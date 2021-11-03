@@ -1,0 +1,13 @@
+<mat-chip-list
+    *ngIf="itemTags"
+    appearance="outline"
+    #chipList
+    cdkDropListOrientation="horizontal" >
+
+  <mat-chip
+    *ngFor="let item of (itemTags || [])"
+    >
+    {{item }}
+  </mat-chip>
+
+</mat-chip-list>

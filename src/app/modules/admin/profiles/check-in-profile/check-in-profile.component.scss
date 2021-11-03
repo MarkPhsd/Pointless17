@@ -1,0 +1,136 @@
+@import "/src/mixins.scss";
+.grid-header {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(400px, 1fr) );
+  // padding: 10px;
+  margin: 10px;
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    grid-template-columns: auto;
+    gap: var(--gap);
+    // grid-template-columns: repeat( auto-fit, minmax(400px, 1fr) );
+    margin: 10px;
+  }
+}
+
+.grid-flow {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(325px, 1fr) );
+}
+
+.grid-buttons {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(95px, 1fr) );
+
+}
+
+.grid-item {
+  // align-items: flex-end;
+  // max-height: 150px;
+  // min-height: 150px;
+  // height:     150px;
+  justify-content: baseline;
+  overflow-x: scroll;
+}
+
+app-widget-uploader {
+  margin: 5rem 5rem 5rem 5rem;
+}
+
+mat-label {
+  margin: 5px;
+  font-size: 1em;
+}
+
+button {
+  margin: 5px;
+}
+
+.button-margin {
+  margin: 5px;
+}
+
+#customer-notes {
+  margin:  5;
+  object-fit: cover;
+  width: 300px;
+}
+
+mat-form-field {
+  margin: 5px;
+  font-size: 1em;
+}
+
+mat-card{
+  margin: 5px
+}
+
+simple-tiny {
+  padding:5px;
+}
+
+.itemSaved {
+  color: hotpink;
+}
+
+.order-list-height {
+  height: 150px;
+}
+
+
+label {
+  display: block;
+  padding: 5px;
+}
+
+h1 {
+  font-size: 1em;
+  text-decoration: underline;
+}
+
+.order-panel {
+  height: 55vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+#remove_email {
+  color: red;
+  margin: 5px;
+}
+
+#register_button {
+  background: lightblue;
+}
+
+.alert {
+  color: darkred;
+}
+
+.ng-invalid:not(form)  {
+  border-left: 3px solid darkred;
+}
+
+img {
+  width: 150px;
+  height: 150px;
+  align-content: center;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.form-field {
+  width: 165px;
+}

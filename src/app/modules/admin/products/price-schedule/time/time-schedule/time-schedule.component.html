@@ -1,0 +1,76 @@
+<div *ngIf="inputForm">
+  <mat-card>
+    <mat-card-subtitle>
+      <div class="subtitle">
+        Leave on for all time, or turn on to selected times.
+      </div>
+    </mat-card-subtitle>
+
+    <mat-divider></mat-divider>
+
+    <div [formGroup]="inputForm">
+
+        <div class="item-label">
+          <mat-icon>schedule</mat-icon>
+          <mat-label>All Times</mat-label>
+        </div>
+
+        <div class="item-label">
+          <mat-slide-toggle
+                  class           ="price-values"
+                  name            ="timeFrameAlways"
+                  formControlName ="timeFrameAlways"
+                  [(ngModel)]     ="timeFrameAlways"
+                  (click)         = "toggle()"
+                  >
+          </mat-slide-toggle>
+        </div>
+
+      <div *ngIf="!timeFrameAlways">
+
+        <button mat-button
+              (click)="addItem()">
+        <mat-icon>add</mat-icon>Add</button>
+
+        <div *ngIf="timeFrames">
+          <div formArrayName="timeFrames"
+               *ngFor="let t of timeFrames.controls; let i = index;">
+
+            <div  [formGroupName]="i">
+              <div class="grid-container">
+
+                <div class="subtitle">
+                  <mat-form-field appearance="outline">
+                    <mat-label >Start</mat-label>
+                    <input matInput
+                          type="time"
+                          formControlName="startTime"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div class="subtitle">
+                  <mat-form-field appearance="outline">
+                    <mat-label >End</mat-label>
+                    <input matInput
+                          type="time"
+                          formControlName="endTime"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <button mat-raised-button
+                      (click)="deleteItem(i)">
+              <mat-icon>delete</mat-icon>Remove</button>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </mat-card>
+</div>
+
+

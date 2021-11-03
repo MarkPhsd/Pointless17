@@ -1,0 +1,33 @@
+<div [formGroup]="searchForm"
+      class="form-background">
+
+  <mat-form-field class="form-background"
+                  appearance="outline" fxFlexFill >
+
+    <mat-label class="form-background">Price Lookup</mat-label>
+    <input
+            #input
+            type="text"
+            class="input-field"
+            placeholder="Price Categories"
+            matInput
+            formControlName="priceCategoryLookup"
+            [matAutocomplete]="auto">
+
+        <mat-autocomplete panelWidth    = "auto"
+                          #auto         = "matAutocomplete"
+                          [displayWith] = "displayFn.bind(this)">
+
+        <mat-option *ngFor="let item of results$ | async"
+                    [value]="item">
+              {{item.name}}
+        </mat-option>
+
+    </mat-autocomplete>
+  </mat-form-field>
+
+</div>
+
+<div hidden="true" [formGroup]="inputForm">
+  <input  formControlName="priceCategory">
+</div>

@@ -1,0 +1,32 @@
+::ng-deep .cdk-overlay-pane {
+  /* Do you changes here */
+    min-width:  auto !important;
+}
+
+// mat-form-field {
+//   margin: 5px;
+// }
+mat-form-field {
+  font-size: .8em;
+}
+
+.form-background {
+  width: 200px;
+}
+
+.small-text {
+  font-size: small;
+}
+
+.mat-option {
+  white-space: normal;
+  line-height: normal;
+}
+
+// .mat-select-panel mat-option.mat-option {
+//   height: unset;
+// }
+
+// .mat-option-text.mat-option-text {
+//   white-space: normal;
+// }

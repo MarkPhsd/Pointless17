@@ -1,0 +1,22 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <div class="grid-container">
+      <div class="filterItem" >
+        <mat-form-field appearance="outline">
+          <mat-label>Species</mat-label>
+          <mat-select
+                      type="number"
+                      [formControlName] ="'species'"
+                      name="species"
+            >
+            <div *ngIf="speciesTypes as list" >
+              <mat-option *ngFor="let item of list" [value]="item.name">
+                  {{item.name}}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+<div *ngIf="clientType">
+
+  <mat-card class="mat-card">
+    <mat-card-title>
+      Client Type Edit: {{ clientType.name }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      <app-edit-buttons-standard
+          (outputeupdateItem)     ="updateItem($event)"
+          (outputupdateItemExit)  ="updateItemExit($event)"
+          (outputupdatedeleteItem)="deleteItem($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
+          (outputCopy)            ="copyItem($event)"
+      ></app-edit-buttons-standard>
+      <mat-divider></mat-divider>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div *ngIf="inputForm" [formGroup]="inputForm" >
+        <div class="grid-headers">
+          <div >
+            <h4>Description</h4>
+          </div >
+          <div>
+            <h4>Limits</h4>
+          </div>
+        </div>
+        <div class="grid-container">
+          <mat-divider></mat-divider>
+          <div  class="grid-fields ">
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Display Name</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="name"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Point Value</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="pointValue"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Daily Credit</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="dailyCredit"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+          </div>
+          <mat-divider [vertical]="true"></mat-divider>
+          <div  class="grid-fields">
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Daily Limit</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="dailyLimit"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Seeds</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="limitSeeds"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Plants</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="limitPlants"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Solids</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="limitSolid"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Concentrate</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="limitConcentrate"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Extract</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="limitExtract"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Concentrate</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="limitConcentrates"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

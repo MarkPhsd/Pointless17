@@ -1,0 +1,39 @@
+<div *ngIf="inputForm && priceScheduleTracking">
+  <mat-card>
+    <mat-card-subtitle>
+      <div class="subtitle">
+        Leave on for all types, or turn on to selected types.
+      </div>
+    </mat-card-subtitle>
+    <mat-divider></mat-divider>
+
+    <div [formGroup]="inputForm">
+      <div class="item-label">
+        <mat-label>All Clients</mat-label>
+      </div>
+      <div class="item-label">
+        <mat-slide-toggle
+                class           ="price-values"
+                formControlName ="allEligible"
+                [(ngModel)]     ="priceScheduleTracking.allEligible"
+
+                >
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div *ngIf="!priceScheduleTracking.allEligible">
+        <mat-selection-list #list
+                            [compareWith] ="compareFunction"
+                            [(ngModel)]   ="savedClientTypes" >
+          <mat-list-option *ngFor         ="let itemType of clientTypeList;  let i =index;"
+                            [value]       ="itemType"
+                            (click)       ="setValues()"
+                            >
+                {{itemType.name}}
+          </mat-list-option>
+        </mat-selection-list>
+    </div>
+
+  </mat-card>
+</div>

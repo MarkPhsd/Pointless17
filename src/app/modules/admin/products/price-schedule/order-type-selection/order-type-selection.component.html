@@ -1,0 +1,40 @@
+<div *ngIf="inputForm && priceScheduleTracking">
+  <mat-card>
+    <mat-card-subtitle>
+      <div class="subtitle">
+        Leave on for all types, or turn on to selected types.
+      </div>
+    </mat-card-subtitle>
+    <mat-divider></mat-divider>
+
+    <div [formGroup]="inputForm">
+      <div class="item-label">
+        <mat-label>All Orders</mat-label>
+      </div>
+      <div class="item-label">
+          <mat-slide-toggle
+                  class           ="price-values"
+                  formControlName ="allOrderTypes"
+                  [(ngModel)]     ="priceScheduleTracking.allOrderTypes"
+                  >
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+      <div *ngIf="!priceScheduleTracking.allOrderTypes">
+        <mat-selection-list   #list
+                              [compareWith]   = "compareFunction"
+                              [(ngModel)]     = "savedOrderTypes">
+          <mat-list-option   *ngFor           = "let item of orderTypelist;  let i =index;"
+                              [value]="item"
+                              (click)="setValues()"
+                             >
+             {{item.name}}
+          </mat-list-option>
+        </mat-selection-list>
+    </div>
+  </mat-card>
+</div>
+
+
+

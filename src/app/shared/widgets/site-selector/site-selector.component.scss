@@ -1,0 +1,123 @@
+// @import "../../../../styles.scss";
+
+.canvas   {
+  background-blend-mode: color-dodge;
+  z-index: -1;
+  color: #b2cecf;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+body {
+  overflow-y: hidden; /* Hide vertical scrollbar */
+  overflow-x: hidden; /* Hide horizontal scrollbar */
+}
+
+.site-name {
+  font-weight: 500;
+  font-size: 1.2em;
+  width: 100%;
+  white-space: nowrap;
+  // overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  // float: left;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  align-items: baseline;
+  // line-height: 1em;
+  align-content: center;
+}
+
+.site-address {
+  font-weight: 400;
+  font-size: 1em;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  align-items: baseline;
+
+  // line-height: 1em;
+}
+
+.site-image {
+  height: 5vh;
+  border-radius: 5px;
+  align-items: center;
+  margin: 2px 2px 2px 2px;
+}
+
+.site-image:hover {
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+}
+
+.site-image:active:hover {
+  box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
+}
+
+.grid-item {
+  height: 16vh;
+  width:  100%;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  background-color: #221E1D;
+}
+
+.grid-item:hover {
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+}
+
+.grid-item:active:hover {
+  box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
+}
+
+h4 {
+  color: #221E1D;
+}
+
+.mat-dialog-actions {
+  justify-content: center;
+}
+
+.grid {
+  display: grid;
+  background-color: rgba(255, 255, 255, 0.8);
+  grid-template-columns: 1fr ;
+  grid-gap: 5px;
+
+  // @include for-phone-only {
+  //   grid-template-columns: 1fr   ;
+  //   grid-template-rows: auto ;
+
+  // }
+  .big-button {
+    height: 50px;
+
+  }
+
+  // @include for-tablet-landscape-up {
+  //   grid-template-columns: 1fr 1fr 1fr ;
+  //   grid-template-rows: auto;
+  // }
+
+  // @include for-tablet-portrait-up  {
+  //   grid-template-columns: 1fr 1fr 1fr 1fr ;
+  //   grid-template-rows: auto ;
+  // }
+
+  // @include for-desktop-up  {
+  //   grid-template-columns: 1fr 1fr 1fr 1fr;
+  //   grid-template-rows: auto;
+  // }
+
+  // @include for-big-desktop-up {
+  //   grid-template-columns: 1fr 1fr 1fr 1fr ;
+  //   grid-template-rows:  auto ;
+
+  // }
+
+}
+

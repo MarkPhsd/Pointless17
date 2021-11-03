@@ -1,0 +1,280 @@
+import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, Subject  } from 'rxjs';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+import { GridApi } from 'ag-grid-community';
+import "ag-grid-community/dist/styles/ag-grid.css";
+import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+import { AgGridService } from 'src/app/_services/system/ag-grid-service';
+import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ItemCategoriesEditComponent } from '../item-categories-edit/item-categories-edit.component';
+import { Capacitor, Plugins } from '@capacitor/core';
+
+import {
+  METRCItemsCategories,
+} from 'src/app/_interfaces/metrcs/items';
+
+@Component({
+  selector: 'app-item-categories-list',
+  templateUrl: './item-categories-list.component.html',
+  styleUrls: ['./item-categories-list.component.scss']
+})
+export class ItemCategoriesListComponent implements OnInit {
+
+  searchGridApi: GridApi;
+  searchGridColumnApi: GridAlignColumnsDirective;
+  searchGridOptions: any;
+
+  //AgGrid
+  private gridApi: GridApi;
+  private gridColumnApi: GridAlignColumnsDirective;
+  gridOptions: any
+  columnDefs = [];
+  defaultColDef;
+  frameworkComponents: any;
+  rowDataClicked1 = {};
+  rowDataClicked2 = {};
+
+  public rowData: any[];
+  public info: string;
+
+  paginationSize = 50
+  currentRow = 1;
+  currentPage = 1
+  pageNumber = 1
+  pageSize = 50
+  numberOfPages = 1
+  rowCount = 50
+
+  get platForm() {  return Capacitor.getPlatform(); }
+  //This is for the search Section//
+  public searchForm: FormGroup;
+  // get searchItemsValue() { return this.searchForm.get("controlSearchItems") as FormControl;}
+  private readonly onDestroy = new Subject<void>();
+  search: string;
+
+  mETRCItemsCategories$: Observable<METRCItemsCategories[]>;
+
+  refreshGrid = true;
+  //This is for the search Section//
+  gridDimensions: string;
+  agtheme        = 'ag-theme-material';;
+
+  public gridStyle: any = {
+    general: {
+        normal: 'grid-eor-normal'
+    },
+    row: {
+        general: {
+            normal: 'grid-eor-row-normal',
+            hovered: 'grid-eor-row-hovered',
+            selected: 'grid-eor-row-selected'
+        }
+    }
+  }
+
+
+  constructor(  private _snackBar: MatSnackBar,
+      private router: Router,
+      private agGridService: AgGridService,
+      private fb: FormBuilder,
+      private metrcItemsCategoriesService: MetrcItemsCategoriesService,
+      private dialog: MatDialog,
+      public route: ActivatedRoute,
+
+    )
+  {
+    this.searchItems()
+    this.initGridResults()
+    this.initClasses()
+  }
+
+  initClasses()  {
+    const platForm = this.platForm;
+    this.gridDimensions =  'width: 100%; height: 90%;'
+    this.agtheme  = 'ag-theme-material';
+    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 85%;' }
+    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 85%;' }
+  }
+
+  initGridResults() {
+    this.initAGGridFeatures()
+
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
+
+    this.defaultColDef = {
+      flex: 1,
+      minWidth: 100,
+    };
+  }
+
+  ngOnInit(): void {
+    try {
+      this.searchForm = this.fb.group(
+         { controlSearchItems: ['']
+        }
+      );
+    } catch (error) {
+
+    }
+
+  };
+
+  initAGGridFeatures() {
+
+    this.columnDefs =  [
+
+      {
+       field: "Id",
+       cellRenderer: "btnCellRenderer",
+       cellRendererParams: {
+         onClick: this.editItemWithId.bind(this),
+         label: 'Edit',
+         getLabelFunction: this.getLabel.bind(this),
+         btnClass: 'btn'
+       },
+       minWidth: 75
+     },
+      {headerName: 'Name', field: 'name', sortable: true, minWidth: 250},
+      {headerName: 'Type',  sortable: true, field: 'productCategoryType',},
+      {headerName: 'Quantity Type', field: 'quantityType', sortable: true},
+    ]
+
+    this.initGridOptions()
+  }
+
+  initGridOptions()  {
+    this.gridOptions = {
+      pagination: true,
+      paginationPageSize: 50,
+      cacheBlockSize: 25,
+      maxBlocksInCache: 800,
+      rowModelType: 'infinite',
+      infiniteInitialRowCount: 2,
+    }
+  }
+
+  initSearchGridOptions()  {
+    this.searchGridOptions = {
+      pagination: true,
+      paginationPageSize: this.paginationSize,
+      cacheBlockSize: this.paginationSize,
+      rowModelType: 'infinite',
+      infiniteInitialRowCount: 2,
+    }
+  }
+
+  searchLabels() {
+    this.mETRCItemsCategories$ = this.metrcItemsCategoriesService.getCategories()
+  }
+
+  searchItems() {
+    this.mETRCItemsCategories$ = this.metrcItemsCategoriesService.getCategories()
+  }
+
+  importCategories() {
+    const import$ = this.metrcItemsCategoriesService.importItemCategories()
+    import$.subscribe(data => {
+      this.searchItems()
+    })
+  }
+
+  onSearchgridReady({ api } : {api: GridApi}) {
+    this.gridApi = api;
+    api.sizeColumnsToFit();
+  }
+
+  onSearchGridReady(params) {
+    this.searchItems()
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+  }
+
+  onGridReady(params) {
+    this.gridApi = params.api;
+    this.gridColumnApi = params.columnApi;
+  }
+
+  getRowData():  Observable<METRCItemsCategories[]>  {
+    return this.metrcItemsCategoriesService.getCategories()
+  }
+
+  getLabel(rowData)
+  {
+    if(rowData && rowData.hasIndicator)
+      return 'Edit';
+      else return 'Edit';
+  }
+
+  onBtnClick1(e) {
+    console.log(e)
+    this.rowDataClicked1 = e.rowData;
+  }
+
+  onBtnClick2(e) {
+    console.log(e)
+    this.rowDataClicked2 = e.rowData;
+  }
+
+  editItemWithId(event) {
+    if (event.rowData.id) {
+      const id = event.rowData.id
+      console.log('editItemWithId', id)
+      this.openCategoriesDialog(id)
+      }
+  }
+
+  editProduct(e){
+    this.notifyEvent(`Event ${e}`, "Success")
+    this.router.navigate(["/productedit/", {id:e.id}]);
+  }
+
+  onDeselectAll() {
+  }
+
+  onExportToCsv() {
+    this.gridApi.exportDataAsCsv();
+  }
+
+  onSortByNameAndPrice(sort: string) {
+  }
+
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: 'top'
+    });
+  }
+
+  openCategoriesDialog(id: number) {
+    console.log('openCategoriesDialog', id)
+    const dialogConfig = [
+      { data: { id: id } }
+    ]
+
+    const dialogRef = this.dialog.open(ItemCategoriesEditComponent,
+      { width: '60vw',
+        height: '60vh',
+        data : {id: id}
+      },
+    )
+
+    dialogRef.afterClosed().subscribe(result => {
+      // console.log('The dialog was closed');
+    });
+
+  }
+
+
+
+
+
+
+
+}

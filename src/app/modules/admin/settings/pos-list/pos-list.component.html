@@ -1,0 +1,45 @@
+<div id="header" >
+
+  <h2>
+    Current assignment: {{posName}}
+  </h2>
+
+  <button mat-raised-button color="primary" (click)="clearPOS()">Clear device</button>
+
+</div>
+
+<div fxLayout="row" fxLayoutAlign="space-between center" flLayoutGap="20px">
+
+<mat-card fxFlex="100">
+
+      <table mat-table #outerSort="matSort" [dataSource]="dataSource" multiTemplateDataRows class="mat-elevation-z8" matSort>
+
+
+          <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef> Assignment </th>
+              <td mat-cell *matCellDef="let element">
+              <button mat-raised-button color="primary" (click)="setPOSName(element.name)">Assign Device</button>
+              </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+
+    <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+        [class.example-element-row]="element.addresses?.data.length"
+       >
+
+    </tr>
+
+  </table>
+
+
+  <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 50]"></mat-paginator>
+
+</mat-card>
+
+</div>

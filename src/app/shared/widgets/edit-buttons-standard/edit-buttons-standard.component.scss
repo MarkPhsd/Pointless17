@@ -1,0 +1,23 @@
+
+// mat-raised-button {
+//   margin: 5rem 5rem 2rem 2rem;
+//   padding: 1rem 1rem 1rem 1rem;
+// }
+
+button {
+  margin-bottom: 5px;
+}
+
+.flex-container {
+  --gap: 3px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
+
+}
+
+.buttons-format {
+  max-width: 375px;
+  width:     350px;
+  float: right;
+}

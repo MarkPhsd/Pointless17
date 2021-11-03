@@ -1,0 +1,136 @@
+.headers {
+  float: left;
+  font-size: 1.1em;
+}
+
+
+.itemTypes {
+  width: 175px;
+  height: 45px;
+  font-size: 1.1em;
+  border-radius: 3px;
+}
+
+.subitemTypes {
+  // margin-left: 25px;
+  font-size: .8em;
+  width: 125px;
+  margin-left: 5px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border-radius: 5px;
+  border-width: 2px;
+  height: 45px;
+}
+
+// mat-button-toggle {
+//   text-align: left;
+//   line-height: 0px !important;
+// }
+
+.buttons-container {
+  display: flex;
+  // grid-template-columns: 150px 35px;
+  gap: 2px;
+  // overflow: hidden;
+}
+
+.itemtype-buttons-container {
+  display: grid;
+  grid-template-columns: 175px auto;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.toggle-buttons-margins{
+  margin-top: 5px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 600px;
+  row-gap: 5px;
+  gap: 10px;
+  // width: 100%;
+  overflow: auto;
+}
+
+
+.sub-headers {
+  font-size: .9em;
+  font-weight: 400;
+}
+
+.type-list {
+  height: 83vh;
+  overflow-y: scroll;
+  width: 250px;
+  margin-top: 10px;
+}
+
+.search-list {
+  // height: 75vh;
+  overflow-y: hidden;
+  // width: 250px;
+  margin-top: 10px;
+}
+
+.category-header {
+  font-weight   : 500px;
+  font-size     : .9em;
+  margin-bottom : 3px;
+  margin-top    : 3px;
+  vertical-align:middle;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.selected-categories {
+  font-weight: 400px;
+  font-size  : .8em;
+  margin-left: 15px;
+  list-style : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.itemtype-header {
+  font-weight  : 500px;
+  font-size    : .9em;
+  margin-bottom: 3px;
+  margin-top   : 3px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.selected-types {
+  font-weight  : 400px;
+  font-size    : .8em;
+  margin-left  : 15px;
+  list-style   : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.icon-height {
+  vertical-align:middle;
+}
+
+
+.slidedown {
+  display: grid;
+  grid-template-columns: 1fr;
+  // float                 : left;
+  animation-duration    : 500ms;
+  animation-name        : slidein;
+}
+
+
+@keyframes slidein {
+  from {
+      margin-top: -20%;
+  }
+  to {
+      margin-top: 0%;
+  }
+}

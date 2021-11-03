@@ -1,0 +1,68 @@
+<div class="container" >
+
+  <div  fxLayout="column">
+
+    <div class="section-gap"
+         fxLayout="row"
+         fxLayoutAlign="space-between center"
+         flLayoutGap="20px">
+        <app-widget-filter
+          (messageOut)="receiveData($event)">
+        </app-widget-filter>
+    </div>
+
+    <br> <mat-divider  class="section-gap"></mat-divider> <br>
+    <div *ngIf="dateFrom && dateTo">
+
+      <div class="grid-flow"
+          *ngIf="dateFrom && dateTo">
+        <div  *ngFor="let site of sites$ | async">
+          <app-sales-tax-report
+                  [site]="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]="dateTo"
+                  [minimized]="'true'"
+                  [notifier]="childNotifier">
+           {{site.name}}
+          </app-sales-tax-report>
+        </div>
+      </div>
+
+      <div
+            class="section-gap"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            flLayoutGap="20px">
+          <mat-card fxFlex="100">
+              <app-widget-card [dateFrom] ="dateFrom"
+                               [dateTo]   ="dateTo"
+                               groupBy    ="date"
+                               chartName  ="ByDate"
+                               [counter]  ="count+1"
+                ></app-widget-card>
+          </mat-card>
+      </div>
+
+      <div
+            class="section-gap"
+            fxLayout="row"
+            fxLayoutAlign="space-between center"
+            flLayoutGap="20px">
+          <mat-card fxFlex="100">
+              <app-widget-card [dateFrom] ="dateFrom"
+                               [dateTo]   ="dateFrom"
+                               groupBy    ="hour"
+                               chartName  ="Hourly"
+                               [counter]  ="count+1"
+                ></app-widget-card>
+          </mat-card>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+

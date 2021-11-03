@@ -1,0 +1,77 @@
+body,
+html {
+  // height: 100vh; //for coverbackground video
+  margin: 0;
+  overflow: hidden;
+}
+
+// .canvas  {
+//   top: 0;
+//   left: 0;
+//   height: 100%;
+//   width: 100%;
+//   // background-color:rgb(103, 123, 167);
+//   position: absolute;
+//   z-index: 1;
+// }
+
+.center {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.headings {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.prices {
+  font-size: 1em;
+  font-weight: 500;
+  line-height: 1.2em;
+  margin: .2em .2em .2em;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+}
+
+.row-height {
+  height: 100%
+}
+
+
+.stat-cards {
+  opacity: .8;
+}
+
+#mat-card {
+   border-radius: 5px;
+
+  .mat-card-header{
+    padding: 5px;
+  }
+  .mat-card{
+    padding: 0;
+  }
+
+  .mat-card-content{
+    padding: 5px;
+  }
+ }
+
+.grid-item {
+  align-items: flex-end;
+  float: left;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr ;
+  grid-template-rows: auto;
+  gap: 1em 1em;
+}

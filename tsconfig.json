@@ -1,0 +1,47 @@
+{
+  "compileOnSave": false,
+  "types": [
+    "underscore",
+    "jest",
+  ],
+  "typeRoots": [
+    "node_modules/@types",
+    "@types/jest",
+  ],
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "emitDecoratorMetadata": true,
+    "target": "es2016",
+    "module": "es2020",
+    "types": ["node", "googlemaps", "jest"],
+    "lib": [
+      "es2020",
+      "dom"
+    ],
+    "paths" : {
+      "constants": ["./node_modules/constants-browserify"],
+      "crypto": ["./node_modules/crypto-browserify"],
+      "http": ["./node_modules/stream-http"],
+      "https": ["./node_modules/https-browserify"],
+      "os": ["./node_modules/os-browserify"],
+      "stream": ["./node_modules/stream-browserify"],
+      "zlib": ["./node_modules/browserify-zlib"],
+      "fs": ["./node_modules/fs"],
+      "child_process": ["./node_modules/child_process"],
+      "winreg": ["./node_modules/winreg"]
+    }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "strictInjectionParameters": true
+  }
+}
+

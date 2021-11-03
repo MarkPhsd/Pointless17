@@ -1,0 +1,31 @@
+
+<mat-card>
+
+<div class="grid-container">
+
+  {{item.adjustmentNote}}
+
+  <div class="grid-item">
+    Dates
+     <br> {{item.beginDate | date: 'short'  }}
+     <br> {{item.endDate   | date: 'short'  }}
+  </div>
+
+  <div class="grid-item employee"     *ngIf="item.employeeName">             User:        </div>
+    <div class="grid-item"  *ngIf="item.employeeName">   {{item.employeeName}} </div>
+  <div class="grid-item cost"         *ngIf="item.cost != 0">                Cost:        </div>
+   <div class="grid-item"  *ngIf="item.cost != 0">    {{item.cost  | currency}}</div>
+  <div class="grid-item cost"         *ngIf="item.price != 0">               Price:       </div>
+  <div class="grid-item"   *ngIf="item.price != 0">   {{item.price | currency}}</div>
+  <div class="grid-item packageCount" *ngIf="item.packageCountRemaining">    PCKG Count:  </div>
+   <div class="grid-item"  *ngIf="item.packageCountRemaining">   {{item.packageCountRemaining}}</div>
+  <div class="grid-item location"     *ngIf="item.location">                 Location:    </div>
+    <div class="grid-item"  *ngIf="item.location">     {{item.location}}</div>
+  <div class="grid-item location"     *ngIf="item.adjustmentNote">           Note:    </div>
+  <div class="grid-item"    *ngIf="item.adjustmentNote">     {{item.adjustmentNote}}</div>
+  <div class="grid-item location"     *ngIf="item.adjustmentType">           Type:    </div>
+   <div class="grid-item"   *ngIf="item.adjustmentType">     {{item.adjustmentType}}</div>
+
+</div>
+
+</mat-card>

@@ -1,0 +1,160 @@
+<div  class="grid-container" >
+
+  <div  class="item-label item-fields" [formGroup]="searchForm" >
+    <mat-form-field appearance="outline" class="form-fields">
+      <mat-label >Search Items</mat-label>
+        <input
+                #input
+                matInput
+                type           ="text"
+                id             ="name"
+                formControlName="itemName">
+    </mat-form-field>
+  </div>
+
+  <div class="grid-container  item-fields" *ngIf="fieldsForm"  [formGroup]="fieldsForm" >
+
+    <div class="item-label">
+      <mat-label class="item-label">All Client Types</mat-label>
+      <mat-slide-toggle
+              class           = "price-values"
+              formControlName = "allEligible"
+              [(ngModel)]     = "allEligible"
+              (change)        = "onToggleChange($event)"
+              >
+      </mat-slide-toggle>
+    </div>
+
+    <div class="item-label">
+      <mat-label class="item-label">All Order Types</mat-label>
+      <mat-slide-toggle
+              class           = "price-values"
+              formControlName     = "allOrderTypes"
+              [(ngModel)]     = "allOrderTypes"
+              (change)        = "onToggleChange($event)"
+              >
+      </mat-slide-toggle>
+    </div>
+
+    <div class="item-label">
+      <mat-label class="item-label">All Weekdays</mat-label>
+      <mat-slide-toggle
+              class           = "price-values"
+              formControlName     = "allWeekdaysDays"
+              [(ngModel)]     = "allWeekdaysDays"
+              (change)        = "onToggleChange($event)"
+              >
+      </mat-slide-toggle>
+    </div>
+
+    <div class="item-label">
+      <mat-label class="item-label">Time Frame Always</mat-label>
+      <mat-slide-toggle
+              class           = "price-values"
+              formControlName     = "timeFrameAlways"
+              [(ngModel)]     = "timeFrameAlways"
+              (change)        = "onToggleChange($event)"
+              >
+      </mat-slide-toggle>
+    </div>
+
+    <div class="item-label">
+      <mat-label class="item-label">All Dates</mat-label>
+      <mat-slide-toggle
+              class           = "price-values"
+              formControlName     = "allDates"
+              [(ngModel)]     = "allDates"
+              (change)        = "onToggleChange($event)"
+              >
+      </mat-slide-toggle>
+    </div>
+
+    <div class="item-label">
+      <mat-label class="item-label">Active</mat-label>
+      <mat-slide-toggle
+              class           = "price-values"
+              formControlName = "active"
+              [(ngModel)]     = "active"
+              (change)        = "onToggleChange($event)"
+              >
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+
+  <div class="grid-container item-fields" >
+    <div class="item-label" *ngIf="priceAdjustScheduleTypes as list" >
+      <mat-button-toggle-group
+                                (change)        = "onToggleChange($event.value)"
+                                [(ngModel)]     = "type"
+                              >
+
+        <mat-button-toggle class="discount-type-button"
+                            [value]="item.name"
+                            *ngFor="let item of list" >
+
+          <div *ngIf="item.name === 'BOGO - Item Discounts'">
+            <mat-icon class="mat-icon">label</mat-icon>
+          </div>
+
+          <div *ngIf="item.name === 'Percent Off'">
+            <mat-icon class="mat-icon">class</mat-icon>
+          </div>
+
+          <div *ngIf="item.name === 'Money Off'">
+            <mat-icon class="mat-icon">money</mat-icon>
+          </div>
+          <div *ngIf="item.name === 'Free Item Off'">
+            <mat-icon class="mat-icon">loyalty</mat-icon>
+          </div>
+
+          {{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+
+
+      <div class="grid-item">
+        <button mat-button
+          class="assign-button"
+          (click)="listAll()"> <mat-icon>list</mat-icon>List All
+        </button>
+        <button mat-button
+          class="assign-button"
+          (click)="deleteSelected()"> <mat-icon>delete</mat-icon>Delete Selected
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="grid-list">
+    <div >
+      <ag-grid-angular
+            #agGrid
+            style                ="width: 100%; height: 100%;"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+
+</div>
+
+
+<div class="floating-info">
+  <div *ngIf="inputForm && priceScheduleTracking">
+    <app-price-schedule-info
+            [inputForm]="inputForm"
+            [hideDelete]="'true'"
+              >
+    </app-price-schedule-info>
+  </div>
+</div>
+<!-- -->

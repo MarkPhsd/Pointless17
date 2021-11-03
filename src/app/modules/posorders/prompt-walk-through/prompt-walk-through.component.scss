@@ -1,0 +1,61 @@
+@import "/src/mixins.scss";
+
+.image {
+
+  height: 75px;
+  width : 75px;
+
+  @include for-phone-only {
+    height: 50px;
+    width : 50px;
+  }
+}
+
+mat-card {
+
+  margin: 5px;
+
+  @include for-phone-only {
+    margin: 2px;
+  }
+
+}
+
+.grid-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+
+  @include for-phone-only {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+.grid-prompt {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 10px;
+
+  @include for-phone-only {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.foo .mat-dialog-container {
+  display: block;
+  padding: 0;
+  margin: 0px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  overflow: auto;
+  outline: 0;
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  max-height: inherit;
+}

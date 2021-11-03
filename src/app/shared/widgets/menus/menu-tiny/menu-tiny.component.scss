@@ -1,0 +1,135 @@
+@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+@import url(https://use.fontawesome.com/releases/v5.3.1/css/all.css);
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+:host {
+    .mat-icon {
+        vertical-align: middle;
+        margin-right: 20px;
+    }
+}
+
+*, *:before, *:after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.row-class {
+  width: 100%;
+}
+
+.submenu-sections {
+  margin-top: 50px;
+  width: 100%;
+}
+
+.accordion {
+  width: 100%;
+  // max-width: 225px;
+  margin: auto;
+  line-height: 1.6em;
+  border-radius: 4px;
+}
+
+.accordion .menu {
+  position: relative;
+  padding: 15px 15px 15px 5px;
+  font-weight: 400;
+  border-bottom: 1px solid #ccc;
+  line-height: 1.6em;
+  cursor: pointer;
+  transition: all 0.4s ease;
+}
+
+.accordion li:last-child .menu {
+  border-bottom: 0;
+}
+
+.accordion li i {
+  transition: all 0.4s ease;
+}
+
+.accordion li i.fa-chevron-down {
+  right: .5rem;
+  left: auto;
+}
+
+.submenu-position  {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+
+ul {
+  list-style: none;
+  list-style-type: none;
+  left: .5rem;
+  line-height: 2.6em;
+  width: 100%;
+}
+
+li {
+  line-height: 2.6em;
+  left: .5rem;
+}
+
+.accordion li.active i.fa-chevron-down {
+  transform: rotate(180deg);
+}
+
+.menu-item :hover {
+  background-color: #d3c8ca;
+  transition: all .5s ease-in-out;
+}
+
+.submenu {
+  height:             0;
+  overflow:           hidden;
+  font-size:          1em;
+  margin-top:         15px;
+  transition: height  0.4s ease;
+}
+
+.submenu li {
+  color: #d3c8ca;
+}
+
+.accordion li:last-child .submenu {
+  border-radius: 0 0 4px 4px;
+}
+
+.accordion li:last-child .submenu li:last-child {
+  border-bottom: 0;
+}
+
+.menu :hover {
+  background-color: #7b7677;
+  transition: all .5s ease-in-out;
+}
+
+.submenu a {
+  display: block;
+  text-decoration: none;
+  padding-left: 5px;
+  transition: all 0.25s ease-in-out;
+  line-height: 1.2em;
+}
+
+.submenu a:hover {
+  background: #b63b4d;
+  color: #fff;
+}
+
+.menu-header {
+  font-size:     1.2em;
+  font-weight:   425;
+  margin-top:    15px;
+  margin-bottom: 5px;
+  margin-left:   5px;
+}
+
+.menu-header {
+  margin-bottom: 15px
+}

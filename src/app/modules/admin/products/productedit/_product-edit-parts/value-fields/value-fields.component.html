@@ -1,0 +1,13 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <div class="filterItem" >
+      <mat-form-field class="mat-fields quantity" appearance="flat">
+        <mat-label >{{fieldDescription}}</mat-label>
+        <input matInput
+              type="number"
+              [formControlName]="fieldName"
+              class="form-control" >
+      </mat-form-field>
+    </div>
+  </div>
+</div>

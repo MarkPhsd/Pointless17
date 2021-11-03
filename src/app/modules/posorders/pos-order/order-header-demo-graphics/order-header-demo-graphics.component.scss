@@ -1,0 +1,69 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  // width     : 100%;
+  // min-width : 325px;
+  // min-height: 155px;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+  width     : 100%;
+  min-width : 275px;
+  width     : 275px;
+  max-width : 275px;
+  min-height: 75px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    width     : 100%;
+    min-width : 335px;
+    max-width : 335px;
+    min-height: 75px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+.grid-order-header {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  height: max-content;
+}
+
+.grid-header-item {
+  height: 165px;
+  margin-left: 3px;
+  margin-right: 5px;
+}
+
+.grid-contact {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  // grid-auto-flow: row;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+}
+
+.grid-item-button {
+  margin-top: -15px;
+  margin-bottom: 0px;
+  align-items: center;
+}
+
+.transaction-data {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  width: 300px;
+  border-radius: 3px;
+  margin: 5px 5px ;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.float-left{
+  float: left;
+}

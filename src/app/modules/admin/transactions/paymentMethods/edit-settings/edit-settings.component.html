@@ -1,0 +1,51 @@
+
+<mat-card *ngIf="inputForm">
+  <mat-card-subtitle>
+    <div>
+      <h4>
+        <ng-content select="[header]"></ng-content>
+      </h4>
+    </div>
+    <div>
+      <ng-content select="[body]"></ng-content>
+    </div>
+  </mat-card-subtitle>
+  <mat-card-content>
+  </mat-card-content>
+</mat-card>
+<div  *ngIf="inputForm" [formGroup]="inputForm">
+  <div class="toggle-fields">
+    <div *ngIf="fieldType === 'boolean'">
+        <mat-label><ng-content select="[fielddescription]"></ng-content></mat-label>
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    [(ngModel)] ="settingValue"
+                    [formControlName]="settingFieldName"
+                    (change)="updateSetting()">
+          <mat-label><ng-content select="[fielddescription]"></ng-content></mat-label>
+          </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div *ngIf="fieldType != 'boolean'">
+      <mat-form-field
+                class="fields"
+                appearance="outline"
+        >
+          <mat-label><ng-content select="[fielddescription]"></ng-content></mat-label>
+          <input matInput
+                  [type]="fieldType"
+                  name = "value"
+                  [formControlName]="settingFieldName"
+                  (change)="updateSetting()"
+          >
+      </mat-form-field>
+    </div>
+
+
+  </div>
+
+</div>
+
+
+

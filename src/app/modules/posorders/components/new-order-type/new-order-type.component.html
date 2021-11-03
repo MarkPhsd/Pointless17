@@ -1,0 +1,24 @@
+ <mat-card>
+   <mat-card-title>
+    <button mat-button (click)="newOrder()">
+      <mat-icon>receipt</mat-icon><span>New Default Order</span>
+   </button>
+
+   </mat-card-title>
+   <mat-card-content>
+    <app-mat-toggle-selector
+        class="toggle-selector"
+        [list$]="serviceTypes$"
+        [hideAllOption]="'true'"
+        (outPutID)="newOrderByType($event)">
+       Start new Order
+    </app-mat-toggle-selector>
+   </mat-card-content>
+   <mat-card-actions>
+    <button *ngIf="showCancel"
+            mat-button
+            (click)="onCancel()">
+      <mat-icon>close</mat-icon><span>Dismiss</span>
+     </button>
+  </mat-card-actions>
+ </mat-card>

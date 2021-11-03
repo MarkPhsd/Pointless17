@@ -1,0 +1,18 @@
+<div class="custom-tooltip" [style.background-color]="data.color">
+  tool Tip
+
+  <div *ngIf="inventoryAssignment">
+    <div class="item-name">
+      {{item.name}}
+    </div>
+  </div>
+
+  <div *ngIf="menuItem$">
+    <div *ngFor="Let item of (menuItem$ | async)">
+      <div class="onlineDescription">
+        {{item.onlineDescription}}
+      </div>
+    </div>
+  </div>
+
+</div>

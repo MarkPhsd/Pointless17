@@ -1,0 +1,56 @@
+
+<div *ngIf="menuItem" class="grid-spinners">
+
+
+  <div *ngIf="menuItem.thc">
+    <app-value-spinner
+        [color]="'warn'"
+        [colorTrack]="'accent'"
+        [value]="menuItem?.thc"
+        [description]="'THC'"
+        [spinnerText]="spinnerText">
+    </app-value-spinner>
+  </div>
+
+  <div *ngIf="menuItem.thca">
+    <app-value-spinner
+        [color]="'warn'"
+        [colorTrack]="'accent'"
+        [value]="menuItem?.thca"
+        [description]="'THCA'"
+        [spinnerText]="spinnerText">
+    </app-value-spinner>
+  </div>
+
+  <div *ngIf="menuItem.cbd">
+    <app-value-spinner
+      [color]="'accent'"
+      [colorTrack]="'warn'"
+      [value]="menuItem?.cbd"
+      [description]="'CBD'"
+      [spinnerText]="spinnerText">
+  </app-value-spinner>
+  </div>
+
+
+  <div *ngIf="menuItem.cbda">
+    <app-value-spinner
+        [color]="'accent'"
+        [colorTrack]="'warn'"
+        [value]="menuItem?.cbda"
+        [description]="'CBDA'"
+        [spinnerText]="spinnerText">
+    </app-value-spinner>
+  </div>
+
+  <div *ngIf="menuItem.cbn">
+    <app-value-spinner
+        [color]="'accent'"
+        [colorTrack]="'warn'"
+        [value]="menuItem?.cbn"
+        [description]="'CBN'"
+        [spinnerText]="spinnerText">
+    </app-value-spinner>
+  </div>
+
+</div>

@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-subtitle *ngIf="instructions && editField">
+    {{instructions}} - {{editField}}
+  </mat-card-subtitle>
+  <mat-card-content *ngIf="posOrderItem">
+
+    <div
+         [formGroup]="inputForm"
+         id="inputForm"
+        >
+
+      <div *ngIf="editField == 'modifierNote'">
+        <mat-form-field appearance="outline"  >
+          <mat-label>Item Notes</mat-label>
+          <textarea matInput
+                rows="10"
+                cols="45"
+                formControlName="modifierNote"
+          ></textarea>
+        </mat-form-field>
+      </div>
+
+
+      <div *ngIf="editField == 'quantity'">
+        <mat-form-field appearance="outline"  >
+          <mat-label>Item Quantity</mat-label>
+          <input
+                matInput
+                type="number"
+                formControlName="quantity"
+          >
+        </mat-form-field>
+      </div>
+
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+    <button mat-button (click)="onCancel()"><mat-icon>exit</mat-icon>Cancel</button>
+  </mat-card-actions>
+</mat-card>

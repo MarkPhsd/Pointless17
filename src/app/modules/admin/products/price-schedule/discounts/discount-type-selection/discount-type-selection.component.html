@@ -1,0 +1,131 @@
+<div *ngIf="inputForm">
+
+  <div [formGroup]="inputForm">
+
+    <div class="grid-container ">
+      <mat-label>Type</mat-label>
+      <div *ngIf="priceAdjustScheduleTypes">
+        <div *ngIf="priceAdjustScheduleTypes as list" >
+          <mat-button-toggle-group name="type"
+                                  aria-label="Font Style"
+                                  formControlName="type"
+                                  >
+
+            <mat-button-toggle class="discount-type-button"
+                               [value]="item.name"
+                               (tapClick)="selectAdjustScheduleTypes(item)"
+                               *ngFor="let item of list" >
+
+              <div *ngIf="item.name === 'BOGO - Item Discounts'">
+                <mat-icon>label</mat-icon>
+              </div>
+              <div *ngIf="item.name === 'Percent Off'">
+                <mat-icon>class</mat-icon>
+
+              </div>
+              <div *ngIf="item.name === 'Money Off'">
+                <mat-icon>money</mat-icon>
+
+              </div>
+              <div *ngIf="item.name === 'Free Item Off'">
+                <mat-icon>loyalty</mat-icon>
+              </div>
+
+              {{item.name}}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+
+          <div *ngIf="selectedAdjustScheduleTypes" >
+
+            <mat-divider></mat-divider>
+
+            <div  class="discount-info">
+              <mat-card >
+                <mat-card-title>
+                  <div class="discount-instructions">
+                    Details & Instructions
+                  </div>
+                </mat-card-title>
+
+                <mat-card-content>
+
+                  <div *ngIf="selectedAdjustScheduleTypes.name === 'BOGO - Item Discounts'">
+                    <div class="discount-description">
+                      Items to be selected from the rewards section.
+                    </div>
+                  </div>
+                  <div *ngIf="selectedAdjustScheduleTypes.name === 'Percent Off'">
+                    Input the percentage off.
+                    <mat-form-field appearance="outline">
+                      <mat-label >Value</mat-label>
+                      <input matInput type="number"
+                             formControlName="value"
+                             [(ngModel)]="value"
+                             (ngModelChange) = "updateInfo()"
+                             class="form-control" >
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="selectedAdjustScheduleTypes.name === 'Money Off'">
+                    Input the cash discount.
+                    <mat-form-field appearance="outline">
+                      <mat-label >Value</mat-label>
+                      <input matInput type="number"
+                            formControlName="value"
+                            [(ngModel)]="value"
+                            (ngModelChange) = "updateInfo()"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+                  <div *ngIf="selectedAdjustScheduleTypes.name === 'Free Item Off'">
+                    <div class="discount-description">
+                      Items to be selected from the rewards section.
+                    </div>
+                  </div>
+
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--
+      <mat-form-field appearance="outline">
+
+        <mat-select
+              type              = "text"
+              formControlName   = "discountType"
+              name              = "discountType"
+            >
+            <div *ngIf="priceAdjustScheduleTypes">
+              <div *ngIf="priceAdjustScheduleTypes as list" >
+                <mat-option *ngFor="let item of list" [value]="item.name">
+                    {{item.name}}
+                </mat-option>
+              </div>
+            </div>
+        </mat-select>
+
+      </mat-form-field> -->
+    </div>
+
+  </div>
+</div>
+  <!-- </div> -->
+
+
+<!-- id:                 number;
+priceScheduleID:    number;
+allItems:           boolean;
+discountType:       string;
+dollarsOffOrder:    number;
+percentageOffOrder: number; -->
+
+<!-- <mat-label>Discount All Items</mat-label>
+<div class="item-label">
+  <mat-slide-toggle
+          class           = "price-values"
+          name            = "allItems"
+          formControlName = "allItems"
+          >
+  </mat-slide-toggle>
+</div> -->

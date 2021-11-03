@@ -1,0 +1,24 @@
+
+<button mat-button mat-raised-button
+        color="primary"
+        (click)="importCategories()">Import</button>
+
+<div fxLayout="column" fx-flex fx-layout-align="space-between"></div>
+
+<div *ngIf="mETRCItemsCategories$">
+
+  <ag-grid-angular
+          #agGrid
+          id="myGrid"
+          [class]="agtheme"
+          [style]="gridDimensions"
+          [columnDefs]="columnDefs"
+          [defaultColDef]="defaultColDef"
+          [rowData]="mETRCItemsCategories$ | async"
+          [frameworkComponents]="frameworkComponents"
+          (gridReady)="onGridReady($event)">
+        </ag-grid-angular>
+
+<div>
+
+

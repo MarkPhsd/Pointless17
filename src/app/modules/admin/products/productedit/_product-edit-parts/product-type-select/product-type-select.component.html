@@ -1,0 +1,24 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <div class="filterItem" >
+      <mat-form-field appearance="outline">
+        <mat-label>Type</mat-label>
+        <mat-select
+                    type               ="number"
+                    [formControlName]  ="'prodModifierType'"
+                    name               ="prodModifierType"
+                    (selectionChange)  ="onSelect($event)"
+          >
+          <div *ngIf="(productTypes$ | async) as list" >
+            <mat-option *ngFor="let item of list" [value]="item.id">
+                {{item.name}}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+      {{itemTypeID}}
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,2285 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li >PrintingService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/system/printing.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#isElectronServiceInitiated" >isElectronServiceInitiated</a>
+                            </li>
+                            <li>
+                                <a href="#item" >item</a>
+                            </li>
+                            <li>
+                                <a href="#order" >order</a>
+                            </li>
+                            <li>
+                                <a href="#receiptLayoutSetting" >receiptLayoutSetting</a>
+                            </li>
+                            <li>
+                                <a href="#receiptStyles" >receiptStyles</a>
+                            </li>
+                            <li>
+                                <a href="#zplSetting" >zplSetting</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#applyStyles" >applyStyles</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                <a href="#convertToPDF" >convertToPDF</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#convertToPNG" >convertToPNG</a>
+                            </li>
+                            <li>
+                                <a href="#getDefaultReceiptPrinter" >getDefaultReceiptPrinter</a>
+                            </li>
+                            <li>
+                                <a href="#getDomToImage" >getDomToImage</a>
+                            </li>
+                            <li>
+                                <a href="#getLastLabelPrinter" >getLastLabelPrinter</a>
+                            </li>
+                            <li>
+                                <a href="#getLastLabelUsed" >getLastLabelUsed</a>
+                            </li>
+                            <li>
+                                <a href="#getLastPrinterName" >getLastPrinterName</a>
+                            </li>
+                            <li>
+                                <a href="#getPrintContent" >getPrintContent</a>
+                            </li>
+                            <li>
+                                <a href="#getPrintHTML" >getPrintHTML</a>
+                            </li>
+                            <li>
+                                <a href="#getTestData" >getTestData</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#initDefaultLayouts" >initDefaultLayouts</a>
+                            </li>
+                            <li>
+                                <a href="#listPrinters" >listPrinters</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#printElectron" >printElectron</a>
+                            </li>
+                            <li>
+                                <a href="#printElectronReceipt" >printElectronReceipt</a>
+                            </li>
+                            <li>
+                                <a href="#printTestLabelElectron" >printTestLabelElectron</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#refreshInventoryLabel" >refreshInventoryLabel</a>
+                            </li>
+                            <li>
+                                <a href="#savePDF" >savePDF</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Async</span>
+                                <a href="#saveReceiptHTML" >saveReceiptHTML</a>
+                            </li>
+                            <li>
+                                <a href="#setLastLabelPrinterName" >setLastLabelPrinterName</a>
+                            </li>
+                            <li>
+                                <a href="#setLastLabelUsed" >setLastLabelUsed</a>
+                            </li>
+                            <li>
+                                <a href="#setLastPrinterName" >setLastPrinterName</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(electronService: ElectronService, snack: MatSnackBar, settingService: <a href="../injectables/SettingsService.html" target="_self">SettingsService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>, renderingService: <a href="../injectables/RenderingService.html" target="_self">RenderingService</a>, labelaryService: <a href="../injectables/LabelaryService.html" target="_self">LabelaryService</a>, fakeDataService: <a href="../injectables/FakeDataService.html" target="_self">FakeDataService</a>, btPrintingService: <a href="../injectables/BtPrintingService.html" target="_self">BtPrintingService</a>, http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/_services/system/printing.service.ts:32</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>electronService</td>
+                                                  
+                                                        <td>
+                                                                    <code>ElectronService</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>snack</td>
+                                                  
+                                                        <td>
+                                                                    <code>MatSnackBar</code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>settingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SettingsService.html" target="_self" >SettingsService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>renderingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/RenderingService.html" target="_self" >RenderingService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>labelaryService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/LabelaryService.html" target="_self" >LabelaryService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>fakeDataService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/FakeDataService.html" target="_self" >FakeDataService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>btPrintingService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/BtPrintingService.html" target="_self" >BtPrintingService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="applyStyles"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>applyStyles</b></span>
+                        <a href="#applyStyles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>applyStyles(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="98"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:98</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/ISetting.html" target="_self" >Promise&lt;ISetting&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convertToPDF"></a>
+                    <span class="name">
+                        <span class="modifier">Public</span>
+                        <span ><b>convertToPDF</b></span>
+                        <a href="#convertToPDF"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>convertToPDF(node: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="117"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:117</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>node</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="convertToPNG"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>convertToPNG</b></span>
+                        <a href="#convertToPNG"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>convertToPNG(node: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:139</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>node</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>unknown</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDefaultReceiptPrinter"></a>
+                    <span class="name">
+                        <span ><b>getDefaultReceiptPrinter</b></span>
+                        <a href="#getDefaultReceiptPrinter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDefaultReceiptPrinter()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="239"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:239</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getDomToImage"></a>
+                    <span class="name">
+                        <span ><b>getDomToImage</b></span>
+                        <a href="#getDomToImage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getDomToImage(node: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="86"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:86</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>node</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLastLabelPrinter"></a>
+                    <span class="name">
+                        <span ><b>getLastLabelPrinter</b></span>
+                        <a href="#getLastLabelPrinter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLastLabelPrinter()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:159</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLastLabelUsed"></a>
+                    <span class="name">
+                        <span ><b>getLastLabelUsed</b></span>
+                        <a href="#getLastLabelUsed"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLastLabelUsed()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="167"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:167</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getLastPrinterName"></a>
+                    <span class="name">
+                        <span ><b>getLastPrinterName</b></span>
+                        <a href="#getLastPrinterName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getLastPrinterName(printerType)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:151</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>printerType</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPrintContent"></a>
+                    <span class="name">
+                        <span ><b>getPrintContent</b></span>
+                        <a href="#getPrintContent"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPrintContent(htmlContent: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, styles: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="209"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:209</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>htmlContent</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>styles</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPrintHTML"></a>
+                    <span class="name">
+                        <span ><b>getPrintHTML</b></span>
+                        <a href="#getPrintHTML"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPrintHTML()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="262"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:262</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTestData"></a>
+                    <span class="name">
+                        <span ><b>getTestData</b></span>
+                        <a href="#getTestData"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTestData(prtContent: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="299"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:299</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>prtContent</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initDefaultLayouts"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>initDefaultLayouts</b></span>
+                        <a href="#initDefaultLayouts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>initDefaultLayouts()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="50"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:50</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="listPrinters"></a>
+                    <span class="name">
+                        <span ><b>listPrinters</b></span>
+                        <a href="#listPrinters"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>listPrinters()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="110"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:110</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printElectron"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>printElectron</b></span>
+                        <a href="#printElectron"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>printElectron(contents: <a href="../s/s.html" target="_self">string</a>, printerName: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="175"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:175</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>contents</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>printerName</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printElectronReceipt"></a>
+                    <span class="name">
+                        <span ><b>printElectronReceipt</b></span>
+                        <a href="#printElectronReceipt"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>printElectronReceipt(printerName: <a href="../s/s.html" target="_self">string</a>, styles: <a href="../interfaces/ISetting.html" target="_self">ISetting</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="245"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:245</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>printerName</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>styles</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISetting.html" target="_self" >ISetting</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="printTestLabelElectron"></a>
+                    <span class="name">
+                        <span ><b>printTestLabelElectron</b></span>
+                        <a href="#printTestLabelElectron"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>printTestLabelElectron(printString: <a href="../s/s.html" target="_self">string</a>, printerName: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="251"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:251</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>printString</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>printerName</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="refreshInventoryLabel"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>refreshInventoryLabel</b></span>
+                        <a href="#refreshInventoryLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>refreshInventoryLabel(zplText: <a href="../s/s.html" target="_self">string</a>, data: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="62"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:62</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>zplText</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>data</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Promise&lt;string&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="savePDF"></a>
+                    <span class="name">
+                        <span ><b>savePDF</b></span>
+                        <a href="#savePDF"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>savePDF(nativeElement: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, _this)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="220"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:220</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>nativeElement</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>_this</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="saveReceiptHTML"></a>
+                    <span class="name">
+                        <span class="modifier">Async</span>
+                        <span ><b>saveReceiptHTML</b></span>
+                        <a href="#saveReceiptHTML"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>saveReceiptHTML(prtContent: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="280"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:280</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>prtContent</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setLastLabelPrinterName"></a>
+                    <span class="name">
+                        <span ><b>setLastLabelPrinterName</b></span>
+                        <a href="#setLastLabelPrinterName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setLastLabelPrinterName(printerName: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="163"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:163</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>printerName</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setLastLabelUsed"></a>
+                    <span class="name">
+                        <span ><b>setLastLabelUsed</b></span>
+                        <a href="#setLastLabelUsed"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setLastLabelUsed(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="171"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:171</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setLastPrinterName"></a>
+                    <span class="name">
+                        <span ><b>setLastPrinterName</b></span>
+                        <a href="#setLastPrinterName"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setLastPrinterName(printerType: <a href="../s/s.html" target="_self">string</a>, printerName: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="155"
+                            class="link-to-prism">src/app/_services/system/printing.service.ts:155</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>printerType</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>printerName</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isElectronServiceInitiated"></a>
+                    <span class="name">
+                        <span ><b>isElectronServiceInitiated</b></span>
+                        <a href="#isElectronServiceInitiated"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>false</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/app/_services/system/printing.service.ts:32</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="item"></a>
+                    <span class="name">
+                        <span ><b>item</b></span>
+                        <a href="#item"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/_services/system/printing.service.ts:30</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="order"></a>
+                    <span class="name">
+                        <span ><b>order</b></span>
+                        <a href="#order"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IPOSOrder.html" target="_self" >IPOSOrder</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="31" class="link-to-prism">src/app/_services/system/printing.service.ts:31</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="receiptLayoutSetting"></a>
+                    <span class="name">
+                        <span ><b>receiptLayoutSetting</b></span>
+                        <a href="#receiptLayoutSetting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ISetting.html" target="_self" >ISetting</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/_services/system/printing.service.ts:28</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="receiptStyles"></a>
+                    <span class="name">
+                        <span ><b>receiptStyles</b></span>
+                        <a href="#receiptStyles"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ISetting.html" target="_self" >ISetting</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="29" class="link-to-prism">src/app/_services/system/printing.service.ts:29</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="zplSetting"></a>
+                    <span class="name">
+                        <span ><b>zplSetting</b></span>
+                        <a href="#zplSetting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/ISetting.html" target="_self" >ISetting</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="27" class="link-to-prism">src/app/_services/system/printing.service.ts:27</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { ElementRef, Injectable, Renderer2 } from &#x27;@angular/core&#x27;;
+import * as _ from &quot;lodash&quot;;
+import { SettingsService } from &#x27;src/app/_services/system/settings.service&#x27;;
+import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { Settings } from &#x27;electron/main&#x27;;
+import { ISetting, ISite } from &#x27;src/app/_interfaces&#x27;;
+import { IInventoryAssignment } from &#x27;src/app/_services/inventory/inventory-assignment.service&#x27;;
+import { MatSnackBar } from &#x27;@angular/material/snack-bar&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { ElectronService } from &#x27;ngx-electron&#x27;;
+import { IPOSOrder } from &#x27;src/app/_interfaces/transactions/posorder&#x27;;
+import html2canvas from &#x27;html2canvas&#x27;;
+import domtoimage from &#x27;dom-to-image&#x27;;
+import { jsPDF } from &quot;jspdf&quot;;
+import * as  printJS from &quot;print-js&quot;;
+import { RenderingService } from &#x27;./rendering.service&#x27;;
+import { LabelaryService, zplLabel } from &#x27;../labelary/labelary.service&#x27;;
+import { FakeDataService } from &#x27;./fake-data.service&#x27;;
+import { BtPrintingService } from &#x27;./bt-printing.service&#x27;;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+
+export class PrintingService {
+
+  zplSetting            : ISetting;
+  receiptLayoutSetting  : ISetting;
+  receiptStyles         : ISetting;
+  item                  : IInventoryAssignment;
+  order                 : IPOSOrder
+  isElectronServiceInitiated &#x3D; false
+
+  constructor(  private electronService: ElectronService,
+                private snack: MatSnackBar,
+                private settingService: SettingsService,
+                private siteService: SitesService,
+                private renderingService: RenderingService,
+                private labelaryService: LabelaryService,
+                private fakeDataService: FakeDataService,
+                private btPrintingService: BtPrintingService,
+                private http: HttpClient,) {
+
+    if (this.electronService.remote !&#x3D; null) {
+      this.isElectronServiceInitiated &#x3D; true
+      console.log(&#x27;electron services initiated&#x27;)
+    }
+  }
+
+  async initDefaultLayouts() {
+    const site &#x3D; this.siteService.getAssignedSite();
+    //initialize generic items for testing.
+    try {
+      this.zplSetting           &#x3D; await this.settingService.setDefaultZPLText(site);
+      this.receiptLayoutSetting &#x3D; await this.settingService.setDefaultReceiptLayout(site)
+      this.receiptStyles        &#x3D; await this.settingService.setDefaultReceiptStyles(site)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async refreshInventoryLabel(zplText: string, data: IInventoryAssignment): Promise&lt;string&gt; {
+
+    const site        &#x3D;  this.siteService.getAssignedSite();
+    if (!zplText) {return}
+
+    let zpl &#x3D; {} as  zplLabel;
+    zpl.height &#x3D; &#x27;2&#x27; // this.zplSetting.option2;
+    zpl.width  &#x3D; &#x27;3&#x27; // this.zplSetting.option3;
+
+    if (!zpl) { return }
+
+    //interpolate the zpl text
+    zplText &#x3D;  this.renderingService.interpolateText(data, zplText)
+    zpl.text   &#x3D; zplText
+
+    if (zpl) {
+      const labelImage$  &#x3D;  this.labelaryService.postZPL(site, zpl)
+      const img &#x3D; await labelImage$.pipe().toPromise()
+      return  &#x60;data:image/jpeg;base64,${img}&#x60;
+    }
+
+  }
+
+
+  getDomToImage(node: any) {
+      domtoimage.toPng(node)
+    .then(function (dataUrl) {
+        var img &#x3D; new Image();
+        img.src &#x3D; dataUrl;
+        document.body.appendChild(img);
+    })
+    .catch(function (error) {
+        console.error(&#x27;oops, something went wrong!&#x27;, error);
+    });
+  }
+
+  async applyStyles(site: ISite): Promise&lt;ISetting&gt; {
+    const receiptStyle$       &#x3D; this.settingService.getSettingByName(site, &#x27;ReceiptStyles&#x27;)
+    const receiptStylePromise &#x3D; await receiptStyle$.pipe().toPromise()
+    if (receiptStylePromise) {
+      // const styles &#x3D; this.renderingService.interporlateFromDB(receiptStyles.text)
+      const style &#x3D; document.createElement(&#x27;style&#x27;);
+      style.innerHTML &#x3D; receiptStylePromise.text;
+      document.head.appendChild(style);
+      return receiptStylePromise
+    }
+  }
+
+  listPrinters(): any {
+    const printWindow &#x3D; new this.electronService.remote.BrowserWindow({ show:false })
+    printWindow.loadURL(&#x27;http://github.com&#x27;)
+    return printWindow.webContents.getPrinters();
+  }
+
+   // const node &#x3D; document.getElementById(&#x27;printsection&#x27;);
+  public convertToPDF(node: any)
+  {
+    try {
+      const options &#x3D; { background: &#x27;white&#x27;, height: 845, width: 595 };
+      domtoimage.toPng(node, options).then(
+      data &#x3D;&gt;
+      {
+          //Initialize JSPDF
+          const doc &#x3D; new jsPDF(&#x27;p&#x27;, &#x27;mm&#x27;, &#x27;a4&#x27;);
+          doc.addImage(data, &#x27;PNG&#x27;, 0, 0, 250, 250);//change values to your preference
+          doc.save(&#x27;invoice.pdf&#x27;);
+
+      }, error &#x3D;&gt;
+      {
+        this.snack.open(error, &#x27;PNG Error error&#x27;)
+      }
+      )
+    } catch (error) {
+      this.snack.open(error, &#x27;PNG Error error&#x27;)
+    }
+  }
+
+  async convertToPNG(node: any)
+  {
+      try {
+        const options &#x3D; { background: &#x27;white&#x27;, height: 845, width: 300 };
+        return  domtoimage.toPng(node, options)
+
+      } catch (error) {
+        this.snack.open(error, &#x27;PNG Error error&#x27;)
+      }
+
+  }
+
+  getLastPrinterName(printerType): string {
+    return  localStorage.getItem(printerType)
+  }
+
+  setLastPrinterName(printerType: string, printerName: string) {
+    localStorage.setItem(printerType, printerName)
+  }
+
+  getLastLabelPrinter(): string {
+    return this.getLastPrinterName(&#x27;LastLabelPrinter&#x27;)
+  }
+
+  setLastLabelPrinterName(printerName: string) {
+    this.setLastPrinterName(&#x27;LastLabelPrinter&#x27;, printerName)
+  }
+
+  getLastLabelUsed(): number {
+    return parseInt( localStorage.getItem(&#x27;lastLabelUsed&#x27;) )
+  }
+
+  setLastLabelUsed(id: number) {
+    localStorage.setItem(&#x27;lastLabelUsed&#x27;, id.toString())
+  }
+
+  async printElectron(contents: string, printerName: string) {
+
+    const site &#x3D; this.siteService.getAssignedSite();
+
+    const receiptStyle$       &#x3D; this.settingService.getSettingByName(site, &#x27;ReceiptStyles&#x27;)
+    const receiptStylePromise &#x3D; await receiptStyle$.pipe().toPromise()
+
+    const printWindow &#x3D; new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    const id          &#x3D; printWindow.id
+
+    printWindow.loadURL(contents)
+      .then((e) &#x3D;&gt; {
+
+        printWindow.hide();
+        printWindow.webContents.print(
+          { silent: true, printBackground: false, deviceName: printerName }, (error, data) &#x3D;&gt; {
+          if (error) {
+            if (error &#x3D;&#x3D; true)  {
+              printWindow.close();
+            }
+          } else {
+            printWindow.close();
+          }
+            if (data) {
+              printWindow.close();
+            }
+          }
+        )
+        }).catch((e) &#x3D;&gt; {
+          console.log(e);
+      }
+    )
+  }
+
+  getPrintContent(htmlContent: any, styles: any) {
+
+    const htmlHeader &#x3D; &#x60;&lt;!DOCTYPE html &lt;html&gt;&lt;head&gt; ${styles}&lt;/head&gt; &lt;body&gt;&#x60;
+    const htmlFooter &#x3D; &#x27;&lt;/body&gt; &lt;/html&gt;&#x27;
+    const html &#x3D; &#x60;${htmlHeader}  ${htmlContent} ${htmlFooter}&#x60;
+
+    const file &#x3D; &#x60;$data:text/html;charset&#x3D;UTF-8, ${encodeURIComponent(html)}&#x60;
+    return file
+
+  }
+
+  savePDF(nativeElement: any, _this) {
+    {
+       try {
+         html2canvas(nativeElement).then(canvas &#x3D;&gt; {
+           var pdf &#x3D; new jsPDF(&#x27;p&#x27;, &#x27;pt&#x27;, [canvas.width +15 , canvas.height + 25]);
+           _this.canvas.nativeElement.src &#x3D; canvas.toDataURL();
+           const content &#x3D; canvas.toDataURL(&#x27;image/png&#x27;);
+           // let imageData &#x3D; this.getBase64Image(this.canvas.nativeElement);
+
+           pdf.addImage(content, &quot;JPG&quot;, 10, 10, canvas.width -15,   canvas.height -25);
+           pdf.save(&#x27;pointlessOutput.pdf&#x27;);
+         });
+       } catch (error) {
+         console.log(error)
+       }
+     }
+   }
+
+
+  getDefaultReceiptPrinter()
+  {
+    console.log(&#x27;&#x27;)
+  }
+
+
+  printElectronReceipt(printerName: string, styles: ISetting) {
+    const html &#x3D; this.getPrintHTML()
+    const contents &#x3D; &#x60;data:text/html;charset&#x3D;utf-8,  ${encodeURIComponent(html) }&#x60;
+    this.printElectron(contents, printerName)
+  }
+
+  printTestLabelElectron(printString: string, printerName: string) {
+    const fileName &#x3D; &#x60;c:\\pointless\\print.txt&#x60;;
+    try {
+      window.fs.writeFileSync(fileName, printString);
+    } catch (error) {
+      this.snack.open(&#x60;File could not be written. Please make sure you have a writable folder ${fileName}&#x60;, &#x27;Error&#x27;)
+    }
+    const file &#x3D; &#x60;file:///c://pointless//print.txt&#x60;
+    this.printElectron(file, printerName)
+  }
+
+  getPrintHTML() {
+    const prtContent   &#x3D; document.getElementById(&#x27;printsection&#x27;);
+    const content      &#x3D; &#x60;${prtContent.innerHTML}&#x60;
+    let styles  &#x3D; &#x27;&#x27;
+    if (this.receiptStyles) {
+      const styles &#x3D;  this.receiptStyles.text;
+    }
+    const htmlHeader &#x3D; &#x60;&lt;!DOCTYPE html &lt;html&gt;
+                        &lt;head&gt;
+                        &lt;style&gt;${styles}&lt;/style&gt;
+                        &lt;title&gt;Print&lt;/title&gt;
+                        &lt;/head&gt; &lt;body&gt;&#x60;
+    const htmlFooter &#x3D; &#x27;&lt;/body&gt; &lt;/html&gt;&#x27;
+    const html &#x3D; &#x60;${htmlHeader}  ${content} ${htmlFooter}&#x60;
+    return html
+  }
+
+
+  async saveReceiptHTML(prtContent: any) {
+
+    const site &#x3D; this.siteService.getAssignedSite();
+
+    let styles  &#x3D; &#x27;&#x27;
+    if (this.receiptStyles) {
+      const styles &#x3D;  this.receiptStyles.text;
+    }
+
+    let setting &#x3D; {} as ISetting;
+
+    setting.name &#x3D; &#x27;receiptStyles&#x27;;
+    setting.text &#x3D; this.getTestData(prtContent);
+
+    const observerable$ &#x3D; await this.settingService.setText(site, setting)
+
+  }
+
+
+  getTestData(prtContent: any) {
+    // var prtContent &#x3D; document.getElementById(&#x27;print-section&#x27;);
+    return prtContent.innerHTML;
+  }
+
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'PrintingService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,30 @@
+<div *ngIf="promptMenuItem"
+      class="grid-items">
+
+  <div>
+    <button mat-button
+            class="buttons"
+            (click)="addItem()">
+     <mat-icon>add</mat-icon> {{promptMenuItem.prompt_Products.name}}
+    </button>
+  </div>
+
+  <div *ngIf ="imageURL" class="image">
+    <img class="image" [src]="imageURL">
+  </div>
+
+  <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"
+        class="button-item">
+    <button mat-button
+            class="buttons"
+            (click)="removeItem()">
+     <mat-icon>delete</mat-icon> Remove
+    </button>
+  </div>
+
+  <div
+      class="span-column onlineShortDescription"
+      [innerHTML]="promptMenuItem.prompt_Products?.onlineShortDescription">
+  </div>
+
+</div>

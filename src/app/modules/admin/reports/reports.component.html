@@ -1,0 +1,24 @@
+<h4>Range: {{ dateFrom }} to  {{ dateTo }} </h4>
+
+<div fxLayout="row" fxLayoutAlign="space-between center" flLayoutGap="20px">
+    <mat-card fxFlex="100">
+        <app-widget-filter (messageOut)="receiveData($event)"></app-widget-filter>
+     </mat-card>
+</div>
+
+<br>
+    <mat-divider></mat-divider>
+<br>
+
+<div
+      *ngIf="dateFrom && dateTo"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      flLayoutGap="20px">
+    <mat-card fxFlex="100">
+            <app-widget-chart-table [sites]="chartData"
+                                    [dateFrom]="dateFrom"
+                                    [dateTo]="dateTo"
+                                    [notifier]="childNotifier"></app-widget-chart-table>
+     </mat-card>
+</div>

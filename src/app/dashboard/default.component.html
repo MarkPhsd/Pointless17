@@ -1,0 +1,50 @@
+<app-header>
+</app-header>
+
+<mat-drawer-container >
+  <mat-drawer
+              position="start"
+              [class]="barType"
+              [mode]="sidebarMode"
+              [opened]="sideBarOpen">
+
+      <div [hidden]="searchBarOpen">
+
+        <div [hidden]="toolbarTiny">
+          <app-menu-minimal></app-menu-minimal>
+        </div>
+
+        <div [hidden]="!toolbarTiny">
+          <app-menu-tiny></app-menu-tiny>
+        </div>
+
+      </div>
+
+      <div [hidden]="!searchBarOpen">
+        <app-menu-search-bar>
+        </app-menu-search-bar>
+      </div>
+
+  </mat-drawer>
+
+  <mat-drawer-content>
+      <div class="animations"
+           [@routeAnimations]="prepareRoute(outlet)" >
+          <router-outlet #outlet="outlet"></router-outlet>
+      </div>
+  </mat-drawer-content>
+
+  <mat-drawer
+              position="end"
+              [mode]="sidebarMode"
+              [opened]="orderBarOpen"
+              class="mat-orderBar" >
+    <app-order-bar>
+    </app-order-bar>
+  </mat-drawer>
+
+</mat-drawer-container>
+
+
+
+

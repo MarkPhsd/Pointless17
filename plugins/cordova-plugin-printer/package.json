@@ -1,0 +1,78 @@
+{
+  "_args": [
+    [
+      "cordova-plugin-printer@0.8.0",
+      "C:\\Users\\Mark\\source\\repos\\CCSApp"
+    ]
+  ],
+  "_from": "cordova-plugin-printer@0.8.0",
+  "_id": "cordova-plugin-printer@0.8.0",
+  "_inBundle": false,
+  "_integrity": "sha512-Olu2SuCedztO6PtXoHwA4J/emOxZlj64Ya9aZhcxoXJITG+RDF6Nb3oThcpYPTa73+py+gPF7r19lv3Q8RR/Nw==",
+  "_location": "/cordova-plugin-printer",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "version",
+    "registry": true,
+    "raw": "cordova-plugin-printer@0.8.0",
+    "name": "cordova-plugin-printer",
+    "escapedName": "cordova-plugin-printer",
+    "rawSpec": "0.8.0",
+    "saveSpec": null,
+    "fetchSpec": "0.8.0"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-printer/-/cordova-plugin-printer-0.8.0.tgz",
+  "_spec": "0.8.0",
+  "_where": "C:\\Users\\Mark\\source\\repos\\CCSApp",
+  "author": {
+    "name": "Sebastián Katzer"
+  },
+  "bugs": {
+    "url": "https://github.com/katzer/cordova-plugin-printer/issues"
+  },
+  "cordova": {
+    "id": "cordova-plugin-printer",
+    "platforms": [
+      "ios",
+      "android",
+      "windows",
+      "browser"
+    ]
+  },
+  "description": "Prints HTML documents",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    },
+    {
+      "name": "android-sdk",
+      "version": ">=19"
+    },
+    {
+      "name": "apple-ios",
+      "version": ">=8.0"
+    }
+  ],
+  "homepage": "https://github.com/katzer/cordova-plugin-printer#readme",
+  "keywords": [
+    "appplant",
+    "printer",
+    "cordova",
+    "ecosystem:cordova",
+    "cordova-ios",
+    "cordova-android",
+    "cordova-windows",
+    "cordova-browser"
+  ],
+  "license": "Apache 2.0",
+  "name": "cordova-plugin-printer",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katzer/cordova-plugin-printer.git"
+  },
+  "version": "0.8.0"
+}

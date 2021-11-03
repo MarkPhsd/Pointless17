@@ -1,0 +1,183 @@
+// body{ overflow-x: hidden;}
+@import "/src/mixins.scss";
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
+  gap: 2px;
+}
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(375px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+.mat-input-element {
+  font-size: small;
+}
+
+mat-raised-button {
+  margin: 5rem 5rem 2rem 2rem;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+button {
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+app-widget-uploader {
+  margin: 5rem 5rem 5rem 5rem;
+  padding: 2rem 2rem 2rem 2rem;
+}
+
+mat-label {
+  padding:5px;
+  font-size: 1.0em;
+}
+
+mat-form-field {
+  font-size: 1em;
+  margin: 3px 3px 3px 3px;
+}
+.header-column {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+.button-margins {
+  margin: -5px 3px 3px 3px;
+}
+
+.location-assignment {
+  float: left;
+  width: 100px !important;
+}
+
+.select-conversion{
+  // float: left;
+  width: 100px !important;
+}
+
+
+.price-values {
+  width: 145px;
+}
+
+mat-radio-button  {
+  margin: 3px;
+}
+
+mat-card{
+  padding: 5px 5px 5px 5px;
+  margin:  3px 3px 3px 3px;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+.itemSaved {
+  color: hotpink;
+}
+
+mat-drawer {
+  width: 200px;
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding: 20px;
+}
+
+simple-tinymce {
+  padding:5px;
+}
+
+label {
+  display: block;
+  padding: 5px;
+}
+
+button{
+  padding: 5px;
+}
+
+h1 {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+
+#remove_email {
+  // color: red;
+  margin: 5px;
+}
+
+#register_button {
+  background: lightblue;
+}
+
+.subtitle {
+  width: 300px;
+}
+
+.itemInfoColumns {
+  width: 200px;
+}
+
+.item-label {
+  float: left;
+}
+
+.item-info {
+  float: right;
+}
+
+// .ng-valid:not(form) {
+//   border-left: 3px solid greenyellow;
+// }
+
+img {
+  width: 150px;
+  height: 150px;
+  align-content: center;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.container {
+  padding: 5px;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+body{ overflow-x: hidden;}
+
+mat-form-field {
+  font-size: .8em;
+}
+
+.checmical-values {
+  margin: 5px 2px 2px 2px;
+}

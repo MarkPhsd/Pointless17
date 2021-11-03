@@ -1,0 +1,165 @@
+<div *ngIf="payment"  class="gallery-container">
+  <div *ngIf="payment as item; else loading">
+    <mat-card>
+
+      <mat-card-subtitle>
+        <div class="header-grid">
+
+          <div class="header-grid info-width">
+
+            <div class="title-format"> Order</div>
+            <div class="title-format">{{item.orderID}}</div>
+
+            <div class="title-format">Payment ID</div>
+            <div class="title-format">{{item.id}}</div>
+
+            <div *ngIf="paymentMethod" class="title-format">Method </div>
+            <div *ngIf="paymentMethod" class="title-format">{{paymentMethod.name}}</div>
+
+            <div class="title-format">Amount</div>
+            <div class="title-format"> {{item.amountPaid | currency}} </div>
+
+            <div class="title-format">Amount Received</div>
+            <div class="title-format"> {{item.amountReceived | currency}} </div>
+
+            <div class="title-format">Tip</div>
+            <div class="title-format"> {{item.tipAmount | currency}} </div>
+
+          </div>
+
+          <div>
+            <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateItem($event)"
+              (outputupdateItemExit)  ="updateItemExit($event)"
+              (outputupdatedeleteItem)="deleteItem($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+            ></app-edit-buttons-standard>
+          </div>
+
+        </div>
+
+        <div class="header-grid info-width sub-title">
+          <div>Employee</div> <div> {{item.employeeName }} </div>
+
+          <div>Open</div>    <div> {{item.orderDate | date: 'shortDate'}} </div>
+          <div>Closed </div> <div> {{item.completionDate  | date: 'shortDate'}} </div>
+        </div>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <mat-divider></mat-divider>
+        <div *ngIf="inputForm"
+              class="grid-container"
+              [formGroup]="inputForm">
+
+          <div class="grid-item">
+
+            <div class="header">
+              <h4><mat-icon>edit</mat-icon> Edit </h4>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Void reason</mat-label>
+                <input matInput
+                      type             ="text"
+                      formControlName  ="voidReason"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Void Amount</mat-label>
+                <input matInput
+                      type             ="text"
+                      formControlName  ="voidAmount"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Check #</mat-label>
+                <input matInput
+                      type             ="text"
+                      formControlName  ="checkNumber"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <!-- <mat-card class="card-dimensions">
+              <mat-card-content>
+                <app-mat-toggle-selector
+                    class="card-height"
+                    [list$]            = "paymenthMethods$"
+                    [hideAllOption]    = "'true'"
+                    [toggleDimensions] = "'toggle-group-tall'"
+                    [buttonDimensions] = "'button-dimensions-tall'"
+                    (outPutItem)       = "getPaymentMethod($event)"
+                  >
+                </app-mat-toggle-selector>
+              </mat-card-content>
+            </mat-card> -->
+
+          </div>
+
+          <div *ngIf="paymentMethod && paymentMethod.isCreditCard">
+
+            <div class="grid-item">
+              <div class="header">
+                <h4><mat-icon>credit_card</mat-icon> Credit Into </h4>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Approval Code </mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="approvalCode"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Pre Auth</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="preAuth"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Batched</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="isBatched"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Card Holder</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="cardHolder"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>

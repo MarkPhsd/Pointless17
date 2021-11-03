@@ -1,0 +1,2249 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content component">
+                   <div class="content-data">
+
+
+
+
+<ol class="breadcrumb">
+  <li>Components</li>
+  <li
+  >
+  PriceScheduleInfoComponent</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+        <li >
+            <a href="#templateData" role="tab" id="templateData-tab" data-toggle="tab" data-link="template">Template</a>
+        </li>
+        <li >
+            <a href="#styleData" role="tab" id="styleData-tab" data-toggle="tab" data-link="style">Styles</a>
+        </li>
+        <li >
+            <a href="#tree" role="tab" id="tree-tab" data-toggle="tab" data-link="dom-tree">DOM Tree</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info"><p class="comment">
+    <h3>File</h3>
+</p>
+<p class="comment">
+    <code>src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts</code>
+</p>
+
+
+
+
+    <p class="comment">
+        <h3>Implements</h3>
+    </p>
+    <p class="comment">
+                    <code><a href="https://angular.io/api/core/OnInit" target="_blank" >OnInit</a></code>
+                    <code><a href="../miscellaneous/variables.html#s" target="_self" >OnChanges</a></code>
+                    <code><a href="https://angular.io/api/core/AfterViewInit" target="_blank" >AfterViewInit</a></code>
+    </p>
+
+
+<section>
+    <h3>Metadata</h3>
+    <table class="table table-sm table-hover">
+        <tbody>
+
+
+
+
+
+
+
+
+
+
+
+            <tr>
+                <td class="col-md-3">selector</td>
+                <td class="col-md-9"><code>app-price-schedule-info</code></td>
+            </tr>
+
+            <tr>
+                <td class="col-md-3">styleUrls</td>
+                <td class="col-md-9"><code>./price-schedule-info.component.scss</code></td>
+            </tr>
+
+
+
+            <tr>
+                <td class="col-md-3">templateUrl</td>
+                <td class="col-md-9"><code>./price-schedule-info.component.html</code></td>
+            </tr>
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#_priceSchedule" >_priceSchedule</a>
+                            </li>
+                            <li>
+                                <a href="#animationCounter" >animationCounter</a>
+                            </li>
+                            <li>
+                                <a href="#priceScheduleTracking" >priceScheduleTracking</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getCounter" >getCounter</a>
+                            </li>
+                            <li>
+                                <a href="#initSubscriptions" >initSubscriptions</a>
+                            </li>
+                            <li>
+                                <a href="#ngAfterViewInit" >ngAfterViewInit</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnChanges" >ngOnChanges</a>
+                            </li>
+                            <li>
+                                <a href="#ngOnInit" >ngOnInit</a>
+                            </li>
+                            <li>
+                                <a href="#removeCategoryDiscounts" >removeCategoryDiscounts</a>
+                            </li>
+                            <li>
+                                <a href="#removeDiscountItemTypes" >removeDiscountItemTypes</a>
+                            </li>
+                            <li>
+                                <a href="#removeItemDiscounts" >removeItemDiscounts</a>
+                            </li>
+                            <li>
+                                <a href="#removeRequiredCategories" >removeRequiredCategories</a>
+                            </li>
+                            <li>
+                                <a href="#removeRequiredItem" >removeRequiredItem</a>
+                            </li>
+                            <li>
+                                <a href="#removeRequiredItems" >removeRequiredItems</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Inputs</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#hideDelete" >hideDelete</a>
+                            </li>
+                            <li>
+                                <a href="#inputForm" >inputForm</a>
+                            </li>
+                            <li>
+                                <a href="#item" >item</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Accessors</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                    <a href="#requiredCategories" >requiredCategories</a>
+                                </li>
+                                <li>
+                                    <a href="#requiredItems" >requiredItems</a>
+                                </li>
+                                <li>
+                                    <a href="#requiredItemTypes" >requiredItemTypes</a>
+                                </li>
+                                <li>
+                                    <a href="#requiredBrands" >requiredBrands</a>
+                                </li>
+                                <li>
+                                    <a href="#categoryDiscounts" >categoryDiscounts</a>
+                                </li>
+                                <li>
+                                    <a href="#itemDiscounts" >itemDiscounts</a>
+                                </li>
+                                <li>
+                                    <a href="#itemTypeDiscounts" >itemTypeDiscounts</a>
+                                </li>
+                                <li>
+                                    <a href="#brandDiscounts" >brandDiscounts</a>
+                                </li>
+                                <li>
+                                    <a href="#timeFrames" >timeFrames</a>
+                                </li>
+                                <li>
+                                    <a href="#orderTypes" >orderTypes</a>
+                                </li>
+                                <li>
+                                    <a href="#clientTypes" >clientTypes</a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(priceScheduleDataService: <a href="../injectables/PriceScheduleDataService.html" target="_self">PriceScheduleDataService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="104" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:104</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>priceScheduleDataService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/PriceScheduleDataService.html" target="_self" >PriceScheduleDataService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+    <section>
+    <h3 id="inputs">Inputs</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="hideDelete"></a>
+                        <b>hideDelete</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:50</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="inputForm"></a>
+                        <b>inputForm</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://angular.io/api/forms/FormGroup" target="_blank" >FormGroup</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="49" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:49</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="item"></a>
+                        <b>item</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IPriceSchedule.html" target="_self" >IPriceSchedule</a></code>
+
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-2" colspan="2">
+                                    <div class="io-line">Defined in <a href="" data-line="48" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:48</a></div>
+                            </td>
+                        </tr>
+            </tbody>
+        </table>
+</section>
+
+
+
+    <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getCounter"></a>
+                    <span class="name">
+                        <span ><b>getCounter</b></span>
+                        <a href="#getCounter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getCounter()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:119</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="initSubscriptions"></a>
+                    <span class="name">
+                        <span ><b>initSubscriptions</b></span>
+                        <a href="#initSubscriptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>initSubscriptions()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="55"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:55</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngAfterViewInit"></a>
+                    <span class="name">
+                        <span ><b>ngAfterViewInit</b></span>
+                        <a href="#ngAfterViewInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngAfterViewInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="115"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:115</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnChanges"></a>
+                    <span class="name">
+                        <span ><b>ngOnChanges</b></span>
+                        <a href="#ngOnChanges"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnChanges(changes: <a href="../s/s.html" target="_self">SimpleChanges</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="123"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:123</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>changes</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >SimpleChanges</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="ngOnInit"></a>
+                    <span class="name">
+                        <span ><b>ngOnInit</b></span>
+                        <a href="#ngOnInit"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>ngOnInit()</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="111"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:111</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeCategoryDiscounts"></a>
+                    <span class="name">
+                        <span ><b>removeCategoryDiscounts</b></span>
+                        <a href="#removeCategoryDiscounts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeCategoryDiscounts(i)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="139"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:139</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>i</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeDiscountItemTypes"></a>
+                    <span class="name">
+                        <span ><b>removeDiscountItemTypes</b></span>
+                        <a href="#removeDiscountItemTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeDiscountItemTypes(i)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="136"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:136</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>i</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeItemDiscounts"></a>
+                    <span class="name">
+                        <span ><b>removeItemDiscounts</b></span>
+                        <a href="#removeItemDiscounts"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeItemDiscounts(i)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="142"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:142</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>i</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeRequiredCategories"></a>
+                    <span class="name">
+                        <span ><b>removeRequiredCategories</b></span>
+                        <a href="#removeRequiredCategories"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeRequiredCategories(i)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="130"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:130</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>i</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeRequiredItem"></a>
+                    <span class="name">
+                        <span ><b>removeRequiredItem</b></span>
+                        <a href="#removeRequiredItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeRequiredItem(i)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="127"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:127</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>i</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="removeRequiredItems"></a>
+                    <span class="name">
+                        <span ><b>removeRequiredItems</b></span>
+                        <a href="#removeRequiredItems"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>removeRequiredItems(i)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="133"
+                            class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:133</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>i</td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+    <section>
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="_priceSchedule"></a>
+                    <span class="name">
+                        <span ><b>_priceSchedule</b></span>
+                        <a href="#_priceSchedule"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Subscription</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:52</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="animationCounter"></a>
+                    <span class="name">
+                        <span ><b>animationCounter</b></span>
+                        <a href="#animationCounter"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:46</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="priceScheduleTracking"></a>
+                    <span class="name">
+                        <span ><b>priceScheduleTracking</b></span>
+                        <a href="#priceScheduleTracking"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="../interfaces/IPriceSchedule.html" target="_self" >IPriceSchedule</a></code>
+
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="53" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:53</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    <section>
+    <h3 id="accessors">
+        Accessors
+    </h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="requiredCategories"></a>
+                        <span class="name"><b>requiredCategories</b><a href="#requiredCategories"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>requiredCategories()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:62</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="requiredItems"></a>
+                        <span class="name"><b>requiredItems</b><a href="#requiredItems"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>requiredItems()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="66" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:66</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="requiredItemTypes"></a>
+                        <span class="name"><b>requiredItemTypes</b><a href="#requiredItemTypes"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>requiredItemTypes()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="70" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:70</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="requiredBrands"></a>
+                        <span class="name"><b>requiredBrands</b><a href="#requiredBrands"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>requiredBrands()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="74" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:74</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="categoryDiscounts"></a>
+                        <span class="name"><b>categoryDiscounts</b><a href="#categoryDiscounts"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>categoryDiscounts()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="78" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:78</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="itemDiscounts"></a>
+                        <span class="name"><b>itemDiscounts</b><a href="#itemDiscounts"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>itemDiscounts()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="82" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:82</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="itemTypeDiscounts"></a>
+                        <span class="name"><b>itemTypeDiscounts</b><a href="#itemTypeDiscounts"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>itemTypeDiscounts()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="86" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:86</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="brandDiscounts"></a>
+                        <span class="name"><b>brandDiscounts</b><a href="#brandDiscounts"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>brandDiscounts()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="90" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:90</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="timeFrames"></a>
+                        <span class="name"><b>timeFrames</b><a href="#timeFrames"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>timeFrames()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="94" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:94</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="orderTypes"></a>
+                        <span class="name"><b>orderTypes</b><a href="#orderTypes"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>orderTypes()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="98" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:98</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <a name="clientTypes"></a>
+                        <span class="name"><b>clientTypes</b><a href="#clientTypes"><span class="icon ion-ios-link"></span></a></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <span class="accessor"><b>get</b><code>clientTypes()</code></span>
+                    </td>
+                </tr>
+                            <tr>
+                                <td class="col-md-4">
+                                    <div class="io-line">Defined in <a href="" data-line="102" class="link-to-prism">src/app/modules/admin/products/price-schedule/price-schedule-info/price-schedule-info.component.ts:102</a></div>
+                                </td>
+                            </tr>
+
+            </tbody>
+        </table>
+</section>
+</div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Component, OnInit, Input, AfterViewInit, OnChanges, SimpleChanges } from &#x27;@angular/core&#x27;;
+import { FormArray, FormGroup } from &#x27;@angular/forms&#x27;;
+import { IPriceSchedule } from &#x27;src/app/_interfaces/menu/price-schedule&#x27;;
+import { Subscription } from &#x27;rxjs&#x27;;
+import { PriceScheduleDataService } from &#x27;src/app/_services/menu/price-schedule-data.service&#x27;;
+import { trigger, transition, query, style, animate, group } from &#x27;@angular/animations&#x27;;
+
+const left &#x3D; [
+  query(&#x27;:enter, :leave&#x27;, style({ position: &#x27;fixed&#x27;, width: &#x27;100%&#x27; }), { optional: true }),
+  group([
+    query(&#x27;:enter&#x27;, [style({ transform: &#x27;translateX(-100%)&#x27; }), animate(&#x27;.3s ease-out&#x27;, style({ transform: &#x27;translateX(0%)&#x27; }))], {
+      optional: true,
+    }),
+    query(&#x27;:leave&#x27;, [style({ transform: &#x27;translateX(0%)&#x27; }), animate(&#x27;.3s ease-out&#x27;, style({ transform: &#x27;translateX(100%)&#x27; }))], {
+      optional: true,
+    }),
+  ]),
+];
+
+const right &#x3D; [
+  query(&#x27;:enter, :leave&#x27;, style({ position: &#x27;fixed&#x27;, width: &#x27;100%&#x27; }), { optional: true }),
+  group([
+    query(&#x27;:enter&#x27;, [style({ transform: &#x27;translateX(100%)&#x27; }), animate(&#x27;.3s ease-out&#x27;, style({ transform: &#x27;translateX(0%)&#x27; }))], {
+      optional: true,
+    }),
+    query(&#x27;:leave&#x27;, [style({ transform: &#x27;translateX(0%)&#x27; }), animate(&#x27;.3s ease-out&#x27;, style({ transform: &#x27;translateX(-100%)&#x27; }))], {
+      optional: true,
+    }),
+  ]),
+];
+
+@Component({
+  selector: &#x27;app-price-schedule-info&#x27;,
+  templateUrl: &#x27;./price-schedule-info.component.html&#x27;,
+  styleUrls: [&#x27;./price-schedule-info.component.scss&#x27;],
+  // animations: [slideInOutAnimation]
+  animations: [
+    trigger(&#x27;slider&#x27;, [
+      transition(&#x27;:increment&#x27;, right),
+      transition(&#x27;:decrement&#x27;, left),
+    ]),
+  ],
+})
+export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewInit {
+  //animation
+  animationCounter: number;
+
+  @Input()  item:                IPriceSchedule;
+  @Input()  inputForm:           FormGroup;
+  @Input()  hideDelete:          boolean;
+
+  _priceSchedule              : Subscription;
+  priceScheduleTracking       : IPriceSchedule;
+
+  initSubscriptions() {
+    this._priceSchedule &#x3D; this.priceScheduleDataService.priceSchedule$.subscribe( data &#x3D;&gt; {
+      this.priceScheduleTracking &#x3D; data
+      // this.requiredItemTypes.patchValue(data.requiredItemTypes)
+    })
+  }
+
+  get requiredCategories() : FormArray {
+    return this.inputForm.get(&#x27;requiredCategories&#x27;) as FormArray;
+  }
+
+  get requiredItems() : FormArray {
+    return this.inputForm.get(&#x27;requiredItems&#x27;) as FormArray;
+  }
+
+  get requiredItemTypes() : FormArray {
+    return this.inputForm.get(&#x27;requiredItemTypes&#x27;) as FormArray;
+  }
+
+  get requiredBrands() : FormArray {
+    return this.inputForm.get(&#x27;requiredBrands&#x27;) as FormArray;
+  }
+
+  get categoryDiscounts() : FormArray {
+    return this.inputForm.get(&#x27;categoryDiscounts&#x27;) as FormArray;
+  }
+
+  get itemDiscounts() : FormArray {
+    return this.inputForm.get(&#x27;itemDiscounts&#x27;) as FormArray;
+  }
+
+  get itemTypeDiscounts() : FormArray {
+    return this.inputForm.get(&#x27;itemTypeDiscounts&#x27;) as FormArray;
+  }
+
+  get brandDiscounts() : FormArray {
+    return this.inputForm.get(&#x27;brandDiscounts&#x27;) as FormArray;
+  }
+
+  get timeFrames() : FormArray {
+    return this.inputForm.get(&#x27;timeFrames&#x27;) as FormArray;
+  }
+
+  get orderTypes() : FormArray {
+    return this.inputForm.get(&#x27;orderTypes&#x27;) as FormArray;
+  }
+
+  get clientTypes() : FormArray {
+    return this.inputForm.get(&#x27;clientTypes&#x27;) as FormArray;
+  }
+
+  constructor(
+    private priceScheduleDataService  : PriceScheduleDataService,
+  )
+  { }
+
+  ngOnInit(): void {
+    this.initSubscriptions();
+  }
+
+  ngAfterViewInit() {
+    this.initSubscriptions();
+  }
+
+  getCounter() {
+    this.animationCounter &#x3D; this.animationCounter + 1
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    this.initSubscriptions();
+  }
+
+  removeRequiredItem(i) {
+    this.requiredItemTypes.removeAt(i)
+  }
+  removeRequiredCategories(i) {
+    this.requiredCategories.removeAt(i)
+  }
+  removeRequiredItems(i) {
+    this.requiredItems.removeAt(i)
+  }
+  removeDiscountItemTypes(i) {
+    this.itemTypeDiscounts.removeAt(i)
+  }
+  removeCategoryDiscounts(i) {
+    this.categoryDiscounts.removeAt(i)
+  }
+  removeItemDiscounts(i){
+    this.itemDiscounts.removeAt(i)
+  }
+
+
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-templateData">
+        <pre class="line-numbers"><code class="language-html">&lt;div *ngIf&#x3D;&quot;priceScheduleTracking&quot; class&#x3D;&quot;type-list&quot;&gt;
+  &lt;mat-card&gt;
+    &lt;mat-card-subtitle&gt;
+      &lt;div *ngIf&#x3D;&quot;inputForm&quot;&gt;
+        &lt;div&gt;
+          Name: {{priceScheduleTracking.name}}
+
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/mat-card-subtitle&gt;
+
+    &lt;mat-card-content class&#x3D;&quot;type-card&quot;&gt;
+      &lt;mat-card  class&#x3D;&quot;type-card&quot;&gt;
+         &lt;div class&#x3D;&quot;grid-info&quot;&gt;
+
+            &lt;div class&#x3D;&quot;grid-box&quot;&gt;
+              &lt;div&gt;
+                &lt;mat-icon  class&#x3D;&quot;icon&quot;&gt;shopping_cart&lt;/mat-icon&gt;
+              &lt;/div&gt;
+
+              &lt;div *ngIf&#x3D;&quot;!priceScheduleTracking.allOrderTypes&quot; &gt;
+                &lt;div *ngFor&#x3D;&quot;let item of priceScheduleTracking.orderTypes&quot; class&#x3D;&quot;slidein&quot;&gt;
+                  {{item.name }}
+                &lt;/div&gt;
+              &lt;/div&gt;
+
+              &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.allOrderTypes&quot;  class&#x3D;&quot;slidein&quot;&gt;
+                &lt;div&gt;
+                  All Orders
+                &lt;/div&gt;
+              &lt;/div&gt;
+
+            &lt;/div&gt;
+
+            &lt;div class&#x3D;&quot;grid-box&quot;&gt;
+              &lt;div class&#x3D;&quot;icons-headers&quot; &gt;
+                &lt;mat-icon  class&#x3D;&quot;icon&quot;&gt;people&lt;/mat-icon&gt;
+              &lt;/div&gt;
+              &lt;div *ngIf&#x3D;&quot;!priceScheduleTracking.allEligible&quot; &gt;
+                &lt;div *ngFor&#x3D;&quot;let item of priceScheduleTracking.clientTypes&quot;  class&#x3D;&quot;slidein&quot;&gt;
+                  &lt;div&gt;
+                    &lt;div *ngIf&#x3D;&quot;item&quot;&gt;
+                      {{ item.name }}
+                    &lt;/div&gt;
+                  &lt;/div&gt;
+                &lt;/div&gt;
+              &lt;/div&gt;
+
+              &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.allEligible&quot; class&#x3D;&quot;slidein&quot;&gt;
+                All Clients
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+        &lt;/div&gt;
+      &lt;/mat-card&gt;
+
+      &lt;div class&#x3D;&quot;headers grid-constraints&quot;&gt;
+
+        &lt;div class&#x3D;&quot;icons-headers&quot; &gt;
+          Schedule
+          &lt;mat-icon  class&#x3D;&quot;icon&quot;&gt;event&lt;/mat-icon&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;headers grid-interior-container&quot;&gt;
+          &lt;div class&#x3D;&quot;icons-headers&quot; &gt;
+            &lt;mat-icon  class&#x3D;&quot;icon&quot;&gt;calendar_view_week&lt;/mat-icon&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;!priceScheduleTracking.allWeekdaysDays&quot; &gt;
+            &lt;div *ngFor&#x3D;&quot;let item of priceScheduleTracking.weekDays&quot;  class&#x3D;&quot;slidein&quot;&gt;
+                {{ item.name }}
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.allWeekdaysDays&quot;&gt;
+            All days of week.
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;icons-headers&quot; &gt;
+            &lt;mat-icon  class&#x3D;&quot;icon&quot;&gt;date_range&lt;/mat-icon&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;!priceScheduleTracking.allDates&quot;&gt;
+            &lt;div *ngFor&#x3D;&quot;let item of priceScheduleTracking.dateFrames&quot; class&#x3D;&quot;slidein&quot;&gt;
+              &lt;div&gt;
+                {{item.startDate | date: &#x27;shortDate&#x27; }} - {{item.endDate  | date: &#x27;shortDate&#x27; }}
+              &lt;/div&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.allDates&quot;  class&#x3D;&quot;slidein&quot;&gt;
+            All Dates
+          &lt;/div&gt;
+
+          &lt;div class&#x3D;&quot;icons-headers&quot; &gt;
+            &lt;mat-icon class&#x3D;&quot;icon&quot;&gt;schedule&lt;/mat-icon&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;!priceScheduleTracking.timeFrameAlways&quot;&gt;
+            &lt;div *ngFor&#x3D;&quot;let item of priceScheduleTracking.timeFrames&quot; class&#x3D;&quot;slidein&quot;&gt;
+              {{ item.startTime | date: &#x27;shortTime&#x27; }} - {{ item.endTime | date: &#x27;shortTime&#x27; }}
+            &lt;/div&gt;
+          &lt;/div&gt;
+
+          &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.timeFrameAlways&quot; class&#x3D;&quot;slidein&quot;&gt;
+            All Time
+          &lt;/div&gt;
+
+        &lt;/div&gt;
+      &lt;/div&gt;
+
+      &lt;div&gt;
+        &lt;mat-divider&gt;&lt;/mat-divider&gt;
+      &lt;/div&gt;
+
+
+
+        &lt;div class&#x3D;&quot;constraint-panels&quot;  *ngIf&#x3D;&quot;inputForm&quot;&gt;
+
+          &lt;div [formGroup]&#x3D;&quot;inputForm&quot;&gt;
+            &lt;mat-card&gt;
+              &lt;mat-card-subtitle&gt;
+                &lt;div class&#x3D;&quot;rewards-header&quot;&gt;
+                  &lt;mat-icon&gt;settings&lt;/mat-icon&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;rewards-icon&quot;&gt;Required Groups &amp; Items&lt;/div&gt;
+              &lt;/mat-card-subtitle&gt;
+
+              &lt;mat-card-content&gt;
+                  &lt;mat-divider&gt;&lt;/mat-divider&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.requiredItemTypes.length&gt;0&quot;&gt;
+                    &lt;div class&#x3D;&quot;itemtype-header&quot;&gt;
+                      &lt;mat-icon&gt;table_view&lt;/mat-icon&gt;Types
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                          [inputForm]     &#x3D; &quot;inputForm&quot;
+                          [data]          &#x3D; &quot;priceScheduleTracking.requiredItemTypes&quot;
+                          [formArray]     &#x3D; &quot;requiredItemTypes&quot;
+                          [arrayTypeName] &#x3D; &quot;&#x27;requiredItemTypes&#x27;&quot;
+                          [hideDelete]    &#x3D; &quot;hideDelete&quot;
+                        &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;requiredCategories.length&gt;0&quot;&gt;
+                    &lt;div class&#x3D;&quot;icon-header&quot;&gt;
+                      &lt;mat-icon&gt;category&lt;/mat-icon&gt;Categories
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                        [inputForm]     &#x3D;&quot;inputForm&quot;
+                        [data]          &#x3D;&quot;priceScheduleTracking.requiredCategories&quot;
+                        [formArray]     &#x3D;&quot;requiredCategories&quot;
+                        [arrayTypeName] &#x3D;&quot;&#x27;requiredCategories&#x27;&quot;
+                        [hideDelete]    &#x3D;&quot;hideDelete&quot;
+                        &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+
+                  &lt;div *ngIf&#x3D;&quot;requiredItems.length&gt;0 &amp;&amp; inputForm&quot;&gt;
+                    &lt;div class&#x3D;&quot;icon-header&quot;&gt;
+                      &lt;mat-icon&gt;inventory_2&lt;/mat-icon&gt;Items
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                        [inputForm]     &#x3D; &quot;inputForm&quot;
+                        [data]          &#x3D; &quot;priceScheduleTracking.requiredItems&quot;
+                        [formArray]     &#x3D; &quot;requiredItems&quot;
+                        [arrayTypeName] &#x3D; &quot;&#x27;requiredItems&#x27;&quot;
+                        [hideDelete]    &#x3D; &quot;hideDelete&quot;
+                        &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;requiredBrands.length&gt;0&quot;&gt;
+                    &lt;div class&#x3D;&quot;icon-header&quot;&gt;
+                      &lt;mat-icon&gt;branding_watermark&lt;/mat-icon&gt;Brands
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                      [inputForm]     &#x3D;&quot;inputForm&quot;
+                      [data]          &#x3D;&quot;priceScheduleTracking.requiredBrands&quot;
+                      [formArray]     &#x3D;&quot;requiredBrands&quot;
+                      [arrayTypeName] &#x3D;&quot;&#x27;requiredBrands&#x27;&quot;
+                      [hideDelete]    &#x3D;&quot;hideDelete&quot;
+                      &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+                &lt;/mat-card-content&gt;
+              &lt;/mat-card&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+
+        &lt;div class&#x3D;&quot;constraint-panels&quot; *ngIf&#x3D;&quot;inputForm&quot;&gt;
+          &lt;div [formGroup]&#x3D;&quot;inputForm&quot;  &gt;
+            &lt;mat-card&gt;
+              &lt;mat-card-subtitle&gt;
+                &lt;div class&#x3D;&quot;rewards-header&quot;&gt;
+                    &lt;mat-icon&gt;loyalty&lt;/mat-icon&gt;
+                &lt;/div&gt;
+                &lt;div class&#x3D;&quot;rewards-icon&quot;&gt;Rewards&lt;/div&gt;
+                &lt;div&gt;
+                  Type: {{priceScheduleTracking.type}}
+                &lt;/div&gt;
+              &lt;/mat-card-subtitle&gt;
+
+              &lt;mat-card-content&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;itemTypeDiscounts.length&gt;0&quot;&gt;
+                    &lt;mat-divider&gt;&lt;/mat-divider&gt;
+                    &lt;div class&#x3D;&quot;icon-header&quot;&gt;
+                      &lt;mat-icon&gt;table_view&lt;/mat-icon&gt;Item Types
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                        [inputForm]     &#x3D;&quot;inputForm&quot;
+                        [data]          &#x3D;&quot;priceScheduleTracking.itemTypeDiscounts&quot;
+                        [formArray]     &#x3D;&quot;itemTypeDiscounts&quot;
+                        [arrayTypeName] &#x3D;&quot;&#x27;itemTypeDiscounts&#x27;&quot;
+                        [hideDelete]    &#x3D;&quot;hideDelete&quot;
+                        &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.categoryDiscounts.length&gt;0&quot;&gt;
+                    &lt;div class&#x3D;&quot;itemtype-header&quot;&gt;
+                      &lt;mat-icon&gt;category&lt;/mat-icon&gt;Categories
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                          [inputForm]      &#x3D;&quot;inputForm&quot;
+                          [data]           &#x3D;&quot;priceScheduleTracking.categoryDiscounts&quot;
+                          [formArray]      &#x3D;&quot;categoryDiscounts&quot;
+                          [arrayTypeName]  &#x3D;&quot;&#x27;categoryDiscounts&#x27;&quot;
+                          [hideDelete]     &#x3D;&quot;hideDelete&quot;
+                          &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.itemDiscounts.length&gt;0&quot;&gt;
+                    &lt;div class&#x3D;&quot;icon-header&quot;&gt;
+                      &lt;mat-icon&gt;inventory_2&lt;/mat-icon&gt;Item Discounts
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                          [inputForm]     &#x3D;&quot;inputForm&quot;
+                          [data]          &#x3D;&quot;priceScheduleTracking.itemDiscounts&quot;
+                          [formArray]     &#x3D;&quot;itemDiscounts&quot;
+                          [arrayTypeName] &#x3D;&quot;&#x27;itemDiscounts&#x27;&quot;
+                          [hideDelete]    &#x3D;&quot;hideDelete&quot;
+                          &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+                  &lt;div *ngIf&#x3D;&quot;priceScheduleTracking.brandDiscounts.length&gt;0&quot;&gt;
+                    &lt;div class&#x3D;&quot;icon-header&quot;&gt;
+                      &lt;mat-icon&gt;branding_watermark&lt;/mat-icon&gt;Brand Discounts
+                    &lt;/div&gt;
+                    &lt;app-price-schedule-fields
+                          [inputForm]    &#x3D;&quot;inputForm&quot;
+                          [data]         &#x3D;&quot;priceScheduleTracking.brandDiscounts&quot;
+                          [formArray]    &#x3D;&quot;brandDiscounts&quot;
+                          [arrayTypeName]&#x3D;&quot;&#x27;brandDiscounts&#x27;&quot;
+                          [hideDelete]   &#x3D;&quot;hideDelete&quot;
+                          &gt;
+                    &lt;/app-price-schedule-fields&gt;
+                  &lt;/div&gt;
+
+              &lt;/mat-card-content&gt;
+            &lt;/mat-card&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+
+    &lt;/mat-card-content&gt;
+  &lt;/mat-card&gt;
+
+
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-styleData">
+                <p class="comment">
+                    <code>./price-schedule-info.component.scss</code>
+                </p>
+                <pre class="line-numbers"><code class="language-scss">// @import &quot;../../../../../../styles.scss&quot;;
+
+.subtitle {
+  font-size: 1.1em;
+  font-weight: 350em;
+}
+
+.mat-input-element {
+  font-size: small;
+}
+
+.new-item {
+  transition: ease-in-out 400ms max-height;
+}
+
+.wrapper:hover #slide {
+  transition: 1s;
+  left: 0;
+}
+
+mat-raised-button {
+  margin: 5rem 5rem 2rem 2rem;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+button {
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+:host ::ng-deep mat-form-field .andor-listbox {
+  width: 50px;
+  padding: 0px;
+}
+
+mat-icon{
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.rewards-header {
+  float: left;
+  margin-bottom: 5px;
+}
+.rewards-icon {
+  // float: left;
+  margin-bottom: 5px;
+}
+
+// :host ::ng-deep mat-select .mat-select {
+//   width: 25px;
+//   padding: 0px;
+// }
+
+.title {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.label {
+  float: left;
+  margin:  3px 3px 3px 3px;
+  font-size: .8em;
+}
+
+.fields {
+  // float: left;
+  margin:  3px 3px 3px 3px;
+  font-size: .8em;
+}
+mat-label {
+  padding:5px;
+  font-size: 1.0em;
+}
+
+meta-tags {
+  height: 100px;
+}
+
+mat-form-field {
+  margin: 3px 3px 3px 3px;
+  font-size: .9em;
+}
+
+mat-radio-button  {
+  margin: 3px;
+}
+
+mat-card{
+  padding: 5px 5px 5px 5px;
+  margin:  3px 3px 3px 3px;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+.itemSaved {
+  color: hotpink;
+}
+
+mat-drawer {
+  width: 200px;
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding: 20px;
+}
+
+simple-tinymce {
+  padding:5px;
+}
+
+mat-form-field {
+  font-size: .8em;
+}
+
+label {
+  display: block;
+  padding: 5px;
+}
+
+button{
+  padding: 5px;
+}
+
+h1 {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+
+#remove_email {
+  // color: red;
+  margin: 5px;
+}
+
+#register_button {
+  background: lightblue;
+}
+
+.alert {
+  // color: darkred;
+}
+
+.ng-invalid:not(form)  {
+ // border-left: 3px solid darkred;
+}
+
+img {
+  width: 150px;
+  height: 150px;
+  align-content: center;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.container {
+  padding: 5px;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+body{ overflow-x: hidden;}
+
+.weekday-margin {
+  margin: 0 10px;
+}
+
+.category-margin  {
+  margin-left: 10px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns:  105px  55px  75px 55px;
+  gap: 10px;
+  grid-column-gap: 5px;
+  width: 300px;
+  margin-left: 10px;
+}
+
+// .constraint-panels {
+//   overflow-y: scroll;
+//   overflow-x: hidden;
+// }
+
+.grid-items {
+  width: 50px;
+}
+
+.grid-item   {
+  width: 50px;
+}
+
+::ng-deep mat-select-panel {
+  min-width: 65px !important;
+}
+
+::ng-deep mat-select{
+  width           : 65px;
+  font-size       : 1em;
+}
+
+.type-list {
+  min-height: 90vh;
+  height    : 90vh;
+  max-height: 90vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  // width: 250px;
+  margin-top: 10px;
+}
+
+.grid-item {
+  align-items: baseline;
+}
+
+.grid-item-and-or {
+  align-items: baseline;
+  width: 65px;
+  font-size: 1.2em;
+}
+
+.grid-constraints {
+  display: grid;
+  grid-template-columns:  .25fr 1.75fr  ;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 100%;
+}
+
+.section-container {
+  // overflow-x: scroll;
+  // overflow-x: hidden;
+  // overflow-y: auto;
+
+}
+
+.grid-form {
+  display: grid;
+  grid-template-columns:  .75fr .25fr .25fr;
+  flex-wrap: wrap;
+  gap: 10px;
+  width: 300px;
+}
+
+.grid-box {
+  display: grid;
+  grid-template-columns: repeat(1 1fr);
+  // flex-wrap: wrap;
+  margin-left: 5px;
+  vertical-align: top;
+  // flex-wrap: wrap;
+}
+
+.grid-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-wrap: wrap;
+  width: 275px;
+  // height: 200px;
+  margin-left: 5px;
+  vertical-align: top;
+  // flex-wrap: wrap;
+}
+
+
+.trash-button {
+  // margin-top: -10px;
+  position: relative;
+  top:      -5px;
+  width     : 35px;
+  height    : 1em;
+}
+
+.headers {
+  font-size: .8em;
+  font-weight: 400;
+  margin-top: 5px;
+  // float: right;
+  // float: left;
+}
+
+.grid-interior-container {
+  display: grid;
+  grid-template-columns:  .25fr 1.75fr ;
+  // flex-wrap: wrap;
+  gap: 10px;
+  // width: 300px;
+}
+
+
+.icons-headers {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.icon {
+  // float: ;
+}
+
+.icon-header {
+  font-weight   : 500px;
+  font-size     : .9em;
+  margin-bottom : 5px;
+  margin-top    : 5px;
+  vertical-align:middle;
+  vertical-align: middle;
+  text-align: left;
+  align-items: baseline;
+}
+
+.selected-categories {
+  font-weight: 400px;
+  font-size  : .8em;
+  margin-left: 15px;
+  list-style : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.itemtype-header {
+  font-weight  : 500px;
+  font-size    : .9em;
+  margin-bottom: 5px;
+  margin-top   : 5px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.selected-types {
+  font-weight  : 400px;
+  font-size    : .8em;
+  margin-left  : 15px;
+  list-style   : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.icon-height {
+  vertical-align:middle;
+}
+
+// .quantity {
+//   width: 45px Im !important;
+//   font-size:   1.1em;
+// }
+
+.item-name {
+  width: 105px;
+  font-size:   1.1em;
+}
+
+.quantity {
+  width: 50px;
+  font-size:   1.1em;
+}
+
+.andOr {
+  width: 65px;
+  font-size:   1.1em;
+}
+
+
+.slidein {
+  display: grid;
+  grid-template-columns: 1fr;
+  animation-duration    : 500ms;
+  animation-name        : slidein;
+}
+
+@keyframes slidein {
+  from {
+      margin-left: -20%;
+  }
+  to {
+      margin-left: 0%;
+  }
+}
+</code></pre>
+    </div>
+
+    <div class="tab-pane fade " id="c-tree">
+        <div id="tree-container"></div>
+        <div class="tree-legend">
+            <div class="title">
+                <b>Legend</b>
+            </div>
+            <div>
+                <div class="color htmlelement"></div><span>Html element</span>
+            </div>
+            <div>
+                <div class="color component"></div><span>Component</span>
+            </div>
+            <div>
+                <div class="color directive"></div><span>Html element with directive</span>
+            </div>
+        </div>
+    </div>
+
+    
+</div>
+
+<script src="../js/libs/vis.min.js"></script>
+<script src="../js/libs/htmlparser.js"></script>
+<script src="../js/libs/deep-iterator.js"></script>
+<script>
+        var COMPONENT_TEMPLATE = '<div><div *ngIf="priceScheduleTracking" class="type-list">  <mat-card>    <mat-card-subtitle>      <div *ngIf="inputForm">        <div>          Name: {{priceScheduleTracking.name}}        </div>      </div>    </mat-card-subtitle>    <mat-card-content class="type-card">      <mat-card  class="type-card">         <div class="grid-info">            <div class="grid-box">              <div>                <mat-icon  class="icon">shopping_cart</mat-icon>              </div>              <div *ngIf="!priceScheduleTracking.allOrderTypes" >                <div *ngFor="let item of priceScheduleTracking.orderTypes" class="slidein">                  {{item.name }}                </div>              </div>              <div *ngIf="priceScheduleTracking.allOrderTypes"  class="slidein">                <div>                  All Orders                </div>              </div>            </div>            <div class="grid-box">              <div class="icons-headers" >                <mat-icon  class="icon">people</mat-icon>              </div>              <div *ngIf="!priceScheduleTracking.allEligible" >                <div *ngFor="let item of priceScheduleTracking.clientTypes"  class="slidein">                  <div>                    <div *ngIf="item">                      {{ item.name }}                    </div>                  </div>                </div>              </div>              <div *ngIf="priceScheduleTracking.allEligible" class="slidein">                All Clients              </div>            </div>        </div>      </mat-card>      <div class="headers grid-constraints">        <div class="icons-headers" >          Schedule          <mat-icon  class="icon">event</mat-icon>        </div>        <div class="headers grid-interior-container">          <div class="icons-headers" >            <mat-icon  class="icon">calendar_view_week</mat-icon>          </div>          <div *ngIf="!priceScheduleTracking.allWeekdaysDays" >            <div *ngFor="let item of priceScheduleTracking.weekDays"  class="slidein">                {{ item.name }}            </div>          </div>          <div *ngIf="priceScheduleTracking.allWeekdaysDays">            All days of week.          </div>          <div class="icons-headers" >            <mat-icon  class="icon">date_range</mat-icon>          </div>          <div *ngIf="!priceScheduleTracking.allDates">            <div *ngFor="let item of priceScheduleTracking.dateFrames" class="slidein">              <div>                {{item.startDate | date: \'shortDate\' }} - {{item.endDate  | date: \'shortDate\' }}              </div>            </div>          </div>          <div *ngIf="priceScheduleTracking.allDates"  class="slidein">            All Dates          </div>          <div class="icons-headers" >            <mat-icon class="icon">schedule</mat-icon>          </div>          <div *ngIf="!priceScheduleTracking.timeFrameAlways">            <div *ngFor="let item of priceScheduleTracking.timeFrames" class="slidein">              {{ item.startTime | date: \'shortTime\' }} - {{ item.endTime | date: \'shortTime\' }}            </div>          </div>          <div *ngIf="priceScheduleTracking.timeFrameAlways" class="slidein">            All Time          </div>        </div>      </div>      <div>        <mat-divider></mat-divider>      </div>        <div class="constraint-panels"  *ngIf="inputForm">          <div [formGroup]="inputForm">            <mat-card>              <mat-card-subtitle>                <div class="rewards-header">                  <mat-icon>settings</mat-icon>                </div>                <div class="rewards-icon">Required Groups & Items</div>              </mat-card-subtitle>              <mat-card-content>                  <mat-divider></mat-divider>                  <div *ngIf="priceScheduleTracking.requiredItemTypes.length>0">                    <div class="itemtype-header">                      <mat-icon>table_view</mat-icon>Types                    </div>                    <app-price-schedule-fields                          [inputForm]     = "inputForm"                          [data]          = "priceScheduleTracking.requiredItemTypes"                          [formArray]     = "requiredItemTypes"                          [arrayTypeName] = "\'requiredItemTypes\'"                          [hideDelete]    = "hideDelete"                        >                    </app-price-schedule-fields>                  </div>                  <div *ngIf="requiredCategories.length>0">                    <div class="icon-header">                      <mat-icon>category</mat-icon>Categories                    </div>                    <app-price-schedule-fields                        [inputForm]     ="inputForm"                        [data]          ="priceScheduleTracking.requiredCategories"                        [formArray]     ="requiredCategories"                        [arrayTypeName] ="\'requiredCategories\'"                        [hideDelete]    ="hideDelete"                        >                    </app-price-schedule-fields>                  </div>                  <div *ngIf="requiredItems.length>0 && inputForm">                    <div class="icon-header">                      <mat-icon>inventory_2</mat-icon>Items                    </div>                    <app-price-schedule-fields                        [inputForm]     = "inputForm"                        [data]          = "priceScheduleTracking.requiredItems"                        [formArray]     = "requiredItems"                        [arrayTypeName] = "\'requiredItems\'"                        [hideDelete]    = "hideDelete"                        >                    </app-price-schedule-fields>                  </div>                  <div *ngIf="requiredBrands.length>0">                    <div class="icon-header">                      <mat-icon>branding_watermark</mat-icon>Brands                    </div>                    <app-price-schedule-fields                      [inputForm]     ="inputForm"                      [data]          ="priceScheduleTracking.requiredBrands"                      [formArray]     ="requiredBrands"                      [arrayTypeName] ="\'requiredBrands\'"                      [hideDelete]    ="hideDelete"                      >                    </app-price-schedule-fields>                  </div>                </mat-card-content>              </mat-card>            </div>        </div>        <div class="constraint-panels" *ngIf="inputForm">          <div [formGroup]="inputForm"  >            <mat-card>              <mat-card-subtitle>                <div class="rewards-header">                    <mat-icon>loyalty</mat-icon>                </div>                <div class="rewards-icon">Rewards</div>                <div>                  Type: {{priceScheduleTracking.type}}                </div>              </mat-card-subtitle>              <mat-card-content>                  <div *ngIf="itemTypeDiscounts.length>0">                    <mat-divider></mat-divider>                    <div class="icon-header">                      <mat-icon>table_view</mat-icon>Item Types                    </div>                    <app-price-schedule-fields                        [inputForm]     ="inputForm"                        [data]          ="priceScheduleTracking.itemTypeDiscounts"                        [formArray]     ="itemTypeDiscounts"                        [arrayTypeName] ="\'itemTypeDiscounts\'"                        [hideDelete]    ="hideDelete"                        >                    </app-price-schedule-fields>                  </div>                  <div *ngIf="priceScheduleTracking.categoryDiscounts.length>0">                    <div class="itemtype-header">                      <mat-icon>category</mat-icon>Categories                    </div>                    <app-price-schedule-fields                          [inputForm]      ="inputForm"                          [data]           ="priceScheduleTracking.categoryDiscounts"                          [formArray]      ="categoryDiscounts"                          [arrayTypeName]  ="\'categoryDiscounts\'"                          [hideDelete]     ="hideDelete"                          >                    </app-price-schedule-fields>                  </div>                  <div *ngIf="priceScheduleTracking.itemDiscounts.length>0">                    <div class="icon-header">                      <mat-icon>inventory_2</mat-icon>Item Discounts                    </div>                    <app-price-schedule-fields                          [inputForm]     ="inputForm"                          [data]          ="priceScheduleTracking.itemDiscounts"                          [formArray]     ="itemDiscounts"                          [arrayTypeName] ="\'itemDiscounts\'"                          [hideDelete]    ="hideDelete"                          >                    </app-price-schedule-fields>                  </div>                  <div *ngIf="priceScheduleTracking.brandDiscounts.length>0">                    <div class="icon-header">                      <mat-icon>branding_watermark</mat-icon>Brand Discounts                    </div>                    <app-price-schedule-fields                          [inputForm]    ="inputForm"                          [data]         ="priceScheduleTracking.brandDiscounts"                          [formArray]    ="brandDiscounts"                          [arrayTypeName]="\'brandDiscounts\'"                          [hideDelete]   ="hideDelete"                          >                    </app-price-schedule-fields>                  </div>              </mat-card-content>            </mat-card>          </div>        </div>    </mat-card-content>  </mat-card></div>'
+    var COMPONENTS = [{'name': 'AccordionComponent', 'selector': 'app-accordion'},{'name': 'AccordionMenuItemEditComponent', 'selector': 'app-accordion-menu-item-edit'},{'name': 'AddInventoryItemComponent', 'selector': 'app-add-inventory-item'},{'name': 'AddItemByTypeComponent', 'selector': 'app-add-item-by-type'},{'name': 'AdjustItemComponent', 'selector': 'app-adjust-item'},{'name': 'AdjustItemNoteComponent', 'selector': 'app-adjust-item-note'},{'name': 'AdjustItemPriceChangeComponent', 'selector': 'app-adjust-item-price-change'},{'name': 'AdjustItemVoidReasonsComponent', 'selector': 'app-adjust-item-void-reasons'},{'name': 'AdjustmentReasonsComponent', 'selector': 'app-adjustment-reasons'},{'name': 'AdminbranditemComponent', 'selector': 'app-adminbranditem'},{'name': 'AdminbrandslistComponent', 'selector': 'app-adminbrandslist'},{'name': 'AdminComponent', 'selector': 'app-admin'},{'name': 'AgGridImageFormatterComponent', 'selector': 'app-ag-grid-image-formatter'},{'name': 'AgGridTestComponent', 'selector': 'app-ag-grid-test'},{'name': 'AgGridToggleComponent', 'selector': 'app-ag-grid-toggle'},{'name': 'AgPaginationComponent', 'selector': 'app-ag-pagination'},{'name': 'AppComponent', 'selector': 'app-root'},{'name': 'AppGateComponent', 'selector': 'app-app-gate'},{'name': 'AreaComponent', 'selector': 'app-widget-area'},{'name': 'AuditPanelComponent', 'selector': 'app-audit-panel'},{'name': 'BarcodeScannerComponent', 'selector': 'app-barcode-scanner'},{'name': 'BrandslistComponent', 'selector': 'app-brandslist'},{'name': 'BrandTypeSelectComponent', 'selector': 'app-brand-type-select'},{'name': 'BtBlueToothScannerComponent', 'selector': 'app-bt-blue-tooth-scanner'},{'name': 'BtPOSPrinterComponent', 'selector': 'app-bt-posprinter'},{'name': 'ButtonComponent', 'selector': 'storybook-button'},{'name': 'ButtonRendererComponent', 'selector': 'app-button-renderer'},{'name': 'CacheSettingsComponent', 'selector': 'app-cache-settings'},{'name': 'CannabisItemEditComponent', 'selector': 'app-cannabis-item-edit'},{'name': 'CardComponent', 'selector': 'app-widget-card'},{'name': 'CartButtonComponent', 'selector': 'app-cart-button'},{'name': 'CashDiscountItemProductEditComponent', 'selector': 'app-cash-discount-item-product-edit'},{'name': 'CashDiscountOrderProductEditComponent', 'selector': 'app-cash-discount-order-product-edit'},{'name': 'CategoriesAlternateComponent', 'selector': 'app-categories-alternate'},{'name': 'CategoriesComponent', 'selector': 'app-categories'},{'name': 'CategorieslistviewComponent', 'selector': 'app-categorieslistview'},{'name': 'CategoryScrollComponent', 'selector': 'app-category-scroll'},{'name': 'CategorySelectComponent', 'selector': 'app-category-select'},{'name': 'ChangepasswordComponent', 'selector': 'app-changepassword'},{'name': 'ChartTableComponent', 'selector': 'app-widget-chart-table'},{'name': 'CheckInProfileComponent', 'selector': 'app-check-in-profile'},{'name': 'ChemicalSpinnersComponent', 'selector': 'app-chemical-spinners'},{'name': 'ChemicalValuesComponent', 'selector': 'app-chemical-values'},{'name': 'ChipsDisplayComponent', 'selector': 'app-chips-display'},{'name': 'ClientSearchSelectorComponent', 'selector': 'app-client-search-selector'},{'name': 'ClientTypeEditComponent', 'selector': 'app-client-type-edit'},{'name': 'ClientTypeListComponent', 'selector': 'app-client-type-list'},{'name': 'ClientTypeSelectionComponent', 'selector': 'app-client-type-selection'},{'name': 'ClientTypesLookupComponent', 'selector': 'app-client-types-lookup'},{'name': 'DashboardComponent', 'selector': 'app-dashboard'},{'name': 'DatabaseSchemaComponent', 'selector': 'app-database-schema'},{'name': 'DateScheduleComponent', 'selector': 'app-date-schedule'},{'name': 'DefaultComponent', 'selector': 'app-default'},{'name': 'DemographicsComponent', 'selector': 'app-demographics'},{'name': 'DepartmentSelectComponent', 'selector': 'app-department-select'},{'name': 'DiscountOptionsComponent', 'selector': 'app-discount-options'},{'name': 'DiscountTypeSelectionComponent', 'selector': 'app-discount-type-selection'},{'name': 'DsiEMVPaymentComponent', 'selector': 'app-dsi-emvpayment'},{'name': 'EachProductEditComponent', 'selector': 'app-each-product-edit'},{'name': 'EditButtonsStandardComponent', 'selector': 'app-edit-buttons-standard'},{'name': 'EditSelectedItemsComponent', 'selector': 'app-edit-selected-items'},{'name': 'FacilitiesListComponent', 'selector': 'app-facilities-list'},{'name': 'FacilitySearchSelectorComponent', 'selector': 'app-facility-search-selector'},{'name': 'FilterComponent', 'selector': 'app-widget-filter'},{'name': 'FlatRateEditComponent', 'selector': 'app-flat-rate-edit'},{'name': 'FlatRateListComponent', 'selector': 'app-flat-rate-list'},{'name': 'FlatTaxRateListComponent', 'selector': 'app-flat-tax-rate-list'},{'name': 'FoodProductEditComponent', 'selector': 'app-food-product-edit'},{'name': 'FooterComponent', 'selector': 'app-footer'},{'name': 'FormSelectListComponent', 'selector': 'app-form-select-list'},{'name': 'GenericIdSelectComponent', 'selector': 'app-generic-id-select'},{'name': 'GenericNameSelectComponent', 'selector': 'app-generic-name-select'},{'name': 'GiftCardProductEditComponent', 'selector': 'app-gift-card-product-edit'},{'name': 'GoogleMapsComponent', 'selector': 'app-google-maps'},{'name': 'HammerCardComponent', 'selector': 'app-hammer-card'},{'name': 'HeaderComponent', 'selector': 'storybook-header'},{'name': 'HeaderComponent', 'selector': 'app-header'},{'name': 'HTMLEditPrintingComponent', 'selector': 'app-htmledit-printing'},{'name': 'ImageCaptureComponent', 'selector': 'app-image-capture'},{'name': 'InstalledPrintersComponent', 'selector': 'app-installed-printers'},{'name': 'InventoryAdjustmentNoteComponent', 'selector': 'app-adjustment-note'},{'name': 'InventoryComponent', 'selector': 'app-inventory-settings'},{'name': 'InventoryHistoryItemComponent', 'selector': 'app-inventory-history-item'},{'name': 'InventoryHistoryListComponent', 'selector': 'app-inventory-history-list'},{'name': 'InventoryListComponent', 'selector': 'app-inventory-list'},{'name': 'InventoryListToolTipComponent', 'selector': 'app-inventory-list-tool-tip'},{'name': 'InventoryLocationsComponent', 'selector': 'app-inventory-locations'},{'name': 'IonicGeoLocationComponent', 'selector': 'app-ionic-geo-location'},{'name': 'ItemCategoriesEditComponent', 'selector': 'app-item-categories-edit'},{'name': 'ItemCategoriesListComponent', 'selector': 'app-item-categories-list'},{'name': 'ItemPercentageDiscountProductEditComponent', 'selector': 'app-item-percentage-discount-product-edit'},{'name': 'ItemTypeCategoryAssignmentComponent', 'selector': 'app-item-type-category-assignment'},{'name': 'ItemTypeComponent', 'selector': 'app-item-type'},{'name': 'ItemTypeDisplayAssignmentComponent', 'selector': 'app-item-type-display-assignment'},{'name': 'ItemTypeEditorComponent', 'selector': 'app-item-type-editor'},{'name': 'ItemTypeSortComponent', 'selector': 'app-item-type-sort'},{'name': 'Label1by8Component', 'selector': 'app-label1by8'},{'name': 'LabelViewSelectorComponent', 'selector': 'app-label-view-selector'},{'name': 'LimitValuesProgressBarsComponent', 'selector': 'app-limit-values-progress-bars'},{'name': 'LiquorProductEditComponent', 'selector': 'app-liquor-product-edit'},{'name': 'ListPrintersElectronComponent', 'selector': 'app-list-printers-electron'},{'name': 'ListProductSearchInputComponent', 'selector': 'app-list-product-search-input'},{'name': 'LoginComponent', 'selector': 'login-dashboard'},{'name': 'MainMenuComponent', 'selector': 'app-main-menu'},{'name': 'MatSpinnerOverlayComponent', 'selector': 'app-mat-spinner-overlay'},{'name': 'MatToggleSelectorComponent', 'selector': 'app-mat-toggle-selector'},{'name': 'MenuCardCategoriesComponent', 'selector': 'app-menu-card-categories'},{'name': 'MenuCompactComponent', 'selector': 'app-menu-compact'},{'name': 'MenuGroupItemEditComponent', 'selector': 'app-menu-group-item-edit'},{'name': 'MenuItemCardComponent', 'selector': 'app-menu-item-card'},{'name': 'MenuitemComponent', 'selector': 'app-menuitem'},{'name': 'MenuItemGalleryComponent', 'selector': 'app-menu-item-gallery'},{'name': 'MenuItemModalComponent', 'selector': 'app-menu-item-modal'},{'name': 'MenuitemsComponent', 'selector': 'app-menuitems'},{'name': 'MenuItemsInfiniteComponent', 'selector': 'app-menu-items-infinite'},{'name': 'MenuManagerComponent', 'selector': 'app-menu-manager'},{'name': 'MenuMinimalComponent', 'selector': 'app-menu-minimal'},{'name': 'MenuSearchBarComponent', 'selector': 'app-menu-search-bar'},{'name': 'MenuTinyComponent', 'selector': 'app-menu-tiny'},{'name': 'MessagesToUserComponent', 'selector': 'app-messages-to-user'},{'name': 'MetaTagChipsComponent', 'selector': 'app-meta-tag-chips'},{'name': 'MetrcIndividualPackageComponent', 'selector': 'app-metrc-individual-package'},{'name': 'MetrcInventoryPropertiesComponent', 'selector': 'app-metrc-inventory-properties'},{'name': 'METRCProductsAddComponent', 'selector': 'app-products-add'},{'name': 'MetrcSalesListComponent', 'selector': 'app-metrc-sales-list'},{'name': 'ModifierProductEditComponent', 'selector': 'app-modifier-product-edit'},{'name': 'MoveInventoryLocationComponent', 'selector': 'app-move-inventory-location'},{'name': 'NewInventoryItemComponent', 'selector': 'app-new-inventory-item'},{'name': 'OrderBarComponent', 'selector': 'app-order-bar'},{'name': 'OrderCardComponent', 'selector': 'app-order-card'},{'name': 'OrderFilterPanelComponent', 'selector': 'app-order-filter-panel'},{'name': 'OrderItemListComponent', 'selector': 'app-order-item-list'},{'name': 'OrderItemsListComponent', 'selector': 'app-order-items-list'},{'name': 'OrderPercentageDiscountProductEditComponent', 'selector': 'app-order-percentage-discount-product-edit'},{'name': 'OrdersFilterComponent', 'selector': 'app-orders-filter'},{'name': 'OrdersMainComponent', 'selector': 'app-orders-main'},{'name': 'OrderTypeSelectionComponent', 'selector': 'app-order-type-selection'},{'name': 'PackageActionsComponent', 'selector': 'app-package-actions'},{'name': 'PackageListComponent', 'selector': 'app-package-list'},{'name': 'PackageSearchSelectorComponent', 'selector': 'app-package-search-selector'},{'name': 'PageComponent', 'selector': 'storybook-page'},{'name': 'PageNotFoundComponent', 'selector': 'app-page-not-found'},{'name': 'PagerBlobComponent', 'selector': 'pager-blob'},{'name': 'PieComponent', 'selector': 'app-widget-pie'},{'name': 'PosListComponent', 'selector': 'app-pos-list'},{'name': 'PosOrderComponent', 'selector': 'app-pos-order'},{'name': 'PosOrderItemComponent', 'selector': 'app-pos-order-item'},{'name': 'PosOrderListComponent', 'selector': 'app-pos-order-list'},{'name': 'PosOrdersComponent', 'selector': 'app-pos-orders'},{'name': 'PosPaymentComponent', 'selector': 'app-pos-payment'},{'name': 'PosPaymentsComponent', 'selector': 'app-pos-payments'},{'name': 'PriceCategoriesComponent', 'selector': 'app-price-categories'},{'name': 'PriceCategoriesEditComponent', 'selector': 'app-price-categories-edit'},{'name': 'PriceCategorySearchComponent', 'selector': 'app-price-category-search'},{'name': 'PriceCategorySelectComponent', 'selector': 'app-price-category-select'},{'name': 'PriceLinesComponent', 'selector': 'app-price-lines'},{'name': 'PriceScheduleComponent', 'selector': 'app-price-schedule'},{'name': 'PriceScheduleConstraintsComponent', 'selector': 'app-price-schedule-constraints'},{'name': 'PriceScheduleFieldsComponent', 'selector': 'app-price-schedule-fields'},{'name': 'PriceScheduleInfoComponent', 'selector': 'app-price-schedule-info'},{'name': 'PriceScheduleListComponent', 'selector': 'app-price-schedule-list'},{'name': 'PriceTiersComponent', 'selector': 'app-price-tiers'},{'name': 'ProducteditComponent', 'selector': 'app-productedit'},{'name': 'ProductInfoPanelComponent', 'selector': 'app-product-info-panel'},{'name': 'ProductlistviewComponent', 'selector': 'app-productlistview'},{'name': 'ProductSearchSelectorComponent', 'selector': 'app-product-search-selector'},{'name': 'ProductTypeSelectComponent', 'selector': 'app-product-type-select'},{'name': 'ProfileComponent', 'selector': 'app-profile'},{'name': 'ProfileEditorComponent', 'selector': 'app-profile-editor'},{'name': 'ProfileListComponent', 'selector': 'app-profile-list'},{'name': 'ProfileLookupComponent', 'selector': 'app-profile-lookup'},{'name': 'ProgressBarComponent', 'selector': 'app-progress-bar'},{'name': 'ProgressUploaderComponent', 'selector': 'app-progress'},{'name': 'ReceiptLayoutComponent', 'selector': 'app-receipt-layout'},{'name': 'RegisterAccountExistingUserComponent', 'selector': 'app-register-account-existing-user'},{'name': 'RegisterAccountExistingUserWithTokenComponent', 'selector': 'app-register-account-existing-user-with-token'},{'name': 'RegisterAccountMainComponent', 'selector': 'app-register-account-main'},{'name': 'ReportsComponent', 'selector': 'app-reports'},{'name': 'ResetpasswordComponent', 'selector': 'app-resetpassword'},{'name': 'ReviewComponent', 'selector': 'app-review'},{'name': 'ReviewEditComponent', 'selector': 'app-review-edit'},{'name': 'ReviewsComponent', 'selector': 'app-reviews'},{'name': 'RewardTypeFilterComponent', 'selector': 'app-reward-type-filter'},{'name': 'RewardTypeResultsSelectorComponent', 'selector': 'app-reward-type-panel'},{'name': 'RouteDispatchComponent', 'selector': 'app-route-dispatch'},{'name': 'RouteDispatchDetailsComponent', 'selector': 'app-route-dispatch-details'},{'name': 'RouteDispatchDetailsEditComponent', 'selector': 'app-route-dispatch-details-edit'},{'name': 'RouteDispatchEditComponent', 'selector': 'app-route-dispatch-edit'},{'name': 'RouteDispatchesComponent', 'selector': 'app-route-dispatches'},{'name': 'SalesTaxReportComponent', 'selector': 'app-sales-tax-report'},{'name': 'ScaleReaderComponent', 'selector': 'app-scale-reader'},{'name': 'SearchPanelComponent', 'selector': 'app-search-panel'},{'name': 'SearchResultsComponent', 'selector': 'app-search-results'},{'name': 'ServiceTypeEditComponent', 'selector': 'app-service-type-edit'},{'name': 'ServiceTypeListComponent', 'selector': 'app-service-type-list'},{'name': 'SettingsComponent', 'selector': 'app-settings'},{'name': 'SidebarComponent', 'selector': 'app-sidebar'},{'name': 'SimpleTinyComponent', 'selector': 'simple-tinymce'},{'name': 'SiteEditComponent', 'selector': 'app-site-edit'},{'name': 'SitepointsComponent', 'selector': 'app-sitepoints'},{'name': 'SitepurchasesComponent', 'selector': 'app-sitepurchases'},{'name': 'SitesComponent', 'selector': 'app-sites'},{'name': 'SiteSelectorComponent', 'selector': 'app-site-selector'},{'name': 'SmokeProductEditComponent', 'selector': 'app-smoke-product-edit'},{'name': 'SoftwareComponent', 'selector': 'app-software'},{'name': 'SpeciesListComponent', 'selector': 'app-species-list'},{'name': 'StatusLookupComponent', 'selector': 'app-status-lookup'},{'name': 'StickyHeaderComponent', 'selector': 'app-sticky-header'},{'name': 'StrainPackagesComponent', 'selector': 'app-strain-packages'},{'name': 'StrainProductEditComponent', 'selector': 'app-strain-product-edit'},{'name': 'StrainsAddComponent', 'selector': 'app-strains-add'},{'name': 'SubMenuItemEditComponent', 'selector': 'app-sub-menu-item-edit'},{'name': 'SummarycardComponent', 'selector': 'app-summarycard'},{'name': 'TaxEditComponent', 'selector': 'app-tax-edit'},{'name': 'TaxFieldsComponent', 'selector': 'app-tax-fields'},{'name': 'TaxListComponent', 'selector': 'app-tax-list'},{'name': 'TaxRateListComponent', 'selector': 'app-tax-rate-list'},{'name': 'TierItemsComponent', 'selector': 'app-tier-items'},{'name': 'TierMenuComponent', 'selector': 'app-tier-menu'},{'name': 'TierPricesComponent', 'selector': 'app-tier-prices'},{'name': 'TiersCardComponent', 'selector': 'app-tiers-card'},{'name': 'TimeScheduleComponent', 'selector': 'app-time-schedule'},{'name': 'TvHappyHoursComponent', 'selector': 'app-tv-happy-hours'},{'name': 'TvPriceSpecialsComponent', 'selector': 'app-tv-price-specials'},{'name': 'TvPriceTierMenuItemsComponent', 'selector': 'app-tv-price-tier-menu-items'},{'name': 'TvPriceTiersComponent', 'selector': 'app-tv-price-tiers'},{'name': 'TypeFilterComponent', 'selector': 'app-type-filter'},{'name': 'TypeResultsSelectorComponent', 'selector': 'app-type-results-selector'},{'name': 'UnitTypeEditComponent', 'selector': 'app-unit-type-edit'},{'name': 'UnitTypeFieldsComponent', 'selector': 'app-unit-type-fields'},{'name': 'UnitTypeListComponent', 'selector': 'unit-types'},{'name': 'UploaderComponent', 'selector': 'app-widget-uploader'},{'name': 'UseGroupTaxAssignmentComponent', 'selector': 'app-use-group-tax-assignment'},{'name': 'UsermessagesComponent', 'selector': 'app-usermessages'},{'name': 'ValueFieldsComponent', 'selector': 'app-value-fields'},{'name': 'ValueSpinnerComponent', 'selector': 'app-value-spinner'},{'name': 'WebEnabledComponent', 'selector': 'app-web-enabled'},{'name': 'WeekDaySelectionComponent', 'selector': 'app-week-day-selection'},{'name': 'WeightedFoodProductEditComponent', 'selector': 'app-weighted-food-product-edit'},{'name': 'WishlistComponent', 'selector': 'app-wishlist'}];
+    var DIRECTIVES = [{'name': 'AutofocusDirective', 'selector': '[appAutoFocusInput]'},{'name': 'CurrencyFormatterDirective', 'selector': '[currencyFormatter]'},{'name': 'DndDirective', 'selector': '[appDnd]'},{'name': 'Events', 'selector': '[Events]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'HammertimeDirective', 'selector': '[hammertime]'},{'name': 'ScrollableDirective', 'selector': '[appScrollable]'},{'name': 'StickyHeaderDirective', 'selector': '[stickyHeaderDirective]'}];
+    var ACTUAL_COMPONENT = {'name': 'PriceScheduleInfoComponent'};
+</script>
+<script src="../js/tree.js"></script>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'component';
+            var COMPODOC_CURRENT_PAGE_URL = 'PriceScheduleInfoComponent.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

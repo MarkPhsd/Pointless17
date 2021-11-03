@@ -1,0 +1,18 @@
+
+<div *ngFor="let sale of sales$ | async">
+
+  <h5>{{site.name}}</h5>
+
+  Total {{  sale?.orderTotal | currency  }}
+  <br>
+
+  Count {{   sale?.count }}
+  <br>
+
+  <div *ngIf="sale?.count">
+    Average {{  sale?.orderTotal /  sale?.count | currency }}
+  </div>
+
+
+</div>
+

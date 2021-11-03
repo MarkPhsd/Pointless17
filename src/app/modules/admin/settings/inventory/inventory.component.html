@@ -1,0 +1,28 @@
+
+<div *ngIf="role == 'admin'">
+  <div>
+    <button mat-raised-button color="primary" (click)="openAdjustmentReasonsDialog()">
+        <mat-icon>adjust</mat-icon>Adjustment Reasons</button>
+  </div>
+  <div>
+    <button mat-raised-button color="primary" (click)="serviceTypeList()">
+      <mat-icon>add_shopping_cart</mat-icon>Transaction Types </button>
+  </div>
+  <div>
+    <button  mat-raised-button color="primary" (click)="clientTypesList()">
+        <mat-icon>manage_accounts</mat-icon>Vendor & Client Types </button>
+  </div>
+
+  <div>
+    <button mat-raised-button color="primary" (click)="companyEdit()">
+      <mat-icon>store</mat-icon>Edit Company
+    </button>
+  </div>
+
+  <br>
+  <mat-divider></mat-divider>
+
+  <p>This feature is intended for initial setup. It should not be used if you are operating already.</p>
+
+  <button mat-raised-button color="primary" (click)="initTypes()"><mat-icon>warning</mat-icon>Initialize</button>
+</div>

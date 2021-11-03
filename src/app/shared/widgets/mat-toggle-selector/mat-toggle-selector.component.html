@@ -1,0 +1,32 @@
+<div class="heading">
+  <h4>
+    <ng-content></ng-content>
+  </h4>
+</div>
+<div [class]="toggleDimensions">
+  <mat-button-toggle-group
+          name         = "type"
+          [(ngModel)]  = "id"
+          (change)="changeSelection()"
+          vertical >
+      <mat-button-toggle
+            *ngIf="!hideAllOption"
+            [value]="emptyItem"
+            [class]="buttonDimensions"
+            >
+          All
+      </mat-button-toggle>
+
+      <mat-button-toggle
+            type="button"
+            [value]="item"
+            [class]="buttonDimensions"
+            (change)="setItem(item)"
+            *ngFor="let item of (list$ | async)" >
+          {{item.name}}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+</div>
+
+
+<!-- [style.width.percent]="95" -->

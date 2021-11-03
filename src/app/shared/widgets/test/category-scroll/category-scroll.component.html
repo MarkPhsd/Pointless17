@@ -1,0 +1,62 @@
+
+<div *ngIf="href == '/categories'">
+  <div  *ngIf="categories$ | async as categories; else loading"
+        [@listAnimation]="1">
+    <div class="item text"
+         *ngFor="let item of categories">
+      <div class="center-vertical">
+        <div class="center-vertical"
+             (click)="listItems(item.id)" >
+          <div class="text" >{{item.name}}</div>
+          <img draggable="false" [src]="getCategorySrc(item)" alt="item">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="href != '/categories'">
+
+  <div class="grid-container"
+       *ngIf="categories$ | async as categories; else loading"
+       [@listAnimation]="section">
+
+       <div class="grid-item title">
+        <h1>Categories</h1>
+      </div>
+
+      <main id="slider" class="grid-item main" >
+        <div class="items" >
+
+          <div class="item text" *ngFor="let item of categories">
+            <div class="center-vertical">
+              <div class="center-vertical" (click)="listItems(item.id)">
+                <div class="text">{{item.name}}</div>
+                <img  loading="lazy" draggable="false" [src]="getCategorySrc(item)" alt="item">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+
+    <footer class="grid-footer footer">
+
+      <div>
+        <a>
+          <button mat-raised-button
+                  class="button"
+                  color="primary"
+                  (click)="showAll()" >Show All <mat-icon>open_in_new</mat-icon>
+          </button>
+        </a>
+      </div>
+      </footer>
+
+  </div>
+</div>
+
+  <ng-template #loading >
+    <mat-spinner></mat-spinner>
+  </ng-template>

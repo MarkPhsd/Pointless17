@@ -1,0 +1,46 @@
+
+<div *ngIf="promptGroup">
+
+  <mat-card >
+    <mat-card-subtitle>
+      <h3>
+        {{promptGroup.name}}
+        <br>
+        <span *ngIf="orderPromptGroup  && orderPromptGroup.posOrderItem">{{ orderPromptGroup.posOrderItem.productName}}</span>
+      </h3>
+
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div
+          [innerHTML]="promptGroup?.instructions">
+      </div>
+    </mat-card-content>
+    <mat-card-actions>
+      <div class="grid-list">
+        <button mat-button (click)="reset()"><mat-icon>refresh</mat-icon>Start Over</button>
+        <button mat-button (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+        <button mat-button (click)="applyChoices()"><mat-icon>approval</mat-icon>Apply Choices</button>
+      </div>
+    </mat-card-actions>
+  </mat-card>
+  <mat-divider></mat-divider>
+
+  <mat-card>
+
+    <div class="grid-prompt">
+      <div>
+        <prompt-sub-group-panel></prompt-sub-group-panel>
+      </div>
+      <div>
+        <prompt-items-selected></prompt-items-selected>
+      </div>
+    </div>
+
+  </mat-card>
+
+</div>
+
+<!-- <div *ngIf="orderPromptGroup">
+  {{orderPromptGroup | json}}
+</div> -->
+

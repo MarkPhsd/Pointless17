@@ -1,0 +1,1969 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li >MetrcTransfersService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/metrc/metrc-transfers.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#dELETETransfersExternalIncoming" >dELETETransfersExternalIncoming</a>
+                            </li>
+                            <li>
+                                <a href="#deleteTransferTemplates" >deleteTransferTemplates</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCTansfersTemplatesDeliveries" >getMETRCTansfersTemplatesDeliveries</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCTransfersTemplates" >getMETRCTransfersTemplates</a>
+                            </li>
+                            <li>
+                                <a href="#getMetrcTransfersTemplatesDeliveryPackages" >getMetrcTransfersTemplatesDeliveryPackages</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCTransfersTypes" >getMETRCTransfersTypes</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersDeliveries" >getTransfersDeliveries</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersDeliveryPackagesGet" >getTransfersDeliveryPackagesGet</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersDeliveryPackagesRequiredLabTestBatches" >getTransfersDeliveryPackagesRequiredLabTestBatches</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersDeliveryPackagesStates" >getTransfersDeliveryPackagesStates</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersDeliveryPackagesWholeSale" >getTransfersDeliveryPackagesWholeSale</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersIncoming" >getTransfersIncoming</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersOutgoing" >getTransfersOutgoing</a>
+                            </li>
+                            <li>
+                                <a href="#getTransfersRejected" >getTransfersRejected</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCTransfersTemplates" >postMETRCTransfersTemplates</a>
+                            </li>
+                            <li>
+                                <a href="#postTransfersExternalIncoming" >postTransfersExternalIncoming</a>
+                            </li>
+                            <li>
+                                <a href="#putMETRCTransfersTemplates" >putMETRCTransfersTemplates</a>
+                            </li>
+                            <li>
+                                <a href="#putTransfersExternalIncoming" >putTransfersExternalIncoming</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="28" class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:28</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>auth</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="dELETETransfersExternalIncoming"></a>
+                    <span class="name">
+                        <span ><b>dELETETransfersExternalIncoming</b></span>
+                        <a href="#dELETETransfersExternalIncoming"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>dELETETransfersExternalIncoming(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="192"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:192</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteTransferTemplates"></a>
+                    <span class="name">
+                        <span ><b>deleteTransferTemplates</b></span>
+                        <a href="#deleteTransferTemplates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteTransferTemplates(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="286"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:286</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;any&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCTansfersTemplatesDeliveries"></a>
+                    <span class="name">
+                        <span ><b>getMETRCTansfersTemplatesDeliveries</b></span>
+                        <a href="#getMETRCTansfersTemplatesDeliveries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCTansfersTemplatesDeliveries(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="224"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:224</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTansfersTemplatesDeliveriesGet.html" target="_self" >Observable&lt;METRCTansfersTemplatesDeliveriesGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCTransfersTemplates"></a>
+                    <span class="name">
+                        <span ><b>getMETRCTransfersTemplates</b></span>
+                        <a href="#getMETRCTransfersTemplates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCTransfersTemplates(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="208"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:208</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTransfersTemplatesGet.html" target="_self" >Observable&lt;METRCTransfersTemplatesGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMetrcTransfersTemplatesDeliveryPackages"></a>
+                    <span class="name">
+                        <span ><b>getMetrcTransfersTemplatesDeliveryPackages</b></span>
+                        <a href="#getMetrcTransfersTemplatesDeliveryPackages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMetrcTransfersTemplatesDeliveryPackages(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="240"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:240</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>    <code>Observable&lt;MetrcTransfersTemplatesDeliveryPackagesGet[]&gt;</code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCTransfersTypes"></a>
+                    <span class="name">
+                        <span ><b>getMETRCTransfersTypes</b></span>
+                        <a href="#getMETRCTransfersTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCTransfersTypes(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="302"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:302</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTransfersTypesGet.html" target="_self" >Observable&lt;METRCTransfersTypesGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersDeliveries"></a>
+                    <span class="name">
+                        <span ><b>getTransfersDeliveries</b></span>
+                        <a href="#getTransfersDeliveries"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersDeliveries(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="80"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:80</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTransfersDeliveriesGET.html" target="_self" >Observable&lt;METRCTransfersDeliveriesGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersDeliveryPackagesGet"></a>
+                    <span class="name">
+                        <span ><b>getTransfersDeliveryPackagesGet</b></span>
+                        <a href="#getTransfersDeliveryPackagesGet"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersDeliveryPackagesGet(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="96"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:96</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCTransfersDeliveryPackagesGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersDeliveryPackagesRequiredLabTestBatches"></a>
+                    <span class="name">
+                        <span ><b>getTransfersDeliveryPackagesRequiredLabTestBatches</b></span>
+                        <a href="#getTransfersDeliveryPackagesRequiredLabTestBatches"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersDeliveryPackagesRequiredLabTestBatches(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="128"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:128</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCTransfersDeliveryPackagesRequiredLabTestBatchesGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersDeliveryPackagesStates"></a>
+                    <span class="name">
+                        <span ><b>getTransfersDeliveryPackagesStates</b></span>
+                        <a href="#getTransfersDeliveryPackagesStates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersDeliveryPackagesStates(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="144"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:144</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCTransfersDeliveryPackagesStatesGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersDeliveryPackagesWholeSale"></a>
+                    <span class="name">
+                        <span ><b>getTransfersDeliveryPackagesWholeSale</b></span>
+                        <a href="#getTransfersDeliveryPackagesWholeSale"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersDeliveryPackagesWholeSale(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="112"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:112</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCTransfersDeliveryPackagesWholeSaleGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersIncoming"></a>
+                    <span class="name">
+                        <span ><b>getTransfersIncoming</b></span>
+                        <a href="#getTransfersIncoming"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersIncoming(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="32"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:32</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTransfersIncomingGET.html" target="_self" >Observable&lt;METRCTransfersIncomingGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersOutgoing"></a>
+                    <span class="name">
+                        <span ><b>getTransfersOutgoing</b></span>
+                        <a href="#getTransfersOutgoing"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersOutgoing(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="48"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:48</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTransfersOutgoingGet.html" target="_self" >Observable&lt;METRCTransfersOutgoingGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTransfersRejected"></a>
+                    <span class="name">
+                        <span ><b>getTransfersRejected</b></span>
+                        <a href="#getTransfersRejected"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTransfersRejected(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="64"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:64</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCTransfersRejectedGet.html" target="_self" >Observable&lt;METRCTransfersRejectedGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCTransfersTemplates"></a>
+                    <span class="name">
+                        <span ><b>postMETRCTransfersTemplates</b></span>
+                        <a href="#postMETRCTransfersTemplates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCTransfersTemplates(mETRCTransfersTemplatesPOST: <a href="../interfaces/METRCTransfersTemplatesPOST.html" target="_self">METRCTransfersTemplatesPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="256"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:256</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCTransfersTemplatesPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCTransfersTemplatesPOST.html" target="_self" >METRCTransfersTemplatesPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postTransfersExternalIncoming"></a>
+                    <span class="name">
+                        <span ><b>postTransfersExternalIncoming</b></span>
+                        <a href="#postTransfersExternalIncoming"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postTransfersExternalIncoming(mETRCTransfersExternalIncomingPOST: <a href="../interfaces/METRCTransfersExternalIncomingPOST.html" target="_self">METRCTransfersExternalIncomingPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="160"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:160</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCTransfersExternalIncomingPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCTransfersExternalIncomingPOST.html" target="_self" >METRCTransfersExternalIncomingPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putMETRCTransfersTemplates"></a>
+                    <span class="name">
+                        <span ><b>putMETRCTransfersTemplates</b></span>
+                        <a href="#putMETRCTransfersTemplates"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putMETRCTransfersTemplates(mETRCTransfersTemplatesPOST: <a href="../interfaces/METRCTransfersTemplatesPOST.html" target="_self">METRCTransfersTemplatesPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="271"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:271</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCTransfersTemplatesPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCTransfersTemplatesPOST.html" target="_self" >METRCTransfersTemplatesPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="putTransfersExternalIncoming"></a>
+                    <span class="name">
+                        <span ><b>putTransfersExternalIncoming</b></span>
+                        <a href="#putTransfersExternalIncoming"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>putTransfersExternalIncoming(mETRCTransfersExternalIncomingPUT: <a href="../interfaces/METRCTransfersExternalIncomingPUT.html" target="_self">METRCTransfersExternalIncomingPUT[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="176"
+                            class="link-to-prism">src/app/_services/metrc/metrc-transfers.service.ts:176</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCTransfersExternalIncomingPUT</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCTransfersExternalIncomingPUT.html" target="_self" >METRCTransfersExternalIncomingPUT[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient,  } from &#x27;@angular/common/http&#x27;;
+import { Observable, } from &#x27;rxjs&#x27;;
+import { ISite } from &#x27;src/app/_interfaces&#x27;;
+import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
+import {
+   METRCTransfersIncomingGET,
+   METRCTransfersOutgoingGet,
+   METRCTransfersRejectedGet,
+   METRCTransfersDeliveriesGET,
+   METRCTransfersDeliveryPackagesGET,
+   METRCTransfersDeliveryPackagesWholeSaleGET,
+   METRCTransfersDeliveryPackagesRequiredLabTestBatchesGET,
+   METRCTransfersDeliveryPackagesStatesGet,
+   METRCTransfersExternalIncomingPOST,
+   METRCTransfersExternalIncomingPUT,
+   METRCTransfersTemplatesGet,
+   METRCTansfersTemplatesDeliveriesGet,
+   MetrcTransfersTemplatesDeliveryPackagesGet,
+   METRCTransfersTemplatesPOST,
+   METRCTransfersTypesGet,
+} from &#x27;src/app/_interfaces/metrcs/transfers&#x27;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+
+export class MetrcTransfersService {
+
+  constructor( private http: HttpClient, private auth: AuthenticationService, ) { }
+
+  getTransfersIncoming(site: ISite):  Observable&lt;METRCTransfersIncomingGET[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/&#x27;
+
+    const endPoint &#x3D; &#x27;incoming&#x27;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersIncomingGET[]&gt;(url);
+
+  }
+
+  getTransfersOutgoing(site: ISite):  Observable&lt;METRCTransfersOutgoingGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/&#x27;
+
+    const endPoint &#x3D; &#x27;outgoing&#x27;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersOutgoingGet[]&gt;(url);
+
+  }
+
+  getTransfersRejected(site: ISite):  Observable&lt;METRCTransfersRejectedGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/&#x27;
+
+    const endPoint &#x3D; &#x27;rejected&#x27;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersRejectedGet[]&gt;(url);
+
+  }
+
+  getTransfersDeliveries(id: number,site: ISite):  Observable&lt;METRCTransfersDeliveriesGET[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}/deliveries&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersDeliveriesGET[]&gt;(url);
+
+  }
+
+  getTransfersDeliveryPackagesGet(id: number, site: ISite):  Observable&lt;METRCTransfersDeliveryPackagesGET[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/deliveries/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}/packages&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersDeliveryPackagesGET[]&gt;(url);
+
+  }
+
+  getTransfersDeliveryPackagesWholeSale(id: number, site: ISite):  Observable&lt;METRCTransfersDeliveryPackagesWholeSaleGET[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/deliveries/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}/packages/wholesale&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersDeliveryPackagesWholeSaleGET[]&gt;(url);
+
+  }
+
+  getTransfersDeliveryPackagesRequiredLabTestBatches(id: number, site: ISite):  Observable&lt;METRCTransfersDeliveryPackagesRequiredLabTestBatchesGET[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/delivery/packages&#x27;
+
+    const endPoint &#x3D; &#x60;${id}/requiredlabtestbatches&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersDeliveryPackagesRequiredLabTestBatchesGET[]&gt;(url);
+
+  }
+
+  getTransfersDeliveryPackagesStates(site: ISite):  Observable&lt;METRCTransfersDeliveryPackagesStatesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/delivery/packages/states&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersDeliveryPackagesStatesGet[]&gt;(url);
+
+  }
+
+  postTransfersExternalIncoming(mETRCTransfersExternalIncomingPOST: METRCTransfersExternalIncomingPOST[], site: ISite) {
+
+    const controller &#x3D; &#x27;/transfers/v1/external/incoming&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post(url, mETRCTransfersExternalIncomingPOST);
+
+  }
+
+  putTransfersExternalIncoming(mETRCTransfersExternalIncomingPUT: METRCTransfersExternalIncomingPUT[], site: ISite) {
+
+    const controller &#x3D; &#x27;/transfers/v1/external/incoming&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.put(url, mETRCTransfersExternalIncomingPUT);
+
+  }
+
+  dELETETransfersExternalIncoming(id: number, site: ISite) {
+
+    const controller &#x3D; &#x27;/transfers/v1/external/incoming&#x27;
+
+    const endPoint &#x3D; &#x60;${id}&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.delete(url);
+
+  }
+
+  getMETRCTransfersTemplates(site: ISite):  Observable&lt;METRCTransfersTemplatesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/templates&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersTemplatesGet[]&gt;(url);
+
+  }
+
+  getMETRCTansfersTemplatesDeliveries(id: number, site: ISite):  Observable&lt;METRCTansfersTemplatesDeliveriesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/templates/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}/deliveries&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTansfersTemplatesDeliveriesGet[]&gt;(url);
+
+  }
+
+  getMetrcTransfersTemplatesDeliveryPackages(id: number, site: ISite):  Observable&lt;MetrcTransfersTemplatesDeliveryPackagesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/templates/delivery/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}/packages&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;MetrcTransfersTemplatesDeliveryPackagesGet[]&gt;(url);
+
+  }
+
+  postMETRCTransfersTemplates(mETRCTransfersTemplatesPOST: METRCTransfersTemplatesPOST[], site: ISite) {
+    const controller &#x3D; &#x27;/transfers/v1/templates&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post(url, mETRCTransfersTemplatesPOST);
+
+  }
+
+  putMETRCTransfersTemplates(mETRCTransfersTemplatesPOST: METRCTransfersTemplatesPOST[], site: ISite) {
+    const controller &#x3D; &#x27;/transfers/v1/templates&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post(url, mETRCTransfersTemplatesPOST);
+
+  }
+
+  deleteTransferTemplates(id: number, site: ISite): Observable&lt;any&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/templates/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.delete&lt;any&gt;(url);
+
+  }
+
+  getMETRCTransfersTypes(site: ISite): Observable&lt;METRCTransfersTypesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/transfers/v1/types&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCTransfersTypesGet[]&gt;(url);
+
+  }
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'MetrcTransfersService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

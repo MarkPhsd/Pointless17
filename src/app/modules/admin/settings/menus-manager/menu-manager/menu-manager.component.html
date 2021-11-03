@@ -1,0 +1,76 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>
+      <div class="header-icons">
+        <mat-icon>menu</mat-icon>
+      </div>
+      <h3>Menu Manager</h3>
+
+    </mat-card-title>
+
+    <mat-card-subtitle>
+      Sort and edit menus.
+      <h2>Drag menus to sort. Click on to edit.</h2>
+      <button mat-button (click)="initMenu()">Initialize Menu</button>
+    </mat-card-subtitle>
+    <mat-divider></mat-divider>
+
+    <div class="grid-container">
+      <div *ngIf="accordionMenus">
+        <div
+              cdkDropList
+              #accordionList="cdkDropList"
+              (cdkDropListDropped)="dropAccordion($event)"
+              >
+
+          <div *ngFor="let item of accordionMenus"
+              class="pop button"
+              cdkDrag
+              (click)="assignSubMenu(item, item.submenus)"
+              >
+              <mat-icon>{{item.icon}}</mat-icon>
+              {{item.name}}
+
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="submenu">
+        <div
+            cdkDropList
+            #secondList="cdkDropList"
+            (cdkDropListDropped)="drop($event)"
+            >
+          <div  *ngFor="let item of submenu"
+                class="pop button"
+                cdkDrag
+                (click)="assignSubMenuItem(item)"
+                >
+            <mat-icon>{{item.icon}}</mat-icon>
+            {{item.name}}
+          </div>
+        </div>
+      </div>
+
+      <div class="cards">
+        <div *ngIf="accordionMenu">
+          <app-accordion-menu-item-edit
+              [id]="accordionMenu.id">
+          </app-accordion-menu-item-edit>
+        </div>
+
+        <div *ngIf="submenuItem">
+          <app-menu-group-item-edit [id]="submenuItem.id">
+          </app-menu-group-item-edit>
+        </div>
+
+      </div>
+
+    </div>
+
+  </mat-card>
+
+</div>
+
+
+

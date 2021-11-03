@@ -1,0 +1,77 @@
+
+<div  *ngIf="mainPanel"
+      class="buttons-container">
+  <div>
+    <button mat-raised-button class="button" color="primary"  (click)="printLabels()">
+      <mat-icon>print</mat-icon>
+       Labels
+    </button>
+  </div>
+
+  <div>
+    <button mat-raised-button class="button" color="primary"  (click)="rePrintLabels()">
+      <mat-icon>print</mat-icon>
+        Re-Print Labels
+    </button>
+  </div>
+
+  <div>
+    <button mat-raised-button class="button" color="primary" (click)="printReceipt()">
+      <mat-icon>print</mat-icon>
+      <span *ngIf="!smallDevice">
+         Receipt
+       </span>
+    </button>
+  </div>
+
+  <div>
+    <button mat-raised-button class="button" color="primary" (click)="makePayment()">
+      <mat-icon>credit_card</mat-icon>
+      <span *ngIf="!smallDevice">
+         Payment
+       </span>
+    </button>
+  </div>
+
+  <div  *ngIf="(!itemsPrinted && !paymentsMade)">
+    <button mat-raised-button class="button" color="primary" (click)="deleteOrder()">
+      <mat-icon>delete</mat-icon>
+      <span *ngIf="!smallDevice">
+        Void
+      </span>
+    </button>
+  </div>
+
+  <div  *ngIf="isAuthorized && (itemsPrinted || paymentsMade)">
+    <button mat-raised-button class="button" color="primary" (click)="voidOrder()">
+      <mat-icon>delete</mat-icon>
+      <span *ngIf="!smallDevice">
+        Delete
+      </span>
+    </button>
+  </div>
+
+  <div *ngIf="mainPanel && smallDevice">
+    <button  mat-raised-button
+        class="button"
+        color="primary"
+        (click)="showItems()">
+      <mat-icon>list</mat-icon>
+      Items
+    </button>
+  </div>
+
+  <div *ngIf="mainPanel && !order.suspendedOrder">
+    <span *ngIf="isAuthorized && order.clientID != 0">
+      <button mat-raised-button color="warn"
+              (click)="suspendOrder()">Suspend Order</button>
+    </span>
+  </div>
+
+  <div *ngIf="mainPanel && order.suspendedOrder">
+    <span *ngIf="isAuthorized && order.clientID != 0">
+      <button mat-raised-button color="warn"
+              (click)="removeSuspension()">Remove Suspension</button>
+    </span>
+  </div>
+</div>

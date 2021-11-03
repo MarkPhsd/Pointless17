@@ -1,0 +1,16 @@
+<div *ngIf="inputForm" [formGroup]="inputForm">
+  <div *ngIf="(clientTypes$ | async) as list" >
+    <mat-form-field class="fields" appearance="outline">
+      <mat-label>Client Type</mat-label>
+      <mat-select
+                  type            = "number"
+                  name            = "clientTypeID"
+                  formControlName = "clientTypeID"
+                >
+          <mat-option *ngFor="let item of list" [value]="item.id">
+            {{item.name}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

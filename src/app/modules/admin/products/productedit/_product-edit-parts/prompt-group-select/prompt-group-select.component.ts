@@ -1,0 +1,40 @@
+import { Component, EventEmitter, Input, OnInit,Output } from '@angular/core';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { Observable } from 'rxjs';
+import { FormGroup , FormBuilder } from '@angular/forms';
+import {  MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
+import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
+
+@Component({
+  selector: 'prompt-group-select',
+  templateUrl: './prompt-group-select.component.html',
+  styleUrls: ['./prompt-group-select.component.scss']
+})
+export class PromptGroupSelectComponent implements OnInit {
+
+  @Input() productTypeID  : number;
+  @Input() inputForm      : FormGroup;
+  @Output() outputProductTypeID   :      EventEmitter<any> = new EventEmitter();
+
+  promptResults$           : Observable<IPromptGroup[]>;
+
+  constructor(private promptGroupservice: PromptGroupService,
+              private siteService: SitesService,
+              private fb: FormBuilder,
+              )
+        { }
+
+  async ngOnInit() {
+    const search = {} as MenuPromptSearchModel;
+    search.pageSize = 1000
+    search.pageNumber = 1;
+    const site = this.siteService.getAssignedSite();
+    this.promptResults$  = await this.promptGroupservice.getPrompts(site)
+  }
+
+  onSelect(event) {
+    console.log(event.value)
+    this.outputProductTypeID.emit(event.value)
+  }
+
+}

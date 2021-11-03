@@ -1,0 +1,15 @@
+
+<div *ngIf="posOrders$">
+    <ag-grid-angular
+        #agGrid
+        id="myGrid"
+        style="width: 100%; "
+        [class]="agGridClass"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [rowData]="posOrders$ | async"
+        [frameworkComponents]="frameworkComponents"
+        (gridReady)="onPOSGridReady($event)">
+      </ag-grid-angular>
+<div>
+

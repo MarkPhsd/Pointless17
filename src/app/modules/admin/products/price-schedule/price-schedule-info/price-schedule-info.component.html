@@ -1,0 +1,274 @@
+<div *ngIf="priceScheduleTracking" class="type-list">
+  <mat-card>
+    <mat-card-subtitle>
+      <div *ngIf="inputForm">
+        <div>
+          Name: {{priceScheduleTracking.name}}
+
+        </div>
+      </div>
+    </mat-card-subtitle>
+
+    <mat-card-content class="type-card">
+      <mat-card  class="type-card">
+         <div class="grid-info">
+
+            <div class="grid-box">
+              <div>
+                <mat-icon  class="icon">shopping_cart</mat-icon>
+              </div>
+
+              <div *ngIf="!priceScheduleTracking.allOrderTypes" >
+                <div *ngFor="let item of priceScheduleTracking.orderTypes" class="slidein">
+                  {{item.name }}
+                </div>
+              </div>
+
+              <div *ngIf="priceScheduleTracking.allOrderTypes"  class="slidein">
+                <div>
+                  All Orders
+                </div>
+              </div>
+
+            </div>
+
+            <div class="grid-box">
+              <div class="icons-headers" >
+                <mat-icon  class="icon">people</mat-icon>
+              </div>
+              <div *ngIf="!priceScheduleTracking.allEligible" >
+                <div *ngFor="let item of priceScheduleTracking.clientTypes"  class="slidein">
+                  <div>
+                    <div *ngIf="item">
+                      {{ item.name }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div *ngIf="priceScheduleTracking.allEligible" class="slidein">
+                All Clients
+              </div>
+            </div>
+
+        </div>
+      </mat-card>
+
+      <div class="headers grid-constraints">
+
+        <div class="icons-headers" >
+          Schedule
+          <mat-icon  class="icon">event</mat-icon>
+        </div>
+
+        <div class="headers grid-interior-container">
+          <div class="icons-headers" >
+            <mat-icon  class="icon">calendar_view_week</mat-icon>
+          </div>
+
+          <div *ngIf="!priceScheduleTracking.allWeekdaysDays" >
+            <div *ngFor="let item of priceScheduleTracking.weekDays"  class="slidein">
+                {{ item.name }}
+            </div>
+          </div>
+
+          <div *ngIf="priceScheduleTracking.allWeekdaysDays">
+            All days of week.
+          </div>
+
+          <div class="icons-headers" >
+            <mat-icon  class="icon">date_range</mat-icon>
+          </div>
+
+          <div *ngIf="!priceScheduleTracking.allDates">
+            <div *ngFor="let item of priceScheduleTracking.dateFrames" class="slidein">
+              <div>
+                {{item.startDate | date: 'shortDate' }} - {{item.endDate  | date: 'shortDate' }}
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="priceScheduleTracking.allDates"  class="slidein">
+            All Dates
+          </div>
+
+          <div class="icons-headers" >
+            <mat-icon class="icon">schedule</mat-icon>
+          </div>
+
+          <div *ngIf="!priceScheduleTracking.timeFrameAlways">
+            <div *ngFor="let item of priceScheduleTracking.timeFrames" class="slidein">
+              {{ item.startTime | date: 'shortTime' }} - {{ item.endTime | date: 'shortTime' }}
+            </div>
+          </div>
+
+          <div *ngIf="priceScheduleTracking.timeFrameAlways" class="slidein">
+            All Time
+          </div>
+
+        </div>
+      </div>
+
+      <div>
+        <mat-divider></mat-divider>
+      </div>
+
+
+
+        <div class="constraint-panels"  *ngIf="inputForm">
+
+          <div [formGroup]="inputForm">
+            <mat-card>
+              <mat-card-subtitle>
+                <div class="rewards-header">
+                  <mat-icon>settings</mat-icon>
+                </div>
+                <div class="rewards-icon">Required Groups & Items</div>
+              </mat-card-subtitle>
+
+              <mat-card-content>
+                  <mat-divider></mat-divider>
+
+                  <div *ngIf="priceScheduleTracking.requiredItemTypes.length>0">
+                    <div class="itemtype-header">
+                      <mat-icon>table_view</mat-icon>Types
+                    </div>
+                    <app-price-schedule-fields
+                          [inputForm]     = "inputForm"
+                          [data]          = "priceScheduleTracking.requiredItemTypes"
+                          [formArray]     = "requiredItemTypes"
+                          [arrayTypeName] = "'requiredItemTypes'"
+                          [hideDelete]    = "hideDelete"
+                        >
+                    </app-price-schedule-fields>
+                  </div>
+
+                  <div *ngIf="requiredCategories.length>0">
+                    <div class="icon-header">
+                      <mat-icon>category</mat-icon>Categories
+                    </div>
+                    <app-price-schedule-fields
+                        [inputForm]     ="inputForm"
+                        [data]          ="priceScheduleTracking.requiredCategories"
+                        [formArray]     ="requiredCategories"
+                        [arrayTypeName] ="'requiredCategories'"
+                        [hideDelete]    ="hideDelete"
+                        >
+                    </app-price-schedule-fields>
+                  </div>
+
+
+                  <div *ngIf="requiredItems.length>0 && inputForm">
+                    <div class="icon-header">
+                      <mat-icon>inventory_2</mat-icon>Items
+                    </div>
+                    <app-price-schedule-fields
+                        [inputForm]     = "inputForm"
+                        [data]          = "priceScheduleTracking.requiredItems"
+                        [formArray]     = "requiredItems"
+                        [arrayTypeName] = "'requiredItems'"
+                        [hideDelete]    = "hideDelete"
+                        >
+                    </app-price-schedule-fields>
+                  </div>
+
+                  <div *ngIf="requiredBrands.length>0">
+                    <div class="icon-header">
+                      <mat-icon>branding_watermark</mat-icon>Brands
+                    </div>
+                    <app-price-schedule-fields
+                      [inputForm]     ="inputForm"
+                      [data]          ="priceScheduleTracking.requiredBrands"
+                      [formArray]     ="requiredBrands"
+                      [arrayTypeName] ="'requiredBrands'"
+                      [hideDelete]    ="hideDelete"
+                      >
+                    </app-price-schedule-fields>
+                  </div>
+
+                </mat-card-content>
+              </mat-card>
+            </div>
+        </div>
+
+        <div class="constraint-panels" *ngIf="inputForm">
+          <div [formGroup]="inputForm"  >
+            <mat-card>
+              <mat-card-subtitle>
+                <div class="rewards-header">
+                    <mat-icon>loyalty</mat-icon>
+                </div>
+                <div class="rewards-icon">Rewards</div>
+                <div>
+                  Type: {{priceScheduleTracking.type}}
+                </div>
+              </mat-card-subtitle>
+
+              <mat-card-content>
+
+                  <div *ngIf="itemTypeDiscounts.length>0">
+                    <mat-divider></mat-divider>
+                    <div class="icon-header">
+                      <mat-icon>table_view</mat-icon>Item Types
+                    </div>
+                    <app-price-schedule-fields
+                        [inputForm]     ="inputForm"
+                        [data]          ="priceScheduleTracking.itemTypeDiscounts"
+                        [formArray]     ="itemTypeDiscounts"
+                        [arrayTypeName] ="'itemTypeDiscounts'"
+                        [hideDelete]    ="hideDelete"
+                        >
+                    </app-price-schedule-fields>
+                  </div>
+
+                  <div *ngIf="priceScheduleTracking.categoryDiscounts.length>0">
+                    <div class="itemtype-header">
+                      <mat-icon>category</mat-icon>Categories
+                    </div>
+                    <app-price-schedule-fields
+                          [inputForm]      ="inputForm"
+                          [data]           ="priceScheduleTracking.categoryDiscounts"
+                          [formArray]      ="categoryDiscounts"
+                          [arrayTypeName]  ="'categoryDiscounts'"
+                          [hideDelete]     ="hideDelete"
+                          >
+                    </app-price-schedule-fields>
+                  </div>
+
+                  <div *ngIf="priceScheduleTracking.itemDiscounts.length>0">
+                    <div class="icon-header">
+                      <mat-icon>inventory_2</mat-icon>Item Discounts
+                    </div>
+                    <app-price-schedule-fields
+                          [inputForm]     ="inputForm"
+                          [data]          ="priceScheduleTracking.itemDiscounts"
+                          [formArray]     ="itemDiscounts"
+                          [arrayTypeName] ="'itemDiscounts'"
+                          [hideDelete]    ="hideDelete"
+                          >
+                    </app-price-schedule-fields>
+                  </div>
+
+                  <div *ngIf="priceScheduleTracking.brandDiscounts.length>0">
+                    <div class="icon-header">
+                      <mat-icon>branding_watermark</mat-icon>Brand Discounts
+                    </div>
+                    <app-price-schedule-fields
+                          [inputForm]    ="inputForm"
+                          [data]         ="priceScheduleTracking.brandDiscounts"
+                          [formArray]    ="brandDiscounts"
+                          [arrayTypeName]="'brandDiscounts'"
+                          [hideDelete]   ="hideDelete"
+                          >
+                    </app-price-schedule-fields>
+                  </div>
+
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+
+    </mat-card-content>
+  </mat-card>
+
+

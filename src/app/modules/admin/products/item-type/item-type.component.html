@@ -1,0 +1,155 @@
+{{urlPath}}
+<mat-card>
+  <mat-accordion class="example-headers-align" multi="false" >
+
+    <mat-expansion-panel [expanded]="accordionStep === 0" (opened)="setStep(0)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <div class="icon-setings">
+            <mat-icon>speaker_group</mat-icon>
+          </div>
+          Item Types & Item Type Settings
+        </mat-panel-title>
+        <mat-panel-description>
+          <div class="icon-setings">
+              This list defines the types of items you use to sell, as well as features for gift cards and discounts.
+          </div>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+        <mat-card-title>
+
+        </mat-card-title>
+        <mat-card-content>
+
+          <div fxLayout="row" fxLayoutAlign="space-around end" >
+            <div fxFlex=80 fxFill fxLayout="column" fxLayoutAlign="space-between start" >
+              <span id="selectedRows"> </span>
+            </div>
+            <div fxFlex=20 fxLayout="column" fxLayoutAlign="space-between end" >
+              <div class="grid-container">
+                           <div class="grid-item">
+                  <button mat-button color="primary"
+                        (click)="delete()">
+                    <mat-icon>delete</mat-icon>Delete Selected</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- [modules]="modules" -->
+          <div *ngIf="itemTypes$">
+            <ag-grid-angular
+                  #agGrid
+                  style="width: 100%; height: 75vh;"
+                  id="mySearchGrid"
+                  class="ag-theme-material"
+                  [columnDefs]="columnDefs"
+                  [defaultColDef]="defaultColDef"
+                  [rowSelection]="rowSelection"
+                  [rowData]="itemTypes$ | async "
+                  [frameworkComponents]="frameworkComponents"
+                  (gridReady)="onGridReady($event)"
+                  (selectionChanged)="onSelectionChanged($event)"
+              >
+            </ag-grid-angular>
+          </div>
+
+        </mat-card-content>
+      <mat-action-row>
+        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 1" (opened)="setStep(1)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>settings</mat-icon>
+          Categories for Item Types
+        </mat-panel-title>
+        <mat-panel-description>
+          This list helps you assign the Categories of your item list to Item Types.
+          Select the type on the left. Then assign categories to the list on the far right.
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+       <mat-card-content>
+          <app-item-type-category-assignment
+              [availables]="availableItems"
+              [selects]="selectedItems"
+              valueField="id"
+              textField="name"
+              [availableText]="UnAssignedCategories"
+              [selectedText]="AssignedCategories"
+              (itemsMoved)="onItemsMoved($event)">
+          </app-item-type-category-assignment>
+        </mat-card-content>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 2" (opened)="setStep(2)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>settings</mat-icon>
+          Item Types for Customer Display
+        </mat-panel-title>
+        <mat-panel-description>
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+       <mat-card-content>
+          <app-item-type-display-assignment
+              [availables]="itemTypeBasic"
+              [selects]="selectedItemTypes"
+              valueField="id"
+              textField="name"
+              [availableText]="UnAssignedCategories"
+              [selectedText]="AssignedCategories"
+              (itemsMoved)="onItemsMoved($event)">
+          </app-item-type-display-assignment>
+        </mat-card-content>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 3" (opened)="setStep(3)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <mat-icon>scale</mat-icon>
+          Assign Taxes to Item Group Types
+        </mat-panel-title>
+        <mat-panel-description>
+
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+       <mat-card-content>
+          <app-use-group-tax-assignment ></app-use-group-tax-assignment>
+
+        </mat-card-content>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+</mat-card>
+
+
+
+

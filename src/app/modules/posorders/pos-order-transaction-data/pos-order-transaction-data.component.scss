@@ -1,0 +1,42 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  // width     : 100%;
+  // min-width : 325px;
+  // min-height: 155px;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+  width     : 100%;
+  min-width : 275px;
+  width     : 275px;
+  max-width : 275px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    width     : 100%;
+    min-width : 335px;
+    max-width : 335px;
+    min-height: 155px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+
+.transaction-data {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  // width: 300px;
+  border-radius: 3px;
+  margin: 5px 5px ;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: larger;
+}
+
+
+body {
+  font-size: larger;
+}
+

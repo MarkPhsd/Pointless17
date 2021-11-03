@@ -1,0 +1,14 @@
+<div class="grid-item grid-item-gallery">
+  <div *ngIf="items">
+    <div   *ngIf="items.length == 1">
+      <img class="gallery"
+          [src]="items[0].data.src "
+          [alt]="menuItem?.name">
+    </div>
+    <div  *ngIf="items.length > 1">
+      <gallery id="gallery"
+              [items]="items">
+      </gallery>
+    </div>
+  </div>
+</div>

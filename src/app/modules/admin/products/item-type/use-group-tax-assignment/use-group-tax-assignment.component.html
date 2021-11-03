@@ -1,0 +1,78 @@
+<div class="grid-container">
+
+  <div class="type-list">
+    <h4 class="text-center listbox-title">Taxes</h4>
+    <div>
+      Select  a tax, then drag items in the left list to the right list to assign them to this tax rate.
+    </div>
+
+    <div *ngIf="(taxes$ | async) as list"  >
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" vertical >
+        <mat-button-toggle (click)="setItemType(item)" *ngFor="let item of list" [value]="item.id">
+           {{ item.name }} <mat-icon>{{item.icon}}</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+  </div>
+
+  <div>
+
+    <div class="grid-dual-list" [formGroup]="listBoxForm">
+
+      <div class="dualListLeft">
+        <div class="drag-drop-container">
+            <mat-form-field appearance="outline">
+            <mat-label>{{availableText}}</mat-label>
+            <input matInput
+                  class="form-control vertical-spacing-5"
+                  placeholder="{{availableFilterPlaceholder}}"
+                  formControlName="availableSearchInput"
+                  #availableSearchInput />
+          </mat-form-field>
+          <div cdkDropList #availables="cdkDropList"
+              [cdkDropListData] ="availableItems"
+              [cdkDropListConnectedTo] ="[selects]"
+              (cdkDropListDropped)="drop($event)"
+              class="drag-drop-list  selection-list">
+              <div nbButton outline status='primary'
+                  class="drag-drop-box"
+                  *ngFor="let item of availableItems | arrayFilter:['text', availableSearchInput.value]" cdkDrag>
+                  {{ item.text }}
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dualListRight">
+        <div class="drag-drop-container">
+            <mat-form-field appearance="outline">
+              <mat-label>{{selectedText}}</mat-label>
+              <input matInput
+                    type="text"
+                    class="form-control"
+                    placeholder="{{selectedFilterPlaceholder}}"
+                    formControlName="selectedSearchInput"
+                    #selectedSearchInput />
+            </mat-form-field>
+
+            <div cdkDropList #selects="cdkDropList"
+                [cdkDropListData] ="selectedItems"
+                [cdkDropListConnectedTo]="[availables]"
+                (cdkDropListDropped)="drop($event)"
+                class="drag-drop-list selection-list">
+              <div nbButton outline status='primary'
+                  class="drag-drop-box"
+                  *ngFor="let item of selectedItems | arrayFilter:['text', selectedSearchInput.value]"
+                  cdkDrag>
+                  {{ item.text }}
+              </div>
+            </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

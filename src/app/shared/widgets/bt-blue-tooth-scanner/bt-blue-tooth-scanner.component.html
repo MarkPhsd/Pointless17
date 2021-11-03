@@ -1,0 +1,34 @@
+<div class="con">
+
+  <button mat-button (click)="refreshScan">refresh</button>
+  <div>
+    scannerData {{scannerData}}
+  </div>
+  <!-- <div>
+     pairedDevices {{pairedDevices| json }}
+    <div *ngFor = "let item of pairedDevices.devices">
+      <div>
+        name {{item.name}} address {{item.address}}
+      </div>
+      <div>
+        object {{item | json}}
+      </div>
+
+    </div>
+  </div> -->
+  <mat-form-field appearance="fill">
+    <mat-label>Select Device</mat-label>
+    <mat-select [(ngModel)]="deviceAdddress"
+                (selectionChange)="selectDevice()"
+                name="device">
+      <mat-option *ngFor="let item of pairedDevices.devices" [value]="item.address">
+        {{item?.name}} | {{ item?.address}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <div>
+    {{dataSelected}}
+  </div>
+
+</div>

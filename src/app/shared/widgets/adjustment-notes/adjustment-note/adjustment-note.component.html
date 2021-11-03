@@ -1,0 +1,56 @@
+
+
+
+<form [formGroup]="inputForm" >
+  <h4>Audit Note</h4>
+  <div *ngIf="inputForm.controls.adjustmentType.errors?.required && inputForm.controls.adjustmentType.touched" class="error">
+    <mat-icon color="warn">warning</mat-icon> Location required.
+  </div>
+  <div class=".grid-container">
+
+      <div class="grid-item">
+        <mat-form-field appearance="outline">
+          <mat-label >Packages Remaining</mat-label>
+          <input matInput
+                type="text"
+                formControlName="packageCountRemaining"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div class="grid-item">
+        <mat-form-field appearance="outline" id="customer-notes">
+          <mat-label>Adjustment Notes</mat-label>
+            <textarea matInput rows="10"
+                      formControlName="adjustmentNotes"
+            >
+          </textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="grid-item">
+        <mat-form-field appearance="outline">
+          <mat-label>Adjust Type</mat-label>
+          <mat-select
+                      type="text"
+                      formControlNamename="adjustmentType"
+                      (selectionChange)="getAdjustmentType($event)"
+                    >
+            <div *ngIf="(adjustmentReasons$ | async) as list">
+              <mat-option *ngFor="let item of list" [value]="item.name">
+                {{ item.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+    <mat-divider></mat-divider>
+
+    <div fxLayout="row">
+        <button mat-raised-button class="form-button" color="primary" (click)="update()">Update</button>
+    </div>
+
+  </div>
+
+</form>

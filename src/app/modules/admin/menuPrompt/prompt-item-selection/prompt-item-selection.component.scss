@@ -1,0 +1,52 @@
+.grid-list-nopanel {
+
+  display: grid;
+  grid-template-columns: 1fr 30vw;
+  height: 5vh;
+  gap    : 10px;
+
+  // @media (max-width: 599px)  {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 600px)   {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 900px) {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 1200px)  {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 1800px)  {
+  //   height: 50vh;
+  // }
+}
+
+.grid-list {
+
+  display: grid;
+  grid-template-columns: 1fr 20vw;
+  height: 65vh;
+  gap    : 10px;
+
+  // @media (max-width: 599px)  {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 600px)   {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 900px) {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 1200px)  {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 1800px)  {
+  //   height: 50vh;
+  // }
+}
+
+
+mat-card {
+  // height:  75vh;
+}

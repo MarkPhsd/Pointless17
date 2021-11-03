@@ -1,0 +1,162 @@
+<div class="container">
+  <div *ngIf="priceSchedule"  >
+    <div *ngIf="inputForm">
+      <div [formGroup]="inputForm">
+          <div class="grid-card">
+
+            <div>
+              <mat-tab-group>
+                <mat-tab label="Name & Type">
+                  <mat-card>
+                    <app-discount-options
+                                          [inputForm]="inputForm"   >
+                    </app-discount-options>
+                  </mat-card>
+                </mat-tab>
+
+                <mat-tab label="Constraints">
+                  <app-price-schedule-constraints
+                      [inputForm]="inputForm"
+                      [item]="priceSchedule">
+                  </app-price-schedule-constraints>
+                </mat-tab>
+
+                <mat-tab label="Category & Items">
+                  <div class="grid-search-container">
+                    <app-type-filter
+                      [inputForm]="inputForm"
+                      [item]     ="priceSchedule">
+                    </app-type-filter>
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Offers and Rewards">
+                  <div class="grid-search-container">
+                    <app-reward-type-filter
+                      [inputForm]="inputForm"
+                      [item]     ="priceSchedule">
+                    </app-reward-type-filter>
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Finalize">
+                  <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+                  <button mat-button (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+                  <button  mat-button (click)="logInfo()">log info </button> -->
+                  <div *ngIf="priceScheduleTracking">
+
+                      <div *ngIf="priceScheduleTracking.clientTypes">
+                        <h4>ClientTypes</h4>
+                        <div *ngFor="let item of priceScheduleTracking.clientTypes">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf="priceScheduleTracking.orderTypes">
+                        <h4>Order Types</h4>
+                        <div *ngFor="let item of priceScheduleTracking.orderTypes">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf="priceScheduleTracking.itemTypeDiscounts">
+                        <h4>item Type Discounts</h4>
+                        <div *ngFor="let item of priceScheduleTracking.itemTypeDiscounts">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf=" priceScheduleTracking.categoryDiscounts">
+                        <h4>category Discounts</h4>
+                        <div *ngFor="let item of priceScheduleTracking.categoryDiscounts">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf=" priceScheduleTracking.itemDiscounts">
+                        <h4>item Discounts</h4>
+                        <div *ngFor="let item of priceScheduleTracking.itemDiscounts">
+                          {{ item | json }}
+                      </div>
+                      <br>
+                      <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf="priceScheduleTracking.brandDiscounts">
+                        <h4>  brands Discounts</h4>
+                        <div *ngFor="let item of priceScheduleTracking.brandDiscounts">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <h3>Required</h3>
+
+                      <div *ngIf="priceScheduleTracking.requiredItemTypes">
+                        <h4>  required ItemTypes</h4>
+                        <div *ngFor="let item of priceScheduleTracking.requiredItemTypes">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf="priceScheduleTracking.requiredCategories">
+                        <h4>  required Categories</h4>
+                        <div *ngFor="let item of priceScheduleTracking.requiredCategories">
+                          {{ item | json }}
+                        </div>
+                        <br>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf="priceScheduleTracking.requiredItems">
+                        <h4>  required Items</h4>
+                        <div *ngFor="let item of priceScheduleTracking.requiredItems">
+                          {{ item.name }}
+                        </div>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                      <div *ngIf="priceScheduleTracking.requiredBrands">
+                        <h4>  brands Required</h4>
+                        <div *ngFor="let item of priceScheduleTracking.requiredBrands">
+                          {{ item.name }}
+                        </div>
+                        <mat-divider></mat-divider>
+                      </div>
+
+                  </div>
+                </mat-tab>
+              </mat-tab-group>
+
+            </div>
+
+            <div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="floating-info">
+  <app-price-schedule-info
+                           [inputForm]="inputForm"
+                           >
+  </app-price-schedule-info>
+</div>
+
+<!-- <div class="grid-container">
+  <button (click)="initForm()"> init form</button>
+  <button (click)="setDefaultFormValues()"> Fill form</button>
+</div> -->

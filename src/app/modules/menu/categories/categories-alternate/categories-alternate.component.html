@@ -1,0 +1,35 @@
+<div class="grid-container">
+  <div class="grid-item title">
+    <h1>Categories</h1>
+  </div>
+  <main class="grid-item main">
+    <div class="items">
+
+      <div class="item item1" *ngFor="let item of categories">
+        <div class="center-horiztonal">
+          <div class="center-vertical" >
+            <div>{{item.name}}</div>
+            <img  [src]="getCatSource(item)" alt="item">
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p>🐰🥚Click & Drag <i>powered by Javascript</i></p>
+  </main>
+
+  <footer class="grid-footer footer">
+
+    <div>
+      <a>
+        <button mat-raised-button
+                class="button"
+                color="primary"
+                (click)="showAll()" >Show All <mat-icon>open_in_new</mat-icon>
+        </button>
+      </a>
+    </div>
+    </footer>
+</div>
+

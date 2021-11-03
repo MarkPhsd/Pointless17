@@ -1,0 +1,29 @@
+
+.header-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 5px;
+}
+
+.info-width {
+  width: 300px;
+}
+
+.title-format {
+  font-size: 1em;
+}
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.sub-title {
+  margin: 20px;
+}
+
+.card-dimensions {
+  margin: 10px;
+}

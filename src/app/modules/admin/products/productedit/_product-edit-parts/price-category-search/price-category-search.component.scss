@@ -1,0 +1,14 @@
+mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 175px;
+}
+
+.mat-form-field-infix {
+    display: block;
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    width: 175px;
+}

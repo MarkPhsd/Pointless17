@@ -1,0 +1,305 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content directive">
+                   <div class="content-data">
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Directives</li>
+  <li >Events</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_interfaces/events.ts</code>
+        </p>
+
+
+
+
+
+        <section>
+            <h3>Metadata</h3>
+            <table class="table table-sm table-hover">
+                <tbody>
+
+                    <tr>
+                        <td class="col-md-3">Selector</td>
+                        <td class="col-md-9"><code>[Events]</code></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </section>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Output, EventEmitter, Injectable, Directive } from &#x27;@angular/core&#x27;;
+
+export interface EventObj&lt;T&gt; {
+  event: T;
+  editor: any;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+
+@Directive({
+  selector: &quot;[Events]&quot;,
+  exportAs: &quot;Events&quot;
+})
+
+export abstract class Events {
+  @Output() onBeforePaste: EventEmitter&lt;EventObj&lt;ClipboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onBlur: EventEmitter&lt;EventObj&lt;FocusEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onClick: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onContextMenu: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onCopy: EventEmitter&lt;EventObj&lt;ClipboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onCut: EventEmitter&lt;EventObj&lt;ClipboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDblclick: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDrag: EventEmitter&lt;EventObj&lt;DragEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDragDrop: EventEmitter&lt;EventObj&lt;DragEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDragEnd: EventEmitter&lt;EventObj&lt;DragEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDragGesture: EventEmitter&lt;EventObj&lt;DragEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDragOver: EventEmitter&lt;EventObj&lt;DragEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDrop: EventEmitter&lt;EventObj&lt;DragEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onFocus: EventEmitter&lt;EventObj&lt;FocusEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onFocusIn: EventEmitter&lt;EventObj&lt;FocusEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onFocusOut: EventEmitter&lt;EventObj&lt;FocusEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onKeyDown: EventEmitter&lt;EventObj&lt;KeyboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onKeyPress: EventEmitter&lt;EventObj&lt;KeyboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onKeyUp: EventEmitter&lt;EventObj&lt;KeyboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseDown: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseEnter: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseLeave: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseMove: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseOut: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseOver: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onMouseUp: EventEmitter&lt;EventObj&lt;MouseEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onPaste: EventEmitter&lt;EventObj&lt;ClipboardEvent&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onSelectionChange: EventEmitter&lt;EventObj&lt;Event&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onActivate: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onAddUndo: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onBeforeAddUndo: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onBeforeExecCommand: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onBeforeGetContent: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onBeforeRenderUI: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onBeforeSetContent: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onChange: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onClearUndos: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDeactivate: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onDirty: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onExecCommand: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onGetContent: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onHide: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onInit: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onLoadContent: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onNodeChange: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onPostProcess: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onPostRender: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onPreInit: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onPreProcess: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onProgressState: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onRedo: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onRemove: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onReset: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onSaveContent: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onSetAttrib: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onObjectResizeStart: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onObjectResized: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onObjectSelected: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onSetContent: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onShow: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onSubmit: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onUndo: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+  @Output() onVisualAid: EventEmitter&lt;EventObj&lt;any&gt;&gt; &#x3D; new EventEmitter();
+}
+
+export const validEvents: (keyof Events)[] &#x3D; [
+  &#x27;onActivate&#x27;,
+  &#x27;onAddUndo&#x27;,
+  &#x27;onBeforeAddUndo&#x27;,
+  &#x27;onBeforeExecCommand&#x27;,
+  &#x27;onBeforeGetContent&#x27;,
+  &#x27;onBeforeRenderUI&#x27;,
+  &#x27;onBeforeSetContent&#x27;,
+  &#x27;onBeforePaste&#x27;,
+  &#x27;onBlur&#x27;,
+  &#x27;onChange&#x27;,
+  &#x27;onClearUndos&#x27;,
+  &#x27;onClick&#x27;,
+  &#x27;onContextMenu&#x27;,
+  &#x27;onCopy&#x27;,
+  &#x27;onCut&#x27;,
+  &#x27;onDblclick&#x27;,
+  &#x27;onDeactivate&#x27;,
+  &#x27;onDirty&#x27;,
+  &#x27;onDrag&#x27;,
+  &#x27;onDragDrop&#x27;,
+  &#x27;onDragEnd&#x27;,
+  &#x27;onDragGesture&#x27;,
+  &#x27;onDragOver&#x27;,
+  &#x27;onDrop&#x27;,
+  &#x27;onExecCommand&#x27;,
+  &#x27;onFocus&#x27;,
+  &#x27;onFocusIn&#x27;,
+  &#x27;onFocusOut&#x27;,
+  &#x27;onGetContent&#x27;,
+  &#x27;onHide&#x27;,
+  &#x27;onInit&#x27;,
+  &#x27;onKeyDown&#x27;,
+  &#x27;onKeyPress&#x27;,
+  &#x27;onKeyUp&#x27;,
+  &#x27;onLoadContent&#x27;,
+  &#x27;onMouseDown&#x27;,
+  &#x27;onMouseEnter&#x27;,
+  &#x27;onMouseLeave&#x27;,
+  &#x27;onMouseMove&#x27;,
+  &#x27;onMouseOut&#x27;,
+  &#x27;onMouseOver&#x27;,
+  &#x27;onMouseUp&#x27;,
+  &#x27;onNodeChange&#x27;,
+  &#x27;onObjectResizeStart&#x27;,
+  &#x27;onObjectResized&#x27;,
+  &#x27;onObjectSelected&#x27;,
+  &#x27;onPaste&#x27;,
+  &#x27;onPostProcess&#x27;,
+  &#x27;onPostRender&#x27;,
+  &#x27;onPreProcess&#x27;,
+  &#x27;onProgressState&#x27;,
+  &#x27;onRedo&#x27;,
+  &#x27;onRemove&#x27;,
+  &#x27;onReset&#x27;,
+  &#x27;onSaveContent&#x27;,
+  &#x27;onSelectionChange&#x27;,
+  &#x27;onSetAttrib&#x27;,
+  &#x27;onSetContent&#x27;,
+  &#x27;onShow&#x27;,
+  &#x27;onSubmit&#x27;,
+  &#x27;onUndo&#x27;,
+  &#x27;onVisualAid&#x27;
+];
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'directive';
+            var COMPODOC_CURRENT_PAGE_URL = 'Events.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

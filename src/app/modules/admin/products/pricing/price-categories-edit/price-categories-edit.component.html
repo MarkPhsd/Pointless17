@@ -1,0 +1,405 @@
+
+<mat-card>
+
+  <mat-card-title>
+    <mat-icon>edit</mat-icon> {{priceCategory.name}}
+    <mat-divider>
+    </mat-divider>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+
+    <div class="grid-header-container">
+      <div>
+        <div *ngIf="!showMore">
+            <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show More Prices</button>
+            </div>
+            <div *ngIf="showMore">
+              <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
+            </div>
+
+            <div *ngIf="!showTime">
+              <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
+            </div>
+            <div *ngIf="showTime">
+              <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
+            </div>
+
+            <div *ngIf="!showConversions">
+              <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Show Conversions</button>
+            </div>
+            <div *ngIf="showConversions">
+              <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Hide Conversions</button>
+            </div>
+        </div>
+
+        <div>
+          <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateCategory($event)"
+              (outputupdateItemExit)  ="updateCategoryExit($event)"
+              (outputupdatedeleteItem)="deleteCategory($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+              (outputCopy)            ="copyItem($event)"
+
+          ></app-edit-buttons-standard>
+        </div>
+
+      </div>
+    <mat-divider>
+    </mat-divider>
+
+  </mat-card-subtitle>
+
+  <mat-card-content>
+
+    <div [formGroup]="inputForm">
+      <!-- <button mat-button (click)="saveAllItems()">Save all items</button> -->
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput
+                type="text"
+                formControlName="name"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div class="grid-header-container">
+        <div *ngIf="productPrices">
+          <div formArrayName="productPrices"
+            *ngFor="let item of productPrices.controls; let i = index;">
+
+             <mat-card>
+              <mat-card-subtitle>
+                </mat-card-subtitle>
+                <mat-card-content>
+
+                <div  [formGroupName]="i" >
+
+                  <div class="grid-simple-price-container">
+                    <div>
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >Retail</mat-label>
+                        <input matInput
+                              currencyMask
+                              type="currency"
+                              formControlName="retail"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div>
+                      <mat-form-field appearance="outline">
+                        <mat-label>Category</mat-label>
+                        <mat-select
+                                    type="number"
+                                    [formControlName] = "'unitTypeID'"
+                                    name="unitTypeID"
+                          >
+                          <div *ngIf="(unitTypes$ | async) as list" >
+                            <mat-option *ngFor="let item of list" [value]="item.id">
+                                {{item.name}}
+                            </mat-option>
+                          </div>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+
+                    <div>
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >wholesale</mat-label>
+                        <input matInput
+                              type="text"
+                              formControlName="wholeSale"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div>
+                      <app-edit-buttons-standard
+                        (outputeupdateItem)     ="updateItem(item)"
+                        (outputupdatedeleteItem)="deleteItem(item, i)"
+                        (outputCopy)            ="copyItem(item)"
+                        [hideExit]=             "true"
+                        ></app-edit-buttons-standard>
+                    </div>
+
+                  </div>
+
+                  <div  *ngIf="showMore || showTime"  class="grid-price-time-container">
+                    <div  *ngIf="showMore"  class=" grid-multiprice-container">
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price1</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price1"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price2</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price2"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price3</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price3"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price4</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price4"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price5</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price5"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price6</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price6"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price7</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price7"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price8</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price8"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price9</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price9"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price10</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price10"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+
+                    </div>
+                    <div *ngIf="showTime" class="grid-time-container">
+                      <div >
+                        Time & Date based price will automatically apply when dates or time assigned.
+                      </div>
+
+                      <div *ngIf="showTime">
+                        <mat-form-field appearance="outline" class="date-fields">
+                          <mat-label >Price</mat-label>
+                          <input matInput
+                                type="number"
+                                formControlName="specialDatePrice"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="showTime">
+                        <mat-form-field appearance="outline" class="date-fields">
+                          <mat-label>Start Date</mat-label>
+                          <input matInput
+                                formControlName="startDate"
+                                [matDatepicker]="picker">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div *ngIf="showTime">
+                        <mat-form-field appearance="outline" class="date-fields">
+                          <mat-label>End Date</mat-label>
+                          <input matInput
+                                formControlName="endDate"
+                                [matDatepicker]="picker">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                      </div>
+                      <div *ngIf="showTime">
+                        <mat-form-field appearance="outline" class="date-fields">
+                          <mat-label >Start</mat-label>
+                          <input matInput
+                                type="time"
+                                formControlName="startTime"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div *ngIf="showTime">
+                        <mat-form-field appearance="outline" class="date-fields">
+                          <mat-label >End</mat-label>
+                          <input matInput
+                                type="time"
+                                formControlName="endTime"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                    </div>
+                  </div>
+
+                  <div *ngIf="showConversions" class="grid-conversion-container">
+                    <mat-card>
+                      <div>
+                        Conversions multiply values against the primary count.
+                        <ul>
+                          <li> Multiplier is used when the quantity of the item is greater or less than 1 of the primary item. </li>
+                          <li> Unit Ratio is the amount of the item that is part of a recipe. </li>
+                        </ul>
+                      </div>
+                      <mat-card-content>
+                        <div class="grid-conversion-items">
+                        <div>
+                          <mat-form-field appearance="outline" class="conversion-fields">
+                            <mat-label >Multiplier</mat-label>
+                            <input matInput
+                                  type="text"
+                                  formControlName="partMultiplyer"
+                                  class="form-control" >
+                          </mat-form-field>
+                        </div>
+
+                        <div>
+                          <mat-form-field appearance="outline" class="conversion-fields">
+                            <mat-label >Unit Ratio (recipes)</mat-label>
+                            <input matInput
+                                  type="text"
+                                  formControlName="unitPartRatio"
+                                  class="form-control" >
+                          </mat-form-field>
+                        </div>
+                      </div>
+
+                      </mat-card-content>
+
+                    </mat-card>
+
+                  </div>
+
+                </div>
+
+              </mat-card-content>
+            </mat-card>
+          </div>
+
+          <button mat-button
+                  class="button"
+                  color="primary"
+                  (click)="addPrice()">
+          <mat-icon>add</mat-icon>Add</button>
+
+        </div>
+      </div>
+
+
+    </div>
+  </mat-card-content>
+</mat-card>
+<!--
+unitPartRatio:    [''],
+partMultiplyer:   [''],
+itemQuantity:     [''], -->
+<!-- Prices form.
+{{inputForm.value | json }}
+object
+{{this.priceCategory | json}}
+<mat-divider></mat-divider>
+Prices Info. -->
+<!--
+hideFromMenu:     [''],
+useforInventory:  [''],
+pizzaMultiplier:  [''],
+unitPartRatio:    [''],
+partMultiplyer:   [''],
+doNotDelete:      [''],
+pizzaSize:        [''],
+priceType:        [''],
+barcode:          [''],
+uid:
+productID:        [''],
+tierPriceGroup:   [''],
+webEnabled:       [''],
+
+pizzaMultiplier:  [''],
+unitPartRatio:    [''],
+partMultiplyer:   [''],
+itemQuantity:     [''],
+
+price1:           [price1],
+price2:           [price2],
+price3:           [price3],
+price4:           [price4],
+price5:           [price5],
+price6:           [price6],
+price7:           [price7],
+price8:           [price8],
+price9:           [price9],
+price10:          [price10],
+wholeSale:        [wholeSale],
+
+
+timeBasedPrice:   [timeBasedPrice],
+weekDays:         [weekDays],
+endTime:          [endTime],
+startTime:        [startTime],
+specialDatePrice: [specialDatePrice],
+startDate:        [startDate],
+endDate:          [endDate] -->
+

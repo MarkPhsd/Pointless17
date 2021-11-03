@@ -1,0 +1,33 @@
+<mat-card *ngIf="order">
+
+  <mat-card-subtitle>
+    <div class="total-card">
+      Order {{order.id}} - {{order.serviceType}}
+    </div>
+    <div class="total-card">
+       {{order.employeeName}}
+    </div>
+    <div *ngIf="order.completionDate" class="total-card">
+      Started  {{order.orderDate | date: 'shortDate'}} - {{order.orderDate | date: 'shortTime'}}
+     </div>
+    <div *ngIf="order.completionDate" class="total-card">
+      Completed  {{order.completionDate | date: 'shortDate'}} - {{order.completionDate | date: 'shortTime'}}
+     </div>
+
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="transaction-data">
+      <div>Sub   </div>
+      <div> {{ order.subTotal | currency }}</div>
+      <div>Tax  </div>
+      <div> {{ order.taxTotal | currency }}</div>
+      <div>Total </div>
+      <div> {{ order.total | currency }}</div>
+      <div>Items </div>
+      <div> {{ order.itemCount }}</div>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>

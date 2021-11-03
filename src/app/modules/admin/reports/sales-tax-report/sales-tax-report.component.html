@@ -1,0 +1,141 @@
+
+<div
+     class="mat-card-container"
+     *ngIf="site && (sales$ | async) as sale; else loading">
+
+     <!-- {{sale | json}} -->
+     <mat-card>
+      <mat-card-title>
+        <div class="grid">
+          <div  class="totals_label">
+            <h4> <ng-content></ng-content> </h4>
+          </div>
+        </div>
+        <div class="grid">
+          <div class="header-labels">
+            {{sale.startDate | date: 'short'}}
+          </div>
+          <div  class="header-labels">
+            {{sale.endDate | date: 'short'}}
+          </div>
+        </div>
+      </mat-card-title>
+
+      <mat-card-content>
+
+        <div *ngIf="sale.resultsMessage"> <mat-icon>warning</mat-icon>{{sale.resultsMessage}} </div>
+
+        <div class="grid" *ngIf="!sale.resultsMessage" >
+          <div class="grid-item totals_label">Net (pre-tax):</div>
+          <div class="grid-item totals">{{sale.netSales | currency }} <br>  </div>
+
+          <div class="grid-item other_label">Non-Taxable:</div>
+          <div class="grid-item other">{{sale.nonTaxableSalesTotal | currency}}</div>
+
+          <div class="grid-item tax_label"> Tax 1: </div>
+          <div class="grid-item tax">{{sale.taxTotal1 | currency }}  </div>
+
+          <div class="grid-item tax_label"> Tax 2: </div>
+          <div class="grid-item tax"> {{sale.taxTotal2 | currency }} </div>
+
+          <div class="grid-item tax_label"> Tax 3: </div>
+          <div class="grid-item tax">{{sale.taxTotal3 | currency }}  </div>
+
+          <div class="grid-item tax_label" > CRV: </div>
+          <div class="grid-item tax"> {{sale.crv | currency }}  </div>
+        </div>
+
+        <mat-divider></mat-divider>
+
+      </mat-card-content>
+      <mat-card-footer  *ngIf="!sale.resultsMessage" >
+        <div class="grid-footer" >
+          <div class="grid-item field_bold totals_label"> Gross (net + taxes  ) :</div>
+          <div class="grid-item field_bold totals_label"> {{sale.grossSales | currency }}  </div>
+        </div>
+      </mat-card-footer>
+    </mat-card>
+
+    <mat-divider></mat-divider>
+
+    <mat-card  *ngIf="!sale.resultsMessage" >
+
+      <mat-card-title>
+        <div class="grid">
+          <div  class="totals_label">
+            <div class="grid">
+              <div>
+                <h4><mat-icon>local_offer</mat-icon> Discounts </h4>
+              </div>
+              <div>
+                <span  *ngIf="minimized">
+                  <button mat-button (click)="minimized = !minimized"><mat-icon>expand</mat-icon>More</button>
+                </span>
+                <span  *ngIf="!minimized">
+                  <button mat-button (click)="minimized = !minimized"><mat-icon>minimize</mat-icon>Less</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-title>
+
+      <mat-card-content *ngIf="!minimized">
+        <div class="grid">
+
+          <div class="grid-item discounts_label">Order $ Discounts:</div>
+          <div class="grid-item discounts">{{sale.orderCashDiscount | currency }} </div>
+
+          <div class="grid-item discounts_label">Item $ Discounts:</div>
+          <div class="grid-item discounts"> {{sale.itemCashDiscount | currency }}</div>
+
+          <div class="grid-item discounts_label">Order % Discounts:</div>
+          <div class="grid-item discounts"> {{sale.orderPercentDiscount | currency }} </div>
+
+          <div class="grid-item discounts_label">Item % Discounts:</div>
+          <div class="grid-item discounts"> {{sale.itemPercentDiscount | currency }}</div>
+
+          <div class="grid-item other_label">Gift Card:</div>
+          <div class="grid-item other">{{sale.giftCardIssuances | currency }} </div>
+
+        </div>
+      </mat-card-content>
+  </mat-card>
+
+  <mat-divider></mat-divider>
+
+  <mat-card  *ngIf="!sale.resultsMessage" >
+    <mat-card-title>
+      <div class="grid">
+        <div  class="totals_label">
+          <div class="grid">
+            <div>
+              <h4> Other </h4>
+            </div>
+            <div>
+              <span  *ngIf="minimized">
+                <button mat-button (click)="minimized = !minimized"><mat-icon>expand</mat-icon>More</button>
+              </span>
+              <span  *ngIf="!minimized">
+                <button mat-button (click)="minimized = !minimized"><mat-icon>minimize</mat-icon>Less</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-card-title>
+
+    <mat-card-content  *ngIf="!minimized">
+      <div class="grid">
+        <div class="grid-item other_label">Paid Outs:</div>
+        <div class="grid-item other"> {{sale.paidOuts | currency }} </div>
+      </div>
+      </mat-card-content>
+  </mat-card>
+
+
+</div>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+</ng-template>

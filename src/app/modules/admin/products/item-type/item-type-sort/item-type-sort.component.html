@@ -1,0 +1,25 @@
+<div  fxFlex fxLayout="column" >
+
+  <button mat-raised-button (click)="initList()">Rest List</button>
+
+  <h2>Sort Menu Categories</h2>
+  <div *ngIf="itemTypes$">
+
+    <div
+          cdkDropList
+          #accordionList="cdkDropList"
+          (cdkDropListDropped)  ="drop($event)"
+          style                 ="width: 25%">
+
+      <div *ngFor="let item of (itemTypes$ | async)"
+          class="pop"
+          cdkDrag
+          (click)="assignType(item.id)"
+          >
+
+          {{item.name}}
+
+      </div>
+    </div>
+  </div>
+</div>

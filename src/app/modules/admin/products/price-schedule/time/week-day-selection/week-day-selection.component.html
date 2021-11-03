@@ -1,0 +1,42 @@
+<div *ngIf="inputForm">
+  <mat-card>
+    <mat-card-subtitle>
+      <div class="subtitle">
+        Leave on for all days, or turn on to selected days.
+      </div>
+    </mat-card-subtitle>
+
+    <mat-divider></mat-divider>
+
+    <div [formGroup]="inputForm">
+      <div class="item-label">
+        <mat-icon>calendar_view_week</mat-icon>
+        <mat-label>Use Every Weekday</mat-label>
+      </div>
+
+      <div class="item-label">
+        <mat-slide-toggle
+                class           ="price-values"
+                name            ="allWeekdaysDays"
+                formControlName ="allWeekdaysDays"
+                [(ngModel)]     ="allWeekdaysDays"
+                (change)        ="getItems()"
+                >
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <div *ngIf="!allWeekdaysDays">
+      <section class="example-section">
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="monday">monday</mat-checkbox>
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="tuesday">tuesday</mat-checkbox>
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="wednesday">wednesday</mat-checkbox>
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="thursday">thursday</mat-checkbox>
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="friday">friday</mat-checkbox>
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="saturday">saturday</mat-checkbox>
+        <mat-checkbox class="weekday-margin" (change)="getItems()"  [(ngModel)]="sunday">sunday</mat-checkbox>
+      </section>
+    </div>
+</mat-card>
+
+

@@ -1,0 +1,15 @@
+.device-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: 500px;
+  max-width: 500px;
+}
+
+mat-form-field, button {
+  font-size: smaller;
+  width:100px;
+  margin: 3px;
+}
+

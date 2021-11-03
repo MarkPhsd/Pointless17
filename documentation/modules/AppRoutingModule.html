@@ -1,0 +1,388 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content module">
+                   <div class="content-data">
+
+
+
+<ol class="breadcrumb">
+    <li>Modules</li>
+    <li >AppRoutingModule</li>
+</ol>
+
+
+<ul class="nav nav-tabs" role="tablist">
+    <li  class="active" >
+        <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+    </li>
+    <li >
+        <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/app-routing.module.ts</code>
+        </p>
+
+
+
+
+
+        <div class="container-fluid module">
+            <div class="row">
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { NgModule } from &#x27;@angular/core&#x27;;
+import { Routes, RouterModule } from &#x27;@angular/router&#x27;;
+import { DefaultComponent  } from &#x27;./dashboard/default.component&#x27;;
+import { SitesComponent } from &#x27;./modules/sites/sites.component&#x27;;
+import { LoginComponent} from &#x27;./modules/login/login.component&#x27;;
+import { ChangepasswordComponent } from &#x27;./modules/login/changepassword/changepassword.component&#x27;;
+import { ResetpasswordComponent } from &#x27;./modules/login/resetpassword/resetpassword.component&#x27;;
+import { ProducteditComponent } from &#x27;./modules/admin/products/productedit/productedit.component&#x27;;
+import { CategoriesComponent } from &#x27;./modules/menu/categories/categories.component&#x27;;
+import { WishlistComponent } from &#x27;./modules/profile/wishlist/wishlist.component&#x27;;
+import { CustomReuseStrategy } from &#x27;src/app/_routing/route-reuse-strategy&#x27;;
+import { CategorieslistviewComponent } from &#x27;./modules/admin/products/categorieslistview/categoriestlistview.component&#x27;;
+import { MenuitemComponent } from &#x27;./modules/menu/menuitem/menuitem.component&#x27;;
+import { AdminbrandslistComponent } from &#x27;./modules/admin/products/adminbrandslist/adminbrandslist.component&#x27;;
+import { AdminbranditemComponent } from &#x27;./modules/admin/products/adminbrandslist/adminbranditem/adminbranditem.component&#x27;;
+import { BrandslistComponent } from &#x27;./modules/menu/brandslist/brandslist.component&#x27;;
+import { MenuitemsComponent } from &#x27;./modules/menu/menuitems/menuitems.component&#x27;;
+import { ImageCaptureComponent } from &#x27;./shared/widgets/image-capture/image-capture.component&#x27;;
+import { ProfileEditorComponent } from &#x27;./modules/admin/profiles/profile-editor/profile-editor.component&#x27;;
+import { ProfileLookupComponent } from &#x27;./modules/admin/profiles/profile-lookup/profile-lookup.component&#x27;;
+import { PosOrderComponent } from &#x27;./modules/posorders/pos-order/pos-order.component&#x27;;
+import { SearchResultsComponent } from &#x27;./modules/menu/search-results/search-results.component&#x27;;
+import { AdminComponent } from &#x27;./modules/admin/admin.component&#x27;;
+import { SettingsComponent } from &#x27;./modules/admin/settings/settings.component&#x27;;
+import { ProductlistviewComponent } from &#x27;./modules/admin/products/productlistview/productlistview.component&#x27;;
+import { PosOrdersComponent } from &#x27;./modules/posorders/pos-orders/pos-orders.component&#x27;;
+import { PageNotFoundComponent } from &#x27;./shared/widgets/page-not-found/page-not-found.component&#x27;;
+import { SiteEditComponent } from &#x27;./modules/admin/settings/site-edit/site-edit.component&#x27;;
+import { ReviewEditComponent } from &#x27;./modules/reviews/review-edit/review-edit.component&#x27;;
+import { ReportsComponent } from &#x27;./modules/admin/reports/reports.component&#x27;;
+import { PosListComponent } from &#x27;./modules/admin/settings/pos-list/pos-list.component&#x27;;
+import { DashboardComponent } from &#x27;./modules/admin/reports/dashboard/dashboard.component&#x27;;
+import { OrderItemListComponent } from &#x27;./modules/posorders/order-items-list/order-item-list/order-item-list.component&#x27;;
+import { OrderItemsListComponent } from &#x27;./modules/posorders/order-items-list/order-items-list.component&#x27;;
+import { AppGateComponent } from &#x27;./modules/app-gate/app-gate/app-gate.component&#x27;;
+import { AuthGuard } from &#x27;./_http-interceptors/auth.guard&#x27;;
+import { AgeVerificationGuardService } from &#x27;./_http-interceptors/age-verification-guard.service&#x27;;
+import { MainMenuComponent } from &#x27;./modules/menu/mainMenu/main-menu/main-menu.component&#x27;;
+import { MenuItemModalComponent } from &#x27;./modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component&#x27;;
+import { HammerCardComponent } from &#x27;./shared/widgets/hammer-card/hammer-card.component&#x27;;
+import { TvPriceSpecialsComponent } from &#x27;./modules/tv-menu/tv-price-specials/tv-price-specials.component&#x27;;
+import { TierMenuComponent } from &#x27;./modules/menu/tierMenu/tier-menu/tier-menu.component&#x27;;
+import { PriceCategoriesComponent } from &#x27;./modules/admin/products/pricing/price-categories/price-categories.component&#x27;;
+import { PriceTiersComponent } from &#x27;./modules/tv-menu/price-tiers/price-tiers.component&#x27;;
+import { RegisterAccountExistingUserComponent } from &#x27;./modules/login/registration/register-account-existing-user/register-account-existing-user.component&#x27;;
+import { RegisterAccountExistingUserWithTokenComponent } from &#x27;./modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component&#x27;;
+import { RegisterAccountMainComponent } from &#x27;./modules/login/registration/register-account-main/register-account-main.component&#x27;;
+import { CategoriesAlternateComponent } from &#x27;./modules/menu/categories/categories-alternate/categories-alternate.component&#x27;;
+import { BarcodeScannerComponent } from &#x27;./shared/widgets/barcode-scanner/barcode-scanner.component&#x27;;
+import { PackageListComponent } from &#x27;./modules/admin/metrc/packages/package-list.component&#x27;;
+import { ItemCategoriesListComponent } from &#x27;./modules/admin/metrc/items/item-categories-list/item-categories-list.component&#x27;;
+import { ProductSearchSelectorComponent } from &#x27;./shared/widgets/product-search-selector/product-search-selector.component&#x27;
+import { PreloadAllModules } from &#x27;@angular/router&#x27;;
+import { InventoryLocationsComponent } from &#x27;src/app/modules/admin/inventory/inventory-locations/inventory-locations.component&#x27;;
+import { FacilitiesListComponent } from &#x27;src/app/modules/admin/metrc/facilities/facilities-list/facilities-list.component&#x27;;
+import { InventoryListComponent } from &#x27;./modules/admin/inventory/inventory-list/inventory-list/inventory-list.component&#x27;;
+import { ProfileComponent } from &#x27;./modules/profile/profile.component&#x27;;
+import { MetrcSalesListComponent } from &#x27;./modules/admin/metrc/metrc-sales-list/metrc-sales-list.component&#x27;;
+import { CategoryScrollComponent } from &#x27;./shared/widgets/test/category-scroll/category-scroll.component&#x27;;
+import { MenuManagerComponent } from &#x27;./modules/admin/settings/menus-manager/menu-manager/menu-manager.component&#x27;;
+import { MenuMinimalComponent } from &#x27;./shared/widgets/menus/menu-minimal/menu-minimal.component&#x27;;
+import { AccordionComponent } from &#x27;./shared/widgets/menus/accordion/accordion.component&#x27;;
+import { ItemTypeComponent } from &#x27;./modules/admin/products/item-type/item-type.component&#x27;;
+import { FlatRateListComponent } from &#x27;./modules/admin/products/flatRate/flat-rate-list/flat-rate-list.component&#x27;;
+import { TaxRateListComponent } from &#x27;./modules/admin/products/item-type/tax-rate-list/tax-rate-list.component&#x27;;
+import { TaxListComponent } from &#x27;./modules/admin/products/taxes/tax-list/tax-list.component&#x27;;
+import { Label1by8Component } from &#x27;./modules/admin/settings/printing/label1by8/label1by8.component&#x27;;
+import { IonicGeoLocationComponent } from &#x27;./shared/widgets/ionic-geo-location/ionic-geo-location.component&#x27;;
+import { MenuTinyComponent } from &#x27;./shared/widgets/menus/menu-tiny/menu-tiny.component&#x27;;
+import { MenuItemsInfiniteComponent } from &#x27;./modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component&#x27;;
+import { InstalledPrintersComponent } from &#x27;./modules/admin/settings/printing/installed-printers/installed-printers.component&#x27;;
+import { StrainsAddComponent } from &#x27;./modules/admin/metrc/packages/strains-add/strains-add.component&#x27;;
+import { PriceScheduleComponent } from &#x27;./modules/admin/products/price-schedule/price-schedule.component&#x27;;
+import { ItemTypeCategoryAssignmentComponent } from &#x27;./modules/admin/products/item-type/item-type-category-assignment/item-type-category-assignment.component&#x27;;
+import { AgGridTestComponent } from &#x27;./shared/widgets/ag-grid-test/ag-grid-test.component&#x27;;
+import { UnitTypeFieldsComponent } from &#x27;./modules/admin/products/productedit/_product-edit-parts/unit-type-fields/unit-type-fields.component&#x27;;
+import { UnitTypeListComponent } from &#x27;./modules/admin/products/unit-type-list/unit-type-list.component&#x27;;
+import { DsiEMVPaymentComponent } from &#x27;./modules/admin/dsi-emvpayment/dsi-emvpayment.component&#x27;;
+import { PriceScheduleListComponent } from &#x27;./modules/admin/products/price-schedule/price-schedule-list/price-schedule-list.component&#x27;;
+import { ClientTypeEditComponent } from &#x27;./modules/admin/clients/client-types/client-type-edit/client-type-edit.component&#x27;;
+import { ClientTypeListComponent } from &#x27;./modules/admin/clients/client-types/client-type-list/client-type-list.component&#x27;;
+import { ServiceTypeListComponent } from &#x27;./modules/admin/transactions/serviceTypes/service-type-list/service-type-list.component&#x27;;
+import { ServiceTypeEditComponent } from &#x27;./modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component&#x27;;
+import { OrdersMainComponent } from &#x27;./modules/orders/orders-main/orders-main.component&#x27;;
+import { PosOrderItemComponent } from &#x27;./modules/posorders/pos-order-item/pos-order-item.component&#x27;;
+import { ScaleReaderComponent } from &#x27;./shared/widgets/scale-reader/scale-reader.component&#x27;;
+
+const routes: Routes &#x3D; [
+
+   {path: &#x27;&#x27;, component: DefaultComponent,
+      children: [
+        { path: &#x27;&#x27;, component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;app-main-menu&#x27;, component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: &#x27;isLeft&#x27;} },
+
+        { path: &#x27;app-profile&#x27;, component: ProfileComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+        { path: &#x27;categories&#x27;, component: CategoriesComponent,canActivate: [AgeVerificationGuardService],   data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;brandslist&#x27;, component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;menuitems&#x27;, component: MenuitemsComponent,canActivate: [AgeVerificationGuardService],   data: { animation:  &#x27;isLeft&#x27;} },
+
+        { path: &#x27;menuitems-infinite&#x27;, component: MenuItemsInfiniteComponent ,canActivate: [AgeVerificationGuardService],   data: { animation:  &#x27;isLeft&#x27;} },
+
+        { path: &#x27;menuitem&#x27;,     component: MenuitemComponent, canActivate: [AgeVerificationGuardService],  data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;searchproducts&#x27;, component: SearchResultsComponent, canActivate: [AgeVerificationGuardService],  data: { animation: &#x27;isLeft&#x27;} },
+
+        { path: &#x27;dashboard&#x27;,  component: DashboardComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;reports&#x27;,    component: ReportsComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+        { path: &#x27;admin&#x27;, component: AdminComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;settings&#x27;, component: SettingsComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;sites&#x27;,      component: SitesComponent,  canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;site-edit&#x27;, component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+
+        { path: &#x27;pos-orders&#x27;, component: OrdersMainComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;pos-order-search&#x27;, component: PosOrdersComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;currentorder&#x27;, component: PosOrderComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+        //profile viewing
+        { path: &#x27;wishlist&#x27;, component: WishlistComponent, canActivate: [AuthGuard],data: { animation: &#x27;isLeft&#x27;}},
+
+        { path: &#x27;productedit&#x27;, component: ProducteditComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;product-list-view&#x27;, component: ProductlistviewComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;price-schedule&#x27;, component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;price-schedule-edit&#x27;, component: PriceScheduleComponent,canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;price-categories&#x27;, component: PriceCategoriesComponent, canActivate: [AuthGuard],data: { animation: &#x27;isLeft&#x27;}},
+
+        { path: &#x27;categorylist&#x27;, component: CategorieslistviewComponent,  canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;categorieslistview&#x27;, component: CategorieslistviewComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;adminbrandslist&#x27;, component: AdminbrandslistComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;adminbranditem&#x27;, component: AdminbranditemComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;pos-list&#x27;, component: PosListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;flatrate&#x27;, component: FlatRateListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;item-types&#x27;, component: ItemTypeComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;taxes&#x27;, component: TaxListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;flat-rate-taxes&#x27;, component: FlatRateListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;price-categories&#x27;, component: PriceCategoriesComponent, data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;unit-types&#x27;, component: UnitTypeListComponent, data: { animation: &#x27;isLeft&#x27;}},
+
+        { path: &#x27;app-order-items-list&#x27;, component: OrderItemsListComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        { path: &#x27;app-order-item-list&#x27;, component: OrderItemListComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+
+        //app-metrc-sales
+        { path: &#x27;metrc-sales&#x27;, component: MetrcSalesListComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+
+        // app-package-list
+        { path: &#x27;package-list&#x27;, component: PackageListComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        // &#x27;ItemCategoriesListComponent
+        { path: &#x27;metrc-categories-list&#x27;, component: ItemCategoriesListComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;}},
+
+        { path: &#x27;metrc-facilities-list&#x27;, component: FacilitiesListComponent, canActivate: [AuthGuard], data: { animation:  &#x27;isLeft&#x27;} },
+        //  metrc-facilities-list
+        //FacilitiesListComponent
+
+        //inventory InventoryListComponent
+        { path: &#x27;inventory-list&#x27;, component: InventoryListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;inventory-locations&#x27;, component: InventoryLocationsComponent,  canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+        //profile look up editing
+        { path: &#x27;profileEditor&#x27;, component: ProfileEditorComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;profileListing&#x27;, component: ProfileLookupComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+
+        //ClientSettings;
+        { path: &#x27;client-type-list&#x27;, component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;client-type-edit&#x27;, component: ClientTypeEditComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+        //transaction settings
+        { path: &#x27;service-type-list&#x27;, component: ServiceTypeListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+        { path: &#x27;service-type-edit&#x27;, component: ServiceTypeEditComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+        { path: &#x27;imagecapture&#x27;, component: ImageCaptureComponent,data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;review-edit&#x27;, component: ReviewEditComponent, canActivate: [AuthGuard],data: { animation: &#x27;isLeft&#x27;}},
+
+        { path: &#x27;tier-menu&#x27;, component: TierMenuComponent, canActivate: [AuthGuard],data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;cat-alternate&#x27;, component: CategoriesAlternateComponent},
+
+        //settings
+        { path: &#x27;drag&#x27;, component: MenuManagerComponent , canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;app-settings&#x27;, component: SettingsComponent , canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+        { path: &#x27;item-type-category-assignment&#x27;, component: ItemTypeCategoryAssignmentComponent , canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+        //printing
+        { path: &#x27;label1by8&#x27;, component: Label1by8Component, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+        //geo-location
+        { path: &#x27;location&#x27;, component: IonicGeoLocationComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+        { path: &#x27;strains&#x27;, component: StrainsAddComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+        { path: &#x27;hammerjs&#x27;, component: HammerCardComponent ,data: { animation: &#x27;isLeft&#x27;}},
+        // { path: &#x27;pos-order-item&#x27;, component: PosOrderItemComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+      ]
+    },
+    // app-pos-order-item/
+    // { path: &#x27;pos-order-item&#x27;, component: PosOrderItemComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+    { path: &#x27;scale-reader&#x27;, component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+
+    { path: &#x27;client-type-list&#x27;, component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;} },
+
+
+    { path: &#x27;payments&#x27;, component: DsiEMVPaymentComponent, data: { animation: &#x27;isLeft&#x27;}},
+
+    { path: &#x27;agtest&#x27;, component: AgGridTestComponent, data: { animation: &#x27;isLeft&#x27;}},
+
+    { path: &#x27;printerSettings&#x27;, component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: &#x27;isLeft&#x27;} },
+    { path: &#x27;brandslist2&#x27;, component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: &#x27;isLeft&#x27;} },
+    { path: &#x27;menu-accordion&#x27;, component: AccordionComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;menu-minimal&#x27;, component: MenuMinimalComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;menu-tiny&#x27;, component: MenuTinyComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;catscroll&#x27;, component: CategoryScrollComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;product-search-selector&#x27;, component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;barcodescanner&#x27;, component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: &#x27;isLeft&#x27;}},
+
+    // { path: &#x27;HomePage&#x27;, component: HomePage, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;login&#x27;, component: LoginComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;resetpassword&#x27;, component: ResetpasswordComponent,data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;changepassword&#x27;, component: ChangepasswordComponent,data: { animation: &#x27;isLeft&#x27;}},
+
+    { path: &#x27;register-existing-user&#x27;, component: RegisterAccountExistingUserComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;register-token&#x27;, component: RegisterAccountExistingUserWithTokenComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;register-user&#x27;, component: RegisterAccountMainComponent, data: { animation: &#x27;isLeft&#x27;}},
+
+    { path: &#x27;app-app-gate&#x27;, component: AppGateComponent, data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;price-tier&#x27;, component: PriceTiersComponent },
+
+    { path: &#x27;tvpricetiers&#x27;, component: TvPriceSpecialsComponent ,data: { animation: &#x27;isLeft&#x27;}},
+    { path: &#x27;menu-modal&#x27;, component: MenuItemModalComponent,data: { animation: &#x27;isLeft&#x27;}},
+
+    { path: &#x27;**&#x27;, component: PageNotFoundComponent},
+  ];
+
+@NgModule({
+  imports:[
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+  ],
+  // imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule],
+  providers: [
+    {
+      provide: CustomReuseStrategy,
+      useClass: CustomReuseStrategy
+    }],
+})
+export class AppRoutingModule { }
+</code></pre>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'module';
+            var COMPODOC_CURRENT_PAGE_URL = 'AppRoutingModule.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

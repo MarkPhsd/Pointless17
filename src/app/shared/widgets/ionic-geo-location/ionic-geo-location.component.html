@@ -1,0 +1,32 @@
+
+<h3>Geo Tracking </h3>
+
+<mat-divider></mat-divider>
+
+<div class="details">
+  This section will test your geo location tracking.
+  This performs a reverse lookup on your geo codes. This is a paid sevirce using Google mapping solutions.
+</div>
+<button mat-raised-button color="primary" (click)="getCurrentPosition()">Get your Location</button>
+
+<!-- {{currentCoordinates | json}} -->
+
+<div class="position">
+  Latitude: {{ latitude }}
+</div>
+<div class="position">
+  Longitude: {{ longitude }}
+</div>
+
+<div [hidden]="true" id="floating-panel">
+  <input id="latlng" type="text" value="{{latitude}}, {{longitude}}" />
+  <input id="submit" type="button" value="Reverse Geocode" />
+</div>
+
+<div id="map"></div>
+
+<script
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBIwzALxUPNbatRBj3Xi1Uhp0fFzwWNBkE&callback=initMap&libraries=&v=weekly"
+  async
+>
+</script>

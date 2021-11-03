@@ -1,0 +1,44 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+
+    <mat-card>
+      <mat-card-subtitle>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput
+                type="text"
+                formControlName ="name"
+                [(ngModel)]     ="name"
+                (change)        = "onToggleChange($event)"
+                class="form-control" >
+        </mat-form-field>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+
+        <app-discount-type-selection
+                [inputForm]="inputForm"
+                >
+        </app-discount-type-selection>
+
+      </mat-card-content>
+
+      <div class="item-label">
+        <mat-label>Enabled</mat-label>
+        <mat-slide-toggle
+                class           ="price-values"
+                formControlName ="active"
+                [(ngModel)]     ="active"
+                (change)        = "onToggleChange($event)"
+                >
+        </mat-slide-toggle>
+      </div>
+    </mat-card>
+
+  </div>
+</div>
+
+<!-- allItems:           [''],
+discountType:       [''],
+dollarsOffOrder:    [''],
+percentageOffOrder: [''], -->

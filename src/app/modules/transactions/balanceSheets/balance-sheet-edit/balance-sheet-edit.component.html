@@ -1,0 +1,339 @@
+<div class="container" *ngIf="sheet; else loading">
+  <mat-card *ngIf="sheet as item" >
+    <mat-card-title>
+      <div>
+        Balance Sheet
+      </div>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <div class="header-grid">
+
+        <div class="header-grid ">
+          <div>Type     </div>
+             <div> {{ sheetType }} ({{sheet.id}})</div>
+
+          <div>Employee </div>
+              <div *ngIf="item.balanceSheetEmployee" > {{item.balanceSheetEmployee.lastName}} </div>
+
+          <div  *ngIf="item.deviceName">Device </div>
+              <div *ngIf="item.deviceName"> {{item.deviceName}} </div>
+
+          <div>Started     </div>
+              <div> {{item.startTime | date: 'shortDate'}} {{item.startTime | date: 'shortTime'}} </div>
+
+          <div *ngIf="item.endTime">Closed   </div>
+               <div  *ngIf="item.endTime"> {{item.endTime | date: 'shortDate'}} {{item.endTime  | date: 'shortTime'}} </div>
+
+          <div  *ngIf="!item.endTime"> Sheet Open </div>
+          <div  *ngIf="!item.endTime"> ----- </div>
+
+            <div>Manual Drawer Opens</div>
+              <div> {{item.noSales | number }} </div>
+
+          <div class="item-span "></div>
+        </div>
+
+          <div class="header-grid info-width">
+            <div>Over Under</div>   <div> {{item.overUnderTotal | currency}} </div>
+            <div>Total Sales</div>  <div> {{item.salesTotal     | currency}} </div>
+            <div>Cash</div>         <div> {{item.cashIn         | currency}} </div>
+            <div>Credit</div>       <div> {{item.creditIn       | currency}} </div>
+
+            <div class="item-span cashdrop-border" *ngIf="item.cashDrops">
+              <span class="title">Cash Drops</span>
+              <div class="header-grid info-width" *ngFor="let item of item.cashDrops">
+                <div> {{item.amount | currency}} </div>
+              </div>
+              <div class="title">Drop Total </div>
+                <div> {{ item.cashDropTotal | currency }}</div>
+            </div>
+
+            <div>Balance</div>
+                <div> {{ sheet.overUnderTotal | currency}} </div>
+
+            <div>New Balance </div>
+                <div> {{ getCurrentBalance() | currency }} </div>
+
+             <!-- {{ item.cashIn - getSummaryOfCashStart() + getSummaryOfCashEnd() }} -->
+          </div>
+
+
+
+        <div>
+          <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateItem($event)"
+              (outputupdateItemExit)  ="updateItemExit($event)"
+              (outputupdatedeleteItem)="deleteItem($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+              (outputPrint)           ="print($event)"
+              [printOption]           ="true"
+            ></app-edit-buttons-standard>
+        </div>
+      </div>
+
+      <mat-divider class="mat-dividers"></mat-divider>
+
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <div class="grid-container">
+        <div>
+          <h4><mat-icon>edit</mat-icon> Edit </h4>
+
+
+
+          <div *ngIf="!sheet.endTime">
+            <span *ngIf ="this.sheet.shiftStarted != 1">
+              <button color="warn" mat-raised-button (click)="startShift()">Start Sheet</button>
+            </span>
+          </div>
+
+          <div *ngIf="!sheet.endTime">
+            <span *ngIf ="sheet.shiftStarted == 1">
+              <button color="warn" mat-raised-button (click)="closeSheet()">Close Sheet</button>
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <div  *ngIf="inputForm && sheet"
+            class="grid-container"
+            [formGroup]="inputForm">
+
+          <div class="header"
+              *ngIf="!item.shiftStarted || isAuthorized">
+              <h4> Start {{ getSummaryOfCashStart() | currency }} </h4>
+            <div class="grid-container">
+              <div >
+
+                 <div>
+                  <cash-value-calc
+                      [formControlName] = "'dollarsStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "1">
+                      Dollars
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] = "'fivesStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "5">
+                      Fives
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] = "'tensStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "10">
+                      Tens
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] = "'twentiesStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "20">
+                      Twenties
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'fiftiesStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "50">
+                      Fifites
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] = "'hundredsStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "100">
+                      Hundreds
+                  </cash-value-calc>
+                </div>
+              </div>
+
+              <div class="grid-item">
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] = "'pennyStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".01">
+                      Pennies
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                     [formControlName]  = "'nickelStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".05">
+                      Nickles
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                       [formControlName]= "'dimeStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".10">
+                      Dimes
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] = "'quarterStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".25">
+                      Quarters
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                     [formControlName]  = "'halfDollarStart'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".50">
+                      Half Dollars
+                  </cash-value-calc>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="header"
+               *ngIf="item.shiftStarted || isAuthorized">
+            <h4> End {{ getSummaryOfCashEnd() | currency }} </h4>
+            <div class="grid-container">
+              <div class="grid-item">
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'onesEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "1">
+                      Ones
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'fivesEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "5">
+                      Fives
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                     [formControlName] ="'tensEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "10">
+                      Tens
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'twentiesEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "20">
+                      Twenties
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'fiftiesEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "50">
+                      Fifties
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'hundredsEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = "100">
+                      Hundreds
+                  </cash-value-calc>
+                </div>
+
+              </div>
+
+              <div class="grid-item">
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'pennyEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".01">
+                      Pennies
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'nickelEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".05">
+                      Nickels
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'dimeEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".10">
+                      Dimes
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'quarterEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".25">
+                      Quarters
+                  </cash-value-calc>
+                </div>
+
+                <div>
+                  <cash-value-calc
+                      [formControlName] ="'halfDollarEnd'"
+                      [inputForm]       = "inputForm"
+                      [multiplier]      = ".50">
+                      Half Dollars
+                  </cash-value-calc>
+                </div>
+
+              </div>
+            </div>
+          </div>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- <ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template> -->
+
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>
+</div>

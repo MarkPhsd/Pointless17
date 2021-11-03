@@ -1,0 +1,52 @@
+<!-- uses two forms for lookup and saving to  -->
+
+<div [formGroup]="searchForm"
+     >
+  <mat-form-field [class]="formFieldClass"
+                  appearance="outline"
+                  fxFlexFill >
+
+    <mat-label class="form-background">
+        <ng-content></ng-content>
+    </mat-label>
+
+    <input
+            #input
+            type="text"
+            class="input-field"
+            placeholder="Employee Lookup"
+            matInput
+            formControlName="employeeID"
+            [matAutocomplete]="auto">
+
+        <mat-autocomplete panelWidth    = "auto"
+                          #auto         = "matAutocomplete"
+                          [displayWith] = "displayFn.bind(this)">
+
+       <mat-option *ngFor="let item of (results$ | async)?.results"
+                    [value]="item">
+              {{item.lastName}} , {{item.firstName}}
+        </mat-option>
+
+    </mat-autocomplete>
+  </mat-form-field>
+
+</div>
+<!--  -->
+<div  hidden="true" [formGroup]="inputForm">
+  <input  formControlName="employeeID">
+</div>
+
+<div >
+  <div class="item-name">
+    <mat-icon>badge</mat-icon>
+    Associated Employee
+  </div>
+  <span class="item-name">
+    <mat-label>
+      {{employeeName}}
+    </mat-label>
+   </span>
+</div>
+
+

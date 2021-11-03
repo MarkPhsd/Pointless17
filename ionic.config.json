@@ -1,0 +1,13 @@
+{
+  "defaultProject": "CCSApp",
+  "projects": {
+    "CCSApp": {
+      "name": "CCSApp",
+      "integrations": {
+        "capacitor": {},
+        "cordova": {}
+      },
+      "type": "angular"
+    }
+  }
+}

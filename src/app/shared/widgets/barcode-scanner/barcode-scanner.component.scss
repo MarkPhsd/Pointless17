@@ -1,0 +1,63 @@
+ion-content, body, container {
+  --background: transparent!important;
+}
+.overlay {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+}
+
+.cameraPreview {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+.image-overlay {
+  z-index: 1;
+  position: absolute;
+  left: 25%;
+  top: 25%;
+  width: 50%;
+}
+
+#capture {
+  position: absolute;
+  bottom: 75px;
+  left: calc(50% - 25px);
+  width: 50px;
+  height: 50px;
+  z-index: 11;
+}
+
+#close {
+  position: absolute;
+  bottom: 75px;
+  left: calc(50% - 175px);
+  width: 50px;
+  height: 50px;
+  z-index: 11;
+}
+
+#flip {
+  position: absolute;
+  bottom: 75px;
+  left: calc(50% + 125px);
+  width: 50px;
+  height: 50px;
+  z-index: 11;
+}
+
+#close::part(native) {
+  border-radius: 30px;
+}
+
+#capture::part(native) {
+  border-radius: 30px;
+}
+
+#flip::part(native) {
+  border-radius: 30px;
+}

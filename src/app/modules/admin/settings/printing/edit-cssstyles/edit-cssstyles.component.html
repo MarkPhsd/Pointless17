@@ -1,0 +1,106 @@
+<div *ngIf="!setting">
+  Loading...
+</div>
+
+<div *ngIf="setting">
+
+  <div class="header-alignment">
+    <mat-icon>design_services</mat-icon>
+ </div>
+
+  <div class="header">
+      Designer
+  </div>
+
+  <div  fxLayout="row" fxLayoutAlign="end end">
+      <div fxLayout="column" fxLayoutAlign="end end" fxFlex="50"  fxLayoutGap="40px">
+        <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="10px">
+          <button mat-raised-button color="primary"  (click)="copy()"><mat-icon>file_copy</mat-icon>Copy</button>
+          <button mat-raised-button color="primary"  (click)="update()"><mat-icon>save</mat-icon>Save</button>
+          <button mat-raised-button color="primary"  (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+          <button mat-raised-button color="primary"  (click)="onCancel()"><mat-icon>close</mat-icon>Close</button>
+        </div>
+      </div>
+  </div>
+
+  <div class="margin">
+    <mat-divider></mat-divider>
+  </div>
+
+  <div [formGroup]="inputForm"
+        (ngSubmit)="update()"
+        *ngIf="inputForm">
+
+    <div *ngIf="setting.name === 'ReceiptStyles'">
+      <h4>CSS Styles</h4>
+      <div>
+        These styles determine font, and alignment of the items in the print out.
+        Keep in mind, if you understand CSS then options like color will not
+        apply when you use a printer that does not have color.
+      </div>
+    </div>
+
+    <div>Type: {{setting.name}}</div>
+
+    <div  >
+      <mat-form-field appearance="outline">
+        <mat-label >Name</mat-label>
+        <input matInput
+              type             ="text"
+              formControlName  ="name"
+              [(ngModel)]      ="setting.name"
+              class="form-control" >
+      </mat-form-field>
+    </div>
+
+    <div >
+      <mat-form-field appearance="outline" class="description">
+        <mat-label>Styles</mat-label>
+        <textarea
+                  matInput
+                  type             ="text"
+                  formControlName  ="text"
+                  rows             ="50"
+                  cols             ="90"
+            >
+        </textarea>
+      </mat-form-field>
+    </div>
+
+  </div>
+<!--
+  <div  fxLayout="column"
+        fxLayoutAlign="space-around center"
+        fxFlex="50"
+        fxLayoutGap="20px" >
+      <h4>Design Layout</h4>
+      <mat-card>
+      <div >
+        <div *ngIf="!isLabel">
+          <app-receipt-layout [headerText]="setting.option6"
+                              [itemText]="setting.text"
+                              [footerText]="setting.option5"
+                              [paymentsText]="setting.option7"
+                              [subFooterText]="setting.option8"
+                              [printerWidth]="setting.option9"
+                              [items]="items"
+                              [order]="order"
+                              [payments]="payments"
+                              [orderType]="orderTypes"
+                              [testdata]="true"
+                              [liveEdit]="true"
+                              [isLabel]="isLabel"
+                              [styles]="receiptStyles"
+                              [interpolatedHeaderTexts]  ="interpolatedHeaderTexts"
+                              [interpolatedItemTexts] ="interpolatedItemTexts"
+                              [interpolatedFooterTexts]  ="interpolatedFooterTexts"
+                              [interpolatedPaymentsTexts] ="interpolatedPaymentsTexts"
+                              [interpolatedSubFooterTexts] ="interpolatedSubFooterTexts"
+            ></app-receipt-layout>
+        </div>
+    </div>
+
+      </mat-card>
+  </div> -->
+
+</div>

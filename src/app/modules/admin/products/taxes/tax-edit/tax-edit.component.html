@@ -1,0 +1,62 @@
+
+
+<mat-card>
+  <mat-card-title>
+    Tax Editor
+  </mat-card-title>
+  <mat-card-content>
+    <div [formGroup]="inputForm">
+      <div fxLayout="column" fxLayoutAlign="space-around center" >
+
+        <div>
+          <mat-form-field appearance="outline">
+          <mat-label>Nme</mat-label>
+          <input matInput
+                  type             ="text"
+                  formControlName  ="name"
+                  class="form-control" >
+          </mat-form-field>
+        </div>
+          <br>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Rate</mat-label>
+            <input matInput
+                    type             ="number"
+                    formControlName  ="amount"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+
+        <div> Save this Rate in a specified tax column.</div>
+        <div class="filterItem" >
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tax Column</mat-label>
+            <mat-select
+                        type="number"
+                        [formControlName]  ="'taxColumn'"
+                        name="taxColumn"
+              >
+              <mat-option *ngFor="let item of taxColumns" [value]="item">{{item}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div fxLayout="row" fxLayoutAlign="space-between center"  >
+           <button mat-raised-button
+                  color="primary"
+                  (click)="save()"><mat-icon>save</mat-icon></button>
+          <button class="main-buttons"
+                  mat-raised-button color="primary"
+                  (click)="delete()"><mat-icon>delete</mat-icon></button>
+        </div>
+    </div>
+  </div>
+
+  </mat-card-content>
+
+
+</mat-card>
+

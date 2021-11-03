@@ -1,0 +1,57 @@
+{
+  "name": "pointLess",
+  "version": "0.9.9",
+  "description": "Point of Sale Ecommerce Kiosk",
+  "main": "index.js",
+  "CompanyName": "Pointless",
+  "scripts": {
+    "electron:start": "electron ./",
+    "postinstall": "install-app-deps electron-rebuild -f -w sqlite3",
+    "start": "npm install && electron ./app",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build": "electron-builder build  --win --publish never",
+    "deploy": "electron-builder build --win --x64 --ia32 --publish always ",
+    "electron": "wait-on http://localhost:4200 && electron .",
+    "prestart": "npm run clean",
+    "startconcurrently": "concurrently -k \"ng serve\" \"npm run electron\"",
+    "runElectron": "concurrently -k \"npm run electron\""
+  },
+  "dependencies": {
+    "@capacitor/electron": "^2.4.8",
+    "electron-is-dev": "^1.1.0",
+    "electron-log": "^4.4.0",
+    "electron-updater": "^4.3.9"
+  },
+  "devDependencies": {
+    "electron": "^11.0.0",
+    "electron-builder": "^22.11.7",
+    "electron-reloader": "^1.2.1"
+  },
+  "keywords": [
+    "capacitor",
+    "electron",
+    "Point of Sale",
+    "POS",
+    "Ecommerce",
+    "WebStore"
+  ],
+  "author": "Coast to Coast Business Solutions",
+  "license": "ISC",
+  "win": {
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://cafecartel.com/temp/download"
+      }
+    ]
+  },
+  "build": {
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://cafecartel.com/temp/download"
+      }
+    ]
+  }
+}

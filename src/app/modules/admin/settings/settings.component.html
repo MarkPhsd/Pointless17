@@ -1,0 +1,181 @@
+<div class="header">
+  <mat-icon>settings</mat-icon>
+  Settings
+</div>
+<div class="roleDescription">User Level: {{ role }}</div>
+<br>
+
+<div class="settings" *ngIf="role">
+
+  <div *ngIf="role === 'admin' || role === 'manager'">
+    <mat-accordion class="example-headers-align" multi="false">
+      <mat-expansion-panel [expanded]="accordionStep === 0"
+                           (opened)="setStep(0)"
+                           hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Data
+          </mat-panel-title>
+          <mat-panel-description>
+            Database and Settings
+            <mat-icon>database</mat-icon>
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <app-database-schema></app-database-schema>
+
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+          <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+
+      </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 1"
+                          (opened)="setStep(1)"
+                          hideToggle>
+      <mat-expansion-panel-header>
+          <mat-panel-title>
+            Lists
+          </mat-panel-title>
+          <mat-panel-description>
+            Feature lists for initial & ongoing configuration.
+            <mat-icon>store</mat-icon>
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <div class="grid-settings-2">
+
+        <div>
+            <button mat-raised-button
+                    color  = "primary"
+                    class  = "button-wide"
+                    (click)= "togglePaymentMethodsList()">
+              <mat-icon>payment</mat-icon> Payment Methods
+            </button>
+
+          <app-inventory-settings
+                  [role]="role">
+          </app-inventory-settings>
+        </div>
+
+        <div>
+          <app-software-settings></app-software-settings>
+        </div>
+
+      </div>
+
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 2" (opened)="setStep(2)" hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Side Menu
+          </mat-panel-title>
+          <mat-panel-description>
+            Side Menu Settings
+            <mat-icon>menu</mat-icon>
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <button mat-raised-button color="primary" (click)="openMenuManager()">Menus</button>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 3" (opened)="setStep(3)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Printer
+        </mat-panel-title>
+        <mat-panel-description>
+          Print Test and Settings
+          <mat-icon>printer</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <app-installed-printers></app-installed-printers>
+
+      <!-- <app-pos-thermal-printer></app-pos-thermal-printer> -->
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 4" (opened)="setStep(4)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Geo Location
+        </mat-panel-title>
+        <mat-panel-description>
+          Geo Location
+          <mat-icon>location_on</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <app-ionic-geo-location></app-ionic-geo-location>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 5" (opened)="setStep(5)" hideToggle>
+      <mat-expansion-panel-header>
+          <mat-panel-title>
+            Credit Card Processing
+          </mat-panel-title>
+          <mat-panel-description>
+            Data Cap Setup
+
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+
+        <div *ngIf="role === 'admin'">
+          <button mat-button color="accent" (click)="gotoPayments()"><mat-icon>settings</mat-icon> Settings</button>
+        </div>
+
+      <mat-action-row>
+        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+    <mat-expansion-panel [expanded]="accordionStep === 5" (opened)="setStep(6)" hideToggle>
+      <mat-expansion-panel-header>
+          <mat-panel-title>
+            Device Info
+          </mat-panel-title>
+          <mat-panel-description>
+            Device Info
+          </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <app-device-info></app-device-info>
+
+      <mat-action-row>
+        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+        <button mat-button color="primary" (click)="nextStep()">Next</button>
+      </mat-action-row>
+
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+</div>

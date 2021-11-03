@@ -1,0 +1,366 @@
+// mat-form-field {
+//   font-size: .8em;
+//   margin: 6px 4px 4px 4px;
+// }
+
+// // body{ overflow-x: hidden;}
+
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+// }
+
+// .flex-column  {
+//   margin-top: 4px;
+// }
+
+// .chemicalInput {
+//   width: 50px;
+// }
+
+// mat-raised-button {
+//   margin: 5rem 5rem 2rem 2rem;
+//   padding: 1rem 1rem 1rem 1rem;
+// }
+
+
+// mat-card{
+//   padding: 5px 5px 5px 5px;
+//   margin:  3px 3px 3px 3px;
+// }
+
+// .example-tab-icon {
+//   margin-right: 8px;
+// }
+
+// simple-tinymce {
+//   padding:5px;
+// }
+
+// h1 {
+//   font-size: 1.5em;
+//   text-decoration: underline;
+// }
+
+// .range-description {
+//   margin-top: 1.5em;
+//   margin-right: 1em;
+// }
+
+// .custom-card {
+//   background-color: gray;
+//   padding: 25px;
+//   margin-bottom: 25px;
+// }
+
+
+// #inventoryMoveInstructions {
+//   font-weight: 600;
+// }
+
+// .inventoryLocationControls {
+//   float: right;
+// }
+
+// .inventoryControlLabels {
+//   text-align:  left;
+// }
+
+// #inventoryAssignLocationsButton {
+//   float: right;
+// }
+
+// .cancel-assignment {
+//   float: right;
+// }
+
+// ::ng-deep .mat-form-field-wrapper{
+//    margin-bottom: -1.5em;
+//    margin-left: 4px;
+//    margin-right: 4px;
+// }
+
+// ::ng-deep .mat-datepicker-content .mat-calendar
+// {
+//   zoom: 0.85;
+// }
+
+// ::ng-deep  .md-datepicker-input-container {
+//   width: 50px;
+// }
+
+// mat-form-field {
+//   font-size: .8em;
+//   margin: 4px 4px 4px 4px;
+// }
+
+// .assignment-header {
+//   font-size: 1.2;
+//   font-weight: 400;
+//   margin-left: 5px;
+// }
+
+// .fields {
+//   margin: 4px 4px 4px 4px;
+// }
+
+// .grid-container {
+//   display: grid;
+//   grid-template-columns: .5fr 1fr 1fr ;
+//   gap: 2px;
+// }
+
+// .item-input {
+//   max-width: 75px;
+//   width: 50px;
+// }
+
+// .range-description {
+//   padding-top: 10px;
+//   margin-top: 5px;
+//   margin-right: 5px min;
+//   float: left;
+// }
+
+// .grid-inventoryControls {
+//   display: grid;
+//   grid-template-columns: 1fr 1fr;
+//   gap: 2px;
+// }
+
+// .button-assign {
+//   float: left;
+//   margin: 2px 2px 2px 2px;
+// }
+
+// .btn-edit-pacakge {
+//   float: left;
+//   margin: 2px 2px 2px 2px;
+// }
+
+// .location-assignment {
+//   float: left;
+//   width: 100px !important;
+// }
+
+// .select-conversion{
+//   // float: left;
+//   width: 100px !important;
+// }
+
+// .input-quantity{
+//   // float: left;
+//   width: 100px !important;
+// }
+
+// .cost {
+//   width: 100px !important;
+//   // float: left;
+// }
+
+// .strain-card {
+//   // height: 85vh;
+//   overflow: hidden;
+//   // min-width: 725px;
+
+// }
+
+// .inventory-card {
+//   min-width: 250px;
+//   // overflow: hidden;
+// }
+
+// .inlineControls {
+//   // float: left;
+//   width: 50px
+// }
+
+// .package-list {
+//   overflow-y: scroll;
+//   overflow-x: hidden;
+//   margin: 2px 2px 2px 2px;
+//   padding: 0;
+//   max-height: 225px;
+// }
+
+// body{ overflow-x: hidden;}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.flex-column  {
+  margin-top: 4px;
+}
+
+.chemicalInput {
+  width: 50px;
+}
+
+mat-raised-button {
+  margin: 5rem 5rem 2rem 2rem;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+
+mat-card{
+  padding: 5px 5px 5px 5px;
+  margin:  3px 3px 3px 3px;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+simple-tinymce {
+  padding:5px;
+}
+
+h1 {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+
+.range-description {
+  margin-top: 1.5em;
+  margin-right: 1em;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+
+#inventoryMoveInstructions {
+  font-weight: 600;
+}
+
+.inventoryLocationControls {
+  float: right;
+}
+
+.inventoryControlLabels {
+  text-align:  left;
+}
+
+#inventoryAssignLocationsButton {
+  float: right;
+}
+
+.cancel-assignment {
+  float: right;
+}
+
+::ng-deep .mat-form-field-wrapper{
+   margin-bottom: -1.5em;
+   margin-left: 4px;
+   margin-right: 4px;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar
+{
+  zoom: 0.85;
+}
+
+::ng-deep  .md-datepicker-input-container {
+  width: 50px;
+}
+
+mat-form-field {
+  font-size: .8em;
+  margin: 4px 4px 4px 4px;
+}
+
+.assignment-header {
+  font-size: 1.2;
+  font-weight: 400;
+  margin-left: 5px;
+}
+
+.fields {
+  margin: 4px 4px 4px 4px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: .5fr 1fr 1fr ;
+  gap: 2px;
+}
+
+.item-input {
+  max-width: 75px;
+  width: 50px;
+}
+
+.range-description {
+  padding-top: 10px;
+  margin-top: 5px;
+  margin-right: 5px min;
+  float: left;
+}
+
+.grid-inventoryControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.button-assign {
+  float: left;
+  margin: 2px 2px 2px 2px;
+}
+
+.btn-edit-pacakge {
+  float: left;
+  margin: 2px 2px 2px 2px;
+}
+
+.location-assignment {
+  float: left;
+  width: 100px !important;
+}
+
+.select-conversion{
+  // float: left;
+  width: 100px !important;
+}
+
+.input-quantity{
+  // float: left;
+  width: 100px !important;
+}
+
+.cost {
+  width: 100px !important;
+  // float: left;
+}
+
+.strain-card {
+  // height: 85vh;
+  overflow: hidden;
+  // min-width: 725px;
+
+}
+
+.inventory-card {
+  min-width: 250px;
+  // overflow: hidden;
+}
+
+.inlineControls {
+  // float: left;
+  width: 50px
+}
+
+.package-list {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin: 2px 2px 2px 2px;
+  padding: 0;
+  max-height: 225px;
+}

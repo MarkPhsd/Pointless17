@@ -1,0 +1,102 @@
+
+<div class="body" *ngIf="package">
+
+  <mat-card class="strain-card">
+
+    <mat-card-title>
+      <div><h3>Label: {{package.label}}</h3></div>
+
+    </mat-card-title>
+    <mat-card-subtitle>
+      <div class="item-info">Facility Code / Name: {{package.itemFromFacilityLicenseNumber}} / {{package.itemFromFacilityName}} </div>
+
+      <div class="item-info">Name: {{package.item.name}} | Intaking as {{intakeConversion.name}}  </div>
+
+      <div class="item-info">Testing State: {{package.labTestingState}}</div>
+
+      <mat-divider></mat-divider>
+    </mat-card-subtitle>
+
+    <mat-card-content >
+
+      <form [formGroup]="packageForm"  >
+
+        <div fxLayout="row"
+            fxFlex
+            fxFill
+            fxLayoutAlign="center start">
+
+          <div fxLayout="column"
+                fxLayoutAlign="start start"
+                fxFlex
+                fxFill
+                fxLayoutGap
+                class="fields"
+                >
+<!--
+              <app-metrc-inventory-properties
+                    [inputForm]   ="packageForm"
+                    [package]     ="package"
+                    >
+              </app-metrc-inventory-properties> -->
+              <div>
+                <app-metrc-inventory-properties
+                      [inputForm]   ="packageForm"
+                      [package]     ="package"
+                      (outputMenuItem)="getStrain($event)"
+                      (outputVendor)  ="getVendor($event)"
+                      >
+                </app-metrc-inventory-properties>
+              </div>
+          </div>
+
+          <div fxLayout="column"
+              fxLayoutAlign="start start"
+              fxFlex ="33"
+              class="fields"
+              fxLayoutGap>
+
+              <app-chemical-values [inputForm]="packageForm">
+              </app-chemical-values>
+
+          </div>
+
+          <div fxLayout="column"
+                  fxFill
+                  fxFlex
+                  fxLayoutAlign="start start"
+                    fxLayoutGap >
+
+              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required && packageForm.controls.inventoryLocationID.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.conversionName.errors?.required && packageForm.controls.conversionName.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.inputQuantity.errors?.required && packageForm.controls.inputQuantity.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.cost.errors?.required && packageForm.controls.cost.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
+              </div>
+
+              <app-strain-packages  (outputPackage)="getNewPackage($event)"
+                                    (outoutClosePackage)="onCancel($event)"
+                                    [menuItem]="menuItem"
+                                    [facility]="facility"
+                                    [packageForm]="packageForm"
+                                    [package]="package">
+                      </app-strain-packages>
+
+          </div>
+
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+</div>

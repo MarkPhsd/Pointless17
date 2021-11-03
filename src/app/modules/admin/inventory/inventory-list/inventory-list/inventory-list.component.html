@@ -1,0 +1,160 @@
+<div fxLayout="column" fx-flex fx-layout-align="space-between" class="form-controls">
+    <form  [formGroup]="searchForm" id="searchForm" (ngSubmit)="onSearch()">
+
+      <div class="grid-container">
+        <div class="grid-item">
+
+          <mat-form-field appearance="outline">
+            <mat-label >Search </mat-label>
+            <input
+                 #input
+                  matInput
+                  type="text"
+                  id="searchProducts"
+                  formControlName="searchProducts"
+                  class="form-control"
+                  [matAutocomplete]="auto">
+
+                  <mat-autocomplete panelWidth="auto"
+                                    #auto="matAutocomplete"
+                                    [displayWith]="displayFn.bind(this)">
+            </mat-autocomplete>
+          </mat-form-field>
+
+        </div>
+
+        <div class="grid-item">
+          <mat-form-field appearance="outline">
+            <mat-label>Sites</mat-label>
+             <mat-select
+                        type="text"
+                        (selectionChange)="getAssignedSiteSelection($event)"
+                        formControlNamename="selectedSiteID"
+                      >
+              <div *ngIf="(sites$ | async) as list">
+                <mat-option *ngFor="let item of list" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="grid-item">
+          <mat-form-field appearance="outline">
+            <mat-label>METRC Categories</mat-label>
+             <mat-select
+                        type="text"
+                        (selectionChange)="getMetrcCategory($event)"
+                        formControlNamename="metrcCategory"
+                      >
+              <div *ngIf="(metrcCategory$ | async) as list">
+                <mat-option [value]=0>All</mat-option>
+                <mat-option *ngFor="let item of list" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="grid-item">
+          <mat-form-field appearance="outline">
+            <mat-label>Locations</mat-label>
+             <mat-select
+                        type="text"
+                        (selectionChange)="getLocation($event)"
+                        formControlNamename="inventoryLocations"
+                      >
+              <div *ngIf="(locations$ | async) as list">
+                <mat-option [value]=0>All</mat-option>
+                <mat-option *ngFor="let item of list" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+
+        <div class="grid-item">
+          <mat-form-field appearance="outline">
+            <mat-label>Status</mat-label>
+             <mat-select
+                        type="text"
+                        (selectionChange)="getInventoryStatus($event)"
+                        formControlNamename="inventoryStatusID"
+                      >
+              <div *ngIf="inventoryStatusList">
+
+                <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
+                  {{ item.name }}
+                </mat-option>
+
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="grid-item">
+          <button mat-button
+                   (click)="onSearch()"><mat-icon>refresh</mat-icon> List All</button>
+
+          <button class="info-buttons"
+                  mat-button
+                  (click)="addInventoryItem()"><mat-icon>add</mat-icon> Add</button>
+
+        </div>
+    </div>
+  </form>
+</div>
+
+<mat-divider></mat-divider>
+
+<div fxLayout="row" class="panels">
+  <div  fxLayout="column" fxFlex="80">
+    <div *ngIf="searchPaging" >
+
+      <ag-grid-angular
+            #agGrid
+            class                ="ag-theme-material agrid-container"
+            [defaultColDef]      ="defaultColDef"
+            [columnDefs]         ="columnDefs"
+            [rowSelection]       ="rowSelection"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            [rowData]            ="inventoryAssignment$ | async"
+            [frameworkComponents]="frameworkComponents"
+            [tooltipShowDelay]   ="tooltipShowDelay"
+            (gridReady)          ="onSearchGridReady($event)">
+      </ag-grid-angular>
+    </div>
+
+    <div *ngIf="!searchPaging" class="agrid-container">
+      <ag-grid-angular
+            #agGrid
+            class                ="ag-theme-material agrid-container"
+            [defaultColDef]      ="defaultColDef"
+            [columnDefs]         ="columnDefs"
+            [rowSelection]       ="rowSelection"
+            [gridOptions]        = "gridOptions"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            [frameworkComponents]="frameworkComponents"
+            [tooltipShowDelay]   ="tooltipShowDelay"
+            (gridReady)          ="onGridReady($event)">
+      </ag-grid-angular>
+    </div>
+  </div>
+
+  <div  fxLayout="column" fxFlex="20">
+    <div *ngIf="inventoryAssignmentHistory">
+      <app-inventory-history-list class="history-panel"
+                                  [setInventoryAssignment]="inventoryAssignment"
+                                  [inventoryAssignments]="inventoryAssignmentHistory"
+                                  [id]="id">
+      </app-inventory-history-list>
+    </div>
+  </div>
+
+</div>
+
+

@@ -1,0 +1,30 @@
+
+<mat-card>
+
+  <mat-card-title>
+    <mat-icon>setting</mat-icon>Flat Rates
+  </mat-card-title>
+
+  <mat-card-content>
+    <button mat-raised-button color="primary" (click)="addRate()">Add Rate</button>
+  </mat-card-content>
+
+</mat-card>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="flatRate">
+
+  <ag-grid-angular
+        #agGrid
+        style="width: 100%; height: 80vh;"
+        id="mySearchGrid"
+        class="ag-theme-material"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [rowData]="flatRate"
+        [frameworkComponents]="frameworkComponents"
+        (gridReady)="onSearchGridReady($event)">
+  </ag-grid-angular>
+
+</div>

@@ -1,0 +1,197 @@
+.grid-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+  max-width: 900px;
+
+}
+
+.item-label {
+  margin: 3px;
+}
+
+.grid-list-container {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 7px;
+}
+
+.item-fields {
+  float: left;
+}
+.grid-list-item {
+  // height: 800px;
+  max-height: 775px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  // margin-bottom: 50px;
+}
+
+.grid-list {
+  display: grid;
+  grid-template-columns: 1fr 33vw;
+  gap: 7px;
+
+  @media (max-width: 599px)  {
+    height: 50vh;
+
+  }
+  @media (min-width: 600px)   {
+    height: 50vh;
+
+  }
+  @media (min-width: 900px) {
+    height:  65vh;
+
+  }
+  @media (min-width: 1200px)  {
+    height:  65vh;
+
+  }
+
+  @media (min-width: 1800px)  {
+    height:  65vh;
+
+  }
+  overflow-x: hidden;
+  overflow-y: hidden;
+  max-height: 800px;
+
+}
+
+.mat-card {
+  margin-bottom: 5px;
+}
+
+.form-fields {
+  margin: 0;
+  padding: 0;
+}
+
+
+table
+{
+  width: 100%;
+}
+
+  .agGridButton {
+    font-size: 1em;
+    padding: -1px 1px;
+    margin: -1px 1px;
+    line-height: 1.2
+  }
+
+  button {
+    padding: 3px 3px 3px 3px;
+    margin: 3px 3px 3px 3px;
+    // height: 38px;
+  }
+
+  .header-items {
+    float: left;
+  }
+
+  ::ng-deep .mat-form-field .mat-form-field-wrapper {
+    font-size: .8em;
+    padding: -3px -3px;
+    margin: 4px 4px 4px 4px;
+  }
+
+  .form-controls {
+    font-size: .8em;
+  }
+  mat-form-field {
+    font-size: .9em;
+    margin: 3px 3px 3px 3px;
+  }
+
+
+
+  .view-items {
+    float: left;
+    margin-top: 13px;
+  }
+  .view-button {
+    // float: right;
+    margin-top: 9px;
+  }
+
+  .grid-nav {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 5px;
+  }
+
+  .mini-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 3px;
+  }
+
+  .discount-type-button {
+    width:  150px;
+    height: 100px;
+  }
+
+  .discount-info {
+    padding-top: 5px;
+    margin-top: 1px;
+    width: 100;
+  }
+
+  .discount-instructions{
+    font-size: .9em;
+    font-weight: 400px;
+  }
+
+  .grid-list-item {
+    height: 95%;
+    overflow: hidden;
+  }
+
+  .mat-icon {
+    margin: 0px;
+    padding: 0px;
+  }
+
+  .grid-list-item {
+
+    width        : 33vw;
+    max-width    : 425px;
+    position     : fixed;
+    top          : 125px;
+    right        : 1.2em;
+    z-index      : 100;
+    padding-right: 10px;
+    overflow-x   : visible;
+  }
+  .slidein {
+    display: grid;
+    grid-template-columns: 1fr;
+    // float                 : left;
+    animation-duration    : 500ms;
+    animation-name        : slidein;
+  }
+
+
+  @keyframes slidein {
+    from {
+        margin-left: -20%;
+    }
+    to {
+        margin-left: 0%;
+    }
+  }
+
+  .floating-info {
+    width        : 32%;
+    max-width    : 425px;
+    position     : fixed;
+    top          : 75px;
+    right        : 1.2em;
+    z-index      : 100;
+    padding-right: 10px;
+    overflow-x   : visible;
+  }

@@ -1,0 +1,110 @@
+﻿<div class="container bg">
+
+  <div class="row-height">
+
+   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+
+    <div *ngIf="this.companyName != '' ; else loading">
+
+      <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
+          <mat-card fxFlex="100%">
+
+              <mat-card-title>
+                <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                    <img (click)="setAPIAlt()"
+                         [src]="logo"
+                         width="125px"
+                         [alt]="company"
+                         class="logo">
+                    <h2> {{compName}} </h2>
+                </div>
+              </mat-card-title>
+
+              <mat-card-subtitle>
+
+                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                    <h2>Use your email or phone. </h2>
+                    <h3>First time users request password.</h3>
+                  </div>
+              </mat-card-subtitle>
+
+              <mat-card-content>
+                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                    <form [formGroup]="loginForm">
+
+                        <mat-form-field appearance="fill">
+                            <mat-label>User</mat-label>
+                            <input matInput type="text" formControlName="username" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                                <div *ngIf="f.username.errors.required">Username is required</div>
+                            </div>
+                        </mat-form-field>
+
+                        <br>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Password</mat-label>
+                            <input matInput type="password" formControlName="password" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                <div *ngIf="f.password.errors.required">Password is required</div>
+                            </div>
+                        </mat-form-field>
+
+                        <br>
+                        <div fxLayout="column" fxLayoutAlign="space-around center" class="row-height">
+                          <div >
+                            <button class="login" mat-raised-button color="primary" (click)="onSubmit()">Login</button>
+                            <button class="login" mat-raised-button color="primary"  (click)='browseMenu()'>Guest </button>
+                          </div>
+                        </div>
+
+                        <div class="spinner"
+                              *ngIf="spinnerLoading" >
+                          <mat-spinner diameter="30"></mat-spinner>
+                        </div>
+
+                    </form>
+
+                    <div *ngIf="(platformService && !platformService.webMode) && platformService.apiUrl.length != 0 ">
+                      <!-- Connected to:  {{platformService.apiUrl}} -->
+                      <!-- Platform:  {{platformService.platForm}} -->
+                    </div>
+
+                    <div>
+                      {{ this.statusMessage }}
+                    </div>
+                  </div>
+
+                  <br>
+                  <mat-divider></mat-divider>
+
+                  <br>
+                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                    <div>
+                      <button mat-raised-button  (click)='changePassword()'>Change Password</button>
+                      <button mat-raised-button  (click)='registerUser()'>Register</button>
+                      <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>
+                    </div>
+                  </div>
+              </mat-card-content>
+
+          </mat-card>
+
+        </div>
+
+    </div>
+
+    <br>
+
+
+    <ng-template #loading >
+      <h2>Please wait...is loading.</h2>
+      <mat-spinner></mat-spinner>
+    </ng-template>
+
+  </div>
+
+  </div>
+
+</div>

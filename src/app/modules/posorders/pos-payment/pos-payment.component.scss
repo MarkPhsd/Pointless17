@@ -1,0 +1,181 @@
+@import "/src/mixins.scss";
+
+
+.order-layout-empty {
+}
+
+.order-layout {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  // grid-auto-flow:dense;
+
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+}
+
+.order-layout div {
+  // min-height: 50px;
+  // border: 1px solid;
+}
+
+.order-layout div:first-child {
+  // grid-row: span 2;
+}
+
+.order-layout.reverse {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.order-layout.reverse div:first-child {
+  grid-column: 2;
+}
+
+.grid-list {
+  display: grid;
+  grid-template-columns: 1fr minmax(285px, 285px);
+  gap: 2px;
+
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns: auto;
+    gap: 5px;
+  }
+}
+
+//delete
+.transaction-data {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+  border-radius: 3px;
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(275, 1fr) );
+    margin: 5px ;
+  }
+}
+
+.grid-header-item {
+  margin: 15px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+
+  @include for-phone-only  {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: left;
+  }
+}
+
+
+.headers {
+  display: flex;
+  // flex-wrap: wrap;
+  overflow-y: auto;
+  overflow-x: hidden;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.keypad {
+  min-height: 550px;
+  height: 550px;
+}
+
+.card-dimensions {
+  width: 100%;
+  height: 545px;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @include for-phone-only  {
+    width     : 100%;
+    min-width : 335px;
+    max-width : 335px;
+    min-height: 75px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+}
+
+.card-dimensions-larger {
+  width: 100%;
+  height: 575px;
+  // overflow: auto;
+  // display: flex;
+  // align-items: center;
+  // justify-content: center;
+}
+
+.card-dimensions-small {
+  width: 33%;
+  height: 125px;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.payment-header {
+  font-size: 1.1em;
+  font-weight: 500;
+}
+
+.grid-flow {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+  }
+}
+
+.card-height {
+  height    : 155px;
+  min-height: 155px;
+  max-height: 155px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  @include for-phone-only  {
+    height    : 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(100, 1fr) );
+  font-size: larger;
+}
+
+.order-completed {
+  font-size: larger;
+  font-style: italic;
+}

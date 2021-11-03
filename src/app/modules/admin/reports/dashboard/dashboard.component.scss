@@ -1,0 +1,40 @@
+
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+mat-drawer {
+  width: 200px;
+}
+
+.grid-flow {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(370px, 1fr) );
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding: 20px;
+}
+
+.mat-card {
+  max-width: 250px;
+}
+
+.section-gap {
+  margin: 10px;
+}
+
+.section-reports {
+  margin-left: 5px;
+
+}
+

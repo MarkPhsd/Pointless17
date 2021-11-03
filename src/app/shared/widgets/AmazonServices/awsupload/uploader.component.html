@@ -1,0 +1,43 @@
+<div class="container"
+     appDnd
+    (fileDropped)="onFileDropped($event)" >
+
+  <input type="file" #fileDropRef
+                     id="fileDropRef"
+                     multiple
+                     (change)="fileBrowseHandler($event.target.files)" />
+
+  <mat-icon>upload</mat-icon>
+
+  <div class="file-drop">Drop Files</div>
+
+  <button mat-button
+          color="primary"
+          (click)="fileDropRef"><mat-icon>upload</mat-icon>
+    </button>
+
+</div>
+
+<div >
+
+    <div *ngIf="fileNames">
+      <div *ngFor="let item of fileNames.split(','); let i = index ">
+        <div *ngIf="item != ''"  class="container">
+          <div>
+            {{ getItemName(item) }}
+          </div>
+          <div>
+            <img class="uploaded-image"  [src]="getImageURL(item)" [alt]="item">
+          </div>
+
+          <div class="delete" >
+            <button mat-button (click)="deleteFile(item)"> <mat-icon>delete_forever</mat-icon></button>
+          </div>
+
+          <!-- <mat-divider></mat-divider> -->
+
+        </div>
+      </div>
+    </div>
+
+</div>

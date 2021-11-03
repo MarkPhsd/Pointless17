@@ -1,0 +1,34 @@
+^XA
+^BY4,3,150
+^FO65,55
+^BC
+^FD
+${item.sku}
+^FS
+^CFA,30
+^FO55,25^FD
+^FB600, 6^FD
+${item.productName}
+^FS
+^CFA,30
+^FO55,255^FD
+^FB600, 6^FD
+${item.price}  Batch ID 10/15/2020
+^FS
+^CFA,30
+^FO55,315^FD
+^FB600, 6^FD
+METRC ${item.label}
+^FS
+^CFA,30
+^FO55,345^FD
+^FB600, 6^FD
+402R-X0001
+^FS
+^CFA,50
+^FT25,480^A1B,28,28
+^FB600,1,0,C
+^FD
+Natures &
+^FS
+^XZ

@@ -1,0 +1,34 @@
+
+
+.spinner-text {
+  position: relative;
+  top        : 100px;
+  transform: translate(-15%, -50%);
+  font-size: 1.4em;
+  text-align: center;
+}
+
+.spinner-text-android {
+  position: relative;
+  top        : 100px;
+  transform: translate(-15%, -50%);
+  font-size: 1.3em;
+  text-align: center;
+}
+
+:host ::ng-deep .track circle{
+  stroke-opacity: 0.3 !important;
+}
+
+.spinner-position {
+  position: absolute;
+  left: 0;
+}
+
+.twitter-like{
+  .mat-progress-spinner{
+    display: inline;
+    position: relative;
+    left: 0;
+  }
+}

@@ -1,0 +1,77 @@
+<mat-card [class]="classcontainer">
+    <mat-card-subtitle>
+
+      <div class="header-grid" >
+
+        <div  class="grid-title" >
+          <div class="header-title" >Categories</div>
+        </div>
+
+        <div>
+          <button mat-button
+              class="button"
+              color="primary"
+              (click)="showAll()" >Show All <mat-icon>open_in_new</mat-icon>
+          </button>
+        </div>
+
+        <div class="floating-info
+                    slidein
+                    loader
+                    spinner"
+              *ngIf="loading" >
+          <mat-spinner diameter="30"></mat-spinner>
+        </div>
+
+      </div>
+
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      </div>
+
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <div class="parent-container" >
+        <div fxLayout="row" class="panels">
+          <div  fxLayout="column" fxFlex="99">
+
+            <div  *ngIf="categories"
+                  [class]="orderslist"
+                  infiniteScroll
+                  [infiniteScrollDistance]="2"
+                  [infiniteScrollThrottle]="50"
+                  (scrolled)              ="onScrollDown()"
+                  (scrolledUp)            ="onScrollUp()"
+                  [scrollWindow]          ="false">
+
+                <div  class="grid-flow">
+                  <div *ngFor="let item of categories; let i = index" [@listAnimation]="categories.length">
+                    <div class="grid-item">
+                      <div>
+                        <div class="text">{{item.name  | truncateText: 15  }}</div>
+                        <img  loading="lazy"
+                              draggable="false"
+                              [src]="getCategorySource(item)"
+                              (click)="listItems(item.id)"
+                              class="grid-item"
+                              alt="item">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+
+  <mat-card-actions>
+    <ng-template *ngIf="loading" >
+      <mat-spinner></mat-spinner>
+    </ng-template>
+  </mat-card-actions>
+
+</mat-card>

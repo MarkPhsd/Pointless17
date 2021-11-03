@@ -1,0 +1,63 @@
+:host {
+  display: block;
+  flex-direction: column;
+  height: 100%;
+}
+
+app-header {
+  width:  100%;
+  // position: fixed;
+  // height: 100%;
+}
+
+app-sticky-header {
+  z-index: 1000;
+  height: 75px;
+  display: flex;
+  // justify-content: center;
+  // align-items: center;
+}
+
+.mat-drawer-toolbar {
+  width: 190px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+}
+
+.mat-drawer-searchbar {
+  width: 190px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+}
+
+mat-drawer-container {
+  height: 96%;
+  padding-top: -5px;
+  overflow: hidden;
+}
+
+mat-drawer-content {
+  padding: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  min-height: 94%;
+  max-height: 94%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+mat-sidebar {
+  min-width: 125px !important;
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  background-color:rgb(55, 55, 59);
+}
+
+.mat-orderBar {
+  min-width: 200px !important;
+  max-width: 200px;
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  overflow: hidden;
+}
+
+
+

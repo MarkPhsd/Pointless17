@@ -1,0 +1,179 @@
+@import "/src/mixins.scss";
+
+:host {
+  .mat-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+  }
+}
+
+.mat-divider {
+  margin-top: 10px;
+}
+
+mat-toolbar {
+  padding: 0px;
+}
+
+mat-menu {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+mat-card  {
+  padding:0px;
+  margin: 3px;
+}
+
+form {
+  margin-top: 1em;
+  font-size: .8em;
+}
+
+ul li{
+  list-style: none;
+  display: inline;
+  margin-left: 5px;
+}
+
+.small-screen {
+  visibility: visible;
+
+  @include for-phone-only  {
+    visibility: hidden;
+  }
+
+}
+
+.grid-flow {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+    grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+    // margin-top: -5px;
+    margin-left: -5px;
+
+  @include for-phone-only  {
+    --gap: 0px;
+    display: grid;
+    gap: var(--gap);
+    // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+    grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+    // margin-top: -5px;
+    margin-left: -15px;
+    left: -10px;
+  }
+}
+
+// .first-list {
+//   position: relative;
+//   left: -40px;
+// }
+
+.second-list {
+  position: relative;
+}
+
+.margin-info {
+  margin-left: 3px;;
+}
+
+button {
+  margin-left: 3px;
+}
+
+//disable text
+.site-name {
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+       -moz-user-select:none;
+       -ms-user-select:none;
+       user-select:none;
+  // margin-left: .5em;
+}
+
+.pos-name {
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+       -moz-user-select:none;
+       -ms-user-select:none;
+       user-select:none;
+  // margin-left: .5em;
+  font-style: italic;
+}
+
+.mat-button-item {
+  // margin-top: 3px;
+}
+
+.search {
+  margin-left: 5px;
+  padding: 5px;
+}
+
+.profile-card {
+    text-align: center;
+    padding: 0 20px  20px  20px;
+    img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 50%;
+    }
+}
+
+.mat-item {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  text-align: center;
+}
+
+mat-sidenav {
+  min-width: 125px !important;
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0 6px rgba(0, 0, 0, .1);
+  background-color:rgb(63, 81, 181);
+}
+
+@media (min-width: 10em) and (max-width: 100em) {
+  h1, h3, h2, h4 {
+    font-size: .9rem;
+  }
+  size-format {
+    display: none;
+  }
+}
+
+.heading {
+    background-color: #FFCC32;
+    position: absolute;
+    transform: rotateZ(-90deg);
+    padding: 0.5%;
+    top: 109px;
+    width: 225px;
+    text-align: center;
+    box-shadow: 5px 5px 5px black;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.heading-left {
+  left: 0.5%;
+}
+
+.pos-buttons-mat-card {
+  margin-right: -3px;
+  margin-left: -3px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: -3px;
+
+}
+
+.cart-button {
+  margin-left: 5px;
+}
+
+

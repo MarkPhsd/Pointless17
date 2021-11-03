@@ -1,0 +1,170 @@
+<div *ngIf="paymentMethod">
+
+  <mat-card class="mat-card">
+    <mat-card-title>
+       Type Edit: {{ paymentMethod.name }}
+    </mat-card-title>
+    <mat-card-subtitle>
+      <app-edit-buttons-standard
+          (outputeupdateItem)     ="updateItem($event)"
+          (outputupdateItemExit)  ="updateItemExit($event)"
+          (outputupdatedeleteItem)="deleteItem($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
+          (outputCopy)            ="copyItem($event)"
+      ></app-edit-buttons-standard>
+      <mat-divider></mat-divider>
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div *ngIf="inputForm" [formGroup]="inputForm" >
+        <div class="grid-headers">
+          <div >
+            <h4>Basics</h4>
+          </div >
+        </div>
+        <div class="grid-container">
+          <mat-divider></mat-divider>
+          <div class="grid-content">
+
+            <div class="grid-fields ">
+              <div>
+                <mat-form-field appearance="outline" >
+                  <mat-label >Name</mat-label>
+                  <input matInput
+                        type             ="text"
+                        formControlName  ="name"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div class="grid-headers">
+                  <div class="instructions">
+                    Credit Card
+                  </div>
+                  <div>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="isCreditCard"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+              <div class="grid-headers">
+                  <div>
+                    <div class="instructions">
+                      Company Credit
+                    </div>
+                    <mat-label></mat-label>
+                  </div>
+                  <div>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="companyCredit"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+              <div class="grid-headers">
+                <div class="instructions">
+                  Reverse Charge
+                </div>
+                <div>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="reverseCharge"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+              <div class="grid-headers">
+                <div class="instructions">
+                  Manager Required
+                </div>
+                <div>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="managerRequired"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+              <div class="grid-headers">
+                <div class="instructions">
+                  WIC
+                </div>
+                <div>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="wic"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+              <div class="grid-headers">
+                <div class="instructions">
+                  EBT
+                </div>
+                <mat-checkbox
+                      type             ="checkbox"
+                      formControlName  ="ebt"
+                      class="form-control" >
+                </mat-checkbox>
+              </div>
+            </div>
+            <div class="grid-fields">
+              <div>
+                <div class="instructions">
+                </div>
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Sort</mat-label>
+                    <input matInput
+                          type             ="number"
+                          formControlName  ="tenderOrder"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div>
+                <div class="instructions">
+                </div>
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Exchange Rate</mat-label>
+                    <input matInput
+                          type             ="number"
+                          formControlName  ="exchangeRate"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div>
+                <div class="instructions">
+                </div>
+                <div>
+                  <mat-label >State</mat-label>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="state"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <!-- <mat-divider [vertical]="true"></mat-divider> -->
+
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

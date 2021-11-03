@@ -1,0 +1,341 @@
+@import "/src/mixins.scss";
+
+h3, .h3 {
+  font-size: 1rem;
+  margin-top: 1px;
+  margin-bottom: -1px;
+}
+
+.itemRow {
+  margin-top: -5px;
+}
+
+button {
+  margin: 2px 2px 2px 2px;
+  padding: 2px 2px 2px 2px
+}
+
+mat-icon {
+  margin: 1px 1px 1px 1px;
+  padding: 1px 1px 1px 1px;
+  float: left;
+}
+
+.item-data {
+  float: left;
+}
+
+.img-main {
+  width: 300px;
+}
+
+.thc, .cbd {
+  float: left;
+  margin-right: 1em;
+}
+
+.progressSpinner {
+  width: 50px;
+}
+
+.custom-card {
+  padding       : 10px;
+  margin-left   : 10px;
+  margin-top    : 10px;
+  margin-bottom : 10px;
+  margin-right  : 10px;
+}
+
+.custom-card-leftmargin {
+  padding       : 10px;
+  margin-left   : 150px;
+  margin-top    : 10px;
+  margin-bottom : 10px;
+  margin-right  : 10px;
+}
+
+.panel{
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #f00;
+  $breakpoint: 600px;
+  --multiplier: calc( #{$breakpoint} - 100%);
+  .element{
+    min-width: 33%;
+    max-width: 100%;
+    flex-grow: 1;
+    flex-basis: calc( var(--multiplier) * 999 );
+    background: orange;
+  }
+}
+
+.item-details-grid {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+}
+
+.grid-item-button {
+  margin-right: 10px;
+  vertical-align: middle;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+}
+
+.mat-icon {
+  vertical-align: middle;
+}
+
+.grid-mat-icon {
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.grid-item-span-row  {
+  // grid-column-end: span 2;
+  grid-row: 1 / 2;
+}
+
+.buttons-items {
+
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+  }
+
+}
+
+.buttons-container {
+
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+  }
+
+}
+
+img {
+  width: 95px;
+  align-content: center;
+  border: rgba(78, 53, 53, 0.1);
+  border-radius: 5px;
+  border-style: solid;
+  border-width: 3px;
+  margin: 3px;
+  padding: 3px;
+
+  @media screen and (max-width: 600px) {
+    visibility: hidden;
+  }
+  else {
+    visibility: visible;
+  }
+}
+
+
+.price {
+  background-color: bisque;
+  border: cadetblue;
+  border-radius: 2px;
+  border-style: solid;
+  margin: 5px;
+  padding: 5px 5px 5px 5px;
+}
+
+.quantity {
+  background-color: bisque;
+  border: cadetblue;
+  border-radius: 2px;
+  border-style: solid;
+  margin: 5px;
+  padding: 5px 5px 5px 5px;
+}
+
+button {
+  margin: 5px 5px;
+  width: 110px;
+}
+
+.btn {
+  border-radius: 3px;
+  border-style: solid;
+  border-width: 1px;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  height: 38px;
+  line-height: 1.4;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-appearance: none;
+}
+
+.btn-primary {
+  background-color: #f56400;
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.transaction-data {
+  background-color: #f5f5f1;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  margin-bottom: 3px;
+  margin-right: 3px;
+  padding: 3px 3px;
+  display: table;
+}
+
+.item-data {
+  background-color: #f5f5f1;
+  border: 0px solid #e2e2e2;
+  border-radius: 3px;
+  margin-bottom: 3px;
+  margin-right: 3px;
+  margin-top: 3px;
+  padding: 3px 5px;
+  display: table;
+}
+
+.onlineShortDescription {
+  // font-weight: 600;
+  // font-size: 1em;
+  width: 100%;
+  // white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+}
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 0 5px;
+}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+@media only screen and (min-width: 600px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-template-rows: auto auto;
+    grid-gap: 10px;
+    height: calc(100vh - 10px);
+  }
+}
+
+/* Medium devices (landscape tablets, 768px and up) */
+@media only screen and (min-width: 768px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    grid-template-rows: auto auto min-content;
+    grid-gap: 10px;
+    height: calc(100vh - 10px);
+  }
+}
+
+/* Large devices (laptops/desktops, 992px and up) */
+@media only screen and (min-width: 992px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-template-rows: auto auto min-content;
+    grid-gap: 10px;
+    height: calc(100vh - 10px);
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1200px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    grid-template-rows: auto auto min-content;
+    grid-gap: 10px;
+    height: calc(100vh - 10px);
+  }
+}
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+@media only screen and (min-width: 1400px) {
+  .grid {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto auto;
+    grid-template-rows: auto auto min-content;
+    grid-gap: 10px;
+    height: calc(100vh - 10px);
+  }
+}
+
+
+#product-name {
+  @media only screen and (min-width: 1400px) {
+    width: 240px;
+  }
+  @media only screen and (min-width: 1200px) {
+    width: 220px;
+  }
+  @media only screen and (min-width: 992px) {
+    width: 220px;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 200px;
+  }
+}
+#advertisement {
+  @media only screen and (min-width: 1400px) {
+    width: 240px;
+  }
+  @media only screen and (min-width: 1200px) {
+    width: 220px;
+  }
+  @media only screen and (min-width: 992px) {
+    width: 220px;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 200px;
+  }
+  @media only screen and (min-width: 600px) {
+    width: 200px;
+  }
+}
+
+/* Extra small devices (phones, 600px and down) */
+@media only screen and (max-width: 600px) {
+  .onlineShortDescription {
+    visibility: false;
+  }
+}

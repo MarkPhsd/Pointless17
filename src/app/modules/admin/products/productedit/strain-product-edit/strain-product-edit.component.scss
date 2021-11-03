@@ -1,0 +1,64 @@
+@import "/src/mixins.scss";
+
+.mat-input-element {
+  font-size: small;
+}
+
+mat-form-field {
+  font-size: 1em;
+}
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+}
+
+// .header-container {
+//   --gap: 10px;
+//   display: grid;
+//   gap: var(--gap);
+//   grid-template-columns: 200px 1fr;
+// }
+
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+.grid-order-header {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  grid-auto-flow:dense;
+}
+
+.grid-item {
+  align-items: flex-end;
+  width      : 200px;
+}
+
+.image-container {
+  margin:  5px;
+  height: 235px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.basic-fields {
+  margin-left: 3px;
+}

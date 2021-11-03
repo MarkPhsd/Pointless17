@@ -1,0 +1,129 @@
+
+  <div class="item-container" *ngIf="inputForm">
+    <div>
+      <ng-content select="[info]"></ng-content>
+    </div>
+
+    <div class="header-info"  [formGroup]="inputForm">
+      <mat-form-field  appearance="outline">
+          <mat-label >
+            <ng-content></ng-content>
+          </mat-label>
+          <input   matInput
+                   #input
+                   [type]           ="inputType"
+                   appAutoFocusInput
+                   formControlName  ="itemName"
+                   class="form-control" >
+      </mat-form-field>
+    </div>
+
+    <div>
+      <button class= "keyboard-button"
+              mat-button
+              (click)="initShowInput()">
+        <mat-icon>keyboard_alt</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="checkbox" *ngIf="inputTypeValue === 'password'" >
+    <mat-checkbox
+        class="example-margin"
+        [(ngModel)]="showPassword"
+        (change)="refreshDisplay()"
+      >
+      Show Password
+    </mat-checkbox>
+  </div>
+
+  <mat-card class="mat-card" *ngIf="showInput">
+    <mat-card-content >
+      <div [class]="alternateClass">
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(1)">1 </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(2)">2
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(3)">3
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(4)">4
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(5)">5
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(6)">6
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(7)">7
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(8)">8
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(9)">9
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="deleteLastItem()">
+            <mat-icon>
+              arrow_back_ios_new
+            </mat-icon>
+          </button>
+        </div>
+
+        <div [class]="numberbuttons">
+          <button mat-button  (click)="enterValue(0)">0
+          </button>
+        </div>
+
+        <div *ngIf="inputTypeValue == 'decimal'"  [class]="numberbuttons">
+          <button mat-button  (click)="inputDoubleZero()">00
+          </button>
+        </div>
+
+        <div *ngIf="inputTypeValue == 'decimal'"  [class]="numberbuttons">
+          <button mat-button  (click)="inputTripleZero()">000
+          </button>
+        </div>
+
+        <div [class]="numberbuttons + 'endButton'">
+          <button mat-button  (click)="returnEnterPress()">Enter
+          </button>
+        </div>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+<!-- formatted  {{formatted}}
+inputForm {{inputForm.value | json}}
+
+@Input() value {{value}}          = ''; <br>
+@Input() instruction {{instruction}}    = 'Enter Value'; <br>
+@Input() inputTypeValue {{inputTypeValue}} = 'password'; <br>
+showInput               = false; <br>
+
+inputType    {{inputType}}            = 'text'; <br>
+showPassword {{showPassword}}     : boolean; <br> -->

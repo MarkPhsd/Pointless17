@@ -1,0 +1,46 @@
+<mat-card>
+
+  <mat-card-title>
+    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+      Items
+    </div>
+  </mat-card-title>
+
+  <mat-card-content>
+
+    <div class="gridContainer" *ngIf="headers">
+      <div class="grid-container-header">
+        <div class="headers " *ngFor="let header of headers">
+          <div class="grid-item menu-items">
+            <div class="headers">
+              {{header}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="gridContainer" *ngIf="headers">
+     <div class="grid-container">
+        <div class="headers gridScroller" *ngFor="let header of headers">
+          <div *ngFor="let flower of flowers" >
+            <div *ngIf="flower.priceTier === header" >
+                <div class="grid-item menu-items ">
+                    {{flower.flower}}
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>
+
+<ng-template #loading >
+<h2>Please wait...is loading.</h2>
+<mat-spinner></mat-spinner>
+</ng-template>
+

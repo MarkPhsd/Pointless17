@@ -1,0 +1,172 @@
+.mat-input-element {
+  font-size: small;
+}
+
+mat-raised-button {
+  margin: 5rem 5rem 2rem 2rem;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+button {
+  width:  100px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+.header {
+  font-size: 1.5em;
+  font-weight: 600;
+  margin-left: 5px;
+
+}
+
+.header-alignment {
+  float: left;
+}
+.imageview {
+  width: 400px;
+  border: 3px;
+  border-radius: 3px;
+  margin: 3px 3px 3px 3px;
+  padding: 3px 3px 3px 3px;
+}
+
+.border-section {
+  width: 300px;
+  border: 3px;
+  border-radius: 3px;
+  margin: 3px 3px 3px 3px;
+  padding: 3px 3px 3px 3px;
+}
+
+mat-label {
+  padding:5px;
+  font-size: 1.0em;
+}
+
+meta-tags {
+  height: 100px;
+}
+mat-form-field {
+  margin: 3px 3px 3px 3px;
+}
+
+mat-radio-button  {
+  margin: 3px;
+}
+
+mat-card{
+  padding: 5px 5px 5px 5px;
+  margin:  3px 3px 3px 3px;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+.itemSaved {
+  color: hotpink;
+}
+
+mat-drawer {
+  width: 200px;
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding: 20px;
+}
+
+simple-tinymce {
+  padding:5px;
+}
+
+label {
+  display: block;
+  padding: 5px;
+}
+
+button{
+  padding: 5px;
+}
+
+h1 {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+
+#remove_email {
+  // color: red;
+  margin: 5px;
+}
+
+#register_button {
+  background: lightblue;
+}
+
+.alert {
+  // color: darkred;
+}
+
+.ng-invalid:not(form)  {
+  // border-left: 3px solid darkred;
+}
+
+// .ng-valid:not(form) {
+//   border-left: 3px solid greenyellow;
+// }
+
+img {
+  width: 150px;
+  height: 150px;
+  align-content: center;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.container {
+  padding: 5px;
+}
+
+.description {
+  // height: 600px;
+  width:  350px;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+body{ overflow-x: hidden;}
+
+mat-form-field {
+  font-size: .8em;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.margin {
+  margin: 3px 3px 3px 3px;
+}
+
+.receipt-width-80 {
+  width: 300px;
+}
+.receipt-width-80 {
+  width: 200px;
+}
+.receipt-width-85{
+  width: 300px;
+}

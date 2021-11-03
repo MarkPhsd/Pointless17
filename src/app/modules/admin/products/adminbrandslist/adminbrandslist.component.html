@@ -1,0 +1,57 @@
+
+<h2><mat-icon>brand</mat-icon>Brands</h2>
+<div *ngIf="message">
+  <mat-card>{{message}}</mat-card>
+</div>
+<div  class="grid-container">
+  <div class="grid-header">
+    <div  [formGroup]="searchForm"
+        class="grid-item" >
+      <mat-form-field appearance="outline" class="form-fields">
+      <mat-label >Search Items</mat-label>
+        <input
+                #input
+                matInput
+                type           ="text"
+                id             ="name"
+                formControlName="name">
+      </mat-form-field>
+    </div>
+
+    <div>
+      <button mat-button (click)="listAll()">
+        <mat-icon>list</mat-icon>
+        List All</button>
+    </div>
+
+    <div class="header-items">
+      <button mat-button
+              (click)="add()">
+        <mat-icon>add</mat-icon>Add</button>
+    </div>
+    <div class="header-items">
+      <button mat-button
+              (click)="deleteSelected()">
+        <mat-icon>delete</mat-icon>Delete Selected</button>
+    </div>
+  </div>
+
+  <div>
+    <ag-grid-angular
+          #agGrid
+          [style]              ="gridDimensions"
+          id                   ="myGrid"
+          [class]              ="agtheme"
+          [columnDefs]         ="columnDefs"
+          [defaultColDef]      ="defaultColDef"
+          [gridOptions]        ="gridOptions"
+          [rowSelection]       ="rowSelection"
+          [frameworkComponents]="frameworkComponents"
+          (selectionChanged)   ="onSelectionChanged($event)"
+          (gridReady)          ="onGridReady($event)">
+
+    </ag-grid-angular>
+  </div>
+
+
+</div>

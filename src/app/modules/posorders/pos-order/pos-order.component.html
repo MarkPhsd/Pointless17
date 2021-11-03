@@ -1,0 +1,92 @@
+<div  *ngIf="order" class="container">
+  <div [class]="orderlayout">
+
+    <div [class]="gridRight">
+
+      <div class="grid-panels">
+        <div class="flex-item">
+          <pos-order-transaction-data [order]="order">
+          </pos-order-transaction-data>
+        </div>
+
+        <div  class="flex-item"
+              *ngIf="mainPanel">
+          <app-order-header-demo-graphics
+            [canRemoveClient]="canRemoveClient"
+            [order]="order"
+            (outPutOpenClient)="openClient()"
+            (outPutRemoveClient)="removeClient()"
+            (outPutAssignCustomer)="assignCustomer($event)"
+            >
+          </app-order-header-demo-graphics>
+        </div>
+
+        <div class="flex-item"
+             *ngIf="mainPanel">
+          <limit-values-progress-bars
+              [order]="order">
+          </limit-values-progress-bars>
+        </div>
+      </div>
+
+      <div [class]="infobuttonpanel">
+        <div
+            *ngIf="mainPanel" >
+          <pos-order-function-buttons
+                (outPutPrintLabel)  ="printLabels()"
+                (outPutRePrintLabel)="rePrintLabels()"
+                (outPutPrintReceipt)="printReceipt()"
+                (outPutMakePayment) ="makePayment()"
+                (outPutDeleteOrder) ="deleteOrder()"
+                (outPutShowItems)   ="showItems()"
+                (outPutVoidOrder)   ="voidOrder()"
+                (outPutSuspendOrder)="suspendOrder()"
+                (outPutRemoveSuspension)="removeSuspension()"
+                [itemsPrinted]      ="itemsPrinted"
+                [paymentsMade]      ="paymentsMade"
+                [isAuthorized]      ="isAuthorized"
+                [openBar]           ="openBar"
+                [mainPanel]         ="mainPanel"
+                [order]             ="order"
+          ></pos-order-function-buttons>
+
+        </div>
+        <div  *ngIf="!mainPanel" >
+          <button mat-raised-button
+                  class="button"
+                  color="primary"
+                  (click)="toggleOpenOrderBar()">
+            <mat-icon>edit</mat-icon>
+            Edit Cart
+          </button>
+
+          <button  mat-raised-button
+                  class="button"
+                  color="primary"
+                  (click)="makePayment()">
+            <mat-icon>credit_card</mat-icon>
+            Payments
+          </button>
+        </div>
+
+
+      </div>
+
+    </div>
+
+    <!-- *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (mainPanel && !smallDevice)" -->
+    <div *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (!mainPanel && !smallDevice)  ">
+
+      <pos-order-items
+                        [mainPanel]        ="mainPanel"
+                        [order]="order"></pos-order-items>
+
+    </div>
+
+  </div>
+</div>
+
+
+<!-- <ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template> -->

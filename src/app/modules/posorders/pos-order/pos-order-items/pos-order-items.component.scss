@@ -1,0 +1,59 @@
+@import "/src/mixins.scss";
+
+ion-item-sliding {
+  width: 99%;
+  padding: 0;
+  margin: 2px;
+}
+
+ion-item {
+  width: 99%;
+  padding: 0;
+  margin: 2px;
+}
+
+pos-order-item {
+  width: 99%;
+  padding: 0;
+  margin: 0px;
+}
+
+// .scroll-content {
+//   display: flex;
+//   flex-direction: column;
+
+//   ion-slides {
+//       display: flex;
+//   }
+// }
+.item-list {
+
+  margin-bottom: 25px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 85vh;
+
+  @include for-phone-only  {
+    margin-bottom: 25px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    // height: 65vh;
+  }
+
+}
+
+.item-list-side-panel {
+
+  margin-bottom: 25px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 55vh;
+
+  @include for-phone-only  {
+    margin-bottom: 25px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 65vh;
+  }
+
+}

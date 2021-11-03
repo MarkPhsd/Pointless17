@@ -1,0 +1,28 @@
+<div [formGroup]="searchForm" *ngIf="searchForm">
+    <div class  ="grid-container">
+      <mat-form-field appearance="outline"
+                      class="form-fields">
+        <mat-label>
+          <ng-content #fieldSearchDescription></ng-content>
+        </mat-label>
+
+        <mat-select
+                    type="'text'"
+                    [formControlName]   = "formFieldName"
+                    (selectionChange)   = "updateResults($event)"
+          >
+          <div *ngIf="(list$ | async) as list">
+            <mat-option [value]="0">
+              Clear
+            </mat-option>
+            <mat-option *ngFor="let item of list" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+  </div>
+</div>
+
+

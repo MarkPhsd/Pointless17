@@ -1,0 +1,33 @@
+<mat-card class="mat-card-view">
+  <mat-card-content>
+    <button mat-button (click)="newEmployee()">New <mat-icon>add</mat-icon></button>
+    <button mat-button (click)="initSearchModel()">Reset <mat-icon>refresh</mat-icon></button>
+
+    <mat-button-toggle-group
+          name        ="toggleOpenClosedAll"
+          class       ="toggle-view"
+          [(ngModel)] ="toggleTerminated"
+          (change)    ="refreshSearch()"
+      >
+      <mat-button-toggle class="toggle-min" value="0">All</mat-button-toggle>
+      <mat-button-toggle class="toggle-min" value="1">Employeed</mat-button-toggle>
+      <mat-button-toggle class="toggle-min" value="2">Terminated </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <div *ngIf="searchModel"
+         class="toggle-selector-employee">
+      <app-mat-toggle-selector
+              [id]      ="searchModel.jobTypeID"
+              [list$]   ="jobTypes$"
+              (outPutID)="setJobType($event)">
+              Employee
+      </app-mat-toggle-selector>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+

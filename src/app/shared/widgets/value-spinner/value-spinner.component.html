@@ -1,0 +1,27 @@
+<div *ngIf="value"
+     [class]="spinnerText"
+     > {{ description }} <br>
+      %{{ value }}
+</div>
+
+<div class="grid-item-thc" *ngIf="value" >
+
+  <div class="twitter-like">
+    <div>
+      <mat-spinner
+        class="track"
+        value="100"
+        [color]="colorTrack"
+        mode="determinate">
+      </mat-spinner>
+      <mat-spinner
+        [color]="color"
+        [value]="value"
+        mode="determinate">
+      </mat-spinner>
+    </div>
+  </div>
+
+</div>
+
+

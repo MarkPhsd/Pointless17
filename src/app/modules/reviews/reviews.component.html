@@ -1,0 +1,75 @@
+  <mat-card>
+    <mat-card-title >
+
+      <div fxLayout="row" fxLayoutAlign=" center" >
+
+        <div fxLayout="column" fxLayoutAlign="end">
+
+          <div fxLayout="row" fxLayoutAlign="space-evenly center">
+
+            <div >
+
+              <div id="reviewTitle" *ngIf="ratingAverage">
+                <!-- <star-rating [starType]="'svg'" [rating]="ratingAverage"></star-rating> -->
+              </div>
+
+              <div id="reviewTitle" *ngIf="!ratingAverage">
+                <!-- <star-rating [starType]="'svg'" [rating]="0"></star-rating> -->
+              </div>
+
+              <div id="reviewTitle"  *ngIf="ratingCount != 0">
+                ( {{ ratingCount }} reviews)
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </mat-card-title>
+
+    <mat-card-content>
+
+      <div *ngIf="reviews$">
+
+        <div  *ngIf="reviews$ | async as reviews; else loading">
+
+          <div id="reviewsContainer" *ngFor="let review of reviews">
+
+            <mat-divider></mat-divider>
+
+            <div id="review-date">
+               {{review.reviewDate | date:'short'}}
+            </div>
+
+            <!-- <star-rating [starType]="'svg'" [rating]="review.ratingValue"> </star-rating> -->
+
+            <div id="reviewNotes"> {{review.reviewNotes}}</div>
+
+            <div *ngIf="review.images">
+              <img [src]="getImageSrc(review.images)" />
+            </div>
+
+            <div *ngIf="review.reviewResponse">
+              <mat-divider></mat-divider>
+              <h2>Response</h2>
+              <p>{{review.reviewResponse}}</p>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+
+<ng-template #loading >
+    <mat-spinner></mat-spinner>
+</ng-template>
+
+

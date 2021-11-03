@@ -1,0 +1,52 @@
+
+<div
+    class="mat-card-container"
+    *ngIf="site && (sales$ | async) as summary; else loading">
+  <div *ngIf="summary.results as sales">
+    <mat-card >
+      <mat-card-title>
+
+        <div class="grid">
+          <div  class="totals_label">
+            <h4> <ng-content></ng-content> </h4>
+            <div *ngIf="summary.resultMessage">
+              <mat-icon>alert</mat-icon>
+              {{summary.resultMessage}}
+            </div>
+          </div>
+        </div>
+
+      </mat-card-title>
+
+      <mat-card-content >
+        <div class="grid">
+          <div class="totals">Item :</div>
+          <div class="totals ">Pre Tax :</div>
+          <div class="totals">#</div>
+        </div>
+
+        <div class="grid"
+             *ngFor="let sale of sales">
+          <div class="totals">{{sale.productName }}  </div>
+          <div class="totals align-right">{{sale.itemTotal | currency }}   </div>
+          <div class="totals totals_label">{{sale.quantity }} </div>
+        </div>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <div *ngIf="summary.summary">
+          <div class="grid-footer">
+            <div class="totals-footer"> Totals </div>
+            <div class="totals totals_label">{{summary.summary.itemTotal | currency }}  </div>
+            <div class="totals totals_label">{{summary.summary.quantity }}              </div>
+          </div>
+        </div>
+      </mat-card-footer>
+
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+</ng-template>

@@ -1,0 +1,75 @@
+<div [formGroup]="inputForm">
+  <div class="grid-container">
+
+    <mat-tab label="Taxes" *ngIf="product?.prodModifierType === 3">
+        <div fxLayout="column" fxLayoutAlign="space-around center" >
+
+          <div class="filterItem" fxLayout="column">
+            <div *ngIf="(taxes$ | async) as list" >
+              <mat-form-field appearance="outline">
+                <mat-label>Tax 1</mat-label>
+                <mat-select
+                            type="number"
+                            formControlName ="taxLookUp"
+                  >
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{item.rate}}, {{item.name}}
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="filterItem" fxLayout="column">
+            <div *ngIf="(taxes$ | async) as list" >
+              <mat-form-field appearance="outline">
+                <mat-label>Tax 2</mat-label>
+                <mat-select
+                            type="number"
+                            formControlName ="tax2"
+                  >
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{item.rate}}, {{item.name}}
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="filterItem" fxLayout="column">
+            <div *ngIf="(taxes$ | async) as list" >
+              <mat-form-field appearance="outline">
+                <mat-label>Tax 3</mat-label>
+                <mat-select
+                            type="number"
+                            formControlName ="tax3"
+                  >
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{item.rate}}, {{item.name}}
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+
+        </div>
+
+        <div fxLayout="column" fxLayoutAlign="start" >
+          <mat-label>Tax Conditions</mat-label>
+            <mat-radio-group aria-label="Tax Options"
+                              formControlName="taxable"
+                              type="number"
+                              [value] = "taxable"
+                            >
+              <mat-radio-button [value]="2">Always</mat-radio-button><br>
+              <mat-radio-button [value]="1">According To Transaction</mat-radio-button><br>
+              <mat-radio-button [value]="3">Never</mat-radio-button>
+            </mat-radio-group>
+
+        </div>
+
+    </mat-tab>
+
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="item-container">
+
+  <div fxLayout="row"
+       fxLayoutAlign="space-around center">
+    <div fxLayout="column"
+         fxLayoutAlign="start center">
+      <img *ngIf="!isApp" [src]="imageUrl" id="product-image"  (click)="displayItem()"/>
+      <img *ngIf="isApp"  [src]="imageUrl" id="product-image"  (click)="addItemToOrder(menuItem)"/>
+    </div>
+  </div>
+
+  <div class="product-name">{{ getItem(menuItem.name)  }}</div>
+
+  <div id="advertisement">
+  </div>
+
+  <div class="product-name" id="star-rating">
+    <div  *ngIf="menuItem.ratingAverage && menuItem.ratingCount &&
+            menuItem.ratingAverage != 0 && menuItem.ratingCount != 0
+            ">
+      reviews:  {{menuItem.ratingAverage}} rating: {{menuItem.ratingCount}}
+    </div>
+  </div>
+
+  <div fxLayout="row"
+       fxLayoutAlign="center" >
+
+    <div id="price">{{menuItem.retail | currency}}</div>
+
+    <button
+          *ngIf="isApp"
+          mat-button
+          class="add-button"
+          color="primary"
+          (click)="displayItem()" >
+      <mat-icon>open_in_new</mat-icon>
+      View
+    </button>
+
+    <button
+          *ngIf="!isApp"
+          mat-button
+          class="add-button"
+          color="primary"
+          (click)="addItemToOrder(menuItem)" >
+      <mat-icon>add</mat-icon>
+      Add
+    </button>
+
+  </div>
+
+</div>

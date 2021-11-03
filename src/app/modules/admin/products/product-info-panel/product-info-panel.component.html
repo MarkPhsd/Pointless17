@@ -1,0 +1,87 @@
+<mat-card class="mat-card-view">
+  <mat-card-content>
+
+    <!-- <div class="headers">Adjustments</div> -->
+
+    <div fxLayout="column" fxLayoutAlign="space-around start" >
+      <div class="grid-container grids-container">
+        <button class="info-buttons"  mat-button color="accent" (click)="editWebProduct()"><mat-icon>web</mat-icon>Web Info</button>
+        <button class="info-buttons"  mat-button color="accent" (click)="editProduct()"><mat-icon>info</mat-icon>Item Edit</button>
+      </div>
+    </div>
+
+    <!-- aria-label="Font Style" -->
+    <mat-button-toggle-group
+          name="toggleLabelEvents"
+          class="toggle-view"
+          [(ngModel)]="toggleLabelEvents"
+      >
+      <mat-button-toggle value="labels" (click)="onToggleLabelEvents('labels')">Labels</mat-button-toggle>
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')">Events</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <br>
+
+    <div *ngIf="toggleLabelEvents == 'labels'">
+
+      <br>
+      <app-label-view-selector [@slideInOut]="'in'"
+            [labelID]="labelID"
+            (outputLabelSetting)="getLabelSetting($event)"
+            [setProduct]="product"
+            [labelImageHeight]="150"
+            >
+        </app-label-view-selector>
+
+        <div *ngIf="electronEnabled || printingEnabled">
+          <app-list-printers-electron
+                                    [printerName]="printerName"
+                                    (outputPrinterName)="getPrinterName($event)"
+
+                                    ></app-list-printers-electron>
+          <div [formGroup]="printForm">
+            <mat-form-field appearance="outline">
+              <mat-label >Print Quantity</mat-label>
+              <input matInput
+                      type="number"
+                      [(ngModel)] = "printQuantity"
+                      formControlName="printQuantity"
+                      class="form-control" >
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="electronEnabled || printingEnabled">
+          <div class="grid-container">
+            <button class="info-buttons"
+                    mat-raised-button color="primary"
+                    (click)="printSku()"><mat-icon>print</mat-icon>Sku </button>
+            <button class="info-buttons" mat-raised-button color="primary"
+                    (click)="printSerial()"><mat-icon>print</mat-icon>Serial </button>
+          </div>
+        </div>
+      <!-- <mat-divider class="divider-margin"></mat-divider> -->
+    </div>
+
+    <div *ngIf="toggleLabelEvents == 'events'">
+      <!-- <div  class="headers">Events</div> -->
+      <br>
+
+      <!-- <div class="cards" *ngIf="inventoryAssignments" >
+        <div *ngFor="let item of inventoryAssignments.slice().reverse()">
+            <app-inventory-history-item
+                [item]="item">
+            </app-inventory-history-item> -->
+            <!-- <mat-divider></mat-divider>
+        </div>
+      </div>  -->
+    </div>
+
+  </mat-card-content>
+
+</mat-card>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+

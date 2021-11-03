@@ -1,0 +1,54 @@
+<h1> tesseract capture</h1>
+<div id="grid">
+
+  <div class="grid-item">
+
+        <button  id="snap"
+            mat-raised-button
+           color="primary"
+            (click)="capture()">
+            Capture
+        </button>
+
+
+        <button id="snap"
+          mat-raised-button
+          color="primary"
+          (click)="clearCaptures()">
+          Try again
+        </button>
+
+
+        <button id="snap"
+            mat-raised-button
+            color="primary"
+            (click)="processImage()">Process
+        </button>
+
+
+    <div>
+      <video
+            #video
+            id="video"
+            autoplay>
+      </video>
+    </div>
+
+    <div *ngFor="let c of captures; let i = index">
+      <button id="snap"
+         mat-raised-button
+         color="primary"
+         (click)="saveImageCaptureASNewFile(i)">Save
+      </button>
+      <br>
+      <img src="{{ c }}" class="captured-image"  />
+   </div>
+
+
+    <div [innerHTML]="textResult"></div>
+    <canvas #canvas id="canvas"   width="640" height="480" ></canvas>
+
+  </div>
+
+  <div>
+</div>

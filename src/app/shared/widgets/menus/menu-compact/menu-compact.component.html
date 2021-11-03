@@ -1,0 +1,68 @@
+
+<div fxLayout="row" class="row-class">
+
+  <div fxLayout="column" class="row-class"
+       *ngIf="!displayCategories">
+
+    <ul id="accordion"
+        class="accordion">
+      <li class="menu-item" @fade *ngFor="let menu of menus; let i = index"
+          [class.active]="menu.active">
+          <!-- *ngIf="isUserAuthorized(menu.userType)" -->
+        <div *ngIf="isAuthorized(menu)" >
+            <div class="menu"
+              (click)="toggle(menu, i)">
+              <mat-icon>{{ menu.icon }}</mat-icon>
+              {{ menu.name }}
+          </div>
+        </div>
+      </li>
+    </ul>
+
+  </div>
+
+  <div fxLayout="column" class="row-class"
+       *ngIf="displayCategories">
+
+    <div class=" accordion  menu-header">
+      <mat-icon>{{menus[index].icon}}</mat-icon>
+      {{ menus[index].name }}
+      <mat-divider></mat-divider>
+      <div class="menu-header-footer"></div>
+    </div>
+
+    <ul id="accordion"
+        class="accordion">
+      <li class="menu-item" @fade  *ngFor="let item of submenu" >
+        <!-- -->
+        <div class="menu" *ngIf="isAuthorized(item)" >
+          <a mat-list-item
+              routerLinkActive={{item.routerLinkActive}}
+              routerLink=      {{item.routerLink}}>
+            <mat-icon>{{ item.icon }}</mat-icon>
+            {{ item.name }}
+          </a>
+        </div>
+      </li>
+      <li>
+        <div class="menu">
+          <a  mat-list-item
+                  (click)="resetMenu()">
+            <mat-icon>navigate_before</mat-icon>
+            Back
+          </a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+<mat-menu #menu="matMenu"  @fade  *ngFor="let item of submenu" >
+  <div  *ngIf="isAuthorized(item)" >
+    <button mat-menu-item color="accent">
+      <mat-icon>{{ item.icon }}</mat-icon>
+      <span> {{ item.name }}</span>
+    </button>
+  </div>
+</mat-menu>

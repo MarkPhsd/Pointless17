@@ -1,0 +1,69 @@
+.mat-input-element {
+  font-size: small;
+}
+
+.app-widget-uploader {
+  width:     200px;
+  max-width: 200px;
+  height:    200px;
+  max-height:200px;
+  margin: 2px;
+  padding: 2px;
+}
+
+mat-label {
+  font-size: small;
+}
+
+meta-tags {
+  height: 100px;
+}
+
+mat-form-field {
+  margin: 3px;
+  font-size: small;
+}
+
+.instructions {
+  font: small;
+  font-weight: 400;
+}
+
+mat-card{
+  margin:  5px;
+  // height: 485px;
+}
+
+.content-container {
+   height     : 310px;
+   overflow-y : auto;
+   overflow-x   : hidden;
+}
+
+img {
+  width: 150px;
+  height: 150px;
+  align-content: center;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.container {
+  padding: 5px;
+}
+
+
+body{ overflow-x: hidden;}
+
+mat-form-field {
+  font-size: small;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+}

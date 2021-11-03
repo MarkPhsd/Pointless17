@@ -1,0 +1,39 @@
+<div class="flex-container">
+
+  <mat-card   class="example-card"
+              [@cardAnimator]="animationState"
+              (@cardAnimator.done)="resetAnimationState()"
+              (swipeleft)="startAnimation('slideOutLeft')"
+              (swiperight)="startAnimation('zoomOutRight')"
+              (swipeup)="startAnimation('rotateOutUpRight')"
+              (swipedown)="startAnimation('flipOutY')">
+
+      <mat-card-content>
+        <img mat-card-image
+
+              src="https://www.drugabuse.gov/sites/default/files/styles/content_image_medium/public/marijuana-ss-417.jpg" />
+
+        <p>
+          One of our favorites! A little better than Grandma used to bake.
+
+          Cannabis Product - Exclusively for Medical Use.
+
+          Not for Resale or Redistribution.
+
+          Keep away from Children and Pets.
+        </p>
+
+          <button mat-raised-button  tappable (click)="startAnimation('wobble')">Wobble</button>
+          <button mat-raised-button  tappable (click)="startAnimation('swing')">Swing</button>
+
+          <button mat-raised-button   (click)="startAnimation('slideOutLeft')">SlideOut</button>
+          <button mat-raised-button   (click)="startAnimation('zoomOutRight')">Zoom Away</button>
+          <button mat-raised-button   (click)="startAnimation('rotateOutUpRight')">Rotate</button>
+
+          <button mat-raised-button   (click)="resetAnimationState()">Reset</button>
+
+      </mat-card-content>
+
+  </mat-card>
+
+</div>

@@ -1,0 +1,27 @@
+
+<ul class="dots btns">
+  <li *ngFor="let item of _total;let i = index; let lst = last;"
+  [style.width.px]="_config.width"
+  [style.height.px]="_config.height"
+  [style.margin-right.px]="(lst ? 0 : _config.margin)"
+  (click)="setActive(item)"></li>
+</ul>
+
+<ul class="dots blobs">
+  <li #point class="active"></li>
+  <li *ngFor="let item of _total;let i = index; let lst = last;"
+  [style.width.px]="_config.width"
+  [style.height.px]="_config.height"
+  [style.margin-right.px]="(lst ? 0 : _config.margin)"
+  (click)="setActive(item)"></li>
+</ul>
+
+<svg>
+  <defs>
+    <filter id="goo">
+      <feGaussianBlur in="SourceGraphic" [attr.stdDeviation]="svg.blur" result="blur" />
+      <feColorMatrix in="blur" mode="matrix" [attr.values]="svg.values" result="goo" />
+      <feComposite in="SourceGraphic" in2="goo" operator="atop"/>
+    </filter>
+  </defs>
+</svg>

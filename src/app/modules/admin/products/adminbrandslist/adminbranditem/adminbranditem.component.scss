@@ -1,0 +1,35 @@
+@import "/src/mixins.scss";
+
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+app-widget-uploader {
+  margin: 5px;
+}
+
+mat-card {
+  margin: 10px;
+}
+
+.display-buttons {
+  flex-direction: row;
+  box-sizing: border-box;
+  // display: flex;
+  place-content: stretch flex-end;
+  align-items: stretch;
+  flex: 1 1 100%;
+  max-width: 300%;
+}

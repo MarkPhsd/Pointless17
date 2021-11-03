@@ -1,0 +1,200 @@
+<div class="container" *ngIf="product">
+
+  <!-- <div *ngIf="productForm.controls.fullProductName.errors?.required && productForm.controls.fullProductName.touched" class="error">
+    <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
+  </div>
+
+  <div *ngIf="productForm.controls.name.errors?.required && productForm.controls.name.touched" class="error">
+    <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
+  </div> -->
+  <mat-card>
+    <mat-card-title>
+
+      <div class="header-container" >
+        <div >
+          <h4>
+            <div *ngIf="product.id == 0">
+              Add Item:   {{ product?.name  }}  {{ product?.barcode }}
+            </div>
+            <div *ngIf="product.id != 0">
+              Edit Item:   {{ product?.name  }}  {{ product?.barcode }}
+            </div>
+          </h4>
+        </div>
+        <div >
+          <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+                (outputCopy)            ="copyItem($event)"
+          ></app-edit-buttons-standard>
+        </div>
+      </div>
+
+    </mat-card-title>
+
+    <mat-divider> </mat-divider>
+
+    <form [formGroup]="productForm"  id="fullProductName"  >
+
+      <div class="grid-container">
+
+          <div class="grid-item">
+            <div class="header">
+              <h4><mat-icon>subject</mat-icon> Basics </h4>
+            </div>
+
+            <div class="basic-fields">
+              <mat-form-field appearance="outline">
+                <mat-label >Long Name</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="fullProductName"
+                       >
+              </mat-form-field>
+            </div>
+
+            <div class="basic-fields">
+              <mat-form-field appearance="outline">
+                <mat-label >Name</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="name"
+                       >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <app-category-select [inputForm]="productForm"></app-category-select>
+            </div>
+
+            <div>
+              <app-department-select [inputForm]="productForm" ></app-department-select>
+            </div>
+
+            <div>
+              <product-type-select [inputForm]="productForm"> </product-type-select>
+            </div>
+
+            <div>
+              <app-brand-type-select
+                                [id] = "brandID.value"
+                                [inputForm]="productForm">
+              </app-brand-type-select>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Barcode</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="barcode"
+                >
+              </mat-form-field>
+            </div>
+
+
+            <div>
+              <!-- <div>
+                <app-printer-location-selection [inputForm]="productForm"></app-printer-location-selection>
+              </div>
+              <div>
+                <exit-label-selection [inputForm]="productForm"></exit-label-selection>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="grid-item">
+
+            <div class="header">
+              <h4><mat-icon>price_change</mat-icon>Prices</h4>
+            </div>
+
+            <div>
+              <app-price-category-select
+                          *ngIf="itemType.useType === 'product'"
+                          [itemType]        ="itemType"
+                          [priceCategoryID] ="priceCategoryID"
+                          [inputForm]       ="productForm" >
+              </app-price-category-select>
+            </div>
+
+            <div class="header">
+              <h4><mat-icon>image</mat-icon>Images</h4>
+            </div>
+
+            <div>
+
+                <app-widget-uploader
+                    [(fileNames)]="urlImageMain"
+                    (messageOut) ="received_URLMainImage($event)"
+                    (imageUrl)   ="updateUrlImageMain($event)">
+                </app-widget-uploader>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="grid-item">
+
+            <div class="header">
+              <h4> <mat-icon>list</mat-icon>  {{ itemType.name }}</h4>
+            </div>
+
+            <div *ngIf="itemType  && (
+                 itemType.name   === 'wine'
+              || itemType.name   === 'alcohol'
+              || itemType.name   === 'beer')">
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'grocery')">
+              <food-product-edit [inputForm]="productForm"></food-product-edit>
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'tobacco' )">
+              <!-- //age
+              //type pilsner white red etc. -->
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'discount' )">
+              <!-- //type money off, percentage etc. -->
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'Generic')">
+              <!-- //prompt modifier type
+              //recipe
+              //notation
+              //ingredients -->
+              <prompt-group-select
+                 [inputForm]="productForm"
+              ></prompt-group-select>
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'retail' )">
+              <!-- //package -- like group of products with sub products
+              // -->
+              <retail-product-edit [inputForm]="productForm"></retail-product-edit>
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'modifier' )">
+              <!-- //no real options other than web view. -->
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'grouping' )">
+              <!-- //department /category -->
+            </div>
+
+            <div *ngIf="itemType  && (itemType.name === 'strain' || itemType.name === 'cannabis' || itemType.name ===  'med-cannabis')">
+              <cannabis-item-edit [inputForm]="productForm"></cannabis-item-edit>
+            </div>
+
+          </div>
+
+      </div>
+
+    </form>
+  </mat-card>
+</div>

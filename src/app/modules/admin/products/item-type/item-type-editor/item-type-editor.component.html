@@ -1,0 +1,169 @@
+<div *ngIf="itemType; else loading">
+  <div [formGroup]="inputForm">
+
+    <mat-card>
+
+      <mat-card-title>
+        <div *ngIf="itemType" class="type">{{itemType.name}}</div>
+        <div *ngIf="selectedItemsCount > 0" class="type">Multiple Items Selected</div>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <div *ngIf="selectedItems" class="instructions">
+          Values changed here will affect all items of this type. Please set all values in this form to what the items should have.
+        </div>
+        <mat-card-actions>
+          <button mat-raised-button color="primary" class="button" (click)="save()">Save</button>
+        </mat-card-actions>
+        <mat-divider></mat-divider>
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <div class="content-container">
+
+          <div
+
+                fxFlex="row"
+                fxLayoutAlign="space-around start" >
+            <div fxLayout="column" fxLayoutAlign="space-around start" >
+                <div>
+                  <mat-slide-toggle name="enabled"
+                                    formControlName="enabled">
+                    <mat-label>Enabled</mat-label>
+                  </mat-slide-toggle>
+                </div>
+                <div>
+                  <mat-slide-toggle
+                                    name= "labelRequired"
+                                    formControlName="labelRequired">
+                    <mat-label>Label Print Out Required</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div>
+                  <mat-slide-toggle name= "weightedItem"
+                                    formControlName="weightedItem">
+                    <mat-label>Scale Weighted Item</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div>
+                  <mat-slide-toggle name= "expirationRequired"
+                                    formControlName="expirationRequired">
+                    <mat-label>Expiration Date Required</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Age Requirement</mat-label>
+                        <input matInput
+                        type             ="number"
+                        name             ="ageRequirement"
+                        formControlName  ="ageRequirement"
+                      class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Icon</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="icon"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div class="filterItem" >
+                  <mat-form-field appearance="outline">
+                    <mat-label>Tax Setting</mat-label>
+                    <mat-select
+                                type="number"
+                                [formControlName]  ="'taxable'"
+                                name="taxable"
+                      >
+                      <mat-option value=0>Clear</mat-option>
+                      <mat-option *ngFor="let item of taxesSetting"
+                                  [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="(receiptList$ | async) as receiptList">
+                  <mat-label>Print item to a prep ticket</mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Prep Ticket</mat-label>
+                    <mat-select
+                        type="text"
+                        [(ngModel)]        ="prepTicketID"
+                        [formControlName]  = "'prepTicketID'"
+                        (selectionChange)="setPrepTicketID(prepTicketID)">
+                        <mat-option value=0>Clear</mat-option>
+                        <mat-option *ngFor="let item of receiptList" [value]="item.id">
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="(printerLocations$ | async) as locations">
+                  <mat-label>Print item to a Location</mat-label>
+                  <mat-form-field appearance="outline">
+                    <mat-label>Location</mat-label>
+                    <mat-select
+                        type="text"
+                        [(ngModel)]        ="printLocationID"
+                        [formControlName]  = "'printLocationID'"
+                        (selectionChange)="setLocationID(printLocationID)">
+                        <mat-option value=0>Clear</mat-option>
+                        <mat-option *ngFor="let item of locations"
+                                      [value]="item.id">
+                            {{ item.name }}
+                        </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+              <div>
+                  <mat-label>Exit Label Selection</mat-label>
+                  <app-label-view-selector
+                      [labelList$]      ="labelList$"
+                      [labelID]         ="itemType.labelTypeID"
+                      [labelImageHeight]="200"
+                      (outPutLabelID)   ="setLabelID($event)">
+                  </app-label-view-selector>
+                </div>
+            </div>
+
+            <div fxLayout="column" fxLayoutAlign="space-around start" >
+                <h4>Drop Type Image / Icon</h4>
+                <div class="app-widget-uploader">
+                    <app-widget-uploader
+                    [(fileNames)]="itemType.imageName"
+                    (messageOut) ="received_URLImage($event)"
+                    (imageUrl)   ="received_URLImage($event)">
+                    </app-widget-uploader>
+                </div>
+            </div>
+
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>
+
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+
+
+              <!-- <app-tax-rate-list [inputForm]="inputForm" [formControl]="tax1id"></app-tax-rate-list> -->
+              <!-- -<app-tax-rate-list [inputForm]="inputForm" [formControlName]="tax2id"></app-tax-rate-list>
+              <app-tax-rate-list [inputForm]="inputForm" [formControlName]="tax3id"></app-tax-rate-list> -->
+              <!-- <app-flat-tax-rate-list [inputForm]="inputForm"></app-flat-tax-rate-list> -->

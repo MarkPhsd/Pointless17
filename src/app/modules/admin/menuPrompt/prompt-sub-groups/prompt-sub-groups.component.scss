@@ -1,0 +1,139 @@
+
+
+.grid-list-container {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 7px;
+    // overflow: hidden;
+    height: 90vh;
+  }
+
+  .grid-list-item {
+    height: 95%;
+    overflow: hidden;
+  }
+
+  .grid-item-2 {
+    top: 0px;
+    position: relative;
+    margin-top: -5px;
+    font-size: .9em;
+  }
+
+  .loader {
+    margin: 5px;
+  }
+
+  .grid-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+
+  .grid-dimensions {
+    width: 100%; height: 100%;
+  }
+
+  .grid-dimensions-electron {
+    width: 90%; height: 90%;
+  }
+
+  .grid-dimensions-capacitor {
+    width: 90%; height: 90%;
+  }
+
+  .grid-list {
+
+    display: grid;
+    grid-template-columns: 1fr 20vw;
+    height: 65vh;
+    gap    : 10px;
+
+    @media (max-width: 599px)  {
+      height: 50vh;
+    }
+    @media (min-width: 600px)   {
+      height: 65vh;
+    }
+    @media (min-width: 900px) {
+      height: 75vh;
+    }
+    @media (min-width: 1200px)  {
+      height: 75vh;
+    }
+    @media (min-width: 1800px)  {
+      height: 70vh;
+    }
+  }
+
+  .mat-card {
+    margin-bottom: 5px;
+  }
+
+  .form-fields {
+    margin: 0;
+    padding: 0;
+  }
+
+
+  table
+  {
+    width: 100%;
+  }
+
+    .agGridButton {
+      font-size: 1em;
+      padding: -1px 1px;
+      margin: -1px 1px;
+      line-height: 1.2
+    }
+
+    button {
+      padding: 3px 3px 3px 3px;
+      margin: 3px 3px 3px 3px;
+      // height: 38px;
+    }
+
+    .header-items {
+      float: left;
+    }
+
+    ::ng-deep .mat-form-field .mat-form-field-wrapper {
+      font-size: .8em;
+      padding: -3px -3px;
+      margin: 4px 4px 4px 4px;
+    }
+
+    .form-controls {
+      font-size: .8em;
+    }
+    mat-form-field {
+      font-size: .9em;
+      margin: 3px 3px 3px 3px;
+    }
+    .form-fields {
+      margin: 0;
+      padding: 0;
+    }
+
+    .view-items {
+      float: left;
+      margin-top: 13px;
+    }
+    .view-button {
+      // float: right;
+      margin-top: 9px;
+    }
+
+    .grid-nav {
+      display: grid;
+      grid-template-columns: 150px 1fr;
+      gap: 5px;
+    }
+
+    .mini-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3px;
+    }

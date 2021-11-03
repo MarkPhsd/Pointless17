@@ -1,0 +1,59 @@
+<mat-card fxFlex="100%" *ngIf="user">
+
+
+    <mat-card-header>
+        <mat-card-subtitle>
+            <h3>Welcome {{ user.clientType?.name}} ,</h3>
+        </mat-card-subtitle>
+        <mat-card-title >
+
+            <h2>
+            <button mat-icon-button (click)="editProfile()">
+              <mat-icon >edit</mat-icon>
+             </button>
+             {{user.firstName}} {{user.lastName}}</h2>
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <div class="profilewrapper">
+
+        <div>
+          <label>
+              Email: {{user.email}}
+          </label>
+          <br />
+          <label>
+              Local Points: {{user.loyaltyPoints}} value:  {{user.loyaltyPointValue | currency}}
+          </label>
+          <br />
+          <label>
+              Phone: {{user.phone}}
+          </label>
+          <br>
+          <label>
+              Account: {{user.accountNumber}}
+          </label>
+          <br />
+          <label>
+              ID: {{user.id}}
+          </label>
+        </div>
+
+        <div>
+          <mat-card  >
+            <img class="driverlicense" src="http://cafecartel.com/placeholder.jpg">
+          </mat-card>
+        </div>
+
+        <div>
+          <div [innerHTML]="user?.onlineDescription"></div>
+        </div>
+
+      </div>
+
+    </mat-card-content>
+
+
+</mat-card>

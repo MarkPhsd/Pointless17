@@ -1,0 +1,2037 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li >MetrcPackagesService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/metrc/metrc-packages.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Properties</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#activeDateRange" >activeDateRange</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#generateSku" >generateSku</a>
+                            </li>
+                            <li>
+                                <a href="#getActive" >getActive</a>
+                            </li>
+                            <li>
+                                <a href="#getAdjustReasons" >getAdjustReasons</a>
+                            </li>
+                            <li>
+                                <a href="#getInActive" >getInActive</a>
+                            </li>
+                            <li>
+                                <a href="#getOnHold" >getOnHold</a>
+                            </li>
+                            <li>
+                                <a href="#getPackagesByID" >getPackagesByID</a>
+                            </li>
+                            <li>
+                                <a href="#getPackagesByLabel" >getPackagesByLabel</a>
+                            </li>
+                            <li>
+                                <a href="#getTypes" >getTypes</a>
+                            </li>
+                            <li>
+                                <a href="#postPacakgesAdjust" >postPacakgesAdjust</a>
+                            </li>
+                            <li>
+                                <a href="#postPacakgesChangeItem" >postPacakgesChangeItem</a>
+                            </li>
+                            <li>
+                                <a href="#postPacakgesChangeNote" >postPacakgesChangeNote</a>
+                            </li>
+                            <li>
+                                <a href="#postPackages" >postPackages</a>
+                            </li>
+                            <li>
+                                <a href="#postPackagesChangeLocations" >postPackagesChangeLocations</a>
+                            </li>
+                            <li>
+                                <a href="#postPackagesCreatePlantings" >postPackagesCreatePlantings</a>
+                            </li>
+                            <li>
+                                <a href="#postPackagesCreateTesting" >postPackagesCreateTesting</a>
+                            </li>
+                            <li>
+                                <a href="#postPackagesfinish" >postPackagesfinish</a>
+                            </li>
+                            <li>
+                                <a href="#postPackagesRemediate" >postPackagesRemediate</a>
+                            </li>
+                            <li>
+                                <a href="#postPackagesUnfinish" >postPackagesUnfinish</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:33</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>auth</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="generateSku"></a>
+                    <span class="name">
+                        <span ><b>generateSku</b></span>
+                        <a href="#generateSku"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>generateSku(sku: <a href="../s/s.html" target="_self">string</a>, index: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="302"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:302</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>sku</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>index</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getActive"></a>
+                    <span class="name">
+                        <span ><b>getActive</b></span>
+                        <a href="#getActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, packageFilter: <a href="../interfaces/PackageFilter.html" target="_self">PackageFilter</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="69"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:69</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>packageFilter</td>
+                                    <td>
+                                                <code><a href="../interfaces/PackageFilter.html" target="_self" >PackageFilter</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getAdjustReasons"></a>
+                    <span class="name">
+                        <span ><b>getAdjustReasons</b></span>
+                        <a href="#getAdjustReasons"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getAdjustReasons(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="129"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:129</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesAdjustReasonsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInActive"></a>
+                    <span class="name">
+                        <span ><b>getInActive</b></span>
+                        <a href="#getInActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, packageFilter: <a href="../interfaces/PackageFilter.html" target="_self">PackageFilter</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="83"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:83</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>packageFilter</td>
+                                    <td>
+                                                <code><a href="../interfaces/PackageFilter.html" target="_self" >PackageFilter</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getOnHold"></a>
+                    <span class="name">
+                        <span ><b>getOnHold</b></span>
+                        <a href="#getOnHold"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getOnHold(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="97"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:97</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPackagesByID"></a>
+                    <span class="name">
+                        <span ><b>getPackagesByID</b></span>
+                        <a href="#getPackagesByID"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPackagesByID(id: <a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank">any</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="40"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:40</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getPackagesByLabel"></a>
+                    <span class="name">
+                        <span ><b>getPackagesByLabel</b></span>
+                        <a href="#getPackagesByLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getPackagesByLabel(label: <a href="../s/s.html" target="_self">string</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="55"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:55</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>label</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getTypes"></a>
+                    <span class="name">
+                        <span ><b>getTypes</b></span>
+                        <a href="#getTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getTypes(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="113"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:113</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackage[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPacakgesAdjust"></a>
+                    <span class="name">
+                        <span ><b>postPacakgesAdjust</b></span>
+                        <a href="#postPacakgesAdjust"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPacakgesAdjust(mETRCPacakgesAdjust: <a href="../interfaces/METRCPacakgesAdjust.html" target="_self">METRCPacakgesAdjust[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="240"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:240</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPacakgesAdjust</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPacakgesAdjust.html" target="_self" >METRCPacakgesAdjust[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPacakgesAdjust.html" target="_self" >Observable&lt;METRCPacakgesAdjust[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPacakgesChangeItem"></a>
+                    <span class="name">
+                        <span ><b>postPacakgesChangeItem</b></span>
+                        <a href="#postPacakgesChangeItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPacakgesChangeItem(mETRCPacakgesChangeItem: <a href="../s/s.html" target="_self">METRCPacakgesChangeItem[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="193"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:193</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPacakgesChangeItem</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPacakgesChangeItem[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPacakgesChangeItem[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPacakgesChangeNote"></a>
+                    <span class="name">
+                        <span ><b>postPacakgesChangeNote</b></span>
+                        <a href="#postPacakgesChangeNote"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPacakgesChangeNote(mETRCPackagesChangeNote: <a href="../s/s.html" target="_self">METRCPackagesChangeNote[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="209"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:209</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPackagesChangeNote</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesChangeNote[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesChangeNote[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackages"></a>
+                    <span class="name">
+                        <span ><b>postPackages</b></span>
+                        <a href="#postPackages"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackages(mETRCPackagesCreatePOST: <a href="../s/s.html" target="_self">METRCPackagesCreatePOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:145</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPackagesCreatePOST</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesCreatePOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesCreatePOST[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackagesChangeLocations"></a>
+                    <span class="name">
+                        <span ><b>postPackagesChangeLocations</b></span>
+                        <a href="#postPackagesChangeLocations"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackagesChangeLocations(mETRCPackagesChangeNote: <a href="../s/s.html" target="_self">METRCPackagesChangeLocations[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="225"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:225</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPackagesChangeNote</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesChangeLocations[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesChangeLocations[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackagesCreatePlantings"></a>
+                    <span class="name">
+                        <span ><b>postPackagesCreatePlantings</b></span>
+                        <a href="#postPackagesCreatePlantings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackagesCreatePlantings(mETRCPackagesCreatePlantings: <a href="../s/s.html" target="_self">METRCPackagesCreatePlantings[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="177"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:177</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPackagesCreatePlantings</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesCreatePlantings[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesCreatePlantings[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackagesCreateTesting"></a>
+                    <span class="name">
+                        <span ><b>postPackagesCreateTesting</b></span>
+                        <a href="#postPackagesCreateTesting"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackagesCreateTesting(mETRCPackagesCreateTesting: <a href="../s/s.html" target="_self">METRCPackagesCreateTesting[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="161"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:161</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPackagesCreateTesting</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesCreateTesting[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesCreateTesting[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackagesfinish"></a>
+                    <span class="name">
+                        <span ><b>postPackagesfinish</b></span>
+                        <a href="#postPackagesfinish"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackagesfinish(mETRCPacakgesAdjust: <a href="../s/s.html" target="_self">METRCPackagesFinish[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="255"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:255</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPacakgesAdjust</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesFinish[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesFinish[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackagesRemediate"></a>
+                    <span class="name">
+                        <span ><b>postPackagesRemediate</b></span>
+                        <a href="#postPackagesRemediate"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackagesRemediate(mETRCPackagesRemediate: <a href="../s/s.html" target="_self">METRCPackagesRemediate[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="285"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:285</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPackagesRemediate</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesRemediate[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesRemediate[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postPackagesUnfinish"></a>
+                    <span class="name">
+                        <span ><b>postPackagesUnfinish</b></span>
+                        <a href="#postPackagesUnfinish"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postPackagesUnfinish(mETRCPacakgesAdjust: <a href="../s/s.html" target="_self">METRCPackagesUnfinish[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="270"
+                            class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:270</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPacakgesAdjust</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPackagesUnfinish[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../miscellaneous/variables.html#s" target="_self" >Observable&lt;METRCPackagesUnfinish[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+            <section>
+    
+    <h3 id="inputs">
+        Properties
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="activeDateRange"></a>
+                    <span class="name">
+                        <span ><b>activeDateRange</b></span>
+                        <a href="#activeDateRange"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x60;&#x60;</code>
+                    </td>
+                </tr>
+                    <tr>
+                        <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/app/_services/metrc/metrc-packages.service.ts:33</a></div>
+                        </td>
+                    </tr>
+
+
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable, } from &#x27;rxjs&#x27;;
+import { IMETRCSales } from &#x27;src/app/_interfaces/transactions/metrc-sales&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { AuthenticationService } from &#x27;../../_services/system/authentication.service&#x27;;
+import { ISite } from &#x27;src/app/_interfaces&#x27;;
+import { SitesService } from &#x27;../../_services/reporting/sites.service&#x27;;
+
+import {
+  METRCPackage,
+  METRCPackageTypes,
+  PackageFilter,
+  METRCPackagesAdjustReasonsGet,
+  METRCPackagesCreatePOST,
+  METRCPackagesCreateTesting,
+  METRCPackagesCreatePlantings,
+  METRCPacakgesChangeItem,
+  METRCPackagesChangeNote,
+  METRCPackagesChangeLocations,
+  METRCPacakgesAdjust,
+  METRCPackagesFinish,
+  METRCPackagesUnfinish,
+  METRCPackagesRemediate
+} from &#x27;../../_interfaces/metrcs/packages&#x27;;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+
+export class MetrcPackagesService {
+
+  //example date range &amp;lastModifiedStart&#x3D;2021-02-26T17:30:00Z&amp;lastModifiedEnd&#x3D;2021-02-27T17:30:00Z
+  activeDateRange &#x3D; &#x60;&#x60;
+
+  constructor( private http: HttpClient,
+    private auth: AuthenticationService,
+  ) {
+    }
+
+    getPackagesByID(id:any, site: ISite): Observable&lt;METRCPackage&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;GetMETRCPackage&#x60;
+
+      const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+      console.log(url)
+      return this.http.get&lt;METRCPackage&gt;(url);
+
+    }
+
+    getPackagesByLabel(label:string, site: ISite): Observable&lt;METRCPackage&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;GetMETRCPackageByLabel&#x60;
+
+      const parameters &#x3D; &#x60;${label}&#x60;
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+      return this.http.get&lt;METRCPackage&gt;(url);
+
+    }
+
+    getActive(site: ISite, packageFilter: PackageFilter): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;GetMETRCPackages&#x60;
+
+      packageFilter.hasImported &#x3D; false
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+      return this.http.post&lt;METRCPackage[]&gt;(url, packageFilter);
+
+    }
+
+    getInActive(site: ISite, packageFilter: PackageFilter): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/METRCPackages/&#x27;
+
+      const endPoint &#x3D; &#x60;GetMETRCPackages&#x60;
+
+      packageFilter.hasImported &#x3D; false
+
+      const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+      return this.http.post&lt;METRCPackage[]&gt;(url, packageFilter);
+
+    }
+
+    getOnHold(site: ISite): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/onHold&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.get&lt;METRCPackage[]&gt;(url);
+
+    }
+
+    getTypes(site: ISite): Observable&lt;METRCPackage[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/types&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.get&lt;METRCPackage[]&gt;(url);
+
+    }
+
+    getAdjustReasons(site: ISite): Observable&lt;METRCPackagesAdjustReasonsGet[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/adjust/reasons&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.get&lt;METRCPackagesAdjustReasonsGet[]&gt;(url);
+
+    }
+
+    postPackages(mETRCPackagesCreatePOST: METRCPackagesCreatePOST[], site: ISite): Observable&lt;METRCPackagesCreatePOST[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/create&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesCreatePOST[]&gt;(url,mETRCPackagesCreatePOST);
+
+    }
+
+    postPackagesCreateTesting(mETRCPackagesCreateTesting: METRCPackagesCreateTesting[], site: ISite): Observable&lt;METRCPackagesCreateTesting[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/create/testing&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesCreateTesting[]&gt;(url, mETRCPackagesCreateTesting);
+
+    }
+
+    postPackagesCreatePlantings(mETRCPackagesCreatePlantings: METRCPackagesCreatePlantings[], site: ISite): Observable&lt;METRCPackagesCreatePlantings[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/create/plantings&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesCreatePlantings[]&gt;(url, mETRCPackagesCreatePlantings);
+
+    }
+
+    postPacakgesChangeItem(mETRCPacakgesChangeItem: METRCPacakgesChangeItem[], site: ISite): Observable&lt;METRCPacakgesChangeItem[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/change/item&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPacakgesChangeItem[]&gt;(url, mETRCPacakgesChangeItem);
+
+    }
+
+    postPacakgesChangeNote(mETRCPackagesChangeNote: METRCPackagesChangeNote[], site: ISite): Observable&lt;METRCPackagesChangeNote[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/change/note&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesChangeNote[]&gt;(url, mETRCPackagesChangeNote);
+
+    }
+
+    postPackagesChangeLocations(mETRCPackagesChangeNote: METRCPackagesChangeLocations[], site: ISite): Observable&lt;METRCPackagesChangeLocations[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/change/locations&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesChangeLocations[]&gt;(url, mETRCPackagesChangeNote);
+    }
+
+    postPacakgesAdjust(mETRCPacakgesAdjust: METRCPacakgesAdjust[], site: ISite): Observable&lt;METRCPacakgesAdjust[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/adjust&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPacakgesAdjust[]&gt;(url, mETRCPacakgesAdjust);
+    }
+
+    postPackagesfinish(mETRCPacakgesAdjust: METRCPackagesFinish[], site: ISite): Observable&lt;METRCPackagesFinish[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/finish&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesFinish[]&gt;(url, mETRCPacakgesAdjust);
+    }
+
+    postPackagesUnfinish(mETRCPacakgesAdjust: METRCPackagesUnfinish[], site: ISite): Observable&lt;METRCPackagesUnfinish[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/unfinish&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesUnfinish[]&gt;(url, mETRCPacakgesAdjust);
+    }
+
+    postPackagesRemediate(mETRCPackagesRemediate: METRCPackagesRemediate[], site: ISite): Observable&lt;METRCPackagesRemediate[]&gt; {
+
+      const controller &#x3D; &#x27;/packages/v1/remediate&#x27;
+
+      const endPoint &#x3D; &#x60;&#x60;
+
+      const parameters &#x3D; &#x27;&#x27;
+
+      const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+      const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+      return this.http.post&lt;METRCPackagesRemediate[]&gt;(url, mETRCPackagesRemediate);
+    }
+
+
+
+    generateSku(sku: string, index: number): string {
+      return &#x60;mt${sku.substring(sku.length - 7)}-${index}&#x60;
+    }
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'MetrcPackagesService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

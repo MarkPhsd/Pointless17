@@ -1,0 +1,102 @@
+<mat-card [class]="classcontainer">
+  <mat-card-subtitle>
+    <div class="header-grid" >
+      <div  class="grid-title" >
+        Brands
+      </div>
+
+      <div>
+        <button mat-button
+              class="button"
+              color="primary"
+              (click)="searchToggle()" ><mat-icon>search</mat-icon>
+        </button>
+      </div>
+
+      <div [hidden]="!toggleSearch">
+        <div  [formGroup]="searchForm"
+              class="grid-item" >
+          <mat-form-field appearance="outline" class="form-fields">
+            <mat-label><mat-icon>search</mat-icon>Search / Scan </mat-label>
+            <input
+                  class="input-value"
+                  #input
+                  matInput
+                  appAutoFocusInput
+                  type           ="text"
+                  id             ="name"
+                  formControlName="itemName">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="!singlePage">
+        <button mat-button
+              class="button"
+              color="primary"
+              (click)="showAll()" >Show All <mat-icon>open_in_new</mat-icon>
+        </button>
+      </div>
+
+      <div class="floating-info
+                slidein
+                loader
+                spinner"
+          *ngIf="loading" >
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+
+    </div>
+
+    <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+    </div>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="parent-container" >
+      <div fxLayout="row" class="panels">
+        <div  fxLayout="column" fxFlex="99">
+
+            <div  *ngIf="brands"
+                  [class]="orderslist"
+                  infiniteScroll
+                  [infiniteScrollDistance]="2"
+                  [infiniteScrollThrottle]="50"
+                  (scrolled)              ="onScrollDown()"
+                  (scrolledUp)            ="onScrollUp()"
+                  [scrollWindow]          ="false">
+
+              <div class="grid-flow">
+                <div *ngFor="let item of brands; let i = index">
+                  <div class="grid-item">
+                    <div>
+                      <div class="text">{{item.company  | truncateText: 15  }}</div>
+                      <img
+                         loading="lazy"
+                         draggable="false"
+                         [src]="getBrandSource(item)"
+                         (click)="listItems(item.id)"
+                         class="grid-item"
+                         alt="item">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+    <div [hidden]="true"  class="slidein paging-alignment">
+        <div *ngIf="endOfRecords"> ...all items loaded.</div>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>
+

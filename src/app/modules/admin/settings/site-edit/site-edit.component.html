@@ -1,0 +1,189 @@
+<h2>Site Editor</h2>
+
+<div *ngIf="dataSource">
+  <div  class="table-container">
+    <div class="table-container mat-elevation-z2">
+
+      <div *ngIf="dataSource">
+
+        <table mat-table #outerSort="matSort" [dataSource]="dataSource"
+               multiTemplateDataRows matSort>
+
+          <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef> Name </th>
+              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="url">
+              <th mat-header-cell *matHeaderCellDef> Url </th>
+              <td mat-cell *matCellDef="let element"> {{element.url}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="edit">
+              <th mat-header-cell *matHeaderCellDef> Edit </th>
+              <td mat-cell *matCellDef="let element">
+              <button mat-raised-button color="primary" (click)="editItem(element.id)">Edit</button>
+              </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
+
+        </table>
+      </div>
+
+      <ng-template #loading >
+          <mat-spinner></mat-spinner>
+      </ng-template>
+
+
+      <mat-paginator  #paginator
+                      [pageSize]="pageSize"
+                      [length]="length"
+                      [pageSizeOptions]="pageSizeOptions"
+                    ></mat-paginator>
+    </div>
+  </div>
+
+<form [formGroup]="sitesForm" >
+
+  <div fxLayout="row" fxLayoutAlign="space-around center" >
+
+    <div  fxLayout="column">
+
+          <div  fxLayout="row">
+              <button mat-raised-button class="form-button" color="primary" (click)="updateSite()">Save Changes</button>
+              <button mat-raised-button class="form-button" color="primary" (click)="deleteCurrentSite()">Delete Site</button>
+          </div>
+
+          <div  fxLayout="row">
+            <div  fxLayout="column">
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >Site Name</mat-label>
+                  <input matInput type="text"
+                          formControlName="name"
+                          class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >URL</mat-label>
+                  <input matInput type="text"
+                        formControlName="url"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >Phone</mat-label>
+                  <input matInput type="text"
+                        formControlName="phone"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+
+           </div>
+
+           <div  fxLayout="column">
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >Address</mat-label>
+                  <input matInput type="text"
+                          formControlName="address"
+                          class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >City</mat-label>
+                  <input matInput type="text"
+                        formControlName="city"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >State</mat-label>
+                  <input matInput type="text"
+                          formControlName="state"
+                          class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >Zip</mat-label>
+                  <input matInput type="text"
+                          formControlName="zip"
+                          class="form-control" >
+                </mat-form-field>
+              </div>
+          </div>
+          <div fxLayout="column">
+
+              <div *ngIf="metrcEnabled">
+                <div>
+                  <mat-form-field appearance="standard">
+                    <mat-label >METRC URL</mat-label>
+                    <input matInput type="text"
+                          formControlName="metrcURL"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="standard">
+                    <mat-label >License Number</mat-label>
+                    <input matInput type="text"
+                          formControlName="metrcLicenseNumber"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div *ngIf="metrcEnabled">
+                <div>
+                  <mat-form-field appearance="standard">
+                    <mat-label >METRC Key</mat-label>
+                    <input matInput type="text"
+                          formControlName="metrcKey"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="standard">
+                    <mat-label >Metrc User</mat-label>
+                    <input matInput type="text"
+                          formControlName="metrcUser"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+
+
+          </div>
+        </div>
+      </div>
+
+      <div  fxLayout="column">
+        <h3>Choose Site Image</h3>
+        <app-widget-uploader   (messageOut)="received_URLMainImage($event)"
+                              [(fileNames)]="imgName"
+                              >
+        </app-widget-uploader>
+
+    </div>
+
+  </div>
+
+</form>

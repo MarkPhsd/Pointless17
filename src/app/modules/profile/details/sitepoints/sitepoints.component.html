@@ -1,0 +1,40 @@
+<div fxLayout="row" fxLayoutAlign="space-between center" flLayoutGap="20px">
+   
+    <mat-card fxFlex="100">
+        <mat-card-title>
+            Site Points at Our other Places            
+           
+        </mat-card-title>
+        
+        <mat-card-subtitle>  
+            You may be signed up at other locations, 
+            here are your points at those:
+            <mat-icon>refresh</mat-icon>
+            <button mat-icon-button (click)='refreshComponent()'></button>
+        </mat-card-subtitle>
+        <mat-card-content>
+            <div fxLayout="row" fxLayoutAlign="space-between center" fxLayoutGap="20px">
+                <div fxFlex="100">
+                    <div class="mat-elevation-z8">
+                        <mat-table [dataSource]="sites" >
+                        
+                            <ng-container matColumnDef="Name">
+                                <mat-header-cell *matHeaderCellDef> Name. </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.Name}} </mat-cell>
+                            </ng-container>
+                        
+                            <ng-container matColumnDef="status">
+                                <mat-header-cell *matHeaderCellDef> Loyalty Points </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.status}} </mat-cell>
+                            </ng-container>     
+                            
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                                
+                        </mat-table>
+                    </div>
+                </div>
+            </div>
+            </mat-card-content>
+    </mat-card>
+</div>

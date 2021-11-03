@@ -1,0 +1,36 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+mat-drawer {
+  width: 200px;
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding: 20px;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+
+}
+
+.container {
+  padding: 5px;
+}
+
+.uploaders {
+  margin: 5px 5px 1px 1px;
+}
+
+br {
+  margin: 5px 5px 5px 5px;
+}

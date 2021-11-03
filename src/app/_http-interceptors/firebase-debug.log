@@ -1,0 +1,39 @@
+[debug] [2021-04-27T08:21:35.560Z] ----------------------------------------------------------------------
+[debug] [2021-04-27T08:21:35.563Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Mark\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
+[debug] [2021-04-27T08:21:35.564Z] CLI Version:   9.10.0
+[debug] [2021-04-27T08:21:35.564Z] Platform:      win32
+[debug] [2021-04-27T08:21:35.564Z] Node Version:  v14.15.5
+[debug] [2021-04-27T08:21:35.573Z] Time:          Tue Apr 27 2021 01:21:35 GMT-0700 (Pacific Daylight Time)
+[debug] [2021-04-27T08:21:35.574Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-04-27T08:21:35.577Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2021-04-27T08:21:35.613Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-04-27T08:21:35.614Z] > authorizing via signed-in user (cafecartelsystems@gmail.com)
+[debug] [2021-04-27T08:21:35.614Z] [iam] checking project ccsapi for permissions ["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]
+[debug] [2021-04-27T08:21:35.616Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-04-27T08:21:35.616Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-04-27T08:21:35.830Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","expires":"Mon, 01 Jan 1990 00:00:00 GMT","date":"Tue, 27 Apr 2021 08:21:36 GMT","pragma":"no-cache","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-04-27T08:21:35.854Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/ccsapi:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasedatabase.instances.update","firebasehosting.sites.update"]}
+[debug] [2021-04-27T08:21:35.961Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2021-04-27T08:21:35.962Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2021-04-27T08:21:36.222Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 27 Apr 2021 08:21:36 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=184","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-04-27T08:21:36.223Z] > refreshing access token with scopes: []
+[debug] [2021-04-27T08:21:36.224Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-04-27T08:21:36.430Z] <<< HTTP RESPONSE 200 {"date":"Tue, 27 Apr 2021 08:21:36 GMT","expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","pragma":"no-cache","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-29=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-04-27T08:21:36.450Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi [none]
+[debug] [2021-04-27T08:21:36.719Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi 200
+[debug] [2021-04-27T08:21:36.720Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi {"projectId":"ccsapi","projectNumber":"286330060118","displayName":"CCSAPI","name":"projects/ccsapi","resources":{"hostingSite":"ccsapi","realtimeDatabaseInstance":"ccsapi-default-rtdb"},"state":"ACTIVE"}
+[debug] [2021-04-27T08:21:36.721Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi [none]
+[debug] [2021-04-27T08:21:36.951Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi 200
+[debug] [2021-04-27T08:21:36.952Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi {"projectId":"ccsapi","projectNumber":"286330060118","displayName":"CCSAPI","name":"projects/ccsapi","resources":{"hostingSite":"ccsapi","realtimeDatabaseInstance":"ccsapi-default-rtdb"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'ccsapi'...
+[info] 
+[info] i  deploying database, hosting 
+[info] i  database: checking rules syntax... 
+[debug] [2021-04-27T08:21:36.959Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-04-27T08:21:36.959Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>

@@ -1,0 +1,136 @@
+@import "/src/mixins.scss";
+
+$gray: #555;
+$yellow: #f2e968;
+$white: #efefef;
+
+.parent-container {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 100%;
+}
+
+.parent-container-single-page {
+  overflow-x: hidden;
+  overflow-y: hidden;
+  height: 85vh;
+}
+
+.container-single-page {
+  height: 85vh;
+}
+
+.container {
+  height: 85vh;
+}
+
+.card-container {
+  overflow-x: hidden;
+}
+
+.grid-flow {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+  }
+}
+
+.loader {
+  margin: 5px;
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.spinner {
+  width: 25px;
+  height: 25px;
+}
+
+.orders-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 45vh;
+}
+
+.orders-list-single-page {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 75vh;
+}
+
+.header-grid  {
+  display       : flex;
+  flex-direction: row;
+  flex          : auto;
+  flex-wrap     : wrap;
+  flex-basis    : auto;
+  margin-left   : 40px;
+}
+
+.button {
+  // width: 150px;
+  margin: 5px
+}
+
+mat-card {
+  margin: 5px;
+}
+
+.grid-title  {
+    font-weight: 500;
+    font-size: 1.2em;
+    margin-top: 5px;
+
+    @include for-phone-only  {
+      // visibility: hidden;
+      font-weight: 400;
+      font-size: 1em;
+      margin-top: 5px;
+    }
+  }
+
+
+.text {
+  text-align: center;
+  text-overflow: ellipsis;
+  margin: .25em;
+}
+
+img {
+  width: 15vh;
+  height: 15vh;
+  border-radius: 50%;
+  @include for-phone-only  {
+    min-width: 12vh;
+    min-height: 12vh;
+      border-radius: 50%;
+  }
+}
+
+img:hover {
+  transform: scale(1.02);
+}
+
+img:active:hover {
+  // box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
+  transform: scale(1.07);
+}
+
+.header-title {
+  margin-top: 5px;
+  // padding-top: 2px;
+}
+
+

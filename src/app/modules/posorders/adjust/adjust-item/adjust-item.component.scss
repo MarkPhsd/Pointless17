@@ -1,0 +1,38 @@
+.card-content {
+  vertical-align:middle;
+  display: flexbox;
+  flex-direction: column;
+  flex-grow: inherit;
+}
+
+
+.toggle-buttons-wide {
+  width    : 400px;
+  max-width: 400px;
+  min-width: 4100px;
+  margin-left: 5px;
+}
+
+.toggle-buttons {
+  width    :  185px;
+  max-width:  185px;
+  min-width:  185px;
+  margin-left: 5px;
+}
+
+.grid-item {
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.heading {
+  font-size: 1.1em;
+  align-items: center;
+  text-align: center;
+}
+
+.toggle-group {
+  height: 240px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

@@ -1,0 +1,105 @@
+@import "/src/mixins.scss";
+
+.parent-container {
+  overflow: hidden;
+  height: 100%;
+}
+
+.card-container {
+  overflow-x: hidden;
+}
+
+.grid-flow {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.grid-item {
+  align-items: flex-end;
+  max-height: 150px;
+  min-height: 150px;
+  height:     150px;
+  overflow-x: scroll;
+}
+
+.orders-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin: 5px;
+}
+
+.mat-dialog-actions {
+  justify-content: center;
+}
+
+.orders-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 85vh;
+}
+
+.end-of-line {
+  float: left;
+}
+
+.paging-alignment {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 5px;
+  margin-top: 3px;
+  font-size: .9em;
+  font-weight: 300;
+}
+
+.loader {
+  margin-bottom: 15px;
+}
+
+.floating-info {
+  position: fixed;
+  top     : 150px;
+  z-index : 100;
+  padding-right: 10px;
+  overflow-x: visible;
+}
+
+.spinner-loader {
+  z-index: 50;
+}
+
+.slidein {
+  animation-duration    : 500ms;
+  animation-name        : fadein;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 5%;
+  }
+  to {
+    opacity: 100%;
+  }
+}
+
+@keyframes slidein {
+  from {
+      margin-left: -20%;
+  }
+  to {
+      margin-left: 0%;
+  }
+}
+
+.text-max-width {
+  max-width: 200px;
+}
+
+button {
+  width: 100px;
+  height: 25px;
+  margin: 5px 5px 5px 50px;
+}

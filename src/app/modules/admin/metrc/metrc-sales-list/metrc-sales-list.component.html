@@ -1,0 +1,75 @@
+<div fxLayout="column" fx-flex fx-layout-align="space-between" class="form-controls">
+  <div class="grid-container">
+
+    <div class="grid-item">
+      <form  [formGroup]="searchForm" id="searchForm" (ngSubmit)="searchLabels()">
+        <div class="grid-item">
+          <mat-form-field appearance="outline">
+            <mat-label>Sites</mat-label>
+              <mat-select
+                        type="text"
+                        (selectionChange)="getAssignedSiteSelection($event)"
+                        formControlNamename="selectedSiteID"
+                      >
+              <div *ngIf="(sites$ | async) as list">
+                <mat-option *ngFor="let item of list" [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+
+    <div class="grid-item">
+      <button
+              mat-raised-button
+              color="primary"
+              (click)="showresults()"
+              >
+      <mat-icon>refresh</mat-icon>
+      Process Sales
+      </button>
+    </div>
+
+    <div class="grid-item">
+      <button
+              mat-raised-button
+              color="primary"
+              (click)="showresults()"
+              >
+              <mat-icon>refresh</mat-icon>
+              Show unProcessed
+      </button>
+    </div>
+
+    <div class="grid-item">
+      <button
+              mat-raised-button
+              color="primary"
+              (click)="showresults()"
+              >
+              <mat-icon>refresh</mat-icon>
+              Show Processed
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="metrcSales$">
+
+  <ag-grid-angular
+      #agGrid
+      id="myGrid"
+      [style]="gridDimensions"
+      [class]="agtheme"
+      [columnDefs]="columnDefs"
+      [defaultColDef]="defaultColDef"
+      [rowData]="metrcSales$ | async"
+      [frameworkComponents]="frameworkComponents"
+      (gridReady)="onGridReady($event)">
+    </ag-grid-angular>
+
+<div>

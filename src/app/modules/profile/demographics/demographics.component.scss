@@ -1,0 +1,26 @@
+mat-card-header {
+  margin-left: 0;
+}
+
+.driverlicense {
+  // width: 200px;
+  max-width: 100%;
+  height: auto;
+  width: auto;
+}
+
+button {
+  width:25px;
+}
+
+label {
+  font-size: 1em;
+}
+
+
+.profilewrapper {
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+}

@@ -1,0 +1,28 @@
+<mat-card *ngIf="item" >
+
+  <mat-card-title><div class="location-assignment"><h5>{{item.location}}</h5>
+    <mat-icon>inventory</mat-icon></div>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div  fxLayout="column"
+          fxLayoutAlign="start start"
+          fxFlex="80"
+          fxLayoutGap>
+
+        <br>
+        <div *ngIf="item.price" class="location-assignment" > Price {{item.price}}</div>
+        <div *ngIf="item.cost" class="location-assignment" > Cost {{item.cost}}</div>
+        <br>
+        <div class="location-assignment"> Qty {{item.packageQuantity}} {{item.unitConvertedtoName}}</div>
+        <br>
+        <div class="location-assignment"> {{item.sku}}</div>
+
+        <button mat-button class="cancel-assignment" (click)="deleteAssignment(i)"><mat-icon>delete</mat-icon>cancel</button>
+        <button mat-button class="cancel-assignment" (click)="editAssignment(i)"><mat-icon>edit</mat-icon>Edit</button>
+
+    </div>
+  </mat-card-content>
+
+
+</mat-card>

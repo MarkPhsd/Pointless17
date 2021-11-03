@@ -1,0 +1,30 @@
+<div *ngIf="processingVisible">
+  <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
+</div>
+<div class="spinner">
+  <button mat-raised-button color="primary" (click)="updateSchema()">Update Schema</button>
+</div>
+
+<br>
+<br>
+<br>
+<div class="results">
+
+  <div *ngIf="schema$">
+    <div class="grid-container">
+        <div #allTheseThings *ngFor="let item of schema$ | async; let last = last"  class="grid-container">
+            <div *ngIf="item.errorHappened">
+              {{item.name}}  {{item.result}}
+            </div>
+          </div>
+        </div>
+      <div>
+      <br>
+    {{databaseMessage}}
+    </div>
+  </div>
+
+ <app-cache-settings></app-cache-settings>
+
+</div>
+

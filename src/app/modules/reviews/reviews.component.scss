@@ -1,0 +1,175 @@
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+mat-card-title {
+
+  padding: 5px 5px 5px 5px;
+  margin:  5px 5px 5px 5px;
+
+}
+
+reviewsContainer {
+  padding: 5px 5px 5px 5px;
+  margin:  5px 5px 5px 5px;
+}
+
+#reviewCount {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  white-space: nowrap;
+  // overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+
+#reviewAverage {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  white-space: nowrap;
+  // overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+star-rating {
+  float: left;
+}
+
+review-date {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+
+  align-items: baseline;
+  line-height: 1em;
+
+  padding: 5px 5px 5px 5px;
+  margin:  5px 5px 5px 5px;
+}
+
+#review-client-name {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  white-space: nowrap;
+  // overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+
+  align-items: baseline;
+  line-height: 1em;
+
+  padding: 5px 5px 5px 5px;
+  margin:  5px 5px 5px 5px;
+
+}
+
+#reviewtext {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  white-space: nowrap;
+  // overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+
+body{ overflow-x: hidden;}
+img {
+  width: 150px;
+  height: 150px;
+  align-content: center;
+}
+
+#reviewTitle {
+  font-size: .7em;
+  float: left;
+}
+star-rating {
+  font-size: 1em;
+}
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.container {
+  padding: 5px 5px 5px 5px;
+  margin:  5px 5px 5px 5px;
+}
+
+.mat-input-element {
+  font-size: small;
+}
+
+button {
+  margin-bottom: 10px;
+  margin-left: 10px;
+}
+
+mat-label {
+  padding:5px;
+  font-size: 1.0em;
+}
+
+mat-form-field {
+  margin: 3px 3px 3px 3px;
+}
+
+mat-checkbox  {
+  margin: 3px 3px 3px 3px;
+}
+
+
+mat-radio-button  {
+  margin: 3px;
+}
+
+
+mat-card{
+
+  padding: 5px 5px 5px 5px;
+  margin:  5px 5px 5px 5px;
+  width: 99%;
+}
+
+#review-field {
+
+  padding: 5px 5px 5px 5px;
+  margin:  3px 3px 3px 3px;
+  object-fit: cover;
+  width: 100%;
+
+}
+.example-tab-icon {
+  margin-right: 8px;
+}

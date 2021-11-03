@@ -1,0 +1,20 @@
+.grid {
+  display: grid;
+  grid-template-columns: 75px 55px 100px;
+  gap: 10px;
+}
+
+.item {
+  float: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  // font-size: small;
+}
+
+.bar {
+  margin-top: 5px;
+}
+
+.float {
+  float: left;
+}

@@ -1,0 +1,108 @@
+.mat-card-container {
+  max-width: 375px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+// grid-item totals
+
+.mat-divider {
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.mat-card-title {
+  margin-bottom: 10px;
+}
+
+.header-labels {
+  font-size     : 12px;
+  margin        : 0px 5px 5px 5px;
+  padding       : 0px 5px 5px 5px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  float         : left;
+  align-items   : baseline;
+  line-height   : 1em;
+}
+
+.align-right {
+  float: right;
+}
+
+.field_bold {
+  font-weight: 700px;
+}
+
+.totals_label{
+  font-size: .9em;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+.totals_label{
+  font-size: 10px;
+  margin: 0px;
+  padding: 0px ;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+.totals {
+  font-size: .9em;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+.grid-item {
+  // background-color: rgba(169, 163, 163, 0.8);
+  // align-items: flex-end;
+}
+
+.grid {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 160px auto auto;
+}
+
+.grid-footer {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  margin-left: 15px;
+}
+
+.headers {
+  margin-bottom: 10px;
+  align-content: center;
+  justify-content: center;
+}
+
+.footerheader-margin {
+  margin-left: 5px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}

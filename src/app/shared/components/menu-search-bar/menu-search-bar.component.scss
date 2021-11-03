@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+:host {
+    .mat-icon {
+            vertical-align: middle;
+            margin-right: 20px;
+    }
+}
+
+.input-data {
+  margin: 5px;
+  // padding: 5px;
+}
+
+mat-sidenav-container {
+  min-width: 125px !important;
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  background-color:rgb(55, 55, 59);
+}
+
+.sidenav-container {
+  height: 200vh;
+}
+
+.sidenav {
+  width: 220px;
+}
+
+.form-controls {
+  font-size: .8em;
+}
+
+.form-fields {
+  margin-left: 10px;
+  margin-bottom: 0px;
+  padding: 0;
+  width: 200px;
+  font-size: .9em;
+}
+
+.search-input {
+  width    : 190px;
+  max-width: 190px;
+  min-width: 190px;
+}
+
+.grid-container {
+  height: 90vh;
+  margin-left: 5px;
+  margin-right: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.input-value {
+  font-size: .8em;
+}
+
+.grid-item {
+  align-items: center;
+  margin-left: -20px;
+}
+
+.search-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-flow: row;
+  margin-bottom: 5px;
+}
+
+mat-label {
+  text-align: center;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+mat-form-field {
+  font-size: .9em;
+  margin-top: 3px;
+  padding: 1px
+}
+
+mat-button-toggle {
+  width    : 165px;
+  max-width: 165px;
+  min-width: 165px;
+  margin-left: 5px;
+}
+
+mat-expansion-panel {
+  margin: 3px;
+  padding: 2px;
+}
+
+.toggle-buttons {
+  width    : 185px;
+  max-width: 168px;
+  min-width: 185px;
+  margin-left: -10px;
+  // left: -10px;
+}
+
+mat-radio-button {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-radio-button {
+  margin-bottom: 5px;
+  margin-top:    5px;
+}

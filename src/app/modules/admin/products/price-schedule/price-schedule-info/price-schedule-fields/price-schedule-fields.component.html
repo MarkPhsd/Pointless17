@@ -1,0 +1,58 @@
+
+<div [formGroup]="inputForm">
+
+  <div *ngIf="arrayTypeName">
+    <div [formArrayName]="arrayTypeName"
+         *ngFor="let item of formArray.controls; let i = index;">
+      <div [formGroupName]="i"
+           class="category-margin grid-container">
+
+        <div class="slidein" >
+          <mat-form-field  appearance="flat">
+            <input matInput
+                  type="text"
+                  formControlName="name"
+                  enabled = false
+                  class="item-name" >
+          </mat-form-field>
+        </div>
+
+        <div class="slidein">
+          <mat-form-field  appearance="flat"  >
+            <mat-label >Quantity</mat-label>
+            <input class="mat-fields quantity"
+                  matInput
+                  type="number"
+                  formControlName="quantity"
+                  >
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="andOrOption == true"
+              class="slidein">
+          <mat-form-field appearance="flat" class="andor-listbox">
+            <mat-label>And/Or</mat-label>
+            <mat-select  class="grid-item-and-or"
+                          type="text"
+                          formControlNamename="andOr"
+                      >
+                <mat-option [value]="'And'">
+                  And
+                </mat-option>
+                <mat-option [value]="'Or'">
+                  Or
+                </mat-option>
+
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="slidein" *ngIf="!hideDelete">
+          <button mat-button (click)="removeItem(i)"><mat-icon>delete</mat-icon></button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+

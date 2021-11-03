@@ -1,0 +1,69 @@
+.dots {
+
+  display: flex;
+  position: relative;
+  align-items: flex-start;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  & > li {
+    //margin-right:7px;
+    border-radius:100%;
+    text-align: center;
+    box-shadow: 0 0 5px #FFF inset;
+  }
+  &.blobs {
+    -webkit-filter: url("#goo");
+    filter: url("#goo");
+    & > li {
+      background: rgba(255, 255, 255, 0.4);
+      box-shadow: 0 0 6px #FFF inset;
+    }
+  }
+
+  &.btns {
+    position: absolute;
+    z-index: 100;
+    & > li {
+
+      /*
+      //background: rgba(255, 255, 255, 0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 2px #FFF inset;
+      */
+
+      transition:.5s box-shadow linear;
+
+      &:not(.active):hover {
+        cursor: pointer;
+        box-shadow: 0 0 15px #FFF inset;
+        /*
+        &:after{
+          content:'';
+          width:4px;
+          height:4px;
+          margin: auto;
+           background: #F90;
+        }
+        */
+      }
+    }
+  }
+
+  li.active {
+    position: absolute;
+    background: #FFF;
+    box-shadow:  0 0 15px #FFF;
+    margin:3px;
+    transform:translate3d(0,0,0);
+    transition: 1s transform cubic-bezier(0.5, 1.1, 0.6, 1.1);
+  }
+
+}
+
+svg{
+  position: absolute;
+  height:1px;
+}

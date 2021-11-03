@@ -1,0 +1,53 @@
+
+
+
+<div class="parent-container">
+
+  <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+  </div>
+
+  <div fxLayout="row" class="panels">
+    <div  fxLayout="column" fxFlex="99">
+      <div class="orders-container">
+        <div  *ngIf="menuItems"
+              class="orders-list"
+              infiniteScroll
+              [infiniteScrollDistance]="2"
+              [infiniteScrollThrottle]="50"
+              (scrolled)="onScrollDown()"
+              (scrolledUp)="onScrollUp()"
+              [scrollWindow]="false"   >
+
+          <div class="grid-flow">
+            <div *ngFor="let menuItem of menuItems; let i = index">
+              <app-menu-item-card
+                                [id]="menuItem.id"
+                                [retail]="menuItem.retail"
+                                [name]="menuItem.name"
+                                [imageUrl]="getItemSrc(menuItem)"
+                                [menuItem]="menuItem"
+                                class="grid-item"
+              ></app-menu-item-card>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div [hidden]="true"  class="slidein paging-alignment">
+      <div> {{searchDescription}} </div>
+      <div *ngIf="endOfRecords"> ...all items loaded.</div>
+  </div>
+
+  <div class="floating-info slidein loader"  *ngIf="loading && !endOfRecords" >
+    <mat-spinner></mat-spinner>
+  </div>
+
+</div>
+
+
+

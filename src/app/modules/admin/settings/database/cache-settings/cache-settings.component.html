@@ -1,0 +1,38 @@
+<h4>Cache Settings</h4>
+
+<div *ngIf="currentCache">
+  Current Cache: Status: {{currentCache.boolean}} Time (minutes) {{currentCache.value}}
+  <mat-divider></mat-divider>
+</div>
+
+<div *ngIf="cacheTimeSetting">
+  <div *ngIf="cacheForm">
+    <div [formGroup]="cacheForm">
+      <div class="fields">
+          <mat-slide-toggle
+                    [(ngModel)] ="cacheTimeSetting.boolean"
+                    formControlName="boolean"
+                    (change)="updateCacheTime()">
+          <mat-label>Enable Cache</mat-label>
+          </mat-slide-toggle>
+      </div>
+
+      <div class="fields">
+        <mat-form-field class="example-form-field">
+          <mat-label>Cache Time</mat-label>
+            <input matInput
+                   type="text"
+                   name = "value"
+                   formControlName="value"
+                   [(ngModel)] ="cacheTimeSetting.value"
+                   (change)="updateCacheTime()"
+            >
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+
+
+  <api-stored-value></api-stored-value>
+
+</div>

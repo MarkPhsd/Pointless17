@@ -1,0 +1,119 @@
+<div class="grid-container">
+  <div *ngIf="(itemTypes$ | async) as list"
+         class="type-list" >
+
+      <div  [@listAnimation]="list.length">
+        <div class="toggle-buttons-margins categories"
+            *ngFor="let item of list"
+            >
+
+            <div class="itemtype-buttons-container">
+
+              <button mat-button-stroked
+                      class="itemTypes slidein"
+                      (click)="toggleItemTypeSelected(item)"
+                      value="{{ item.id }}" >
+                <div *ngIf="isItemToggled(item)">
+                  <mat-icon>expand_more</mat-icon>
+                  {{ item.name }}
+                </div>
+
+                <div *ngIf="!isItemToggled(item)">
+                  <mat-icon >chevron_right</mat-icon>
+                  {{ item.name }}
+                </div>
+              </button>
+
+              <button mat-icon-button
+                (click)="addItemType(item)">
+                <mat-icon>add</mat-icon>
+              </button>
+
+            </div>
+
+          <div *ngIf="isItemToggled(item)">
+
+            <div *ngIf="item.itemType_Categories_List">
+              <div class="sub-headers">Categories</div>
+              <mat-divider></mat-divider>
+            </div>
+
+            <div  [@listAnimation]=" item.itemType_Categories_List.length">
+              <div *ngFor="let sub of item.itemType_Categories_List"
+                    >
+                <div *ngIf="sub.name != '' && sub.name != undefined" >
+                  <div class="buttons-container">
+                    <div>
+                      <button mat-button-stroked
+                              (click)="toggleCategory(sub)"
+                              class="subitemTypes ">
+                        <div *ngIf="sub.itemCount">
+                          <mat-icon>search</mat-icon>
+                          {{sub.name }}  ({{sub.itemCount.itemCount}})
+                        </div>
+                        <div *ngIf="!sub.itemCount">
+                          <mat-icon>search</mat-icon>
+                          {{sub.name }}  (0)
+                        </div>
+                      </button>
+                    </div>
+                    <div>
+                      <button mat-icon-button
+                        (click)="addCategory(sub)">
+                        <mat-icon>add</mat-icon>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="item.brandItemCount">
+              <div *ngIf="item.brandItemCount.length>0">
+                <div class="sub-headers">Brands</div>
+                <mat-divider></mat-divider>
+                <div  [@listAnimation]=" item.brandItemCount.length">
+                  <div *ngFor="let brand of item.brandItemCount"
+                      >
+                    <div *ngIf="brand.name != '' && brand.name != undefined"
+                        class="buttons-container">
+                      <div>
+                        <button mat-button-stroked
+                                (click)="toggleBrand(brand)"
+                                class="subitemTypes  ">
+                          <mat-icon>search</mat-icon>
+                          {{brand.name}} ({{brand.itemCount}})
+                        </button>
+                      </div>
+                      <div>
+                        <button mat-icon-button
+                          (click)="addBrand(brand)">
+                          <mat-icon>add</mat-icon>
+                        </button>
+                      </div>
+                  </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+  </div>
+
+  <div *ngIf="requiredItemTypes"
+       class="search-list" >
+
+    <app-type-results-selector
+      [inputForm]       ="inputForm"
+      [selectedCategory]="lastSelectedCategory"
+      [selectedBrand]   ="lastSelectedBrand"
+      [selectedItemType]="lastSelectedItemType"
+      >
+    </app-type-results-selector>
+
+  </div>
+
+</div>
+

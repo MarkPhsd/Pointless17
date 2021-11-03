@@ -1,0 +1,87 @@
+::ng-deep .mat-form-field .mat-form-field-wrapper {
+  font-size: .8em;
+  padding: -3px -3px;
+  margin: 4px 4px 4px 4px;
+}
+
+// .form-controls {
+//   font-size: .8em;
+// }
+
+// mat-form-field {
+//   font-size: .9em;
+//   margin: 3px 3px 3px 3px;
+// }
+
+.headers {
+  float: left;
+  font-size: 1.1em;
+}
+
+.itemTypes {
+  width: 175px;
+  height: 45px;
+
+  font-size: 1.1em;
+}
+
+.subitemTypes {
+  // margin-left: 25px;
+  font-size: .8em;
+  width: 125px;
+  margin-left: 10px;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  border-radius: 5px;
+  border-width: 2px;
+  height: 35px;
+}
+
+.ag-grid {
+  margin-top: 10px;
+}
+
+.toggle-buttons-margins{
+  margin-top: 5px;
+}
+
+.category-header {
+  font-weight   : 500px;
+  font-size     : .9em;
+  margin-bottom : 5px;
+  margin-top    : 5px;
+  vertical-align:middle;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.selected-categories {
+  font-weight: 400px;
+  font-size  : .8em;
+  margin-left: 15px;
+  list-style : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.itemtype-header {
+  font-weight  : 500px;
+  font-size    : .9em;
+  margin-bottom: 5px;
+  margin-top   : 5px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.selected-types {
+  font-weight  : 400px;
+  font-size    : .8em;
+  margin-left  : 15px;
+  list-style   : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.icon-height {
+  vertical-align:middle;
+}

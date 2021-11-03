@@ -1,0 +1,155 @@
+@import "/src/mixins.scss";
+
+.order-type-selector {
+
+}
+
+.filter-order-title {
+
+}
+
+.toggle-selector {
+  margin-top: 10px;
+  margin-left: 5px;
+  // height: 400px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.toggle-selector-employee {
+  margin-top: 10px;
+  margin-left: 5px;
+  // height: 400px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.toggle-min {
+  width: 75px
+}
+
+.keypad {
+  margin-left: 0px;
+}
+
+.package-title {
+  font-weight: 400px;
+  font-size: 1.1em;
+  margin: 3px 5px 3px 3px;
+}
+
+mat-form-field {
+  font-size: 1em;
+}
+
+mat-button-toggle-group {
+  width: 95%;
+
+  margin-left: 4px;
+  margin-right: 5px;
+  // padding-right: 4px;
+  // padding-left: 4px;
+  margin-top: 10px;
+}
+
+mat-button-toggle {
+  flex: 1 1 100%;
+  box-sizing: border-box;
+  align-items: center;
+  flex-direction: row;
+  display: flex;
+}
+
+mat-card-title {
+  // padding: 1px 1px 1px 1px;
+  margin-left:  -10px;
+  padding-left: -10px;
+}
+
+app-inventory-history-item {
+  overflow: hidden;
+}
+
+.mat-card-view {
+  overflow: hidden;
+  // height: 65vh;
+}
+
+.headers {
+  font-size: 1em;
+  font-weight: 400;
+  margin: 3px 3px 3px 3px;
+  padding: 1px 1px 1px 1px;
+}
+
+.divider-margin {
+  margin-bottom: 10px;
+  margin-top:    5px;
+}
+
+.event-buttons {
+  float: center;
+  width: 100px;
+  // margin:  2px 2px 2px 2px;
+}
+
+.label-buttons {
+  float: center;
+  width: 100px;
+  // margin: 5px 2px 2px 2px;
+}
+
+.info-buttons {
+  // float: center;
+  width: 100px;
+  // margin: 2px 2px 2px 2px;
+}
+
+.product-buttons {
+  float: center;
+  width: 100px;
+  // margin: 2px 2px 2px 2px;
+}
+
+.grid-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+button {
+  // padding: 3px 3px 3px 3px;
+  margin-top: 6px;
+  margin-left: 3px;
+  margin-right: 3px;
+  height: 2.5em;
+}
+
+mat-card-content {
+  margin-left:  -10px;
+  padding-left: -10px;
+  width: 110%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  font-size: .8em;
+}
+
+mat-card {
+  font-size:  1em;
+  width:      100%;
+  min-width:  185px;
+  height:100%;
+  // height:     85vh;
+  // max-height: 85vh;
+  // min-height: 85vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.cards {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 57vh;
+  width: 100%;
+  min-width: 155px;
+}

@@ -1,0 +1,99 @@
+<div *ngIf="prompt && inputForm; else loading"  class="container">
+  <div [formGroup]="inputForm">
+
+    <mat-card >
+      <mat-card-title >
+        <div class="header-container" >
+          <div>
+            <h4>
+              <div *ngIf="prompt.id == 0">
+                Add Item:  {{ prompt?.name  }}
+              </div>
+              <div *ngIf="prompt.id != 0">
+                Edit Item: {{ prompt?.name  }}
+              </div>
+            </h4>
+          </div>
+          <div>
+            <app-edit-buttons-standard
+                  (outputeupdateItem)     ="updateItem($event)"
+                  (outputupdateItemExit)  ="updateItemExit($event)"
+                  (outputupdatedeleteItem)="deleteItem($event)"
+                  (outputupdateonCancel)  ="onCancel($event)"
+                  (outputCopy)            ="copyItem($event)"
+            ></app-edit-buttons-standard>
+          </div>
+        </div>
+    </mat-card-title>
+
+    <mat-card-content >
+
+      <div class="info-group">
+        <mat-tab-group mat-align-tabs="start"  >
+
+          <mat-tab label="Basic">
+            <div class="grid-container">
+
+              <div>
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label >Name</mat-label>
+                      <input matInput
+                            type             ="text"
+                            formControlName  ="name"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label >Min Quantity</mat-label>
+                      <input matInput
+                            type             ="number"
+                            formControlName  ="minQuantity"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label >Max Quantity</mat-label>
+                      <input matInput
+                            type             ="number"
+                            formControlName  ="maxQuantity"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-card class="image-container">
+                      <app-widget-uploader
+                        [(fileNames)]="imageMain"
+                        (messageOut) ="received_URLMainImage($event)"
+                        (imageUrl)   ="updateUrlImageMain($event)">
+                      </app-widget-uploader>
+                    </mat-card>
+                  </div>
+
+                  <div class="document-content">
+                    <mat-divider></mat-divider>
+                    <mat-label>Short Description </mat-label><br>
+                    <simple-tinymce name="instructions"
+                                    cols="50" rows="15"
+                                    formControlName="instructions"
+                                    [(ngModel)]="instructions">
+                    </simple-tinymce>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+</div>
+
+<ng-template #loading >
+<mat-spinner></mat-spinner>
+</ng-template>

@@ -1,0 +1,77 @@
+<div fxLayout="row"
+     class="row-class"
+     *ngIf="menus">
+  <ul id="accordion"
+      class="accordion">
+    <li class="menu-item" @fade
+        *ngFor="let menu of menus; let i = index"
+        [class.active]="menu.active">
+        <!-- *ngIf="isAuthorized(menu)" -->
+        <!-- {{menu.userType}} -->
+      <div *ngIf="isAuthorized(menu)" >
+      <!-- <div *userAuthorized="menu.userType"  > -->
+          <div class="menu"
+            (click)="toggle(menu, i)">
+            <mat-icon>{{ menu.icon }}</mat-icon>
+            {{ menu.name }}
+        </div>
+      </div>
+    </li>
+  </ul>
+
+</div>
+
+<div class="submenu-position">
+  <div fxLayout="row"
+        class="submenu-sections"
+        *ngIf="displayCategories" >
+    <div *ngIf="submenu">
+      <ul id="accordion"
+          class="accordion">
+        <li class="menu-item"
+            @fade
+            *ngFor="let item of submenu" >
+          <div *ngIf="!item.minimized && isAuthorized(item)" >
+            <div class="menu" >
+              <a mat-list-item
+                  color="accent"
+                  routerLinkActive={{item.routerLinkActive}}
+                  routerLink=      {{item.routerLink}}>
+                <mat-icon>{{ item.icon }}</mat-icon>
+                {{ item.name }}
+              </a>
+            </div>
+          </div>
+        </li>
+      </ul>
+
+      <button mat-icon-button
+              [matMenuTriggerFor]="menu"
+              aria-label="Example icon-button with a menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <div class="submenu-position"></div>
+        <ul id="accordion"
+            class="accordion">
+            <li>
+              <mat-menu #menu="matMenu">
+                <div  *ngFor="let item of submenu">
+                    <!-- //*ngIf="isAuthorized(item)" -->
+                  <div *ngIf="item.minimized && isAuthorized(item)" >
+                      <button mat-menu-item
+                              color="accent"
+                              routerLinkActive={{item.routerLinkActive}}
+                              routerLink=      {{item.routerLink}}>
+                        <mat-icon>{{ item.icon }}</mat-icon>
+                        <span> {{ item.name }}</span>
+                      </button>
+                    </div>
+                  </div>
+              </mat-menu>
+            </li>
+        </ul>
+      </div>
+  </div>
+</div>
+

@@ -1,0 +1,58 @@
+<div fxLayout="column" fx-flex fx-layout-align="space-between">
+
+  <div fxLayout="row" fx-flex fx-layout-align="space-between">
+    <!-- <form  [formGroup]="searchForm" id="searchForm" (ngSubmit)="goSearchProducts()">
+       <mat-form-field >
+          <mat-label >Search Products</mat-label>
+          <input  matInput
+                  type="text"
+                  id="searchProducts"
+                  formControlName="searchProducts"
+                  class="form-control" >
+        </mat-form-field>
+    </form> -->
+
+    <form  [formGroup]="searchForm" id="searchForm" >
+      <mat-form-field appearance="outline">
+          <mat-label >Search Items</mat-label>
+            <input
+                    #input
+                    matInput
+                    type="text"
+                    id="searchProducts"
+                    formControlName="searchProducts"
+                    class="form-control"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete panelWidth="auto"
+                                  #auto="matAutocomplete"
+                                  [displayWith]="displayFn.bind(this)">
+          </mat-autocomplete>
+        </mat-form-field>
+    </form>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div *ngIf="menuItems" class="orderTotal">
+    <div *ngFor="let menuItem of menuItems | paginate: { itemsPerPage: 5, currentPage: currentPage }" >
+          <pos-order-item
+              [productName] = "menuItem?.name"
+              [unitPrice]="menuItem?.retail"
+              [onlineShortDescription]="menuItem?.onlineShortDescription"
+              [productID]="menuItem?.id"
+              [placeHolderImage]="'placeholderproduct.jpg'"
+              [mainImage]="menuItem?.urlImageMain"
+              [thc]="menuItem.thc"
+              [cbd]="menuItem.cbd"
+              [hideAddAnotherOne]="1"
+              [menuItem]="menuItem"
+            ></pos-order-item>
+    </div>
+  </div>
+
+<pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+
+
+<ng-template #loading >
+    <mat-spinner></mat-spinner>
+</ng-template>

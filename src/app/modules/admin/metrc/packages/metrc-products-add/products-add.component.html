@@ -1,0 +1,237 @@
+<div *ngIf="package">
+  <mat-card class="strain-card">
+    <mat-card-title>
+      <div><h3>Label: {{package.label}}</h3></div>
+    </mat-card-title>
+
+    <mat-card-subtitle>
+      <div class="item-info">Facility Code / Name: {{package.itemFromFacilityLicenseNumber}} / {{package.itemFromFacilityName}} </div>
+
+      <div class="item-info">Name: {{package.item.name}} | Intaking as {{intakeConversion.name}}  </div>
+
+      <div class="item-info">Testing State: {{package.labTestingState}}</div>
+      <mat-divider></mat-divider>
+    </mat-card-subtitle>
+
+    <mat-card-content >
+
+      <!-- <div *ngIf="packageForm">
+        <div *ngIf="packageForm.controls.expiration.errors?.required && packageForm.controls.expiration.touched" class="error">
+         <mat-icon color="warn">warning</mat-icon> Expiration required.
+        </div>
+        <div *ngIf="packageForm.controls.ProductName.errors?.required && packageForm.controls.ProductName.touched" class="error">
+           <mat-icon color="warn">warning</mat-icon> Name required.
+        </div>
+
+       <div *ngIf="packageForm.controls.quantityType.errors?.required && packageForm.controls.quantityType.touched" class="error">
+           <mat-icon color="warn">warning</mat-icon> QuantityType required.
+        </div>
+
+        <div *ngIf="packageForm.controls.productionBatchNumber.errors?.required && packageForm.controls.productionBatchNumber.touched" class="error">
+           <mat-icon color="warn">warning</mat-icon> Production BatchNumber required.
+        </div>
+        <div *ngIf="packageForm.controls.batchDate.errors?.required && packageForm.controls.batchDate.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Batch Date required.
+        </div>
+
+        <div *ngIf="packageForm.controls.productCategoryType.errors?.required && packageForm.controls.productCategoryType.touched" class="error">
+           <mat-icon color="warn">warning</mat-icon> Category Type required.
+        </div>
+      </div>  -->
+      <div [formGroup]="packageForm"  >
+
+        <div fxLayout="row"
+             fxFlex
+             fxFill
+             fxLayoutAlign="center start">
+           <div fxLayout="column"
+                  fxLayoutAlign="start start"
+                  fxFlex
+                  fxFill
+                  fxLayoutGap
+                  class="fields"
+                  >
+
+            <div>
+              <app-metrc-inventory-properties
+                    [inputForm]   ="packageForm"
+                    [package]     ="package"
+                    (outputMenuItem)="getSelectedMenuItem($event)"
+                    (outputVendor)  ="getVendor($event)"
+                    >
+              </app-metrc-inventory-properties>
+            </div>
+          </div>
+
+          <div fxLayout="column"
+              fxLayoutAlign="start start"
+              fxFlex
+              fxFill
+              fxLayoutGap
+              class="fields"
+              >
+              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required && packageForm.controls.inventoryLocationID.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.conversionName.errors?.required && packageForm.controls.conversionName.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.inputQuantity.errors?.required && packageForm.controls.inputQuantity.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
+              </div>
+
+              <div *ngIf="packageForm.controls.cost.errors?.required && packageForm.controls.cost.touched" class="error">
+                <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
+              </div>
+
+              <mat-card fxFlex
+                        fxFlexFill >
+
+                <div id="inventoryMoveInstructions">Move inventory to location:</div>
+                <div *ngIf="package">Taking in: {{package.quantity}}  {{package.unitOfMeasureName}} </div>
+                <div *ngIf="baseUnitsRemaining "> Grams remaining {{ baseUnitsRemaining }}</div>
+                <div *ngIf="unitOfMeasure">  Convert to {{conversionName}} {{unitOfMeasure.value}} </div>
+                <div *ngIf="unitsConverted"> Usable amount {{unitsConverted.unitOutPutQuantity}}</div>
+                <div *ngIf="unitsRemaining"> Packages Remaining {{unitsRemaining}} </div>
+                <div *ngIf="unitsConverted.ouputRemainder">Left over: {{unitsConverted.ouputRemainder}}</div>
+
+                <div>
+                  <mat-form-field appearance="outline" class="location-assignment fields">
+                  <mat-label>Locations</mat-label>
+                    <mat-select
+                            [(ngModel)]="inventoryLocationID"
+                            type="text"
+                            formControlName="inventoryLocationID"
+                            (selectionChange)="getLocationAssignment($event.value)"
+                            >
+                      <div *ngIf="(inventoryLocations$ | async) as list">
+                        <mat-option *ngFor="let item of list" [value]="item.id">
+                          {{item.name}}
+                        </mat-option>
+                      </div>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="outline" class="select-conversion fields" [hidden]="true">
+                    <mat-label>Conversion</mat-label>
+                      <mat-select
+                                [(ngModel)]="conversionName"
+                                type="text"
+                                formControlName="conversionName"
+                                (selectionChange)="getAvailableUnits($event.value)"
+                                >
+
+                      <div *ngIf="(conversions) as list" >
+                        <mat-option *ngFor="let item of list" [value]="item.name">
+                          {{item.name}} ({{item.value}})
+                        </mat-option>
+                      </div>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div >
+                  <mat-form-field appearance="outline"  class="location-assignment fields">
+                    <mat-label >Quantity</mat-label>
+                    <input  matInput
+                      [(ngModel)]="inputQuantity"
+                      type="text"
+                      formControlName="inputQuantity"
+                      (ngModelChange)="getAvailableUnitsByQuantity()"
+                    >
+                  </mat-form-field>
+
+                  <mat-form-field  appearance="outline" class="select-conversion fields"  >
+                    <mat-label >Cost</mat-label>
+                      <input  matInput
+                        type="text"
+                        formControlName="cost"
+                        (blur)="transformAmount($event)"
+                        [(ngModel)]="cost"
+                      >
+                  </mat-form-field>
+                </div>
+
+                <div *ngIf="unitsConverted && unitsConverted.unitConvertTo">
+                  <div *ngIf="unitsConverted.unitConvertTo.name === 'Joints'">
+
+                    <mat-form-field appearance="outline" class="location-assignment fields" >
+                      <mat-label >Weight</mat-label>
+                        <input  matInput
+                              [(ngModel)]="jointWeight"
+                              type="text"
+                              formControlName="jointWeight"
+                            >
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="select-conversion fields"  >
+                      <mat-label >Price</mat-label>
+                      <input  matInput
+                            [(ngModel)]="price"
+                            type="text"
+                            formControlName="price"
+                            (blur)="transformAmount($event)"
+                          >
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <br>
+
+                <div class="button-assign" *ngIf="baseUnitsRemaining != 0">
+                  <button mat-raised-button
+                          class="button"
+                          color="primary"
+                          type="button"
+                          (click)="addInventoryAssignmentGroup()">
+                          Assign
+                  </button>
+                </div>
+
+                <div class="btn-edit-pacakge" *ngIf="baseUnitsRemaining != 0">
+                  <button mat-raised-button
+                          class="button"
+                          color="primary"
+                          type="button"
+                          (click)="addRemainingInventoryToAssignedGroup()">
+                          Use Remaining
+                  </button>
+                </div>
+
+                <div *ngIf="baseUnitsRemaining == 0">
+                  <button mat-raised-button
+                          class="button"
+                          color="primary"
+                          type="button"
+                          (click)="completePackageImport()">
+                          Complete Package
+                  </button>
+                </div>
+
+              </mat-card>
+
+
+              <div *ngIf="inventoryAssigments" fxFlex fxFlexFill>
+                <mat-card class="package-list" >
+                  <div *ngFor="let item of inventoryAssigments ;let i = index">
+                    <app-metrc-individual-package
+                                                (outputEditAssignment)  ="editAssignment($event)"
+                                                (outputdeleteAssignment)="deleteAssignment($event)"
+                                                [item]                  ="item"
+                                                [i]                     ="i"
+                                                >
+                    </app-metrc-individual-package>
+
+                  </div>
+                </mat-card>
+              </div>
+
+
+          </div>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

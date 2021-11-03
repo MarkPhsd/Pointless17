@@ -1,0 +1,1767 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li >InventoryAssignmentService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/inventory/inventory-assignment.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#addInventoryItem" >addInventoryItem</a>
+                            </li>
+                            <li>
+                                <a href="#addInventoryList" >addInventoryList</a>
+                            </li>
+                            <li>
+                                <a href="#deleteInventory" >deleteInventory</a>
+                            </li>
+                            <li>
+                                <a href="#editInventory" >editInventory</a>
+                            </li>
+                            <li>
+                                <a href="#getActiveInventory" >getActiveInventory</a>
+                            </li>
+                            <li>
+                                <a href="#getInActiveInventory" >getInActiveInventory</a>
+                            </li>
+                            <li>
+                                <a href="#getInventory" >getInventory</a>
+                            </li>
+                            <li>
+                                <a href="#getInventoryAssignment" >getInventoryAssignment</a>
+                            </li>
+                            <li>
+                                <a href="#getInventoryAssignmentHistory" >getInventoryAssignmentHistory</a>
+                            </li>
+                            <li>
+                                <a href="#getInventoryByType" >getInventoryByType</a>
+                            </li>
+                            <li>
+                                <a href="#getSummaryOfGramsUsed" >getSummaryOfGramsUsed</a>
+                            </li>
+                            <li>
+                                <a href="#moveInventory" >moveInventory</a>
+                            </li>
+                            <li>
+                                <a href="#setNonConvertingFieldValues" >setNonConvertingFieldValues</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>, siteService: <a href="../injectables/SitesService.html" target="_self">SitesService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="97" class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:97</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>auth</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>siteService</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/SitesService.html" target="_self" >SitesService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addInventoryItem"></a>
+                    <span class="name">
+                        <span ><b>addInventoryItem</b></span>
+                        <a href="#addInventoryItem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addInventoryItem(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, iInventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="259"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:259</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>iInventoryAssignment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="addInventoryList"></a>
+                    <span class="name">
+                        <span ><b>addInventoryList</b></span>
+                        <a href="#addInventoryList"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>addInventoryList(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, label: <a href="../s/s.html" target="_self">string</a>, iInventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="245"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:245</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>label</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>iInventoryAssignment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="deleteInventory"></a>
+                    <span class="name">
+                        <span ><b>deleteInventory</b></span>
+                        <a href="#deleteInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>deleteInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="276"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:276</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="editInventory"></a>
+                    <span class="name">
+                        <span ><b>editInventory</b></span>
+                        <a href="#editInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>editInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, iInventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="219"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:219</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>iInventoryAssignment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getActiveInventory"></a>
+                    <span class="name">
+                        <span ><b>getActiveInventory</b></span>
+                        <a href="#getActiveInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getActiveInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, inventoryFilter: <a href="../interfaces/InventoryFilter.html" target="_self">InventoryFilter</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="159"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:159</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inventoryFilter</td>
+                                    <td>
+                                                <code><a href="../interfaces/InventoryFilter.html" target="_self" >InventoryFilter</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInActiveInventory"></a>
+                    <span class="name">
+                        <span ><b>getInActiveInventory</b></span>
+                        <a href="#getInActiveInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInActiveInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, pageNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, pageSize: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="176"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:176</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>pageNumber</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>pageSize</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInventory"></a>
+                    <span class="name">
+                        <span ><b>getInventory</b></span>
+                        <a href="#getInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, inventoryFilter: <a href="../interfaces/InventoryFilter.html" target="_self">InventoryFilter</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="145"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:145</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inventoryFilter</td>
+                                    <td>
+                                                <code><a href="../interfaces/InventoryFilter.html" target="_self" >InventoryFilter</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInventoryAssignment"></a>
+                    <span class="name">
+                        <span ><b>getInventoryAssignment</b></span>
+                        <a href="#getInventoryAssignment"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInventoryAssignment(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="117"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:117</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInventoryAssignmentHistory"></a>
+                    <span class="name">
+                        <span ><b>getInventoryAssignmentHistory</b></span>
+                        <a href="#getInventoryAssignmentHistory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInventoryAssignmentHistory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="131"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:131</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getInventoryByType"></a>
+                    <span class="name">
+                        <span ><b>getInventoryByType</b></span>
+                        <a href="#getInventoryByType"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getInventoryByType(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, pageNumber: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, pageSize: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, type: <a href="../s/s.html" target="_self">string</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="197"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:197</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>pageNumber</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>pageSize</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>type</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getSummaryOfGramsUsed"></a>
+                    <span class="name">
+                        <span ><b>getSummaryOfGramsUsed</b></span>
+                        <a href="#getSummaryOfGramsUsed"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getSummaryOfGramsUsed(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, inventoryAssigments: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment[]</a>, packageQuantity: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="106"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:106</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inventoryAssigments</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>packageQuantity</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="moveInventory"></a>
+                    <span class="name">
+                        <span ><b>moveInventory</b></span>
+                        <a href="#moveInventory"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>moveInventory(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>, iInventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment[]</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="233"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:233</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>iInventoryAssignment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >Observable&lt;IInventoryAssignment[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="setNonConvertingFieldValues"></a>
+                    <span class="name">
+                        <span ><b>setNonConvertingFieldValues</b></span>
+                        <a href="#setNonConvertingFieldValues"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>setNonConvertingFieldValues(inventoryAssignment: <a href="../interfaces/IInventoryAssignment.html" target="_self">IInventoryAssignment</a>, facility, inventoryLocation, intakeConversion, menuItem: <a href="../interfaces/IMenuItem.html" target="_self">IMenuItem</a>, metrcPackage: <a href="../interfaces/METRCPackage.html" target="_self">METRCPackage</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="291"
+                            class="link-to-prism">src/app/_services/inventory/inventory-assignment.service.ts:291</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>inventoryAssignment</td>
+                                    <td>
+                                                <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>facility</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>inventoryLocation</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>intakeConversion</td>
+                                    <td>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>menuItem</td>
+                                    <td>
+                                                <code><a href="../interfaces/IMenuItem.html" target="_self" >IMenuItem</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>metrcPackage</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPackage.html" target="_self" >METRCPackage</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/IInventoryAssignment.html" target="_self" >IInventoryAssignment</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { AuthenticationService } from &#x27;../system/authentication.service&#x27;;
+import { Observable } from &#x27;rxjs&#x27;;
+import { ISite}  from &#x27;src/app/_interfaces&#x27;;
+import { SitesService } from &#x27;src/app/_services/reporting/sites.service&#x27;;
+import { IMenuItem } from &#x27;src/app/_interfaces/menu/menu-products&#x27;;
+import { METRCPackage } from &#x27;src/app/_interfaces/metrcs/packages&#x27;;
+
+export interface IInventoryAssignment {
+  id:                    number;
+  packageType:           string;
+  productName:           string;
+  productCategoryName:   string;
+  itemStrainName:        string;
+  sku:                   string;
+  label:                 string;
+  metrcPackageID:        number;
+  locationID:            number;
+  location:              string;
+
+  unitOfMeasureName:     string;
+  unitMulitplier:        number;
+  baseQuantity:          number;
+  baseQuantityRemaining: number;
+  packageQuantity:       number;
+  packageCountRemaining: number;
+  unitConvertedtoName:   string;
+  jointWeight:           number;
+
+  intakeUOM:             string;
+  intakeConversionValue: number;
+  packagedOrBulk:        number;
+  productID:             number;
+  dateCreated:           string;
+  expiration:            string;
+  facilityLicenseNumber: string;
+  batchDate:             string;
+  cost:                  number;
+  price:                 number;
+  priceScheduleID:       number;
+  notAvalibleForSale:    boolean;
+  thc:                   number;
+  thc2:                  number;
+  thca2:                 number;
+  thca:                  number;
+  cbd:                   number;
+  cbd2:                  number;
+  cbda2:                 number;
+  cbda:                  number;
+  cbn:                   number;
+  cbn2:                  number;
+  employeeID:            number;
+  employeeName:          string;
+  requiresAttention:     boolean;
+  beginDate:             string;
+  endDate:               string;
+  adjustmentNote:        string;
+  adjustmentDate:        string;
+  adjustmentType:        string;
+  serials:               Serial[];
+}
+
+export interface Serial {
+  id:                    number;
+  inventoryAssignmentID: number;
+  sku:                   string;
+  quantity:              number;
+  adjustmentNote:        string;
+  adjustmentDate:        string;
+  adjustmentType:        string;
+  serialCode:            string;
+  beginDate:             string;
+  endDate:               string;
+}
+
+export interface InventoryFilter {
+  productName:          string;
+  productCategoryName:  string;
+  itemStrainName:       string;
+  sku:                  string;
+  label:                string;
+  location:             string;
+  noActiveCount:        boolean;
+  packageType:          string;
+  pageSize:             number;
+  pageNumber:           number;
+  notAvalibleForSale:   boolean;
+  requiresAttention:    boolean;
+  inventoryStatus:      number;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+
+export class InventoryAssignmentService {
+
+  constructor(
+    private http: HttpClient,
+    private auth: AuthenticationService,
+    private siteService: SitesService)
+  {
+  }
+
+  getSummaryOfGramsUsed(site: ISite, inventoryAssigments: IInventoryAssignment[], packageQuantity: number): any {
+    if (inventoryAssigments) {
+      let total &#x3D; 0; inventoryAssigments.forEach(item &#x3D;&gt;
+      {
+        total +&#x3D; item.baseQuantity //* item.jointWeight
+      })
+      console.log(&#x27;total used&#x27;)
+      return packageQuantity - total
+    }
+  }
+
+ getInventoryAssignment(site: ISite, id: number): Observable&lt;IInventoryAssignment&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;GetInventoryAssignment&#x60;
+
+  const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  return  this.http.get&lt;IInventoryAssignment&gt;(url)
+
+ }
+
+ getInventoryAssignmentHistory(site: ISite, id: number): Observable&lt;IInventoryAssignment[]&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;GetInventoryHistoryList&#x60;
+
+  const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  return  this.http.get&lt;IInventoryAssignment[]&gt;(url)
+
+ }
+
+ getInventory(site: ISite, inventoryFilter: InventoryFilter): Observable&lt;IInventoryAssignment[]&gt; {
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;postInventory&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, inventoryFilter)
+
+  }
+
+  getActiveInventory(site: ISite, inventoryFilter: InventoryFilter): Observable&lt;IInventoryAssignment[]&gt; {
+
+    inventoryFilter.noActiveCount &#x3D; true
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;postInventory&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, inventoryFilter)
+
+  }
+
+
+  getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable&lt;IInventoryAssignment[]&gt; {
+
+    const inventoryFilter &#x3D; {}  as InventoryFilter;
+
+    inventoryFilter.pageNumber &#x3D; pageNumber
+    inventoryFilter.pageSize &#x3D; pageSize
+    inventoryFilter.noActiveCount &#x3D; true
+
+    const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+    const endPoint &#x3D; &#x60;postInventory&#x60;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return  this.http.post&lt;IInventoryAssignment[]&gt;(url, inventoryFilter )
+
+
+ }
+
+ getInventoryByType(site: ISite,pageNumber: number, pageSize: number, type: string): Observable&lt;IInventoryAssignment[]&gt; {
+
+  const inventoryFilter &#x3D; {}  as InventoryFilter;
+
+  inventoryFilter.packageType &#x3D; type
+  inventoryFilter.pageNumber &#x3D; pageNumber
+  inventoryFilter.pageSize &#x3D; pageSize
+  inventoryFilter.noActiveCount &#x3D; true
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;GetInventoryList&#x60;
+
+  const parameters &#x3D; &#x60;&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  return  this.http.post&lt;any&gt;(url, inventoryFilter )
+
+}
+
+  // https://localhost:44309/api/InventoryAssignments/PutInventoryAssignment?id&#x3D;8
+editInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable&lt;IInventoryAssignment&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;PutInventoryAssignment&#x60;
+
+  const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  return  this.http.put&lt;IInventoryAssignment&gt;(url, iInventoryAssignment)
+
+}
+
+moveInventory(site: ISite, iInventoryAssignment: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;moveInventory&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}&#x60;
+
+  return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+
+}
+
+addInventoryList(site: ISite, label: string, iInventoryAssignment: IInventoryAssignment[]): Observable&lt;IInventoryAssignment[]&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;PostInventoryAssignments&#x60;
+
+  const parameters &#x3D; &#x60;?label&#x3D;${label}&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  return  this.http.post&lt;IInventoryAssignment[]&gt;(url, iInventoryAssignment)
+
+}
+
+addInventoryItem(site: ISite,  iInventoryAssignment: IInventoryAssignment): Observable&lt;IInventoryAssignment&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;PostInventoryAssignment&#x60;
+
+  const parameters &#x3D; &#x60;&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  console.log(&#x27;iInventoryAssignment&#x27;, iInventoryAssignment)
+  console.log(&#x27;url&#x27;, url)
+  return  this.http.post&lt;IInventoryAssignment&gt;(url, iInventoryAssignment)
+
+
+}
+
+deleteInventory(site: ISite, id: number): Observable&lt;IInventoryAssignment[]&gt; {
+
+  const controller &#x3D;  &#x60;/InventoryAssignments/&#x60;
+
+  const endPoint &#x3D; &#x60;DeleteInventoryAssignment&#x60;
+
+  const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+  const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+  return  this.http.delete&lt;IInventoryAssignment[]&gt;(url)
+
+}
+
+
+  setNonConvertingFieldValues(inventoryAssignment: IInventoryAssignment,
+                                        facility, inventoryLocation , intakeConversion, menuItem: IMenuItem, metrcPackage: METRCPackage ): IInventoryAssignment {
+
+    // inventoryAssignment &#x3D; this.inventoryAssignmentService.setNonConvertingFieldValues( )
+    //assign values to inventoryAssignement
+    inventoryAssignment.locationID            &#x3D; inventoryLocation.id
+    inventoryAssignment.location              &#x3D; inventoryLocation.name
+
+    inventoryAssignment.intakeUOM             &#x3D; intakeConversion.name
+    inventoryAssignment.intakeConversionValue &#x3D; intakeConversion.value
+
+    inventoryAssignment.facilityLicenseNumber &#x3D; facility.metrcLicense
+
+    inventoryAssignment.productID             &#x3D; menuItem.id
+    inventoryAssignment.productName           &#x3D; menuItem.name
+    inventoryAssignment.itemStrainName        &#x3D; menuItem.name
+
+    console.log(inventoryAssignment)
+
+    inventoryAssignment.label                 &#x3D; metrcPackage.label
+    inventoryAssignment.metrcPackageID        &#x3D; metrcPackage.id
+    inventoryAssignment.packageType           &#x3D; metrcPackage.packageType
+    inventoryAssignment.unitOfMeasureName     &#x3D; metrcPackage.unitOfMeasureName
+    inventoryAssignment.productCategoryName   &#x3D; metrcPackage.productCategoryName
+    // metrcPackage.
+
+    inventoryAssignment.notAvalibleForSale  &#x3D; false
+    if (!inventoryLocation.activeLocation) { inventoryAssignment.notAvalibleForSale  &#x3D; true}
+    inventoryAssignment.requiresAttention     &#x3D; false
+
+    inventoryAssignment.employeeName          &#x3D; localStorage.getItem(&#x27;username&#x27;);
+    inventoryAssignment.employeeID            &#x3D; parseInt(localStorage.getItem(&#x27;userID&#x27;));
+
+    const d &#x3D; new Date();
+    inventoryAssignment.dateCreated           &#x3D; d.toISOString()
+
+    return inventoryAssignment
+  }
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'InventoryAssignmentService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,87 @@
+
+<mat-card *ngIf="unitType">
+
+  <mat-card-title>
+    <mat-icon>edit</mat-icon> {{unitType.name}}
+    <mat-divider>
+    </mat-divider>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+
+    <div class="grid-header-container">
+      <div>
+        <div>
+
+        </div>
+
+        <div>
+          <app-edit-buttons-standard
+              (outputeupdateItem)     ="update($event)"
+              (outputupdateItemExit)  ="updateExit($event)"
+              (outputupdatedeleteItem)="delete($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+          ></app-edit-buttons-standard>
+        </div>
+
+      </div>
+    </div>
+    <mat-divider>    </mat-divider>
+
+
+  </mat-card-subtitle>
+
+  <mat-card-content>
+
+    <div [formGroup]="inputForm">
+
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput
+                type="text"
+                formControlName="name"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Abbreviation</mat-label>
+          <input matInput
+                type="text"
+                formControlName="abbreviation"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Multiplier</mat-label>
+          <input matInput
+                type="text"
+                formControlName="unitMultiplyer"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<!-- id:               number;
+name:             string;
+unitNote:         string;
+unitCategory:     string;
+unitMultipliedTo: number;
+unitMultiplyer:   number;
+mainUnit:         number;
+isMainUnit:       boolean;
+itemMultiplier:   number;
+doNotDelete:      number;
+abbreviation:     string;
+plural:           string;
+milileters:       number;
+fluidOunces:      number;
+massOunces:       number;
+grams:            number;
+unitID:           number;
+uid:              string; -->

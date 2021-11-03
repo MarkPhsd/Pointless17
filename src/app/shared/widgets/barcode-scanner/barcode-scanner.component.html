@@ -1,0 +1,53 @@
+
+<ion-header>
+  <ion-toolbar color="primary">
+    <div class="site-info">
+      <button mat-button (click)="goHome()">
+        <mat-icon >home</mat-icon>
+      </button>
+    </div>
+    <ion-title>DL Scanner</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-button (click)="cameraOn()"  *ngIf="!cameraActive">
+  Scan
+</ion-button>
+
+<div>
+  status: {{status}}
+</div>
+
+<div *ngIf="error">Error: {{error}} </div>
+
+<div *ngIf="user">
+  <!-- <div>
+    Name:  {{user?.firstName}} {{user?.lastName}}
+  </div>
+  <div>
+    Account: {{user?.accountNumber}}
+    <br>
+    ID: {{user.id}}
+  </div> -->
+</div>
+
+<ion-content>
+  <div class="overlay" [style.z-index]="cameraActive ? 10 : 0">
+    <div *ngIf="cameraActive"  class="cameraPreview" id="cameraPreview">
+
+        <ion-button (click)="cameraOff()" expand="block" id="close">
+          <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+        </ion-button>
+
+        <!-- <ion-button (click)="captureImage()" expand="block" id="capture">
+          <ion-icon name="camera" slot="icon-only"></ion-icon>
+        </ion-button> -->
+
+        <ion-button (click)="flipCamera()" expand="block" id="flip">
+          <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+
+    </div>
+
+</ion-content>

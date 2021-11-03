@@ -1,0 +1,27 @@
+<mat-card *ngIf="prompt" >
+  <mat-card-subtitle>
+    <button mat-button (click)="goBack()"><mat-icon>arrow_back_ios</mat-icon>Back</button>
+    Assign items to the Group {{prompt.name}}
+  </mat-card-subtitle>
+  <!-- <mat-card-content>
+  </mat-card-content> -->
+</mat-card>
+
+<div class="grid-list" *ngIf="prompt; else loading" >
+  <div>
+    <app-productlistview
+          [editOff]="'true'"
+          [hideEditSelected]="'true'"
+          [hideAdd]="'true'"
+          (outputPromptItem)="assignNewItem($event)"
+    ></app-productlistview>
+  </div>
+
+  <div>
+    <prompt-selected-items></prompt-selected-items>
+  </div>
+</div>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>

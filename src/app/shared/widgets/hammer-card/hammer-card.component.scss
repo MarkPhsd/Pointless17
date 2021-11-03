@@ -1,0 +1,36 @@
+body {
+  height: 100%;
+}
+.flex-container {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+img {
+  width: 25vw;
+  height: 25vh
+}
+
+mat-card-actions {
+  overflow: hidden;
+  text-align: center;
+  width: 25vw;
+  height: 25vh
+}
+mat-card {
+  width: 50vw;
+  height: 50vh
+}
+
+button {
+  float:left;
+}
+

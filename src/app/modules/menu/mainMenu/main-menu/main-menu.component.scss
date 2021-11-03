@@ -1,0 +1,89 @@
+// code for laying out video and smoke reveal.
+// .canvas  {
+//   top: 0;
+//   left: 0;
+//   height: 100%;
+//   width: 100%;
+//   background-color:rgb(103, 123, 167);
+//   clip-path: polygon(100% 0, 100% 57%, 0 100%, 0 0);
+//   position: absolute;
+//   z-index: -1;
+// }
+
+
+.viewport-header {
+  height: 100vh;
+  width: 100vh;
+  top: 20px;
+  left: 0px;
+}
+
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-blend-mode: lighten;
+  mix-blend-mode: overlay;
+  z-index: -2;
+}
+// <video autoplay muted loop class="video">
+//   <source src="../../../../../assets/video/smoke.mp4" type="video/mp4">
+// </video>
+
+body, app-brand-list {
+
+  // color: white;
+  font-weight: 600;
+  font: 1.2em;
+}
+
+.canvas  {
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  // background-color:rgb(103, 123, 167);
+  position: absolute;
+  z-index: 1;
+}
+
+mat-divider {
+  margin-bottom: 1em;
+}
+
+.viewport-header {
+  height: 100vh;
+  width: 100vh;
+  top: 20px;
+  left: 0px;
+  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+  filter: blur(5px);
+
+  background-blend-mode:hue;
+}
+
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  mix-blend-mode: overlay;
+  z-index: -1;
+}
+
+header {
+  position: fixed;
+  width: 100%;
+  text-align: center;
+
+  transition: .4s;
+}
+
+
+

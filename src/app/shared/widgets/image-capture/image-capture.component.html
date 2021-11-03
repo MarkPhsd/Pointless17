@@ -1,0 +1,86 @@
+ <div fxLayout="column"  fxLayoutGap fxLayoutAlign="space-around center" >
+
+    <div *ngIf="captureOn">
+
+
+    </div>
+
+    <div *ngIf="!captureOn">
+      <button id="snap"
+        mat-raised-button
+        color="primary"
+        (click)="clearCaptures()">
+        Try again
+      </button>
+
+      <button id="snap"
+        mat-raised-button
+        color="primary"
+        (click)="saveImageCaptureASNewFile(0)">Save
+      </button>
+
+    </div>
+
+    <div *ngIf="captureOn">
+      <video
+            #video
+            id="video"
+            autoplay>
+      </video>
+    </div>
+
+    <div *ngIf="!captureOn">
+      <div  *ngFor="let c of captures; let i = index">
+        <br>
+        <img src="{{ c }}" class="captured-image"  />
+      </div>
+    </div>
+
+    <h2>..Or use a file.</h2>
+    <div class="container" appDnd (fileDropped)="fileBrowseHandler($event)" >
+
+      <input accept="image/*" type="file" #fileDropRef id="fileDropRef"
+             multiple (change)="fileBrowseHandler($event.target.files)" />
+
+      <mat-icon class="md-icon-48">add_photo_alternate</mat-icon>
+
+      <!-- <h4>Drag and drop file here </h4> -->
+
+      <button mat-raised-button color="primary" (click)="fileDropRef">Browse for Files</button>
+
+    </div>
+
+ </div>
+
+ <div fxLayout="column" fxLayoutGap fxLayoutAlign="space-around center" >
+
+    <!-- <h4>Status:</h4>
+    {{logger}}
+
+    <div *ngIf="showData">
+      <div >
+        <h4>DL Data</h4>
+        accountNumber:  {{driversLicence?.accountNumber}}<br>
+        firstName:      {{driversLicence?.firstName}}<br>
+        middleName:     {{driversLicence?.middleName}}<br>
+        lastName:       {{driversLicence?.lastName}}<br>
+        address:        {{driversLicence?.address}}<br>
+        state:          {{driversLicence?.state}}<br>
+        city:           {{driversLicence?.city}}<br>
+        zip:            {{driversLicence?.zip}}<br>
+        dob:            {{driversLicence?.dob}}<br>
+        exp:            {{driversLicence?.exp}}<br>
+      </div>
+    </div> -->
+
+    <canvas #canvas id="canvas"   width="640" height="480" ></canvas>
+
+ </div>
+
+<ng-template class="mat-spinner" #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+
+
+
+

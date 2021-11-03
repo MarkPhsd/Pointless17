@@ -1,0 +1,26 @@
+
+<div fxFlex fxLayout="column start" >
+  <div *ngIf="promptMenuItems">
+    <h4>Drag / Drop to Sort</h4>
+    <div  class="drag-list"
+          cdkDropList
+          #accordionList="cdkDropList"
+          (cdkDropListDropped)  ="drop($event)"
+        >
+      <div *ngFor="let item of promptMenuItems; let index = index;"
+           class="pop"
+           cdkDrag
+           (click)="assignItem(item, index)"
+        >
+          {{item.prompt_Products?.name}}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="promptMenuItem">
+    <button  mat-button
+            (click)="deleteSelected()">
+            Remove {{promptMenuItem.prompt_Products?.name | truncateText: 8}}
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

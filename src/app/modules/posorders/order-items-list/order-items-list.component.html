@@ -1,0 +1,135 @@
+  <h2>Report Item History</h2>
+  <mat-card class="custom-card">
+    <mat-card-content>
+      <div class="grid" >
+        <div class="grid-item">
+          <div class="filterItem" >
+            <div *ngIf="(sites$ | async) as list" >
+              <mat-form-field appearance="outline">
+                <mat-label>Site</mat-label>
+                <mat-select
+                  name="siteID"
+                  [(ngModel)]="selectedSiteID">
+                    <mat-option *ngFor="let item of list" [value]="item.id">
+                      {{ item.name }}
+                    </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <mat-form-field appearance="outline" >
+            <mat-label>Product Name</mat-label>
+            <input matInput
+                  type="text"
+                  name="productNameField"
+                  [(ngModel)]="productName">
+          </mat-form-field>
+        </div>
+
+        <div class="grid-item">
+          <div *ngIf="(serviceTypes$ | async) as list" >
+            <mat-form-field appearance="outline">
+              <mat-label>Type</mat-label>
+              <mat-select
+                          name="serviceTypeID"
+                          [(ngModel)]="selectedServiceTypeID">
+                  <mat-option *ngFor="let item of list" [value]="item.id">
+                    {{ item.name }}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="grid-item filterItem">
+          <div *ngIf="(employees$ | async) as list" >
+            <mat-form-field appearance="outline">
+              <mat-label>Employee</mat-label>
+              <mat-select
+                          name="employeeID"
+                          [(ngModel)]="selectedEmployeeID">
+                  <mat-option *ngFor="let item of list" [value]="item.id">
+                    {{item.lastname}}, {{item.firstName}}
+                  </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="grid-item">
+          <mat-form-field size="22"  class="datFilter" appearance="outline">
+            <mat-label>Filter</mat-label>
+            <mat-date-range-input
+              [formGroup]="filterForm"
+              [rangePicker]="reportRangePicker">
+              <input matStartDate placeholder="Start date" formControlName="dateFrom">
+              <input matEndDate placeholder="End date" formControlName="dateTo">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matSuffix [for]="reportRangePicker"  ></mat-datepicker-toggle>
+            <mat-date-range-picker touchUi #reportRangePicker  ></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+        <div class="grid-item">
+          <mat-checkbox class="example-margin" [(ngModel)]="productsOnly">Products Only</mat-checkbox>
+        </div>
+
+        <div class="grid-item">
+          <mat-checkbox class="example-margin" [(ngModel)]="discountsOnly">Discounts Only</mat-checkbox>
+        </div>
+
+        <div class="grid-item">
+          <mat-checkbox class="example-margin" [(ngModel)]="weightedItems">Weighted Items</mat-checkbox>
+        </div>
+
+        <mat-radio-group [(ngModel)]="groupByOption">
+          <mat-label>Group by - select one.</mat-label>
+
+           <div class="grid-item">
+              <!-- <div class="grid-item-sub"> -->
+                <mat-radio-button class="example-margin" value="0">None</mat-radio-button>
+              <!-- </div> -->
+
+              <!-- <div class="grid-item-sub"> -->
+                <mat-radio-button class="example-margin" value="1">Employee</mat-radio-button>
+              <!-- </div> -->
+
+              <!-- <div class="grid-item-sub"> -->
+                <mat-radio-button class="example-margin" value="2">Date</mat-radio-button>
+              <!-- </div> -->
+              <br>
+              <!-- <div class="grid-item-sub"> -->
+                <mat-radio-button class="example-margin" value="3">Product</mat-radio-button>
+              <!-- </div> -->
+
+              <!-- <div class="grid-item-sub"> -->
+                <mat-radio-button class="example-margin" value="4">Category</mat-radio-button>
+              <!-- </div> -->
+
+              <!-- <div class="grid-item-sub"> -->
+                <mat-radio-button class="example-margin" value="5">Department</mat-radio-button>
+              <!-- </div> -->
+            </div>
+        </mat-radio-group>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+  <br>
+
+  <button
+          mat-raised-button
+          color="primary"
+          (click)="showresults()"
+        >
+    <mat-icon>refresh</mat-icon>  Show Results  </button>
+
+
+  <app-order-item-list [reportItemSales$]="reportItemSales$" ></app-order-item-list>
+
+
+

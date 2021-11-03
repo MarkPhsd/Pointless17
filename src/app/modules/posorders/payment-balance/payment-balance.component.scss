@@ -1,0 +1,91 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  // width     : 100%;
+  // min-width : 325px;
+  // min-height: 155px;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+  width     : 100%;
+  min-width : 335px;
+  max-width : 335px;
+  min-height: 155px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    width     : 100%;
+    min-width : 335px;
+    max-width : 335px;
+    min-height: 155px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
+
+.transaction-data {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 300px;
+  border-radius: 3px;
+  margin: 5px 5px ;
+  overflow-y: auto;
+  overflow-x: hidden;
+  font-size: larger;
+}
+
+.card-height {
+  height    : 155px;
+  min-height: 155px;
+  max-height: 155px;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+body {
+  font-size: larger;
+}
+
+.grid-item-button {
+  margin-top: -15px;
+  margin-bottom: 0px;
+  height: 45px;
+  font-size: 1em;
+  align-items: center;
+  @include for-phone-only  {
+    margin-top: -15px;
+    margin-bottom: 0px;
+    // height: 45px;
+    // font-size: 50px;
+    align-items: center;
+  }
+}
+
+.payment-grid {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  margin-bottom: 15px;
+  grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+  overflow-y: hidden;
+  overflow-x: hidden;
+  font-size: larger;
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+    font-size: 1em;
+    overflow-y: auto;
+    overflow-x: auto;
+
+  }
+
+
+}
+
+.void-info {
+  color:chocolate;
+  font-style: italic;
+}

@@ -1,0 +1,200 @@
+<div class="header">
+  <h2>Print Settings </h2>
+  <p>These setting change based on the device type you are using. </p>
+  <p><mat-icon>web</mat-icon> Web:     Printing options for the web are limited to dialog windows, there is no automated printing.</p>
+  <p><mat-icon>android</mat-icon> Android: Printers require an associated bluetooth printer.</p>
+  <p><mat-icon>windows</mat-icon> Windows: When installed as an application on Windows, windows installed printers are listed.</p>
+</div>
+
+<mat-divider></mat-divider>
+
+  <!-- <div fxLayout="row" fxLayoutAlign="space-between start"> -->
+  <div class="grid-printing">
+    <!-- <div fxLayout="column" fxLayoutAlign="space-around start" fxFlex="50"  fxLayoutGap="20px" > -->
+    <div>
+      <div *ngIf="platForm === 'web'">
+
+        <h3>Print Test for Web </h3>
+        <div>
+          <button mat-raised-button color="primary"
+                 (click)="printReceiptPrinterTest()"><mat-icon>print</mat-icon>Print</button>
+        </div>
+        <div>
+          <br>
+          <button mat-raised-button color="primary"
+                  (click)="convertToPDF()"><mat-icon>save</mat-icon> PDF</button>
+        </div>
+      </div>
+
+      <div *ngIf="platForm==='android'">
+
+        <app-list-printers-electron
+            (outputPrinterName)="setDefaultElectronReceiptPrinterName($event)" >
+        </app-list-printers-electron>
+
+        <h3>Print Test for Android</h3>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Receipt Types</mat-label>
+              <mat-select
+                        type="text"
+                        [(ngModel)]="btPrinter"
+                        formControlNamename="btPrinter"
+                     >
+              <div *ngIf="(btPrinters$ | async) as list">
+                  <mat-option *ngFor="let item of list" [value]="item.address">
+                  {{ item.name }}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+          <div>
+            <button mat-raised-button color="primary" (click)="printAndroidImage()"><mat-icon>print</mat-icon>Print</button>
+          </div>
+          <div>
+            <button mat-raised-button color="primary"  (click)="printAndroid()"><mat-icon>save</mat-icon> Print Test</button>
+          </div>
+      </div>
+
+      <div *ngIf="platForm === 'electron'">
+
+        <app-list-printers-electron
+              (outputPrinterName)="setDefaultElectronReceiptPrinterName($event)" >
+        </app-list-printers-electron>
+
+        <div *ngIf="defaultElectronReceiptPrinter">
+          {{ defaultElectronReceiptPrinter }}
+        </div>
+
+        <h3>Print Test for Windows/Linux</h3>
+        <div>
+          <button mat-raised-button color="primary"(click)="printElectron()"> <mat-icon>print</mat-icon>Print </button>
+        </div>
+
+        <div>
+          <mat-checkbox [(ngModel)]="printOptions.silent" >
+            Silent Print
+          </mat-checkbox>
+        </div>
+
+        <div>
+          <mat-checkbox [(ngModel)]="printOptions.printBackground"  >
+           Print Background
+          </mat-checkbox>
+        </div>
+
+        <div>
+          <mat-checkbox [(ngModel)]="hideWindow"  >
+           Hide Print Window
+          </mat-checkbox>
+        </div>
+
+        <div>
+          <br>
+          <button mat-raised-button  color="primary" (click)="convertToPDF()">
+            <mat-icon>save</mat-icon> PDF</button>
+        </div>
+
+        <div>
+          <br>
+          <button mat-raised-button color="primary" (click)="printTestLabelElectron()">
+            <mat-icon>print</mat-icon>Print ZPL Label
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <div>
+
+    <h3>Print Templates</h3>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Receipt Types</mat-label>
+        <mat-select
+                  type="text"
+                  [(ngModel)]="receiptID"
+                  formControlNamename="receiptID"
+                  (selectionChange)="refreshReceipt(receiptID)">
+            <div *ngIf="(receiptList$ | async) as list">
+            <mat-option *ngFor="let item of list" [value]="item.id">
+            {{ item.name }}
+          </mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
+
+    <button mat-raised-button color="primary" (click)="openEditor(receiptID)">
+    <mat-icon>edit</mat-icon>Edit </button>
+
+    <div *ngIf="!receiptLayoutSetting || !headerText || !footerText || !itemsText">
+      Loading...
+    </div>
+
+    <div *ngIf="receiptLayoutSetting">
+      <mat-card>
+        <div  *ngIf="headerText &&  itemsText"
+              class="border-section">
+            <app-receipt-layout #printsection id="printsection"
+                              [headerText]="headerText"
+                              [footerText]="footerText"
+                              [itemText]="itemsText"
+                              [printerWidth]="receiptLayoutSetting.option9"
+                              [paymentsText]="paymentsText"
+                              [subFooterText]="subFooterText"
+                              [items]="items"
+                              [order]="orders"
+                              [payments]="payments"
+                              [orderType]="orderTypes"
+                              [testdata]="true"
+                              [liveEdit]="false"
+                              [styles]="receiptStyles">
+           </app-receipt-layout>
+
+        </div>
+      </mat-card>
+    </div>
+
+    <h3 class="header-description">Label Templates</h3>
+    <app-label-view-selector
+        [labelList$]="labelList$"
+        [labelImageHeight]="200"
+        (outPutLabelID)="getLabelID($event)">
+    </app-label-view-selector>
+
+    <span>
+      <button mat-raised-button color="primary" (click)="openEditor(labelID)">
+      <mat-icon>edit</mat-icon>Edit</button>
+    </span>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="resetDefaultLayouts()">
+      <mat-icon> restore</mat-icon>Reset Receipts</button>
+    </div>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="editReceiptStyles()">
+      <mat-icon>edit</mat-icon>Edit CSS Styles</button>
+    </div>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="resetStyles()">
+      <mat-icon>restore</mat-icon>Reset CSS Styles</button>
+    </div>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="initDefaultLabel()">
+      <mat-icon>restore</mat-icon>Reset Labels </button>
+    </div>
+
+  </div>
+</div>
+
+<mat-card>
+<div [hidden] ="true" id="download" class="border-section">
+  <img #canvas>
+  <a #downloadLink></a>
+</div>
+</mat-card>
+

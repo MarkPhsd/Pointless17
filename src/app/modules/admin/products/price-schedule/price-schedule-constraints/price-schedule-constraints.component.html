@@ -1,0 +1,62 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <mat-card>
+      <mat-card-title>
+        <div fxLayout="row" fxLayoutAlign="center">
+
+        </div>
+      </mat-card-title>
+
+          <div class="headers">
+            <mat-icon  class="icon header-alignment">shopping_cart</mat-icon>
+            <div class="header">Orders</div>
+          </div>
+
+          <app-order-type-selection
+                (outputOrderTypes)  = "setOrderTypeValues($event)"
+                [inputForm]         = "inputForm"
+
+                                >
+          </app-order-type-selection >
+
+          <div class="headers">
+            <mat-icon class="icon header-alignment">people</mat-icon>
+            <div class="header">Customers</div>
+          </div>
+
+          <app-client-type-selection
+                (outputClientTypes)   =  "setClientTypeValues($event)"
+                [inputForm]           =  "inputForm"
+
+                                >
+          </app-client-type-selection >
+
+          <div class="headers">
+            <mat-icon  class="icon  header-alignment">event</mat-icon>
+            <div class="header">Periods</div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <app-week-day-selection
+                [allWeekdaysDays]       = "item.allWeekdaysDays"
+                [inputForm]             = "inputForm"
+                [item]                  = "item"
+                (outputWeekdays)        = "setWeekDayArray($event)">
+          </app-week-day-selection>
+
+          <app-time-schedule
+
+              [inputForm]               = "inputForm"
+              [item]                    = "item">
+          </app-time-schedule>
+
+          <app-date-schedule
+
+              [inputForm]               = "inputForm"
+              [item]                    = "item">
+          </app-date-schedule>
+
+    </mat-card>
+  </div>
+</div>

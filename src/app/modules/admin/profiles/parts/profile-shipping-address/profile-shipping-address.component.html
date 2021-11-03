@@ -1,0 +1,56 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <h4>Shipping Address</h4>
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label >Address</mat-label>
+        <input matInput type="text"
+              id="shippingAddress"
+              formControlName="shippingAddress"
+              class="form-control" >
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label >Address2</mat-label>
+        <input matInput type="text"
+              id="shippingAddress2"
+              formControlName="shippingAddress2"
+              class="form-control" >
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label >City</mat-label>
+        <input matInput
+              type="text"
+              id="city"
+              formControlName="city"
+              class="form-control" >
+
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label >State</mat-label>
+        <input matInput
+              type="text"
+              id="state"
+              formControlName="state"
+              class="form-control" >
+
+      </mat-form-field>
+    </p>
+
+    <p>
+      <mat-form-field appearance="outline">
+        <mat-label >Zip</mat-label>
+        <input matInput type="text" id="state" formControlName="zip"  class="form-control" >
+
+      </mat-form-field>
+    </p>
+  </div>
+</div>

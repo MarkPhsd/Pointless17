@@ -1,0 +1,210 @@
+
+<div class="body"  *ngIf="item">
+
+  <mat-card class="strain-card">
+
+    <mat-card-title>
+
+      <div><h3>Item: {{item.productName}} </h3></div>
+      <div><h3>Label:{{item.label}}       </h3></div>
+
+    </mat-card-title>
+
+    <mat-card-subtitle>
+
+      <div class="header-container" >
+        <div class="subtitle grid-container">
+          <div class="item-label">Sku</div>
+          <div class="item-info"> {{item.sku}} </div>
+          <div class="item-label">Type</div>
+          <div class="item-info"> {{item.packageType}} </div>
+          <div class="item-label">Intake Category </div>
+          <div class="item-info"> {{item.productCategoryName}} </div>
+          <div class="item-label">Facility Code</div>
+          <div class="item-info"> {{item.facilityLicenseNumber}} </div>
+        </div>
+
+        <div class="button-margins">
+
+          <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+          ></app-edit-buttons-standard>
+        </div>
+      </div>
+
+    <mat-divider></mat-divider>
+
+    </mat-card-subtitle>
+
+    <mat-card-content >
+
+      <div fxLayout="row"
+            fxFlex
+            fxFill
+            fxLayoutGap=15
+            fxLayoutAlign="center start">
+
+          <div  fxLayout="column"
+                fxLayoutAlign="start start"
+                fxFlex
+                fxFill
+                fxLayoutGap=15
+                class="fields"
+          >
+
+            <div  fxLayout="row"
+                fxLayoutAlign="space-around center"
+                fxFlex
+                fxLayoutGap=15
+                class="fields"
+            >
+
+              <div [formGroup]="inputForm">
+                <div class="subtitle grid-container">
+
+                  <div class="item-label">
+                    <mat-label>Not Avalible For Sale</mat-label>
+                  </div>
+
+                  <div class="item-info">
+                    <mat-slide-toggle
+                            class="price-values"
+                            formGroupName  ="notAvalibleForSale"
+                            formControlName="notAvalibleForSale">
+                    </mat-slide-toggle>
+                  </div>
+
+                  <div class="item-label">
+                    <mat-label>Requires Attention</mat-label>
+                  </div>
+
+                  <div class="item-label">
+                    <mat-slide-toggle
+                            class="price-values"
+                            formGroupName  ="requiresAttention"
+                            formControlName="requiresAttention">
+                    </mat-slide-toggle>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div  fxLayout="row"
+                    fxLayoutAlign="space-around center"
+                    fxFlex
+                    fxFill
+                    fxLayoutGap=15
+                    class="fields"
+              >
+
+              <div class="subtitle grid-container">
+
+                <div class="header-column">Fixed Values</div>
+
+                <div > </div>
+
+                <div  class="item-label">Intake UOM</div>
+                <div  class="item-info">{{item.intakeUOM}} </div>
+
+                <div  class="item-label">UOM</div>
+                <div  class="item-info">{{item.unitOfMeasureName}} </div>
+
+                <div  class="item-label">Multiplier</div>
+                <div  class="item-info">{{item.unitMulitplier}} </div>
+
+                <div  class="item-label">Base Quantity</div>
+                <div  class="item-info">{{item.baseQuantity}} </div>
+
+                <div  class="item-label">Base Remaining</div>
+                <div  class="item-info">{{item.baseQuantityRemaining}} </div>
+
+                <div [hidden]="item.packageType != undefined && item.packageType != ''"   class="item-label">Type</div>
+                <div [hidden]="item.packageType != undefined && item.packageType != ''"  class="item-info">{{item.packageType}} </div>
+
+                <div class="item-label">Converted To Units</div>
+                <div class="item-info">{{item.unitConvertedtoName}} </div>
+
+                <div  class="item-label">Start Package Count</div>
+                <div  class="item-info">{{item.packageQuantity}} </div>
+
+                <div  class="item-label">Packages Remaining</div>
+                <div  class="item-info">{{item.packageCountRemaining}} </div>
+
+                <div *ngIf="item.jointWeight != 0 && item.jointWeight != undefined "  class="item-label">Joint Weight</div>
+                <div *ngIf="item.jointWeight != 0 && item.jointWeight != undefined "  class="item-info">{{item.jointWeight}} </div>
+
+                <div class="item-label">Dates</div>
+                <div class="item-info"></div>
+
+                <div [hidden]="item.batchDate != undefined && item.batchDate != ''"
+                      class="item-label">Batch </div>
+                <div [hidden]="item.batchDate != undefined && item.batchDate != ''"
+                      class="item-info">{{item.batchDate | date: 'short' }} </div>
+
+                <div class="item-label">Created</div>
+                <div class="item-info">{{item.dateCreated | date: 'short' }} </div>
+
+                <div class="item-label">Expiration</div>
+                <div class="item-info">{{item.expiration | date: 'short' }} </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+          <div  fxLayout="column"
+                fxLayoutAlign="start start"
+                fxFlex
+                class="fields"
+                fxLayoutGap=15
+                >
+
+              <div [formGroup]="inputForm">
+                <app-chemical-values [inputForm]="inputForm">
+                </app-chemical-values>
+              </div>
+
+          </div>
+
+          <div  fxLayout="column"
+                fxLayoutAlign="start start"
+                fxFlex
+                class="fields"
+                fxLayoutGap=15
+          >
+
+          <div [formGroup]="inputForm">
+            <div  class="header-column">Price</div>
+              <mat-form-field  appearance="outline" class=" price-values fields">
+                <mat-label >Cost</mat-label>
+                <input  matInput
+                        type           ="text"
+                        formControlName="cost"
+                        name           ="cost"
+                        class          ="price-values"
+                        >
+              </mat-form-field>
+
+              <mat-form-field  appearance="outline" class="price-values fields">
+                <mat-label >Price</mat-label>
+                <input  matInput
+                        type           ="text"
+                        formControlName="price"
+                        name           ="price"
+                        class          ="price-values"
+                        >
+              </mat-form-field>
+            </div>
+          </div>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

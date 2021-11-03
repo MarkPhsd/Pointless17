@@ -1,0 +1,14 @@
+
+
+.grid-container {
+  display              : grid;
+  grid-template-columns: 1fr 1fr;
+  width                : 500px;
+  grid                 : 8px;
+}
+
+.fields {
+  margin: 3px;
+  font-size: .9em;
+  width:     75px;
+}

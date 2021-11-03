@@ -1,0 +1,27 @@
+button {
+  margin: 3px 3px 3px 3px;
+  height: 2.5em;
+}
+
+::ng-deep .mat-form-field-wrapper{
+  margin-bottom: -1.5em;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+
+mat-form-field {
+ font-size: .8em;
+ margin: 4px 4px 4px 4px;
+}
+
+.form-controls {
+  font-size: .8em;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-wrap: wrap;
+}
+

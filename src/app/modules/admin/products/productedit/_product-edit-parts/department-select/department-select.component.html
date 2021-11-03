@@ -1,0 +1,21 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Departments</mat-label>
+      <mat-select
+                  type="number"
+                  [formControlName]  ="'departmentID'"
+                  name="departmentID"
+        >
+        <div *ngIf="(departments$ | async) as list" >
+          <mat-option *ngFor="let item of list" [value]="item.id">
+              {{item.name}}
+          </mat-option>
+        </div>
+      </mat-select>
+    </mat-form-field>
+
+  </div>
+</div>
+

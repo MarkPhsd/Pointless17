@@ -1,0 +1,42 @@
+<mat-card>
+
+   <div *ngIf="orderPromptGroup && orderPromptGroup.selected_PromptSubGroups">
+
+     <div>
+        <div class="header-title">
+          <mat-icon>self_improvement</mat-icon>   The Chosen Items
+        </div>
+        <span *ngIf="orderPromptGroup  && orderPromptGroup.posOrderItem">
+          {{ orderPromptGroup.posOrderItem.productName}}
+        </span>
+        <span>
+          Item Total {{ total | currency }}
+        </span>
+      </div>
+
+     <div class="sub-group-border" *ngFor="let selectedSubPrompts of orderPromptGroup.selected_PromptSubGroups; let index = index">
+       <div class="sub-group"> {{selectedSubPrompts.promptSubGroups.name}} </div>
+       <div class="grid-list"
+            *ngFor="let item of selectedSubPrompts.promptSubGroups.itemsSelected; let itemIndex = index">
+          <div>
+            {{item.menuItem.name}} <br> {{item.menuItem.retail | currency}}
+          </div>
+          <div>
+            <button mat-button (click)="remove( itemIndex, index)"><mat-icon>delete</mat-icon></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+</mat-card>
+
+ <!-- <div *ngFor="let item of subGroupItems.itemsSelected">
+  <div *ngIf="item.menuItem">
+    {{item.menuItem.Name}}
+  </div>
+</div>  -->
+<!--
+json object
+<div *ngIf="orderPromptGroup">
+  {{ orderPromptGroup | json }}
+</div> -->

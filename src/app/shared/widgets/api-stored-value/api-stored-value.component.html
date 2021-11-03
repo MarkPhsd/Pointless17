@@ -1,0 +1,40 @@
+<mat-card fxFlex="100%" *ngIf="!platFormService.webMode">
+
+  <mat-card-title>
+      <h2>App Setting</h2>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+      <h2>You are using the installed Pointless App</h2>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+
+      <p>In order to connect to your service, you must know your API. Please input the URL to the API.</p>
+      <p>The API url should look something like: https://mycompanyName.com/api</p>
+      <div *ngIf="currentAPIUrl">
+       <h4>
+          Current API  {{currentAPIUrl}}
+        </h4>
+      </div>
+
+      <div [formGroup]="inputForm" *ngIf="inputForm">
+        <mat-form-field appearance="outline"  class="fields" >
+          <mat-label >API Url</mat-label>
+          <input matInput
+          type="text"
+          formControlName="apiUrl"
+          >
+        </mat-form-field>
+      </div>
+
+      <button mat-raised-button color="primary"
+              (click)="setAPIUrl()">Set API</button>
+
+      <button mat-raised-button color="primary"
+              routerLinkActive="list-item-active"
+              routerLink="/login">Exit</button>
+
+  </mat-card-content>
+
+</mat-card>

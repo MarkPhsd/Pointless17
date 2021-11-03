@@ -1,0 +1,225 @@
+
+<div *ngIf="!setting">
+  Loading...
+</div>
+
+<div *ngIf="setting">
+
+  <div class="header-alignment">
+    <mat-icon>design_services</mat-icon>
+ </div>
+
+  <div class="header">
+      Designer
+  </div>
+
+  <div  fxLayout="row" fxLayoutAlign="end end">
+    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="40px">
+
+    </div>
+    <div fxLayout="column" fxLayoutAlign="end end" fxFlex="50"  fxLayoutGap="40px">
+      <div fxLayout="row" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="10px">
+        <button mat-raised-button color="primary"  (click)="copy()"><mat-icon>file_copy</mat-icon>Copy</button>
+        <button mat-raised-button color="primary"  (click)="update()"><mat-icon>save</mat-icon>Save</button>
+        <button mat-raised-button color="primary"  (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+        <button mat-raised-button color="primary"  (click)="onCancel()"><mat-icon>close</mat-icon>Close</button>
+      </div>
+    </div>
+   </div>
+
+  <div class="margin">
+    <mat-divider></mat-divider>
+  </div>
+
+  <div fxLayout="row" fxLayoutAlign="space-between start" fxLayoutGap="40px">
+
+    <div fxLayout="column" fxLayoutAlign="space-around center" fxFlex="50"  fxLayoutGap="40px">
+        <div [formGroup]="inputForm"
+              (ngSubmit)="update()"
+              *ngIf="inputForm">
+
+            <div *ngIf="isLabel">
+              <h4>ZPL Codes</h4>
+              <div>Enter codes designed to work with ZPL Printer.
+                For more info see Labelary. <a href="http://labelary.com/zpl.html" target="_blank">Labelary.</a>
+                and the <a href="http://labelary.com/viewer.html" target="_blank"> Labelary ZPL Designer.</a>
+              </div>
+
+            </div>
+
+            <div *ngIf="!isLabel">
+              <h4>HTML</h4>
+              <div>Print out use HTML to determine results.
+                Fields can be included that are specific to the section.
+                See documentation for field list.</div>
+            </div>
+
+            <br>
+            <div>Type: {{setting.description}}</div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Name</mat-label>
+                <input matInput
+                      type             ="text"
+                      formControlName  ="name"
+                      [(ngModel)]      ="setting.name"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div *ngIf="!isLabel">
+              <mat-form-field appearance="outline">
+                <mat-label> {{setting.option9}}</mat-label>
+                  <mat-select
+                      type            ="text"
+                      [(ngModel)]     ="setting.option9"
+                      formControlName ="option9"
+                      (selectionChange)="setPrinterWidthValue()">
+
+                    <mat-option  [value]="58">
+                      58MM
+                    </mat-option>
+                    <mat-option  [value]="80">
+                      80MM
+                    </mat-option>
+                    <mat-option  [value]="850">
+                      8.5in
+                    </mat-option>
+                  </mat-select>
+
+              </mat-form-field>
+            </div>
+
+            <mat-label>HTML Layout</mat-label>
+            <br>
+            <div *ngIf="!isLabel">
+              <mat-form-field appearance="outline" class="description">
+
+                <mat-label>Header</mat-label>
+                <textarea
+                          matInput
+                          type             ="text"
+                          formControlName  ="option6"
+                          [(ngModel)]      ="setting.option6"
+                          rows             ="10"
+                          cols             ="30"
+                    >
+                </textarea>
+              </mat-form-field>
+              <br>
+            </div>
+
+            <mat-form-field appearance="outline" class="description">
+              <mat-label>Items</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        formControlName  ="text"
+                        [(ngModel)]      ="setting.text"
+                        rows             ="10"
+                        cols             ="30"
+                  >
+              </textarea>
+            </mat-form-field>
+            <br>
+
+            <div *ngIf="!isLabel">
+              <mat-form-field appearance="outline" class="description">
+                <mat-label>Payments</mat-label>
+                <textarea
+                          matInput
+                          type             ="text"
+                          formControlName  ="option5"
+                          [(ngModel)]      ="setting.option5"
+                          rows             ="10"
+                          cols             ="30"
+                    >
+                </textarea>
+              </mat-form-field>
+              <br>
+            </div>
+
+            <div *ngIf="!isLabel">
+              <mat-form-field appearance="outline" class="description">
+                <mat-label>Footer</mat-label>
+                <textarea
+                          matInput
+                          type             ="text"
+                          formControlName  ="option7"
+                          [(ngModel)]      ="setting.option7"
+                          rows             ="10"
+                          cols             ="30"
+
+                    >
+                </textarea>
+              </mat-form-field>
+              <br>
+            </div>
+            <div *ngIf="!isLabel">
+              <mat-form-field appearance="outline" class="description">
+                <mat-label>Footer</mat-label>
+                <textarea
+                          matInput
+                          type             ="text"
+                          formControlName  ="option8"
+                          [(ngModel)]      ="setting.option8"
+                          rows             ="10"
+                          cols             ="30"
+
+                    >
+                </textarea>
+              </mat-form-field>
+              <br>
+            </div>
+         </div>
+    </div>
+    <div fxLayout="column"
+         fxLayoutAlign="space-around center"
+         fxFlex="50"
+         fxLayoutGap="20px" >
+      <h4>Design Layout</h4>
+      <mat-card>
+        <div >
+          <div *ngIf="!isLabel">
+            <app-receipt-layout [headerText]="setting.option6"
+                                [itemText]="setting.text"
+                                [footerText]="setting.option5"
+                                [paymentsText]="setting.option7"
+                                [subFooterText]="setting.option8"
+                                [printerWidth]="setting.option9"
+                                [items]="items"
+                                [order]="order"
+                                [payments]="payments"
+                                [orderType]="orderTypes"
+                                [testdata]="true"
+                                [liveEdit]="true"
+                                [isLabel]="isLabel"
+                                [styles]="receiptStyles"
+                                [interpolatedHeaderTexts]  ="interpolatedHeaderTexts"
+                                [interpolatedItemTexts] ="interpolatedItemTexts"
+                                [interpolatedFooterTexts]  ="interpolatedFooterTexts"
+                                [interpolatedPaymentsTexts] ="interpolatedPaymentsTexts"
+                                [interpolatedSubFooterTexts] ="interpolatedSubFooterTexts"
+              ></app-receipt-layout>
+
+          </div>
+
+          <div *ngIf="isLabel">
+            <div *ngIf="labelImage64 != null " >
+              <img  class="imageview"  [src]="labelImage64">
+            </div>
+
+            <div [hidden] ="true" id="download" >
+              <img class="imageview" #canvas>
+              <a #downloadLink></a>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+    </div>
+  </div>
+
+
+</div>

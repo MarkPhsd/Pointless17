@@ -1,0 +1,65 @@
+
+<mat-card *ngIf="(order?.gramCount != 0
+          || order?.concentrateCount != 0
+          || order?.extractCount != 0
+          || order?.liquidCount != 0
+          || order?.seedCount != 0 ) && mainPanel" >
+  <mat-card-subtitle>
+    Limits
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div *ngIf="order">
+      <div  class="grid-header-item transaction-data checmicals"
+            >
+            <app-progress-bar
+              *ngIf="order?.gramCount != 0"
+              [value]="order?.gramCount"
+              [percentage]="gramCountProgress">
+                Gram
+            </app-progress-bar>
+
+            <app-progress-bar
+              *ngIf="order?.concentrateCount != 0"
+              [value]="order?.concentrateCount"
+              [percentage]="concentrateCountProgress">
+                Concentrate
+            </app-progress-bar>
+
+            <app-progress-bar
+              *ngIf="order?.extractCount != 0"
+              [value]="order?.extractCount"
+              [percentage]="extractCountProgress">
+                Extract
+            </app-progress-bar>
+
+            <app-progress-bar
+              *ngIf="order?.liquidCount != 0"
+              [value]="order?.liquidCount"
+              [percentage]="liquidCountProgress">
+                Liquid
+            </app-progress-bar>
+
+            <app-progress-bar
+              *ngIf="order?.seedCount != 0"
+              [value]="order?.seedCount"
+              [percentage]="seedCountProgress">
+                Seed
+            </app-progress-bar>
+
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+<!--
+        this.gramCountProgress         = ((this.order.gramCount / type.limitGram ) * 100).toFixed(0)
+        // this.solidCountProgress        = ((this.order.gramCount / type.limitSolid ) * 100).toFixed(0)
+        // this.plantCountProgress        = ((this.order.plantCount / type.limitPlants ) * 100).toFixed(0)
+        this.concentrateCountProgress  = ((this.order.concentrateCount / type.limitConcentrate ) * 100).toFixed(0)
+        this.extractCountProgress      = ((this.order.extractCount / type.limitExtract ) * 100).toFixed(0)
+        this.liquidCountProgress       = ((this.order.liquidCount / type.limitLiquid ) * 100).toFixed(0)
+        this.seedCountProgress         = ((this.order.seedCount / type.limitSeeds ) * 100).toFixed(0)
+
+-->

@@ -1,0 +1,23 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <div class="filterItem" >
+      <mat-form-field appearance="outline">
+        <mat-label>Tax</mat-label>
+        <mat-select
+                    type="number"
+                    [formControlName] = "formControl"
+                    name=""
+                    (selectionChange)="getItem($event)"
+
+          >
+          <div *ngIf="items" >
+            <mat-option *ngFor="let item of items" [value]="item.id">
+                {{item.name}}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</div>
+

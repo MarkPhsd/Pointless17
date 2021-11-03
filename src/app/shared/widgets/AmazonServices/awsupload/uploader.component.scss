@@ -1,0 +1,180 @@
+
+@mixin md-icon-size($size: 16px) {
+  font-size: $size;
+  height: $size;
+  width: $size;
+}
+
+.md-icon-16 {
+  @include md-icon-size(16px);
+}
+
+.md-icon-18 {
+  @include md-icon-size(18px);
+}
+
+.md-icon-24 {
+  @include md-icon-size(24px);
+}
+
+.md-icon-36 {
+  @include md-icon-size(36px);
+}
+
+.md-icon-48 {
+  @include md-icon-size(48px);
+}
+
+.container {
+    width: 125px;
+    height: 115px;
+    text-align: center;
+    border: dashed 1px #979797;
+    position: relative;
+    margin: 0 auto;
+    overflow: hidden;
+    input {
+      opacity: 0;
+      position: absolute;
+      z-index: 2;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+
+    label {
+      color: white;
+      width: 100px;
+      height: 15px;
+      border-radius: 10.5px;
+      background-color: #db202f;
+      padding: 0.5rem;
+    }
+
+    // h3 {
+    //   font-size: 14px;
+    //   font-weight: 600;
+    //   color: #38424c;
+    // }
+  }
+
+  .label {
+    width: 100px;
+    overflow: hidden;
+    font-size: .9em;
+    font-weight: 400;
+  }
+
+  .fileover {
+    animation: shake 2s;
+    animation-iteration-count: infinite;
+  }
+
+  .file-drop {
+    font-weight: 400;
+    font-size: 1.1em;
+  }
+
+
+  .delete {
+    display: flex;
+    margin-left: 0.5rem;
+    cursor: pointer;
+    align-self: flex-end;
+  }
+
+  .uploaded-image {
+    width: 75px;
+
+  }
+
+  .files-list {
+    margin-top: 1em;
+
+  .single-file {
+    display: flex;
+    padding: 0.5rem;
+    justify-content: space-between;
+    align-items: center;
+    border: dashed 1px #979797;
+    margin-bottom: 1rem;
+
+    .delete {
+      display: flex;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+
+
+      display: flex;
+      flex-grow: 1;
+
+      .name {
+        font-size: 14px;
+        font-weight: 500;
+        color: #353f4a;
+        margin: 0;
+      }
+
+      .size {
+        font-size: 12px;
+        font-weight: 500;
+        color: #a4a4a4;
+        margin: 0;
+        margin-bottom: 0.25rem;
+      }
+
+      .info {
+        width: 100%
+      }
+    }
+  }
+
+  /* Shake animation */
+  @keyframes shake {
+    0% {
+      transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+      transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+      transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+      transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+      transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+      transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+      transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+      transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+      transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+      transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+      transform: translate(1px, -2px) rotate(-1deg);
+    }
+  }

@@ -1,0 +1,93 @@
+mat-icon {
+  margin: 5px;
+}
+
+mat-card {
+  padding: 15px;
+  margin: 5px;
+}
+
+mat-card-subtitle {
+  margin: 10px;
+}
+
+.headers {
+  float: left;
+  font-size: 1.1em;
+}
+
+// .item-type-card {
+//   width: 225px;
+//   padding: 5px;
+//   margin: 5px;
+// }
+
+.itemTypes {
+  width: 175px;
+  height: 45px;
+  font-size: 1em;
+}
+
+.item-adjustments{
+  width: 195px;
+  height: 45px;
+  font-size: .8em;
+}
+
+.grid-container {
+  width: 720px;
+  min-width: 350px;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(210px, 1fr) );
+  row-gap: 2px;
+  gap: 2px;
+  overflow: hidden;
+}
+
+.toggle-buttons-margins{
+  margin: 2px;
+}
+
+.type-list {
+  min-height: 275px;
+  width     : 21  0px;
+  height    : 475px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 5px;
+}
+
+.selected-categories {
+  font-weight: 400px;
+  font-size  : .8em;
+  margin-left: 15px;
+  list-style : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.itemtype-header {
+  font-weight  : 500px;
+  font-size    : .9em;
+  margin-bottom: 3px;
+  margin-top   : 3px;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.selected-types {
+  font-weight  : 400px;
+  font-size    : .8em;
+  margin-left  : 15px;
+  list-style   : none;
+  vertical-align: middle;
+  text-align: left;
+}
+
+.icon-height {
+  vertical-align:middle;
+}
+
+.exit {
+  float: right;
+}

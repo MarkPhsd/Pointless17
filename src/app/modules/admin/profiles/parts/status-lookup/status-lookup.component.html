@@ -1,0 +1,17 @@
+<div *ngIf="inputForm" [formGroup]="inputForm">
+  <div *ngIf="(statuses$ | async) as list" >
+    <mat-form-field class="fields" appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select
+            type            = "number"
+            name            = "status"
+            formControlName ="status"
+          >
+          <mat-option *ngFor="let item of list" [value]="item.id">
+            {{item.status}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+

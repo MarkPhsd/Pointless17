@@ -1,0 +1,100 @@
+  <mat-card>
+    <mat-card-subtitle>
+
+      Add New Items by Type
+      <div class="exit">
+        <button (click)="exit()" mat-button>
+          <mat-icon>close</mat-icon>Exit
+        </button>
+      </div>
+
+    </mat-card-subtitle>
+    <mat-card-content>
+      <div class="grid-container">
+        <div>
+          <mat-card>
+            <mat-card-content>
+              <mat-icon>cart</mat-icon>Items
+
+              <div   *ngIf="itemTypeProducts"
+                     class="type-list" >
+                <div class="toggle-buttons-margins"
+                     *ngFor="let item of itemTypeProducts">
+
+                  <mat-button-toggle
+                      class="itemTypes"
+                      (click)="addItem(item)"
+                      value="{{ item.id }}" >
+                    <div class="headers">
+                      <mat-icon class="icon-height">add</mat-icon> {{ item.name }}
+                    </div>
+                  </mat-button-toggle>
+
+                </div>
+              </div>
+
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div>
+          <mat-card>
+
+            <mat-card-subtitle>
+                <mat-icon>category</mat-icon>Grouping
+            </mat-card-subtitle>
+
+              <mat-card-content>
+
+                <div  *ngIf="itemTypeCategories"
+                      class="type-list" >
+                  <div class="toggle-buttons-margins  categories"
+                       *ngFor="let item of itemTypeCategories">
+
+                    <mat-button-toggle
+                        class="item-adjustments"
+                        (click)="addItem(item)"
+                        value="{{ item.id }}" >
+                      <div class="headers">
+                        <mat-icon class="icon-height">add</mat-icon> {{ item.name }}
+                      </div>
+                    </mat-button-toggle>
+
+                  </div>
+                </div>
+
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <div>
+          <mat-card>
+            <mat-card-subtitle>
+              <mat-icon>discount</mat-icon>Adjustment Types
+            </mat-card-subtitle>
+            <mat-card-content>
+              <div *ngIf="itemTypeAdjustments"
+                    class="type-list" >
+                <div class="toggle-buttons-margins  categories"
+                      *ngFor="let item of itemTypeAdjustments">
+
+                  <mat-button-toggle
+                      class="item-adjustments"
+                      (click)="addItem(item)"
+                      value="{{ item.id }}" >
+                    <div class="headers">
+                      <mat-icon class="icon-height">add</mat-icon> {{ item.name }}
+                    </div>
+                  </mat-button-toggle>
+
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+

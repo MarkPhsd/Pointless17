@@ -1,0 +1,67 @@
+table {
+  width: 100%;
+}
+
+.agGridButton {
+  font-size: 8px;
+  padding: -1px 1px;
+  margin: -1px 1px;
+  line-height: 1.2
+}
+
+.history-panel {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+button {
+  // padding: 3px 3px 3px 3px;
+  margin-top:   6px;
+  margin-left:  3px;
+  margin-right: 3px;
+  height:       2.5em;
+}
+
+// .side-bar {
+//   min-width: 210px;
+//   width:     210px;
+// }
+
+::ng-deep .mat-form-field-wrapper{
+  margin-bottom: -1.5em;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+::ng-deep .mat-datepicker-content .mat-calendar
+{
+ zoom: 0.85;
+}
+
+::ng-deep  .md-datepicker-input-container {
+ width: 50px;
+}
+
+mat-card {
+  margin: 1px 1px 1px 1px;
+  padding: 1px 1px 1px 1px;
+}
+mat-form-field {
+ font-size: .9em;
+ margin: 4px 4px 4px 4px;
+}
+
+.form-controls {
+  font-size: .9em;
+}
+
+.grid-container {
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.agrid-container {
+  height: 75vh;
+  width: 100%;
+}

@@ -1,0 +1,17 @@
+
+<div class="container bg">
+  <!-- {{this.platForm}} -->
+  <div *ngIf="platFormService.webMode">
+    <div class="age-gate-form" *ngIf="useAppGate">
+        <!-- <img [src]="logo" width="125px" [alt]="company"  class="logo"> -->
+        <div class="age-gate-error" data-error-field="buttons"></div>
+
+        <div class="entry-question">{{ entryQuestion }}</div>
+
+        <button mat-raised-button  (click)="enterSite()">Yes</button>
+        <button mat-raised-button  (click)="leaveSite()">No</button>
+      </div>
+    </div>
+    <!-- apiUrl{{apiUrl}} -->
+</div>
+

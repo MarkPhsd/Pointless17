@@ -1,0 +1,36 @@
+@import "/src/mixins.scss";
+
+.buttons-container2 {
+  display: flex;
+  flex-direction: row;
+  justify-content: center  space-between;
+  gap: 5px;
+}
+
+.buttons-container {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
+  }
+}
+
+button {
+  margin: 5px 5px;
+  width: 150px;
+  height: 55px;
+
+  @include for-phone-only  {
+    margin: 2px 2px;
+    width: 140px;
+    height: 35px;
+    // height: 40px;
+  }
+
+}

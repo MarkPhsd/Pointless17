@@ -1,0 +1,79 @@
+
+
+@import "/src/mixins.scss";
+
+.container {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.header-grid {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+  margin: 5px;
+
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+}
+
+
+.info-width {
+  width: 300px;
+  @include for-phone-only  {
+    width: 300px;
+  }
+}
+
+.title-format {
+  font-size: 1em;
+}
+
+.grid-item {
+  width: 105px;
+}
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // width: 450px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.title {
+  font-weight: 700px;
+}
+
+.item-span {
+  grid-column: 1 / span 2;
+}
+
+.cashdrop-border {
+  border: 2px;
+  border-radius: 4px;
+  border-style: solid;
+  margin-top: 3px;
+  margin-bottom: 3px;
+  padding: 2px;
+}
+
+.mat-dividers {
+  margin: 4px;
+}
+
+.grid-start-finish {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // width: 400px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.card-dimensions {
+  margin: 10px;
+}

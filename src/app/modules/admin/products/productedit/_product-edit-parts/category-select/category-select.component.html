@@ -1,0 +1,25 @@
+<div *ngIf="inputForm">
+  <div [formGroup]="inputForm">
+    <div class="grid-container">
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select
+                    type="number"
+                    [formControlName] = "'categoryID'"
+                    name="categoryID"
+                    (selectionChange)="getCategory($event)"
+          >
+          <div *ngIf="(categories$ | async) as list" >
+            <mat-option *ngFor="let item of list" [value]="item.id">
+                {{item.name}}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+
+  </div>
+  </div>
+</div>
+
+

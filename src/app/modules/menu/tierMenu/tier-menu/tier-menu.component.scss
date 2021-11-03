@@ -1,0 +1,128 @@
+.viewport-header {
+  // height: 100vh;
+  // width: 100vh;
+  top: 20px;
+  left: 0px;
+  -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+  filter: blur(5px);
+  background-blend-mode: lighten;
+}
+
+.video {
+  object-fit: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  // mix-blend-mode:color;
+}
+
+.bg {
+  /* The image used */
+    // background-image: url('https://assets3.thrillist.com/v1/image/2876839/1584x1054/crop;jpeg_quality=60.jpg');
+  /* Full height */
+
+  background-color: rgb(64, 94, 87);
+  z-index: -3;
+
+}
+
+
+.container {
+  width:  85vw;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  align-content: center;
+}
+
+.bg-position {
+  height: 100vh;
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.center {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headings {
+  font-size: 3em;
+  font-weight: 600;
+}
+
+.prices {
+  font-size: 3em;
+  font-weight: 500;
+  line-height: 1.2em;
+  margin: .2em .2em .2em;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+}
+
+.row-height {
+  height: 100%
+}
+
+h4 {
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.stat-cards {
+  opacity: .8;
+  margin: .5em .5em .5em .5em;
+}
+
+#mat-card {
+   border-radius: 10px;
+
+  .mat-card-header{
+    padding: 5px;
+  }
+  .mat-card{
+    padding: 0;
+  }
+
+  .mat-card-content{
+    padding: 5px;
+  }
+ }
+
+.grid-item {
+  align-items: flex-end;
+  float: left;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr ;
+  grid-template-rows: auto;
+  overflow: scroll;
+  gap: 1em 1em;
+}
+
+
+
+.bg {
+  /* The image used */
+  background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
+
+  /* Full height */
+  height: 100vh;
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  z-index: -2;
+}

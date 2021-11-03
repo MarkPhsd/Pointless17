@@ -1,0 +1,136 @@
+<mat-card class="mat-card-view">
+  <mat-card-content>
+    <button mat-button (click)="resetSearch()">Reset <mat-icon>refresh</mat-icon></button>
+
+    <div class="keypad">
+      <app-key-pad
+        [inputForm]     ="searchForm"
+        [inputTypeValue]="'text'"
+        (outPutValue)   ="refreshPaymentSearch($event)">
+        Enter Number
+      </app-key-pad>
+  </div>
+
+  <div *ngIf="isAuthorized" class="fields">
+    <mat-form-field appearance="outline" *ngIf="dateRangeForm">
+
+      <mat-label>Date Range (Start Time)</mat-label>
+
+      <mat-date-range-input [formGroup]="dateRangeForm"
+                            [rangePicker]="reportRangePicker"
+                            >
+        <input matStartDate
+                formControlName="start"
+                placeholder="Start date"
+                (click)='emitDatePickerData()'>
+        <input matEndDate formControlName="end"
+                placeholder="End date"
+                (click)='emitDatePickerData()'>
+
+              </mat-date-range-input>
+
+      <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
+                              ></mat-datepicker-toggle>
+      <mat-date-range-picker touchUi #reportRangePicker
+                              ></mat-date-range-picker>
+
+      <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+      <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+    </mat-form-field>
+  </div>
+
+
+    <mat-button-toggle-group
+          name        ="toggleOpenClosedAll"
+          class       ="toggle-view"
+          [(ngModel)] ="toggleOpenClosedAll"
+          (change)    ="refreshToggleAllClosedOpen()"
+      >
+      <mat-button-toggle class="toggle-min" value="0"> All</mat-button-toggle>
+      <mat-button-toggle class="toggle-min" value="2"> Pre-Auth</mat-button-toggle>
+      <mat-button-toggle class="toggle-min" value="1" >{{0 | currency}} Tip </mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-button-toggle-group
+        name="toggleTypeEmployee"
+        class="toggle-view"
+        [(ngModel)]="toggleIsCashCredit"
+        (change)    ="refreshToggleCashCredit()"
+      >
+      <mat-button-toggle value="1" > <mat-icon>attach_money</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="2" > <mat-icon>credit_card</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="0" >All</mat-button-toggle>
+    </mat-button-toggle-group>
+
+    <mat-button-toggle-group
+          name="toggleTypeEmployee"
+          class="toggle-view"
+          [(ngModel)]="toggleTypeEmployee"
+        >
+        <mat-button-toggle value="0" > <mat-icon>payments</mat-icon> </mat-button-toggle>
+        <mat-button-toggle value="1" > <mat-icon>receipt</mat-icon> </mat-button-toggle>
+        <mat-button-toggle value="2" > <mat-icon>badge</mat-icon> </mat-button-toggle>
+    </mat-button-toggle-group>
+
+
+    <div [hidden]="toggleTypeEmployee  != '2' "
+         class="toggle-selector-employee">
+      <app-mat-toggle-selector
+              [id]="searchModel.employeeID"
+              [list$]="employees$"
+              (outPutID)="setEmployee($event)">
+              Employee
+      </app-mat-toggle-selector>
+    </div>
+
+    <div [hidden]="toggleTypeEmployee != '1'"
+         class="toggle-selector">
+      <app-mat-toggle-selector
+            *ngIf="searchModel"
+            [id]="searchModel.serviceTypeID"
+            [list$]="serviceTypes$"
+            (outPutID)="setServiceType($event)">
+            Sale Type
+      </app-mat-toggle-selector>
+    </div>
+
+    <div [hidden]="toggleTypeEmployee != '0'"
+          class="toggle-selector">
+      <app-mat-toggle-selector
+            *ngIf="searchModel"
+            [id]="searchModel.paymentMethodID"
+            [list$]="paymentMethod$"
+            (outPutID)="setPaymentMethod($event)">
+            Payment Method
+      </app-mat-toggle-selector>
+    </div>
+
+    <div *ngIf="electronEnabled || printingEnabled">
+      <div [formGroup]="printForm">
+        <mat-form-field appearance="outline">
+          <mat-label >Print Quantity</mat-label>
+          <input matInput
+                  type="number"
+                  [(ngModel)] = "printQuantity"
+                  formControlName="printQuantity"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="electronEnabled || printingEnabled || capacitorEnabled">
+      <div class="grid-container">
+        <button class="info-buttons"
+                mat-raised-button color="primary"
+                ><mat-icon>print</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+

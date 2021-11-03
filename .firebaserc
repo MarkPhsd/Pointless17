@@ -1,0 +1,23 @@
+{
+  "projects": {
+    "default": "ccsapi"
+  },
+  "targets": {
+    "ccsapi": {
+      "hosting": {
+        "ockosherstore": [
+          "ockosherstore"
+        ],
+        "ccsapi": [
+          "ccsapi"
+        ],
+        "coconutsfl": [
+          "coconutsfl"
+        ],
+        "highplainzstrains1": [
+          "highplainzstrains1"
+        ]
+      }
+    }
+  }
+}

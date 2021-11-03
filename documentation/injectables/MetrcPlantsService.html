@@ -1,0 +1,2138 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content injectable">
+                   <div class="content-data">
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Injectables</li>
+  <li >MetrcPlantsService</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/metrc/metrc-plants.service.ts</code>
+        </p>
+
+
+
+
+
+            <section>
+    <h3 id="index">Index</h3>
+    <table class="table table-sm table-bordered index-table">
+        <tbody>
+
+                <tr>
+                    <td class="col-md-4">
+                        <h6><b>Methods</b></h6>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <ul class="index-list">
+                            <li>
+                                <a href="#getMETRCPlants" >getMETRCPlants</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsAdditives" >getMETRCPlantsAdditives</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsAdditivesTypes" >getMETRCPlantsAdditivesTypes</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsByLabel" >getMETRCPlantsByLabel</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsflowering" >getMETRCPlantsflowering</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsGrowthPhases" >getMETRCPlantsGrowthPhases</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsinActive" >getMETRCPlantsinActive</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsOnHold" >getMETRCPlantsOnHold</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsVegatative" >getMETRCPlantsVegatative</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsWasteMethods" >getMETRCPlantsWasteMethods</a>
+                            </li>
+                            <li>
+                                <a href="#getMETRCPlantsWasteReasons" >getMETRCPlantsWasteReasons</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsAdditives" >postMETRCPlantsAdditives</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsAdditivesByLocation" >postMETRCPlantsAdditivesByLocation</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsChangeGrowthPhases" >postMETRCPlantsChangeGrowthPhases</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsCreatePlantBatchPackage" >postMETRCPlantsCreatePlantBatchPackage</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsCreatePlantings" >postMETRCPlantsCreatePlantings</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsHarvestPlants" >postMETRCPlantsHarvestPlants</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsManicurePlant" >postMETRCPlantsManicurePlant</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPlantsMovePlants" >postMETRCPlantsMovePlants</a>
+                            </li>
+                            <li>
+                                <a href="#postMETRCPOSTPlantsDestroyPlants" >postMETRCPOSTPlantsDestroyPlants</a>
+                            </li>
+                        </ul>
+                    </td>
+                </tr>
+
+
+
+
+
+        </tbody>
+    </table>
+</section>
+
+            <section>
+    <h3 id="constructor">Constructor</h3>
+        <table class="table table-sm table-bordered">
+            <tbody>
+                <tr>
+                    <td class="col-md-4">
+<code>constructor(http: <a href="https://angular.io/api/common/http/HttpClient" target="_blank">HttpClient</a>, auth: <a href="../injectables/AuthenticationService.html" target="_self">AuthenticationService</a>)</code>
+                    </td>
+                </tr>
+                        <tr>
+                            <td class="col-md-4">
+                                <div class="io-line">Defined in <a href="" data-line="30" class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:30</a></div>
+                            </td>
+                        </tr>
+
+                <tr>
+                    <td class="col-md-4">
+                            <div>
+                                    <b>Parameters :</b>
+                                    <table class="params">
+                                        <thead>
+                                            <tr>
+                                                <td>Name</td>
+                                                    <td>Type</td>
+                                                <td>Optional</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                                <tr>
+                                                        <td>http</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="https://angular.io/api/common/http/HttpClient" target="_blank" >HttpClient</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                                <tr>
+                                                        <td>auth</td>
+                                                  
+                                                        <td>
+                                                                        <code><a href="../injectables/AuthenticationService.html" target="_self" >AuthenticationService</a></code>
+                                                        </td>
+                                                  
+                                                    <td>
+                                                            No
+                                                    </td>
+                                                    
+                                                </tr>
+                                        </tbody>
+                                    </table>
+                            </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+</section>
+
+            <section>
+    
+    <h3 id="methods">
+        Methods
+    </h3>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlants"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlants</b></span>
+                        <a href="#getMETRCPlants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlants(id: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="38"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:38</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>id</td>
+                                    <td>
+                                                <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsGet.html" target="_self" >Observable&lt;METRCPlantsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsAdditives"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsAdditives</b></span>
+                        <a href="#getMETRCPlantsAdditives"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsAdditives(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="135"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:135</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsAdditivesGet.html" target="_self" >Observable&lt;METRCPlantsAdditivesGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsAdditivesTypes"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsAdditivesTypes</b></span>
+                        <a href="#getMETRCPlantsAdditivesTypes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsAdditivesTypes(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="167"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:167</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsAdditivesTypesGET.html" target="_self" >Observable&lt;METRCPlantsAdditivesTypesGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsByLabel"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsByLabel</b></span>
+                        <a href="#getMETRCPlantsByLabel"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsByLabel(label: <a href="../s/s.html" target="_self">string</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="55"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:55</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>label</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsAdditivesGet.html" target="_self" >Observable&lt;METRCPlantsAdditivesGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsflowering"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsflowering</b></span>
+                        <a href="#getMETRCPlantsflowering"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsflowering(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="87"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:87</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsGet.html" target="_self" >Observable&lt;METRCPlantsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsGrowthPhases"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsGrowthPhases</b></span>
+                        <a href="#getMETRCPlantsGrowthPhases"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsGrowthPhases(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="151"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:151</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsGrowthPhasesGET.html" target="_self" >Observable&lt;METRCPlantsGrowthPhasesGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsinActive"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsinActive</b></span>
+                        <a href="#getMETRCPlantsinActive"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsinActive(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="119"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:119</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsGet.html" target="_self" >Observable&lt;METRCPlantsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsOnHold"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsOnHold</b></span>
+                        <a href="#getMETRCPlantsOnHold"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsOnHold(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="103"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:103</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsGet.html" target="_self" >Observable&lt;METRCPlantsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsVegatative"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsVegatative</b></span>
+                        <a href="#getMETRCPlantsVegatative"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsVegatative(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="71"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:71</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsGet.html" target="_self" >Observable&lt;METRCPlantsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsWasteMethods"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsWasteMethods</b></span>
+                        <a href="#getMETRCPlantsWasteMethods"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsWasteMethods(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="184"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:184</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsWasteMethodsGET.html" target="_self" >Observable&lt;METRCPlantsWasteMethodsGET[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="getMETRCPlantsWasteReasons"></a>
+                    <span class="name">
+                        <span ><b>getMETRCPlantsWasteReasons</b></span>
+                        <a href="#getMETRCPlantsWasteReasons"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>getMETRCPlantsWasteReasons(site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="200"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:200</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="../interfaces/METRCPlantsWasteReasonsGet.html" target="_self" >Observable&lt;METRCPlantsWasteReasonsGet[]&gt;</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsAdditives"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsAdditives</b></span>
+                        <a href="#postMETRCPlantsAdditives"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsAdditives(mETRCPlantsAdditivesPOST: <a href="../interfaces/METRCPlantsAdditivesPOST.html" target="_self">METRCPlantsAdditivesPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="264"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:264</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsAdditivesPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsAdditivesPOST.html" target="_self" >METRCPlantsAdditivesPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsAdditivesByLocation"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsAdditivesByLocation</b></span>
+                        <a href="#postMETRCPlantsAdditivesByLocation"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsAdditivesByLocation(mETRCPlantsAdditivesByLocationPOST: <a href="../interfaces/METRCPlantsAdditivesByLocationPOST.html" target="_self">METRCPlantsAdditivesByLocationPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="281"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:281</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsAdditivesByLocationPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsAdditivesByLocationPOST.html" target="_self" >METRCPlantsAdditivesByLocationPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsChangeGrowthPhases"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsChangeGrowthPhases</b></span>
+                        <a href="#postMETRCPlantsChangeGrowthPhases"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsChangeGrowthPhases(mETRCPlantsChangeGrowthPhasesPOST: <a href="../interfaces/METRCPlantsChangeGrowthPhasesPOST.html" target="_self">METRCPlantsChangeGrowthPhasesPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="232"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:232</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsChangeGrowthPhasesPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsChangeGrowthPhasesPOST.html" target="_self" >METRCPlantsChangeGrowthPhasesPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsCreatePlantBatchPackage"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsCreatePlantBatchPackage</b></span>
+                        <a href="#postMETRCPlantsCreatePlantBatchPackage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsCreatePlantBatchPackage(mETRCPlantsCreatePlantBatchPackagePOST: <a href="../s/s.html" target="_self">METRCPlantsCreatePlantBatchPackagePOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="311"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:311</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsCreatePlantBatchPackagePOST</td>
+                                    <td>
+                                                <code><a href="../miscellaneous/variables.html#s" target="_self" >METRCPlantsCreatePlantBatchPackagePOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsCreatePlantings"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsCreatePlantings</b></span>
+                        <a href="#postMETRCPlantsCreatePlantings"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsCreatePlantings(mETRCPlantsCreatePlantingsPOST: <a href="../interfaces/METRCPlantsCreatePlantingsPOST.html" target="_self">METRCPlantsCreatePlantingsPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="296"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:296</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsCreatePlantingsPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsCreatePlantingsPOST.html" target="_self" >METRCPlantsCreatePlantingsPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsHarvestPlants"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsHarvestPlants</b></span>
+                        <a href="#postMETRCPlantsHarvestPlants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsHarvestPlants(mETRCPlantsHarvestPlantsPOST: <a href="../interfaces/METRCPlantsHarvestPlantsPOST.html" target="_self">METRCPlantsHarvestPlantsPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="341"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:341</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsHarvestPlantsPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsHarvestPlantsPOST.html" target="_self" >METRCPlantsHarvestPlantsPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsManicurePlant"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsManicurePlant</b></span>
+                        <a href="#postMETRCPlantsManicurePlant"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsManicurePlant(mETRCPlantsManicurePlantPOST: <a href="../interfaces/METRCPlantsManicurePlantPOST.html" target="_self">METRCPlantsManicurePlantPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="326"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:326</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsManicurePlantPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsManicurePlantPOST.html" target="_self" >METRCPlantsManicurePlantPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPlantsMovePlants"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPlantsMovePlants</b></span>
+                        <a href="#postMETRCPlantsMovePlants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPlantsMovePlants(mETRCPlantsMovePlantsPOST: <a href="../interfaces/METRCPlantsMovePlantsPOST.html" target="_self">METRCPlantsMovePlantsPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="216"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:216</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPlantsMovePlantsPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPlantsMovePlantsPOST.html" target="_self" >METRCPlantsMovePlantsPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="postMETRCPOSTPlantsDestroyPlants"></a>
+                    <span class="name">
+                        <span ><b>postMETRCPOSTPlantsDestroyPlants</b></span>
+                        <a href="#postMETRCPOSTPlantsDestroyPlants"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>postMETRCPOSTPlantsDestroyPlants(mETRCPOSTPlantsDestroyPlantsPOST: <a href="../interfaces/METRCPOSTPlantsDestroyPlantsPOST.html" target="_self">METRCPOSTPlantsDestroyPlantsPOST[]</a>, site: <a href="../interfaces/ISite.html" target="_self">ISite</a>)</code>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-line">Defined in <a href="" data-line="248"
+                            class="link-to-prism">src/app/_services/metrc/metrc-plants.service.ts:248</a></div>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                    <div class="io-description">
+                        <b>Parameters :</b>
+                        <table class="params">
+                            <thead>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>Type</td>
+                                    <td>Optional</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>mETRCPOSTPlantsDestroyPlantsPOST</td>
+                                    <td>
+                                                <code><a href="../interfaces/METRCPOSTPlantsDestroyPlantsPOST.html" target="_self" >METRCPOSTPlantsDestroyPlantsPOST[]</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                                <tr>
+                                    <td>site</td>
+                                    <td>
+                                                <code><a href="../interfaces/ISite.html" target="_self" >ISite</a></code>
+                                    </td>
+
+                                    <td>
+                                        No
+                                    </td>
+
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div>
+                    </div>
+                    <div class="io-description">
+                        <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >any</a></code>
+
+                    </div>
+                    <div class="io-description">
+                        
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { Observable, } from &#x27;rxjs&#x27;;
+import { IMETRCSales } from &#x27;src/app/_interfaces/transactions/metrc-sales&#x27;;
+import { HttpClient } from &#x27;@angular/common/http&#x27;;
+import { AuthenticationService } from &#x27;../../_services/system/authentication.service&#x27;;
+import { ISite } from &#x27;src/app/_interfaces&#x27;;
+import { SitesService } from &#x27;../../_services/reporting/sites.service&#x27;;
+
+import {
+    METRCPlantsGet,
+    METRCPlantsAdditivesGet,
+    METRCPlantsGrowthPhasesGET,
+    METRCPlantsAdditivesTypesGET,
+    METRCPlantsWasteMethodsGET,
+    METRCPlantsWasteReasonsGet,
+    METRCPlantsMovePlantsPOST,
+    METRCPlantsChangeGrowthPhasesPOST,
+    METRCPOSTPlantsDestroyPlantsPOST,
+    METRCPlantsAdditivesPOST,
+    METRCPlantsAdditivesByLocationPOST,
+    METRCPlantsCreatePlantingsPOST,
+    METRCPlantsCreatePlantBatchPackagePOST,
+    METRCPlantsManicurePlantPOST,
+    METRCPlantsHarvestPlantsPOST
+} from &#x27;../../_interfaces/metrcs/plants&#x27;;
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+export class MetrcPlantsService {
+
+  constructor( private http: HttpClient,
+    private auth: AuthenticationService,
+   ) {
+
+   }
+
+   getMETRCPlants(id:number, site: ISite): Observable&lt;METRCPlantsGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/&#x27;
+
+    const endPoint &#x3D; &#x60;${id}&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsGet[]&gt;(url);
+
+  }
+
+
+  getMETRCPlantsByLabel(label:string, site: ISite): Observable&lt;METRCPlantsAdditivesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/&#x27;
+
+    const endPoint &#x3D; &#x60;${label}&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsAdditivesGet[]&gt;(url);
+
+  }
+
+  getMETRCPlantsVegatative(site:ISite): Observable&lt;METRCPlantsGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/vegetative&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsGet[]&gt;(url);
+
+  }
+
+  getMETRCPlantsflowering(site:ISite): Observable&lt;METRCPlantsGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/flowering&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsGet[]&gt;(url);
+
+  }
+
+  getMETRCPlantsOnHold(site:ISite): Observable&lt;METRCPlantsGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/onhold&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsGet[]&gt;(url);
+
+  }
+
+  getMETRCPlantsinActive(site:ISite): Observable&lt;METRCPlantsGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/inactive&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsGet[]&gt;(url);
+
+  }
+
+  getMETRCPlantsAdditives(site:ISite): Observable&lt;METRCPlantsAdditivesGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/additives&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsAdditivesGet[]&gt;(url);
+
+  }
+
+  getMETRCPlantsGrowthPhases(site:ISite): Observable&lt;METRCPlantsGrowthPhasesGET[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/growthhases&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsGrowthPhasesGET[]&gt;(url);
+
+  }
+
+  getMETRCPlantsAdditivesTypes(site:ISite): Observable&lt;METRCPlantsAdditivesTypesGET[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/additives/types&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsAdditivesTypesGET[]&gt;(url);
+
+  }
+
+
+  getMETRCPlantsWasteMethods(site:ISite): Observable&lt;METRCPlantsWasteMethodsGET[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/waste/methods&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsWasteMethodsGET[]&gt;(url);
+
+  }
+
+  getMETRCPlantsWasteReasons(site:ISite): Observable&lt;METRCPlantsWasteReasonsGet[]&gt; {
+
+    const controller &#x3D; &#x27;/plants/v1/waste/reasons&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.get&lt;METRCPlantsWasteReasonsGet[]&gt;(url);
+
+  }
+
+  postMETRCPlantsMovePlants(mETRCPlantsMovePlantsPOST: METRCPlantsMovePlantsPOST[] , site: ISite): any {
+
+    const controller &#x3D; &#x27;/plants/v1/move/plants&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsWasteReasonsGet[]&gt;(url,mETRCPlantsMovePlantsPOST);
+
+  }
+
+  postMETRCPlantsChangeGrowthPhases(mETRCPlantsChangeGrowthPhasesPOST: METRCPlantsChangeGrowthPhasesPOST[] , site: ISite): any {
+
+    const controller &#x3D; &#x27;/plants/v1/changeGrowthPhases&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsChangeGrowthPhasesPOST[]&gt;(url, mETRCPlantsChangeGrowthPhasesPOST);
+
+  }
+
+  postMETRCPOSTPlantsDestroyPlants(mETRCPOSTPlantsDestroyPlantsPOST: METRCPOSTPlantsDestroyPlantsPOST[] , site: ISite): any {
+
+    const controller &#x3D; &#x27;/plants/v1/destroyplants&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPOSTPlantsDestroyPlantsPOST[]&gt;(url, mETRCPOSTPlantsDestroyPlantsPOST);
+
+  }
+
+  postMETRCPlantsAdditives(mETRCPlantsAdditivesPOST: METRCPlantsAdditivesPOST[] , site: ISite): any {
+
+    const controller &#x3D; &#x27;/plants/v1/additives&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsAdditivesPOST[]&gt;(url, mETRCPlantsAdditivesPOST);
+
+  }
+
+
+  postMETRCPlantsAdditivesByLocation(mETRCPlantsAdditivesByLocationPOST: METRCPlantsAdditivesByLocationPOST[] , site: ISite): any {
+    const controller &#x3D; &#x27;/plants/v1/additives/bylocation&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsAdditivesByLocationPOST[]&gt;(url, mETRCPlantsAdditivesByLocationPOST);
+
+  }
+
+  postMETRCPlantsCreatePlantings(mETRCPlantsCreatePlantingsPOST: METRCPlantsCreatePlantingsPOST[] , site: ISite): any {
+    const controller &#x3D; &#x27;/plants/v1/create/plantings&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsCreatePlantingsPOST[]&gt;(url, mETRCPlantsCreatePlantingsPOST);
+
+  }
+
+  postMETRCPlantsCreatePlantBatchPackage(mETRCPlantsCreatePlantBatchPackagePOST: METRCPlantsCreatePlantBatchPackagePOST[] , site: ISite): any {
+    const controller &#x3D; &#x27;/plants/v1/create/plantbatch/packages&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsCreatePlantBatchPackagePOST[]&gt;(url, mETRCPlantsCreatePlantBatchPackagePOST);
+
+  }
+
+  postMETRCPlantsManicurePlant(mETRCPlantsManicurePlantPOST: METRCPlantsManicurePlantPOST[] , site: ISite): any {
+    const controller &#x3D; &#x27;/plants/v1/manicureplants&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsManicurePlantPOST[]&gt;(url, mETRCPlantsManicurePlantPOST);
+  }
+
+
+  postMETRCPlantsHarvestPlants(mETRCPlantsHarvestPlantsPOST: METRCPlantsHarvestPlantsPOST[] , site: ISite): any {
+    const controller &#x3D; &#x27;/plants/v1/harvestplants&#x27;
+
+    const endPoint &#x3D; &#x60;&#x60;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const licenseNumber  &#x3D; &#x60;?licenseNumber&#x3D;${site.metrcLicenseNumber}&#x60;
+
+    const url &#x3D; &#x60;${site.metrcURL}${controller}${endPoint}${parameters}${licenseNumber}&#x60;
+
+    return this.http.post&lt;METRCPlantsHarvestPlantsPOST[]&gt;(url, mETRCPlantsHarvestPlantsPOST);
+
+  }
+
+
+}
+</code></pre>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'injectable';
+            var COMPODOC_CURRENT_PAGE_URL = 'MetrcPlantsService.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

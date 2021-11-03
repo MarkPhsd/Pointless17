@@ -1,0 +1,19 @@
+<button mat-button mat-raised-button class="button" color="primary" (click)="import()">Import</button>
+
+<div *ngIf="mETRCFacilities$" class="agrid-container">
+
+  <ag-grid-angular
+    #agGrid
+    id="myGrid"
+    style="height: 85vh;"
+    class="ag-theme-balham"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [rowData]="mETRCFacilities$ | async"
+    [frameworkComponents]="frameworkComponents"
+    (gridReady)="onGridReady($event)">
+  </ag-grid-angular>
+
+<div>
+
+

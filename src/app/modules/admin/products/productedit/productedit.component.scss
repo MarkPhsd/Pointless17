@@ -1,0 +1,202 @@
+@import "/src/mixins.scss";
+
+.mat-input-element {
+  font-size: small;
+}
+
+.app-widget-uploader {
+  width:     200px;
+  max-width: 200px;
+  height:    200px;
+  max-height:200px;
+  margin:  2rem 2rem 2rem 2rem;
+}
+
+
+.grid-order-header {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  grid-auto-flow:dense;
+}
+
+
+
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+.info-group {
+  height: 450px;
+  min-height: 450px;
+}
+
+mat-label {
+  padding:5px;
+  font-size: 1.0em;
+}
+
+meta-tags {
+  height: 100px;
+}
+
+mat-form-field {
+  margin: 3px 3px 3px 3px;
+}
+
+mat-radio-button  {
+  margin: 3px;
+}
+
+mat-card{
+  padding: 5px 5px 5px 5px;
+  margin:  3px 3px 3px 3px;
+  // height: 100%;
+  // overflow: hidden;
+}
+
+.example-tab-icon {
+  margin-right: 8px;
+}
+
+.itemSaved {
+  color: hotpink;
+}
+
+mat-drawer {
+  width: 200px;
+}
+
+mat-drawer-container {
+  height: 100%;
+}
+
+mat-drawer-content {
+  padding: 20px;
+}
+
+simple-tinymce {
+  padding:5px;
+}
+
+mat-form-field {
+  font-size: .8em;
+}
+
+label {
+  display: block;
+  padding: 5px;
+}
+
+button{
+  padding: 5px;
+}
+
+h1 {
+  font-size: 1.5em;
+  text-decoration: underline;
+}
+
+#remove_email {
+  // color: red;
+  margin: 5px;
+}
+
+#register_button {
+  background: lightblue;
+}
+
+// .alert {
+//   // color: darkred;
+// }
+
+// .ng-invalid:not(form)  {
+//   // border-left: 3px solid darkred;
+// }
+
+// .ng-valid:not(form) {
+//   border-left: 3px solid greenyellow;
+// }
+
+// img {
+//   width: 150px;
+//   height: 150px;
+//   align-content: center;
+// }
+
+.custom-card {
+  background-color: gray;
+  padding: 25px;
+  margin-bottom: 25px;
+}
+
+.container {
+  padding: 5px;
+}
+
+// :host {
+//   display: flex;
+//   flex-direction: column;
+//   height: 100%;
+// }
+
+body{ overflow-x: hidden;}
+
+// .grid-container {
+//   display: flex;
+//   flex-wrap: wrap;
+// }
+
+// .document-content {
+//   display: block;
+
+//   @media (max-width: 425px)  {
+//     display: none;
+//     background-color: antiquewhite;
+//   }
+//   @media (max-width: 599px)  {
+//     display: none;
+//     background-color: antiquewhite;
+//   }
+//   // @media (max-width: 600px)   {
+//   //   display: none;
+//   //   background-color: antiquewhite;
+//   // }
+//   @media (max-width: 900px) {
+//     display: none;
+//     background-color: antiquewhite;
+//   }
+// }
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+}
+
+.mat-form-field {
+  display: inline-block;
+  position: relative;
+  text-align: left;
+  width: 175px;
+}
+
+mat-card {
+  height: 100%;
+}
+

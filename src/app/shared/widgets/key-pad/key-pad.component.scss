@@ -1,0 +1,112 @@
+mat-card {
+  // width : 285px;
+  // margin-left: 35px;
+  margin: 10px;
+}
+
+.header-info {
+  display: flex;
+  align-items: flex-end;
+  margin-top:  -10px;
+  margin-left: 10px;
+  top: -10px;
+  position:relative;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.grid-keypad {
+  display         : grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap             : 0px;
+  // column-gap      : 1px;
+  margin-left     : 10px;
+  grid-gap        : 0px;
+  grid-column-gap : 0px;
+}
+
+.grid-keypad-alternate {
+  display         : grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap             : 0px;
+  // column-gap      : 1px;
+  margin-left     : 15px;
+  grid-gap        : 0px;
+  grid-column-gap : 0px;
+}
+
+mat-button  {
+  border-radius: 5px;
+}
+
+.button-sized-1 {
+  width       : 75px;
+  height      : 50px;
+}
+
+.button-sized-2 {
+  width       : 130px;
+  height      : 85px;
+  border-radius: 5px;
+}
+
+.keyboard-button {
+  border-color: rgb(92, 99, 96);
+  border-width: 1px;
+  border-style: solid;
+  margin-left : 5px;
+  margin-top  : 8px;
+  border-radius: 5px;
+}
+// number-buttons button-sized-1
+
+.number-buttons {
+  border-color: rgb(92, 99, 96);
+  border-width: 1px;
+  border-style: solid;
+  margin-left : 0px;
+  margin-top  : 5px;
+  padding     : 0px;
+  border-radius: 5px;
+}
+
+mat-form-field {
+  margin-bottom: 5px;
+  height: 1em;
+  width   : 120px;
+}
+
+button {
+  width       : 100%;
+  height      : 100%;
+  margin-left : 0px;
+  margin-top  : 0px;
+  padding     : 0px;
+}
+
+.checkbox {
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-top: 10px;
+  margin-right: 5px;
+}
+
+
+.mat-card {
+  margin: 5px;
+}
+
+.item-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+}
+
+.endButton {
+  grid-column-end: -1;
+}

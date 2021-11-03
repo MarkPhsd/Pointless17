@@ -1,0 +1,42 @@
+<div class="buttons-grid">
+
+  <div>
+    <button mat-button (click)="print()">
+      <mat-icon>print</mat-icon>
+      Print
+    </button>
+  </div>
+
+  <div>
+    <button mat-button (click)="exit()">
+      <mat-icon>close</mat-icon>
+      Exit
+    </button>
+  </div>
+
+</div>
+
+<div>Printer: {{printerName}} </div>
+
+<div *ngIf="receiptLayoutSetting && order">
+    <div  *ngIf="headerText && footerText && itemsText"
+           class="border-section">
+      <app-receipt-layout #printsection
+                          id="printsection"
+                          [headerText]="headerText"
+                          [footerText]="footerText"
+                          [itemText]="itemsText"
+                          [printerWidth]="receiptLayoutSetting.option9"
+                          [paymentsText]="paymentsText"
+                          [subFooterText]="subFooterText"
+                          [items]="items"
+                          [order]="order"
+                          [payments]="payments"
+                          [orderType]="orderTypes"
+                          [testdata]="true"
+                          [liveEdit]="false"
+                          [styles]="receiptStyles">
+       </app-receipt-layout>
+    </div>
+</div>
+

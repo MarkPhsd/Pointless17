@@ -1,0 +1,553 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>pointless documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css" media="(prefers-color-scheme: dark)">
+    </head>
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top visible-xs">
+            <a href="../" class="navbar-brand">pointless documentation</a>
+            <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="hidden-xs menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content interface">
+                   <div class="content-data">
+
+
+
+
+
+
+
+
+
+
+
+
+<ol class="breadcrumb">
+  <li>Interfaces</li>
+  <li
+  >
+  IIsOnline</li>
+</ol>
+
+<ul class="nav nav-tabs" role="tablist">
+        <li class="active">
+            <a href="#info" role="tab" id="info-tab" data-toggle="tab" data-link="info">Info</a>
+        </li>
+        <li >
+            <a href="#source" role="tab" id="source-tab" data-toggle="tab" data-link="source">Source</a>
+        </li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade active in" id="c-info">
+        <p class="comment">
+            <h3>File</h3>
+        </p>
+        <p class="comment">
+            <code>src/app/_services/system/settings.service.ts</code>
+        </p>
+
+
+
+
+        <section>
+            <h3 id="index">Index</h3>
+            <table class="table table-sm table-bordered index-table">
+                <tbody>
+                    <tr>
+                        <td class="col-md-4">
+                            <h6><b>Properties</b></h6>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-4">
+                            <ul class="index-list">
+                                <li>
+                                        <a href="#result" 
+>
+                                            result
+                                        </a>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+
+
+            <section>
+                <h3 id="inputs">Properties</h3>
+                    <table class="table table-sm table-bordered">
+                        <tbody>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <a name="result"></a>
+                                        <span class="name "><b>result</b>
+                                            <a href="#result">
+                                                <span class="icon ion-ios-link"></span>
+                                            </a>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-4">
+                                        <code>result:         <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+</code>
+                                    </td>
+                                </tr>
+
+
+                                    <tr>
+                                        <td class="col-md-4">
+                                            <i>Type : </i>        <code><a href="../miscellaneous/variables.html#s" target="_self" >string</a></code>
+
+                                        </td>
+                                    </tr>
+
+
+
+
+
+                        </tbody>
+                    </table>
+            </section>
+    </div>
+
+
+    <div class="tab-pane fade  tab-source-code" id="c-source">
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import { Injectable } from &#x27;@angular/core&#x27;;
+import { HttpClient, HttpHeaders,  } from &#x27;@angular/common/http&#x27;;
+import { AuthenticationService } from &#x27;src/app/_services/system/authentication.service&#x27;;
+import { Observable, } from &#x27;rxjs&#x27;;
+import { ISetting, ISite }   from &#x27;src/app/_interfaces&#x27;;
+import { environment } from &#x27;src/environments/environment&#x27;;
+import { SitesService } from &#x27;../reporting/sites.service&#x27;;
+import { IItemBasic } from &#x27;../menu/menu.service&#x27;;
+import { HttpClientCacheService } from &#x27;src/app/_http-interceptors/http-client-cache.service&#x27;;
+
+interface IIsOnline {
+  result: string;
+}
+
+@Injectable({
+  providedIn: &#x27;root&#x27;
+})
+
+export class SettingsService {
+
+  constructor( private http: HttpClient,
+                private httpCache: HttpClientCacheService,
+                private auth: AuthenticationService,
+
+              private siteService: SitesService ) { }
+
+  isAPIOnline(): Observable&lt;any&gt; {
+
+    const controller &#x3D; &quot;/values/&quot;
+
+    const endPoint &#x3D; &#x27;getIsOnline&#x27;;
+
+    const url &#x3D; &#x60;${environment.apiUrl}${controller}${endPoint}&#x60;
+
+    return this.http.get&lt;any&gt;(url, { observe: &#x27;response&#x27;}  )
+
+  }
+
+  getPOSNames(site: ISite):  Observable&lt;ISetting[]&gt; {
+
+    const controller &#x3D; &#x27;/settings/&#x27;
+
+    const endPoint &#x3D; &#x27;getListOfPOSComputers&#x27;
+
+    const parameters &#x3D; &#x27;&#x27;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;ISetting[]&gt;(url);
+
+  }
+
+  getSettingsByDescription(site: ISite, description: String):  Observable&lt;ISetting[]&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;GetSettingsByDescription&#x27;;
+
+    const parameters &#x3D; &#x60;?description&#x3D;${description}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;ISetting[]&gt;(url);
+
+  }
+
+  getVoidReasons(site: ISite):  Observable&lt;IItemBasic[]&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;getVoidReasons&#x27;;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    const uri &#x3D;  this.siteService.getCacheURI(url)
+
+    return this.httpCache.get&lt;IItemBasic[]&gt;(uri);
+
+  }
+
+  getSetting(site: ISite, id: number):  Observable&lt;ISetting&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;getSetting&#x27;;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;ISetting&gt;(url);
+
+  }
+
+  deleteSetting(site: ISite, id: number):  Observable&lt;ISetting&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;deleteSetting&#x27;;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.delete&lt;ISetting&gt;(url);
+
+  }
+
+  getLabels(site: ISite):  Observable&lt;ISetting[]&gt; {
+
+    return this.getSettingsByDescription(site, &#x27;labels&#x27;)
+
+  }
+
+  getReceipts(site: ISite):  Observable&lt;ISetting[]&gt; {
+
+    return this.getSettingsByDescription(site, &#x27;receiptLayouts&#x27;)
+
+  }
+
+  getPrepReceipts(site: ISite):  Observable&lt;ISetting[]&gt; {
+
+    return this.getSettingsByDescription(site, &#x27;prepreceipt&#x27;)
+
+  }
+
+  getReceiptStyles(site: ISite):  Observable&lt;ISetting[]&gt; {
+
+    return this.getSettingsByDescription(site, &#x27;receiptStyles&#x27;)
+
+  }
+
+  getSettingByName(site: ISite, name: String):  Observable&lt;ISetting&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;getSettingByName&#x27;;
+
+    const parameters &#x3D; &#x60;?name&#x3D;${name}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.get&lt;ISetting&gt;(url);
+
+  }
+
+  putSetting(site: ISite, id: number, setting : ISetting):  Observable&lt;ISetting&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;putSetting&#x27;;
+
+    const parameters &#x3D; &#x60;?id&#x3D;${id}&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.put&lt;ISetting&gt;(url, setting);
+
+  }
+
+  postSetting(site: ISite,  setting: ISetting):  Observable&lt;ISetting&gt; {
+
+    const controller &#x3D; &quot;/settings/&quot;
+
+    const endPoint &#x3D; &#x27;postSetting&#x27;;
+
+    const parameters &#x3D; &#x60;&#x60;
+
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+
+    return this.http.post&lt;ISetting&gt;(url, setting);
+
+  }
+
+  getOrderAssociatedWithTablet(site: ISite):  Observable&lt;ISetting[]&gt; {
+    const controller &#x3D; &quot;/settings/&quot;
+    const endPoint &#x3D; &#x27;getOrderAssociatedWithTablet&#x27;
+    const parameters &#x3D; &#x27;&#x27;
+    const url &#x3D; &#x60;${site.url}${controller}${endPoint}${parameters}&#x60;
+    return  this.http.get&lt;ISetting[]&gt;(url);
+  }
+
+  async  saveSetting(site: ISite, setting: ISetting): Promise&lt;ISetting&gt;  {
+
+    if (setting.id &#x3D;&#x3D; undefined)  {
+      return await this.postSetting(site,setting).pipe().toPromise()
+    }
+    if (setting.id) {
+      return await this.putSetting(site, setting.id, setting).toPromise()
+    }
+
+  }
+
+  //default values
+  async setText(site: ISite, setting: ISetting): Promise&lt;ISetting&gt;  {
+
+    let setting$ &#x3D; this.getSettingByName(site, setting.name)
+
+    let _setting &#x3D; await setting$.pipe().toPromise()
+
+    if (_setting) {
+      setting.id &#x3D; _setting.id
+      return _setting// don&#x27;t need to re-save if it exists.
+    }
+
+    return  await this.saveSetting(site, setting)
+
+  }
+
+  ////////////////
+  async setDefaultZPLText(site: ISite): Promise&lt;ISetting&gt; {
+    let setting     &#x3D; {} as ISetting;
+    setting.name    &#x3D; &#x27;ZPLTemplate&#x27;
+    setting.text    &#x3D; await this.getDefaultZPLText()
+    setting.description &#x3D; &#x27;Labels&#x27;
+    setting.option2 &#x3D; &#x27;2&#x27;
+    setting.option3 &#x3D; &#x27;3&#x27;
+    return await this.setText(site, setting)
+  }
+
+  async getDefaultZPLText() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/labelZPL.txt&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  ////////////////
+
+  ////////////////
+  async setDefaultReceiptLayout(site: ISite): Promise&lt;ISetting&gt; {
+    let setting        &#x3D; {} as ISetting;
+    setting.name       &#x3D; &#x27;Receipt Default&#x27;
+    setting.text       &#x3D;  await this.getDefaultReceiptItemLayout()
+    setting.option6    &#x3D;  await this.getDefaultReceiptHeaderLayout()
+    setting.option5    &#x3D;  await this.getDefaultReceiptFooterLayout()
+    setting.option7    &#x3D;  await this.getDefaultReceiptPaymentLayout()
+    setting.option8    &#x3D;  await this.getDefaultReceiptsubFooterLayout()
+
+    setting.description &#x3D; &#x27;ReceiptLayouts&#x27;
+    return await this.setText(site, setting)
+  }
+
+  async getDefaultReceiptItemLayout() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/receiptTemplateItems.html&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  async getDefaultReceiptHeaderLayout() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/receiptTemplateHeader.html&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  async getDefaultReceiptFooterLayout() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/receiptTemplateFooter.html&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  async getDefaultReceiptsubFooterLayout() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/receiptTemplatesubFooter.html&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  async getDefaultReceiptPaymentLayout() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/receiptTemplatePayments.html&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  ////////////////
+
+  ////////////////
+  async setDefaultReceiptStyles(site: ISite): Promise&lt;ISetting&gt; {
+    let setting     &#x3D; {} as ISetting;
+    setting.name    &#x3D; &#x27;ReceiptStyles&#x27;
+    setting.text    &#x3D; await this.getDefaultReceiptStyles();
+    setting.description &#x3D; &#x27;ReceiptStyles&#x27;
+    return  this.setText(site, setting)
+  }
+
+  async getDefaultReceiptStyles() {
+    const oberservable$ &#x3D; this.http.get(&#x27;assets/htmlTemplates/receiptStyles.txt&#x27;, {responseType: &#x27;text&#x27;});
+    return await oberservable$.pipe().toPromise()
+  }
+  ////////////////
+
+  //////////////////
+  async initCacheTime(site: ISite): Promise&lt;ISetting&gt; {
+
+    const data &#x3D; await this.getSettingByName(site,&quot;CacheTime&quot;).pipe().toPromise()
+    if (data) {return data }
+
+    let setting &#x3D; {} as ISetting;
+
+    setting.name &#x3D; &quot;CacheTime&quot;
+    setting.value &#x3D; &#x27;10000&#x27;
+    setting.boolean &#x3D; true
+
+    return  await this.postSetting(site, setting).pipe().toPromise();
+  }
+
+  async initAppCache(): Promise&lt;ISetting&gt; {
+    // var person &#x3D; { &quot;name&quot;: &quot;billy&quot;, &quot;age&quot;: 23};
+    // localStorage.setItem(&#x27;person&#x27;, JSON.stringify(person)); //stringify object and store
+    // var retrievedPerson &#x3D; JSON.parse(localStorage.getItem(&#x27;person&#x27;));
+    let setting &#x3D; {} as ISetting;
+    let appCache &#x3D; JSON.parse(localStorage.getItem(&#x27;appCache&#x27;));
+
+    if (appCache) {
+       setting.value &#x3D; appCache
+       return await setting
+      }
+
+    try {
+      const site &#x3D; this.siteService.getAssignedSite();
+
+      const data      &#x3D; await this.getSettingByName(site,&quot;CacheTime&quot;).pipe().toPromise()
+      localStorage.setItem(&#x27;appCache&#x27;, JSON.stringify(data));
+      if (data) {return await data }
+
+      setting.name    &#x3D; &quot;CacheTime&quot;
+      setting.value   &#x3D; &#x27;10000&#x27;
+      setting.boolean &#x3D; true
+
+      const cache     &#x3D;  await this.postSetting(site, setting).pipe().toPromise();
+      localStorage.setItem(&#x27;appCache&#x27;, JSON.stringify(cache));
+      return await cache
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+  getCacheURI(url: string) {
+    const  cache &#x3D; this.getCurrentCache();
+
+    if (cache &#x3D;&#x3D; null) {
+      return  { url: url, cacheMins: 0 }
+    }
+
+    return { url: url, cacheMins: parseInt(cache.value) }
+  }
+
+  getCurrentCache(): ISetting {
+    try {
+      const appCache &#x3D; JSON.parse(localStorage.getItem(&#x27;appCache&#x27;));
+      // console.log(&#x27;initAppCache&#x27;, appCache)
+      return appCache
+
+    } catch (error) {
+      console.log(error)
+    }
+
+  }
+
+}
+
+
+
+
+</code></pre>
+    </div>
+</div>
+
+
+                   
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> result-matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'interface';
+            var COMPODOC_CURRENT_PAGE_URL = 'IIsOnline.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
+       
+       <script type="module" src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
+
+       <script src="../js/libs/bootstrap-native.js"></script>
+
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
+       <script src="../js/libs/zepto.min.js"></script>
+
+       <script src="../js/compodoc.js"></script>
+
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>

@@ -1,0 +1,148 @@
+
+<div *ngIf="menuItem$"  class="gallery-container">
+  <div *ngIf="(menuItem$ | async) as menuItem; else loading">
+
+    <mat-card >
+      <mat-card-title class="exit">
+
+      </mat-card-title>
+      <mat-card-subtitle >
+        <div class="grid">
+
+          <div class="grid-item">
+            <div class="grid-demographics">
+
+              <div class="species" id="product-name">
+                <button mat-raised-button color="accent">
+                  {{ menuItem?.species }}
+                </button>
+              </div>
+
+              <div id="brand-name" *ngIf="brand$ | async as brand">
+                {{ brand.companyName }}
+              </div>
+
+              <div id="product-name">{{ menuItem?.name }}</div>
+              <div id="barcode">{{ menuItem?.barcode}}</div>
+
+              <div class="prices">
+                <div class="pricing-box" *ngIf="menuItem?.retail" >
+                  <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
+                  <div id="price"> Price {{ menuItem?.retail | currency }} </div>
+                </div>
+
+                <div  class="pricing-box" *ngIf="menuItem.msrp != 0" >
+                  <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
+                  <div id="price">MSRP {{ menuItem?.msrp | currency }} </div>
+                </div>
+              </div>
+
+              <div class="manager-info" *ngIf="isUserStaff">
+                <div class="pricing-box"  >
+                  <div id="unitDescription"> </div>
+                  <div id="price"> Count {{ menuItem?.productCount  }} </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="grid-save-add-buttons">
+
+            <div id="addToWishList">
+              <button mat-button
+                      class="button"
+                >Add To Wishlist</button>
+            </div>
+
+            <div id="addItemToOrder">
+              <button  mat-button
+                       class="button"
+                       (click)="addItemToOrder()" >
+                <mat-icon>add</mat-icon>Add To Order</button>
+              </div>
+
+            <div class="column-3-span">
+
+              <div class="buttons-quantity">
+
+                <div id="addItemToOrder">
+                  <button mat-raised-button class="button"
+                          (click)="changeQuantity(1)">
+                  <mat-icon>exposure_plus_1</mat-icon></button>
+                </div>
+
+                <div >
+                  <mat-form-field
+                                  appearance="outline"
+                                  class="quantity-input"
+                                  >
+                    <mat-label >quantity</mat-label>
+                    <input matInput
+                          type             ="text"
+                          [(ngModel)]="quantity"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div id="addItemToOrder">
+                  <button mat-raised-button
+                          class="button"
+                          (click)="changeQuantity(-1)" >
+                          <mat-icon>exposure_neg_1</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-subtitle>
+
+      <mat-card-content >
+
+        <div class="flexy">
+          <div class="grid">
+
+            <div class="gallery">
+              <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
+            </div>
+
+            <div>
+              <div id="onlineDescription"
+                  class="grid-item-gallery"
+                  [innerHTML]="menuItem?.onlineDescription">
+              </div>
+
+              <div class="center">
+                <app-chemical-spinners
+                  [menuItem]="menuItem">
+                </app-chemical-spinners>
+              </div>
+
+              <div class="center">
+                <app-chips-display
+                    [items]="menuItem.metaTags">
+                </app-chips-display>
+              </div>
+            </div>
+
+            <div *ngIf="menuItem.specialDescription">
+              <div id="specialDescription"> {{ menuItem?.specialDescription }} </div>
+            </div>
+
+            <div class="onlineShortDescription"
+                [innerHTML]="menuItem?.onlineShortDescription">
+            </div>
+
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>

@@ -1,0 +1,141 @@
+
+<mat-card>
+    <mat-card-title>Edit Company</mat-card-title>
+    <mat-card-subtitle>
+      <div >
+        <app-edit-buttons-standard
+              (outputeupdateItem)     ="update($event)"
+              (outputupdateItemExit)  ="updateExit($event)"
+              (outputupdateonCancel)  ="navSettings($event)"
+              (outputupdatedeleteItem)="delete($event)"
+              enableDelete            ="false"
+        ></app-edit-buttons-standard>
+      </div>
+      <mat-divider></mat-divider>
+    </mat-card-subtitle>
+
+    <mat-card-content >
+      <div >
+        <div class="grid-forms"
+             [formGroup]="inputForm"
+             *ngIf="inputForm && company$; else loading;">
+          <div class="grid-forms">
+          <div>
+            <mat-form-field appearance="outline">
+            <mat-label >Name</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="compName"
+                  class="form-control" >
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="outline">
+            <mat-label >Corp</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="compCorpName"
+                  class="form-control" >
+            </mat-form-field>
+          </div>
+          <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Phone</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="phone"
+                    class="form-control" >
+              </mat-form-field>
+          </div>
+          <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Phone2</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="phone2"
+                    class="form-control" >
+              </mat-form-field>
+          </div>
+          <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Fax</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="fax"
+                    class="form-control" >
+              </mat-form-field>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline">
+            <mat-label >Web</mat-label>
+            <input matInput
+                    type="text"
+                    formControlName="url"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+
+
+          </div>
+          <div>
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Address 1</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="compAddress1"
+                    class="form-control" >
+                </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Address 2</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="compAddress2"
+                    class="form-control" >
+                </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >City</mat-label>
+              <input matInput
+                      type="text"
+                      formControlName="compCity"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >State</mat-label>
+              <input matInput
+                      type="text"
+                      formControlName="compState"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Postal</mat-label>
+              <input matInput
+                      type="text"
+                      formControlName="compBillingZip"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <ng-template #loading >
+          <mat-spinner  diameter="100"></mat-spinner>
+        </ng-template>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+
+
+

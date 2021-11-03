@@ -1,0 +1,39 @@
+<div *ngIf="itemType  && (itemType.type === 'retail liquor')">
+  <app-mat-select [inputForm]= "inputForm"
+                  [fieldName]= "'printerID'"
+                  [list$]    = "printerLocations$">
+    Print Location
+</app-mat-select>
+</div>
+
+<div *ngIf="itemType  && (itemType.type === 'grocery')">
+
+</div>
+
+<div *ngIf="itemType  && ( itemType.type === 'tobacco') ">
+
+</div>
+
+<div *ngIf="itemType  && (itemType.type === 'discount' )">
+
+ </div>
+
+<div *ngIf="itemType  && (itemType.name === 'Food' )">
+
+</div>
+
+<div *ngIf="itemType  && (itemType.name === 'Retail' )">
+
+</div>
+
+<div *ngIf="itemType  && (itemType.name === 'Modifier' )">
+
+</div>
+
+<div *ngIf="itemType  && (itemType.type === 'grouping' )">
+
+</div>
+
+<div *ngIf="itemType  && (itemType.type === 'cannabis' || itemType.type ===  'med-cannabis')">
+
+</div>
