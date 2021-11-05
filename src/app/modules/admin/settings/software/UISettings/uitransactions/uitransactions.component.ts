@@ -37,11 +37,11 @@ export class UITransactionsComponent implements OnInit {
     });
   }
 
-  initForm(setting: ISetting) {
+  async initForm(setting: ISetting) {
     const form = this.inputForm
     console.log("uitransactions setting", setting)
     if (setting) {
-      this.inputForm = this.uISettingsService.setFormValue(form, setting, setting.text)
+      this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text)
     }
   }
 

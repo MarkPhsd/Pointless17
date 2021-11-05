@@ -1,3 +1,10 @@
+@import "/src/mixins.scss";
+
 .toggle-selector {
   height: 225px;
+
+  @include for-phone-only  {
+    height: 225px;
+  }
+
 }

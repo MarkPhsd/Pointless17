@@ -63,11 +63,13 @@ export class PosOrderItemsComponent implements OnInit {
                 private uiSettingsService: UISettingsService,
               )
  {
-    this.initSubscriptions();
+
     this.orderItemsPanel = 'item-list';
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.uiSettingsService.subscribeToCachedConfig()
+    this.initSubscriptions();
     this.orderItemsPanel = 'item-list';
     // this.getUIConfig()
   }

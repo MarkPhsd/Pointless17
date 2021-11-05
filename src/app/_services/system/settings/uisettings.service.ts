@@ -32,43 +32,46 @@ export class UISettingsService {
       private settingsService: SettingsService) {
 
     const site = this.siteService.getAssignedSite();
-    this.settingsService.getSettingByNameCached(site, 'UITransactionSetting').subscribe(data => {
+    this.settingsService.getSettingByNameCached(site, ' ').subscribe(data => {
       const ui = {} as TransactionUISettings
       if (data.text) {
         const ui = JSON.parse(data.text)
         this.updateUISubscription(ui)
         return
       }
-      this.updateUISubscription(ui)
     })
 
   }
 
+  async  subscribeToCachedConfig(): Promise<TransactionUISettings> {
+    const site = this.siteService.getAssignedSite();
+    const setting = await this.settingsService.getSettingByNameCached(site, 'UITransactionSetting').toPromise();
+    const config = JSON.parse(setting.text) as TransactionUISettings
+    this.updateUISubscription(config);
+    return config
+  }
+
   getTransactionUISettings(cached: boolean): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
-    if (cached)  {  return  this.settingsService.getSettingByNameCached(site, 'UITransactionSetting') }
+    if (cached)  { return this.settingsService.getSettingByNameCached(site, 'UITransactionSetting') }
     if (!cached) { return this.settingsService.getSettingByName(site, 'UITransactionSetting')}
   }
 
   async  saveTransactionUIConfig(fb: FormGroup): Promise<ISetting>  {
     const transactionUISettings = fb.value
-    return await  this.setTransactionUISetting(transactionUISettings )
+    return await  this.setTransactionUISetting(transactionUISettings)
   }
 
   //save setting returns promise
   private async setTransactionUISetting(transactionUISettings: TransactionUISettings): Promise<ISetting> {
-
     const site    = this.siteService.getAssignedSite();
-
     const setting = {} as ISetting;
     setting.id    = transactionUISettings.id
     setting.name  = "UITransactionSetting"
+    console.log('transactionUISettings', transactionUISettings)
     setting.text  = JSON.stringify(transactionUISettings);
-
     this.updateUISubscription(transactionUISettings)
-
     return await this.settingsService.putSetting(site, setting.id, setting).toPromise()
-
   }
 
   initForm(fb: FormGroup): FormGroup {
@@ -82,11 +85,13 @@ export class UISettingsService {
     return fb
   }
 
-  setFormValue(inputForm: FormGroup, setting: ISetting, text: any): FormGroup {
+  async setFormValue(inputForm: FormGroup, setting: ISetting, text: any): Promise<FormGroup> {
     inputForm = this.initForm(inputForm);
+    if (!text) {
+      setting = await this.initConfigSettings(setting)
+    }
     const config = JSON.parse(text) as TransactionUISettings
     config.id = setting.id;
-    console.log('setFormValue', config)
     inputForm = this.setFormValues(config, inputForm);
     return inputForm
   }
@@ -104,20 +109,13 @@ export class UISettingsService {
     return fb
   }
 
+  async initConfigSettings(setting: ISetting): Promise<ISetting> {
+    const ui = {} as TransactionUISettings
+    ui.id = setting.id
+    setting = await this.setTransactionUISetting(ui)
+    const config = JSON.parse(setting.text) as TransactionUISettings
+    this.updateUISubscription(config)
+    return setting
+  }
+
 }
-
-
-// const controller = "/settings/"
-
-// const endPoint = 'gets';
-
-// const uri = `${site.url}${controller}${endPoint}${parameters}`
-
-// if (appCache) {
-//   if (appCache.value) {
-//     const url = { url: uri, cacheMins: 0}
-//     return  this.httpCache.get<TransactionUISettings>(url)
-//   }
-// }
-
-// return this.http.get<TransactionUISettings>(uri);

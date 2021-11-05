@@ -176,8 +176,9 @@ export class PosPaymentComponent implements OnInit {
 
       let paymentResponse  = {} as IPaymentResponse
       this.posPayment.amountReceived = amount;
-      console.log(paymentResponse)
+
       paymentResponse = await this.getResults(amount)
+      console.log('applyPaymentAmount', paymentResponse)
 
       this.processResults(paymentResponse)
     }
@@ -255,6 +256,7 @@ export class PosPaymentComponent implements OnInit {
 
     if (this.paymentMethod && this.posPayment && this.order)
       {console.log('pos method, payment method, order are true')}
+
     if (this.paymentMethod && this.posPayment && this.order) {
 
       //cash

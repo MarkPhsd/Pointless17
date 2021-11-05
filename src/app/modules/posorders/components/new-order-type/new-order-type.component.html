@@ -8,6 +8,7 @@
    <mat-card-content>
     <app-mat-toggle-selector
         class="toggle-selector"
+        buttonDimensions="button-dimensions-tall"
         [list$]="serviceTypes$"
         [hideAllOption]="'true'"
         (outPutID)="newOrderByType($event)">
