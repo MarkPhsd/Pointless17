@@ -1,198 +1,198 @@
-.grid-receipt  {
-	display: grid;
-	grid-template-columns: 50px auto 80px;
-	grid-template-rows:  auto;
-	gap: 20px;
-}
-
-.grid-receipt-85 {
-	display: grid;
-	grid-template-columns: 50px auto 80px;
-	grid-template-rows:  auto;
-	gap: 20px;
-}
-
-.grid-receipt-80 {
-	display: grid;
-	grid-template-columns: 50px auto 80px;
-	grid-template-rows:  auto;
-	gap: 20px;
-}
-
-.grid-receipt-58  {
-	display: grid;
-	grid-template-columns: 20px auto auto;
-	grid-template-rows:  auto;
-	gap: 5px;
-}
-
-.grid-totals {
-   display: grid;
-   grid-template-columns: 120px auto auto;
-   gap: 10px;
-   float: right
-   margin-top: 20px;
-}
-
-.grid-totals-85 {
-   display: grid;
-   grid-template-columns: 120px auto auto;
-   gap: 10px;
-   float: right
-   margin-top: 20px;
-}
-
-.grid-totals-80 {
-   display: grid;
-   grid-template-columns: 120px auto auto;
-   gap: 10px;
-   float: right
-   margin-top: 20px;
-}
-
-.grid-totals-58 {
-   display: grid;
-   grid-template-columns: 15px auto auto;
-   gap: 5px;
-   float: right
-   margin-top: 5px;
-}
-
-.grid-totals-4-col-85 {
-   display: grid;
-   grid-template-columns: 50px 50px auto auto;
-   gap: 10px;
-   float: right
-   margin-top: 20px;
-}
-
-.grid-totals-4-col-80 {
-   display: grid;
-   grid-template-columns: 50px 50px auto auto;
-   gap: 10px;
-   float: right
-   margin-top: 20px;
-}
-
-.grid-totals-4-col-58 {
-   display: grid;
-   grid-template-columns: 50px 50px auto auto;
-   gap: 5px;
-   float: right
-   margin-top: 5px;
-}
-
-.spacing-58 {
-  margin-top: 5px;
-}
-
-.spacing {
-  margin-top: 20px;
-}
-
-.image-container  {
-    position: absolute;
-    right: 0;
-    left: 50;
-    top: 0;
-    bottom: 0;
-}
-
-.printsection {
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-receipt  {
+    display: grid;
+    grid-template-columns: 50px auto 80px;
+    grid-template-rows:  auto;
+    gap: 20px;
   }
-}
 
-.printsection-58 {
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-receipt-85 {
+    display: grid;
+    grid-template-columns: 50px auto 80px;
+    grid-template-rows:  auto;
+    gap: 20px;
   }
-}
 
-.companyName {
-  text-align: center;
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-receipt-80 {
+    display: grid;
+    grid-template-columns: 50px auto 80px;
+    grid-template-rows:  auto;
+    gap: 20px;
   }
-}
 
-.address {
-  text-align: center;
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-receipt-58  {
+    display: grid;
+    grid-template-columns: 20px auto auto;
+    grid-template-rows:  auto;
+    gap: 5px;
   }
-}
 
-.itemName, itemprice {
-  align-items: center;
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-totals {
+    display: grid;
+    grid-template-columns: 120px auto auto;
+    gap: 10px;
+    float: right
+    margin-top: 20px;
   }
-}
 
-.quantity {
-  align-items: center;
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-totals-85 {
+    display: grid;
+    grid-template-columns: 120px auto auto;
+    gap: 10px;
+    float: right
+    margin-top: 20px;
   }
-}
 
-.item-price {
-  text-align: right;
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
+  .grid-totals-80 {
+    display: grid;
+    grid-template-columns: 120px auto auto;
+    gap: 10px;
+    float: right
+    margin-top: 20px;
   }
-}
 
- .total {
+  .grid-totals-58 {
+    display: grid;
+    grid-template-columns: 15px auto auto;
+    gap: 5px;
+    float: right
+    margin-top: 5px;
+  }
+
+  .grid-totals-4-col-85 {
+    display: grid;
+    grid-template-columns: 50px 50px auto auto;
+    gap: 10px;
+    float: right
+    margin-top: 20px;
+  }
+
+  .grid-totals-4-col-80 {
+    display: grid;
+    grid-template-columns: 50px 75px auto auto;
+    gap: 10px;
+    float: right
+    margin-top: 20px;
+  }
+
+  .grid-totals-4-col-58 {
+    display: grid;
+    grid-template-columns: 50px 75px auto auto;
+    gap: 5px;
+    float: right
+    margin-top: 5px;
+  }
+
+  .spacing-58 {
+    margin-top: 5px;
+  }
+
+  .spacing {
+    margin-top: 20px;
+  }
+
+  .image-container  {
+      position: absolute;
+      right: 0;
+      left: 50;
+      top: 0;
+      bottom: 0;
+  }
+
+  .printsection {
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .printsection-58 {
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .companyName {
+    text-align: center;
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .address {
+    text-align: center;
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .itemName, itemprice {
+    align-items: center;
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .quantity {
+    align-items: center;
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .item-price {
     text-align: right;
     font-size: .8em;
     @media : print {
       font-size: 10pt;
     }
-}
-
-.method {
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
   }
-}
 
-.amountPaid {
-  font-size: .8em;
-  text-align: right;
-  @media : print {
-    font-size: 10pt;
+  .total {
+      text-align: right;
+      font-size: .8em;
+      @media : print {
+        font-size: 10pt;
+      }
   }
-}
 
-.name {
-  font-size: .8em;
-  @media : print {
-    font-size: 10pt;
-  }
-}
-
-.description {
-     font-size: .8em;
+  .method {
+    font-size: .8em;
     @media : print {
       font-size: 10pt;
     }
-}
+  }
 
-.items-span-columns-2{
-  grid-column-end: span 2;
-}
+  .amountPaid {
+    font-size: .8em;
+    text-align: right;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
 
-.items-span-columns-3{
-  grid-column-end: span 3;
-}
+  .name {
+    font-size: .8em;
+    @media : print {
+      font-size: 10pt;
+    }
+  }
+
+  .description {
+      font-size: .8em;
+      @media : print {
+        font-size: 10pt;
+      }
+  }
+
+  .items-span-columns-2{
+    grid-column-end: span 2;
+  }
+
+  .items-span-columns-3{
+    grid-column-end: span 3;
+  }

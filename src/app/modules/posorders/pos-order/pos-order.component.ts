@@ -115,7 +115,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private printingService: PrintingService,
               private _snackBar: MatSnackBar,
               private router: Router,
-              public route: ActivatedRoute,
+              public  route: ActivatedRoute,
               private siteService: SitesService,
               private toolbarUIService: ToolBarUIService,
               private bottomSheet     : MatBottomSheet,
@@ -549,8 +549,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   printReceipt() {
-    console.log('print or receipt')
-    //this.printerService.printReceipt(order);
     this.openReceiptView();
   }
 

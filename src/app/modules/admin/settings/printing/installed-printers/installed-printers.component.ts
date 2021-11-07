@@ -24,6 +24,7 @@ import domtoimage from 'dom-to-image';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { switchMap } from 'rxjs/operators';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
@@ -99,64 +100,68 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   prepReceiptList$:  Observable<ISetting[]>;
   receiptID       :  number;
 
-  items :     any[];
-  orders :    any[];
-  payments:   any[];
-  orderTypes: any[];
-  platForm = '';
+  electronSetting       : ISetting;
+  electronReceiptPrinter: string;
+  electronReceipt       : string;
+  electronReceiptID     : number;
 
-  btPrinters : any=[];
-  btPrinters$: any;
-  btPrinter  : string;
-  imageConversion: any;
-  defaultElectronReceiptPrinter: string;
+  items           : any[];
+  orders          : any[];
+  payments        : any[];
+  orderTypes      : any[];
+  platForm        = '';
 
-  printOptions: printOptions;
-  hideWindow  : boolean;
+  btPrinters      : any=[];
+  btPrinters$     : any;
+  btPrinter       : string;
+  imageConversion : any;
+
+  printOptions    : printOptions;
+  hideWindow      : boolean;
 
   constructor(
-              private electronService: ElectronService,
-              private snack: MatSnackBar,
-              private settingService: SettingsService,
-              private siteService: SitesService,
-              private printingService: PrintingService,
-              private dialog     : MatDialog,
-              private fakeData: FakeDataService,
-              private renderingService: RenderingService,
-              private btPrinterService: BtPrintingService,
+              private electronService       : ElectronService,
+              private printingService       : PrintingService,
               private printingAndroidService: PrintingAndroidService,
+              private btPrinterService      : BtPrintingService,
+              private snack                 : MatSnackBar,
+              private settingService        : SettingsService,
+              private siteService           : SitesService,
+              private dialog                : MatDialog,
+              private fakeData              : FakeDataService,
+              private renderingService      : RenderingService,
+              private platFormService       : PlatformService,
   ) {
     this.printOptions = {} as printOptions;
+    this.platForm = this.platFormService.platForm;
   }
 
   async ngOnInit() {
-    this.printerAssignment();
+    this.getPrinterAssignment();
   }
 
-  getPlatForm() {
-    return Capacitor.getPlatform();
-  }
+  async getPrinterAssignment(){
 
-  async printerAssignment(){
-    const platForm              =  this.getPlatForm()
-    this.platForm               = platForm
-    if (this.electronService.remote != null) {
-      this.platForm = 'electron'
+    if (this.platFormService.isAppElectron) {
       this.printingService.getDefaultElectronReceiptPrinter().subscribe( data => {
-        this.defaultElectronReceiptPrinter = data.text;
+       console.log('getDefaultElectronReceiptPrinter data', data)
+        this.electronSetting = data;
+        this.electronReceiptPrinter = data.text;
+        this.electronReceipt = data.value ;
+
         if (this.printOptions) {
           this.printOptions.deviceName = data.text
         }
+        console.log('electron printing settings', data)
       })
     }
-    if (this.isElectronServiceInitiated) {  }
 
-    if (platForm === 'android') {
+    if (this.platFormService.androidApp) {
       this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
       this.platForm     = 'android'
       this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
     }
-    if (platForm === 'web') { }
+
   }
 
   async ngAfterViewInit() {
@@ -166,7 +171,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   async  initDefaultLayouts() {
     try {
       const site = this.siteService.getAssignedSite();
-
       await this.printingService.initDefaultLayouts();
       await this.applyStyles();
       const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
@@ -176,7 +180,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     } catch (error) {
       console.log(error)
     }
-
   }
 
   async initDefaultLabel(){
@@ -197,7 +200,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       this.receiptLayoutSetting   = null;
       const site                  = this.siteService.getAssignedSite();
       const receipt$              = this.settingService.getSetting(site, id)
-
       receipt$.subscribe(data => {
         this.receiptID = id
         this.initSubComponent( data, this.receiptStyles )
@@ -206,12 +208,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       console.log(error)
     }
   }
-
-  // setDefaultReceiptWidth(width) {
-  //   if (width && this.receiptIDUseID ) {
-
-  //   }
-  // }
 
   saveAsReceiptDefault(id: number) {
 
@@ -574,17 +570,52 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     )
   }
 
-  setDefaultElectronReceiptPrinterName(name: string) {
-    this.printerName = name
-    localStorage.setItem('defaultElectronReceiptPrinter', name)
-    this.printingService.getDefaultElectronReceiptPrinter().pipe( switchMap( data =>  {
-      data.text  = name;
-      return  this.printingService.setDefaultElectronReceiptPrinter(data)
-    })
-    ).subscribe(data => {
-      console.log('printer setting', data)
+  setElectronReceiptID(event) {
+    if (!this.electronSetting) { return }
+    this.electronReceipt             = event.name
+    this.electronReceiptID           = event.id
+    this.electronSetting.value       = this.electronReceipt
+    console.log('electronReceiptID', this.electronReceipt)
+    console.log('electronReceiptPrinter', this.electronReceiptPrinter)
+    this.setElectronReceipt(this.electronSetting);
+  }
+
+  setElectronPrinterName(event) {
+    this.electronReceiptPrinter = event
+    if (!this.electronSetting) { return }
+    this.electronSetting.text   = event
+    this.electronReceiptPrinter = event;
+    this.setElectronReceipt(this.electronSetting);
+  }
+
+  setElectronReceipt(electronSetting: ISetting) {
+    if (!electronSetting) { return}
+    const receipt$ = this.printingService.setDefaultElectronReceiptPrinter(this.electronSetting);
+    receipt$.subscribe(data => {
+      this.electronReceiptPrinter = data.text;
+      this.electronReceiptID      = +data.option1;
+      this.electronReceipt        = data.value;
     })
   }
+
+  setAndroidReceiptPrinter(event) {
+    console.log('')
+  }
+
+  // setDefaultElectronReceiptPrinterName(name: string) {
+  //   this.printerName = name
+  //   localStorage.setItem('defaultElectronReceiptPrinter', name)
+  //   if (this.electronSetting) {
+  //     this.electronSetting.text = name;
+  //   }
+  //   this.printingService.getDefaultElectronReceiptPrinter().pipe( switchMap( data =>  {
+  //     data.text  = name;
+  //     return  this.printingService.setDefaultElectronReceiptPrinter(data)
+  //   })
+  //   ).subscribe(data => {
+  //     console.log('printer setting', data)
+  //   })
+  // }
 
   getLabelID(id: any) {
     this.labelID = parseInt(id)

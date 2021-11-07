@@ -1,5 +1,4 @@
 <div class="buttons-grid">
-
   <div>
     <button mat-button (click)="print()">
       <mat-icon>print</mat-icon>
@@ -13,16 +12,19 @@
       Exit
     </button>
   </div>
-
 </div>
 
 <div>Printer: {{printerName}} </div>
 
-<div *ngIf="receiptLayoutSetting && order">
-    <div  *ngIf="headerText && footerText && itemsText"
-           class="border-section">
-      <app-receipt-layout #printsection
-                          id="printsection"
+<div *ngIf="receiptLayoutSetting">
+
+  <mat-card>
+    <div  *ngIf="headerText &&  itemsText"
+          class="border-section">
+          <!-- headerText{{headerText}}
+          <br>
+          itemsText {{itemsText}} -->
+       <app-receipt-layout #printsection id="printsection"
                           [headerText]="headerText"
                           [footerText]="footerText"
                           [itemText]="itemsText"
@@ -30,13 +32,35 @@
                           [paymentsText]="paymentsText"
                           [subFooterText]="subFooterText"
                           [items]="items"
-                          [order]="order"
+                          [order]="orders"
                           [payments]="payments"
                           [orderType]="orderTypes"
-                          [testdata]="true"
+                          [testdata]="false"
                           [liveEdit]="false"
                           [styles]="receiptStyles">
        </app-receipt-layout>
     </div>
+  </mat-card>
 </div>
 
+<!-- <div *ngIf="receiptLayoutSetting && order">
+  <div  *ngIf="headerText && footerText && itemsText"
+         class="border-section">
+    <app-receipt-layout #printsection
+                        id="printsection"
+                        [headerText]="headerText"
+                        [footerText]="footerText"
+                        [itemText]="itemsText"
+                        [printerWidth]="receiptLayoutSetting.option9"
+                        [paymentsText]="paymentsText"
+                        [subFooterText]="subFooterText"
+                        [items]="items"
+                        [order]="order"
+                        [payments]="payments"
+                        [orderType]="orderTypes"
+                        [testdata]="true"
+                        [liveEdit]="false"
+                        [styles]="receiptStyles">
+     </app-receipt-layout>
+  </div>
+</div> -->

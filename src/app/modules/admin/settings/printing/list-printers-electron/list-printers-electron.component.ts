@@ -11,8 +11,8 @@ export class ListPrintersElectronComponent implements OnInit {
 
   @Output() outputPrinterName   :      EventEmitter<any> = new EventEmitter();
 
-  isElectronServiceInitiated: boolean;
-  printerList               : any;
+  isElectronServiceInitiated    : boolean;
+  printerList                   : any;
   @Input()  printerName:               string
 
   constructor(private electronService: ElectronService,

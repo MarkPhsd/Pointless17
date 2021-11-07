@@ -2,24 +2,16 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild, AfterViewInit, Inp
 import { ElectronService } from 'ngx-electron';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder, IProduct, ISetting } from 'src/app/_interfaces';
+import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import * as  printJS from "print-js";
-import { RenderingService } from 'src/app/_services/system/rendering.service';
-import { SafeHtmlPipe } from 'src/app/_pipes/safe-html.pipe';
 import { Observable, Subscription } from 'rxjs';
-import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printing.component';
-import { Router } from '@angular/router';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { FakeDataService } from 'src/app/_services/system/fake-data.service';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { MatDialogRef } from '@angular/material/dialog';
+import { Capacitor,  } from '@capacitor/core';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-import html2canvas from 'html2canvas';
-import domtoimage from 'dom-to-image';
+
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { Dialog } from 'electron';
 
 @Component({
   selector: 'app-reciept-pop-up',
@@ -60,10 +52,11 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   btPrinter         : string;
   imageConversion   : any;
 
-
   order             : IPOSOrder;
   _order            : Subscription;
   subscriptionInitialized: boolean;
+
+  electronReceiptSetting: ISetting;
 
   intSubscriptions() {
     this._order       = this.orderService.currentOrder$.subscribe(data => {
@@ -78,9 +71,8 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
           this.items      = data.posOrderItems
         }
       } catch (error) {
-
+        console.log(error)
       }
-
       console.log('order', this.orders)
     })
   }
@@ -102,21 +94,83 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     this.applyStyles();
     this.intSubscriptions();
     this.getOrderType();
-    this.getDefaultPrinter()
+    this.getDefaultPrinter();
+  }
+
+  async ngAfterViewInit() {
+    this.initDefaultLayouts();
   }
 
   async getDefaultPrinter() {
+    //!! get the Printer name And the Receipt Type.
+    //then REfresh the receipt with the styles and the printer selected.
+
+    //get the DefaultElectornReceiptCached This will reduce API Calls.
+    //The DeaultRecieptCached doesn't get the receipt styles
+    //it gets the pointer to the receipt styles.
+
+    //call the styles
+    //once those are set the receipt will load
+
     // const site       = this.siteService.getAssignedSite();
     // const item       = await this.settingService.getDefaultReceiptPrinter(site)
-    const printerName   =    localStorage.getItem('defaultElectronReceiptPrinter')
+    const printerName     = localStorage.getItem('electronReceiptPrinter')
+    let   receipt         = localStorage.getItem('electronReceipt')
+    let electronReceiptID = localStorage.getItem('electronReceiptID')
+    console.log('Printer then Receipt ' + printerName, receipt )
+
+
     if (!printerName) {
-      this.printingService.getDefaultElectronReceiptPrinter().subscribe(data => {
+        console.log('getting Info')
+        const item = await this.printingService.getDefaultElectronReceiptPrinter().toPromise()
+        this.electronReceiptSetting = item;
+
+        console.log('electronReceiptSetting', item)
+        localStorage.setItem('electronReceiptPrinter', item.text)
+        localStorage.setItem('electronReceipt', item.name)
+        localStorage.setItem('electronReceiptID', item.option1)
+        electronReceiptID = item.option1;
+
         this.printerName = printerName;
-        return
-      })
+        return printerName
     }
+
+    this.refreshReceipt(electronReceiptID);
+
     this.printerName = printerName;
   }
+
+  async refreshReceipt(id: any) {
+
+    try {
+      this.receiptLayoutSetting   = null;
+      const site                  = this.siteService.getAssignedSite();
+      const receipt$              = this.settingService.getSetting(site, id)
+      receipt$.subscribe(data => {
+        this.initSubComponent( data, this.receiptStyles )
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting) {
+    try {
+      console.log('initSubComponent receiptPromise', receiptPromise)
+      console.log('initSubComponent receiptStylePromise', receiptPromise)
+      if (receiptPromise && receiptStylePromise) {
+        this.receiptLayoutSetting = receiptPromise
+        this.headerText           =  this.receiptLayoutSetting.option6
+        this.footerText           =  this.receiptLayoutSetting.option5
+        this.itemsText            =  this.receiptLayoutSetting.text
+        this.paymentsText         =  this.receiptLayoutSetting.option7
+        this.subFooterText        =  this.receiptLayoutSetting.option8
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
 
   async getOrderType(){
     const site                  = this.siteService.getAssignedSite();
@@ -127,10 +181,6 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
 
   getPlatForm() {
     return Capacitor.getPlatform();
-  }
-
-  async ngAfterViewInit() {
-    this.initDefaultLayouts()
   }
 
  async printerAssignment(){
@@ -151,7 +201,8 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
       const site                  = this.siteService.getAssignedSite();
       await this.printingService.initDefaultLayouts();
       await this.applyStyles();
-      const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
+      // const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
+      const receipt$ = this.printingService.getDefaultElectronReceiptPrinter()
       const receiptPromise        = await receipt$.pipe().toPromise()
       this.refreshReceipt(receiptPromise.id);
     } catch (error) {
@@ -205,33 +256,7 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     return file
   }
 
-  async refreshReceipt(id: any) {
-    try {
-      this.receiptLayoutSetting   = null;
-      const site                  = this.siteService.getAssignedSite();
-      const receipt$              = this.settingService.getSetting(site, id)
-      receipt$.subscribe(data => {
-        this.initSubComponent( data, this.receiptStyles )
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
-  initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting) {
-    try {
-      if (receiptPromise && receiptStylePromise) {
-        this.receiptLayoutSetting = receiptPromise
-        this.headerText           =  this.receiptLayoutSetting.option6
-        this.footerText           =  this.receiptLayoutSetting.option5
-        this.itemsText            =  this.receiptLayoutSetting.text
-        this.paymentsText         =  this.receiptLayoutSetting.option7
-        this.subFooterText        =  this.receiptLayoutSetting.option8
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   async print() {
     const platForm    =  this.getPlatForm()
@@ -250,8 +275,6 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
       this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
     }
     if (platForm === 'web') {
-      // const prtContent  = document.getElementById('printsection');
-      // this.printingService.getPrintHTML(prtContent);
        this.convertToPDF();
      }
   }
@@ -267,7 +290,6 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
       printBackground: false,
       deviceName: this.printerName
     }
-
     this.printingService.printElectron( contents, this.printerName, options, true)
   }
 

@@ -1,8 +1,10 @@
 <h4>Cache Settings</h4>
 
 <div *ngIf="currentCache">
-  Current Cache: Status: {{currentCache.boolean}} Time (minutes) {{currentCache.value}}
+  Current cache:
   <mat-divider></mat-divider>
+    <!-- {{currentCache | json}}
+    : Status: {{currentCache.boolean}} Time (minutes) {{currentCache.value}} -->
 </div>
 
 <div *ngIf="cacheTimeSetting">

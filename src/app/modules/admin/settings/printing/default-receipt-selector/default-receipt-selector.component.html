@@ -1,0 +1,14 @@
+<mat-form-field appearance="outline">
+  <mat-label><ng-content></ng-content></mat-label>
+    <mat-select
+              type                  ="text"
+              [(ngModel)]           ="receipt"
+              formControlNamename   ="receiptName"
+              (selectionChange)     ="setReceipt()">
+        <div *ngIf="(receiptList | async) as list">
+        <mat-option *ngFor="let item of list" [value]="item">
+          {{ item.name }}
+      </mat-option>
+    </div>
+  </mat-select>
+</mat-form-field>

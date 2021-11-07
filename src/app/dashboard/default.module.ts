@@ -110,7 +110,6 @@ import { ReceiptLayoutComponent } from '../modules/admin/settings/printing/recei
 import { CacheSettingsComponent } from '../modules/admin/settings/database/cache-settings/cache-settings.component';
 import { InventoryHistoryListComponent } from '../modules/admin/inventory/inventory-history-list/inventory-history-list.component';
 import { InventoryHistoryItemComponent } from '../modules/admin/inventory/inventory-history-item/inventory-history-item.component';
-import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { LabelViewSelectorComponent } from '../modules/admin/settings/printing/label-view-selector/label-view-selector.component';
 import { InventoryComponent } from '../modules/admin/settings/inventory/inventory.component';
 import { StrainPackagesComponent } from '../modules/admin/metrc/packages/strains-add/strain-packages/strain-packages.component';
@@ -200,8 +199,9 @@ import { EditSettingsComponent } from '../modules/admin/transactions/paymentMeth
 import { PaymentMethodSettingsComponent } from '../modules/admin/transactions/paymentMethods/payment-method-settings/payment-method-settings.component';
 import { SoftwareComponent } from '../modules/admin/settings/software/software.component';
 import { UITransactionsComponent } from '../modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
-
 import { CompanyEditComponent } from '../modules/admin/company-edit/company-edit.component';
+import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
+import { DefaultReceiptSelectorComponent } from '../modules/admin/settings/printing/default-receipt-selector/default-receipt-selector.component';
 
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -240,6 +240,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DateScheduleComponent,
     DefaultComponent,
     DiscountOptionsComponent,
+    DefaultReceiptSelectorComponent,
     DemographicsComponent,
     DiscountTypeSelectionComponent,
     DndDirective,

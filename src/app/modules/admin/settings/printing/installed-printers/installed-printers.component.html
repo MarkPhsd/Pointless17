@@ -12,7 +12,7 @@
   <div class="grid-printing">
     <!-- <div fxLayout="column" fxLayoutAlign="space-around start" fxFlex="50"  fxLayoutGap="20px" > -->
     <div>
-      <div *ngIf="platForm === 'web'">
+      <div *ngIf="platForm === 'web' ">
 
         <h3>Print Test for Web </h3>
         <div>
@@ -26,10 +26,10 @@
         </div>
       </div>
 
-      <div *ngIf="platForm==='android'">
+      <div *ngIf="platForm === 'android' ">
 
         <app-list-printers-electron
-            (outputPrinterName)="setDefaultElectronReceiptPrinterName($event)" >
+            (outputPrinterName)="setAndroidReceiptPrinter($event)" >
         </app-list-printers-electron>
 
         <h3>Print Test for Android</h3>
@@ -55,16 +55,25 @@
           <div>
             <button mat-raised-button color="primary"  (click)="printAndroid()"><mat-icon>save</mat-icon> Print Test</button>
           </div>
+
       </div>
 
-      <div *ngIf="platForm === 'electron'">
+      <div *ngIf="platForm === 'electron' ">
 
         <app-list-printers-electron
-              (outputPrinterName)="setDefaultElectronReceiptPrinterName($event)" >
+              [printerName]      ="electronReceiptPrinter"
+              (outputPrinterName)="setElectronPrinterName($event)" >
         </app-list-printers-electron>
 
-        <div *ngIf="defaultElectronReceiptPrinter">
-          {{ defaultElectronReceiptPrinter }}
+        <div *ngIf="electronSetting">
+          <default-receipt-selector
+            [receiptList]      = "receiptList$"
+            [receiptID]        = "electronReceiptID"
+            [receiptName]      = "electronReceipt"
+            [receipt]          = "electronSetting"
+            (outPutReceiptName)  = "setElectronReceiptID($event)" >
+            Default Receipt
+          </default-receipt-selector>
         </div>
 
         <h3>Print Test for Windows/Linux</h3>
@@ -117,13 +126,12 @@
                   formControlNamename="receiptID"
                   (selectionChange)="refreshReceipt(receiptID)">
             <div *ngIf="(receiptList$ | async) as list">
-            <mat-option *ngFor="let item of list" [value]="item.id">
+            <mat-option *ngFor="let item of list" [value]="item">
             {{ item.name }}
           </mat-option>
         </div>
       </mat-select>
     </mat-form-field>
-
 
     <button mat-raised-button color="primary" (click)="openEditor(receiptID)">
     <mat-icon>edit</mat-icon>Edit </button>
@@ -151,7 +159,6 @@
                               [liveEdit]="false"
                               [styles]="receiptStyles">
            </app-receipt-layout>
-
         </div>
       </mat-card>
     </div>

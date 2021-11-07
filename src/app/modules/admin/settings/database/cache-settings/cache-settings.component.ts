@@ -17,8 +17,8 @@ export class CacheSettingsComponent implements AfterViewInit {
   cacheTime         :    string;
   cacheEnabled      :    boolean;
   cacheTimeSetting  = {} as  ISetting;
-  cacheForm: FormGroup;
-  currentCache: ISetting;
+  cacheForm         : FormGroup;
+  currentCache      : ISetting;
 
   constructor(
               private systemService:     SystemService,
@@ -35,7 +35,7 @@ export class CacheSettingsComponent implements AfterViewInit {
   }
 
   async initCacheTime(){
-    const site = this.sitesService.getAssignedSite();
+    const site        = this.sitesService.getAssignedSite();
     this.cacheTimeSetting = await this.settingsService.initCacheTime(site)
     if (this.cacheTimeSetting) {
       this.cacheForm  = this.fbSettingsService.initForm(this.cacheForm)
@@ -46,9 +46,7 @@ export class CacheSettingsComponent implements AfterViewInit {
   updateCacheTime() {
     if (this.cacheTimeSetting && this.cacheForm) {
       const site = this.sitesService.getAssignedSite();
-
       this.cacheTimeSetting = this.cacheForm.value;
-
       this.settingsService.putSetting(site, this.cacheTimeSetting.id, this.cacheTimeSetting ).subscribe( data => {
         this.cacheTimeSetting = data
         localStorage.setItem('appCache', JSON.stringify(this.cacheTimeSetting.value));

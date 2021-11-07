@@ -124,6 +124,7 @@ export class ReceiptLayoutComponent implements OnInit, OnChanges {
     private fakeDataService : FakeDataService) { }
 
   async ngOnInit() {
+    console.log('receipt layout initialized')
     this.getReceiptWidth()
     await this.applyStyles();
     await this.refreshData();
@@ -135,6 +136,8 @@ export class ReceiptLayoutComponent implements OnInit, OnChanges {
 
     this.initSubscriptions();
   }
+
+
 
   async refreshData() {
     this.site = this.siteService.getAssignedSite();
