@@ -64,7 +64,7 @@
       </div>
 
       <mat-card
-              *ngIf="!smallDevice && ( (isUserStaff && platFormService.platForm !='web' ) || (isAdmin) )"
+              *ngIf="!smallDevice && ( (isUserStaff && platFormService.platForm !='web' ) || (isUserStaff) )"
               class="pos-buttons-mat-card">
         <ul
             fxFlex fxLayout="row"

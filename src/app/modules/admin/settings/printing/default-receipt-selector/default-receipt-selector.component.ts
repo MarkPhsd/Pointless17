@@ -1,6 +1,9 @@
 import { Component, EventEmitter, OnInit,Input, Output  } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'default-receipt-selector',
@@ -14,17 +17,36 @@ export class DefaultReceiptSelectorComponent implements OnInit {
   @Input()  receiptID         : any;
   @Input()  receiptList       : Observable<any>;
   @Output() outPutReceiptName : EventEmitter<any> = new EventEmitter();
-  constructor() { }
 
-  ngOnInit(): void {
-    console.log('')
+  constructor(private settingsService: SettingsService, private siteService: SitesService) { }
+
+  async ngOnInit() {
+    //this requires we get the receiptID, then assign it to the item as the default item, selected item.
+    console.log('receiptID', this.receiptID)
+    if (this.receiptID) {
+      const site = this.siteService.getAssignedSite();
+
+      const item$ = this.settingsService.getSetting(site, this.receiptID).subscribe(data=> {
+        this.receipt = data;
+        this.receiptName = data.value
+      })
+
+    }
   }
 
   setReceipt() {
-    console.log('item', this.receipt)
-    this.outPutReceiptName.emit(event)
+    const site = this.siteService.getAssignedSite();
+    const item$ = this.settingsService.getSetting(site, this.receiptID)
+    item$.subscribe(data=> {
+      this.receipt = data;
+      this.outPutReceiptName.emit(this.receipt)
+    })
   }
 
 
 
 }
+
+// function site(site: any, receiptID: any) {
+//   throw new Error('Function not implemented.');
+// }

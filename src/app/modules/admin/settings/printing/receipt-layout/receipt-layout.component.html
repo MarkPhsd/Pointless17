@@ -7,7 +7,6 @@
   <div  *ngIf="liveEdit">
 
     <div     *ngIf="headerText && orders">
-      headerText {{headerText  | json}}
       <div   *ngFor="let order of orders">
         <div [innerHTML]="getInterpolatedHTML(headerText, order)" >  </div>
       </div>

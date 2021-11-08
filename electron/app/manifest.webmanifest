@@ -6,6 +6,7 @@
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
+  "description": "Pointless is a POS, Inventory, CRM, designed for online and in store usage. It works with many of your favorite API's",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

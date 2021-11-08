@@ -1,19 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IUser, IUserProfile }  from 'src/app/_interfaces';
-import { AuthenticationService, MenuService, UserService} from 'src/app/_services';
-import {
-  BreakpointObserver,
-  Breakpoints,
-  BreakpointState,
-} from '@angular/cdk/layout';
-import { AccordionMenu, accordionConfig,SubMenu } from 'src/app/_interfaces/index';
-import { Observable, pipe, Subscription } from 'rxjs';
-import { first, map } from 'rxjs/operators';
+import { IUser}  from 'src/app/_interfaces';
+import { AuthenticationService} from 'src/app/_services';
+import { AccordionMenu, accordionConfig, SubMenu } from 'src/app/_interfaces/index';
+import { Observable,  Subscription } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
-import { SystemService } from 'src/app/_services/system/system.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -44,25 +35,25 @@ export class SidebarComponent implements OnInit {
     console.log('init side bar subscriptions')
     this._user =     this.authorizationService.user$.subscribe(data => {
       this.user = data
+      console.log('inint menu user', data)
       this.getMenu();
       this.displayRoles()
     })
   }
 
-constructor(private userService: UserService,
-            private breakpointObserver: BreakpointObserver,
+constructor(
             private authorizationService: AuthenticationService,
             private menusService: MenusService,
-            private siteService : SitesService,
-            private SystemService: SystemService, ) {
+            private siteService : SitesService, ) {
 
-    this.initSubscriptions();
-  }
+            }
 
   async ngOnInit() {
-      const site = this.siteService.getAssignedSite()
-      await this.menusService.createMainMenu(site);
-      this.initSubscriptions()
+    console.log('init side bar')
+    this.initSubscriptions();
+    if (!this.user) { return }
+    const site = this.siteService.getAssignedSite()
+    await this.menusService.createMainMenu(site);
     this.selectedItem = ''
   }
 

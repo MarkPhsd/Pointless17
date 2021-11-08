@@ -269,6 +269,7 @@ const routes: Routes = [
     { path: 'login', component: LoginComponent, data: { animation: 'isLeft'}},
     { path: 'resetpassword', component: ResetpasswordComponent,data: { animation: 'isLeft'}},
     { path: 'changepassword', component: ChangepasswordComponent,data: { animation: 'isLeft'}},
+    { path: 'api-setting', component: APISettingComponent ,data: { animation: 'isLeft'}},
     { path: 'apisetting', component: APISettingComponent ,data: { animation: 'isLeft'}},
 
     { path: 'register-existing-user', component: RegisterAccountExistingUserComponent, data: { animation: 'isLeft'}},

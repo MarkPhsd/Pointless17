@@ -9,6 +9,8 @@ import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { ChangeDetectionStrategy } from '@angular/compiler/src/compiler_facade_interface';
 import { Capacitor, Plugins, KeyboardInfo } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
+import { AuthenticationService } from '../_services';
+import { IUser } from '../_interfaces';
 
 @Component({
   selector: 'app-default',
@@ -49,11 +51,25 @@ export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewI
   barType         = "mat-drawer-toolbar"
   apiUrl: any;
 
+  _user: Subscription;
+  user : IUser;
+
+  initSubscriptions() {
+    console.log('init side bar subscriptions')
+    this._user =     this.authorizationService.user$.subscribe(data => {
+      this.user = data
+      console.log('inint menu user', data)
+      // this.getMenu();
+    })
+  }
+
   constructor(
                private toolBarUIService: ToolBarUIService,
                private _renderer       : Renderer2,
                private cd              : ChangeDetectorRef,
                private appInitService  : AppInitService,
+               private authorizationService: AuthenticationService,
+
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
 
@@ -68,6 +84,7 @@ export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewI
     this.initBarService()
     this.refreshToolBarType()
     this.initOrderBarSubscription();
+    this.initSubscriptions();
   }
 
   ngAfterViewInit() {

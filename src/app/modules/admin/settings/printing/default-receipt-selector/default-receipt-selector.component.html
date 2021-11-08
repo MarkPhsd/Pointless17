@@ -2,13 +2,21 @@
   <mat-label><ng-content></ng-content></mat-label>
     <mat-select
               type                  ="text"
-              [(ngModel)]           ="receipt"
+              [(ngModel)]           ="receiptID"
               formControlNamename   ="receiptName"
               (selectionChange)     ="setReceipt()">
         <div *ngIf="(receiptList | async) as list">
-        <mat-option *ngFor="let item of list" [value]="item">
+        <mat-option *ngFor="let item of list"
+                    [value]="item.id">
           {{ item.name }}
       </mat-option>
     </div>
   </mat-select>
 </mat-form-field>
+
+<!-- <div *ngIf="receipt">
+  {{receipt.name}}<br>
+  {{receipt.value}}<br>
+  {{receipt.option1}}<br>
+  {{receipt.text}}<br>
+</div> -->

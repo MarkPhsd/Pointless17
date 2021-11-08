@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu, ipcRenderer: ipc } = require('electron');
 const isDevMode       = require('electron-is-dev');
 const { CapacitorSplashScreen, configCapacitor } = require('@capacitor/electron');
 const { autoUpdater } = require('electron-updater');
-const Registry        = require('winreg');
+const registry        = require('winreg');
 const path            = require('path');
 const log             = require('electron-log');
 
@@ -61,7 +61,7 @@ async function createWindow () {
   }
 
   if (isDevMode) { url = `http://localhost:4200/index.html`;  }
-
+  // url = `file://${__dirname}/app/index.html`
   try {
     mainWindow = new BrowserWindow({
       height: 920,
@@ -128,8 +128,8 @@ app.on('activate', function () {
   }
 });
 
-regKey = new Registry({                                       // new operator is optional
-  hive: Registry.HKLM,                                        // open registry hive HKEY_CURRENT_USER
+regKey = new registry({                                       // new operator is optional
+  hive: registry.HKLM,                                        // open registry hive HKEY_CURRENT_USER
   // key:  '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run' // key containing autostart programs
   key: '\\SOFTWARE\\WOW6432Node\\ScaleService'
 })

@@ -82,6 +82,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         // this.authenticationService.externalAPI = false;
         // console.log(user)
         if (user) {
+          console.log('interceptor', user)
           user.authdata = window.btoa(user.username + ':' + user.password);
           const isLoggedIn = user && user.authdata;
           if (isLoggedIn) {

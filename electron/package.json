@@ -21,7 +21,8 @@
     "@capacitor/electron": "^2.4.8",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.4.0",
-    "electron-updater": "^4.3.9"
+    "electron-updater": "^4.3.9",
+    "winreg": "^1.2.4"
   },
   "devDependencies": {
     "electron": "^11.0.0",

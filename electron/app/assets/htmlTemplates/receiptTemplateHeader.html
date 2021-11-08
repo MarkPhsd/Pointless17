@@ -8,20 +8,22 @@
 <span class="mat-divider"></span>
 <br>
 
-<div class="grid-totals">
+<div class="grid-totals-4-col-58">
 
-<div class="total"></div>
-<div class="total ">Order</div>
+<div class="total ">Order:</div>
 <div class="total">${item.orderID}</div>
 
-<div class="total"></div>
-<div class="totals total" >Time</div>
+<div class="totals total" >Time:</div>
 <div class="totals total ">${item.orderTime}</div>
 
-<div></div>
-<div class="totals total ">Type</div>
+<div class="totals total ">Type:</div>
 <div class="totals total ">${item.serviceType}</div>
 
+<div class="totals total" >Date:</div>
+<div class="totals total ">${item.orderDate.substr(2,8) }</div>
+
+<div class="totals total ">Rep:</div>
+<div class="totals total ">${item.employeeName}</div>
 </div>
 
 

@@ -8,13 +8,13 @@
               [mode]="sidebarMode"
               [opened]="sideBarOpen">
 
-      <div [hidden]="searchBarOpen">
+      <div [hidden]="searchBarOpen" >
 
-        <div [hidden]="toolbarTiny">
+        <div [hidden]="toolbarTiny"  >
           <app-menu-minimal></app-menu-minimal>
         </div>
 
-        <div [hidden]="!toolbarTiny">
+        <div [hidden]="!toolbarTiny" >
           <app-menu-tiny></app-menu-tiny>
         </div>
 

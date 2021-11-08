@@ -24,13 +24,17 @@ export interface IUserExists {
 export class AuthenticationService {
 
     public  externalAPI         : boolean;
+
     private _user               = new BehaviorSubject<IUser>(null);
     public  user$               = this._user.asObservable();
+
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
+
     apiUrl: any;
 
     updateUser(user: IUser) {
+      console.log('AuthenticationService user updated', user)
       this._user.next(user)
       localStorage.setItem('user', JSON.stringify(user));
     }

@@ -18,7 +18,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
   templateUrl: './reciept-pop-up.component.html',
   styleUrls: ['./reciept-pop-up.component.scss']
 })
-export class RecieptPopUpComponent implements OnInit, AfterViewInit {
+export class RecieptPopUpComponent implements OnInit {
 
   @ViewChild('printsection') printsection: ElementRef;
   @Input() printerName      : string;
@@ -91,14 +91,10 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-    this.applyStyles();
+    await this.applyStyles();
+    // this.getOrderType();
     this.intSubscriptions();
-    this.getOrderType();
     this.getDefaultPrinter();
-  }
-
-  async ngAfterViewInit() {
-    this.initDefaultLayouts();
   }
 
   async getDefaultPrinter() {
@@ -114,30 +110,36 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
 
     // const site       = this.siteService.getAssignedSite();
     // const item       = await this.settingService.getDefaultReceiptPrinter(site)
-    const printerName     = localStorage.getItem('electronReceiptPrinter')
-    let   receipt         = localStorage.getItem('electronReceipt')
-    let electronReceiptID = localStorage.getItem('electronReceiptID')
-    console.log('Printer then Receipt ' + printerName, receipt )
+    // let   printerName     = ''// localStorage.getItem('electronReceiptPrinter')
+    // let   receipt         = ''// localStorage.getItem('electronReceipt')
+    // let   receiptID       = ''// localStorage.getItem('electronReceiptID')
 
-
-    if (!printerName) {
+    // if (!printerName || !receiptID || !receipt) {
         console.log('getting Info')
+
         const item = await this.printingService.getDefaultElectronReceiptPrinter().toPromise()
         this.electronReceiptSetting = item;
 
         console.log('electronReceiptSetting', item)
         localStorage.setItem('electronReceiptPrinter', item.text)
-        localStorage.setItem('electronReceipt', item.name)
+        localStorage.setItem('electronReceipt', item.value)
         localStorage.setItem('electronReceiptID', item.option1)
-        electronReceiptID = item.option1;
 
-        this.printerName = printerName;
-        return printerName
-    }
+        // this.receipt     =  item.value;
+        this.receiptID   =  +item.option1;
+        this.printerName =  item.text;
+        // this.refreshReceipt(receiptID);
+        let receiptID        =  +item.option1;
 
-    this.refreshReceipt(electronReceiptID);
+        // return printerName
+    // }
 
-    this.printerName = printerName;
+    // this.printerName =  printerName;
+
+    // console.log('Receipt Info', printerName, receiptID, receipt)
+
+    this.refreshReceipt(receiptID);
+
   }
 
   async refreshReceipt(id: any) {
@@ -196,19 +198,6 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     if (platForm === 'web') { }
   }
 
-  async  initDefaultLayouts() {
-    try {
-      const site                  = this.siteService.getAssignedSite();
-      await this.printingService.initDefaultLayouts();
-      await this.applyStyles();
-      // const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
-      const receipt$ = this.printingService.getDefaultElectronReceiptPrinter()
-      const receiptPromise        = await receipt$.pipe().toPromise()
-      this.refreshReceipt(receiptPromise.id);
-    } catch (error) {
-      console.log(error)
-    }
-  }
 
   getPrintContent(htmlContent: any) {
     let styles  = ''
@@ -255,8 +244,6 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     }));
     return file
   }
-
-
 
   async print() {
     const platForm    =  this.getPlatForm()

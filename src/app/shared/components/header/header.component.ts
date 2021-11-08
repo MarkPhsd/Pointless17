@@ -113,6 +113,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.getUserInfo()
     })
 
+
+
   }
 
   ngOnDestroy(): void {

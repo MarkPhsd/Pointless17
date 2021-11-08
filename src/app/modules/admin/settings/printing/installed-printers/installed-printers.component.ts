@@ -145,10 +145,10 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     if (this.platFormService.isAppElectron) {
       this.printingService.getDefaultElectronReceiptPrinter().subscribe( data => {
        console.log('getDefaultElectronReceiptPrinter data', data)
-        this.electronSetting = data;
+        this.electronSetting        = data;
         this.electronReceiptPrinter = data.text;
-        this.electronReceipt = data.value ;
-
+        this.electronReceipt        = data.value ;
+        this.electronReceiptID      = +data.option1
         if (this.printOptions) {
           this.printOptions.deviceName = data.text
         }
@@ -572,11 +572,13 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   setElectronReceiptID(event) {
     if (!this.electronSetting) { return }
+    console.log('set electron Receipt ID', event)
+
     this.electronReceipt             = event.name
     this.electronReceiptID           = event.id
     this.electronSetting.value       = this.electronReceipt
-    console.log('electronReceiptID', this.electronReceipt)
-    console.log('electronReceiptPrinter', this.electronReceiptPrinter)
+    this.electronSetting.option1     = this.electronReceiptID.toString();
+    console.log(this.electronSetting)
     this.setElectronReceipt(this.electronSetting);
   }
 
@@ -585,11 +587,13 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     if (!this.electronSetting) { return }
     this.electronSetting.text   = event
     this.electronReceiptPrinter = event;
+    console.log('electronReceiptPrinter', event)
     this.setElectronReceipt(this.electronSetting);
   }
 
   setElectronReceipt(electronSetting: ISetting) {
     if (!electronSetting) { return}
+
     const receipt$ = this.printingService.setDefaultElectronReceiptPrinter(this.electronSetting);
     receipt$.subscribe(data => {
       this.electronReceiptPrinter = data.text;

@@ -31,20 +31,30 @@ export class AppInitService  {
 
     //if app then set the app if appvalue doesn't exist
     this.apiUrl = this.getLocalApiUrl();
+    console.log('app Init Service ');
 
-    if (this.appInUse) {
-      if ( this.apiUrl ){
+    if (!this.platFormService.webMode) {
+      console.log('app is in use')
+      if ( !this.apiUrl ){
         // if there is no API then the user needs to input one.
         //we also have to have a way to change or clear the API, just in case.
         // redirect to home if already logged in
         this.useAppGate = false
-        this.router.navigate(['/app-apisetting']);
+        this.router.navigate(['/apisetting']);
         return
       }
     }
 
-    this.appConfig = await this.httpClient.get('/assets/app-config.json').toPromise();
-    this.apiUrl = this.appConfig.apiUrl
+    if (this.platFormService.webMode) {
+      try {
+        console.log('web mode is in use')
+        this.appConfig = await this.httpClient.get('/assets/app-config.json').toPromise();
+        this.apiUrl = this.appConfig.apiUrl
+      } catch (error) {
+        this.useAppGate = false
+        this.router.navigate(['/apisetting']);
+      }
+    }
 
   }
 
@@ -64,8 +74,13 @@ export class AppInitService  {
     if (this.apiUrl) { return this.apiUrl };
 
     if (!this.appConfig) {
-      throw Error('Config file not loaded!');
+      // throw Error('Config file not loaded!');
+
+      this.useAppGate = false
+      this.router.navigate(['/apisetting']);
+      return ''
     }
+
     return this.appConfig.apiUrl;
   }
 

@@ -46,7 +46,7 @@
     "@angular/router": "^12.1.1",
     "@angular/service-worker": "^12.1.1",
     "@capacitor-community/camera-preview": "^2.0.0-beta.0",
-    "@capacitor-community/electron": "^1.4.2",
+    "@capacitor-community/electron": "^3.0.0",
     "@capacitor/android": "^2.4.7",
     "@capacitor/core": "2.4.6",
     "@dutchconcepts/capacitor-barcode-scanner": "^1.1.2",

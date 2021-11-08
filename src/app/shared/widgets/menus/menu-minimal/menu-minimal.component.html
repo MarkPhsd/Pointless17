@@ -9,7 +9,6 @@
           *ngFor="let menu of menus; let i = index"
           [class.active]="menu.active">
           <div *userAuthorized="menu.userType">
-          <!-- <div *ngIf="isAuthorized(menu)" > -->
             <div class="menu"
                   (click)="toggle(menu, i)">
                 <mat-icon>{{ menu.icon }}</mat-icon>
@@ -39,9 +38,8 @@
             @fade
             *ngFor="let item of submenu" >
           <div *ngIf="!item.minimized">
-            {{item.userType}}
-            <div class="menu"  *ngIf="isAuthorized(menu)">
-
+            <!-- <div class="menu"  *ngIf="isAuthorized(menu)"></div> -->
+            <div class="menu" *userAuthorized="item.userType">
               <a mat-list-item
                   color="accent"
                   routerLinkActive={{item.routerLinkActive}}
@@ -65,7 +63,7 @@
           <li>
             <mat-menu #menu="matMenu">
               <div  *ngFor="let item of submenu">
-                <div  *ngIf="isAuthorized(menu)" >
+                <div  *userAuthorized="item.userType">
                   <div *ngIf="item.minimized">
                     <button mat-menu-item
                             color="accent"

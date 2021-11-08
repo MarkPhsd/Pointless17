@@ -387,7 +387,7 @@ export class PrintingService {
 
   previewReceipt() {
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
-      { width: '400px',
+      { width: '425px',
         height: '90vh',
       },
     )

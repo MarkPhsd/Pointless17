@@ -67,10 +67,8 @@
 
         <div *ngIf="electronSetting">
           <default-receipt-selector
-            [receiptList]      = "receiptList$"
-            [receiptID]        = "electronReceiptID"
-            [receiptName]      = "electronReceipt"
-            [receipt]          = "electronSetting"
+            [receiptList]        = "receiptList$"
+            [receiptID]          = "electronReceiptID"
             (outPutReceiptName)  = "setElectronReceiptID($event)" >
             Default Receipt
           </default-receipt-selector>
@@ -126,7 +124,7 @@
                   formControlNamename="receiptID"
                   (selectionChange)="refreshReceipt(receiptID)">
             <div *ngIf="(receiptList$ | async) as list">
-            <mat-option *ngFor="let item of list" [value]="item">
+            <mat-option *ngFor="let item of list" [value]="item.id">
             {{ item.name }}
           </mat-option>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, AfterViewInit } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser } from 'src/app/_interfaces/index';
 import { Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
@@ -17,28 +17,24 @@ import { fadeAnimation } from 'src/app/_animations';
   ]
 })
 
-export class MenuTinyComponent implements OnInit, OnDestroy {
+export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
 
   accordionMenu$:    Observable<AccordionMenu[]>;
   @Input() options;
+
   @Input() menus:    AccordionMenu[];
   submenu:           SubMenu[];
   config:            accordionConfig;
   displayCategories: boolean;
   index:             number;
   result:            boolean;
+
   user              : IUser;
   _user             : Subscription;
 
   initSubscription() {
-
-    if (this.authenticationService.userValue) {
-      this.user = this.authenticationService.userValue;
-    }
-
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
-      // console.log('user updated', data)
       this.getMenu();
     })
 
@@ -57,6 +53,12 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.initSubscription();
   }
 
+  ngAfterViewInit() {
+    this._user = this.authenticationService.user$.subscribe( data => {
+      this.user  = data
+      this.getMenu();
+    })
+  }
   ngOnDestroy() {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -77,7 +79,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       console.log('No User Assigned')
       return;
     }
-    // console.log('getmenu', this.user)
+
     const site  =  this.siteService.getAssignedSite();
     this.config = this.mergeConfig(this.options);
     this.accordionMenu$ =  this.menusService.getMainMenu(site)

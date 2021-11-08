@@ -43,6 +43,12 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   initSubscription() {
 
+    console.log('init menu minimal')
+    if (this.authenticationService.userValue) {
+      this.user = this.authenticationService.userValue;
+      this.getMenu();
+    }
+
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
       this.getMenu();

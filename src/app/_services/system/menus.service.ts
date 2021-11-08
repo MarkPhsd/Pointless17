@@ -203,7 +203,8 @@ export class MenusService {
     },
   ] ;
 
-  constructor( private http: HttpClient, private auth: AuthenticationService, ) { }
+  constructor( private http: HttpClient,
+               private auth: AuthenticationService, ) { }
 
   getAnonymous(): string {
     return 'admin,manager,user,employee,anonymous'
