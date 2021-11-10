@@ -1,14 +1,12 @@
-import { Component, OnInit, Input, OnChanges,OnDestroy } from '@angular/core';
-import { AccordionMenu, accordionConfig, SubMenu, IUserProfile, IUser } from 'src/app/_interfaces/index';
-import { Observable, Subscription, } from 'rxjs';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
+import { EMPTY, Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { transition, animate, style, trigger } from '@angular/animations';
-import { SystemService } from 'src/app/_services/system/system.service';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { AuthenticationService } from 'src/app/_services';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu-minimal',
@@ -37,84 +35,58 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   displayCategories: boolean;
   index:             number;
   result:            boolean;
+
   user              : IUser;
   _user             : Subscription;
-
+  site: ISite;
 
   initSubscription() {
-
-    console.log('init menu minimal')
-    if (this.authenticationService.userValue) {
-      this.user = this.authenticationService.userValue;
-      this.getMenu();
-    }
-
-    this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
-      this.getMenu();
-    })
-
+    this._user = this.authenticationService.user$.pipe(
+      switchMap(
+        user => {
+            if (!user) {
+              this.menus = [] as AccordionMenu[];
+              return EMPTY
+            }
+            return  this.menusService.getMainMenu(this.site, user)
+          }
+        )
+      ).subscribe( data => {
+        this.menus = [] as AccordionMenu[];
+        if (!data) { return }
+        this.config = this.mergeConfig(this.options);
+        this.menus = data
+        if (this.menus)
+          data.filter( item => {
+            if (item.active) {this.menus.push(item) } //= data
+          })
+        }, err => {
+          this.menus = [] as AccordionMenu[];
+      }
+    )
   }
 
   constructor ( private menusService            : MenusService,
-                private userAuthorizationService: UserAuthorizationService,
                 private router                  : Router,
                 private siteService             : SitesService,
                 private authenticationService   : AuthenticationService,
-              ) {}
+              ) {
+
+    this.site  =  this.siteService.getAssignedSite();
+  }
 
   async ngOnInit() {
     this.initSubscription();
   }
 
   ngOnDestroy() {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    if (this._user) {
-      this._user.unsubscribe()
-    }
-  }
-
-  async getMenu() {
-    if (!this.user) {
-      // console.log('No User Assigned')
-      return;
-    }
-    // console.log('getmenu', this.user)/
-
-    const site  =  this.siteService.getAssignedSite();
-    this.config = this.mergeConfig(this.options);
-    this.accordionMenu$ =  this.menusService.getMainMenu(site)
-
-    this.accordionMenu$.subscribe(data=>{
-      // console.log(data, this.user.roles)
-      this.menus = [] as AccordionMenu[];
-      data.filter( item => {
-        if (item.active) {
-          this.menus.push(item)  //= data
-        }
-      })
-    }, err => {
-      // console.log('err', err)
-    })
-    this.displayCategories = false;
+    if (this._user) { this._user.unsubscribe() }
   }
 
   async initMenu() {
-    if (!this.user) {
-      // console.log('No User Assigned')
-      return;
-    }
+    if (!this.user) { return; }
     const site  = this.siteService.getAssignedSite();
-    try {
-      this.menusService.createMainMenu(site).subscribe(data => console.log(data))
-    } catch (error) {
-      // console.log('error', error)
-    }
-  }
-
-  toggleDelayHide() {
-
+    this.menusService.createMainMenu(site).subscribe(data => console.log(data))
   }
 
   mergeConfig(options: accordionConfig) {
@@ -147,11 +119,9 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     }
   }
 
-  isAuthorized(menu: any): boolean {
-    // if (!menu.active) {return false}
-    // console.log('isAuthorized from menu minimal')
-    return this.userAuthorizationService.isUserAuthorized(menu.userType)
-  }
+  // isAuthorized(menu: any): boolean {
+  //   return this.userAuthorizationService.isUserAuthorized(menu.userType)
+  // }
 
 
 }
