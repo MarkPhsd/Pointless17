@@ -28,7 +28,6 @@ export class UITransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('UITransactionsComponent on init')
     this.uiSettings$.subscribe(data => {
       this.uiSettings = data;
       if (this.uiSettings) {
@@ -39,14 +38,13 @@ export class UITransactionsComponent implements OnInit {
 
   async initForm(setting: ISetting) {
     const form = this.inputForm
-    console.log("uitransactions setting", setting)
     if (setting) {
       this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text)
     }
   }
 
   async updateSetting(){
-    const result =  await this.uISettingsService.saveTransactionUIConfig(this.inputForm)
+    const result =  await this.uISettingsService.saveConfig(this.inputForm)
   }
 
 }

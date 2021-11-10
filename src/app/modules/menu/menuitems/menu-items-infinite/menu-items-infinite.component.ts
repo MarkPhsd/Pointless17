@@ -182,7 +182,7 @@ initSearchService() {
 initOrderBarSubscription() {
   this.toolbarServiceUI.orderBar$.subscribe(data => {
     this.orderBar = data
-    console.log(data)
+    // console.log(data)
     if (this.orderBar) {
       this.grid = "grid-smaller"
     }
@@ -193,13 +193,13 @@ initOrderBarSubscription() {
 }
 
 onScrollDown() {
-  console.log('scrolled down!!');
+  // console.log('scrolled down!!');
   this.scrollingInfo = 'scroll down'
   this.nextPage();
 }
 
 onScrollUp() {
-  console.log('scrolled up!!');
+  // console.log('scrolled up!!');
   this.scrollingInfo = 'scroll up'
 }
 
@@ -236,7 +236,7 @@ async addToList(pageSize: number, pageNumber: number)  {
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
-    console.log('model', model);
+    // console.log('model', model);
 
     const site                     = this.siteService.getAssignedSite();
     const results$                 = this.menuService.getMenuItemsBySearchPaged(site, model);
@@ -317,7 +317,7 @@ getItemSrc(item:IMenuItem) {
 
   @HostListener('window:scroll', ['$event']) // <- Add scroll listener to window
   scrolled(event: any): void {
-    console.log('scrolled')
+    // console.log('scrolled')
     this.isNearBottom = this.isUserNearBottom();
   }
 

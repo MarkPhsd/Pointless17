@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, AfterViewInit, Input, RendererStyleFlags2 } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, Input } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -8,10 +8,8 @@ import { Observable, Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Capacitor,  } from '@capacitor/core';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
-import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-reciept-pop-up',
@@ -59,19 +57,16 @@ export class RecieptPopUpComponent implements OnInit {
   electronReceiptSetting: ISetting;
 
   intSubscriptions() {
+    console.log('RecieptPopUpComponent inituSubscriptions')
     this._order       = this.orderService.currentOrder$.subscribe(data => {
       this.order      = data;
       this.orders     = [];
-      try {
-        this.orders.push(data)
-        if (data.posPayments) {
-          this.payments   = data.posPayments
-        }
-        if (data.posOrderItems) {
-          this.items      = data.posOrderItems
-        }
-      } catch (error) {
-        console.log(error)
+      this.orders.push(data)
+      if (data.posPayments) {
+        this.payments   = data.posPayments
+      }
+      if (data.posOrderItems) {
+        this.items      = data.posOrderItems
       }
       console.log('order', this.orders)
     })
@@ -80,7 +75,6 @@ export class RecieptPopUpComponent implements OnInit {
   constructor(
       private electronService       : ElectronService,
       private orderService          : OrdersService,
-      private serviceTypeService    : ServiceTypeService,
       private settingService        : SettingsService,
       private siteService           : SitesService,
       private printingService       : PrintingService,
@@ -91,9 +85,8 @@ export class RecieptPopUpComponent implements OnInit {
   }
 
   async ngOnInit() {
-    await this.applyStyles();
-    // this.getOrderType();
     this.intSubscriptions();
+    await this.applyStyles();
     this.getDefaultPrinter();
   }
 
@@ -107,49 +100,26 @@ export class RecieptPopUpComponent implements OnInit {
 
     //call the styles
     //once those are set the receipt will load
+    console.log('getting Info')
 
-    // const site       = this.siteService.getAssignedSite();
-    // const item       = await this.settingService.getDefaultReceiptPrinter(site)
-    // let   printerName     = ''// localStorage.getItem('electronReceiptPrinter')
-    // let   receipt         = ''// localStorage.getItem('electronReceipt')
-    // let   receiptID       = ''// localStorage.getItem('electronReceiptID')
+    const item = await this.printingService.getDefaultElectronReceiptPrinter().toPromise()
+    this.electronReceiptSetting = item;
+    localStorage.setItem('electronReceiptPrinter', item.text)
+    localStorage.setItem('electronReceipt', item.value)
+    localStorage.setItem('electronReceiptID', item.option1)
 
-    // if (!printerName || !receiptID || !receipt) {
-        console.log('getting Info')
-
-        const item = await this.printingService.getDefaultElectronReceiptPrinter().toPromise()
-        this.electronReceiptSetting = item;
-
-        console.log('electronReceiptSetting', item)
-        localStorage.setItem('electronReceiptPrinter', item.text)
-        localStorage.setItem('electronReceipt', item.value)
-        localStorage.setItem('electronReceiptID', item.option1)
-
-        // this.receipt     =  item.value;
-        this.receiptID   =  +item.option1;
-        this.printerName =  item.text;
-        // this.refreshReceipt(receiptID);
-        let receiptID        =  +item.option1;
-
-        // return printerName
-    // }
-
-    // this.printerName =  printerName;
-
-    // console.log('Receipt Info', printerName, receiptID, receipt)
-
+    this.receiptID   =  +item.option1;
+    this.printerName =  item.text;
+    let receiptID        =  +item.option1;
     this.refreshReceipt(receiptID);
-
   }
 
   async refreshReceipt(id: any) {
-
     try {
-      this.receiptLayoutSetting   = null;
-      const site                  = this.siteService.getAssignedSite();
+       const site                  = this.siteService.getAssignedSite();
       const receipt$              = this.settingService.getSetting(site, id)
-      receipt$.subscribe(data => {
-        this.initSubComponent( data, this.receiptStyles )
+      receipt$.subscribe(receipt => {
+        this.initSubComponent( receipt, this.receiptStyles )
       })
     } catch (error) {
       console.log(error)
@@ -158,8 +128,6 @@ export class RecieptPopUpComponent implements OnInit {
 
   initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting) {
     try {
-      console.log('initSubComponent receiptPromise', receiptPromise)
-      console.log('initSubComponent receiptStylePromise', receiptPromise)
       if (receiptPromise && receiptStylePromise) {
         this.receiptLayoutSetting = receiptPromise
         this.headerText           =  this.receiptLayoutSetting.option6
@@ -170,14 +138,6 @@ export class RecieptPopUpComponent implements OnInit {
       }
     } catch (error) {
       console.log(error)
-    }
-  }
-
-
-  async getOrderType(){
-    const site                  = this.siteService.getAssignedSite();
-    if (this.order) {
-      this.orderTypes = await  this.serviceTypeService.getType(site,this.order.serviceTypeID)
     }
   }
 
@@ -247,6 +207,7 @@ export class RecieptPopUpComponent implements OnInit {
 
   async print() {
     const platForm    =  this.getPlatForm()
+
     if (this.electronService.remote != null) {
       if (!this.printerName) {
         window.alert('No default printer has been assigned.')
@@ -255,12 +216,15 @@ export class RecieptPopUpComponent implements OnInit {
       this.printElectron()
       return
     }
+
     if (this.isElectronServiceInitiated) {  }
+
     if (platForm === 'android') {
       this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
       this.platForm     = 'android'
       this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
     }
+
     if (platForm === 'web') {
        this.convertToPDF();
      }

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IUser } from '../_interfaces/people/users';
 import { AuthenticationService } from '../_services';
@@ -10,12 +10,10 @@ import { UserAuthorizationService } from '../_services/system/user-authorization
 export class UserAuthorizedDirective implements OnInit {
 
   @Input() set userAuthorized(val) {
-    console.log('UserAuthorizedDirective', val)
     this.permissions = val;
     this.updateView();
   }
 
-  private currentUser: IUser;
   private permissions: any;
 
   user              : IUser;
@@ -27,9 +25,7 @@ export class UserAuthorizedDirective implements OnInit {
     })
   }
 
-
   constructor(
-    private element: ElementRef,
     private templateRef: TemplateRef<any>,
     private viewContainer: ViewContainerRef,
     private userService: UserAuthorizationService,

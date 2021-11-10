@@ -32,7 +32,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
     if (!params.value) {
       this.showHide ='display:none;'
-      console.log("showhide is true")
+      // console.log("showhide is true")
     }
 
 

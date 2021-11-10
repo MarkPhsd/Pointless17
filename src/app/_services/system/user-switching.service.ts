@@ -111,10 +111,12 @@ export class UserSwitchingService {
           user => {
             if (user) {
               try {
-                  console.log('success')
-                  const currentUser = this.setUserInfo(user, password)
-                  this.authenticationService.updateUser(currentUser)
+                  // console.log('success')
+                  console.log('user', user)
                   this.clearSubscriptions();
+                  const currentUser = this.setUserInfo(user, password)
+                  console.log('currentUser', currentUser)
+                  this.authenticationService.updateUser(currentUser)
                   return user
               } catch (error) {
                 console.log('error', error)

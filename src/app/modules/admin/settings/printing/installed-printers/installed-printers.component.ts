@@ -144,7 +144,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
     if (this.platFormService.isAppElectron) {
       this.printingService.getDefaultElectronReceiptPrinter().subscribe( data => {
-       console.log('getDefaultElectronReceiptPrinter data', data)
+      //  console.log('getDefaultElectronReceiptPrinter data', data)
         this.electronSetting        = data;
         this.electronReceiptPrinter = data.text;
         this.electronReceipt        = data.value ;
@@ -152,7 +152,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         if (this.printOptions) {
           this.printOptions.deviceName = data.text
         }
-        console.log('electron printing settings', data)
+        // console.log('electron printing settings', data)
       })
     }
 
@@ -202,6 +202,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       const receipt$              = this.settingService.getSetting(site, id)
       receipt$.subscribe(data => {
         this.receiptID = id
+        // console.log('receiptPromise', data)
         this.initSubComponent( data, this.receiptStyles )
       })
     } catch (error) {
@@ -225,7 +226,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         this.subFooterText        =  this.receiptLayoutSetting.option8
       }
     } catch (error) {
-      console.log(error)
+      // console.log(error)
     }
   }
 

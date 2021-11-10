@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
-import { ISetting, ISite, IUserProfile }   from 'src/app/_interfaces';
+import { Observable, Subscription, } from 'rxjs';
+import { ISetting, ISite, IUser, IUserProfile }   from 'src/app/_interfaces';
 import { environment } from 'src/environments/environment';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 import { UrlResolver } from '@angular/compiler';
@@ -203,8 +203,19 @@ export class MenusService {
     },
   ] ;
 
+  user              : IUser;
+  _user             : Subscription;
+
+  initSubscription() {
+    this._user = this.auth.user$.subscribe( data => {
+      this.user  = data
+    })
+  }
+
   constructor( private http: HttpClient,
-               private auth: AuthenticationService, ) { }
+               private auth: AuthenticationService, ) {
+                 this.initSubscription();
+               }
 
   getAnonymous(): string {
     return 'admin,manager,user,employee,anonymous'
@@ -222,7 +233,9 @@ export class MenusService {
     return 'admin,manager'
   }
 
-  getMenu(site: ISite, menuName: string): Observable<AccordionMenu[]> {
+  getMenu(site: ISite, menuName: string, user: IUser): Observable<AccordionMenu[]> {
+
+      if (!user) {return}
 
       const controller = "/MenuGroups/"
 
@@ -236,8 +249,8 @@ export class MenusService {
 
     }
 
-  getMainMenu(site: ISite): Observable<AccordionMenu[]> {
-     return this.getMenu(site, 'main')
+  getMainMenu(site: ISite, user: IUser): Observable<AccordionMenu[]> {
+     return this.getMenu(site, 'main', user)
   }
 
   //PutSubMenuGrouplist
@@ -272,11 +285,13 @@ export class MenusService {
 
   createMainMenu(site: ISite): Observable<MenuGroup> {
 
-    const user = this.auth.userValue
-    if (!user) {
+    // const user = this.auth.userValue
+    if (!this.user) {
       console.log('user not defined - createMainMenu')
       return null
     }
+
+    if (this.user.roles != 'admin') { return }
 
     const  menuGroup =  {name: 'main', id: 0, userType: this.getUsers(), accordionMenus: this.accordionMenus }  as MenuGroup;
 

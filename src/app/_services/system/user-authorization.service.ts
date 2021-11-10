@@ -19,6 +19,7 @@ export class UserAuthorizationService {
 
   isUserAuthorized(requiredArray: string): boolean {
     const user = JSON.parse(localStorage.getItem('user')) as IUser;
+    // console.log('user', user.roles)
 
     if (!user) { return false }
 

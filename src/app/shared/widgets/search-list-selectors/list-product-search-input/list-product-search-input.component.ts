@@ -81,7 +81,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
     if (!this.input ) { console.log('input undefined')
       return
     }
-    console.log('initialized listproductSearch')
+    // console.log('initialized listproductSearch')
     this.initSearchSubscription()
     this.hideKeyboardTimeOut();
   }

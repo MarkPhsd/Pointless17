@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "0.9.007",
+  "version": "0.9.008",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -12,9 +12,9 @@
     "winreg": false
   },
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve  --progress=false --source-map=false --host=192.168.0.16 --port=4200",
-    "startLocal": "ng serve  --progress=false --source-map=false --host=localhost --port=4200",
+    "ng"        : "ng",
+    "start"     : "ng serve   --host=192.168.0.16 --port=4200",
+    "startLocal": "ng serve  --host=localhost --port=4200",
     "build": "ng build --optimization --configuration production ",
     "test": "ng test",
     "lint": "ng lint",

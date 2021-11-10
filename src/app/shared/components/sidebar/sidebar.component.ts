@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IUser}  from 'src/app/_interfaces';
+import { ISite, IUser}  from 'src/app/_interfaces';
 import { AuthenticationService} from 'src/app/_services';
 import { AccordionMenu, accordionConfig, SubMenu } from 'src/app/_interfaces/index';
 import { Observable,  Subscription } from 'rxjs';
@@ -26,70 +26,46 @@ export class SidebarComponent implements OnInit {
   isAuthorized    : boolean;
   productMenu     : boolean;
   reportMenu      : boolean;
-  selectedItem : string;
+  selectedItem    = '';
 
   _user: Subscription;
   user : IUser;
+  site: ISite;
 
   initSubscriptions() {
-    console.log('init side bar subscriptions')
-    this._user =     this.authorizationService.user$.subscribe(data => {
+    this._user =    this.authorizationService.user$.subscribe(data => {
+      // console.log('sidebar init subscriptions')
       this.user = data
-      console.log('inint menu user', data)
-      this.getMenu();
-      this.displayRoles()
+      this.getMenu(this.site);
     })
   }
 
-constructor(
+  constructor(
             private authorizationService: AuthenticationService,
             private menusService: MenusService,
             private siteService : SitesService, ) {
-
-            }
-
-  async ngOnInit() {
-    console.log('init side bar')
-    this.initSubscriptions();
-    if (!this.user) { return }
-    const site = this.siteService.getAssignedSite()
-    await this.menusService.createMainMenu(site);
-    this.selectedItem = ''
+    const site  =  this.siteService.getAssignedSite();
   }
 
-  async getMenu() {
-    const site  =  this.siteService.getAssignedSite();
-    this.accordionMenu$ =  this.menusService.getMainMenu(site)
+  async ngOnInit() {
+    console.log('sidebar ngOnInit')
+    this.initSubscriptions();
+    if (!this.user) { return }
+    this.initMenu(this.site);
+  }
+
+  async initMenu(site: ISite) {
+    await this.menusService.createMainMenu(site);
+  }
+
+  async getMenu(site: ISite) {
+    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
     this.accordionMenu$.subscribe(data=>{
       this.accordionMenu = data
+      console.log('user ', this.user.roles);
+      console.log('menu', data)
     })
   }
 
-  displayRoles(){
-    if (this.user != undefined) {
-    } else {
-
-      if (this.user.roles.toLocaleLowerCase() == 'user')
-      {
-        this.isAuthorized = false;
-      }
-      if (this.user.roles.toLocaleLowerCase() == 'admin')
-      {
-        this.isAuthorized = true;
-      }
-      if (this.user.roles.toLocaleLowerCase() == 'manager')
-      {
-        this.isAuthorized = true;
-      }
-      if (this.user.roles.toLocaleLowerCase() == 'employee')
-      {
-        this.isAuthorized = true;
-      }
-      if (this.user.roles.toLocaleLowerCase() == 'cashier')
-      {
-        this.isAuthorized = true;
-      }
-    }
-  };
 
 }

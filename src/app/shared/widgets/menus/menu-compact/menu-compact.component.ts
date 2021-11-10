@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AccordionMenu, accordionConfig, SubMenu, IUser } from 'src/app/_interfaces/index';
+import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
 import { Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -25,11 +25,11 @@ export class MenuCompactComponent implements OnInit {
   result:            boolean;
   user              : IUser;
   _user             : Subscription;
-
+  site: ISite;
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user = data
-      this.refreshMenu();
+      this.getMenu();
     })
   }
 
@@ -38,26 +38,17 @@ export class MenuCompactComponent implements OnInit {
                 private router                  : Router,
                 private siteService             : SitesService,
                 private authenticationService   : AuthenticationService,
-              ) {}
+              ) {this.site  =  this.siteService.getAssignedSite();}
 
   async ngOnInit() {
     this.initSubscription();
   }
 
-  async refreshMenu() {
-    this.user = this.authenticationService.userValue
-    this.getMenu();
-  }
-
   async getMenu() {
-    if (!this.user) {
-      // console.log('No User Assigned')
-      return;
-    }
+    // if (!this.user) {  return;    }
     const site  =  this.siteService.getAssignedSite();
     this.config = this.mergeConfig(this.options);
-    this.accordionMenu$ =  this.menusService.getMainMenu(site)
-
+    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
     this.accordionMenu$.subscribe(data=>{
       this.menus = [] as AccordionMenu[];
       data.filter( item => {
@@ -68,6 +59,7 @@ export class MenuCompactComponent implements OnInit {
     }, err => {
       console.log('err', err)
     })
+
     this.displayCategories = false;
   }
 

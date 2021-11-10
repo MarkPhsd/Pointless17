@@ -61,9 +61,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   initOrderBarSubscription() {
     this.toolbarServiceUI.orderBar$.subscribe(data => {
-      console.log('bar updated', data)
+      // console.log('bar updated', data)
       this.openOrderBar = data
-      console.log('openOrderBar', this.openOrderBar)
+      // console.log('openOrderBar', this.openOrderBar)
     })
   }
 
@@ -165,7 +165,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   async toggleOpenOrderBar() {
-    console.log('original this.openOrderBar', this.openOrderBar)
+    // console.log('original this.openOrderBar', this.openOrderBar)
     // this.toolbarServiceUI.orderBar$.subscribe(data => {
     //     if (data) {
     //       console.log(this.openOrderBar, data)

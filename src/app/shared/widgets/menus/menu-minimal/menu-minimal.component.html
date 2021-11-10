@@ -1,97 +1,99 @@
-<div fxLayout="row" class="row-class">
-  <div fxLayout="column" class="row-class"
-       *ngIf="!displayCategories && menus">
+minimal
+<div fxLayout="column" class="row-class"
+      *ngIf="!displayCategories && menus">
+
+  <ul id="accordion"
+      class="accordion">
+    <li class="menu-item"
+        @fade
+        *ngFor="let menu of menus; let i = index"
+        [class.active]="menu.active">
+        <div *userAuthorized="menu.userType">
+          <!-- <div *ngIf="isAuthorized(menu)" > -->
+          <div class="menu"
+                (click)="toggle(menu, i)">
+              <mat-icon>{{ menu.icon }}</mat-icon>
+              {{ menu.name }}
+          </div>
+      </div>
+    </li>
+  </ul>
+
+</div>
+
+<div fxLayout="column" class="row-class"
+      *ngIf="displayCategories">
+
+  <div class=" accordion  menu-header">
+    <mat-icon>{{menus[index].icon}}</mat-icon>
+    {{ menus[index].name }}
+    <mat-divider></mat-divider>
+    <div class="menu-header-footer"></div>
+  </div>
+
+  <div *ngIf="submenu">
 
     <ul id="accordion"
         class="accordion">
       <li class="menu-item"
           @fade
-          *ngFor="let menu of menus; let i = index"
-          [class.active]="menu.active">
-          <div *userAuthorized="menu.userType">
-            <div class="menu"
-                  (click)="toggle(menu, i)">
-                <mat-icon>{{ menu.icon }}</mat-icon>
-                {{ menu.name }}
-            </div>
+          *ngFor="let item of submenu" >
+        <div *ngIf="!item.minimized">
+          <!-- <div class="menu"  *ngIf="isAuthorized(menu)"></div> -->
+          <div class="menu" *userAuthorized="item.userType">
+            <a mat-list-item
+                color="accent"
+                routerLinkActive={{item.routerLinkActive}}
+                routerLink=      {{item.routerLink}}>
+              <mat-icon>{{ item.icon }}</mat-icon>
+              {{ item.name }}
+            </a>
+          </div>
         </div>
       </li>
     </ul>
 
-  </div>
+    <button mat-icon-button
+            [matMenuTriggerFor]="menu"
+            aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
 
-  <div fxLayout="column" class="row-class"
-       *ngIf="displayCategories">
-
-    <div class=" accordion  menu-header">
-      <mat-icon>{{menus[index].icon}}</mat-icon>
-      {{ menus[index].name }}
-      <mat-divider></mat-divider>
-      <div class="menu-header-footer"></div>
-    </div>
-
-    <div *ngIf="submenu">
-
-      <ul id="accordion"
-          class="accordion">
-        <li class="menu-item"
-            @fade
-            *ngFor="let item of submenu" >
-          <div *ngIf="!item.minimized">
-            <!-- <div class="menu"  *ngIf="isAuthorized(menu)"></div> -->
-            <div class="menu" *userAuthorized="item.userType">
-              <a mat-list-item
-                  color="accent"
-                  routerLinkActive={{item.routerLinkActive}}
-                  routerLink=      {{item.routerLink}}>
-                <mat-icon>{{ item.icon }}</mat-icon>
-                {{ item.name }}
-              </a>
+    <ul id="accordion"
+      class="accordion">
+        <li>
+          <mat-menu #menu="matMenu">
+            <div  *ngFor="let item of submenu">
+              <div  *userAuthorized="item.userType">
+                <div *ngIf="item.minimized">
+                  <button mat-menu-item
+                          color="accent"
+                          routerLinkActive={{item.routerLinkActive}}
+                          routerLink=      {{item.routerLink}}>
+                    <mat-icon>{{ item.icon }}</mat-icon>
+                    <span> {{ item.name }}</span>
+                  </button>
+                </div>
+              </div>
             </div>
-          </div>
+          </mat-menu>
+
         </li>
       </ul>
 
-      <button mat-icon-button
-              [matMenuTriggerFor]="menu"
-              aria-label="Example icon-button with a menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-
       <ul id="accordion"
-        class="accordion">
+          class="accordion">
           <li>
-            <mat-menu #menu="matMenu">
-              <div  *ngFor="let item of submenu">
-                <div  *userAuthorized="item.userType">
-                  <div *ngIf="item.minimized">
-                    <button mat-menu-item
-                            color="accent"
-                            routerLinkActive={{item.routerLinkActive}}
-                            routerLink=      {{item.routerLink}}>
-                      <mat-icon>{{ item.icon }}</mat-icon>
-                      <span> {{ item.name }}</span>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </mat-menu>
-
+            <div class="menu">
+              <a  mat-list-item
+                      (click)="resetMenu()">
+                <mat-icon>navigate_before</mat-icon>
+                Back
+              </a>
+            </div>
           </li>
-        </ul>
+      </ul>
 
-        <ul id="accordion"
-            class="accordion">
-            <li>
-              <div class="menu">
-                <a  mat-list-item
-                        (click)="resetMenu()">
-                  <mat-icon>navigate_before</mat-icon>
-                  Back
-                </a>
-              </div>
-            </li>
-        </ul>
-
-   </div>
+  </div>
 </div>
+

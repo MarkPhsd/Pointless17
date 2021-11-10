@@ -1,9 +1,10 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
-import { AccordionMenu, MenuGroup, SubMenu } from 'src/app/_interfaces';
+import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
+import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { SystemService } from 'src/app/_services/system/system.service';
@@ -28,9 +29,19 @@ export class MenuManagerComponent implements OnInit  {
   accordionMenu : AccordionMenu;
   submenuItem   : SubMenu;
 
+  user              : IUser;
+  _user             : Subscription;
+
+  initSubscription() {
+    this._user = this.authenticationService.user$.subscribe( data => {
+      this.user = data
+    })
+  }
+
   constructor(
               private menusService: MenusService,
               private siteService: SitesService,
+              private authenticationService: AuthenticationService,
               private _snackBar: MatSnackBar){
   }
 
@@ -40,7 +51,10 @@ export class MenuManagerComponent implements OnInit  {
 
   getMainMenu(){
     const site  =  this.siteService.getAssignedSite();
-    const accordionMenu$ = this.menusService.getMainMenu(site);
+    if (!this.user) {return}
+    console.log('MenuManagerComponent getmenu => user', this.user)
+    const accordionMenu$ = this.menusService.getMainMenu(site, this.user);
+
     accordionMenu$.subscribe( data => {
       this.accordionMenus = data
     })

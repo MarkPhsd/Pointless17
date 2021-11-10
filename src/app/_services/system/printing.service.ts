@@ -203,10 +203,7 @@ export class PrintingService {
 
     const site                = this.siteService.getAssignedSite();
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-    // const receiptStylePromise = await receiptStyle$.pipe().toPromise()
-
     const printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-    // const id          = printWindow.id
 
     printWindow.loadURL(contents)
       .then((e) => {
@@ -223,16 +220,13 @@ export class PrintingService {
         printWindow.webContents.print(
           options,
           (error, data) => {
-            // console.log('print data', data)
             if (error) {
-              // console.log('error', error)
               if (error == true)  {
                 printWindow.close();
                 return
               }
             }
             if (data) {
-              // console.log('closing Window no error / data')
               printWindow.close();
               return
             }
@@ -339,7 +333,6 @@ export class PrintingService {
       return false
     }
   }
-
 
   getPrintHTML(prtContent) {
     console.log('print')

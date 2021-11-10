@@ -72,15 +72,11 @@ export class HTMLEditPrintingComponent implements OnInit {
               private siteService      : SitesService,
               private _snackBar        : MatSnackBar,
               private printingService  : PrintingService,
-              private router           : Router,
-              private fb               : FormBuilder,
-              private dialog           : MatDialog,
               private fbSettingsService: FbSettingsService,
               private dialogRef        : MatDialogRef<HTMLEditPrintingComponent>,
               public  route            : ActivatedRoute,
               private renderingService : RenderingService,
               private fakeData         : FakeDataService,
-              private labelaryService :  LabelaryService,
               @Inject(MAT_DIALOG_DATA) public data: any
               )
   {

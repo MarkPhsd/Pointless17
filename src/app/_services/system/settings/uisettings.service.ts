@@ -20,7 +20,7 @@ export interface TransactionUISettings {
 export class UISettingsService {
 
   private _transactionUISettings       = new BehaviorSubject<TransactionUISettings>(null);
-  public transactionUISettings$        = this._transactionUISettings.asObservable();
+  public  transactionUISettings$        = this._transactionUISettings.asObservable();
 
   updateUISubscription(ui: TransactionUISettings) {
     this._transactionUISettings.next(ui);
@@ -51,24 +51,24 @@ export class UISettingsService {
     return config
   }
 
-  getTransactionUISettings(cached: boolean): Observable<ISetting> {
+  getSettings(cached: boolean): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     if (cached)  { return this.settingsService.getSettingByNameCached(site, 'UITransactionSetting') }
     if (!cached) { return this.settingsService.getSettingByName(site, 'UITransactionSetting')}
   }
 
-  async  saveTransactionUIConfig(fb: FormGroup): Promise<ISetting>  {
+  async  saveConfig(fb: FormGroup): Promise<ISetting>  {
     const transactionUISettings = fb.value
-    return await  this.setTransactionUISetting(transactionUISettings)
+    return await  this.setSetting(transactionUISettings)
   }
 
   //save setting returns promise
-  private async setTransactionUISetting(transactionUISettings: TransactionUISettings): Promise<ISetting> {
+  private async setSetting(transactionUISettings: TransactionUISettings): Promise<ISetting> {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
     setting.id    = transactionUISettings.id
     setting.name  = "UITransactionSetting"
-    console.log('transactionUISettings', transactionUISettings)
+    // console.log('transactionUISettings', transactionUISettings)
     setting.text  = JSON.stringify(transactionUISettings);
     this.updateUISubscription(transactionUISettings)
     return await this.settingsService.putSetting(site, setting.id, setting).toPromise()
@@ -88,7 +88,7 @@ export class UISettingsService {
   async setFormValue(inputForm: FormGroup, setting: ISetting, text: any): Promise<FormGroup> {
     inputForm = this.initForm(inputForm);
     if (!text) {
-      setting = await this.initConfigSettings(setting)
+      setting = await this.initConfig(setting)
     }
     const config = JSON.parse(text) as TransactionUISettings
     config.id = setting.id;
@@ -98,7 +98,7 @@ export class UISettingsService {
 
 
   setFormValues(config: TransactionUISettings, fb: FormGroup): FormGroup {
-    console.log(config, fb)
+    // console.log(config, fb)
     fb = this._fb.group({
       id             : [config.id],
       displayNotes   : [config.displayNotes],
@@ -109,10 +109,10 @@ export class UISettingsService {
     return fb
   }
 
-  async initConfigSettings(setting: ISetting): Promise<ISetting> {
+  async initConfig(setting: ISetting): Promise<ISetting> {
     const ui = {} as TransactionUISettings
     ui.id = setting.id
-    setting = await this.setTransactionUISetting(ui)
+    setting = await this.setSetting(ui)
     const config = JSON.parse(setting.text) as TransactionUISettings
     this.updateUISubscription(config)
     return setting

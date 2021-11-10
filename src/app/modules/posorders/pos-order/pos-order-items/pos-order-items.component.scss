@@ -3,13 +3,24 @@
 ion-item-sliding {
   width: 99%;
   padding: 0;
-  margin: 2px;
+  // margin: 2px;
 }
 
 ion-item {
-  width: 99%;
+  // width: 99%;
+  // padding: 0;
+  // // margin: 2px;
+  width: 110%;
   padding: 0;
-  margin: 2px;
+  left: -10px;
+
+}
+
+
+.nopadd  {
+  padding: 0;
+  margin: -3px;
+  width: 98%;
 }
 
 pos-order-item {

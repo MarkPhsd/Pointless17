@@ -55,13 +55,10 @@ const menuTemplateDev = [
 
 async function createWindow () {
   let url = ''
-  if (!isDevMode) {
-    url = `file://${__dirname}/app/index.html`
-    // url = `http://localhost:4200/index.html`
-  }
+  if (!isDevMode) { url = `file://${__dirname}/app/index.html`  }
+  if (isDevMode) { url = `http://192.168.0.16:4200/index.html` }
+  url = `http://192.168.0.16:4200/index.html`;
 
-  if (isDevMode) { url = `http://localhost:4200/index.html`;  }
-  // url = `file://${__dirname}/app/index.html`
   try {
     mainWindow = new BrowserWindow({
       height: 920,
@@ -73,7 +70,6 @@ async function createWindow () {
         nodeIntegrationInWorker: true,
         backgroundThrottling: false,
         contextIsolation: false,
-        // preload: path.join(__dirname, 'node_modules', '@capacitor', 'electron', 'dist', 'electron-bridge.js')
         preload: path.join(url, 'node_modules', '@capacitor', 'electron', 'dist', 'electron-bridge.js')
       }
     });

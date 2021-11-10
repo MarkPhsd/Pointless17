@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'src/app/_services';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
@@ -17,6 +18,7 @@ export class ApiStoredValueComponent implements OnInit {
       public platFormService       : PlatformService,
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
+      private appInitService       : AppInitService,
     ) {
       this.currentAPIUrl = localStorage.getItem('storedApiUrl');
       if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
@@ -34,6 +36,7 @@ export class ApiStoredValueComponent implements OnInit {
   setAPIUrl(){
     const apiUrl = this.inputForm.controls['apiUrl'].value
     localStorage.setItem('storedApiUrl', apiUrl)
+    this.appInitService.init();
     this.authenticationService.clearUserSettings()
     this.currentAPIUrl = apiUrl;
   }

@@ -39,7 +39,7 @@ export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('search phrase initilized')
+    console.log('')
   }
 
   ngAfterViewInit() {

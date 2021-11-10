@@ -36,7 +36,7 @@ export class AgeVerificationGuardService {
     const amI21 = localStorage.getItem('ami21')
 
     if (amI21 === undefined || amI21 != 'true') {
-      this.router.navigate(['/app-app-gate'], { queryParams: { returnUrl: state.url } });
+      this.router.navigate(['/appgate'], { queryParams: { returnUrl: state.url } });
       return false;
     }
     // if (amI21 === undefined || amI21 != 'true') {

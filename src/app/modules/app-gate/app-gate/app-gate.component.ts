@@ -38,6 +38,7 @@ export class AppGateComponent implements OnInit , OnChanges{
       this.router.navigateByUrl('/login')
       return
     }
+
     await this.navRefresh()
   }
 

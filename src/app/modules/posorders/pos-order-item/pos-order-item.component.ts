@@ -86,7 +86,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
 
-  transactionUISettings$  = this.uiSettingService.getTransactionUISettings(true);
+  transactionUISettings$  = this.uiSettingService.getSettings(true);
 
   @HostListener("window:resize", [])
    updateItemsPerPage() {

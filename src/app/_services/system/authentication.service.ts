@@ -34,7 +34,7 @@ export class AuthenticationService {
     apiUrl: any;
 
     updateUser(user: IUser) {
-      console.log('AuthenticationService user updated', user)
+      // console.log('AuthenticationService user updated', user)
       this._user.next(user)
       localStorage.setItem('user', JSON.stringify(user));
     }
@@ -93,16 +93,17 @@ export class AuthenticationService {
       user.authdata = window.btoa( `${user.username}:${user.password}`);
       localStorage.setItem("ami21", 'true');
       this.updateUser(user);
+
     }
 
     logout() {
       // remove user from local storage to log user out
       this.clearUserSettings();
-      console.log('user settings cleared')
+      // console.log('user settings cleared')
       if (this.platFormservice.webMode) {
         if (this.appInitService.appGateEnabled) {
-          this.router.navigate(['/app-app-gate']);
-          console.log('route to app gate')
+          this.router.navigate(['/appgate']);
+          // console.log('route to app gate')
           return
         }
       }

@@ -10,6 +10,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { ElectronService } from 'ngx-electron';
 import { SitesService } from './_services/reporting/sites.service';
 import { MenusService } from './_services/system/menus.service';
+import { Subscription } from 'rxjs';
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
 @Component({
@@ -23,10 +24,25 @@ export class AppComponent {
   title = 'CCS Dashboard';
   toggleTheme = new FormControl(false);
   user: IUser;
+  _user: Subscription;
+
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
 
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
+
+  initSubscription() {
+
+    // console.log('init menu minimal')
+    if (this.authenticationService.userValue) {
+      this.user = this.authenticationService.userValue;
+    }
+
+    this._user = this.authenticationService.user$.subscribe( data => {
+      this.user  = data
+    })
+
+  }
 
   constructor(
       private platform:              Platform,
@@ -38,9 +54,11 @@ export class AppComponent {
       private electronService:       ElectronService,
       private siteService         :  SitesService,
       private menusService        :  MenusService,
+
   ) {
 
-      this.user = this.authenticationService.userValue
+      // this.user = this.authenticationService.userValue
+      this.initSubscription();
 
       this.initializeApp();
       // Initialize BackButton Eevent.
@@ -62,19 +80,15 @@ export class AppComponent {
 
   initMenu() {
     const site  = this.siteService.getAssignedSite();
-    try {
+    if (this.user) {
       this.menusService.createMainMenu(site).subscribe(data => {
-
-      }, err=> {
-        console.log('Menu Alredy Created.')
-      })
-    } catch (error) {
-      // console.log('error', error)
+        }
+      )
     }
   }
 
   logout() {
-      this.authenticationService.logout();
+    this.authenticationService.logout();
   }
 
   // active hardware back button

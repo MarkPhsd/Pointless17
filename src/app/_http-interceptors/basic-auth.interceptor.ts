@@ -13,6 +13,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
+      // console.log('interceptor user')
     })
   }
 
@@ -25,15 +26,24 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
       const user = this.user;
+      // this.authenticationService.externalAPI = false;
+      // console.log(user)
+      if (user) {
+        user.authdata = window.btoa(user.username + ':' + user.password);
+        if (  user.authdata) {
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Basic ${user.authdata}`
+            }
+          });
+          // console.log(user, request)
+        }
 
-      if (!user) {
-        // console.log('no user assigned')
-      } else {
-        // console.log (user.username, user.password)
+        return next.handle(request);
+
       }
 
       if (request.headers.has(InterceptorSkipHeader)) {
-
         //     //we might have to have two login options here, because this area was changed to userx
         //     this.authenticationService.externalAPI = true
         //     const userx = this.authenticationService.userxValue;
@@ -51,7 +61,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
       }
 
       {
-
         // localStorage.setItem('metrcUser', JSON.stringify(user.metrcUser));
         // localStorage.setItem('metrcKey', JSON.stringify(user.metrcKey));
         const metrcURL = localStorage.getItem('site.metrcURL')
@@ -72,28 +81,12 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
               this.authenticationService.externalAPI = true
               return next.handle(request);
-              console.log("mectrurl authdata", authdata)
+              // console.log("mectrurl authdata", authdata)
             } catch (error) {
               console.log(error)
             }
           }
-        }
-
-        // this.authenticationService.externalAPI = false;
-        // console.log(user)
-        if (user) {
-          console.log('interceptor', user)
-          user.authdata = window.btoa(user.username + ':' + user.password);
-          const isLoggedIn = user && user.authdata;
-          if (isLoggedIn) {
-            request = request.clone({
-              setHeaders: {
-                Authorization: `Basic ${user.authdata}`
-              }
-            });
-          }
-        }
-
+      }
 
         // console.log('resquest', request)
         this.authenticationService.externalAPI = false

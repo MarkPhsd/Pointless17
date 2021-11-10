@@ -17,7 +17,7 @@ import { fadeAnimation } from 'src/app/_animations';
   ]
 })
 
-export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
+export class MenuTinyComponent implements OnInit, OnDestroy {
 
   accordionMenu$:    Observable<AccordionMenu[]>;
   @Input() options;
@@ -35,9 +35,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
+      // console.log('init Subscription Tiny', data)
       this.getMenu();
     })
-
   }
 
   constructor ( private menusService            : MenusService,
@@ -47,18 +47,12 @@ export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
                 private authenticationService   : AuthenticationService,
               ) {
 
-              }
+  }
 
   async ngOnInit() {
     this.initSubscription();
   }
 
-  ngAfterViewInit() {
-    this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
-      this.getMenu();
-    })
-  }
   ngOnDestroy() {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -76,14 +70,17 @@ export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
 
   async getMenu() {
     if (!this.user) {
-      console.log('No User Assigned')
+      // console.log('menu-tiny getmenu => no user')
+      this.menus = [] as AccordionMenu[];
       return;
     }
 
     const site  =  this.siteService.getAssignedSite();
     this.config = this.mergeConfig(this.options);
-    this.accordionMenu$ =  this.menusService.getMainMenu(site)
-    this.accordionMenu$.subscribe(data=>{
+    // console.log('menu-tiny getmenu => user', this.user)
+    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
+
+    this.accordionMenu$.subscribe( data => {
       this.menus = [] as AccordionMenu[];
       data.filter( item => {
         if (item.active) {
@@ -91,8 +88,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
         }
       })
     }, err => {
-      console.log('err', err)
+      console.log('error Get menu', err)
     })
+
     this.displayCategories = false;
   }
 
@@ -132,33 +130,15 @@ export class MenuTinyComponent implements OnInit, OnDestroy,AfterViewInit {
 
   isAuthorized(menu: any): boolean {
     return this.userAuthorizationService.isUserAuthorized(menu.userType)
+
   }
 
-   getUserInfo() {
-
+  getUserInfo() {
     this.user = {} as IUser;
-
     const user = JSON.parse(localStorage.getItem('user')) as IUser;
-    // this.snackBar.open(user.username.toString(), 'Changed', {verticalPosition: 'top', duration: 2000})
-
     if (!user) {  return null }
     this.user = user;
-    this.getName(user);
-
   }
-
-  getName(user : IUser) {
-    let lastName  = user.lastName
-    let firstName =  user.firstName
-    // if (firstName && lastName) {
-    //   this.employeeName = `${user.username}`
-    // }
-    // this.snackBar.open(`Name ${this.employeeName}`, 'Changed', {verticalPosition: 'top', duration: 2000})
-    return
-  }
-
-
-
 
 }
 

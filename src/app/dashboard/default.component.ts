@@ -19,7 +19,7 @@ import { IUser } from '../_interfaces';
   animations: [ fader ],
 })
 
-export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewInit {
+export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   pages = new      Array(10);
   itemChange$:     Observable<number>;
@@ -55,11 +55,19 @@ export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewI
   user : IUser;
 
   initSubscriptions() {
-    console.log('init side bar subscriptions')
     this._user =     this.authorizationService.user$.subscribe(data => {
       this.user = data
-      console.log('inint menu user', data)
-      // this.getMenu();
+    })
+    this.toolBarUIService.orderBar$.subscribe(data => {
+      this.orderBarOpen = data
+    })
+    this.toolbarSideBar = this.toolBarUIService.toolbarSideBar$.subscribe( data => {
+      this.sideBarOpen = data
+      this.barType =  "mat-drawer-searchbar"
+    })
+    this.searchbarSidebar = this.toolBarUIService.searchSideBar$.subscribe( data => {
+      this.searchBarOpen = data
+      this.barType = "mat-drawer-toolbar"
     })
   }
 
@@ -81,10 +89,8 @@ export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewI
   ngOnInit(): void {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.renderTheme();
-    this.initBarService()
-    this.refreshToolBarType()
-    this.initOrderBarSubscription();
     this.initSubscriptions();
+    this.refreshToolBarType();
   }
 
   ngAfterViewInit() {
@@ -97,29 +103,8 @@ export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewI
     },50);
   };
 
-  initOrderBarSubscription() {
-    this.toolBarUIService.orderBar$.subscribe(data => {
-      this.orderBarOpen = data
-    })
-  }
-
   orderBarToggler(event){
     this.toolBarUIService.updateOrderBar(event)
-  }
-
-  initBarService() {
-    this.toolbarSideBar = this.toolBarUIService.toolbarSideBar$.subscribe( data => {
-      this.sideBarOpen = data
-      this.barType =  "mat-drawer-searchbar"
-    })
-    this.searchbarSidebar = this.toolBarUIService.searchSideBar$.subscribe( data => {
-      this.searchBarOpen = data
-      this.barType = "mat-drawer-toolbar"
-    })
-  }
-
-  ngOnChanges() {
-    this.initBarService();
   }
 
   @HostListener('window:beforeunload')
@@ -137,6 +122,10 @@ export class DefaultComponent implements OnInit, OnDestroy, OnChanges,AfterViewI
       this.searchbarSidebar.unsubscribe();
       this.searchBarOpen = null;
     }
+    if (this._user) {
+      this._user.unsubscribe();
+    }
+
   }
 
   @HostListener("window:resize", [])

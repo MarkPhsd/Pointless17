@@ -5,9 +5,11 @@
       [class]="orderItemsPanel"
       >
 
-  <ion-item-sliding  *ngFor="let item of order.posOrderItems; let i = index" >
-    <div *ngIf="uiConfig && ((mainPanel || bottomSheetOpen) || (item.id == item.idRef || item.prompGrouptID == 0))">
-      <ion-item>
+  <ion-item-sliding
+            class="nopadd"
+            *ngFor="let item of order.posOrderItems; let i = index" >
+    <div class="nopadd"  *ngIf="uiConfig && ((mainPanel || bottomSheetOpen) || (item.id == item.idRef || item.prompGrouptID == 0))">
+      <ion-item >
         <pos-order-item
                     [class]="gridScroller"
                     [index]="i"

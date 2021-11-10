@@ -8,14 +8,10 @@ export class CacheClientService {
     constructor() { }
 
     save(options: LocalStorageSaveOptions) {
-
-      console.log('save cache key', options.key)
-      // Set default values for optionals
+      // console.log('save cache key', options.key)
       options.expirationMins = options.expirationMins || 0
-
       // Set expiration date in miliseconds
       const expirationMS = options.expirationMins !== 0 ? options.expirationMins * 60 * 1000 : 0
-
       const record = {
         value: typeof options.data === 'string' ? options.data : JSON.stringify(options.data),
         expiration: expirationMS !== 0 ? new Date().getTime() + expirationMS : null,
@@ -25,9 +21,6 @@ export class CacheClientService {
     }
 
     load(key: string) {
-      // Get cached data from localstorage
-      // console.log('load cache key', key)
-
       const item = localStorage.getItem(key)
       if (item !== null) {
         const record = JSON.parse(item)

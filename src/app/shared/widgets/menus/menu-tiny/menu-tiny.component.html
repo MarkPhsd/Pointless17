@@ -1,13 +1,14 @@
 <div fxLayout="row"
      class="row-class"
      *ngIf="menus">
+
   <ul id="accordion"
       class="accordion">
     <li class="menu-item" @fade
         *ngFor="let menu of menus; let i = index"
         [class.active]="menu.active">
-
-      <div *userAuthorized="menu.userType"  >
+       <div *userAuthorized="menu.userType">
+          <!-- <div *ngIf="isAuthorized(menu)" > -->
           <div class="menu"
             (click)="toggle(menu, i)">
             <mat-icon>{{ menu.icon }}</mat-icon>

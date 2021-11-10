@@ -29,12 +29,11 @@ export class AppInitService  {
 
   async init() {
 
-    //if app then set the app if appvalue doesn't exist
     this.apiUrl = this.getLocalApiUrl();
-    console.log('app Init Service ');
+    // console.log('app Init Service ');
 
     if (!this.platFormService.webMode) {
-      console.log('app is in use')
+      // console.log('app is in use')
       if ( !this.apiUrl ){
         // if there is no API then the user needs to input one.
         //we also have to have a way to change or clear the API, just in case.
@@ -47,7 +46,7 @@ export class AppInitService  {
 
     if (this.platFormService.webMode) {
       try {
-        console.log('web mode is in use')
+        // console.log('web mode is in use')
         this.appConfig = await this.httpClient.get('/assets/app-config.json').toPromise();
         this.apiUrl = this.appConfig.apiUrl
       } catch (error) {

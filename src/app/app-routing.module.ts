@@ -276,7 +276,7 @@ const routes: Routes = [
     { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
     { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
 
-    { path: 'app-app-gate', component: AppGateComponent, data: { animation: 'isLeft'}},
+    { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
     { path: 'price-tier', component: PriceTiersComponent },
 
     { path: 'tvpricetiers', component: TvPriceSpecialsComponent ,data: { animation: 'isLeft'}},

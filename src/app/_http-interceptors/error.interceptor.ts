@@ -7,8 +7,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
+
+    //private authenticationService: AuthenticationService,
+
     constructor(
-                private authenticationService: AuthenticationService,
                 private _snackBar: MatSnackBar
                 ) { }
 
@@ -16,22 +18,20 @@ export class ErrorInterceptor implements HttpInterceptor {
         return next.handle(request)
         .pipe(
             retry(3),
-
-            catchError(err => {
-
-                let errorMessage = '';
-                if (err.status === 401) {
-                  // this.notifyEvent('Oh no!:' + err.message, 'Some error occured.')
-                  console.log(err)
-                }
-                if (err.status = 500) {
-                    errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
-                    // this.notifyEvent('Oh no!:' + err, 'Some error occured.')
-                }
-                //const error = err.error.message || err.statusText;
-                // console.log("HttpInterceptor error:",  errorMessage )
-                return throwError(errorMessage);
-        }))
+          catchError(err => {
+            let errorMessage = '';
+            if (err.status === 401) {
+              // this.notifyEvent('Oh no!:' + err.message, 'Some error occured.')
+              console.log(err)
+            }
+            if (err.status === 500) {
+              // this.notifyEvent('Oh no!:' + err, 'Some error occured.')
+              errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
+            }
+            //const error = err.error.message || err.statusText;
+            // console.log("HttpInterceptor error:",  errorMessage )
+            return throwError(errorMessage);
+      }))
     }
 
     notifyEvent(message: string, action: string) {

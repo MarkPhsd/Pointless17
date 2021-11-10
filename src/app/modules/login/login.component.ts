@@ -10,6 +10,7 @@ import { environment } from 'src/environments/environment';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 @Component({
     selector:   'login-dashboard',
@@ -55,6 +56,8 @@ export class LoginComponent implements OnInit {
         private siteService: SitesService,
         private awsBucketService: AWSBucketService,
         public platformService : PlatformService,
+        private appInitService: AppInitService,
+
     )
     {
       this.redirects();
@@ -85,6 +88,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/apisetting']);
       }
     }
+
     initCompanyInfo() {
       this.getCompanyInfo();
       if (this.company === undefined) {
@@ -102,21 +106,20 @@ export class LoginComponent implements OnInit {
     }
 
     redirectUserLoggedIn() {
-      // redirect to home if already logged in
+
       const user = this.authenticationService.userValue
       if (user) {
-        if (this.authenticationService.userValue) {
-          this.router.navigate(['/app-main-menu']);
-          return true
-        }
+        console.log('redirectUserLoggedIn', user)
+        this.router.navigate(['/app-main-menu']);
+        return true
       }
     }
 
     redirectAPIUrlRequired() {
-      console.log('redirect api')
-      //if is app and no apiurl is stored move to the apiURlSetting Component.
+       //if is app and no apiurl is stored move to the apiURlSetting Component.
       if (!this.platformService.webMode) {
-        console.log('redirect api is webmode')
+        console.log('redirectAPIUrlRequired')
+
         if (this.platformService.apiUrl.length == 0) {
           console.log('redirect api length = ')
           this.router.navigate(['/apisetting']);
@@ -127,7 +130,6 @@ export class LoginComponent implements OnInit {
 
     refreshTheme() {
       const theme =  localStorage.getItem('angularTheme');
-
       if ( theme === 'dark-theme') {
         this._renderer.addClass(document.body, 'dark-theme');
         this._renderer.removeClass(document.body, 'light-theme');
@@ -147,7 +149,9 @@ export class LoginComponent implements OnInit {
       this.notifyEvent("Your settings have been removed from this device.", "Bye!");
       this.siteService.clearAssignedSite();
       if (!this.platformService.webMode) { return }
-      this.router.navigate(['/app-app-gate']);
+      if (this.appInitService.appGateEnabled()) {
+        this.router.navigate(['/appgate']);
+      }
     }
 
     async  browseMenu() {

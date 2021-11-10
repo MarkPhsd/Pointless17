@@ -1,6 +1,6 @@
 {
   "name": "pointLess",
-  "version": "0.9.9",
+  "version": "0.9.941",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -12,6 +12,7 @@
     "dist": "electron-builder",
     "build": "electron-builder build  --win --publish never",
     "deploy": "electron-builder build --win --x64 --ia32 --publish always ",
+    "deploy64": "electron-builder build --win --x64 --publish always ",
     "electron": "wait-on http://localhost:4200 && electron .",
     "prestart": "npm run clean",
     "startconcurrently": "concurrently -k \"ng serve\" \"npm run electron\"",

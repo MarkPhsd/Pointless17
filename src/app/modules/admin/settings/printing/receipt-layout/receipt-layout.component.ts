@@ -18,7 +18,7 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './receipt-layout.component.html',
   styleUrls: ['./receipt-layout.component.scss']
 })
-export class ReceiptLayoutComponent implements OnInit, OnChanges {
+export class ReceiptLayoutComponent implements OnInit {
 
   //we use these because it makes formating easier
   //during design process. so don't use saved seettings.
@@ -54,64 +54,64 @@ export class ReceiptLayoutComponent implements OnInit, OnChanges {
   @Input() interpolatedSubFooterTexts = [] as string[];
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
+
   _order: Subscription;
 
   async initSubscriptions() {
+    console.log('initSubscriptions')
+
     this.site = this.siteService.getAssignedSite();
-    if (this.orderService.currentOrder$) {
-      this._order = this.orderService.currentOrder$.pipe(
-        switchMap(
-          data => {
-            if (!data)  {
-              return EMPTY
-            }
-            this.order = data
-            this.items      = this.order.posOrderItems
-            this.payments   = this.order.posPayments
-
-            let posOrder = {} as IPOSOrder
-
-            const datepipe: DatePipe = new DatePipe('en-US')
-            if (data.orderDate) {
-              this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')
-            }
-
-            if (this.items) {
-              this.items = this.items.filter( item => item.quantity != 0  );
-            }
-
-            if ( this.payments) {
-              this.payments = this.payments.filter(item => item.amountPaid != 0 );
-            }
-
-            this.orders=[]
-
-            try {
-              if (this.order) {
-                this.orders.push(this.order)
-              }
-            } catch (error) {
-              return EMPTY
-            }
-
-
-            return this.serviceTypeService.getType(this.site, data.serviceTypeID)
+    this._order = this.orderService.currentOrder$.pipe(
+      switchMap(
+        data => {
+          if (!data)  {
+            return EMPTY
           }
-        )
-      ).subscribe( data => {
-        this.orderType = data
+          this.order = data
+          this.items      = this.order.posOrderItems
+          this.payments   = this.order.posPayments
 
-        this.orderTypes = []
-        try{
-          this.orderTypes.push(this.orderType)
-        } catch (error) {
+          // let posOrder = {} as IPOSOrder
+
+          const datepipe: DatePipe = new DatePipe('en-US')
+          if (data.orderDate) {
+            this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')
+          }
+
+          if (this.items) {
+            this.items = this.items.filter( item => item.quantity != 0  );
+          }
+
+          if ( this.payments) {
+            this.payments = this.payments.filter(item => item.amountPaid != 0 );
+          }
+
+          this.orders=[]
+          console.log('order subscribed', this.order)
+
+          try {
+            if (this.order) {
+              this.orders.push(this.order)
+            }
+          } catch (error) {
+            return EMPTY
+          }
+          return this.serviceTypeService.getType(this.site, data.serviceTypeID)
         }
+      )
+    ).subscribe( data => {
+      this.orderType = data
 
-        }, err => {
-          console.log(err)
-      })
+      this.orderTypes = []
+      try{
+        this.orderTypes.push(this.orderType)
+      } catch (error) {
+      }
 
-    }
+      }, err => {
+        console.log(err)
+    })
+
   }
 
   constructor(
@@ -125,18 +125,11 @@ export class ReceiptLayoutComponent implements OnInit, OnChanges {
 
   async ngOnInit() {
     console.log('receipt layout initialized')
+    this.initSubscriptions();
     this.getReceiptWidth()
     await this.applyStyles();
     await this.refreshData();
   }
-
-  ngOnChanges() {
-    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
-    //Add '${implements OnChanges}' to the class.
-
-    this.initSubscriptions();
-  }
-
 
 
   async refreshData() {
