@@ -38,7 +38,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   user              : IUser;
   _user             : Subscription;
-  site: ISite;
+  site              : ISite;
 
   initSubscription() {
     this._user = this.authenticationService.user$.pipe(
@@ -55,11 +55,12 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         this.menus = [] as AccordionMenu[];
         if (!data) { return }
         this.config = this.mergeConfig(this.options);
-        this.menus = data
-        if (this.menus)
+        // this.menus = data
+        if (data)
           data.filter( item => {
             if (item.active) {this.menus.push(item) } //= data
           })
+          this.displayCategories = false;
         }, err => {
           this.menus = [] as AccordionMenu[];
       }
@@ -71,23 +72,29 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
                 private siteService             : SitesService,
                 private authenticationService   : AuthenticationService,
               ) {
-
     this.site  =  this.siteService.getAssignedSite();
   }
 
   async ngOnInit() {
-    this.initSubscription();
+
+    const site  = this.siteService.getAssignedSite();
+    const result = await this.menusService.mainMenuExists(site).pipe().toPromise();
+
+    if (result) {
+      this.initSubscription()
+    }
+
   }
 
   ngOnDestroy() {
     if (this._user) { this._user.unsubscribe() }
   }
 
-  async initMenu() {
-    if (!this.user) { return; }
-    const site  = this.siteService.getAssignedSite();
-    this.menusService.createMainMenu(site).subscribe(data => console.log(data))
-  }
+  // async initMenu() {
+  //   if (!this.user) { return; }
+  //   const site  = this.siteService.getAssignedSite();
+  //   // this.menusService.createMainMenu(site).subscribe(data => console.log(data))
+  // }
 
   mergeConfig(options: accordionConfig) {
     const config = {
@@ -105,23 +112,22 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   }
 
   toggle(menu: AccordionMenu, index: number) {
-    this.displayCategories = true
-    this.index = index;
-    if (!this.config.multi) {
-      this.menus.filter(
-        (menu, i) => i !== index && menu.active
-      ).forEach(menu => menu.active = !menu.active);
-    }
-    this.menus[index].active = !this.menus[index].active;
-    this.submenu  = this.menus[index].submenus
-    if (menu.routerLink) {
-      this.routerNavigation(menu.routerLink)
+    try {
+      this.displayCategories = true
+      this.index = index;
+      if (!this.config.multi) {
+        this.menus.filter(
+          (menu, i) => i !== index && menu.active
+        ).forEach(menu => menu.active = !menu.active);
+      }
+      this.menus[index].active = !this.menus[index].active;
+      this.submenu  = this.menus[index].submenus
+      if (menu.routerLink) {
+        this.routerNavigation(menu.routerLink)
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
-
-  // isAuthorized(menu: any): boolean {
-  //   return this.userAuthorizationService.isUserAuthorized(menu.userType)
-  // }
-
 
 }

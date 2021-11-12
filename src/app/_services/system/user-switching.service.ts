@@ -65,7 +65,7 @@ export class UserSwitchingService {
     this.employeeService.getEmployeeByPIN(site, pin).subscribe
       (data =>
       {
-        console.log('user',data)
+        // console.log('user',data)
         if (data) {
           if (data.employee && data.client) {
 
@@ -112,10 +112,10 @@ export class UserSwitchingService {
             if (user) {
               try {
                   // console.log('success')
-                  console.log('user', user)
+                  // console.log('user', user)
                   this.clearSubscriptions();
                   const currentUser = this.setUserInfo(user, password)
-                  console.log('currentUser', currentUser)
+                  // console.log('currentUser', currentUser)
                   this.authenticationService.updateUser(currentUser)
                   return user
               } catch (error) {

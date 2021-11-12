@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 import { UrlResolver } from '@angular/compiler';
 import { UserComponentFactory } from 'ag-grid-community';
+import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 @Injectable({
   providedIn: 'root'
@@ -213,6 +214,7 @@ export class MenusService {
   }
 
   constructor( private http: HttpClient,
+               private httpCache: HttpClientCacheService,
                private auth: AuthenticationService, ) {
                  this.initSubscription();
                }
@@ -283,10 +285,43 @@ export class MenusService {
 
   }
 
-  createMainMenu(site: ISite): Observable<MenuGroup> {
+  mainMenuExists(site: ISite): Observable<boolean> {
+
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'MenuExists';
+
+    const parameters = `?name=main`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    const url = { url: uri, cacheMins: 120}
+
+    return  this.httpCache.get<boolean>(url)
+
+  }
+
+  menuExists(site: ISite, name: string): Observable<boolean> {
+
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'MenuExists';
+
+    const parameters = `?name=${name}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    const url = { url: uri, cacheMins: 120}
+
+    return  this.httpCache.get<boolean>(url)
+
+  }
+
+  createMainMenu(user: IUser, site: ISite): Observable<MenuGroup> {
 
     // const user = this.auth.userValue
-    if (!this.user) {
+    // console.log('createMainMenu', user)
+    if (!user) {
       console.log('user not defined - createMainMenu')
       return null
     }

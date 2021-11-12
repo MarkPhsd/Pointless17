@@ -66,6 +66,9 @@ export class UISettingsService {
   private async setSetting(transactionUISettings: TransactionUISettings): Promise<ISetting> {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
+
+    if (!transactionUISettings || !transactionUISettings.id) { return setting }
+
     setting.id    = transactionUISettings.id
     setting.name  = "UITransactionSetting"
     // console.log('transactionUISettings', transactionUISettings)
@@ -111,6 +114,8 @@ export class UISettingsService {
 
   async initConfig(setting: ISetting): Promise<ISetting> {
     const ui = {} as TransactionUISettings
+    if (setting) { return };
+
     ui.id = setting.id
     setting = await this.setSetting(ui)
     const config = JSON.parse(setting.text) as TransactionUISettings

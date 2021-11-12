@@ -93,7 +93,6 @@ export class SitesService {
   }
 
    getAssignedSite(): ISite {
-
     let site = {} as ISite
     const url = localStorage.getItem("site.url")
 
@@ -113,7 +112,6 @@ export class SitesService {
     }
 
     return site
-
   }
 
   setAssignedSite(site: ISite){

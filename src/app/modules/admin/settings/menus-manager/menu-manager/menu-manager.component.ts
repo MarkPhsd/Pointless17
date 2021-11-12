@@ -78,15 +78,17 @@ export class MenuManagerComponent implements OnInit  {
 
     const site       =  this.siteService.getAssignedSite();
     const deleteMenu = await this.menusService.deleteMenu(site).pipe().toPromise();
-    const menu$      =  this.menusService.createMainMenu(site)
-    const menu       =  await menu$.pipe().toPromise()
+    if (this.user) {
+      const menu$      =  this.menusService.createMainMenu(this.user, site)
+      const menu       =  await menu$.pipe().toPromise()
 
-    if (menu.id) {
-      const clearMenu$ = this.menusService.deleteMenuGroup(site,menu.id)
-      clearMenu$.subscribe(data => {
-        const menu$ =  this.menusService.createMainMenu(site)
-        this.getMainMenu();
-      })
+      if (menu.id) {
+        const clearMenu$ = this.menusService.deleteMenuGroup(site,menu.id)
+        clearMenu$.subscribe(data => {
+          const menu$ =  this.menusService.createMainMenu(this.user, site)
+          this.getMainMenu();
+        })
+      }
     }
 
   }

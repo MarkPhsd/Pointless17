@@ -5,7 +5,6 @@
   border-radius: 3px;
   margin: 3px 3px 3px 3px;
   padding: 3px 3px 3px 3px;
-
 }
 
 .buttons-grid {
@@ -15,4 +14,9 @@
   justify-content: space-between;
   align-content: space-around;
   width: 100%;
+}
+
+.mat-card-white {
+  background-color: white;
+  color: black;
 }

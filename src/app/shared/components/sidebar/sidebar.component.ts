@@ -49,22 +49,22 @@ export class SidebarComponent implements OnInit {
 
   async ngOnInit() {
     console.log('sidebar ngOnInit')
-    this.initSubscriptions();
-    if (!this.user) { return }
-    this.initMenu(this.site);
+    // this.initSubscriptions();
+    // if (!this.user) { return }
+    // this.initMenu(this.site);
   }
 
-  async initMenu(site: ISite) {
-    await this.menusService.createMainMenu(site);
-  }
+  // async initMenu(site: ISite) {
+  //   await this.menusService.createMainMenu(site);
+  // }
 
   async getMenu(site: ISite) {
-    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
-    this.accordionMenu$.subscribe(data=>{
-      this.accordionMenu = data
-      console.log('user ', this.user.roles);
-      console.log('menu', data)
-    })
+    // this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
+    // this.accordionMenu$.subscribe(data=>{
+    //   this.accordionMenu = data
+    //   console.log('user ', this.user.roles);
+    //   console.log('menu', data)
+    // })
   }
 
 

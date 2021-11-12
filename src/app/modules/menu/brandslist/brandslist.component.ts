@@ -212,7 +212,9 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     this.clientSearchModel        = clientSearchModel;
     this.clientSearchResults$     = this.contactsService.getLiveBrands(site, clientSearchModel)
     const data                    = await this.clientSearchResults$.pipe().toPromise();
+    if (!data) { return }
     this.brands                   = data.results
+    if (!this.brands) { return }
     if (this.brands.length == 0 ) { this.noBrands = true }
     this.initClass('ngoninit');
   }
@@ -334,7 +336,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     this.loading                   = true
 
     results$.subscribe(data => {
-      if (data.results.length == 0 || data.results == null) {
+      if (!data || data.results.length == 0 || data.results == null) {
         this.value = 100;
         this.loading = false;
         this.endOfRecords = true

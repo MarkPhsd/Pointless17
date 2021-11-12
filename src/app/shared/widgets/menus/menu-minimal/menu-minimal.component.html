@@ -1,6 +1,7 @@
-minimal
-<div fxLayout="column" class="row-class"
-      *ngIf="!displayCategories && menus">
+
+<div fxLayout="column"
+     class="row-class"
+     *ngIf="!displayCategories && menus">
 
   <ul id="accordion"
       class="accordion">
@@ -9,7 +10,6 @@ minimal
         *ngFor="let menu of menus; let i = index"
         [class.active]="menu.active">
         <div *userAuthorized="menu.userType">
-          <!-- <div *ngIf="isAuthorized(menu)" > -->
           <div class="menu"
                 (click)="toggle(menu, i)">
               <mat-icon>{{ menu.icon }}</mat-icon>
@@ -32,14 +32,12 @@ minimal
   </div>
 
   <div *ngIf="submenu">
-
     <ul id="accordion"
         class="accordion">
       <li class="menu-item"
           @fade
           *ngFor="let item of submenu" >
         <div *ngIf="!item.minimized">
-          <!-- <div class="menu"  *ngIf="isAuthorized(menu)"></div> -->
           <div class="menu" *userAuthorized="item.userType">
             <a mat-list-item
                 color="accent"

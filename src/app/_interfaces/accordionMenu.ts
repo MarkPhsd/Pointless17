@@ -3,12 +3,6 @@ export type accordionConfig = {
   multi?: boolean
 };
 
-export interface MenuGroup {
-  id:                   number;
-  name:                 string;
-  userType:             string;
-  accordionMenus:       [];
-}
 
 export interface AccordionMenu {
   id:                   number;
@@ -22,6 +16,13 @@ export interface AccordionMenu {
   routerLinkActive:     string;
   method:               string;
   submenus:             SubMenu[];
+}
+
+export interface MenuGroup {
+  id:                   number;
+  name:                 string;
+  userType:             string;
+  accordionMenus:       [];
 }
 
 export interface SubMenu {

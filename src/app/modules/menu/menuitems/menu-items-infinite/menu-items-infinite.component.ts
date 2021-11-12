@@ -234,6 +234,9 @@ async addToList(pageSize: number, pageNumber: number)  {
       }
     }
 
+    if (!pageNumber) {return}
+    if (!pageSize) {return}
+
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     // console.log('model', model);

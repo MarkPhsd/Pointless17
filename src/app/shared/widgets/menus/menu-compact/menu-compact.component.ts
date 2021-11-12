@@ -1,11 +1,12 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
-import { Observable, Subscription, } from 'rxjs';
+import { EMPTY, Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService } from 'src/app/_services';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu-compact',
@@ -13,7 +14,7 @@ import { AuthenticationService } from 'src/app/_services';
   styleUrls: ['./menu-compact.component.scss'],
 })
 
-export class MenuCompactComponent implements OnInit {
+export class MenuCompactComponent implements OnInit, OnDestroy {
 
   accordionMenu$:    Observable<AccordionMenu[]>;
   @Input() options;
@@ -26,12 +27,34 @@ export class MenuCompactComponent implements OnInit {
   user              : IUser;
   _user             : Subscription;
   site: ISite;
+
   initSubscription() {
-    this._user = this.authenticationService.user$.subscribe( data => {
-      this.user = data
-      this.getMenu();
-    })
+    this._user = this.authenticationService.user$.pipe(
+      switchMap(
+        user => {
+            if (!user) {
+              this.menus = [] as AccordionMenu[];
+              return EMPTY
+            }
+            return  this.menusService.getMainMenu(this.site, user)
+          }
+        )
+      ).subscribe( data => {
+        this.menus = [] as AccordionMenu[];
+        if (!data) {
+           return
+        }
+        this.config = this.mergeConfig(this.options);
+        if (data)
+          data.filter( item => {
+            if (item.active) {this.menus.push(item) } //= data
+          })
+        }, err => {
+          this.menus = [] as AccordionMenu[];
+      }
+    )
   }
+
 
   constructor ( private menusService            : MenusService,
                 private userAuthorizationService: UserAuthorizationService,
@@ -41,35 +64,17 @@ export class MenuCompactComponent implements OnInit {
               ) {this.site  =  this.siteService.getAssignedSite();}
 
   async ngOnInit() {
-    this.initSubscription();
-  }
 
-  async getMenu() {
-    // if (!this.user) {  return;    }
-    const site  =  this.siteService.getAssignedSite();
-    this.config = this.mergeConfig(this.options);
-    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
-    this.accordionMenu$.subscribe(data=>{
-      this.menus = [] as AccordionMenu[];
-      data.filter( item => {
-        if (item.active) {
-          this.menus.push(item)  //= data
-        }
-      })
-    }, err => {
-      console.log('err', err)
-    })
-
-    this.displayCategories = false;
-  }
-
-  async initMenu() {
     const site  = this.siteService.getAssignedSite();
-    try {
-      this.menusService.createMainMenu(site).subscribe(data => console.log(data))
-    } catch (error) {
-      console.log('error', error)
+    const result = await this.menusService.mainMenuExists(site).toPromise();
+    if (result) {
+      this.initSubscription()
     }
+
+  }
+
+  ngOnDestroy() {
+    if (this._user) { this._user.unsubscribe() }
   }
 
   mergeConfig(options: accordionConfig) {

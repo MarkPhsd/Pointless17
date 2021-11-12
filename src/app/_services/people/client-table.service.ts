@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
+import { EMPTY, Observable, } from 'rxjs';
 import { IClientTable, ISite, IUserProfile,employee }   from  'src/app/_interfaces';
 import { environment } from 'src/environments/environment';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
@@ -20,6 +20,8 @@ export class ClientTableService {
 
   getClient(site: ISite, id: any) : Observable<IClientTable> {
 
+    if (id == 0) {return EMPTY}
+
     const controller =  "/ClientTable/"
 
     const endPoint = `getClientTable`
@@ -33,6 +35,8 @@ export class ClientTableService {
   }
 
   delete(site: ISite, id: number) : Observable<IClientTable> {
+
+    if (id == 0) {return EMPTY}
 
     const controller =  "/ClientTable/"
 
@@ -48,6 +52,7 @@ export class ClientTableService {
 
   deleteList(site: ISite, id: number[]) : Observable<IClientTable> {
 
+
     const controller =  "/ClientTable/"
 
     const endPoint = `deleteList`
@@ -61,6 +66,8 @@ export class ClientTableService {
   }
 
   putClient(site: ISite, id: any, client: IClientTable): Observable<IClientTable> {
+
+    if (id == 0) {return EMPTY}
 
     const controller =  "/ClientTable/"
 

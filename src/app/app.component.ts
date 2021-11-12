@@ -32,8 +32,6 @@ export class AppComponent {
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   initSubscription() {
-
-    // console.log('init menu minimal')
     if (this.authenticationService.userValue) {
       this.user = this.authenticationService.userValue;
     }
@@ -51,40 +49,24 @@ export class AppComponent {
       private statusBar:             StatusBar,
       private toastController:       ToastController,
       private awsService:            AWSBucketService,
-      private electronService:       ElectronService,
       private siteService         :  SitesService,
       private menusService        :  MenusService,
 
   ) {
-
-      // this.user = this.authenticationService.userValue
       this.initSubscription();
 
       this.initializeApp();
-      // Initialize BackButton Eevent.
+      // Initialize BackButton Event.
       this.backButtonEvent();
+
       //aws settings
       this.awsService.awsBucket();
-
-      if (this.electronService.isElectronApp) {
-        // this.electronService.ipcRenderer.on('trigger-alert');
-      }
-      this.initMenu();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
       this.statusBar.styleLightContent();
     });
-  }
-
-  initMenu() {
-    const site  = this.siteService.getAssignedSite();
-    if (this.user) {
-      this.menusService.createMainMenu(site).subscribe(data => {
-        }
-      )
-    }
   }
 
   logout() {

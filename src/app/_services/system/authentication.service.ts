@@ -61,7 +61,10 @@ export class AuthenticationService {
     // if paged refreshed, try to reset the user.
     public get userValue(): IUser {
 
+      // console.log('getting user')
+
       if (!this._user.value) {
+        // console.log('getting user  not set, retrieving from local storage')
         const item = localStorage.getItem('user');
         if (!item) {
           //will return undefined or null;
@@ -73,6 +76,8 @@ export class AuthenticationService {
           return nextUser
         }
       }
+
+      // console.log('user Value exists', this._user.value)
 
       return this._user.value;
     }
@@ -93,7 +98,6 @@ export class AuthenticationService {
       user.authdata = window.btoa( `${user.username}:${user.password}`);
       localStorage.setItem("ami21", 'true');
       this.updateUser(user);
-
     }
 
     logout() {
@@ -108,7 +112,7 @@ export class AuthenticationService {
         }
       }
 
-      console.log('route to login')
+      // console.log('route to login')
       this.router.navigate(['/login']);
 
     }
