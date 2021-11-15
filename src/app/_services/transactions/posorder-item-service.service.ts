@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
-import { IProductPostOrderItem, ISite }   from 'src/app/_interfaces';
+import { IProductPostOrderItem, ISite, IUser }   from 'src/app/_interfaces';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,6 +21,7 @@ export interface ItemPostResults {
   expirationPass   : boolean;
   inventory        : IInventoryAssignment;
   posItem          : IPurchaseOrderItem;
+  posItemMenuItem  : IMenuItem;
   serial           : Serial;
   scanResult       : boolean;
   inventoryResults : InventoryResults
@@ -39,6 +40,11 @@ export interface ItemPostResults {
   countUsed        : number;
  }
 
+ export interface ApplySerialAction {
+   id        : number;
+   serialCode: string;
+   overRide  : boolean;
+ }
 
 export interface newItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number}
 export interface newInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number}
@@ -79,6 +85,7 @@ export interface ItemWithAction {
 })
 
 export class POSOrderItemServiceService {
+
   get platForm() {  return Capacitor.getPlatform(); }
 
   private _posOrderItem       = new BehaviorSubject<PosOrderItem>(null);
@@ -150,7 +157,7 @@ export class POSOrderItemServiceService {
   }
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
-    if (order) {
+    if (order && barcode) {
       let newItem = { orderID: order.id, quantity: quantity, barcode: barcode } as newItem
       return this.addItemToOrderWithBarcode(site, newItem)
     }
@@ -159,8 +166,10 @@ export class POSOrderItemServiceService {
 
   addItemToOrderWithBarcode(site: ISite, newItem: any):  Observable<ItemPostResults> {
 
+    if (!newItem ) { return }
+
     newItem = this.getNewItemWeight(newItem);
-    console.log(newItem)
+
     const controller = "/POSOrderItems/"
 
     const endPoint  = "PostUniquBarcodeItem"
@@ -170,6 +179,29 @@ export class POSOrderItemServiceService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<ItemPostResults>(url, newItem );
+
+  }
+
+
+  appylySerial(site: ISite, id: number, serialCode: string, user: IUser): Observable<ItemPostResults> {
+
+    const item = {} as ApplySerialAction
+    item.id = id;
+    item.serialCode = serialCode;
+
+    if (user) {
+
+    }
+
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "applySerial"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<ItemPostResults>(url, item);
 
   }
 
@@ -303,7 +335,7 @@ export class POSOrderItemServiceService {
   }
 
 
-  deletePOSOrderItem(site: ISite, id: number): Observable<string> {
+  deletePOSOrderItem(site: ISite, id: number): Observable<ItemPostResults> {
 
     const controller = "/POSOrderItems/"
 
@@ -313,7 +345,7 @@ export class POSOrderItemServiceService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.delete<string>(url)
+    return  this.http.delete<ItemPostResults>(url)
 
   }
 

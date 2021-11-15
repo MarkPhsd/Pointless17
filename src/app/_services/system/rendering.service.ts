@@ -79,7 +79,6 @@ export class RenderingService {
     let  stringArray = []
     if (obj) {
       obj.forEach( data => {
-
         stringArray.push( this.interpolateText(data, text))
       })
     }

@@ -119,10 +119,11 @@ export class ItemTypeEditorComponent   {
     let result: boolean;
 
     return new Promise(resolve => {
+      const site = this.siteService.getAssignedSite()
+
       if (this.inputForm.valid) {
         this.setNonFormValues()
 
-        const site = this.siteService.getAssignedSite()
         try {
             if (this.itemTypes) {
               this.itemTypes.forEach( item => {
@@ -130,7 +131,7 @@ export class ItemTypeEditorComponent   {
                 item = this.inputForm.value;
                 item.id = id;
                 item.labelTypeID = this.labelTypeID;
-                console.log(this.labelTypeID )
+                console.log(this.labelTypeID, item )
                 return  this.updateItem(site, item)
               })
               this.onCancel()

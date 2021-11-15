@@ -1,37 +1,33 @@
 import { Injectable } from '@angular/core';
-import { Component, Input, OnInit, OnDestroy} from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
-import { DevService, AnimationCountService } from 'src/app/_services/';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
-import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { ItemPostResults, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { ElectronService } from 'ngx-electron';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { Data } from 'electron/main';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { T } from '@angular/cdk/keycodes';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
-import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
+import { ISite }   from 'src/app/_interfaces';
 import { PromptWalkThroughService } from '../menuPrompt/prompt-walk-through.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
-import { map } from 'rxjs/operators';
+import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-serial/requires-serial.component';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderMethodsService {
 
-  order            : IPOSOrder;
-  _order           : Subscription;
-  subscriptionInitialized: boolean;
+  order                   : IPOSOrder;
+  _order                  : Subscription;
+  subscriptionInitialized : boolean;
 
   intSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(data => {
@@ -39,10 +35,7 @@ export class OrderMethodsService {
     })
   }
 
-  constructor(private menuService             : MenuService,
-              private awsBucket               : AWSBucketService,
-              private router                  : Router,
-              public route                    : ActivatedRoute,
+  constructor(public route                    : ActivatedRoute,
               private dialog                  : MatDialog,
               private siteService             : SitesService,
               private orderService            : OrdersService,
@@ -50,8 +43,7 @@ export class OrderMethodsService {
               private posOrderItemService     : POSOrderItemServiceService,
               private promptGroupService      : PromptGroupService,
               private promptWalkService: PromptWalkThroughService,
-              private electronService: ElectronService,) {
-
+             ) {
     this.intSubscriptions();
   }
 
@@ -76,48 +68,85 @@ export class OrderMethodsService {
     if (!order) { order = this.order }
 
     if (order) {
-      const newItem = { orderID: order.id, quantity: quantity, menuItem: item }
-      const itemResult =  this.posOrderItemService.postItem(site, newItem).subscribe(data => {
-        if (data.order) {
-          this.orderService.updateOrderSubscription(data.order)
-          this.addedItemOptions(order, item, data.posItem)
-        } else {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+      const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
+      const itemResult  =  this.posOrderItemService.postItem(site, newItem).subscribe(data => {
+          if (data.order) {
+            this.orderService.updateOrderSubscription(data.order)
+            this.addedItemOptions(order, item, data.posItem)
+          } else {
+            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+          }
         }
-      })
-
+      )
     }
+  }
+
+  appylySerial(posItem: IPOSOrderItem) {
+    const site = this.siteService.getAssignedSite();
+    return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
   }
 
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
 
-      const site = this.siteService.getAssignedSite()
-      const result = await this.doesOrderExist(site);
-      if (!result) { return }
-      const order = this.order
+    const site = this.siteService.getAssignedSite()
+    const result = await this.doesOrderExist(site);
+    if (!result) { return }
+    const order = this.order
 
-      const addItem$ = this.posOrderItemService.scanItemForOrder(site, order, barcode, 1);
-          //or we refresh the order with the new item added
-       addItem$.subscribe(
-          data=> {
-          if (data.menuItemWithPrice) {
-            //this means we prompt for prices.
+    const addItem$ = this.posOrderItemService.scanItemForOrder(site, order, barcode, 1);
+    //or we refresh the order with the new item added
+    addItem$.subscribe(
+        data=> {
+
+        console.log(data.posItemMenuItem)
+        if (data.posItemMenuItem) {
+          const item    = data.posItemMenuItem.itemType
+          const menuItem = data.posItemMenuItem
+          if (item.requiresSerial) {
+            this.promptSerial(menuItem, data.posItem)
           }
-          if (data.order) {
-            this.orderService.updateOrderSubscription(data.order)
+        }
+
+        if (data.menuItemWithPrice) {
+          //this means we prompt for prices.
+        }
+        if (data.order) {
+          this.orderService.updateOrderSubscription(data.order)
+        }
+        if (data.menuItem) {
+          if (data.menuItem.length > 0) {
+            //here we can and present a list of items found
           }
-          if (data.menuItem) {
-            if (data.menuItem.length > 0) {
-              //here we can and present a list of items found
-            }
-          }
-          if (!data.order && data.menuItem) {
-            this.notifyEvent(`${data.resultErrorDescription}`, 'Error', )
-          }
+        }
+        if (!data.order && data.menuItem) {
+          this.notifyEvent(`${data.resultErrorDescription}`, 'Error', )
+        }
+      }
+    )
+
+    input.nativeElement.value = ''
+
+  }
+
+  promptSerial(menuItem: IMenuItem, posItem: IPurchaseOrderItem) {
+    if ( posItem) {
+
+      const dialogRef = this.dialog.open(RequiresSerialComponent,
+        {
+          width:     '300ox',
+          maxWidth:  '300ox',
+          height:    '300ox',
+          maxHeight  :'300ox',
+          panelClass :'foo',
+          data       : posItem
         }
       )
 
-      input.nativeElement.value = ''
+      dialogRef.afterClosed().subscribe(result => {
+        // this.promptGroupService.updatePromptGroup(null)
+        // this.promptWalkService.updatePromptGroup(null)
+      });
+    }
   }
 
   addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
@@ -129,12 +158,10 @@ export class OrderMethodsService {
 
   openPriceChangePrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-
   }
 
   openGiftCardPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-
   }
 
   openQuantityPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
@@ -168,6 +195,7 @@ export class OrderMethodsService {
           panelClass: 'foo'
         }
       )
+
       dialogRef.afterClosed().subscribe(result => {
         this.promptGroupService.updatePromptGroup(null)
         this.promptWalkService.updatePromptGroup(null)

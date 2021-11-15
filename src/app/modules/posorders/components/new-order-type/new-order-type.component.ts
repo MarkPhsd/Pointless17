@@ -1,12 +1,8 @@
 import { Component,Input, OnInit, Optional } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { IPOSOrder, IPOSPayment,IServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';

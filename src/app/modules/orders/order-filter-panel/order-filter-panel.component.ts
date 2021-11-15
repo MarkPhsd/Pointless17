@@ -218,17 +218,16 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   initFilter(search: IPOSOrderSearchModel) {
     if (!search) {
       search = {} as IPOSOrderSearchModel
-      search.suspendedOrder = 0
-      search.greaterThanZero = 0
-      search.closedOpenAllOrders = 0;
+      search.suspendedOrder       = 0
+      search.greaterThanZero      = 0
+      search.closedOpenAllOrders  = 1;
       this.searchModel = search;
     }
 
     this.toggleSuspendedOrders       =  search.suspendedOrder.toString()      //= parseInt(this.toggleSuspendedOrders)
     this.toggleOrdersGreaterThanZero =  search.greaterThanZero.toString()      //= parseInt(this.toggleOrdersGreaterThanZero)
     this.toggleOpenClosedAll         =  search.closedOpenAllOrders.toString() //= parseInt(this.toggleOpenClosedAll)
-    // this.serviceTypes                =  search.serviceTypeID
-    // this.searchModel = search;
+
   }
 
   changeToggleTypeEmployee() {
@@ -249,7 +248,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   refreshSearch() {
-
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel
       this.searchModel.serviceTypeID = 0
       this.searchModel.employeeID    = 0
@@ -262,7 +260,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
     this.initOrderSearch(search)
     return this._searchItems$
-
   }
 
   refreshOrderSearch(searchPhrase) {
@@ -301,28 +298,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   newOrderWithPayload(){
-
-    if (!this.orderServiceType) {
-      this.orderServiceType = {} as IServiceType;
-    }
-
     const site = this.siteService.getAssignedSite();
-
-    const orderPayload = {} as OrderPayload;
-    orderPayload.serviceType = this.orderServiceType;
-    orderPayload.client = null;
-
-    const order$ = this.orderService.postOrderWithPayload(site, orderPayload)
-
-    order$.subscribe(
-      order => {
-        // this.notifyEvent(`Order Submitted Order # ${data.id}`, "Posted")
-        console.log(order)
-        this.orderService.setActiveOrder(site, order)
-      }, catchError => {
-        this.notifyEvent(`Error submitting Order # ${catchError}`, "Posted")
-      }
-    )
+    this.orderService.newOrderWithPayload(site, this.orderServiceType)
   }
 
   newOrderOptions() {
@@ -333,9 +310,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.matSnack.open(message, title, {duration: 2000, verticalPosition: 'bottom'})
   }
 
-
   async initDateForm() {
-    console.log('init date form')
     this.dateRangeForm = new FormGroup({
       start: new FormControl(),
       end: new FormControl()
@@ -354,7 +329,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.searchModel.completionDate_To   = this.dateRangeForm.get("start").value;
 
     this.subscribeToDatePicker();
-
   }
 
   subscribeToDatePicker()
@@ -389,7 +363,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   refreshDateSearch() {
-
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
 
     if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
@@ -405,7 +378,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.searchModel.completionDate_To = this.dateTo.toISOString()
 
     this.refreshSearch()
-
   }
 
 

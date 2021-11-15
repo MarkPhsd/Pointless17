@@ -1,22 +1,21 @@
-import { Component, ElementRef, OnInit,  ViewChild, Input } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
-import { PrintingService } from 'src/app/_services/system/printing.service';
+import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { Observable, Subscription } from 'rxjs';
 import { MatDialogRef } from '@angular/material/dialog';
-import { Capacitor,  } from '@capacitor/core';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-reciept-pop-up',
   templateUrl: './reciept-pop-up.component.html',
   styleUrls: ['./reciept-pop-up.component.scss']
 })
-export class RecieptPopUpComponent implements OnInit {
+export class RecieptPopUpComponent implements OnInit, AfterViewInit {
 
   @ViewChild('printsection') printsection: ElementRef;
   @Input() printerName      : string;
@@ -56,8 +55,14 @@ export class RecieptPopUpComponent implements OnInit {
 
   electronReceiptSetting: ISetting;
 
+  _printReady      : Subscription;
+  printReady       : boolean
+
+  orderCheck = 0;
+
+  autoPrinted = false;
+
   intSubscriptions() {
-    console.log('RecieptPopUpComponent inituSubscriptions')
     this._order       = this.orderService.currentOrder$.subscribe(data => {
       this.order      = data;
       this.orders     = [];
@@ -68,128 +73,106 @@ export class RecieptPopUpComponent implements OnInit {
       if (data.posOrderItems) {
         this.items      = data.posOrderItems
       }
-      console.log('order', this.orders)
+    })
+
+    this._printReady = this.printingService.printReady$.subscribe(status => {
+      if (status && !this.autoPrinted) {
+        this.print();
+        this.dialogRef.close();
+        this.autoPrinted = true;
+      }
     })
   }
 
   constructor(
-      private electronService       : ElectronService,
+      private platFormService       : PlatformService,
       private orderService          : OrdersService,
       private settingService        : SettingsService,
       private siteService           : SitesService,
       private printingService       : PrintingService,
-      private btPrinterService      : BtPrintingService,
       private dialogRef: MatDialogRef<RecieptPopUpComponent>,
       private printingAndroidService: PrintingAndroidService,
   ) {
   }
 
   async ngOnInit() {
+    console.log('')
+  }
+
+  async ngAfterViewInit() {
+    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+    //Add 'implements AfterViewInit' to the class.
     this.intSubscriptions();
-    await this.applyStyles();
-    this.getDefaultPrinter();
-  }
+    const styles     = await this.applyStyles();
+    const receiptID  = await this.getDefaultPrinter();
+    if (receiptID && styles ) {
+      const receipt$ =  this.refreshReceipt(receiptID);
+      receipt$.subscribe( receipt => {
+        if (this.initSubComponent( receipt, styles )) {
 
-  async getDefaultPrinter() {
-    //!! get the Printer name And the Receipt Type.
-    //then REfresh the receipt with the styles and the printer selected.
-
-    //get the DefaultElectornReceiptCached This will reduce API Calls.
-    //The DeaultRecieptCached doesn't get the receipt styles
-    //it gets the pointer to the receipt styles.
-
-    //call the styles
-    //once those are set the receipt will load
-    console.log('getting Info')
-
-    const item = await this.printingService.getDefaultElectronReceiptPrinter().toPromise()
-    this.electronReceiptSetting = item;
-    localStorage.setItem('electronReceiptPrinter', item.text)
-    localStorage.setItem('electronReceipt', item.value)
-    localStorage.setItem('electronReceiptID', item.option1)
-
-    this.receiptID   =  +item.option1;
-    this.printerName =  item.text;
-    let receiptID        =  +item.option1;
-    this.refreshReceipt(receiptID);
-  }
-
-  async refreshReceipt(id: any) {
-    try {
-       const site                  = this.siteService.getAssignedSite();
-      const receipt$              = this.settingService.getSetting(site, id)
-      receipt$.subscribe(receipt => {
-        this.initSubComponent( receipt, this.receiptStyles )
+        }
       })
-    } catch (error) {
-      console.log(error)
     }
   }
 
-  initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting) {
-    try {
-      if (receiptPromise && receiptStylePromise) {
-        this.receiptLayoutSetting = receiptPromise
-        this.headerText           =  this.receiptLayoutSetting.option6
-        this.footerText           =  this.receiptLayoutSetting.option5
-        this.itemsText            =  this.receiptLayoutSetting.text
-        this.paymentsText         =  this.receiptLayoutSetting.option7
-        this.subFooterText        =  this.receiptLayoutSetting.option8
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  getPlatForm() {
-    return Capacitor.getPlatform();
-  }
-
- async printerAssignment(){
-    const platForm              =  this.getPlatForm()
-    this.platForm               = platForm
-    if (this.electronService.remote != null) { this.platForm = 'electron' }
-    if (this.isElectronServiceInitiated) {  }
-    if (platForm === 'android') {
-      this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-      this.platForm     = 'android'
-      this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
-    }
-    if (platForm === 'web') { }
-  }
-
-
-  getPrintContent(htmlContent: any) {
-    let styles  = ''
-    if (this.receiptStyles) { const styles =  this.receiptStyles.text; }
-    const htmlHeader = `<!DOCTYPE html <html><head>
-    <style>${styles}</style>
-    <title>print</title>
-    </head> <body>`
-    const htmlFooter = '</body></html>'
-    const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
-    return html
-  }
-
-  async applyStyles() {
+  async applyStyles(): Promise<ISetting> {
     const site                = this.siteService.getAssignedSite();
-    this.receiptStyles        = await this.printingService.applyStyles(site)
+    this.receiptStyles        = await this.printingService.appyStylesCached(site)
     if (this.receiptStyles) {
       const style             = document.createElement('style');
       style.innerHTML         = this.receiptStyles.text;
       document.head.appendChild(style);
+      return this.receiptStyles
     }
   }
 
-  getReceiptContents() {
+  async getDefaultPrinter(): Promise<number> {
+    const item = await this.printingService.getDefaultElectronReceiptPrinterCached().toPromise()
+    this.electronReceiptSetting = item;
+    this.receiptID   =  +item.option1;
+    this.printerName =  item.text;
+    return this.receiptID;
+  }
+
+  refreshReceipt(id: any): Observable<ISetting> {
+      const site          = this.siteService.getAssignedSite();
+      const receipt$      = this.settingService.getSetting(site, id)
+      return receipt$
+  }
+
+  initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting): boolean {
+    if (receiptPromise && receiptStylePromise) {
+      this.receiptLayoutSetting =  receiptPromise
+      this.headerText           =  this.receiptLayoutSetting.option6
+      this.footerText           =  this.receiptLayoutSetting.option5
+      this.itemsText            =  this.receiptLayoutSetting.text
+      this.paymentsText         =  this.receiptLayoutSetting.option7
+      this.subFooterText        =  this.receiptLayoutSetting.option8
+      return true
+    }
+  }
+
+  getReceiptContents(styles: string) {
     const prtContent     = document.getElementById('printsection');
+    if (!prtContent) {
+      console.log('print content empty')
+      return
+    }
+
     const content        = `${prtContent.innerHTML}`
-    const loadView       = ({title}) => {
+    if (!content) {
+      console.log('content empty')
+      return
+    }
+
+    const  title = 'Receipt';
+
+    const loadView       = ({ title }) => {
       return (`
         <!DOCTYPE html>
         <html>
           <head>
-            <style>${this.receiptStyles.text}</style>
+            <style>${styles}</style>
             <title>${title}</title>
             <meta charset="UTF-8">
           </head>
@@ -200,32 +183,28 @@ export class RecieptPopUpComponent implements OnInit {
       `)
     }
     const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
-      title: "Account"
+      title: "Receipt"
     }));
     return file
   }
 
   async print() {
-    const platForm    =  this.getPlatForm()
 
-    if (this.electronService.remote != null) {
-      if (!this.printerName) {
-        window.alert('No default printer has been assigned.')
-        return
-      }
+    if (this.platFormService.isAppElectron) {
+      // if (!this.printerName) {
+      //   window.alert('No default printer has been assigned.')
+      //   return
+      // }
       this.printElectron()
       return
     }
 
-    if (this.isElectronServiceInitiated) {  }
+    if (this.platFormService.androidApp) {
+      this.printAndroid();
 
-    if (platForm === 'android') {
-      this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-      this.platForm     = 'android'
-      this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
     }
 
-    if (platForm === 'web') {
+    if (this.platFormService.webMode) {
        this.convertToPDF();
      }
   }
@@ -235,13 +214,23 @@ export class RecieptPopUpComponent implements OnInit {
   }
 
   async printElectron() {
-    const contents = this.getReceiptContents()
+    const styles = this.receiptStyles.text;
+    const contents = this.getReceiptContents(styles)
     const options = {
       silent: true,
       printBackground: false,
       deviceName: this.printerName
+    } as printOptions;
+
+    if (!contents) { console.log('no contents in print electron')}
+
+    if (!options) { console.log('no options in print electron')}
+
+    if (!this.printerName) { console.log('no printerName in print electron')}
+
+    if (contents && this.printerName, options) {
+      this.printingService.printElectron( contents, this.printerName, options)
     }
-    this.printingService.printElectron( contents, this.printerName, options, true)
   }
 
   savePDF() {
@@ -254,6 +243,8 @@ export class RecieptPopUpComponent implements OnInit {
     //save selected printer to local storage
     //set saved printer name /bt id to selection on load.
     // const order = this.fakeData.getPOSOrderContents()
+    // this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+    // this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
     this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
   }
 
@@ -261,3 +252,31 @@ export class RecieptPopUpComponent implements OnInit {
     this.dialogRef.close();
   }
 }
+
+
+// function swichtMap(arg0: (receipt: any) => void) {
+//   throw new Error('Function not implemented.');
+// }
+// async printerAssignment(){
+//   const platForm              = this.getPlatForm()
+//   this.platForm               = platForm
+//   if (this.electronService.remote != null) { this.platForm = 'electron' }
+//   if (this.isElectronServiceInitiated) {  }
+//   if (platForm === 'android') {
+//     this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+//     this.platForm     = 'android'
+//     this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+//   }
+//   if (platForm === 'web') { }
+// }
+// getPrintContent(htmlContent: any) {
+//   let styles  = ''
+//   if (this.receiptStyles) { const styles =  this.receiptStyles.text; }
+//   const htmlHeader = `<!DOCTYPE html <html><head>
+//   <style>${styles}</style>
+//   <title>print</title>
+//   </head> <body>`
+//   const htmlFooter = '</body></html>'
+//   const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
+//   return html
+// }

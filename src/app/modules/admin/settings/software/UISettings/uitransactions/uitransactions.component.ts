@@ -19,28 +19,23 @@ export class UITransactionsComponent implements OnInit {
   uiTransactions = {} as TransactionUISettings;
 
   constructor(
-      private uISettingsService: UISettingsService,
       private siteService      : SitesService,
+      private uISettingsService: UISettingsService,
       private settingsService  :SettingsService,
   ) {
-    const site = this.siteService.getAssignedSite();
-    this.uiSettings$ = this.settingsService.getSettingByName(site, 'UITransactionSetting')
   }
 
   ngOnInit() {
-    this.uiSettings$.subscribe(data => {
-      this.uiSettings = data;
-      if (this.uiSettings) {
-        this.initForm(this.uiSettings);
+    this.uISettingsService.getSettings(false).subscribe(data => {
+      if (data) {
+        this.initForm(data);
       }
     });
   }
 
   async initForm(setting: ISetting) {
     const form = this.inputForm
-    if (setting) {
-      this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text)
-    }
+    this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text)
   }
 
   async updateSetting(){

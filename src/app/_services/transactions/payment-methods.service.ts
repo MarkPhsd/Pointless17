@@ -129,7 +129,7 @@ export class PaymentMethodsService {
   delete(site: ISite, id: number): Observable<IPaymentMethod> {
     const controller = "/PaymentMethods/"
 
-    const endPoint  = "delete"
+    const endPoint  = "DeletePaymentMethod"
 
     const parameters = `?id=${id}`
 
@@ -141,7 +141,7 @@ export class PaymentMethodsService {
   post(site: ISite, paymentMethod: IPaymentMethod): Observable<IPaymentMethod> {
     const controller = "/PaymentMethods/"
 
-    const endPoint  = "delete"
+    const endPoint  = "postPaymentMethod"
 
     const parameters = ``
 
@@ -164,7 +164,7 @@ export class PaymentMethodsService {
 
   saveItem(site: ISite, paymentMethod: IPaymentMethod): Observable<IPaymentMethod> {
     if (paymentMethod.id === 0 || !paymentMethod.id) {
-      return this.put(site, paymentMethod)
+      return this.post(site, paymentMethod)
     } else {
       return this.put(site, paymentMethod)
     }

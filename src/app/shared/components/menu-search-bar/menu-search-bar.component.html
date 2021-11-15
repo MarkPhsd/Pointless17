@@ -2,7 +2,7 @@
 
 <div class="grid-container">
   <div  [formGroup]="searchForm"
-      class="grid-item" >
+      class="grid-item form-width" >
       <mat-form-field appearance="outline" class="form-fields">
         <mat-label><mat-icon>search</mat-icon>Search / Scan </mat-label>
         <input
@@ -28,11 +28,18 @@
               (click)="toggleKeyboard()">
               <mat-icon>keyboard</mat-icon></button>
     </div>
+
     <div >
       <button mat-button
               (click)="clearAll()">
-              <mat-icon>refresh</mat-icon></button>
+              Reset<mat-icon>reset</mat-icon></button>
     </div>
+    <!-- <div >
+      <button mat-button
+              (click)="clearAll()">
+              <mat-icon>refresh</mat-icon></button>
+    </div> -->
+
   </div>
 
   <mat-accordion multi>

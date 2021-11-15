@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { EMPTY, Observable, Subscription } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { clientType, employee, IClientTable, IStatus, IUserProfile } from 'src/app/_interfaces';
 import { IPOSOrder, IPOSOrderSearchModel, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -58,6 +58,16 @@ export class CheckInProfileComponent implements OnInit {
   isStaff       : boolean;
   minumumAllowedDateForPurchases: Date
 
+  currentOrder:  IPOSOrder;
+  _currentOrder: Subscription;
+
+  initSubscriptions() {
+    this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
+      this.currentOrder = data;
+    })
+
+  }
+
   constructor(
               private router: Router,
               public route: ActivatedRoute,
@@ -78,7 +88,7 @@ export class CheckInProfileComponent implements OnInit {
 
       this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
       this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
-
+      this.initSubscriptions();
   }
 
  async ngOnInit() {
@@ -142,15 +152,13 @@ export class CheckInProfileComponent implements OnInit {
   postNewCheckIn() {
     const site = this.siteService.getAssignedSite();
     if (this.id) {
-
       const order$ = this.orderService.getNewDefaultCheckIn(site, this.id)
-
       order$.subscribe(
         data => {
           this.notifyEvent(`Order Submitted Order # ${data.id}`, "Posted")
           this.refreshOrders();
         }, catchError => {
-          this.notifyEvent("Order was not submitted", "Error")
+          this.notifyEvent("Order was not submitted " + catchError, "Error")
         }
       )
     }
@@ -163,14 +171,29 @@ export class CheckInProfileComponent implements OnInit {
 
     try {
       const client$ = this.clientTableService.saveClient(site, this.inputForm.value)
-      client$.subscribe(data =>
-                      {result = "Saved contact."})
-
-      this.notifyEvent(result, "Success")
+      client$.pipe(
+        switchMap(data =>
+          {
+            // console.log('update 0')
+            if (!data) { return EMPTY }
+            // console.log('update 1')
+            if (this.currentOrder) {
+              // console.log('update 2')
+              return this.orderService.getOrder(site, this.currentOrder.id.toString())
+            }
+            // console.log('update empty')
+            return EMPTY;
+          }
+        )).subscribe( order => {
+          // console.log('update order', order)
+          this.orderService.updateOrderSubscription(order)
+        })
 
     } catch (error) {
       this.notifyEvent(result, "Failure")
     }
+
+
   };
 
   updateUserExit() {

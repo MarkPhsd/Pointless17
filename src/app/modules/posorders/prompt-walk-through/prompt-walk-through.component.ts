@@ -76,7 +76,6 @@ export class PromptWalkThroughComponent implements OnInit {
     //cancel prompt and item being applied to.
     const result = window.confirm("Do you want to cancel this prompt? This will not apply any selections")
     this.dialogRef.close()
-    console.log('delete all items', result)
     if (result) {
       this.dialogRef.close()
     }

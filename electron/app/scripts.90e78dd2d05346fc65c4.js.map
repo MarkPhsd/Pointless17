@@ -1,1 +1,0 @@
-{"version":3,"file":"scripts.90e78dd2d05346fc65c4.js","mappings":"AAAAA,OAAOC,GAAKC,QAAQ","sources":["src\\native.js"],"sourcesContent":["window.fs = require('fs');\r\n"],"names":["window","fs","require"],"sourceRoot":"webpack:///"}

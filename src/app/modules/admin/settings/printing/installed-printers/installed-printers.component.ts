@@ -7,7 +7,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
-import { PrintingService } from 'src/app/_services/system/printing.service';
+import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import * as  printJS from "print-js";
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SafeHtmlPipe } from 'src/app/_pipes/safe-html.pipe';
@@ -25,6 +25,7 @@ import { PrintingAndroidService } from 'src/app/_services/system/printing-androi
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { switchMap } from 'rxjs/operators';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ConsoleService } from 'src/app/_services/system/console.service';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
@@ -44,11 +45,6 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 // https://www.codota.com/code/javascript/functions/child_process/exec
 // https://jscomplete.com/learn/node-beyond-basics/child-processes
 
- export interface printOptions {
-  silent: true;
-  printBackground: false;
-  deviceName: string;
-}
 
 @Component({
   selector: 'app-installed-printers',
@@ -131,6 +127,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private fakeData              : FakeDataService,
               private renderingService      : RenderingService,
               private platFormService       : PlatformService,
+              private cs : ConsoleService,
   ) {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
@@ -178,7 +175,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       this.refreshReceipt(receiptPromise.id);
       this.refreshSelections();
     } catch (error) {
-      console.log(error)
+      // this.cs.console.log(error)
     }
   }
 
@@ -444,7 +441,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     if (this.printOptions) {
       this.printOptions.deviceName = this.printerName
     }
-    this.printingService.printElectron( contents, this.printerName, this.printOptions, this.hideWindow)
+
+    this.printingService.printElectron( contents, this.printerName, this.printOptions)
   }
 
   convertToPDF() {

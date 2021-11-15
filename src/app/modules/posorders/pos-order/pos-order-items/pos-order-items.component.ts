@@ -29,7 +29,7 @@ export class PosOrderItemsComponent implements OnInit {
   smallDevice    : boolean;
   animationState : string;
   _order         : Subscription;
-  gridScroller: '';
+  gridScroller   : '';
 
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
@@ -63,9 +63,8 @@ export class PosOrderItemsComponent implements OnInit {
                 private uiSettingsService: UISettingsService,
               )
  {
-
     this.orderItemsPanel = 'item-list';
-  }
+ }
 
   async ngOnInit() {
     await this.uiSettingsService.subscribeToCachedConfig()

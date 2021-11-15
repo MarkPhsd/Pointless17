@@ -57,7 +57,7 @@ async function createWindow () {
   let url = ''
   if (!isDevMode) { url = `file://${__dirname}/app/index.html`  }
   if (isDevMode)  { url = `http://192.168.0.16:4200/index.html` }
-  url = `http://192.168.0.16:4200/index.html`;
+  url = `http://localhost:4200/index.html`;
 
   try {
     mainWindow = new BrowserWindow({

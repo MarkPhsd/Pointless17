@@ -1,0 +1,35 @@
+<mat-card>
+  <mat-card-subtitle>
+    Scan Barcode
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div [formGroup]="inputForm">
+      <div class="grid-item">
+        <mat-form-field appearance="outline">
+          <mat-label ><mat-icon >qr_code</mat-icon> Scan Barcode</mat-label>
+          <input matInput
+                type              ="text"
+                formControlName   ="serial"
+                id                ="serial"
+                #input
+                matInput
+                appAutoFocusInput
+          >
+        </mat-form-field>
+      </div>
+    </div>
+    <mat-card-actions>
+      <button mat-raised-button (click)="initForm()">
+        <mat-icon>clear</mat-icon>
+        Clear
+      </button>
+
+      <button mat-raised-button (click)="onCancel()">
+        <mat-icon>exit</mat-icon>
+        Exit
+      </button>
+    </mat-card-actions>
+  </mat-card-content>
+
+</mat-card>

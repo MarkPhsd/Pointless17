@@ -23,6 +23,10 @@
             {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
           </span>
 
+          <span  *ngIf="orderItem && orderItem.serialCode">
+            {{ orderItem.serialCode }}
+          </span>
+
           <span  *ngIf="orderItem && orderItem.modifierNote">
             {{ orderItem.modifierNote }}
           </span>
@@ -74,6 +78,10 @@
                 View
               </span>
             </button>
+          </span>
+
+          <span *ngIf="orderItem && orderItem.serialCode">
+            <button mat-button (click)="ediSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
           </span>
 
           <span *ngIf="!showEdit && promptOption">

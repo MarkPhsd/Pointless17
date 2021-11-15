@@ -379,7 +379,7 @@ export class PaymentMethodListComponent implements OnInit {
       }
     }
     addNew() {
-      this.productEditButtonService.openServiceTypeEditor(0)
+      this.productEditButtonService.openPaymentMethodEditor(0)
     }
 
     // editSelectedItems() {

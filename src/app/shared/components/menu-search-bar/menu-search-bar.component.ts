@@ -16,7 +16,7 @@ import { Capacitor, Plugins, KeyboardInfo } from '@capacitor/core';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 
-// import { Keyboard } from '@capacitor/keyboard';
+// import { Keyboard } from '@capafcitor/keyboard';
 
 const { Keyboard } = Plugins;
 
@@ -197,6 +197,10 @@ constructor(
     this.initProductSearchModel();
     this.input.nativeElement.value = ''
     this.input.nativeElement.focus();
+    //set the toggle buttons as well:
+    this.categoryID = 0
+    this.brandID = 0
+    this.typeID = 0
     Keyboard.hide();
   }
 

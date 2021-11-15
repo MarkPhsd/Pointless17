@@ -17,7 +17,7 @@ export class MatToggleSelectorComponent {
 
   @Input()  toggleDimensions  = 'toggle-group'
   @Input()  toggleButtonClass = 'toggle-button'
-  @Input()  buttonDimensions  = 'button-dimensions'
+  @Input()  buttonDimensions  = 'button-dimensions-tall'
 
   constructor() {
      if (this.toggleButtonClass) {

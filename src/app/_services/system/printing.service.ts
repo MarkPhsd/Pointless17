@@ -19,11 +19,19 @@ import { FakeDataService } from './fake-data.service';
 import { BtPrintingService } from './bt-printing.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+export interface printOptions {
+  silent: true;
+  printBackground: false;
+  deviceName: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 
 export class PrintingService {
 
@@ -34,6 +42,9 @@ export class PrintingService {
   order                 : IPOSOrder
   isElectronServiceInitiated = false
 
+  private _printReady       = new BehaviorSubject<boolean>(null);
+  public printReady$        = this._printReady.asObservable();
+
   constructor(  private electronService   : ElectronService,
                 private snack             : MatSnackBar,
                 private settingService    : SettingsService,
@@ -42,13 +53,20 @@ export class PrintingService {
                 private labelaryService   : LabelaryService,
                 private fakeDataService   : FakeDataService,
                 private btPrintingService : BtPrintingService,
-                private dialog            : MatDialog,
-                private http              : HttpClient,) {
+                private dialog            : MatDialog,) {
 
     if (this.electronService.remote != null) {
       this.isElectronServiceInitiated = true
       console.log('electron services initiated')
     }
+  }
+
+  getPrintReady(): Observable<boolean> {
+    return this.printReady$
+  }
+
+  updatePrintReady(status: boolean) {
+    this._printReady.next(status)
   }
 
   async initDefaultLayouts() {
@@ -128,13 +146,24 @@ export class PrintingService {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
     const receiptStylePromise = await receiptStyle$.pipe().toPromise()
     if (receiptStylePromise) {
-      // const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
       const style = document.createElement('style');
       style.innerHTML = receiptStylePromise.text;
       document.head.appendChild(style);
       return receiptStylePromise
     }
   }
+
+  async  appyStylesCached(site: ISite): Promise<ISetting> {
+    const receiptStyle$       = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+    const receiptStylePromise = await receiptStyle$.pipe().toPromise()
+    if (receiptStylePromise) {
+      const style = document.createElement('style');
+      style.innerHTML = receiptStylePromise.text;
+      document.head.appendChild(style);
+      return receiptStylePromise
+    }
+  }
+
 
   listPrinters(): any {
     const printWindow = new this.electronService.remote.BrowserWindow({ show:false })
@@ -199,7 +228,7 @@ export class PrintingService {
     localStorage.setItem('lastLabelUsed', id.toString())
   }
 
-  async printElectron(contents: string, printerName: string, options: any,  hideWindow: boolean) {
+  async printElectron(contents: string, printerName: string, options: printOptions) {
 
     const site                = this.siteService.getAssignedSite();
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
@@ -207,7 +236,7 @@ export class PrintingService {
 
     printWindow.loadURL(contents)
       .then((e) => {
-        if (hideWindow) {
+        if (options.silent) {
           printWindow.hide();
         }
         if (!options) {
@@ -232,8 +261,9 @@ export class PrintingService {
             }
           }
         )
-        }).catch((e) => {
-          console.log(e);
+        }).catch((err) => {
+          // console.log(e);
+          printWindow.close();
         }
     )
   }
@@ -277,9 +307,9 @@ export class PrintingService {
       silent: true,
       printBackground: false,
       deviceName: printerName
-    }
+    } as printOptions
 
-    this.printElectron( contents, printerName, options, true)
+    this.printElectron( contents, printerName, options)
   }
 
   printTestLabelElectron(printString: string, printerName: string): boolean {
@@ -296,12 +326,10 @@ export class PrintingService {
       silent: true,
       printBackground: false,
       deviceName: printerName
-    }
-    console.log('printerName',printerName)
-    console.log('printString',printString)
+    }  as printOptions
 
     try {
-      this.printElectron( printString, printerName, options, true)
+      this.printElectron( printString, printerName, options)
       return true;
     } catch (error) {
       return false
@@ -323,10 +351,10 @@ export class PrintingService {
       silent: true,
       printBackground: false,
       deviceName: printerName
-    }
+    } as printOptions
 
     try {
-      this.printElectron( file, printerName, options, true)
+      this.printElectron( file, printerName, options)
       return true;
     } catch (error) {
       console.log(error)
@@ -376,6 +404,11 @@ export class PrintingService {
   getDefaultElectronReceiptPrinter(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     return this.settingService.getSettingByName(site, 'defaultElectronReceiptPrinterName')
+  }
+
+  getDefaultElectronReceiptPrinterCached(): Observable<ISetting> {
+    const site = this.siteService.getAssignedSite();
+    return this.settingService.getSettingByNameCached(site, 'defaultElectronReceiptPrinterName')
   }
 
   previewReceipt() {

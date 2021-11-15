@@ -64,7 +64,6 @@ export class PosOrderItemEditComponent  {
       const item = this.getItemValue();
       if (item && site) {
 
-        console.log('thismenuItem.')
         if (this.editField == 'quantity'  ) {
             this.posOrderItemService.changeItemQuantity(site, item ).subscribe( data => {
             this.orderService.updateOrderSubscription(data)

@@ -59,12 +59,6 @@ export class OrdersService {
     this._posSearchModel.next(searchModel);
   }
 
-  // currentPOSOrder$: Observable<IPOSOrder>;
-
-  // updateOrderSearchResults(posOrders: IPOSOrder[]) {
-  //   this._posOrders.next(posOrders);
-  // }
-
   constructor(
     private http: HttpClient,
     private _SnackBar: MatSnackBar,
@@ -155,21 +149,7 @@ export class OrdersService {
 
   }
 
-  c(site: ISite, orderPayload: OrderPayload):  Observable<IPOSOrder>  {
 
-    //get default settings
-
-    const controller = "/POSOrders/"
-
-    const endPoint  = "PostNewDefaultOrder"
-
-    const parameters = ``
-
-    const url = `${site.url}${controller}${endPoint}${parameters}`
-
-    return this.http.get<IPOSOrder>(url);
-
-  }
 
   postOrderWithPayload(site: ISite, orderPayload: OrderPayload):  Observable<IPOSOrder>  {
 
@@ -202,6 +182,7 @@ export class OrdersService {
     return this.http.post<IPOSOrder>(url, orderPayload);
 
   }
+
 
     ///takes the clientID and submits a new POS order of Default Transaction Type.
   //posts a check in in store.
@@ -388,6 +369,7 @@ export class OrdersService {
 
   }
 
+
   //////////////////async await functions.
   async newDefaultOrder(site: ISite): Promise<boolean>  {
     if (!site)        {  return }
@@ -409,7 +391,7 @@ export class OrdersService {
           this.notificationEvent(`Error submitting Order # ${catchError}`, "Posted")
           return false
         }
-      )
+    )
 
     return result
   }

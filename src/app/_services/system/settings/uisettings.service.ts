@@ -32,12 +32,15 @@ export class UISettingsService {
       private settingsService: SettingsService) {
 
     const site = this.siteService.getAssignedSite();
-    this.settingsService.getSettingByNameCached(site, ' ').subscribe(data => {
+    this.settingsService.getSettingByNameCached(site, 'UITransactionSetting').subscribe(data => {
       const ui = {} as TransactionUISettings
       if (data.text) {
         const ui = JSON.parse(data.text)
         this.updateUISubscription(ui)
         return
+      }
+      if (!data.text) {
+
       }
     })
 
@@ -89,14 +92,18 @@ export class UISettingsService {
   }
 
   async setFormValue(inputForm: FormGroup, setting: ISetting, text: any): Promise<FormGroup> {
+
     inputForm = this.initForm(inputForm);
     if (!text) {
       setting = await this.initConfig(setting)
     }
+
     const config = JSON.parse(text) as TransactionUISettings
     config.id = setting.id;
+
     inputForm = this.setFormValues(config, inputForm);
     return inputForm
+
   }
 
 
@@ -114,7 +121,16 @@ export class UISettingsService {
 
   async initConfig(setting: ISetting): Promise<ISetting> {
     const ui = {} as TransactionUISettings
-    if (setting) { return };
+
+    if (!setting) {
+      const site    = this.siteService.getAssignedSite();
+      setting = await this.settingsService.getSettingByName(site, 'UITransactionSetting').pipe().toPromise()
+    };
+
+    if (!setting) {
+      console.log('error UITransaction setting not established')
+      return
+    }
 
     ui.id = setting.id
     setting = await this.setSetting(ui)

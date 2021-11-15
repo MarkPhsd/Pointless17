@@ -99,29 +99,29 @@ export interface IMenuItem {
   itemType:                 ItemType;
 }
 
-
 export interface ItemType {
-  id:                  number;
-  name:                string;
-  taxable:             number;
-  type:                string;
-  weightedItem:        boolean;
-  expirationRequired:  boolean;
-  labelRequired:       boolean;
-  ageRequirement:      number;
-  sortOrder:           number;
-  enabled:             boolean;
-  useType:             string;
-  icon:                string;
-  imageName:           string;
-  useGroupID:          number;
-  prepTicketID        :number;
-  labelTypeID         :number;
-  printerName:         string;
-  printLocationID :    number;
-  itemType_Categories: ItemTypeCategory[];
-  useGroups:           UseGroups;
-  printerLocation    :IPrinterLocation;
+  id:                   number;
+  name:                 string;
+  taxable:              number;
+  type:                 string;
+  weightedItem:         boolean;
+  expirationRequired:   boolean;
+  labelRequired:        boolean;
+  ageRequirement:       number;
+  sortOrder:            number;
+  enabled:              boolean;
+  useType:              string;
+  icon:                 string;
+  imageName:            string;
+  useGroupID:           number;
+  prepTicketID        : number;
+  labelTypeID         : number;
+  printerName:          string;
+  printLocationID :     number;
+  itemType_Categories:  ItemTypeCategory[];
+  useGroups           : UseGroups;
+  printerLocation     : IPrinterLocation;
+  requiresSerial      : boolean;
 }
 
 export interface ItemTypeCategory {

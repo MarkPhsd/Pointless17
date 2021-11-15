@@ -165,6 +165,7 @@ export class SettingsService {
 
   }
 
+
   getSettingBySetting(site: ISite, setting: ISetting):  Observable<ISetting> {
 
     const controller = "/settings/"

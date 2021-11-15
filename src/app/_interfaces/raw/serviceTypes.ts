@@ -14,6 +14,6 @@ export interface IServiceType {
   showTipOption:         number;
   printerName:           string;
   icon       :           string;
-  apiOrder          :    number;
-  onlineOrder       :    number;
+  apiOrder          :    boolean;
+  onlineOrder       :    boolean;
 }

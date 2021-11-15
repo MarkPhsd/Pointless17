@@ -34,7 +34,6 @@ export class OrderCardComponent implements OnInit {
       if(!this.order.itemCount) {
         this.order.itemCount = 0
       }
-
       this.minutesOpen = this.getMinutesOpen(this.order)
     }
   }
@@ -59,8 +58,6 @@ export class OrderCardComponent implements OnInit {
     if (isNaN(minutes)) { return 0}
     return minutes
   }
-
-
 
   openOrder() {
     if (this.order) {

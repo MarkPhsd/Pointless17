@@ -119,7 +119,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private siteService: SitesService,
               private toolbarUIService: ToolBarUIService,
               private bottomSheet     : MatBottomSheet,
-              private dialog          : MatDialog,
               private menuItemService : MenuService,
               private orderItemService: POSOrderItemServiceService,
               private renderingService: RenderingService,
@@ -415,8 +414,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
           const itemType = data.itemType
 
           const printerLocations = itemType.printerLocation
-          console.log('printerLocation', printerLocations)
-          console.log('data.itemType.labelTypeID', data.itemType.labelTypeID)
+          // console.log('printerLocation', printerLocations)
+          // console.log('data.itemType.labelTypeID', data.itemType.labelTypeID)
           printerName = printerLocations.printer;
 
           if (printerName && printerName != '') {
@@ -433,7 +432,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })).pipe(
       switchMap( data => {
         // //get the PrintString Format
-        console.log('getting Text From label setting',  data)
+        // console.log('getting Text From label setting',  data)
         if (printerName) {
           const content = this.renderingService.interpolateText(item, data.text)
           const result  = this.printingService.printLabelElectron(content, printerName)
@@ -534,7 +533,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // }
 
   returnMenuItem(item: IMenuItem): Observable<IMenuItem> {
-
     return
   }
 

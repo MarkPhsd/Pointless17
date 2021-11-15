@@ -1,6 +1,6 @@
 <div *ngIf="paymentMethod">
 
-  <mat-card class="mat-card">
+  <mat-card >
     <mat-card-title>
        Type Edit: {{ paymentMethod.name }}
     </mat-card-title>
@@ -14,6 +14,7 @@
       ></app-edit-buttons-standard>
       <mat-divider></mat-divider>
     </mat-card-subtitle>
+
     <mat-card-content>
       <div *ngIf="inputForm" [formGroup]="inputForm" >
         <div class="grid-headers">
@@ -25,8 +26,8 @@
           <mat-divider></mat-divider>
           <div class="grid-content">
 
-            <div class="grid-fields ">
-              <div>
+            <div class="grid-fields">
+              <div class="grid-headers">
                 <mat-form-field appearance="outline" >
                   <mat-label >Name</mat-label>
                   <input matInput
@@ -50,13 +51,10 @@
               </div>
 
               <div class="grid-headers">
-                  <div>
-                    <div class="instructions">
+                  <div class="instructions">
                       Company Credit
-                    </div>
-                    <mat-label></mat-label>
                   </div>
-                  <div>
+                <div>
                   <mat-checkbox
                         type             ="checkbox"
                         formControlName  ="companyCredit"
@@ -114,6 +112,18 @@
                       class="form-control" >
                 </mat-checkbox>
               </div>
+
+              <div class="grid-headers">
+                <div class="instructions">
+                  State
+                </div>
+                <mat-checkbox
+                      type             ="checkbox"
+                      formControlName  ="state"
+                      class="form-control" >
+                </mat-checkbox>
+              </div>
+
             </div>
             <div class="grid-fields">
               <div>
@@ -144,18 +154,7 @@
                 </div>
               </div>
 
-              <div>
-                <div class="instructions">
-                </div>
-                <div>
-                  <mat-label >State</mat-label>
-                  <mat-checkbox
-                        type             ="checkbox"
-                        formControlName  ="state"
-                        class="form-control" >
-                  </mat-checkbox>
-                </div>
-              </div>
+
 
             </div>
 

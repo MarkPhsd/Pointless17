@@ -75,11 +75,12 @@
     </div>
 
     <!-- *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (mainPanel && !smallDevice)" -->
-    <div *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (!mainPanel && !smallDevice)  ">
+    <div *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (!mainPanel && !smallDevice)">
 
       <pos-order-items
-                        [mainPanel]        ="mainPanel"
-                        [order]="order"></pos-order-items>
+                        [mainPanel] ="mainPanel"
+                        [order]     ="order">
+      </pos-order-items>
 
     </div>
 

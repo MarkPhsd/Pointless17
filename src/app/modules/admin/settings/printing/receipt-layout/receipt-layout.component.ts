@@ -58,7 +58,6 @@ export class ReceiptLayoutComponent implements OnInit {
   _order: Subscription;
 
   async initSubscriptions() {
-    console.log('initSubscriptions')
 
     this.site = this.siteService.getAssignedSite();
     this._order = this.orderService.currentOrder$.pipe(
@@ -87,7 +86,6 @@ export class ReceiptLayoutComponent implements OnInit {
           }
 
           this.orders=[]
-          console.log('order subscribed', this.order)
 
           try {
             if (this.order) {
@@ -99,18 +97,25 @@ export class ReceiptLayoutComponent implements OnInit {
           return this.serviceTypeService.getType(this.site, data.serviceTypeID)
         }
       )
-    ).subscribe( data => {
-      this.orderType = data
-
-      this.orderTypes = []
-      try{
+    ).pipe(
+      switchMap( data => {
+        this.orderType = data
+        this.orderTypes = []
         this.orderTypes.push(this.orderType)
-      } catch (error) {
+        if (this.subFooterText) {
+          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes)
+        }
+        // return this.printingService.printReady$;
+        this.printingService.updatePrintReady(true)
+        return EMPTY
       }
+    )).subscribe(data => {
 
       }, err => {
         console.log(err)
-    })
+      }
+    )
+
 
   }
 
@@ -124,13 +129,11 @@ export class ReceiptLayoutComponent implements OnInit {
     private fakeDataService : FakeDataService) { }
 
   async ngOnInit() {
-    console.log('receipt layout initialized')
     this.initSubscriptions();
     this.getReceiptWidth()
     await this.applyStyles();
     await this.refreshData();
   }
-
 
   async refreshData() {
     this.site = this.siteService.getAssignedSite();
@@ -179,7 +182,7 @@ export class ReceiptLayoutComponent implements OnInit {
           }
         )
       } else {
-        console.log('you knew this was going to happen')
+        // console.log('you knew this was going to happen')
       }
 
     } catch (error) {

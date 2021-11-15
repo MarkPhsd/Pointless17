@@ -24,12 +24,9 @@ export class PaymentMethodEditComponent  implements OnInit {
 
   constructor(
     private paymentMethodService    : PaymentMethodsService,
-    private fb                      : FormBuilder,
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
-    private awsService              : AWSBucketService,
     private awsBucket               : AWSBucketService,
-    private route                   : Router,
     private dialogRef: MatDialogRef<PaymentMethodEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 
@@ -52,7 +49,6 @@ export class PaymentMethodEditComponent  implements OnInit {
     async initializeForm()  {
 
       this.initFormFields()
-      console.log('initializeForm', this.id)
       if (this.inputForm && this.id) {
         const site = this.siteService.getAssignedSite();
         const payments$ = this.paymentMethodService.getPaymentMethod(site, this.id).pipe(
@@ -70,7 +66,6 @@ export class PaymentMethodEditComponent  implements OnInit {
           data => {
             this.paymentMethod = data
             this.id          = data.id
-            console.log(this.paymentMethod)
         })
       }
 
@@ -78,7 +73,6 @@ export class PaymentMethodEditComponent  implements OnInit {
         this.paymentMethod = {} as IPaymentMethod;
         this.inputForm.patchValue(this.paymentMethod)
       }
-
 
     };
 
@@ -96,7 +90,6 @@ export class PaymentMethodEditComponent  implements OnInit {
           item$.subscribe( data => {
             this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'bottom'})
             resolve(true)
-
           }, error => {
             this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'bottom'})
             resolve(false)
@@ -119,15 +112,12 @@ export class PaymentMethodEditComponent  implements OnInit {
     }
 
     deleteItem(event) {
+      console.log('delete', event, this.paymentMethod.id)
       const site = this.siteService.getAssignedSite()
-      if (!this.paymentMethod) {
-        this.snack.open("No item initiated.", "Failure", {duration:2000, verticalPosition: 'top'})
-        return
-      }
-        this.paymentMethodService.delete(site, this.paymentMethod.id).subscribe( data =>{
-          this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
-          this.onCancel(event)
-      })
+      this.paymentMethodService.delete(site, this.paymentMethod.id).subscribe( data =>{
+        this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
+        this.onCancel(event)
+    })
     }
 
     copyItem(event) {

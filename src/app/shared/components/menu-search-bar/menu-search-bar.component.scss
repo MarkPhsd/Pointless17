@@ -12,6 +12,10 @@
   // padding: 5px;
 }
 
+.form-width {
+  width: 100px;
+}
+
 mat-sidenav-container {
   min-width: 125px !important;
   border-right: 1px solid #eee;
@@ -32,10 +36,10 @@ mat-sidenav-container {
 }
 
 .form-fields {
-  margin-left: 10px;
+  margin-left: 20px;
   margin-bottom: 0px;
   padding: 0;
-  width: 200px;
+  width: 175px;
   font-size: .9em;
 }
 
@@ -60,6 +64,7 @@ mat-sidenav-container {
 .grid-item {
   align-items: center;
   margin-left: -20px;
+  width: 165px;
 }
 
 .search-buttons {
@@ -94,9 +99,9 @@ mat-expansion-panel {
 }
 
 .toggle-buttons {
-  width    : 185px;
-  max-width: 168px;
-  min-width: 185px;
+  width    : 165px;
+  max-width: 165px;
+  min-width: 165px;
   margin-left: -10px;
   // left: -10px;
 }

@@ -1,5 +1,3 @@
-<!-- *ngIf="(!mainPanel && order && order.posOrderItems && order.posOrderItems.length >0) || !bottomSheetOpen" -->
-
 <div
       #scrollMe
       [class]="orderItemsPanel"
@@ -8,7 +6,9 @@
   <ion-item-sliding
             class="nopadd"
             *ngFor="let item of order.posOrderItems; let i = index" >
-    <div class="nopadd"  *ngIf="uiConfig && ((mainPanel || bottomSheetOpen) || (item.id == item.idRef || item.prompGrouptID == 0))">
+    <div class="nopadd"
+        *ngIf="uiConfig && ((mainPanel || bottomSheetOpen)
+              || (item.id == item.idRef || item.prompGrouptID == 0))">
       <ion-item >
         <pos-order-item
                     [class]="gridScroller"

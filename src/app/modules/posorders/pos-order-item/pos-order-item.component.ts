@@ -108,6 +108,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   constructor(  private orderService: OrdersService,
+                private orderMethodsService: OrderMethodsService,
                 private awsBucket          : AWSBucketService,
                 private _snackBar          : MatSnackBar,
                 private sanitizer          : DomSanitizer,
@@ -204,6 +205,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       // update order
     });
 
+  }
+
+  ediSerial() {
+    if (this.orderItem) {
+      const site = this.siteService.getAssignedSite();
+      this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id).subscribe( data => {
+          this.orderMethodsService.promptSerial(this.menuItem, data)
+         }
+      )
+    }
   }
 
   refreshSidePanel() {

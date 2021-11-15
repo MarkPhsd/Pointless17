@@ -202,6 +202,7 @@ import { UITransactionsComponent } from '../modules/admin/settings/software/UISe
 import { CompanyEditComponent } from '../modules/admin/company-edit/company-edit.component';
 import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { DefaultReceiptSelectorComponent } from '../modules/admin/settings/printing/default-receipt-selector/default-receipt-selector.component';
+import { RequiresSerialComponent } from '../modules/posorders/requires-serial/requires-serial.component';
 
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -340,6 +341,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ReceiptLayoutComponent,
     RecieptPopUpComponent,
     ReportsComponent,
+    RequiresSerialComponent,
     ReviewComponent,
     ReviewsComponent,
     ReviewEditComponent,

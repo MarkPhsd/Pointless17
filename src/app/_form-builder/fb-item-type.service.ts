@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ItemTypeComponent } from '../modules/admin/products/item-type/item-type.component';
 import { IItemType } from '../_services/menu/item-type.service';
 
 @Injectable({
@@ -30,9 +29,9 @@ export class FbItemTypeService {
       labelTypeID:          [''],
       printLocationID:      [''],
       printerName:          [''],
+      requiresSerial  :     [''],
     })
     return inputForm
-
   }
 
   intitFormData(inputForm: FormGroup,data: IItemType) {
