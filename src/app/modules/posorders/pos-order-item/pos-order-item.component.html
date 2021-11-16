@@ -92,27 +92,27 @@
             <button mat-button (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
           </span>
 
-          <span *ngIf="!showEdit  && (uiConfig.displayQuantity)">
+          <span *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode">
             <button mat-button (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
           </span>
 
         </span>
 
-        <span *ngIf="orderItem.printed">
+        <div *ngIf="orderItem.printed">
           <mat-icon  color="warn" >print</mat-icon>
-          <div  *ngIf="mainPanel || bottomSheetOpen">
+          <span  *ngIf="mainPanel || bottomSheetOpen">
             {{orderItem.printed | date: 'shortTime'}}
-          </div>
-        </span>
+          </span>
+        </div>
 
-        <span *ngIf="orderItem.voidReason">
-          <div  class="item-data">
+        <div *ngIf="orderItem.voidReason">
+          <span  class="item-data">
             <mat-icon  color="warn">lock</mat-icon>
-          </div>
-          <div  *ngIf="mainPanel || bottomSheetOpen">
+          </span>
+          <span  *ngIf="mainPanel || bottomSheetOpen">
             Item voided:  {{ orderItem.voidReason }}
-          </div>
-        </span>
+          </span>
+        </div>
 
       </div>
 

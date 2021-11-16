@@ -89,6 +89,7 @@ export class CheckInProfileComponent implements OnInit {
       this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
       this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
       this.initSubscriptions();
+
   }
 
  async ngOnInit() {

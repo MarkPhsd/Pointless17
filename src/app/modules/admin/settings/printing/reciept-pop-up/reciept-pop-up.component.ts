@@ -55,12 +55,12 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
 
   electronReceiptSetting: ISetting;
 
-  _printReady      : Subscription;
-  printReady       : boolean
+  _printReady       : Subscription;
+  printReady        : boolean
 
-  orderCheck = 0;
+  orderCheck        = 0;
 
-  autoPrinted = false;
+  autoPrinted       = false;
 
   intSubscriptions() {
     this._order       = this.orderService.currentOrder$.subscribe(data => {
@@ -104,12 +104,15 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     //Add 'implements AfterViewInit' to the class.
     this.intSubscriptions();
     const styles     = await this.applyStyles();
+    // console.log('styles')
     const receiptID  = await this.getDefaultPrinter();
+    // console.log('default printer')
     if (receiptID && styles ) {
       const receipt$ =  this.refreshReceipt(receiptID);
+      // console.log('refresh receipt')
       receipt$.subscribe( receipt => {
         if (this.initSubComponent( receipt, styles )) {
-
+          // console.log('refresh sub')
         }
       })
     }
@@ -127,7 +130,8 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   }
 
   async getDefaultPrinter(): Promise<number> {
-    const item = await this.printingService.getDefaultElectronReceiptPrinterCached().toPromise()
+    const item       = await this.printingService.getDefaultElectronReceiptPrinterCached().toPromise()
+    if (!item) { return}
     this.electronReceiptSetting = item;
     this.receiptID   =  +item.option1;
     this.printerName =  item.text;

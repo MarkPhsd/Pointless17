@@ -1,21 +1,18 @@
-import { Component,  Inject,  OnInit,
-  ViewChild ,ElementRef, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component,  OnInit,
+         OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthenticationService, AWSBucketService, ContactsService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {  FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { Route } from '@angular/compiler/src/core';
 import { Location } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
+import { AuthenticationService } from 'src/app/_services';
+import { IUser } from 'src/app/_interfaces';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -45,7 +42,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   get fiftiesStart()      { return this.inputForm.get('fiftiesStart') as FormControl; }
   get twentiesStart()     { return this.inputForm.get('twentiesStart') as FormControl; }
   get tensStart()         { return this.inputForm.get('tensStart') as FormControl; }
-  get dollarsStart()      { return this.inputForm.get('dollarsStart') as FormControl; }
+  get dollarStart()      { return this.inputForm.get('dollarStart') as FormControl; }
   get fivesStart()        { return this.inputForm.get('fivesStart') as FormControl; }
 
   get platForm()       {  return Capacitor.getPlatform(); }
@@ -60,6 +57,9 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   id              : string;
   sheet           : IBalanceSheet;
   _sheet          : Subscription;
+
+  user            : IUser;
+  _user           : Subscription;
 
   employees$      :   Observable<IItemBasic[]>;
   paymentMethod$  :   Observable<IBalanceSheet[]>;
@@ -83,41 +83,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   endOptionsDisabled   = false;
   startOptionsDisabled = false;
 
-  constructor(  private _snackBar               : MatSnackBar,
-                private sheetService            : BalanceSheetService,
-                private fb                      : FormBuilder,
-                private siteService             : SitesService,
-                private productEditButtonService: ProductEditButtonService,
-                private userAuthorization       : UserAuthorizationService,
-                private userService             : AuthenticationService,
-                private _bottomSheet            : MatBottomSheet,
-                private location                : Location,
-                private route                   : ActivatedRoute,
-                private router: Router,
-              )
-  {
+  //init subscriptions
+  //requires user
+  //requires balance sheet
 
-  }
-
-  async ngOnInit() {
-    this.initClasses()
-     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff       = this.userAuthorization.isUserAuthorized('admin, manager, employee')
-    this.id = this.route.snapshot.paramMap.get('id');
-    if (this.id) {
-      await  this.getSheet(this.id)
-    }
-    if(!this.id) {
-      this.updateToCurrentSheet();
-    }
-    this.initSubscription()
-  };
-
-  ngOnDestroy() {
-    this.sheetService.updateBalanceSheet(null)
-  }
-
-  initSubscription() {
+  initSubscriptions() {
     this.loading = true
     this._sheet = this.sheetService.balanceSheet$.subscribe( data => {
       this.sheet = data;
@@ -125,19 +95,62 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.initForm();
       this.getSheetType(this.sheet)
     })
+
+    this._user = this.authenticationService.user$.subscribe( data => {
+      this.user = data;
+
+    })
+
+  }
+
+  constructor(  private _snackBar               : MatSnackBar,
+                private sheetService            : BalanceSheetService,
+                private siteService             : SitesService,
+                private userAuthorization       : UserAuthorizationService,
+                private location                : Location,
+                private route                   : ActivatedRoute,
+                private authenticationService   : AuthenticationService,
+                private router: Router,
+              )
+  {
+  }
+
+  async ngOnInit() {
+    this.initSubscriptions()
+
+    this.isAuthorized  = this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isStaff       = this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.id            = this.route.snapshot.paramMap.get('id');
+    if (this.id) {
+      await  this.getSheet(this.id)
+    }
+    if(!this.id) {
+      this.updateToCurrentSheet();
+    }
+
+  };
+
+  newBalanceSheet() {
+    //we have to initialize the balance sheet.
+    //we should just be sending maybe the device, and the user.
+    if (!this.id) {
+      this.updateToCurrentSheet();
+    }
+  }
+
+  ngOnDestroy() {
+    this.sheetService.updateBalanceSheet(null)
   }
 
   updateToCurrentSheet() {
-    console.log('update to current sheet', this.sheet)
+    // console.log('update to current sheet', this.sheet)
     let deviceName = localStorage.getItem('devicename');
-    console.log('devicename', deviceName)
+    // console.log('devicename', deviceName)
     if (!deviceName || deviceName.length == 0 || deviceName == undefined || deviceName === '' ){
       deviceName = 'nada'
     }
 
     if (!this.sheet)  {
-      // console.log('updateToCurrentSheet')
-
       const site = this.siteService.getAssignedSite()
       if (!deviceName) { deviceName = 'nada' }
       // console.log('deviceName', deviceName)
@@ -187,18 +200,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }
   }
 
-
-
   initForm() {
     this.inputForm =  this.sheetService.initForm(this.inputForm);
     if (this.sheet) {
       this.inputForm.patchValue(this.sheet)
     }
     this.setEnabledFeatures()
-  }
-
-  initClasses()  {
-    const platForm  = this.platForm;
   }
 
   updateItem(event) {
@@ -296,7 +303,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.fiftiesStart.enable()
     this.twentiesStart.enable()
     this.tensStart.enable()
-    this.dollarsStart.enable()
+    this.dollarStart.enable()
     this.fivesStart.enable()
   }
 
@@ -324,7 +331,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.fiftiesStart.disable()
     this.twentiesStart.disable()
     this.tensStart.disable()
-    this.dollarsStart.disable()
+    this.dollarStart.disable()
     this.fivesStart.disable()
   }
 
@@ -392,12 +399,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     total      =   (this.twentiesStart.value * 20) + total
     total      =   (this.tensStart.value * 10) + total
     total      =   (this.fivesStart.value * 5) + total
-    try {
-      total      =   (this.dollarsStart.value * 1) + total
-    } catch (error) {
-      // console.log('err', error)
-    }
-
+    total      =   (this.dollarStart.value * 1) + total
     return total
   }
 
@@ -408,7 +410,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     total      =   (this.dimeEnd.value * .10) + total
     total      =   (this.nickelEnd.value * .05) + total
     total      =   (this.pennyEnd.value * .01) + total
-
     total      =   (this.hundredsEnd.value * 100) + total
     total      =   (this.fiftiesEnd.value * 50) + total
     total      =   (this.twentiesEnd.value * 20) + total

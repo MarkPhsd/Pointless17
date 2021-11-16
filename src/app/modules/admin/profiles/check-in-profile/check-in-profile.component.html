@@ -162,7 +162,33 @@
                           class="form-control" >
                     </mat-form-field>
                   </div>
+
+                  <div>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>DOB</mat-label>
+                      <input matInput
+                            [matDatepicker]="picker"
+                            formControlName="dob"
+                          >
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Expiration</mat-label>
+                      <input matInput
+                            [matDatepicker]="picker"
+                            formControlName="followUp"
+                          >
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
                 </div>
+
               </div>
 
             </mat-tab>
@@ -209,6 +235,19 @@
                       <mat-datepicker touchUi #picker></mat-datepicker>
                     </mat-form-field>
                   </div>
+
+                  <div>
+                    <mat-form-field class="example-full-width" appearance="outline">
+                      <mat-label>Expiration</mat-label>
+                      <input matInput
+                            [matDatepicker]="picker"
+                            formControlName="followUp"
+                          >
+                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker touchUi #picker></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+
                 </div>
                 <div >
                   <div >

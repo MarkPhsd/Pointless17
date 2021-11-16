@@ -1,3 +1,9 @@
+<div class="container" *ngIf="!sheet">
+  {{sheet}}
+  <mat-spinner></mat-spinner>
+  <button mat-raised-button (click)="newBalanceSheet()">Start Sheet</button>
+</div>
+
 <div class="container" *ngIf="sheet; else loading">
   <mat-card *ngIf="sheet as item" >
     <mat-card-title>
@@ -109,7 +115,7 @@
 
                  <div>
                   <cash-value-calc
-                      [formControlName] = "'dollarsStart'"
+                      [formControlName] = "'dollarStart'"
                       [inputForm]       = "inputForm"
                       [multiplier]      = "1">
                       Dollars
@@ -329,10 +335,6 @@
     </mat-card-content>
   </mat-card>
 </div>
-
-<!-- <ng-template #loading >
-  <mat-spinner></mat-spinner>
-</ng-template> -->
 
 <div *ngIf="loading">
   <mat-spinner></mat-spinner>
