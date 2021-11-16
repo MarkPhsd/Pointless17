@@ -2,6 +2,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
@@ -46,18 +47,19 @@ export class MenuManagerComponent implements OnInit  {
   }
 
   ngOnInit() {
+    this.initSubscription();
     this.getMainMenu()
   }
 
   getMainMenu(){
     const site  =  this.siteService.getAssignedSite();
+    console.log('this.user', this.user)
     if (!this.user) {return}
-    console.log('MenuManagerComponent getmenu => user', this.user)
     const accordionMenu$ = this.menusService.getMainMenu(site, this.user);
-
     accordionMenu$.subscribe( data => {
       this.accordionMenus = data
     })
+
   }
 
   assignSubMenuItem(event) {
@@ -71,27 +73,40 @@ export class MenuManagerComponent implements OnInit  {
   }
 
   async initMenu() {
+    const site       =  this.siteService.getAssignedSite();
 
     const result = window.confirm('Do you want to reset the menu?')
 
     if (!result) {return}
 
-    const site       =  this.siteService.getAssignedSite();
-    const deleteMenu = await this.menusService.deleteMenu(site).pipe().toPromise();
-    if (this.user) {
-      const menu$      =  this.menusService.createMainMenu(this.user, site)
-      const menu       =  await menu$.pipe().toPromise()
+    console.log('init menu', this.user)
 
+    if (this.user) {
+
+      const deleteMenu = await this.menusService.deleteMenu(site).pipe().toPromise();
+      console.log('deletemenu', deleteMenu)
+      const menu$      =  this.menusService.createMainMenu(this.user, site)
+      console.log('create main menu')
+      const menu       =  await menu$.pipe().toPromise()
+      console.log('created main menu', menu)
+
+      //if the main menus hav ebeen created delete the sub menu's and make them also
       if (menu.id) {
         const clearMenu$ = this.menusService.deleteMenuGroup(site,menu.id)
-        clearMenu$.subscribe(data => {
-          const menu$ =  this.menusService.createMainMenu(this.user, site)
-          this.getMainMenu();
-        })
+        clearMenu$.pipe(switchMap (data => {
+          console.log('createMainMenu', menu)
+          return  this.menusService.createMainMenu(this.user, site)
+          })).pipe(switchMap(menu => {
+            console.log('getMainMenu', menu)
+            return this.menusService.getMainMenu(site, this.user);
+            })
+          ).subscribe(accordionMenu=> {
+            console.log('created accordionMenu', menu)
+            this.accordionMenus = accordionMenu
+          })
+        }
       }
     }
-
-  }
 
   dropAccordion(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.accordionMenus, event.previousIndex, event.currentIndex);

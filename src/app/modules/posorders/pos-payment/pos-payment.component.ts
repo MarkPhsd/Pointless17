@@ -21,17 +21,18 @@ export class PosPaymentComponent implements OnInit {
   @Input() order  :   IPOSOrder;
   id              :   number;
 
-  _currentPayment   : Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
-  currentPayment$   : Observable<IPOSPayment>;//     = this._currentPayment.asObservable();
-  posPayment       : IPOSPayment;
+  _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
+  currentPayment$ :   Observable<IPOSPayment>;//     = this._currentPayment.asObservable();
+  posPayment      :   IPOSPayment;
 
   employees$      :   Observable<IItemBasic[]>;
-  paymentMethods$  :  Observable<IPaymentMethod[]>;
+  paymentMethods$ :   Observable<IPaymentMethod[]>;
   paymentMethod   :   IPaymentMethod;
   serviceTypes$   :   Observable<IServiceType[]>;
   _searchModel    :   Subscription;
   searchModel     :   IPaymentSearchModel;
-  paymentAmountForm :   FormGroup;
+  paymentAmountForm : FormGroup;
+  pointValueForm  :   FormGroup
   checkNumberForm :   FormGroup
   _order          :   Subscription;
   showInput       =   true // initialize keypad open
@@ -47,14 +48,13 @@ export class PosPaymentComponent implements OnInit {
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
-
       this.order = data
       this.refreshIsOrderPaid();
-
     })
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
     })
+
   }
 
   constructor(private paymentService: POSPaymentService,
@@ -114,19 +114,6 @@ export class PosPaymentComponent implements OnInit {
     }
   }
 
-  // refreshPayments() {
-  //   if (this.order) {
-  //     const site = this.sitesService.getAssignedSite();
-  //     const searchModel = {} as IPaymentSearchModel;
-  //     searchModel.orderID = this.order.id;
-  //     this.paymentSummary$ = this.paymentService.searchPayments(site, searchModel)
-  //     this.paymentSummary$.subscribe(data => {
-  //       this.paymentSummary = data;
-  //     })
-  //   }
-  //   this.refreshIsOrderPaid();
-  // }
-
   initForms() {
     this.initCheckForm();
     this.initPaymentForm();
@@ -169,30 +156,34 @@ export class PosPaymentComponent implements OnInit {
   async applyPaymentAmount(event) {
 
     if (this.order &&  this.paymentMethod) {
-
       const amount = this.formatValueEntered(event)
       const isValidAmount = this.validateAmount(amount, this.paymentMethod, this.order)
       if (!isValidAmount) { return }
-
-      let paymentResponse  = {} as IPaymentResponse
-      this.posPayment.amountReceived = amount;
-
-      paymentResponse = await this.getResults(amount)
-      console.log('applyPaymentAmount', paymentResponse)
-
-      this.processResults(paymentResponse)
+      await this.processGetResults(amount)
     }
 
     //if order or payment method don't exist, we have a bigger problem, but we can ignore for now.
     this.initPaymentForm();
+  }
 
+  async processGetResults(amount) {
+    let paymentResponse  = {} as IPaymentResponse
+    this.posPayment.amountReceived = amount;
+
+    paymentResponse = await this.getResults(amount)
+
+    if (!paymentResponse) {
+      this.notify('Payment not processed', 'failure', 1000)
+      return
+    }
+
+     this.processResults(paymentResponse)
   }
 
   processResults(paymentResponse: IPaymentResponse) {
 
     let result = 0
     if (paymentResponse) {
-      console.log('paymentResponse)', paymentResponse)
     }
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
@@ -236,7 +227,6 @@ export class PosPaymentComponent implements OnInit {
     }
   }
 
-
   closeOrder() {
     if (this.order) {
       const site = this.sitesService.getAssignedSite();
@@ -275,6 +265,12 @@ export class PosPaymentComponent implements OnInit {
         return await this.processCashPayment(site, this.posPayment, this.order, amount, this.paymentMethod)
       }
 
+      if (this.paymentMethod.name.toLowerCase() === 'rewards points' || this.paymentMethod.name.toLowerCase() === 'loyalty points') {
+        console.log("Rewards Value Applied", amount)
+        return await this.enterPointCashValue(amount)
+        // return await this.processRewardPoints(site, this.posPayment, this.order, amount, this.paymentMethod)
+      }
+
       //else
       if (this.paymentMethod.companyCredit) {
 
@@ -285,21 +281,19 @@ export class PosPaymentComponent implements OnInit {
 
       }
 
-      if (this.paymentMethod.name.toLowerCase() === 'rewards Points' || this.paymentMethod.name.toLowerCase() === 'loyalty points') {
-        return await this.processRewardPoints(site, this.posPayment, this.order, amount, this.paymentMethod)
-      }
+
     }
     return
   }
 
   async processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPaymentResponse> {
-    const payment$ = await this.paymentService.makePayment(site, this.posPayment, this.order, amount, this.paymentMethod)
+    const payment$ = this.paymentService.makePayment(site, this.posPayment, this.order, amount, this.paymentMethod)
     const results =  await payment$.pipe().toPromise();
     return results
   }
 
   async processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPaymentResponse> {
-    const payment$ = await this.paymentService.makePayment(site, this.posPayment, this.order, amount, this.paymentMethod)
+    const payment$ = this.paymentService.makePayment(site, this.posPayment, this.order, amount, this.paymentMethod)
     const results =  await payment$.pipe().toPromise();
     return results
   }
@@ -307,8 +301,8 @@ export class PosPaymentComponent implements OnInit {
   async processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPaymentResponse> {
     if (order.clients_POSOrders) {
       if (order.clients_POSOrders.loyaltyPointValue >= amount) {
-        const payment$ = await this.paymentService.makePayment(site, this.posPayment, this.order, amount, this.paymentMethod)
-        const results =  await payment$.pipe().toPromise();
+        const payment$ = this.paymentService.makePayment(site, this.posPayment, this.order, amount, this.paymentMethod)
+        const results  = await payment$.pipe().toPromise();
         return results
       } else  {
         this.notify(`There are not enough points to pay this amount. The client has $${order.clients_POSOrders.loyaltyPointValue} in total.`, 'Try Again',3000)
@@ -317,31 +311,62 @@ export class PosPaymentComponent implements OnInit {
     }
   }
 
-  async processCheckPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPOSPayment> {
-    return
+  applyPointBalance() {
+    const amount = this.order.clients_POSOrders.loyaltyPointValue
+    let amountPaid = 0
+    console.log('Loyalty Point Value', amount)
+    if (amount >= this.order.balanceRemaining) {  amountPaid = this.order.balanceRemaining  }
+
+    if (this.order.balanceRemaining >= amount) { amountPaid = amount  }
+
+    this.pointValueForm = this.fb.group( { itemName: [amountPaid]})
+
+    this.processGetResults(amountPaid)
   }
+
+  async enterPointCashValue(event) {
+    const site = this.sitesService.getAssignedSite();
+    //apply payment as cash value
+    if (this.posPayment && event && this.paymentMethod && this.order) {
+      const amountPaid = event;
+      if (this.order.balanceRemaining >= amountPaid)  {
+        return await this.processRewardPoints(site, this.posPayment, this.order, amountPaid, this.paymentMethod)
+      }
+      if (amountPaid > this.order.balanceRemaining )  {
+        this.notify('Amount entered is greater than the total. Please try again.', 'Oops!', 1500)
+        return
+      }
+    }
+  }
+
 
   applyBalance() {
     this.applyPaymentAmount(this.order.balanceRemaining *100)
   }
 
-  goToPaymentMethod(){
-    this.resetPaymentMethod();
+  async processCheckPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPOSPayment> {
+    return
   }
 
   getPaymentMethod(paymentMethod) {
     this.paymentMethod = paymentMethod;
-
-    console.log(paymentMethod)
-
     if (this.paymentMethod) {
       if (this.paymentMethod.name.toLowerCase() === 'check') {
         this.stepSelection = 2;
-      } else {
-        this.stepSelection = 3;
+        return
       }
+      if (this.paymentMethod.name.toLowerCase() === 'rewards points') {
+        this.stepSelection = 4;
+        return
+      }
+      this.stepSelection = 3;
     }
     return
+  }
+
+
+  goToPaymentMethod(){
+    this.resetPaymentMethod();
   }
 
   enterCheckNumber(event) {
@@ -351,7 +376,6 @@ export class PosPaymentComponent implements OnInit {
     } else {
       this.posPayment = {} as IPOSPayment;
       this.posPayment.checkNumber = event
-
     }
   }
 
@@ -367,3 +391,17 @@ export class PosPaymentComponent implements OnInit {
   }
 
 }
+
+
+  // refreshPayments() {
+  //   if (this.order) {
+  //     const site = this.sitesService.getAssignedSite();
+  //     const searchModel = {} as IPaymentSearchModel;
+  //     searchModel.orderID = this.order.id;
+  //     this.paymentSummary$ = this.paymentService.searchPayments(site, searchModel)
+  //     this.paymentSummary$.subscribe(data => {
+  //       this.paymentSummary = data;
+  //     })
+  //   }
+  //   this.refreshIsOrderPaid();
+  // }

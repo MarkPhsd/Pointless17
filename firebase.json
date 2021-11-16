@@ -61,6 +61,21 @@
         "destination": "/index.html"
       }
     ]
+  },
+  {
+    "target": "naturesherbsloglanemed",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 
 ]

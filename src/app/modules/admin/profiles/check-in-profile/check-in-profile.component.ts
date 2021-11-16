@@ -193,7 +193,6 @@ export class CheckInProfileComponent implements OnInit {
       this.notifyEvent(result, "Failure")
     }
 
-
   };
 
   updateUserExit() {

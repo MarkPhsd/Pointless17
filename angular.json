@@ -52,12 +52,12 @@
               "src/native.js"
             ],
 
-            "optimization": false,
+            "optimization": true,
             "sourceMap": false,
             "namedChunks": false,
             "extractLicenses": true,
             "vendorChunk": true,
-            "buildOptimizer": false,
+            "buildOptimizer": true,
             "statsJson": false,
             "progress": false
 
@@ -71,16 +71,14 @@
                 }
               ],
 
-              "optimization": false,
+              "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": true,
-              "buildOptimizer": false,
-              "statsJson": false,
-              "progress": false,
+              "vendorChunk": false,
+              "buildOptimizer": true,
 
               "budgets": [
                 {

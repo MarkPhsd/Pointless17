@@ -55,12 +55,15 @@
 
             <div class="grid-header-item" *ngIf="stepSelection == 2">
               <mat-card class="card-dimensions">
-                <mat-card-subtitle>
-                  <div  class="item-container payment-header" *ngIf="paymentMethod">
-                      {{paymentMethod.name}}
-                  </div>
-                </mat-card-subtitle>
                 <mat-card-content>
+                  <div class="item-container"  *ngIf="paymentMethod">
+                    <div>
+                      <h4>
+                        {{paymentMethod.name}} | Order Balance : {{order.balanceRemaining | currency}}
+
+                      </h4>
+                    </div>
+                  </div>
                   <div class="item-container ">
                     <span class ="action-buttons">
                       <button mat-button (click)="goToPaymentMethod()" >
@@ -87,13 +90,62 @@
               </mat-card>
             </div>
 
+            <div class="grid-header-item" *ngIf="stepSelection == 4">
+              <mat-card class="card-dimensions">
+                <mat-card-content>
+                  <div class="item-container"  *ngIf="paymentMethod">
+                    <div>
+                      <h4>
+                        {{paymentMethod.name}} | Order Balance : {{order.balanceRemaining | currency}}
+
+                      </h4>
+                      <h5>
+                        <div *ngIf="order && order.clients_POSOrders">
+                          Point Cash Value {{order.clients_POSOrders.loyaltyPointValue | currency}}
+                        </div>
+                      </h5>
+                    </div>
+                  </div>
+                  <div class="item-container ">
+                    <span class ="action-buttons">
+                      <button mat-button (click)="goToPaymentMethod()" >
+                        Start Over
+                        <mat-icon>back</mat-icon>
+                      </button>
+                    </span>
+                    <span>
+                      <button mat-button (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon></button>
+                    </span>
+
+                    <span class ="action-buttons">
+                      <button mat-button (click)="applyPointBalance()">
+                        Apply Balance
+                        <mat-icon>credit_card</mat-icon>
+                      </button>
+                    </span>
+                  </div>
+
+                  <div class="item-container keypad">
+                    <app-key-pad
+                      [inputForm]        ="pointValueForm"
+                      [inputTypeValue]   ="'decimal'"
+                      [showInput]        ="showInput"
+                      [alternateClass]   ="'grid-keypad-alternate'"
+                      (outPutReturnEnter)="enterPointCashValue($event)">
+                      Point Amount
+                  </app-key-pad>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+
             <div class="grid-header-item" *ngIf="stepSelection == 3">
               <mat-card class="card-dimensions">
                 <mat-card-content>
                   <div class="item-container"  *ngIf="paymentMethod">
                     <div>
                       <h4>
-                        {{paymentMethod.name}} | Remaining : {{order.balanceRemaining | currency}}
+                        {{paymentMethod.name}} | Order Balance : {{order.balanceRemaining | currency}}
                         <span *ngIf="paymentMethod.name === 'check'">
                            {{posPayment.checkNumber}}
                         </span>

@@ -153,8 +153,6 @@ export class MenuService {
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    // return  this.httpClient.get<IMenuItem[]>(uri);
-
     const url = { url: uri, cacheMins: 0}
 
     return  this.httpCache.get<IMenuItem[]>(url)

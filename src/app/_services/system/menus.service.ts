@@ -322,7 +322,7 @@ export class MenusService {
     // const user = this.auth.userValue
     // console.log('createMainMenu', user)
     if (!user) {
-      console.log('user not defined - createMainMenu')
+      // console.log('user not defined - createMainMenu')
       return null
     }
 
