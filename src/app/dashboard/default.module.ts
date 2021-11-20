@@ -64,7 +64,6 @@ import { ClientTypeService } from 'src/app/_services/people/client-type.service'
 import { PosOrderListComponent } from 'src/app/modules/posorders/pos-order-list/pos-order-list.component';
 import { TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { SimpleTinyComponent } from 'src/app/_components/tinymce/tinymce.component';
-import { NgxPaginationModule} from 'ngx-pagination';
 import { StickyHeaderComponent } from 'src/app/_components/sticky-header.component';
 import { ReportsComponent } from 'src/app/modules/admin/reports/reports.component';
 import { OrderItemsListComponent } from 'src/app/modules/posorders/order-items-list/order-items-list.component';
@@ -396,7 +395,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       HammerModule,
       IonicModule.forRoot(),
       InfiniteScrollModule,
-      NgxPaginationModule,
       NgPipesModule,
       ReactiveFormsModule,
       ReactiveFormsModule,

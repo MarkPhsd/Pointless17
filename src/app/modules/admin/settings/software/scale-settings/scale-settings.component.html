@@ -1,0 +1,43 @@
+<mat-card>
+  <mat-card-subtitle>
+    Scale Settings
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div  *ngIf="inputForm"
+           [formGroup]="inputForm">
+
+           <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="enabled"
+                      (change)="updateSetting()">
+              <mat-label>Enabled</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+           <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label >Decimal Places</mat-label>
+              <input matInput
+                    type             ="number"
+                    formControlName  ="decimalPlaces"
+                    (change)="updateSetting()">
+
+            </mat-form-field>
+          </div>
+
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label >Check Scale Timer (seconds)</mat-label>
+              <input matInput
+                    type             ="number"
+                    formControlName  ="timer"
+                    (change)="updateSetting()">
+
+            </mat-form-field>
+          </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>
+

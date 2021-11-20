@@ -1,18 +1,11 @@
 const { app, BrowserWindow, Menu, ipcRenderer: ipc } = require('electron');
-const isDevMode       = require('electron-is-dev');
 const { CapacitorSplashScreen, configCapacitor } = require('@capacitor/electron');
-const { autoUpdater } = require('electron-updater');
 const registry        = require('winreg');
 const path            = require('path');
-const log             = require('electron-log');
 
-//added
-// const electronReload = require('electron-reloader')
-// require('electron-reload')(__dirname, {
-//   electron: path.join(__dirname, 'node_modules', '.bin', 'electron'),
-//   hardResetMethod: 'exit'
-// });
+//notes import typs for capacitor electron
 
+const isDevMode       = require('electron-is-dev');
 try {
   if (isDevMode) {
     require('electron-reloader')(module, {
@@ -21,16 +14,18 @@ try {
     });
   }
 } catch (err) {
-  console.log('Error', err);
   log.info(`Error electron-reloader: ${err} `);
 }
 
 // https://gist.github.com/iffy/0ff845e8e3f59dbe7eaf2bf24443f104
 
+const { autoUpdater } = require('electron-updater');
+const log             = require('electron-log');
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
+
 // Place holders for our windows so they don't get garbage collected.
 let mainWindow  = null ;
 // Placeholder for SplashScreen ref
@@ -56,8 +51,9 @@ const menuTemplateDev = [
 async function createWindow () {
   let url = ''
   if (!isDevMode) { url = `file://${__dirname}/app/index.html`  }
-  if (isDevMode)  { url = `http://192.168.0.16:4200/index.html` }
-  url = `http://localhost:4200/index.html`;
+  if (isDevMode)  { url = `http://localhost:4200/index.html` }
+  // url = `file://${__dirname}/app/index.html`;
+  // url = 'https://ccsapi.web.app/index.html'
 
   try {
     mainWindow = new BrowserWindow({
@@ -79,28 +75,28 @@ async function createWindow () {
 
   configCapacitor(mainWindow);
 
-  if (isDevMode) {
-    // Set our above template to the Menu Object if we are in development mode, dont want users having the devtools.
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateDev));
-    // If we are developers we might as well open the devtools by default.
-    mainWindow.webContents.openDevTools();
-  }
+    if (isDevMode) {
+      // Set our above template to the Menu Object if we are in development mode, dont want users having the devtools.
+      Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateDev));
+      // If we are developers we might as well open the devtools by default.
+      mainWindow.webContents.openDevTools();
+    }
 
-  if(!isDevMode) {
-    splashScreen = new CapacitorSplashScreen(mainWindow);
-    splashScreen.init();
-  } else {
-    log.info(`Pointless loading Window From devmode : ${isDevMode} url ${url}`);
-    mainWindow.loadURL(url);
-    mainWindow.webContents.on('dom-ready', () => {
-      mainWindow.show();
-    });
-  }
+    if(!isDevMode) {
+      splashScreen = new CapacitorSplashScreen(mainWindow);
+      splashScreen.init();
+    } else {
+      log.info(`Pointless loading Window From devmode : ${isDevMode} url ${url}`);
+      mainWindow.loadURL(url);
+      mainWindow.webContents.on('dom-ready', () => {
+        mainWindow.show();
+      });
+    }
 
-  if (mainWindow != null) {
-    setInterval( readScale, 250);
+    if (mainWindow != null) {
+      setInterval( readScale, 500);
+    }
   }
-}
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -136,6 +132,13 @@ app.on('ready', function()  {
   }
 });
 
+// export interface scaleInfo {
+//   wWeight       : string;
+//   mode         :  string;
+//   type         : string;
+//   valueToDivide: string;
+// }
+
 function readScale() {
   regKey.values(function (err, items /* array of RegistryItem */) {
     if (err) {
@@ -144,30 +147,33 @@ function readScale() {
     else
       try {
         if (mainWindow && mainWindow.webContents) {
+
+          var scaleInfo = {status: '', type: '', weight: '', valueToDivide: '', mode: ''}
+          // log.info(scaleInfo)
           for (var i=0; i<items.length; i++) {
             const item = items[i];
-              // log.error('reading registry' + items[i]  );
-            if (item) {
+             if (item) {
               if (item.name == 'scaleType') {
-                // log.info('ScaleType' + item.value);
-                mainWindow.webContents.send('scaleType',  item.value)
-                // log.error('reading registry ' + 'scaleType ',  item.value);
-              }
-              if (item.name == 'sWeight') {
-                // log.info('ScaleWeight', item.value);
-                mainWindow.webContents.send('scaleWeight',  item.value)
-                // log.error('reading registry ' + 'scaleWeight ',  item.value);
-              }
-              //ValueToDivide
-              if (item.name == 'ValueToDivide') {
-                mainWindow.webContents.send('scaleValueToDivide',  item.value)
-                // log.error('reading registry ' + 'scaleValueToDivide ',  item.value);
+                scaleInfo.type = item.value;
               }
               if (item.name == 'mode') {
-                mainWindow.webContents.send('scaleMode',  item.value)
+                scaleInfo.mode = item.value;
+              }
+              if (item.name == 'sWeight') {
+                scaleInfo.weight = item.value;
+              }
+              if (item.name == 'ValueToDivide') {
+                scaleInfo.valueToDivide = item.value;
+              }
+              if (item.name == 'ValueToDivide') {
+                scaleInfo.status = item.value;
               }
             }
           }
+          if (scaleInfo) {
+            mainWindow.webContents.send('scaleInfo',  scaleInfo)
+          }
+
         }
       } catch (error) {
         //we don't care.
@@ -268,3 +274,22 @@ app.on('ready', function()  {
 // autoUpdater.on('download-progress', (ev, progressObj) => {
 // })
 
+     // if (item.name == 'sWeight') {
+              //   // log.info('ScaleWeight', item.value);
+              //     mainWindow.webContents.send('scaleWeight',  item.value)
+              //     log.error('reading registry ' + 'scaleWeight ',  item.value);
+              // }
+
+              // // log.info('ScaleType' + item.value);
+              // if (item.name == 'scaleType') {
+              //   mainWindow.webContents.send('scaleType',  item.value)
+              //   // log.error('reading registry ' + 'scaleType ',  item.value);
+              // }
+              // //ValueToDivide
+              // if (item.name == 'ValueToDivide') {
+              //   mainWindow.webContents.send('scaleValueToDivide',  item.value)
+              //   // log.error('reading registry ' + 'scaleValueToDivide ',  item.value);
+              // }
+              // if (item.name == 'mode') {
+              //   mainWindow.webContents.send('scaleMode',  item.value)
+              // }

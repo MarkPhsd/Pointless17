@@ -63,6 +63,7 @@
         <app-list-printers-electron
               [printerName]      ="electronReceiptPrinter"
               (outputPrinterName)="setElectronPrinterName($event)" >
+            Receipt Printer
         </app-list-printers-electron>
 
         <div *ngIf="electronSetting">
@@ -109,6 +110,15 @@
             <mat-icon>print</mat-icon>Print ZPL Label
           </button>
         </div>
+
+        <div class="margin-padding">
+          <app-list-printers-electron
+            [printerName]      ="electronLabelPrinter"
+            (outputPrinterName)="setElectronLabelPrinterName($event)" >
+            Label Printer
+          </app-list-printers-electron>
+        </div>
+
 
       </div>
     </div>

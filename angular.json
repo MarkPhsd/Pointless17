@@ -50,18 +50,10 @@
             ],
             "scripts": [
               "src/native.js"
-            ],
-
-            "optimization": true,
-            "sourceMap": false,
-            "namedChunks": false,
-            "extractLicenses": true,
-            "vendorChunk": true,
-            "buildOptimizer": true,
-            "statsJson": false,
-            "progress": false
+            ]
 
           },
+
           "configurations": {
             "production": {
               "fileReplacements": [
@@ -71,14 +63,15 @@
                 }
               ],
 
-              "optimization": true,
+              "optimization": false,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
+              "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true,
+              "buildOptimizer": false,
 
               "budgets": [
                 {

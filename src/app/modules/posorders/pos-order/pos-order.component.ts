@@ -376,7 +376,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //update the items that have the label printed
   ///update the inventory
   //update the subscription order Info
-  printLabels() {
+  async printLabels() {
 
     //get the order
     if (this.order) {
@@ -398,47 +398,43 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     //get item
   //print maybe
   //update inventory
-  printLabel(item: PosOrderItem) {
+  async  printLabel(item: PosOrderItem) {
 
     const site = this.siteService.getAssignedSite();
-    let printerName = ''
+
+    //get cached label printer name
+    const printer = await this.printingService.getElectronLabelPrinterCached().pipe().toPromise();
+    if (!printer || !printer.text) {
+      console.log('printer', printer)
+      return;
+    }
+    const printerName = printer.text
+
     this.menuItemService.getMenuItemByID(site, item.productID).pipe(
       switchMap(data => {
         if ( !data  || data == "No Records" || !data.itemType) {
           console.log('no data')
-          return
+          return EMPTY
         }
 
-        if ( data.itemType && ( (data.itemType.prepTicketID != 0 || data.itemType.labelTypeID != 0 ) && data.itemType.printerLocation ) ) {
-          printerName = data.itemType.printerName
-          const itemType = data.itemType
-
-          const printerLocations = itemType.printerLocation
-          // console.log('printerLocation', printerLocations)
-          // console.log('data.itemType.labelTypeID', data.itemType.labelTypeID)
-          printerName = printerLocations.printer;
-
-          if (printerName && printerName != '') {
+        console.log('data.itemType', data.itemType)
+        if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printerName ) ) {
             if (data.itemType.labelTypeID !=0 ) {
               return   this.settingService.getSetting(site, data.itemType.labelTypeID)
             }
-            return EMPTY
-          }
-
         } else {
+          console.log('No print option')
           return this.orderItemService.setItemAsPrinted(site, item )
         }
 
     })).pipe(
       switchMap( data => {
         // //get the PrintString Format
-        // console.log('getting Text From label setting',  data)
-        if (printerName) {
-          const content = this.renderingService.interpolateText(item, data.text)
-          const result  = this.printingService.printLabelElectron(content, printerName)
-        }
+        console.log('getting Text From label setting',  data)
+        const content = this.renderingService.interpolateText(item, data.text)
+        const result  = this.printingService.printLabelElectron(content, printerName)
 
-        if (!item.printed) {
+        if (!item.printed || (data && !data.printed)) {
           return this.orderItemService.setItemAsPrinted(site, item )
         }
 

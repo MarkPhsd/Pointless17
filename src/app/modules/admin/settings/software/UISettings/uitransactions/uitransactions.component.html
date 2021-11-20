@@ -10,7 +10,6 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
-
                   formControlName="displayNotes"
                   (change)="updateSetting()">
           <mat-label>Display Notes</mat-label>
@@ -19,7 +18,6 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
-
                   formControlName="displayQuantity"
                   (change)="updateSetting()">
           <mat-label>Display Quantity</mat-label>
@@ -28,7 +26,6 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
-
                   formControlName="displayAdd"
                   (change)="updateSetting()">
           <mat-label>Display Add Button</mat-label>
@@ -37,21 +34,12 @@
 
       <div class="toggle-fields">
         <mat-slide-toggle
-
                   formControlName="displayView"
                   (change)="updateSetting()">
           <mat-label>Display View</mat-label>
         </mat-slide-toggle>
       </div>
-
-      <!-- {{inputForm.value | json}} -->
     </div>
-
   </mat-card-content>
 
 </mat-card>
-
-<!-- <div *ngIf="(uiSettings$ | async) as item">
-  {{item | json}}
-</div> -->
-<!-- [(ngModel)] ="uiTransactions.displayView" -->

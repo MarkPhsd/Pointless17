@@ -9,14 +9,20 @@
       {{itemWithAction.posItem.productName}}
     </mat-card-subtitle>
     <mat-card-content>
+      <div *ngIf="list$">
+        No Void Options Setup
+      </div>
+
       <div class="card-content">
-        <app-mat-toggle-selector
-            [toggleButtonClass]="'toggle-buttons-wide'"
-            (outPutID)="selectItem($event)"
-            [hideAllOption]="true"
-            [list$]="list$">
-            Select
-        </app-mat-toggle-selector>
+        <div *ngIf="list$">
+          <app-mat-toggle-selector
+              [toggleButtonClass]="'toggle-buttons-wide'"
+              (outPutID)="selectItem($event)"
+              [hideAllOption]="true"
+              [list$]="list$">
+              Select
+          </app-mat-toggle-selector>
+        </div>
       </div>
 
       <div class="toggle-group">

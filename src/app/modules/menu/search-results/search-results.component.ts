@@ -5,7 +5,7 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { AWSBucketService, MenuService, MessageService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IItemBasicB, IMenuItemsResultsPaged, IProductSearchResultsPaged } from 'src/app/_services/menu/menu.service';
+import { IMenuItemsResultsPaged,  } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { MatPaginator } from '@angular/material/paginator';

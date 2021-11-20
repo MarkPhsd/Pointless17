@@ -1,15 +1,21 @@
-import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Inject } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { Observable, Subscription } from 'rxjs';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+// import { PrintOptions } from '@ionic-native/printer/ngx';
 
+// export interface printOptions {
+//   silent: true;
+//   printBackground: false;
+//   deviceName: string;
+// }
 @Component({
   selector: 'app-reciept-pop-up',
   templateUrl: './reciept-pop-up.component.html',
@@ -59,6 +65,7 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   printReady        : boolean
 
   orderCheck        = 0;
+  options           : printOptions;
 
   autoPrinted       = false;
 
@@ -76,12 +83,14 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     })
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
-      if (status && !this.autoPrinted) {
-        this.print();
-        this.dialogRef.close();
-        this.autoPrinted = true;
+      if (status) {
+          if (this.options && this.options.silent) {
+            this.print();
+            this.autoPrinted = true;
+          }
+        }
       }
-    })
+    )
   }
 
   constructor(
@@ -90,10 +99,16 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
       private settingService        : SettingsService,
       private siteService           : SitesService,
       private printingService       : PrintingService,
-      private dialogRef: MatDialogRef<RecieptPopUpComponent>,
       private printingAndroidService: PrintingAndroidService,
-  ) {
+      private dialogRef: MatDialogRef<RecieptPopUpComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: any
+    )
+  {
+    if (data)  {
+      this.options = data
+    }
   }
+
 
   async ngOnInit() {
     console.log('')
@@ -130,7 +145,7 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   }
 
   async getDefaultPrinter(): Promise<number> {
-    const item       = await this.printingService.getDefaultElectronReceiptPrinterCached().toPromise()
+    const item       = await this.printingService.getElectronReceiptPrinterCached().toPromise()
     if (!item) { return}
     this.electronReceiptSetting = item;
     this.receiptID   =  +item.option1;
@@ -199,7 +214,10 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
       //   window.alert('No default printer has been assigned.')
       //   return
       // }
-      this.printElectron()
+      const result = this.printElectron()
+      // if (result) {
+      //    this.dialogRef.close();
+      // }
       return
     }
 
@@ -233,7 +251,7 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     if (!this.printerName) { console.log('no printerName in print electron')}
 
     if (contents && this.printerName, options) {
-      this.printingService.printElectron( contents, this.printerName, options)
+        this.printingService.printElectron( contents, this.printerName, options)
     }
   }
 

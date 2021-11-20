@@ -4,9 +4,12 @@ button {
 }
 
 .grid-container {
-
   display: flex;
   flex-wrap: wrap;
+}
+
+.margin-padding {
+  margin-top: 5px;
 }
 
 .grid-printing {

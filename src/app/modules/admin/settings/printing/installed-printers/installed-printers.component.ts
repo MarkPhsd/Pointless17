@@ -101,6 +101,11 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   electronReceipt       : string;
   electronReceiptID     : number;
 
+  electronLabelPrinter: string;
+  electronLabelPrinterSetting: ISetting;
+  electrongLabelID     : number;
+  electronLabel        : string;
+
   items           : any[];
   orders          : any[];
   payments        : any[];
@@ -140,7 +145,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   async getPrinterAssignment(){
 
     if (this.platFormService.isAppElectron) {
-      this.printingService.getDefaultElectronReceiptPrinter().subscribe( data => {
+      this.printingService.getElectronReceiptPrinter().subscribe( data => {
       //  console.log('getDefaultElectronReceiptPrinter data', data)
         this.electronSetting        = data;
         this.electronReceiptPrinter = data.text;
@@ -151,6 +156,18 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         }
         // console.log('electron printing settings', data)
       })
+
+      this.printingService.getElectronLabelPrinter().subscribe( data => {
+        //  console.log('getDefaultElectronReceiptPrinter data', data)
+          this.electronLabelPrinterSetting        = data;
+          this.electronLabelPrinter   = data.text;
+          this.electrongLabelID      = +data.option1
+          // if (this.printOptions) {
+          //   this.printOptions.deviceName = data.text
+          // }
+          // console.log('electron printing settings', data)
+        })
+
     }
 
     if (this.platFormService.androidApp) {
@@ -586,20 +603,42 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     if (!this.electronSetting) { return }
     this.electronSetting.text   = event
     this.electronReceiptPrinter = event;
-    console.log('electronReceiptPrinter', event)
     this.setElectronReceipt(this.electronSetting);
+  }
+
+  setElectronLabelPrinterName(event) {
+    this.electronLabelPrinter = event
+    if (!this.electronLabelPrinter) { return }
+    console.log(event)
+    if (!this.electronLabelPrinterSetting) { this.electronLabelPrinterSetting = {} as ISetting}
+    this.electronLabelPrinterSetting.name   = 'electronLabelPrinter'
+    this.electronLabelPrinterSetting.text   = event
+    this.electronLabelPrinter               = event;
+    this.setElectronLabel(this.electronLabelPrinterSetting);
   }
 
   setElectronReceipt(electronSetting: ISetting) {
     if (!electronSetting) { return}
 
-    const receipt$ = this.printingService.setDefaultElectronReceiptPrinter(this.electronSetting);
+    const receipt$ = this.printingService.setElectronReceiptPrinter(this.electronSetting);
     receipt$.subscribe(data => {
       this.electronReceiptPrinter = data.text;
       this.electronReceiptID      = +data.option1;
       this.electronReceipt        = data.value;
     })
   }
+
+  setElectronLabel(setting: ISetting) {
+    if (!setting) { return}
+
+    const receipt$ = this.printingService.setElectronLabelPrinter(setting);
+    receipt$.subscribe(data => {
+      this.electronLabelPrinter = data.text;
+      this.electrongLabelID     = +data.option1;
+      this.electronLabel        = data.value;
+    })
+  }
+
 
   setAndroidReceiptPrinter(event) {
     console.log('')

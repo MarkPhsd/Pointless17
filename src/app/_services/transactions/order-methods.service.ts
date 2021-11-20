@@ -59,17 +59,20 @@ export class OrderMethodsService {
     return true
   }
 
-  async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
+  appylySerial(posItem: IPOSOrderItem) {
+    const site = this.siteService.getAssignedSite();
+    return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
+  }
 
+  async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
     const site = this.siteService.getAssignedSite()
     const result = await this.doesOrderExist(site);
-
     if (!result) { return }
     if (!order) { order = this.order }
-
     if (order) {
       const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
-      const itemResult  =  this.posOrderItemService.postItem(site, newItem).subscribe(data => {
+      const itemResult$ = this.posOrderItemService.postItem(site, newItem)
+      itemResult$.subscribe(data => {
           if (data.order) {
             this.orderService.updateOrderSubscription(data.order)
             this.addedItemOptions(order, item, data.posItem)
@@ -81,11 +84,6 @@ export class OrderMethodsService {
     }
   }
 
-  appylySerial(posItem: IPOSOrderItem) {
-    const site = this.siteService.getAssignedSite();
-    return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
-  }
-
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
 
     const site = this.siteService.getAssignedSite()
@@ -93,20 +91,13 @@ export class OrderMethodsService {
     if (!result) { return }
     const order = this.order
 
-    const addItem$ = this.posOrderItemService.scanItemForOrder(site, order, barcode, 1);
     //or we refresh the order with the new item added
+    const addItem$ = this.posOrderItemService.scanItemForOrder(site, order, barcode, 1);
     addItem$.subscribe(
         data=> {
-
-        console.log(data.posItemMenuItem)
         if (data.posItemMenuItem) {
-          const item    = data.posItemMenuItem.itemType
-          const menuItem = data.posItemMenuItem
-          if (item.requiresSerial) {
-            this.promptSerial(menuItem, data.posItem)
-          }
+          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
         }
-
         if (data.menuItemWithPrice) {
           //this means we prompt for prices.
         }
@@ -123,14 +114,11 @@ export class OrderMethodsService {
         }
       }
     )
-
     input.nativeElement.value = ''
-
   }
 
   promptSerial(menuItem: IMenuItem, posItem: IPurchaseOrderItem) {
-    if ( posItem) {
-
+    if (posItem) {
       const dialogRef = this.dialog.open(RequiresSerialComponent,
         {
           width:     '300ox',
@@ -141,7 +129,6 @@ export class OrderMethodsService {
           data       : posItem
         }
       )
-
       dialogRef.afterClosed().subscribe(result => {
         // this.promptGroupService.updatePromptGroup(null)
         // this.promptWalkService.updatePromptGroup(null)
@@ -149,7 +136,18 @@ export class OrderMethodsService {
     }
   }
 
+  async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
+    const site = this.siteService.getAssignedSite()
+    if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
+    const prompt = await this.promptGroupService.getPrompt(site, item.promptGroupID).pipe().toPromise()
+    this.openPromptWalkThroughWithItem(prompt, posItem)
+  }
+
   addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
+    console.log('item.requiresSerial', item.itemType.requiresSerial)
+    if (item.requiresSerial || item.itemType.requiresSerial) {
+      this.promptSerial(item, posItem)
+    }
     this.openPromptWalkThrough(order, item,posItem)
     this.openQuantityPrompt(order,item,    posItem)
     this.openGiftCardPrompt(order,item,    posItem)
@@ -168,24 +166,12 @@ export class OrderMethodsService {
     const site = this.siteService.getAssignedSite()
   }
 
-  async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
-
-    const site = this.siteService.getAssignedSite()
-    if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
-
-    const prompt = await this.promptGroupService.getPrompt(site, item.promptGroupID).pipe().toPromise()
-
-    this.openPromptWalkThroughWithItem(prompt, posItem)
-
-  }
 
   openPromptWalkThroughWithItem(prompt: IPromptGroup, posItem: IPurchaseOrderItem) {
     if (prompt) {
-
       prompt.posOrderItem = posItem;
       this.promptGroupService.updatePromptGroup(prompt);
       // encapsulation: ViewEncapsulation.None
-
       const dialogRef = this.dialog.open(PromptWalkThroughComponent,
         {
           width:     '90vw',
@@ -195,15 +181,12 @@ export class OrderMethodsService {
           panelClass: 'foo'
         }
       )
-
       dialogRef.afterClosed().subscribe(result => {
         this.promptGroupService.updatePromptGroup(null)
         this.promptWalkService.updatePromptGroup(null)
       });
     }
   }
-
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

@@ -113,23 +113,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   async addItemToOrder(item) {
-
-    // if (this.order) {
-
-
-      this.orderMethodService.addItemToOrder(this.order, item, 1)
-    // }
-    // if (this.order) {
-    //   const site = this.siteService.getAssignedSite()
-    //   const newItem = { orderID: this.order.id, quantity: 1, menuItem: item }
-    //   await  this.posOrderItemService.postItem(site, newItem).subscribe(data => {
-    //     if (data.order) {
-    //       this.orderService.updateOrderSubscription(data.order)
-    //     } else {
-    //       this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-    //     }
-    //   })
-    // }
+    this.orderMethodService.addItemToOrder(this.order, item, 1)
   }
 
 

@@ -78,9 +78,7 @@ export class RequiresSerialComponent implements OnInit {
   onCancel() {
     const serial = this.serialCode.value;
 
-    console.log('on cancel 1 ')
-
-    if (this.posItem && this.posItem.serialCode.length == 0 && serial.length == 0) {
+    if (this.posItem && (!this.posItem.serialCode || this.posItem.serialCode.length == 0) && (!serial || serial.length == 0)) {
       console.log('on cancel 2 ')
       if (window.confirm(`If you cancel, the item may be removed from this order`)) {
         this.deleteItem(this.posItem)

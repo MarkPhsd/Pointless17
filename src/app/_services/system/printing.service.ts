@@ -224,16 +224,15 @@ export class PrintingService {
     return parseInt( localStorage.getItem('lastLabelUsed') )
   }
 
-  setLastLabelUsed(id: number) {
+  setLastLabelUsed(id: number): boolean {
     localStorage.setItem('lastLabelUsed', id.toString())
+    return true;
   }
 
-  async printElectron(contents: string, printerName: string, options: printOptions) {
+  async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
 
-    const site                = this.siteService.getAssignedSite();
-    const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-    const printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-
+    const printWindow         = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    console.log('print electron options', options)
     printWindow.loadURL(contents)
       .then((e) => {
         if (options.silent) {
@@ -252,20 +251,23 @@ export class PrintingService {
             if (error) {
               if (error == true)  {
                 printWindow.close();
-                return
+                return true
               }
             }
             if (data) {
               printWindow.close();
-              return
+              return true
             }
           }
         )
         }).catch((err) => {
           // console.log(e);
           printWindow.close();
+          return false
         }
     )
+    return false;
+
   }
 
   getPrintContent(htmlContent: any, styles: any) {
@@ -345,6 +347,7 @@ export class PrintingService {
     } catch (error) {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
     }
+    console.log('printLabelElectron')
 
     const file = `file:///c://pointless//print.txt`
     const options = {
@@ -396,20 +399,52 @@ export class PrintingService {
     return prtContent.innerHTML;
   }
 
-  setDefaultElectronReceiptPrinter(setting: ISetting) : Observable<ISetting> {
-    const site = this.siteService.getAssignedSite();
-    return this.settingService.putSetting(site, setting.id, setting)
+  setElectronLabelPrinter(setting: ISetting) : Observable<ISetting> {
+    return this.setSetting(setting)
   }
 
-  getDefaultElectronReceiptPrinter(): Observable<ISetting> {
-    const site = this.siteService.getAssignedSite();
-    return this.settingService.getSettingByName(site, 'defaultElectronReceiptPrinterName')
+  setElectronReceiptPrinter(setting: ISetting) : Observable<ISetting> {
+    return this.setSetting(setting)
   }
 
-  getDefaultElectronReceiptPrinterCached(): Observable<ISetting> {
+  setSetting(setting: ISetting) : Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
-    return this.settingService.getSettingByNameCached(site, 'defaultElectronReceiptPrinterName')
+    if (setting.id) {
+      return this.settingService.putSetting(site, setting.id, setting)
+    }
+    if (!setting.id) {
+      return this.settingService.postSetting(site, setting)
+    }
   }
+
+  ///
+  getElectronLabelPrinter(): Observable<ISetting> {
+    return this.getSetting('electronLabelPrinter')
+  }
+
+  getElectronLabelPrinterCached(): Observable<ISetting> {
+    return this.getSettingCached('electronLabelPrinter')
+  }
+
+  /////
+  getElectronReceiptPrinterCached(): Observable<ISetting> {
+    return this.getSettingCached('defaultElectronReceiptPrinterName')
+  }
+
+  getElectronReceiptPrinter(): Observable<ISetting> {
+    return this.getSetting('defaultElectronReceiptPrinterName')
+  }
+
+  getSetting(settingName: string) {
+    const site = this.siteService.getAssignedSite();
+    return this.settingService.getSettingByName(site, settingName)
+  }
+
+  getSettingCached(settingName: string): Observable<ISetting> {
+    const site = this.siteService.getAssignedSite();
+    return this.settingService.getSettingByNameCached(site, settingName)
+  }
+
 
   previewReceipt() {
     const dialogRef = this.dialog.open(RecieptPopUpComponent,

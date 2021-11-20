@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -19,9 +17,7 @@ export class UITransactionsComponent implements OnInit {
   uiTransactions = {} as TransactionUISettings;
 
   constructor(
-      private siteService      : SitesService,
       private uISettingsService: UISettingsService,
-      private settingsService  :SettingsService,
   ) {
   }
 

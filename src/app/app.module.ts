@@ -105,8 +105,6 @@ export function init_app(appLoadService: AppInitService) {
     IonicModule.forRoot(),
     NGXMaterialModule,
     NgxElectronModule,
-    // // NgxKeypadModule,
-    // NumericKeyboardModule,
     ReactiveFormsModule,
     SharedModule
   ],

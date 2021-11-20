@@ -33,7 +33,7 @@
 
   <mat-divider></mat-divider>
 
-  <div *ngIf="menuItems" class="orderTotal">
+  <!-- <div *ngIf="menuItems" class="orderTotal">
     <div *ngFor="let menuItem of menuItems | paginate: { itemsPerPage: 5, currentPage: currentPage }" >
           <pos-order-item
               [productName] = "menuItem?.name"
@@ -50,7 +50,7 @@
     </div>
   </div>
 
-<pagination-controls (pageChange)="currentPage = $event"></pagination-controls>
+<pagination-controls (pageChange)="currentPage = $event"></pagination-controls> -->
 
 
 <ng-template #loading >

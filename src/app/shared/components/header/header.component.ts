@@ -15,7 +15,7 @@ import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector
 // https://blog.bitsrc.io/6-ways-to-unsubscribe-from-observables-in-angular-ab912819a78f
 import {Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { ScaleInfo, ScaleService } from 'src/app/_services/system/scale-service.service';
+import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -71,6 +71,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   scannerEnabled: boolean;
   private toolBar   :  boolean;
 
+  showPOSFunctions    =   false;
+  showTableLayout     =   false;
+  scaleName           :   any;
+  scaleValue          :   any;
+  smallDevice : boolean;
+  isUserStaff  = false;
+  isAdmin      = false;
+
   _order              :   Subscription;
   order               :   IPOSOrder;
 
@@ -80,20 +88,15 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
-  showPOSFunctions    =   false;
-  showTableLayout     =   false;
-  scaleName           :   any;
-  scaleValue          :   any;
-  smallDevice : boolean;
-  isUserStaff  = false;
-  isAdmin      = false;
-  scaleInfo           ={} as ScaleInfo;
+  scaleInfo           : ScaleInfo;
   _scaleInfo          : Subscription;
+  scaleSetup           : ScaleSetup;
+  displayWeight       : string;
 
-  _openOrderBar      : Subscription;
+  _openOrderBar       : Subscription;
 
-  user               : IUser;
-  _user              : Subscription;
+  user                : IUser;
+  _user               : Subscription;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -101,7 +104,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     })
 
     this._scaleInfo = this.scaleService.scaleInfo$.subscribe( data => {
-      this.scaleInfo = data;
+      this.scaleInfo = data
     })
 
     this._openOrderBar = this.toolbarUIService.orderBar$.subscribe( data => {
@@ -112,8 +115,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.user  = data
       this.getUserInfo()
     })
-
-
 
   }
 
@@ -132,6 +133,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this._user) {
       this._user.unsubscribe();
     }
+    // console.log('header destroyed')
   }
 
   constructor(private authenticationService:  AuthenticationService,
@@ -150,6 +152,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               public  platFormService     : PlatformService,
               private fb              :       FormBuilder ) {
 
+    this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');
     this.platFormService.getPlatForm();

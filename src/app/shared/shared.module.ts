@@ -112,6 +112,7 @@ import { SearchDebounceInputComponent } from './widgets/search-debounce-input/se
 import { UserAuthorizedDirective } from '../_directives/user-authorized.directive';
 import { APISettingComponent } from '../modules/login/apisetting/apisetting.component';
 import { ApiStoredValueComponent } from './widgets/api-stored-value/api-stored-value.component';
+import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
 
 export class MyHammerConfig extends HammerGestureConfig {
     overrides = <any> {
@@ -208,6 +209,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     RequestMessagesComponent,
     SalesTaxReportComponent,
     ScaleReaderComponent,
+    ScaleSettingsComponent,
     SidebarComponent,
     SiteSelectorComponent,
     SpeciesListComponent,
@@ -325,6 +327,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     RetailProductEditComponent,
     RequestMessagesComponent,
     SalesTaxReportComponent,
+    ScaleSettingsComponent,
     ScaleReaderComponent,
     SearchDebounceInputComponent,
     SidebarComponent,
