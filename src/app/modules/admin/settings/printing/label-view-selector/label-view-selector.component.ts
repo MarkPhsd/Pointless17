@@ -35,6 +35,7 @@ export class LabelViewSelectorComponent implements OnInit {
       this.refreshLabelSettings(this.labelID)
     }
   }
+
   @Input() set setInventoryAssignment(inventoryAssignment: IInventoryAssignment) {
     if (this.labelID) {
       this.inventoryItem = inventoryAssignment;

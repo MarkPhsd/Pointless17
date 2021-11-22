@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector'
-import { Capacitor, Plugins } from '@capacitor/core';
+
 @Component({
   selector: 'app-device-info',
   templateUrl: './device-info.component.html',
@@ -12,7 +12,6 @@ export class DeviceInfoComponent implements OnInit {
   isMobile        : boolean;
   isTablet        : boolean;
   isDesktopDevice : boolean;
-
   deviceName      : string;
 
   constructor( public  deviceService:   DeviceDetectorService,) { }

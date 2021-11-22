@@ -1,10 +1,8 @@
 
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
-import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
+import { Component,  Inject, OnInit } from '@angular/core';
+import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { IServiceType } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,23 +26,16 @@ export class ServiceTypeEditComponent implements OnInit {
 
   constructor(
     private serviceTypeService      : ServiceTypeService,
-    private fb                      : FormBuilder,
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
-    private awsService              : AWSBucketService,
     private awsBucket               : AWSBucketService,
     private fbServiceTypeService    : FbServiceTypeService,
-    private route                   : Router,
     private dialogRef: MatDialogRef<ServiceTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 
   {
-    console.log('constructor', data)
     if (data) {
       this.id = data
-      // this.clientType = data
-    } else {
-      // this.id = this.route.snapshot.paramMap.get('id');
     }
     this.initializeForm()
   }

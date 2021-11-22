@@ -13,7 +13,7 @@ export class ListPrintersElectronComponent implements OnInit {
 
   isElectronServiceInitiated    : boolean;
   printerList                   : any;
-  @Input()  printerName:               string
+  @Input()  printerName         : string
 
   constructor(private electronService: ElectronService,
               private printingService: PrintingService) { }
@@ -29,6 +29,7 @@ export class ListPrintersElectronComponent implements OnInit {
 
   listPrinters(): any {
     this.printerList = this.printingService.listPrinters();
+    console.log('Printer List', this.printerList)
   }
 
   emitPrinter() {

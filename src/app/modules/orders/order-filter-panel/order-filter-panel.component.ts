@@ -188,7 +188,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
   initEmployeeList(){
     const site           = this.siteService.getAssignedSite()
-    setInterval(this.refreshEmployees, 1000);
+    setInterval(this.refreshEmployees, (60*1000) *5);
    }
 
   refreshEmployees(){

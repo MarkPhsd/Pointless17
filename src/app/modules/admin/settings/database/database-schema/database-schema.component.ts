@@ -6,7 +6,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormBuilder } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 
-
 @Component({
   selector: 'app-database-schema',
   templateUrl: './database-schema.component.html',
@@ -30,7 +29,6 @@ export class DatabaseSchemaComponent implements AfterViewInit {
   {
     console.log('')
   }
-
 
   async  ngAfterViewInit() {
     this.things.changes.subscribe(t => {

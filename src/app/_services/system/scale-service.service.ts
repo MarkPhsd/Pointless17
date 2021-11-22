@@ -38,29 +38,51 @@ export class ScaleService  {
     ) {
 
     //set a scale timer that can be adjusted. set to local storage.
+    // this.readScaleOnInterval();
+    this.readScaleEvent();
+  }
+
+
+  // readScaleOnInterval() {
+  //   const scaleSetup = this.getScaleSetup()
+
+  //   if (!scaleSetup || !scaleSetup.enabled) { return }
+  //   if (this.electronService.remote != null) {
+  //     this.isElectronServiceInitiated = true
+  //     setInterval( () => {
+  //       this.electronService.ipcRenderer.on('scaleInfo', (event, args) => {
+  //         const info         = {} as ScaleInfo;
+  //         info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
+  //         info.type          = args.type;
+  //         info.mode          = args.mode;
+  //         info.scaleStatus   = args.status;
+  //         info.valueToDivide = args.valueToDivide
+  //         this.updateSubscription(info)
+  //       });
+  //     },
+  //     +scaleSetup.timer * 1000)
+  //   }
+  // }
+
+  readScaleEvent() {
     const scaleSetup = this.getScaleSetup()
-
     if (!scaleSetup || !scaleSetup.enabled) { return }
-
     if (this.electronService.remote != null) {
-      this.isElectronServiceInitiated = true
-      setInterval( () => {
-        this.electronService.ipcRenderer.on('scaleInfo', (event, args) => {
+    this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+        {
           const info         = {} as ScaleInfo;
-          // console.log('unformated', args);
           info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
-          // console.log('formated', args.value);
           info.type          = args.type;
           info.mode          = args.mode;
           info.scaleStatus   = args.status;
           info.valueToDivide = args.valueToDivide
+          console.log('info', info)
+          console.log('event', event)
           this.updateSubscription(info)
-        });
-      },
-      +scaleSetup.timer * 1000)
+        },
+      );
     }
   }
-
 
   getScaleWeighFormat(value: string, decimalPlaces: number): string {
     try {

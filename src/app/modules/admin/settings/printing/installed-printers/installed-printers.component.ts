@@ -50,7 +50,6 @@ import { ConsoleService } from 'src/app/_services/system/console.service';
   selector: 'app-installed-printers',
   templateUrl: './installed-printers.component.html',
   styleUrls: ['./installed-printers.component.scss'],
-  // changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [ SafeHtmlPipe ]
 })
 export class InstalledPrintersComponent implements OnInit, AfterViewInit {
@@ -154,20 +153,13 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         if (this.printOptions) {
           this.printOptions.deviceName = data.text
         }
-        // console.log('electron printing settings', data)
       })
 
       this.printingService.getElectronLabelPrinter().subscribe( data => {
-        //  console.log('getDefaultElectronReceiptPrinter data', data)
           this.electronLabelPrinterSetting        = data;
           this.electronLabelPrinter   = data.text;
           this.electrongLabelID      = +data.option1
-          // if (this.printOptions) {
-          //   this.printOptions.deviceName = data.text
-          // }
-          // console.log('electron printing settings', data)
         })
-
     }
 
     if (this.platFormService.androidApp) {
@@ -189,7 +181,9 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       await this.applyStyles();
       const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
       const receiptPromise        = await receipt$.pipe().toPromise()
-      this.refreshReceipt(receiptPromise.id);
+      if (receiptPromise) {
+        this.refreshReceipt(receiptPromise.id);
+      }
       this.refreshSelections();
     } catch (error) {
       // this.cs.console.log(error)

@@ -100,7 +100,6 @@ export class UserSwitchingService {
 
     const site = this.siteService.getAssignedSite()
     const apiUrl = await this.appInitService.apiBaseUrl()
-
     let url = `${apiUrl}/users/authenticate`
 
     const userLogin = { username, password };
@@ -109,14 +108,14 @@ export class UserSwitchingService {
         timeout(5000),
         map(
           user => {
+            console.log('user', user)
             if (user) {
               try {
-                  // console.log('success')
-                  // console.log('user', user)
+
                   this.clearSubscriptions();
                   const currentUser = this.setUserInfo(user, password)
-                  // console.log('currentUser', currentUser)
                   this.authenticationService.updateUser(currentUser)
+
                   return user
               } catch (error) {
                 console.log('error', error)
@@ -129,7 +128,6 @@ export class UserSwitchingService {
             return err
       })
     )
-
   }
 
   setUserInfo(user: IUser, password) {

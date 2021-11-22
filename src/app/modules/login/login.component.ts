@@ -63,181 +63,167 @@ export class LoginComponent implements OnInit {
       this.redirects();
     }
 
-    async ngOnInit() {
+  async ngOnInit() {
+    if (!this.platformService.webMode) { this.amI21 = true  }
+    if (this.platformService.webMode)  { this.amI21 = false }
+    this.refreshTheme()
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
-      if (!this.platformService.webMode) { this.amI21 = true  }
-      if (this.platformService.webMode)  { this.amI21 = false }
+    this.loginForm = this.fb.group({
+        username: ['', Validators.required],
+        password: ['', Validators.required]
+    });
 
-      // this.renderTheme();
-      this.refreshTheme()
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.initCompanyInfo()
+  }
 
-      this.loginForm = this.fb.group({
-          username: ['', Validators.required],
-          password: ['', Validators.required]
-      });
-
-      this.initCompanyInfo()
+  setAPIAlt() {
+    this.counter  = this.counter +1
+    if (this.counter > 5) {
+      this.counter = 0;
+      this.router.navigate(['/apisetting']);
     }
+  }
 
-    setAPIAlt() {
-      this.counter  = this.counter +1
-      console.log(this.counter)
-      if (this.counter > 5) {
-        this.counter = 0;
+  initCompanyInfo() {
+    this.getCompanyInfo();
+    if (this.company === undefined) {
+    } else {
+      this.compName = this.company.compName
+    }
+    this.logo        = `${environment.logo}`
+    this.compName    = `${environment.company}`
+    this.awsBucketService.getBucket()
+  }
+
+  redirects() {
+    if (this.redirectAPIUrlRequired())  { return }
+    if (this.redirectUserLoggedIn())  { return }
+  }
+
+  redirectUserLoggedIn() {
+    const user = this.authenticationService.userValue
+    if (user) {
+      this.router.navigate(['/app-main-menu']);
+      return true
+    }
+  }
+
+  redirectAPIUrlRequired() {
+      //if is app and no apiurl is stored move to the apiURlSetting Component.
+    if (!this.platformService.webMode) {
+      if (this.platformService.apiUrl.length == 0) {
         this.router.navigate(['/apisetting']);
-      }
-    }
-
-    initCompanyInfo() {
-      this.getCompanyInfo();
-      if (this.company === undefined) {
-      } else {
-        this.compName = this.company.compName
-      }
-      this.logo        = `${environment.logo}`
-      this.compName    = `${environment.company}`
-      this.awsBucketService.getBucket()
-    }
-
-    redirects() {
-      if (this.redirectAPIUrlRequired())  { return }
-      if (this.redirectUserLoggedIn())  { return }
-    }
-
-    redirectUserLoggedIn() {
-
-      const user = this.authenticationService.userValue
-      if (user) {
-        console.log('redirectUserLoggedIn', user)
-        this.router.navigate(['/app-main-menu']);
         return true
       }
     }
+  }
 
-    redirectAPIUrlRequired() {
-       //if is app and no apiurl is stored move to the apiURlSetting Component.
-      if (!this.platformService.webMode) {
-        console.log('redirectAPIUrlRequired')
-
-        if (this.platformService.apiUrl.length == 0) {
-          console.log('redirect api length = ')
-          this.router.navigate(['/apisetting']);
-          return true
-        }
-      }
+  refreshTheme() {
+    const theme =  localStorage.getItem('angularTheme');
+    if ( theme === 'dark-theme') {
+      this._renderer.addClass(document.body, 'dark-theme');
+      this._renderer.removeClass(document.body, 'light-theme');
+      localStorage.setItem('angularTheme', 'dark-theme')
+      return
     }
 
-    refreshTheme() {
-      const theme =  localStorage.getItem('angularTheme');
-      if ( theme === 'dark-theme') {
-        this._renderer.addClass(document.body, 'dark-theme');
-        this._renderer.removeClass(document.body, 'light-theme');
-        localStorage.setItem('angularTheme', 'dark-theme')
-        return
-      }
-
-      if ( theme != 'dark-theme') {
-        this._renderer.addClass(document.body, 'light-theme');
-        this._renderer.removeClass(document.body, 'dark-theme');
-        localStorage.setItem('angularTheme', 'light-theme')
-      }
+    if ( theme != 'dark-theme') {
+      this._renderer.addClass(document.body, 'light-theme');
+      this._renderer.removeClass(document.body, 'dark-theme');
+      localStorage.setItem('angularTheme', 'light-theme')
     }
+  }
 
-    async forgetMe() {
-      this.clearUserSettings();
-      this.notifyEvent("Your settings have been removed from this device.", "Bye!");
-      this.siteService.clearAssignedSite();
-      if (!this.platformService.webMode) { return }
-      if (this.appInitService.appGateEnabled()) {
-        this.router.navigate(['/appgate']);
-      }
+  async forgetMe() {
+    this.clearUserSettings();
+    this.notifyEvent("Your settings have been removed from this device.", "Bye!");
+    this.siteService.clearAssignedSite();
+    if (!this.platformService.webMode) { return }
+    if (this.appInitService.appGateEnabled()) {
+      this.router.navigate(['/appgate']);
     }
+  }
 
-    async  browseMenu() {
-      this.router.navigate(['/app-main-menu']);
-    }
+  async  browseMenu() {
+    this.router.navigate(['/app-main-menu']);
+  }
 
-    clearUserSettings() {
-      this.authenticationService.clearUserSettings()
-    }
+  clearUserSettings() {
+    this.authenticationService.clearUserSettings()
+  }
 
-    getCompanyInfo() {
-      try {
-         const site = this.siteService.getAssignedSite();
-          this.companyService.getCompany(site).subscribe(data =>
-          {
-            this.company  = data
-            localStorage.setItem('company/compName', JSON.stringify(this.company.compName))
-            localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
-            localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
-          }, error  => {
-            this.statusMessage ="System Offline - login unavailable."
-          }
-        );
-
-      } catch (error) {
-        this.statusMessage ="System Offline - login unavailable."
-      }
-    }
-
-    registerUser(){
-      this.router.navigate(['/register-user']);
-    }
-
-    changePassword(){
-      this.router.navigate(['/resetpassword']);
-    }
-
-    async  onSubmit() {
-      this.submitted = true;
-      this.statusMessage = ""
-      this.spinnerLoading = true;
-
-      if (this.loginForm.invalid) {
-        this.statusMessage = 'User name and password required.'
-        return;
-      }
-
-      (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
-        .pipe(first())
-        .subscribe(
-          data =>
-          {
-            if (this.returnUrl = '/') { this.returnUrl = '/app-main-menu' }
-            this.spinnerLoading = false;
-            if (this.returnUrl === '/login') {
-              this.returnUrl = '/app-main-menu'
-              this.browseMenu();
-            }
-            this.router.navigate([this.returnUrl]);
-            return
-          },
-          error => {
-            this.spinnerLoading = false;
-            this.statusMessage = `Login failed. ${error.message}.`
-            this.loading = false;
-            return
+  getCompanyInfo() {
+    try {
+        const site = this.siteService.getAssignedSite();
+        this.companyService.getCompany(site).subscribe(data =>
+        {
+          this.company  = data
+          localStorage.setItem('company/compName', JSON.stringify(this.company.compName))
+          localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
+          localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
+        }, error  => {
+          this.statusMessage ="System Offline - login unavailable."
         }
       );
+
+    } catch (error) {
+      this.statusMessage ="System Offline - login unavailable."
+    }
+  }
+
+  registerUser(){
+    this.router.navigate(['/register-user']);
+  }
+
+  changePassword(){
+    this.router.navigate(['/resetpassword']);
+  }
+
+  async  onSubmit() {
+    this.submitted = true;
+    this.statusMessage = ""
+    this.spinnerLoading = true;
+
+    if (this.loginForm.invalid) {
+      this.statusMessage = 'User name and password required.'
+      return;
     }
 
-    notifyEvent(message: string, action: string) {
-      this._snackBar.open(message, action, {
-        duration: 2000,
-        verticalPosition: 'top'
-      });
-    }
+    (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
+      .pipe(first())
+      .subscribe(
+        data =>
+        {
+          console.log('data', data)
+          this.loginToReturnUrl()
+          return
+        },
+        error => {
+          console.log('data', error)
+          this.spinnerLoading = false;
+          this.statusMessage = `Login failed. ${error.message}.`
+          this.loading = false;
+          return
+      }
+    );
+  }
+
+  loginToReturnUrl() {
+    this.spinnerLoading = false;
+    if (this.returnUrl = '/') { this.returnUrl = '/app-main-menu' }
+    if (this.returnUrl === '/login') {  this.returnUrl = '/app-main-menu'}
+    if (this.returnUrl === '/apisetting') {    this.returnUrl = '/app-main-menu'}
+    this.router.navigate([this.returnUrl]);
+    this.browseMenu();
+  }
+
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: 'top'
+    });
+  }
 
 }
 
-    // renderTheme() {
-    //   const theme = localStorage.getItem('angularTheme')
-    //   if (theme === 'light-theme') {
-    //     this._renderer.addClass(document.body, 'light-theme');
-    //     this._renderer.removeClass(document.body, 'dark-theme');
-    //   } else {
-    //     this._renderer.addClass(document.body, 'light-theme');
-    //     this._renderer.removeClass(document.body, 'dark-theme');
-    //   }
-    // }

@@ -1,13 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { IUser, IUserProfile } from 'src/app/_interfaces';
+import {  IUserProfile } from 'src/app/_interfaces';
 import {  OrdersService, UserService } from 'src/app/_services';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { InventoryLocationsComponent } from './inventory/inventory-locations/inventory-locations.component';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
 
 @Component({
   selector: 'app-admin',

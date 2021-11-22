@@ -1,8 +1,6 @@
 import { Component, OnInit, OnChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { environment } from 'src/environments/environment';
-import { Capacitor, Plugins } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
@@ -13,32 +11,27 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 })
 export class AppGateComponent implements OnInit , OnChanges{
 
-  logo: string;
-  company: string;
-  entryQuestion: string;
+  logo          : string;
+  company       : string;
+  entryQuestion : string;
   rememberChoice: boolean;
-  useAppGate : boolean;
+  useAppGate    : boolean;
+  apiUrl        : any;
 
-  apiUrl : any;
-
-  constructor(private router: Router,
-              private electronService: ElectronService,
+  constructor(private router        : Router,
               private appInitService: AppInitService,
               public platFormService: PlatformService,
         ) { }
 
   async ngOnInit() {
-
     await this.appInitService.init();
     this.apiUrl         = this.appInitService.apiBaseUrl();
     this.useAppGate     = this.appInitService.appGateEnabled();
     this.entryQuestion  = this.appInitService.appGateMessage();
-
     if (!this.useAppGate)  {
       this.router.navigateByUrl('/login')
       return
     }
-
     await this.navRefresh()
   }
 
@@ -46,7 +39,6 @@ export class AppGateComponent implements OnInit , OnChanges{
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
     if (!this.useAppGate)  {  this.router.navigateByUrl('/login')}
-
   }
 
   leaveSite() {
@@ -54,8 +46,8 @@ export class AppGateComponent implements OnInit , OnChanges{
   }
 
   async navRefresh() {
-    this.logo = '';
-    this.company = '';
+    this.logo     = '';
+    this.company  = '';
     if (!this.platFormService.webMode ) {
       this.skipCheck();
       return

@@ -1,12 +1,10 @@
-import { AfterViewInit, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
+import {  Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { IUser } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Router } from '@angular/router';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-settings',

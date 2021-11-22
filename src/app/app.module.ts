@@ -124,7 +124,6 @@ export function init_app(appLoadService: AppInitService) {
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    // { provide: HAMMER_GESTURE_CONFIG, useClass: MyHammerConfig },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     CurrencyPipe,
     CacheClientService,

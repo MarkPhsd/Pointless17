@@ -1,9 +1,9 @@
 
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component, Output, OnInit,
+  ViewChild ,ElementRef, EventEmitter, AfterViewInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
+import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -15,7 +15,6 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IServiceType, ISetting } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
@@ -26,7 +25,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
   templateUrl: './service-type-list.component.html',
   styleUrls: ['./service-type-list.component.scss']
 })
-export class ServiceTypeListComponent implements OnInit {
+export class ServiceTypeListComponent implements OnInit, AfterViewInit {
 
   serviceType$  :  Observable<IServiceType[]>;
   serviceType    : IServiceType;
@@ -101,23 +100,20 @@ export class ServiceTypeListComponent implements OnInit {
             private productEditButtonService: ProductEditButtonService,
             private agGridFormatingService  : AgGridFormatingService,
             private awsService              : AWSBucketService,
-            private router                  : Router,
   ) { }
 
   async ngOnInit() {
     const site          = this.siteService.getAssignedSite();
     this.rowSelection   = 'multiple'
     this.urlPath        = await this.awsService.awsBucketURL();
-    this.serviceType$  = this.serviceTypeService.getAllServiceTypes(site);
+    this.serviceType$   = this.serviceTypeService.getAllServiceTypes(site);
     this.initForm();
     this.initAgGrid(this.pageSize);
-    this.serviceType$ = this.serviceTypeService.getAllServiceTypes(site);
-
+    this.serviceType$   = this.serviceTypeService.getAllServiceTypes(site);
     this.settingsService.getSettingByName(site, 'DefaultOrderType').subscribe( data => {
       if (data) {
-        console.log(data)
         this.defaultOrderSetting = data
-        this.defaultID = parseInt(data.value);
+        this.defaultID  = parseInt(data.value);
       }
     })
   }
@@ -125,12 +121,9 @@ export class ServiceTypeListComponent implements OnInit {
   setDefaultID(event) {
     if (!event) {return}
     if (!this.defaultOrderSetting) { return }
-
-    const site          = this.siteService.getAssignedSite();
-    const setting = this.defaultOrderSetting;
-    console.log(event)
-    setting.value = event.id;
-
+    const site         = this.siteService.getAssignedSite();
+    const setting      = this.defaultOrderSetting;
+    setting.value      = event.id;
     this.settingsService.putSetting(site, setting.id, setting).subscribe(data => {
         this.defaultOrderSetting = data
         this.defaultID = parseInt(data.value);
@@ -139,13 +132,12 @@ export class ServiceTypeListComponent implements OnInit {
   }
 
   initForm() {
-    this.searchForm   = this.fb.group( {
+    this.searchForm  = this.fb.group( {
       searchItems    : [''],
     });
   }
 
   ngAfterViewInit() {
-
     if (this.input) {
       fromEvent(this.input.nativeElement,'keyup')
       .pipe(
@@ -212,8 +204,6 @@ export class ServiceTypeListComponent implements OnInit {
       let searchModel         = {} as IServiceType;
       // let search              = ''
       searchModel.name        = this.searchItemsValue.value
-      // productSearchModel.pageSize   = this.pageSize
-      // productSearchModel.pageNumber = this.currentPage
       return searchModel
     }
 

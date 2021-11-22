@@ -15,7 +15,7 @@ include ':capacitor-sqlite'
 project(':capacitor-sqlite').projectDir = new File('../node_modules/capacitor-sqlite/android')
 
 include ':dsiemv-android-plugin'
-project(':dsiemv-android-plugin').projectDir = new File('../node_modules/dsiemv-android-plugin/android')
+project(':dsiemv-android-plugin').projectDir = new File('../../../dsiEmvAndroidPlugin/dsiemv-android-plugin/android')
 
 include ':ionic-zebra-label-printer'
 project(':ionic-zebra-label-printer').projectDir = new File('../node_modules/ionic-zebra-label-printer/android')

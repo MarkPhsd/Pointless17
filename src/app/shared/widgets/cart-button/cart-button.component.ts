@@ -161,6 +161,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   refreshOrder() {
+    // console.log('refresh orderRunning')
     if (!this.refreshCurrentOrderCheck) {  this.assignCurrentOrder() }
   }
 

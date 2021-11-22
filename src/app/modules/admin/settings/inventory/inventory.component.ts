@@ -4,8 +4,7 @@ import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-re
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { Observable, Subject ,fromEvent } from 'rxjs';
-import { of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UseGroupsService } from 'src/app/_services/menu/use-groups.service';
 import { Router } from '@angular/router';
@@ -25,7 +24,6 @@ export class InventoryComponent implements OnInit {
 
   constructor(
     private dialog        :  MatDialog,
-    private settingService:  SettingsService,
     private siteService   :  SitesService,
     private snackBar      :  MatSnackBar,
     private router        :  Router,
@@ -35,7 +33,6 @@ export class InventoryComponent implements OnInit {
   ngOnInit(): void {
     console.log('')
   }
-
 
   openAdjustmentReasonsDialog() {
     const dialogConfig = [

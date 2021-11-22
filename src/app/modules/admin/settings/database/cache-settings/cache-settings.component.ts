@@ -1,11 +1,9 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { ISetting, ISite, IUser } from 'src/app/_interfaces';
+import { AfterViewInit,  Component } from '@angular/core';
+import { ISetting,  } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import {  SystemService } from 'src/app/_services/system/system.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-cache-settings',
@@ -21,11 +19,9 @@ export class CacheSettingsComponent implements AfterViewInit {
   currentCache      : ISetting;
 
   constructor(
-              private systemService:     SystemService,
               private settingsService:   SettingsService,
               private sitesService:      SitesService,
               private fbSettingsService: FbSettingsService,
-              private fb: FormBuilder
               )
     { }
 

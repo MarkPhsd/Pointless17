@@ -17,9 +17,12 @@
         "build": {
           "builder": "@angular-builders/custom-webpack:browser",
           "options": {
+
             "customWebpackConfig": {
               "path": "webpack.config.ts"
+
             },
+
             "outputPath": "dist/CCSApp",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -63,14 +66,14 @@
                 }
               ],
 
-              "optimization": false,
+              "optimization": true,
+              "buildOptimizer": true,
               "outputHashing": "all",
-              "sourceMap": true,
+              "sourceMap": false,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": false,
 
               "budgets": [
                 {

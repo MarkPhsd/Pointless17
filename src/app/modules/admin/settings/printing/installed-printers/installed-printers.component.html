@@ -11,6 +11,7 @@
   <!-- <div fxLayout="row" fxLayoutAlign="space-between start"> -->
   <div class="grid-printing">
     <!-- <div fxLayout="column" fxLayoutAlign="space-around start" fxFlex="50"  fxLayoutGap="20px" > -->
+
     <div>
       <div *ngIf="platForm === 'web' ">
 
@@ -77,7 +78,9 @@
 
         <h3>Print Test for Windows/Linux</h3>
         <div>
-          <button mat-raised-button color="primary"(click)="printElectron()"> <mat-icon>print</mat-icon>Print </button>
+          <button mat-raised-button color="primary"(click)="printElectron()">
+            <mat-icon>print</mat-icon>Print
+          </button>
         </div>
 
         <div>
@@ -141,8 +144,11 @@
       </mat-select>
     </mat-form-field>
 
-    <button mat-raised-button color="primary" (click)="openEditor(receiptID)">
-    <mat-icon>edit</mat-icon>Edit </button>
+    <button mat-raised-button
+            color="primary"
+            (click)="openEditor(receiptID)">
+      <mat-icon>edit</mat-icon>Edit
+    </button>
 
     <div *ngIf="!receiptLayoutSetting || !headerText || !footerText || !itemsText">
       Loading...
@@ -207,9 +213,9 @@
 </div>
 
 <mat-card>
-<div [hidden] ="true" id="download" class="border-section">
-  <img #canvas>
-  <a #downloadLink></a>
-</div>
+  <div [hidden] ="true" id="download" class="border-section">
+    <img #canvas>
+    <a #downloadLink></a>
+  </div>
 </mat-card>
 

@@ -73,8 +73,6 @@ export class RenderingService {
    }).format(number)
   }
 
-
-
   refreshStringArrayData(text: string, obj: any[]) {
     let  stringArray = []
     if (obj) {

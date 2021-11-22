@@ -114,12 +114,12 @@ import { APISettingComponent } from '../modules/login/apisetting/apisetting.comp
 import { ApiStoredValueComponent } from './widgets/api-stored-value/api-stored-value.component';
 import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
 
-export class MyHammerConfig extends HammerGestureConfig {
-    overrides = <any> {
-        'pinch': { enable: false },
-        'rotate': { enable: false }
-    }
-}
+// export class MyHammerConfig extends HammerGestureConfig {
+//     overrides = <any> {
+//         'pinch': { enable: false },
+//         'rotate': { enable: false }
+//     }
+// }
 @NgModule({
   declarations: [
     AccordionComponent,
@@ -347,10 +347,10 @@ export class MyHammerConfig extends HammerGestureConfig {
    // { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
    // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
    { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover' }},
-   {
-      provide: HAMMER_GESTURE_CONFIG,
-      useClass: MyHammerConfig
-    }
+  //  {
+  //     provide: HAMMER_GESTURE_CONFIG,
+  //     useClass: MyHammerConfig
+  //   }
   ]
 
 })

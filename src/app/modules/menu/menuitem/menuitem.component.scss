@@ -299,7 +299,7 @@ input {
 .prices {
   display: flex;
   flex-direction: row;
-  justify-content: start;
+  justify-content: flex-start;
 }
 
 .quantity-input {
@@ -314,7 +314,7 @@ input {
 .buttons-quantity {
   display: flex;
   flex-direction: row;
-  justify-content: end;
+  justify-content: flex-end;
 }
 
 mat-form-field {
@@ -344,7 +344,7 @@ mat-form-field {
 .exit {
   display        : flex;
   flex-direction : row;
-  justify-content: end;
+  justify-content: flex-end;
   position       : absolute;
   right: 20px;
   min-height   : 40px;

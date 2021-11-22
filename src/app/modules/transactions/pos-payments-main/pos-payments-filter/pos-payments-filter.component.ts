@@ -170,33 +170,31 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       this.toggleTypeEmployee          = "0"
       this.toggleIsCashCredit          = 0
 
-      if (!this.searchModel) {
-        this.searchModel = {} as IPaymentSearchModel
-      }
+      if (!this.searchModel) { this.searchModel = {} as IPaymentSearchModel}
 
-      this.searchModel.id = 0
-      this.searchModel.orderID = 0
-      this.searchModel.isCash = false
-      this.searchModel.preAuth = false
-      this.searchModel.isCreditCard = false
-      this.searchModel.tipInput = false
+      this.searchModel.id               = 0
+      this.searchModel.orderID          = 0
+      this.searchModel.isCash           = false
+      this.searchModel.preAuth          = false
+      this.searchModel.isCreditCard     = false
+      this.searchModel.tipInput         = false
 
-      this.searchModel.serviceTypeID = 0;
-      this.searchModel.employeeID = 0;
-      this.searchModel.paymentMethodID = 0;
-      this.searchModel.pageNumber = 1;
+      this.searchModel.serviceTypeID    = 0;
+      this.searchModel.employeeID       = 0;
+      this.searchModel.paymentMethodID  = 0;
+      this.searchModel.pageNumber       = 1;
 
       const site           = this.siteService.getAssignedSite()
       this.employees$      = this.orderService.getActiveEmployees(site)
       this.serviceTypes$   = this.serviceTypes.getSaleTypes(site)
-      this.paymentMethod$   = this.paymentMethodsService.getList(site)
+      this.paymentMethod$  = this.paymentMethodsService.getList(site)
 
       this.refreshSearch();
     }
 
     initEmployeeList(){
       const site           = this.siteService.getAssignedSite()
-      setInterval(this.refreshEmployees, 1000);
+      setInterval(this.refreshEmployees,  (60*1000) *5);
      }
 
      refreshEmployees(){
