@@ -171,7 +171,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   resetSearch() {
-
     this.searchModel = {} as IPOSOrderSearchModel;
     this.toggleSuspendedOrders       = "0";
     this.toggleOrdersGreaterThanZero = "0";
@@ -181,7 +180,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     if (this.searchModel) {
       this.searchModel.orderID = 0
     }
-
     this.initForm();
     this.refreshSearch();
   }
@@ -195,7 +193,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     try {
       const site           = this.siteService.getAssignedSite()
       if (!site) {
-        console.log('site not defined')
         return
       }
       this.employees$      = this.orderService.getActiveEmployees(site)
@@ -211,7 +208,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   initOrderSearch(searchModel: IPOSOrderSearchModel) {
-    // this.orderService.updateOrderSearchResults( null )
     this.orderService.updateOrderSearchModel( this.searchModel )
   }
 
@@ -253,7 +249,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       this.searchModel.employeeID    = 0
     }
 
-    const search = this.searchModel;
+    const search               = this.searchModel;
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
@@ -267,9 +263,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.searchModel.serviceTypeID = 0
     this.searchModel.employeeID    = 0
 
-    this.searchModel.orderID = parseInt(searchPhrase)
+    this.searchModel.orderID   = parseInt(searchPhrase)
 
-    const search = this.searchModel;
+    const search               = this.searchModel;
     search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
@@ -327,7 +323,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
     this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
     this.searchModel.completionDate_To   = this.dateRangeForm.get("start").value;
-
     this.subscribeToDatePicker();
   }
 
@@ -364,7 +359,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
   refreshDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
-
     if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
       this.searchModel.completionDate_From = '';
       this.searchModel.completionDate_To   = '';
@@ -375,8 +369,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.dateFrom = this.dateRangeForm.get("start").value
     this.dateTo   = this.dateRangeForm.get("end").value
     this.searchModel.completionDate_From = this.dateFrom.toISOString()
-    this.searchModel.completionDate_To = this.dateTo.toISOString()
-
+    this.searchModel.completionDate_To   = this.dateTo.toISOString()
     this.refreshSearch()
   }
 

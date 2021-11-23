@@ -1,8 +1,12 @@
 <mat-card class="mat-card-view">
   <mat-card-content>
-    <button mat-button (click)="resetSearch()">Reset <mat-icon>refresh</mat-icon></button>
+    <button mat-button
+            (click)="resetSearch()">
+      Reset <mat-icon>refresh</mat-icon>
+    </button>
 
-    <div class="keypad fields">
+    <div *ngIf="searchModel"
+         class="keypad fields">
       <app-key-pad
         [inputForm]     ="searchForm"
         [inputTypeValue]="'text'"
@@ -13,7 +17,6 @@
 
     <div class="fields">
       <mat-form-field appearance="outline" *ngIf="dateRangeForm">
-
         <mat-label>Date Range (Start Time)</mat-label>
 
         <mat-date-range-input [formGroup]="dateRangeForm"

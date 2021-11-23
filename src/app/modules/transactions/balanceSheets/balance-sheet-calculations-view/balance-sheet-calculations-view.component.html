@@ -1,0 +1,20 @@
+<div *ngIf="sheet" class="header-grid info-width">
+
+  <div>Over Under</div>   <div class="calculation"> {{sheet.overUnderTotal | currency}} </div>
+  <div>Total Sales</div>  <div class="calculation"> {{sheet.salesTotal     | currency}} </div>
+  <div>Cash</div>         <div class="calculation"> {{sheet.cashIn         | currency}} </div>
+  <div>Credit</div>       <div class="calculation"> {{sheet.creditIn       | currency}} </div>
+
+  <div class="item-span cashdrop-border" *ngIf="sheet.cashDrops">
+    <span class="title">Cash Drops</span>
+    <div class="header-grid info-width" *ngFor="let item of sheet.cashDrops">
+      <div class="calculation"> {{sheet.amount | currency}} </div>
+    </div>
+    <div class="title">Drop Total </div>
+     <div class="calculation"> {{ sheet.cashDropTotal | currency }}</div>
+  </div>
+
+  <div *ngIf="currentBalance">New Balance </div>
+  <div class="calculation" *ngIf="currentBalance"> {{ currentBalance | currency }} </div>
+
+</div>

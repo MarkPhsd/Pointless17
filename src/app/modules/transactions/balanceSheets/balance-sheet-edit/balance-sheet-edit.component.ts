@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import {  FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { EMPTY, Observable, Subscription } from 'rxjs';
+import {  Observable, Subscription } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -13,6 +13,7 @@ import { Location } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser } from 'src/app/_interfaces';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -42,14 +43,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   get fiftiesStart()      { return this.inputForm.get('fiftiesStart') as FormControl; }
   get twentiesStart()     { return this.inputForm.get('twentiesStart') as FormControl; }
   get tensStart()         { return this.inputForm.get('tensStart') as FormControl; }
-  get dollarStart()      { return this.inputForm.get('dollarStart') as FormControl; }
+  get dollarsStart()      { return this.inputForm.get('dollarsStart') as FormControl; }
   get fivesStart()        { return this.inputForm.get('fivesStart') as FormControl; }
 
-  get platForm()       {  return Capacitor.getPlatform(); }
+  get platForm()          { return Capacitor.getPlatform(); }
 
-  value             : any;
-  // //This is for the filter Section//
-  //search form filters
+  value           : any;
   searchForm      : FormGroup;
   inputForm       : FormGroup;
   urlPath         : string;
@@ -61,20 +60,20 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   user            : IUser;
   _user           : Subscription;
 
-  employees$      :   Observable<IItemBasic[]>;
-  paymentMethod$  :   Observable<IBalanceSheet[]>;
+  employees$      : Observable<IItemBasic[]>;
+  paymentMethod$  : Observable<IBalanceSheet[]>;
 
-  _searchModel    :   Subscription;
-  searchModel     :   BalanceSheetSearchModel;
-  isAuthorized    :   boolean;
-  isStaff         :   boolean;
-  _showStart       :   boolean;
+  _searchModel    : Subscription;
+  searchModel     : BalanceSheetSearchModel;
+  isAuthorized    : boolean;
+  isStaff         : boolean;
+  _showStart      : boolean;
   sheetType       : string;
 
   startingCashForm = 0;
   endingCashForm   = 0;
-  startingCashSaved = 0;
-  endingCashSaved   = 0;
+  startingCashSaved= 0;
+  endingCashSaved  = 0;
   loading          = true;
   startShiftInt    : number;
   balance          = 0;
@@ -92,7 +91,10 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this._sheet = this.sheetService.balanceSheet$.subscribe( data => {
       this.sheet = data;
       this.loading = false;
-      this.initForm();
+      if (this.inputForm) {
+        // console.log('patching value', data)
+        this.inputForm.patchValue(this.sheet)
+      }
       this.getSheetType(this.sheet)
     })
 
@@ -109,14 +111,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private location                : Location,
                 private route                   : ActivatedRoute,
                 private authenticationService   : AuthenticationService,
-                private router: Router,
+                private router                  : Router,
+                private toolbarUIService        : ToolBarUIService,
               )
   {
+    // this.initForm(this.sheet);
+    this.inputForm = this.sheetService.initForm(this.inputForm);
   }
 
   async ngOnInit() {
+    this.hideToolbars();
     this.initSubscriptions()
-
     this.isAuthorized  = this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff       = this.userAuthorization.isUserAuthorized('admin, manager, employee')
     this.id            = this.route.snapshot.paramMap.get('id');
@@ -126,7 +131,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if(!this.id) {
       this.updateToCurrentSheet();
     }
-
   };
 
   newBalanceSheet() {
@@ -135,6 +139,14 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if (!this.id) {
       this.updateToCurrentSheet();
     }
+  }
+
+  hideToolbars() {
+    this.toolbarUIService.hidetoolBars()
+  }
+
+  toggleSearchMenu() {
+    this.toolbarUIService.switchSearchBarSideBar()
   }
 
   ngOnDestroy() {
@@ -158,8 +170,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
           this.sheetService.updateBalanceSheet(sheet)
           return  this.sheetService.getSheetCalculations(site, sheet)
       })).subscribe( sheet => {
-          this.sheet = sheet
-          this.sheetService.updateBalanceSheet(sheet)
+        this.sheetService.updateBalanceSheet(sheet)
+
       })
     }
 
@@ -177,32 +189,30 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.sheetService.updateBalanceSheet(sheet)
       return this.sheetService.getSheetCalculations(site, sheet)
     })).subscribe( sheet => {
-      this.sheet = sheet
       this.sheetService.updateBalanceSheet(sheet)
     })
 
   }
 
   getSheetType(sheet: IBalanceSheet) {
-    if (sheet) {
-      if (sheet.type == 3) {
-        this.sheetType = "Cashier"
-      }
-      if (sheet.type == 4) {
-        this.sheetType = "Server"
-      }
-      if (sheet.type != 4 && sheet.type != 3) {
-        this.sheetType = "other"
-      }
-    }
+    this.sheetType = this.sheetService.getSheetType(sheet)
   }
 
-  initForm() {
-    this.inputForm =  this.sheetService.initForm(this.inputForm);
-    if (this.sheet) {
-      this.inputForm.patchValue(this.sheet)
+  initForm(sheet: IBalanceSheet) {
+    try {
+      const form = this.inputForm // this.sheetService.initForm(this.inputForm);
+
+      if (!form) { console.log('form not initiated')
+        return
+      }
+      if (!sheet) { console.log('form not initiated')
+        return
+      }
+
+      if (this.sheet) {  this.inputForm.patchValue(this.sheet) }
+      this.setEnabledFeatures()
+    } catch (error) {
     }
-    this.setEnabledFeatures()
   }
 
   updateItem(event) {
@@ -238,40 +248,32 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }
   }
 
-
   setEnabledFeatures() {
     let allowUpdate = false;
     allowUpdate = this.isAuthorized
-
     if (allowUpdate) {
       this.setStartEnabled()
       this.setCloseEnabled()
       return
     }
-
     if (!allowUpdate) { allowUpdate = this.isStaff }
-
     if (this.sheet) {
       if (this.isStaff ) {
-
         if (this.sheet.shiftStarted != 1 ) {
           this.setStartEnabled()
           this.setCloseDisabled()
           return
         }
-
         if (this.sheet.shiftStarted == 1 && !this.sheet.endTime ) {
           this.setStartDisabled()
           this.setCloseEnabled()
           return
         }
-
         if (this.sheet.endTime) {
           this.setStartDisabled()
           this.setCloseDisabled()
           return
         }
-
       }
     }
   }
@@ -300,7 +302,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.fiftiesStart.enable()
     this.twentiesStart.enable()
     this.tensStart.enable()
-    this.dollarStart.enable()
+    this.dollarsStart.enable()
     this.fivesStart.enable()
   }
 
@@ -328,7 +330,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.fiftiesStart.disable()
     this.twentiesStart.disable()
     this.tensStart.disable()
-    this.dollarStart.disable()
+    this.dollarsStart.disable()
     this.fivesStart.disable()
   }
 
@@ -344,6 +346,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
         const site = this.siteService.getAssignedSite();
         this.sheetService.deleteSheet(site, this.sheet.id).subscribe( data => {
           this.notify('Sheet is deleted.', 'Succes')
+          this.onCancel(null);
         }, (err) => {
           this.notify('Sheet note deleted.' + err, 'Failure')
         })
@@ -351,14 +354,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     }
   }
 
-
   print(event){
     //print
   }
 
   onCancel(event){
     this.location.back()
-    // this._bottomSheet.dismiss();
   }
 
   showStart() {
@@ -379,8 +380,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   getSummaryOfCashCounted() {
-    // this.startingCashForm = this.getSummaryOfCashStart();
-    // this.endingCashForm   = this.getSummaryOfCashEnd();
     this.getCurrentBalance();
   }
 
@@ -396,7 +395,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     total      =   (this.twentiesStart.value * 20) + total
     total      =   (this.tensStart.value * 10) + total
     total      =   (this.fivesStart.value * 5) + total
-    total      =   (this.dollarStart.value * 1) + total
+    total      =   (this.dollarsStart.value * 1) + total
     return total
   }
 
@@ -419,14 +418,10 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   getCurrentBalance() {
     const cashEnd    = this.getSummaryOfCashEnd();
     const cashStart  = this.getSummaryOfCashStart();
-
-    //new balance
     if (this.sheet) {
       const balance = cashEnd - cashStart - this.sheet.cashIn - this.sheet.cashDropTotal
       this.balance  = balance
     }
-    // console.log(this.balance)
     return this.balance
-
   }
 }

@@ -369,9 +369,6 @@ export class MenuService {
     }
     return this.httpCache.post<any>(uri, productSearchModel)
 
-
-
-
   }
 
   getProductsBySearchForLists(site: ISite, productSearchModel: ProductSearchModel): Observable<IProductSearchResultsPaged> {
@@ -388,7 +385,7 @@ export class MenuService {
 
     return this.httpClient.post<IProductSearchResultsPaged>(url, productSearchModel)
 
-    const uri = { url: url, cacheMins: 10, body: productSearchModel}
+    // const uri = { url: url, cacheMins: 10, body: productSearchModel}
 
     // return this.httpCache.post<IProductSearchResults[]>(uri)
 
@@ -420,9 +417,9 @@ export class MenuService {
 
     return this.httpClient.get<IItemBasic[]>(uri)
 
-    const url = { url: uri, cacheMins: 0}
+    // const url = { url: uri, cacheMins: 0}
 
-    return this.httpCache.get<IItemBasic[]>(url)
+    // return this.httpCache.get<IItemBasic[]>(url)
 
   }
 
@@ -443,16 +440,9 @@ export class MenuService {
 
     return this.httpClient.post<IMenuItem[]>(url, productSearchModel)
 
-    const uri =  this.sitesService.getCacheURI(url)
+    // const uri =  this.sitesService.getCacheURI(url)
 
-    return  this.httpCache.get<any[]>(uri)
-
-    // return this.httpClient.post<IMenuItem[]>(uri, productSearchModel)
-
-    // console.log('getProductListSearch')
-    // const url = { url: uri, cacheMins: 1, body: productSearchModel}
-
-    // return this.httpCache.post<IMenuItem[]>(url)
+    // return  this.httpCache.get<any[]>(uri)
 
   }
 
@@ -482,15 +472,14 @@ export class MenuService {
 
     const endPoint = `GetMenuItemByID`
 
-    const parameters = `?ID=${id}`
+    const parameters = `?ID=${id}&quantity=${1}`
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.httpClient.get<IMenuItem>(uri)
-//
-    const url = { url: uri, cacheMins: 0}
-
-    return this.httpCache.get<IMenuItem>(url)
+    // //
+    //     const url = { url: uri, cacheMins: 0}
+    //     return this.httpCache.get<IMenuItem>(url)
 
   };
 
@@ -520,10 +509,9 @@ export class MenuService {
 
     return  this.httpClient.get<any>(url)
 
-    const uri =  this.sitesService.getCacheURI(url)
+    // const uri =  this.sitesService.getCacheURI(url)
 
-    return  this.httpCache.get<any>(uri)
-
+    // return  this.httpCache.get<any>(uri)
 
     // const url = { url: uri, cacheMins: 0}
 

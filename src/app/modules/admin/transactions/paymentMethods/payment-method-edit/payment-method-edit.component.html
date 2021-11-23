@@ -37,6 +37,36 @@
                 </mat-form-field>
               </div>
 
+              <div>
+                <div class="instructions">
+                </div>
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Sort</mat-label>
+                    <input matInput
+                          type             ="number"
+                          formControlName  ="tenderOrder"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div>
+                <div class="instructions">
+                </div>
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Exchange Rate</mat-label>
+                    <input matInput
+                          type             ="number"
+                          formControlName  ="exchangeRate"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid-fields">
               <div class="grid-headers">
                   <div class="instructions">
                     Credit Card
@@ -154,42 +184,7 @@
                 </mat-checkbox>
               </div>
             </div>
-            <div class="grid-fields">
-              <div>
-                <div class="instructions">
-                </div>
-                <div>
-                  <mat-form-field appearance="outline">
-                    <mat-label >Sort</mat-label>
-                    <input matInput
-                          type             ="number"
-                          formControlName  ="tenderOrder"
-                          class="form-control" >
-                  </mat-form-field>
-                </div>
-              </div>
-
-              <div>
-                <div class="instructions">
-                </div>
-                <div>
-                  <mat-form-field appearance="outline">
-                    <mat-label >Exchange Rate</mat-label>
-                    <input matInput
-                          type             ="number"
-                          formControlName  ="exchangeRate"
-                          class="form-control" >
-                  </mat-form-field>
-                </div>
-              </div>
-
-
-
-            </div>
-
           </div>
-          <!-- <mat-divider [vertical]="true"></mat-divider> -->
-
         </div>
       </div>
     </mat-card-content>

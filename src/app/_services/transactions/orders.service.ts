@@ -2,13 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IPOSOrder, IPOSOrderSearchModel, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { environment } from 'src/environments/environment';
-import { catchError, concatMap, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
+import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor,  } from '@capacitor/core';
 import { StringDecoder } from 'node:string_decoder';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 
@@ -36,14 +34,14 @@ export class OrdersService {
   private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
   public posSearchModel$      = this._posSearchModel.asObservable();
 
-  private _posOrders       = new BehaviorSubject<IPOSOrder[]>(null);
-  public posOrders$        = this._posOrders.asObservable();
+  private _posOrders          = new BehaviorSubject<IPOSOrder[]>(null);
+  public posOrders$           = this._posOrders.asObservable();
 
   private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
   public currentOrder$        = this._currentOrder.asObservable();
 
-  private _bottomSheetOpen       = new BehaviorSubject<boolean>(null);
-  public bottomSheetOpen$        = this._bottomSheetOpen.asObservable();
+  private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
+  public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
 
   isApp                       = false;
 
@@ -63,7 +61,6 @@ export class OrdersService {
     private http: HttpClient,
     private _SnackBar: MatSnackBar,
     private toolbarServiceUI: ToolBarUIService,
-
             )
   {
     if (    this.platForm  === "Electron"
@@ -88,7 +85,6 @@ export class OrdersService {
       return false
     }
   }
-
 
   get posName(): string { return localStorage.getItem("POSName") }
 
@@ -148,8 +144,6 @@ export class OrdersService {
     return this.http.get<IPOSOrder>(url);
 
   }
-
-
 
   postOrderWithPayload(site: ISite, orderPayload: OrderPayload):  Observable<IPOSOrder>  {
 
@@ -369,7 +363,6 @@ export class OrdersService {
 
   }
 
-
   //////////////////async await functions.
   async newDefaultOrder(site: ISite): Promise<boolean>  {
     if (!site)        {  return }
@@ -381,7 +374,6 @@ export class OrdersService {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
     const order$ = this.postOrderWithPayload(site, orderPayload)
-
     const result = await order$.pipe().toPromise()
       .then(
         order => {
@@ -392,7 +384,6 @@ export class OrdersService {
           return false
         }
     )
-
     return result
   }
 
@@ -408,8 +399,6 @@ export class OrdersService {
   }
 
   getEmployeeID() {
-    // localStorage.setItem('employeeIDLogin', JSON.stringify(user.employeeID))
-
     const id = localStorage.getItem('employeeIDLogin')  ;
     console.log('employeeIDLogin', id)
     if (id) {
@@ -429,21 +418,11 @@ export class OrdersService {
   }
 
   setActiveOrder(site, order) {
-
     if (order) {
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
       return
     }
-
-    // const order$ =  this.getOrder(site, order.id)
-    // order$.subscribe(data =>
-    //   {
-    //     this.updateOrderSubscription(data)
-    //     this.toolbarServiceUI.updateOrderBar(true)
-    //   }
-    // )
-
   }
 
   notificationEvent(description, title){

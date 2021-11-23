@@ -180,7 +180,9 @@ export class UserSwitchingService {
 
   processLogin(user: IUser) {
     //login the user based on the message response of the user.
-    console.log('user from Process login', user)
+    // console.log('user from Process login', user)
+
+    console.log('user', user)
 
     if (user && user.message == undefined) {
       return 'user undefined'

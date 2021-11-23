@@ -12,20 +12,19 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
-  margin: 5px;
+  margin: 3px;
 
   @include for-phone-only  {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 5px;
+    gap: 3px;
   }
 }
 
-
 .info-width {
-  width: 300px;
+  width: 275px;
   @include for-phone-only  {
-    width: 300px;
+    width: 275px;
   }
 }
 
@@ -38,11 +37,14 @@
 }
 
 .grid-container {
-  --gap: 10px;
+  --gap: 5px;
   display: grid;
   gap: var(--gap);
-  // width: 450px;
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.span-col {
+  grid-column: 2 / span 3;
 }
 
 .title {

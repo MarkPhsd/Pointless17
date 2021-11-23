@@ -73,9 +73,10 @@ export class BalanceSheetFilterComponent implements  OnInit {
 
   ngOnInit(): void {
     this.initPlatForm();
-    this.initSearchForm();
     this.initDateForm()
+    this.initSearchForm();
     this.initSubscriptions();
+    this.initSearchForm();
     this.initFormFromSearchModel();
   }
 
@@ -181,13 +182,19 @@ export class BalanceSheetFilterComponent implements  OnInit {
   }
 
   resetSearch() {
+    this.initSearchModel();
     this.refreshSearch();
   }
 
-  async initSearchForm() {
+  initSearchForm() {
     this.searchForm = this.fb.group({
       itemName : ['']
     })
+    if (this.searchModel && this.searchModel.id) {
+      this.searchForm = this.fb.group({
+        itemName : [this.searchModel.id]
+      })
+    }
   }
 
   async initDateForm() {
@@ -250,7 +257,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
 
   assignDateSettings() {
     if (! this.searchModel) {  this.searchModel = {} as BalanceSheetSearchModel  }
-
     if (this.dateRangeForm ) {
       this.dateFrom = this.dateRangeForm.get("start").value
       this.dateTo   = this.dateRangeForm.get("end").value
@@ -260,7 +266,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
         return
       }
     }
-
     if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
       this.searchModel.completionDate_From = '';
       this.searchModel.completionDate_To   = '';

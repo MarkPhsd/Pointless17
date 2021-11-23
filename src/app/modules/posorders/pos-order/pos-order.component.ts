@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostBinding, Input,
-  OnInit, Output, OnDestroy, SimpleChanges, ViewChild, HostListener } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input,
+  OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, Subscription } from 'rxjs';
@@ -13,13 +13,11 @@ import * as kf from '../../../_animations/list-animations';
 import { fadeAnimation } from 'src/app/_animations';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PosOrderItemsComponent } from './pos-order-items/pos-order-items.component';
-import { RecieptPopUpComponent } from '../../admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
-import { MatDialog } from '@angular/material/dialog';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { EMPTY,timer } from 'rxjs';
+import { EMPTY, } from 'rxjs';
 
 import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
 
@@ -90,14 +88,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.canRemoveClient = true
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
         this.canRemoveClient = false
-        // console.log('canRemoveClient', this.canRemoveClient)
       }
       if (this.order && this.order.posPayments && this.order.posPayments.length > 0)  {
         this.canRemoveClient = false
-        // console.log('canRemoveClient', this.canRemoveClient)
       }
-      // console.log('canRemoveClient result', this.canRemoveClient)
-
       this.checkIfPaymentsMade()
       this.checkIfItemsPrinted()
     })
@@ -177,6 +171,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.sidePanelPercentAdjust = 60
     }
     this.isAuthorized = true
+    this.toolbarUIService.hidetoolBars();
   }
 
   openClient() {

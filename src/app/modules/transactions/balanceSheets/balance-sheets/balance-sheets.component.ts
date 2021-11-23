@@ -27,6 +27,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BalanceSheetFilterComponent } from '../balance-sheet-filter/balance-sheet-filter.component';
+import { BalanceSheetQuickViewComponent } from '../balance-sheet-quick-view/balance-sheet-quick-view.component';
 
 @Component({
   selector: 'app-balance-sheets',
@@ -158,7 +159,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     if (this.input) {
-      console.log('ngAfterViewInit refreshInputHook')
+      // console.log('ngAfterViewInit refreshInputHook')
       fromEvent(this.input.nativeElement,'keyup')
       .pipe(
         filter(Boolean),
@@ -203,7 +204,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
     this.defaultColDef = {
       flex: 2,
-      // minWidth: 100,
     };
 
     this.columnDefs =  [
@@ -220,50 +220,47 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
                       maxWidth: 135,
                       flex: 2,
       },
-      {headerName: 'ID',     field: 'id',         sortable: true,
-          width   : 85,
-          minWidth: 85,
-          maxWidth: 100,
-          flex    : 2,
-      },
-      {headerName: 'Employee',     field: 'balanceSheetEmployee.lastName', sortable: true,
+      // {headerName: 'ID',     field: 'id',         sortable: true,
+      //     width   : 85,
+      //     minWidth: 85,
+      //     maxWidth: 100,
+      //     flex    : 2,
+      // },
+      {headerName: 'Employee',    field: 'balanceSheetEmployee.lastName', sortable: true,
                     width   : 100,
                     minWidth: 100,
                     maxWidth: 100,
                     flex    : 2,
       },
-
-      {headerName: 'Started On',     field: 'startTime',         sortable: true,
+      {headerName: 'Started On',  field: 'startTime',         sortable: true,
                   cellRenderer: this.agGridService.dateCellRendererUSD,
                   width   : 165,
                   minWidth: 165,
                   maxWidth: 200,
                   flex    : 2,
       },
-      {headerName: 'Total',  field: 'Total',      sortable: true,
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 100,
+      {headerName: 'Total',       field: 'salesTotal',      sortable: true,
+                  cellRenderer: this.agGridService.currencyCellRendererUSD,
+                  width   : 135,
+                  minWidth: 135,
+                  maxWidth: 135,
                   flex    : 2,
       },
-      {headerName: 'Balance',    field: 'overUnderTotal', sortable: true,
+      {headerName: 'Balance',     field: 'overUnderTotal', sortable: true,
                   cellRenderer: this.agGridService.currencyCellRendererUSD,
                   width   : 100,
                   minWidth: 100,
                   maxWidth: 100,
                   flex    : 2,
       },
-      {headerName: 'DeviceName', field: 'deviceName', sortable: true,
+      {headerName: 'DeviceName',  field: 'deviceName', sortable: true,
                   width   : 160,
                   minWidth: 160,
                   maxWidth: 200,
                   flex    : 2,
       },
-
     ]
-
-      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
-
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
   listAll(){
@@ -294,7 +291,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
     }
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    console.log('initSearchModel', searchModel)
+    // console.log('initSearchModel', searchModel)
     this.balanceSheetService.updateBalanceSearchModel(searchModel)
     return searchModel
   }
@@ -358,9 +355,9 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
         }
     };
 
-    if (this.numberOfPages !=0 && this.numberOfPages) {
-      this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-    }
+    // if (this.numberOfPages !=0 && this.numberOfPages) {
+    //   this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+    // }
 
   }
 
@@ -490,6 +487,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
     this.selected = selected
     this.id = selectedRows[0].id;
     this.getItem(this.id)
+
   }
 
   getItem(id: number) {
@@ -497,6 +495,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
       const site = this.siteService.getAssignedSite();
       this.balanceSheetService.getSheet(site, this.id).subscribe(data => {
          this.balanceSheet = data;
+         this.quickView(data);
         }
       )
     }
@@ -551,13 +550,21 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-    duration: 2000,
-    verticalPosition: 'top'
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 
   filterBottomSheet() {
     this._bottomSheet.open(BalanceSheetFilterComponent);
   }
+
+  quickView(sheet: IBalanceSheet) {
+    if (sheet) {
+      this.balanceSheetService.updateBalanceSheet(sheet)
+      this._bottomSheet.open(BalanceSheetQuickViewComponent)
+    }
+  }
+
 }
 

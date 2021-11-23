@@ -1,8 +1,6 @@
 <mat-card class="mat-card-view">
   <mat-card-content>
 
-    <!-- <div class="headers">Adjustments</div> -->
-
     <div fxLayout="column" fxLayoutAlign="space-around start" >
       <div class="grid-container grids-container">
         <button class="info-buttons"  mat-button color="accent" (click)="editWebProduct()"><mat-icon>web</mat-icon>Web Info</button>
@@ -25,12 +23,12 @@
     <div *ngIf="toggleLabelEvents == 'labels'">
 
       <br>
-      <app-label-view-selector [@slideInOut]="'in'"
-            [labelID]="labelID"
-            (outputLabelSetting)="getLabelSetting($event)"
-            [setProduct]="product"
-            [labelImageHeight]="150"
-            >
+        <app-label-view-selector
+              [labelID]="labelID"
+              (outputLabelSetting)="getLabelSetting($event)"
+              [setProduct]="product"
+              [labelImageHeight]="150"
+              >
         </app-label-view-selector>
 
         <div *ngIf="electronEnabled || printingEnabled">
@@ -60,21 +58,11 @@
                     (click)="printSerial()"><mat-icon>print</mat-icon>Serial </button>
           </div>
         </div>
-      <!-- <mat-divider class="divider-margin"></mat-divider> -->
+
     </div>
 
     <div *ngIf="toggleLabelEvents == 'events'">
-      <!-- <div  class="headers">Events</div> -->
-      <br>
-
-      <!-- <div class="cards" *ngIf="inventoryAssignments" >
-        <div *ngFor="let item of inventoryAssignments.slice().reverse()">
-            <app-inventory-history-item
-                [item]="item">
-            </app-inventory-history-item> -->
-            <!-- <mat-divider></mat-divider>
-        </div>
-      </div>  -->
+        <br>
     </div>
 
   </mat-card-content>

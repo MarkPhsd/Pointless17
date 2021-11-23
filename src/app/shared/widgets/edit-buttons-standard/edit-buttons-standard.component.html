@@ -34,6 +34,7 @@
     <div>
       <button *ngIf="enableDelete"
               mat-button
+              color="warn"
               class="button"
               (click)="deleteItem()">
               <mat-icon>delete</mat-icon>
@@ -43,7 +44,8 @@
 
     <div *ngIf="!hideExit">
       <button  mat-button class="button"  (click)="onCancel()">
-        <mat-icon>close</mat-icon>
+        <!-- <mat-icon>close</mat-icon> -->
+        <mat-icon>exit_to_app</mat-icon>
         <span *ngIf="!smallDevice">Exit</span>
       </button>
     </div>

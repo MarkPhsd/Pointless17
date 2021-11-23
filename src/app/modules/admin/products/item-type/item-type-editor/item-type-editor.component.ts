@@ -69,7 +69,6 @@ export class ItemTypeEditorComponent   {
       this.id = data.id
       if (!this.id) {
         return
-        console.log('no data')
       }
       if (this.id) {
         this.initializeForm(this.id, form)
@@ -79,10 +78,8 @@ export class ItemTypeEditorComponent   {
 
      if (selectedItems) {
       const _selectedItems: number[]  = Object.values(selectedItems)
-
       const numbersList: number[]  = Object.values(_selectedItems[0])
       this.selectedItemsCount = _selectedItems.length;
-
       numbersList.forEach(data=> {
         let item = {} as IItemType;
         item.id = data
@@ -117,7 +114,6 @@ export class ItemTypeEditorComponent   {
 
   async update(): Promise<boolean> {
     let result: boolean;
-
     return new Promise(resolve => {
       const site = this.siteService.getAssignedSite()
 
@@ -131,7 +127,6 @@ export class ItemTypeEditorComponent   {
                 item = this.inputForm.value;
                 item.id = id;
                 item.labelTypeID = this.labelTypeID;
-                console.log(this.labelTypeID, item )
                 return  this.updateItem(site, item)
               })
               this.onCancel()
@@ -158,7 +153,6 @@ export class ItemTypeEditorComponent   {
       item.prepTicketID =this.prepTicketID;
       if (this.itemType) {  item.imageName = this.itemType.imageName  }
       const product$ = this.itemTypeService.putItemTypeNoChildren(site, item)
-
       product$.subscribe(
          data => {
             this._snackBar.open(`Update item`, "Succcess", { duration: 2000} )
@@ -183,19 +177,16 @@ export class ItemTypeEditorComponent   {
 
   setPrepTicketID(event) {
     this.itemType.prepTicketID = parseInt(event)
-    console.log('event', event)
   }
 
   setLocationID(event) {
     this.printLocationID  = parseInt(event)
-    console.log('event', event)
   }
 
   setLabelID(event) {
     // this.itemType.labelTypeID;
     this.itemType.labelTypeID = parseInt(event);
     this.labelTypeID = event
-    console.log('event', event)
   }
 
   setNonFormValues() {
@@ -215,14 +206,10 @@ export class ItemTypeEditorComponent   {
     const id   = item.id;
     const site = this.siteService.getAssignedSite();
     const item$ = this.itemTypeService.delete(site, id)
-
     item$.subscribe(data => {
       this.notifyEvent('Item deleted.', 'Success');
       this.onCancel();
     })
-
-    //do confirm of delete some how.
-    //then
   }
 
   copyItem() {

@@ -1,8 +1,7 @@
-import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ProducteditComponent } from '../../products/productedit/productedit.component';
+import { Component,  Input,  OnInit } from '@angular/core';
+import { MatDialog} from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -13,17 +12,12 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
-import { MenuProductPriceTierService } from 'src/app/_services/menu/menu-product-price-tier.service';
-import { trigger, transition, animate, style } from '@angular/animations';
-import { slideInOutAnimation } from 'src/app/_animations';
-import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
-import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 
 @Component({
   selector: 'app-product-info-panel',
   templateUrl: './product-info-panel.component.html',
   styleUrls: ['./product-info-panel.component.scss'],
-  animations: [slideInOutAnimation]
+  // animations: [slideInOutAnimation]
 })
 export class ProductInfoPanelComponent implements OnInit {
 
@@ -47,32 +41,25 @@ export class ProductInfoPanelComponent implements OnInit {
 
   constructor(
        public route              : ActivatedRoute,
-       private dialog            : MatDialog,
        private menuService       : MenuService,
        private siteService       : SitesService,
-       private settingService    : SettingsService,
        private fb                : FormBuilder,
        private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
-
        )
   {
     // this.toggleLabelEvents = false;
-
   }
 
   onToggleLabelEvents(option) {
     // { this.toggleLabelEvents  = 'labels'}
     // { this.toggleLabelEvents  = 'events'}
     this.toggleLabelEvents  = option;
-
     // return
-
   }
-
 
   getLastPrinterName(): string {
     return this.printingService.getLastLabelPrinter()
@@ -96,18 +83,14 @@ export class ProductInfoPanelComponent implements OnInit {
     this.electronEnabled =  this.electronService.isElectronApp
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
-
   }
 
-
   initForm() {
-
     if (this.product) {
       this.printForm = this.fb.group({
         printQuantity: [this.product.productCount]
       } )
     }
-
   }
 
   editWebProduct() {
@@ -124,15 +107,12 @@ export class ProductInfoPanelComponent implements OnInit {
   }
 
   async editProduct() {
-       // get the id if there is one
-
     if (this.id) {
       const id = this.id
       if (this.product) {
         const productID = this.product.id
         const site = this.siteService.getAssignedSite();
         const menuItem$ =  this.menuService.getMenuItemByID(site, productID)
-
         menuItem$.subscribe(data => {
           if (id) {
             this.productEditButton.openProductEditor(productID, data.prodModifierType)
@@ -142,29 +122,23 @@ export class ProductInfoPanelComponent implements OnInit {
     }
   }
 
-
   printLegal() {
-
   }
 
   printSerial() {
-
   }
 
   printSku() {
-
     // const item =  this.fakeDataService.getInventoryItemTestData();
     // const printString = this.renderingService.interpolateText(item, zplString )
     if (this.labelSetting && this.product) {
       const content = this.renderingService.interpolateText(this.product, this.labelSetting.text)
-
       //then get the quantity from this.printQuantity
       if(this.printQuantity == null) { this.printQuantity == 1}
       for (let i = 0; i < this.printQuantity; i++) {
         this.printingService.printTestLabelElectron(content, this.printerName)
       }
     }
-
   }
 
   adjustmentNote(){
@@ -182,7 +156,6 @@ export class ProductInfoPanelComponent implements OnInit {
   openNoteDialog(id: any) {
     this.inventoryEditButon.openNoteDialog(id)
   }
-
 
   openProductDialog(id: any) {
     if (id) {

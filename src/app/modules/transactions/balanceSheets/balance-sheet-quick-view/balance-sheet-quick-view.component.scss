@@ -1,0 +1,9 @@
+.grid-buttons {
+  display: grid;
+  --gap: 5px;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  margin: 3px;
+  width : 100%;
+}
+

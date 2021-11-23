@@ -1,0 +1,27 @@
+
+  <div  *ngIf="sheet"  class="header-grid info-width">
+    <div>Type</div>
+    <div class="span-col"> {{ sheetType }} ({{sheet.id}})</div>
+
+    <div>Employee</div>
+    <div class="span-col" *ngIf="sheet.balanceSheetEmployee" > {{sheet.balanceSheetEmployee.lastName}} </div>
+
+    <div *ngIf="sheet.deviceName">Device </div>
+    <div class="span-col" *ngIf="sheet.deviceName"> {{sheet.deviceName}} </div>
+
+    <div>Started</div>
+    <div class="span-col"> {{sheet.startTime | date: 'shortDate'}} {{sheet.startTime | date: 'shortTime'}} </div>
+
+    <div *ngIf="sheet.endTime">Closed </div>
+    <div class="span-col" *ngIf="sheet.endTime">
+      {{sheet.endTime | date: 'shortDate'}} {{sheet.endTime  | date: 'shortTime'}}
+    </div>
+
+    <div  *ngIf="!sheet.endTime">Sheet Open</div>
+    <div  *ngIf="!sheet.endTime"> ----- </div>
+
+    <div>Manual Drawer Opens</div>
+    <div> {{sheet.noSales | number }} </div>
+
+    <div class="item-span "></div>
+  </div>

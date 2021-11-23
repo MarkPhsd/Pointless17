@@ -202,6 +202,9 @@ import { CompanyEditComponent } from '../modules/admin/company-edit/company-edit
 import { ListPrintersElectronComponent } from '../modules/admin/settings/printing/list-printers-electron/list-printers-electron.component';
 import { DefaultReceiptSelectorComponent } from '../modules/admin/settings/printing/default-receipt-selector/default-receipt-selector.component';
 import { RequiresSerialComponent } from '../modules/posorders/requires-serial/requires-serial.component';
+import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
+import { BalanceSheetHeaderViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-header-view/balance-sheet-header-view.component';
+import { BalanceSheetQuickViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-quick-view/balance-sheet-quick-view.component';
 
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -226,6 +229,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BalanceSheetsComponent,
     BalanceSheetFilterComponent,
     BalanceSheetEditComponent,
+    BalanceSheetCalculationsViewComponent,
+    BalanceSheetHeaderViewComponent,
+    BalanceSheetQuickViewComponent,
     BrandslistComponent,
     BrandTypeSelectComponent,
     CacheSettingsComponent,
@@ -277,6 +283,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemCardComponent,
     MenuManagerComponent,
     MessagesToUserComponent,
+
     MetrcIndividualPackageComponent,
     MetrcInventoryPropertiesComponent,
     MainMenuComponent,

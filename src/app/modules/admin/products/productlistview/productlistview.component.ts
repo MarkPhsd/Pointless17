@@ -1,5 +1,5 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component,   Input, Output, OnInit,
+  EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -20,7 +20,7 @@ import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ClientSearchModel, IProduct, IUserProfile } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
@@ -179,7 +179,6 @@ async initForm() {
 }
 
 refreshSearchPhrase(event) {
-  console.log('Refresh Search Phrase', event)
   this.refreshSearch();
 }
 
@@ -211,7 +210,7 @@ initAgGrid(pageSize: number) {
                     flex: 2,
     },
     {headerName: 'Name',     field: 'name',         sortable: true,
-                width   : 275,
+                width   : 175,
                 minWidth: 175,
                 maxWidth: 275,
                 flex    : 1,
@@ -230,7 +229,7 @@ initAgGrid(pageSize: number) {
     },
     {headerName: 'Category', field: 'category',     sortable: true,
                 width: 140,
-                minWidth: 100,
+                minWidth: 140,
                 maxWidth: 200,
                // flex: 2,
     },
@@ -244,7 +243,7 @@ initAgGrid(pageSize: number) {
     {headerName: 'msrp', field: 'msrp', sortable: true,
                 cellRenderer: this.agGridService.currencyCellRendererUSD,
                 width: 100,
-                minWidth: 75,
+                minWidth: 100,
                 maxWidth: 125,
                  // flex: 2,
                 },

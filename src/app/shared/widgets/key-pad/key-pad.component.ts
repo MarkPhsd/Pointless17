@@ -153,7 +153,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     if (!this.value) {
       this.inputForm.controls['itemName'].setValue('')
       return
-      console.log('value is null')
     }
 
     if (this.value)
@@ -205,9 +204,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
       } else {
         this.formatted = Number(0).toLocaleString('en', this.options);
       }
-
     }
-    console.log('output to control', this.formatted)
+
     if (this.formatted) {
       this.inputForm.controls['itemName'].setValue(this.formatted)
     } else {

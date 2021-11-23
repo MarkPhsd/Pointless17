@@ -1,8 +1,4 @@
-<div class="container" *ngIf="!sheet">
-  {{sheet}}
-  <mat-spinner></mat-spinner>
-  <button mat-raised-button (click)="newBalanceSheet()">Start Sheet</button>
-</div>
+
 
 <div class="container" *ngIf="sheet; else loading">
   <mat-card *ngIf="sheet as item" >
@@ -14,56 +10,19 @@
     <mat-card-subtitle>
       <div class="header-grid">
 
-        <div class="header-grid ">
-          <div>Type     </div>
-             <div> {{ sheetType }} ({{sheet.id}})</div>
-
-          <div>Employee </div>
-              <div *ngIf="item.balanceSheetEmployee" > {{item.balanceSheetEmployee.lastName}} </div>
-
-          <div  *ngIf="item.deviceName">Device </div>
-              <div *ngIf="item.deviceName"> {{item.deviceName}} </div>
-
-          <div>Started     </div>
-              <div> {{item.startTime | date: 'shortDate'}} {{item.startTime | date: 'shortTime'}} </div>
-
-          <div *ngIf="item.endTime">Closed   </div>
-               <div  *ngIf="item.endTime"> {{item.endTime | date: 'shortDate'}} {{item.endTime  | date: 'shortTime'}} </div>
-
-          <div  *ngIf="!item.endTime"> Sheet Open </div>
-          <div  *ngIf="!item.endTime"> ----- </div>
-
-            <div>Manual Drawer Opens</div>
-              <div> {{item.noSales | number }} </div>
-
-          <div class="item-span "></div>
+        <div>
+          <balance-sheet-header-view
+            [sheetType]="sheetType"
+            [sheet]="sheet">
+          </balance-sheet-header-view>
         </div>
 
-          <div class="header-grid info-width">
-            <div>Over Under</div>   <div> {{item.overUnderTotal | currency}} </div>
-            <div>Total Sales</div>  <div> {{item.salesTotal     | currency}} </div>
-            <div>Cash</div>         <div> {{item.cashIn         | currency}} </div>
-            <div>Credit</div>       <div> {{item.creditIn       | currency}} </div>
-
-            <div class="item-span cashdrop-border" *ngIf="item.cashDrops">
-              <span class="title">Cash Drops</span>
-              <div class="header-grid info-width" *ngFor="let item of item.cashDrops">
-                <div> {{item.amount | currency}} </div>
-              </div>
-              <div class="title">Drop Total </div>
-                <div> {{ item.cashDropTotal | currency }}</div>
-            </div>
-
-            <div>Balance</div>
-                <div> {{ sheet.overUnderTotal | currency}} </div>
-
-            <div>New Balance </div>
-                <div> {{ getCurrentBalance() | currency }} </div>
-
-             <!-- {{ item.cashIn - getSummaryOfCashStart() + getSummaryOfCashEnd() }} -->
-          </div>
-
-
+        <div>
+          <balance-sheet-calculations-view
+              [currentBalance]="getCurrentBalance()"
+              [sheet]="sheet">
+          </balance-sheet-calculations-view>
+        </div>
 
         <div>
           <app-edit-buttons-standard
@@ -113,7 +72,7 @@
 
                  <div>
                   <cash-value-calc
-                      [formControlName] = "'dollarStart'"
+                      [formControlName] = "'dollarsStart'"
                       [inputForm]       = "inputForm"
                       [multiplier]      = "1">
                       Dollars
@@ -334,6 +293,7 @@
   </mat-card>
 </div>
 
-<div *ngIf="loading">
+<ng-template #loading >
+  <button mat-raised-button (click)="newBalanceSheet()">Start Sheet</button>
   <mat-spinner></mat-spinner>
-</div>
+</ng-template>

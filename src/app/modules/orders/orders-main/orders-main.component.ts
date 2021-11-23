@@ -1,5 +1,4 @@
 import {Component, HostListener, OnInit, OnDestroy, AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef, Renderer2,
   ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
@@ -91,7 +90,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
     private router: Router,
     public route: ActivatedRoute,
     private siteService: SitesService,
-    private renderer: Renderer2,
     private toolbarServiceUI : ToolBarUIService,
     private _bottomSheet: MatBottomSheet
     )
@@ -137,7 +135,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
         this.currentPage = 1
         this.nextPage(true)
       })
-
     } catch (error) {
     }
   }
@@ -242,7 +239,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
       if (!this.orders)  { this.orders = [] as IPOSOrder[] }
       this.currentPage += 1;
-      //if no data
 
       if (!data || !data.results) {
         this.loading = false;
@@ -275,8 +271,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
           this.loading = false;
           this.value = 100;
         }
-        // console.log(' this.orders' ,  this.orders)
-
         this.value = ((this.orders.length / this.totalRecords ) * 100).toFixed(0)
         this.loading      = false
         return
@@ -317,7 +311,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
     const threshold = 150;
     const position = window.scrollY + window.innerHeight; // <- Measure position differently
     const height = document.body.scrollHeight; // <- Measure height differently
-    console.log('isUserNearBottom' ,  position > height - threshold)
     return position > height - threshold;
   }
 
@@ -328,7 +321,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   filterBottomSheet() {
-    // app-order-filter-panel
     this._bottomSheet.open(OrderFilterPanelComponent);
   }
 

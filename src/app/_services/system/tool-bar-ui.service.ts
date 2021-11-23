@@ -75,8 +75,8 @@ export class ToolBarUIService {
   }
 
   hidetoolBars() {
-    this.searchBar = false
-    this.toolBar   = false
+    this.updateSearchBarSideBar(false)
+    this.updateOrderBar(false)
   }
 
   switchSearchBarSideBar() {

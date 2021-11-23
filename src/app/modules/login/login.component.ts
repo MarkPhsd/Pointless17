@@ -200,13 +200,13 @@ export class LoginComponent implements OnInit {
       .subscribe(
         user =>
         {
-          console.log('user', user)
           if(user.status === 0)
           {
             user.message == 'Failed'
             user.erorMessage = 'Service is not accesible. Check Internet.'
             this.statusMessage = "Service is not accessible, check connection."
           }
+
           this.statusMessage =  this.userSwitchingService.processLogin(user)
 
         },
