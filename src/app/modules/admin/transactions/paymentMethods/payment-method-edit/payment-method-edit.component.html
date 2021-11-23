@@ -51,6 +51,19 @@
               </div>
 
               <div class="grid-headers">
+                <div class="instructions">
+                  Cash
+                </div>
+                <div>
+                  <mat-checkbox
+                        type             ="checkbox"
+                        formControlName  ="isCash"
+                        class="form-control" >
+                  </mat-checkbox>
+                </div>
+              </div>
+
+              <div class="grid-headers">
                   <div class="instructions">
                       Company Credit
                   </div>
@@ -88,7 +101,6 @@
                   </mat-checkbox>
                 </div>
               </div>
-
               <div class="grid-headers">
                 <div class="instructions">
                   WIC
@@ -101,7 +113,6 @@
                   </mat-checkbox>
                 </div>
               </div>
-
               <div class="grid-headers">
                 <div class="instructions">
                   EBT
@@ -112,7 +123,6 @@
                       class="form-control" >
                 </mat-checkbox>
               </div>
-
               <div class="grid-headers">
                 <div class="instructions">
                   State
@@ -123,7 +133,26 @@
                       class="form-control" >
                 </mat-checkbox>
               </div>
-
+              <div class="grid-headers">
+                <div class="instructions">
+                  Pre Auth Type
+                </div>
+                <mat-checkbox
+                      type             ="checkbox"
+                      formControlName  ="preAuth"
+                      class="form-control" >
+                </mat-checkbox>
+              </div>
+              <div class="grid-headers">
+                <div class="instructions">
+                  Enabled Online
+                </div>
+                <mat-checkbox
+                      type             ="checkbox"
+                      formControlName  ="enabledOnline"
+                      class="form-control" >
+                </mat-checkbox>
+              </div>
             </div>
             <div class="grid-fields">
               <div>

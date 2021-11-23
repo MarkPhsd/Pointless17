@@ -151,8 +151,8 @@ h1 {
 .grid-headers {
   display: grid;
   grid-template-columns: repeat(2, 1fr) ;
-  grid-gap: 5px;
-  gap: 2px;
+  // grid-gap: 2px;
+  // gap: 2px;
   width: 350px;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -160,7 +160,7 @@ h1 {
 
 .grid-fields {
   display: grid;
-  --gap: 10px;
+  --gap: 2px;
   gap: var(--gap);
   grid-template-columns: repeat(1, 1fr) ;
   overflow-y: auto;

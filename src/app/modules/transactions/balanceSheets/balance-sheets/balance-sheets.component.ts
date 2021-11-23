@@ -112,7 +112,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
                 private agGridFormatingService  : AgGridFormatingService,
                 private awsService              : AWSBucketService,
                 private userAuthorization       : UserAuthorizationService,
-                private userService             : AuthenticationService,
                 private router                  : Router,
                 private _bottomSheet            : MatBottomSheet,
               )
@@ -209,21 +208,21 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
     this.columnDefs =  [
       {
-      field: 'id',
-      cellRenderer: "btnCellRenderer",
+        field: 'id',
+        cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
                         onClick: this.editItemWithId.bind(this),
                         label: 'Edit',
                         getLabelFunction: this.getLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
                       },
-                      minWidth: 125,
-                      maxWidth: 125,
+                      minWidth: 135,
+                      maxWidth: 135,
                       flex: 2,
       },
       {headerName: 'ID',     field: 'id',         sortable: true,
-          width   : 100,
-          minWidth: 100,
+          width   : 85,
+          minWidth: 85,
           maxWidth: 100,
           flex    : 2,
       },
@@ -234,11 +233,11 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
                     flex    : 2,
       },
 
-      {headerName: 'Date',     field: 'endTime',         sortable: true,
+      {headerName: 'Started On',     field: 'startTime',         sortable: true,
                   cellRenderer: this.agGridService.dateCellRendererUSD,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 150,
+                  width   : 165,
+                  minWidth: 165,
+                  maxWidth: 200,
                   flex    : 2,
       },
       {headerName: 'Total',  field: 'Total',      sortable: true,
@@ -255,9 +254,9 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
                   flex    : 2,
       },
       {headerName: 'DeviceName', field: 'deviceName', sortable: true,
-                  width   : 140,
-                  minWidth: 100,
-                  maxWidth: 150,
+                  width   : 160,
+                  minWidth: 160,
+                  maxWidth: 200,
                   flex    : 2,
       },
 
@@ -279,12 +278,10 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
       this.gridOptions.columnApi.getAllColumns().forEach(function (column) {
         allColumnIds.push(column.colId);
       });
-
       this.gridOptions.columnApi.autoSizeColumns(allColumnIds, skipHeader);
     } catch (error) {
       console.log(error)
     }
-
   }
 
   //initialize filter each time before getting data.
@@ -292,7 +289,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
   //and other things are required per grid.
   initSearchModel(): BalanceSheetSearchModel {
     let searchModel        = {} as BalanceSheetSearchModel;
-
     if (this.searchModel) {
       searchModel = this.searchModel
     }
@@ -336,34 +332,31 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
   //ag-grid standard method.
   getDataSource(params) {
     return {
-    getRows: (params: IGetRowsParams) => {
-      const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            if (data.paging) {
-              const resp =  data.paging
-              this.isfirstpage   = resp.isFirstPage
-              this.islastpage    = resp.isFirstPage
-              this.currentPage   = resp.currentPage
-              this.numberOfPages = resp.pageCount
-              this.recordCount   = resp.recordCount
+      getRows: (params: IGetRowsParams) => {
+        const items$ = this.getRowData(params, params.startRow, params.endRow)
+        items$.subscribe(data =>
+          {
+              if (data.paging) {
+                const resp =  data.paging
+                this.isfirstpage   = resp.isFirstPage
+                this.islastpage    = resp.isFirstPage
+                this.currentPage   = resp.currentPage
+                this.numberOfPages = resp.pageCount
+                this.recordCount   = resp.recordCount
+              }
+              if (this.numberOfPages !=0 && this.numberOfPages) {
+                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+              }
+              if (data.results) {
+                params.successCallback(data.results)
+                this.rowData = data.results
+              }
+            }, err => {
+              console.log(err)
             }
-            if (this.numberOfPages !=0 && this.numberOfPages) {
-              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-            }
-            if (data.results) {
-              params.successCallback(data.results)
-
-              this.rowData = data.results
-            }
-
-          }, err => {
-            console.log(err)
-          }
-      );
-      }
+        );
+        }
     };
-
 
     if (this.numberOfPages !=0 && this.numberOfPages) {
       this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
@@ -390,7 +383,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
     }
     this.onFirstDataRendered(this.params)
 
-    // if (!params) { return }
     if (params == undefined) { return }
 
     if (!params.startRow ||  !params.endRow) {
@@ -410,7 +402,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
               this.currentPage   = resp.currentPage
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
-
               if (this.numberOfPages !=0 && this.numberOfPages) {
                 this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
               }
@@ -419,30 +410,26 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
             if (data.results) {
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
-
               this.rowData = results
             }
-
           }
         );
       }
     };
 
-    console.log("this autosize all")
     if (!datasource)   { return }
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
     this.autoSizeAll(true)
   }
 
-   onFirstDataRendered (params) {
+  onFirstDataRendered (params) {
     try {
       params.api.sizeColumnsToFit()
-      window.setTimeout(() => {
-        const colIds = params.columnApi.getAllColumns().map(c => c.colId)
-        params.columnApi.autoSizeColumns(colIds)
-      }, 50)
-
+      // window.setTimeout(() => {
+      //   const colIds = params.columnApi.getAllColumns().map(c => c.colId)
+      //   params.columnApi.autoSizeColumns(colIds)
+      // }, 50)
      } catch (error) {
       console.log(error)
     }
@@ -468,7 +455,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
   //search method for debounce on form field
   displayFn(search) {
     this.selectItem(search)
-    console.log('displayFn', search)
     return search;
   }
 
@@ -501,7 +487,6 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
       ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
 
-    // document.querySelector('#selectedRows').innerHTML = selectedRowsString;
     this.selected = selected
     this.id = selectedRows[0].id;
     this.getItem(this.id)
@@ -523,9 +508,14 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
   getLabel(rowData)
   {
-    if(rowData && rowData.hasIndicator)
-      return 'Edit';
-      else return 'Edit';
+
+    if(rowData) {
+      try {
+        return rowData.id
+      } catch (error) {
+      }
+    }
+    return 'Edit';
   }
 
   onBtnClick1(e) {
@@ -538,13 +528,10 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
   async editItemWithId(item:any) {
     if(!item) {
-      console.log(item)
       return
     }
     const id   = item.rowData.id;
     const site = this.siteService.getAssignedSite()
-    // const sheet = await this.balanceSheetService.getSheet(site, id).pipe().toPromise();
-    // this.balanceSheetService.updateBalanceSheet(sheet)
     this.router.navigate(['/balance-sheet-edit', {id:item.rowData.id}]);
   }
 

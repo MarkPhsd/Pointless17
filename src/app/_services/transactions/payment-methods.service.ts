@@ -25,7 +25,8 @@ export interface IPaymentMethod {
   exchangeRate:    number;
   isCash:          boolean;
   state:           boolean;
-
+  enabledOnline:   boolean;
+  preAuth     :    boolean;
 }
 
 @Injectable({
@@ -185,6 +186,8 @@ export class PaymentMethodsService {
             exchangeRate:    [''], //
             isCash:          [''], //
             state:           [''], //
+            preAuth:         [''],
+            enabledOnline:   ['']
           }
         )
         return fb

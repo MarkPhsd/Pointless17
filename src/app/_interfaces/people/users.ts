@@ -12,8 +12,10 @@ export interface IUser {
     phone: string;
     roles: string;
     type:  string;
-    message: string;
     employeeID: number;
     metrcUser: string;
     metrcKey: string;
+    loginAttempts: number;
+    message: string;
+    errorMessage: string
 }

@@ -101,20 +101,15 @@ export class AuthenticationService {
     }
 
     logout() {
-      // remove user from local storage to log user out
       this.clearUserSettings();
-      // console.log('user settings cleared')
       if (this.platFormservice.webMode) {
-        if (this.appInitService.appGateEnabled) {
+        console.log('use app gate', this.appInitService.useAppGate)
+        if (this.appInitService.useAppGate) {
           this.router.navigate(['/appgate']);
-          // console.log('route to app gate')
           return
         }
       }
-
-      // console.log('route to login')
       this.router.navigate(['/login']);
-
     }
 
     clearUserSettings(){

@@ -5,6 +5,7 @@
            fxLayout="row"
            fxLayoutAlign="start start">
         <div class="grid-flow">
+
           <div *ngIf="!smallDevice">
             <button mat-button
                     (click)="goBack()">
@@ -12,7 +13,7 @@
             </button>
           </div>
 
-          <div>
+          <div *ngIf="user">
             <button mat-button
                    (click)="toggleSideBar()">
               <mat-icon >menu</mat-icon>
@@ -150,7 +151,16 @@
             <app-cart-button> </app-cart-button>
           </div>
 
-          <div>
+          <div *ngIf="!user">
+            <button color="warn"
+                    mat-button
+                    class="nav-item nav-link"
+                    (click)="logout()">
+                <mat-icon>exit_to_app</mat-icon>
+            </button>
+          </div>
+
+          <div *ngIf="user">
             <button mat-button [matMenuTriggerFor]="menu">
               <mat-icon>person_outline</mat-icon>
             </button>

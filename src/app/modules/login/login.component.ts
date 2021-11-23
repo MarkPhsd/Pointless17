@@ -146,7 +146,12 @@ export class LoginComponent implements OnInit {
   }
 
   async  browseMenu() {
-    this.router.navigate(['/app-main-menu']);
+    this.userSwitchingService.browseMenu()
+  }
+
+  loginToReturnUrl() {
+    this.spinnerLoading = false;
+    this.userSwitchingService.loginToReturnUrl()
   }
 
   clearUserSettings() {
@@ -193,29 +198,25 @@ export class LoginComponent implements OnInit {
     (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
       .pipe(first())
       .subscribe(
-        data =>
+        user =>
         {
-          console.log('data', data)
-          this.loginToReturnUrl()
-          return
+          console.log('user', user)
+          if(user.status === 0)
+          {
+            user.message == 'Failed'
+            user.erorMessage = 'Service is not accesible. Check Internet.'
+            this.statusMessage = "Service is not accessible, check connection."
+          }
+          this.statusMessage =  this.userSwitchingService.processLogin(user)
+
         },
         error => {
-          console.log('data', error)
           this.spinnerLoading = false;
-          this.statusMessage = `Login failed. ${error.message}.`
+          this.statusMessage = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
           this.loading = false;
           return
       }
     );
-  }
-
-  loginToReturnUrl() {
-    this.spinnerLoading = false;
-    if (this.returnUrl = '/') { this.returnUrl = '/app-main-menu' }
-    if (this.returnUrl === '/login') {  this.returnUrl = '/app-main-menu'}
-    if (this.returnUrl === '/apisetting') {    this.returnUrl = '/app-main-menu'}
-    this.router.navigate([this.returnUrl]);
-    this.browseMenu();
   }
 
   notifyEvent(message: string, action: string) {

@@ -1,5 +1,5 @@
-import {Component, HostBinding, OnDestroy, Output, HostListener,
-  OnInit,  ViewChild, ElementRef, QueryList, ViewChildren, Input, EventEmitter}  from '@angular/core';
+import {Component,  Output,
+  OnInit,  ViewChild, ElementRef, EventEmitter}  from '@angular/core';
 import { IUser } from 'src/app/_interfaces';
 import {AuthenticationService, IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -37,35 +37,26 @@ export class BalanceSheetFilterComponent implements  OnInit {
   selectedType                : number;
   toggleOpenClosedAll            = "1";
   toggleEmployeeDeviceAll        = "0"
-
   printForm          : FormGroup;
   user               = {} as IUser;
-
   employees$    :   Observable<IItemBasic[]>;
   searchModel   = {} as   BalanceSheetSearchModel;
   dateRangeForm : FormGroup;
-
   _searchModel  : Subscription;
+  isAuthorized  : boolean;
+  filterForm    : FormGroup;
+  dateFrom      : Date;
+  dateTo        : Date;
+  dateRange     : string;
+  counter       : number;
 
-  isAuthorized : boolean;
-  filterForm: FormGroup;
-  // calDate: IDatePicker;
-  dateFrom: Date;
-  dateTo: Date;
-  dateRange: string;
-
-  counter: number;
-
-  //Do this next!!
   initSubscriptions() {
       this._searchModel = this.balanceSheetService.balanceSearchModelSheet$.subscribe( data => {
         this.searchModel  = data
         if (!data) {
-          console.log('data is null')
           this.initSearchModel();
         }
     })
-
   }
 
   constructor(  private _snackBar               : MatSnackBar,
@@ -115,7 +106,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
 
       this.toggleEmployeeDeviceAll     =  search.type.toString();
 
-      console.log('init dates', search);
       if (search.completionDate_From || search.completionDate_To) {
         try {
           this.dateRangeForm =  this.fb.group({
@@ -130,27 +120,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
       this.subscribeToDatePicker();
     }
   }
-
-  // setSearchFormFromModel(searchModel: BalanceSheetSearchModel) {
-  //   if (searchModel){
-  //     try {
-
-  //       this.initFormFromSearchModel();
-
-  //       if (searchModel.completionDate_From || searchModel.completionDate_To) {
-  //         this.dateRangeForm =  this.fb.group({
-  //           start: new Date(searchModel.completionDate_From),
-  //           end  : new Date(searchModel.completionDate_To)
-  //         })
-  //       } else {
-  //         this.initDateForm();
-  //       }
-
-  //   } catch (error) {
-  //       console.log('error applying search dates', error)
-  //     }
-  //   }
-  // }
 
   setEmployee(event) {
     if (!event) { return }
@@ -169,7 +138,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
     const search = this.searchModel;
 
     this.balanceSheetService.updateBalanceSearchModel( search )
-    console.log('refreshSearch update search Subscription', search)
     this.outputRefreshSearch.emit('true');
   }
 
@@ -192,7 +160,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
   }
 
   initSearchModel() {
-
     const site = this.siteService.getAssignedSite()
     this.searchModel = {} as BalanceSheetSearchModel
 
@@ -211,7 +178,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
 
     this.initSearchForm();
     this.initDateForm()
-
   }
 
   resetSearch() {
@@ -225,7 +191,6 @@ export class BalanceSheetFilterComponent implements  OnInit {
   }
 
   async initDateForm() {
-    // console.log('init date form')
     this.dateRangeForm = new FormGroup({
       start: new FormControl(),
       end: new FormControl()
@@ -241,13 +206,10 @@ export class BalanceSheetFilterComponent implements  OnInit {
       end: today // new Date()
     })
 
-    // console.log('date', this.dateRangeForm.get("start").value)
-
     this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
     this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
 
     this.subscribeToDatePicker();
-
   }
 
   subscribeToDatePicker()
@@ -273,9 +235,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
 
   emitDatePickerData() {
     if (this.dateRangeForm) {
-      console.log('date range form exsits')
       if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
-        console.log('Will refresh')
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
         this.refreshDateSearch()
@@ -306,7 +266,5 @@ export class BalanceSheetFilterComponent implements  OnInit {
       this.searchModel.completionDate_To   = '';
       return
     }
-
   }
-
 }

@@ -82,11 +82,9 @@
     </mat-card-subtitle>
 
     <mat-card-content>
-      <div class="grid-container">
+      <div *ngIf="sheet" class="grid-container">
         <div>
           <h4><mat-icon>edit</mat-icon> Edit </h4>
-
-
 
           <div *ngIf="!sheet.endTime">
             <span *ngIf ="this.sheet.shiftStarted != 1">

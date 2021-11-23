@@ -1,15 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
-import { map, switchMap, timeout } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { IUser, IUserProfile } from 'src/app/_interfaces';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { EMPTY } from 'rxjs';
+import { map,  timeout } from 'rxjs/operators';
+import { IUser } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SitesService } from '../reporting/sites.service';
-import { AuthenticationService, ContactsService, MenuService, OrdersService } from '..';
+import { AuthenticationService, ContactsService, OrdersService } from '..';
 import { BalanceSheetService } from '../transactions/balance-sheet.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -46,6 +45,7 @@ export class UserSwitchingService {
     private paymentService  : POSPaymentService,
     private snackBar        : MatSnackBar,
     private appInitService  : AppInitService,
+    private route: ActivatedRoute,
   ) {
   }
 
@@ -81,6 +81,7 @@ export class UserSwitchingService {
             currentUser.username  = client.userName;
             currentUser.phone     = client.phone;
             currentUser.email     = client.email;
+
             const user = this.setUserInfo(currentUser, pin)
             this.authenticationService.updateUser(user)
             this.clearSubscriptions();
@@ -113,7 +114,7 @@ export class UserSwitchingService {
               try {
 
                   this.clearSubscriptions();
-                  const currentUser = this.setUserInfo(user, password)
+                  const currentUser   = this.setUserInfo(user, password)
                   this.authenticationService.updateUser(currentUser)
 
                   return user
@@ -146,6 +147,8 @@ export class UserSwitchingService {
     currentUser.phone     = user.phone;
     currentUser.email     = user.email;
     currentUser.token     = user.token;
+    currentUser.errorMessage = user.errorMessage
+    currentUser.message = user.message
     user.authdata = window.btoa(user.username + ':' + user.password);
     return currentUser
   }
@@ -173,6 +176,42 @@ export class UserSwitchingService {
         data: request
       },
     )
+  }
+
+  processLogin(user: IUser) {
+    //login the user based on the message response of the user.
+    console.log('user from Process login', user)
+
+    if (user && user.message == undefined) {
+      return 'user undefined'
+    }
+
+    if (user && !user.message) {
+      return 'No message response from API.'
+    }
+
+    if (user.message === 'success') {
+      this.loginToReturnUrl();
+      return 'success'
+    }
+
+    //if account loccked out then change here.
+    if (user.message.toLowerCase() === 'failed') {
+      return user.errorMessage
+    }
+  }
+
+  async  browseMenu() {
+    this.router.navigate(['/app-main-menu']);
+  }
+
+  loginToReturnUrl() {
+    let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    if (returnUrl = '/') { returnUrl = '/app-main-menu' }
+    if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
+    if (returnUrl === '/apisetting') {    returnUrl = '/app-main-menu'}
+    this.router.navigate([returnUrl]);
+    this.browseMenu();
   }
 
 

@@ -5,10 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import {  FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { EMPTY, Observable, Subscription } from 'rxjs';
+import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
+import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { Location } from '@angular/common';
 import { switchMap } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/_services';
@@ -98,7 +98,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user = data;
-
     })
 
   }
@@ -153,15 +152,14 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     if (!this.sheet)  {
       const site = this.siteService.getAssignedSite()
       if (!deviceName) { deviceName = 'nada' }
-      // console.log('deviceName', deviceName)
       this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap(sheet => {
-        this.loading = false;
-        this.sheetService.updateBalanceSheet(sheet)
-        return this.sheetService.getSheetCalculations(site, sheet)
+          this.loading = false;
+          this.sheetService.updateBalanceSheet(sheet)
+          return  this.sheetService.getSheetCalculations(site, sheet)
       })).subscribe( sheet => {
-        this.sheet = sheet
-        this.sheetService.updateBalanceSheet(sheet)
+          this.sheet = sheet
+          this.sheetService.updateBalanceSheet(sheet)
       })
     }
 
@@ -173,7 +171,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.loading = true
     const id = parseInt(sheetID)
     const site = this.siteService.getAssignedSite()
-
     this.sheetService.getSheet(site, id).pipe(
       switchMap(sheet => {
       this.loading = false;
