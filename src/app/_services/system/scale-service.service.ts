@@ -76,8 +76,8 @@ export class ScaleService  {
           info.mode          = args.mode;
           info.scaleStatus   = args.status;
           info.valueToDivide = args.valueToDivide
-          console.log('info', info)
-          console.log('event', event)
+          // console.log('info', info)
+          // console.log('event', event)
           this.updateSubscription(info)
         },
       );
@@ -137,7 +137,7 @@ export class ScaleService  {
     scaleSetup.timer              = 500;
     scaleSetup.enabled            = true;
     this.updateScaleSetup(scaleSetup);
-    console.log('scale setup', scaleSetup)
+    // console.log('scale setup', scaleSetup)
     return scaleSetup;
   }
 

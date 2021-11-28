@@ -9,6 +9,18 @@
   margin-bottom: 5px;
 }
 
+.totals_label{
+  font-size: .9em;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  align-items: baseline;
+  line-height: 1em;
+}
 
 .center-container {
   display        : flex;
@@ -27,24 +39,35 @@
   margin: 0px 5px 5px 5px;
   padding: 0px 5px 5px 5px;
   white-space: nowrap;
-  overflow: hidden;
+  // overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
 }
 
+.grid {
+  display: grid;
+  grid-template-columns: 1fr auto ;
+  grid-template-rows: auto;
+  grid-gap: 2px;
+  // height: calc(100vh - 10px);
+}
 
 .grid-headerfooter {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  // grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  grid-template-columns: 60px 85px 55px 55px 45px;
+  margin-left: 15px;
 }
 
 .grid-items {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
+
   grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+
   margin-left: -15px;
 }
 
@@ -52,8 +75,11 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
-  margin-left: 15px;
+  grid-template-columns: 85px 85px 85px;
+  margin-left: 30px;
+  font-size: .9em;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .headers {
@@ -67,4 +93,28 @@
   display: flex;
   align-content: center;
   justify-content: center;
+}
+
+.header-labels {
+  font-size     : 12px;
+  margin        : 0px 5px 5px 5px;
+  padding       : 0px 5px 5px 5px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  float         : left;
+  align-items   : baseline;
+  line-height   : 1em;
+}
+
+.calculation {
+  // grid-column: 2/3;
+  text-align: left;
+}
+
+.grid-item {
+  // background-color: rgba(169, 163, 163, 0.8);
+  align-items: flex-start;
+  text-align: left;
 }

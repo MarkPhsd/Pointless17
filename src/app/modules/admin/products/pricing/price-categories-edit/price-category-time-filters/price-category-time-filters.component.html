@@ -1,0 +1,58 @@
+<div [formGroup]="inputForm"
+     *ngIf="showTime"
+     class="grid-time-container">
+
+  <div >
+    Time & Date based price will automatically apply when dates or time assigned.
+  </div>
+
+  <div *ngIf="showTime">
+    <mat-form-field appearance="outline" class="date-fields">
+      <mat-label >Price</mat-label>
+      <input matInput
+            type="number"
+            formControlName="specialDatePrice"
+            class="form-control" >
+    </mat-form-field>
+  </div>
+
+  <div *ngIf="showTime">
+    <mat-form-field appearance="outline" class="date-fields">
+      <mat-label>Start Date</mat-label>
+      <input matInput
+            formControlName="startDate"
+            [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div *ngIf="showTime">
+    <mat-form-field appearance="outline" class="date-fields">
+      <mat-label>End Date</mat-label>
+      <input matInput
+            formControlName="endDate"
+            [matDatepicker]="picker">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  <div *ngIf="showTime">
+    <mat-form-field appearance="outline" class="date-fields">
+      <mat-label >Start</mat-label>
+      <input matInput
+            type="time"
+            formControlName="startTime"
+            class="form-control" >
+    </mat-form-field>
+  </div>
+  <div *ngIf="showTime">
+    <mat-form-field appearance="outline" class="date-fields">
+      <mat-label >End</mat-label>
+      <input matInput
+            type="time"
+            formControlName="endTime"
+            class="form-control" >
+    </mat-form-field>
+  </div>
+
+</div>

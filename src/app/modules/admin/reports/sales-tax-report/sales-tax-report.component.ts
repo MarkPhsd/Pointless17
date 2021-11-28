@@ -4,7 +4,7 @@ import { ISite } from 'src/app/_interfaces';
 import { IReportingSearchModel, IReportItemSales, ITaxReport, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 
 @Component({
-  selector: 'app-sales-tax-report',
+  selector: 'sales-tax-report',
   templateUrl: './sales-tax-report.component.html',
   styleUrls: ['./sales-tax-report.component.scss']
 })

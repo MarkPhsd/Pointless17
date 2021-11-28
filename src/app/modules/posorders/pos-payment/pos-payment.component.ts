@@ -169,14 +169,11 @@ export class PosPaymentComponent implements OnInit {
   async processGetResults(amount) {
     let paymentResponse  = {} as IPaymentResponse
     this.posPayment.amountReceived = amount;
-
     paymentResponse = await this.getResults(amount)
-
     if (!paymentResponse) {
       this.notify('Payment not processed', 'failure', 1000)
       return
     }
-
      this.processResults(paymentResponse)
   }
 
@@ -189,7 +186,6 @@ export class PosPaymentComponent implements OnInit {
       if (paymentResponse.orderCompleted) {
          result =  this.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
       } else {
-
       }
     }
 

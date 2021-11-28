@@ -1,11 +1,18 @@
-.order-type-selector {
 
+.refresh {
+  float:right;
+  margin-left: 0px;
+  top: -10px;
+}
+mat-form-field {
+  width: 200px;
 }
 
-.filter-order-title {
-
+.dates-field {
+  width: 300px;
+  max-width: 300px;
+  margin-left: 0px;
 }
-
 
 .fields {
   margin-top: 5px;

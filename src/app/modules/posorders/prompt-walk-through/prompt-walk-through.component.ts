@@ -103,7 +103,7 @@ export class PromptWalkThroughComponent implements OnInit {
 
       this.posOrderItemService.postPromptItems(site, this.orderPromptGroup).pipe(
             switchMap( data  => {
-              return  this.orderService.getOrder(site, data.orderID.toString())
+              return  this.orderService.getOrder(site, data.orderID.toString(), false)
             }
           )
         ).subscribe(data => {

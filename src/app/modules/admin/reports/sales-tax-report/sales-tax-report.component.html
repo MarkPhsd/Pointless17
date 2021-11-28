@@ -78,6 +78,8 @@
             </div>
           </div>
         </div>
+        <mat-divider></mat-divider>
+
       </mat-card-title>
 
       <mat-card-content *ngIf="!minimized">
@@ -95,11 +97,28 @@
           <div class="grid-item discounts_label">Item % Discounts:</div>
           <div class="grid-item discounts"> {{sale.itemPercentDiscount | currency }}</div>
 
+          <div class="grid-item discounts_label">Point Discounts:</div>
+          <div class="grid-item discounts"> {{sale.itemLoyaltyPointDiscount | currency }}</div>
+
           <div class="grid-item other_label">Gift Card:</div>
           <div class="grid-item other">{{sale.giftCardIssuances | currency }} </div>
 
         </div>
+
+        <mat-divider></mat-divider>
       </mat-card-content>
+
+      <mat-card-footer  *ngIf="!sale.resultsMessage" >
+        <div class="grid-footer" >
+          <div class="grid-item field_bold totals_label"> Summary :</div>
+          <div class="grid-item field_bold totals_label"> {{sale.orderCashDiscount +
+                                                          sale.itemCashDiscount +
+                                                          sale.orderPercentDiscount +
+                                                          sale.itemPercentDiscount +
+                                                          sale.itemLoyaltyPointDiscount
+                                                        | currency }}   </div>
+        </div>
+      </mat-card-footer>
   </mat-card>
 
   <mat-divider></mat-divider>

@@ -7,22 +7,17 @@
   </div>
 
   <div *ngIf="sales.paymentSummary as payments">
-
-    <div
-          class="mat-card-container"
+    <div  class="mat-card-container"
           *ngIf="sales.resultMessage != 'failed'">
       <mat-card  *ngIf="payments">
         <mat-card-title>
-
-          <div class="center-container">
-            <div class="grid spacer footerheader-margin">
-              <div  class="header-label">
-                <h4> <ng-content></ng-content> </h4>
-              </div>
+          <div class="grid">
+            <div  class="totals_label">
+              <h4> <ng-content></ng-content> </h4>
             </div>
           </div>
 
-          <div class="grid spacer">
+          <div class="grid">
             <div class="header-labels">
               {{sales.paymentSummary[0].startDate | date: 'short'}}
             </div>
@@ -34,23 +29,22 @@
         </mat-card-title>
 
         <mat-card-content>
-          <div class="grid-headerfooter headers totals" *ngIf="payments">
-            <span *ngIf="groupBy === 'Employee'">
-              <div>Staff</div>
-            </span>
+          <div class="grid-headerfooter"
+               *ngIf="payments">
 
-            <span *ngIf="groupBy === 'PaymentMethod'">
-              <div>Method</div>
-            </span>
+            <div *ngIf="groupBy === 'Employee'" class="grid-item">Staff </div>
+            <div *ngIf="groupBy !=  'Employee'" class="grid-item">Method</div>
 
-            <div>Avg</div>
-            <div>Amount</div>
-            <div>Tip</div>
-            <div>#</div>
+            <div class="grid-item">Amount</div>
+            <div class="grid-item">Avg</div>
+            <div class="grid-item">Tip</div>
+
+            <div *ngIf="groupBy === 'Employee'" class="grid-item">#    </div>
+            <div *ngIf="groupBy !=  'Employee'" class="grid-item">#    </div>
           </div>
 
-          <div class="grid-items"
-              *ngFor="let payment of payments" >
+          <div class="grid-headerfooter"
+               *ngFor="let payment of payments" >
 
             <span *ngIf="groupBy === 'Employee'">
               <div class="totals"
@@ -63,57 +57,53 @@
               </div>
             </span>
 
-            <span *ngIf="groupBy === 'PaymentMethod'">
-              <div class="totals"
-                  *ngIf="payment.paymentMethod">
-                {{ payment.paymentMethod }}
-              </div>
-            </span>
-
-            <div class="totals" *ngIf=" payment.count != 0">
-              {{payment.amountPaid / payment.count | currency }}
+            <div class="grid-item" *ngIf="groupBy != 'Employee'" >
+              {{ payment.paymentMethod }}
             </div>
 
-            <div class="totals">
+            <div  class="grid-item">
               {{payment.amountPaid | currency }}
             </div>
 
-            <div class="totals"
-                >
+            <div  class="grid-item" *ngIf=" payment.count != 0">
+              {{payment.amountPaid / payment.count | currency }}
+            </div>
+
+            <div class="grid-item calculation">
               {{payment.tipAmount | currency }}
             </div>
 
-            <div class="totals" *ngIf="payment?.count != 0">
-              {{payment.count }}
+            <div  class="grid-item calculation" *ngIf="payment?.count != 0">
+              {{ payment.count }}
             </div>
+
           </div>
+          <mat-divider></mat-divider>
         </mat-card-content>
 
         <mat-card-footer>
-          <div class="footerheader-margin">
 
-            <div  class="grid-footer footerheader-margin">
-              <div>Average</div>
-              <div class="totals" *ngIf=" sales.count != 0">
-                {{sales.total / sales.count | currency }}
-              </div>
-            </div>
-
-            <div  class="grid-footer footerheader-margin"   >
-              <div>Total</div>
-              <div class="totals">
-                {{sales.total | currency }}
-              </div>
-            </div>
-
-            <div  class="grid-footer footerheader-margin"   >
-              <div>Count</div>
-              <div class="totals">
-                {{sales.count }}
-              </div>
-            </div>
+          <div class="grid-footer"
+               *ngIf="payments">
+            <!-- <span *ngIf="groupBy === 'Employee'">
+              <div class="grid-item">Staff</div>
+            </span> -->
+            <div class="grid-item">Total</div>
+            <div class="grid-item">Avg</div>
+            <div class="grid-item">Count</div>
           </div>
 
+          <div class="grid-footer">
+            <div class="grid-item ">
+              {{sales.total | currency }}
+            </div>
+            <div class="grid-item" *ngIf=" sales.count != 0">
+              {{sales.total / sales.count | currency }}
+            </div>
+            <div class="grid-item ">
+              {{sales.count }}
+            </div>
+          </div>
         </mat-card-footer>
       </mat-card>
     </div>
@@ -121,7 +111,6 @@
   </div>
 
 </div>
-
 
 <ng-template #loading>
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>

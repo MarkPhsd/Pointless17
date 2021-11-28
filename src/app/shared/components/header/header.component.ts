@@ -1,15 +1,12 @@
 import { Component, OnInit, Output, EventEmitter,
         HostBinding, Renderer2, HostListener, OnDestroy, OnChanges } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { OverlayContainer } from '@angular/cdk/overlay';
+import { FormBuilder,FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { CompanyService,AuthenticationService, OrdersService, MenuService, MessageService, UserService} from 'src/app/_services';
-import { ICompany, IPOSOrder, ISite, IUser, IUserProfile }  from 'src/app/_interfaces';
+import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
+import { ICompany, IPOSOrder, ISite, IUser,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { Router } from '@angular/router';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { Observable, of, Subject, Subscription, throwError, timer } from 'rxjs';
-import { catchError, delay, delayWhen, finalize, first, map, repeatWhen, retryWhen, tap } from 'rxjs/operators';
+import { Observable, of, Subject, Subscription, throwError,  } from 'rxjs';
+import { catchError, delay,  repeatWhen } from 'rxjs/operators';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
 // https://blog.bitsrc.io/6-ways-to-unsubscribe-from-observables-in-angular-ab912819a78f
@@ -18,9 +15,9 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PollingService } from 'src/app/_services/system/polling.service';
 
 interface IIsOnline {
   result: string;
@@ -133,10 +130,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this._user) {
       this._user.unsubscribe();
     }
-    // console.log('header destroyed')
+
   }
 
   constructor(private authenticationService:  AuthenticationService,
+              private pollingService        : PollingService,
               private dialog:                 MatDialog,
               private companyService:         CompanyService,
               private _renderer:              Renderer2,
@@ -169,13 +167,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.searchForm = this.fb.group( {
       searchProducts: ''
     });
-
     this.renderTheme();
     this.refreshTheme()
     this.initCompany();
     this.mediaWatcher()
     this.initSite();
     this.updateItemsPerPage();
+    this.pollingService.poll();
   }
 
   refreshScannerOption() {
@@ -214,20 +212,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   updateItemsPerPage() {
     this.showSearchForm = true
     this.smallDevice = false
-
     if (window.innerWidth >= 1200) {
       this.sitePickerWidth = 33
     } else if (window.innerWidth >= 992) {
       this.sitePickerWidth = 33
     } else if (window.innerWidth  >= 768) {
       this.sitePickerWidth = 75
-
     } else if (window.innerWidth < 768) {
       this.showSearchForm = false
       this.sitePickerWidth = 75
       this.smallDevice = true
     }
-
   }
 
   getUserInfo() {
@@ -262,7 +257,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isUserStaff = true
       this.showPOSFunctions = true;
     }
-
   }
 
   initSite() {
@@ -371,7 +365,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     )
     dialogRef.afterClosed().subscribe(result => {
       this.initSite();
-      console.log('The dialog was closed');
     });
   }
 

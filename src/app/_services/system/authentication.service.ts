@@ -34,7 +34,6 @@ export class AuthenticationService {
     apiUrl: any;
 
     updateUser(user: IUser) {
-      // console.log('AuthenticationService user updated', user)
       this._user.next(user)
       localStorage.setItem('user', JSON.stringify(user));
     }
@@ -58,13 +57,8 @@ export class AuthenticationService {
       this.updateUserX(userx)
     }
 
-    // if paged refreshed, try to reset the user.
     public get userValue(): IUser {
-
-      // console.log('getting user')
-
       if (!this._user.value) {
-        // console.log('getting user  not set, retrieving from local storage')
         const item = localStorage.getItem('user');
         if (!item) {
           //will return undefined or null;
@@ -76,9 +70,6 @@ export class AuthenticationService {
           return nextUser
         }
       }
-
-      // console.log('user Value exists', this._user.value)
-
       return this._user.value;
     }
 
@@ -86,7 +77,6 @@ export class AuthenticationService {
       if ( !this._userx.value ) {
         const user = JSON.parse(localStorage.getItem('userx')) as IUser;
         user.roles = user.roles.toLowerCase();
-        // this.userSubject.next(user);
       }
       return this._userx.value;
     }
@@ -103,7 +93,6 @@ export class AuthenticationService {
     logout() {
       this.clearUserSettings();
       if (this.platFormservice.webMode) {
-        console.log('use app gate', this.appInitService.useAppGate)
         if (this.appInitService.useAppGate) {
           this.router.navigate(['/appgate']);
           return

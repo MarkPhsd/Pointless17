@@ -52,12 +52,20 @@
 
         </div>
         <div  *ngIf="!mainPanel" >
+
           <button mat-raised-button
                   class="button"
                   color="primary"
                   (click)="toggleOpenOrderBar()">
-            <mat-icon>edit</mat-icon>
-            Edit Cart
+            <div *ngIf="order.history">
+              <mat-icon>view</mat-icon>
+              View Cart
+            </div>
+            <div *ngIf="!order.history">
+              <mat-icon>edit</mat-icon>
+              Edit Cart
+            </div>
+
           </button>
 
           <button  mat-raised-button

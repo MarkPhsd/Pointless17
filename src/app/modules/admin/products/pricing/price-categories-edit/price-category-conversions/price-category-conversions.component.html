@@ -1,0 +1,36 @@
+<span [formGroup]="inputForm" >
+  <mat-card >
+    <div >
+      Conversions multiply values against the primary count.
+      <ul>
+        <li> Multiplier is used when the quantity of the item is greater or less than 1 of the primary item. </li>
+        <li> Unit Ratio is the amount of the item that is part of a recipe. </li>
+      </ul>
+    </div>
+    <mat-card-content>
+      <div class="grid-conversion-items">
+      <div>
+        <mat-form-field appearance="outline" class="conversion-fields">
+          <mat-label >Multiplier</mat-label>
+          <input matInput
+                type="text"
+                formControlName="partMultiplyer"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline" class="conversion-fields">
+          <mat-label >Unit Ratio (recipes)</mat-label>
+          <input matInput
+                type="text"
+                formControlName="unitPartRatio"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+    </div>
+
+    </mat-card-content>
+
+  </mat-card>
+</span>

@@ -94,13 +94,13 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
-      private platFormService       : PlatformService,
-      private orderService          : OrdersService,
-      private settingService        : SettingsService,
-      private siteService           : SitesService,
-      private printingService       : PrintingService,
-      private printingAndroidService: PrintingAndroidService,
-      private dialogRef: MatDialogRef<RecieptPopUpComponent>,
+    private orderService          : OrdersService,
+    private settingService        : SettingsService,
+    private siteService           : SitesService,
+    private platFormService       : PlatformService,
+    private printingService       : PrintingService,
+    private printingAndroidService: PrintingAndroidService,
+    private dialogRef: MatDialogRef<RecieptPopUpComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
@@ -173,19 +173,11 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
 
   getReceiptContents(styles: string) {
     const prtContent     = document.getElementById('printsection');
-    if (!prtContent) {
-      console.log('print content empty')
-      return
-    }
-
+    if (!prtContent) { return  }
     const content        = `${prtContent.innerHTML}`
-    if (!content) {
-      console.log('content empty')
-      return
-    }
+    if (!content) { return }
 
     const  title = 'Receipt';
-
     const loadView       = ({ title }) => {
       return (`
         <!DOCTYPE html>
@@ -208,27 +200,12 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
   }
 
   async print() {
-
     if (this.platFormService.isAppElectron) {
-      // if (!this.printerName) {
-      //   window.alert('No default printer has been assigned.')
-      //   return
-      // }
       const result = this.printElectron()
-      // if (result) {
-      //    this.dialogRef.close();
-      // }
       return
     }
-
-    if (this.platFormService.androidApp) {
-      this.printAndroid();
-
-    }
-
-    if (this.platFormService.webMode) {
-       this.convertToPDF();
-     }
+    if (this.platFormService.androidApp) {this.printAndroid();}
+    if (this.platFormService.webMode) { this.convertToPDF();}
   }
 
   convertToPDF() {
@@ -245,11 +222,8 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     } as printOptions;
 
     if (!contents) { console.log('no contents in print electron')}
-
     if (!options) { console.log('no options in print electron')}
-
     if (!this.printerName) { console.log('no printerName in print electron')}
-
     if (contents && this.printerName, options) {
         this.printingService.printElectron( contents, this.printerName, options)
     }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransferDataService } from 'src/app/_services/transactions/transfer-data.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { ITaxReport} from 'src/app/_services/reporting/reporting-items-sales.service';
 import { Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
+import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 
 @Component({
   selector: 'pos-operations',
@@ -15,11 +18,14 @@ import { ISite } from 'src/app/_interfaces';
 })
 export class PosOperationsComponent implements OnInit {
 
+  @ViewChild('printsection') printsection: ElementRef;
   @Input() site    : ISite;
   @Input() notifier: Subject<boolean>
   localSite: ISite;
   dateFrom: any;
   dateTo  : any;
+
+  printerName: string;
 
   closeResult     = '';
   runningClose :  boolean;
@@ -37,6 +43,10 @@ export class PosOperationsComponent implements OnInit {
     private transferDataService: TransferDataService,
     private balanceSheetService: BalanceSheetService,
     private router             : Router,
+    private platFormService       : PlatformService,
+    private printingService       : PrintingService,
+    private printingAndroidService: PrintingAndroidService,
+
   ) {
 
     if (!this.site) {
@@ -119,6 +129,16 @@ export class PosOperationsComponent implements OnInit {
     this.router.navigateByUrl('/pos-orders')
   }
 
+  async print() {
+    if (this.platFormService.isAppElectron) {
+      const result = this.printElectron()
+      return
+    }
+    if (this.platFormService.androidApp) {this.printAndroid();}
+    if (this.platFormService.webMode)    { this.convertToPDF();}
+  }
+
+
   closeAllSheets() {
     const site = this.siteService.getAssignedSite();
     this.runningClose = true;
@@ -132,5 +152,75 @@ export class PosOperationsComponent implements OnInit {
     )
   }
 
+  getReceiptContents(styles: string) {
+    const prtContent     = document.getElementById('printsection');
+    if (!prtContent) { return  }
+    const content        = `${prtContent.innerHTML}`
+    if (!content) { return }
+
+    const  title = 'Receipt';
+    const loadView       = ({ title }) => {
+      return (`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <style>${styles}</style>
+            <title>${title}</title>
+            <meta charset="UTF-8">
+          </head>
+          <body>
+            <div id="view">${content}</div>
+          </body>
+        </html>
+      `)
+    }
+    const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
+      title: "Receipt"
+    }));
+    return file
+  }
+
+
+  convertToPDF() {
+    console.log('convertToPdf')
+    this.printingService.convertToPDF( document.getElementById('printsection') )
+  }
+
+  async printElectron() {
+    const styles =  '' //this.receiptStyles.text;
+    const contents = this.getReceiptContents(styles)
+
+    const options = {
+      silent: true,
+      printBackground: false,
+      deviceName: this.printerName
+    } as printOptions;
+
+    if (!contents) { console.log('no contents in print electron')}
+    if (!options) { console.log('no options in print electron')}
+    if (!this.printerName) { console.log('no printerName in print electron')}
+    if (contents && this.printerName, options) {
+        this.printingService.printElectron( contents, this.printerName, options)
+    }
+
+  }
+
+  setPrinter(event) {
+    this.printerName = event;
+  }
+  savePDF() {
+    this.printingService.savePDF(this.printsection.nativeElement, this)
+  }
+
+  async printAndroid() {
+    //create fake date for order. - get order info from postman to use.
+    //passorder info to new method PrintAndroidReceipt.'
+    //save selected printer to local storage
+    //set saved printer name /bt id to selection on load.
+    // const order = this.fakeData.getPOSOrderContents()
+    // this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+    // this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+    // this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
+  }
 
 }

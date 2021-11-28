@@ -68,14 +68,21 @@ export class LoginComponent implements OnInit {
     if (this.platformService.webMode)  { this.amI21 = false }
     this.refreshTheme()
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
-    this.loginForm = this.fb.group({
-        username: ['', Validators.required],
-        password: ['', Validators.required]
-    });
-
+    this.iniForm();
     this.initCompanyInfo()
   }
+
+  iniForm() {
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
+  }
+
+  switchUser() {
+    this.userSwitchingService.openPIN({request: 'switchUser'})
+  }
+
 
   setAPIAlt() {
     this.counter  = this.counter +1
@@ -200,14 +207,20 @@ export class LoginComponent implements OnInit {
       .subscribe(
         user =>
         {
+
+          if (user && user.message === 'success') {
+            this.userSwitchingService.processLogin(user)
+            this.spinnerLoading = false;
+            this.iniForm()
+            return
+          }
+
           if(user.status === 0)
           {
             user.message == 'Failed'
             user.erorMessage = 'Service is not accesible. Check Internet.'
             this.statusMessage = "Service is not accessible, check connection."
           }
-
-          this.statusMessage =  this.userSwitchingService.processLogin(user)
 
         },
         error => {

@@ -1,18 +1,18 @@
 import { Component, OnInit ,OnDestroy,Optional } from '@angular/core';
 import { Route } from '@angular/compiler/src/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IPOSPayment, PosPayment } from 'src/app/_interfaces';
-import { OrdersService, UserService } from 'src/app/_services';
+import { IPOSPayment } from 'src/app/_interfaces';
+import { OrdersService  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable,  Subscription } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-import { Location} from '@angular/common';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialogRef } from '@angular/material/dialog';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'pos-payment-edit',
@@ -25,35 +25,36 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
 
   paymenthMethods$: Observable<IPaymentMethod[]>;
   paymentMethod   : IPaymentMethod;
-  payment         : IPOSPayment;
   isUserStaff     : boolean;
   roles           : string;
   id              : string;
 
-  private _payment : Subscription;
+  deleteAllowed = false;
+  payment         : IPOSPayment;
+  _payment        : Subscription;
 
   initSubscriptions() {
-    this._payment = this.paymentService.currentPayment$.subscribe( data => {
-      this.payment   = data
+    this._payment = this.paymentService.currentPayment$.subscribe( payment => {
+      this.payment   = payment
+      if (payment && payment.history) {
+        this.deleteAllowed = false
+      }
     });
   }
 
   constructor(
       private paymentService      : POSPaymentService,
       private paymentMethodService: PaymentMethodsService,
-      private userService         : UserService,
       private userAuthorization   : UserAuthorizationService,
-      private router              : Router,
       private siteService         : SitesService,
       public  route               : ActivatedRoute,
-      private location            : Location,
       private orderService        : OrdersService,
       private _snackBar           : MatSnackBar,
       private _bottomSheet        : MatBottomSheet,
+      private printingService     : PrintingService,
       @Optional() private dialogRef  : MatDialogRef<PosPaymentEditComponent>,
 
   ) {
-
     this.roles = localStorage.getItem(`roles`)
     this.isUserStaff = this.userAuthorization.isCurrentUserStaff()
   }
@@ -74,8 +75,30 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  printCheck(event) {
+    if (this.payment) {
+      const site      = this.siteService.getAssignedSite()
+      this.orderService.getOrder(site, this.payment.orderID.toString(), this.payment.history).subscribe( order => {
+          this.orderService.updateOrderSubscription(order)
+          this.printingService.previewReceipt();
+        }
+      )
+    }
+  }
+
+  viewOrder(event) {
+    if (!this.payment) { return }
+    const history = this.payment.history
+    const id      = this.payment.orderID;
+    const site    = this.siteService.getAssignedSite();
+    const order$  =  this.orderService.getOrder(site, id.toString(), history )
+    order$.subscribe(data =>  { this.orderService.setActiveOrder(site, data)
+      this._bottomSheet.dismiss();
+    })
+  }
+
   async getPaymentMethod(methodID: number) {
-    const site      = this.siteService.getAssignedSite()
+    const site         = this.siteService.getAssignedSite()
     this.paymentMethod = await  this.paymentMethodService.getPaymentMethod(site, methodID).pipe().toPromise()
   }
 
@@ -88,7 +111,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
   async getItem(id: number) {
     console.log('payment id', this.id)
     const site      = this.siteService.getAssignedSite()
-    const payment$  = this.paymentService.getPOSPayment(site, id)
+    const payment$  = this.paymentService.getPOSPayment(site, id, false)
     this.payment    = await payment$.pipe().toPromise();
 
     if (this.payment) {
@@ -148,9 +171,10 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     }
   }
 
+
   reOpenOrder(id: number) {
     const site      = this.siteService.getAssignedSite()
-    const order = this.orderService.getOrder(site, id.toString()).subscribe( data => {
+    const order     = this.orderService.getOrder(site, id.toString(), false ).subscribe( data => {
       data.completionDate = null
       data.completionTime = null;
       this.orderService.putOrder(site, data).subscribe(data => {

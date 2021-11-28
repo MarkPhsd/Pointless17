@@ -103,7 +103,7 @@ export class ChangeDueComponent   {
       //process tip via credit card service.
       payment$.subscribe(data => {
         this.paymentService.updatePaymentSubscription(data)
-        this.orderService.getOrder(site, data.orderID.toString()).subscribe(order => {
+        this.orderService.getOrder(site, data.orderID.toString(), false).subscribe(order => {
           this.orderService.updateOrderSubscription(order)
           this.dialogRef.close()
         })

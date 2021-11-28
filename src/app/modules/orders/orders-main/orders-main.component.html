@@ -31,7 +31,7 @@
             <div [class]="grid">
               <div *ngFor="let order of orders; let i = index">
                 <app-order-card
-                  *ngIf="order.id"
+                  *ngIf="order && order.id"
                   (click)="setActiveOrder(order)"
                   class="grid-item"
                   [order]="order"

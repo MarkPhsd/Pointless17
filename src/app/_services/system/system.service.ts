@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders,  } from '@angular/common/http';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
-import { MenusService } from '../system/menus.service';
-import { SitesService } from '../reporting/sites.service';
-import { ISite } from 'src/app/_interfaces';
+import { HttpClient,  } from '@angular/common/http';
+import { BehaviorSubject, Observable, } from 'rxjs';
+import { ICompany, ISite } from 'src/app/_interfaces';
 
 export interface SchemaUpdateResults {
   name:               string;
@@ -19,12 +16,12 @@ export interface SchemaUpdateResults {
 })
 export class SystemService {
 
-  constructor( private http: HttpClient,
-               private auth: AuthenticationService,
-               private menusService: MenusService,
-               private siteService: SitesService,) {
-        }
+  private _webApiStatus          = new BehaviorSubject<ICompany>(null);
+  public webApiStatus$           = this._webApiStatus.asObservable();
 
+  constructor( private http: HttpClient,
+              )
+  { }
 
    getSyncDatabaseSchema(site:ISite):  Observable<SchemaUpdateResults[]> {
 
@@ -38,7 +35,6 @@ export class SystemService {
 
     return this.http.get<SchemaUpdateResults[]>(url);
 
-  }
 
-
+   }
 }

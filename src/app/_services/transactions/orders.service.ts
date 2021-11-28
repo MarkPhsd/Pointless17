@@ -131,13 +131,15 @@ export class OrdersService {
 
   }
 
-  getOrder(site: ISite, id: string):  Observable<IPOSOrder>  {
+  getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
+
+    if (history === undefined) {history = false};
 
     const controller = "/POSOrders/"
 
     const endPoint  = "GetPOSOrder"
 
-    const parameters = `?ID=${id}`
+    const parameters = `?ID=${id}&history=${history}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

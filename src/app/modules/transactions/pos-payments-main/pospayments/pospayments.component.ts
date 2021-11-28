@@ -1,15 +1,11 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
+import { Component, Output, OnInit,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { AuthenticationService, AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
+import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -21,8 +17,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IPOSPayment, IPOSPaymentsOptimzed, IServiceType } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -103,7 +98,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
   isAuthorized    :   boolean;
 
   constructor(  private _snackBar               : MatSnackBar,
-                private router                  : Router,
                 private pOSPaymentService       : POSPaymentService,
                 private agGridService           : AgGridService,
                 private fb                      : FormBuilder,
@@ -111,7 +105,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
                 private agGridFormatingService  : AgGridFormatingService,
                 private awsService              : AWSBucketService,
                 private userAuthorization       : UserAuthorizationService,
-                private userService             : AuthenticationService,
                 private _bottomSheet            : MatBottomSheet
 
               )
@@ -125,7 +118,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
     this.initClasses()
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
-
     this.initAuthorization();
   };
 
@@ -145,7 +137,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
     this.searchForm = this.fb.group({
       itemName : ['']
     })
-
   }
 
   ngOnDestroy(): void {
@@ -177,21 +168,15 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
     try {
       this._searchModel = this.pOSPaymentService.searchModel$.subscribe( data => {
         this.searchModel            = data
-
           if (!this.searchModel) {
             const searchModel       = {} as IPaymentSearchModel;
-            console.log('data changed', data)
-
             this.currentPage        = 1
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 25;
             this.searchModel        = searchModel
             this.refreshSearch_sub()
-
             return
           }
-
-          // this.refreshSearch_sub()
         }
       )
     } catch (error) {
@@ -262,10 +247,10 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
       //
       {headerName: 'Completed', field: 'completionDate',     sortable: true,
                   cellRenderer: this.agGridService.dateCellRendererUSD,
-                  width   : 140,
-                  minWidth: 100,
+                  width   : 150,
+                  minWidth: 150,
                   maxWidth: 150,
-                // flex: 2,
+                  flex: 2,
       },
       {headerName: 'Employee',   field: 'employeeName',       sortable: true,
                   width   : 100,
@@ -287,12 +272,19 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
                   minWidth: 100,
                   maxWidth: 100,
                   // flex: 2,
-                },
+      },
+      {headerName: 'History', field: 'history', sortable: true,
+          cellRenderer: this.agGridService.currencyCellRendererUSD,
+          visible : false,
+          width   : 0,
+          minWidth: 0,
+          maxWidth: 0,
+          // flex: 2,
+        },
     ]
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
 
-      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
-
-    }
+  }
 
   listAll(){
     const control = this.itemName
@@ -315,9 +307,7 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
   initSearchModel(): IPaymentSearchModel {
     let searchModel        = {} as IPaymentSearchModel;
 
-    if (this.searchModel) {
-      searchModel = this.searchModel
-    }
+    if (this.searchModel) { searchModel = this.searchModel }
 
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
@@ -380,20 +370,14 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
             }
             if (data.results) {
               params.successCallback(data.results)
-
               this.rowData = data.results
             }
-
           }, err => {
             console.log(err)
           }
       );
       }
     };
-
-    if (this.numberOfPages !=0 && this.numberOfPages) {
-      this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-    }
   }
 
   //ag-grid standard method
@@ -406,15 +390,14 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
 
   //ag-grid standard method
   async onGridReady(params: any) {
+    if (params == undefined) { return }
+
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
       this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
-
-    // if (!params) { return }
-    if (params == undefined) { return }
 
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
@@ -433,7 +416,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
               this.currentPage   = resp.currentPage
               this.numberOfPages = resp.pageCount
               this.recordCount   = resp.recordCount
-
               if (this.numberOfPages !=0 && this.numberOfPages) {
                 this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
               }
@@ -442,7 +424,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
             if (data.results) {
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
-
               this.rowData = results
             }
 
@@ -488,7 +469,6 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  //mutli select method for selection change.
   onSelectionChanged(event) {
 
     let selectedRows       = this.gridApi.getSelectedRows();
@@ -498,6 +478,7 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
 
     selectedRows.forEach(function (selectedRow, index) {
     if (index >= maxToShow) { return; }
+
     if (index > 0) {  selectedRowsString += ', ';  }
       selected.push(selectedRow.id)
       selectedRowsString += selectedRow.name;
@@ -509,20 +490,36 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
       ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
 
-    // document.querySelector('#selectedRows').innerHTML = selectedRowsString;
     this.selected = selected
-    this.id = selectedRows[0].id;
-    this.getItem(this.id)
-    this.getItemHistory(this.id)
+
+    if (selected && selectedRows && selectedRows[0]) {
+      const item = selectedRows[0];
+      this.id = item.id;
+      const history = item.history
+      // this.getItem(this.id, history)
+      this.editItemWithId(item)
+    }
+
   }
 
-  getItem(id: number) {
+  getItem(id: number, history: boolean) {
     if (id) {
       const site = this.siteService.getAssignedSite();
-      this.pOSPaymentService.getPOSPayment(site, this.id).subscribe(data => {
+      this.pOSPaymentService.getPOSPayment(site, this.id, history).subscribe(data => {
          this.posPayment = data;
         }
       )
+    }
+  }
+
+  async editItemWithId(payment:any) {
+
+    console.log(payment)
+    if(!payment) { return  }
+    if (payment && payment.rowData) {  payment = payment.rowData;}
+    if (payment) {
+      this.pOSPaymentService.updatePaymentSubscription(payment)
+      this._bottomSheet.open(PosPaymentEditComponent);
     }
   }
 
@@ -549,20 +546,7 @@ export class POSPaymentsComponent implements  OnInit, AfterViewInit, OnDestroy {
     this.rowDataClicked2 = e.rowData;
   }
 
-  async editItemWithId(item:any) {
-    if(!item) {
-      return
-    }
 
-    const paymentID = parseInt( item.rowData.id);
-    // this.router.navigate(['/pos-payment-edit', {id:id}]);
-    const site = this.siteService.getAssignedSite();
-    const payment = await this.pOSPaymentService.getPOSPayment(site,paymentID).pipe().toPromise();
-    if (payment) {
-      this.pOSPaymentService.updatePaymentSubscription(payment)
-      this._bottomSheet.open(PosPaymentEditComponent);
-    }
-  }
 
   onSortByNameAndPrice(sort: string) { }
 

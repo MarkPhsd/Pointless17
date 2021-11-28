@@ -1,0 +1,13 @@
+
+.grid-multiprice-container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
+}
+
+.prices-fields {
+  width  : 75px;
+  margin : 0px;
+  padding: 0px;
+ }

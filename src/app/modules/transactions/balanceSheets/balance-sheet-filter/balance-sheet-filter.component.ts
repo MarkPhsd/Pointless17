@@ -10,6 +10,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
+import {TooltipPosition} from '@angular/material/tooltip';
 
 @Component({
   selector: 'balance-sheet-filter',

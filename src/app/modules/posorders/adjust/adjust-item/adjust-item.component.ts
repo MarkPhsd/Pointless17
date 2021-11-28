@@ -95,7 +95,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     //update the order service.
     const site = this.siteService.getAssignedSite();
     const orderID = this.itemWithAction.posItem.orderID;
-    const order = await this.orderService.getOrder(site, orderID.toString()).pipe().toPromise();
+    const order = await this.orderService.getOrder(site, orderID.toString(), false).pipe().toPromise();
     this.orderService.updateOrderSubscription(order)
   }
 

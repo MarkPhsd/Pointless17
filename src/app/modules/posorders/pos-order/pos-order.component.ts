@@ -184,7 +184,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   refreshOrder() {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
-      const order$ = this.orderService.getOrder(site, this.order.id.toString() )
+      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
       // const source = timer(5000, 3000);
       order$.subscribe( data => {
           this.orderService.updateOrderSubscription(data)
@@ -232,14 +232,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   async assignCurrentOrder() {
-     if (this.currentPOSOrderExists()) {
+    if (this.currentPOSOrderExists()) {
       const order$ = this.orderService.getCurrentPOSOrder(this.siteService.getAssignedSite(),this.orderService.posName)
     } else {
       if (!this.order) {
         this.order$ = null
         return
       }
-      const order$ = this.orderService.getOrder(this.siteService.getAssignedSite(),  this.order.id.toString())
+      const order$ = this.orderService.getOrder(this.siteService.getAssignedSite(),  this.order.id.toString(), this.order.history)
     }
     this.refreshObservable(this.order$)
   }

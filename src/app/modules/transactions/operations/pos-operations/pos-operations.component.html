@@ -6,7 +6,25 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <button mat-raised-button (click)="closeDay()">Close Day</button>
+    <span>
+      <button mat-raised-button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>
+      Refresh Sales Reports</button>
+    </span>
+
+    <span>
+      <button mat-raised-button (click)="closeDay()">Close Day</button>
+    </span>
+
+    <span>
+      <button mat-raised-button (click)="print()"> <mat-icon>print</mat-icon>Print</button>
+    </span>
+
+    <app-list-printers-electron
+        [printerName]      ="printerName"
+        (outputPrinterName)="setPrinter($event)" >
+      Receipt Printer
+    </app-list-printers-electron>
+
     <span *ngIf="runningClose">
       <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
     </span>
@@ -56,9 +74,6 @@
         </mat-card>
 
       </div>
-
-      <!-- {{ canCloseOrderResults | json }} -->
-
     </div>
 
     <mat-divider></mat-divider>
@@ -75,10 +90,7 @@
   <mat-card>
     <mat-card-content>
       <div class="grid-sales-cards ">
-        <div>
-          <button mat-button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>
-          Refresh Sales Reports</button>
-        </div>
+
         <div>
           <div>
             Start {{iBalanceSheet.startTime | date: 'short'}}
@@ -92,11 +104,11 @@
   </mat-card>
 </div>
 
-<div class="container">
+<div #printsection class="container">
   <div class=" grid-sales-cards " *ngIf="iBalanceSheet && localSite">
 
       <div >
-        <app-sales-tax-report
+        <sales-tax-report
               [site]="localSite"
               [dateFrom]="dateFrom"
               [dateTo]="dateTo"
@@ -104,7 +116,7 @@
               >
             <mat-icon>receipt</mat-icon>  Sales
             <mat-divider></mat-divider>
-        </app-sales-tax-report>
+        </sales-tax-report>
       </div>
 
       <div >
@@ -121,7 +133,7 @@
       </div>
 
       <div>
-        <app-payment-report
+        <payment-report
               [site]    ="localSite"
               [dateFrom]="dateFrom"
               [dateTo]  ="dateTo"
@@ -130,9 +142,9 @@
               >
             <mat-icon>credit_card</mat-icon>  Payment Methods
             <mat-divider></mat-divider>
-        </app-payment-report>
+        </payment-report>
 
-        <app-payment-report
+        <payment-report
               [site]    ="localSite"
               [dateFrom]="dateFrom"
               [dateTo]  ="dateTo"
@@ -141,7 +153,7 @@
               >
             <mat-icon>people</mat-icon>  Employee Sales
             <mat-divider></mat-divider>
-        </app-payment-report>
+        </payment-report>
       </div>
 
   </div>

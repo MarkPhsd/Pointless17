@@ -347,10 +347,6 @@ export class PaymentMethodListComponent implements OnInit {
       }
     }
 
-    // async getItemHistory(id: any) {
-    //   const site = this.siteService.getAssignedSite();
-    // }
-
     onDeselectAll() { }
 
     onExportToCsv() {
@@ -381,14 +377,6 @@ export class PaymentMethodListComponent implements OnInit {
     addNew() {
       this.productEditButtonService.openPaymentMethodEditor(0)
     }
-
-    // editSelectedItems() {
-    //   if (!this.selected) {
-    //     this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
-    //     return
-    //   }
-    //     this.productEditButtonService.editTypes(this.selected)
-    // }
 
     onSortByNameAndPrice(sort: string) { }
 

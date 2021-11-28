@@ -164,7 +164,6 @@ import { PaymentMethodListComponent } from '../modules/admin/transactions/paymen
 import { PaymentMethodEditComponent } from '../modules/admin/transactions/paymentMethods/payment-method-edit/payment-method-edit.component';
 import { PosPaymentsFilterComponent } from '../modules/transactions/pos-payments-main/pos-payments-filter/pos-payments-filter.component';
 import { PosPaymentComponent } from '../modules/posorders/pos-payment/pos-payment.component';
-import { PosPaymentsDetailsComponent } from '../modules/transactions/pos-payments-main/pos-payments-details/pos-payments-details.component';
 import { POSPaymentsComponent } from '../modules/transactions/pos-payments-main/pospayments/pospayments.component';
 import { IonicModule } from '@ionic/angular';
 import { BalanceSheetsComponent } from '../modules/transactions/balanceSheets/balance-sheets/balance-sheets.component';
@@ -205,6 +204,9 @@ import { RequiresSerialComponent } from '../modules/posorders/requires-serial/re
 import { BalanceSheetCalculationsViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-calculations-view/balance-sheet-calculations-view.component';
 import { BalanceSheetHeaderViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-header-view/balance-sheet-header-view.component';
 import { BalanceSheetQuickViewComponent } from '../modules/transactions/balanceSheets/balance-sheet-quick-view/balance-sheet-quick-view.component';
+import { PriceCategoryPriceFieldsComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-price-fields/price-category-price-fields.component';
+import { PriceCategoryConversionsComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-conversions/price-category-conversions.component';
+import { PriceCategoryTimeFiltersComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-time-filters/price-category-time-filters.component';
 
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -283,7 +285,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemCardComponent,
     MenuManagerComponent,
     MessagesToUserComponent,
-
     MetrcIndividualPackageComponent,
     MetrcInventoryPropertiesComponent,
     MainMenuComponent,
@@ -314,8 +315,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PosPaymentComponent,
     POSPaymentsComponent,
     PosPaymentComponent,
-    PosPaymentsDetailsComponent,
     PriceCategoriesEditComponent,
+    PriceCategoryPriceFieldsComponent,
+    PriceCategoryConversionsComponent,
+    PriceCategoryTimeFiltersComponent,
     PriceCategoriesComponent,
     PriceScheduleComponent,
     PriceScheduleListComponent,

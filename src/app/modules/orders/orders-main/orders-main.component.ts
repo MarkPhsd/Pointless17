@@ -119,7 +119,6 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // if (this._searchModel) {this._searchModel.unsubscribe();}
     if (this._orderBar) { this._orderBar.unsubscribe(); }
   }
 
@@ -178,13 +177,12 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onScrollDown() {
-    console.log('scrolled down!!');
     this.scrollingInfo = 'scroll down'
+    console.log('scrolled down')
     this.nextPage(false);
   }
 
   onScrollUp() {
-    console.log('scrolled up!!');
     this.scrollingInfo = 'scroll up'
   }
 
@@ -192,6 +190,7 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async nextPage(reset: boolean) {
+    console.log('next page', this.pageSize, 'currentPage', this.currentPage, 'reset', reset)
     await this.addToList(this.pageSize, this.currentPage, reset)
   }
 
@@ -217,11 +216,10 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
 
   setActiveOrder(order) {
     const site  = this.siteService.getAssignedSite();
-    const order$ =  this.orderService.getOrder(site, order.id)
+    const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
-        this.orderService.updateOrderSubscription(data)
-        this.toolbarServiceUI.updateOrderBar(true)
+        this.orderService.setActiveOrder(site, data)
       }
     )
   }
@@ -273,11 +271,13 @@ export class OrdersMainComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.value = ((this.orders.length / this.totalRecords ) * 100).toFixed(0)
         this.loading      = false
+
         return
       }
 
       this.pagingInfo = data.paging
       if (data) {
+          this.endOfRecords = true;
           this.loading      = false
           this.value        = 100;
         }

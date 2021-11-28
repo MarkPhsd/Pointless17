@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { EMPTY } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
 import { map,  timeout } from 'rxjs/operators';
 import { IUser } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
@@ -13,24 +13,28 @@ import { BalanceSheetService } from '../transactions/balance-sheet.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppInitService } from './app-init.service';
+import { PlatformService } from './platform.service';
+import { EncryptionService } from '../encryption/encryption.service';
+
+export interface ElectronDimensions {
+  height: string;
+  width : string;
+  depth : string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserSwitchingService {
 
-  // private _user       = new BehaviorSubject<IUserProfile>(null);
-  // public  user$       = this._user.asObservable();
-  // private user        :  IUserProfile
+  user  : IUser;
+  _user : Subscription
 
-  // updateUserSubscription(user: IUserProfile) {
-  //   console.log('user subscription updated', user)
-  //   this._user.next(user);
-  //   if (!user) {
-  //     this.clearSubscriptions();
-  //   }
-  // }
-  // getCurrentUser(): IUserProfile { return this.user}
+  initSubscriptions() {
+    this._user = this.authenticationService.user$.subscribe(user => {
+      this.user = user;
+    })
+  }
 
   constructor(
     private router          : Router,
@@ -45,8 +49,21 @@ export class UserSwitchingService {
     private paymentService  : POSPaymentService,
     private snackBar        : MatSnackBar,
     private appInitService  : AppInitService,
-    private route: ActivatedRoute,
+    private route           : ActivatedRoute,
+    private platformService : PlatformService,
+    private encryptionService: EncryptionService,
   ) {
+    this.initSubscriptions();
+    this.initializeAppUser();
+  }
+
+  initializeAppUser() {
+    const temp = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
+    if (temp) { return }
+
+    const appUser = {} as ElectronDimensions;
+    const user = JSON.stringify(appUser)
+    localStorage.setItem('appUser', user)
   }
 
   async switchUser(): Promise<boolean> {
@@ -58,20 +75,46 @@ export class UserSwitchingService {
     return true
   }
 
-  pinEntryResults(pin: any) {
+  setAppUser() {
+    //then we can set the user to the secret user
+    const appUser = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
 
+    const iUser = {} as IUser;
+    iUser.username  = this.encryptionService.decrypt(appUser.height, appUser.depth)
+    iUser.password = this.encryptionService.decrypt(appUser.width, appUser.depth)
+
+    this.authenticationService.updateUser(iUser)
+  }
+
+  saveAppUser(appUser: ElectronDimensions) {
+    // height: string;
+    // width : string;
+    // depth : string;
+
+    appUser.height = this.encryptionService.encrypt(appUser.height, appUser.depth)
+    appUser.width  = this.encryptionService.encrypt(appUser.width, appUser.depth)
+
+    const user = JSON.stringify(appUser);
+    localStorage.setItem('electronFeature', user);
+  }
+
+  pinEntryResults(pin: any) {
     //find employee
     const site = this.siteService.getAssignedSite()
+    //secret user
+    if (!this.user && !this.platformService.webMode) {
+      this.setAppUser();
+    }
+
     this.employeeService.getEmployeeByPIN(site, pin).subscribe
       (data =>
       {
-        // console.log('user',data)
         if (data) {
           if (data.employee && data.client) {
 
             let currentUser       = {} as IUser;
-            const emp      = data.employee
-            const client   = data.client;
+            const emp             = data.employee
+            const client          = data.client;
 
             currentUser.password  = pin;
             currentUser.roles     = client.roles
@@ -104,6 +147,7 @@ export class UserSwitchingService {
     let url = `${apiUrl}/users/authenticate`
 
     const userLogin = { username, password };
+
     return  this.http.post<any>(url, userLogin)
       .pipe(
         timeout(5000),
@@ -167,6 +211,8 @@ export class UserSwitchingService {
   }
 
   openPIN(request: any) {
+    if (this.platformService.webMode) {return}
+
     let dialogRef: any;
     dialogRef = this.dialog.open(FastUserSwitchComponent,
       { width:        '550px',
@@ -181,9 +227,6 @@ export class UserSwitchingService {
   processLogin(user: IUser) {
     //login the user based on the message response of the user.
     // console.log('user from Process login', user)
-
-    console.log('user', user)
-
     if (user && user.message == undefined) {
       return 'user undefined'
     }

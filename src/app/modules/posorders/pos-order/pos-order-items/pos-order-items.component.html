@@ -7,8 +7,12 @@
             class="nopadd"
             *ngFor="let item of order.posOrderItems; let i = index" >
     <div class="nopadd"
-        *ngIf="uiConfig && ((mainPanel || bottomSheetOpen)
-              || (item.id == item.idRef || item.prompGrouptID == 0))">
+        *ngIf="uiConfig &&
+               ((mainPanel || bottomSheetOpen)
+                || order.history ||
+               (item.id == item.idRef || item.prompGrouptID == 0))"
+                           >
+
       <ion-item >
         <pos-order-item
                     [class]="gridScroller"

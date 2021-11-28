@@ -15,30 +15,36 @@
             </div>
           </div>
         </div>
-
       </mat-card-title>
 
       <mat-card-content >
-        <div class="grid">
-          <div class="totals">Item :</div>
-          <div class="totals ">Pre Tax :</div>
-          <div class="totals">#</div>
+
+
+        <div class="grid-body">
+          <div class="totals">Item :    </div>
+          <div class="totals">Pre Tax :</div>
+          <div class="totals">#         </div>
         </div>
 
-        <div class="grid"
+        <div class="grid-body"
              *ngFor="let sale of sales">
-          <div class="totals">{{sale.productName }}  </div>
-          <div class="totals align-right">{{sale.itemTotal | currency }}   </div>
-          <div class="totals totals_label">{{sale.quantity }} </div>
+          <div class="product-name">{{sale.productName }}                  </div>
+          <div class="totals">{{sale.itemTotal | currency }}   </div>
+          <div class="totals">{{sale.quantity }}               </div>
+        </div>
+
+        <div class="margin-divider">
+          <mat-divider></mat-divider>
         </div>
       </mat-card-content>
 
       <mat-card-footer>
+
         <div *ngIf="summary.summary">
           <div class="grid-footer">
-            <div class="totals-footer"> Totals </div>
-            <div class="totals totals_label">{{summary.summary.itemTotal | currency }}  </div>
-            <div class="totals totals_label">{{summary.summary.quantity }}              </div>
+            <div class="totals"> Totals                                    </div>
+            <div class="totals">{{summary.summary.itemTotal | currency }}  </div>
+            <div class="totals">{{summary.summary.quantity }}              </div>
           </div>
         </div>
       </mat-card-footer>

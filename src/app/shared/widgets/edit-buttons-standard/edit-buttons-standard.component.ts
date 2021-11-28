@@ -14,12 +14,15 @@ export class EditButtonsStandardComponent  {
   @Output() outputupdatedeleteItem: EventEmitter<any> = new EventEmitter<any>();
   @Output() outputupdateonCancel  : EventEmitter<any> = new EventEmitter<any>();
   @Output() outputCopy            : EventEmitter<any> = new EventEmitter<any>();
+  @Output() outputViewOrder       : EventEmitter<any> = new EventEmitter<any>();
 
   @Input() enableCopy  : boolean;
   @Input() enableUpdate: boolean;
   @Input() enableDelete: boolean;
   @Input() hideExit    : boolean;
   @Input() printOption : boolean;
+  @Input() viewOrder   : boolean;
+  @Input() historyItem : boolean;
 
   smallDevice = false;
 
@@ -29,11 +32,9 @@ export class EditButtonsStandardComponent  {
       this.enableCopy   = false
       this.enableUpdate = true
       this.enableDelete = false
-
       if ( this.userauthorizationService.isUserAuthorized('admin') ||  this.userauthorizationService.isUserAuthorized('admin') ) {
         this.enableDelete = true
       }
-
       this.updateItemsPerPage();
   }
 
@@ -67,5 +68,8 @@ export class EditButtonsStandardComponent  {
     this.outputupdateonCancel.emit('demo')
   }
 
+  onOutputViewOrder() {
+    this.outputViewOrder.emit('demo')
+  }
 
 }

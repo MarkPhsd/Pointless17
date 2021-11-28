@@ -31,52 +31,14 @@
   grid-row-gap: 2px;
 }
 
-.grid-multiprice-container {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  grid-column-gap: 2px;
-  grid-row-gap: 2px;
-}
-
-.grid-time-container {
-  display        : grid;
-  grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: repeat(4, 1fr);
-  grid-column-gap: 2px;
-  grid-row-gap   : 2px;
-}
-
-.grid-conversion-container {
-  display        : grid;
-  grid-template-columns: repeat(1, 1fr);
-  // grid-template-rows: repeat(4, 1fr);
-  grid-column-gap: 2px;
-  grid-row-gap   : 2px;
-}
-
-.grid-conversion-items {
-  display        : grid;
-  grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: repeat(4, 1fr);
-  grid-column-gap: 2px;
-  grid-row-gap   : 2px;
-}
-
 .prices-fields {
  width  : 75px;
  margin : 0px;
  padding: 0px;
 }
 
-.date-fields {
-  width: 150px;
-  margin: 0px;
-}
 
-.conversion-fields{
-  width: 150px;
-  margin: 0px;
-}
+
 
 .grid-price-time-container {
   display        : grid;

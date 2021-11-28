@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
 import { Observable} from 'rxjs';
 import { ICompany, ISite } from   'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
 import { AppInitService } from './app-init.service';
 
 @Injectable({

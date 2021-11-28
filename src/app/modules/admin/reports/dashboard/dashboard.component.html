@@ -17,15 +17,24 @@
       <div class="grid-flow"
           *ngIf="dateFrom && dateTo">
         <div  *ngFor="let site of sites$ | async">
-          <app-sales-tax-report
+          <sales-tax-report
                   [site]="site"
                   [dateFrom]="dateFrom"
                   [dateTo]="dateTo"
                   [minimized]="'true'"
                   [notifier]="childNotifier">
-           {{site.name}}
-          </app-sales-tax-report>
+                  <mat-icon>summarize</mat-icon> Sales - {{site.name}}
+          </sales-tax-report>
+
+          <payment-report
+                  [site]    ="site"
+                  [dateFrom]="dateFrom"
+                  [dateTo]  ="dateTo"
+                  [notifier]="childNotifier">
+                  <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
+          </payment-report>
         </div>
+
       </div>
 
       <div

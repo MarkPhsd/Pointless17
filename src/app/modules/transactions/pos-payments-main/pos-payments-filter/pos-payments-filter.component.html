@@ -11,23 +11,21 @@
       </app-key-pad>
   </div>
 
-  <div *ngIf="isAuthorized" class="fields">
+  <div *ngIf="isAuthorized" class="dates-field ">
     <mat-form-field appearance="outline" *ngIf="dateRangeForm">
-
       <mat-label>Date Range (Start Time)</mat-label>
-
       <mat-date-range-input [formGroup]="dateRangeForm"
                             [rangePicker]="reportRangePicker"
-                            >
-        <input matStartDate
-                formControlName="start"
-                placeholder="Start date"
-                (click)='emitDatePickerData()'>
-        <input matEndDate formControlName="end"
-                placeholder="End date"
-                (click)='emitDatePickerData()'>
+                               >
+          <input matStartDate
+                  formControlName="start"
+                  placeholder="Start date"
+                  (click)='emitDatePickerData()'>
+          <input matEndDate formControlName="end"
+                  placeholder="End date"
+                  (click)='emitDatePickerData()'>
 
-              </mat-date-range-input>
+              </mat-date-range-input >
 
       <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
                               ></mat-datepicker-toggle>
@@ -37,6 +35,7 @@
       <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
       <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
     </mat-form-field>
+    <div class="refresh"> <button mat-raised-button (click)="emitDatePickerData()"><mat-icon>refresh</mat-icon> </button></div>
   </div>
 
 
@@ -57,9 +56,23 @@
         [(ngModel)]="toggleIsCashCredit"
         (change)    ="refreshToggleCashCredit()"
       >
-      <mat-button-toggle value="1" > <mat-icon>attach_money</mat-icon> </mat-button-toggle>
-      <mat-button-toggle value="2" > <mat-icon>credit_card</mat-icon> </mat-button-toggle>
-      <mat-button-toggle value="0" >All</mat-button-toggle>
+      <mat-button-toggle value="1"
+                          #tooltip="matTooltip"
+                          matTooltip="Cash Payments"
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1000"
+      > <mat-icon>attach_money</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="2"
+                          #tooltip="matTooltip"
+                          matTooltip="Credit Payments"
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1000" >
+        <mat-icon>credit_card</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="0"
+                          #tooltip="matTooltip"
+                          matTooltip="Show All"
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1000" >All</mat-button-toggle>
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
@@ -67,9 +80,21 @@
           class="toggle-view"
           [(ngModel)]="toggleTypeEmployee"
         >
-        <mat-button-toggle value="0" > <mat-icon>payments</mat-icon> </mat-button-toggle>
-        <mat-button-toggle value="1" > <mat-icon>receipt</mat-icon> </mat-button-toggle>
-        <mat-button-toggle value="2" > <mat-icon>badge</mat-icon> </mat-button-toggle>
+    <mat-button-toggle value="0"
+          #tooltip="matTooltip"
+          matTooltip="Filter Payment Type"
+          matTooltipPosition="above"
+        matTooltipHideDelay="1000" > <mat-icon>payments</mat-icon> </mat-button-toggle>
+    <mat-button-toggle value="1"
+          #tooltip="matTooltip"
+          matTooltip="Filter Service Type"
+          matTooltipPosition="above"
+        matTooltipHideDelay="1000" > <mat-icon>receipt</mat-icon> </mat-button-toggle>
+    <mat-button-toggle value="2"
+          #tooltip="matTooltip"
+          matTooltip="Filter By User"
+          matTooltipPosition="above"
+        matTooltipHideDelay="1000" > <mat-icon>badge</mat-icon> </mat-button-toggle>
     </mat-button-toggle-group>
 
 

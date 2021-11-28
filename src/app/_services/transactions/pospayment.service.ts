@@ -57,6 +57,8 @@ export interface IPaymentSearchModel {
   isCash                       : boolean;
   isCreditCard                 : boolean;
   tipInput                     : boolean;
+  zrun                         : number;
+  reportRunID                  : number;
 }
 
 @Injectable({
@@ -115,17 +117,16 @@ export class POSPaymentService {
 
   }
 
-  getPOSPayment(site: ISite, id: number): Observable<IPOSPayment> {
+  getPOSPayment(site: ISite, id: number, history: boolean): Observable<IPOSPayment> {
     const controller = '/POSPayments/'
 
     const endPoint  = 'GetPOSPayment'
 
-    const parameters = `?id=${id}`
+    const parameters = `?id=${id}&history=${history}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IPOSPayment>(url);
-
   }
 
   putPOSPayment(site: ISite, payment: IPOSPayment): Observable<IPOSPayment> {

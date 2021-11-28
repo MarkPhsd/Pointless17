@@ -27,9 +27,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
   productPrice            : ProductPrice;
 
   constructor(
-          private itemService: POSOrderItemServiceService,
           public  route: ActivatedRoute,
-          private settingsService: SettingsService,
           private siteService: SitesService,
           private orderService: OrdersService,
           private matSnackBar: MatSnackBar,
@@ -74,7 +72,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
       const orderID = this.order.id
-      const order = await this.orderService.getOrder(site, orderID.toString()).pipe().toPromise();
+      const order = await this.orderService.getOrder(site, orderID.toString(), false).pipe().toPromise();
       this.orderService.updateOrderSubscription(order)
     }
   }

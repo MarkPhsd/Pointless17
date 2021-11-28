@@ -1,20 +1,14 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component,  Inject,  Input, Output, OnInit } from '@angular/core';
+
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
-import { FormBuilder, FormControl, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { IPriceCategories, IPriceCategory2, IPriceCategoryPaged, PriceCategorySearchModel,
-          ProductPrice, ProductPrice2, UnitType, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IPriceCategories, IPriceCategory2,
+          ProductPrice, ProductPrice2, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { FbPriceCategoriesService } from 'src/app/_form-builder/fb-price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { PriceCategoryItemService } from 'src/app/_services/menu/price-category-item.service';
@@ -36,23 +30,19 @@ export class PriceCategoriesEditComponent implements OnInit {
   get productPrices() : FormArray {
     return this.inputForm.get('productPrices') as FormArray;
   }
+
   unitTypes$: Observable<IItemBasic[]>;
   unitTypes :  IItemBasic[]
   fieldOptions = { prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }
 
   constructor(  private _snackBar   : MatSnackBar,
-    private router                  : Router,
-    private agGridService           : AgGridService,
     private fb                      : FormBuilder,
     private siteService             : SitesService,
-    private dialog                  : MatDialog,
-    private productEditButtonService: ProductEditButtonService,
     private priceCategoryService    : PriceCategoriesService,
     private priceCategoryItemService: PriceCategoryItemService,
     private fbPriceCategory         : FbPriceCategoriesService,
     private dialogRef: MatDialogRef<PriceCategoriesEditComponent>,
     private unitTypeService: UnitTypesService,
-    private snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: IPriceCategories
     )
   {
@@ -355,7 +345,6 @@ export class PriceCategoriesEditComponent implements OnInit {
     )
 
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

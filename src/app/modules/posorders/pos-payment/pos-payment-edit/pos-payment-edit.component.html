@@ -28,14 +28,18 @@
           </div>
 
           <div>
-            <app-edit-buttons-standard
+          <app-edit-buttons-standard
+              [printOption]           ="true"
+              [viewOrder]             ="true"
+              [enableDelete]          ="deleteAllowed"
+              (outPutPrint)           ="printCheck($event)"
               (outputeupdateItem)     ="updateItem($event)"
               (outputupdateItemExit)  ="updateItemExit($event)"
               (outputupdatedeleteItem)="deleteItem($event)"
               (outputupdateonCancel)  ="onCancel($event)"
+              (outputViewOrder)       ="viewOrder($event)"
             ></app-edit-buttons-standard>
           </div>
-
         </div>
 
         <div class="header-grid info-width sub-title">

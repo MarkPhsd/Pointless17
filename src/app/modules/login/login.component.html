@@ -21,42 +21,58 @@
               </mat-card-title>
 
               <mat-card-subtitle>
-
-                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                    <h2>Use your email or phone. </h2>
-                    <h3>First time users request password.</h3>
+                  <div class="center">
+                    <div>
+                      <h3>Use your email or phone. </h3>
+                    </div>
+                    <div>
+                      <h3>First time users request password.</h3>
+                    </div>
                   </div>
               </mat-card-subtitle>
 
               <mat-card-content>
-                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                    <form [formGroup]="loginForm">
+                  <div class="center">
 
-                        <mat-form-field appearance="fill">
+                    <div class="center" [formGroup]="loginForm">
+                        <div>
+                          <mat-form-field appearance="fill">
                             <mat-label>User</mat-label>
                             <input matInput type="text" formControlName="username" class="form-control"
                                 [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                             <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
                                 <div *ngIf="f.username.errors.required">Username is required</div>
                             </div>
-                        </mat-form-field>
+                          </mat-form-field>
+                        </div>
 
-                        <br>
-                        <mat-form-field appearance="fill">
-                            <mat-label>Password</mat-label>
-                            <input matInput type="password" formControlName="password" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                            <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
-                                <div *ngIf="f.password.errors.required">Password is required</div>
-                            </div>
-                        </mat-form-field>
+                        <div>
+                          <mat-form-field appearance="fill">
+                              <mat-label>Password</mat-label>
+                              <input matInput type="password" formControlName="password" class="form-control"
+                                  [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                              <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+                                  <div *ngIf="f.password.errors.required">Password is required</div>
+                              </div>
+                          </mat-form-field>
+                        </div>
 
-                        <br>
-                        <div fxLayout="column" fxLayoutAlign="space-around center" class="row-height">
-                          <div >
-                            <button class="login" mat-raised-button color="primary" (click)="onSubmit()">Login</button>
-                            <button class="login" mat-raised-button color="primary"  (click)='browseMenu()'>Guest </button>
-                          </div>
+                        <div>
+
+                          <button class="login"
+                                  mat-raised-button
+                                  color="primary"
+                                  (click)="onSubmit()">Login</button>
+                          <button class="login"
+                                  mat-raised-button color="primary"
+                                  (click)='browseMenu()'>Guest</button>
+
+                          <!-- <span *ngIf="!this.platformService.webMode">
+                            <button class="login"
+                                    mat-raised-button color="primary"
+                                    (click)='switchUser()'>PIN</button>
+                          </span> -->
+
                         </div>
 
                         <div class="spinner"
@@ -64,24 +80,23 @@
                           <mat-spinner diameter="30"></mat-spinner>
                         </div>
 
-                    </form>
+                    </div>
 
                     <div *ngIf="(platformService && !platformService.webMode) && platformService.apiUrl.length != 0 ">
-                      <!-- Connected to:  {{platformService.apiUrl}} -->
-                      <!-- Platform:  {{platformService.platForm}} -->
                     </div>
 
                     <div>
                       {{ this.statusMessage }}
                     </div>
+
                   </div>
 
-                  <br>
-                  <mat-divider></mat-divider>
+                  <div class="registration">
+                    <mat-divider></mat-divider>
+                  </div>
 
-                  <br>
-                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                    <div>
+                  <div class="center">
+                    <div class="registration">
                       <button mat-raised-button  (click)='changePassword()'>Change Password</button>
                       <button mat-raised-button  (click)='registerUser()'>Register</button>
                       <button mat-raised-button  (click)='forgetMe()'>Forget Me</button>

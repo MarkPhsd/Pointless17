@@ -101,7 +101,7 @@ async function createWindow () {
           if (item.name == 'timerInterval') {
             hexString = item.value;
             if (hexString) { interval = parseInt(hexString, 16); }
-            log.info(`Scale Timer Interval: ${interval} `);
+            // log.info(`Scale Timer Interval: ${interval} `);
           }
         }
       }

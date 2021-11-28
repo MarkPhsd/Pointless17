@@ -5,6 +5,7 @@ import { IUser } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-settings',
@@ -18,13 +19,16 @@ export class SettingsComponent implements OnInit {
   showPaymentMethods = false;
   user:         IUser;
   role:         string;
-  accordionStep = 0;
+  accordionStep = -1;
 
   constructor(
       private AuthenticationService: AuthenticationService,
+      private platformService      : PlatformService,
       private dialog:          MatDialog,
       private router :         Router)
-  { }
+  {
+    this.accordionStep = -1;
+  }
 
     ngOnInit() {
       this.getCurrentUser();

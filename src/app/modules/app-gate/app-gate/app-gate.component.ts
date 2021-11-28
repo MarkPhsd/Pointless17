@@ -24,6 +24,7 @@ export class AppGateComponent implements OnInit , OnChanges{
         ) { }
 
   async ngOnInit() {
+    this.apiUrl = this.appInitService.getLocalApiUrl()
     await this.appInitService.init();
     this.apiUrl         = this.appInitService.apiBaseUrl();
     this.useAppGate     = this.appInitService.appGateEnabled();

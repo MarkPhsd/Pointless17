@@ -129,7 +129,7 @@ export class PosOrderItemsComponent implements OnInit {
 
   async updateSubscription(orderID: number) {
     const site = this.siteService.getAssignedSite();
-    const order = await this.orderService.getOrder(site, orderID.toString()).pipe().toPromise();
+    const order = await this.orderService.getOrder(site, orderID.toString(), false).pipe().toPromise();
     this.orderService.updateOrderSubscription(order)
   }
 

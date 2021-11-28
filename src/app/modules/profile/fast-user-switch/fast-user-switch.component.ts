@@ -1,9 +1,6 @@
-import { NgSwitchCase } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthenticationService } from 'src/app/_services';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 
 @Component({
@@ -28,7 +25,6 @@ export class FastUserSwitchComponent implements OnInit {
       this.request = data.request
       this.requestData = data
     }
-    console.log('data', data)
   }
 
   ngOnInit(): void {
@@ -46,9 +42,7 @@ export class FastUserSwitchComponent implements OnInit {
       default:
         break;
     }
-
     this.dialogRef.close();
-
   }
 
   enterPIN(event) {

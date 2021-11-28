@@ -1,5 +1,16 @@
 <div class="buttons-format flex-container">
 
+    <div>
+      <button *ngIf="viewOrder"
+              mat-button
+              color="primary"
+              class="button"
+              (click)="onOutputViewOrder()">
+              <mat-icon>expand</mat-icon>
+        <span >View</span>
+      </button>
+    </div>
+
     <div *ngIf="enableCopy">
       <button  mat-button class="button"  (click)="copy()">
         <mat-icon>copy</mat-icon>
@@ -44,7 +55,6 @@
 
     <div *ngIf="!hideExit">
       <button  mat-button class="button"  (click)="onCancel()">
-        <!-- <mat-icon>close</mat-icon> -->
         <mat-icon>exit_to_app</mat-icon>
         <span *ngIf="!smallDevice">Exit</span>
       </button>
@@ -52,23 +62,3 @@
 
 </div>
 
-<!--
-<div fxLayout="column" fxLayoutAlign="end" class="grid-container">
-
-  <div fxLayout="row" fxLayoutAlign="end end">
-
-  <button *ngIf="enableCopy" mat-button class="button"  (click)="copy()"><mat-icon>copy</mat-icon>Delete</button>
-
-  <button mat-button class="button"  (click)="updateItem()"><mat-icon>save</mat-icon>Save</button>
-
-  <div *ngIf="!hideExit">
-    <button mat-button class="button" (click)="updateItemExit()"><mat-icon>save</mat-icon>Save and Exit</button>
-  </div>
-
-  <button *ngIf="enableDelete" mat-button class="button"  (click)="deleteItem()"><mat-icon>delete</mat-icon>Delete</button>
-
-  <div *ngIf="!hideExit">
-    <button  mat-button class="button"  (click)="onCancel()"><mat-icon>close</mat-icon>Exit</button>
-  </div>
-
-</div> -->

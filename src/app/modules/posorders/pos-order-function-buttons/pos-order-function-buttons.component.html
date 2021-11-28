@@ -1,6 +1,10 @@
 
 <div  *ngIf="mainPanel"
       class="buttons-container">
+
+  <div *ngIf="order.history">
+    <h5>Transaction can not be modified.</h5>
+  </div>
   <div>
     <button mat-raised-button class="button" color="primary"  (click)="printLabels()">
       <mat-icon>print</mat-icon>
@@ -33,7 +37,7 @@
     </button>
   </div>
 
-  <div  *ngIf="(!itemsPrinted && !paymentsMade)">
+  <div  *ngIf="!order.history && (!itemsPrinted && !paymentsMade)">
     <button mat-raised-button class="button" color="primary" (click)="deleteOrder()">
       <mat-icon>delete</mat-icon>
       <span *ngIf="!smallDevice">
@@ -42,7 +46,7 @@
     </button>
   </div>
 
-  <div  *ngIf="isAuthorized && (itemsPrinted || paymentsMade)">
+  <div  *ngIf="!order.history && isAuthorized && (itemsPrinted || paymentsMade)">
     <button mat-raised-button class="button" color="primary" (click)="voidOrder()">
       <mat-icon>delete</mat-icon>
       <span *ngIf="!smallDevice">
@@ -62,14 +66,14 @@
   </div>
 
   <div *ngIf="mainPanel && !order.suspendedOrder">
-    <span *ngIf="isAuthorized && order.clientID != 0">
+    <span *ngIf="!order.history && isAuthorized && order.clientID != 0">
       <button mat-raised-button color="warn"
               (click)="suspendOrder()">Suspend Order</button>
     </span>
   </div>
 
   <div *ngIf="mainPanel && order.suspendedOrder">
-    <span *ngIf="isAuthorized && order.clientID != 0">
+    <span *ngIf="!order.history && isAuthorized && order.clientID != 0">
       <button mat-raised-button color="warn"
               (click)="removeSuspension()">Remove Suspension</button>
     </span>

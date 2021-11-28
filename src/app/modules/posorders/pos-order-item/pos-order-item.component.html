@@ -10,7 +10,7 @@
       <div class="grid-items">
 
         <div class="grid-item-span-row" *ngIf="orderItem">
-
+          1
           <span>
             {{index+1}}. {{ orderItem?.productName }}
           </span>
@@ -30,8 +30,6 @@
           <span  *ngIf="mainPanel && orderItem && orderItem.modifierNote && (orderItem.modifierNote != orderItem.serialCode)">
             {{ orderItem.modifierNote }}
           </span>
-
-        <!-- </div> -->
 
           <span  *ngIf="mainPanel || bottomSheetOpen">
             <img *ngIf="imagePath" [src]="imagePath" />
@@ -98,20 +96,24 @@
 
         </span>
 
-        <div *ngIf="orderItem.printed">
-          <mat-icon  color="warn" >print</mat-icon>
-          <span  *ngIf="mainPanel || bottomSheetOpen">
-            {{orderItem.printed | date: 'shortTime'}}
-          </span>
-        </div>
+        <div>
 
-        <div *ngIf="orderItem.voidReason">
-          <span  class="item-data">
-            <mat-icon  color="warn">lock</mat-icon>
+          <span *ngIf="orderItem.printed">
+            <mat-icon  color="warn" >print</mat-icon>
+            <span  *ngIf="mainPanel || bottomSheetOpen">
+              {{orderItem.printed | date: 'shortTime'}}
+            </span>
           </span>
-          <span  *ngIf="mainPanel || bottomSheetOpen">
-            Item voided:  {{ orderItem.voidReason }}
-          </span>
+
+          <div class="void-info" *ngIf="orderItem.voidReason">
+            <span  class="">
+              <mat-icon   color="warn"  >lock</mat-icon>
+            </span>
+            <span  *ngIf="mainPanel || bottomSheetOpen">
+              Item voided:  {{ orderItem.voidReason }}
+            </span>
+          </div>
+
         </div>
 
       </div>

@@ -55,6 +55,9 @@
     </div>
 
     <div *ngIf="isAuthorized" class="fields">
+
+      <button mat-raised-button (click)="toggleDateRangeFilter()">Dates<mat-icon>date_range</mat-icon></button>
+
       <mat-form-field appearance="outline" *ngIf="dateRangeForm">
 
         <mat-label>Date Range (Start Time)</mat-label>
@@ -101,7 +104,10 @@
           (change)    ="refreshSearch()"
         >
       <mat-button-toggle value="0" >Active </mat-button-toggle>
-      <mat-button-toggle value="1">Suspended</mat-button-toggle>
+      <mat-button-toggle value="1" #tooltip="matTooltip"
+                          matTooltip="Orders suspended so they don't close at the end of the day."
+                          matTooltipPosition="above"
+                          matTooltipHideDelay="1000">Suspended</mat-button-toggle>
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
@@ -120,8 +126,15 @@
           [(ngModel)] ="toggleTypeEmployee"
           (change)    ="changeToggleTypeEmployee()"
         >
-      <mat-button-toggle value="1" > <mat-icon>badge</mat-icon> </mat-button-toggle>
-      <mat-button-toggle value="0" > <mat-icon>receipt</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="1"
+                        matTooltip="User filter."
+                        matTooltipPosition="above"
+                        matTooltipHideDelay="1000" > <mat-icon>badge</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="0"
+                        matTooltip="Transaction filter."
+                        matTooltipPosition="above"
+                        matTooltipHideDelay="1000">
+          <mat-icon>receipt</mat-icon> </mat-button-toggle>
     </mat-button-toggle-group>
 
     <div [hidden]="toggleTypeEmployee  === '0' && searchModel"

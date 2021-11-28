@@ -180,7 +180,7 @@ export class CheckInProfileComponent implements OnInit {
             // console.log('update 1')
             if (this.currentOrder) {
               // console.log('update 2')
-              return this.orderService.getOrder(site, this.currentOrder.id.toString())
+              return this.orderService.getOrder(site, this.currentOrder.id.toString(), false)
             }
             // console.log('update empty')
             return EMPTY;

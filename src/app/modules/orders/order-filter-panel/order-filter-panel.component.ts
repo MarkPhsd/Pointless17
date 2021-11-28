@@ -1,20 +1,18 @@
-import {Component, HostBinding, OnDestroy,
+import {Component, OnDestroy,
         HostListener, OnInit, AfterViewInit,
         EventEmitter, Output,
-        Renderer2, ViewChild, ElementRef, QueryList,
-        ViewChildren, Input}  from '@angular/core';
-import { IEmployee, IServiceType, IUser, IUserProfile } from 'src/app/_interfaces';
-import { IPOSOrderSearchModel, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { IItemBasic, OrderPayload, UserService } from 'src/app/_services';
+        ViewChild, ElementRef,
+        }  from '@angular/core';
+import { IServiceType, IUser,  } from 'src/app/_interfaces';
+import { IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
+import { IItemBasic,} from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
-import {AWSBucketService, MenuService} from 'src/app/_services';
-import {trigger, transition, animate, style, query, stagger} from '@angular/animations';
 import {ActivatedRoute, Router} from '@angular/router';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Plugins } from '@capacitor/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
@@ -65,6 +63,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   value            : string;
   smallDevice       = false;
   isAuthorized     : any;
+  showDateFilter   : boolean;
 
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -105,11 +104,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     const site           = this.siteService.getAssignedSite()
     this.employees$      = this.orderService.getActiveEmployees(site)
     this.serviceTypes$   = this.serviceTypes.getSaleTypes(site)
-
-    // if (this.searchModel) {
-    //   this.initFilter(this.searchModel);//displays settings of filter
-    // }
-
+    this.initDateForm();
     this.initForm();
     this.initAuthorization();
     this.refreshSearch();
@@ -172,6 +167,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
   resetSearch() {
     this.searchModel = {} as IPOSOrderSearchModel;
+    this.initDateForm()
     this.toggleSuspendedOrders       = "0";
     this.toggleOrdersGreaterThanZero = "0";
     this.toggleOpenClosedAll         = "1"
@@ -306,7 +302,22 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.matSnack.open(message, title, {duration: 2000, verticalPosition: 'bottom'})
   }
 
+  toggleDateRangeFilter() {
+    this.showDateFilter=!this.showDateFilter
+    this.initDateForm()
+  }
+
   async initDateForm() {
+
+    if (!this.showDateFilter) {
+      if (this.searchModel) {
+        this.searchModel.completionDate_From = null;
+        this.searchModel.completionDate_To = null;
+      }
+      this.dateRangeForm = null;
+      return
+    }
+
     this.dateRangeForm = new FormGroup({
       start: new FormControl(),
       end: new FormControl()
@@ -352,6 +363,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("start").value) {
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo = (  this.dateRangeForm.get("end").value )
+
+
+        console.log(this.dateRangeForm.get("start").value)
+        console.log(this.dateRangeForm.get("end").value)
+
         this.refreshDateSearch()
       }
     }
@@ -359,6 +375,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
   refreshDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
+
+    this.dateFrom = this.dateRangeForm.get("start").value
+    this.dateTo   = this.dateRangeForm.get("end").value
+
+    console.log(this.dateRangeForm.get("start").value)
+    console.log(this.dateRangeForm.get("end").value)
+
     if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
       this.searchModel.completionDate_From = '';
       this.searchModel.completionDate_To   = '';
@@ -366,8 +389,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       return
     }
 
-    this.dateFrom = this.dateRangeForm.get("start").value
-    this.dateTo   = this.dateRangeForm.get("end").value
     this.searchModel.completionDate_From = this.dateFrom.toISOString()
     this.searchModel.completionDate_To   = this.dateTo.toISOString()
     this.refreshSearch()

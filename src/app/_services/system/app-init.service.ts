@@ -1,5 +1,6 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
@@ -16,6 +17,7 @@ export class AppInitService  {
 
   constructor(handler: HttpBackend,
               private platFormService: PlatformService,
+              private _snackbar: MatSnackBar,
               private router: Router,) {
     this.platFormService.getplatFormInfo()
     this.httpClient = new HttpClient(handler);
@@ -29,7 +31,9 @@ export class AppInitService  {
 
   async init() {
 
+    // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
+
     if (!this.platFormService.webMode) {
       if ( !this.apiUrl ){
         // if there is no API then the user needs to input one.
@@ -52,7 +56,20 @@ export class AppInitService  {
         this.router.navigate(['/apisetting']);
       }
     }
+  }
 
+  setAPIUrl(apiUrl): boolean {
+    //localStorage.set('storedApiUrl', apiUrl)
+    if (apiUrl ) {
+      try {
+        const url = new URL(apiUrl);
+        localStorage.setItem('storedApiUrl', apiUrl)
+        return true
+      } catch (error) {
+        this._snackbar.open('Url not formed properly.' + error, 'Failure')
+      }
+    }
+    return false
   }
 
   appInUse() {

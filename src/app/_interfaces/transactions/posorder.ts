@@ -95,6 +95,7 @@ export interface IPOSOrder {
   totalPayments         :number;
   voidReason            :string;
   resultMessage         : string;
+  history               : boolean;
 }
 
 export interface ClientsPOSOrders {
@@ -209,6 +210,7 @@ export interface PosOrderItem {
   idRef                       :  number;
   posOrderMenuItem:              PosOrderMenuItem;
   serialCode:                        string;
+  history                     :  boolean;
 }
 
 export interface PosPayment {
@@ -231,6 +233,7 @@ export interface PosPayment {
   positiveNegative:    number;
   voidReason           : string;
   paymentMethod        : IPaymentMethod;
+  history                     :  boolean;
 }
 ////Payments - need to move to it's own file.
 
@@ -401,4 +404,5 @@ export interface IPOSPayment {
   beginDate:           string;
   endDate:             string;
   orderID:             number;
+  history           :  boolean;
 }

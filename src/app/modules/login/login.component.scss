@@ -23,11 +23,15 @@ html {
 }
 
 .center {
-  width: 100vw;
-  opacity: .8;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  // opacity         : .8;
+  display         : grid;
+  place-items     : center;
+  justify-content : space-evenly;
+}
+
+.registration {
+  margin-top: 20px;
+
 }
 
 .spinner {

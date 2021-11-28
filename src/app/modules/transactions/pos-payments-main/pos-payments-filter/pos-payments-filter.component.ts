@@ -220,10 +220,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       if (! this.searchModel) {  this.searchModel = {} as IPaymentSearchModel }
       const searchModel = this.searchModel;
       searchModel.orderID = parseInt (id);
-      console.log('filter output', this.searchModel)
-      // search.id      = parseInt (id);
       this.posPaymentService.updateSearchModel( searchModel )
-      // return this._searchItems$
       this.outputRefreshSearch.emit('true');
     }
 
@@ -295,17 +292,15 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
 
     setActiveOrder(id: number) {
       const site  = this.siteService.getAssignedSite();
-      const order$ =  this.posPaymentService.getPOSPayment(site, id)
+      const order$ =  this.posPaymentService.getPOSPayment(site, id, false)
       order$.subscribe(data =>
         {
           this.posPaymentService.updatePaymentSubscription(data)
-          // this.toolbarServiceUI.updateOrderBar(true)
         }
       )
     }
 
     async initDateForm() {
-      console.log('init date form')
       this.dateRangeForm = new FormGroup({
         start: new FormControl(),
         end: new FormControl()
@@ -321,11 +316,8 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
         end: today // new Date()
       })
 
-      console.log('date', this.dateRangeForm.get("start").value)
-
       this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
       this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
-
       this.subscribeToDatePicker();
 
     }
@@ -354,9 +346,11 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
      emitDatePickerData() {
 
       if (this.dateRangeForm) {
-        if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
+        if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
+
           this.dateFrom = this.dateRangeForm.get("start").value
-          this.dateTo = (  this.dateRangeForm.get("end").value )
+          this.dateTo   =  this.dateRangeForm.get("end").value
+
           this.refreshDateSearch()
         }
       }
@@ -379,7 +373,6 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
 
       this.searchModel.completionDate_From = this.dateFrom.toISOString()
       this.searchModel.completionDate_To = this.dateTo.toISOString()
-
       this.refreshSearch()
 
     }
