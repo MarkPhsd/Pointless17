@@ -202,12 +202,14 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    console.log('run user switching');
+
     (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
       .pipe(first())
       .subscribe(
         user =>
         {
-
+          console.log(user.message);
           if (user && user.message === 'success') {
             this.userSwitchingService.processLogin(user)
             this.spinnerLoading = false;
@@ -215,7 +217,7 @@ export class LoginComponent implements OnInit {
             return
           }
 
-          if(user.status === 0)
+          if(user && user.status === 0)
           {
             user.message == 'Failed'
             user.erorMessage = 'Service is not accesible. Check Internet.'

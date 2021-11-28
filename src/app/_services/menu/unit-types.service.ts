@@ -52,7 +52,7 @@ export class UnitTypesService {
 
   };
 
-  getBasicTypes(site: ISite, searchModel: PriceCategorySearchModel): Observable<IUnitTypePaged> {
+  getBasicTypes(site: ISite,  searchModel: PriceCategorySearchModel): Observable<IUnitTypePaged> {
 
     const controller =  "/UnitTypes/"
 
@@ -62,7 +62,7 @@ export class UnitTypesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.get<IUnitTypePaged>(url)
+    return  this.http.post<IUnitTypePaged>(url,searchModel)
 
   }
 ;

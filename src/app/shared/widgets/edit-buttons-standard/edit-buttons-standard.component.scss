@@ -1,17 +1,22 @@
 button {
   margin-bottom: 5px;
+  justify-content: flex-end;
+  justify-self:    end;
+  grid-column-end: span 3;
 }
 
 .flex-container {
-  --gap: 3px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
-  justify-content: flex-end;
+  --gap   : 3px;
+  display : grid;
+  gap     : var(--gap);
+  grid-template-columns : repeat( auto-fit, minmax(75px, 1fr) );
+  grid-auto-flow        :dense;
+  justify-content       : flex-end;
+  justify-self          :    end;
 }
 
 .buttons-format {
-  max-width: 375px;
-  width:     350px;
-  float: right;
+  max-width : 400px;
+  width     : 400px;
+  float     : right;
 }

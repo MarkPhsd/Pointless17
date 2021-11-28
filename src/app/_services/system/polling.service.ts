@@ -1,8 +1,5 @@
-import { Injectable , OnInit, OnDestroy} from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient} from '@angular/common/http';
-import { ICompany, ISite } from   'src/app/_interfaces';
-import { CompanyService } from '..';
-
 import {
   Subscription,
   BehaviorSubject,
@@ -18,7 +15,7 @@ import {
   switchMap,
   tap
 } from 'rxjs/operators';
-import { AppInitService } from './app-init.service';
+
 import { SitesService } from '../reporting/sites.service';
 
 export const POLLING_INTERVAL  = (60 * 1000) * 1;                   // <-- poll every 1 min
@@ -34,8 +31,11 @@ export class PollingService   {
 
   timer$            = new BehaviorSubject<number>(0);    // <-- initially call immediately
   close$            = new ReplaySubject<any>(1);         // <-- close open subscriptions
-  sub: Subscription;
-  apiUrl = '';
+  sub               : Subscription;
+  apiUrl             = '';
+
+  private _poll          = new BehaviorSubject<boolean>(null);
+  public poll$           = this._poll.asObservable();
 
   constructor(
               private siteService: SitesService,
@@ -43,8 +43,6 @@ export class PollingService   {
 
     const site = this.siteService.getAssignedSite();
     this.apiUrl = site.url;
-    console.log('poll', this.apiUrl)
-
   }
 
   poll() {
@@ -59,6 +57,8 @@ export class PollingService   {
             ),
             catchError(() => {
               // <-- start timer again on error
+              this._poll.next(false)
+              console.log('Subscription failed');
               this.timer$.next(POLLING_INTERVAL);
               return NEVER; // <-- don't forward errors
             })
@@ -69,9 +69,14 @@ export class PollingService   {
       .subscribe({
         next: (data: any) => {
           console.log('Subscription next');
+          this._poll.next(true)
         },
+
         complete: () => console.log('Subscription complete')
-      });
+      }),  catchError => {
+        console.log('Subscription failed');
+        this._poll.next(false)
+      };
   }
 
 

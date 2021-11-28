@@ -113,6 +113,7 @@ import { UserAuthorizedDirective } from '../_directives/user-authorized.directiv
 import { APISettingComponent } from '../modules/login/apisetting/apisetting.component';
 import { ApiStoredValueComponent } from './widgets/api-stored-value/api-stored-value.component';
 import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
+import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-status-display.component';
 
 // export class MyHammerConfig extends HammerGestureConfig {
 //     overrides = <any> {
@@ -128,6 +129,7 @@ import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale
     AreaComponent,
     APISettingComponent,
     ApiStoredValueComponent,
+    ApiStatusDisplayComponent,
     AutofocusDirective,
     ChangeDueComponent,
     ButtonRendererComponent,
@@ -229,6 +231,7 @@ import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale
     ProgressBarComponent,
     SearchDebounceInputComponent,
 
+
   ],
 
   imports: [
@@ -255,6 +258,7 @@ import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale
     AutofocusDirective,
     APISettingComponent,
     ApiStoredValueComponent,
+    ApiStatusDisplayComponent,
     UserAuthorizedDirective,
     CashValueCalcComponent,
     ChangeDueComponent,

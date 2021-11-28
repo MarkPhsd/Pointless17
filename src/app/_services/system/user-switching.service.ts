@@ -146,21 +146,20 @@ export class UserSwitchingService {
     const apiUrl = await this.appInitService.apiBaseUrl()
     let url = `${apiUrl}/users/authenticate`
 
+    this.clearSubscriptions();
+
     const userLogin = { username, password };
 
     return  this.http.post<any>(url, userLogin)
       .pipe(
-        timeout(5000),
+        // timeout(5000),
         map(
           user => {
             console.log('user', user)
             if (user) {
               try {
-
-                  this.clearSubscriptions();
                   const currentUser   = this.setUserInfo(user, password)
                   this.authenticationService.updateUser(currentUser)
-
                   return user
               } catch (error) {
                 console.log('error', error)

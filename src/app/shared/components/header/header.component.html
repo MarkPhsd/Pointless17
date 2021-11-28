@@ -47,7 +47,9 @@
             </button>
           </div>
 
-          <div> {{apiStatus}}</div>
+          <div>
+            <api-status-display></api-status-display>
+          </div>
 
           <div *ngIf="smallDevice">
             <app-cart-button> </app-cart-button>
@@ -63,6 +65,7 @@
 
         </div>
       </div>
+
       <div  class="pos-buttons-mat-card">
         <mat-card
                 *ngIf="!smallDevice && ( (isUserStaff && platFormService.platForm !='web' ) || (isUserStaff) )"
@@ -116,7 +119,7 @@
                 {{scaleInfo.value}} {{scaleInfo.mode}}
               </li>
 
-              <li>
+              <li *ngIf="platFormService && !platFormService.webMode">
                 <button mat-button
                         color="accent"
                         (click)="switchUser()">

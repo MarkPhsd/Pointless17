@@ -1,5 +1,4 @@
 import { Component,  Inject,  Input, Output, OnInit } from '@angular/core';
-
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
@@ -7,6 +6,7 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPriceCategories, IPriceCategory2,
+          IUnitTypePaged,
           ProductPrice, ProductPrice2, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { FbPriceCategoriesService } from 'src/app/_form-builder/fb-price-categories';
@@ -31,7 +31,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     return this.inputForm.get('productPrices') as FormArray;
   }
 
-  unitTypes$: Observable<IItemBasic[]>;
+  unitTypes$: Observable<IUnitTypePaged>;
   unitTypes :  IItemBasic[]
   fieldOptions = { prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }
 
@@ -53,12 +53,14 @@ export class PriceCategoriesEditComponent implements OnInit {
 
     let unitSearchModel = {} as UnitTypeSearchModel;
     unitSearchModel.pageNumber = 1;
-    unitSearchModel.pageSize   = 100;
+    unitSearchModel.pageSize   = 1000;
 
     const search$ = this.unitTypeService.getBasicTypes(site, unitSearchModel)
     search$.subscribe(data => {
       this.unitTypes = data.results;
+     // console.log('init sizes', data.results)
     })
+    this.unitTypes$ = this.unitTypeService.getBasicTypes(site, unitSearchModel);
     this.refreshData_Sub(this.priceCategory);
   }
 
@@ -109,7 +111,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     if (!inputForm) { return }
     if (!items)     { return }
     let pricing = this.productPrices;
-    // let pricing = this.inputForm.controls[arrayName] as FormArray;
+
     pricing.clear();
 
     items.forEach( data =>

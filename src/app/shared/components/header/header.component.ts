@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   openOrderBar:                      boolean;
   @HostBinding('class') className = '';
 
-  apiStatus : string;
+
   isApp     : boolean;
 
   // get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
@@ -284,17 +284,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   initCompany() {
     const site     = this.siteService.getAssignedSite();
     this.company$  = this.companyService.getCompany(site)
-    .pipe(
-        repeatWhen(notifications =>
-          notifications.pipe(
-          delay(4000)
-      ),
-    )),
-    catchError((err: any) => {
-        this.apiStatus = "--Offline--"
-        return throwError(err);
-      }
-    )
   }
 
   initSearchObservable() {

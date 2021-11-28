@@ -90,14 +90,14 @@
 
                     <div>
                       <mat-form-field appearance="outline">
-                        <mat-label>Category</mat-label>
+                        <mat-label>Unit of Measure</mat-label>
                         <mat-select
                                     type="number"
                                     [formControlName] = "'unitTypeID'"
                                     name="unitTypeID"
                           >
                           <div *ngIf="(unitTypes$ | async) as list" >
-                            <mat-option *ngFor="let item of list" [value]="item.id">
+                            <mat-option *ngFor="let item of list.results" [value]="item.id">
                                 {{item.name}}
                             </mat-option>
                           </div>
