@@ -8,7 +8,7 @@ import { POSOrderItemServiceService } from 'src/app/_services/transactions/posor
 
 export interface Item {
   order: IPOSOrder;
-  menuItem: IMenuItem;
+  item: IMenuItem;
   posItem: IPurchaseOrderItem;
 }
 
@@ -21,8 +21,9 @@ export class PriceOptionsComponent  {
 
   //prices
   //  const  newItem = {order: order, item: item, posItem: posItem}
-  newItem: any;
-  prices: ProductPrice[];
+  newItem : Item;
+
+  prices  : ProductPrice[];
   menuItem: IMenuItem;
 
   constructor(
@@ -31,16 +32,21 @@ export class PriceOptionsComponent  {
     private orderService             : OrdersService,
     private dialogRef                : MatDialogRef<PriceOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,) {
-      console.log(data)
-      const item = data as Item
 
-      if (item) {
-        if (item.menuItem && item.menuItem.priceCategories && item.menuItem.priceCategories.productPrices) {
-          this.prices = item.menuItem.priceCategories.productPrices;
+      const item = data as Item
+      this.newItem = data;
+
+      console.log('data from MenuItem', this.newItem);
+      if (this.newItem && this.newItem.item && this.newItem.item.priceCategories) {
+      }
+
+      if (this.newItem.item) {
+        const menuItem = this.newItem.item;
+        if ( menuItem &&  menuItem.priceCategories &&  menuItem.priceCategories.productPrices) {
+          this.prices =  menuItem.priceCategories.productPrices;
         }
       }
 
-      // this.menuItem = item.menuItem;
     }
 
 

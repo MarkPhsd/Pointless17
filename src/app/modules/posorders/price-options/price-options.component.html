@@ -6,31 +6,34 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <div *ngIf="prices">
-      <div *ngFor="let item of prices;let i = index">
-        <button
-            class="buttonPrices"
-            mat-raised-button
-            (click)="addItemPrice(item)"
-        >
-        {{item.retail}}
-        <span *ngIf="item.unitType">
-          {{item.unitType.name}}
-        </span>
-        </button>
+
+      <div class="center" *ngIf="prices">
+        <div *ngFor="let item of prices;let i = index">
+          <button
+              class="buttonPrices"
+              mat-raised-button
+              (click)="addItemPrice(item)"
+          >
+          <span *ngIf="item.unitType">
+            {{item.unitType.name}}
+          </span>
+          {{item.retail | currency}}
+          </button>
+
+        </div>
 
       </div>
 
-    </div>
-
   <mat-card-actions>
-    <button
+    <div class="center" >
+      <button
           class="buttonPrices"
           mat-raised-button
           (click)="cancel()"
-    >
-    Cancel
-    </button>
+          >
+          Cancel
+      </button>
+    </div>
 
   </mat-card-actions>
   </mat-card-content>

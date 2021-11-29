@@ -1,4 +1,13 @@
 .buttonPrices {
   width: 200px;
-  height: 100px
+  height: 100px;
+  margin: 15px;
+}
+
+
+.center {
+  // opacity         : .8;
+  display         : grid;
+  place-items     : center;
+  justify-content : space-evenly;
 }
