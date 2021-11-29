@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
-import { ActivatedRoute, Router } from '@angular/router';
+import { OrdersService } from 'src/app/_services';
+import { ActivatedRoute } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable, Subscription } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ItemPostResults, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { ElectronService } from 'ngx-electron';
+import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
-import { Data } from 'electron/main';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { T } from '@angular/cdk/keycodes';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
@@ -19,6 +17,7 @@ import { ISite }   from 'src/app/_interfaces';
 import { PromptWalkThroughService } from '../menuPrompt/prompt-walk-through.service';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-serial/requires-serial.component';
+import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +40,7 @@ export class OrderMethodsService {
               private orderService            : OrdersService,
               private _snackBar               : MatSnackBar,
               private posOrderItemService     : POSOrderItemServiceService,
+              // private priceService            : PricingService,
               private promptGroupService      : PromptGroupService,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -61,14 +61,15 @@ export class OrderMethodsService {
 
   appylySerial(posItem: IPOSOrderItem) {
     const site = this.siteService.getAssignedSite();
+    console.log(posItem, posItem.serialCode)
     return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
-    const site = this.siteService.getAssignedSite()
-    const result = await this.doesOrderExist(site);
+    const site          = this.siteService.getAssignedSite()
+    if (!order)         { order = this.order }
+    const result        = await this.doesOrderExist(site);
     if (!result) { return }
-    if (!order) { order = this.order }
     if (order) {
       const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
       const itemResult$ = this.posOrderItemService.postItem(site, newItem)
@@ -130,8 +131,8 @@ export class OrderMethodsService {
         }
       )
       dialogRef.afterClosed().subscribe(result => {
-        // this.promptGroupService.updatePromptGroup(null)
-        // this.promptWalkService.updatePromptGroup(null)
+        console.log('prompt serial close', result)
+
       });
     }
   }
@@ -143,27 +144,73 @@ export class OrderMethodsService {
     this.openPromptWalkThroughWithItem(prompt, posItem)
   }
 
-  addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
-    console.log('item.requiresSerial', item.itemType.requiresSerial)
-    if (item.requiresSerial || item.itemType.requiresSerial) {
-      this.promptSerial(item, posItem)
+  //, pricing:  priceList[]
+  async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
+
+    const priceOption = await this.openPriceOptionPrompt(order,item,posItem);
+
+    this.openPriceChangePrompt(order, item, posItem)
+
+    if (item.requiresSerial || item.itemType.requiresSerial) { this.promptSerial(item, posItem) }
+
+    this.openPromptWalkThrough(order,item,posItem)
+
+    this.openQuantityPrompt(order,item,posItem)
+
+    this.openGiftCardPrompt(order,item,posItem)
+
+  }
+
+  async  openPriceOptionPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
+    const site = this.siteService.getAssignedSite()
+    //if there are multiple prices for this item.
+    //the webapi will return what price options are avalible for the item.
+    //the pop up will occur and prompt with options.
+    //the function will return true once complete.
+
+    if (item && item.priceCategories && item.priceCategories.productPrices.length > 0 ) {
+      //remove unused prices if they exist?
+
+        // prompt.posOrderItem = posItem;
+        // this.promptGroupService.updatePromptGroup(prompt);
+        // encapsulation: ViewEncapsulation.None
+        // const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
+        const  newItem = {order: order, item: item, posItem: posItem}
+
+        const dialogRef = this.dialog.open(PriceOptionsComponent,
+          {
+            width:     '500px',
+            maxWidth:  '500px',
+            height:    '75vh',
+            maxHeight: '75vh',
+            panelClass: 'foo',
+            data: newItem
+          }
+        )
+        dialogRef.afterClosed().subscribe(result => {
+          this.promptGroupService.updatePromptGroup(null)
+          this.promptWalkService.updatePromptGroup(null)
+        });
+
     }
-    this.openPromptWalkThrough(order, item,posItem)
-    this.openQuantityPrompt(order,item,    posItem)
-    this.openGiftCardPrompt(order,item,    posItem)
-    this.openPriceChangePrompt(order,item, posItem)
+
+    return true;
   }
 
   openPriceChangePrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
+
+    // return true
   }
 
   openGiftCardPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
+
   }
 
   openQuantityPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
+
   }
 
 

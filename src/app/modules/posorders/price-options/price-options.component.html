@@ -1,0 +1,38 @@
+<mat-card>
+  <mat-card-subtitle>
+    <div *ngIf="menuItem">
+      {{menuItem.name}}
+    </div>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div *ngIf="prices">
+      <div *ngFor="let item of prices;let i = index">
+        <button
+            class="buttonPrices"
+            mat-raised-button
+            (click)="addItemPrice(item)"
+        >
+        {{item.retail}}
+        <span *ngIf="item.unitType">
+          {{item.unitType.name}}
+        </span>
+        </button>
+
+      </div>
+
+    </div>
+
+  <mat-card-actions>
+    <button
+          class="buttonPrices"
+          mat-raised-button
+          (click)="cancel()"
+    >
+    Cancel
+    </button>
+
+  </mat-card-actions>
+  </mat-card-content>
+
+</mat-card>

@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
-import { IProductPostOrderItem, ISite, IUser }   from 'src/app/_interfaces';
+import { ISite, IUser }   from 'src/app/_interfaces';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { concatMap, switchMap } from 'rxjs/operators';
 import { OrdersService } from './orders.service';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { IPurchaseOrderItem } from '../../_interfaces/raw/purchaseorderitems';
 import { IInventoryAssignment,Serial } from '../inventory/inventory-assignment.service';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { ScaleInfo, ScaleService } from '../system/scale-service.service';
 
@@ -129,15 +127,11 @@ export class POSOrderItemServiceService {
 
   getNewItemWeight(newItem: any) {
     //  Not oScale.ScaleMode = "NA"
-
-    console.log('isApp scale read', this.isApp)
     if (this.scaleInfo) {
       const scaleInfo = this.scaleInfo
       if  (scaleInfo) {
         let weight = scaleInfo.value;
-        console.log('scaleInfo', scaleInfo)
         newItem.weight = weight
-        console.log('newItemWeight', newItem.Weight)
       }
     }
     return newItem;
@@ -147,12 +141,17 @@ export class POSOrderItemServiceService {
   async addItemToOrder(site: ISite, newItem: any):  Promise<ItemPostResults> {
     if (newItem) {
        return await this.postItem(site, newItem).pipe().toPromise();
+      //  const item$ =this.postItem(site, newItem)
+      //  const item = await lastValueFrom(item$);
     }
   }
 
   async addItemToOrderWithBarcodePromise(site: ISite, newItem: newItem):  Promise<ItemPostResults> {
     if (newItem) {
        return await this.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
+      //  const item$ =this.addItemToOrderWithBarcode(site, newItem)
+      //  const item = await lastValueFrom(item$);
+      //  return item
     }
   }
 
@@ -182,14 +181,13 @@ export class POSOrderItemServiceService {
 
   }
 
-
   appylySerial(site: ISite, id: number, serialCode: string, user: IUser): Observable<ItemPostResults> {
 
     const item = {} as ApplySerialAction
     item.id = id;
     item.serialCode = serialCode;
 
-    if (user) {
+    if (!user) {
 
     }
 

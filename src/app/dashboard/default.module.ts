@@ -207,6 +207,7 @@ import { BalanceSheetQuickViewComponent } from '../modules/transactions/balanceS
 import { PriceCategoryPriceFieldsComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-price-fields/price-category-price-fields.component';
 import { PriceCategoryConversionsComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-conversions/price-category-conversions.component';
 import { PriceCategoryTimeFiltersComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-time-filters/price-category-time-filters.component';
+import { PriceOptionsComponent } from '../modules/posorders/price-options/price-options.component';
 
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -320,6 +321,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceCategoryConversionsComponent,
     PriceCategoryTimeFiltersComponent,
     PriceCategoriesComponent,
+    PriceOptionsComponent,
     PriceScheduleComponent,
     PriceScheduleListComponent,
     PriceScheduleConstraintsComponent,

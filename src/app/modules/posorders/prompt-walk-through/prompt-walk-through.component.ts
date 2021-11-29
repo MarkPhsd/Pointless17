@@ -54,9 +54,9 @@ export class PromptWalkThroughComponent implements OnInit {
   constructor(
     private sitesService             : SitesService,
     private posOrderItemService      : POSOrderItemServiceService,
-    private promptWalkThroughService : PromptWalkThroughService,
     private orderService             : OrdersService,
     private promptGroupService       : PromptGroupService,
+    private promptWalkThroughService : PromptWalkThroughService,
     private dialogRef                : MatDialogRef<PromptWalkThroughComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     )
