@@ -11,8 +11,10 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
   styleUrls: ['./api-stored-value.component.scss']
 })
 export class ApiStoredValueComponent implements OnInit {
+
   inputForm: FormGroup;
   currentAPIUrl : any;
+
   constructor(
       private router               : Router,
       public platFormService       : PlatformService,
@@ -22,7 +24,6 @@ export class ApiStoredValueComponent implements OnInit {
     ) {
 
       this.currentAPIUrl = localStorage.getItem('storedApiUrl');
-
       if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
         this.router.navigate(['/login'])
       }

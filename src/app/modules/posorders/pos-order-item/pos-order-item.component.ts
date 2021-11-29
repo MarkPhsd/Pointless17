@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef,  HostListener, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, ElementRef,  HostListener, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -11,14 +11,11 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
-import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { PromptGroupEditComponent } from '../../admin/menuPrompt/prompt-groups/prompt-group-edit/prompt-group-edit.component';
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { PosOrderItemEditComponent } from './pos-order-item-edit/pos-order-item-edit.component';
 
@@ -258,10 +255,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   async addItemToOrder() {
     if (this.menuItem) {
       const quantity  =  Number(1)
-      const newItem = { orderID: 0, quantity: quantity, menuItem: this.menuItem }
-      const site = this.siteService.getAssignedSite()
-      //!!! TestAddItemToOrder
-      this.posOrderItemService.addItemToOrder(site, newItem)
+      console.log('addItem To Order')
+      this.orderMethodsService.addItemToOrder(this.order, this.menuItem, quantity)
     }
   }
 

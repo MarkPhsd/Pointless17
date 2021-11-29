@@ -9,6 +9,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'pos-order-items',
@@ -61,6 +62,7 @@ export class PosOrderItemsComponent implements OnInit {
                 private productEditButtonService: ProductEditButtonService,
                 private posOrderItemService: POSOrderItemServiceService,
                 private uiSettingsService: UISettingsService,
+                private orderMethodService: OrderMethodsService,
               )
  {
     this.orderItemsPanel = 'item-list';
@@ -103,34 +105,18 @@ export class PosOrderItemsComponent implements OnInit {
   }
 
   async removeItemFromList(payload: any) {
-    console.log(payload)
     const index = payload.index;
     const orderItem = payload.item
-    if (orderItem) {
-      const site = this.siteService.getAssignedSite()
-      if (orderItem.printed || this.order.completionDate ) {
-        //only manager can void. but should be voided.
-        this.productEditButtonService.openVoidItemDialog(orderItem)
-        return
-      }
+    // this.orderMethodService.addItemToOrder
+    this.orderMethodService.removeItemFromList(index, orderItem)
 
-      if (orderItem.id) {
-        const orderID = orderItem.orderID
-        let item = await this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).pipe().toPromise();
-        if (item) {
-            this.notifyEvent('Item Deleted', "")
-            this.updateSubscription(orderID)
-            this.order.posOrderItems.splice(index, 1)
-        }
-        this.updateSubscription(orderID);
-      }
-    }
   }
 
   async updateSubscription(orderID: number) {
     const site = this.siteService.getAssignedSite();
-    const order = await this.orderService.getOrder(site, orderID.toString(), false).pipe().toPromise();
-    this.orderService.updateOrderSubscription(order)
+    this.orderService.getOrder(site, orderID.toString(), false).subscribe(order => {
+      this.orderService.updateOrderSubscription(order)
+    })
   }
 
   startAnimation(state) {

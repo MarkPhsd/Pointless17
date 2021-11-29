@@ -6,9 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { IPOSOrder, IPurchaseOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { T } from '@angular/cdk/keycodes';
@@ -18,6 +18,7 @@ import { PromptWalkThroughService } from '../menuPrompt/prompt-walk-through.serv
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-serial/requires-serial.component';
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
+import { ProductEditButtonService } from '../menu/product-edit-button.service';
 
 export interface ProcessItem {
   order: IPOSOrder;
@@ -36,22 +37,23 @@ export class OrderMethodsService {
 
   private itemProcessSection      = 0
   private _itemProcessSection     = new BehaviorSubject<number>(null);
-  // private itemProcessSubscription: Subscription;
   public itemProcessSection$      = this._itemProcessSection.asObservable();
 
   processItem : ProcessItem
 
-  intSubscriptions() {
+  initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(data => {
       this.order = data;
     })
+  }
 
-    // this._itemProcessSection = this.itemProcessSubscription$.subscribe()
+  initItemProcess(){
+    this.processItem = null;
+    this._itemProcessSection.next(0)
   }
 
   updateProcess()  {
     this.itemProcessSection = this.itemProcessSection +1
-    console.log('updateProcess', this.itemProcessSection)
     this._itemProcessSection.next(this.itemProcessSection)
     this.handleProcessItem()
   }
@@ -62,15 +64,16 @@ export class OrderMethodsService {
               private orderService            : OrdersService,
               private _snackBar               : MatSnackBar,
               private posOrderItemService     : POSOrderItemServiceService,
+              private productEditButtonService: ProductEditButtonService,
               // private priceService            : PricingService,
               private promptGroupService      : PromptGroupService,
               private promptWalkService: PromptWalkThroughService,
              ) {
-    this.intSubscriptions();
+    this.initSubscriptions();
   }
 
   async doesOrderExist(site: ISite): Promise<boolean> {
-    if (!this.subscriptionInitialized) { this.intSubscriptions(); }
+    if (!this.subscriptionInitialized) { this.initSubscriptions(); }
     if (!this.order) {
       const result = await this.orderService.newDefaultOrder(site)
       if (!result) {
@@ -83,7 +86,6 @@ export class OrderMethodsService {
 
   appylySerial(posItem: IPOSOrderItem) {
     const site = this.siteService.getAssignedSite();
-    console.log(posItem, posItem.serialCode)
     return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
   }
 
@@ -97,7 +99,7 @@ export class OrderMethodsService {
       const itemResult$ = this.posOrderItemService.postItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
-            this.orderService.updateOrderSubscription(data.order)
+            // this.orderService.updateOrderSubscription(data.order)
             this.addedItemOptions(order, item, data.posItem)
           } else {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
@@ -107,15 +109,22 @@ export class OrderMethodsService {
     }
   }
 
-  // Public Property OrderID As Integer
-  // Public Property MenuItem As MenuItem
-  // Public Property Quantity As Decimal
-  // Public Property Barcode As String
-  // Public Property OverRide As Boolean
-  // Public Property Weight As Double
-  // Public Property POSOrderItem As POSOrderItem
+  async addItemToOrderWithBarcodePromise(site: ISite, newItem: NewItem):  Promise<ItemPostResults> {
+    if (newItem) {
+      this.initItemProcess();
+       return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
+    }
+  }
 
-  //this.newItem.order, this.newItem.posItem, this.newItem.item, price, this.newItem.posItem.quantity)
+  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
+    if (order && barcode) {
+      this.initItemProcess();
+      let newItem = { orderID: order.id, quantity: quantity, barcode: barcode } as NewItem
+      return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
+    }
+    return null;
+  }
+
   async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
     const site          = this.siteService.getAssignedSite()
     if (!order)         { order = this.order }
@@ -123,14 +132,14 @@ export class OrderMethodsService {
     if (!result) { return }
     if (order) {
 
-      const newItem     = { orderID: order.id, itemID: posOrderItem.id, quantity: quantity, menuItem: menuItem, price: price }
+      const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
       const itemResult$ = this.posOrderItemService.putItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
             this.orderService.updateOrderSubscription(data.order)
-            this.addedItemOptions(order, menuItem, data.posItem)
+            this.updateProcess()
           } else {
-            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+            this.notifyEvent(`Error occured, this item was not changed. ${data.resultErrorDescription}`, 'Alert')
           }
         }
       )
@@ -143,25 +152,24 @@ export class OrderMethodsService {
 
     const site = this.siteService.getAssignedSite()
     const result = await this.doesOrderExist(site);
+    this.initItemProcess();
     if (!result) { return }
     const order = this.order
 
     //or we refresh the order with the new item added
-    const addItem$ = this.posOrderItemService.scanItemForOrder(site, order, barcode, 1);
+    const addItem$ = this.scanItemForOrder(site, order, barcode, 1);
     addItem$.subscribe(
         data=> {
         if (data.posItemMenuItem) {
           this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
         }
         if (data.menuItemWithPrice) {
-          //this means we prompt for prices.
         }
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
         }
         if (data.menuItem) {
           if (data.menuItem.length > 0) {
-            //here we can and present a list of items found
           }
         }
         if (!data.order && data.menuItem) {
@@ -187,11 +195,12 @@ export class OrderMethodsService {
           }
         )
         dialogRef.afterClosed().subscribe(result => {
-          if (result) { this.updateProcess(); }
+          if (result)  { this.updateProcess(); }
+          if (!result) { this.initItemProcess(); }
         });
       }
     }
-    // this.handleProcessItem();
+
   }
 
   async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
@@ -209,24 +218,28 @@ export class OrderMethodsService {
     processItem.posItem = posItem;
     this.processItem    = processItem;
     this._itemProcessSection.next(0)
+    this.itemProcessSection = 0;
     this.handleProcessItem();
   }
 
   async handleProcessItem() {
     const process = this.itemProcessSection;
-    // order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem
 
-    if (!this.processItem) {return}
+    // console.log('handleProcessItem', this.processItem, this.itemProcessSection)
+    if (!this.processItem) {
+      this.orderService.updateOrderSubscription(this.order)
+      return
+    }
 
     switch(process) {
       case  0: {
-          this.promptSerial(this.processItem.item, this.processItem.posItem)
-          break;
-        }
-      case  1: {
         this.openPriceOptionPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem)
         break;
       }
+      case  1: {
+          this.promptSerial(this.processItem.item, this.processItem.posItem)
+          break;
+        }
       case  2: {
         this.openPromptWalkThrough(this.processItem.order,this.processItem.item,this.processItem.posItem)
         //statements;
@@ -284,6 +297,7 @@ export class OrderMethodsService {
           if (result) {
             this.updateProcess() //
           }
+          if (!result) { this.initItemProcess(); }
         });
         return;
     }
@@ -327,11 +341,34 @@ export class OrderMethodsService {
         if (result) {
           this.updateProcess();
         }
+        if (!result) { this.initItemProcess(); }
+
         return;
       });
     }
     // this.updateProcess() //
     return;
+  }
+
+  removeItemFromList(index: number, orderItem: PosOrderItem) {
+    if (orderItem) {
+      const site = this.siteService.getAssignedSite()
+      if (orderItem.printed || this.order.completionDate ) {
+        this.productEditButtonService.openVoidItemDialog(orderItem)
+        return
+      }
+
+      if (orderItem.id) {
+        const orderID = orderItem.orderID
+        this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe( item=> {
+          if (item) {
+            this.notifyEvent('Item Deleted', "")
+            this.order.posOrderItems.splice(index, 1)
+            this.orderService.updateOrderSubscription(item.order)
+          }
+        })
+      }
+    }
   }
 
   notifyEvent(message: string, action: string) {

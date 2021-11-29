@@ -83,7 +83,7 @@ export class UserSwitchingService {
     iUser.username  = this.encryptionService.decrypt(appUser.height, appUser.depth)
     iUser.password = this.encryptionService.decrypt(appUser.width, appUser.depth)
 
-    this.authenticationService.updateUser(iUser)
+    // this.authenticationService.updateUser(iUser)
   }
 
   saveAppUser(appUser: ElectronDimensions) {
@@ -243,6 +243,8 @@ export class UserSwitchingService {
     if (user.message.toLowerCase() === 'failed') {
       return user.errorMessage
     }
+
+    this.setAppUser()
   }
 
   async  browseMenu() {

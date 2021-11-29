@@ -59,20 +59,20 @@ export class LoginComponent implements OnInit {
         private appInitService: AppInitService,
 
     )
-    {
-      this.redirects();
-    }
+  {
+    this.redirects();
+  }
 
   async ngOnInit() {
     if (!this.platformService.webMode) { this.amI21 = true  }
     if (this.platformService.webMode)  { this.amI21 = false }
     this.refreshTheme()
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.iniForm();
+    this.initForm();
     this.initCompanyInfo()
   }
 
-  iniForm() {
+  initForm() {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
@@ -82,7 +82,6 @@ export class LoginComponent implements OnInit {
   switchUser() {
     this.userSwitchingService.openPIN({request: 'switchUser'})
   }
-
 
   setAPIAlt() {
     this.counter  = this.counter +1
@@ -119,6 +118,7 @@ export class LoginComponent implements OnInit {
   redirectAPIUrlRequired() {
       //if is app and no apiurl is stored move to the apiURlSetting Component.
     if (!this.platformService.webMode) {
+      this.platformService.initAPIUrl();
       if (this.platformService.apiUrl.length == 0) {
         this.router.navigate(['/apisetting']);
         return true
@@ -196,14 +196,10 @@ export class LoginComponent implements OnInit {
     this.submitted = true;
     this.statusMessage = ""
     this.spinnerLoading = true;
-
     if (this.loginForm.invalid) {
       this.statusMessage = 'User name and password required.'
       return;
     }
-
-    console.log('run user switching');
-
     (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
       .pipe(first())
       .subscribe(
@@ -212,18 +208,17 @@ export class LoginComponent implements OnInit {
           console.log(user.message);
           if (user && user.message === 'success') {
             this.userSwitchingService.processLogin(user)
+
             this.spinnerLoading = false;
-            this.iniForm()
+            this.initForm()
             return
           }
-
           if(user && user.status === 0)
           {
             user.message == 'Failed'
             user.erorMessage = 'Service is not accesible. Check Internet.'
             this.statusMessage = "Service is not accessible, check connection."
           }
-
         },
         error => {
           this.spinnerLoading = false;

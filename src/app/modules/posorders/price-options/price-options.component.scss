@@ -8,6 +8,7 @@
 .center {
   // opacity         : .8;
   display         : grid;
+  grid-template-columns: auto auto;
   place-items     : center;
   justify-content : space-evenly;
 }

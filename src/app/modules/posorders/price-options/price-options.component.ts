@@ -53,13 +53,13 @@ export class PriceOptionsComponent  {
 
 
   async addItemPrice(price: ProductPrice) {
-    // this.orderMethodService.addItemToOrder(this.order, item, 1)
     await this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item, price, this.newItem.posItem.quantity, this.newItem.posItem.id)
+    this.dialogRef.close(true);
   }
 
   cancel() {
     this.removeItem();
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   removeItem(){

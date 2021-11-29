@@ -5,7 +5,6 @@ import { ISite, IUser }   from 'src/app/_interfaces';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { Capacitor } from '@capacitor/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { OrdersService } from './orders.service';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { IPurchaseOrderItem } from '../../_interfaces/raw/purchaseorderitems';
 import { IInventoryAssignment,Serial } from '../inventory/inventory-assignment.service';
@@ -44,9 +43,9 @@ export interface ItemPostResults {
    overRide  : boolean;
  }
 
-export interface newItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number}
-export interface newInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number}
-export interface newSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number}
+export interface NewItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number}
+export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number}
+export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number}
 
 
 enum actions {
@@ -113,7 +112,6 @@ export class POSOrderItemServiceService {
   constructor(
     private http                : HttpClient,
     private _SnackBar           : MatSnackBar,
-    private orderService        : OrdersService,
     private scaleService        : ScaleService,
     )
   {
@@ -123,10 +121,9 @@ export class POSOrderItemServiceService {
 
     this.initScaleInfoSubscription() ;
 
-   }
+  }
 
   getNewItemWeight(newItem: any) {
-    //  Not oScale.ScaleMode = "NA"
     if (this.scaleInfo) {
       const scaleInfo = this.scaleInfo
       if  (scaleInfo) {
@@ -137,31 +134,6 @@ export class POSOrderItemServiceService {
     return newItem;
   }
 
-
-  async addItemToOrder(site: ISite, newItem: any):  Promise<ItemPostResults> {
-    if (newItem) {
-       return await this.postItem(site, newItem).pipe().toPromise();
-      //  const item$ =this.postItem(site, newItem)
-      //  const item = await lastValueFrom(item$);
-    }
-  }
-
-  async addItemToOrderWithBarcodePromise(site: ISite, newItem: newItem):  Promise<ItemPostResults> {
-    if (newItem) {
-       return await this.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
-      //  const item$ =this.addItemToOrderWithBarcode(site, newItem)
-      //  const item = await lastValueFrom(item$);
-      //  return item
-    }
-  }
-
-  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
-    if (order && barcode) {
-      let newItem = { orderID: order.id, quantity: quantity, barcode: barcode } as newItem
-      return this.addItemToOrderWithBarcode(site, newItem)
-    }
-    return null;
-  }
 
   addItemToOrderWithBarcode(site: ISite, newItem: any):  Observable<ItemPostResults> {
 
@@ -187,10 +159,6 @@ export class POSOrderItemServiceService {
     item.id = id;
     item.serialCode = serialCode;
 
-    if (!user) {
-
-    }
-
     const controller = "/POSOrderItems/"
 
     const endPoint  = "applySerial"
@@ -203,7 +171,7 @@ export class POSOrderItemServiceService {
 
   }
 
-   postItemWithBarcode(site: ISite, newItem: newItem): Observable<ItemPostResults> {
+   postItemWithBarcode(site: ISite, newItem: NewItem): Observable<ItemPostResults> {
 
     newItem =  this.getNewItemWeight(newItem);
 
