@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { IPOSOrder, IPurchaseOrderItem } from 'src/app/_interfaces';
+import { IPOSOrder, IPurchaseOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -36,6 +36,7 @@ export class OrderMethodsService {
 
   private itemProcessSection      = 0
   private _itemProcessSection     = new BehaviorSubject<number>(null);
+  // private itemProcessSubscription: Subscription;
   public itemProcessSection$      = this._itemProcessSection.asObservable();
 
   processItem : ProcessItem
@@ -45,17 +46,15 @@ export class OrderMethodsService {
       this.order = data;
     })
 
-
+    // this._itemProcessSection = this.itemProcessSubscription$.subscribe()
   }
 
-  // _itemProcessSection.next(this.itemProcessSection+=this.itemProcessSection);
   updateProcess()  {
-    this.itemProcessSection += this.itemProcessSection
+    this.itemProcessSection = this.itemProcessSection +1
+    console.log('updateProcess', this.itemProcessSection)
     this._itemProcessSection.next(this.itemProcessSection)
     this.handleProcessItem()
   }
-
-
 
   constructor(public route                    : ActivatedRoute,
               private dialog                  : MatDialog,
@@ -108,6 +107,38 @@ export class OrderMethodsService {
     }
   }
 
+  // Public Property OrderID As Integer
+  // Public Property MenuItem As MenuItem
+  // Public Property Quantity As Decimal
+  // Public Property Barcode As String
+  // Public Property OverRide As Boolean
+  // Public Property Weight As Double
+  // Public Property POSOrderItem As POSOrderItem
+
+  //this.newItem.order, this.newItem.posItem, this.newItem.item, price, this.newItem.posItem.quantity)
+  async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
+    const site          = this.siteService.getAssignedSite()
+    if (!order)         { order = this.order }
+    const result        = await this.doesOrderExist(site);
+    if (!result) { return }
+    if (order) {
+
+      const newItem     = { orderID: order.id, itemID: posOrderItem.id, quantity: quantity, menuItem: menuItem, price: price }
+      const itemResult$ = this.posOrderItemService.putItem(site, newItem)
+      itemResult$.subscribe(data => {
+          if (data.order) {
+            this.orderService.updateOrderSubscription(data.order)
+            this.addedItemOptions(order, menuItem, data.posItem)
+          } else {
+            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+          }
+        }
+      )
+    }
+  }
+
+  // this.orderMethodService.addItemToOrder(this.newItem.order, price, this.newItem.posItem.quantity)
+
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
 
     const site = this.siteService.getAssignedSite()
@@ -147,21 +178,20 @@ export class OrderMethodsService {
       {
         const dialogRef = this.dialog.open(RequiresSerialComponent,
           {
-            width:     '300ox',
-            maxWidth:  '300ox',
-            height:    '300ox',
-            maxHeight  :'300ox',
+            width:     '300px',
+            maxWidth:  '300px',
+            height:    '270px',
+            maxHeight  :'270px',
             panelClass :'foo',
             data       : posItem
           }
         )
         dialogRef.afterClosed().subscribe(result => {
-          this.handleProcessItem();
+          if (result) { this.updateProcess(); }
         });
       }
     }
-
-    this.handleProcessItem();
+    // this.handleProcessItem();
   }
 
   async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
@@ -189,13 +219,10 @@ export class OrderMethodsService {
     if (!this.processItem) {return}
 
     switch(process) {
-
       case  0: {
           this.promptSerial(this.processItem.item, this.processItem.posItem)
-          this.handleProcessItem();
           break;
         }
-
       case  1: {
         this.openPriceOptionPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem)
         break;
@@ -220,8 +247,8 @@ export class OrderMethodsService {
         break;
       }
       default: {
-           //statements;
-           break;
+        //statements;
+        break;
       }
     }
   }
@@ -229,8 +256,6 @@ export class OrderMethodsService {
 
   async  openPriceOptionPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
     const site = this.siteService.getAssignedSite()
-    console.log('addItemToOrder', item)
-
     //if there are multiple prices for this item.
     //the webapi will return what price options are avalible for the item.
     //the pop up will occur and prompt with options.
@@ -256,28 +281,30 @@ export class OrderMethodsService {
           //use this to remove item if price isn't choice.
           this.promptGroupService.updatePromptGroup(null)
           this.promptWalkService.updatePromptGroup(null)
-          this.updateProcess() //
+          if (result) {
+            this.updateProcess() //
+          }
         });
         return;
     }
-    this.updateProcess() //
+    // this.updateProcess() //
     return true;
   }
 
   openPriceChangePrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-    this.handleProcessItem();
+    // this.handleProcessItem();
   }
 
   openGiftCardPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-    this.handleProcessItem();
+    // this.handleProcessItem();
 
   }
 
   openQuantityPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-    this.handleProcessItem();
+    // this.handleProcessItem();
   }
 
   openPromptWalkThroughWithItem(prompt: IPromptGroup, posItem: IPurchaseOrderItem) {
@@ -297,11 +324,13 @@ export class OrderMethodsService {
       dialogRef.afterClosed().subscribe(result => {
         this.promptGroupService.updatePromptGroup(null)
         this.promptWalkService.updatePromptGroup(null)
-        this.handleProcessItem();
+        if (result) {
+          this.updateProcess();
+        }
         return;
       });
     }
-    this.updateProcess() //
+    // this.updateProcess() //
     return;
   }
 

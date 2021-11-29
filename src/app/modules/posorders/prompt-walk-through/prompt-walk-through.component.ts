@@ -8,7 +8,7 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
-import { Subscription } from 'rxjs';
+import { EMPTY, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 @Component({
@@ -100,17 +100,19 @@ export class PromptWalkThroughComponent implements OnInit {
   applyChoices() {
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
-
       this.posOrderItemService.postPromptItems(site, this.orderPromptGroup).pipe(
             switchMap( data  => {
               return  this.orderService.getOrder(site, data.orderID.toString(), false)
-            }
+            },
           )
         ).subscribe(data => {
+          if (!data) {
+            this.dialogRef.close(false)
+            return;
+          }
           this.orderService.updateOrderSubscription(data)
-          this.dialogRef.close()
+          this.dialogRef.close(true)
       })
-
     }
   }
 

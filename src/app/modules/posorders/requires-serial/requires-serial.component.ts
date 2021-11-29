@@ -69,7 +69,7 @@ export class RequiresSerialComponent implements OnInit {
       this.orderMethodService.appylySerial(this.posItem).subscribe(data =>{
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
-          this.dialogRef.close();
+          this.dialogRef.close(true);
         }
       })
     }
@@ -82,7 +82,7 @@ export class RequiresSerialComponent implements OnInit {
       console.log('on cancel 2 ')
       if (window.confirm(`If you cancel, the item may be removed from this order`)) {
         this.deleteItem(this.posItem)
-        this.dialogRef.close();
+        this.dialogRef.close(false);
       }
       return
     }

@@ -4,6 +4,7 @@ import { IPOSOrder, IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem, ProductPrice } from 'src/app/_interfaces/menu/menu-products';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 export interface Item {
@@ -30,6 +31,7 @@ export class PriceOptionsComponent  {
     private sitesService             : SitesService,
     private posOrderItemService      : POSOrderItemServiceService,
     private orderService             : OrdersService,
+    private orderMethodService       : OrderMethodsService,
     private dialogRef                : MatDialogRef<PriceOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,) {
 
@@ -50,8 +52,9 @@ export class PriceOptionsComponent  {
     }
 
 
-  addItemPrice(item: any) {
-
+  async addItemPrice(price: ProductPrice) {
+    // this.orderMethodService.addItemToOrder(this.order, item, 1)
+    await this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item, price, this.newItem.posItem.quantity, this.newItem.posItem.id)
   }
 
   cancel() {

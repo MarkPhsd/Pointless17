@@ -14,9 +14,9 @@
               mat-raised-button
               (click)="addItemPrice(item)"
           >
-          <span *ngIf="item.unitType">
-            {{item.unitType.name}}
-          </span>
+            <span *ngIf="item.unitType">
+              {{item.unitType.name}}
+            </span>
           {{item.retail | currency}}
           </button>
 

@@ -1,18 +1,16 @@
 import { Component, Input, OnInit, OnDestroy} from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
-import { DevService, AnimationCountService } from 'src/app/_services/';
+import { AWSBucketService, OrdersService } from 'src/app/_services';
+import { DevService } from 'src/app/_services/';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuItemModalComponent } from './menu-item-modal/menu-item-modal.component';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 import { ElectronService } from 'ngx-electron';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
@@ -29,33 +27,29 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
-  @Input() id: number;
-  @Input() retail: number;
-  @Input() name: string;
-  @Input() imageUrl: string;
-  @Input() menuItem: IMenuItem;
-  bucketName:             string;
-  placeHolderImage: String = 'productPlaceHolder.jpg';
-  _order  :  Subscription;
-  order   :  IPOSOrder;
+  @Input() id        : number;
+  @Input() retail    : number;
+  @Input() name      : string;
+  @Input() imageUrl  : string;
+  @Input() menuItem  : IMenuItem;
+  bucketName         : string;
+  placeHolderImage   : String = 'productPlaceHolder.jpg';
+  _order             : Subscription;
+  order              : IPOSOrder;
 
   platForm =  this.getPlatForm()
   appName = ''
   isApp   = false;
   getPlatForm() {  return Capacitor.getPlatform(); }
 
-  constructor(private devMode: DevService,
-    private menuService: MenuService,
+  constructor(
+    private devMode: DevService,
     private awsBucket: AWSBucketService,
     private router: Router,
     public route: ActivatedRoute,
-    private _animationCount: AnimationCountService,
     private dialog: MatDialog,
-    private truncateTextPipe: TruncateTextPipe,
-    private siteService: SitesService,
     private orderService: OrdersService,
     private _snackBar: MatSnackBar,
-    private posOrderItemService: POSOrderItemServiceService,
     private electronService: ElectronService,
     private orderMethodService: OrderMethodsService,
     )
@@ -101,7 +95,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     if (!item) {return ''}
     item = item.substr(0, 20);
     return item;
-    return this.truncateTextPipe.transform(item.replace(/<[^>]+>/g, ''), 15)
   }
 
   getItemSrc(item:IMenuItem) {
@@ -115,7 +108,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   async addItemToOrder(item) {
     this.orderMethodService.addItemToOrder(this.order, item, 1)
   }
-
 
   openDialog() {
     const dialogConfig = [
@@ -131,7 +123,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      return result;
     });
   }
 

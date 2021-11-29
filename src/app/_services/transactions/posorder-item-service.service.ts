@@ -237,6 +237,25 @@ export class POSOrderItemServiceService {
 
   }
 
+  putItem(site: ISite, newItem: any): Observable<ItemPostResults> {
+
+    newItem = this.getNewItemWeight(newItem);
+
+    console.log(newItem)
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "PutItem";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<ItemPostResults>(url , newItem)
+
+  }
+
+
   postPromptItems(site: ISite, iPrompt: IPromptGroup): Observable<IPromptGroup> {
 
     const controller = "/POSOrderItems/";

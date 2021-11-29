@@ -21,6 +21,11 @@ mat-card {
 
 }
 
+.mat-card {
+  height: 73vh;
+}
+
+
 .grid-list {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
