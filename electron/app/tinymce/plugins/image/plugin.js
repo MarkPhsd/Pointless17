@@ -4,12 +4,12 @@
  * For LGPL see License.txt in the project root for license information.
  * For commercial licenses see https://www.tiny.cloud/
  *
- * Version: 5.10.0 (2021-10-11)
+ * Version: 5.8.2 (2021-06-23)
  */
 (function () {
     'use strict';
 
-    var global$6 = tinymce.util.Tools.resolve('tinymce.PluginManager');
+    var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
     var __assign = function () {
       __assign = Object.assign || function __assign(t) {
@@ -62,7 +62,6 @@
     var isNonNullable = function (a) {
       return !isNullable(a);
     };
-    var isFunction = isSimpleType('function');
     var isNumber = isSimpleType('number');
 
     var noop = function () {
@@ -72,9 +71,6 @@
         return value;
       };
     };
-    var identity = function (x) {
-      return x;
-    };
     var never = constant(false);
     var always = constant(true);
 
@@ -82,14 +78,20 @@
       return NONE;
     };
     var NONE = function () {
+      var eq = function (o) {
+        return o.isNone();
+      };
       var call = function (thunk) {
         return thunk();
       };
-      var id = identity;
+      var id = function (n) {
+        return n;
+      };
       var me = {
         fold: function (n, _s) {
           return n();
         },
+        is: never,
         isSome: never,
         isNone: always,
         getOr: id,
@@ -106,9 +108,9 @@
         bind: none,
         exists: never,
         forall: always,
-        filter: function () {
-          return none();
-        },
+        filter: none,
+        equals: eq,
+        equals_: eq,
         toArray: function () {
           return [];
         },
@@ -127,6 +129,9 @@
       var me = {
         fold: function (n, s) {
           return s(a);
+        },
+        is: function (v) {
+          return a === v;
         },
         isSome: always,
         isNone: never,
@@ -154,6 +159,14 @@
         },
         toString: function () {
           return 'some(' + a + ')';
+        },
+        equals: function (o) {
+          return o.is(a);
+        },
+        equals_: function (o, elementEq) {
+          return o.fold(never, function (b) {
+            return elementEq(a, b);
+          });
         }
       };
       return me;
@@ -228,7 +241,7 @@
       return Optional.none();
     };
 
-    typeof window !== 'undefined' ? window : Function('return this;')();
+    var Global = typeof window !== 'undefined' ? window : Function('return this;')();
 
     var rawSet = function (dom, key, value) {
       if (isString(value) || isBoolean(value) || isNumber(value)) {
@@ -282,13 +295,11 @@
       fromPoint: fromPoint
     };
 
-    var global$5 = tinymce.util.Tools.resolve('tinymce.dom.DOMUtils');
+    var global$1 = tinymce.util.Tools.resolve('tinymce.dom.DOMUtils');
 
-    var global$4 = tinymce.util.Tools.resolve('tinymce.util.Promise');
+    var global$2 = tinymce.util.Tools.resolve('tinymce.util.Promise');
 
-    var global$3 = tinymce.util.Tools.resolve('tinymce.util.URI');
-
-    var global$2 = tinymce.util.Tools.resolve('tinymce.util.XHR');
+    var global$3 = tinymce.util.Tools.resolve('tinymce.util.XHR');
 
     var hasDimensions = function (editor) {
       return editor.getParam('image_dimensions', true, 'boolean');
@@ -334,10 +345,9 @@
       return Math.max(parseInt(val1, 10), parseInt(val2, 10));
     };
     var getImageSize = function (url) {
-      return new global$4(function (callback) {
+      return new global$2(function (callback) {
         var img = document.createElement('img');
         var done = function (dimensions) {
-          img.onload = img.onerror = null;
           if (img.parentNode) {
             img.parentNode.removeChild(img);
           }
@@ -350,10 +360,10 @@
             width: width,
             height: height
           };
-          done(global$4.resolve(dimensions));
+          done(global$2.resolve(dimensions));
         };
         img.onerror = function () {
-          done(global$4.reject('Failed to get image dimensions for: ' + url));
+          done(global$2.reject('Failed to get image dimensions for: ' + url));
         };
         var style = img.style;
         style.visibility = 'hidden';
@@ -410,14 +420,14 @@
     };
     var createImageList = function (editor, callback) {
       var imageList = getImageList(editor);
-      if (isString(imageList)) {
-        global$2.send({
+      if (typeof imageList === 'string') {
+        global$3.send({
           url: imageList,
           success: function (text) {
             callback(JSON.parse(text));
           }
         });
-      } else if (isFunction(imageList)) {
+      } else if (typeof imageList === 'function') {
         imageList(callback);
       } else {
         callback(imageList);
@@ -443,7 +453,7 @@
       imgElm.onerror = selectImage;
     };
     var blobToDataUri = function (blob) {
-      return new global$4(function (resolve, reject) {
+      return new global$2(function (resolve, reject) {
         var reader = new FileReader();
         reader.onload = function () {
           resolve(reader.result);
@@ -457,11 +467,8 @@
     var isPlaceholderImage = function (imgElm) {
       return imgElm.nodeName === 'IMG' && (imgElm.hasAttribute('data-mce-object') || imgElm.hasAttribute('data-mce-placeholder'));
     };
-    var isSafeImageUrl = function (editor, src) {
-      return global$3.isDomSafe(src, 'img', editor.settings);
-    };
 
-    var DOM = global$5.DOM;
+    var DOM = global$1.DOM;
     var getHspace = function (image) {
       if (image.style.marginLeft && image.style.marginRight && image.style.marginLeft === image.style.marginRight) {
         return removePixelSuffix(image.style.marginLeft);
@@ -704,7 +711,7 @@
       updateAlt(image, oldData, newData);
     };
 
-    var normalizeCss$1 = function (editor, cssText) {
+    var normalizeCss = function (editor, cssText) {
       var css = editor.dom.styles.parse(cssText);
       var mergedCss = mergeMargins(css);
       var compressed = editor.dom.styles.parse(editor.dom.styles.serialize(mergedCss));
@@ -738,12 +745,12 @@
     var readImageDataFromSelection = function (editor) {
       var image = getSelectedImage(editor);
       return image ? read(function (css) {
-        return normalizeCss$1(editor, css);
+        return normalizeCss(editor, css);
       }, image) : defaultData();
     };
     var insertImageAtCaret = function (editor, data) {
       var elm = create(function (css) {
-        return normalizeCss$1(editor, css);
+        return normalizeCss(editor, css);
       }, data);
       editor.dom.setAttrib(elm, 'data-mce-id', '__mcenew');
       editor.focus();
@@ -775,7 +782,7 @@
     var writeImageDataToSelection = function (editor, data) {
       var image = getSelectedImage(editor);
       write(function (css) {
-        return normalizeCss$1(editor, css);
+        return normalizeCss(editor, css);
       }, data, image);
       syncSrcAttr(editor, image);
       if (isFigure(image.parentNode)) {
@@ -787,20 +794,15 @@
         waitLoadImage(editor, data, image);
       }
     };
-    var sanitizeImageData = function (editor, data) {
-      var src = data.src;
-      return __assign(__assign({}, data), { src: isSafeImageUrl(editor, src) ? src : '' });
-    };
     var insertOrUpdateImage = function (editor, partialData) {
       var image = getSelectedImage(editor);
       if (image) {
         var selectedImageData = read(function (css) {
-          return normalizeCss$1(editor, css);
+          return normalizeCss(editor, css);
         }, image);
         var data = __assign(__assign({}, selectedImageData), partialData);
-        var sanitizedData = sanitizeImageData(editor, data);
         if (data.src) {
-          writeImageDataToSelection(editor, sanitizedData);
+          writeImageDataToSelection(editor, data);
         } else {
           deleteImage(editor, image);
         }
@@ -809,6 +811,7 @@
       }
     };
 
+    var hasOwnProperty$1 = Object.prototype.hasOwnProperty;
     var deep = function (old, nu) {
       var bothObjects = isObject(old) && isObject(nu);
       return bothObjects ? deepMerge(old, nu) : nu;
@@ -826,7 +829,7 @@
         for (var j = 0; j < objects.length; j++) {
           var curObject = objects[j];
           for (var key in curObject) {
-            if (has(curObject, key)) {
+            if (hasOwnProperty$1.call(curObject, key)) {
               ret[key] = merger(ret[key], curObject[key]);
             }
           }
@@ -840,9 +843,9 @@
       return s.length > 0;
     };
 
-    var global$1 = tinymce.util.Tools.resolve('tinymce.util.ImageUploader');
+    var global$4 = tinymce.util.Tools.resolve('tinymce.util.ImageUploader');
 
-    var global = tinymce.util.Tools.resolve('tinymce.util.Tools');
+    var global$5 = tinymce.util.Tools.resolve('tinymce.util.Tools');
 
     var getValue = function (item) {
       return isString(item.value) ? item.value : '';
@@ -858,7 +861,7 @@
     };
     var sanitizeList = function (list, extractValue) {
       var out = [];
-      global.each(list, function (item) {
+      global$5.each(list, function (item) {
         var text = getText(item);
         if (item.menu !== undefined) {
           var items = sanitizeList(item.menu, extractValue);
@@ -876,14 +879,14 @@
       });
       return out;
     };
-    var sanitizer = function (extractor) {
-      if (extractor === void 0) {
-        extractor = getValue;
+    var sanitizer = function (extracter) {
+      if (extracter === void 0) {
+        extracter = getValue;
       }
       return function (list) {
         if (list) {
           return Optional.from(list).map(function (list) {
-            return sanitizeList(list, extractor);
+            return sanitizeList(list, extracter);
           });
         } else {
           return Optional.none();
@@ -894,7 +897,7 @@
       return sanitizer(getValue)(list);
     };
     var isGroup = function (item) {
-      return has(item, 'items');
+      return Object.prototype.hasOwnProperty.call(item, 'items');
     };
     var findEntryDelegate = function (list, value) {
       return findMap(list, function (item) {
@@ -918,7 +921,7 @@
       findEntry: findEntry
     };
 
-    var makeTab$2 = function (_info) {
+    var makeTab = function (_info) {
       return {
         title: 'Advanced',
         name: 'advanced',
@@ -1006,13 +1009,13 @@
         ]
       };
     };
-    var AdvTab = { makeTab: makeTab$2 };
+    var AdvTab = { makeTab: makeTab };
 
     var collect = function (editor) {
       var urlListSanitizer = ListUtils.sanitizer(function (item) {
         return editor.convertURL(item.value || item.url, 'src');
       });
-      var futureImageList = new global$4(function (completer) {
+      var futureImageList = new global$2(function (completer) {
         createImageList(editor, function (imageList) {
           completer(urlListSanitizer(imageList).map(function (items) {
             return flatten([
@@ -1149,7 +1152,7 @@
       makeItems: makeItems
     };
 
-    var makeTab = function (_info) {
+    var makeTab$2 = function (_info) {
       var items = [{
           type: 'dropzone',
           name: 'fileinput'
@@ -1160,7 +1163,7 @@
         items: items
       };
     };
-    var UploadTab = { makeTab: makeTab };
+    var UploadTab = { makeTab: makeTab$2 };
 
     var createState = function (info) {
       return {
@@ -1514,19 +1517,12 @@
     };
     var imageSize = function (editor) {
       return function (url) {
-        if (!isSafeImageUrl(editor, url)) {
-          return global$4.resolve({
-            width: '',
-            height: ''
-          });
-        } else {
-          return getImageSize(editor.documentBaseURI.toAbsolute(url)).then(function (dimensions) {
-            return {
-              width: String(dimensions.width),
-              height: String(dimensions.height)
-            };
-          });
-        }
+        return getImageSize(editor.documentBaseURI.toAbsolute(url)).then(function (dimensions) {
+          return {
+            width: String(dimensions.width),
+            height: String(dimensions.height)
+          };
+        });
       };
     };
     var createBlobCache = function (editor) {
@@ -1550,9 +1546,9 @@
         editor.windowManager.alert(message);
       };
     };
-    var normalizeCss = function (editor) {
+    var normalizeCss$1 = function (editor) {
       return function (cssText) {
-        return normalizeCss$1(editor, cssText);
+        return normalizeCss(editor, cssText);
       };
     };
     var parseStyle = function (editor) {
@@ -1567,11 +1563,11 @@
     };
     var uploadImage = function (editor) {
       return function (blobInfo) {
-        return global$1(editor).upload([blobInfo], false).then(function (results) {
+        return global$4(editor).upload([blobInfo], false).then(function (results) {
           if (results.length === 0) {
-            return global$4.reject('Failed to upload image');
+            return global$2.reject('Failed to upload image');
           } else if (results[0].status === false) {
-            return global$4.reject(results[0].error.message);
+            return global$2.reject(results[0].error.message);
           } else {
             return results[0];
           }
@@ -1585,7 +1581,7 @@
         addToBlobCache: addToBlobCache(editor),
         createBlobCache: createBlobCache(editor),
         alertErr: alertErr(editor),
-        normalizeCss: normalizeCss(editor),
+        normalizeCss: normalizeCss$1(editor),
         parseStyle: parseStyle(editor),
         serializeStyle: serializeStyle(editor),
         uploadImage: uploadImage(editor)
@@ -1596,7 +1592,7 @@
       return { open: open };
     };
 
-    var register$1 = function (editor) {
+    var register = function (editor) {
       editor.addCommand('mceImage', Dialog(editor).open);
       editor.addCommand('mceUpdateImage', function (_ui, data) {
         editor.undoManager.transact(function () {
@@ -1619,7 +1615,7 @@
           var node = nodes[i];
           if (hasImageClass(node)) {
             node.attr('contenteditable', state ? 'false' : null);
-            global.each(node.getAll('figcaption'), toggleContentEditable);
+            global$5.each(node.getAll('figcaption'), toggleContentEditable);
           }
         }
       };
@@ -1631,13 +1627,12 @@
       });
     };
 
-    var register = function (editor) {
+    var register$1 = function (editor) {
       editor.ui.registry.addToggleButton('image', {
         icon: 'image',
         tooltip: 'Insert/edit image',
         onAction: Dialog(editor).open,
         onSetup: function (buttonApi) {
-          buttonApi.setActive(isNonNullable(getSelectedImage(editor)));
           return editor.selection.selectorChangedWithUnbind('img:not([data-mce-object],[data-mce-placeholder]),figure.image', buttonApi.setActive).unbind;
         }
       });
@@ -1654,10 +1649,10 @@
     };
 
     function Plugin () {
-      global$6.add('image', function (editor) {
+      global.add('image', function (editor) {
         setup(editor);
-        register(editor);
         register$1(editor);
+        register(editor);
       });
     }
 

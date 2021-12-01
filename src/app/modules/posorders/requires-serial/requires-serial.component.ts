@@ -1,20 +1,19 @@
-import { Component, ElementRef, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subject } from 'rxjs';
+import { IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { OrdersService } from 'src/app/_services';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
   selector: 'app-requires-serial',
   templateUrl: './requires-serial.component.html',
   styleUrls: ['./requires-serial.component.scss']
 })
-export class RequiresSerialComponent implements OnInit {
+export class RequiresSerialComponent implements OnInit, OnDestroy {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect                     = new EventEmitter();
@@ -24,15 +23,13 @@ export class RequiresSerialComponent implements OnInit {
   get serialCode() { return this.inputForm.get("serial") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
-  posItem  : IPOSOrderItem;
+  posItem  : IPurchaseOrderItem;
 
   keyboardOption      = false;
   keyboardDisplayOn   = false;
 
   constructor(private orderMethodService          : OrderMethodsService,
-              private posOrderItemService         : POSOrderItemServiceService,
               private orderService                : OrdersService,
-              private siteService                 : SitesService,
               private snackBar                    : MatSnackBar,
               private fb                          : FormBuilder,
               private dialogRef                   : MatDialogRef<RequiresSerialComponent>,
@@ -46,6 +43,10 @@ export class RequiresSerialComponent implements OnInit {
 
   ngOnInit(): void {
     this.initForm();
+  }
+
+  ngOnDestroy() {
+    this.onCancel()
   }
 
   initFormSubscription() {
@@ -69,7 +70,7 @@ export class RequiresSerialComponent implements OnInit {
       this.orderMethodService.appylySerial(this.posItem).subscribe(data =>{
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
-          this.dialogRef.close(true);
+          this.dialogRef.close({posItem: this.posItem, result : true});
         }
       })
     }
@@ -77,46 +78,17 @@ export class RequiresSerialComponent implements OnInit {
 
   onCancel() {
     const serial = this.serialCode.value;
-
     if (this.posItem && (!this.posItem.serialCode || this.posItem.serialCode.length == 0) && (!serial || serial.length == 0)) {
-      console.log('on cancel 2 ')
       if (window.confirm(`If you cancel, the item may be removed from this order`)) {
-        this.deleteItem(this.posItem)
-        this.dialogRef.close(false);
+        this.dialogRef.close({posItem: this.posItem, result : false});
       }
       return
     }
-
-    console.log('on cancel')
-    this.dialogRef.close();
-    //it's already goign to be updated if the serial exists.
-    if (serial) {
-      if (serial.length == 24)  {
-
-      }
-    }
-
+    this.dialogRef.close({posItem: this.posItem, result : true});
   }
 
   async deleteItem(item: IPOSOrderItem ) {
-
-    const site = this.siteService.getAssignedSite();
-    const orderID = item.orderID;
-
-    if (item.id) {
-      let result = await this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe().toPromise();
-      if (result.scanResult) {
-        this.notifyEvent('Item Deleted')
-      } else  {
-        this.notifyEvent('Item must be voided')
-      }
-
-      if (result && result.order) {
-        this.orderService.updateOrderSubscription(result.order);
-      }
-      this.dialogRef.close();
-    }
-
+    this.dialogRef.close({posItem: this.posItem, result : false});
   }
 
   notifyEvent(message: string) {

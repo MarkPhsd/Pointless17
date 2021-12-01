@@ -223,6 +223,8 @@ export class BalanceSheetService {
     this.deviceName = localStorage.getItem('devicename')
   }
 
+
+
   getSheetType(sheet: IBalanceSheet) {
     if (sheet && sheet.type) {
       if (sheet.type == 3) {

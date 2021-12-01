@@ -9,7 +9,7 @@
 /electron
 /android
 /ios
-
+/electron/app/tinymce
 # dependencies
 /node_modules
 

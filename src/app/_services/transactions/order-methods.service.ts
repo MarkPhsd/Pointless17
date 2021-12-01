@@ -84,7 +84,7 @@ export class OrderMethodsService {
     return true
   }
 
-  appylySerial(posItem: IPOSOrderItem) {
+  appylySerial(posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite();
     return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
   }
@@ -194,10 +194,38 @@ export class OrderMethodsService {
             data       : posItem
           }
         )
-        dialogRef.afterClosed().subscribe(result => {
-          if (result)  { this.updateProcess(); }
-          if (!result) { this.initItemProcess(); }
+        dialogRef.afterClosed().subscribe(data => {
+          if (data.result)  { this.updateProcess (); }
+          if (!data.result) {
+            if (data.posItem){
+              this.cancelItem(data.posItem);
+            }
+            if (!data.posItem) {
+              this.cancelItem(posItem);
+            }
+            this.initItemProcess();
+           }
         });
+      }
+    }
+
+  }
+
+
+  async cancelItem(posItem: IPurchaseOrderItem ) {
+
+    const site = this.siteService.getAssignedSite();
+    const orderID = posItem.orderID;
+
+    if (posItem.id) {
+      let result = await this.posOrderItemService.deletePOSOrderItem(site, posItem.id).pipe().toPromise();
+      if (result.scanResult) {
+        this.notifyEvent('Item Deleted', 'Notice')
+      } else  {
+        this.notifyEvent('Item must be voided', 'Notice')
+      }
+      if (result && result.order) {
+        this.orderService.updateOrderSubscription(result.order);
       }
     }
 

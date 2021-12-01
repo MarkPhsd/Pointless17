@@ -24,10 +24,15 @@
     <div class="span-col" > {{sheet.noSales | number }} </div>
 
     <div>Orders Open</div>
-    <div class="span-col">  {{ ordersOpen }} </div>
+    <div class="span-col"
+         [ngStyle]="{'color':ordersOpen > 0 ? 'red' : '' }">  {{ ordersOpen }} </div>
 
     <div>Orders Closed</div>
-    <div class="span-col">  {{ ordersCount }} </div>
+      <div class="span-col"
+          class="calculation"
+        >
+      {{ ordersCount }}
+    </div>
 
     <div class="item-span ">
       <button mat-raised-button color="warn"

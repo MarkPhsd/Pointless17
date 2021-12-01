@@ -52,8 +52,12 @@
           </div>
 
           <div *ngIf="!sheet.endTime">
-            <span *ngIf ="sheet.shiftStarted == 1">
+
+            <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
               <button color="warn" mat-raised-button (click)="closeSheet()">Close Sheet</button>
+            </span>
+            <span *ngIf="ordersOpen>0">
+              {{ ordersOpen }} order(s) are open. Close orders to close sheet.
             </span>
           </div>
 

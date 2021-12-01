@@ -14,6 +14,7 @@ import { switchMap } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -81,12 +82,17 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   endOptionsDisabled   = false;
   startOptionsDisabled = false;
-
+  ordersCount      = 0;
+  ordersOpen       = 0;
   //init subscriptions
   //requires user
   //requires balance sheet
 
+  _openOrders: Subscription;
+  _ordersCount : Subscription;
+
   initSubscriptions() {
+
     this.loading = true
     this._sheet = this.sheetService.balanceSheet$.subscribe( data => {
       this.sheet = data;
@@ -96,8 +102,20 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       }
       this.getSheetType(this.sheet)
     })
+
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user = data;
+    })
+
+    this._ordersCount = this.balanceSheetMethodsService.ordersOpen$.subscribe( data => {
+
+      if (!data) { return }
+      this.ordersCount = data
+    })
+    this._openOrders  =  this.balanceSheetMethodsService.ordersOpen$.subscribe( data => {
+
+      if (!data) { return }
+      this.ordersOpen       = data
     })
   }
 
@@ -110,6 +128,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private authenticationService   : AuthenticationService,
                 private router                  : Router,
                 private toolbarUIService        : ToolBarUIService,
+                private balanceSheetMethodsService: BalanceSheetMethodsService,
               )
   {
     this.inputForm = this.sheetService.initForm(this.inputForm);

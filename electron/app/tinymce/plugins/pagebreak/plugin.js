@@ -4,14 +4,14 @@
  * For LGPL see License.txt in the project root for license information.
  * For commercial licenses see https://www.tiny.cloud/
  *
- * Version: 5.10.0 (2021-10-11)
+ * Version: 5.8.2 (2021-06-23)
  */
 (function () {
     'use strict';
 
-    var global$1 = tinymce.util.Tools.resolve('tinymce.PluginManager');
+    var global = tinymce.util.Tools.resolve('tinymce.PluginManager');
 
-    var global = tinymce.util.Tools.resolve('tinymce.Env');
+    var global$1 = tinymce.util.Tools.resolve('tinymce.Env');
 
     var getSeparatorHtml = function (editor) {
       return editor.getParam('pagebreak_separator', '<!-- pagebreak -->');
@@ -22,10 +22,10 @@
 
     var pageBreakClass = 'mce-pagebreak';
     var getPlaceholderHtml = function (shouldSplitBlock) {
-      var html = '<img src="' + global.transparentSrc + '" class="' + pageBreakClass + '" data-mce-resize="false" data-mce-placeholder />';
+      var html = '<img src="' + global$1.transparentSrc + '" class="' + pageBreakClass + '" data-mce-resize="false" data-mce-placeholder />';
       return shouldSplitBlock ? '<p>' + html + '</p>' : html;
     };
-    var setup$1 = function (editor) {
+    var setup = function (editor) {
       var separatorHtml = getSeparatorHtml(editor);
       var shouldSplitBlock$1 = function () {
         return shouldSplitBlock(editor);
@@ -60,13 +60,13 @@
       });
     };
 
-    var register$1 = function (editor) {
+    var register = function (editor) {
       editor.addCommand('mcePageBreak', function () {
         editor.insertContent(getPlaceholderHtml(shouldSplitBlock(editor)));
       });
     };
 
-    var setup = function (editor) {
+    var setup$1 = function (editor) {
       editor.on('ResolveName', function (e) {
         if (e.target.nodeName === 'IMG' && editor.dom.hasClass(e.target, pageBreakClass)) {
           e.name = 'pagebreak';
@@ -74,28 +74,29 @@
       });
     };
 
-    var register = function (editor) {
-      var onAction = function () {
-        return editor.execCommand('mcePageBreak');
-      };
+    var register$1 = function (editor) {
       editor.ui.registry.addButton('pagebreak', {
         icon: 'page-break',
         tooltip: 'Page break',
-        onAction: onAction
+        onAction: function () {
+          return editor.execCommand('mcePageBreak');
+        }
       });
       editor.ui.registry.addMenuItem('pagebreak', {
         text: 'Page break',
         icon: 'page-break',
-        onAction: onAction
+        onAction: function () {
+          return editor.execCommand('mcePageBreak');
+        }
       });
     };
 
     function Plugin () {
-      global$1.add('pagebreak', function (editor) {
-        register$1(editor);
+      global.add('pagebreak', function (editor) {
         register(editor);
-        setup$1(editor);
+        register$1(editor);
         setup(editor);
+        setup$1(editor);
       });
     }
 

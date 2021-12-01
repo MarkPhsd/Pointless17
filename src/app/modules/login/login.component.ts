@@ -21,30 +21,30 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 export class LoginComponent implements OnInit {
 
-    @Input() statusMessage: string;
+  @Input() statusMessage: string;
 
-    spinnerLoading: boolean;
-    compName: string;
-    company = {} as ICompany;
-    logo: string;
+  spinnerLoading: boolean;
+  compName: string;
+  company = {} as ICompany;
+  logo: string;
 
-    loading = false;
-    submitted = false;
-    returnUrl: string;
-    error = '';
-    companyName: string;
-    id: any;
+  loading = false;
+  submitted = false;
+  returnUrl: string;
+  error = '';
+  companyName: string;
+  id: any;
 
-    isApp    : boolean;
-    loginForm: FormGroup;
-    amI21: any;
+  isApp    : boolean;
+  loginForm: FormGroup;
+  amI21: any;
 
-    counter =0;
+  counter =0;
 
-    // convenience getter for easy access to form fields
-    get f() { return this.loginForm.controls; }
+  // convenience getter for easy access to form fields
+  get f() { return this.loginForm.controls; }
 
-    constructor(
+  constructor(
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
@@ -57,7 +57,6 @@ export class LoginComponent implements OnInit {
         private awsBucketService: AWSBucketService,
         public platformService : PlatformService,
         private appInitService: AppInitService,
-
     )
   {
     this.redirects();
@@ -166,22 +165,18 @@ export class LoginComponent implements OnInit {
   }
 
   getCompanyInfo() {
-    try {
-        const site = this.siteService.getAssignedSite();
-        this.companyService.getCompany(site).subscribe(data =>
-        {
+    const site = this.siteService.getAssignedSite();
+    this.companyService.getCompany(site).subscribe(data =>
+      {
+        if (data) {
           this.company  = data
           localStorage.setItem('company/compName', JSON.stringify(this.company.compName))
           localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
           localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
-        }, error  => {
-          this.statusMessage ="System Offline - login unavailable."
         }
-      );
-
-    } catch (error) {
-      this.statusMessage ="System Offline - login unavailable."
-    }
+      }, error  => {
+      }
+    );
   }
 
   registerUser(){

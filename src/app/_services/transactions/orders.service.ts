@@ -139,7 +139,7 @@ export class OrdersService {
   // Public Property Paging As Pagination
   // Public Property Summary As POSOrdersSummarized
   // Public Property ErrorMessage As String
-  getPendingInBalanceSheet(site: ISite, id: number): Observable<any> {
+  getPendingInBalanceSheet(site: ISite, id: number): Observable<IOrdersPaged> {
 
     const controller = "/POSOrders/";
 
@@ -149,7 +149,7 @@ export class OrdersService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.get<any>(url )
+    return  this.http.get<IOrdersPaged>(url)
   }
 
   //getOrderCountCompletedInBalanceSheet
