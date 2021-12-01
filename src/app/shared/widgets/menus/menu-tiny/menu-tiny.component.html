@@ -35,7 +35,7 @@
             <div *ngIf="!item.minimized">
               <div class="menu" >
                 <a mat-list-item
-                    color="accent"
+                    color=""
                     routerLinkActive={{item.routerLinkActive}}
                     routerLink=      {{item.routerLink}}>
                   <mat-icon>{{ item.icon }}</mat-icon>
@@ -60,12 +60,10 @@
             <li>
               <mat-menu #menu="matMenu">
                 <div  *ngFor="let item of submenu">
-                    <!-- //*ngIf="isAuthorized(item)" -->
-                  <!-- <div *ngIf="item.minimized && isAuthorized(item)" > -->
                     <div *ngIf="item.minimized">
                       <div *userAuthorized="item.userType">
                         <button mat-menu-item
-                                color="accent"
+                                color=""
                                 routerLinkActive={{item.routerLinkActive}}
                                 routerLink=      {{item.routerLink}}>
                           <mat-icon>{{ item.icon }}</mat-icon>

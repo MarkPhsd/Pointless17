@@ -198,16 +198,8 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
      }
 
      refreshEmployees(){
-       try {
-          const site           = this.siteService.getAssignedSite()
-          if (!site) {
-            console.log('site not defined')
-            return
-          }
-          this.employees$      = this.orderService.getActiveEmployees(site)
-       } catch (error) {
-        console.log(error)
-       }
+        const site           = this.siteService.getAssignedSite()
+        this.employees$      = this.orderService.getActiveEmployees(site)
      }
 
      ngOnDestroy() {

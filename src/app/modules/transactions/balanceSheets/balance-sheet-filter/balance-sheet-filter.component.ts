@@ -1,7 +1,7 @@
 import {Component,  Output,
   OnInit,  ViewChild, ElementRef, EventEmitter}  from '@angular/core';
 import { IUser } from 'src/app/_interfaces';
-import {AuthenticationService, IItemBasic } from 'src/app/_services';
+import {AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -38,9 +38,9 @@ export class BalanceSheetFilterComponent implements  OnInit {
   selectedType                : number;
   toggleOpenClosedAll            = "1";
   toggleEmployeeDeviceAll        = "0"
-  printForm          : FormGroup;
-  user               = {} as IUser;
-  employees$    :   Observable<IItemBasic[]>;
+  printForm     : FormGroup;
+  user          = {} as IUser;
+  employees$    : Observable<IItemBasic[]>;
   searchModel   = {} as   BalanceSheetSearchModel;
   dateRangeForm : FormGroup;
   _searchModel  : Subscription;
@@ -66,6 +66,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
                 private siteService             : SitesService,
                 private userAuthorization       : UserAuthorizationService,
                 private employeeService         : EmployeeService,
+                private orderService            : OrdersService,
                 private auth                    : AuthenticationService,
               )
     {
@@ -79,6 +80,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
     this.initSubscriptions();
     this.initSearchForm();
     this.initFormFromSearchModel();
+    this.initEmployeeList();
   }
 
   initAuthorization() {
@@ -122,6 +124,19 @@ export class BalanceSheetFilterComponent implements  OnInit {
       this.subscribeToDatePicker();
     }
   }
+
+  initEmployeeList(){
+    this.refreshEmployees();
+    console.log('employee list')
+    const site           = this.siteService.getAssignedSite()
+    setInterval(this.refreshEmployees,  (60*1000) *5);
+   }
+
+   refreshEmployees(){
+      const site           = this.siteService.getAssignedSite()
+      this.employees$      = this.orderService.getActiveEmployees(site)
+   }
+
 
   setEmployee(event) {
     if (!event) { return }
