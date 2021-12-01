@@ -171,6 +171,8 @@ export class POSOrderItemServiceService {
 
   }
 
+
+
    postItemWithBarcode(site: ISite, newItem: NewItem): Observable<ItemPostResults> {
 
     newItem =  this.getNewItemWeight(newItem);

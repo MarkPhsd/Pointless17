@@ -1,6 +1,14 @@
 <div *ngIf="sheet" class="header-grid info-width">
 
-  <div>Over Under</div>   <div class="calculation"> {{sheet.overUnderTotal | currency}} </div>
+  <div>
+    <span *ngIf="currentBalance >= 1">Current Balance over</span>
+    <span *ngIf="currentBalance <= 1">Current Balance under</span>
+    <span *ngIf="currentBalance == 0">Current Balance</span>
+  </div>
+      <div class="calculation"
+        [ngStyle]="{'color':currentBalance >= 0 ? '' : 'red' }" >
+        {{currentBalance | currency}}
+       </div>
   <div>Total Sales</div>  <div class="calculation"> {{sheet.salesTotal     | currency}} </div>
   <div>Cash</div>         <div class="calculation"> {{sheet.cashIn         | currency}} </div>
   <div>Credit</div>       <div class="calculation"> {{sheet.creditIn       | currency}} </div>
@@ -14,7 +22,10 @@
      <div class="calculation"> {{ sheet.cashDropTotal | currency }}</div>
   </div>
 
-  <div *ngIf="currentBalance">New Balance </div>
-  <div class="calculation" *ngIf="currentBalance"> {{ currentBalance | currency }} </div>
-
+  <!-- <div *ngIf="currentBalance">New Balance </div> -->
+  <!-- <div class="calculation" *ngIf="currentBalance"> {{ currentBalance | currency }} </div>
+  <div class="calculation"
+    [ngStyle]="{'background-color':currentBalance >= 0 ? 'green' : 'red' }" >
+    {{currentBalance | currency}}
+  </div> -->
 </div>

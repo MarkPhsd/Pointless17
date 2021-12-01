@@ -23,7 +23,7 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
+  grid-template-columns: repeat( 125px, minmax(105px, 1fr) );
   margin: 3px;
 
   @include for-phone-only  {

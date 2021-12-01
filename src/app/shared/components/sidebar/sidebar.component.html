@@ -1,5 +1,5 @@
 <mat-sidenav-container  class="navbar-sidenav-container">
-  <app-accordion  *ngIf="accordionMenu$; else loading"
+  <app-accordion
                   [options]="accordionConfig"
                   [menus]="accordionMenu$ | async">
   </app-accordion>
@@ -11,4 +11,4 @@
 </mat-sidenav-container>
 
 
-
+<!-- *ngIf="accordionMenu$; else loading" -->

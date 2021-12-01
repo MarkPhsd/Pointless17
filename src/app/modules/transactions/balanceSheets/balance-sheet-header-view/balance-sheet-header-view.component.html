@@ -20,8 +20,14 @@
     <div  *ngIf="!sheet.endTime">Sheet Open</div>
     <div  class="span-col" *ngIf="!sheet.endTime"> ----- </div>
 
-    <div>Manual Drawer Opens</div>
-    <div  class="span-col" > {{sheet.noSales | number }} </div>
+    <div>Drawer Opens</div>
+    <div class="span-col" > {{sheet.noSales | number }} </div>
+
+    <div>Orders Open</div>
+    <div class="span-col">  {{ ordersOpen }} </div>
+
+    <div>Orders Closed</div>
+    <div class="span-col">  {{ ordersCount }} </div>
 
     <div class="item-span ">
       <button mat-raised-button color="warn"

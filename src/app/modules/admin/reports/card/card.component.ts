@@ -8,8 +8,6 @@ import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
-
-
 @Component({
   selector: 'app-widget-card',
   templateUrl: './card.component.html',
@@ -53,8 +51,6 @@ export class CardComponent  implements OnInit  ,OnChanges{
   salesPayment    : ISalesPayments;
   xAxis           : any;
   subTitle        : any;
-
-
 
   constructor(private  sitesService     : SitesService,
               private  reportingService : ReportingService,

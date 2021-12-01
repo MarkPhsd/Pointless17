@@ -182,7 +182,7 @@ export class OrderMethodsService {
 
   promptSerial(menuItem: IMenuItem, posItem: IPurchaseOrderItem) {
     if (posItem) {
-      if (this.processItem.item.requiresSerial || this.processItem.item.itemType.requiresSerial)
+      if ( menuItem.itemType.requiresSerial)
       {
         const dialogRef = this.dialog.open(RequiresSerialComponent,
           {

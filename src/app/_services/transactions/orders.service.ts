@@ -2,13 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
+import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor,  } from '@capacitor/core';
 import { StringDecoder } from 'node:string_decoder';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
+import { ItemPostResults } from './posorder-item-service.service';
+import { IBalanceSheet } from './balance-sheet.service';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -23,6 +25,8 @@ export interface OrderPayload {
   orderName   : StringDecoder
   order       : IPOSOrder;
 }
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -130,6 +134,39 @@ export class OrdersService {
     return this.http.get<IItemBasic[]>(url);
 
   }
+
+  // Public Property results As PagedList(Of POSOrder)
+  // Public Property Paging As Pagination
+  // Public Property Summary As POSOrdersSummarized
+  // Public Property ErrorMessage As String
+  getPendingInBalanceSheet(site: ISite, id: number): Observable<any> {
+
+    const controller = "/POSOrders/";
+
+    const endPoint = "GetPendingInBalanceSheet";
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url )
+  }
+
+  //getOrderCountCompletedInBalanceSheet
+  getOrderCountCompletedInBalanceSheet(site: ISite, sheet: IBalanceSheet ): Observable<IOrdersPaged> {
+
+    const controller = "/POSOrders/";
+
+    const endPoint = "getOrderCountCompletedInBalanceSheet";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IOrdersPaged>(url, sheet )
+  }
+
+
 
   getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
 

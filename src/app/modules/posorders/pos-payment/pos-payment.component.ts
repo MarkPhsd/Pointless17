@@ -7,6 +7,7 @@ import { IPaymentResponse, IPOSOrder, IPOSPayment, IPOSPaymentsOptimzed, IServic
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
@@ -57,15 +58,16 @@ export class PosPaymentComponent implements OnInit {
 
   }
 
-  constructor(private paymentService: POSPaymentService,
-              private sitesService  : SitesService,
-              private orderService  : OrdersService,
+  constructor(private paymentService  : POSPaymentService,
+              private sitesService    : SitesService,
+              private orderService    : OrdersService,
               private paymentMethodService: PaymentMethodsService,
-              private matSnackBar   : MatSnackBar,
-              private router        : Router,
-              private toolbarUI     : ToolBarUIService,
+              private matSnackBar     : MatSnackBar,
+              private router          : Router,
+              private toolbarUI       : ToolBarUIService,
               private editDialog      : ProductEditButtonService,
-              private fb            : FormBuilder) { }
+              private printingService :PrintingService,
+              private fb              : FormBuilder) { }
 
   ngOnInit(): void {
 
@@ -181,7 +183,9 @@ export class PosPaymentComponent implements OnInit {
 
     let result = 0
     if (paymentResponse) {
+      console.log(paymentResponse)
     }
+
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
          result =  this.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
@@ -206,15 +210,20 @@ export class PosPaymentComponent implements OnInit {
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
 
     const payment = paymentResponse.payment
+    console.log('paymentResponse', paymentResponse)
+    console.log('payment', payment);
+    console.log('paymentMethod', paymentMethod)
 
     if (payment && paymentMethod) {
       if (paymentMethod.isCreditCard) {
         //open tip input option - same as cash
         this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        this.printingService.previewReceipt()
         return 1
       }
       if (payment.amountReceived >= payment.amountPaid) {
         this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        this.printingService.previewReceipt()
         return 1
       }
 
@@ -230,7 +239,7 @@ export class PosPaymentComponent implements OnInit {
       result$.subscribe(data=>  {
         this.notify(`Order Paid for`, 'Order Completed', 1000)
         this.orderService.updateOrderSubscription(data)
-        // this.router.navigateByUrl('/pos-orders')
+        this.printingService.previewReceipt()
       }
     )
    }
@@ -310,7 +319,6 @@ export class PosPaymentComponent implements OnInit {
   applyPointBalance() {
     const amount = this.order.clients_POSOrders.loyaltyPointValue
     let amountPaid = 0
-    console.log('Loyalty Point Value', amount)
     if (amount >= this.order.balanceRemaining) {  amountPaid = this.order.balanceRemaining  }
 
     if (this.order.balanceRemaining >= amount) { amountPaid = amount  }

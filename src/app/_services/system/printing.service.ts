@@ -6,7 +6,6 @@ import { Settings } from 'electron/main';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpClient } from '@angular/common/http';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import html2canvas from 'html2canvas';

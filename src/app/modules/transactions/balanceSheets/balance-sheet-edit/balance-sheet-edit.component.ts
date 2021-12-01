@@ -3,9 +3,9 @@ import { Component,  OnInit,
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import {  FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import {  Observable, Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -92,16 +92,13 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.sheet = data;
       this.loading = false;
       if (this.inputForm) {
-        // console.log('patching value', data)
         this.inputForm.patchValue(this.sheet)
       }
       this.getSheetType(this.sheet)
     })
-
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user = data;
     })
-
   }
 
   constructor(  private _snackBar               : MatSnackBar,
@@ -115,7 +112,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private toolbarUIService        : ToolBarUIService,
               )
   {
-    // this.initForm(this.sheet);
     this.inputForm = this.sheetService.initForm(this.inputForm);
   }
 
@@ -185,12 +181,14 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     const site = this.siteService.getAssignedSite()
     this.sheetService.getSheet(site, id).pipe(
       switchMap(sheet => {
-      this.loading = false;
-      this.sheetService.updateBalanceSheet(sheet)
-      return this.sheetService.getSheetCalculations(site, sheet)
-    })).subscribe( sheet => {
-      this.sheetService.updateBalanceSheet(sheet)
-    })
+        this.loading = false;
+        this.sheetService.updateBalanceSheet(sheet)
+        return this.sheetService.getSheetCalculations(site, sheet)
+      })).subscribe(
+      sheet => {
+        this.sheetService.updateBalanceSheet(sheet)
+      }
+    )
 
   }
 
@@ -420,6 +418,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     const cashStart  = this.getSummaryOfCashStart();
     if (this.sheet) {
       const balance = cashEnd - cashStart - this.sheet.cashIn - this.sheet.cashDropTotal
+
       this.balance  = balance
     }
     return this.balance

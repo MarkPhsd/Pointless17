@@ -1,5 +1,5 @@
 button {
-  margin-bottom: 5px;
+  margin-bottom: 15px;
   justify-content: flex-end;
   justify-self:    end;
   grid-column-end: span 3;
@@ -16,7 +16,8 @@ button {
 }
 
 .buttons-format {
-  max-width : 400px;
-  width     : 400px;
+  max-width : 355px;
+  width     : 355px;
   float     : right;
+  margin-bottom: 10px;
 }

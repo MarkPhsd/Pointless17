@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ISite, IUser}  from 'src/app/_interfaces';
 import { AuthenticationService} from 'src/app/_services';
 import { AccordionMenu, accordionConfig, SubMenu } from 'src/app/_interfaces/index';
@@ -12,7 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   styleUrls: ['./sidebar.component.scss']
 })
 
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
 
   @ViewChild('drawer') drawer: any;
 
@@ -34,7 +34,6 @@ export class SidebarComponent implements OnInit {
 
   initSubscriptions() {
     this._user =    this.authorizationService.user$.subscribe(data => {
-      // console.log('sidebar init subscriptions')
       this.user = data
       this.getMenu(this.site);
     })
@@ -49,17 +48,14 @@ export class SidebarComponent implements OnInit {
 
   async ngOnInit() {
     console.log('sidebar ngOnInit')
-    // this.initSubscriptions();
-    // if (!this.user) { return }
-    // this.initMenu(this.site);
   }
 
-  // async initMenu(site: ISite) {
-  //   await this.menusService.createMainMenu(site);
-  // }
+  ngOnDestroy() {
+    this._user.unsubscribe();
+  }
 
   async getMenu(site: ISite) {
-    // this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
+    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
     // this.accordionMenu$.subscribe(data=>{
     //   this.accordionMenu = data
     //   console.log('user ', this.user.roles);

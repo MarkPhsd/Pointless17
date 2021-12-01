@@ -1,7 +1,7 @@
 <div class="buttons-format flex-container">
 
-    <div>
-      <button *ngIf="viewOrder"
+    <div *ngIf="viewOrder">
+      <button
               mat-button
               color="primary"
               class="button"
@@ -25,7 +25,7 @@
       </button>
     </div>
 
-    <div>
+    <div >
       <button mat-button
           class="button"
           (click)="updateItem()">
@@ -42,8 +42,8 @@
       </button>
     </div>
 
-    <div>
-      <button *ngIf="enableDelete"
+    <div *ngIf="enableDelete">
+      <button
               mat-button
               color="warn"
               class="button"

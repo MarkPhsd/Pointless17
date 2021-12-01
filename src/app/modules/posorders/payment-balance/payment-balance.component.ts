@@ -6,6 +6,7 @@ import { IPOSOrder, IPOSPayment, ISite } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
@@ -46,6 +47,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private editDialog      : ProductEditButtonService,
               private toolBarUI       : ToolBarUIService,
               private matSnackBar   : MatSnackBar,
+              private printingService: PrintingService,
               private router: Router) {
    }
 
@@ -132,8 +134,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    }
 
    printPaymentReceipt(item) {
+     console.log('print')
+    this.printingService.previewReceipt()
     if (item) {
       // this.printPaymentReceipt(item)
+      this.printingService.previewReceipt()
     }
    }
 
