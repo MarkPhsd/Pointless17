@@ -24,12 +24,15 @@ export interface IPaymentSalesSummary {
   total         : number;
   tipAmount     : number;
   count         : number;
+  creditTotal   : number;
 }
 
 export interface PaymentSummary {
   amountPaid:    number;
   tipAmount:    number;
   paymentMethod: string;
+  isCash      : boolean;
+  isCreditCard: boolean;
   count:         number;
   startDate:     string;
   endDate:       string;

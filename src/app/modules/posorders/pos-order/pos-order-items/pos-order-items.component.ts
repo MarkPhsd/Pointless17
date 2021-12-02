@@ -1,13 +1,11 @@
 // import { Route } from '@angular/router';
 import { Subscription } from 'rxjs';
-import {  Component, ElementRef, HostBinding, HostListener, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
+import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
+import { ActivatedRoute } from '@angular/router';
+import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
@@ -42,6 +40,7 @@ export class PosOrderItemsComponent implements OnInit {
     })
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
+      console.log('pos order items ', this.order )
       setTimeout(() => {
         this.scrollToBottom();
       }, 200);
@@ -59,8 +58,6 @@ export class PosOrderItemsComponent implements OnInit {
                 public el:            ElementRef,
                 public route:         ActivatedRoute,
                 private siteService:  SitesService,
-                private productEditButtonService: ProductEditButtonService,
-                private posOrderItemService: POSOrderItemServiceService,
                 private uiSettingsService: UISettingsService,
                 private orderMethodService: OrderMethodsService,
               )

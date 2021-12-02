@@ -48,12 +48,14 @@ export class OrderMethodsService {
   }
 
   initItemProcess(){
+    this.orderService.updateOrderSubscription(this.order);
     this.processItem = null;
     this._itemProcessSection.next(0)
   }
 
   updateProcess()  {
     this.itemProcessSection = this.itemProcessSection +1
+    console.log('update Process',  this.itemProcessSection)
     this._itemProcessSection.next(this.itemProcessSection)
     this.handleProcessItem()
   }
@@ -65,7 +67,6 @@ export class OrderMethodsService {
               private _snackBar               : MatSnackBar,
               private posOrderItemService     : POSOrderItemServiceService,
               private productEditButtonService: ProductEditButtonService,
-              // private priceService            : PricingService,
               private promptGroupService      : PromptGroupService,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -99,10 +100,31 @@ export class OrderMethodsService {
       const itemResult$ = this.posOrderItemService.postItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
-            // this.orderService.updateOrderSubscription(data.order)
-            this.addedItemOptions(order, item, data.posItem)
+            // this.order = data.order
+            this.addedItemOptions(data.order, item, data.posItem)
           } else {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+          }
+        }
+      )
+    }
+  }
+
+  async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
+    const site          = this.siteService.getAssignedSite()
+    if (!order)         { order = this.order }
+    const result        = await this.doesOrderExist(site);
+    if (!result) { return }
+    if (order) {
+      const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
+      const itemResult$ = this.posOrderItemService.putItem(site, newItem)
+      itemResult$.subscribe(data => {
+          if (data.order) {
+            this.order = data.order
+            this.orderService.updateOrderSubscription(data.order)
+            this.updateProcess()
+          } else {
+            this.notifyEvent(`Error occured, this item was not changed. ${data.resultErrorDescription}`, 'Alert')
           }
         }
       )
@@ -124,29 +146,6 @@ export class OrderMethodsService {
     }
     return null;
   }
-
-  async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
-    const site          = this.siteService.getAssignedSite()
-    if (!order)         { order = this.order }
-    const result        = await this.doesOrderExist(site);
-    if (!result) { return }
-    if (order) {
-
-      const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
-      const itemResult$ = this.posOrderItemService.putItem(site, newItem)
-      itemResult$.subscribe(data => {
-          if (data.order) {
-            this.orderService.updateOrderSubscription(data.order)
-            this.updateProcess()
-          } else {
-            this.notifyEvent(`Error occured, this item was not changed. ${data.resultErrorDescription}`, 'Alert')
-          }
-        }
-      )
-    }
-  }
-
-  // this.orderMethodService.addItemToOrder(this.newItem.order, price, this.newItem.posItem.quantity)
 
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
 
@@ -208,15 +207,10 @@ export class OrderMethodsService {
         });
       }
     }
-
   }
 
-
   async cancelItem(posItem: IPurchaseOrderItem ) {
-
     const site = this.siteService.getAssignedSite();
-    const orderID = posItem.orderID;
-
     if (posItem.id) {
       let result = await this.posOrderItemService.deletePOSOrderItem(site, posItem.id).pipe().toPromise();
       if (result.scanResult) {
@@ -228,7 +222,6 @@ export class OrderMethodsService {
         this.orderService.updateOrderSubscription(result.order);
       }
     }
-
   }
 
   async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
@@ -253,42 +246,53 @@ export class OrderMethodsService {
   async handleProcessItem() {
     const process = this.itemProcessSection;
 
-    // console.log('handleProcessItem', this.processItem, this.itemProcessSection)
     if (!this.processItem) {
+      console.log('no processItem')
       this.orderService.updateOrderSubscription(this.order)
       return
     }
 
     switch(process) {
       case  0: {
-        this.openPriceOptionPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem)
-        break;
+          this.openPriceOptionPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem)
+          console.log('Handle Process Item openPriceOptionPrompt', 0)
+          break;
       }
       case  1: {
           this.promptSerial(this.processItem.item, this.processItem.posItem)
+          console.log('Handle Process Item promptSerial', 1)
           break;
         }
       case  2: {
         this.openPromptWalkThrough(this.processItem.order,this.processItem.item,this.processItem.posItem)
         //statements;
+        console.log('Handle Process Item openPromptWalkThrough', 2)
         break;
       }
       case  3: {
         this.openQuantityPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem);
         //statements;
+        console.log('Handle Process Item openQuantityPrompt', 3)
         break;
       }
       case  4: {
         this.openGiftCardPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem);
         //statements;
+        console.log('Handle Process Item openGiftCardPrompt', 4)
         break;
       }
       case 5: {
         this.openPriceChangePrompt(this.processItem.order,this.processItem.item,this.processItem.posItem);
+        console.log('Handle Process Item openPriceChangePrompt', 5)
+        break;
+      }
+      case 6: {
+        this.orderService.updateOrderSubscription(this.processItem.order);
+        console.log('Handle Process Item updateOrderSubscription', 6)
+        this.initItemProcess();
         break;
       }
       default: {
-        //statements;
         break;
       }
     }
@@ -296,57 +300,67 @@ export class OrderMethodsService {
 
 
   async  openPriceOptionPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
+
+    if (!order || !item || !posItem) {return}
+
     const site = this.siteService.getAssignedSite()
     //if there are multiple prices for this item.
     //the webapi will return what price options are avalible for the item.
     //the pop up will occur and prompt with options.
     //the function will return true once complete.
-    if (item && item.priceCategories && item.priceCategories.productPrices.length > 0 ) {
-        //remove unused prices if they exist?
-        // prompt.posOrderItem = posItem;
-        // this.promptGroupService.updatePromptGroup(prompt);
-        // encapsulation: ViewEncapsulation.None
-        // const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
-        const  newItem = {order: order, item: item, posItem: posItem}
-        const dialogRef = this.dialog.open(PriceOptionsComponent,
-          {
-            width:     '500px',
-            maxWidth:  '500px',
-            height:    '75vh',
-            maxHeight: '75vh',
-            panelClass: 'foo',
-            data: newItem
-          }
-        )
-        dialogRef.afterClosed().subscribe(result => {
-          //use this to remove item if price isn't choice.
-          this.promptGroupService.updatePromptGroup(null)
-          this.promptWalkService.updatePromptGroup(null)
-          if (result) {
-            this.updateProcess() //
-          }
-          if (!result) { this.initItemProcess(); }
-        });
-        return;
+    if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
+      // remove unused prices if they exist?
+      // prompt.posOrderItem = posItem;
+      // this.promptGroupService.updatePromptGroup(prompt);
+      // encapsulation: ViewEncapsulation.None
+      console.log('productPrices.length', item.priceCategories.productPrices.length)
+
+      const  newItem = {order: order, item: item, posItem: posItem}
+      const dialogRef = this.dialog.open(PriceOptionsComponent,
+        {
+          width:     '500px',
+          maxWidth:  '500px',
+          height:    '75vh',
+          maxHeight: '75vh',
+          panelClass: 'foo',
+          data: newItem
+        }
+      )
+      dialogRef.afterClosed().subscribe(result => {
+        //use this to remove item if price isn't choice.
+        this.promptGroupService.updatePromptGroup(null)
+        this.promptWalkService.updatePromptGroup(null)
+        if (result) {
+          this.updateProcess() //
+          return
+        }
+        if (!result) {
+          this.order = order;
+          this.initItemProcess();
+          return
+        }
+      });
+    } else {
+      console.log('Confirm no Prompt for price.')
+      this.order = order;
+      this.initItemProcess();
     }
-    // this.updateProcess() //
     return true;
   }
 
   openPriceChangePrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-    // this.handleProcessItem();
+    this.updateProcess() //
   }
 
   openGiftCardPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-    // this.handleProcessItem();
-
+    this.updateProcess() //
   }
 
   openQuantityPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
-    // this.handleProcessItem();
+    this.updateProcess() //
   }
 
   openPromptWalkThroughWithItem(prompt: IPromptGroup, posItem: IPurchaseOrderItem) {
@@ -370,11 +384,10 @@ export class OrderMethodsService {
           this.updateProcess();
         }
         if (!result) { this.initItemProcess(); }
-
         return;
       });
     }
-    // this.updateProcess() //
+
     return;
   }
 

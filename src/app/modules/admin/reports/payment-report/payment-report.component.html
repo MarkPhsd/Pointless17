@@ -83,17 +83,33 @@
 
         <mat-card-footer>
 
+          <div class="grid-footer">
+            <div class="grid-item ">
+              Credit Total
+            </div>
+            <div class="grid-item ">
+              {{sales.creditTotal | currency }}
+            </div>
+            <div class="grid-item" >
+            </div>
+            <div class="grid-item ">
+            </div>
+          </div>
+
           <div class="grid-footer"
                *ngIf="payments">
-            <!-- <span *ngIf="groupBy === 'Employee'">
-              <div class="grid-item">Staff</div>
-            </span> -->
+            <div class="grid-item">-----</div>
             <div class="grid-item">Total</div>
             <div class="grid-item">Avg</div>
             <div class="grid-item">Count</div>
           </div>
 
+
+
           <div class="grid-footer">
+            <div class="grid-item ">
+              Total
+            </div>
             <div class="grid-item ">
               {{sales.total | currency }}
             </div>
@@ -104,6 +120,8 @@
               {{sales.count }}
             </div>
           </div>
+
+
         </mat-card-footer>
       </mat-card>
     </div>
