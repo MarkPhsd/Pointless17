@@ -23,19 +23,19 @@ export class ApiStoredValueComponent implements OnInit {
       private appInitService       : AppInitService,
     ) {
 
-      this.currentAPIUrl = localStorage.getItem('storedApiUrl');
-      if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
-        this.router.navigate(['/login'])
-      }
+    this.currentAPIUrl = localStorage.getItem('storedApiUrl');
+    if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
+      this.router.navigate(['/login'])
+    }
 
-   }
+  }
 
   ngOnInit(): void {
     const currentAPIUrl = localStorage.getItem('storedApiUrl');
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
     });
-
+    console.log('App setting Init')
   }
 
   setAPIUrl(){

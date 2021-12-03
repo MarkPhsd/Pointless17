@@ -42,8 +42,9 @@ export class OrderMethodsService {
   processItem : ProcessItem
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe(data => {
-      this.order = data;
+    this._order = this.orderService.currentOrder$.subscribe(order => {
+      this.order = order;
+      console.log('subscription order method service ', order)
     })
   }
 
@@ -55,7 +56,6 @@ export class OrderMethodsService {
 
   updateProcess()  {
     this.itemProcessSection = this.itemProcessSection +1
-    console.log('update Process',  this.itemProcessSection)
     this._itemProcessSection.next(this.itemProcessSection)
     this.handleProcessItem()
   }
@@ -94,14 +94,18 @@ export class OrderMethodsService {
     const site          = this.siteService.getAssignedSite()
     if (!order)         { order = this.order }
     const result        = await this.doesOrderExist(site);
+
     if (!result) { return }
+    console.log('addItemToOrder result with order', result, order, this.order)
+    if (!order) {order = this.order}
     if (order) {
       const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
+      console.log('addItemToOrder result with order', result, newItem)
       const itemResult$ = this.posOrderItemService.postItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
-            // this.order = data.order
             this.addedItemOptions(data.order, item, data.posItem)
+            console.log('item added')
           } else {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
           }
@@ -119,6 +123,9 @@ export class OrderMethodsService {
       const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
       const itemResult$ = this.posOrderItemService.putItem(site, newItem)
       itemResult$.subscribe(data => {
+
+
+
           if (data.order) {
             this.order = data.order
             this.orderService.updateOrderSubscription(data.order)
@@ -194,13 +201,16 @@ export class OrderMethodsService {
           }
         )
         dialogRef.afterClosed().subscribe(data => {
-          if (data.result)  { this.updateProcess (); }
-          if (!data.result) {
+          if (data && data.order) {
+            this.order = data.order
+            this.orderService.updateOrderSubscription(this.order)
+          }
+
+          if (data && data.result)  { this.updateProcess (); }
+
+          if (!data || !data.result) {
             if (data.posItem){
-              this.cancelItem(data.posItem);
-            }
-            if (!data.posItem) {
-              this.cancelItem(posItem);
+              this.cancelItem(data.posItem, false);
             }
             this.initItemProcess();
            }
@@ -209,18 +219,21 @@ export class OrderMethodsService {
     }
   }
 
-  async cancelItem(posItem: IPurchaseOrderItem ) {
+  async cancelItem(posItem: IPurchaseOrderItem, notify : boolean ) {
     const site = this.siteService.getAssignedSite();
     if (posItem.id) {
       let result = await this.posOrderItemService.deletePOSOrderItem(site, posItem.id).pipe().toPromise();
       if (result.scanResult) {
-        this.notifyEvent('Item Deleted', 'Notice')
+        this.notifyWithOption('Item Deleted', 'Notice',notify)
       } else  {
-        this.notifyEvent('Item must be voided', 'Notice')
+        this.notifyWithOption('Item must be voided', 'Notice',notify)
       }
       if (result && result.order) {
         this.orderService.updateOrderSubscription(result.order);
+        this.initItemProcess();
       }
+    } else {
+      this.initItemProcess();
     }
   }
 
@@ -240,6 +253,7 @@ export class OrderMethodsService {
     this.processItem    = processItem;
     this._itemProcessSection.next(0)
     this.itemProcessSection = 0;
+    this.order = order;
     this.handleProcessItem();
   }
 
@@ -254,7 +268,7 @@ export class OrderMethodsService {
 
     switch(process) {
       case  0: {
-          this.openPriceOptionPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem)
+          this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
           console.log('Handle Process Item openPriceOptionPrompt', 0)
           break;
       }
@@ -264,32 +278,32 @@ export class OrderMethodsService {
           break;
         }
       case  2: {
-        this.openPromptWalkThrough(this.processItem.order,this.processItem.item,this.processItem.posItem)
+        this.openPromptWalkThrough(this.order,this.processItem.item,this.processItem.posItem)
         //statements;
         console.log('Handle Process Item openPromptWalkThrough', 2)
         break;
       }
       case  3: {
-        this.openQuantityPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem);
+        this.openQuantityPrompt(this.order,this.processItem.item,this.processItem.posItem);
         //statements;
         console.log('Handle Process Item openQuantityPrompt', 3)
         break;
       }
       case  4: {
-        this.openGiftCardPrompt(this.processItem.order,this.processItem.item,this.processItem.posItem);
+        this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
         //statements;
         console.log('Handle Process Item openGiftCardPrompt', 4)
         break;
       }
       case 5: {
-        this.openPriceChangePrompt(this.processItem.order,this.processItem.item,this.processItem.posItem);
+        this.openPriceChangePrompt(this.order,this.processItem.item,this.processItem.posItem);
         console.log('Handle Process Item openPriceChangePrompt', 5)
         break;
       }
       case 6: {
-        this.orderService.updateOrderSubscription(this.processItem.order);
+        this.orderService.updateOrderSubscription(this.order);
         console.log('Handle Process Item updateOrderSubscription', 6)
-        this.initItemProcess();
+        // this.initItemProcess();
         break;
       }
       default: {
@@ -299,7 +313,7 @@ export class OrderMethodsService {
   }
 
 
-  async  openPriceOptionPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
+  async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
 
     if (!order || !item || !posItem) {return}
 
@@ -328,17 +342,20 @@ export class OrderMethodsService {
       )
       dialogRef.afterClosed().subscribe(result => {
         //use this to remove item if price isn't choice.
-        this.promptGroupService.updatePromptGroup(null)
-        this.promptWalkService.updatePromptGroup(null)
+        // this.promptGroupService.updatePromptGroup(null)
+        // this.promptWalkService.updatePromptGroup(null)
+        if (!result) {
+          console.log('result price option', result)
+          // this.order = order;
+          this.cancelItem(posItem, false);
+
+          return
+        }
         if (result) {
           this.updateProcess() //
           return
         }
-        if (!result) {
-          this.order = order;
-          this.initItemProcess();
-          return
-        }
+
       });
     } else {
       console.log('Confirm no Prompt for price.')
@@ -412,10 +429,16 @@ export class OrderMethodsService {
     }
   }
 
+  notifyWithOption(message: string, title: string, notifyEnabled: boolean) {
+    if (notifyEnabled) {
+      this.notifyEvent('Item must be voided', 'Notice')
+    }
+  }
+
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
-      verticalPosition: 'top'
+      verticalPosition: 'bottom'
     });
   }
 }

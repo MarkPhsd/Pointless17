@@ -200,21 +200,17 @@ export class LoginComponent implements OnInit {
       .subscribe(
         user =>
         {
-          console.log(user.message);
-
           if (user && user.message === 'success') {
             this.userSwitchingService.processLogin(user)
             this.spinnerLoading = false;
             this.initForm()
             return
           }
-
           if(user && (user.status === 0 || user.message  == 'failed')) {
             user.message == 'Failed'
             user.erorMessage = 'Error logging in. '
             this.statusMessage = "Service is not accessible, check connection."
           }
-
 
         },
         error => {

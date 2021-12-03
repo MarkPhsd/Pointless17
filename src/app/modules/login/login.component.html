@@ -1,16 +1,15 @@
 ﻿<div class="container bg">
-
   <div class="row-height">
-
    <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-
     <div *ngIf="this.companyName != '' ; else loading">
 
       <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
           <mat-card fxFlex="100%">
 
               <mat-card-title>
-                <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                <div fxLayout="column"
+                     fxLayoutAlign="center center"
+                     class="row-height">
                     <img (click)="setAPIAlt()"
                          [src]="logo"
                          width="125px"

@@ -27,7 +27,11 @@
             {{ orderItem.serialCode }}
           </span>
 
-          <span  *ngIf="mainPanel && orderItem && orderItem.modifierNote && (orderItem.modifierNote != orderItem.serialCode)">
+          <span  *ngIf="mainPanel
+                        && orderItem
+                        && orderItem.modifierNote
+                        && (orderItem.modifierNote != orderItem.serialCode)
+                        && orderItem.modifierNote != ''">
             {{ orderItem.modifierNote }}
           </span>
 

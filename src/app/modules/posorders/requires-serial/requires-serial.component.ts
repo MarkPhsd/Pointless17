@@ -70,7 +70,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
       this.orderMethodService.appylySerial(this.posItem).subscribe(data =>{
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
-          this.dialogRef.close({posItem: this.posItem, result : true});
+          this.dialogRef.close({posItem: this.posItem, result : true, order: data.order});
         }
       })
     }
@@ -79,9 +79,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   onCancel() {
     const serial = this.serialCode.value;
     if (this.posItem && (!this.posItem.serialCode || this.posItem.serialCode.length == 0) && (!serial || serial.length == 0)) {
-      if (window.confirm(`If you cancel, the item may be removed from this order`)) {
         this.dialogRef.close({posItem: this.posItem, result : false});
-      }
       return
     }
     this.dialogRef.close({posItem: this.posItem, result : true});

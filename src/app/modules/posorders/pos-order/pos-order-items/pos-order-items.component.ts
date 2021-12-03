@@ -38,8 +38,9 @@ export class PosOrderItemsComponent implements OnInit {
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
     })
-    this._order = this.orderService.currentOrder$.subscribe( data => {
-      this.order = data
+
+    this._order = this.orderService.currentOrder$.subscribe( order => {
+      this.order = order
       console.log('pos order items ', this.order )
       setTimeout(() => {
         this.scrollToBottom();

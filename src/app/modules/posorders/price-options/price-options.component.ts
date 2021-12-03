@@ -26,11 +26,9 @@ export class PriceOptionsComponent  {
 
   prices  : ProductPrice[];
   menuItem: IMenuItem;
+  price   : ProductPrice;
 
   constructor(
-    private sitesService             : SitesService,
-    private posOrderItemService      : POSOrderItemServiceService,
-    private orderService             : OrdersService,
     private orderMethodService       : OrderMethodsService,
     private dialogRef                : MatDialogRef<PriceOptionsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,) {
@@ -48,9 +46,7 @@ export class PriceOptionsComponent  {
           this.prices =  menuItem.priceCategories.productPrices;
         }
       }
-
-    }
-
+  }
 
   async addItemPrice(price: ProductPrice) {
     await this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item, price, this.newItem.posItem.quantity, this.newItem.posItem.id)
@@ -63,7 +59,7 @@ export class PriceOptionsComponent  {
   }
 
   removeItem(){
-    // this.posOrderItemService.removeItem(posItem)
+
   }
 
 }
