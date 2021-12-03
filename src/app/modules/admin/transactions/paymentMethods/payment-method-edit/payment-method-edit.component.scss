@@ -3,166 +3,20 @@
   overflow-y: auto;
 }
 
-.mat-input-element {
-  font-size: 1em;
-}
-
-.mat-label {
-  font-size: 1.2em;
-}
-
-.mat-card {
-   height: 99%;
-}
-
-mat-raised-button {
-  margin: 5rem 5rem 2rem 2rem;
-  padding: 1rem 1rem 1rem 1rem;
-}
-
-button {
-  margin-bottom: 10px;
-  margin-left: 10px;
-}
-
-mat-label {
-  padding:5px;
-  font-size: 1.0em;
-}
-
-
-mat-form-field {
-  margin: 3px 3px 3px 3px;
-}
-
-mat-radio-button  {
-  margin: 3px;
-}
-
-mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
-  // height: 100%;
-  // overflow: hidden;
-}
-
-.example-tab-icon {
-  margin-right: 8px;
-}
-
-.itemSaved {
-  color: hotpink;
-}
-
-mat-drawer {
-  width: 200px;
-}
-
-mat-drawer-container {
-  height: 100%;
-}
-
-mat-drawer-content {
-  padding: 20px;
-}
-
-simple-tinymce {
-  padding:5px;
-}
-
 mat-form-field {
   font-size: 1em;
-}
-
-label {
-  display: block;
-  padding: 5px;
-}
-
-button{
-  padding: 5px;
-}
-
-h1 {
-  font-size: 1.5em;
-  text-decoration: underline;
-}
-
-#remove_email {
-  // color: red;
-  margin: 5px;
-}
-
-#register_button {
-  background: lightblue;
-}
-
-.alert {
-  // color: darkred;
-}
-
-.ng-invalid:not(form)  {
-  // border-left: 3px solid darkred;
-}
-
-// .ng-valid:not(form) {
-//   border-left: 3px solid greenyellow;
-// }
-
-
-.grid-container {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.document-content {
-  display: block;
-
-  @media (max-width: 425px)  {
-    display: none;
-    background-color: antiquewhite;
-  }
-  @media (max-width: 599px)  {
-    display: none;
-    background-color: antiquewhite;
-  }
-  // @media (max-width: 600px)   {
-  //   display: none;
-  //   background-color: antiquewhite;
-  // }
-  @media (max-width: 900px) {
-    display: none;
-    background-color: antiquewhite;
-  }
-
 }
 
 .grid-content {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  // grid-template-rows: auto ;
-  grid-gap: 10px;
-  gap: 2px;
-  overflow-x: hidden;
-  overflow-y: auto;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  margin-top: 10px;
 }
 
-
-.grid-headers {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr) ;
-  // grid-gap: 2px;
-  // gap: 2px;
-  width: 350px;
-  overflow-x: hidden;
-  overflow-y: hidden;
-}
 
 .grid-fields {
   display: grid;
-  --gap: 2px;
-  gap: var(--gap);
-  grid-template-columns: repeat(1, 1fr) ;
-  overflow-y: auto;
-  height: 500px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  margin-left: 15px;
 }
+

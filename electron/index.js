@@ -203,9 +203,9 @@ autoUpdater.on('update-downloaded', (ev, info) => {
     // Wait 5 seconds, then quit and install
     // In your application, you don't need to wait 5 seconds.
     // You could call autoUpdater.quitAndInstall(); immediately
-
     //testing nodes
     setTimeout(function() {
+      log.info('checking autoUpdater for Quit And Install' )
       autoUpdater.quitAndInstall();
     }, 5000)
   }
@@ -213,6 +213,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
 
 app.on('ready', function()  {
   if (!isDevMode) {
+    log.info('checking autoUpdater for App.on' )
     autoUpdater.checkForUpdates();
   }
 });
@@ -226,40 +227,40 @@ app.on('ready', function()  {
 // for the app to show a window than to have to click "About" to see
 // that updates are working.
 //-------------------------------------------------------------------
-// let win;
+let win;
 
-// function sendStatusToWindow(text) {
-//   log.info(text);
-//   win.webContents.send('message', text);
-// }
-// function createDefaultWindow() {
-//   win = new BrowserWindow();
-//   win.webContents.openDevTools();
-//   win.on('closed', () => {
-//     win = null;
-//   });
-//   // win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
-//   win.loadURL(`file://${__dirname}/app/version.html`);
-//   return win;
-// }
-// autoUpdater.on('checking-for-update', () => {
-//   sendStatusToWindow('Checking for update...');
-// })
-// autoUpdater.on('update-available', (ev, info) => {
-//   sendStatusToWindow('Update available.');
-// })
-// autoUpdater.on('update-not-available', (ev, info) => {
-//   sendStatusToWindow('Update not available.');
-// })
-// autoUpdater.on('error', (ev, err) => {
-//   sendStatusToWindow('Error in auto-updater.');
-// })
-// autoUpdater.on('download-progress', (ev, progressObj) => {
-//   sendStatusToWindow('Download progress...');
-// })
-// autoUpdater.on('update-downloaded', (ev, info) => {
-//   sendStatusToWindow('Update downloaded; will install in 5 seconds');
-// });
+function sendStatusToWindow(text) {
+  log.info(text);
+  win.webContents.send('message', text);
+}
+function createDefaultWindow() {
+  win = new BrowserWindow();
+  win.webContents.openDevTools();
+  win.on('closed', () => {
+    win = null;
+  });
+  // win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
+  win.loadURL(`file://${__dirname}/app/version.html`);
+  return win;
+}
+autoUpdater.on('checking-for-update', () => {
+  sendStatusToWindow('Checking for update...');
+})
+autoUpdater.on('update-available', (ev, info) => {
+  sendStatusToWindow('Update available.');
+})
+autoUpdater.on('update-not-available', (ev, info) => {
+  sendStatusToWindow('Update not available.');
+})
+autoUpdater.on('error', (ev, err) => {
+  sendStatusToWindow('Error in auto-updater.');
+})
+autoUpdater.on('download-progress', (ev, progressObj) => {
+  sendStatusToWindow('Download progress...');
+})
+autoUpdater.on('update-downloaded', (ev, info) => {
+  sendStatusToWindow('Update downloaded; will install in 5 seconds');
+});
 
 // app.on('ready', function() {
 //   // Create the Menu
@@ -293,22 +294,4 @@ app.on('ready', function()  {
 // autoUpdater.on('download-progress', (ev, progressObj) => {
 // })
 
-     // if (item.name == 'sWeight') {
-              //   // log.info('ScaleWeight', item.value);
-              //     mainWindow.webContents.send('scaleWeight',  item.value)
-              //     log.error('reading registry ' + 'scaleWeight ',  item.value);
-              // }
 
-              // // log.info('ScaleType' + item.value);
-              // if (item.name == 'scaleType') {
-              //   mainWindow.webContents.send('scaleType',  item.value)
-              //   // log.error('reading registry ' + 'scaleType ',  item.value);
-              // }
-              // //ValueToDivide
-              // if (item.name == 'ValueToDivide') {
-              //   mainWindow.webContents.send('scaleValueToDivide',  item.value)
-              //   // log.error('reading registry ' + 'scaleValueToDivide ',  item.value);
-              // }
-              // if (item.name == 'mode') {
-              //   mainWindow.webContents.send('scaleMode',  item.value)
-              // }

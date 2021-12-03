@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 
 @Component({
   selector: 'balance-sheet-calculations-view',
@@ -7,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class BalanceSheetCalculationsViewComponent implements OnInit {
 
-  @Input() sheet: any;
+  @Input() sheet: IBalanceSheet;
   @Input() currentBalance: number;
 
   constructor() { }

@@ -129,11 +129,13 @@ export class BalanceSheetFilterComponent implements  OnInit {
     this.refreshEmployees();
     console.log('employee list')
     const site           = this.siteService.getAssignedSite()
+    if (!site) { return }
     setInterval(this.refreshEmployees,  (60*1000) *5);
    }
 
    refreshEmployees(){
       const site           = this.siteService.getAssignedSite()
+      if (!site) { return }
       this.employees$      = this.orderService.getActiveEmployees(site)
    }
 
@@ -178,6 +180,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
 
   initSearchModel() {
     const site = this.siteService.getAssignedSite()
+    if (!site) { return }
     this.searchModel = {} as BalanceSheetSearchModel
 
     this.balanceSheetService.updateBalanceSearchModel(this.searchModel)

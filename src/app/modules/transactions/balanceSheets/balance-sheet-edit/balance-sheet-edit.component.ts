@@ -1,5 +1,4 @@
-import { Component,  OnInit,
-         OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -84,9 +83,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   startOptionsDisabled = false;
   ordersCount      = 0;
   ordersOpen       = 0;
-  //init subscriptions
-  //requires user
-  //requires balance sheet
 
   _openOrders: Subscription;
   _ordersCount : Subscription;
@@ -96,6 +92,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.loading = true
     this._sheet = this.sheetService.balanceSheet$.subscribe( data => {
       this.sheet = data;
+      console.log('Subscription Sheet', data)
       this.loading = false;
       if (this.inputForm) {
         this.inputForm.patchValue(this.sheet)
@@ -436,8 +433,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     const cashEnd    = this.getSummaryOfCashEnd();
     const cashStart  = this.getSummaryOfCashStart();
     if (this.sheet) {
-      const balance = cashEnd - cashStart - this.sheet.cashIn - this.sheet.cashDropTotal
-
+      const balance =  cashEnd + this.sheet.cashDropTotal  - cashStart - this.sheet.cashIn
+      console.log(this.sheet.cashDropTotal  , cashEnd , cashStart)
       this.balance  = balance
     }
     return this.balance
