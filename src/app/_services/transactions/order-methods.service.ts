@@ -85,9 +85,9 @@ export class OrderMethodsService {
     return true
   }
 
-  appylySerial(posItem: IPurchaseOrderItem) {
+  appylySerial(id: number, serialCode: string) {
     const site = this.siteService.getAssignedSite();
-    return this.posOrderItemService.appylySerial(site, posItem.id, posItem.serialCode, null)
+    return this.posOrderItemService.appylySerial(site, id, serialCode, null)
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
@@ -100,12 +100,10 @@ export class OrderMethodsService {
     if (!order) {order = this.order}
     if (order) {
       const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
-      console.log('addItemToOrder result with order', result, newItem)
       const itemResult$ = this.posOrderItemService.postItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
             this.addedItemOptions(data.order, item, data.posItem)
-            console.log('item added')
           } else {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
           }
@@ -186,9 +184,10 @@ export class OrderMethodsService {
     input.nativeElement.value = ''
   }
 
-  promptSerial(menuItem: IMenuItem, posItem: IPurchaseOrderItem) {
-    if (posItem) {
-      if ( menuItem.itemType.requiresSerial)
+  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean) {
+
+    if (id) {
+      if ( (menuItem && menuItem.itemType.requiresSerial) || editOverRide)
       {
         const dialogRef = this.dialog.open(RequiresSerialComponent,
           {
@@ -197,7 +196,7 @@ export class OrderMethodsService {
             height:    '270px',
             maxHeight  :'270px',
             panelClass :'foo',
-            data       : posItem
+            data       : id
           }
         )
         dialogRef.afterClosed().subscribe(data => {
@@ -209,8 +208,8 @@ export class OrderMethodsService {
           if (data && data.result)  { this.updateProcess (); }
 
           if (!data || !data.result) {
-            if (data.posItem){
-              this.cancelItem(data.posItem, false);
+            if (data.id){
+              this.cancelItem(data.id, false);
             }
             this.initItemProcess();
            }
@@ -219,14 +218,63 @@ export class OrderMethodsService {
     }
   }
 
-  async cancelItem(posItem: IPurchaseOrderItem, notify : boolean ) {
+  async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
+
+    if (!order || !item || !posItem) {return}
+
+    const site = this.siteService.getAssignedSite()
+    //if there are multiple prices for this item.
+    //the webapi will return what price options are avalible for the item.
+    //the pop up will occur and prompt with options.
+    //the function will return true once complete.
+    if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
+      // remove unused prices if they exist?
+      // prompt.posOrderItem = posItem;
+      // this.promptGroupService.updatePromptGroup(prompt);
+      // encapsulation: ViewEncapsulation.None
+      console.log('productPrices.length', item.priceCategories.productPrices.length)
+
+      const  newItem = {order: order, item: item, posItem: posItem}
+      const dialogRef = this.dialog.open(PriceOptionsComponent,
+        {
+          width:     '500px',
+          maxWidth:  '500px',
+          height:    '75vh',
+          maxHeight: '75vh',
+          panelClass: 'foo',
+          data: newItem
+        }
+      )
+      dialogRef.afterClosed().subscribe(result => {
+        //use this to remove item if price isn't choice.
+        // this.promptGroupService.updatePromptGroup(null)
+        // this.promptWalkService.updatePromptGroup(null)
+        if (!result) {
+          this.cancelItem(posItem.id, false);
+          return
+        }
+        if (result) {
+          this.updateProcess() //
+          return
+        }
+
+      });
+    } else {
+      console.log('Confirm no Prompt for price.')
+      this.order = order;
+      this.initItemProcess();
+    }
+    return true;
+  }
+
+  async cancelItem(id: number, notify : boolean ) {
     const site = this.siteService.getAssignedSite();
-    if (posItem.id) {
-      let result = await this.posOrderItemService.deletePOSOrderItem(site, posItem.id).pipe().toPromise();
+    if (id) {
+      let result = await this.posOrderItemService.deletePOSOrderItem(site, id).pipe().toPromise();
       if (result.scanResult) {
-        this.notifyWithOption('Item Deleted', 'Notice',notify)
+        this.notifyWithOption('Item Deleted', 'Notice', notify)
       } else  {
-        this.notifyWithOption('Item must be voided', 'Notice',notify)
+        this.notifyWithOption('Item must be voided', 'Notice', notify)
       }
       if (result && result.order) {
         this.orderService.updateOrderSubscription(result.order);
@@ -273,7 +321,7 @@ export class OrderMethodsService {
           break;
       }
       case  1: {
-          this.promptSerial(this.processItem.item, this.processItem.posItem)
+          this.promptSerial(this.processItem.item, this.processItem.posItem.id, false)
           console.log('Handle Process Item promptSerial', 1)
           break;
         }
@@ -310,59 +358,6 @@ export class OrderMethodsService {
         break;
       }
     }
-  }
-
-
-  async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
-
-    if (!order || !item || !posItem) {return}
-
-    const site = this.siteService.getAssignedSite()
-    //if there are multiple prices for this item.
-    //the webapi will return what price options are avalible for the item.
-    //the pop up will occur and prompt with options.
-    //the function will return true once complete.
-    if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
-      // remove unused prices if they exist?
-      // prompt.posOrderItem = posItem;
-      // this.promptGroupService.updatePromptGroup(prompt);
-      // encapsulation: ViewEncapsulation.None
-      console.log('productPrices.length', item.priceCategories.productPrices.length)
-
-      const  newItem = {order: order, item: item, posItem: posItem}
-      const dialogRef = this.dialog.open(PriceOptionsComponent,
-        {
-          width:     '500px',
-          maxWidth:  '500px',
-          height:    '75vh',
-          maxHeight: '75vh',
-          panelClass: 'foo',
-          data: newItem
-        }
-      )
-      dialogRef.afterClosed().subscribe(result => {
-        //use this to remove item if price isn't choice.
-        // this.promptGroupService.updatePromptGroup(null)
-        // this.promptWalkService.updatePromptGroup(null)
-        if (!result) {
-          console.log('result price option', result)
-          // this.order = order;
-          this.cancelItem(posItem, false);
-
-          return
-        }
-        if (result) {
-          this.updateProcess() //
-          return
-        }
-
-      });
-    } else {
-      console.log('Confirm no Prompt for price.')
-      this.order = order;
-      this.initItemProcess();
-    }
-    return true;
   }
 
   openPriceChangePrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
@@ -431,7 +426,7 @@ export class OrderMethodsService {
 
   notifyWithOption(message: string, title: string, notifyEnabled: boolean) {
     if (notifyEnabled) {
-      this.notifyEvent('Item must be voided', 'Notice')
+      this.notifyEvent(message, title)
     }
   }
 

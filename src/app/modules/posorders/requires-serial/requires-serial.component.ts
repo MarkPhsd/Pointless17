@@ -7,6 +7,7 @@ import { IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { OrdersService } from 'src/app/_services';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { __asyncValues } from 'tslib';
 
 @Component({
   selector: 'app-requires-serial',
@@ -23,7 +24,8 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   get serialCode() { return this.inputForm.get("serial") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
-  posItem  : IPurchaseOrderItem;
+  id           : number;
+  currentSerial: string;
 
   keyboardOption      = false;
   keyboardDisplayOn   = false;
@@ -37,7 +39,8 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
       )
   {
     if (data) {
-      this.posItem = data;
+      // this.posItem = data;
+      this.id = data
     }
   }
 
@@ -52,6 +55,8 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   initFormSubscription() {
     this.inputForm.controls['serial'].valueChanges.subscribe(value => {
       if (value.length == 24) {
+        console.log(value)
+        const item = value.toString().substr(0,24)
         this.applySerial(value)
       }
     });
@@ -65,12 +70,11 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   }
 
   applySerial(serial: string) {
-    if (this.posItem && serial) {
-      this.posItem.serialCode = serial;
-      this.orderMethodService.appylySerial(this.posItem).subscribe(data =>{
+    if (this.id && serial) {
+      this.orderMethodService.appylySerial(this.id, serial).subscribe(data =>{
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
-          this.dialogRef.close({posItem: this.posItem, result : true, order: data.order});
+          this.dialogRef.close({id: this.id, result : true, order: data.order});
         }
       })
     }
@@ -78,15 +82,15 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
 
   onCancel() {
     const serial = this.serialCode.value;
-    if (this.posItem && (!this.posItem.serialCode || this.posItem.serialCode.length == 0) && (!serial || serial.length == 0)) {
-        this.dialogRef.close({posItem: this.posItem, result : false});
+    if ((!this.currentSerial || this.currentSerial.length == 0) && (!serial || serial.length == 0)) {
+        this.dialogRef.close({id: this.id, result : false});
       return
     }
-    this.dialogRef.close({posItem: this.posItem, result : true});
+    this.dialogRef.close({id: this.id, result : true});
   }
 
   async deleteItem(item: IPOSOrderItem ) {
-    this.dialogRef.close({posItem: this.posItem, result : false});
+    this.dialogRef.close({id: this.id, result : false});
   }
 
   notifyEvent(message: string) {
