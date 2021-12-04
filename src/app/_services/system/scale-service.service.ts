@@ -36,33 +36,8 @@ export class ScaleService  {
   constructor(
     private electronService: ElectronService,
     ) {
-
-    //set a scale timer that can be adjusted. set to local storage.
-    // this.readScaleOnInterval();
     this.readScaleEvent();
   }
-
-
-  // readScaleOnInterval() {
-  //   const scaleSetup = this.getScaleSetup()
-
-  //   if (!scaleSetup || !scaleSetup.enabled) { return }
-  //   if (this.electronService.remote != null) {
-  //     this.isElectronServiceInitiated = true
-  //     setInterval( () => {
-  //       this.electronService.ipcRenderer.on('scaleInfo', (event, args) => {
-  //         const info         = {} as ScaleInfo;
-  //         info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
-  //         info.type          = args.type;
-  //         info.mode          = args.mode;
-  //         info.scaleStatus   = args.status;
-  //         info.valueToDivide = args.valueToDivide
-  //         this.updateSubscription(info)
-  //       });
-  //     },
-  //     +scaleSetup.timer * 1000)
-  //   }
-  // }
 
   readScaleEvent() {
     const scaleSetup = this.getScaleSetup()
@@ -76,12 +51,19 @@ export class ScaleService  {
           info.mode          = args.mode;
           info.scaleStatus   = args.status;
           info.valueToDivide = args.valueToDivide
-          // console.log('info', info)
-          // console.log('event', event)
           this.updateSubscription(info)
         },
       );
     }
+  }
+
+  async readScale() {
+    if (this.isElectronServiceInitiated) {
+      const scaleInfo = this.getScaleInfo();
+      this.updateSubscription(scaleInfo)
+      return  scaleInfo
+    }
+    return  null;
   }
 
   getScaleWeighFormat(value: string, decimalPlaces: number): string {
@@ -100,7 +82,6 @@ export class ScaleService  {
       return '-1';
     }
   }
-
 
   getScaleInfo(): ScaleInfo {
     this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
@@ -122,30 +103,18 @@ export class ScaleService  {
     return  scaleSetup
   }
 
-  async readScale() {
-    if (this.isElectronServiceInitiated) {
-      const scaleInfo = this.getScaleInfo();
-      this.updateSubscription(scaleInfo)
-      return  scaleInfo
-    }
-    return  null;
-  }
-
   initializeScaleSetup() {
     let scaleSetup = {}  as ScaleSetup;
     scaleSetup.decimalPlaces      = 2;
     scaleSetup.timer              = 500;
     scaleSetup.enabled            = true;
     this.updateScaleSetup(scaleSetup);
-    // console.log('scale setup', scaleSetup)
     return scaleSetup;
   }
 
   updateScaleSetup(scaleSetup: ScaleSetup) {
     localStorage.setItem('ScaleSetup', JSON.stringify(scaleSetup))
   }
-
-
 
 }
 

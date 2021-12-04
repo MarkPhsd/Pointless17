@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,NgZone  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
@@ -16,6 +16,7 @@ export class ApiStoredValueComponent implements OnInit {
   inputForm: FormGroup;
   currentAPIUrl : any;
   version: any;
+  message: string;
 
   constructor(
       private router               : Router,
@@ -24,6 +25,7 @@ export class ApiStoredValueComponent implements OnInit {
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
       private electronService      : ElectronService,
+      private ngZone: NgZone
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
@@ -31,6 +33,17 @@ export class ApiStoredValueComponent implements OnInit {
       this.router.navigate(['/login'])
     }
 
+    this.initRender();
+    this.getVersion();
+  }
+
+  initRender() {
+    if (!this.electronService.isElectronApp) { return }
+    this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
+      this.ngZone.run(() => {
+          this.version = arg
+      });
+    })
   }
 
   ngOnInit(): void {
@@ -55,20 +68,15 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   getVersion() {
-
     if (!this.electronService.isElectronApp) { return }
-
-       this.electronService.ipcRenderer.on('ping', args => {
-         console.log(args);
-       })
-
+    this.electronService.ipcRenderer.send('asynchronous-message', 'ping');
   }
 
   getPong(): any {
+    if (!this.electronService.isElectronApp) { return }
     console.log('pong')
-    this.electronService.ipcRenderer.on('ping', (event, pong) => {
+    this.electronService.ipcRenderer.addListener('asynchronous-message', (event, pong) => {
       console.log('ping',event, pong)
-      return pong
     });
     return null
   }

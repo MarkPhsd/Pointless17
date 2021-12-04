@@ -6,6 +6,8 @@ import { AuthenticationService } from 'src/app/_services';
 import { Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { SystemManagerService } from 'src/app/_services/system/system-manager.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-settings',
@@ -17,17 +19,28 @@ export class SettingsComponent implements OnInit {
   get platForm() {  return Capacitor.getPlatform(); }
 
   showPaymentMethods = false;
-  user:         IUser;
-  role:         string;
+  user          :  IUser;
+  role          :  string;
+
   accordionStep = -1;
+  _accordionStep: Subscription;
+
+  initSubscriptions() {
+    this._accordionStep  = this.systemManagerService.accordionMenu$.subscribe( step => {
+      this.accordionStep = step;
+      console.log('initSubscriptions', step)
+    })
+  }
 
   constructor(
       private AuthenticationService: AuthenticationService,
       private platformService      : PlatformService,
-      private dialog:          MatDialog,
-      private router :         Router)
+      private dialog               : MatDialog,
+      private systemManagerService : SystemManagerService,
+      private router               : Router)
   {
     this.accordionStep = -1;
+    this.initSubscriptions();
   }
 
     ngOnInit() {
@@ -50,15 +63,20 @@ export class SettingsComponent implements OnInit {
     }
 
     setStep(index: number) {
-      this.accordionStep = index;
+      console.log('setStep')
+      this.systemManagerService.updateAccordionStep(index)
+      // this.accordionStep = index;
+      console.log('setStep', index)
     }
 
     nextStep() {
-      this.accordionStep++;
+      this.accordionStep += 1;
+      this.systemManagerService.updateAccordionStep(this.accordionStep)
     }
 
     prevStep() {
-      this.accordionStep--;
+      this.accordionStep += -1;
+      this.systemManagerService.updateAccordionStep(this.accordionStep)
     }
 
     getCurrentUser() {
@@ -69,7 +87,6 @@ export class SettingsComponent implements OnInit {
         }
       })
     }
-
 
     openProductDialog(id: any) {
       const dialogConfig = [

@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, ipcRenderer: ipc } = require('electron');
+const { app, BrowserWindow, Menu,ipcMain , ipcRenderer: ipc } = require('electron');
 const { CapacitorSplashScreen, configCapacitor } = require('@capacitor/electron');
 const registry        = require('winreg');
 const path            = require('path');
@@ -216,6 +216,14 @@ app.on('ready', function()  {
     autoUpdater.checkForUpdates();
   }
 });
+
+ipcMain.on('asynchronous-message', (event, arg) => {
+  event.reply('asynchronous-reply', app.getVersion())
+})
+
+ipcMain.on('synchronous-message', (event, arg) => {
+  event.returnValue = 'pong'
+})
 
 //-------------------------------------------------------------------
 // Open a window that displays the version
