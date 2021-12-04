@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -14,6 +15,7 @@ export class ApiStoredValueComponent implements OnInit {
 
   inputForm: FormGroup;
   currentAPIUrl : any;
+  version: any;
 
   constructor(
       private router               : Router,
@@ -21,6 +23,7 @@ export class ApiStoredValueComponent implements OnInit {
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
+      private electronService      : ElectronService,
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
@@ -36,6 +39,9 @@ export class ApiStoredValueComponent implements OnInit {
       apiUrl: [currentAPIUrl],
     });
     console.log('App setting Init')
+
+    // this.getVersion()
+
   }
 
   setAPIUrl(){
@@ -48,4 +54,24 @@ export class ApiStoredValueComponent implements OnInit {
     this.currentAPIUrl = apiUrl;
   }
 
+  getVersion() {
+
+    if (!this.electronService.isElectronApp) { return }
+
+       this.electronService.ipcRenderer.on('ping', args => {
+         console.log(args);
+       })
+
+  }
+
+  getPong(): any {
+    console.log('pong')
+    this.electronService.ipcRenderer.on('ping', (event, pong) => {
+      console.log('ping',event, pong)
+      return pong
+    });
+    return null
+  }
 }
+
+

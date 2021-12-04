@@ -126,7 +126,7 @@ export class ScaleService  {
     if (this.isElectronServiceInitiated) {
       const scaleInfo = this.getScaleInfo();
       this.updateSubscription(scaleInfo)
-      return  this.getScaleInfo();
+      return  scaleInfo
     }
     return  null;
   }
