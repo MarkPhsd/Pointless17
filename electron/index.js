@@ -4,7 +4,6 @@ const registry        = require('winreg');
 const path            = require('path');
 const { autoUpdater } = require('electron-updater');
 const log             = require('electron-log');
-//notes import typs for capacitor electron
 
 const isDevMode       = require('electron-is-dev');
 try {

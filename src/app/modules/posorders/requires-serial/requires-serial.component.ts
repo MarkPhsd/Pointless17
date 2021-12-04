@@ -39,8 +39,8 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
       )
   {
     if (data) {
-      // this.posItem = data;
-      this.id = data
+      this.id = data.id
+      this.currentSerial = data.serial
     }
   }
 
@@ -64,7 +64,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
 
   initForm() {
     this.inputForm = this.fb.group({
-      serial: ['']
+      serial: [this.currentSerial]
     })
     this.initFormSubscription();
   }
