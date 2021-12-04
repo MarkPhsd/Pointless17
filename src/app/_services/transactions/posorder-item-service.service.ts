@@ -244,12 +244,12 @@ export class POSOrderItemServiceService {
 
     const controller = "/POSOrderItems/"
 
-    const endPoint  = "getPOSOrderItems"
+    const endPoint  = "getPOSOrderItem"
 
-    const parameters = `$id=${id}`
+    const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
+    console.log(url)
     return this.http.get<PosOrderItem>(url);
 
   }

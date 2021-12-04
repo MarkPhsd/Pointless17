@@ -207,11 +207,9 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   editSerial() {
     if (this.orderItem) {
       const site = this.siteService.getAssignedSite();
-      console.log('this.orderItem.id', this.orderItem.id)
       const item$ = this.posOrderItemService.getPOSOrderItem(site, this.orderItem.id)
       item$.subscribe( data => {
-          console.log('on serial. ', data)
-          this.orderMethodsService.promptSerial(this.menuItem, data.id, true)
+          this.orderMethodsService.promptSerial(this.menuItem, data.id, true, data.serialCode)
         }, err => {
           console.log('error', err)
         }

@@ -184,7 +184,7 @@ export class OrderMethodsService {
     input.nativeElement.value = ''
   }
 
-  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean) {
+  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string) {
 
     if (id) {
       if ( (menuItem && menuItem.itemType.requiresSerial) || editOverRide)
@@ -196,7 +196,7 @@ export class OrderMethodsService {
             height:    '270px',
             maxHeight  :'270px',
             panelClass :'foo',
-            data       : id
+            data       : { id: id, serial: serial}
           }
         )
         dialogRef.afterClosed().subscribe(data => {
@@ -204,9 +204,7 @@ export class OrderMethodsService {
             this.order = data.order
             this.orderService.updateOrderSubscription(this.order)
           }
-
           if (data && data.result)  { this.updateProcess (); }
-
           if (!data || !data.result) {
             if (data.id){
               this.cancelItem(data.id, false);
@@ -321,7 +319,7 @@ export class OrderMethodsService {
           break;
       }
       case  1: {
-          this.promptSerial(this.processItem.item, this.processItem.posItem.id, false)
+          this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')
           console.log('Handle Process Item promptSerial', 1)
           break;
         }
