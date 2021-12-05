@@ -39,7 +39,7 @@ export class ApiStoredValueComponent implements OnInit {
 
   initRender() {
     if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.on('asynchronous-reply', (event, arg) => {
+    this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
       this.ngZone.run(() => {
           this.version = arg
       });
@@ -52,9 +52,6 @@ export class ApiStoredValueComponent implements OnInit {
       apiUrl: [currentAPIUrl],
     });
     console.log('App setting Init')
-
-    // this.getVersion()
-
   }
 
   setAPIUrl(){
@@ -67,9 +64,14 @@ export class ApiStoredValueComponent implements OnInit {
     this.currentAPIUrl = apiUrl;
   }
 
+  checkForUpdate() {
+    if (!this.electronService.isElectronApp) { return }
+    this.electronService.ipcRenderer.send('getVersion', 'ping');
+  }
+
   getVersion() {
     if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.send('asynchronous-message', 'ping');
+    this.electronService.ipcRenderer.send('getVersion', 'ping');
   }
 
   getPong(): any {

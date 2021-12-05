@@ -132,10 +132,7 @@ app.on('close', () =>  {
     app.quit();
   }
 });
-// mainWindow.on('close', function (e) {
-//   app.quit();
-//   if (window) {  window = null } // Clean up your window object.
-// })
+
 
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
@@ -153,6 +150,7 @@ regKey = new registry({                                       // new operator is
 
 app.on('ready', function ()  {
   if (!isDevMode) {
+    log.info('checkForUpdatesAndNotify'  )
     autoUpdater.checkForUpdatesAndNotify();
   }
 });
@@ -198,6 +196,8 @@ function readScale() {
 }
 
 autoUpdater.on('update-downloaded', (ev, info) => {
+  log.info(info + 'autoUpdater update-downloaded '  )
+
   if (!isDevMode) {
     // Wait 5 seconds, then quit and install
     // In your application, you don't need to wait 5 seconds.
@@ -217,8 +217,8 @@ app.on('ready', function()  {
   }
 });
 
-ipcMain.on('asynchronous-message', (event, arg) => {
-  event.reply('asynchronous-reply', app.getVersion())
+ipcMain.on('getVersion', (event, arg) => {
+  event.reply('getVersion', app.getVersion())
 })
 
 ipcMain.on('synchronous-message', (event, arg) => {
@@ -240,6 +240,7 @@ function sendStatusToWindow(text) {
   log.info(text);
   win.webContents.send('message', text);
 }
+
 function createDefaultWindow() {
   win = new BrowserWindow();
   win.webContents.openDevTools();
@@ -250,22 +251,30 @@ function createDefaultWindow() {
   win.loadURL(`file://${__dirname}/app/version.html`);
   return win;
 }
+
 autoUpdater.on('checking-for-update', () => {
+  log.info(info + 'autoUpdater checking-for-update '  )
   sendStatusToWindow('Checking for update...');
 })
+
 autoUpdater.on('update-available', (ev, info) => {
+  log.info(info + 'autoUpdater update-available '  )
   sendStatusToWindow('Update available.');
 })
 autoUpdater.on('update-not-available', (ev, info) => {
+  log.info(info + 'autoUpdater update-not available '  )
   sendStatusToWindow('Update not available.');
 })
 autoUpdater.on('error', (ev, err) => {
+  log.info(err + 'autoUpdater error'  )
   sendStatusToWindow('Error in auto-updater.');
 })
 autoUpdater.on('download-progress', (ev, progressObj) => {
+  log.info(progressObj + 'autoUpdater download-progress'  )
   sendStatusToWindow('Download progress...');
 })
 autoUpdater.on('update-downloaded', (ev, info) => {
+  log.info(info + 'autoUpdater update-downloaded'  )
   sendStatusToWindow('Update downloaded; will install in 5 seconds');
 });
 
