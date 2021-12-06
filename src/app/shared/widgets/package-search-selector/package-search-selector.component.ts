@@ -7,9 +7,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject, fromEvent } from 'rxjs';
+import { Subject, fromEvent } from 'rxjs';
 
-import { MenuService, MessageService, IItemBasic } from 'src/app/_services';
+import { IItemBasic } from 'src/app/_services';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/packages';
 
@@ -41,7 +41,6 @@ export class PackageSearchSelectorComponent implements OnInit {
   )
 
   constructor(
-    private router: Router,
     public route: ActivatedRoute,
     private metrcPackagesService: MetrcPackagesService,
     private fb: FormBuilder,

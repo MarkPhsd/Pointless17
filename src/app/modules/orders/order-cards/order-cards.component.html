@@ -1,0 +1,30 @@
+<div *ngIf="value" class="loader">
+  <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+</div>
+<div>
+  <div class="orders-container">
+    <div  *ngIf="orders"
+          class="orders-list"
+          infiniteScroll
+          [infiniteScrollDistance]="2"
+          [infiniteScrollThrottle]="50"
+          (scrolled)="onScrollDown()"
+          (scrolledUp)="onScrollUp()"
+          [scrollWindow]="false"   >
+        <div [class]="grid">
+          <div *ngFor="let order of orders; let i = index">
+            <app-order-card
+              *ngIf="order && order.id"
+              (click)="setActiveOrder(order)"
+              class="grid-item"
+              [order]="order"
+            ></app-order-card>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="floating-info slidein loader"  *ngIf="loading && !endOfRecords" >
+  <mat-spinner></mat-spinner>
+</div>

@@ -1,0 +1,16 @@
+<mat-form-field appearance="outline">
+  <mat-label><ng-content></ng-content></mat-label>
+  <mat-select
+       name="itemID"
+       [(ngModel)]="itemID"
+       (selectionChange)="setItemID($event)">
+    <mat-option value="0">
+      Any
+    </mat-option>
+    <div *ngIf="(list$ | async) as list" >
+      <mat-option *ngFor="let item of list" [value]="item.id">
+        {{ item.name }}
+      </mat-option>
+    </div>
+  </mat-select>
+</mat-form-field>

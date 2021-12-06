@@ -208,6 +208,10 @@ import { PriceCategoryPriceFieldsComponent } from '../modules/admin/products/pri
 import { PriceCategoryConversionsComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-conversions/price-category-conversions.component';
 import { PriceCategoryTimeFiltersComponent } from '../modules/admin/products/pricing/price-categories-edit/price-category-time-filters/price-category-time-filters.component';
 import { PriceOptionsComponent } from '../modules/posorders/price-options/price-options.component';
+import { ProfileDemographicsComponent } from '../modules/admin/profiles/parts/demographics/demographics.component';
+import { ProfileIDCardInfoComponent } from '../modules/admin/profiles/parts/profile-idcard-info/profile-idcard-info.component';
+import { OrderCardsComponent } from '../modules/orders/order-cards/order-cards.component';
+import { OrdersListComponent } from '../modules/orders/orders-list/orders-list.component';
 
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -299,7 +303,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrderBarComponent,
     OrderTypeSelectionComponent,
     OrderCardComponent,
+    OrderCardsComponent,
     OrderFilterPanelComponent,
+    OrdersListComponent,
     OrdersMainComponent,
     PackageListComponent,
     PackageSearchSelectorComponent,
@@ -329,7 +335,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceScheduleFieldsComponent,
     ProfileListComponent,
     ProfileComponent,
+    ProfileDemographicsComponent,
     ProfileEditorComponent,
+    ProfileIDCardInfoComponent,
     ProfileLookupComponent,
     ProducteditComponent,
     ProductlistviewComponent,

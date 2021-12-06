@@ -1,96 +1,74 @@
+  <!--
+  <div class="container" *ngIf="toggleListGrid">
+  <div class="grid-list">
+    <div>
+      <div *ngIf="value" class="loader">
+        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      </div>
 
-  <div  class="grid-container" >
+      <ag-grid-angular
+            #agGrid
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
+            [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
+            [rowSelection]       ="rowSelection"
+            [frameworkComponents]="frameworkComponents"
+            (selectionChanged)   ="onSelectionChanged($event)"
+            (gridReady)          ="onGridReady($event)">
 
-    <div class="grid-item">
-    <mat-form-field appearance="outline">
-      <mat-label>Site</mat-label>
-      <mat-select
-        name="siteID"
-        [(ngModel)]="selectedSiteID">
+      </ag-grid-angular>
+    </div>
 
-        <div *ngIf="(sites$ | async) as list" >
-          <mat-option *ngFor="let item of list" [value]="item.id">
-            {{ item.name }}
-          </mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
-  </div>
+    <div class="filter-panel">
+    <app-pos-payments-filter
+          (outputRefreshSearch)="refreshSearchAny($event)">
+      </app-pos-payments-filter>
 
-  <div class="grid-item">
-    <mat-form-field appearance="outline">
-      <mat-label>Type</mat-label>
-      <mat-select
-           name="serviceTypeID"
-          [(ngModel)]="selectedServiceTypeID">
-        <div *ngIf="(serviceTypes$ | async) as list" >
-          <mat-option *ngFor="let item of list" [value]="item.id">
-            {{ item.name }}
-          </mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="grid-item">
-    <mat-form-field appearance="outline">
-      <mat-label>Employee</mat-label>
-      <mat-select
-        name="employeeID"
-        [(ngModel)]="selectedEmployeeID">
-        <div *ngIf="(employees$ | async) as list" >
-
-          <mat-option *ngFor="let item of list" [value]="item.id">
-            {{item.lastname}}, {{item.firstName}}
-          </mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="grid-item">
-    <mat-form-field appearance="outline">
-      <mat-label>Dispatcher</mat-label>
-      <mat-select
-        name="dispatcherID"
-        [(ngModel)]="selectedDispatcherID">
-        <div *ngIf="(dispatchers$ | async) as list" >
-          <mat-option *ngFor="let item of list" [value]="item.id">
-            {{item.lastname}}, {{item.firstName}}
-          </mat-option>
-        </div>
-      </mat-select>
-    </mat-form-field>
-  </div>
-
-  <div class="grid-item">
-    <app-widget-filter></app-widget-filter>
+    </div>
   </div>
 
 </div>
+-->
+  <!-- <div *ngIf="posOrders$">
+    <ag-grid-angular
+        #agGrid
+        id="myGrid"
+        style="width: 100%; height: 70vh;"
+        class="ag-theme-balham"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [rowData]="posOrders$ | async"
+        [frameworkComponents]="frameworkComponents"
+        (gridReady)="onPOSGridReady($event)">
+    </ag-grid-angular>
+  <div> -->
+  <!-- <mat-form-field appearance="outline">
+    <mat-label>Site</mat-label>
+    <mat-select
+          name="siteID"
+          [(ngModel)]="selectedSiteID">
+      <div *ngIf="(sites$ | async) as list" >
+        <mat-option *ngFor="let item of list" [value]="item.id">
+          {{ item.name }}
+        </mat-option>
+      </div>
+    </mat-select>
+  </mat-form-field> -->
 
-<div  class="grid-container" >
+  <!-- <mat-select-ngmodel
+      [list$]="serviceTypes$"
+      (outPutItem)="setServiceType($event)"
+  >
+    Transaction Type
+  </mat-select-ngmodel>
 
-  <div class="grid-item">
-    <button  mat-raised-button color="primary" (click)="showFilteredOrders()"> Show Filtered</button>
-  </div>
+  <mat-select-ngmodel
+    [list$]="employees$"
+    (outPutItem)="setEmployee($event)"
+  >
+    Staff
+  </mat-select-ngmodel> -->
 
-  <div class="grid-item">
-    <button  mat-raised-button color="primary"  (click)="showAllOrders()"> Show all Orders</button>
-  </div>
-
-</div>
-
-<div *ngIf="posOrders$">
-  <ag-grid-angular
-      #agGrid
-      id="myGrid"
-      style="width: 100%; height: 70vh;"
-      class="ag-theme-balham"
-      [columnDefs]="columnDefs"
-      [defaultColDef]="defaultColDef"
-      [rowData]="posOrders$ | async"
-      [frameworkComponents]="frameworkComponents"
-      (gridReady)="onPOSGridReady($event)">
-  </ag-grid-angular>
-<div>

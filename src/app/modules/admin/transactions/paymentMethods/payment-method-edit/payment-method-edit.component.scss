@@ -10,18 +10,21 @@ mat-form-field {
 .grid-content {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-  margin-top: 10px;
+  margin: 10px;
+  gap: 10px;
 }
 
 
 .grid-fields {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-  margin-left: 15px;
+  margin: 10px;
+  gap: 10px;
 }
 
 .item-options {
   display: grid;
-  grid-template-columns: 100px 50px 100px 50px;
-  margin-left: 15px;
+  grid-template-columns: 125px 50px 125px 50px;
+  margin: 10px;
+  gap: 10px;
 }

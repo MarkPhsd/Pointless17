@@ -114,6 +114,7 @@ import { APISettingComponent } from '../modules/login/apisetting/apisetting.comp
 import { ApiStoredValueComponent } from './widgets/api-stored-value/api-stored-value.component';
 import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale-settings/scale-settings.component';
 import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-status-display.component';
+import { MatSelectNGModelComponent } from './widgets/mat-select-ngmodel/mat-select-ngmodel.component';
 
 // export class MyHammerConfig extends HammerGestureConfig {
 //     overrides = <any> {
@@ -230,6 +231,7 @@ import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-stat
     ValueSpinnerComponent,
     ProgressBarComponent,
     SearchDebounceInputComponent,
+    MatSelectNGModelComponent,
 
 
   ],
@@ -297,6 +299,8 @@ import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-stat
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     MatToggleSelectorComponent,
+    MatSelectComponent,
+    MatSelectNGModelComponent,
     MatSpinnerOverlayComponent,
     MetaTagChipsComponent,
     MenuCompactComponent,

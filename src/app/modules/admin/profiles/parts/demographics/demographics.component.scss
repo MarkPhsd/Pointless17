@@ -1,0 +1,12 @@
+.grid-flow {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+}
+
+#customer-notes {
+  margin:  5;
+  object-fit: cover;
+  width: 300px;
+}

@@ -1,0 +1,252 @@
+@import "/src/mixins.scss";
+// https://blog.logrocket.com/flexible-layouts-without-media-queries/
+.parent-container {
+  overflow: hidden;
+  height: 100%;
+}
+
+.grid-container {
+
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 1fr 300px;
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+  }
+
+}
+
+.grid-flow {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+
+  grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(140px, 1fr) );
+  }
+
+}
+
+
+.item {
+  padding: 1.35rem;
+  background: #90bcbc;
+  border-radius: 4px;
+}
+
+
+.card-container {
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  flex-basis: auto;
+  // flex-wrap:;
+  flex-grow: inherit;
+  gap: 5px;
+  height: 95%;
+}
+
+.filter-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+  // height: 70vh;
+  height: 84vh;
+  max-height: 84vh;
+  max-width:  275px;
+  margin: 5px;
+
+  @include for-phone-only  {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 80vh;
+    max-width:  300px;
+    margin: 5px;
+  }
+}
+
+.orders-container {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding-right: 5px;
+  margin: 5px;
+}
+
+.orders-list {
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: 85vh;
+}
+
+.grid-item {
+  align-items: flex-end;
+  max-height: 200px;
+  min-height: 200px;
+  height:     200px;
+  overflow-x: scroll;
+}
+
+.grid-item :hover {
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+}
+
+.grid-item :active:hover {
+  box-shadow: 1px 1px 2px rgb(138, 88, 88), 0 0 25px rgb(55, 108, 168), 0 0 5px rgb(84, 116, 90);
+}
+
+.grid-item:active {
+  align-items: flex-end;
+  max-height: 200px;
+  min-height: 200px;
+  height:     200px;
+  overflow-x: scroll;
+}
+
+.mat-dialog-actions {
+  justify-content: center;
+}
+
+.filter-panel {
+
+    @include for-phone-only  {
+      visibility: hidden;
+    }
+
+}
+
+.order-panel {
+  // fxLayout="column" fxFlex="75"
+  display: flex;
+  flex-direction: column;
+  flex: 75;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: column;
+    flex: 10;
+  }
+}
+
+.grid-smallest {
+  display: flex;
+  flex-direction: column;
+  grid-gap: 5px;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    // display: grid;
+    // grid-template-columns: repeat(1, 1fr);
+    // grid-template-rows: auto auto;
+    // // gap: 5px;
+    // grid-gap: 5px;
+  }
+
+  @include for-tablet-portrait-up   {
+    display: grid;   // @mixin for-tablet-portrait-up {
+    grid-template-columns:  repeat(1, 1fr) ;
+    grid-template-rows: auto auto auto;
+    // grid-gap: 10px;
+    grid-gap: 5px;
+    // background-color: rgb(53, 12, 70);
+  }
+
+  @include for-tablet-landscape-up {
+    display: grid;  // @mixin for-tablet-landscape-up {
+    grid-template-columns: repeat(2, 1fr)    ;
+    grid-template-rows: auto auto auto;
+    // grid-gap: 10px;
+    grid-gap: 5px;
+    // background-color: rgb(18, 153, 41);
+  }
+
+  @include for-desktop-up  {
+    display: grid;  // @mixin for-desktop-up {
+    grid-template-columns: repeat(3, 1fr)  ;
+    grid-template-rows: auto auto auto auto;
+    // grid-gap: 10px;
+    grid-gap: 5px;
+    // background-color: rgb(12, 30, 51);
+  }
+
+  @include for-big-desktop-up  {
+    display: grid;   // @mixin for-big-desktop-up {
+    grid-template-columns: repeat(4, 1fr)  ;
+    grid-template-rows:  auto auto auto auto ;
+    // grid-gap: 10px;
+    grid-gap: 5px;
+    // background-color: rgb(3, 85, 33);
+  }
+}
+
+.end-of-line {
+  float: left;
+}
+
+.paging-alignment {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-left: 5px;
+  margin-top: 3px;
+  // font-style: italic;
+  font-size: .9em;
+  font-weight: 300;
+}
+
+.filter-container {
+  height: max-content;
+  width: max-content;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.loader {
+  margin-bottom: 5px;
+}
+
+.floating-info {
+  position: fixed;
+  top     : 150px;
+  z-index : 100;
+  padding-right: 10px;
+  overflow-x: visible;
+}
+
+.spinner-loader {
+  z-index: 50;
+}
+
+.slidein {
+  animation-duration    : 500ms;
+  animation-name        : fadein;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 5%;
+  }
+  to {
+    opacity: 100%;
+  }
+}
+
+@keyframes slidein {
+  from {
+      margin-left: -20%;
+  }
+  to {
+      margin-left: 0%;
+  }
+}
+

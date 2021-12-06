@@ -15,5 +15,7 @@ export class MatSelectComponent {
   @Output() outputItem = new EventEmitter<any>();
   constructor() { }
 
-
+  setOutPut(event) {
+    this.outputItem.emit(event)
+  }
 }

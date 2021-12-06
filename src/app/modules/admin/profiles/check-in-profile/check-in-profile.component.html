@@ -19,7 +19,7 @@
 
           <div>
             <h4>
-              {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}  | Account |   {{clientTable.accountNumber}}
+              {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}  | Account :  {{clientTable?.accountNumber}}
             </h4>
           </div>
         </div>
@@ -84,117 +84,13 @@
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
 
-              <div class="grid-flow">
-                <div >
-                    <div>
-                        <mat-form-field  appearance="outline">
-                        <mat-label >Title</mat-label>
-                        <input matInput
-                              type="text"
-                              id="title"
-                              formControlName="title"
-                              class="form-control" >
-                        </mat-form-field>
-                    </div>
-
-                    <div>
-                        <mat-form-field appearance="outline">
-                        <mat-label >First Name</mat-label>
-                        <input matInput
-                               type="text"
-                               id="title"
-                               formControlName="firstName"
-                               class="form-control" >
-                        </mat-form-field>
-                    </div>
-
-                    <div>
-                        <mat-form-field appearance="outline">
-                        <mat-label >Last Name</mat-label>
-                        <input matInput
-                               type="text"
-                               id="title"
-                               formControlName="lastName"
-                               class="form-control" >
-                          </mat-form-field>
-                    </div>
-
-                    <div>
-                        <mat-form-field appearance="outline">
-                        <mat-label >Phone</mat-label>
-                        <input matInput
-                              type="text"
-                              id="title"
-                              formControlName="phone"
-                              class="form-control" >
-                        </mat-form-field>
-                    </div>
-
-                    <div>
-                        <mat-form-field appearance="outline">
-                        <mat-label >Email</mat-label>
-                        <input matInput
-                                type="text"
-                                id="title"
-                                formControlName="email"
-                                class="form-control" >
-                        </mat-form-field>
-                    </div>
-
-                </div>
-
-                <div>
-                 <div>
-                    <mat-form-field appearance="outline"  id="customer-notes">
-                      <mat-label>Customer Notes</mat-label>
-                        <textarea matInput rows="10"
-                                  formControlName="notes"
-
-                        ></textarea>
-                    </mat-form-field>
-                  </div>
-                  <div>
-                    <mat-form-field appearance="outline">
-                    <mat-label >Loyalty Points</mat-label>
-                    <input matInput type="text"
-                          id="title"
-                          formControlName="loyaltyPoints"
-                          class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div>
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>DOB</mat-label>
-                      <input matInput
-                            [matDatepicker]="picker"
-                            formControlName="dob"
-                          >
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker touchUi #picker></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-
-                  <div>
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Expiration</mat-label>
-                      <input matInput
-                            [matDatepicker]="picker"
-                            formControlName="followUp"
-                          >
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker touchUi #picker></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-
-                </div>
-
-              </div>
-
+              <app-profile-demographics
+                [inputForm]="inputForm"
+                [isAuthorized]="isAuthorized">
+              </app-profile-demographics>
             </mat-tab>
 
             <mat-tab label="Addresses "  (swipeleft)="swipe(1, $event.type)" (swiperight)="swipe(1, $event.type)">
-
               <div class="grid-flow" >
                 <div>
                   <app-profile-billing-address
@@ -210,83 +106,10 @@
             </mat-tab>
 
             <mat-tab label="DL Info"  (swipeleft)="swipe(1, $event.type)" (swiperight)="swipe(1, $event.type)">
-
-              <div  class="grid-flow">
-                <div >
-                  <div>
-                    <h4>License Info</h4>
-                  </div>
-
-                  <div>
-                    <mat-form-field appearance="outline">
-                      <mat-label >Account </mat-label>
-                      <input matInput type="text" id="accountNumber" formControlName="accountNumber"  class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div>
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>DOB</mat-label>
-                      <input matInput
-                            [matDatepicker]="picker"
-                            formControlName="dob"
-                          >
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker touchUi #picker></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-
-                  <div>
-                    <mat-form-field class="example-full-width" appearance="outline">
-                      <mat-label>Expiration</mat-label>
-                      <input matInput
-                            [matDatepicker]="picker"
-                            formControlName="followUp"
-                          >
-                      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                      <mat-datepicker touchUi #picker></mat-datepicker>
-                    </mat-form-field>
-                  </div>
-
-                </div>
-                <div >
-                  <div >
-                    <mat-form-field appearance="outline">
-                      <mat-label >Address</mat-label>
-                      <input matInput type="text" id="dlAddress" formControlName="dlAddress"  class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div >
-                    <mat-form-field appearance="outline">
-                      <mat-label >Address 2</mat-label>
-                      <input matInput type="text" id="dlAddress2" formControlName="dlAddress2"  class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div >
-                    <mat-form-field appearance="outline">
-                      <mat-label >City</mat-label>
-                      <input matInput type="text" id="dlAddress2" formControlName="dlCity"  class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div >
-                    <mat-form-field appearance="outline">
-                      <mat-label >State</mat-label>
-                      <input matInput type="text" id="dlAddress2" formControlName="dlState"  class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div >
-                    <mat-form-field appearance="outline">
-                      <mat-label >Zip</mat-label>
-                      <input matInput type="text" id="dlAddress2" formControlName="dlZip"  class="form-control" >
-                    </mat-form-field>
-                  </div>
-                </div>
-              </div>
-
+              <app-profile-idcard-info
+                [inputForm]="inputForm"
+                [isAuthorized]="isAuthorized">
+              </app-profile-idcard-info>
             </mat-tab>
 
             <mat-tab label="Current"
@@ -306,53 +129,10 @@
               </div>
             </mat-tab>
 
-            <!-- client Type -->
             <mat-tab label="Settings"
                      (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
               <div  class="grid-flow">
-                <div>
-
-                  <div >
-                    <app-client-types-lookup [inputForm]="inputForm" ></app-client-types-lookup>
-                  </div>
-
-                  <div>
-                    <mat-form-field appearance="outline">
-                      <mat-label>Tax Option</mat-label>
-                      <mat-select   [disabled]="!isAuthorized"
-                                    type="number"
-                                    formControlName ="taxSales"
-                                  >
-                        <mat-option [value]="1">Non Taxable Client</mat-option>
-                        <mat-option [value]="0">Taxable Client</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-
-                  <div>
-                    <mat-form-field appearance="outline">
-                      <mat-label>Price Level Option</mat-label>
-                      <mat-select   [disabled]="!isAuthorized"
-                                    type="number"
-                                    formControlName ="priceTier"
-                                  >
-                        <mat-option [value]="0">Standard</mat-option>
-                        <mat-option [value]="1">Level 1</mat-option>
-                        <mat-option [value]="2">Level 2</mat-option>
-                        <mat-option [value]="3">Level 3</mat-option>
-                        <mat-option [value]="4">Level 4</mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-
-                  <div >
-                    <app-status-lookup
-                                    [inputForm]="inputForm"
-                    ></app-status-lookup>
-                  </div>
-                </div>
-
                 <div>
                   <div *ngIf="isAuthorized">
                     <mat-form-field appearance="outline">

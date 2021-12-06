@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { IItemBasic, OrdersService } from 'src/app/_services';
@@ -16,9 +16,6 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-// https://stackoverflow.com/questions/53908460/ag-grid-unable-to-add-icon-button-into-each-row-of-the-ag-grid-and-multiselectio?rq=1
-//https://www.ag-grid.com/javascript-grid-cell-rendering/
-//  @HostBinding('@pageAnimations')
 
 @Component({
   selector: 'app-pos-orders',
@@ -26,26 +23,26 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
   styleUrls: ['./pos-orders.component.scss'],
   // animations:  [ fadeInAnimation ],
 })
-export class PosOrdersComponent implements OnInit {
+export class PosOrdersComponent implements  OnInit, OnDestroy {
 
   @Input() posOrders$: Observable<IPOSOrder[]>;
 
   //Search Lookups
-  description: string;
-  formControlName: string;
+  description     : string;
+  formControlName : string;
   selectedEmployeeID: number;
   selectedDispatcherID: number;
   selectedDriverID: number;
   selectedServiceTypeID: number;
-  selectedSiteID: number;
+  selectedSiteID  : number;
 
   //search Observables
-  serviceTypes$: Observable<IServiceType[]>;
-  employees$: Observable<IItemBasic[]>;
-  drivers$:  Observable<IItemBasic[]>;
-  sites$:  Observable<ISite[]>;
-  dispatchers$: Observable<IItemBasic[]>;
-  employeeID: FormControl;
+  serviceTypes$   : Observable<IServiceType[]>;
+  employees$      : Observable<IItemBasic[]>;
+  drivers$        : Observable<IItemBasic[]>;
+  sites$          : Observable<ISite[]>;
+  dispatchers$    : Observable<IItemBasic[]>;
+  employeeID      : FormControl;
 
   frameworkComponents: any;
   defaultColDef;
@@ -76,6 +73,13 @@ export class PosOrdersComponent implements OnInit {
     this.toolbarUIService.hidetoolBars();
   }
 
+  ngOnDestroy(): void {
+    console.log('')
+    // if (this._searchModel) {
+    //   this._searchModel.unsubscribe()
+    // }
+  }
+
   initColDefs() {
 
     this.columnDefs =  [
@@ -89,19 +93,20 @@ export class PosOrdersComponent implements OnInit {
         },
         minWidth: 150
       },
-      {headerName: 'Type', field: 'serviceType', sortable: true},
+      {headerName: 'Type',      field: 'serviceType', sortable: true},
       {headerName: 'Date',  sortable: true,
                     field: 'orderDate',
                     valueFormatter: ({ value }) => this.datePipe.transform(value, 'short')
       },
       {headerName: 'Completed', field: 'completionDate', sortable: true},
-      {headerName: 'Employee', field: 'employeeName', sortable: true},
-      {headerName: 'Customer', field: 'customerName', sortable: true},
-      {headerName: 'SubTotal', field: 'subTotal', sortable: true, cellRenderer: this.agGridService.currencyCellRendererUSD },
-      {headerName: 'Total', field: 'total', sortable: true, cellRenderer: this.agGridService.currencyCellRendererUSD },
-      {headerName: 'Tax', field: 'taxTotal', sortable: true, cellRenderer: this.agGridService.currencyCellRendererUSD },
+      {headerName: 'Employee',  field: 'employeeName', sortable: true},
+      {headerName: 'Customer',  field: 'customerName', sortable: true},
+      {headerName: 'SubTotal',  field: 'subTotal', sortable: true, cellRenderer: this.agGridService.currencyCellRendererUSD },
+      {headerName: 'Total',     field: 'total', sortable: true, cellRenderer: this.agGridService.currencyCellRendererUSD },
+      {headerName: 'Tax',       field: 'taxTotal', sortable: true, cellRenderer: this.agGridService.currencyCellRendererUSD },
       {headerName: 'ItemCount', field: 'itemCount', sortable: true},
     ]
+
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
     };
@@ -134,6 +139,15 @@ export class PosOrdersComponent implements OnInit {
   showFilteredOrders() {
     const site = this.siteService.getAssignedSite()
     this.posOrders$ = this.orderService.getTodaysOpenOrders(site);
+  }
+
+  setEmployee(event) {
+    this.selectedEmployeeID = event
+  }
+
+  setServiceType(event) {
+    this.selectedServiceTypeID = event
+    console.log('set service type', event)
   }
 
   notifyEvent(message: string, action: string) {

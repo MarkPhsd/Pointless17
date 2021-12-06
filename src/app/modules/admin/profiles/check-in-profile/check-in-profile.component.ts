@@ -1,18 +1,16 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {Component, Input, OnInit } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable, Subscription } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { clientType, employee, IClientTable, IStatus, IUserProfile } from 'src/app/_interfaces';
-import { IPOSOrder, IPOSOrderSearchModel, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { AuthenticationService, AWSBucketService, ContactsService, OrdersService, UserService } from 'src/app/_services';
+import { IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
+import { AWSBucketService, ContactsService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
-import { EmployeeService } from 'src/app/_services/people/employee-service.service';
-import { IStatuses, StatusTypeService } from 'src/app/_services/people/status-type.service';
+import { IStatuses} from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
@@ -43,8 +41,8 @@ export class CheckInProfileComponent implements OnInit {
   statuses$   : Observable<IStatuses[]>;
   client$     : Observable<IClientTable>;
 
-  @Input() clientTable: IClientTable;
-  @Input() id       : string;
+  @Input() clientTable  : IClientTable;
+  @Input() id           : string;
 
   posOrders$  : Observable<IPOSOrder[]>;
   orders$     : Observable<IPOSOrder[]>;
@@ -53,34 +51,32 @@ export class CheckInProfileComponent implements OnInit {
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
 
-  public selectedIndex: number;
-  isAuthorized  : boolean ;
-  isStaff       : boolean;
+  public selectedIndex          : number;
+  isAuthorized                  : boolean ;
+  isStaff                       : boolean;
   minumumAllowedDateForPurchases: Date
 
-  currentOrder:  IPOSOrder;
-  _currentOrder: Subscription;
+  currentOrder  :  IPOSOrder;
+  _currentOrder : Subscription;
 
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
       this.currentOrder = data;
     })
-
   }
 
   constructor(
-              private router: Router,
-              public route: ActivatedRoute,
-              private fb: FormBuilder,
-              private sanitizer : DomSanitizer,
-              private awsBucket: AWSBucketService,
-              private _snackBar: MatSnackBar,
-              public contactservice: ContactsService,
-              private clientTableService: ClientTableService,
-              private orderService: OrdersService,
-              private siteService: SitesService,
-              private fbContactsService: FbContactsService,
-              private userAuthorization       : UserAuthorizationService,
+              private router              : Router,
+              public route                : ActivatedRoute,
+              private sanitizer           : DomSanitizer,
+              private awsBucket           : AWSBucketService,
+              private _snackBar           : MatSnackBar,
+              public contactservice       : ContactsService,
+              private clientTableService  : ClientTableService,
+              private orderService        : OrdersService,
+              private siteService         : SitesService,
+              private fbContactsService   : FbContactsService,
+              private userAuthorization   : UserAuthorizationService,
             ) {
 
       this.id = this.route.snapshot.paramMap.get('id');
@@ -114,7 +110,6 @@ export class CheckInProfileComponent implements OnInit {
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
     this.refreshOrders();
   }
-
 
   refreshOrders() {
     const site = this.siteService.getAssignedSite();

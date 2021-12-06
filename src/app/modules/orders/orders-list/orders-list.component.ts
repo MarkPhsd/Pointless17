@@ -1,9 +1,8 @@
 import { Component, Output, OnInit,
-  ViewChild ,ElementRef, EventEmitter, OnDestroy } from '@angular/core';
+  ViewChild ,ElementRef, EventEmitter, OnDestroy, QueryList, ViewChildren } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AWSBucketService} from 'src/app/_services';
+import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IItemBasic } from 'src/app/_services/menu/menu.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
@@ -14,7 +13,7 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { IPOSPayment, IPOSPaymentsOptimzed, IServiceType } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
 import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
@@ -22,13 +21,18 @@ import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.s
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { PosPaymentEditComponent } from 'src/app/modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'app-pospayments',
-  templateUrl: './pospayments.component.html',
-  styleUrls: ['./pospayments.component.scss']
+  selector: 'app-orders-list',
+  templateUrl: './orders-list.component.html',
+  styleUrls: ['./orders-list.component.scss']
 })
-export class POSPaymentsComponent implements  OnInit,  OnDestroy {
+export class OrdersListComponent implements OnInit,OnDestroy {
+
+  @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
+  // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
+  @ViewChildren('item') itemElements: QueryList<any>;
 
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
@@ -40,7 +44,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   private readonly onDestroy = new Subject<void>();
 
   // //search with debounce
-  searchItems$              : Subject<IPaymentSearchModel[]> = new Subject();
+  searchItems$              : Subject<IPOSOrderSearchModel[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
       distinctUntilChanged(),
@@ -58,6 +62,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   private gridApi      : GridApi;
   private gridColumnApi: GridAlignColumnsDirective;
   gridOptions          : any
+  urlPath              : string;
   columnDefs           = [];
   defaultColDef        ;
   frameworkComponents  : any;
@@ -77,24 +82,35 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   value             : any;
   // //This is for the filter Section//
   //search form filters
-  searchForm:        FormGroup;
+  searchForm       : FormGroup;
   inputForm        : FormGroup;
 
   selected        : any[];
   selectedRows    : any;
   agtheme         = 'ag-theme-material';
   gridDimensions
-  urlPath:        string;
 
-  id              : number;
-  posPayment      : IPOSPayment;
+  isAuthorized   : boolean;
 
-  employees$      :   Observable<IItemBasic[]>;
-  paymentMethod$  :   Observable<IPaymentMethod[]>;
-  serviceTypes$   :   Observable<IServiceType[]>;
-  _searchModel    :   Subscription;
-  searchModel     :   IPaymentSearchModel;
-  isAuthorized    :   boolean;
+  _searchModel   : Subscription;
+  searchModel    : IPOSOrderSearchModel;
+
+  _posOrders     : Subscription;
+  posOrders      : IPOSOrder[];
+  posOrder       : IPOSOrder;
+  id             : number;
+
+  grid           = 'grid-flow'
+  _orderBar      : Subscription;
+  orderBar       : boolean;
+
+  _menutBar      : Subscription;
+  menuBar        : boolean;
+
+  _searchBar     : Subscription;
+  searchBar      : boolean;
+
+  itemsPerPage      = 20
 
   constructor(  private _snackBar               : MatSnackBar,
                 private pOSPaymentService       : POSPaymentService,
@@ -104,19 +120,23 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
                 private agGridFormatingService  : AgGridFormatingService,
                 private awsService              : AWSBucketService,
                 private userAuthorization       : UserAuthorizationService,
-                private _bottomSheet            : MatBottomSheet
+                private _bottomSheet            : MatBottomSheet,
+                private readonly datePipe       : DatePipe,
+                private orderService            : OrdersService,
               )
   {
+
     this.initSubscriptions();
     this.initForm();
     this.initAgGrid(this.pageSize);
+
   }
 
   async ngOnInit() {
-    this.initClasses()
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
     this.initAuthorization();
+    this.initClasses()
   };
 
   initAuthorization() {
@@ -125,7 +145,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions = 'width: 100%; height: 100%;'
+    this.gridDimensions = 'width: 100%; height: 80vh;'
     this.agtheme        = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
@@ -145,10 +165,10 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
 
   initSubscriptions() {
     try {
-      this._searchModel = this.pOSPaymentService.searchModel$.subscribe( data => {
+      this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel            = data
           if (!this.searchModel) {
-            const searchModel       = {} as IPaymentSearchModel;
+            const searchModel       = {} as IPOSOrderSearchModel;
             this.currentPage        = 1
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 25;
@@ -163,14 +183,10 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     }
   }
 
-  editRowSelection(event) {
-    this.editItemWithId(event.rowData)
-  }
-
   //ag-grid
   //standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
-  // onClick: this.editRowSelection.bind(this),
+
   initAgGrid(pageSize: number) {
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
@@ -199,72 +215,73 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
           maxWidth: 100,
           flex    : 2,
       },
-      {headerName: 'Order',     field: 'orderID', sortable: true,
-      width   : 100,
-      minWidth: 100,
-      maxWidth: 100,
-      flex    : 2,
-  },
-      {headerName: 'Amount',     field: 'amountPaid',         sortable: true,
+      {headerName: 'Date',     field: 'orderDate', sortable: true,
+          cellRenderer: this.agGridService.dateCellRendererUSD,
+          width   : 165,
+          minWidth: 165,
+          maxWidth: 200,
+          flex    : 2,
+      },
+      {headerName: 'Completed',     field: 'completionDate', sortable: true,
+          cellRenderer: this.agGridService.dateCellRendererUSD,
+          width   : 165,
+          minWidth: 165,
+          maxWidth: 200,
+          flex    : 2,
+      },
+      {headerName: 'Total',     field: 'total',         sortable: true,
                    cellRenderer: this.agGridService.currencyCellRendererUSD,
                   width   : 100,
                   minWidth: 100,
                   maxWidth: 150,
                   flex    : 1,
       },
-      {headerName: 'Method',  field: 'paymentMethod.name',      sortable: true,
+      {headerName: 'Tax',    field: 'taxTotal', sortable: true,
+                  cellRenderer: this.agGridService.currencyCellRendererUSD,
+                  width   : 100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  // flex: 2,
+      },
+      {headerName: 'Items',    field: 'itemCount', sortable: true,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            // flex: 2,
+      },
+      {headerName: 'Customer',  field: 'customerName',      sortable: true,
                   width: 100,
                   minWidth: 100,
                   maxWidth: 100,
                   // flex: 1,
       },
-      {headerName: 'Tip Amount',    field: 'tipAmount', sortable: true,
-                  cellRenderer: this.agGridService.currencyCellRendererUSD,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  // flex: 2,
+      {headerName: 'Type',    field: 'serviceType', sortable: true,
+            width   : 100,
+            minWidth: 100,
+            maxWidth: 100,
+            // flex: 2,
       },
       //
-      {headerName: 'Completed', field: 'completionDate',     sortable: true,
-                  cellRenderer: this.agGridService.dateCellRendererUSD,
-                  width   : 150,
-                  minWidth: 150,
-                  maxWidth: 150,
-                  flex: 2,
-      },
-      {headerName: 'Employee',   field: 'employeeName',       sortable: true,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  // flex: 2,
-                  },
-
-      {headerName: 'Sale',   field: 'serviceType',       sortable: true,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 100,
-              // flex: 2,
-              },
-
-      {headerName: 'Received', field: 'amountReceived', sortable: true,
-                  cellRenderer: this.agGridService.currencyCellRendererUSD,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  // flex: 2,
+      {headerName: 'Employee', field: 'employee',     sortable: true,
+            width   : 150,
+            minWidth: 150,
+            maxWidth: 150,
+            flex: 2,
       },
       {headerName: 'History', field: 'history', sortable: true,
-          cellRenderer: this.agGridService.currencyCellRendererUSD,
-          visible : false,
-          width   : 0,
-          minWidth: 0,
-          maxWidth: 0,
-          // flex: 2,
+            visible : false,
+            width   : 0,
+            minWidth: 0,
+            maxWidth: 0,
+            // flex: 2,
         },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
+
+  initColDefs() {
+  }
+
 
   listAll(){
     const control = this.itemName
@@ -283,13 +300,13 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
-  initSearchModel(): IPaymentSearchModel {
-    let searchModel        = {} as IPaymentSearchModel;
+  initSearchModel(): IPOSOrderSearchModel {
+    let searchModel        = {} as IPOSOrderSearchModel;
     if (this.searchModel) { searchModel = this.searchModel }
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     if (this.itemName.value)  {searchModel.orderID   = this.itemName.value }
-    this.pOSPaymentService.updateSearchModel(searchModel)
+    this.orderService.updateOrderSearchModel(searchModel)
     return searchModel
   }
 
@@ -324,11 +341,11 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   }
 
   //ag-grid standard method
-  getRowData(params, startRow: number, endRow: number):  Observable<IPOSPaymentsOptimzed>  {
+  getRowData(params, startRow: number, endRow: number):  Observable<POSOrdersPaged>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
-    return this.pOSPaymentService.searchPayments(site, searchModel)
+    return this.orderService.getOrderBySearchPaged(site, searchModel)
   }
 
   //ag-grid standard method
@@ -448,8 +465,8 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   getItem(id: number, history: boolean) {
     if (id) {
       const site = this.siteService.getAssignedSite();
-      this.pOSPaymentService.getPOSPayment(site, this.id, history).subscribe(data => {
-         this.posPayment = data;
+      this.orderService.getOrder(site, id.toString(), history).subscribe(data => {
+         this.posOrder = data;
         }
       )
     }

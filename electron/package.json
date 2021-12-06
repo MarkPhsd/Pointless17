@@ -1,6 +1,6 @@
 {
   "name": "PointLess",
-  "version": "1.0.113",
+  "version": "1.0.120",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -22,12 +22,12 @@
     "@capacitor/electron": "^2.4.8",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.4.0",
-    "electron-updater": "^4.6.1",
+    "electron-updater": "^4.3.9",
     "winreg": "^1.2.4"
   },
   "devDependencies": {
     "electron": "^11.0.0",
-    "electron-builder": "^22.14.5",
+    "electron-builder": "^22.10.5",
     "electron-reloader": "^1.2.1"
   },
   "keywords": [
@@ -40,6 +40,10 @@
   ],
   "author": "Coast to Coast Business Solutions",
   "license": "ISC",
+  "repository": {
+    "type": "generic",
+    "url": "https://cafecartel.com/pointless"
+  },
   "win": {
     "publish": [
       {

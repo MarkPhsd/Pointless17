@@ -140,33 +140,12 @@ export class FilterComponent implements OnInit {
       }
     }
 
-    //  emitDatePickerData() {
-    //   if (this.dateRangeForm) {
-    //     if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
-    //       this.dateFrom = this.dateRangeForm.get("start").value
-    //       this.dateTo = (  this.dateRangeForm.get("end").value )
-    //       this.refreshDateSearch()
-    //     }
-    //   }
-    // }
-
-    // emitStartDatePickerData() {
-    //   if (this.dateRangeForm) {
-    //     if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
-    //       this.dateFrom = this.dateRangeForm.get("start").value
-    //       this.dateTo = null; // (  this.dateRangeForm.get("end").value )
-    //       this.messageOut.emit("")
-    //       // this.refreshDateSearch()
-    //     }
-    //   }
-    // }
 
     refreshDateSearch() {
       if (this.dateRangeForm && this.dateRangeForm.get("start").value && this.dateRangeForm.get("end").value) {
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo   = this.dateRangeForm.get("end").value
         this.counter =  1 + this.counter
-        console.log('counter', this.counter)
         this.messageOut.emit( this.dateFrom.toLocaleDateString() + ":" + this.dateTo.toLocaleDateString() + ':' + this.counter );
       }
     }
