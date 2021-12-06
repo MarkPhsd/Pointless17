@@ -1,0 +1,31 @@
+<button mat-button (click)="emitDatePickerData()"><mat-icon>refresh</mat-icon></button>
+
+<mat-form-field
+      class="dates-field"
+      appearance="outline"
+      *ngIf="inputForm">
+
+  <mat-label>Date Range (Start Time)</mat-label>
+
+  <mat-date-range-input [formGroup]   ="inputForm"
+                        [rangePicker] ="reportRangePicker"
+                        >
+    <input matStartDate
+            formControlName="start"
+            placeholder    ="Start date"
+            (click)        = "emitDatePickerData()">
+    <input matEndDate
+            formControlName="end"
+            placeholder    ="End date"
+            (click)        = "emitDatePickerData()">
+
+  </mat-date-range-input>
+
+  <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
+                          ></mat-datepicker-toggle>
+  <mat-date-range-picker touchUi #reportRangePicker
+                          ></mat-date-range-picker>
+
+  <mat-error *ngIf="inputForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+  <mat-error *ngIf="inputForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+</mat-form-field>

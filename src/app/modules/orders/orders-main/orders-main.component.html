@@ -1,11 +1,16 @@
 <div class="parent-container">
 
-  <button mat-button (click)="changeView()">
-    <mat-icon>
-      <span *ngIf="viewType==1">list</span>
-      <span *ngIf="viewType==0">grid</span>
-    </mat-icon><span>View</span>
-  </button>
+  <div *ngIf="isAuthorized">
+    <button mat-button (click)="changeView()">
+      <mat-icon>
+        <span *ngIf="viewType==1">view_list</span>
+        <span *ngIf="viewType==0">view_module</span>
+      </mat-icon>
+      <span *ngIf="viewType==1">View List</span>
+      <span *ngIf="viewType==0">View Grid</span>
+
+    </button>
+  </div>
 
   <div *ngIf="smallDevice">
     <button mat-button (click)="filterBottomSheet()">
@@ -22,7 +27,7 @@
 
   <div class="grid-container">
 
-    <span *ngIf="viewType == 1 ">
+    <span *ngIf="viewType == 1">
       <app-order-cards></app-order-cards>
     </span>
 

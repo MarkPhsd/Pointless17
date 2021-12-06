@@ -3,14 +3,12 @@
   <div *ngIf="inputForm.controls.firstName.errors?.required && inputForm.controls.firstName.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.
   </div>
-
   <div *ngIf="inputForm.controls.lastName.errors?.required && inputForm.controls.lastName.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
   </div>
 
   <mat-card>
     <mat-card-title>
-
       <div class="grid-header">
         <div>
           <div>
@@ -67,29 +65,23 @@
 
     <mat-card-content >
       <form  [formGroup]="inputForm"
-               id="userForm"
-               >
-
+             id="userForm"  >
         <div class="md-content"
               flex md-scroll-y
               (swipeleft)="swipe(id, $event.type)"
               (swiperight)="swipe(id, $event.type)">
-
           <mat-tab-group mat-align-tabs="start"
                          md-stretch-tabs
                          [(selectedIndex)]="selectedIndex"
                          (selectedIndexChange)="selectChange()">
-
             <mat-tab label="Demographics"
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
-
               <app-profile-demographics
                 [inputForm]="inputForm"
                 [isAuthorized]="isAuthorized">
               </app-profile-demographics>
             </mat-tab>
-
             <mat-tab label="Addresses "  (swipeleft)="swipe(1, $event.type)" (swiperight)="swipe(1, $event.type)">
               <div class="grid-flow" >
                 <div>
@@ -112,20 +104,24 @@
               </app-profile-idcard-info>
             </mat-tab>
 
-            <mat-tab label="Current"
-                    (swipeleft)="swipe(1, $event.type)"
-                    (swiperight)="swipe(1, $event.type)">
-                <div class="order-panel">
-                  <app-pos-order-list [posOrders$]="posOrders$"></app-pos-order-list>
-                </div>
-            </mat-tab>
-
-            <mat-tab label="History"
+            <mat-tab label="Transactions"
                     (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
-              <h4 *ngIf="profile">Purchase History {{profile.totalPurchases | currency}}</h4>
               <div class="order-panel">
-                <app-pos-order-list [posOrders$]="orders$"></app-pos-order-list>
+
+                <div>
+                   <mat-date-range
+                    [inputForm]      ="dateRangeForm"
+                    (outputDateRange)="emitDatePickerData($event)">
+                  </mat-date-range>
+                </div>
+
+                <div>
+                   <app-orders-list
+                    [height]="'50vh'"
+                  ></app-orders-list>
+                </div>
+
               </div>
             </mat-tab>
 
@@ -149,7 +145,8 @@
                     </mat-form-field>
                   </div>
 
-                  <div class="form-field" *ngIf="isAuthorized && inputForm">
+                  <div class="form-field"
+                       *ngIf="isAuthorized && inputForm">
                     <employee-lookup
                             [client]      ="clientTable"
                             [inputForm]   ="inputForm" >
@@ -160,7 +157,6 @@
                 </div>
               </div>
             </mat-tab>
-
           </mat-tab-group>
         </div>
       </form>
@@ -175,6 +171,7 @@
                 <mat-icon>delete</mat-icon>Delete</button>
       </div>
     </mat-card-actions>
+
   </mat-card>
 </div>
 

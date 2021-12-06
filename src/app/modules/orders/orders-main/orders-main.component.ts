@@ -6,6 +6,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrdersService } from 'src/app/_services';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -15,15 +16,22 @@ import { OrdersService } from 'src/app/_services';
 
 export class OrdersMainComponent  {
 
-  smallDevice: boolean;
-  viewType   = 0;
+  smallDevice  : boolean;
+  viewType     = 1;
+  isAuthorized : boolean;
 
   constructor (
-    public route        : ActivatedRoute,
-    private _bottomSheet: MatBottomSheet,
-    private siteService : SitesService,
-    private orderService: OrdersService)
+    public route             : ActivatedRoute,
+    private _bottomSheet     : MatBottomSheet,
+    private siteService      : SitesService,
+    private userAuthorization: UserAuthorizationService,
+    private orderService     : OrdersService)
   {
+    this.initAuthorization();
+  }
+
+  initAuthorization() {
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
   }
 
   @HostListener("window:resize", [])

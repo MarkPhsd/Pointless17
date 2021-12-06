@@ -93,7 +93,6 @@ async function createWindow () {
     var interval
     var hexString
       if (!items) {return}
-
       for (var i=0; i<items.length; i++) {
         const item = items[i];
         if (item) {
@@ -256,7 +255,6 @@ autoUpdater.on('checking-for-update', () => {
   log.info(info + 'autoUpdater checking-for-update '  )
   sendStatusToWindow('Checking for update...');
 })
-
 autoUpdater.on('update-available', (ev, info) => {
   log.info(info + 'autoUpdater update-available '  )
   sendStatusToWindow('Update available.');

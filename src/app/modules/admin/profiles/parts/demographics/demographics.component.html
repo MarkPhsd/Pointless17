@@ -1,4 +1,6 @@
-<div class="grid-flow">
+<div *ngIf="inputForm"
+    [formGroup]="inputForm"
+    class="grid-flow">
   <div >
       <div>
           <mat-form-field  appearance="outline">
@@ -85,11 +87,11 @@
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>Expiration</mat-label>
         <input matInput
-              [matDatepicker]="picker"
+              [matDatepicker]="picker2"
               formControlName="followUp"
             >
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #picker></mat-datepicker>
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker touchUi #picker2></mat-datepicker>
       </mat-form-field>
     </div>
 

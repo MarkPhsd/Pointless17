@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PosOrdersComponent } from './pos-orders.component';
+import { MatDateRangeComponent } from './mat-date-range.component';
 
-describe('PosOrdersComponent', () => {
-  let component: PosOrdersComponent;
-  let fixture: ComponentFixture<PosOrdersComponent>;
+describe('MatDateRangeComponent', () => {
+  let component: MatDateRangeComponent;
+  let fixture: ComponentFixture<MatDateRangeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PosOrdersComponent ]
+      declarations: [ MatDateRangeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PosOrdersComponent);
+    fixture = TestBed.createComponent(MatDateRangeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

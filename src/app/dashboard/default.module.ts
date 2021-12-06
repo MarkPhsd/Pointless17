@@ -42,7 +42,6 @@ import { ProfileListComponent } from 'src/app/modules/admin/profiles/profile-lis
 import { DemographicsComponent } from 'src/app/modules/profile/demographics/demographics.component';
 import { ImageCaptureComponent } from 'src/app/shared/widgets/image-capture/image-capture.component';
 import { MessagesToUserComponent } from 'src/app/modules/profile/messages-to-user/messages-to-user.component';
-import { PosOrdersComponent } from 'src/app/modules/posorders/pos-orders/pos-orders.component';
 import { SearchResultsComponent } from 'src/app/modules/menu/search-results/search-results.component';
 import { AdminComponent } from 'src/app/modules/admin/admin.component';
 import { SettingsComponent } from 'src/app/modules/admin/settings/settings.component';
@@ -313,7 +312,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
     PosListComponent,
-    PosOrdersComponent,
     PosOrderComponent,
     PosOrderItemEditComponent,
     PosOrderListComponent,

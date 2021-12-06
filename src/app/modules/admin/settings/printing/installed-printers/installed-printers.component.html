@@ -59,7 +59,7 @@
 
       </div>
 
-      <div *ngIf="platForm === 'electron' ">
+      <div *ngIf="isElectronApp">
 
         <app-list-printers-electron
               [printerName]      ="electronReceiptPrinter"

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -36,10 +37,11 @@ export class AgGridService {
       let date = ''
       let time = ''
 
-      if (!params)  {
+      if (!params || !params.value)  {
         // console.log('date time empty')
         return ''
       }
+      if (!params.value) {return}
 
       if (params) {
          time = new Date(params.value).toLocaleTimeString()

@@ -50,7 +50,6 @@ export class MenusService {
       method:           '',
       submenus: [
         { name: 'Profile',  minimized: false, method: '',  routerLink: '/app-profile', routerLinkActive: 'app-profile', icon: 'face', onClick: '', id: 0, sortOrder: 0, submenuID:1, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
-        { name: 'Sales' ,   minimized: false,  method: '' ,  routerLink: '/sales',     routerLinkActive: 'sales',   icon: 'money',   onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getUsers(), meunyType: 0},
       ]
     },
     {
@@ -107,24 +106,24 @@ export class MenusService {
       ]
     },
 
-    {
-      id:           0,
-      name:         'Sales',
-      icon:         'money',
-      sortOrder:     5,
-      active:       true,
-      menuGroupID:  0,
-      userType:     this.getManagers(),
-      routerLink:       '/pos-order-search',
-      routerLinkActive: 'pos-order-search',
-      method: '' ,
-      submenus: [
-        { name: 'POS Orders',   minimized: false,  method: '' , routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Order History',minimized: true, method: '' ,routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Payments',     minimized: true, method: '' ,  routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Items',        minimized: true, method: '' ,   routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-      ]
-    },
+    // {
+    //   id:           0,
+    //   name:         'Sales',
+    //   icon:         'money',
+    //   sortOrder:     5,
+    //   active:       true,
+    //   menuGroupID:  0,
+    //   userType:     this.getManagers(),
+    //   routerLink:       '/pos-order-search',
+    //   routerLinkActive: 'pos-order-search',
+    //   method: '' ,
+    //   submenus: [
+    //     { name: 'POS Orders',   minimized: false,  method: '' , routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+    //     { name: 'Order History',minimized: true, method: '' ,routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+    //     { name: 'Payments',     minimized: true, method: '' ,  routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+    //     { name: 'Items',        minimized: true, method: '' ,   routerLink: '/pos-order-search', routerLinkActive: 'pos-order-search', icon: 'list', onClick: '', id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+    //   ]
+    // },
     {
       id:     0,
       name: 'Metrc',

@@ -95,6 +95,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   prepReceiptList$:  Observable<ISetting[]>;
   receiptID       :  number;
 
+  isElectronApp  : boolean;
   electronSetting       : ISetting;
   electronReceiptPrinter: string;
   electronReceipt       : string;
@@ -139,6 +140,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   async ngOnInit() {
     this.getPrinterAssignment();
+    this.isElectronApp = this.electronService.isElectronApp;
   }
 
   async getPrinterAssignment(){

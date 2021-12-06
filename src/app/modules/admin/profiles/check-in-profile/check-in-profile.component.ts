@@ -1,5 +1,5 @@
 import {Component, Input, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -23,17 +23,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 
 export class CheckInProfileComponent implements OnInit {
 
-  inputForm: FormGroup;
-
-  // get firstName() {return this.userForm.get("firstName") as FormControl;}
-  // get lastName() { return this.userForm.get("lastName") as FormControl;}
-  // get phone() { return this.userForm.get("phone") as FormControl;}
-  // get email() { return this.userForm.get("email") as FormControl;}
-  // get address() {   return this.userForm.get("address") as FormControl;}
-  // get clientTypeName() { return this.userForm.get("clientTypeName") as FormControl;}
-  // get dob() { return this.userForm.get("dob") as FormControl;}
-  // get statusID() { return this.userForm.get("statusID") as FormControl}
-
+  inputForm   : FormGroup;
   bucketName  :  string;
   awsBucketURL:  string;
   profile     :  IUserProfile;
@@ -43,11 +33,6 @@ export class CheckInProfileComponent implements OnInit {
 
   @Input() clientTable  : IClientTable;
   @Input() id           : string;
-
-  posOrders$  : Observable<IPOSOrder[]>;
-  orders$     : Observable<IPOSOrder[]>;
-
-  //for swipping
 
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
 
@@ -59,64 +44,70 @@ export class CheckInProfileComponent implements OnInit {
   currentOrder  :  IPOSOrder;
   _currentOrder : Subscription;
 
+  _searchModel     :   Subscription;
+  searchModel      :   IPOSOrderSearchModel;
+
+  dateRangeForm     : FormGroup;
+  dateFrom          : any;
+  dateTo            : any;
+
+
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
       this.currentOrder = data;
     })
+
+    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+      this.searchModel = data
+      this.initFilter(data)
+    })
+
   }
 
   constructor(
               private router              : Router,
-              public route                : ActivatedRoute,
+              public  route               : ActivatedRoute,
               private sanitizer           : DomSanitizer,
               private awsBucket           : AWSBucketService,
               private _snackBar           : MatSnackBar,
-              public contactservice       : ContactsService,
+              public  contactservice      : ContactsService,
               private clientTableService  : ClientTableService,
               private orderService        : OrdersService,
               private siteService         : SitesService,
               private fbContactsService   : FbContactsService,
+              private fb                  : FormBuilder,
               private userAuthorization   : UserAuthorizationService,
             ) {
 
-      this.id = this.route.snapshot.paramMap.get('id');
-      this.initForm()
-
-      this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
-      this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
-      this.initSubscriptions();
-
+    this.id = this.route.snapshot.paramMap.get('id');
+    this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.initSubscriptions();
   }
 
- async ngOnInit() {
+  async ngOnInit() {
     const site = this.siteService.getAssignedSite();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
 
-    if (!this.clientTable) {
-      this.client$ = this.clientTableService.getClient(site, this.id);
-      this.client$.subscribe(data=> {
-        this.clientTable = data
-        this.fillForm(this.clientTable.id);
-      })
-    }
-
-    if (this.clientTable) {
-      this.fillForm(this.clientTable.id);
-    }
+    this.fillForm( this.id );
 
     const currentYear = new Date().getFullYear();
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
-    this.refreshOrders();
+
+    this.initDateRangeForm();
+  }
+
+  emitDatePickerData(event) {
+    this.refreshDateSearch()
   }
 
   refreshOrders() {
     const site = this.siteService.getAssignedSite();
-    let POSOrderSearchModel = {} as IPOSOrderSearchModel;
-    POSOrderSearchModel.clientID = parseInt (this.id)
-    this.orders$     = this.orderService.getHistoricalOrders(site, POSOrderSearchModel)
-    this.posOrders$  = this.orderService.getCurrentOrders(site, POSOrderSearchModel)
+    const searchModel = {} as IPOSOrderSearchModel;
+    searchModel.clientID = parseInt (this.id)
+    this.orderService.updateOrderSearchModel(searchModel)
   }
 
   initForm() {
@@ -124,25 +115,109 @@ export class CheckInProfileComponent implements OnInit {
     return this.inputForm
   };
 
-  fillForm(id: any) {
-
-    this.initForm()
-
-    if (this.clientTable) {
-       this.inputForm.patchValue(this.clientTable)
-       console.log('form value patched', this.clientTable)
-       return
+  initDateRangeForm() {
+    if (this.searchModel) {
+      this.searchModel.completionDate_From = null;
+      this.searchModel.completionDate_To = null;
     }
 
-    const site = this.siteService.getAssignedSite();
-    this.client$ = this.clientTableService.getClient(site, id).pipe(
-      tap(data => {
-        this.inputForm.patchValue(data)
-        console.log('form value patched', data)
-        return
-       })
-    );
+    this.dateRangeForm = new FormGroup({
+      start: new FormControl(),
+      end: new FormControl()
+    });
 
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+
+    this.dateRangeForm =  this.fb.group({
+      start: new Date(year, month, 1),
+      end: new Date()
+    })
+
+    this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
+    this.searchModel.completionDate_To   = this.dateRangeForm.get("start").value;
+    this.subscribeToDatePicker();
+  }
+
+  subscribeToDatePicker() {
+    if (this.dateRangeForm) {
+      this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
+        if (!res) {return}
+        this.dateFrom = res
+      })
+
+      this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
+        if (!res) {return}
+        this.dateTo = res
+      })
+
+      this.dateRangeForm.valueChanges.subscribe(res=>{
+        if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("start").value) {
+          this.refreshDateSearch()
+        }
+      })
+    }
+  }
+
+  refreshDateSearch() {
+    if (!this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
+    this.assignDates();
+    this.searchModel.completionDate_From = this.dateFrom.toISOString()
+    this.searchModel.completionDate_To   = this.dateTo.toISOString()
+    this.refreshSearch()
+  }
+
+  refreshSearch() {
+    if (!this.searchModel) {
+      this.searchModel               = {} as IPOSOrderSearchModel
+      this.searchModel.serviceTypeID = 0
+      this.searchModel.employeeID    = 0
+    }
+    this.searchModel.clientID        = parseInt(this.id)
+    const search                     = this.searchModel;
+    this.initOrderSearch(search)
+  }
+
+  initOrderSearch(searchModel: IPOSOrderSearchModel) {
+    this.orderService.updateOrderSearchModel( searchModel )
+  }
+
+  initFilter(search: IPOSOrderSearchModel) {
+    if (!search) {
+      search                      = {} as IPOSOrderSearchModel
+      search.suspendedOrder       = 0
+      search.greaterThanZero      = 0
+      search.closedOpenAllOrders  = 1;
+      search.clientID   = parseInt(this.id)
+      this.searchModel            = search;
+    }
+  }
+
+  assignDates() {
+    if (this.dateRangeForm) {
+      if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("start").value) {
+        this.dateFrom = this.dateRangeForm.get("start").value
+        this.dateTo   = this.dateRangeForm.get("end").value
+      }
+    }
+    if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
+      this.searchModel.completionDate_From = '';
+      this.searchModel.completionDate_To   = '';
+      this.refreshSearch()
+      return
+    }
+  }
+
+  fillForm(id: any) {
+    this.initForm()
+    const site   = this.siteService.getAssignedSite();
+    const client$ =this.clientTableService.getClient(site, id)
+    client$.subscribe(data => {
+      this.inputForm.patchValue(data)
+      console.log(data)
+      return
+    })
   }
 
   postNewCheckIn() {
@@ -158,37 +233,28 @@ export class CheckInProfileComponent implements OnInit {
         }
       )
     }
-
   }
 
   updateUser(): void {
     const site = this.siteService.getAssignedSite();
     let result = ''
-
     try {
       const client$ = this.clientTableService.saveClient(site, this.inputForm.value)
       client$.pipe(
         switchMap(data =>
           {
-            // console.log('update 0')
             if (!data) { return EMPTY }
-            // console.log('update 1')
             if (this.currentOrder) {
-              // console.log('update 2')
               return this.orderService.getOrder(site, this.currentOrder.id.toString(), false)
             }
-            // console.log('update empty')
             return EMPTY;
           }
         )).subscribe( order => {
-          // console.log('update order', order)
           this.orderService.updateOrderSubscription(order)
         })
-
     } catch (error) {
       this.notifyEvent(result, "Failure")
     }
-
   };
 
   updateUserExit() {
@@ -219,7 +285,6 @@ export class CheckInProfileComponent implements OnInit {
   selectChange(): void{
     console.log("Selected INDEX: " + this.selectedIndex);
   }
-
 
   // Action triggered when user swipes
   swipe(selectedIndex: any, action = this.SWIPE_ACTION.RIGHT) {

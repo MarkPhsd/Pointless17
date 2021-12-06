@@ -1,5 +1,5 @@
 import { Component, Output, OnInit,
-  ViewChild ,ElementRef, EventEmitter, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+  ViewChild ,ElementRef, EventEmitter, OnDestroy, QueryList, ViewChildren, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -16,10 +16,7 @@ import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
-import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { PosPaymentEditComponent } from 'src/app/modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
 
@@ -36,11 +33,11 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
-  @ViewChild('input', {static: true}) input: ElementRef;
+  // @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
   searchPhrase:         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  // get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
   // //search with debounce
@@ -112,10 +109,11 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   itemsPerPage      = 20
 
+  //list height
+  @Input()  height = "90vh"
+
   constructor(  private _snackBar               : MatSnackBar,
-                private pOSPaymentService       : POSPaymentService,
                 private agGridService           : AgGridService,
-                private fb                      : FormBuilder,
                 private siteService             : SitesService,
                 private agGridFormatingService  : AgGridFormatingService,
                 private awsService              : AWSBucketService,
@@ -125,11 +123,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 private orderService            : OrdersService,
               )
   {
-
     this.initSubscriptions();
-    this.initForm();
     this.initAgGrid(this.pageSize);
-
   }
 
   async ngOnInit() {
@@ -145,16 +140,21 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions = 'width: 100%; height: 80vh;'
-    this.agtheme        = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
-  }
+    let height = this.height
+    if (!height) {
+      height = "80vh"
+    }
 
-  async initForm() {
-    this.searchForm = this.fb.group({
-      itemName : ['']
-    })
+    this.gridDimensions = `width: 100%; height: ${height}`
+    this.agtheme        = 'ag-theme-material';
+
+    if (!height) {
+      height = "80vh"
+    }
+
+    if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
+    if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
+
   }
 
   ngOnDestroy(): void {
@@ -164,29 +164,24 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   }
 
   initSubscriptions() {
-    try {
-      this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel            = data
-          if (!this.searchModel) {
-            const searchModel       = {} as IPOSOrderSearchModel;
-            this.currentPage        = 1
-            searchModel.pageNumber  = 1;
-            searchModel.pageSize    = 25;
-            this.searchModel        = searchModel
-            this.refreshSearch_sub()
-            return
-          }
+        if (!this.searchModel) {
+          const searchModel       = {} as IPOSOrderSearchModel;
+          this.currentPage        = 1
+          searchModel.pageNumber  = 1;
+          searchModel.pageSize    = 25;
+          this.searchModel        = searchModel
         }
-      )
-    } catch (error) {
-      console.log('init subscription error', error)
-    }
+        this.refreshSearch()
+        return
+      }
+    )
   }
 
   //ag-grid
   //standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
-
   initAgGrid(pageSize: number) {
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
@@ -217,16 +212,16 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       },
       {headerName: 'Date',     field: 'orderDate', sortable: true,
           cellRenderer: this.agGridService.dateCellRendererUSD,
-          width   : 165,
-          minWidth: 165,
-          maxWidth: 200,
+          width   : 150,
+          minWidth: 150,
+          maxWidth: 150,
           flex    : 2,
       },
       {headerName: 'Completed',     field: 'completionDate', sortable: true,
           cellRenderer: this.agGridService.dateCellRendererUSD,
-          width   : 165,
-          minWidth: 165,
-          maxWidth: 200,
+          width   : 150,
+          minWidth: 150,
+          maxWidth: 150,
           flex    : 2,
       },
       {headerName: 'Total',     field: 'total',         sortable: true,
@@ -279,16 +274,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
-  initColDefs() {
-  }
-
-
-  listAll(){
-    const control = this.itemName
-    control.setValue('')
-    this.refreshSearch()
-  }
-
   autoSizeAll(skipHeader) {
     var allColumnIds = [];
     this.gridOptions.columnApi.getAllColumns().forEach(function (column) {
@@ -305,8 +290,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     if (this.searchModel) { searchModel = this.searchModel }
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    if (this.itemName.value)  {searchModel.orderID   = this.itemName.value }
-    this.orderService.updateOrderSearchModel(searchModel)
+    // this.orderService.updateOrderSearchModel(searchModel)
     return searchModel
   }
 
@@ -314,15 +298,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.refreshSearch();
   }
 
-  //this is called from subject rxjs obversablve above constructor.
-  refreshSearch(): Observable<IPaymentSearchModel[]> {
-    this.currentPage         = 1
-    const searchModel = this.initSearchModel();
-    return this.refreshSearch_sub()
-  }
-
-  refreshSearch_sub(): Observable<IPaymentSearchModel[]> {
-    if (this.params){
+  refreshSearch(): Observable<IPOSOrderSearchModel> {
+    if (this.params) {
       this.params.startRow     = 1;
       this.params.endRow       = this.pageSize;
     }
@@ -351,19 +328,16 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //ag-grid standard method
   async onGridReady(params: any) {
     if (params == undefined) { return }
-
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
       this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
-
     if (!params.startRow ||  !params.endRow) {
       params.startRow = 1
       params.endRow = this.pageSize;
     }
-
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
@@ -380,14 +354,12 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
               }
             }
-
             if (data.results) {
               //not applicable to all lists, but leave for ease of use.
               let results  =  this.refreshImages(data.results)
               params.successCallback(results)
               this.rowData = results
             }
-
           }
         );
       }
@@ -439,21 +411,19 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     let selected           = []
 
     selectedRows.forEach(function (selectedRow, index) {
-    if (index >= maxToShow) { return; }
-
-    if (index > 0) {  selectedRowsString += ', ';  }
-      selected.push(selectedRow.id)
-      selectedRowsString += selectedRow.name;
+      if (index >= maxToShow) { return; }
+      if (index > 0) {  selectedRowsString += ', ';  }
+        selected.push(selectedRow.id)
+        selectedRowsString += selectedRow.name;
     });
 
     if (selectedRows.length > maxToShow) {
-    let othersCount = selectedRows.length - maxToShow;
-    selectedRowsString +=
+      let othersCount = selectedRows.length - maxToShow;
+      selectedRowsString +=
       ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
 
     this.selected = selected
-
     if (selected && selectedRows && selectedRows[0]) {
       const item = selectedRows[0];
       this.id = item.id;
@@ -472,13 +442,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     }
   }
 
-  async editItemWithId(payment:any) {
-    console.log('edit item')
-    console.log(payment)
-    if(!payment) { return }
-    if (payment && payment.rowData) {  payment = payment.rowData;}
-    this.pOSPaymentService.updatePaymentSubscription(payment)
-    this._bottomSheet.open(PosPaymentEditComponent);
+  async editItemWithId(order:any) {
+    this.setActiveOrder(order)
   }
 
   async getItemHistory(id: any) {
@@ -489,22 +454,21 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.gridApi.exportDataAsCsv();
   }
 
-  getLabel(rowData)
-  {
+  getLabel(rowData) {
     if(rowData && rowData.hasIndicator)
       return 'Edit';
       else return 'Edit';
   }
 
-  onBtnClick1(e) {
-    this.rowDataClicked1 = e.rowData;
+  setActiveOrder(order) {
+    const site  = this.siteService.getAssignedSite();
+    const order$ =  this.orderService.getOrder(site, order.id, order.history )
+    order$.subscribe(data =>
+      {
+        this.orderService.setActiveOrder(site, data)
+      }
+    )
   }
-
-  onBtnClick2(e) {
-    this.rowDataClicked2 = e.rowData;
-  }
-
-  onSortByNameAndPrice(sort: string) { }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

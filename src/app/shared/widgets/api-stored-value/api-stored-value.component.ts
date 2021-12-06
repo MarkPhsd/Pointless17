@@ -17,6 +17,7 @@ export class ApiStoredValueComponent implements OnInit {
   currentAPIUrl : any;
   version: any;
   message: string;
+  isElectronApp: boolean;
 
   constructor(
       private router               : Router,
@@ -24,7 +25,7 @@ export class ApiStoredValueComponent implements OnInit {
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
-      private electronService      : ElectronService,
+      public electronService      : ElectronService,
       private ngZone: NgZone
     ) {
 
@@ -35,6 +36,7 @@ export class ApiStoredValueComponent implements OnInit {
 
     this.initRender();
     this.getVersion();
+    this.isElectronApp = this.electronService.isElectronApp;
   }
 
   initRender() {
@@ -51,7 +53,8 @@ export class ApiStoredValueComponent implements OnInit {
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
     });
-    console.log('App setting Init')
+    console.log('App setting Init', currentAPIUrl)
+    console.log('platFormService.webMode', this.platFormService.webMode)
   }
 
   setAPIUrl(){

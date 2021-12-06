@@ -112,10 +112,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     if (this._orderBar) { this._orderBar.unsubscribe(); }
   }
 
-  // ngAfterViewInit() {
-  //   this.itemElements.changes.subscribe( _ => this.onItemElementsChanged());
-  // }
-
   initSubscriptions() {
     try {
       this._searchModel = this.orderService.posSearchModel$.subscribe( data => {

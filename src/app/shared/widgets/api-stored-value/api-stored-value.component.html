@@ -1,9 +1,7 @@
-<mat-card fxFlex="100%" *ngIf="!platFormService.webMode">
-
+<mat-card fxFlex="100%" *ngIf="isElectronApp">
   <mat-card-title>
       <h2>App Setting</h2>
-  </mat-card-title>
-
+    </mat-card-title>
   <mat-card-subtitle>
       <h2>You are using the installed Pointless App</h2>
       <h2>Version: {{version}}</h2>

@@ -22,7 +22,6 @@ import { SearchResultsComponent } from './modules/menu/search-results/search-res
 import { AdminComponent } from './modules/admin/admin.component';
 import { SettingsComponent } from './modules/admin/settings/settings.component';
 import { ProductlistviewComponent } from './modules/admin/products/productlistview/productlistview.component';
-import { PosOrdersComponent } from './modules/posorders/pos-orders/pos-orders.component';
 import { PageNotFoundComponent } from './shared/widgets/page-not-found/page-not-found.component';
 import { SiteEditComponent } from './modules/admin/settings/site-edit/site-edit.component';
 import { ReviewEditComponent } from './modules/reviews/review-edit/review-edit.component';
@@ -129,7 +128,6 @@ const routes: Routes = [
         { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
         { path: 'pos-orders', component: OrdersMainComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
-        { path: 'pos-order-search', component: PosOrdersComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
         { path: 'pos-payment', component: PosPaymentComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 

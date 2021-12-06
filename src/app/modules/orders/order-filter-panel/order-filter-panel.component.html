@@ -1,8 +1,6 @@
 <mat-card >
   <mat-card-content>
-
     <div class="button-grid">
-
       <div>
         <button class="button"
                 mat-button
@@ -18,7 +16,6 @@
           <mat-icon>receipt</mat-icon><span>New Order</span>
         </button>
       </div>
-
       <div>
         <button class="button"
                 mat-button
@@ -27,7 +24,6 @@
           <span>Payments</span>
         </button>
       </div>
-
       <div>
         <button class="button"
                   mat-button
@@ -35,7 +31,6 @@
             <mat-icon>add</mat-icon><span>Other New</span>
         </button>
       </div>
-
       <div>
         <button *ngIf="smallDevice"
                 mat-button
@@ -55,34 +50,11 @@
     </div>
 
     <div *ngIf="isAuthorized" class="fields">
-
       <button mat-raised-button (click)="toggleDateRangeFilter()">Dates<mat-icon>date_range</mat-icon></button>
-
-      <mat-form-field appearance="outline" *ngIf="dateRangeForm">
-
-        <mat-label>Date Range (Start Time)</mat-label>
-
-        <mat-date-range-input [formGroup]="dateRangeForm"
-                              [rangePicker]="reportRangePicker"
-                              >
-          <input matStartDate
-                  formControlName="start"
-                  placeholder="Start date"
-                  (click)='emitDatePickerData()'>
-          <input matEndDate formControlName="end"
-                  placeholder="End date"
-                  (click)='emitDatePickerData()'>
-
-                </mat-date-range-input>
-
-        <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
-                                ></mat-datepicker-toggle>
-        <mat-date-range-picker touchUi #reportRangePicker
-                                ></mat-date-range-picker>
-
-        <mat-error *ngIf="dateRangeForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-        <mat-error *ngIf="dateRangeForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-      </mat-form-field>
+      <mat-date-range
+        [inputForm]      ="dateRangeForm"
+        (outputDateRange)="emitDatePickerData($event)">
+      </mat-date-range>
     </div>
 
     <mat-button-toggle-group
