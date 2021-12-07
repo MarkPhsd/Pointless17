@@ -33,6 +33,7 @@ export class AppInitService  {
 
     // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
+    console.log('init app init', this.apiUrl)
 
     if (!this.platFormService.webMode) {
       if ( !this.apiUrl ){
@@ -47,7 +48,6 @@ export class AppInitService  {
 
     if (this.platFormService.webMode) {
       try {
-        // console.log('web mode is in use')
         this.appConfig = await this.httpClient.get('/assets/app-config.json').toPromise();
         this.apiUrl = this.appConfig.apiUrl
         this.useAppGate = this.appConfig.useAppGate
@@ -58,29 +58,31 @@ export class AppInitService  {
     }
   }
 
-  setAPIUrl(apiUrl): boolean {
-    //localStorage.set('storedApiUrl', apiUrl)
+  getLocalApiUrl() {
+    const result = localStorage.getItem('storedApiUrl')
+    if (result != '' ) {
+      return result;
+    }
+    return ''
+  }
+
+  setAPIUrl(apiUrl): string {
     if (apiUrl ) {
       try {
         const url = new URL(apiUrl);
         localStorage.setItem('storedApiUrl', apiUrl)
-        return true
+        const result = localStorage.getItem('storedApiUrl')
+        console.log('new APIUrl', result)
+        return result
       } catch (error) {
         this._snackbar.open('Url not formed properly.' + error, 'Failure')
       }
     }
-    return false
+    return ''
   }
 
   appInUse() {
     return !this.platFormService.webMode
-  }
-
-  getLocalApiUrl() {
-    if ( localStorage.getItem('storedApiUrl')) {
-      return localStorage.getItem('storedApiUrl');
-    }
-    return ''
   }
 
   apiBaseUrl() {

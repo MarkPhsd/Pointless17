@@ -4,7 +4,7 @@ const registry        = require('winreg');
 const path            = require('path');
 const { autoUpdater } = require('electron-updater');
 const log             = require('electron-log');
-
+const os              = require("os");
 const isDevMode       = require('electron-is-dev');
 try {
   if (isDevMode) {
@@ -89,25 +89,50 @@ async function createWindow () {
     });
   }
 
-  regKey.values(function (err, items /* array of RegistryItem */) {
-    var interval
-    var hexString
-      if (!items) {return}
-      for (var i=0; i<items.length; i++) {
-        const item = items[i];
-        if (item) {
-          if (item.name == 'timerInterval') {
-            hexString = item.value;
-            if (hexString) { interval = parseInt(hexString, 16); }
-            // log.info(`Scale Timer Interval: ${interval} `);
+  if (os.arch().trim() == "x64") {
+    regKey.values(function (err, items /* array of RegistryItem */) {
+      var interval
+      var hexString
+        if (!items) {return}
+        for (var i=0; i<items.length; i++) {
+          const item = items[i];
+          if (item) {
+            if (item.name == 'timerInterval') {
+              hexString = item.value;
+              if (hexString) { interval = parseInt(hexString, 16); }
+              // log.info(`Scale Timer Interval: ${interval} `);
+            }
           }
         }
+        if (mainWindow != null && interval != 0) {
+          setInterval( readScale, interval);
+        }
       }
-      if (mainWindow != null && interval != 0) {
-        setInterval( readScale, interval);
+    )
+  }
+  if (os.platform().trim() == "win32")  {
+    regKey32.values(function (err, items /* array of RegistryItem */) {
+      var interval
+      var hexString
+        if (!items) {return}
+        for (var i=0; i<items.length; i++) {
+          const item = items[i];
+          if (item) {
+            if (item.name == 'timerInterval') {
+              hexString = item.value;
+              if (hexString) { interval = parseInt(hexString, 16); }
+              // log.info(`Scale Timer Interval: ${interval} `);
+            }
+          }
+        }
+        if (mainWindow != null && interval != 0) {
+          setInterval( readScale32, interval);
+        }
       }
-    }
-  )
+    )
+
+  }
+
 }
 
 // This method will be called when Electron has finished
@@ -132,7 +157,6 @@ app.on('close', () =>  {
   }
 });
 
-
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -140,6 +164,12 @@ app.on('activate', function () {
     createWindow();
   }
 });
+
+var regKey32 = new registry({                                       // new operator is optional
+  hive: registry.HKLM,                                        // open registry hive HKEY_CURRENT_USER
+  // key:  '\\Software\\Microsoft\\Windows\\CurrentVersion\\Run' // key containing autostart programs
+  key: '\\SOFTWARE\\ScaleService'
+})
 
 regKey = new registry({                                       // new operator is optional
   hive: registry.HKLM,                                        // open registry hive HKEY_CURRENT_USER
@@ -181,6 +211,46 @@ function readScale() {
                 scaleInfo.valueToDivide = item.value;
               }
               if (item.name == 'ValueToDivide') {
+                scaleInfo.status = item.value;
+              }
+            }
+          }
+          if (scaleInfo) {
+            mainWindow.webContents.send('scaleInfo',  scaleInfo)
+          }
+        }
+      } catch (error) {
+      }
+  });
+}
+
+
+function readScale32() {
+  //testing nodes
+  regKey32.values(function (err, items /* array of RegistryItem */) {
+    if (err) {
+      log.error('reading registry' + err);
+    }
+    else
+      try {
+        if (mainWindow && mainWindow.webContents) {
+          var scaleInfo = {status: '', type: '', weight: '', valueToDivide: '', mode: ''}
+          for (var i=0; i<items.length; i++) {
+            const item = items[i];
+             if (item) {
+              if (item.name == 'scaleType') {
+                scaleInfo.type = item.value;
+              }
+              if (item.name == 'mode') {
+                scaleInfo.mode = item.value;
+              }
+              if (item.name == 'sWeight') {
+                scaleInfo.weight = item.value;
+              }
+              if (item.name == 'ValueToDivide') {
+                scaleInfo.valueToDivide = item.value;
+              }
+              if (item.name == 'status') {
                 scaleInfo.status = item.value;
               }
             }

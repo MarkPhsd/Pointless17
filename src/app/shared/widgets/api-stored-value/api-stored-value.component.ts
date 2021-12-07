@@ -59,9 +59,8 @@ export class ApiStoredValueComponent implements OnInit {
 
   setAPIUrl(){
     const apiUrl = this.inputForm.controls['apiUrl'].value
-    localStorage.setItem('storedApiUrl', apiUrl)
     const result =  this.appInitService.setAPIUrl(apiUrl)
-    if (!result) {return}
+    if (!result || result == '') {return}
     this.appInitService.init();
     this.authenticationService.clearUserSettings()
     this.currentAPIUrl = apiUrl;
