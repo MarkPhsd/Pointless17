@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import { QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 import { DefaultComponent  } from './dashboard/default.component';
 import { SitesComponent } from './modules/sites/sites.component';
 import { LoginComponent} from './modules/login/login.component';
@@ -99,6 +100,7 @@ import { PosOperationsComponent } from './modules/transactions/operations/pos-op
 import { CompanyEditComponent } from './modules/admin/company-edit/company-edit.component';
 import { CardComponent } from './modules/admin/reports/card/card.component';
 import { APISettingComponent } from './modules/login/apisetting/apisetting.component';
+
 
 const routes: Routes = [
 
@@ -289,7 +291,8 @@ const routes: Routes = [
 
 @NgModule({
   imports:[
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
   ],
   // imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
