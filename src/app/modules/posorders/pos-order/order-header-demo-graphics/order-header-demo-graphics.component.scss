@@ -24,20 +24,6 @@ mat-card {
   }
 }
 
-.grid-order-header {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  justify-content: space-between;
-  width: 100%;
-  gap: 10px;
-  height: max-content;
-}
-
-.grid-header-item {
-  height: 165px;
-  margin-left: 3px;
-  margin-right: 5px;
-}
 
 .grid-contact {
   display: grid;
@@ -64,6 +50,10 @@ mat-card {
   overflow-x: hidden;
 }
 
-.float-left{
+.float-left {
   float: left;
+}
+
+.new-button {
+  padding-top: 4px;
 }

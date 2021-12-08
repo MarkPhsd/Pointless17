@@ -1,9 +1,6 @@
 import { Component,  Input} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { OrdersService } from 'src/app/_services';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
@@ -13,17 +10,14 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class PosOrderTransactionDataComponent{
 
-  @Input() order: IPOSOrder;
-
-  isAuthorized: boolean;
-  isUserStaff: boolean;
+  @Input() order    : IPOSOrder;
+  @Input() mainPanel: boolean;
+  isAuthorized      : boolean;
+  isUserStaff       : boolean;
 
   constructor(
     private userAuthorization   : UserAuthorizationService,
-    private orderService        : OrdersService,
-    private sitesService        : SitesService,
     private matSnackBar   : MatSnackBar,
-    private router        : Router,
   ) {
     // this.roles = localStorage.getItem(`roles`)
     this.isUserStaff = this.userAuthorization.isCurrentUserStaff()

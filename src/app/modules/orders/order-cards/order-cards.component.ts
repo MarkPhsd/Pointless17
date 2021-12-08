@@ -6,6 +6,7 @@ import { ActivatedRoute} from '@angular/router';
 import { Observable, Subscription} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+// import { share } from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-cards',
@@ -32,13 +33,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   pagingInfo: any;
 
   p: any //html page
-  items               = [];
-  pageOfItems        :      Array<any>;
-  lengthOfArray      :    number
-  smallDevice       = false;
+  items              = [];
+  pageOfItems        : Array<any>;
+  lengthOfArray      : number
+  smallDevice        = false;
 
-  statusmessage     = '';
-  section           = 1;
+  statusmessage      = '';
+  section            = 1;
 
   orders$           : Observable<IPOSOrder[]>;
   orders            : IPOSOrder[];
@@ -84,11 +85,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     public route: ActivatedRoute,
     private siteService: SitesService,
     private toolbarServiceUI : ToolBarUIService,
-
     )
   {
     this.stateValue = this.route.snapshot.paramMap.get('value');
-    this.initSubscriptions();
     this.initOrderBarSubscription();
     this.updateItemsPerPage();
 
@@ -101,11 +100,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       this.searchDescription = `Results from`
       return
     }
+
   }
 
   async ngOnInit()  {
     this.value = 1;
-    await this.nextPage(false);
+    // await this.nextPage(false);
+    this.initSubscriptions();
   }
 
   ngOnDestroy() {
@@ -118,6 +119,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
+        console.log('initSubscriptions')
         this.nextPage(true)
       })
     } catch (error) {
@@ -213,7 +215,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     const site        = this.siteService.getAssignedSite();
-    const results$    = this.orderService.getOrderBySearchPaged(site, model);
+    const results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
     this.loading      = true
 
     results$.subscribe(data => {

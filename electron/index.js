@@ -6,6 +6,7 @@ const { autoUpdater } = require('electron-updater');
 const log             = require('electron-log');
 const os              = require("os");
 const isDevMode       = require('electron-is-dev');
+
 try {
   if (isDevMode) {
     require('electron-reloader')(module, {
@@ -110,10 +111,11 @@ async function createWindow () {
       }
     )
   }
+
   if (os.platform().trim() == "win32")  {
     regKey32.values(function (err, items /* array of RegistryItem */) {
-      var interval
-      var hexString
+        var interval
+        var hexString
         if (!items) {return}
         for (var i=0; i<items.length; i++) {
           const item = items[i];
@@ -121,7 +123,6 @@ async function createWindow () {
             if (item.name == 'timerInterval') {
               hexString = item.value;
               if (hexString) { interval = parseInt(hexString, 16); }
-              // log.info(`Scale Timer Interval: ${interval} `);
             }
           }
         }
@@ -130,8 +131,8 @@ async function createWindow () {
         }
       }
     )
-
   }
+
 
 }
 
@@ -224,20 +225,19 @@ function readScale() {
   });
 }
 
-
 function readScale32() {
   //testing nodes
   regKey32.values(function (err, items /* array of RegistryItem */) {
-    if (err) {
-      log.error('reading registry' + err);
-    }
-    else
+      if (err) {
+        log.error('reading registry' + err);
+      }
+        else
       try {
         if (mainWindow && mainWindow.webContents) {
           var scaleInfo = {status: '', type: '', weight: '', valueToDivide: '', mode: ''}
           for (var i=0; i<items.length; i++) {
             const item = items[i];
-             if (item) {
+              if (item) {
               if (item.name == 'scaleType') {
                 scaleInfo.type = item.value;
               }
@@ -263,6 +263,7 @@ function readScale32() {
       }
   });
 }
+
 
 autoUpdater.on('update-downloaded', (ev, info) => {
   log.info(info + 'autoUpdater update-downloaded '  )

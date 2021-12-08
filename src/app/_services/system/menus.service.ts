@@ -1,12 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders,  } from '@angular/common/http';
+import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, Subscription, } from 'rxjs';
-import { ISetting, ISite, IUser, IUserProfile }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
+import { ISite, IUser }   from 'src/app/_interfaces';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
-import { UrlResolver } from '@angular/compiler';
-import { UserComponentFactory } from 'ag-grid-community';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 @Injectable({
@@ -16,8 +13,6 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 export class MenusService {
 
   submenu = {} as SubMenu[]
-
-
   accordionMenus: AccordionMenu[] = [
     // {
     //   id:               0,

@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
-import { Observable, ReplaySubject, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

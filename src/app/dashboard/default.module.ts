@@ -211,7 +211,7 @@ import { ProfileDemographicsComponent } from '../modules/admin/profiles/parts/de
 import { ProfileIDCardInfoComponent } from '../modules/admin/profiles/parts/profile-idcard-info/profile-idcard-info.component';
 import { OrderCardsComponent } from '../modules/orders/order-cards/order-cards.component';
 import { OrdersListComponent } from '../modules/orders/orders-list/orders-list.component';
-
+// import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -418,6 +418,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       ReactiveFormsModule,
       RouterModule,
       SharedModule,
+      // QuicklinkStrategy,
     ],
 
   exports: [
@@ -425,6 +426,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     AdjustItemComponent,
     SimpleTinyComponent,
     RouterModule,
+    // QuicklinkStrategy,
     BrowserAnimationsModule,
     HammerModule,
   ],

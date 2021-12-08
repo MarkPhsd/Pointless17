@@ -116,6 +116,10 @@ import { ScaleSettingsComponent } from '../modules/admin/settings/software/scale
 import { ApiStatusDisplayComponent } from './widgets/api-status-display/api-status-display.component';
 import { MatSelectNGModelComponent } from './widgets/mat-select-ngmodel/mat-select-ngmodel.component';
 import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.component';
+import { QuicklinkModule } from 'ngx-quicklink';
+import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
+import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
+// import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
 //     overrides = <any> {
@@ -188,6 +192,8 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
     OrderHeaderDemoGraphicsComponent,
+    OrderTotalComponent,
+    OrderHeaderComponent,
     PagerBlobComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
@@ -248,6 +254,7 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     HammerModule,
     IonicModule.forRoot(),
     // NgtUniversalModule,
+    QuicklinkModule,
     RouterModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
@@ -313,6 +320,8 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
     OrderHeaderDemoGraphicsComponent,
+    OrderTotalComponent,
+    OrderHeaderComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
     PieComponent,
@@ -349,6 +358,7 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
     UnitTypeFieldsComponent,
     ValueFieldsComponent,
     WebEnabledComponent,
+
   ],
 
   providers: [

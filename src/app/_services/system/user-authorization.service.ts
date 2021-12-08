@@ -1,8 +1,5 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IUser } from 'src/app/_interfaces';
-import { ClientTableService } from '../people/client-table.service';
-import { AuthenticationService } from './authentication.service';
 // https://dev.to/rdegges/please-stop-using-local-storage-1i04
 @Injectable({
   providedIn: 'root'

@@ -1,9 +1,10 @@
+@import "/src/mixins.scss";
+
 .buttonPrices {
   width: 200px;
   height: 100px;
   margin: 15px;
 }
-
 
 .center {
   // opacity         : .8;
@@ -11,4 +12,13 @@
   grid-template-columns: auto auto;
   place-items     : center;
   justify-content : space-evenly;
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 1fr;
+  }
+
+
 }

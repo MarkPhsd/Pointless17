@@ -7,28 +7,33 @@
         <div class="grid-flow">
 
           <div *ngIf="!smallDevice">
-            <button mat-button
+            <button aria-label="back" mat-button
                     (click)="goBack()">
-             <mat-icon >keyboard_arrow_left</mat-icon>
+             <mat-icon aria-hidden="true">keyboard_arrow_left</mat-icon>
+             <!-- <span aria-hidden="true">menu</span> -->
             </button>
           </div>
 
           <div *ngIf="user">
-            <button mat-button
+            <button aria-label="menu"
+                    mat-button
                    (click)="toggleSideBar()">
               <mat-icon >menu</mat-icon>
+
             </button>
           </div>
 
           <div>
-            <button mat-button
+            <button aria-label="search"
+                    mat-button
                     (click)="toggleSearchMenu()">
               <mat-icon >search</mat-icon>
             </button>
           </div>
 
           <div>
-            <button mat-button
+            <button aria-label="home"
+                    mat-button
                     (click)="goHome()">
               <mat-icon >home</mat-icon>
             </button>
@@ -41,7 +46,8 @@
           </div>
 
           <div *ngIf="!smallDevice" >
-            <button mat-button
+            <button  aria-label="location_on"
+                    mat-button
                     (click)="siteSelector()">
               <mat-icon>location_on</mat-icon>
             </button>
@@ -57,6 +63,7 @@
 
           <div *ngIf="smallDevice &&  ( (isUserStaff && platFormService.platForm !='web') || (isAdmin) )">
             <button mat-button
+                    aria-label="POS"
                     color="accent"
                     (click)="navPOSOrders()">
               <mat-icon>point_of_sale</mat-icon>
@@ -89,6 +96,7 @@
               <li>
                 <button mat-button
                         color="accent"
+                        aria-label="POS"
                       (click)="navPOSOrders()">
                   <mat-icon>point_of_sale</mat-icon>
                 </button>
@@ -96,6 +104,7 @@
 
               <li>
                 <button *ngIf="showTableLayout"
+                        aria-label="dining"
                         mat-button  routerLinkActive="list-item-active"
                         routerLink="/dining-layout">
                   <mat-icon>dining</mat-icon>
@@ -105,6 +114,7 @@
               <!-- if android device -->
               <li *ngIf="platFormService.androidApp">
                 <button mat-button
+                        aria-label="badge"
                         routerLinkActive="list-item-active"
                         routerLink="/barcodescanner">
                   <mat-icon>badge</mat-icon>
@@ -121,6 +131,7 @@
 
               <li *ngIf="platFormService && !platFormService.webMode">
                 <button mat-button
+                        aria-label="transfer_within_a_station"
                         color="accent"
                         (click)="switchUser()">
                   <mat-icon>transfer_within_a_station</mat-icon>
@@ -130,6 +141,7 @@
               <li>
                 <button color="warn"
                         mat-button
+                        aria-label="exit_to_app"
                         class="nav-item nav-link"
                         (click)="logout()">
                     <mat-icon>exit_to_app</mat-icon>
@@ -146,7 +158,7 @@
 
           <!-- visible theme switcher on large screen -->
           <div *ngIf="!smallDevice && !isUserStaff">
-             <app-toggle-theme></app-toggle-theme>
+            <app-toggle-theme></app-toggle-theme>
           </div>
 
           <!-- Cart on all screens -->
@@ -157,6 +169,7 @@
           <div *ngIf="!user">
             <button color="warn"
                     mat-button
+                    aria-label="logout"
                     class="nav-item nav-link"
                     (click)="logout()">
                 <mat-icon>exit_to_app</mat-icon>
@@ -164,16 +177,18 @@
           </div>
 
           <div *ngIf="user">
-            <button mat-button [matMenuTriggerFor]="menu">
+            <button   aria-label="user"
+                      mat-button [matMenuTriggerFor]="menu">
               <mat-icon>person_outline</mat-icon>
             </button>
 
             <mat-menu #menu="matMenu">
 
-              <button color="warn" mat-menu-item>
+              <button aria-label="logout" color="warn" mat-menu-item>
                 <button
                         mat-button
                         class="nav-item nav-link"
+                        aria-label="logout"
                         (click)="logout()">
                     Sign Out
                     <mat-icon>exit_to_app</mat-icon>
@@ -186,8 +201,9 @@
                 <button
                       mat-button
                       class="nav-item nav-link"
+                      aria-label="face"
                       routerLink="/app-profile">
-                    {{ userName }} - {{userRoles}}
+                      {{ userName }} - {{userRoles}}
                     <mat-icon>face</mat-icon>
                 </button>
               </button>
@@ -196,7 +212,6 @@
 
                 <mat-card>
                   <div  mat-menu-item
-                        class="mat-item"
                         *ngIf="smallDevice || isUserStaff">
                       <app-toggle-theme></app-toggle-theme>
                   </div>
@@ -218,6 +233,7 @@
                       *ngIf="smallDevice">
                   <button
                         mat-button
+                        aria-label="location"
                         class="mat-button-item"
                         (click)="siteSelector()">
                     <mat-icon>location_on</mat-icon>

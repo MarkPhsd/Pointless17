@@ -9,7 +9,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
@@ -20,6 +20,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   @Input() order : IPOSOrder;
+  @Input() mainPanel = true;
 
   paymentsEqualTotal: boolean;
   site           : ISite;

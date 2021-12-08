@@ -9,7 +9,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor,  } from '@capacitor/core';
 import { StringDecoder } from 'node:string_decoder';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
-import { ItemPostResults } from './posorder-item-service.service';
 import { IBalanceSheet } from './balance-sheet.service';
 
 export interface POSOrdersPaged {
@@ -25,8 +24,6 @@ export interface OrderPayload {
   orderName   : StringDecoder
   order       : IPOSOrder;
 }
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -92,7 +89,7 @@ export class OrdersService {
 
   get posName(): string { return localStorage.getItem("POSName") }
 
-    getTodaysOpenOrders(site: ISite):  Observable<IPOSOrder[]> {
+  getTodaysOpenOrders(site: ISite):  Observable<IPOSOrder[]> {
 
       const controller = "/POSOrders/"
 

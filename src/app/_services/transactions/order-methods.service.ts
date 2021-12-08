@@ -19,6 +19,7 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-serial/requires-serial.component';
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
+import { PrintingService } from '../system/printing.service';
 
 export interface ProcessItem {
   order: IPOSOrder;
@@ -68,6 +69,7 @@ export class OrderMethodsService {
               private posOrderItemService     : POSOrderItemServiceService,
               private productEditButtonService: ProductEditButtonService,
               private promptGroupService      : PromptGroupService,
+              private printingService          :PrintingService,
               private promptWalkService: PromptWalkThroughService,
              ) {
     this.initSubscriptions();
@@ -281,6 +283,18 @@ export class OrderMethodsService {
     } else {
       this.initItemProcess();
     }
+  }
+
+  closeOrder(site: ISite, order: IPOSOrder) {
+    if (order) {
+      const result$ = this.orderService.completOrder(site, order.id)
+      result$.subscribe(data=>  {
+        this.notifyEvent(`Order Paid for`, 'Order Completed')
+        this.orderService.updateOrderSubscription(data)
+        this.printingService.previewReceipt()
+      }
+    )
+   }
   }
 
   async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {

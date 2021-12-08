@@ -1,1 +1,0 @@
-window.fs=require("fs");

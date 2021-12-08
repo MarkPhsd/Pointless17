@@ -1,18 +1,27 @@
 <mat-card *ngIf="order" >
+
   <mat-card-subtitle>
     <ng-content></ng-content>
+
+    <app-order-header
+        [order]="order"></app-order-header>
+    <app-order-total
+      [mainPanel]="mainPanel"
+      [order]="order">
+    </app-order-total>
+
     <div class="transaction-data" >
-      <div>
-        Payments
-      </div>
-      <div>
-          {{order.totalPayments | currency}}
-      </div>
       <div>
         Balance
       </div>
       <div>
         {{order.balanceRemaining | currency}}
+      </div>
+      <div>
+        Payments
+      </div>
+      <div>
+        {{order.totalPayments | currency}}
       </div>
     </div>
   </mat-card-subtitle>
@@ -21,20 +30,17 @@
 
     <div class="payment-grid"
         *ngFor="let item of order.posPayments">
-
         <div *ngIf="item.paymentMethod" >
           {{item.paymentMethod.name}}
           <span  *ngIf="item.paymentMethod.isCreditCard">
             <button  mat-button (click)="editPayment(item)"><mat-icon>edit</mat-icon></button>
           </span>
-
           <div *ngIf="item.paymentMethod.isCash && item.amountPaid > 0">
             <span *ngIf="item.amountPaid - item.amountReceived !=0">
               Due:
             </span>
           </div>
         </div>
-
         <div *ngIf="item.paymentMethod.isCreditCard && item.cardNum" >
           {{item.cardNum}}
           <div *ngIf="item.cardHolder">
@@ -43,21 +49,17 @@
             </span>
           </div>
         </div>
-
         <div>
           {{item.amountPaid | currency}}
-
           <div  *ngIf="item.tipAmount > 0">
             Tip {{item.tipAmount  | currency}}
           </div>
-
           <div *ngIf="item.paymentMethod.isCash && item.amountPaid > 0">
             <span *ngIf="item.amountPaid - item.amountReceived !=0">
               {{  (item.amountReceived - item.amountPaid)  | currency }}
             </span>
           </div>
         </div>
-
         <div>
           <button mat-button
                   class="grid-item-button"

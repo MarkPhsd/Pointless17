@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders,  } from '@angular/common/http';
+import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, } from 'rxjs';
 import { ISetting, ISite }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
 import { SitesService } from '../reporting/sites.service';
-import { IItemBasic } from '../menu/menu.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { AdjustmentReason } from './adjustment-reasons.service';
 import { AppInitService } from './app-init.service';
@@ -333,7 +331,7 @@ export class SettingsService {
     let setting = {} as ISetting;
     setting.name = "CacheTime"
     setting.value = '10000'
-    setting.boolean = true
+    setting.boolean = false
     return  await this.postSetting(site, setting).pipe().toPromise();
   }
 
@@ -357,7 +355,7 @@ export class SettingsService {
 
       setting.name    = "CacheTime"
       setting.value   = '10000'
-      setting.boolean = true
+      setting.boolean = false
 
       const cache     =  await this.postSetting(site, setting).pipe().toPromise();
       localStorage.setItem('appCache', JSON.stringify(cache));

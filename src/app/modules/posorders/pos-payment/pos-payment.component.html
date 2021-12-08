@@ -3,20 +3,21 @@
   <div [class]="orderlayout">
 
     <div class="transaction-data">
-      <div class="grid-header-item">
+      <!-- <div class="grid-header-item">
         <pos-order-transaction-data [order]="order">
         </pos-order-transaction-data>
+      </div> -->
+      <div class="grid-header-item">
+        <app-payment-balance
+          [mainPanel]="true"
+          [order]="order">
+        </app-payment-balance>
       </div>
-
       <div class="grid-header-item">
         <app-order-header-demo-graphics
             [canRemoveClient]="'false'"
             [order]          ="order">
         </app-order-header-demo-graphics>
-      </div>
-      <div class="grid-header-item">
-        <app-payment-balance [order]="order">
-        </app-payment-balance>
       </div>
     </div>
 
@@ -60,7 +61,6 @@
                     <div>
                       <h4>
                         {{paymentMethod.name}} | Order Balance : {{order.balanceRemaining | currency}}
-
                       </h4>
                     </div>
                   </div>
@@ -75,7 +75,6 @@
                       <button mat-button (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon></button>
                     </span>
                   </div>
-
                   <div class="item-container keypad">
                     <app-key-pad
                       [inputForm]        ="checkNumberForm"
@@ -115,7 +114,6 @@
                     <span>
                       <button mat-button (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon></button>
                     </span>
-
                     <span class ="action-buttons">
                       <button mat-button (click)="applyPointBalance()">
                         Apply Balance
@@ -123,7 +121,6 @@
                       </button>
                     </span>
                   </div>
-
                   <div class="item-container keypad">
                     <app-key-pad
                       [inputForm]        ="pointValueForm"
@@ -151,7 +148,6 @@
                       </h4>
                     </div>
                   </div>
-
                   <div class="item-container ">
                     <span class ="action-buttons">
                       <button mat-button (click)="goToPaymentMethod()" >
@@ -165,7 +161,6 @@
                         <mat-icon>refresh</mat-icon>
                       </button>
                     </span>
-
                     <span class ="action-buttons">
                       <button mat-button (click)="applyBalance()">
                         Apply Balance
@@ -173,7 +168,6 @@
                       </button>
                     </span>
                   </div>
-
                   <div class="item-container ">
                     <app-key-pad
                         [inputForm]        ="paymentAmountForm"
@@ -189,7 +183,6 @@
             </div>
       </div>
     </div>
-
   </div>
 </div>
 

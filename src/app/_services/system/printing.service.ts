@@ -1,8 +1,7 @@
-import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as _ from "lodash";
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Settings } from 'electron/main';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,7 +10,6 @@ import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
 import { jsPDF } from "jspdf";
-import * as  printJS from "print-js";
 import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
 import { FakeDataService } from './fake-data.service';

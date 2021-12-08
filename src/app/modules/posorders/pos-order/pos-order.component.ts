@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input,
-  OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
+         OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, Subscription } from 'rxjs';
@@ -19,7 +19,7 @@ import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { EMPTY, } from 'rxjs';
 
-import { IMenuItem, ItemType } from 'src/app/_interfaces/menu/menu-products';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
 selector: 'app-pos-order',
@@ -45,7 +45,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // @ViewChild('orderItems') orderItems: ElementRef;
   @Output() toggleOpenOrderBarForMe: EventEmitter<any> = new EventEmitter();
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-  openOrderBar:                      boolean;
+  openOrderBar                      : boolean;
   @ViewChild('container') container : ElementRef;
   @Input() OrderID : string;
   @Input() mainPanel: boolean;
@@ -104,23 +104,24 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   constructor(
-              private orderService: OrdersService,
-              private awsBucket: AWSBucketService,
-              private printingService: PrintingService,
-              private _snackBar: MatSnackBar,
-              private router: Router,
-              public  route: ActivatedRoute,
-              private siteService: SitesService,
-              private toolbarUIService: ToolBarUIService,
-              private bottomSheet     : MatBottomSheet,
-              private menuItemService : MenuService,
-              private orderItemService: POSOrderItemServiceService,
-              private renderingService: RenderingService,
-              private settingService  : SettingsService,
+              private orderService      : OrdersService,
+              private awsBucket         : AWSBucketService,
+              private printingService   : PrintingService,
+              private _snackBar         : MatSnackBar,
+              private router            : Router,
+              public  route             : ActivatedRoute,
+              private siteService       : SitesService,
+              private toolbarUIService  : ToolBarUIService,
+              private bottomSheet       : MatBottomSheet,
+              private menuItemService   : MenuService,
+              private orderItemService  : POSOrderItemServiceService,
+              private renderingService  : RenderingService,
+              private settingService    : SettingsService,
               // private printingService : Printing
-              private el: ElementRef) {
+              private el                : ElementRef) {
 
       const outPut = this.route.snapshot.paramMap.get('mainPanel');
+      console.log('order Total Main Panel Check', outPut)
       if (outPut) {
         this.mainPanel = true
       }

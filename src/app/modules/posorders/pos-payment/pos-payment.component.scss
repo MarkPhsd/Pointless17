@@ -50,14 +50,14 @@
 .transaction-data {
   display: grid;
   gap: 5px;
-  grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(275px, 1fr) );
   border-radius: 3px;
 
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(275, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(275px, 1fr) );
     margin: 5px ;
   }
 }
@@ -81,7 +81,6 @@
 
 .headers {
   display: flex;
-  // flex-wrap: wrap;
   overflow-y: auto;
   overflow-x: hidden;
   align-items: center;
@@ -103,7 +102,7 @@
 
 .card-dimensions {
   width: 100%;
-  height: 545px;
+  // height: 545px;
   overflow: auto;
   display: flex;
   align-items: center;

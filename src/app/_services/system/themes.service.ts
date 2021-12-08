@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
 import { Observable, throwError } from 'rxjs';
 import { ITheme }  from 'src/app/_interfaces';
 //import  * as  ThemesJSON from 'src/assets/ThemesJSON';
@@ -12,7 +11,7 @@ export class ThemesService {
 
   constructor() {}
 
-  getThemeOptions() 
+  getThemeOptions()
   {
     // return ThemesJSON;
   }

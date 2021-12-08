@@ -31,10 +31,12 @@
 </mat-card>
 
 <mat-card *ngIf="!order.clients_POSOrders">
-  <app-client-search-selector
-      (itemSelect)="assignCustomer($event)">
-  </app-client-search-selector>
-  <div class="grid-item-button">
-    <button mat-button (click)="gotoAddClient()"><mat-icon>add</mat-icon>New Client</button>
-  </div>
+  <span class="float-left">
+    <app-client-search-selector
+        (itemSelect)="assignCustomer($event)">
+    </app-client-search-selector>
+  </span>
+  <span class="new-button float-left" >
+    <button mat-button (click)="gotoAddClient()"><mat-icon>add</mat-icon>New </button>
+  </span>
 </mat-card>

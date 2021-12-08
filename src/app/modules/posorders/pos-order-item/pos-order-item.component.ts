@@ -96,7 +96,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   initSubscriptions() {
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
-      // this.mainPanel = false;
       if (data) {
         this.mainPanel = data;
         this.isNotInSidePanel = data;
@@ -122,7 +121,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
                 private uiSettingService   : UISettingsService,
               )
   {
-
   }
 
   async ngOnInit() {
@@ -137,11 +135,9 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       this.itemName   =  this.getItemName(this.menuItem.name)
       this.imagePath  =  this.getItemSrc(this.menuItem)
     }
-
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
       this.customcard = 'margin-left: 15px;'
     }
-
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )

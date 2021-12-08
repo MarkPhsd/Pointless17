@@ -50,19 +50,20 @@ export class OrdersMainComponent  {
     const site = this.siteService.getAssignedSite();
     await this.orderService.newDefaultOrder(site);
   }
+
   newOrderOptions() {
     this._bottomSheet.open(NewOrderTypeComponent)
   }
 
   changeView() {
-    if (this.viewType ==1) {
+    if (this.viewType == 1) {
       this.viewType = 0
       return
     }
-    if (this.viewType ==0) {
+    if (this.viewType == 0) {
       this.viewType = 1
       return
     }
-
   }
+
 }
