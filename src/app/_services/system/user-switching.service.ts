@@ -144,6 +144,7 @@ export class UserSwitchingService {
 
     const site = this.siteService.getAssignedSite()
     const apiUrl = await this.appInitService.apiBaseUrl()
+    console.log('apiUrl', apiUrl);
     let url = `${apiUrl}/users/authenticate`
 
     this.clearSubscriptions();

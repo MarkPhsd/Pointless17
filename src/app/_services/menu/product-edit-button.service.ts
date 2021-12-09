@@ -114,7 +114,7 @@ export class ProductEditButtonService {
     let dialogRef: any;
 
     dialogRef = this.dialog.open(PromptGroupEditComponent,
-      { width:        '50vh',
+      { width:        '500px',
         minWidth:     '500px',
         height:       '65vh',
         minHeight:    '650px',

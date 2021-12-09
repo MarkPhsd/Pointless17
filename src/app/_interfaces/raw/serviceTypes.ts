@@ -7,7 +7,7 @@ export interface IServiceType {
   description           :string;
   positiveNegative:      number;
   isRegisterTransaction: boolean;
-  taxITems:              boolean;
+  taxItems:              boolean;
   showOrderType:         boolean;
   retailServiceType:     number;
   managerRequired:       number;

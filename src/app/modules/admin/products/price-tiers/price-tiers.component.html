@@ -1,0 +1,53 @@
+<h3 class="h3">Price Category List</h3>
+
+<div class="grid-container">
+  <div class="grid-item">
+    <form  [formGroup]="searchForm" id="searchForm" >
+      <mat-form-field appearance="outline" class="searchField">
+          <mat-label >Search Items</mat-label>
+            <input
+                    #input
+                    matInput
+                    type="text"
+                    id="searchProducts"
+                    formControlName="searchItems"
+                    class="form-control"
+                    [matAutocomplete]="auto">
+                <mat-autocomplete panelWidth="auto"
+                                  #auto="matAutocomplete"
+                                  [displayWith]="displayFn.bind(this)">
+          </mat-autocomplete>
+        </mat-form-field>
+    </form>
+
+  </div>
+  <div class="grid-item">
+    <button mat-button
+      class="assign-button"
+      (click)="listAll()"> <mat-icon>list</mat-icon>List All</button>
+  </div>
+
+</div>
+
+
+<div class="grid-item">
+  <ag-grid-angular
+        #agGrid
+        style="width: 75%; height: 70vh;"
+        id="myGrid"
+        [class]="agtheme"
+        [columnDefs]="columnDefs"
+        [defaultColDef]="defaultColDef"
+        [gridOptions]="gridOptions"
+        [rowSelection]="rowSelection"
+        [frameworkComponents]="frameworkComponents"
+        (selectionChanged)="onSelectionChanged($event)"
+        (gridReady)="onGridReady($event)">
+  </ag-grid-angular>
+</div>
+
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>
+
+

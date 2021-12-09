@@ -11,11 +11,14 @@
 
         <div class="grid-item-span-row" *ngIf="orderItem">
 
-          <span>
-            {{index+1}}. {{ orderItem?.productName }}
+          <span >
+            {{index+1}}.
+          </span>
+          <span class="product-name" >
+            {{ orderItem?.productName }}
           </span>
 
-          <span  *ngIf="orderItem.itemType">
+          <span class="product-name" *ngIf="orderItem.itemType">
             ( {{orderItem?.itemType?.name}} )
           </span>
 

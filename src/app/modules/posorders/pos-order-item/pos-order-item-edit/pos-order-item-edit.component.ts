@@ -60,14 +60,17 @@ export class PosOrderItemEditComponent  {
 
   save() {
     if (this.posOrderItem) {
+      console.log('this.edifield', this.editField)
+
       const site = this.siteService.getAssignedSite();
       const item = this.getItemValue();
       if (item && site) {
 
         if (this.editField == 'quantity'  ) {
             this.posOrderItemService.changeItemQuantity(site, item ).subscribe( data => {
-            this.orderService.updateOrderSubscription(data)
-            this.onCancel();
+              console.log('save', data);
+              this.orderService.updateOrderSubscription(data)
+              this.onCancel();
           })
           return
         }
@@ -82,6 +85,7 @@ export class PosOrderItemEditComponent  {
 
       }
     }
+
   }
 
   getItemValue() {

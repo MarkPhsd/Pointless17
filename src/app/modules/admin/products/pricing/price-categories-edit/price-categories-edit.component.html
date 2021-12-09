@@ -31,6 +31,10 @@
             <div *ngIf="showConversions">
               <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Hide Conversions</button>
             </div>
+
+            <div>
+              <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Toggle Price By Weight</button>
+            </div>
         </div>
 
         <div>
@@ -293,6 +297,180 @@
                       </div>
 
                     </div>
+                  </div>
+                  <div  *ngIf="showMore || showTime"  class="grid-price-time-container">
+                    <div  *ngIf="showMore"  class=" grid-multiprice-container">
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price1</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price1"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price2</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price2"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price3</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price3"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price4</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price4"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price5</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price5"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price6</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price6"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price7</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price7"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div   *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price8</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price8"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price9</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price9"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div *ngIf="showMore">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >price10</mat-label>
+                          <input matInput
+                                type="text"
+                                currencyMask
+                                formControlName="price10"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+
+                  </div>
+
+                  <div *ngIf="showWeightPrices" class="grid-time-container">
+                    <div >
+                      These are prices set to quantities of greater than the mulitpliers, multipliers are 1, 3.5, 7, 14, 28.
+                      Enter the price equal to the quantity. The final value will be calculated based
+                      on that quantity times price as the rate.
+                      The rate will be recalcualted to match the quantity provided when over a grace amouunt entered in price settings.
+                    </div>
+                    <div></div>
+
+                    <div >
+                      <mat-form-field appearance="outline" class="date-fields">
+                        <mat-label >Gram Price</mat-label>
+                        <input matInput
+                              type="text"
+                              formControlName="gramPrice"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div >
+                      <mat-form-field appearance="outline" class="date-fields">
+                        <mat-label >Eighth Price</mat-label>
+                        <input matInput
+                              type="text"
+                              formControlName="eightPrice"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div >
+                      <mat-form-field appearance="outline" class="date-fields">
+                        <mat-label >Quarter Price</mat-label>
+                        <input matInput
+                              type="text"
+                              formControlName="quarterPrice"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div >
+                      <mat-form-field appearance="outline" class="date-fields">
+                        <mat-label >Half Price</mat-label>
+                        <input matInput
+                              type="text"
+                              formControlName="halfPrice"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div >
+                      <mat-form-field appearance="outline" class="date-fields">
+                        <mat-label >Ounce Price</mat-label>
+                        <input matInput
+                              type="text"
+                              formControlName="ouncePrice"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
                   </div>
 
                   <div *ngIf="showConversions" class="grid-conversion-container">

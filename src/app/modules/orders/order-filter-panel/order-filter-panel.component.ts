@@ -173,6 +173,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.value = ''
     if (this.searchModel) {  this.searchModel.orderID = 0}
     this.initForm();
+    this.initDateForm();
     this.refreshSearch();
   }
 

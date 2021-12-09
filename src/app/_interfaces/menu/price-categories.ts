@@ -72,7 +72,12 @@ export interface ProductPrice {
   startDate:        string;
   endDate:          string;
   priceTiers:       PriceTiers;
-  unitType:         UnitType;
+  unitType:         number;
+  gramPrice:        number;
+  eightPrice:       number;
+  quarterPrice:     number;
+  halfOuncePrice:   number;
+  ouncePrice:       number;
 }
 
 export interface PriceTiers {

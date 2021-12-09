@@ -1,8 +1,7 @@
 import { Injectable, Input } from '@angular/core';
-
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, Observable, Subject, throwError  } from 'rxjs';
-import { IProduct, IProductCategory, ISite, MenuItem }  from 'src/app/_interfaces';
+import { IProduct, IProductCategory, ISite }  from 'src/app/_interfaces';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
 import { HttpClient, HttpHeaders } from '@angular/common/http';

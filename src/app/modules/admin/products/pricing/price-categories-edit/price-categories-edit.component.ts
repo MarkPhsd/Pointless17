@@ -25,6 +25,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   inputForm               : FormGroup;
   showMore                :  boolean;
   showTime                :  boolean;
+  showWeightPrices        :  boolean;
   showConversions         :  boolean;
 
   get productPrices() : FormArray {
@@ -96,6 +97,10 @@ export class PriceCategoriesEditComponent implements OnInit {
   toggleShowConversion() {
     this.showConversions = !this.showConversions
   }
+  toggleWeightPrices() {
+    console.log('toggleWeightPrices')
+    this.showWeightPrices = !this.showWeightPrices
+  }
 
   addPrice() {
     let pricing = this.productPrices
@@ -132,7 +137,6 @@ export class PriceCategoriesEditComponent implements OnInit {
     let pricing = this.inputForm.controls['productPrices'] as FormArray;
     if (pricing) {
       const items = this.productPrices.value
-
       items.forEach(data => {
         this.updateItem(data);
       })
@@ -154,13 +158,10 @@ export class PriceCategoriesEditComponent implements OnInit {
       // console.log('error', error)
     }
 
-
   };
 
   updateItemByItem(price: ProductPrice2) {
     if (!price) { return }
-
-
     try {
       const site = this.siteService.getAssignedSite()
       return new Promise(resolve => {
@@ -200,7 +201,6 @@ export class PriceCategoriesEditComponent implements OnInit {
         this.saveAllItems();
         this.notifyEvent('Item Updated', 'Success')
         resolve(true)
-
         }, error => {
           this.notifyEvent(`Update item. ${error}`, "Failure")
           resolve(false)
@@ -248,7 +248,6 @@ export class PriceCategoriesEditComponent implements OnInit {
         this.removeItem(i)
         this.notifyEvent("Item deleted", "Success")
       }
-
     )
 
   }
@@ -302,6 +301,11 @@ export class PriceCategoriesEditComponent implements OnInit {
         specialDatePrice: 0,
         startDate:        '',
         endDate:          '',
+        gramPrice:  0,
+        eightPrice: 0,
+        halfPrice:  0,
+        quarterPrice: 0,
+        ouncePrice: 0,
       }
   }
 
@@ -343,6 +347,11 @@ export class PriceCategoriesEditComponent implements OnInit {
         specialDatePrice: [''],
         startDate:        [''],
         endDate:          [''],
+        gramPrice:  0,
+        eightPrice: 0,
+        halfPrice:  0,
+        quarterPrice: 0,
+        ouncePrice: 0,
       }
     )
 

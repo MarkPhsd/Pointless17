@@ -1,4 +1,5 @@
 @import "/src/mixins.scss";
+@import '~@angular/material/theming';
 
 .grid-container {
   --gap: 5px;
@@ -17,6 +18,10 @@
 
 .item-span {
   grid-column: 1 / span 2;
+}
+
+.balance-low {
+  // color: mat-color($accent, default);
 }
 
 .header-grid {

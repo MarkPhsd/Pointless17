@@ -211,6 +211,9 @@ import { ProfileDemographicsComponent } from '../modules/admin/profiles/parts/de
 import { ProfileIDCardInfoComponent } from '../modules/admin/profiles/parts/profile-idcard-info/profile-idcard-info.component';
 import { OrderCardsComponent } from '../modules/orders/order-cards/order-cards.component';
 import { OrdersListComponent } from '../modules/orders/orders-list/orders-list.component';
+import { PriceTierEditComponent, PriceTierEditComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
+import { PriceTierLineEditComponent } from '../modules/admin/products/price-tiers/price-tier-line-edit/price-tier-line-edit.component';
+import { PriceTiersComponent } from '../modules/tv-menu/price-tiers/price-tiers.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
 
@@ -311,6 +314,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodListComponent,
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
+    PriceTierEditComponent,
+    PriceTierLineEditComponent,
+    PriceTiersComponent,
     PosListComponent,
     PosOrderComponent,
     PosOrderItemEditComponent,

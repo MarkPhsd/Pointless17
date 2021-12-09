@@ -29,7 +29,7 @@ export class PromptGroupEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any
   )
   {
-    // console.log('prompt id', data)
+    this.prompt  = {} as  IPromptGroup;
     this.inputForm =  this.promptService.initForm(this.inputForm)
     if (data) {
       this.id = data
@@ -39,7 +39,7 @@ export class PromptGroupEditComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // console.log('prompt id', data)
+    console.log('this.id ngoninit', this.id)
     if (this.id) {
      const site = this.siteService.getAssignedSite();
      this.prompt = await this.promptService.getPrompt(site, this.id).pipe().toPromise();
@@ -47,8 +47,9 @@ export class PromptGroupEditComponent implements OnInit {
    }
  }
 
-  getPrompt(id: any) {
+  getPrompt(id: number) {
     this.inputForm =  this.promptService.initForm(this.inputForm)
+    console.log('this.id ngoninit', this.id, this.prompt)
     if (  this.inputForm ) {
       if (!id || id == 0) {
         this.prompt  = {} as  IPromptGroup;
@@ -74,7 +75,7 @@ export class PromptGroupEditComponent implements OnInit {
           this.notifyEvent(`Update item. ${error}`, "Failure")
           resolve(false)
         })
-        
+
        }
       }
     )

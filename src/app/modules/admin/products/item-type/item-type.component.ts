@@ -4,9 +4,7 @@ import { Observable, Subject ,fromEvent } from 'rxjs';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { AllCommunityModules, Module, GridApi } from '@ag-grid-community/all-modules';
+import {  GridApi } from '@ag-grid-community/all-modules';
 
 // import {AgGridAngular} from 'ag-grid-angular';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -339,10 +337,10 @@ export class ItemTypeComponent implements OnInit {
               items.push(item)
             })
 
-          await  this.itemTypeService.deleteItems(site, items).pipe().toPromise();
-          this._snackBar.open('Items Deleted', 'Success', {duration: 2000})
-          this.refreshData();
-
+          this.itemTypeService.deleteItems(site, items).subscribe(data => {
+            this._snackBar.open('Items Deleted', 'Success', {duration: 2000})
+            this.refreshData();
+          });
         }
       }
   }

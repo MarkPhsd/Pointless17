@@ -185,11 +185,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     }
 
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
-      { width:        '300px',
-        minWidth:     '300px',
-        height:       height,
-        minHeight:    height,
-        data : item
+      { width     : '300px',
+        minWidth  : '300px',
+        height    : height,
+        minHeight : height,
+        data      : item
       },
     )
 

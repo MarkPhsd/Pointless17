@@ -1,9 +1,7 @@
 import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService} from 'src/app/_services';
-import { MatDialog } from '@angular/material/dialog';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
@@ -16,7 +14,6 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptSubResults, MenuSubPromptSearchModel } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';

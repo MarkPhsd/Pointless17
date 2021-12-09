@@ -1,15 +1,21 @@
-<mat-card *ngIf="order.clients_POSOrders">
+<mat-card *ngIf="order && order.clients_POSOrders">
 
   <mat-card-subtitle>
     <div class="grid-contact">
       <div class="grid-item float-left">
-        {{order.clients_POSOrders.firstName}} {{order.clients_POSOrders.lastName}}
+        {{order?.clients_POSOrders?.firstName}} {{order?.clients_POSOrders?.lastName}}
       </div>
       <div *ngIf="canRemoveClient" class="grid-item-button">
-        <button mat-button (click)="removeClient()"><mat-icon>clear</mat-icon>Clear</button>
+        <button mat-button
+                (click)="removeClient()">
+            <mat-icon>clear</mat-icon>Clear
+        </button>
       </div>
       <div *ngIf="order.clientID !=0" class="grid-item-button">
-        <button mat-button (click)="openClient()"><mat-icon>open_in_new</mat-icon>View</button>
+        <button mat-button
+                (click)="openClient()">
+            <mat-icon>open_in_new</mat-icon>View
+        </button>
       </div>
     </div>
   </mat-card-subtitle>
@@ -17,15 +23,16 @@
   <mat-card-content>
     <div class="transaction-data">
       <div > Phone </div>
-      <div> {{order.clients_POSOrders.phone}}</div>
+      <div> {{order?.clients_POSOrders?.phone}}</div>
       <div > Account   </div>
-      <div> {{order.clients_POSOrders.accountNumber}}</div>
+      <div> {{order?.clients_POSOrders?.accountNumber}}</div>
       <div > Type  </div>
-      <div> {{order.clients_POSOrders.client_Type.name}}</div>
+
+      <div *ngIf="order.clients_POSOrders && order.clients_POSOrders.client_Type">  {{order?.clients_POSOrders?.client_Type.name}}</div>
       <div > Points </div>
-      <div> {{order.clients_POSOrders.loyaltyPoints}} | {{ order.clients_POSOrders.loyaltyPointValue | currency }} </div>
+      <div> {{order?.clients_POSOrders?.loyaltyPoints}} | {{ order?.clients_POSOrders?.loyaltyPointValue | currency }} </div>
       <div > Age </div>
-      <div> {{order.clients_POSOrders.age}} | DOB ({{order.clients_POSOrders.dob | date : 'shortDate' }}) </div>
+      <div> {{order?.clients_POSOrders?.age}} | DOB ({{order?.clients_POSOrders?.dob | date : 'shortDate' }}) </div>
     </div>
   </mat-card-content>
 </mat-card>
@@ -37,6 +44,9 @@
     </app-client-search-selector>
   </span>
   <span class="new-button float-left" >
-    <button mat-button (click)="gotoAddClient()"><mat-icon>add</mat-icon>New </button>
+    <button mat-button
+            (click)="gotoAddClient()">
+            <mat-icon>add</mat-icon>New
+    </button>
   </span>
 </mat-card>

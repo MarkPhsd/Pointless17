@@ -87,8 +87,13 @@ export class AppInitService  {
 
   apiBaseUrl() {
     if (this.apiUrl) { return this.apiUrl };
+
+    if (!this.apiUrl) {
+      this.apiUrl = localStorage.getItem('storedApiUrl')
+    }
+
     if (!this.appConfig) {
-      // throw Error('Config file not loaded!');
+
       this.useAppGate = false
       this.router.navigate(['/apisetting']);
       return ''

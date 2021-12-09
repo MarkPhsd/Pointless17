@@ -268,7 +268,6 @@ export class POSOrderItemServiceService {
 
   }
 
-
   //modify item
   changeModifierNote(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
@@ -283,7 +282,6 @@ export class POSOrderItemServiceService {
     return  this.http.post<IPOSOrder>(url , posOrderItem)
 
   }
-
 
   changeItemQuantity(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 

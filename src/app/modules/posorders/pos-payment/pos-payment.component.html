@@ -57,6 +57,7 @@
             <div class="grid-header-item" *ngIf="stepSelection == 2">
               <mat-card class="card-dimensions">
                 <mat-card-content>
+
                   <div class="item-container"  *ngIf="paymentMethod">
                     <div>
                       <h4>
@@ -64,7 +65,8 @@
                       </h4>
                     </div>
                   </div>
-                  <div class="item-container ">
+
+                  <div class="item-container item-buttons-container">
                     <span class ="action-buttons">
                       <button mat-button (click)="goToPaymentMethod()" >
                         Start Over
@@ -75,6 +77,7 @@
                       <button mat-button (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon></button>
                     </span>
                   </div>
+
                   <div class="item-container keypad">
                     <app-key-pad
                       [inputForm]        ="checkNumberForm"
@@ -104,7 +107,8 @@
                       </h5>
                     </div>
                   </div>
-                  <div class="item-container ">
+
+                  <div class="item-container item-buttons-container">
                     <span class ="action-buttons">
                       <button mat-button (click)="goToPaymentMethod()" >
                         Start Over
@@ -121,6 +125,7 @@
                       </button>
                     </span>
                   </div>
+
                   <div class="item-container keypad">
                     <app-key-pad
                       [inputForm]        ="pointValueForm"
@@ -148,7 +153,7 @@
                       </h4>
                     </div>
                   </div>
-                  <div class="item-container ">
+                  <div class="item-container  item-buttons-container">
                     <span class ="action-buttons">
                       <button mat-button (click)="goToPaymentMethod()" >
                         Start Over

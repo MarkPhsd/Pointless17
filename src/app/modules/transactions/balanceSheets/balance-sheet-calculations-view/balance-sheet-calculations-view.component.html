@@ -5,9 +5,13 @@
     <span *ngIf="sheet.overUnderTotal < 0">Current Balance under</span>
     <span *ngIf="sheet.overUnderTotal == 0">Current Balance</span>
   </div>
-  <div class="calculation"
-    [ngStyle]="{'color':sheet.overUnderTotal >= 0 ? '' : 'red' }" >
-    {{sheet.overUnderTotal | currency}}
+  <div class="calculation">
+    <span color="warn" class="balance-low" *ngIf="sheet.overUnderTotal>=0">
+      {{sheet.overUnderTotal | currency}}
+    </span>
+    <span class="balance-low" *ngIf="sheet.overUnderTotal<0">
+      {{sheet.overUnderTotal | currency}}
+    </span>
   </div>
 
   <div>Total Sales</div>  <div class="calculation"> {{sheet.salesTotal     | currency}} </div>
@@ -26,8 +30,13 @@
   <div  *ngIf="currentBalance">Adjusted Balance</div>
   <div class="calculation"
        *ngIf="currentBalance"
-       [ngStyle]="{'color':currentBalance >= 0 ? '' : 'red' }" >
-    {{currentBalance | currency}} </div>
+    >
+    <span *ngIf="currentBalance>=0">
+      {{currentBalance | currency}}
+    </span>
+    <span color="warn" *ngIf="currentBalance<0">
+      {{currentBalance | currency}}
+    </span>
 
-
+  </div>
 </div>
