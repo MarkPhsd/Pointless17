@@ -1,9 +1,20 @@
 <div class="buttons-format flex-container">
 
+    <div *ngIf="enableAdd">
+      <button
+              mat-button
+
+              class="button"
+              (click)="onOutPutAdd()">
+              <mat-icon>add</mat-icon>
+        <span >Add</span>
+      </button>
+    </div>
+
     <div *ngIf="viewOrder">
       <button
               mat-button
-              color="primary"
+
               class="button"
               (click)="onOutputViewOrder()">
               <mat-icon>expand</mat-icon>
@@ -27,8 +38,8 @@
 
     <div >
       <button mat-button
-          class="button"
-          (click)="updateItem()">
+              class="button"
+              (click)="updateItem()">
           <mat-icon>save</mat-icon>
           <span *ngIf="!smallDevice">Save</span>
       </button>

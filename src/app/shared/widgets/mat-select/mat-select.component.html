@@ -2,15 +2,20 @@
   <div [formGroup]="inputForm">
       <div class="grid-container">
             <div class="filterItem" >
-          <mat-form-field appearance="outline">
+          <mat-form-field
+            [class]="class"
+            appearance="outline">
             <mat-label><ng-content></ng-content></mat-label>
             <mat-select
-                        type="number"
-                        [formControlName] ="fieldName"
-                        name="species"
+                  type="number"
+                  [formControlName] ="fieldName"
+                  name="species"
+                  (selectionChange)="setItemOutPut($event.value)"
               >
               <div *ngIf="(list$ | async) as list" >
-                <mat-option *ngFor="let item of list"  [value]="item.id">
+                <mat-option
+                    *ngFor="let item of list"
+                     [value]="item">
                     {{item.name}}
                 </mat-option>
               </div>
@@ -20,3 +25,4 @@
       </div>
     </div>
   </div>
+

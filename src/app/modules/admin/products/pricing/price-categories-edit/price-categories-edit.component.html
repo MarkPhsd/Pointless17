@@ -16,12 +16,17 @@
             <div *ngIf="showMore">
               <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
             </div>
+            <div *ngIf="!showMore">
+              <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show More Prices</button>
+            </div>
+
             <div *ngIf="!showTime">
               <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
             </div>
             <div *ngIf="showTime">
               <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
             </div>
+
             <div *ngIf="!showConversions">
               <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Show Conversions</button>
             </div>

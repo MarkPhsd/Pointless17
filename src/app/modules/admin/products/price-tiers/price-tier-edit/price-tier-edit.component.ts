@@ -2,12 +2,18 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable, of, Subscription } from 'rxjs';
 import { FbPriceTierService } from 'src/app/_form-builder/fb-price-tier';
 import { PriceTierPrice,PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 import { PriceTierPriceService } from 'src/app/_services/menu/price-tier-price.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
+export interface WeightProfile {
+  name: string;
+  from: number;
+  to:   number;
+  weight: number
+}
 @Component({
   selector: 'app-price-tier-edit',
   templateUrl: './price-tier-edit.component.html',
@@ -15,7 +21,16 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PriceTierEditComponent implements OnInit {
 
+  weightProfile$ : Observable<WeightProfile[]>;
+  weightProfile = [
+    {name: 'Gram', from: 1,to: 3.49,weight: 1},
+    {name: 'Eight', from: 3.5, to: 6.99, weight: 3.5},
+    {name: 'Quarter', from: 7,to: 13.99,weight: 7},
+    {name: 'Half', from: 14,to: 27.99, weight: 14},
+    {name: 'Ounce', from: 28,to: 28.2,weight: 28},
+  ] as WeightProfile[]
 
+  weightSelectForm              : FormGroup;
   inputForm               : FormGroup;
   priceTier               : PriceTiers;
   priceTierPrice          : PriceTierPrice;
@@ -24,6 +39,7 @@ export class PriceTierEditComponent implements OnInit {
   showWeightPrices: boolean;
   showConversions: boolean;
   showTime: boolean;
+
   get priceTierPrices() : FormArray {
     return this.inputForm.get('priceTierPrices') as FormArray;
   }
@@ -38,10 +54,29 @@ export class PriceTierEditComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: PriceTiers
     )
   {
+
     if (data) {
       this.priceTier = data
     }
+
+    this.initWeightProfileObjservable();
+    this.initWeigthSelectform();
     this.refreshData()
+  }
+
+  initWeigthSelectform() {
+    this.weightSelectForm = this.fb.group({
+      weightProfile: []
+    })
+    this.weightSelectForm.valueChanges.subscribe( data=> {
+      const profile =  data as WeightProfile
+      console.log('data', data)
+    })
+  }
+
+  //assign value of weight list to observable for selector.
+  initWeightProfileObjservable() {
+    this.weightProfile$ = of(this.weightProfile)
   }
 
   ngOnInit(): void {
@@ -87,7 +122,7 @@ export class PriceTierEditComponent implements OnInit {
     )
   }
 
-  addPrice() {
+  addPrice(event) {
     let pricing = this.priceTier.priceTierPrices;
     const item =  {} as PriceTierPrice;
     item.productPriceID = this.priceTier.id;
@@ -209,12 +244,45 @@ export class PriceTierEditComponent implements OnInit {
     )
   }
 
+  setWeightProfile(weightProfile, index) {
+    // const index = 0;
+    //index is the price in the price array.
+    const prof = weightProfile as WeightProfile
+    console.log('weight', weightProfile, index)
+
+                            //this.checkoutFormGroup.get('products')
+    const arrayControl   = this.inputForm.controls['priceTierPrices'] as FormArray;
+    const item           = arrayControl.at(index);
+    let price            = item.value as PriceTierPrice
+
+    if (price) {
+      price.flatQuantity = prof.weight.toString()
+      price.priceName    = prof.name
+      price.quantityFrom = prof.from.toString()
+      price.quantityTo   = prof.to.toString();
+
+      // console.log('item.value  from set weight',  item.value )
+      this.setItemvalue(price,index)
+    }
+  }
+
+  //this.items.at(index).patchValue(...)
+  setItemvalue(item, i) {
+    // console.log('setItemvalue', item, i)
+    if (item) {
+      let prices = this.inputForm.controls['priceTierPrices'] as FormArray;
+      prices.at(i).patchValue(item)
+    }
+  }
+
+  getItem(item, i) {
+    console.log(item, i)
+  }
 
   removeItem(i) {
     let prices = this.inputForm.controls['priceTierPrices'] as FormArray;
     prices.removeAt(i)
   }
-
 
   copyItem(event) {
     //do confirm of delete some how.
@@ -234,7 +302,6 @@ export class PriceTierEditComponent implements OnInit {
     console.log('toggleWeightPrices')
     this.showWeightPrices = !this.showWeightPrices
   }
-
 
   onCancel(event) {
     this.dialogRef.close();
