@@ -1,10 +1,9 @@
 
 <mat-card>
 
-  <mat-card-title>
+  <mat-card-title *ngIf="priceCategory">
     <mat-icon>edit</mat-icon> {{priceCategory.name}}
-    <mat-divider>
-    </mat-divider>
+    <mat-divider> </mat-divider>
   </mat-card-title>
 
   <mat-card-subtitle>
@@ -17,21 +16,18 @@
             <div *ngIf="showMore">
               <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
             </div>
-
             <div *ngIf="!showTime">
               <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
             </div>
             <div *ngIf="showTime">
               <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
             </div>
-
             <div *ngIf="!showConversions">
               <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Show Conversions</button>
             </div>
             <div *ngIf="showConversions">
               <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Hide Conversions</button>
             </div>
-
             <div>
               <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Toggle Price By Weight</button>
             </div>
@@ -44,10 +40,8 @@
               (outputupdatedeleteItem)="deleteCategory($event)"
               (outputupdateonCancel)  ="onCancel($event)"
               (outputCopy)            ="copyItem($event)"
-
           ></app-edit-buttons-standard>
         </div>
-
       </div>
     <mat-divider>
     </mat-divider>
@@ -71,10 +65,10 @@
       <div class="grid-header-container">
         <div *ngIf="productPrices">
           <div formArrayName="productPrices"
-            *ngFor="let item of productPrices.controls; let i = index;">
+               *ngFor="let item of productPrices.controls; let i = index;">
 
              <mat-card>
-              <mat-card-subtitle>
+                <mat-card-subtitle>
                 </mat-card-subtitle>
                 <mat-card-content>
 

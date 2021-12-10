@@ -8,18 +8,7 @@ export interface IPriceCategoryPaged {
 
 }
 
-export interface PriceCategorySearchModel {
- name:                  string;
- pageSize:              number;
- pageNumber:            number;
- pageCount:             number;
- recordCount:           number;
- currentPage:           number;
- lastPag:               number;
- isLastPage:            number;
- isFirstPage:           number;
- loadChildren     :     boolean;
-}
+
 
 export interface IPriceCategories {
   id:            number;
@@ -80,6 +69,12 @@ export interface ProductPrice {
   ouncePrice:       number;
 }
 
+export interface IPriceTierPaged {
+
+  results      : PriceTiers[]
+  paging       : IPagedList
+}
+
 export interface PriceTiers {
   id:              number;
   name:            string;
@@ -90,7 +85,7 @@ export interface PriceTiers {
 
 export interface PriceTierPrice {
   id:             number;
-  productPriceID: number;
+  productPriceID: number; //pricetier
   quantityFrom:   string;
   quantityTo:     string;
   retail:         string;
@@ -109,7 +104,10 @@ export interface PriceTierPrice {
   weekDays:       string;
   flatQuantity:   string;
   priceName:      string;
+  rateOrPrice:    boolean;
 }
+
+
 
 export interface UnitType {
   id:               number;
@@ -138,19 +136,6 @@ export interface IUnitTypePaged {
   paging       : IPagedList
 
 }
-
-export interface UnitTypeSearchModel {
-  name:                  string;
-  pageSize:              number;
-  pageNumber:            number;
-  pageCount:             number;
-  recordCount:           number;
-  currentPage:           number;
-  lastPag:               number;
-  isLastPage:            number;
-  isFirstPage:           number;
-  loadChildren     :     boolean;
- }
 
  export interface ProductPrice2 {
   id:               number;

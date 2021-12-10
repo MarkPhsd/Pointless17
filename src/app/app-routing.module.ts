@@ -40,7 +40,7 @@ import { HammerCardComponent } from './shared/widgets/hammer-card/hammer-card.co
 import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
 import { TierMenuComponent } from './modules/menu/tierMenu/tier-menu/tier-menu.component';
 import { PriceCategoriesComponent } from './modules/admin/products/pricing/price-categories/price-categories.component';
-import { PriceTiersComponent } from './modules/tv-menu/price-tiers/price-tiers.component';
+import { TVPriceTiersComponent } from './modules/tv-menu/price-tiers/price-tiers.component';
 import { RegisterAccountExistingUserComponent } from './modules/login/registration/register-account-existing-user/register-account-existing-user.component';
 import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
@@ -100,6 +100,8 @@ import { PosOperationsComponent } from './modules/transactions/operations/pos-op
 import { CompanyEditComponent } from './modules/admin/company-edit/company-edit.component';
 import { CardComponent } from './modules/admin/reports/card/card.component';
 import { APISettingComponent } from './modules/login/apisetting/apisetting.component';
+import { PriceTiersComponent } from './modules/admin/products/price-tiers/price-tiers.component';
+import { TierPricesComponent } from './modules/menu/tierMenu/tier-prices/tier-prices.component';
 
 
 const routes: Routes = [
@@ -177,6 +179,8 @@ const routes: Routes = [
         { path: 'price-categories', component: PriceCategoriesComponent, data: { animation: 'isLeft'}},
         { path: 'unit-types', component: UnitTypeListComponent, data: { animation: 'isLeft'}},
         { path: 'printer-locations', component: PrinterLocationsComponent, data: { animation: 'isLeft'}},
+
+        { path: 'price-tier-list-edit', component: PriceTiersComponent, data: {animation: 'isLeft'}},
         //PrinterLocationsComponent
 
         { path: 'app-order-items-list', component: OrderItemsListComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
@@ -191,8 +195,6 @@ const routes: Routes = [
         { path: 'metrc-categories-list', component: ItemCategoriesListComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'}},
 
         { path: 'metrc-facilities-list', component: FacilitiesListComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
-        //  metrc-facilities-list
-        //FacilitiesListComponent
 
         //inventory InventoryListComponent
         { path: 'inventory-list', component: InventoryListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
@@ -220,7 +222,7 @@ const routes: Routes = [
         { path: 'imagecapture', component: ImageCaptureComponent,data: { animation: 'isLeft'}},
         { path: 'review-edit', component: ReviewEditComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
 
-        { path: 'tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
+
         { path: 'cat-alternate', component: CategoriesAlternateComponent},
 
         //settings
@@ -243,10 +245,14 @@ const routes: Routes = [
 
         { path: 'company-edit', component: CompanyEditComponent,   canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
+        { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
       ]
     },
     // app-pos-order-item/
     // { path: 'pos-order-item', component: PosOrderItemComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+    { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: { animation: 'isLeft'}},
+
+    { path: 'view-price-tiers', component: TierPricesComponent ,data: { animation: 'isLeft'}},
 
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
     { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
@@ -257,9 +263,6 @@ const routes: Routes = [
 
     { path: 'printerSettings', component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
     { path: 'brandslist2', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-    // { path: 'menu-accordion', component: AccordionComponent, data: { animation: 'isLeft'}},
-    // { path: 'menu-minimal', component: MenuMinimalComponent, data: { animation: 'isLeft'}},
-    // { path: 'menu-tiny', component: MenuTinyComponent, data: { animation: 'isLeft'}},
     { path: 'catscroll', component: CategoryScrollComponent, data: { animation: 'isLeft'}},
 
     { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
@@ -277,9 +280,7 @@ const routes: Routes = [
     { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
 
     { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
-    { path: 'price-tier', component: PriceTiersComponent },
 
-    { path: 'tvpricetiers', component: TvPriceSpecialsComponent ,data: { animation: 'isLeft'}},
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
 
     //app-widget-card

@@ -1,4 +1,4 @@
-import { Component,  Inject,  Input, Output, OnInit } from '@angular/core';
+import { Component,  Inject,  Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
@@ -7,12 +7,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPriceCategories, IPriceCategory2,
           IUnitTypePaged,
-          ProductPrice, ProductPrice2, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
+          ProductPrice, ProductPrice2 } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { FbPriceCategoriesService } from 'src/app/_form-builder/fb-price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { PriceCategoryItemService } from 'src/app/_services/menu/price-category-item.service';
 import { PriceCategories } from 'src/app/_interfaces/menu/menu-products';
+import { SearchModel } from 'src/app/_services/system/paging.service';
 
 @Component({
   selector: 'app-price-categories-edit',
@@ -52,7 +53,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     }
     const site          = this.siteService.getAssignedSite()
 
-    let unitSearchModel = {} as UnitTypeSearchModel;
+    let unitSearchModel = {} as SearchModel;
     unitSearchModel.pageNumber = 1;
     unitSearchModel.pageSize   = 1000;
 
@@ -178,7 +179,6 @@ export class PriceCategoriesEditComponent implements OnInit {
     } catch (error) {
       console.log('error', error)
     }
-
   }
 
   async updateCategory(item): Promise<boolean> {
@@ -347,11 +347,11 @@ export class PriceCategoriesEditComponent implements OnInit {
         specialDatePrice: [''],
         startDate:        [''],
         endDate:          [''],
-        gramPrice:  0,
-        eightPrice: 0,
-        halfPrice:  0,
-        quarterPrice: 0,
-        ouncePrice: 0,
+        gramPrice:        0,
+        eightPrice:       0,
+        halfPrice:        0,
+        quarterPrice:     0,
+        ouncePrice:       0,
       }
     )
 

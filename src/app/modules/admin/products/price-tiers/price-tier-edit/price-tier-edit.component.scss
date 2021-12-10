@@ -1,0 +1,21 @@
+.grid-price-tier-price {
+    display: grid;
+    grid-template-columns: repeat(auto, 10);
+    width: 50%;
+}
+
+.grid-flow {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+}
+
+.field {
+  width: 75px;
+  max-width: 75px;
+}
+.prices-fields {
+  width: 75px;
+  max-width: 75px;
+}

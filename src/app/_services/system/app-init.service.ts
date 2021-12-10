@@ -9,10 +9,11 @@ declare var window: any;
 @Injectable()
 export class AppInitService  {
 
-  private appConfig: any;
+  appConfig: any;
   private apiUrl: any;
   public  useAppGate: boolean;
-
+  public logo: string;
+  // public get appConfig
   private httpClient: HttpClient;
 
   constructor(handler: HttpBackend,
@@ -33,7 +34,6 @@ export class AppInitService  {
 
     // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
-    console.log('init app init', this.apiUrl)
 
     if (!this.platFormService.webMode) {
       if ( !this.apiUrl ){
@@ -48,9 +48,10 @@ export class AppInitService  {
 
     if (this.platFormService.webMode) {
       try {
-        this.appConfig = await this.httpClient.get('/assets/app-config.json').toPromise();
-        this.apiUrl = this.appConfig.apiUrl
+        this.appConfig  = await this.httpClient.get('/assets/app-config.json').toPromise();
+        this.apiUrl     = this.appConfig.apiUrl
         this.useAppGate = this.appConfig.useAppGate
+        this.logo       = this.appConfig.logo;
       } catch (error) {
         this.useAppGate = false
         this.router.navigate(['/apisetting']);

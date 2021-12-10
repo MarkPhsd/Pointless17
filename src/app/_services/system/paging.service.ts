@@ -1,5 +1,17 @@
 import { Injectable } from '@angular/core';
 
+export interface SearchModel {
+  name:                  string;
+  pageSize:              number;
+  pageNumber:            number;
+  pageCount:             number;
+  recordCount:           number;
+  currentPage:           number;
+  lastPag:               number;
+  isLastPage:            number;
+  isFirstPage:           number;
+  loadChildren     :     boolean;
+}
 export interface IPagedList {
   pageCount:       number;
   currentPage:     number;

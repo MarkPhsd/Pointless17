@@ -24,9 +24,10 @@
           <div *ngFor="let flower of flowers$ | async" >
             <div *ngIf="flower.priceTier === header" >
                 <div class="grid-item menu-items ">
-                  <button mat-raised-button class="viewbutton" ><mat-icon>open_in_new</mat-icon></button>
+                  <button mat-raised-button class="viewbutton">
+                    <mat-icon>open_in_new</mat-icon>
+                  </button>
                   {{flower.flower}}
-
                 </div>
             </div>
           </div>

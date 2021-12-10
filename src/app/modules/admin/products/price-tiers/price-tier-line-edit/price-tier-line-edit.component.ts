@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPriceCategories, IPriceCategory2,
           IUnitTypePaged,
-          ProductPrice, ProductPrice2, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
+          ProductPrice, ProductPrice2 } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { FbPriceCategoriesService } from 'src/app/_form-builder/fb-price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';

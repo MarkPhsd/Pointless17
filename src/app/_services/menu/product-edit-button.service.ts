@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Component, Input, OnInit } from '@angular/core';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { IMenuItem, PriceTiers } from 'src/app/_interfaces/menu/menu-products';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProducteditComponent} from 'src/app/modules/admin/products/productedit/productedit.component';
 // import { ItemPercentageDiscountProductEditComponent } from 'src/app/modules/admin/productedit/item-percentage-discount-product-edit/item-percentage-discount-product-edit.component';
@@ -29,6 +29,7 @@ import { AdjustPaymentComponent } from 'src/app/modules/posorders/adjust/adjust-
 import { PaymentWithAction } from '../transactions/pospayment.service';
 import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-groups/prompt-group-edit/prompt-group-edit.component';
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
+import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 
 export interface IBalanceDuePayload {
   order: IPOSOrder;
@@ -140,6 +141,18 @@ export class ProductEditButtonService {
   openPriceEditor(data: IPriceCategories) {
     let dialogRef: any;
     dialogRef = this.dialog.open(PriceCategoriesEditComponent,
+      { width:        '75vw',
+        minWidth:     '800px',
+        height:       '85vh',
+        minHeight:    '600px',
+        data : data
+      },
+    )
+  }
+
+  openPriceTierEditor(data: PriceTiers) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(PriceTierEditComponent,
       { width:        '75vw',
         minWidth:     '800px',
         height:       '85vh',

@@ -1,10 +1,10 @@
-import { IPriceCategoryPaged, IUnitTypePaged, PriceCategorySearchModel, UnitType, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
+import { IUnitTypePaged, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable, Subject, throwError  } from 'rxjs';
+import { Observable, } from 'rxjs';
 import { ISite,  }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
-import { IItemBasic } from './menu.service';
+import { SearchModel } from '../system/paging.service';
 
 
 @Injectable({
@@ -38,7 +38,7 @@ export class UnitTypesService {
 
    }
 
-   getUnitTypesSearch(site: ISite, searchModel: PriceCategorySearchModel): Observable<IUnitTypePaged> {
+   getUnitTypesSearch(site: ISite, searchModel: SearchModel): Observable<IUnitTypePaged> {
 
     const controller =  "/UnitTypes/"
 
@@ -52,7 +52,7 @@ export class UnitTypesService {
 
   };
 
-  getBasicTypes(site: ISite,  searchModel: PriceCategorySearchModel): Observable<IUnitTypePaged> {
+  getBasicTypes(site: ISite,  searchModel: SearchModel): Observable<IUnitTypePaged> {
 
     const controller =  "/UnitTypes/"
 
@@ -82,7 +82,7 @@ get(site: ISite, id: number): Observable<UnitType> {
 };
 
   // api/PriceCategories/GetPriceCategories
-  getList(site: ISite, searchModel: UnitTypeSearchModel): Observable<IUnitTypePaged> {
+  getList(site: ISite, searchModel: SearchModel): Observable<IUnitTypePaged> {
 
     const controller =  "/UnitTypes/"
 

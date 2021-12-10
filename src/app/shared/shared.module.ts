@@ -70,7 +70,6 @@ import { ButtonRendererComponent } from '../_components/btn-renderer.component';
 import { BtBlueToothScannerComponent } from './widgets/bt-blue-tooth-scanner/bt-blue-tooth-scanner.component';
 import { AutofocusDirective } from '../_directives/auto-focus-input.directive';
 import { HammerModule } from '@angular/platform-browser';
-import { HAMMER_GESTURE_CONFIG, HammerGestureConfig } from '@angular/platform-browser';
 import { ClientSearchSelectorComponent } from './widgets/client-search-selector/client-search-selector.component';
 import { LimitValuesProgressBarsComponent } from '../modules/posorders/limit-values-progress-bars/limit-values-progress-bars.component';
 import { ProgressBarComponent } from './widgets/progress-bar/progress-bar.component';

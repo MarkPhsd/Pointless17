@@ -1,39 +1,33 @@
 
 import { Injectable } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
-
-import { IPriceCategories, ProductPrice } from '../_interfaces/menu/price-categories';
-
+import { PriceTierPrice,PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 
 @Injectable({
   providedIn: 'root'
 })
 
-export class FbPriceCategoriesService {
+export class FbPriceTierService {
 
   constructor(private fb: FormBuilder) { }
-
-
-  intitFormData(inputForm: FormGroup, data: IPriceCategories) {
+  intitFormData(inputForm: FormGroup, data: PriceTiers) {
     inputForm.patchValue(data)
     return inputForm
   }
-
 
   initForm(fb: FormGroup): FormGroup {
     fb = this.fb.group({
       id:                           [''],
       name:                         [''],
-      productPrices:      this.fb.array([
-
+      priceTierPrices:      this.fb.array([
       ]),
     })
     return fb
   }
 
-  addPrice(inputForm: FormGroup, arrayType: ProductPrice) {
+  addPrice(inputForm: FormGroup, arrayType: PriceTierPrice) {
     if (!inputForm) { return }
-    const control = inputForm.get('productPrices') as FormArray;
+    const control = inputForm.get('priceTierPrices') as FormArray;
     if (!control)   { return }
     control.push(this.fb.control(arrayType))
   }

@@ -4,6 +4,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable} from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { ICompany } from 'src/app/_interfaces';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 @Component({
   selector: 'app-tier-prices',
@@ -12,36 +13,28 @@ import { ICompany } from 'src/app/_interfaces';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TierPricesComponent implements OnInit {
-
-  tvPriceMenuTiers$: Observable<ITVMenuPriceTiers[]>;
-  tvPriceMenuTiers: ITVMenuPriceTiers[];
   priceTier: string;
   compName: string;
   company = {} as ICompany;
   logo: string;
 
-  constructor(private tvMenuPriceTierService: TvMenuPriceTierService,
-              private siteService:            SitesService)
+  constructor(
+    private tvMenuPriceTierService: TvMenuPriceTierService,
+    private siteService:            SitesService,
+    private appInitService        : AppInitService,)
   { }
 
-
-
   ngOnInit() {
-    this.initMenuPrices();
 
+    this.appInitService.init();
     if (this.company === undefined) {
     } else {
       this.compName = this.company.compName
     }
 
-    this.logo = `${environment.logo}`
+    this.logo     = `${environment.logo}`
     this.compName = `${environment.company}`
   }
-
-  initMenuPrices() {
-     this.tvPriceMenuTiers$  = this.tvMenuPriceTierService.getTVMenuPriceTiers(this.siteService.getAssignedSite())
-  }
-
 
   setPriceTier(tierName: string) {
     this.priceTier = tierName

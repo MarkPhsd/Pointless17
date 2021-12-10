@@ -1,22 +1,17 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable, Subject, throwError  } from 'rxjs';
-import { IProduct, IProductCategory, ISite, MenuItem,  }  from 'src/app/_interfaces';
-import { IMenuItem } from '../../_interfaces/menu/menu-products';
-import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
+import { Observable  } from 'rxjs';
+import { ISite,  }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
-import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
-import { SitesService } from '../reporting/sites.service';
 
-import { IPriceCategories, PriceCategorySearchModel,IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
-
+import { IPriceCategories, IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
+import { SearchModel } from '../system/paging.service';
 
 export interface IItemBasic{
   name: string;
   id  : number;
   type: number;
 }
-
 
 @Injectable({
   providedIn: 'root'
@@ -97,7 +92,7 @@ export class PriceCategoriesService {
 
 
   // api/PriceCategories/GetPriceCategories
-  getList(site: ISite, searchModel: PriceCategorySearchModel): Observable<IPriceCategoryPaged> {
+  getList(site: ISite, searchModel: SearchModel): Observable<IPriceCategoryPaged> {
 
     const controller =  "/PriceCategories/"
 

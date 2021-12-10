@@ -1,16 +1,12 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Inject, Input, OnChanges, OnInit, SimpleChange, ViewChild } from '@angular/core';
-import * as angular from 'angular';
-import { Observable, throwError } from 'rxjs';
-import { catchError, delay, repeatWhen } from 'rxjs/operators';
-import { IFlowerMenu, ITVMenuPriceTiers, TVMenuPriceTierItem, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { Component, Input, OnChanges, OnInit, SimpleChange,  } from '@angular/core';
+import { Observable,  } from 'rxjs';
+import { IFlowerMenu,  TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { trigger, state, style, animate, transition } from '@angular/animations';
 
 @Component({
   selector: 'app-tier-items',
   templateUrl: './tier-items.component.html',
   styleUrls: ['./tier-items.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TierItemsComponent implements OnInit, OnChanges {
 
@@ -24,7 +20,6 @@ export class TierItemsComponent implements OnInit, OnChanges {
               private siteService:            SitesService,
               ) {
       }
-
 
   ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     if (this.flowers$) {

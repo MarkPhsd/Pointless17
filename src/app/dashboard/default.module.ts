@@ -211,11 +211,11 @@ import { ProfileDemographicsComponent } from '../modules/admin/profiles/parts/de
 import { ProfileIDCardInfoComponent } from '../modules/admin/profiles/parts/profile-idcard-info/profile-idcard-info.component';
 import { OrderCardsComponent } from '../modules/orders/order-cards/order-cards.component';
 import { OrdersListComponent } from '../modules/orders/orders-list/orders-list.component';
-import { PriceTierEditComponent, PriceTierEditComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 import { PriceTierLineEditComponent } from '../modules/admin/products/price-tiers/price-tier-line-edit/price-tier-line-edit.component';
-import { PriceTiersComponent } from '../modules/tv-menu/price-tiers/price-tiers.component';
-// import { QuicklinkStrategy } from 'ngx-quicklink';
-// import { TruncateTextPipe } from '../_pipes/truncate-text.pipe';
+import { TVPriceTiersComponent } from '../modules/tv-menu/price-tiers/price-tiers.component';
+import { PriceTierEditComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
+import { PriceTiersComponent } from '../modules/admin/products/price-tiers/price-tiers.component';
+import { TiersWithPricesComponent } from '../modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -314,9 +314,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodListComponent,
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
-    PriceTierEditComponent,
     PriceTierLineEditComponent,
+    PriceTierEditComponent,
     PriceTiersComponent,
+    TVPriceTiersComponent,
     PosListComponent,
     PosOrderComponent,
     PosOrderItemEditComponent,
@@ -393,6 +394,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TierMenuComponent,
     TierItemsComponent,
     TierPricesComponent,
+    TiersWithPricesComponent,
     TimeScheduleComponent,
     TypeFilterComponent,
     TypeResultsSelectorComponent,
@@ -432,7 +434,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     AdjustItemComponent,
     SimpleTinyComponent,
     RouterModule,
-    // QuicklinkStrategy,
     BrowserAnimationsModule,
     HammerModule,
   ],
@@ -466,8 +467,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ThemesService,
     UserService,
     ItemTypeService,
-   // { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
-   // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+
    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
    {provide: RouteReuseStrategy , useClass: RouteReuseService},
 

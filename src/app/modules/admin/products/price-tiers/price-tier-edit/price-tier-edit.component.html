@@ -1,1 +1,257 @@
-<p>price-tier-edit works!</p>
+
+<mat-card>
+  <mat-card-title   *ngIf="priceTier">
+    Price Tiers {{priceTier.name}}
+    <!-- <mat-divider> </mat-divider>s -->
+  </mat-card-title>
+  <mat-card-content>
+
+     <div *ngIf="showMorePrices">
+        <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
+      </div>
+      <div *ngIf="!showMorePrices">
+        <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
+      </div>
+
+      <div *ngIf="!showTime">
+        <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
+      </div>
+      <div *ngIf="showTime">
+        <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
+      </div>
+
+    <app-edit-buttons-standard
+        (outputeupdateItem)     ="updatePriceTier($event)"
+        (outputupdateItemExit)  ="updatePriceTierExit($event)"
+        (outputupdatedeleteItem)="deleteTier($event)"
+        (outputupdateonCancel)  ="onCancel($event)"
+        (outputCopy)            ="copyItem($event)"
+    ></app-edit-buttons-standard>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-title>
+
+  </mat-card-title>
+
+  <mat-card-content>
+
+    <div *ngIf="priceTier && inputForm"
+        [formGroup]="inputForm">
+
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput
+                type="text"
+                formControlName="name"
+                class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div class="grid-header-container">
+        <div *ngIf="priceTier && priceTier.priceTierPrices">
+          <div formArrayName="priceTierPrices"
+              *ngFor="let item of priceTierPrices.controls; let i = index;">
+              <!-- priceTierPrices.controls -->
+            <mat-card>
+              <mat-card-subtitle>
+                </mat-card-subtitle>
+                <mat-card-content>
+
+                <div  [formGroupName]="i" >
+
+                  <div class="grid-flow">
+                    <div class="field">
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >From</mat-label>
+                        <input matInput
+                              type="number"
+                              formControlName="quantityFrom"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div class="field">
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >To</mat-label>
+                        <input matInput
+                              type="number"
+                              formControlName="quantityTo"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div class="field">
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >Price</mat-label>
+                        <input matInput
+                              currencyMask
+                              type="number"
+                              formControlName="retail"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+
+                    <div class="field">
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >Quantity</mat-label>
+                        <input matInput
+                              type="number"
+                              formControlName="flatQuantity"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div class="field">
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >Description</mat-label>
+                        <input matInput
+                              currencyMask
+                              type="text"
+                              formControlName="priceName"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <div class="field">
+                      <mat-form-field appearance="outline" class="prices-fields">
+                        <mat-label >Retail</mat-label>
+                        <input matInput
+                              currencyMask
+                              type="currency"
+                              formControlName="retail"
+                              class="form-control" >
+                      </mat-form-field>
+                    </div>
+
+                    <span *ngIf="showMorePrices">
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 1</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price1"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 2</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price2"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 3</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price3"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 4</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price4"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 5</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price5"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 6</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price6"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 7</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price7"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                      <div class="field">
+                        <mat-form-field appearance="outline" class="prices-fields">
+                          <mat-label >Price 8</mat-label>
+                          <input matInput
+                                currencyMask
+                                type="currency"
+                                formControlName="price8"
+                                class="form-control" >
+                        </mat-form-field>
+                      </div>
+
+                    </span>
+
+
+                    "startTime":"","endTime":"","specialPrice":"1","weekDays":""
+                    "rateOrPrice":true
+                  </div>
+
+                  <div class="price-tier-buttons">
+                    <app-edit-buttons-standard
+                      (outputeupdateItem)     ="updateItem(item)"
+                      (outputupdatedeleteItem)="deleteItem(item, i)"
+                      (outputCopy)            ="copyItem(item)"
+                      [hideExit]=             "true"
+                      ></app-edit-buttons-standard>
+                  </div>
+
+                  <button mat-button
+                          class="button"
+                          color="primary"
+                          (click)="addPrice()">
+                  <mat-icon>add</mat-icon>Add</button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+JSON:
+<div  *ngIf="priceTier">
+  {{priceTier.name}}
+  {{priceTier | json}}
+</div>

@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { IPriceCategories, IPriceCategoryPaged, PriceCategorySearchModel } from 'src/app/_interfaces/menu/price-categories';
+import { IPriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -17,6 +17,7 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
+import { SearchModel } from 'src/app/_services/system/paging.service';
 
 
 @Component({
@@ -170,16 +171,16 @@ export class PriceCategoriesComponent  {
     //initialize filter each time before getting data.
     //the filter fields are stored as variables not as an object since forms
     //and other things are required per grid.
-    initPriceCategorySearchModel(): PriceCategorySearchModel {
-      let priceCategorySearchModel        = {} as PriceCategorySearchModel;
+    initSearchModel(): SearchModel {
+      let searchModel        = {} as SearchModel;
       let search                    = ''
       if (this.searchProductsValue.value)
       {search = this.searchProductsValue.value  }
-      priceCategorySearchModel.loadChildren = false;
-      priceCategorySearchModel.name         = search
-      priceCategorySearchModel.pageSize     = this.pageSize
-      priceCategorySearchModel.pageNumber   = this.currentPage
-      return priceCategorySearchModel
+      searchModel.loadChildren = false;
+      searchModel.name         = search
+      searchModel.pageSize     = this.pageSize
+      searchModel.pageNumber   = this.currentPage
+      return searchModel
     }
 
     getNumberOfPages() {
@@ -187,10 +188,10 @@ export class PriceCategoriesComponent  {
     }
 
     //this is called from subject rxjs obversablve above constructor.
-    refreshSearch(): Observable<IPriceCategoryPaged[]> {
+    refreshSearch(): Observable<IPriceCategoryPaged> {
       this.currentPage         = 1
       const site               = this.siteService.getAssignedSite()
-      const productSearchModel = this.initPriceCategorySearchModel();
+      const searchModel        = this.initSearchModel();
       this.params.startRow     = 1;
       this.params.endRow       = this.pageSize;
       this.onGridReady(this.params)
@@ -220,17 +221,15 @@ export class PriceCategoriesComponent  {
     //ag-grid standard method
     getRowData(params, startRow: number, endRow: number):  Observable<IPriceCategoryPaged>  {
       this.currentPage                      = this.setCurrentPage(startRow, endRow)
-      const priceCategorySearchModel        = this.initPriceCategorySearchModel();
-
+      const searchModel        = this.initSearchModel();
       const site                            = this.siteService.getAssignedSite()
-      return this.priceCategoryService.getList(site, priceCategorySearchModel)
+      return this.priceCategoryService.getList(site, searchModel)
     }
 
     //ag-grid standard method
     getRowDataItems(priceCategoryID: number) {
       const site                      = this.siteService.getAssignedSite()
       const priceCategory$ = this.priceCategoryService.getPriceCategory(site, priceCategoryID)
-      // return this.priceCategory$
       priceCategory$.subscribe(data => this.priceCategory = data)
     }
 

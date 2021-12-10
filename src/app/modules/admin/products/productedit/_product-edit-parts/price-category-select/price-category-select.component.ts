@@ -1,13 +1,11 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { MenuService } from 'src/app/_services';
-import { FormControl, FormGroup } from '@angular/forms';
-import { IProduct } from 'src/app/_interfaces';
-import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { FormGroup } from '@angular/forms';
+import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { IPriceCategories, PriceCategorySearchModel,IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
+import { IPriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
 
 @Component({
   selector: 'app-price-category-select',
@@ -32,14 +30,11 @@ export class PriceCategorySelectComponent implements OnInit {
           }
 
   ngOnInit(): void {
-
     if (this.inputForm) {
 
     }
-
     const site = this.sitesService.getAssignedSite();
     this.priceCategoriesPaged$ = this.menuPricingService.getPriceCategoriesNoChildrenByPage(site);
-
   }
 
   getPriceCategory(event) {

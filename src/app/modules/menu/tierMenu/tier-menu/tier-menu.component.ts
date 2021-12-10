@@ -10,6 +10,4 @@ export class TierMenuComponent {
 
   constructor() { }
 
-
-
 }

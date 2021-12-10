@@ -1,10 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup, FormArray } from '@angular/forms';
-
+import { FormGroup } from '@angular/forms';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import {  UnitType, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
+import { UnitType } from 'src/app/_interfaces/menu/price-categories';
+import { SearchModel } from 'src/app/_services/system/paging.service';
 
 @Component({
   selector: 'app-unit-type-fields',
@@ -25,7 +25,7 @@ export class UnitTypeFieldsComponent implements OnInit {
   ngOnInit(): void {
 
     const site   = this.siteService.getAssignedSite();
-    let search = {} as UnitTypeSearchModel
+    let search = {} as SearchModel
     search.pageSize = 100;
     search.pageNumber = 1;
 

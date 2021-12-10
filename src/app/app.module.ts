@@ -23,7 +23,6 @@ import { ErrorInterceptor } from './_http-interceptors/error.interceptor';
 import { AppGateComponent } from './modules/app-gate/app-gate/app-gate.component';
 import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
 import { TvPriceTierMenuItemsComponent } from './modules/tv-menu/tv-price-tier-menu-items/tv-price-tier-menu-items.component';
-import { PriceTiersComponent } from './modules/tv-menu/price-tiers/price-tiers.component';
 import { RegisterAccountExistingUserComponent } from './modules/login/registration/register-account-existing-user/register-account-existing-user.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
 import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
@@ -81,7 +80,6 @@ export function init_app(appLoadService: AppInitService) {
     LoginComponent,
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
-    PriceTiersComponent,
     RegisterAccountExistingUserComponent,
     RegisterAccountExistingUserWithTokenComponent,
     RegisterAccountMainComponent,

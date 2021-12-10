@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TvPriceTiersComponent } from './tv-price-tiers.component';
+import { TiersWithPricesComponent } from './tiers-with-prices.component';
 
-describe('TvPriceTiersComponent', () => {
-  let component: TvPriceTiersComponent;
-  let fixture: ComponentFixture<TvPriceTiersComponent>;
+describe('TiersWithPricesComponent', () => {
+  let component: TiersWithPricesComponent;
+  let fixture: ComponentFixture<TiersWithPricesComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ TvPriceTiersComponent ]
+      declarations: [ TiersWithPricesComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TvPriceTiersComponent);
+    fixture = TestBed.createComponent(TiersWithPricesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

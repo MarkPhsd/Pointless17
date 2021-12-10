@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import {  IUnitTypePaged,  UnitType, UnitTypeSearchModel } from 'src/app/_interfaces/menu/price-categories';
+import {  IUnitTypePaged,  UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
@@ -17,6 +17,7 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
+import { SearchModel } from 'src/app/_services/system/paging.service';
 
 @Component({
   selector: 'unit-types',
@@ -160,8 +161,8 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
-  initSearchModel(): UnitTypeSearchModel {
-    let searchModel        = {} as UnitTypeSearchModel;
+  initSearchModel(): SearchModel {
+    let searchModel        = {} as SearchModel;
     let search                    = ''
     if (this.searchItemValue.value)
     {search = this.searchItemValue.value  }
@@ -177,7 +178,7 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
   }
 
   //this is called from subject rxjs obversablve above constructor.
-  refreshSearch(): Observable<UnitTypeSearchModel> {
+  refreshSearch(): Observable<SearchModel> {
     this.currentPage          = 1
     const site                = this.siteService.getAssignedSite()
     const UnitTypeSearchModel = this.initSearchModel();

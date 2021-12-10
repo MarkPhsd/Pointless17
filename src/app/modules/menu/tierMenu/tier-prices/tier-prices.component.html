@@ -7,57 +7,19 @@
     </div>
   </mat-card-title>
 
-<mat-card-content>
-  <div fxLayout="column">
-    <div fxLayout="row" fxLayoutAlign="space-around center">
-      <div fxLayout="column">
-        <div class="grid-container">
-          <div class="grid-item headings">
-            Tier
-          </div>
-          <div class="grid-item headings">
-            Gram
-          </div>
-          <div class="grid-item headings">
-            8th
-          </div>
-          <div class="grid-item headings">
-            Quarter
-          </div>
-          <div class="grid-item headings">
-            Half
-          </div>
-          <div class="grid-item headings">
-            Ounce
-          </div>
-        </div>
+  <mat-card-content>
 
-        <div *ngFor="let tier of tvPriceMenuTiers$ | async">
-          <div class="grid-container" >
-            <div class="grid-item  prices">
-              <button mat-raised-button class="viewbutton"  (click)="setPriceTier(tier.name)" ><mat-icon>open_in_new</mat-icon></button>
-              {{tier.name}}
-            </div>
-            <div *ngFor="let item of tier.tvMenuPriceTierItems">
-              <div class="grid-itemprices prices">
-
-                  {{ item?.currentPrice | currency }}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
+    <tiers-with-prices
+      (outPutSetPriceTier)="setPriceTier($event)">
+    </tiers-with-prices>
 
     <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
       <div  fxLayout="row" class="itemlist"  fxlayoutGap="20px" class="stat-cards">
-        <app-tier-items [priceTier]="priceTier"></app-tier-items>
+        <app-tier-items
+              [priceTier]="priceTier"
+        ></app-tier-items>
       </div>
     </div>
-
-
 
   </mat-card-content>
 </mat-card>
