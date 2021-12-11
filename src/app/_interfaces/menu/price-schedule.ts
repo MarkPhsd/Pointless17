@@ -72,6 +72,7 @@ export interface DiscountInfo {
   allItems: boolean;
   typeID?:  number;
   privateScheduleID: number;
+  sort:     number;
 }
 
 export enum AndOr {

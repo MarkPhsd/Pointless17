@@ -1,11 +1,11 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable  } from 'rxjs';
+import { BehaviorSubject, Observable  } from 'rxjs';
 import { ISite }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
-import { IPriceSchedule, IPriceSearchModel, PriceAdjustScheduleTypes, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
+import { DiscountInfo, IPriceSchedule, IPriceSearchModel, PriceAdjustScheduleTypes, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,13 @@ export class PriceScheduleService {
   @Input() pageCount:    number;
   @Input() pageSize      = 25;
   @Input() pageNumber    = 1;
+
+  private _priceSchedule         = new BehaviorSubject<IPriceSchedule>(null);
+  public  priceSchedule$         = this._priceSchedule.asObservable();
+
+  updateItemPriceSchedule(priceSchedule:  IPriceSchedule) {
+    this._priceSchedule.next(priceSchedule);
+  }
 
   constructor(
               private httpCache: HttpClientCacheService,
@@ -37,6 +44,20 @@ export class PriceScheduleService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.httpClient.delete<any>(url)
+
+  }
+
+  deleteItemDiscountSelected(site: ISite, id: number): Observable<DiscountInfo> {
+
+    const controller = "/PriceSchedules/"
+
+    const endPoint = `deleteItemDiscount`;
+
+    const parameters= `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.delete<DiscountInfo>(url)
 
   }
 
@@ -127,6 +148,20 @@ export class PriceScheduleService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.httpClient.post<IPriceSchedule>(url, priceSchedule)
+
+  }
+
+  postItemList(site: ISite, list: DiscountInfo[]): Observable<DiscountInfo[]> {
+
+    const controller = "/PriceSchedules/"
+
+    const endPoint = `PostMenuItemsList`;
+
+    const parameters= ``;
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.post<DiscountInfo[]>(url, list)
 
   }
 

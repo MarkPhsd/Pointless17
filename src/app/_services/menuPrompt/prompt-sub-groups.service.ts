@@ -60,7 +60,6 @@ export class  PromptSubGroupsService {
 
   }
 
-
   searchSubPrompts(site: ISite, searchModel: MenuSubPromptSearchModel): Observable<IPromptSubResults> {
 
     const controller = "/promptSubGroups/"

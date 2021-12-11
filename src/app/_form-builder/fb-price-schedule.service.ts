@@ -236,6 +236,7 @@ export class FbPriceScheduleService {
             quantity:   [info.quantity],
             itemID:     [info.itemID],
             name:       [info.name],
+            sort:       [info.sort],
           }))
         })
       } catch (error) {
@@ -297,6 +298,7 @@ export class FbPriceScheduleService {
         quantity:   [info.quantity],
         itemID:     info.itemID,
         name:       info.name,
+        sort:       [info.sort],
       }))
       return
     }
@@ -307,6 +309,7 @@ export class FbPriceScheduleService {
       quantity:   '0',
       itemID:     '',
       name:       '',
+      sort:       [info.sort],
     }))
 
   }

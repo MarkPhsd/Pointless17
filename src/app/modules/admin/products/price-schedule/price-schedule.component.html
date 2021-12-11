@@ -1,4 +1,11 @@
 <div class="container">
+  <span>
+    <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+  </span>
+  <span>
+    <button mat-button (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+  </span>
+
   <div *ngIf="priceSchedule"  >
     <div *ngIf="inputForm">
       <div [formGroup]="inputForm">
@@ -40,10 +47,11 @@
                 </mat-tab>
 
                 <mat-tab label="Finalize">
-                  <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
-                  <button mat-button (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
-
-                  <button  mat-button (click)="logInfo()">log info </button> -->
+                  <!-- <button  mat-button (click)="logInfo()">log info </button> -->
+                  App Sort Items
+                  <app-item-sort
+                    [priceSchedule]="priceSchedule"
+                  ></app-item-sort>
 
                   <div *ngIf="devMode && priceScheduleTracking">
 

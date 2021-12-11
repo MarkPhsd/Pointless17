@@ -216,6 +216,7 @@ import { TVPriceTiersComponent } from '../modules/tv-menu/price-tiers/price-tier
 import { PriceTierEditComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 import { PriceTiersComponent } from '../modules/admin/products/price-tiers/price-tiers.component';
 import { TiersWithPricesComponent } from '../modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component';
+import { ItemSortComponent } from '../modules/admin/products/price-schedule/item-selections/item-sort/item-sort.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -338,6 +339,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceScheduleConstraintsComponent,
     PriceScheduleInfoComponent,
     PriceScheduleFieldsComponent,
+    ItemSortComponent,
     ProfileListComponent,
     ProfileComponent,
     ProfileDemographicsComponent,

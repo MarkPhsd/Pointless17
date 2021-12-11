@@ -1,0 +1,27 @@
+
+<div fxFlex fxLayout="column start" >
+
+  <div *ngIf="discountInfos">
+    <h4>Drag / Drop to Sort</h4>
+    <div  class="drag-list"
+          cdkDropList
+          #accordionList="cdkDropList"
+          (cdkDropListDropped)  ="drop($event)"
+        >
+      <div *ngFor="let item of discountInfos; let index = index;"
+           class="pop"
+           cdkDrag
+           (click)="assignItem(item, index)"
+        >
+          {{item?.name}}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="discountInfo">
+    <button  mat-button
+            (click)="deleteSelected()">
+            Remove {{discountInfo?.name | truncateText: 8}}
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+</div>

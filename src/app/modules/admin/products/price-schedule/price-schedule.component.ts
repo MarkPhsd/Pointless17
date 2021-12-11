@@ -60,6 +60,11 @@ export class PriceScheduleComponent {
 
     //subscribe to form
     this.inputForm.valueChanges.subscribe(data => {
+      // console.log('priceScheduleTracking', this.priceScheduleTracking)
+      // console.log('data', data)
+      if (!data) {
+        console.log('no data output from Price Schedule Service. Component')
+      }
       this.priceScheduleTracking = data
       // this.priceSchedule = data;
     })
@@ -85,7 +90,7 @@ export class PriceScheduleComponent {
     this.toggleSideBar()
     const id = this.route.snapshot.paramMap.get('id');
     this.getItem( parseInt( id ))
-    // this.initPriceScheduleService();
+    this.initPriceScheduleService();
   }
 
   toggleSideBar() {
@@ -113,7 +118,6 @@ export class PriceScheduleComponent {
           this.priceSchedule = data
           this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
           this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
-          this.initPriceScheduleService();
         }
       )
     }
