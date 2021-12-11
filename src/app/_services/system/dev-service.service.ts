@@ -7,7 +7,8 @@ export class DevService {
 
   constructor() { }
 
-  public getdevMode(): boolean {
+  getdevMode(): boolean {
     return false;
   }
+
 }

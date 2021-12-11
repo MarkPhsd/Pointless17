@@ -8,48 +8,47 @@
 
   <mat-card-subtitle>
 
-    <div class="grid-header-container">
-      <div>
+      <div class="grid-simple-price-container grid-width" >
+
         <div *ngIf="!showMore">
-            <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show More Prices</button>
-            </div>
-            <div *ngIf="showMore">
-              <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
-            </div>
-            <div *ngIf="!showMore">
-              <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show More Prices</button>
-            </div>
+          <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show More Prices</button>
+        </div>
+        <div *ngIf="showMore">
+          <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
+        </div>
 
-            <div *ngIf="!showTime">
-              <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
-            </div>
-            <div *ngIf="showTime">
-              <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
-            </div>
+        <div *ngIf="!showTime">
+          <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
+        </div>
+        <div *ngIf="showTime">
+          <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
+        </div>
 
-            <div *ngIf="!showConversions">
-              <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Show Conversions</button>
-            </div>
-            <div *ngIf="showConversions">
-              <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Hide Conversions</button>
-            </div>
-            <div>
-              <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Toggle Price By Weight</button>
-            </div>
+        <div *ngIf="!showConversions">
+          <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Show Conversions</button>
+        </div>
+
+        <div *ngIf="showConversions">
+          <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Hide Conversions</button>
         </div>
 
         <div>
-          <app-edit-buttons-standard
-              (outputeupdateItem)     ="updateCategory($event)"
-              (outputupdateItemExit)  ="updateCategoryExit($event)"
-              (outputupdatedeleteItem)="deleteCategory($event)"
-              (outputupdateonCancel)  ="onCancel($event)"
-              (outputCopy)            ="copyItem($event)"
-          ></app-edit-buttons-standard>
+          <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Toggle Tiers</button>
         </div>
+
       </div>
-    <mat-divider>
-    </mat-divider>
+
+      <div class="buttons-margin">
+        <app-edit-buttons-standard
+            (outputeupdateItem)     ="updateCategory($event)"
+            (outputupdateItemExit)  ="updateCategoryExit($event)"
+            (outputupdatedeleteItem)="deleteCategory($event)"
+            (outputupdateonCancel)  ="onCancel($event)"
+            (outputCopy)            ="copyItem($event)"
+        ></app-edit-buttons-standard>
+      </div>
+
+    <mat-divider></mat-divider>
 
   </mat-card-subtitle>
 
@@ -241,7 +240,14 @@
 
 
                     </div>
-                    <div *ngIf="showTime" class="grid-time-container">
+                    <div *ngIf="showTime  ||
+                                (priceCategory.productPrices[i].startDate != undefined ||
+                                priceCategory.productPrices[i].specialDatePrice != undefined ||
+                                priceCategory.productPrices[i].endDate != undefined ||
+                                priceCategory.productPrices[i].startTime != undefined ||
+                                priceCategory.productPrices[i].endTime != undefined)
+                                "
+                          class="grid-time-container">
                       <div >
                         Time & Date based price will automatically apply when dates or time assigned.
                       </div>
@@ -297,6 +303,7 @@
 
                     </div>
                   </div>
+
                   <div  *ngIf="showMore || showTime"  class="grid-price-time-container">
                     <div  *ngIf="showMore"  class=" grid-multiprice-container">
 
@@ -471,8 +478,13 @@
                     </div>
 
                   </div>
-
-                  <div *ngIf="showConversions" class="grid-conversion-container">
+                  <div *ngIf="showConversions
+                            || ((priceCategory.productPrices[i].partMultiplyer !=1
+                                && priceCategory.productPrices[i].partMultiplyer != undefined) ||
+                                (priceCategory.productPrices[i].unitPartRatio !=1
+                                && priceCategory.productPrices[i].partMultiplyer != undefined))
+                            "
+                       class="grid-conversion-container">
                     <mat-card>
                       <div>
                         Conversions multiply values against the primary count.
@@ -507,6 +519,34 @@
                       </mat-card-content>
 
                     </mat-card>
+
+                  </div>
+
+                  <div *ngIf="showPriceTiers || (priceCategory.productPrices[i].tierPriceGroup != 0 )" >
+                    <span>
+                      <mat-form-field appearance="outline">
+                        <mat-label>Tier</mat-label>
+                      <mat-select
+                                  type="number"
+                                  formControlName = "tierPriceGroup"
+                                  name="tierPriceGroup"
+                                >
+                        <div *ngIf="(priceTiers$ | async) as list" >
+                            <mat-option [value]="0"><mat-icon>clear</mat-icon></mat-option>
+                            <mat-option *ngFor="let item of list"
+                                        [value]="item.id">
+                              {{item.name}}
+                            </mat-option>
+                          </div>
+                        </mat-select>
+                      </mat-form-field>
+                    </span>
+                    <span *ngIf="priceCategory.productPrices[i].tierPriceGroup as itemID">
+                      <button mat-button
+                        (click)="openPriceTier(itemID)">
+                        <mat-icon>expand</mat-icon>
+                      </button>
+                    </span>
 
                   </div>
 

@@ -19,16 +19,21 @@
               <div *ngIf="item.name === 'BOGO - Item Discounts'">
                 <mat-icon>label</mat-icon>
               </div>
+
               <div *ngIf="item.name === 'Percent Off'">
                 <mat-icon>class</mat-icon>
-
               </div>
+
               <div *ngIf="item.name === 'Money Off'">
                 <mat-icon>money</mat-icon>
-
               </div>
+
               <div *ngIf="item.name === 'Free Item Off'">
                 <mat-icon>loyalty</mat-icon>
+              </div>
+
+              <div *ngIf="item.name === 'Menu List'">
+                <mat-icon>menu</mat-icon>
               </div>
 
               {{item.name}}
@@ -48,7 +53,11 @@
                 </mat-card-title>
 
                 <mat-card-content>
-
+                  <div *ngIf="selectedAdjustScheduleTypes.name === 'Menu List'">
+                    <div class="discount-description">
+                      For menu lists to be displayed or avalible under certain conditions.
+                    </div>
+                  </div>
                   <div *ngIf="selectedAdjustScheduleTypes.name === 'BOGO - Item Discounts'">
                     <div class="discount-description">
                       Items to be selected from the rewards section.

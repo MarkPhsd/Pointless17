@@ -97,12 +97,15 @@
                             class="form-control" >
                     </mat-form-field>
                   </div>
+
                   <div >
+
                     <app-price-category-select
-                                [priceCategoryID]="priceCategoryID"
-                                [inputForm]="productForm" >
+                                [priceCategoryID]="product.priceCategory"
+                                [inputForm]      ="productForm" >
                     </app-price-category-select>
                   </div>
+
                 </div>
 
                 <div class="grid-item">

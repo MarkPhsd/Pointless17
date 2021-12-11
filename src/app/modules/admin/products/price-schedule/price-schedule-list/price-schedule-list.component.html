@@ -108,6 +108,10 @@
             <mat-icon class="mat-icon">loyalty</mat-icon>
           </div>
 
+          <div *ngIf="item.name === 'Menu List'">
+            <mat-icon class="mat-icon">loyalty</mat-icon>
+          </div>
+
           {{item.name}}
         </mat-button-toggle>
       </mat-button-toggle-group>
@@ -121,6 +125,10 @@
         <button mat-button
           class="assign-button"
           (click)="deleteSelected()"> <mat-icon>delete</mat-icon>Delete Selected
+        </button>
+        <button mat-button
+              class="assign-button"
+              (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
         </button>
       </div>
     </div>

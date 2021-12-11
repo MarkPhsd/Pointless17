@@ -2,12 +2,8 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPriceSchedule, PriceAdjustScheduleTypes } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { Observable, Subscription } from 'rxjs';
-import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
-import { ItemCategoriesEditComponent } from 'src/app/modules/admin/metrc/items/item-categories-edit/item-categories-edit.component';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 
 @Component({

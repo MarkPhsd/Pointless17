@@ -39,8 +39,9 @@
           *ngFor="let item of submenu" >
         <div *ngIf="!item.minimized">
           <div class="menu" *userAuthorized="item.userType">
+            <!-- color="accent" -->
             <a mat-list-item
-                color="accent"
+
                 routerLinkActive={{item.routerLinkActive}}
                 routerLink=      {{item.routerLink}}>
               <mat-icon>{{ item.icon }}</mat-icon>
@@ -64,8 +65,9 @@
             <div  *ngFor="let item of submenu">
               <div  *userAuthorized="item.userType">
                 <div *ngIf="item.minimized">
+                  <!-- color="accent" -->
                   <button mat-menu-item
-                          color="accent"
+
                           routerLinkActive={{item.routerLinkActive}}
                           routerLink=      {{item.routerLink}}>
                     <mat-icon>{{ item.icon }}</mat-icon>

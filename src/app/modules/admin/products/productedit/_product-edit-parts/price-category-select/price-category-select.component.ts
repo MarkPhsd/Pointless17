@@ -37,6 +37,11 @@ export class PriceCategorySelectComponent implements OnInit {
     this.priceCategoriesPaged$ = this.menuPricingService.getPriceCategoriesNoChildrenByPage(site);
   }
 
+  openPriceCategory() {
+    if (this.priceCategoryID == 0) { return }
+    this.priceCategoryService.openPriceCategoryEditor(this.priceCategoryID)
+  }
+
   getPriceCategory(event) {
     const item = event
     if (item) {

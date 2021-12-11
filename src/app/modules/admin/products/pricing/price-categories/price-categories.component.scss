@@ -12,3 +12,10 @@
   grid-template-columns: 1fr 1fr;
   width: 50%;
 }
+
+.grid-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  width:  400px;
+}
+

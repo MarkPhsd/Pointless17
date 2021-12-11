@@ -94,7 +94,6 @@ export class PriceTierEditComponent implements OnInit {
   initInputFormSubscription() {
     this.inputForm.valueChanges.subscribe( data=> {
       // const profile =  data as WeightProfile
-
     })
   }
   //assign value of weight list to observable for selector.
@@ -165,7 +164,6 @@ export class PriceTierEditComponent implements OnInit {
     return this.priceTier;
   }
 
-
   updateItemPrice(item, i){
     const price = item.value as PriceTierPrice;
     this.updatePrice(price)
@@ -202,6 +200,8 @@ export class PriceTierEditComponent implements OnInit {
       const product$ = this.priceTierService.savePriceTier(site, priceTier)
       product$.subscribe( data => {
         this.notifyEvent('Item Updated', 'Success')
+        this.priceTier = data;
+        this.refreshData()
         resolve(true)
         }, error => {
           this.notifyEvent(`Update item. ${error}`, "Failure")
@@ -264,36 +264,50 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   deletePrice(item, i) {
-    const result = window.confirm('Are you sure you want to delete this price?')
-    if (!result) { return }
-
-    const price  = item.value as PriceTierPrice
-
     try {
-      if (!price.id) {
-        this.removeItem(i)
-        return
+      const result = window.confirm('Are you sure you want to delete this price?')
+      if (!result) { return }
+
+      const price  = item.value as PriceTierPrice
+
+      try {
+        if (!price.id) {
+          this.removeItem(i)
+          return
+        }
+      } catch (error) {
+        console.log('error ', error)
       }
+
+      console.log('deletePrice ')
+
+      const site = this.siteService.getAssignedSite()
+      if (!price) { return }
+        this.priceTierPriceService.deletePrice(site, price.id).subscribe( data =>{
+
+          this.removeItem(i)
+        }
+      )
     } catch (error) {
       console.log('error ', error)
     }
-
-    const site = this.siteService.getAssignedSite()
-    if (!price) { return }
-      this.priceTierPriceService.deletePrice(site, price.id).subscribe( data =>{
-        this.removeItem(i)
-      }
-    )
   }
 
   removeItem(i) {
+
     const site  = this.siteService.getAssignedSite();
+    console.log('remove item', i, this.priceTierPrices.length);
+
     if (this.priceTierPrices.length >= i) {
-      const item  = this.priceTierPrices.get(i) //.value as PriceTierPrice
-      const price = item.value as PriceTierPrice
+      // const item  = this.priceTierPrices.get(i) //.value as PriceTierPrice
+      // const price = item.value as PriceTierPrice
       console.log('i remove item', i)
-      this.priceTierPrices.removeAt(i)
-      return price
+      try {
+        this.priceTierPrices.removeAt(i)
+      } catch (error) {
+        console.log('remove item', error)
+      }
+      // return price
     }
   }
 

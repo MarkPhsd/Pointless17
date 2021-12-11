@@ -6,6 +6,8 @@ import { HttpClient } from '@angular/common/http';
 
 import { IPriceCategories, IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
 import { SearchModel } from '../system/paging.service';
+import { ProductEditButtonService } from './product-edit-button.service';
+import { SitesService } from '../reporting/sites.service';
 
 export interface IItemBasic{
   name: string;
@@ -25,16 +27,18 @@ export class PriceCategoriesService {
   @Input() pageSize    = 25;
   @Input() pageNumber  = 1;
 
-  constructor( private http: HttpClient,
-               private auth: AuthenticationService
+  constructor( private http                    : HttpClient,
+               private auth                    : AuthenticationService,
+               private productEditButtonService: ProductEditButtonService,
+               private siteService             : SitesService,
               )
   { }
 
   delete(site: ISite, id: number): Observable<IPriceCategories> {
 
-    const controller = "/PriceCategoriesSync/"
+    const controller = "/pricecategories/"
 
-    const endPoint = `DeletePriceCategoriesSync`
+    const endPoint = `DeletePriceCategory`
 
     const parameters = `?id=${id}`
 
@@ -148,6 +152,13 @@ export class PriceCategoriesService {
     }
   }
 
-
+  //move to methods
+  openPriceCategoryEditor(id: number) {
+    const site = this.siteService.getAssignedSite();
+    const price$ = this.getPriceCategory(site, id)
+    price$.subscribe( data => {
+      this.productEditButtonService.openPriceEditor(data)
+    })
+  }
 
 }

@@ -14,8 +14,9 @@
     </div>
   </mat-card-title>
   <mat-card-content>
+    <div class="grid-container grid-flow">
 
-     <div *ngIf="showMorePrices">
+      <div *ngIf="showMorePrices">
         <button mat-button (click)="toggleShowMore()"><mat-icon>money</mat-icon>Show Less Prices</button>
       </div>
       <div *ngIf="!showMorePrices">
@@ -28,6 +29,8 @@
       <div *ngIf="showTime">
         <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
       </div>
+
+    </div>
 
   </mat-card-content>
 </mat-card>
@@ -74,7 +77,7 @@
                     <div>
 
                           <div class="grid-flow">
-                            <div class="field">
+                            <!-- <div class="field">
                               <app-mat-select
                                   [class]     ="'prices-fields'"
                                   [inputForm] ="weightSelectForm"
@@ -83,7 +86,7 @@
                                   (outputItem)="setWeightProfile($event, i)"
                                   >
                               </app-mat-select>
-                            </div>
+                            </div> -->
 
                             <div class="field">
                               <mat-form-field appearance="outline"

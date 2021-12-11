@@ -7,6 +7,7 @@ import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
   TimeFrame, WeekDay
 } from 'src/app/_interfaces/menu/price-schedule';
+import { DevService } from 'src/app/_services';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -50,11 +51,19 @@ export class PriceScheduleComponent {
 
   _priceSchedule              : Subscription;
   priceScheduleTracking       : IPriceSchedule;
+  devMode                     : boolean;
 
   initPriceScheduleService() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       this.priceScheduleTracking = data
     })
+
+    //subscribe to form
+    this.inputForm.valueChanges.subscribe(data => {
+      this.priceScheduleTracking = data
+      // this.priceSchedule = data;
+    })
+
   }
 
   constructor(
@@ -66,9 +75,12 @@ export class PriceScheduleComponent {
       public  route                   : ActivatedRoute,
       private toolBarUIService        : ToolBarUIService,
       private router                  : Router,
+      private devModeService                 : DevService
     )
 
   {
+    this.devMode =  !this.devModeService.getdevMode();
+
     this.initForm()
     this.toggleSideBar()
     const id = this.route.snapshot.paramMap.get('id');
@@ -95,10 +107,9 @@ export class PriceScheduleComponent {
 
   getItem(id: number) {
     if (id) {
-      const site = this.siteService.getAssignedSite();
-      const item$ = this.priceScheduleService.getPriceSchedule(site, id)
-      item$.subscribe(data => {
-
+        const site = this.siteService.getAssignedSite();
+        const item$ = this.priceScheduleService.getPriceSchedule(site, id)
+        item$.subscribe(data => {
           this.priceSchedule = data
           this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
           this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
@@ -133,7 +144,6 @@ export class PriceScheduleComponent {
     if (data) {
        if (data.valid) {
         let  priceSchedule = data.value as IPriceSchedule;
-
         if (priceSchedule.clientTypes) {
           let clientTypes = priceSchedule.clientTypes
           if (clientTypes.length > 0) {
@@ -149,8 +159,8 @@ export class PriceScheduleComponent {
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
       // const priceSchedule = this.getPriceSchedule(this.inputForm)
-      const item = this.priceScheduleService.save(site, this.priceScheduleTracking)
-      item.subscribe(data => {
+      const item$ = this.priceScheduleService.save(site, this.priceScheduleTracking)
+      item$.subscribe( data => {
         this.snack.open('Item Saved', 'Success', {duration: 2000, verticalPosition: 'top'})
       })
     }
@@ -160,15 +170,13 @@ export class PriceScheduleComponent {
   }
 
   delete() {
-
     const result = window.confirm('Are you sure you want to delete this item?')
     if (!result) { return }
-
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
       const priceSchedule = this.getPriceSchedule(this.inputForm)
-      const item = this.priceScheduleService.delete(site, priceSchedule.id)
-      item.subscribe(data => {
+      const item$ = this.priceScheduleService.delete(site, priceSchedule.id)
+      item$.subscribe(data => {
         this.router.navigate(['/price-schedule-list'])
         this.snack.open('Item Deleted', 'Success', {duration: 2000})
       })

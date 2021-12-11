@@ -60,7 +60,7 @@
 
 <mat-menu #menu="matMenu"  @fade  *ngFor="let item of submenu" >
   <div  *ngIf="isAuthorized(item)" >
-    <button mat-menu-item color="accent">
+    <button mat-menu-item >
       <mat-icon>{{ item.icon }}</mat-icon>
       <span> {{ item.name }}</span>
     </button>

@@ -15,12 +15,19 @@ mat-form-field {
   grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
 }
 
+.grid-container-small {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 100px auto;
+}
 // .header-container {
 //   --gap: 10px;
 //   display: grid;
 //   gap: var(--gap);
 //   grid-template-columns: 200px 1fr;
 // }
+
 
 .header-container {
   --gap: 10px;

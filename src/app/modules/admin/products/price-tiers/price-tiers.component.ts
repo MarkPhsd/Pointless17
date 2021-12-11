@@ -317,18 +317,16 @@ export class PriceTiersComponent implements OnInit, AfterViewInit {
     }
 
     editPriceTier(e) {
-      console.log(e)
       const id = e.rowData.id
-      const site = this.siteService.getAssignedSite();
-      const price$ = this.priceTierService.getPriceTier(site, id)
-      price$.subscribe( data => {
-        this.productEditButtonService.openPriceTierEditor(data)
-      })
+      this.priceTierMethods.openPriceTier(id)
     }
 
     addNewTierGroup() {
-      this.priceTierMethods.addNewTierGroup();
+      this.priceTierMethods.addNewTierGroup().subscribe(data => {
+        this.listAll();
+      })
     }
+
     addPriceTier() {
       //add then edit.
       const site = this.siteService.getAssignedSite();

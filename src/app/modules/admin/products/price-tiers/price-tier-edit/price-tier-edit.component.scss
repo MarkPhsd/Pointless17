@@ -18,6 +18,10 @@
   grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
 }
 
+.grid-container {
+  width: 350px;
+}
+
 .divider-margin {
   margin-bottom: 5px;
 }

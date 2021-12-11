@@ -22,14 +22,23 @@
     </mat-form-field>
   </div>
 
-  <div>
-    <app-price-category-search
-          [id]         ="priceCategoryID"
-          [inputForm]  ="inputForm"
+  <div class="grid-container-2col" >
+    <div>
+      <app-price-category-search
+        [id]         ="priceCategory"
+        [inputForm]  ="inputForm"
         >
-    </app-price-category-search>
-  </div>
+      </app-price-category-search>
+    </div>
 
+    <div *ngIf="priceCategoryID  && priceCategoryID != 0">
+      <button mat-button
+              color="accent"
+              (click)="openPriceCategory()">
+        <mat-icon>expand</mat-icon>
+      </button>
+    </div>
+  </div>
 
   <div *ngIf="
        itemType.type === 'Retail Liquor'

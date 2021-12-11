@@ -24,11 +24,20 @@
   grid-row-gap: 2px;
 }
 
+.buttons-margin {
+  margin-top: 10px;
+}
+// grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
+
 .grid-simple-price-container {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-   grid-column-gap: 2px;
+  grid-column-gap: 2px;
   grid-row-gap: 2px;
+}
+
+.grid-width {
+  width: 400px;
 }
 
 .grid-multiprice-container {

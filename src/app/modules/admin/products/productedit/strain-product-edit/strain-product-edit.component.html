@@ -93,8 +93,6 @@
                 >
               </mat-form-field>
             </div>
-
-
             <div>
               <!-- <div>
                 <app-printer-location-selection [inputForm]="productForm"></app-printer-location-selection>
@@ -111,21 +109,22 @@
               <h4><mat-icon>price_change</mat-icon>Prices</h4>
             </div>
 
-            <div>
-              <app-price-category-select
-                          *ngIf="itemType.useType === 'product'"
-                          [itemType]        ="itemType"
-                          [priceCategoryID] ="priceCategoryID"
-                          [inputForm]       ="productForm" >
-              </app-price-category-select>
+            <div class="grid-container-small">
+              <div>
+                <app-price-category-select
+                  *ngIf="itemType.useType === 'product'"
+                  [itemType]        ="itemType"
+                  [priceCategoryID] ="product.priceCategory"
+                  [inputForm]       ="productForm" >
+                </app-price-category-select>
+              </div>
+
             </div>
 
             <div class="header">
               <h4><mat-icon>image</mat-icon>Images</h4>
             </div>
-
             <div>
-
                 <app-widget-uploader
                     [(fileNames)]="urlImageMain"
                     (messageOut) ="received_URLMainImage($event)"

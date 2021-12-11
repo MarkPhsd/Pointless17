@@ -25,7 +25,7 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
   templateUrl: './price-categories.component.html',
   styleUrls: ['./price-categories.component.scss']
 })
-export class PriceCategoriesComponent  {
+export class PriceCategoriesComponent implements OnInit, AfterViewInit {
   // implements OnInit
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -168,6 +168,17 @@ export class PriceCategoriesComponent  {
       this.refreshSearch()
     }
 
+    addCategory() {
+      //add then edit.
+      const site   = this.siteService.getAssignedSite();
+      const price  = {} as IPriceCategories
+      const price$ = this.priceCategoryService.save(site, price)
+      price$.subscribe( data => {
+        this.productEditButtonService.openPriceEditor(data)
+      })
+    }
+
+
     //initialize filter each time before getting data.
     //the filter fields are stored as variables not as an object since forms
     //and other things are required per grid.
@@ -203,8 +214,6 @@ export class PriceCategoriesComponent  {
       const site               = this.siteService.getAssignedSite()
       this.params.startRow     = 1;
       this.params.endRow       = this.pageSize;
-
-
     }
 
     //this doesn't change the page, but updates the properties for getting data from the server.
@@ -216,7 +225,6 @@ export class PriceCategoriesComponent  {
       if (tempStartRow < startRow) { return this.currentPage + 1 }
       return this.currentPage
     }
-
 
     //ag-grid standard method
     getRowData(params, startRow: number, endRow: number):  Observable<IPriceCategoryPaged>  {
@@ -270,7 +278,6 @@ export class PriceCategoriesComponent  {
       if (!this.gridApi) { return }
       this.gridApi.setDatasource(datasource);
     }
-
 
     //search method for debounce on form field
     displayFn(search) {
@@ -327,13 +334,8 @@ export class PriceCategoriesComponent  {
     }
 
     editCategoryFromGrid(e) {
-      console.log(e)
-      this.priceCategoryid = e.rowData.id
-      const site = this.siteService.getAssignedSite();
-      const price$ = this.priceCategoryService.getPriceCategory(site, this.priceCategoryid)
-      price$.subscribe( data => {
-        this.productEditButtonService.openPriceEditor(data)
-      })
+      console.log(e.rowData)
+      this.priceCategoryService.openPriceCategoryEditor(e.rowData.id)
     }
 
     childAddItem() {

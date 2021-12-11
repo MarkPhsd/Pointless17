@@ -4,8 +4,6 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
@@ -19,15 +17,15 @@ import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.serv
 import { IPriceSchedule, IPriceSearchModel, PS_SearchResultsPaged,PriceAdjustScheduleTypes } from 'src/app/_interfaces/menu/price-schedule';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { AgGridToggleComponent } from 'src/app/_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
-import { NullTemplateVisitor } from '@angular/compiler';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-price-schedule-list',
   templateUrl: './price-schedule-list.component.html',
   styleUrls: ['./price-schedule-list.component.scss']
 })
-export class PriceScheduleListComponent implements OnInit {
+export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -444,7 +442,6 @@ export class PriceScheduleListComponent implements OnInit {
     this.gridApi.setDatasource(datasource);
   }
 
-
   refreshImages(data) {
     const urlPath = this.urlPath
     if (urlPath) {
@@ -532,6 +529,10 @@ export class PriceScheduleListComponent implements OnInit {
   async editItemFromGrid(e) {
     if (!e) { return }
     const id = e.rowData.id
+    this.editItem(id)
+  }
+
+  editItem(id) {
     if (id) { this.router.navigate(['/price-schedule-edit', {id : id}]) }
   }
 
@@ -552,7 +553,19 @@ export class PriceScheduleListComponent implements OnInit {
     this.productEditButtonService.editTypes(this.selected)
   }
 
+  addSchedule() {
+    const site = this.siteService.getAssignedSite();
+    const priceSchedule = {} as IPriceSchedule;
+    this.priceScheduleService.save(site, priceSchedule).subscribe(data => {
+      this.editItem(data.id)
+    })
+  }
+
   deleteSelected() {
+
+    const result = window.confirm('Are you sure you want to delete this item?')
+    if (!result) { return }
+
     if (!this.selected) {
       this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
       return

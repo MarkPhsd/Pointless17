@@ -7,6 +7,15 @@
   width: 175px;
 }
 
+.grid-container-2col {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  // grid-template-columns: repeat( auto-fit, minmax(170px, 1fr) );
+  grid-template-columns: 150px auto;
+  width: 175px;
+}
+
 mat-form-field {
   display: inline-block;
   position: relative;

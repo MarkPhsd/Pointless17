@@ -11,6 +11,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -41,9 +42,10 @@ export class StrainProductEditComponent implements OnInit {
               private sanitizer : DomSanitizer,
               private awsBucket: AWSBucketService,
               private _snackBar: MatSnackBar,
+              private itemTypeService  : ItemTypeService,
+              private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
               private fbProductsService: FbProductsService,
-              private itemTypeService  : ItemTypeService,
               private dialogRef: MatDialogRef<StrainProductEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
     )
@@ -151,6 +153,10 @@ export class StrainProductEditComponent implements OnInit {
     }
   };
 
+  openPriceCategory() {
+    if (!this.product) { return }
+    this.priceCategoryService.openPriceCategoryEditor(this.product.priceCategory)
+  }
 
   onCancel(event) {
     this.dialogRef.close();

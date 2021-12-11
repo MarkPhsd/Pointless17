@@ -279,7 +279,10 @@ export class ProducteditComponent implements  OnInit  {
   }
 
 
-
+  openPriceCategory() {
+    if (!this.product) { return }
+    this.priceCategoryService.openPriceCategoryEditor(this.product.priceCategory)
+  }
 
   getProductTypeID(event) {
     console.log(event)

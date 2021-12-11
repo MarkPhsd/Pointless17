@@ -141,7 +141,7 @@ export class PriceTierMethodsService {
   }
 
 
-  addNewTierGroup() {
+  addNewTierGroup(): Observable<any> {
     const site = this.siteService.getAssignedSite();
       const price = {} as PriceTiers
       const price$ = this.priceTierService.savePriceTier(site, price)
@@ -153,9 +153,16 @@ export class PriceTierMethodsService {
            }
          )
       ).subscribe(data => {
-        this.productEditButtonService.openPriceTierEditor(data)
+        if (!data) {
+          return of("Failure")
+        }
+        if (data) {
+          this.productEditButtonService.openPriceTierEditor(data)
+          return of("success")
+        }
       }
     )
+    return EMPTY;
   }
 
   addPricesWithWeightProfiles(priceTier: PriceTiers, pricesArray: FormArray): PriceTiers {
@@ -174,6 +181,14 @@ export class PriceTierMethodsService {
                         ) {
     const  priceTierPrices = this.assignWeightValues(priceTier, price, prof)
     return priceTierPrices
+  }
+
+  openPriceTier(id: number) {
+    const site = this.siteService.getAssignedSite();
+    const price$ = this.priceTierService.getPriceTier(site, id)
+    price$.subscribe( data => {
+      this.productEditButtonService.openPriceTierEditor(data)
+    })
   }
 
   assignWeightValues(priceTier: PriceTiers, price: PriceTierPrice, prof: WeightProfile): PriceTierPrice {

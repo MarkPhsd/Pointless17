@@ -1,9 +1,7 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable, Subject, throwError  } from 'rxjs';
-import { IProduct, IProductCategory, ISite, MenuItem }  from 'src/app/_interfaces';
-import { IMenuItem } from '../../_interfaces/menu/menu-products';
-import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
+import { Observable  } from 'rxjs';
+import { ISite }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
@@ -133,6 +131,8 @@ export class PriceScheduleService {
   }
 
   save(site: ISite, priceSchedule: IPriceSchedule): Observable<IPriceSchedule> {
+
+    if (priceSchedule.id == undefined) {priceSchedule.id = 0}
 
     if (priceSchedule.id == 0) {
       return this.post(site, priceSchedule)
