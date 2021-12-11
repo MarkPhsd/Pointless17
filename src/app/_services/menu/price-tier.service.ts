@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { EMPTY, Observable } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPriceTierPaged, PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 import { AuthenticationService } from '..';
@@ -23,15 +23,15 @@ export class PriceTierService {
   { }
 
 
-  deletePriceTier(site: ISite, id: number): Observable<PriceTiers> {
+  deletePriceTier(site: ISite, id: number): Observable<any> {
 
     const endpoint = "/PriceTiers/"
 
-    const parameters = "DeletePriceTier"
+    const parameters = `DeletePriceTier?id=${id}`
 
     const url = `${site.url}${endpoint}${parameters}`
 
-    return  this.http.delete<PriceTiers>(url)
+    return  this.http.delete<any>(url)
 
   }
 
@@ -64,7 +64,7 @@ export class PriceTierService {
 
     const endpoint = "/PriceTiers/"
 
-    const parameters = "putPriceTiers"
+    const parameters = `putPriceTier?id=${price.id}`
 
     const url = `${site.url}${endpoint}${parameters}`
 
@@ -77,7 +77,7 @@ export class PriceTierService {
 
     const endpoint = "/PriceTiers/"
 
-    const parameters = "postPriceTiers"
+    const parameters = "postPriceTier"
 
     const url = `${site.url}${endpoint}${parameters}`
 
@@ -86,14 +86,17 @@ export class PriceTierService {
   };
 
   savePriceTier(site: ISite, price: PriceTiers) : Observable<PriceTiers> {
+    if (price.id == null) { price.id = 0}
 
-    if (price.id) {
+    if (price.id == 0) {
       return  this.postPriceTier(site, price)
     }
 
-    if (!price.id) {
+    if (price.id ) {
       return this.putPriceTier(site, price)
     }
+
+    return EMPTY
 
   }
 

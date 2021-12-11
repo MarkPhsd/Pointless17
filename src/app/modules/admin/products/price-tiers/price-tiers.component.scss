@@ -12,3 +12,9 @@
   grid-template-columns: 1fr 1fr;
   width: 50%;
 }
+
+.grid-buttons {
+  display: grid;
+  grid-template-columns:auto auto auto;
+  width:  400px;
+}

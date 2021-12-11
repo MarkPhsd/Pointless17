@@ -4,6 +4,13 @@
     width: 50%;
 }
 
+.grid-main {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: auto 75px;
+}
+
 .grid-flow {
   --gap: 5px;
   display: grid;
@@ -11,6 +18,9 @@
   grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
 }
 
+.divider-margin {
+  margin-bottom: 5px;
+}
 .field {
   width: 75px;
   max-width: 75px;
@@ -18,4 +28,9 @@
 .prices-fields {
   width: 75px;
   max-width: 75px;
+}
+
+.border {
+  border: 4px;
+  border-radius: 5px;
 }

@@ -86,23 +86,23 @@ export interface PriceTiers {
 export interface PriceTierPrice {
   id:             number;
   productPriceID: number; //pricetier
-  quantityFrom:   string;
-  quantityTo:     string;
-  retail:         string;
-  price1:         string;
-  price2:         string;
-  price3:         string;
-  price4:         string;
-  price5:         string;
-  price6:         string;
-  price7:         string;
-  price8:         string;
-  price9:         string;
+  quantityFrom:   number;
+  quantityTo:     number;
+  retail:         number;
+  price1:         number;
+  price2:         number;
+  price3:         number;
+  price4:         number;
+  price5:         number;
+  price6:         number;
+  price7:         number;
+  price8:         number;
+  price9:         number;
   startTime:      string;
   endTime:        string;
-  specialPrice:   string;
+  specialPrice:   number;
   weekDays:       string;
-  flatQuantity:   string;
+  flatQuantity:   number;
   priceName:      string;
   rateOrPrice:    boolean;
 }

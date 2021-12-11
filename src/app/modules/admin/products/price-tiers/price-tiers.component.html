@@ -22,9 +22,27 @@
 
   </div>
   <div class="grid-item">
-    <button mat-button
-      class="assign-button"
-      (click)="listAll()"> <mat-icon>list</mat-icon>List All</button>
+    <div>
+      <button mat-button
+          class="assign-button"
+          (click)="listAll()"> <mat-icon>list</mat-icon>List All
+      </button>
+    </div>
+
+    <div>
+      <button mat-button
+        class="assign-button"
+        (click)="addPriceTier()"> <mat-icon>add</mat-icon>Add
+      </button>
+    </div>
+
+    <div>
+      <button mat-button
+          (click)="addNewTierGroup()">
+          <mat-icon>add</mat-icon><mat-icon>scale
+          </mat-icon>Add Weight Profiles
+      </button>
+     </div>
   </div>
 </div>
 

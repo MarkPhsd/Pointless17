@@ -16,6 +16,7 @@ import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { IPriceTierPaged, PriceTiers } from 'src/app/_interfaces/menu/price-categories';
+import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
 
 @Component({
   selector: 'price-tiers-list',
@@ -95,6 +96,7 @@ export class PriceTiersComponent implements OnInit, AfterViewInit {
     private productEditButtonService: ProductEditButtonService,
     private agGridFormatingService  : AgGridFormatingService,
     private priceTierService        : PriceTierService,
+    private priceTierMethods        : PriceTierMethodsService,
   )
   {  }
 
@@ -260,7 +262,6 @@ export class PriceTiersComponent implements OnInit, AfterViewInit {
       this.gridApi.setDatasource(datasource);
     }
 
-
     //search method for debounce on form field
     displayFn(search) {
       this.selectItem(search)
@@ -321,7 +322,19 @@ export class PriceTiersComponent implements OnInit, AfterViewInit {
       const site = this.siteService.getAssignedSite();
       const price$ = this.priceTierService.getPriceTier(site, id)
       price$.subscribe( data => {
-        console.log('price tier', data)
+        this.productEditButtonService.openPriceTierEditor(data)
+      })
+    }
+
+    addNewTierGroup() {
+      this.priceTierMethods.addNewTierGroup();
+    }
+    addPriceTier() {
+      //add then edit.
+      const site = this.siteService.getAssignedSite();
+      const price = {} as PriceTiers
+      const price$ = this.priceTierService.savePriceTier(site, price)
+      price$.subscribe( data => {
         this.productEditButtonService.openPriceTierEditor(data)
       })
     }
@@ -330,6 +343,7 @@ export class PriceTiersComponent implements OnInit, AfterViewInit {
       // this.productEditButtonService.addItem(this.productTypeID)
       this.productEditButtonService.openNewItemSelector()
     }
+
 
     editSelectedItems() {
       if (!this.selected) {
