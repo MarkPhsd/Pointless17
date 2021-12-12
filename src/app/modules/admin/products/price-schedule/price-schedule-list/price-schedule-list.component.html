@@ -29,7 +29,7 @@
       <mat-label class="item-label">All Order Types</mat-label>
       <mat-slide-toggle
               class           = "price-values"
-              formControlName     = "allOrderTypes"
+              formControlName = "allOrderTypes"
               [(ngModel)]     = "allOrderTypes"
               (change)        = "onToggleChange($event)"
               >
@@ -40,7 +40,7 @@
       <mat-label class="item-label">All Weekdays</mat-label>
       <mat-slide-toggle
               class           = "price-values"
-              formControlName     = "allWeekdaysDays"
+              formControlName = "allWeekdaysDays"
               [(ngModel)]     = "allWeekdaysDays"
               (change)        = "onToggleChange($event)"
               >
@@ -129,6 +129,11 @@
         <button mat-button
               class="assign-button"
               (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
+        </button>
+
+        <button mat-button
+              class="assign-button"
+              (click)="navPriceScheduleGroups()"> <mat-icon>settings</mat-icon>Menu List Layouts
         </button>
       </div>
     </div>
