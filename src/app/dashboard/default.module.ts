@@ -217,6 +217,8 @@ import { PriceTierEditComponent } from '../modules/admin/products/price-tiers/pr
 import { PriceTiersComponent } from '../modules/admin/products/price-tiers/price-tiers.component';
 import { TiersWithPricesComponent } from '../modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component';
 import { ItemSortComponent } from '../modules/admin/products/price-schedule/item-selections/item-sort/item-sort.component';
+import { PSMenuGroupListComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
+import { PSMenuGroupEditComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -364,6 +366,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PromptPanelMenuItemsComponent,
     PromptPanelMenuItemComponent,
     PromptItemsSelectedComponent,
+    PSMenuGroupListComponent,
+    PSMenuGroupEditComponent,
     ReceiptLayoutComponent,
     RecieptPopUpComponent,
     ReportsComponent,

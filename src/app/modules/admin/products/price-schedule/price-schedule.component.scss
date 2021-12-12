@@ -192,3 +192,9 @@ body{ overflow-x: hidden;}
   grid-template-columns: .25fr 1fr;
   flex-wrap            : wrap;
 }
+
+.header-grid {
+  display: grid;
+  grid-template-columns: 600px 1fr;
+  flex-wrap            : wrap;
+}

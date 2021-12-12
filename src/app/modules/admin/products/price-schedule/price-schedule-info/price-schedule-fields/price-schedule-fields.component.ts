@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input,  } from '@angular/core';
 import { FormArray,  FormBuilder,  FormGroup, FormGroupName } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
@@ -10,7 +10,7 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
   templateUrl: './price-schedule-fields.component.html',
   styleUrls: ['./price-schedule-fields.component.scss']
 })
-export class PriceScheduleFieldsComponent implements OnInit, OnChanges {
+export class PriceScheduleFieldsComponent implements OnInit {
 
   @Input() inputForm        : FormGroup;
   @Input() arrayTypeName    : string;
@@ -19,38 +19,30 @@ export class PriceScheduleFieldsComponent implements OnInit, OnChanges {
   @Input() formArray        : FormArray;
   @Input() hideDelete       : boolean;
 
-  constructor(
-    private priceScheduleDataService: PriceScheduleDataService,
-    private fb:   FormBuilder,
-    private fbPriceSchedule: FbPriceScheduleService,
-  ) { }
+  _priceSchedule            : Subscription;
+  priceScheduleTracking     : IPriceSchedule;
+  isMenuList                = false;
 
-  _priceSchedule              : Subscription;
-  priceScheduleTracking       : IPriceSchedule;
-
-  ngOnInit(): void {
-    this.initFormValue();
-    console.log('arrayTypeName ngOnInit', this.arrayTypeName)
-  }
-
-  ngOnChanges() {
-    this.initFormValue()
-    // console.log('arrayTypeName ngOnChanges', this.arrayTypeName)
-  }
-
-  // ngAfterViewInit() {
-  //   this.initFormValue();
-  //   console.log('arrayTypeName ngAfterViewInit', this.arrayTypeName)
-  // }
-
-  initFormValue() {
+  initSubscriptions() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
         this.priceScheduleTracking = data
         const inputForm = this.inputForm;
+        console.log('data from Schedule fields', data)
+        if (data && data.type === 'Menu List') {
+          this.isMenuList = true
+        }
         this.fbPriceSchedule.updateDiscountInfos(inputForm, data)
-        // console.log('initFormValue', this.arrayTypeName )
       }
     )
+  }
+
+  constructor(
+    private priceScheduleDataService: PriceScheduleDataService,
+    private fbPriceSchedule         : FbPriceScheduleService,
+  ) { }
+
+  ngOnInit(): void {
+    this.initSubscriptions();
   }
 
   get arrayType() : FormArray {

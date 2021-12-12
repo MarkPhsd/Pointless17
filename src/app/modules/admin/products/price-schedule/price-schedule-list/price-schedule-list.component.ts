@@ -536,8 +536,8 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     if (id) { this.router.navigate(['/price-schedule-edit', {id : id}]) }
   }
 
-  async getItemHistory(id: any) {
-    const site = this.siteService.getAssignedSite();
+  navPriceScheduleGroups() {
+    this.router.navigate(['/psmenu-group-list'])
   }
 
   selectAdjustScheduleTypes(item) {

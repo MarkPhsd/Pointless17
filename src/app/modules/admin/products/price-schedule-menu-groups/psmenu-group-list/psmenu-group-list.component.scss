@@ -1,0 +1,43 @@
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  flex-wrap: wrap;
+  width: 600px;
+}
+
+.grid-card {
+  display: grid;
+  grid-template-columns: 1fr .3fr;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.panel {
+  height: 83vh;
+  overflow-y: scroll;
+}
+
+.floating-info {
+  width        : 32%;
+  max-width    : 425px;
+  position     : fixed;
+  top          : 75px;
+  right        : 1.2em;
+  z-index      : 100;
+  padding-right: 10px;
+  overflow-x   : visible;
+}
+
+.grid-search-container {
+  display              : grid;
+  grid-template-columns: .25fr 1fr;
+  flex-wrap            : wrap;
+}
+
+.header-grid {
+  display: grid;
+  grid-template-columns: 600px 1fr;
+  flex-wrap            : wrap;
+}

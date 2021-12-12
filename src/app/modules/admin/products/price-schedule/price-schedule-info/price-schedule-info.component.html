@@ -116,7 +116,7 @@
 
         <div class="constraint-panels"  *ngIf="inputForm">
 
-          <div [formGroup]="inputForm">
+          <div [formGroup]="inputForm" *ngIf="!isMenuList">
             <mat-card>
               <mat-card-subtitle>
                 <div class="rewards-header">
@@ -188,14 +188,15 @@
                 </mat-card-content>
               </mat-card>
             </div>
-        </div>
+
+           </div>
 
         <div class="constraint-panels" *ngIf="inputForm">
           <div [formGroup]="inputForm"  >
             <mat-card>
-              <mat-card-subtitle>
-                <div class="rewards-header">
-                    <mat-icon>loyalty</mat-icon>
+              <mat-card-subtitle  *ngIf="!isMenuList">
+                <div class="rewards-header" >
+                  <mat-icon>loyalty</mat-icon>
                 </div>
                 <div class="rewards-icon">Rewards</div>
                 <div>
@@ -207,7 +208,7 @@
 
                   <div *ngIf="itemTypeDiscounts.length>0">
                     <mat-divider></mat-divider>
-                    <div class="icon-header">
+                    <div class="icon-header"   *ngIf="!isMenuList">
                       <mat-icon>table_view</mat-icon>Item Types
                     </div>
                     <app-price-schedule-fields
@@ -235,7 +236,7 @@
                   </div>
 
                   <div *ngIf="priceScheduleTracking.itemDiscounts.length>0">
-                    <div class="icon-header">
+                    <div class="icon-header"   *ngIf="!isMenuList">
                       <mat-icon>inventory_2</mat-icon>Item Discounts
                     </div>
                     <app-price-schedule-fields
@@ -249,7 +250,7 @@
                   </div>
 
                   <div *ngIf="priceScheduleTracking.brandDiscounts.length>0">
-                    <div class="icon-header">
+                    <div class="icon-header"   *ngIf="!isMenuList">
                       <mat-icon>branding_watermark</mat-icon>Brand Discounts
                     </div>
                     <app-price-schedule-fields

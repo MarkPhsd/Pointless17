@@ -102,6 +102,7 @@ import { CardComponent } from './modules/admin/reports/card/card.component';
 import { APISettingComponent } from './modules/login/apisetting/apisetting.component';
 import { PriceTiersComponent } from './modules/admin/products/price-tiers/price-tiers.component';
 import { TierPricesComponent } from './modules/menu/tierMenu/tier-prices/tier-prices.component';
+import { PSMenuGroupListComponent } from './modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
 
 
 const routes: Routes = [
@@ -166,6 +167,9 @@ const routes: Routes = [
 
         { path: 'price-schedule', component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { animation: 'isLeft'}},
         { path: 'price-schedule-edit', component: PriceScheduleComponent,canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+
+        ///price schedule layout menu
+        {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         { path: 'categorylist', component: CategorieslistviewComponent,  canActivate: [AuthGuard], data: { animation: 'isLeft'}},
         { path: 'categorieslistview', component: CategorieslistviewComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},

@@ -52,10 +52,19 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
   _priceSchedule              : Subscription;
   priceScheduleTracking       : IPriceSchedule;
 
+  isMenuList                  : boolean;
+
   initSubscriptions() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       this.priceScheduleTracking = data
-      // this.requiredItemTypes.patchValue(data.requiredItemTypes)
+      if (data) {
+        // this.requiredItemTypes.patchValue(data.requiredItemTypes)
+        this.isMenuList = false
+        if ( data.type === 'Menu List') {
+          this.isMenuList = true
+        }
+      }
+
     })
   }
 

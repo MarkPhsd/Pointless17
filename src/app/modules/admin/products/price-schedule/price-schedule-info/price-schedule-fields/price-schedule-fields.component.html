@@ -1,6 +1,6 @@
 
 <div [formGroup]="inputForm">
-
+  isMenuList {{isMenuList}}
   <div *ngIf="arrayTypeName">
     <div [formArrayName]="arrayTypeName"
          *ngFor="let item of formArray.controls; let i = index;">
@@ -17,7 +17,7 @@
           </mat-form-field>
         </div>
 
-        <div class="slidein">
+        <div *ngIf="!isMenuList" class="slidein">
           <mat-form-field  appearance="flat"  >
             <mat-label >Quantity</mat-label>
             <input class="mat-fields quantity"
@@ -28,7 +28,7 @@
           </mat-form-field>
         </div>
 
-        <div *ngIf="andOrOption == true"
+        <div *ngIf="!isMenuList && (andOrOption == true)"
               class="slidein">
           <mat-form-field appearance="flat" class="andor-listbox">
             <mat-label>And/Or</mat-label>
