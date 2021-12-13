@@ -13,15 +13,23 @@
            cdkDrag
            (click)="assignItem(item, index)"
         >
-          {{item?.name}}
-      </div>
+          <div class="grid-row">
+            <div>
+              {{item?.name}}
+            </div>
+            <div>
+              <button  mat-button
+                (click)="deleteSelected(item)">
+                Remove {{discountInfo?.name | truncateText: 8}}
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
     </div>
   </div>
-  <div *ngIf="discountInfo">
-    <button  mat-button
-            (click)="deleteSelected()">
-            Remove {{discountInfo?.name | truncateText: 8}}
-      <mat-icon>delete</mat-icon>
-    </button>
-  </div>
+
+  {{discountInfos | json}}
+
 </div>
+

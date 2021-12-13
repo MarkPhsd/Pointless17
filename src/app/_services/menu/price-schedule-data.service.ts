@@ -16,7 +16,10 @@ export class PriceScheduleDataService {
   constructor() { }
 
   updatePriceSchedule(info: IPriceSchedule) {
+    //output sorted list
+
     this._priceSchedule.next(info);
+
   }
 
 }

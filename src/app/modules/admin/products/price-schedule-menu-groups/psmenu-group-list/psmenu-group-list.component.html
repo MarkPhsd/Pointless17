@@ -1,72 +1,84 @@
-Add  Menu Group
+<!-- Add  Menu Group
 Edit Menu Group
 
 Ag Grid - Edit Group
 
 Assigned Items Items
 
-Sort Menu Group List
+Sort Menu Group List -->
 
+<mat-card>
+  <mat-card-title>
 
-<div class="grid-container">
+  </mat-card-title>
 
-  <div  class="item-label item-fields" [formGroup]="searchForm" >
-    <mat-form-field appearance="outline" class="form-fields">
-      <mat-label >Search Items</mat-label>
-        <input
-                #input
-                matInput
-                type           ="text"
-                id             ="name"
-                formControlName="itemName">
-    </mat-form-field>
-  </div>
+  <mat-card-subtitle>
+    <div class="grid-container">
+      <div  [formGroup]="searchForm" >
+        <mat-form-field appearance="outline" class="form-fields">
+          <mat-label >Search Items</mat-label>
+            <input
+                    #input
+                    matInput
+                    type           ="text"
+                    id             ="name"
+                    formControlName="itemName">
+        </mat-form-field>
+      </div>
 
+      <div class="button-grid" >
+        <div>
+          <button mat-button
+            class="assign-button"
+            (click)="listAll()"> <mat-icon>list</mat-icon>List All
+          </button>
+        </div>
+        <div>
+          <button mat-button
+                class="assign-button"
+                (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
+          </button>
+        </div>
+        <div>
+          <button mat-button
+                class="assign-button"
+                (click)="navPriceScheduleGroups()"> <mat-icon>settings</mat-icon>Menu List Layouts
+          </button>
+        </div>
+      </div>
 
-  <button mat-button
-    class="assign-button"
-    (click)="listAll()"> <mat-icon>list</mat-icon>List All
-  </button>
-  <!-- <button mat-button
-    class="assign-button"
-    (click)="deleteSelected()"> <mat-icon>delete</mat-icon>Delete Selected
-  </button> -->
-  <button mat-button
-        class="assign-button"
-        (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
-  </button>
-
-  <button mat-button
-        class="assign-button"
-        (click)="navPriceScheduleGroups()"> <mat-icon>settings</mat-icon>Menu List Layouts
-  </button>
-</div>
-
-<div class="grid-card">
-  <div class="grid-list">
-    <div>
-      <ag-grid-angular
-            #agGrid
-            style                ="width: 100%; height: 85vh;"
-            id                   ="myGrid"
-            [class]              ="agtheme"
-            [columnDefs]         ="columnDefs"
-            [defaultColDef]      ="defaultColDef"
-            [gridOptions]        ="gridOptions"
-            [rowSelection]       ="rowSelection"
-            [frameworkComponents]="frameworkComponents"
-            (selectionChanged)   ="onSelectionChanged($event)"
-            (gridReady)          ="onGridReady($event)">
-      </ag-grid-angular>
     </div>
-  </div>
-  <div class="floating-info">
-    <div *ngIf="inputForm && priceScheduleTracking">
-      <app-price-schedule-info
-              [inputForm]="inputForm"
-              [hideDelete]="'true'"
-                >
-      </app-price-schedule-info>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="grid-card">
+      <div class="grid-list">
+        <div>
+          <ag-grid-angular
+                #agGrid
+                style                ="width: 100%; height: 75vh;"
+                id                   ="myGrid"
+                [class]              ="agtheme"
+                [columnDefs]         ="columnDefs"
+                [defaultColDef]      ="defaultColDef"
+                [gridOptions]        ="gridOptions"
+                [rowSelection]       ="rowSelection"
+                [frameworkComponents]="frameworkComponents"
+                (selectionChanged)   ="onSelectionChanged($event)"
+                (gridReady)          ="onGridReady($event)">
+          </ag-grid-angular>
+        </div>
+      </div>
+      <div class="floating-info">
+        <div *ngIf="inputForm && priceMenuGroup">
+          <!-- <app-price-schedule-info
+                  [inputForm]="inputForm"
+                  [hideDelete]="'true'"
+                    >
+          </app-price-schedule-info> -->
+        </div>
+      </div>
     </div>
-  </div>
-</div>
+
+  </mat-card-content>
+</mat-card>

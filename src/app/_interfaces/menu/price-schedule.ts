@@ -112,7 +112,6 @@ export interface ClientType {
   id:              number;
   priceScheduleID: number;
   clientTypeID:    number;
-  // type:            ItemType;
   name:            string;
   privateScheduleID: number;
 }

@@ -1,1 +1,62 @@
-<p>psmenu-group-edit works!</p>
+<mat-card *ngIf="priceMenuGroup && inputForm; else loading">
+
+  <mat-card-subtitle>
+    <mat-icon>edit</mat-icon> {{ priceMenuGroup.name }}
+  </mat-card-subtitle>
+
+  <mat-card-actions>
+
+    <div class="buttons-margin">
+      <app-edit-buttons-standard
+          (outputeupdateItem)     ="updateCategory($event, false)"
+          (outputupdateItemExit)  ="updateCategory($event, true)"
+          (outputupdatedeleteItem)="deleteCategory($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
+      ></app-edit-buttons-standard>
+    </div>
+
+  </mat-card-actions>
+
+  <mat-card-content>
+
+    <div *ngIf="inputForm"
+         class="grid-form"
+         [formGroup]="inputForm">
+
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input matInput
+          type="text"
+          formControlName="name"
+          class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div class="grid-item">
+        <mat-card class="image-container">
+          <app-widget-uploader
+              [(fileNames)]="priceMenuGroup.image"
+              (messageOut) ="received_URLMainImage($event)">
+          </app-widget-uploader>
+        </mat-card>
+      </div>
+
+      <mat-label>Description </mat-label><br>
+      <simple-tinymce cols="50"
+                      rows="25"
+                      style="height: 400px;"
+                      name="description"
+                      formControlName="description"
+                      >
+      </simple-tinymce>
+    </div>
+    {{inputForm.value |json}}
+  </mat-card-content>
+
+</mat-card>
+
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

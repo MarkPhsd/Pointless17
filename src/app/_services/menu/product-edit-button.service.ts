@@ -27,6 +27,7 @@ import { PaymentWithAction } from '../transactions/pospayment.service';
 import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-groups/prompt-group-edit/prompt-group-edit.component';
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
 import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
+import { PSMenuGroupEditComponent } from 'src/app/modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
 
 export interface IBalanceDuePayload {
   order: IPOSOrder;
@@ -88,12 +89,26 @@ export class ProductEditButtonService {
     )
   }
 
+
+  openPSMenuGroupEditor(id: any) {
+    let dialogRef: any;
+
+    dialogRef = this.dialog.open(PSMenuGroupEditComponent,
+      { width    : '500px',
+        minWidth : '500px',
+        height   : '65vh',
+        minHeight: '650px',
+        data     : id
+      },
+    )
+  }
+
+
   async openProductDialog(id: any) {
 
     let product = {} as IProduct;
     const site = this.siteService.getAssignedSite();
     product = await this.menuService.getProduct(site, id).pipe().toPromise();
-    console.log('product', product)
 
     if (product) {
       if (!product.prodModifierType) {

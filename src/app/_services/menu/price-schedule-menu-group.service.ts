@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { EMPTY, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { PriceMenuGroup, PriceMenuGroupItem, PSMenuGroupPaged, PSSearchModel, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 
@@ -9,6 +9,9 @@ import { PriceMenuGroup, PriceMenuGroupItem, PSMenuGroupPaged, PSSearchModel, PS
 })
 
 export class PriceScheduleMenuGroupService {
+
+  private _priceMenuGroup        = new BehaviorSubject<PriceMenuGroup>(null);
+  public  priceMenuGroup$        = this._priceMenuGroup.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -76,6 +79,17 @@ export class PriceScheduleMenuGroupService {
 
   };
 
+  searchList(site: ISite, searchModel: PSSearchModel ): Observable<PSMenuGroupPaged> {
+    const endpoint = "/PSMenuGroup/"
+
+    const parameters = "SearchList"
+
+    const url = `${site.url}${endpoint}${parameters}`
+
+    return  this.http.post<PSMenuGroupPaged>(url, searchModel)
+  }
+
+
   save(site: ISite, price: PriceMenuGroup) : Observable<PriceMenuGroup> {
     if (price.id == null) { price.id = 0}
 
@@ -102,14 +116,5 @@ export class PriceScheduleMenuGroupService {
     return  this.http.post<PriceMenuGroup[]>(url, list)
   }
 
-  searchList(site: ISite, searchModel: PSSearchModel ): Observable<PSMenuGroupPaged> {
-    const endpoint = "/PSMenuGroupItem/"
-
-    const parameters = "PostMenuItemsList"
-
-    const url = `${site.url}${endpoint}${parameters}`
-
-    return  this.http.post<PSMenuGroupPaged>(url, searchModel)
-  }
 
 }

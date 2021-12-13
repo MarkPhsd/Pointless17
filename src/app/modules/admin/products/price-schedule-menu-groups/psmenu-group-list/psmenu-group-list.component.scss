@@ -2,9 +2,22 @@
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  flex-wrap: wrap;
-  width: 600px;
+  gap: 10px;
+  grid-template-columns: 300px auto;
+  width: 700px;
+}
+
+.assign-button {
+  padding: 3px 3px 3px 3px;
+  margin: 3px 3px 3px 3px;
+  // width: 100px;
+  height: 55px;
+}
+
+.button-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto auto  auto;
 }
 
 .grid-card {

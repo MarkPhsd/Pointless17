@@ -100,7 +100,9 @@ export class PromptWalkThroughComponent implements OnInit {
   applyChoices() {
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
-      this.posOrderItemService.postPromptItems(site, this.orderPromptGroup).pipe(
+      const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
+
+      prompt$.pipe(
             switchMap( data  => {
               return  this.orderService.getOrder(site, data.orderID.toString(), false)
             },

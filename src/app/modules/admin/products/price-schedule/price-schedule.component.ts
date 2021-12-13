@@ -60,13 +60,10 @@ export class PriceScheduleComponent {
 
     //subscribe to form
     this.inputForm.valueChanges.subscribe(data => {
-      // console.log('priceScheduleTracking', this.priceScheduleTracking)
-      // console.log('data', data)
       if (!data) {
         console.log('no data output from Price Schedule Service. Component')
       }
       this.priceScheduleTracking = data
-      // this.priceSchedule = data;
     })
 
   }
@@ -163,10 +160,18 @@ export class PriceScheduleComponent {
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
       // const priceSchedule = this.getPriceSchedule(this.inputForm)
-      const item$ = this.priceScheduleService.save(site, this.priceScheduleTracking)
+      const item = this.inputForm.value as IPriceSchedule
+
+      this.priceScheduleDataService.updatePriceSchedule(item)
+
+      const item$ = this.priceScheduleService.save(site, item)
+      console.log('item to save ', item)
       item$.subscribe( data => {
         this.snack.open('Item Saved', 'Success', {duration: 2000, verticalPosition: 'top'})
+      }, err => {
+        this.snack.open(err, 'Error', {duration: 4000, verticalPosition: 'top'})
       })
+
     }
     if (!this.inputForm.valid) {
       this.snack.open('Missing values', 'Alert', {duration: 2000, verticalPosition: 'top'})

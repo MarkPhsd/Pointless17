@@ -24,24 +24,9 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-
       const user = this.user;
       // this.authenticationService.externalAPI = false;
       // console.log(user)
-      if (user) {
-        user.authdata = window.btoa(user.username + ':' + user.password);
-        if (  user.authdata) {
-          request = request.clone({
-            setHeaders: {
-              Authorization: `Basic ${user.authdata}`
-            }
-          });
-          // console.log(user, request)
-        }
-
-        return next.handle(request);
-
-      }
 
       if (request.headers.has(InterceptorSkipHeader)) {
         //     //we might have to have two login options here, because this area was changed to userx
@@ -55,10 +40,24 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         //     });
         //     this.authenticationService.externalAPI = false
         //     return next.handle(request);
-
+        console.log('intercept skip header')
         const headers = request.headers.delete(InterceptorSkipHeader);
         return next.handle(request.clone({ headers }));
       }
+
+      if (user) {
+        user.authdata = window.btoa(user.username + ':' + user.password);
+        if (  user.authdata) {
+          request = request.clone({
+            setHeaders: {
+              Authorization: `Basic ${user.authdata}`
+            }
+          });
+
+        }
+        return next.handle(request);
+      }
+
 
       {
         // localStorage.setItem('metrcUser', JSON.stringify(user.metrcUser));
@@ -69,7 +68,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
           if (ismetrcURL) {
             const metrcKey = 'EBROdy-NDUFhhL6M8xQv9y4gxc6VkGkiOlBSjUG8YBvr6ssm' // localStorage.getItem('user.metrcKey')
             const metrcUser = 'rdh-NDqpGuklR36rQqNkUzSOSU3I95Ey7Go1D0bbYw2O1MI5' // localStorage.getItem('user.metrcUser')
-
             try {
               const authdata = window.btoa( `${metrcUser}:${metrcKey}`);
 

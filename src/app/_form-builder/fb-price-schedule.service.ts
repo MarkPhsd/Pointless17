@@ -165,7 +165,6 @@ export class FbPriceScheduleService {
 
     inputForm.patchValue(priceSchedule)
     this.updateDiscountInfos(inputForm, priceSchedule)
-
     this.addDateRanges(inputForm, priceSchedule.dateFrames)
     this.addOrderTypes(inputForm, priceSchedule.orderTypes)
     this.addClientTypes(inputForm, priceSchedule.clientTypes)

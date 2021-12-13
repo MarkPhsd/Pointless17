@@ -1,4 +1,4 @@
-<div *ngIf="inputForm && priceScheduleTracking">
+<div *ngIf="inputForm && priceSchedule">
   <mat-card>
     <mat-card-subtitle>
       <div class="subtitle">
@@ -15,14 +15,13 @@
         <mat-slide-toggle
                 class           ="price-values"
                 formControlName ="allEligible"
-                [(ngModel)]     ="priceScheduleTracking.allEligible"
-
+                [(ngModel)]     ="priceSchedule.allEligible"
                 >
         </mat-slide-toggle>
       </div>
     </div>
 
-    <div *ngIf="!priceScheduleTracking.allEligible">
+    <div *ngIf="!priceSchedule.allEligible">
         <mat-selection-list #list
                             [compareWith] ="compareFunction"
                             [(ngModel)]   ="savedClientTypes" >

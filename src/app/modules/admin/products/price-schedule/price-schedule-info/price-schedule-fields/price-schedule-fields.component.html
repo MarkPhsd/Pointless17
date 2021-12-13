@@ -1,6 +1,5 @@
 
 <div [formGroup]="inputForm">
-  isMenuList {{isMenuList}}
   <div *ngIf="arrayTypeName">
     <div [formArrayName]="arrayTypeName"
          *ngFor="let item of formArray.controls; let i = index;">

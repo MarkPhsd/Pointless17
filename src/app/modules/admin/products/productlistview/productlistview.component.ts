@@ -502,7 +502,7 @@ initProductSearchModel(): ProductSearchModel {
   }
 
   editProduct(e){
-    this.productEditButtonService.openProductDialog(e.id)
+    this.editItemWithId(e.id)
   }
 
   assignItem(e){

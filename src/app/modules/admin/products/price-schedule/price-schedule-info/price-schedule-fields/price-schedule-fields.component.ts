@@ -27,7 +27,7 @@ export class PriceScheduleFieldsComponent implements OnInit {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
         this.priceScheduleTracking = data
         const inputForm = this.inputForm;
-        console.log('data from Schedule fields', data)
+        // console.log('data from Schedule fields', data)
         if (data && data.type === 'Menu List') {
           this.isMenuList = true
         }

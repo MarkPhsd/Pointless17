@@ -11,10 +11,16 @@
 
         <div>
           <span>
-            <button mat-button (click)="save()"><mat-icon>save</mat-icon>Save</button>
+            <button mat-button
+                    (click)="save()">
+              <mat-icon>save</mat-icon>Save
+            </button>
           </span>
           <span>
-            <button mat-button color="accent" (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+            <button mat-button color="accent"
+                    (click)="delete()">
+              <mat-icon>delete</mat-icon>Delete
+            </button>
           </span>
 
         </div>
@@ -76,112 +82,114 @@
                   </mat-tab>
                 </div>
 
-                <mat-tab label="Sort Items"  *ngIf="priceScheduleTracking.type === 'Menu List'">
+                <!-- <mat-tab label="Sort Items"  *ngIf="priceScheduleTracking.type === 'Menu List'">
                   <app-item-sort
+                    [inputForm]="inputForm"
                     [priceSchedule]="priceSchedule"
                   ></app-item-sort>
-                </mat-tab>
+                </mat-tab> -->
 
                 <mat-tab label="Finalize"  *ngIf="priceScheduleTracking.type != 'Menu List'">
-                  <app-item-sort
-                    [priceSchedule]="priceSchedule"
-                  ></app-item-sort>
+
                   <div *ngIf="devMode && priceScheduleTracking">
 
-                      <div *ngIf="priceScheduleTracking.clientTypes">
+                      <div *ngIf="priceScheduleTracking">
+
                         <h4>ClientTypes</h4>
                         <div *ngFor="let item of priceScheduleTracking.clientTypes">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
-                      </div>
 
-                      <div *ngIf="priceScheduleTracking.orderTypes">
+                        <h4>ClientTypes</h4>
+                        <div *ngFor="let item of priceScheduleTracking.clientTypes">
+                          {{ item | json }}
+                        </div>
+
                         <h4>Order Types</h4>
                         <div *ngFor="let item of priceScheduleTracking.orderTypes">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
-                      </div>
 
-                      <div *ngIf="priceScheduleTracking.itemTypeDiscounts">
                         <h4>item Type Discounts</h4>
                         <div *ngFor="let item of priceScheduleTracking.itemTypeDiscounts">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
-                      </div>
 
-                      <div *ngIf=" priceScheduleTracking.categoryDiscounts">
-                        <h4>category Discounts</h4>
+                        <h4>category </h4>
                         <div *ngFor="let item of priceScheduleTracking.categoryDiscounts">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
-                      </div>
 
-                      <div *ngIf=" priceScheduleTracking.itemDiscounts">
-                        <h4>item Discounts</h4>
+                        <h4>item s</h4>
                         <div *ngFor="let item of priceScheduleTracking.itemDiscounts">
                           {{ item | json }}
                       </div>
-                      <br>
-                      <mat-divider></mat-divider>
-                      </div>
 
-                      <div *ngIf="priceScheduleTracking.brandDiscounts">
-                        <h4>  brands Discounts</h4>
+                        <h4>  brands </h4>
                         <div *ngFor="let item of priceScheduleTracking.brandDiscounts">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
+
                       </div>
 
                       <h3>Required</h3>
-
-                      <div *ngIf="priceScheduleTracking.requiredItemTypes">
-                        <h4>  required ItemTypes</h4>
+                        <h4>   ItemTypes</h4>
                         <div *ngFor="let item of priceScheduleTracking.requiredItemTypes">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
-                      </div>
-
-                      <div *ngIf="priceScheduleTracking.requiredCategories">
-                        <h4>  required Categories</h4>
+                        <h4>   Categories</h4>
                         <div *ngFor="let item of priceScheduleTracking.requiredCategories">
                           {{ item | json }}
                         </div>
-                        <br>
-                        <mat-divider></mat-divider>
-                      </div>
-
-                      <div *ngIf="priceScheduleTracking.requiredItems">
-                        <h4>  required Items</h4>
+                        <h4>   items</h4>
                         <div *ngFor="let item of priceScheduleTracking.requiredItems">
                           {{ item.name }}
                         </div>
-                        <mat-divider></mat-divider>
-                      </div>
-
-                      <div *ngIf="priceScheduleTracking.requiredBrands">
-                        <h4>  brands Required</h4>
+                        <h4>   Required</h4>
                         <div *ngFor="let item of priceScheduleTracking.requiredBrands">
                           {{ item.name }}
                         </div>
-                        <mat-divider></mat-divider>
                       </div>
 
-                      <div>
-                        {{inputForm.value | json }}
+                      <div *ngIf="inputForm">
+                        <h4>inputForm Tracking</h4>
+                        <ul>
+                          <li>
+                            Order Types:   {{inputForm.controls['orderTypes'].value | json }}
+                          </li>
+                          <li>
+                            Client Types:   {{inputForm.controls['clientTypes'].value | json }}
+                          </li>
+                          <li>
+                            Category discounts:   {{inputForm.controls['categoryDiscounts'].value | json }}
+                          </li>
+                          <li>
+                            itemTypeDiscounts  {{inputForm.controls['itemTypeDiscounts'].value | json }}
+                          </li>
+                          <li>
+                            itemDiscounts  {{inputForm.controls['itemDiscounts'].value | json }}
+                          </li>
+                          <li>
+                            brandDiscounts {{inputForm.controls['brandDiscounts'].value | json }}
+                          </li>
+                          <li>
+                            requiredCategories  {{inputForm.controls['requiredCategories'].value | json }}
+                          </li>
+                          <li>
+                            requiredItemTypes {{inputForm.controls['requiredItemTypes'].value | json }}
+                          </li>
+                          <li>
+                            requiredItems  {{inputForm.controls['requiredItems'].value | json }}
+                          </li>
+                          <li>
+                            requiredBrands  {{inputForm.controls['requiredBrands'].value | json }}
+                          </li>
+                        </ul>
+
+                        <h4>Whole Form</h4>
+                        {{inputForm.value | json}}
                       </div>
-                  </div>
+
                 </mat-tab>
               </mat-tab-group>
 
@@ -196,10 +204,13 @@
 </div>
 
 <div class="floating-info">
-  <app-price-schedule-info
-                           [inputForm]="inputForm"
-                           >
-  </app-price-schedule-info>
+  <div *ngIf="inputForm && priceScheduleTracking">
+    <app-price-schedule-info
+            [inputForm]="inputForm"
+            [hideDelete]="'false'"
+              >
+    </app-price-schedule-info>
+  </div>
 </div>
 
 <!-- <div class="grid-container">

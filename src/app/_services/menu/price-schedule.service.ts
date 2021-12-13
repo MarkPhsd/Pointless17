@@ -129,11 +129,11 @@ export class PriceScheduleService {
 
     const endPoint = 'PutPriceSchedule'
 
-    const parameters = `?id=${priceSchedule.id}`
+    // const parameters = `?id=${priceSchedule.id}`
 
-    const url = `${site.url}${controller}${endPoint}${parameters}`
+    const url = `${site.url}${controller}${endPoint}`
 
-    return  this.httpClient.put<IPriceSchedule>(url, priceSchedule)
+    return  this.httpClient.post<IPriceSchedule>(url, priceSchedule)
 
   }
 

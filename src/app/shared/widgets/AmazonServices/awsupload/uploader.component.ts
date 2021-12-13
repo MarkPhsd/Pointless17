@@ -1,13 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { AWSBucketService, IAWS_Temp_Key, IKey, MenuService } from 'src/app/_services';
-import { MatSnackBar, MatSnackBarModule} from '@angular/material/snack-bar';
-import { IProduct } from 'src/app/_interfaces/raw/products';
-import { HttpClient,  HttpEvent,  HttpEventType,  HttpHeaders, HttpParams, } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
-import { analyzeAndValidateNgModules } from '@angular/compiler';
-import { isArray } from 'highcharts';
-import { tap } from 'rxjs/operators';
+import { AWSBucketService, IAWS_Temp_Key, IKey } from 'src/app/_services';
+import { MatSnackBar, } from '@angular/material/snack-bar';
+import { HttpClient, } from '@angular/common/http';
+import { EMPTY, Observable,  } from 'rxjs';
+
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-widget-uploader',
@@ -37,8 +35,7 @@ export class UploaderComponent implements OnInit {
   constructor(private awsBucket: AWSBucketService,
              private _snackBar: MatSnackBar,
              private truncateTextPipe: TruncateTextPipe,
-             private http: HttpClient) {
-
+             ) {
             }
 
   async ngOnInit() {
@@ -59,11 +56,9 @@ export class UploaderComponent implements OnInit {
       return this.truncateTextPipe.transform(itemName.replace(/<[^>]+>/g, ''), 10)
       // return itemName.substr(0,10)
     }
-    // return this.truncateTextPipe.transform(itemName.replace(/<[^>]+>/g, ''), 10)
   }
 
   imageRefresh() {
-
   }
 
   onFileDropped($event) {
@@ -75,9 +70,7 @@ export class UploaderComponent implements OnInit {
   }
 
   getImageURL(fileName: string): any {
-
     if (fileName) { return this.awsBucket.getImageURLPath(this.bucketName, fileName) }
-
   }
 
   uploadFiles(files: Array<any>) {
@@ -93,33 +86,35 @@ export class UploaderComponent implements OnInit {
     this.imageUrlToCheck = this.getImageURL(file.name)
 
     try {
-
       const presign$ = this.awsBucket.getPresignedURLObservable(file)
 
-      presign$.subscribe(data=> {
-        if (data.preassignedURL)
-          console.log(data.preassignedURL)
-          this.uploadFile_alt(file, data.preassignedURL)
-        }
-      )
+      presign$.pipe(
+        switchMap( data => {
+          if (data.preassignedURL)
+            console.log(data.preassignedURL)
+            return this.awsBucket.uploadFile(file,  data.preassignedURL)
+          }
+          // , catchError => {
+          //   console.log('error getting presigned url', catchError)
+          //   this.notifyEvent(`${catchError}`, 'Error' )
+          //   return EMPTY
+          // }
+        )
+      ).subscribe( data => {
+        console.log(data)
+        this.uploadFile_alt(file)
+      })
 
      } catch (error) {
       console.log(error)
      }
   };
 
+  async uploadFile_alt(file: any) {
 
- async uploadFile_alt(file: any, url: string) {
-
-    let startTime: any;
-    const uploader$ = this.awsBucket.uploadFile(file, url)
-
-    uploader$.subscribe(
-      data => {
-        this.files.push(file);
-        this.removeDuplicateFileNames()
-      }
-    )
+      if (!this.files) {this.files = []  as File[] }
+      this.files.push(file);
+      this.removeDuplicateFileNames()
 
   }
 
@@ -158,19 +153,15 @@ export class UploaderComponent implements OnInit {
       this.fileNames =   this.fileNames.replace('null', '')
       this.fileNames =   this.fileNames.replace(',,', ',')
 
-
-      if (this.fileNames.substring(0, 1) === "," ) {
-        // console.log('this.fileNames.substring(0, 1)', this.fileNames.substring(0, 1))
-        // console.log('this.filenames', this.fileNames)
-        // this.fileNames = this.fileNames.substring(1, this.fileNames.length -1)
-        // console.log('this.filenames new', this.fileNames)
-      }
+      // if (this.fileNames.substring(0, 1) === "," ) {
+      //   // console.log('this.fileNames.substring(0, 1)', this.fileNames.substring(0, 1))
+      //   // console.log('this.filenames', this.fileNames)
+      //   // this.fileNames = this.fileNames.substring(1, this.fileNames.length -1)
+      //   // console.log('this.filenames new', this.fileNames)
+      // }
 
     }
-
-    console.log(this.fileNames)
     this.messageOut.emit(this.fileNames)
-
   }
 
   deleteFile(name:string) {
@@ -198,7 +189,7 @@ export class UploaderComponent implements OnInit {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 3000,
     });
   }
 
