@@ -63,7 +63,6 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
           this.isMenuList = true
         }
       }
-
     })
   }
 

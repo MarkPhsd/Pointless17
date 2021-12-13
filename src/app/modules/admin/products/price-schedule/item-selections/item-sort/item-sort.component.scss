@@ -1,18 +1,14 @@
 .pop{
-
   padding: 10px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  // justify-content: space-between;
-  // box-sizing: border-box;
   height: 45px;
   cursor: move;
   background: white;
   font-size: 13px;
-
 }
 
 .cdk-drop-list-dragging .cdk-drag {
@@ -54,34 +50,30 @@
 }
 
 .drag-list {
-  // height    : 60vh;
+
   display   : flex;
   flex-direction: column;
-  // grid-template-columns: 1fr;
   overflow-y: auto;
   overflow-x: hidden;
   gap       : 10px;
   margin    : 10px;
-  // width     : 125px;
-
-
   gap       : 10px;
 
-  @media (max-width: 599px)  {
-    height: 50vh;
-  }
-  @media (min-width: 600px)   {
-    height: 65vh;
-  }
-  @media (min-width: 900px) {
-    height: 70vh;
-  }
-  @media (min-width: 1200px)  {
-    height: 70vh;
-  }
+  // @media (max-width: 599px)  {
+  //   height: 50vh;
+  // }
+  // @media (min-width: 600px)   {
+  //   height: 65vh;
+  // }
+  // @media (min-width: 900px) {
+  //   height: 70vh;
+  // }
+  // @media (min-width: 1200px)  {
+  //   height: 70vh;
+  // }
 
-  @media (min-width: 1800px)  {
-    height: 70vh;
-  }
+  // @media (min-width: 1800px)  {
+  //   height: 70vh;
+  // }
 
 }

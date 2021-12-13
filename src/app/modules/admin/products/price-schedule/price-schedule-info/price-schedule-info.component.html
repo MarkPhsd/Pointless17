@@ -112,8 +112,14 @@
         <mat-divider></mat-divider>
       </div>
 
+      <div *ngIf="isMenuList">
+        <app-item-sort
+          [inputForm]="inputForm"
+          [priceSchedule]="priceSchedule">
+        </app-item-sort>
+      </div>
 
-
+      <!-- <div [hidden]="!isMenuList"> -->
         <div class="constraint-panels"  *ngIf="inputForm">
 
           <div [formGroup]="inputForm">
@@ -266,6 +272,7 @@
             </mat-card>
           </div>
         </div>
+      <!-- </div> -->
 
     </mat-card-content>
   </mat-card>

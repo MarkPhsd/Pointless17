@@ -407,7 +407,10 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   }
 
   applyChanges(item: DiscountInfo) {
+    // console.log('Discounts', this.itemDiscounts)
+    // console.log('item to add', item)
     this.priceScheduleTracking.itemDiscounts = this.itemDiscounts;
+    this.fbPriceScheduleService.addDiscountItems(this.inputForm, this.itemDiscounts)
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     this.lastSelectedItem  = item
   }

@@ -379,7 +379,7 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
       const index = array.findIndex( data =>  data.itemID === itemID)
 
       if (index == -1){
-        console.log('itemID adding', itemID)
+
         const newItem    =  {} as DiscountInfo;
         newItem.itemID   =  itemID;
         newItem.name     =  item.name;
@@ -387,12 +387,12 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
         this.requiredItems.push(newItem)
         this.applyChanges(newItem);
         this.lastSelectedItem = newItem
-        console.log('item added')
+        // console.log('item added')
       } else {
         this.requiredItems = this.requiredItems.splice(index, 1)
         this.applyChanges(null);
         this.lastSelectedItem = null
-        console.log('item added')
+        // console.log('item added')
       }
     }
   }

@@ -22,14 +22,15 @@ export class ItemSortComponent implements OnInit {
   _priceSchedule           : Subscription;
   index                    : number;
 
-  // initSubscriptions() {
-  //   this._priceSchedule = this.priceScheduleService.priceSchedule$.subscribe(data => {
-  //     if (data) {
-  //      this.priceSchedule = data;
-  //      this.initList(data.itemDiscounts)
-  //     }
-  //   })
-  // }
+  initSubscriptions() {
+    this._priceSchedule = this.priceScheduleService.priceSchedule$.subscribe(data => {
+      if (data) {
+       this.priceSchedule = data;
+       this.initList(data.itemDiscounts);
+       console.log('received datea for item sort')
+      }
+    })
+  }
   constructor(
     private priceScheduleService: PriceScheduleService,
     private siteService:  SitesService,
