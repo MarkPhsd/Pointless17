@@ -45,6 +45,8 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         return next.handle(request.clone({ headers }));
       }
 
+
+      // console.log('interceptor ', request.url)
       if (user) {
         user.authdata = window.btoa(user.username + ':' + user.password);
         if (  user.authdata) {

@@ -138,6 +138,12 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     this.searchForm = this.fb.group( { itemName: '' } );
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
   // //ag-grid
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement,'keyup')
@@ -516,9 +522,9 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
         this.priceScheduleService.getPriceSchedule(site, this.id).subscribe( data =>
           {
             this.inputForm = this.fbPriceSchedule.initForm(this.inputForm)
+            console.log('update subscription', data)
             this.priceScheduleDataService.updatePriceSchedule(data)
             this.fbPriceSchedule.updateDiscountInfos(this.inputForm, data);
-
           }
         )
       }

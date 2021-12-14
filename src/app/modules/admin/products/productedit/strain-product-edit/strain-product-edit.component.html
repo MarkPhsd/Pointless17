@@ -109,16 +109,16 @@
               <h4><mat-icon>price_change</mat-icon>Prices</h4>
             </div>
 
+            <!-- {{itemType.useType}} -->
             <div class="grid-container-small">
               <div>
                 <app-price-category-select
-                  *ngIf="itemType.useType === 'product'"
+                  *ngIf="itemType.useType != 'category'"
                   [itemType]        ="itemType"
                   [priceCategoryID] ="product.priceCategory"
                   [inputForm]       ="productForm" >
                 </app-price-category-select>
               </div>
-
             </div>
 
             <div class="header">
@@ -130,19 +130,13 @@
                     (messageOut) ="received_URLMainImage($event)"
                     (imageUrl)   ="updateUrlImageMain($event)">
                 </app-widget-uploader>
-
             </div>
-
           </div>
 
-
-
           <div class="grid-item">
-
             <div class="header">
               <h4> <mat-icon>list</mat-icon>  {{ itemType.name }}</h4>
             </div>
-
             <div *ngIf="itemType  && (
                  itemType.name   === 'wine'
               || itemType.name   === 'alcohol'
@@ -186,10 +180,11 @@
               <!-- //department /category -->
             </div>
 
-            <div *ngIf="itemType  && (itemType.name === 'strain' || itemType.name === 'cannabis' || itemType.name ===  'med-cannabis')">
+            <div *ngIf="itemType  && (itemType.name === 'strain' ||
+                                      itemType.name === 'cannabis' ||
+                                      itemType.name ===  'med-cannabis')">
               <cannabis-item-edit [inputForm]="productForm"></cannabis-item-edit>
             </div>
-
           </div>
 
       </div>

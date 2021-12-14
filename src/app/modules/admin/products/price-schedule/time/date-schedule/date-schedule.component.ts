@@ -81,20 +81,6 @@ export class DateScheduleComponent implements OnInit {
     }
   }
 
-  // addItem() {
-  //   try {
-  //       this.fbPriceScheduleService.addDateRange(this.inputForm, null)
-  //       const dateFrame = {} as DateFrame;
-  //       dateFrame.startDate =''
-  //       dateFrame.endDate = ''
-  //       // this.item.dateFrames = [] as DateFrame[]
-  //       // this.item.dateFrames.push(dateFrame)
-  //     console.log('item added')
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
-
   deleteItem(i: any) {
     this.fbPriceScheduleService.deleteDateFrame(i, this.inputForm)
     this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)

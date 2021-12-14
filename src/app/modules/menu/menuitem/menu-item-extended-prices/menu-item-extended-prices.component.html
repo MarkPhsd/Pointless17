@@ -1,0 +1,12 @@
+<!-- <div *ngIf="menuItem.price" -->
+
+
+    <div class="pricing-box" *ngIf="menuItem?.retail" >
+      <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
+      <div id="price"> Price {{ menuItem?.retail | currency }} </div>
+    </div>
+
+    <div  class="pricing-box" *ngIf="menuItem.msrp != 0" >
+      <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
+      <div id="price">MSRP {{ menuItem?.msrp | currency }} </div>
+    </div>

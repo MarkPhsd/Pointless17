@@ -90,6 +90,12 @@ export class PriceScheduleComponent {
     this.initPriceScheduleService();
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
   toggleSideBar() {
     this.toolBarUIService.updateToolBarSideBar(false)
     setTimeout(() => {

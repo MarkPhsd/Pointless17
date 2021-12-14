@@ -1,5 +1,5 @@
 <div *ngIf="priceSchedule" class="type-list">
-  <mat-card>
+  <mat-card class="card-container">
     <mat-card-subtitle>
       <div *ngIf="inputForm">
         <div>
@@ -112,15 +112,15 @@
         <mat-divider></mat-divider>
       </div>
 
-      <div *ngIf="isMenuList">
-        <app-item-sort
-          [inputForm]="inputForm"
-          [priceSchedule]="priceSchedule">
-        </app-item-sort>
-      </div>
+        <div *ngIf="isMenuList">
+          <app-item-sort
+            [inputForm]="inputForm"
+            >
+          </app-item-sort>
+        </div>
 
       <!-- <div [hidden]="!isMenuList"> -->
-        <div class="constraint-panels"  *ngIf="inputForm">
+        <div [hidden]="isMenuList" class="constraint-panels"  *ngIf="inputForm">
 
           <div [formGroup]="inputForm">
             <mat-card>
@@ -196,7 +196,7 @@
             </div>
         </div>
 
-        <div class="constraint-panels" *ngIf="inputForm">
+        <div [hidden]="isMenuList" class="constraint-panels" *ngIf="inputForm">
           <div [formGroup]="inputForm"  >
             <mat-card>
               <mat-card-subtitle>
@@ -276,5 +276,5 @@
 
     </mat-card-content>
   </mat-card>
-
+</div>
 

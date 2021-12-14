@@ -46,6 +46,13 @@ export class DiscountTypeSelectionComponent implements OnInit {
     this.initSubscriptions();
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
+
   initPriceScheduleAdjustments() {
     const site = this.siteService.getAssignedSite();
     this.priceAdjustScheduleTypes$ = this.priceScheduleService.getPriceAdjustList(site)

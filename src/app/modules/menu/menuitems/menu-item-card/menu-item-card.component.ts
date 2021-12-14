@@ -43,7 +43,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   getPlatForm() {  return Capacitor.getPlatform(); }
 
   constructor(
-    private devMode: DevService,
     private awsBucket: AWSBucketService,
     private router: Router,
     public route: ActivatedRoute,

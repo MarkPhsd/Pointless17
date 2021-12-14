@@ -5,6 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { IUser } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
+import { OrdersService } from '..';
 
 export interface IUserExists {
   id:           number;
@@ -48,6 +49,7 @@ export class AuthenticationService {
         private http            : HttpClient,
         private appInitService  : AppInitService,
         private platFormservice : PlatformService,
+        private orderService    : OrdersService,
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
@@ -99,6 +101,12 @@ export class AuthenticationService {
         }
       }
       this.router.navigate(['/login']);
+      this.clearSubscriptions()
+    }
+
+    clearSubscriptions() {
+      this.orderService.updateOrderSubscription(null)
+      this.orderService.updateOrderSearchModel(null);
     }
 
     clearUserSettings(){

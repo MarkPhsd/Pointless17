@@ -1,7 +1,5 @@
 <div *ngIf="inputForm">
-
   <div [formGroup]="inputForm">
-
     <div class="grid-container ">
       <mat-label>Type</mat-label>
       <div *ngIf="priceAdjustScheduleTypes">
@@ -10,32 +8,14 @@
                                   aria-label="Font Style"
                                   formControlName="type"
                                   >
-
             <mat-button-toggle class="discount-type-button"
                                [value]="item.name"
                                (tapClick)="selectAdjustScheduleTypes(item)"
                                *ngFor="let item of list" >
 
-              <div *ngIf="item.name === 'BOGO - Item Discounts'">
-                <mat-icon>label</mat-icon>
+              <div *ngIf="item.name === 'BOGO Discounts'">
+                <mat-icon>{{item.icon}}</mat-icon>
               </div>
-
-              <div *ngIf="item.name === 'Percent Off'">
-                <mat-icon>class</mat-icon>
-              </div>
-
-              <div *ngIf="item.name === 'Money Off'">
-                <mat-icon>money</mat-icon>
-              </div>
-
-              <div *ngIf="item.name === 'Free Item Off'">
-                <mat-icon>loyalty</mat-icon>
-              </div>
-
-              <div *ngIf="item.name === 'Menu List'">
-                <mat-icon>menu</mat-icon>
-              </div>
-
               {{item.name}}
             </mat-button-toggle>
           </mat-button-toggle-group>
@@ -97,24 +77,6 @@
           </div>
         </div>
       </div>
-<!--
-      <mat-form-field appearance="outline">
-
-        <mat-select
-              type              = "text"
-              formControlName   = "discountType"
-              name              = "discountType"
-            >
-            <div *ngIf="priceAdjustScheduleTypes">
-              <div *ngIf="priceAdjustScheduleTypes as list" >
-                <mat-option *ngFor="let item of list" [value]="item.name">
-                    {{item.name}}
-                </mat-option>
-              </div>
-            </div>
-        </mat-select>
-
-      </mat-form-field> -->
     </div>
 
   </div>

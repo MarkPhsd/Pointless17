@@ -103,6 +103,13 @@ export class TypeFilterComponent implements OnInit {
     this.itemTypes$ = this.itemTypeService.getItemTypeCategoriesReadOnlyList(site);
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
+
   isItemToggled(item) {
 
     if (item.id == undefined || !this.lastSelectedItemType)  { return false}

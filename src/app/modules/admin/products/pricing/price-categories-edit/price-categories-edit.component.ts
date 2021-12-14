@@ -260,6 +260,8 @@ export class PriceCategoriesEditComponent implements OnInit {
 
   deleteItem(item, i) {
 
+    const result = window.confirm('Are you sure you want to delete this item?')
+    if (!result) { return }
     item = item.value;
 
     if (!item.id) {

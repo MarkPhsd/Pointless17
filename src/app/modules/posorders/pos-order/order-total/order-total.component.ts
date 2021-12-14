@@ -8,8 +8,8 @@ import { IPOSOrder } from 'src/app/_interfaces';
   styleUrls: ['./order-total.component.scss']
 })
 export class OrderTotalComponent implements OnInit {
-  @Input() order: IPOSOrder
 
+  @Input() order: IPOSOrder
   @Input() mainPanel = false;
 
   transactionDataClass ="transaction-data"

@@ -1,35 +1,38 @@
 
 <div fxFlex fxLayout="column start" >
 
-  <div *ngIf="discountInfos">
-    <h4>Drag / Drop to Sort</h4>
-    <div  class="drag-list"
-          cdkDropList
-          #accordionList="cdkDropList"
-          (cdkDropListDropped)  ="drop($event)"
-        >
-      <div *ngFor="let item of discountInfos; let index = index;"
-           class="pop"
-           cdkDrag
-           (click)="assignItem(item, index)"
-        >
-          <div class="grid-row">
-            <div>
-              {{item?.name}}
-            </div>
-            <div>
-              <button  mat-button
-                (click)="deleteSelected(item)">
-                Remove {{discountInfo?.name | truncateText: 8}}
-                <mat-icon>delete</mat-icon>
-              </button>
+  <div
+       *ngIf="discountInfos">
+    <h5>Drag / Drop to Sort</h5>
+    <div class="drag-container">
+
+      <div  class="drag-list "
+            cdkDropList
+            #accordionList="cdkDropList"
+            (cdkDropListDropped)  ="drop($event)"
+          >
+        <div *ngFor="let item of discountInfos; let index = index;"
+            class="pop"
+            cdkDrag
+            (click)="assignItem(item, index)"
+          >
+            <div class="grid-row">
+              <div>
+                {{item?.name}}
+              </div>
+              <div>
+                <button  mat-button
+                  (click)="deleteSelected(item)">
+                  Remove {{discountInfo?.name | truncateText: 8}}
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+
+      </div>
     </div>
   </div>
-
-  {{discountInfos | json}}
 
 </div>
 

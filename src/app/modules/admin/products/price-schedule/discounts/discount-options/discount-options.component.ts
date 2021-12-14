@@ -42,6 +42,13 @@ export class DiscountOptionsComponent implements OnInit, OnChanges {
     this.priceAdjustScheduleTypes$ = this.priceScheduleService.getPriceAdjustList(site)
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
+
   ngOnChanges() {
     this.updateInfo();
   }

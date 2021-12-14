@@ -45,6 +45,12 @@ export class PriceScheduleFieldsComponent implements OnInit {
     this.initSubscriptions();
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
   get arrayType() : FormArray {
     if (this.arrayTypeName) {
       return this.inputForm.get(this.arrayTypeName) as FormArray;

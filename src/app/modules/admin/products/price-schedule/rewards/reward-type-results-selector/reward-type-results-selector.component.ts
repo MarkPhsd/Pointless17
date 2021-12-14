@@ -110,6 +110,12 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
     this.initSubscriptions();
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(

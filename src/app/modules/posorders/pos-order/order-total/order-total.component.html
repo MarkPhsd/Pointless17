@@ -1,11 +1,11 @@
 <div [class]="transactionDataClass" >
   <div>Sub   </div>
-  <div> {{ order.subTotal | currency }}</div>
+  <div> {{ order?.subTotal | currency }}</div>
   <div>Tax  </div>
-  <div> {{ order.taxTotal | currency }}</div>
+  <div> {{ order?.taxTotal | currency }}</div>
   <div>Total </div>
-  <div> {{ order.total | currency }}</div>
+  <div> {{ order?.total | currency }}</div>
   <div>Items </div>
-  <div> {{ order.itemCount }}</div>
+  <div> {{ order?.itemCount }}</div>
 </div>
 

@@ -13,7 +13,7 @@
   },
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --optimization=false  --host=192.168.0.16 --port=4200",
+    "start with IP": "ng serve --optimization=false  --host=192.168.0.16 --port=4200",
     "startLocal": "ng serve  --optimization=false --host=localhost --port=4200",
     "build": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all --sourceMap=true",
     "buildNoSourceMap": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all",

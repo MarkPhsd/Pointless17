@@ -1,0 +1,29 @@
+
+#unitDescription {
+  font-weight: 500;
+  font-size: 1em;
+  width: 100%;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  float: left;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+#price {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  align-items: baseline;
+  line-height: 1em;
+}

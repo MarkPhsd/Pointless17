@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Subscription } from 'rxjs';
@@ -7,48 +7,83 @@ import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-sch
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { FormGroup } from '@angular/forms';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
+import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 
 @Component({
   selector: 'app-item-sort',
   templateUrl: './item-sort.component.html',
   styleUrls: ['./item-sort.component.scss']
 })
-export class ItemSortComponent implements OnInit {
+export class ItemSortComponent  {
 
-  @Input() priceSchedule   : IPriceSchedule;
+  priceSchedule            : IPriceSchedule;
   @Input() inputForm       : FormGroup;
   discountInfos            : DiscountInfo[];
   discountInfo             : DiscountInfo;
-  _priceSchedule           : Subscription;
+  // _priceSchedule           : Subscription;
   index                    : number;
 
-  initSubscriptions() {
-    this._priceSchedule = this.priceScheduleService.priceSchedule$.subscribe(data => {
-      if (data) {
-       this.priceSchedule = data;
-       this.initList(data.itemDiscounts);
-       console.log('received datea for item sort')
+  // _priceSchedule = this.priceScheduleService.priceSchedule$.subscribe(data => {
+  //   console.log('received datea for item sort', data)
+  //   if (data) {
+  //    this.priceSchedule = data;
+  //    if (data.itemDiscounts) {
+  //      this.initList(data.itemDiscounts);
+  //    }
+  //   }
+  // })
+
+  // initSubscriptions() {
+
+  // }
+
+  _priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
+    this.priceSchedule = data
+    console.log('received datea for item sort', data)
+    if (data) {
+      this.priceSchedule = data;
+      if (data.itemDiscounts) {
+        this.initList(data.itemDiscounts);
       }
-    })
-  }
+     }
+  })
+
   constructor(
-    private priceScheduleService: PriceScheduleService,
-    private siteService:  SitesService,
-    private fbPriceScheduleService  : FbPriceScheduleService,
-    private _snackBar:    MatSnackBar,
+    private priceScheduleDataService  : PriceScheduleDataService,
+    private priceScheduleService      : PriceScheduleService,
+    private siteService               : SitesService,
+    private fbPriceScheduleService    : FbPriceScheduleService,
+    private _snackBar                 : MatSnackBar,
   ) {
   }
 
-  ngOnInit() {
-    if (!this.priceSchedule) { return }
-    this.initList(this.priceSchedule.itemDiscounts)
-    // this.initSubscriptions();
+  // ngOnInit() {
+  //   this.initSubscriptions();
+  // }
+
+  // ngAfterViewInit(): void {
+  //   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
+  //   //Add 'implements AfterViewInit' to the class.
+  //   this.initSubscriptions();
+  // }
+
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
   }
 
+  initList(list: DiscountInfo[]) {
+    if (list) {
+      this.discountInfos = list.sort((a , b) => (+a.sort > +b.sort) ? 1: -1)
+    }
+  }
 
   assignItem(item, index) {
-    this.discountInfo = item
-    this.index = index
+    if (item) {
+      this.discountInfo = item
+      this.index = index
+    }
   }
 
   deleteSelected(item) {
@@ -59,10 +94,6 @@ export class ItemSortComponent implements OnInit {
       this.priceSchedule.itemDiscounts = this.discountInfos;
     })
     this.discountInfo = {} as DiscountInfo
-  }
-
-  initList(list: DiscountInfo[]) {
-    this.discountInfos = list.sort((a , b) => (+a.sort > +b.sort) ? 1: -1)
   }
 
   drop(event: CdkDragDrop<string[]>) {

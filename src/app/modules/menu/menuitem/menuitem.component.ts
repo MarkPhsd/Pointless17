@@ -10,7 +10,6 @@ import {Location} from '@angular/common';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { exhaustMap } from 'rxjs/operators';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -100,7 +99,6 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     }
 
     async addItemToOrder() {
-      console.log('order', this.order)
       if (this.order) {
         this.orderMethodsService.addItemToOrder(this.order, this.menuItem, this.quantity)
       }

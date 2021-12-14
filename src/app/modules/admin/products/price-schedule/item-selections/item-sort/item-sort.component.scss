@@ -50,16 +50,20 @@
 }
 
 .drag-list {
-
   display   : flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow-x: hidden;
+  // overflow-x: hidden;
+  // overflow-y: auto;
   gap       : 10px;
   margin    : 10px;
   gap       : 10px;
+}
 
-  // @media (max-width: 599px)  {
+.drag-container {
+  height    : 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+    // @media (max-width: 599px)  {
   //   height: 50vh;
   // }
   // @media (min-width: 600px)   {

@@ -92,30 +92,12 @@
         <mat-button-toggle class="discount-type-button"
                             [value]="item.name"
                             *ngFor="let item of list" >
-
-          <div *ngIf="item.name === 'BOGO - Item Discounts'">
-            <mat-icon class="mat-icon">label</mat-icon>
+          <div >
+            <mat-icon class="mat-icon">{{item.icon}}</mat-icon>
           </div>
-
-          <div *ngIf="item.name === 'Percent Off'">
-            <mat-icon class="mat-icon">class</mat-icon>
-          </div>
-
-          <div *ngIf="item.name === 'Money Off'">
-            <mat-icon class="mat-icon">money</mat-icon>
-          </div>
-          <div *ngIf="item.name === 'Free Item Off'">
-            <mat-icon class="mat-icon">loyalty</mat-icon>
-          </div>
-
-          <div *ngIf="item.name === 'Menu List'">
-            <mat-icon class="mat-icon">loyalty</mat-icon>
-          </div>
-
           {{item.name}}
         </mat-button-toggle>
       </mat-button-toggle-group>
-
 
       <div class="grid-item">
         <button mat-button
@@ -130,7 +112,6 @@
               class="assign-button"
               (click)="addSchedule()"> <mat-icon>add</mat-icon>Add Item
         </button>
-
         <button mat-button
               class="assign-button"
               (click)="navPriceScheduleGroups()"> <mat-icon>settings</mat-icon>Menu List Layouts

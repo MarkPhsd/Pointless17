@@ -49,6 +49,13 @@ export class OrderTypeSelectionComponent implements OnInit {
     await this.initForm()
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
+
   async initForm() {
     const site = this.siteService.getAssignedSite();
     const serviceTypes$  = this.serviceTypeService.getSaleTypes(site)

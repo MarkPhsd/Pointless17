@@ -115,8 +115,6 @@ export interface Tax {
   name:   string;
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -416,16 +414,16 @@ constructor(private http: HttpClient,
         enabled: true,
         ageRequirement:0,
         sortOrder: 1,
-        useType:'product',
-        icon: 'food',
-        useGroupID: 12,
+        useType:'generic',
+        icon: 'generic',
+        useGroupID: 11,
         imageName: '',
         itemType_Categories: categories,
         requiresSerial: false
       },
 
         {id: 2,  taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0, requiresSerial: false, printerName: '',    name : "Modifier",              itemType_Categories: categories, imageName: '',       icon: 'food', useType:'product', sortOrder: 11, ageRequirement: 0,   enabled: true,     type: 'restaurant', useGroupID: 1, weightedItem: true, expirationRequired: false, labelRequired: false, },
-        {id: 3,  taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',    name : "Text",                  itemType_Categories: categories, imageName: '',       icon: 'food',useType:'adjustment', sortOrder: 12, ageRequirement: 0, enabled: true,     type: 'restaurant', useGroupID: 1, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 3,  taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',    name : "Text",                  itemType_Categories: categories, imageName: '',       icon: 'food', useType:'adjustment', sortOrder: 12, ageRequirement: 0, enabled: true,     type: 'restaurant', useGroupID: 1, weightedItem: true, expirationRequired: false, labelRequired: false, },
 
         {id: 4,  taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Category",              itemType_Categories: categories, imageName: '',       icon: 'category',useType:'category', sortOrder: 8, ageRequirement: 0, enabled: true,    type: 'grouping', useGroupID: 3, weightedItem: true, expirationRequired: false, labelRequired: false, },
         {id: 5,  taxable: 0,  labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Sub Category",          itemType_Categories: categories, imageName: '',       icon: 'group'  , useType:'category', sortOrder: 9, ageRequirement: 0, enabled: true,    type: 'grouping', useGroupID: 3,weightedItem: true, expirationRequired: false, labelRequired: false, },
@@ -436,7 +434,7 @@ constructor(private http: HttpClient,
         {id: 9,  taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Quantity Off Item",     itemType_Categories: categories, imageName: '',       icon: 'coupon',useType:'adjustment', sortOrder: 15, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 10, taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 1",         itemType_Categories: categories, imageName: '',       icon: ''      ,useType:'adjustment', sortOrder: 16, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 11, taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 2",         itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 17, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 12, taxable: 0, labelTypeID: 0,printLocationID: 0,prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 3",         itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 18, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 12, taxable: 0, labelTypeID: 0,printLocationID: 0,prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 3",         itemType_Categories: categories, imageName: '',        icon: ''      , useType:'adjustment', sortOrder: 18, ageRequirement: 0, enabled: true, type:  'discounts',  useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 13, taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Discount % One Item",   itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 19, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 15, taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Promo Unspecified",     itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 20, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 14, taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Blind Item",            itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 21, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
@@ -451,12 +449,12 @@ constructor(private http: HttpClient,
         {id: 23, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Matrix Item",           itemType_Categories: categories, imageName: '',       icon: 'matrix',useType:'product',  sortOrder: 29, ageRequirement: 0, enabled: true, type:  'Retail', useGroupID: 5, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 24, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Retail Clothing",       itemType_Categories: categories, imageName: '',       icon: 'shirt' , useType:'product', sortOrder: 29, ageRequirement: 0, enabled: true, type:  'Retail', useGroupID: 5, weightedItem: false, expirationRequired: false, labelRequired: false, },
 
-        {id: 25, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Hookah Flavor",         itemType_Categories: categories, imageName: '',       icon: 'smoke'  , useType:'product', sortOrder: 30, ageRequirement: 18, enabled: true, type:  'tobacco', useGroupID: 6,  weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 25, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Hookah Flavor",         itemType_Categories: categories, imageName: '',       icon: 'smoke'  , useType:'product', sortOrder: 30, ageRequirement: 18, enabled: true,     type:  'tobacco', useGroupID: 6,  weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 26, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "E Juice",               itemType_Categories: categories, imageName: '',       icon: ''      , useType:'product', sortOrder: 31,  ageRequirement: 18, enabled: true,     type: 'tobacco',  useGroupID: 6,weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 27, taxable: 1,  labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "E Juice Mix",           itemType_Categories: categories, imageName: '',       icon: ''      , useType:'product', sortOrder: 32, ageRequirement: 18, enabled: true,      type:  'tobacco', useGroupID: 6, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 28, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "E Juice Other",         itemType_Categories: categories, imageName: '',       icon: ''      , useType:'product', sortOrder: 33, ageRequirement: 18, enabled: true,      type:  'tobacco', useGroupID: 6,weightedItem: false, expirationRequired: false, labelRequired: false, },
 
-        {id: 29, taxable: 1,  labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Retail",               itemType_Categories: categories, imageName: '',      icon: '', useType:'product',  sortOrder: 1, ageRequirement:0, enabled: true,          type: 'generic',  useGroupID: 6, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 29, taxable: 1,  labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Retail",               itemType_Categories: categories, imageName: '',      icon: '', useType:'product',  sortOrder: 1, ageRequirement:0, enabled: true,           type: 'generic',  useGroupID: 11, weightedItem: true, expirationRequired: false, labelRequired: false, },
 
         {id: 30, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Strain",                itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 2, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: true, expirationRequired: false, labelRequired: false, },
         {id: 31, taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Edible",                itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },

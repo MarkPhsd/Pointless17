@@ -26,15 +26,10 @@
               <div id="barcode">{{ menuItem?.barcode}}</div>
 
               <div class="prices">
-                <div class="pricing-box" *ngIf="menuItem?.retail" >
-                  <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
-                  <div id="price"> Price {{ menuItem?.retail | currency }} </div>
-                </div>
-
-                <div  class="pricing-box" *ngIf="menuItem.msrp != 0" >
-                  <div id="unitDescription"> {{ menuItem?.unitDescription }}</div>
-                  <div id="price">MSRP {{ menuItem?.msrp | currency }} </div>
-                </div>
+                <menu-item-extended-prices
+                  [isUserStaff]="isUserStaff"
+                  [menuItem]="menuItem">
+                </menu-item-extended-prices>
               </div>
 
               <div class="manager-info" *ngIf="isUserStaff">

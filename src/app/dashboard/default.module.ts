@@ -219,6 +219,7 @@ import { TiersWithPricesComponent } from '../modules/menu/tierMenu/tiers-with-pr
 import { ItemSortComponent } from '../modules/admin/products/price-schedule/item-selections/item-sort/item-sort.component';
 import { PSMenuGroupListComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
 import { PSMenuGroupEditComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
+import { MenuItemExtendedPricesComponent } from '../modules/menu/menuitem/menu-item-extended-prices/menu-item-extended-prices.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -293,6 +294,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuGroupItemEditComponent,
     MenuitemComponent,
     MenuItemCardComponent,
+    MenuItemExtendedPricesComponent,
     MenuManagerComponent,
     MessagesToUserComponent,
     MetrcIndividualPackageComponent,

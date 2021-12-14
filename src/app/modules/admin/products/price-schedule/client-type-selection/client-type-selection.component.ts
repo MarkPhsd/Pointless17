@@ -49,6 +49,12 @@ export class ClientTypeSelectionComponent implements OnInit {
     await this.initForm()
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
   async initForm() {
     const site = this.siteService.getAssignedSite();
     const clientTypes$ = this.clientTypeService.getClientTypes(site)

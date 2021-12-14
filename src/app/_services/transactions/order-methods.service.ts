@@ -20,6 +20,7 @@ import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-seri
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { PrintingService } from '../system/printing.service';
+import { MenuItem } from 'electron';
 
 export interface ProcessItem {
   order: IPOSOrder;
@@ -45,7 +46,7 @@ export class OrderMethodsService {
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
-      console.log('subscription order method service ', order)
+      // console.log('subscription order method service ', order)
     })
   }
 
@@ -98,12 +99,23 @@ export class OrderMethodsService {
     const result        = await this.doesOrderExist(site);
 
     if (!result) { return }
-    console.log('addItemToOrder result with order', result, order, this.order)
     if (!order) {order = this.order}
     if (order) {
+
+      if (!item.itemType) {
+        this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
+        return
+      }
+
       const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
       const itemResult$ = this.posOrderItemService.postItem(site, newItem)
+
       itemResult$.subscribe(data => {
+
+          if (data && data.resultErrorDescription) {
+            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+            return
+          }
           if (data.order) {
             this.addedItemOptions(data.order, item, data.posItem)
           } else {
@@ -123,9 +135,6 @@ export class OrderMethodsService {
       const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
       const itemResult$ = this.posOrderItemService.putItem(site, newItem)
       itemResult$.subscribe(data => {
-
-
-
           if (data.order) {
             this.order = data.order
             this.orderService.updateOrderSubscription(data.order)
@@ -262,7 +271,8 @@ export class OrderMethodsService {
     } else {
       console.log('Confirm no Prompt for price.')
       this.order = order;
-      this.initItemProcess();
+      this.updateProcess() //
+      // this.initItemProcess();
     }
     return true;
   }
@@ -310,6 +320,7 @@ export class OrderMethodsService {
     processItem.item    = item;
     processItem.order   = order;
     processItem.posItem = posItem;
+    // console.log('addedItemOptions')
     this.processItem    = processItem;
     this._itemProcessSection.next(0)
     this.itemProcessSection = 0;
@@ -320,6 +331,7 @@ export class OrderMethodsService {
   async handleProcessItem() {
     const process = this.itemProcessSection;
 
+    console.log('handleProcessItems', process)
     if (!this.processItem) {
       console.log('no processItem')
       this.orderService.updateOrderSubscription(this.order)
@@ -333,8 +345,9 @@ export class OrderMethodsService {
           break;
       }
       case  1: {
+          // console.log('pre process serial', this.processItem.item, this.processItem.posItem.id, false, '')
           this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')
-          console.log('Handle Process Item promptSerial', 1)
+          // console.log('Handle Process Item promptSerial', 1)
           break;
         }
       case  2: {
@@ -444,7 +457,7 @@ export class OrderMethodsService {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 5000,
       verticalPosition: 'bottom'
     });
   }

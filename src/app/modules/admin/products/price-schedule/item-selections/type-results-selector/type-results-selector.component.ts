@@ -109,6 +109,12 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     this.initSubscriptions();
   }
 
+  ngDestroy() {
+    if (this._priceSchedule) {
+      this._priceSchedule.unsubscribe();
+    }
+  }
+
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(
