@@ -1,219 +1,107 @@
-<div class="container">
-
-  <div *ngIf="priceSchedule">
-
-    <mat-card>
-      <div class="header-grid">
-
-        <div>
-          {{priceSchedule.name}}
+<div *ngIf="!saveNotification; else saving">
+  <div class="container"
+      *ngIf="priceSchedule; loading">
+    <div>
+      <mat-card>
+        <div class="header-grid">
+          <div>
+            {{priceSchedule.name}}
+          </div>
+          <div>
+            <span>
+              <button mat-button
+                      (click)="save()">
+                <mat-icon>save</mat-icon>Save
+              </button>
+            </span>
+            <span>
+              <button mat-button color="accent"
+                      (click)="delete()">
+                <mat-icon>delete</mat-icon>Delete
+              </button>
+            </span>
+          </div>
         </div>
+      </mat-card>
+      <div *ngIf="inputForm">
+        <div [formGroup]="inputForm">
+            <div class="grid-card">
 
-        <div>
-          <span>
-            <button mat-button
-                    (click)="save()">
-              <mat-icon>save</mat-icon>Save
-            </button>
-          </span>
-          <span>
-            <button mat-button color="accent"
-                    (click)="delete()">
-              <mat-icon>delete</mat-icon>Delete
-            </button>
-          </span>
-
-        </div>
-      </div>
-    </mat-card>
-
-
-    <div *ngIf="inputForm">
-      <div [formGroup]="inputForm">
-          <div class="grid-card">
-
-            <div>
-              <mat-tab-group>
-                <mat-tab label="Name & Type">
-                  <mat-card>
-                    <app-discount-options
-                        [inputForm]="inputForm"   >
-                    </app-discount-options>
-                  </mat-card>
-                </mat-tab>
-
-                <mat-tab label="Constraints">
-                  <app-price-schedule-constraints
-                      [inputForm]="inputForm"
-                      [item]="priceSchedule">
-                  </app-price-schedule-constraints>
-                </mat-tab>
-
-                <div *ngIf="priceScheduleTracking.type != 'Menu List'">
-                  <mat-tab label="Category & Items">
-                    <div class="grid-search-container">
-                      <app-type-filter
-                        [inputForm]="inputForm"
-                        [item]     ="priceSchedule">
-                      </app-type-filter>
-                    </div>
+              <div>
+                <mat-tab-group>
+                  <mat-tab label="Name & Type">
+                    <mat-card>
+                      <app-discount-options
+                          [inputForm]="inputForm">
+                      </app-discount-options>
+                    </mat-card>
                   </mat-tab>
-                </div>
 
-                <div *ngIf="priceScheduleTracking.type === 'Menu List'">
-                  <mat-tab label="Selected Menu Items">
-                    <div class="grid-search-container">
-                      <app-reward-type-filter
+                  <mat-tab label="Constraints">
+                    <app-price-schedule-constraints
                         [inputForm]="inputForm"
-                        [item]     ="priceSchedule">
-                      </app-reward-type-filter>
-                    </div>
+                        [item]="priceSchedule">
+                    </app-price-schedule-constraints>
                   </mat-tab>
-                </div>
 
-                <div *ngIf="priceScheduleTracking.type != 'Menu List'">
-                  <mat-tab label="Offers and Rewards">
-                    <div class="grid-search-container">
-                      <app-reward-type-filter
-                        [inputForm]="inputForm"
-                        [item]     ="priceSchedule">
-                      </app-reward-type-filter>
-                    </div>
-                  </mat-tab>
-                </div>
-
-                <!-- <mat-tab label="Sort Items"  *ngIf="priceScheduleTracking.type === 'Menu List'">
-                  <app-item-sort
-                    [inputForm]="inputForm"
-                    [priceSchedule]="priceSchedule"
-                  ></app-item-sort>
-                </mat-tab> -->
-
-                <mat-tab label="Finalize"  *ngIf="priceScheduleTracking.type != 'Menu List'">
-
-                  <div *ngIf="devMode && priceScheduleTracking">
-
-                      <div *ngIf="priceScheduleTracking">
-
-                        <h4>ClientTypes</h4>
-                        <div *ngFor="let item of priceScheduleTracking.clientTypes">
-                          {{ item | json }}
-                        </div>
-
-                        <h4>ClientTypes</h4>
-                        <div *ngFor="let item of priceScheduleTracking.clientTypes">
-                          {{ item | json }}
-                        </div>
-
-                        <h4>Order Types</h4>
-                        <div *ngFor="let item of priceScheduleTracking.orderTypes">
-                          {{ item | json }}
-                        </div>
-
-                        <h4>item Type Discounts</h4>
-                        <div *ngFor="let item of priceScheduleTracking.itemTypeDiscounts">
-                          {{ item | json }}
-                        </div>
-
-                        <h4>category </h4>
-                        <div *ngFor="let item of priceScheduleTracking.categoryDiscounts">
-                          {{ item | json }}
-                        </div>
-
-                        <h4>item s</h4>
-                        <div *ngFor="let item of priceScheduleTracking.itemDiscounts">
-                          {{ item | json }}
+                  <div *ngIf="priceScheduleTracking.type != 'Menu List'">
+                    <mat-tab label="Category & Items">
+                      <div class="grid-search-container">
+                        <app-type-filter
+                          [inputForm]="inputForm"
+                          [item]     ="priceSchedule">
+                        </app-type-filter>
                       </div>
+                    </mat-tab>
+                  </div>
 
-                        <h4>  brands </h4>
-                        <div *ngFor="let item of priceScheduleTracking.brandDiscounts">
-                          {{ item | json }}
-                        </div>
-
+                  <div *ngIf="priceScheduleTracking.type === 'Menu List'">
+                    <mat-tab label="Selected Menu Items">
+                      <div class="grid-search-container">
+                        <app-reward-type-filter
+                          [inputForm]="inputForm"
+                          [item]     ="priceSchedule">
+                        </app-reward-type-filter>
                       </div>
+                    </mat-tab>
+                  </div>
 
-                      <h3>Required</h3>
-                        <h4>   ItemTypes</h4>
-                        <div *ngFor="let item of priceScheduleTracking.requiredItemTypes">
-                          {{ item | json }}
-                        </div>
-                        <h4>   Categories</h4>
-                        <div *ngFor="let item of priceScheduleTracking.requiredCategories">
-                          {{ item | json }}
-                        </div>
-                        <h4>   items</h4>
-                        <div *ngFor="let item of priceScheduleTracking.requiredItems">
-                          {{ item.name }}
-                        </div>
-                        <h4>   Required</h4>
-                        <div *ngFor="let item of priceScheduleTracking.requiredBrands">
-                          {{ item.name }}
-                        </div>
+                  <div *ngIf="priceScheduleTracking.type != 'Menu List'">
+                    <mat-tab label="Offers and Rewards">
+                      <div class="grid-search-container">
+                        <app-reward-type-filter
+                          [inputForm]="inputForm"
+                          [item]     ="priceSchedule">
+                        </app-reward-type-filter>
                       </div>
-
-                      <div *ngIf="inputForm">
-                        <h4>inputForm Tracking</h4>
-                        <ul>
-                          <li>
-                            Order Types:   {{inputForm.controls['orderTypes'].value | json }}
-                          </li>
-                          <li>
-                            Client Types:   {{inputForm.controls['clientTypes'].value | json }}
-                          </li>
-                          <li>
-                            Category discounts:   {{inputForm.controls['categoryDiscounts'].value | json }}
-                          </li>
-                          <li>
-                            itemTypeDiscounts  {{inputForm.controls['itemTypeDiscounts'].value | json }}
-                          </li>
-                          <li>
-                            itemDiscounts  {{inputForm.controls['itemDiscounts'].value | json }}
-                          </li>
-                          <li>
-                            brandDiscounts {{inputForm.controls['brandDiscounts'].value | json }}
-                          </li>
-                          <li>
-                            requiredCategories  {{inputForm.controls['requiredCategories'].value | json }}
-                          </li>
-                          <li>
-                            requiredItemTypes {{inputForm.controls['requiredItemTypes'].value | json }}
-                          </li>
-                          <li>
-                            requiredItems  {{inputForm.controls['requiredItems'].value | json }}
-                          </li>
-                          <li>
-                            requiredBrands  {{inputForm.controls['requiredBrands'].value | json }}
-                          </li>
-                        </ul>
-
-                        <h4>Whole Form</h4>
-                        {{inputForm.value | json}}
-                      </div>
-
-                </mat-tab>
-              </mat-tab-group>
-
+                    </mat-tab>
+                  </div>
+                </mat-tab-group>
+              </div>
+              <div>
             </div>
-
-            <div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- class="floating-info" -->
+    <div class="floating-info" >
+      <div *ngIf="inputForm">
+        <app-price-schedule-info
+                [inputForm]="inputForm"
+                [hideDelete]="'true'"
+                  >
+        </app-price-schedule-info>
+      </div>
+    </div>
   </div>
 </div>
-
-<div class="floating-info">
-  <div *ngIf="inputForm && priceScheduleTracking">
-    <app-price-schedule-info
-            [inputForm]="inputForm"
-            [hideDelete]="'true'"
-              >
-    </app-price-schedule-info>
-  </div>
-</div>
-
-<!-- <div class="grid-container">
-  <button (click)="initForm()"> init form</button>
-  <button (click)="setDefaultFormValues()"> Fill form</button>
-</div> -->
+<ng-template loading>
+  <h3>saving....</h3>
+  <mat-spinner></mat-spinner>
+</ng-template>
+<ng-template #saving>
+  <h3>saving....</h3>
+  <mat-spinner></mat-spinner>
+</ng-template>

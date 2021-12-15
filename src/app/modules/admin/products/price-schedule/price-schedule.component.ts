@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
-  TimeFrame, WeekDay
+  TimeFrame, WeekDay, OrderType
 } from 'src/app/_interfaces/menu/price-schedule';
 import { DevService } from 'src/app/_services';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
@@ -26,7 +26,7 @@ export class PriceScheduleComponent {
 
   inputForm:            FormGroup;
   selectClientForm:     FormGroup;
-
+  saveNotification:     boolean;
   clientTypes:          ClientTypes;
   dateFrame:            DateFrame;
   maintype:             DiscountInfo;
@@ -51,7 +51,7 @@ export class PriceScheduleComponent {
 
   _priceSchedule              : Subscription;
   priceScheduleTracking       : IPriceSchedule;
-  devMode                     : boolean;
+  devMode                     = false;
 
   initPriceScheduleService() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
@@ -65,7 +65,6 @@ export class PriceScheduleComponent {
       }
       this.priceScheduleTracking = data
     })
-
   }
 
   constructor(
@@ -81,8 +80,7 @@ export class PriceScheduleComponent {
     )
 
   {
-    this.devMode =  !this.devModeService.getdevMode();
-
+    this.devMode = true ; // this.devModeService.getdevMode();
     this.initForm()
     this.toggleSideBar()
     const id = this.route.snapshot.paramMap.get('id');
@@ -162,17 +160,34 @@ export class PriceScheduleComponent {
     return null
   }
 
+  getItemValueFromForm(value: any): IPriceSchedule {
+
+    const newSchedule = {} as IPriceSchedule;
+
+    const orderTypes = newSchedule.orderTypes as OrderType[]
+    console.log('orderTypes', newSchedule.orderTypes)
+    console.log('orderTypes', orderTypes)
+
+    const clientTypes = newSchedule.clientTypes as ClientType[]
+    console.log('clientTypes', clientTypes)
+
+    const itemDiscounts = newSchedule.itemDiscounts as DiscountInfo[]
+    console.log('itemDiscounts', itemDiscounts)
+
+    return value
+  }
+
   save() {
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
       // const priceSchedule = this.getPriceSchedule(this.inputForm)
       const item = this.inputForm.value as IPriceSchedule
-
       this.priceScheduleDataService.updatePriceSchedule(item)
-
-      const item$ = this.priceScheduleService.save(site, item)
-      console.log('item to save ', item)
+      console.log(this.priceSchedule)
+      const item$ = this.priceScheduleService.save(site, this.priceSchedule)
+      this.saveNotification = true
       item$.subscribe( data => {
+        this.saveNotification = false
         this.snack.open('Item Saved', 'Success', {duration: 2000, verticalPosition: 'top'})
       }, err => {
         this.snack.open(err, 'Error', {duration: 4000, verticalPosition: 'top'})

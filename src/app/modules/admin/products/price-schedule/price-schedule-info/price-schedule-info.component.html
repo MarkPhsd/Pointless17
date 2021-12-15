@@ -112,12 +112,12 @@
         <mat-divider></mat-divider>
       </div>
 
-        <div *ngIf="isMenuList">
-          <app-item-sort
-            [inputForm]="inputForm"
-            >
-          </app-item-sort>
-        </div>
+      <div class ="sort-container" *ngIf="isMenuList">
+        <app-item-sort
+          [inputForm]="inputForm"
+          >
+        </app-item-sort>
+      </div>
 
       <!-- <div [hidden]="!isMenuList"> -->
         <div [hidden]="isMenuList" class="constraint-panels"  *ngIf="inputForm">

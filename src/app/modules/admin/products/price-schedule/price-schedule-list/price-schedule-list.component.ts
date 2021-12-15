@@ -108,7 +108,6 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
   constructor(  private _snackBar         : MatSnackBar,
           private priceScheduleService    : PriceScheduleService,
-
           private priceScheduleDataService:PriceScheduleDataService,
           private router                  : Router,
           private fb                      : FormBuilder,

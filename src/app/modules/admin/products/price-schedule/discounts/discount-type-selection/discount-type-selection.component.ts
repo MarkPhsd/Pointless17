@@ -52,11 +52,11 @@ export class DiscountTypeSelectionComponent implements OnInit {
     }
   }
 
-
   initPriceScheduleAdjustments() {
     const site = this.siteService.getAssignedSite();
     this.priceAdjustScheduleTypes$ = this.priceScheduleService.getPriceAdjustList(site)
     this.priceAdjustScheduleTypes$.subscribe( data =>  {
+      console.log('data', data)
       this.priceAdjustScheduleTypes = data;
     })
   }

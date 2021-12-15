@@ -1,3 +1,5 @@
+@import "/src/mixins.scss";
+
 .mat-input-element {
   font-size: small;
 }
@@ -69,6 +71,8 @@ mat-drawer {
 
 mat-drawer-container {
   height: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
 
 }
 
@@ -140,10 +144,74 @@ img {
   margin-bottom: 25px;
 }
 
+// .container {
+//   padding: 5px;
+//   width:   68%;
+// }
 .container {
-  padding: 5px;
-  width:   68%;
+  // overflow-y: hidden;
+  // overflow-x: hidden;
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 825px 250px;
+  // grid-template-columns: 550px 300px;
+  // gap: 10px;
+  // // grid-auto-flow:dense;
+  // background-color: aqua;
+
+  // display: flex;
+  // flex-direction: column;
+  // height: 100%;
+
+  // display: flex;
+  // flex-direction: column;
+  // flex-wrap: wrap;
+  // // justify-content: center;
+  // // align-content: center;
+  // justify-content: space-between;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+
+  @include for-tablet-landscape-up {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+
+  @include for-tablet-portrait-up  {
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+  }
+
+  // @include for-tablet-portrait-up  {
+  //   display: flex;
+  //   flex-direction: column;
+  //   height: 100%;
+  // }
+
+  // @include for-desktop-up  {
+  //   display: flex;
+  //   flex-direction: column;
+  //   height: 100%;
+  // }
+
+  // @include for-big-desktop-up {
+  //   height: 22vh;
+  // }
 }
+
 
 :host {
   display: flex;
@@ -177,11 +245,11 @@ body{ overflow-x: hidden;}
 }
 
 .floating-info {
-  width        : 32%;
-  max-width    : 425px;
-  position     : fixed;
-  top          : 75px;
-  right        : 1.2em;
+  // width        : 32%;
+  // max-width    : 425px;
+  // position     : fixed;
+  // top          : 75px;
+  // right        : 1.2em;
   z-index      : 100;
   padding-right: 10px;
   overflow-x   : visible;
@@ -193,8 +261,8 @@ body{ overflow-x: hidden;}
   flex-wrap            : wrap;
 }
 
-.header-grid {
-  display: grid;
-  grid-template-columns: 600px 1fr;
-  flex-wrap            : wrap;
-}
+// .header-grid {
+//   display: grid;
+//   grid-template-columns: 600px 1fr;
+//   flex-wrap            : wrap;
+// }

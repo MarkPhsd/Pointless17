@@ -1,8 +1,7 @@
 
-
 .discount-type-button {
-  width:200px;
-
+  width:  125px;
+  height: 100px;
 }
 
 .discount-info {
@@ -14,4 +13,14 @@
 .discount-instructions{
   font-size: .9em;
   font-weight: 400px;
+}
+.item-label {
+  margin: 3px;
+}
+.mat-icon {
+  margin: 0px;
+  padding: 0px;
+}
+.item-fields {
+  float: left;
 }

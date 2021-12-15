@@ -119,7 +119,6 @@ export class FbPriceScheduleService {
     inputForm.setValue({
       fieldName: value
     });
-
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 
@@ -132,7 +131,6 @@ export class FbPriceScheduleService {
         if (control) {
           control.clear();
           items.forEach( data =>  {
-            // console.log('set order type values data', data)
 
             if (itemName === 'clientTypeID') {
               control.push(this.fb.control({
@@ -147,7 +145,6 @@ export class FbPriceScheduleService {
                 name:        data.name
                }))
             }
-
 
             if (itemName === 'name') {
               control.push(this.fb.control({ name: data }))

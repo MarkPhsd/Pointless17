@@ -129,7 +129,6 @@ export interface OrderType {
   priceScheduleID: number;
   orderTypeID:     number;
   name:            string;
-  // type:            ItemType;
   privateScheduleID: number;
 }
 
