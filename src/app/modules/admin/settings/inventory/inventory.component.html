@@ -24,5 +24,16 @@
 
   <p>This feature is intended for initial setup. It should not be used if you are operating already.</p>
 
-  <button mat-raised-button color="primary" (click)="initTypes()"><mat-icon>warning</mat-icon>Initialize</button>
+  <div class="grid-loader">
+    <div>
+      <button mat-raised-button
+              color="primary"
+              (click)="initTypes()">
+        <mat-icon>warning</mat-icon>Initialize</button>
+    </div>
+    <div  *ngIf="loading_initTypes">
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+  </div>
+
 </div>

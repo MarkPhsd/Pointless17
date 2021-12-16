@@ -16,71 +16,61 @@ export interface platFormInfo {
 })
 export class PlatformService {
 
-  platFormInfo = {}  as platFormInfo;
-
-  private _platForm: string;
-  private _webMode : boolean
-  private _isAppElectron: boolean;
-  private _androidApp   : boolean;
+  platFormInfo    = {}  as platFormInfo;
   private _apiUrl       : any;
 
-  get isAppElectron() { return this._isAppElectron}
-  get androidApp()    { return this._androidApp}
-  get platForm()      { return this._platForm}
-  get webMode()       { return this._webMode}
-  get apiUrl()        { return this._apiUrl }
+  get isAppElectron() {
+    const info = this.getPlatForm()
+    return info.isAppElectron
+  }
+
+  get androidApp()    {
+    const info = this.getPlatForm()
+    if(info) {
+      return info.androidApp
+    }
+  }
+  get platForm()      {
+    return Capacitor.getPlatform();
+  }
+  get webMode()       {
+    return Capacitor.getPlatform();
+  }
+  get apiUrl()        {
+    return localStorage.getItem('storedApiUrl');
+  }
 
   constructor(
     private electronService     : ElectronService,) {
     this.initAPIUrl();
     if (!this._apiUrl) {this._apiUrl =''};
     this.getPlatForm();
+    console.log('platFormInfo', this.platFormInfo)
   }
 
   initAPIUrl() {
     this._apiUrl =  localStorage.getItem('storedApiUrl');
   }
 
-  getplatFormInfo(): platFormInfo {
+  getPlatForm(): platFormInfo {
+    this.platFormInfo         = {} as platFormInfo
+    this.platFormInfo.webMode = false
 
-    const platFormInfo = this.platFormInfo;
-
-    platFormInfo.androidApp = this._androidApp
-    platFormInfo.isAppElectron = this._isAppElectron
-
-    if (platFormInfo.androidApp || platFormInfo.isAppElectron) {
-      this._webMode = false
-      return
+    try {
+      const platForm            = Capacitor.getPlatform();
+      this.platFormInfo.platForm = platForm
+      if (platForm === 'android') {
+        this.platFormInfo.androidApp = true
+        this.platFormInfo.platForm = 'android'
+      }
+      if (this.electronService.isElectronApp) {
+        this.platFormInfo.isAppElectron = true
+        this.platFormInfo.platForm = 'electron'
+      }
+      return this.platFormInfo
+    } catch (error) {
+      return this.platFormInfo
     }
-
-    platFormInfo.webMode = this._webMode;
-
-    return platFormInfo
-
-  }
-
-  getPlatForm() {
-
-    this._platForm        =  Capacitor.getPlatform();
-    const platForm        = this._platForm;
-    this._webMode = false
-
-    if (platForm === 'android') {
-      this._androidApp = true
-      return false
-    }
-
-    if (this.electronService.isElectronApp) {
-      this._platForm = 'electron'
-      this._isAppElectron = true;
-      return
-    }
-
-    if (platForm === 'web') {
-      this._webMode = true
-      return
-    }
-
   }
 
 }

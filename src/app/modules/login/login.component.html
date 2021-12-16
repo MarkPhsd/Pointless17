@@ -10,12 +10,14 @@
                 <div fxLayout="column"
                      fxLayoutAlign="center center"
                      class="row-height">
-                    <img (click)="setAPIAlt()"
+                    <img *ngIf="logo"
+                         (click)="setAPIAlt()"
                          [src]="logo"
                          width="125px"
                          [alt]="company"
                          class="logo">
-                    <h2> {{compName}} </h2>
+                         {{logo}}
+                    <h2 (click)="setAPIAlt()"> {{compName}} </h2>
                 </div>
               </mat-card-title>
 
@@ -33,7 +35,7 @@
               <mat-card-content>
                   <div class="center">
 
-                    <div class="center" [formGroup]="loginForm">
+                    <div class="center" [formGroup]="loginForm"  (ngSubmit)="onSubmit()" >
                         <div>
                           <mat-form-field appearance="fill">
                             <mat-label>User</mat-label>
@@ -78,7 +80,8 @@
 
                     </div>
 
-                    <div *ngIf="(platformService && !platformService.webMode) && platformService.apiUrl.length != 0 ">
+                    <div *ngIf="(platformService && !platformService.webMode) &&
+                                 platformService.apiUrl.length != 0 ">
                     </div>
 
                     <div>

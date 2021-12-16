@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Capacitor } from '@capacitor/core';
+
 import { ISite } from 'src/app/_interfaces';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
@@ -195,35 +194,14 @@ export interface BalanceSheetSearchModel {
 
 export class BalanceSheetService {
 
-  get platForm() {  return Capacitor.getPlatform(); }
-  deviceName: string;
-  isApp                       = false;
-
-  private _balanceSheet       = new BehaviorSubject<IBalanceSheet>(null);
-  public balanceSheet$        = this._balanceSheet.asObservable();
-
-  private _balanceSheetSearchModel       = new BehaviorSubject<BalanceSheetSearchModel>(null);
-  public balanceSearchModelSheet$        = this._balanceSheetSearchModel.asObservable();
-
-  updateBalanceSheet(BalanceSheet:  IBalanceSheet) {
-    this._balanceSheet.next(BalanceSheet);
-  }
-
-  updateBalanceSearchModel(searchModel:  BalanceSheetSearchModel) {
-    this._balanceSheetSearchModel.next(searchModel);
-  }
 
   constructor(
     private http: HttpClient,
     private _fb: FormBuilder,
   )
   {
-    if ( this.platForm  === "Electron" || this.platForm === "android" || this.platForm === "capacitor")
-    { this.isApp = true }
-    this.deviceName = localStorage.getItem('devicename')
+
   }
-
-
 
   getSheetType(sheet: IBalanceSheet) {
     if (sheet && sheet.type) {
@@ -374,87 +352,7 @@ export class BalanceSheetService {
     return this.http.post<IBalanceSheet>(url, balanceSheet);
   }
 
-  initForm(fb: FormGroup) : FormGroup {
 
-    fb = this._fb.group({
-      id:                  [''],
-      type:                [''],
-      dateTime:            [''],
-      noSales:             [''],
-      startTime:           [''],
-      restaurantSectionID: [''],
-      deviceName:          [''],
-      employeeID:          [''],
-      salesTotal:          [''],
-      overUnderTotal:      [''],
-      registerPosVoids:    [''],
-      registerNegVoids:    [''],
-      startedWith:         [''],
-      endedWith:           [''],
-      endTime:             [''],
-      cashIn:              [''],
-      creditIn:            [''],
-      cashDropCheck:       [''],
-      reportRunMasterID:   [''],
-      onesEnd:             [''],
-      fivesEnd:            [''],
-      tensEnd:             [''],
-      twentiesEnd:         [''],
-      fiftiesEnd:          [''],
-      hundredsEnd:         [''],
-      pennyEnd:            [''],
-      nickelEnd:           [''],
-      dimeEnd:             [''],
-      quarterEnd:          [''],
-      halfDollarEnd:       [''],
-      dollarEnd:           [''],
-      drawerAB:            [''],
-      cashTips:            [''],
-      giftCertificates:    [''],
-      giftCard:            [''],
-      checks:              [''],
-      trvlrCheck:          [''],
-      creditTips:          [''],
-      paidOuts:            [''],
-      mileage:             [''],
-      storeID:             [''],
-      cashDeposit:         [''],
-      checkDeposit:        [''],
-      otherDeposit:        [''],
-      depositer:           [''],
-      c1s:                 [''],
-      c5s:                 [''],
-      c10s:                [''],
-      c20s:                [''],
-      c50s:                [''],
-      c100s:               [''],
-      cashDropAmount:      [''],
-      reportName:          [''],
-      dollarsStart:        [''],
-      fivesStart:          [''],
-      tensStart:           [''],
-      twentiesStart:       [''],
-      fiftiesStart:        [''],
-      hundredsStart:       [''],
-      pennyStart:          [''],
-      dimeStart:           [''],
-      nickelStart:         [''],
-      quarterStart:        [''],
-      halfDollarStart:     [''],
-      dollarStart:         [''],
-      shiftStarted:        [''],
-      twoDollars:          [''],
-      twoDollarsStart:     [''],
-      fiveHundreds:        [''],
-      twoHundreds:         [''],
-      fiveHundredsStart:   [''],
-      twoHundredsStart:    [''],
-      tooniesEnd:          [''],
-      tooniesStart:        [''],
-    })
-
-    return fb
-  }
 
 }
 

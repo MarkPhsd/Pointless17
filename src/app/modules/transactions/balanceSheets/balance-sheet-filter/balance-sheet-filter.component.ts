@@ -11,6 +11,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import {TooltipPosition} from '@angular/material/tooltip';
+import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 
 @Component({
   selector: 'balance-sheet-filter',
@@ -52,7 +53,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
   counter       : number;
 
   initSubscriptions() {
-      this._searchModel = this.balanceSheetService.balanceSearchModelSheet$.subscribe( data => {
+      this._searchModel = this.sheetMethodsService.balanceSearchModelSheet$.subscribe( data => {
         this.searchModel  = data
         if (!data) {
           this.initSearchModel();
@@ -61,13 +62,12 @@ export class BalanceSheetFilterComponent implements  OnInit {
   }
 
   constructor(  private _snackBar               : MatSnackBar,
-                private balanceSheetService     : BalanceSheetService,
                 private fb                      : FormBuilder,
                 private siteService             : SitesService,
                 private userAuthorization       : UserAuthorizationService,
                 private employeeService         : EmployeeService,
                 private orderService            : OrdersService,
-                private auth                    : AuthenticationService,
+                private sheetMethodsService     : BalanceSheetMethodsService
               )
     {
       this.initAuthorization();
@@ -156,7 +156,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
     this.assignDateSettings();
     const search = this.searchModel;
 
-    this.balanceSheetService.updateBalanceSearchModel( search )
+    this.sheetMethodsService.updateBalanceSearchModel( search )
     this.outputRefreshSearch.emit('true');
   }
 
@@ -183,7 +183,7 @@ export class BalanceSheetFilterComponent implements  OnInit {
     if (!site) { return }
     this.searchModel = {} as BalanceSheetSearchModel
 
-    this.balanceSheetService.updateBalanceSearchModel(this.searchModel)
+    this.sheetMethodsService.updateBalanceSearchModel(this.searchModel)
 
     this.toggleOpenClosedAll     = "0"
     this.toggleEmployeeDeviceAll = "0"

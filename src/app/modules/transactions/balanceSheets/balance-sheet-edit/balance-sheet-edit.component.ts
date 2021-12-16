@@ -90,10 +90,9 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   initSubscriptions() {
 
     this.loading = true
-    this._sheet = this.sheetService.balanceSheet$.subscribe( data => {
+    this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
-      console.log('Subscription Sheet', data)
-      this.loading = false;
+        this.loading = false;
       if (this.inputForm) {
         this.inputForm.patchValue(this.sheet)
       }
@@ -104,12 +103,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.user = data;
     })
 
-    this._ordersCount = this.balanceSheetMethodsService.ordersOpen$.subscribe( data => {
+    this._ordersCount = this.sheetMethodsService.ordersOpen$.subscribe( data => {
 
       if (!data) { return }
       this.ordersCount = data
     })
-    this._openOrders  =  this.balanceSheetMethodsService.ordersOpen$.subscribe( data => {
+    this._openOrders  =  this.sheetMethodsService.ordersOpen$.subscribe( data => {
 
       if (!data) { return }
       this.ordersOpen       = data
@@ -125,10 +124,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private authenticationService   : AuthenticationService,
                 private router                  : Router,
                 private toolbarUIService        : ToolBarUIService,
-                private balanceSheetMethodsService: BalanceSheetMethodsService,
+                private sheetMethodsService     : BalanceSheetMethodsService,
+
               )
   {
-    this.inputForm = this.sheetService.initForm(this.inputForm);
+    this.inputForm = this.sheetMethodsService.initForm(this.inputForm);
   }
 
   async ngOnInit() {
@@ -141,16 +141,14 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       await  this.getSheet(this.id)
     }
     if(!this.id) {
-      this.updateToCurrentSheet();
+      this.getCurrentSheet();
     }
   };
 
   newBalanceSheet() {
     //we have to initialize the balance sheet.
     //we should just be sending maybe the device, and the user.
-    if (!this.id) {
-      this.updateToCurrentSheet();
-    }
+    this.sheetMethodsService.getCurrentBalanceSheet()
   }
 
   hideToolbars() {
@@ -162,50 +160,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   ngOnDestroy() {
-    this.sheetService.updateBalanceSheet(null)
+    this.sheetMethodsService.updateBalanceSheet(null)
   }
 
-  updateToCurrentSheet() {
-    // console.log('update to current sheet', this.sheet)
-    let deviceName = localStorage.getItem('devicename');
-    // console.log('devicename', deviceName)
-    if (!deviceName || deviceName.length == 0 || deviceName == undefined || deviceName === '' ){
-      deviceName = 'nada'
-    }
-
-    if (!this.sheet)  {
-      const site = this.siteService.getAssignedSite()
-      if (!deviceName) { deviceName = 'nada' }
-      this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
-        switchMap(sheet => {
-          this.loading = false;
-          this.sheetService.updateBalanceSheet(sheet)
-          return  this.sheetService.getSheetCalculations(site, sheet)
-      })).subscribe( sheet => {
-        this.sheetService.updateBalanceSheet(sheet)
-
-      })
-    }
-
+  getCurrentSheet() {
+    this.getSheet(this.id)
   }
 
-  async getSheet(sheetID: string) {
-
-    if(!sheetID) { return }
-    this.loading = true
-    const id = parseInt(sheetID)
-    const site = this.siteService.getAssignedSite()
-    this.sheetService.getSheet(site, id).pipe(
-      switchMap(sheet => {
-        this.loading = false;
-        this.sheetService.updateBalanceSheet(sheet)
-        return this.sheetService.getSheetCalculations(site, sheet)
-      })).subscribe(
-      sheet => {
-        this.sheetService.updateBalanceSheet(sheet)
-      }
-    )
-
+  async getSheet(id: string) {
+    this.sheetMethodsService.getSheet(id)
   }
 
   getSheetType(sheet: IBalanceSheet) {
@@ -216,10 +179,12 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     try {
       const form = this.inputForm // this.sheetService.initForm(this.inputForm);
 
-      if (!form) { console.log('form not initiated')
+      if (!form)
+        { console.log('form not initiated')
         return
       }
-      if (!sheet) { console.log('form not initiated')
+      if (!sheet)
+       { console.log('form not initiated')
         return
       }
 
@@ -230,19 +195,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   updateItem(event) {
-    const site = this.siteService.getAssignedSite();
-    if (this.inputForm.valid) {
-      const sheet  = this.inputForm.value
-      if (sheet.shiftStarted  != 1) {
-        sheet.shiftStarted = this.startShiftInt;
-      }
-      this.sheetService.putSheet(site, sheet).subscribe(data => {
-        this.sheet = data;
-        this.notify('Sheet saved.', 'Succes')
-      }, (err) => {
-        this.notify('Sheet note deleted.' + err, 'Failure')
-      })
-    }
+    this.sheetMethodsService.updateSheet(this.inputForm, this.startShiftInt)
   }
 
   startShift() {
@@ -252,14 +205,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   closeSheet() {
-    if (this.sheet) {
-      const site = this.siteService.getAssignedSite();
-      this.sheetService.closeShift(site, this.sheet).subscribe(data=> {
-        this.sheet = data;
-        this.router.navigateByUrl('/app-main-menu')
-        this.notify('Sheet is closed.', 'Succes')
-      })
-    }
+    this.sheetMethodsService.closeSheet(this.sheet)
   }
 
   setEnabledFeatures() {
@@ -354,18 +300,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   deleteItem(event){
-    if (this.isAuthorized) {
-      const result = window.confirm('Are you sure you need to remove this?')
-      if (result && this.sheet.id) {
-        const site = this.siteService.getAssignedSite();
-        this.sheetService.deleteSheet(site, this.sheet.id).subscribe( data => {
-          this.notify('Sheet is deleted.', 'Succes')
-          this.onCancel(null);
-        }, (err) => {
-          this.notify('Sheet note deleted.' + err, 'Failure')
-        })
-      }
-    }
+    this.sheetMethodsService.deleteItem(this.isAuthorized, this.sheet)
   }
 
   print(event){
@@ -434,7 +369,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     const cashStart  = this.getSummaryOfCashStart();
     if (this.sheet) {
       const balance =  cashEnd + this.sheet.cashDropTotal  - cashStart - this.sheet.cashIn
-      console.log(this.sheet.cashDropTotal  , cashEnd , cashStart)
       this.balance  = balance
     }
     return this.balance

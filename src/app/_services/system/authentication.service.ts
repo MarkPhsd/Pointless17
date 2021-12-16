@@ -6,6 +6,7 @@ import { IUser } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { OrdersService } from '..';
+import { BalanceSheetMethodsService } from '../transactions/balance-sheet-methods.service';
 
 export interface IUserExists {
   id:           number;

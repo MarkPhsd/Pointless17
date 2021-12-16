@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 
 @Component({
@@ -18,7 +19,7 @@ export class BalanceSheetQuickViewComponent implements OnInit {
   balance   : any;
 
   initSubscriptions() {
-    this._sheet      = this.sheetService.balanceSheet$.subscribe( data => {
+    this._sheet      = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet     = data;
       this.sheetType = this.sheetService.getSheetType(this.sheet)
       try {
@@ -33,6 +34,8 @@ export class BalanceSheetQuickViewComponent implements OnInit {
                 private sheetService  : BalanceSheetService,
                 private router        : Router,
                 private _bottomSheet  : MatBottomSheet,
+                private sheetMethodsService: BalanceSheetMethodsService
+
               )
   {   }
 

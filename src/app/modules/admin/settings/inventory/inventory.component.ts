@@ -1,13 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { IItemType,  } from 'src/app/_services/menu/item-type.service';
 import { Observable } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { UseGroupsService } from 'src/app/_services/menu/use-groups.service';
 import { Router } from '@angular/router';
+import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
+import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 
 @Component({
   selector: 'app-inventory-settings',
@@ -21,52 +17,37 @@ export class InventoryComponent implements OnInit {
 
   itemTypes : IItemType[];
   itemTypes$: Observable<IItemType[]>;
+  loading_initTypes: boolean;
 
   constructor(
-    private dialog        :  MatDialog,
-    private siteService   :  SitesService,
-    private snackBar      :  MatSnackBar,
-    private router        :  Router,
-    private groupTypesService: UseGroupsService,
-    private itemTypeService: ItemTypeService) { }
+    private router                 : Router,
+    private itemTypeMethodsService : ItemTypeMethodsService,
+    private adustmentReasonsService: AdjustmentReasonsService
+) { }
 
   ngOnInit(): void {
     console.log('')
   }
 
   openAdjustmentReasonsDialog() {
-    const dialogConfig = [
-    ]
-    const dialogRef = this.dialog.open(AdjustmentReasonsComponent ,
-      { width:      '700px',
-        minWidth:   '700px',
-        height:     '700px',
-        minHeight:  '700px',
-      },
-    )
+    this.adustmentReasonsService.openAdjustmentReasonEdit();
   }
 
- async initTypes(){
-
-    const answer = window.confirm('Please confirm. This function will delete all item type settings and re-initialize all options for item types.');
-
-    if (answer) {
-      const site = this.siteService.getAssignedSite()
-
-      const groups   = await this.groupTypesService.initGroups(site);
-
-      this.itemTypes = this.itemTypeService.getDefaultItemTypes();
-      this.itemTypes$ = this.itemTypeService.initItemTypes(site, this.itemTypes);
-
-      this.itemTypes$.subscribe(data=>{
-        console.log('items initialized')
-        this.snackBar.open('Items re-initialized.', 'Success', {
-          duration: 2000,
-        })
+  async initTypes(){
+    this.loading_initTypes = true;
+    const result = window.confirm('Please confirm. This function will delete all item type settings and re-initialize all options for item types.');
+    if (result) {
+      this.loading_initTypes = true ;
+      this.itemTypeMethodsService.initalizeTypes().subscribe( data => {
+        this.itemTypeMethodsService.notify(`Items re-initialized.`, 'Success', 2000)
+        this.loading_initTypes = false;
+      }, err => {
+        console.log('error initializing types', err)
+        this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 2000)
+        this.loading_initTypes = false;
       })
     }
   }
-
 
   routerNavigation(url: string) {
     this.router.navigate([url]);

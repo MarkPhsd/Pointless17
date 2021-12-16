@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { ICompany, ISite } from 'src/app/_interfaces';
+import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
+import { ISite } from 'src/app/_interfaces';
 
 export interface AdjustmentReason {
   id:   number;
@@ -15,7 +17,9 @@ export interface AdjustmentReason {
 })
 export class AdjustmentReasonsService {
 
-  constructor( private http: HttpClient) { }
+  constructor(
+    private dialog: MatDialog,
+    private http: HttpClient) { }
 
   getReasons(site: ISite): Observable<AdjustmentReason[]> {
 
@@ -102,5 +106,20 @@ export class AdjustmentReasonsService {
     return  this.http.delete<AdjustmentReason>(url)
 
   };
+
+
+  //methods:
+  openAdjustmentReasonEdit() {
+
+    const dialogConfig = [
+    ]
+    const dialogRef = this.dialog.open(AdjustmentReasonsComponent ,
+      { width:      '700px',
+        minWidth:   '700px',
+        height:     '700px',
+        minHeight:  '700px',
+    },
+    )
+  }
 
 }

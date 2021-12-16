@@ -189,11 +189,9 @@ export class AWSBucketService {
   }
 
   uploadFile(file:File , url: string): Observable<any> {
-
     const headers = new HttpHeaders().set(InterceptorSkipHeader, '');
     return this.http.put<any>( url, file, {headers} )
     // return this.http.put<any>( url, file )
-
   }
 
   async getBucket(): Promise<any> {

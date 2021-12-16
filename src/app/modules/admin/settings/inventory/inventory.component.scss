@@ -8,3 +8,9 @@ button {
   width: 350px;
 
 }
+
+.grid-loader {
+  display: grid;
+  grid-template-columns: 235px 50px;
+  gap: 10px
+}

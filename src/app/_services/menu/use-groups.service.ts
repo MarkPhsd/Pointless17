@@ -84,14 +84,9 @@ export class UseGroupsService {
 
   }
 
-  async initGroups(site: ISite): Promise<any> {
-
-
+  initGroups(site: ISite): Observable<UseGroups[]> {
     const useGroup = this.getDefaultGroups();
-
-    const initList$ = this.postItemGroups(site, useGroup)
-    return await initList$.pipe().toPromise();
-
+    return this.postItemGroups(site, useGroup)
   }
 
   postItemGroups(site: ISite, iItemType: UseGroups[]): Observable<UseGroups[]> {
@@ -149,7 +144,5 @@ export class UseGroupsService {
     return  this.http.get<IItemBasicB[]>(url);
 
   }
-
-
 
 }

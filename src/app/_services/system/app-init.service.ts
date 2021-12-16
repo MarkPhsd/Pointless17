@@ -9,10 +9,11 @@ declare var window: any;
 @Injectable()
 export class AppInitService  {
 
-  appConfig: any;
-  private apiUrl: any;
+  appConfig         : any;
+  private apiUrl    : any;
   public  useAppGate: boolean;
-  public logo: string;
+  public logo       : string;
+  public company    : string;
   // public get appConfig
   private httpClient: HttpClient;
 
@@ -20,10 +21,16 @@ export class AppInitService  {
               private platFormService: PlatformService,
               private _snackbar: MatSnackBar,
               private router: Router,) {
-    this.platFormService.getplatFormInfo()
+
+    this.platFormService.getPlatForm()
     this.httpClient = new HttpClient(handler);
   }
 
+  isApp(): boolean {
+    if (!this.platFormService.webMode) {
+      return true
+    }
+  }
   //for distributed apps.
   //also make a setting that can be applied.
   //that setting can be local storage.
@@ -35,7 +42,7 @@ export class AppInitService  {
     // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
 
-    if (!this.platFormService.webMode) {
+    if (this.isApp) {
       if ( !this.apiUrl ){
         // if there is no API then the user needs to input one.
         //we also have to have a way to change or clear the API, just in case.
@@ -52,6 +59,7 @@ export class AppInitService  {
         this.apiUrl     = this.appConfig.apiUrl
         this.useAppGate = this.appConfig.useAppGate
         this.logo       = this.appConfig.logo;
+        this.company    = this.appConfig.company
       } catch (error) {
         this.useAppGate = false
         this.router.navigate(['/apisetting']);

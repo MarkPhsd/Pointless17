@@ -1,20 +1,21 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { EMPTY, Subscription } from 'rxjs';
-import { map,  timeout } from 'rxjs/operators';
+import { EMPTY, Observable, of, Subscription } from 'rxjs';
+import { map, switchMap, timeout,   } from 'rxjs/operators';
 import { IUser } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
 import { SitesService } from '../reporting/sites.service';
 import { AuthenticationService, ContactsService, OrdersService } from '..';
-import { BalanceSheetService } from '../transactions/balance-sheet.service';
 import { POSPaymentService } from '../transactions/pospayment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { EncryptionService } from '../encryption/encryption.service';
+import { BalanceSheetMethodsService } from '../transactions/balance-sheet-methods.service';
+import { ElectronService } from 'ngx-electron';
 
 export interface ElectronDimensions {
   height: string;
@@ -30,10 +31,17 @@ export class UserSwitchingService {
   user  : IUser;
   _user : Subscription
 
+  isElectron: boolean;
+
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe(user => {
       this.user = user;
     })
+  }
+
+  changeUser(user: IUser): Observable<any> {
+    //ente or chain observables here.
+    return this.sheetMethodsService.promptBalanceSheet(user)
   }
 
   constructor(
@@ -45,13 +53,16 @@ export class UserSwitchingService {
     private authenticationService: AuthenticationService,
     private orderService    : OrdersService,
     private contactsService : ContactsService,
-    private balanceSheetService: BalanceSheetService,
+    private sheetMethodsService: BalanceSheetMethodsService,
     private paymentService  : POSPaymentService,
     private snackBar        : MatSnackBar,
     private appInitService  : AppInitService,
     private route           : ActivatedRoute,
     private platformService : PlatformService,
     private encryptionService: EncryptionService,
+    private electronService: ElectronService
+
+
   ) {
     this.initSubscriptions();
     this.initializeAppUser();
@@ -64,6 +75,8 @@ export class UserSwitchingService {
     const appUser = {} as ElectronDimensions;
     const user = JSON.stringify(appUser)
     localStorage.setItem('appUser', user)
+
+    this.isElectron =  this.electronService.isElectronApp
   }
 
   async switchUser(): Promise<boolean> {
@@ -137,42 +150,40 @@ export class UserSwitchingService {
         this.snackBar.open("Try again.", "Failure", {verticalPosition: 'top', duration: 2000})
         console.log(err)
      })
-
   }
 
-  async login(username: string, password: string) {
-
-    const site = this.siteService.getAssignedSite()
-    const apiUrl = await this.appInitService.apiBaseUrl()
-    console.log('apiUrl', apiUrl);
+  login(username: string, password: string): Observable<any> {
+    const apiUrl =  this.appInitService.apiBaseUrl()
     let url = `${apiUrl}/users/authenticate`
-
     this.clearSubscriptions();
-
     const userLogin = { username, password };
-
     return  this.http.post<any>(url, userLogin)
       .pipe(
-        // timeout(5000),
-        map(
-          user => {
-            console.log('user', user)
-            if (user) {
-              try {
-                  const currentUser   = this.setUserInfo(user, password)
-                  this.authenticationService.updateUser(currentUser)
-                  return user
-              } catch (error) {
-                console.log('error', error)
-                return EMPTY;
+        // timeout(10000),
+        switchMap( user => {
+        if (user) {
+             console.log(user)
+            try {
+              user.message = 'success'
+              const currentUser   = this.setUserInfo(user, password)
+              this.authenticationService.updateUser(currentUser)
+              if (this.platformService.isAppElectron || this.platformService.androidApp) {
+                return  this.changeUser(user)
               }
+              if (this.platformService.webMode) {
+                return of(user)
+              }
+            } catch (error) {
+              console.log('error', error)
             }
-        }
-        , (err: HttpErrorResponse) => {
-            console.log(err)
-            return err
-      })
-    )
+          } else {
+            const user = {message: 'failed'}
+            console.log('is failed')
+            return of(user)
+          }
+        })
+
+      )
   }
 
   setUserInfo(user: IUser, password) {
@@ -194,14 +205,18 @@ export class UserSwitchingService {
     currentUser.errorMessage = user.errorMessage
     currentUser.message = user.message
     user.authdata = window.btoa(user.username + ':' + user.password);
+
+    localStorage.setItem('loggedUser', JSON.stringify(currentUser))
     return currentUser
   }
+
+
 
   clearSubscriptions() {
     this.orderService.updateOrderSubscription(null);
     this.contactsService.updateSearchModel(null);
-    this.balanceSheetService.updateBalanceSearchModel(null);
-    this.balanceSheetService.updateBalanceSheet(null);
+    this.sheetMethodsService.updateBalanceSearchModel(null);
+    this.sheetMethodsService.updateBalanceSheet(null);
     this.paymentService.updatePaymentSubscription(null);
     this.paymentService.updateSearchModel(null);
   }

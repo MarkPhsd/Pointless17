@@ -23,6 +23,7 @@ import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSh
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { BalanceSheetFilterComponent } from '../balance-sheet-filter/balance-sheet-filter.component';
 import { BalanceSheetQuickViewComponent } from '../balance-sheet-quick-view/balance-sheet-quick-view.component';
+import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 
 @Component({
   selector: 'app-balance-sheets',
@@ -110,6 +111,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
                 private userAuthorization       : UserAuthorizationService,
                 private router                  : Router,
                 private _bottomSheet            : MatBottomSheet,
+                private sheetMethodsService     : BalanceSheetMethodsService
               )
   {
     this.initSubscriptions();
@@ -171,7 +173,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
   initSubscriptions() {
     try {
-      this._searchModel = this.balanceSheetService.balanceSearchModelSheet$.subscribe( data => {
+      this._searchModel = this.sheetMethodsService.balanceSearchModelSheet$.subscribe( data => {
           this.searchModel            = data
           if (!this.searchModel) {
             const searchModel       = {} as BalanceSheetSearchModel;
@@ -285,7 +287,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
     // console.log('initSearchModel', searchModel)
-    this.balanceSheetService.updateBalanceSearchModel(searchModel)
+    this.sheetMethodsService.updateBalanceSearchModel(searchModel)
     return searchModel
   }
 
@@ -549,7 +551,7 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
 
   quickView(sheet: IBalanceSheet) {
     if (sheet) {
-      this.balanceSheetService.updateBalanceSheet(sheet)
+      this.sheetMethodsService.updateBalanceSheet(sheet)
       this._bottomSheet.open(BalanceSheetQuickViewComponent)
     }
   }

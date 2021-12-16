@@ -13,6 +13,21 @@ export interface TransactionUISettings {
   id:             number;
 }
 
+export interface WebAppSettings {
+  usersEnabled: Boolean;
+
+}
+
+export interface InstalledAppSettings {
+  defaultReceipt     : string;
+  promptBalanceSheet: boolean;
+}
+
+
+export interface EndOfDayProcedures {
+
+}
+
 @Injectable({
   providedIn: 'root'
 })

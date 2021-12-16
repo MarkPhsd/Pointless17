@@ -1,7 +1,7 @@
 ﻿import { CompanyService,AuthenticationService, AWSBucketService} from 'src/app/_services';
-import { ICompany }  from 'src/app/_interfaces';
-import { Component, Input, OnInit, Renderer2 } from '@angular/core';
-import { first } from 'rxjs/operators';
+import { ICompany, IUser }  from 'src/app/_interfaces';
+import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { first, last } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
@@ -11,6 +11,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector:   'login-dashboard',
@@ -19,7 +20,7 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
     animations: [ fadeInAnimation ],
   })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
 
   @Input() statusMessage: string;
 
@@ -40,7 +41,14 @@ export class LoginComponent implements OnInit {
   amI21: any;
 
   counter =0;
+  loggedInUser : IUser;
+  _user: Subscription;
 
+  initSubscriptions() {
+    this._user = this.authenticationService.user$.subscribe( user => {
+      this.loggedInUser = user
+    })
+  }
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
@@ -68,9 +76,14 @@ export class LoginComponent implements OnInit {
     this.refreshTheme()
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.initForm();
-    this.initCompanyInfo()
+    await this.initCompanyInfo()
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._user) { this._user.unsubscribe()}
+  }
   initForm() {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -90,15 +103,16 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  initCompanyInfo() {
-    this.getCompanyInfo();
-    if (this.company === undefined) {
-    } else {
-      this.compName = this.company.compName
+  async initCompanyInfo() {
+
+    this.compName    = this.appInitService.company
+    const logo        = this.appInitService.logo;
+    const path       = await this.awsBucketService.awsBucket();
+
+    if (path && logo)  {
+      this.logo   = this.awsBucketService.getImageURLPath(path, logo)
     }
-    this.logo        = `${environment.logo}`
-    this.compName    = `${environment.company}`
-    this.awsBucketService.getBucket()
+
   }
 
   redirects() {
@@ -196,22 +210,41 @@ export class LoginComponent implements OnInit {
       return;
     }
     (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
-      .pipe(first())
+      .pipe()
       .subscribe(
         user =>
         {
-          if (user && user.message === 'success') {
+          this.loading = false;
+          if (this.platformService.isAppElectron || this.platformService.androidApp) {
+            // console.log('login result', user)
+            this.loggedInUser = user.user
+            this.spinnerLoading = false
+            const currentUser = user.user
+            const sheet = user.sheet
+            this.userSwitchingService.processLogin(currentUser)
+            if (sheet) {
+              if (sheet.shiftStarted == 0) {
+                // console.log('this user is loggedin', this.loggedInUser)
+                // console.log('this sheet  is active', user)
+                this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
+                return
+              }
+            }
+            return
+          }
+
+          this.loggedInUser = user.user
+          if (this.loggedInUser && this.loggedInUser.message === 'success') {
             this.userSwitchingService.processLogin(user)
             this.spinnerLoading = false;
             this.initForm()
             return
           }
           if(user && (user.status === 0 || user.message  == 'failed')) {
-            user.message == 'Failed'
-            user.erorMessage = 'Error logging in. '
+            this.loggedInUser.message == 'Failed'
+            this.loggedInUser.errorMessage = 'Error logging in. '
             this.statusMessage = "Service is not accessible, check connection."
           }
-
         },
         error => {
           this.spinnerLoading = false;
