@@ -33,10 +33,12 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   _user             : Subscription;
   site              : ISite;
 
+
   initSubscription() {
     this._user = this.authenticationService.user$.pipe(
       switchMap(
         user => {
+            this.user = user
             if (!user) {
               this.menus = [] as AccordionMenu[];
               return EMPTY
@@ -47,14 +49,17 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       ).subscribe( data => {
         this.menus = [] as AccordionMenu[];
         if (!data) {
+           console.log('no menu found')
            return
         }
         this.config = this.mergeConfig(this.options);
+
         if (data)
           data.filter( item => {
             if (item.active) {this.menus.push(item) } //= data
           })
         }, err => {
+          console.log('err no menu found', err)
           this.menus = [] as AccordionMenu[];
       }
     )
@@ -70,47 +75,32 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     const site  = this.siteService.getAssignedSite();
-    const result = await this.menusService.mainMenuExists(site).pipe().toPromise();
-    console.log('ngOninit Result mainmenu exists', result)
-
-    if (!result) {
-      this.initMenu();
-    }
-
-    if (result) {
-      this.initSubscription()
-    }
-
+    this.initSubscription()
+    this.menusService.mainMenuExists(site).subscribe( data => {
+      if (!data.result) {
+        this.initMenu();
+      }
+    })
   }
 
   initMenu() {
     const site  = this.siteService.getAssignedSite();
-    // console.log('ngOninit Result mainmenu exists', )
-
     const menuCheck$ = this.menusService.mainMenuExists(site);
     menuCheck$.pipe(
       switchMap( data => {
-        if (!data || data != true) {
-
+        if (!data || !data.result) {
           const user = this.authenticationService.userValue
-          // console.log('init menu, getting user', user)
 
-          if (user) {
+           if (user) {
             return  this.menusService.createMainMenu(user , site)
           }
           return EMPTY;
         }
       })
     ).subscribe(data => {
-      if (!data)  {
-        // console.log('menu did not initialize')
-      }
       this.initSubscription()
-      // console.log('menu created.')
     })
-
   }
 
   ngOnDestroy() {

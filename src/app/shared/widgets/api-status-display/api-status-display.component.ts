@@ -18,7 +18,7 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._poll = this.pollingService.poll$.subscribe( data => {
       this.connectedToApi = data;
-      console.log(data)
+      // console.log(data)
     })
   }
 

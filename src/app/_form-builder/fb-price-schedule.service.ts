@@ -82,6 +82,8 @@ export class FbPriceScheduleService {
       type:            [''],
       value:           [''],
       enabled:         [true],
+      image:           [],
+      description    : [],
 
       orderTypes:           this.fb.array([ ]),
       clientTypes:          this.fb.array([ ]),

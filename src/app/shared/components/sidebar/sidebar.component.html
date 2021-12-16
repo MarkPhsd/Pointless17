@@ -1,7 +1,7 @@
 <mat-sidenav-container  class="navbar-sidenav-container">
-  <app-accordion
+  <app-accordion  *ngIf="accordionMenu; else loading"
                   [options]="accordionConfig"
-                  [menus]="accordionMenu$ | async">
+                  [menus]="accordionMenu">
   </app-accordion>
 
   <ng-template #loading >

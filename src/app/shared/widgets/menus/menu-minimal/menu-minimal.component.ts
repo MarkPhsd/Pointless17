@@ -39,11 +39,11 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   user              : IUser;
   _user             : Subscription;
   site              : ISite;
-
   initSubscription() {
     this._user = this.authenticationService.user$.pipe(
       switchMap(
         user => {
+            this.user = user
             if (!user) {
               this.menus = [] as AccordionMenu[];
               return EMPTY
@@ -53,15 +53,18 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         )
       ).subscribe( data => {
         this.menus = [] as AccordionMenu[];
-        if (!data) { return }
+        if (!data) {
+           console.log('no menu found')
+           return
+        }
         this.config = this.mergeConfig(this.options);
-        // this.menus = data
+
         if (data)
           data.filter( item => {
             if (item.active) {this.menus.push(item) } //= data
           })
-          this.displayCategories = false;
         }, err => {
+          console.log('err no menu found', err)
           this.menus = [] as AccordionMenu[];
       }
     )
@@ -76,25 +79,37 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     const site  = this.siteService.getAssignedSite();
-    const result = await this.menusService.mainMenuExists(site).pipe().toPromise();
+    this.initSubscription()
+    this.menusService.mainMenuExists(site).subscribe( data => {
+      if (!data.result) {
+        this.initMenu();
+      }
+    })
+  }
 
-    if (result) {
+  initMenu() {
+    const site  = this.siteService.getAssignedSite();
+    const menuCheck$ = this.menusService.mainMenuExists(site);
+    menuCheck$.pipe(
+      switchMap( data => {
+        if (!data || !data.result) {
+          const user = this.authenticationService.userValue
+
+           if (user) {
+            return  this.menusService.createMainMenu(user , site)
+          }
+          return EMPTY;
+        }
+      })
+    ).subscribe(data => {
       this.initSubscription()
-    }
-
+    })
   }
 
   ngOnDestroy() {
     if (this._user) { this._user.unsubscribe() }
   }
-
-  // async initMenu() {
-  //   if (!this.user) { return; }
-  //   const site  = this.siteService.getAssignedSite();
-  //   // this.menusService.createMainMenu(site).subscribe(data => console.log(data))
-  // }
 
   mergeConfig(options: accordionConfig) {
     const config = {

@@ -44,6 +44,7 @@
 
 .toggle-buttons-margins{
   margin-top: 5px;
+
 }
 
 .grid-container {
@@ -51,22 +52,24 @@
   grid-template-columns: 1fr 600px;
   row-gap: 5px;
   gap: 10px;
-  // width: 100%;
-  overflow: auto;
+  height: 100%;
+  overflow-y:hidden;
+  overflow-x: hidden;
 }
 
+.type-list {
+  height: 71vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  width: 250px;
+  margin-top: 10px;
+}
 
 .sub-headers {
   font-size: .9em;
   font-weight: 400;
 }
 
-.type-list {
-  height: 83vh;
-  overflow-y: scroll;
-  width: 250px;
-  margin-top: 10px;
-}
 
 .search-list {
   // height: 75vh;

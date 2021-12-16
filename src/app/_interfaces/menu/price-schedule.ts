@@ -70,6 +70,8 @@ export interface IPriceSchedule {
   timeFrameAlways:    boolean;
   allDates:           boolean;
   active:             boolean;
+  image           :   string;
+  description     :   string;
   name:               string;
   created:            string;
   lastEdited:         string;

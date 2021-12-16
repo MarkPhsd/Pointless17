@@ -2,7 +2,7 @@
   <div *ngIf="(itemTypes$ | async) as list"
          class="type-list" >
 
-      <div  [@listAnimation]="list.length">
+      <div class="" [@listAnimation]="list.length">
         <div class="toggle-buttons-margins categories"
             *ngFor="let item of list"
             >

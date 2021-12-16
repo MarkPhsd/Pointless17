@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu,ipcMain , ipcRenderer: ipc } = require('electro
 const { CapacitorSplashScreen, configCapacitor } = require('@capacitor/electron');
 const registry        = require('winreg');
 const path            = require('path');
-const { autoUpdater } = require('electron-updater');
+const { autoUpdater, NsisUpdater  } = require('electron-updater');
 const log             = require('electron-log');
 const os              = require("os");
 const isDevMode       = require('electron-is-dev');
@@ -24,6 +24,18 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = true;
 autoUpdater.logger = log;
 autoUpdater.logger.transports.file.level = 'info';
 log.info('App starting...');
+
+
+if (os.platform().trim() == "win32" || os.arch().trim() == "x64") {
+  const options = {
+      provider: 'generic',
+      url: 'https://cafecartel.com/pointless'
+  }
+  const autoUpdater = new NsisUpdater(options)
+  log.info(options)
+  autoUpdater.checkForUpdatesAndNotify()
+}
+
 
 // Place holders for our windows so they don't get garbage collected.
 let mainWindow  = null ;
@@ -135,6 +147,9 @@ async function createWindow () {
 
 
 }
+
+
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -266,7 +281,11 @@ function readScale32() {
 
 
 autoUpdater.on('update-downloaded', (ev, info) => {
-  log.info(info + 'autoUpdater update-downloaded '  )
+  if (info) {
+    log.info(info + 'autoUpdater update-downloaded '  )
+  } else {
+    log.info( ' no info - autoUpdater update-downloaded '  )
+  }
 
   if (!isDevMode) {
     // Wait 5 seconds, then quit and install
@@ -308,7 +327,9 @@ let win;
 
 function sendStatusToWindow(text) {
   log.info(text);
-  win.webContents.send('message', text);
+  if (webContents) {
+    win.webContents.send('message', text);
+  }
 }
 
 function createDefaultWindow() {
@@ -347,6 +368,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
   sendStatusToWindow('Update downloaded; will install in 5 seconds');
 });
 
+
 // app.on('ready', function() {
 //   // Create the Menu
 //   // const menu = Menu.buildFromTemplate(template);
@@ -374,8 +396,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
 // })
 // autoUpdater.on('update-not-available', (ev, info) => {
 // })
-// autoUpdater.on('error', (ev, err) => {
-// })
+
 // autoUpdater.on('download-progress', (ev, progressObj) => {
 // })
 

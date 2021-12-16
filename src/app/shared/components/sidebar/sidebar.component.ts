@@ -47,6 +47,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    this.initSubscriptions();
     console.log('sidebar ngOnInit')
   }
 
@@ -55,12 +56,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   async getMenu(site: ISite) {
-    this.accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
-    // this.accordionMenu$.subscribe(data=>{
-    //   this.accordionMenu = data
-    //   console.log('user ', this.user.roles);
-    //   console.log('menu', data)
-    // })
+    const accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
+    accordionMenu$.subscribe(data => {
+      console.log('getMenu success', data)
+      this.accordionMenu = data;
+    }, error => {
+      console.log('getMenu error', error)
+    })
+
   }
 
 

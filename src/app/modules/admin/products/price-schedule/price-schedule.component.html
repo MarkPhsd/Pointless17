@@ -1,4 +1,4 @@
-<div *ngIf="!saveNotification; else saving">
+<div *ngIf="priceSchedule && !saveNotification; else loading">
   <div class="container"
       *ngIf="priceSchedule; loading">
     <div>
@@ -23,63 +23,81 @@
           </div>
         </div>
       </mat-card>
-      <div *ngIf="inputForm">
-        <div [formGroup]="inputForm">
-            <div class="grid-card">
 
-              <div>
-                <mat-tab-group>
-                  <mat-tab label="Name & Type">
-                    <mat-card>
-                      <app-discount-options
-                          [inputForm]="inputForm">
-                      </app-discount-options>
-                    </mat-card>
-                  </mat-tab>
+          <div *ngIf="inputForm">
+            <div [formGroup]="inputForm">
+              <mat-tab-group>
+                  <div class="tab-group-grid">
 
-                  <mat-tab label="Constraints">
-                    <app-price-schedule-constraints
+                  <div>
+                      <mat-tab label="Name & Type">
+                      <mat-card>
+                        <app-discount-options
+                            [inputForm]="inputForm">
+                        </app-discount-options>
+                      </mat-card>
+                    </mat-tab>
+                  </div>
+
+                  <div>
+                      <mat-tab label="Constraints">
+                        <app-price-schedule-constraints
                         [inputForm]="inputForm"
                         [item]="priceSchedule">
-                    </app-price-schedule-constraints>
-                  </mat-tab>
+                      </app-price-schedule-constraints>
+                    </mat-tab>
+                  </div>
 
-                  <div *ngIf="priceScheduleTracking.type != 'Menu List'">
+                  <div>
                     <mat-tab label="Category & Items">
-                      <div class="grid-search-container">
-                        <app-type-filter
-                          [inputForm]="inputForm"
-                          [item]     ="priceSchedule">
-                        </app-type-filter>
-                      </div>
+                      <app-type-filter
+                        [inputForm]="inputForm"
+                        [item]     ="priceSchedule">
+                      </app-type-filter>
                     </mat-tab>
                   </div>
 
-                  <div *ngIf="priceScheduleTracking.type === 'Menu List'">
+                  <div *ngIf="isMenuList">
                     <mat-tab label="Selected Menu Items">
-                      <div class="grid-search-container">
-                        <app-reward-type-filter
-                          [inputForm]="inputForm"
-                          [item]     ="priceSchedule">
-                        </app-reward-type-filter>
-                      </div>
+                      <app-reward-type-filter
+                        [inputForm]="inputForm"
+                        [item]     ="priceSchedule">
+                      </app-reward-type-filter>
                     </mat-tab>
                   </div>
 
-                  <div *ngIf="priceScheduleTracking.type != 'Menu List'">
+                  <div *ngIf="!isMenuList">
                     <mat-tab label="Offers and Rewards">
-                      <div class="grid-search-container">
-                        <app-reward-type-filter
-                          [inputForm]="inputForm"
-                          [item]     ="priceSchedule">
-                        </app-reward-type-filter>
-                      </div>
+                      <app-reward-type-filter
+                        [inputForm]="inputForm"
+                        [item]     ="priceSchedule">
+                      </app-reward-type-filter>
                     </mat-tab>
                   </div>
-                </mat-tab-group>
-              </div>
-              <div>
-            </div>
+
+                  <div *ngIf="isMenuList">
+                    <mat-tab label="Description">
+                        <div class="grid-item">
+                          <mat-card class="image-container">
+                            <app-widget-uploader
+                                  [(fileNames)]="priceSchedule.image"
+                                  (messageOut) ="saveImageToSchedule($event)">
+                                  Uses one image.
+                              </app-widget-uploader>
+                          </mat-card>
+                        </div>
+                        <mat-label> Description </mat-label><br>
+                        <simple-tinymce name="description"
+                                        cols="50" rows="15"
+                                        formControlName="description"
+                                        [(ngModel)]="description">
+                        </simple-tinymce>
+                    </mat-tab>
+                  </div>
+
+                </div>
+              </mat-tab-group>
+            <div>
           </div>
         </div>
       </div>
@@ -97,11 +115,9 @@
     </div>
   </div>
 </div>
-<ng-template loading>
-  <h3>saving....</h3>
+
+<ng-template #loading>
+  <h3>processing....</h3>
   <mat-spinner></mat-spinner>
 </ng-template>
-<ng-template #saving>
-  <h3>saving....</h3>
-  <mat-spinner></mat-spinner>
-</ng-template>
+

@@ -76,8 +76,21 @@
         "destination": "/index.html"
       }
     ]
+  },
+  {
+    "target": "clubskyhigh",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
-
 ]
-
 }

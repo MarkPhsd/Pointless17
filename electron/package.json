@@ -1,34 +1,37 @@
 {
-  "name": "PointLess",
-  "version": "1.0.135",
+  "name": "pointLess",
+  "version": "1.0.150",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
+  "author": "Coast to Coast Business Solutions",
+  "license": "ISC",
   "scripts": {
     "electron:start": "electron ./",
-    "postinstall":  "install-app-deps electron-rebuild -f -w sqlite3",
-    "start":        "npm install && electron ./app",
-    "pack":         "electron-builder --dir",
-    "dist":         "electron-builder",
-    "build":        "electron-builder build --win --publish never",
-    "deploy":       "electron-builder build --win --x64 --ia32 --publish always ",
-    "deploy32":     "electron-builder build --win  --ia32 --publish always ",
-    "deploy64":     "electron-builder build --win --x64 --publish always ",
-    "electron":     "wait-on http://localhost:4200 && electron .",
-    "prestart":     "npm run clean",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "npm install && electron ./app",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "build": "electron-builder build --win --publish never",
+    "deploy Multi Platform": "electron-builder build --win --x64 --ia32 --publish always postinstall",
+    "deploy32": "electron-builder build --win  --ia32 --publish always ",
+    "deploy64": "electron-builder build --win --x64 --publish always ",
+    "electron": "wait-on http://localhost:4200 && electron .",
+    "general publish": "build  -p always",
+    "prestart": "npm run clean",
     "startconcurrently": "concurrently -k \"ng serve\" \"npm run electron\"",
-    "runElectron":  "concurrently -k \"npm run electron\""
+    "runElectron": "concurrently -k \"npm run electron\""
   },
   "dependencies": {
     "@capacitor/electron": "^2.4.8",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.4.0",
-    "electron-updater": "^4.3.9",
+    "electron-updater": "^4.0.6",
     "winreg": "^1.2.4"
   },
   "devDependencies": {
     "electron": "^11.0.0",
-    "electron-builder": "^22.10.5",
+    "electron-builder": "^20.28.4",
     "electron-reloader": "^1.2.1"
   },
   "keywords": [
@@ -39,20 +42,7 @@
     "Ecommerce",
     "WebStore"
   ],
-  "author": "Coast to Coast Business Solutions",
-  "license": "ISC",
-  "repository": {
-    "type": "generic",
-    "url": "https://cafecartel.com/pointless"
-  },
-  "win": {
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://cafecartel.com/pointless"
-      }
-    ]
-  },
+
   "build": {
     "publish": [
       {

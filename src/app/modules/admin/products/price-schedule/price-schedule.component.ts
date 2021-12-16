@@ -41,7 +41,7 @@ export class PriceScheduleComponent {
   active:               boolean;
 
   priceSchedule$      : Observable<IPriceSchedule>;
-  priceSchedule       : IPriceSchedule;
+
   id                  : number;
 
   @Input() requiredItemTypes:  DiscountInfo[] = []; //what is a main type? This is itemType
@@ -50,12 +50,18 @@ export class PriceScheduleComponent {
   @Input() requiredItems:      DiscountInfo[] = [];
 
   _priceSchedule              : Subscription;
-  priceScheduleTracking       : IPriceSchedule;
+  priceSchedule       : IPriceSchedule;
   devMode                     = false;
+  isMenuList                   : boolean;
+  description         : string;
 
   initPriceScheduleService() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
-      this.priceScheduleTracking = data
+      this.priceSchedule = data
+      this.isMenuList = false
+      if (data.type == 'Menu List') {
+        this.isMenuList = true
+      }
     })
 
     //subscribe to form
@@ -63,8 +69,21 @@ export class PriceScheduleComponent {
       if (!data) {
         console.log('no data output from Price Schedule Service. Component')
       }
-      this.priceScheduleTracking = data
+      this.priceSchedule = data
+      this.updateMenuList(this.priceSchedule)
     })
+  }
+
+  updateMenuList(schedule: IPriceSchedule) {
+    this.isMenuList = false
+    if (schedule.type == 'Menu List') {
+      this.isMenuList = true
+    }
+  }
+
+  saveImageToSchedule(event)  {
+    this.priceSchedule.image = event
+    this.inputForm.controls['image'].setValue(this.priceSchedule.image)
   }
 
   constructor(

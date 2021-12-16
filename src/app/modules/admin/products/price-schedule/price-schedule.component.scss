@@ -261,6 +261,24 @@ body{ overflow-x: hidden;}
   flex-wrap            : wrap;
 }
 
+simple-tinymce {
+  padding:5px;
+  min-width: 600px;
+  width: 600px;
+  min-height: 400px;
+}
+
+.tab-group-grid {
+  width: 800px;
+  min-width: 800px;
+  min-height: 700px;
+}
+
+.description {
+  width: 600px;
+  height: 300px;
+}
+
 // .header-grid {
 //   display: grid;
 //   grid-template-columns: 600px 1fr;

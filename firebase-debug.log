@@ -1,0 +1,84 @@
+[debug] [2021-12-15T21:22:27.086Z] ----------------------------------------------------------------------
+[debug] [2021-12-15T21:22:27.095Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Mark\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting:clubskyhigh
+[debug] [2021-12-15T21:22:27.098Z] CLI Version:   9.23.1
+[debug] [2021-12-15T21:22:27.100Z] Platform:      win32
+[debug] [2021-12-15T21:22:27.100Z] Node Version:  v14.17.0
+[debug] [2021-12-15T21:22:27.109Z] Time:          Wed Dec 15 2021 13:22:27 GMT-0800 (Pacific Standard Time)
+[debug] [2021-12-15T21:22:27.110Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2021-12-15T21:22:27.314Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2021-12-15T21:22:27.314Z] > authorizing via signed-in user (cafecartelsystems@gmail.com)
+[debug] [2021-12-15T21:22:27.314Z] [iam] checking project ccsapi for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2021-12-15T21:22:27.320Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/ccsapi:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2021-12-15T21:22:27.597Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Wed, 15 Dec 2021 21:22:27 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=135","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-15T21:22:27.605Z] > refreshing access token with scopes: []
+[debug] [2021-12-15T21:22:27.606Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-15T21:22:27.763Z] <<< HTTP RESPONSE 200 {"date":"Wed, 15 Dec 2021 21:22:27 GMT","pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","cache-control":"no-cache, no-store, max-age=0, must-revalidate","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-15T21:22:27.787Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi [none]
+[debug] [2021-12-15T21:22:28.020Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi 200
+[debug] [2021-12-15T21:22:28.020Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/ccsapi {"projectId":"ccsapi","projectNumber":"286330060118","displayName":"CCSAPI","name":"projects/ccsapi","resources":{"hostingSite":"ccsapi","realtimeDatabaseInstance":"ccsapi-default-rtdb"},"state":"ACTIVE"}
+[info] 
+[info] === Deploying to 'ccsapi'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2021-12-15T21:22:28.032Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2021-12-15T21:22:28.033Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2021-12-15T21:22:28.172Z] <<< HTTP RESPONSE 200 {"cache-control":"no-cache, no-store, max-age=0, must-revalidate","date":"Wed, 15 Dec 2021 21:22:28 GMT","pragma":"no-cache","expires":"Mon, 01 Jan 1990 00:00:00 GMT","content-type":"application/json; charset=utf-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","server":"scaffolding on HTTPServer2","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-15T21:22:28.201Z] >>> HTTP REQUEST POST https://firebasehosting.googleapis.com/v1beta1/sites/clubskhigh/versions  
+ {"config":{"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2021-12-15T21:22:28.574Z] <<< HTTP RESPONSE 500 {"vary":"X-Origin, Referer, Origin,Accept-Encoding","content-type":"application/json; charset=UTF-8","date":"Wed, 15 Dec 2021 21:22:28 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2021-12-15T21:22:28.574Z] <<< HTTP RESPONSE BODY {"error":{"code":500,"message":"Internal error encountered.","status":"INTERNAL"}}
+[error] 
+[error] Error: HTTP Error: 500, Internal error encountered.
+[debug] [2021-12-15T21:22:28.714Z] Error Context: {
+  "body": {
+    "error": {
+      "code": 500,
+      "message": "Internal error encountered.",
+      "status": "INTERNAL"
+    }
+  },
+  "response": {
+    "statusCode": 500,
+    "body": {
+      "error": {
+        "code": 500,
+        "message": "Internal error encountered.",
+        "status": "INTERNAL"
+      }
+    },
+    "headers": {
+      "vary": "X-Origin, Referer, Origin,Accept-Encoding",
+      "content-type": "application/json; charset=UTF-8",
+      "date": "Wed, 15 Dec 2021 21:22:28 GMT",
+      "server": "ESF",
+      "cache-control": "private",
+      "x-xss-protection": "0",
+      "x-frame-options": "SAMEORIGIN",
+      "x-content-type-options": "nosniff",
+      "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-Q050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"",
+      "accept-ranges": "none",
+      "transfer-encoding": "chunked"
+    },
+    "request": {
+      "uri": {
+        "protocol": "https:",
+        "slashes": true,
+        "auth": null,
+        "host": "firebasehosting.googleapis.com",
+        "port": 443,
+        "hostname": "firebasehosting.googleapis.com",
+        "hash": null,
+        "search": null,
+        "query": null,
+        "pathname": "/v1beta1/sites/clubskhigh/versions",
+        "path": "/v1beta1/sites/clubskhigh/versions",
+        "href": "https://firebasehosting.googleapis.com/v1beta1/sites/clubskhigh/versions"
+      },
+      "method": "POST"
+    }
+  }
+}

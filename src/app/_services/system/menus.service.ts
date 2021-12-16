@@ -6,6 +6,10 @@ import { ISite, IUser }   from 'src/app/_interfaces';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
+export interface ResultCheck {
+  result: boolean;
+  message: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -280,7 +284,7 @@ export class MenusService {
 
   }
 
-  mainMenuExists(site: ISite): Observable<boolean> {
+  mainMenuExists(site: ISite): Observable<ResultCheck> {
 
     const controller = "/MenuGroups/"
 
@@ -290,13 +294,14 @@ export class MenusService {
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    const url = { url: uri, cacheMins: 120}
+    const url = { url: uri, cacheMins: 0}
 
-    return  this.httpCache.get<boolean>(url)
+    // return this.http.get<any>(url)
+    return this.http.get<ResultCheck>(uri);
 
   }
 
-  menuExists(site: ISite, name: string): Observable<boolean> {
+  menuExists(site: ISite, name: string): Observable<ResultCheck> {
 
     const controller = "/MenuGroups/"
 
@@ -308,7 +313,7 @@ export class MenusService {
 
     const url = { url: uri, cacheMins: 120}
 
-    return  this.httpCache.get<boolean>(url)
+    return  this.httpCache.get<ResultCheck>(url)
 
   }
 
