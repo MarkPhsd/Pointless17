@@ -8,6 +8,7 @@ import { fadeInAnimation } from 'src/app/_animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'src/environments/environment';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 @Component({
   selector: 'app-register-account-existing-user-with-token',
@@ -45,6 +46,7 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
       private authenticationService: AuthenticationService,
       private companyService: CompanyService,
       private sitesService: SitesService,
+      private appInitService: AppInitService
   ) {
 
     // this.id = this.route.snapshot.paramMap.get('id');
@@ -58,7 +60,7 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
         this.router.navigate(['/app-main-menu']);
       }
     }
-
+    this.initLogo()
   }
 
   ngOnInit(): void {
@@ -78,10 +80,16 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
     } else {
       this.compName = this.company.compName
     }
-
-    this.logo = `${environment.logo}`
     this.compName = `${environment.company}`
   }
+
+  initLogo() {
+    const logo        = this.appInitService.logo;
+    if ( logo)  {
+      this.logo   = logo
+    }
+  }
+
 
   goBack(){
     this.router.navigate(['/login'])

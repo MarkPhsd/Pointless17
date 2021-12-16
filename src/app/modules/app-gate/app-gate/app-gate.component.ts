@@ -36,6 +36,13 @@ export class AppGateComponent implements OnInit , OnChanges{
     await this.navRefresh()
   }
 
+  initLogo() {
+    const logo        = this.appInitService.logo;
+    if (logo)  {
+      this.logo   = logo
+    }
+  }
+
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -47,7 +54,7 @@ export class AppGateComponent implements OnInit , OnChanges{
   }
 
   async navRefresh() {
-    this.logo     = '';
+
     this.company  = '';
     if (!this.platFormService.webMode ) {
       this.skipCheck();

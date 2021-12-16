@@ -1,12 +1,10 @@
 ﻿import { CompanyService,AuthenticationService, AWSBucketService} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
-import { first, last } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from 'src/environments/environment';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -104,15 +102,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async initCompanyInfo() {
-
     this.compName    = this.appInitService.company
+    this.initLogo();
+  }
+
+  initLogo() {
     const logo        = this.appInitService.logo;
-    const path       = await this.awsBucketService.awsBucket();
-
-    if (path && logo)  {
-      this.logo   = this.awsBucketService.getImageURLPath(path, logo)
+    if ( logo)  {
+      this.logo   = logo
     }
-
   }
 
   redirects() {
@@ -224,8 +222,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.userSwitchingService.processLogin(currentUser)
             if (sheet) {
               if (sheet.shiftStarted == 0) {
-                // console.log('this user is loggedin', this.loggedInUser)
-                // console.log('this sheet  is active', user)
+
                 this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
                 return
               }

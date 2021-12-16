@@ -1,13 +1,11 @@
 import { CompanyService,AuthenticationService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { fadeInAnimation } from 'src/app/_animations';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { environment } from 'src/environments/environment';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 @Component({
   selector: 'app-register-account-main',
@@ -17,11 +15,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 export class RegisterAccountMainComponent implements OnInit {
 
   @Input() statusMessage: string;
-
   compName: string;
   company = {} as ICompany;
   logo: string;
-
   loading = false;
   submitted = false;
   returnUrl: string;
@@ -39,55 +35,52 @@ export class RegisterAccountMainComponent implements OnInit {
       private router: Router,
       private authenticationService: AuthenticationService,
       private companyService: CompanyService,
-      private _snackBar: MatSnackBar,
+      private appInitService: AppInitService,
       private sitesService: SitesService,
   ) {
     // redirect to home if already logged in
     if (this.authenticationService.userValue) {
       this.router.navigate(['/app-main-menu']);
     }
+    this.initLogo();
   }
 
   goBack(){
-
     this.router.navigate(['/login'])
   }
 
-  ngOnInit(): void {
+  initLogo() {
+    const logo        = this.appInitService.logo;
+    if ( logo)  {
+      this.logo   = logo
+    }
+  }
 
+  ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
     });
-
     this.getCompanyInfo();
-    // get return url from route parameters or default to '/'
-
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
     if (this.company) {
       this.compName = this.company.compName
     }
-
     this.logo = `${environment.logo}`
     this.compName = `${environment.company}`
-
   }
 
   async onSubmit(){
     this.submitted = true;
     this.statusMessage = ""
-
     // stop here if form is invalid
     if (this.loginForm.invalid) {
       return;
     }
-
     // this.router.navigate(["/adminbranditem/", {id:id}]);
     const result =  this.authenticationService.requestUserSetupToken(this.f.username.value).pipe().toPromise()
     if (result)  {
       this.router.navigate(['/register-token', { data: JSON.stringify(result) } ]);
     }
-
   }
 
   getCompanyInfo() {
@@ -103,7 +96,6 @@ export class RegisterAccountMainComponent implements OnInit {
           this.statusMessage ="Offline"
         }
       );
-
     } catch (error) {
       this.statusMessage ="Offline"
     }

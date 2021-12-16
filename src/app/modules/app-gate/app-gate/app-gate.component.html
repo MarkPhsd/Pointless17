@@ -3,7 +3,7 @@
   <!-- {{this.platForm}} -->
   <div *ngIf="platFormService.webMode">
     <div class="age-gate-form" *ngIf="useAppGate">
-        <!-- <img [src]="logo" width="125px" [alt]="company"  class="logo"> -->
+        <img *ngiIf="logo" [src]="logo" width="125px" [alt]="company"  class="logo">
         <div class="age-gate-error" data-error-field="buttons"></div>
 
         <div class="entry-question">{{ entryQuestion }}</div>
