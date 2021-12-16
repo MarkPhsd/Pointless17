@@ -24,7 +24,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         <h1>Acme</h1>
       </div>
       <div>
-        <storybook-button
+        <!-- <storybook-button
           *ngIf="user"
           size="small"
           (onClick)="onLogout.emit($event)"
@@ -42,7 +42,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
           size="small"
           (onClick)="onCreateAccount.emit($event)"
           label="Sign up"
-        ></storybook-button>
+        ></storybook-button> -->
       </div>
     </div>
   </header>`,
@@ -52,12 +52,9 @@ export default class HeaderComponent {
   @Input()
   user: unknown = null;
 
-  @Output()
-  onLogin = new EventEmitter<Event>();
+  @Output()   onLogin = new EventEmitter<Event>();
 
-  @Output()
-  onLogout = new EventEmitter<Event>();
+  @Output()   onLogout = new EventEmitter<Event>();
 
-  @Output()
-  onCreateAccount = new EventEmitter<Event>();
+  @Output()   onCreateAccount = new EventEmitter<Event>();
 }

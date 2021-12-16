@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         private _snackBar: MatSnackBar,
         private companyService: CompanyService,
         private siteService: SitesService,
-        private awsBucketService: AWSBucketService,
         public platformService : PlatformService,
         private appInitService: AppInitService,
     )
@@ -82,6 +81,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     //Add 'implements OnDestroy' to the class.
     if (this._user) { this._user.unsubscribe()}
   }
+
   initForm() {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
@@ -94,10 +94,16 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setAPIAlt() {
-    this.counter  = this.counter +1
-    if (this.counter > 5) {
-      this.counter = 0;
-      this.router.navigate(['/apisetting']);
+    // console.log('nav to api setting', this.platformService.webMode)
+
+    console.log('setAPIAlt', 'setAPIAlt')
+
+    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
+      this.counter  = this.counter +1
+      if (this.counter > 5) {
+        this.counter = 0;
+        this.router.navigate(['/apisetting']);
+      }
     }
   }
 
@@ -107,10 +113,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initLogo() {
-    const logo        = this.appInitService.logo;
-    if ( logo)  {
-      this.logo   = logo
-    }
+    const logo    = this.appInitService.logo;
+    if ( logo) {  this.logo = logo }
   }
 
   redirects() {
@@ -128,7 +132,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   redirectAPIUrlRequired() {
       //if is app and no apiurl is stored move to the apiURlSetting Component.
-    if (!this.platformService.webMode) {
+    console.log('redirectAPIUrlRequired isAppElectron', this.platformService.isAppElectron )
+    console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
+
+    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
+      console.log('nav to api setting', this.platformService.webMode)
       this.platformService.initAPIUrl();
       if (this.platformService.apiUrl.length == 0) {
         this.router.navigate(['/apisetting']);
@@ -158,8 +166,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.siteService.clearAssignedSite();
     if (!this.platformService.webMode) { return }
-    if (this.appInitService.appGateEnabled()) {
-      this.router.navigate(['/appgate']);
+
+    console.log('redirectAPIUrlRequired isAppElectron', this.platformService.isAppElectron )
+    console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
+
+    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
+      if (this.appInitService.appGateEnabled()) {
+        this.router.navigate(['/appgate']);
+      }
     }
   }
 

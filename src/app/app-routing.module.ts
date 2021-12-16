@@ -252,8 +252,7 @@ const routes: Routes = [
         { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
       ]
     },
-    // app-pos-order-item/
-    // { path: 'pos-order-item', component: PosOrderItemComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: { animation: 'isLeft'}},
 
     { path: 'view-price-tiers', component: TierPricesComponent ,data: { animation: 'isLeft'}},
@@ -272,12 +271,12 @@ const routes: Routes = [
     { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
-    // { path: 'HomePage', component: HomePage, data: { animation: 'isLeft'}},
-    { path: 'login', component: LoginComponent, data: { animation: 'isLeft'}},
+     { path: 'login', component: LoginComponent, data: { animation: 'isLeft'}},
     { path: 'resetpassword', component: ResetpasswordComponent,data: { animation: 'isLeft'}},
     { path: 'changepassword', component: ChangepasswordComponent,data: { animation: 'isLeft'}},
-    { path: 'api-setting', component: APISettingComponent ,data: { animation: 'isLeft'}},
-    { path: 'apisetting', component: APISettingComponent ,data: { animation: 'isLeft'}},
+
+    { path: 'api-setting', component: APISettingComponent , data: { animation: 'isLeft'}},
+    { path: 'apisetting',  component: APISettingComponent , data: { animation: 'isLeft'}},
 
     { path: 'register-existing-user', component: RegisterAccountExistingUserComponent, data: { animation: 'isLeft'}},
     { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
@@ -287,10 +286,7 @@ const routes: Routes = [
 
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
 
-    //app-widget-card
     { path: 'app-widget-card', component: CardComponent, data: { animation: 'isLeft'}},
-    //192.168.0.16:4200/app-widget-card;groupBy=date;dateFrom=09012019;dateTo=09152019
-
     { path: '**', component: PageNotFoundComponent},
   ];
 

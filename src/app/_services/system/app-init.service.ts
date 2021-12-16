@@ -20,6 +20,7 @@ export class AppInitService  {
   constructor(handler: HttpBackend,
               private platFormService: PlatformService,
               private _snackbar: MatSnackBar,
+              private platformService: PlatformService,
               private router: Router,) {
 
     this.platFormService.getPlatForm()
@@ -27,9 +28,10 @@ export class AppInitService  {
   }
 
   isApp(): boolean {
-    if (!this.platFormService.webMode) {
+    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
       return true
     }
+    return false
   }
   //for distributed apps.
   //also make a setting that can be applied.
@@ -42,15 +44,13 @@ export class AppInitService  {
     // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
 
-    if (this.isApp) {
-      if ( !this.apiUrl ){
-        // if there is no API then the user needs to input one.
-        //we also have to have a way to change or clear the API, just in case.
-        // redirect to home if already logged in
-        this.useAppGate = false
-        this.router.navigate(['/apisetting']);
-        return
-      }
+    console.log('routing to apisetting from app-init init is app:', this.isApp())
+
+    if ( !this.apiUrl && this.isApp() ){
+      console.log('routing to apisetting from app-init')
+      this.useAppGate = false
+      this.router.navigate(['/apisetting']);
+      return
     }
 
     if (this.platFormService.webMode) {
@@ -101,7 +101,7 @@ export class AppInitService  {
       this.apiUrl = localStorage.getItem('storedApiUrl')
     }
 
-    if (!this.appConfig) {
+    if (!this.appConfig && this.isApp()) {
 
       this.useAppGate = false
       this.router.navigate(['/apisetting']);

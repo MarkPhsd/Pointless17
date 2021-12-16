@@ -20,15 +20,16 @@ export class PlatformService {
   private _apiUrl       : any;
 
   get isAppElectron() {
-    const info = this.getPlatForm()
-    return info.isAppElectron
+    const info = this.electronService.isElectronApp
+    return  info
   }
 
   get androidApp()    {
     const info = this.getPlatForm()
-    if(info) {
-      return info.androidApp
+    if(info.androidApp) {
+      return true
     }
+    return false
   }
   get platForm()      {
     return Capacitor.getPlatform();

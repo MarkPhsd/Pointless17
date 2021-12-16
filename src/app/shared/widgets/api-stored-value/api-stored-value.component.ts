@@ -25,13 +25,20 @@ export class ApiStoredValueComponent implements OnInit {
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
-      public electronService      : ElectronService,
+      public electronService       : ElectronService,
+      private platformService      : PlatformService,
       private ngZone: NgZone
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
-    if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
-      this.router.navigate(['/login'])
+
+    console.log('redirectAPIUrlRequired isAppElectron', this.platformService.isAppElectron )
+    console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
+
+    if (!this.platformService.isAppElectron || !this.platformService.androidApp)  {
+      // if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
+        this.router.navigate(['/login'])
+      // }
     }
 
     this.initRender();
@@ -49,10 +56,12 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     const currentAPIUrl = localStorage.getItem('storedApiUrl');
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
     });
+
     console.log('App setting Init', currentAPIUrl)
     console.log('platFormService.webMode', this.platFormService.webMode)
   }
