@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirectAPIUrlRequired() {
-    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
+    if (this.platformService.isApp())  {
       this.platformService.initAPIUrl();
       if (this.platformService.apiUrl.length == 0) {
         this.router.navigate(['/apisetting']);

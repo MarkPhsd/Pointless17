@@ -49,11 +49,14 @@ export class PlatformService {
   }
 
   constructor(
-    private electronService     : ElectronService,) {
+      private electronService     : ElectronService,) {
+
     this.initAPIUrl();
+
     if (!this._apiUrl) {this._apiUrl =''};
+
     this.getPlatForm();
-    // console.log('platFormInfo', this.platFormInfo)
+
   }
 
   initAPIUrl() {

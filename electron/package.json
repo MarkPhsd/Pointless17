@@ -1,6 +1,6 @@
 {
   "name": "pointLess",
-  "version": "1.0.151",
+  "version": "1.0.157",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -12,7 +12,6 @@
     "start": "npm install && electron ./app",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "build": "electron-builder build --win --publish never",
     "deploy Multi Platform": "build --win --x64 --ia32 --p always",
     "deploy32": "electron-builder build --win  --ia32 --publish always ",
     "deploy64": "electron-builder build --win --x64 --publish always ",
@@ -20,7 +19,8 @@
     "general publish": "build  -p always",
     "prestart": "npm run clean",
     "startconcurrently": "concurrently -k \"ng serve\" \"npm run electron\"",
-    "runElectron": "concurrently -k \"npm run electron\""
+    "runElectron": "concurrently -k \"npm run electron\"",
+    "build": "electron-builder build --win --publish never"
   },
   "dependencies": {
     "@capacitor/electron": "^2.4.8",

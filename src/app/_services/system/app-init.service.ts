@@ -1,3 +1,4 @@
+import { T } from '@angular/cdk/keycodes';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -6,12 +7,21 @@ import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SitesService } from '../reporting/sites.service';
 
+export interface IAppConfig {
+  apiUrl : string
+  useAppGate: boolean;
+  logo: string;
+  company: string;
+  appUrl: string;
+  appGateMessage: string;
+}
+
 declare var window: any;
 
 @Injectable()
 export class AppInitService  {
 
-  appConfig         : any;
+  appConfig         = {} as IAppConfig;
   private apiUrl    : any;
   public  useAppGate: boolean;
   public logo       : string;
@@ -28,6 +38,7 @@ export class AppInitService  {
 
     this.platFormService.getPlatForm()
     this.httpClient = new HttpClient(handler);
+    this.init();
   }
 
   isApp(): boolean {
@@ -44,34 +55,40 @@ export class AppInitService  {
 
   async init() {
 
-    // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
-    console.log(this.apiUrl)
-    console.log('routing to apisetting from app-init init is app:', this.isApp())
 
-    if ( !this.apiUrl && this.isApp() ){
-      console.log('routing to apisetting from app-init')
+    if ( this.apiUrl === undefined && this.isApp() ){
       this.useAppGate = false
       this.router.navigate(['/apisetting']);
       return
     }
 
-    if (this.platFormService.webMode) {
-      try {
-        this.appConfig  = await this.httpClient.get('/assets/app-config.json').toPromise();
-        this.apiUrl     = this.appConfig.apiUrl
-        this.useAppGate = this.appConfig.useAppGate
-        this.logo       = this.appConfig.logo;
-        this.company    = this.appConfig.company
-      } catch (error) {
-        this.useAppGate = false
-        this.router.navigate(['/apisetting']);
+    if ( this.platFormService.webMode) {
+      console.log('init with web platform')
+          const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
+          if (data) {
+            this.apiUrl     = data.apiUrl
+            this.useAppGate = data.useAppGate
+            this.logo       = data.logo;
+            this.company    = data.company
+            this.appConfig  = data ;
+          }
+          if (!data ) {
+            this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
+            this.useAppGate = false;
+            this.logo       = "http://cafecartel.com/temp/logo.png";
+            this.company    = 'Pointless'
+            this.appConfig.apiUrl = this.apiUrl;
+            this.useAppGate       = false;
+            this.appConfig.logo   = this.logo;
+            this.appConfig.company    = 'Pointless'
+          }
       }
-    }
   }
 
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
+    console.log('getLocalApiUrl 1', result)
     const site = {} as ISite;
     site.url = result
     if (result != '' ) {
@@ -82,7 +99,8 @@ export class AppInitService  {
 
 
   setAPIUrl(apiUrl): string {
-    if (apiUrl ) {
+    console.log('setAPIURL 1', apiUrl)
+    if (apiUrl) {
       try {
         const url = new URL(apiUrl);
         if (url) {
@@ -111,10 +129,12 @@ export class AppInitService  {
   apiBaseUrl() {
     console.log('apiBaseUrl ', this.isApp(), this.apiUrl,this.appConfig.apiUrl, localStorage.getItem('storedApiUrl'))
 
-    if (this.isApp() && this.apiUrl) {
-      this.apiUrl =  localStorage.getItem('storedApiUrl')
+    const urlSaved = localStorage.getItem('storedApiUrl')
+    if (this.isApp() && urlSaved != undefined) {
+      this.apiUrl =  urlSaved
       return   this.apiUrl
     }
+
     if (!this.isApp())  {
       return this.appConfig.apiUrl;
       if (this.apiUrl) { return this.apiUrl };
