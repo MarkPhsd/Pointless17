@@ -36,9 +36,9 @@ export class ApiStoredValueComponent implements OnInit {
     console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
 
     if (!this.platformService.isAppElectron || !this.platformService.androidApp)  {
-      // if (this.router.url === '/app-apisetting'  && this.platFormService.webMode) {
+      if (this.router.url === '/app-apisetting') {
         this.router.navigate(['/login'])
-      // }
+      }
     }
 
     this.initRender();
@@ -56,7 +56,6 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     const currentAPIUrl = localStorage.getItem('storedApiUrl');
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],

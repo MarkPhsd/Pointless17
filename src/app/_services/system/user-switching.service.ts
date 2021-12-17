@@ -153,28 +153,32 @@ export class UserSwitchingService {
   }
 
   login(username: string, password: string): Observable<any> {
+
     const apiUrl =  this.appInitService.apiBaseUrl()
+    console.log('apiUrl', apiUrl)
+
     let url = `${apiUrl}/users/authenticate`
+
     this.clearSubscriptions();
+
     const userLogin = { username, password };
+
     return  this.http.post<any>(url, userLogin)
       .pipe(
         // timeout(10000),
         switchMap( user => {
         if (user) {
-             console.log(user)
             try {
+
               user.message = 'success'
-              const currentUser   = this.setUserInfo(user, password)
-              this.authenticationService.updateUser(currentUser)
-              if (this.platformService.isAppElectron || this.platformService.androidApp) {
-                return  this.changeUser(user)
-              }
-              if (this.platformService.webMode) {
-                return of(user)
-              }
+              const currentUser = this.setUserInfo(user, password)
+
+              if (this.platformService.isApp()) {return this.changeUser(user) }
+              if (!this.platformService.isApp)  {return of(user)              }
+
             } catch (error) {
               console.log('error', error)
+              return of(user)
             }
           } else {
             const user = {message: 'failed'}
@@ -207,10 +211,9 @@ export class UserSwitchingService {
     user.authdata = window.btoa(user.username + ':' + user.password);
 
     localStorage.setItem('loggedUser', JSON.stringify(currentUser))
+    this.authenticationService.updateUser(currentUser)
     return currentUser
   }
-
-
 
   clearSubscriptions() {
     this.orderService.updateOrderSubscription(null);
@@ -272,9 +275,6 @@ export class UserSwitchingService {
     if (returnUrl = '/') { returnUrl = '/app-main-menu' }
     if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
 
-
-    console.log('redirectAPIUrlRequired isAppElectron', this.platformService.isAppElectron )
-    console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
 
     if (!this.platformService.isAppElectron || !this.platformService.androidApp)  {
       console.log('logintoReturnURL')

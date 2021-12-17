@@ -14,12 +14,12 @@ export class FbProductsService {
     product.onlineShortDescription = value
   }
 
-  setProductValues(product: IProduct, inputForm: FormGroup): IProduct {
+    setProductValues(product: IProduct, inputForm: FormGroup): IProduct {
     if (inputForm.valid) {
       //first we set the value of the product from the form.
       //then we can set values that aren't filled. we can do this in the api or on the app?
       product                 = inputForm.value;
-
+      product.barCodeID       = product.barcode
       return product
     }
   }
@@ -74,6 +74,7 @@ export class FbProductsService {
         productPartCategoriesID:      [''],
         doNotDelete:                  [''],
         barcode:                      [''],
+        barcodeid:                    [''],
         doNotDiscount:                [''],
         revenueCenter:                [''],
         componentID:                  [''],
@@ -222,6 +223,7 @@ export class FbProductsService {
         lastEdited:                   [''],
         abv:                          [''],
         promptGroupID:                [''],
+        active:                       [''],
       })
 
       return fb;

@@ -40,7 +40,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         //     });
         //     this.authenticationService.externalAPI = false
         //     return next.handle(request);
-        console.log('intercept skip header')
+        // console.log('intercept skip header')
         const headers = request.headers.delete(InterceptorSkipHeader);
         return next.handle(request.clone({ headers }));
       }
@@ -72,7 +72,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
             const metrcUser = 'rdh-NDqpGuklR36rQqNkUzSOSU3I95Ey7Go1D0bbYw2O1MI5' // localStorage.getItem('user.metrcUser')
             try {
               const authdata = window.btoa( `${metrcUser}:${metrcKey}`);
-
               request = request.clone({
                 setHeaders: {
                     Authorization: `Basic ${authdata}`

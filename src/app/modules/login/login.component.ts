@@ -77,8 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     if (this._user) { this._user.unsubscribe()}
   }
 
@@ -94,10 +92,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setAPIAlt() {
-    // console.log('nav to api setting', this.platformService.webMode)
-
-    console.log('setAPIAlt', 'setAPIAlt')
-
     if (this.platformService.isAppElectron || this.platformService.androidApp)  {
       this.counter  = this.counter +1
       if (this.counter > 5) {
@@ -131,12 +125,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirectAPIUrlRequired() {
-      //if is app and no apiurl is stored move to the apiURlSetting Component.
-    console.log('redirectAPIUrlRequired isAppElectron', this.platformService.isAppElectron )
-    console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
-
     if (this.platformService.isAppElectron || this.platformService.androidApp)  {
-      console.log('nav to api setting', this.platformService.webMode)
       this.platformService.initAPIUrl();
       if (this.platformService.apiUrl.length == 0) {
         this.router.navigate(['/apisetting']);
@@ -153,7 +142,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       localStorage.setItem('angularTheme', 'dark-theme')
       return
     }
-
     if ( theme != 'dark-theme') {
       this._renderer.addClass(document.body, 'light-theme');
       this._renderer.removeClass(document.body, 'dark-theme');
@@ -166,10 +154,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.siteService.clearAssignedSite();
     if (!this.platformService.webMode) { return }
-
-    console.log('redirectAPIUrlRequired isAppElectron', this.platformService.isAppElectron )
-    console.log('redirectAPIUrlRequired androidApp',    this.platformService.androidApp )
-
     if (this.platformService.isAppElectron || this.platformService.androidApp)  {
       if (this.appInitService.appGateEnabled()) {
         this.router.navigate(['/appgate']);
@@ -213,6 +197,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigate(['/resetpassword']);
   }
 
+  loginElectronApp(user) {
+    if (this.platformService.isAppElectron || this.platformService.androidApp) {
+      this.loggedInUser = user.user
+      this.spinnerLoading = false
+      const currentUser = user.user
+      const sheet = user.sheet
+      this.userSwitchingService.processLogin(currentUser)
+      if (sheet) {
+        if (sheet.message) {
+          this.notifyEvent(`Message ${sheet.message}`, `Error`)
+          return false
+        }
+        if (sheet.shiftStarted == 0) {
+          this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
+          return true
+        }
+      }
+    }
+  }
+
   async  onSubmit() {
     this.submitted = true;
     this.statusMessage = ""
@@ -221,48 +225,39 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.statusMessage = 'User name and password required.'
       return;
     }
-    (await this.userSwitchingService.login(this.f.username.value, this.f.password.value))
+    (this.userSwitchingService.login(this.f.username.value, this.f.password.value))
       .pipe()
       .subscribe(
         user =>
         {
           this.loading = false;
-          if (this.platformService.isAppElectron || this.platformService.androidApp) {
-            // console.log('login result', user)
-            this.loggedInUser = user.user
-            this.spinnerLoading = false
-            const currentUser = user.user
-            const sheet = user.sheet
-            this.userSwitchingService.processLogin(currentUser)
-            if (sheet) {
-              if (sheet.shiftStarted == 0) {
+          this.loggedInUser = user
 
-                this.router.navigate(['/balance-sheet-edit', {id:sheet.id}]);
-                return
-              }
-            }
+          if (this.loginElectronApp(user)) {
             return
           }
 
-          this.loggedInUser = user.user
           if (this.loggedInUser && this.loggedInUser.message === 'success') {
             this.userSwitchingService.processLogin(user)
             this.spinnerLoading = false;
             this.initForm()
             return
           }
-          if(user && (user.status === 0 || user.message  == 'failed')) {
-            this.loggedInUser.message == 'Failed'
+
+          if (this.loggedInUser && (this.loggedInUser.message  == 'failed')) {
+            this.loggedInUser.message == 'failed'
             this.loggedInUser.errorMessage = 'Error logging in. '
             this.statusMessage = "Service is not accessible, check connection."
           }
+
         },
         error => {
+          console.log('login error occured', error)
           this.spinnerLoading = false;
           this.statusMessage = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
           this.loading = false;
           return
-      }
+        }
     );
   }
 
@@ -272,6 +267,5 @@ export class LoginComponent implements OnInit, OnDestroy {
       verticalPosition: 'top'
     });
   }
-
 }
 

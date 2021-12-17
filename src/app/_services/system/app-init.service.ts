@@ -2,7 +2,9 @@ import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { SitesService } from '../reporting/sites.service';
 
 declare var window: any;
 
@@ -21,6 +23,7 @@ export class AppInitService  {
               private platFormService: PlatformService,
               private _snackbar: MatSnackBar,
               private platformService: PlatformService,
+
               private router: Router,) {
 
     this.platFormService.getPlatForm()
@@ -43,7 +46,7 @@ export class AppInitService  {
 
     // if (apiUrl) {this.setAPIUrl(apiUrl)}
     this.apiUrl = this.getLocalApiUrl();
-
+    console.log(this.apiUrl)
     console.log('routing to apisetting from app-init init is app:', this.isApp())
 
     if ( !this.apiUrl && this.isApp() ){
@@ -69,20 +72,25 @@ export class AppInitService  {
 
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
+    const site = {} as ISite;
+    site.url = result
     if (result != '' ) {
       return result;
     }
     return ''
   }
 
+
   setAPIUrl(apiUrl): string {
     if (apiUrl ) {
       try {
         const url = new URL(apiUrl);
-        localStorage.setItem('storedApiUrl', apiUrl)
-        const result = localStorage.getItem('storedApiUrl')
-        console.log('new APIUrl', result)
-        return result
+        if (url) {
+          localStorage.setItem('storedApiUrl', apiUrl)
+          this.setAssignedSite(apiUrl)
+          console.log('setAPIURL ', apiUrl)
+          return apiUrl;
+        }
       } catch (error) {
         this._snackbar.open('Url not formed properly.' + error, 'Failure')
       }
@@ -90,23 +98,41 @@ export class AppInitService  {
     return ''
   }
 
+  setAssignedSite(apiUrl) {
+    const site = {} as ISite
+    site.url = apiUrl;
+    localStorage.setItem("site.url", apiUrl)
+  }
+
   appInUse() {
     return !this.platFormService.webMode
   }
 
   apiBaseUrl() {
-    if (this.apiUrl) { return this.apiUrl };
+    console.log('apiBaseUrl ', this.isApp(), this.apiUrl,this.appConfig.apiUrl, localStorage.getItem('storedApiUrl'))
+
+    if (this.isApp() && this.apiUrl) {
+      this.apiUrl =  localStorage.getItem('storedApiUrl')
+      return   this.apiUrl
+    }
+    if (!this.isApp())  {
+      return this.appConfig.apiUrl;
+      if (this.apiUrl) { return this.apiUrl };
+    }
 
     if (!this.apiUrl) {
       this.apiUrl = localStorage.getItem('storedApiUrl')
+      if ( this.apiUrl ){
+        return  this.apiUrl
+      }
     }
 
-    if (!this.appConfig && this.isApp()) {
-
+    if ((!this.appConfig || !this.apiUrl) && this.isApp()) {
       this.useAppGate = false
       this.router.navigate(['/apisetting']);
       return ''
     }
+
     return this.appConfig.apiUrl;
   }
 

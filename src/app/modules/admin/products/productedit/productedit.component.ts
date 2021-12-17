@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, Inject, Input,  OnInit,} from '@ang
 import { AWSBucketService, MenuService } from 'src/app/_services';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DevService } from 'src/app/_services/system/dev-service.service';
 import { Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSnackBar} from '@angular/material/snack-bar';
@@ -10,14 +9,11 @@ import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { IEmployee } from 'src/app/_interfaces';
-import { TaxesService } from 'src/app/_services/menu/taxes.service';
-import { EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { PriceCategoryItemService } from 'src/app/_services/menu/price-category-item.service';
 import { IPriceCategories } from 'src/app/_interfaces/menu/price-categories';
 
 // http://jsfiddle.net/0ftj7w1q/
@@ -164,7 +160,6 @@ export class ProducteditComponent implements  OnInit  {
         product$.subscribe( data => {
           this.notifyEvent('Item Updated', 'Success')
           resolve(true)
-
         }, error => {
           this.notifyEvent(`Update item. ${error}`, "Failure")
           resolve(false)

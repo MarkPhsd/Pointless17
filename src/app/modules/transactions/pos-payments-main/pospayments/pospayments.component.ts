@@ -1,5 +1,5 @@
 import { Component, Output, OnInit,
-  ViewChild ,ElementRef, EventEmitter, OnDestroy } from '@angular/core';
+  ViewChild ,ElementRef, EventEmitter, OnDestroy, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -34,7 +34,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  @Input()  height = "90vh"
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -125,10 +125,21 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions = 'width: 100%; height: 100%;'
+    let height = this.height
+    if (!height) {
+      height = "80vh"
+    }
+
+    this.gridDimensions = `width: 100%; height: ${height}`
     this.agtheme        = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+
+    if (!height) {
+      height = "80vh"
+    }
+
+    if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
+    if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
+
   }
 
   async initForm() {

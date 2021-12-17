@@ -191,5 +191,6 @@ export interface IProduct {
   lastEdited:                   boolean;
   abv                           :string;
   promptGroupID               : number;
+  active                      : boolean;
 }
 

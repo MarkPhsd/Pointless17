@@ -5,7 +5,7 @@ import { OrdersService } from '..';
 import { SitesService } from '../reporting/sites.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from './balance-sheet.service';
 import { Capacitor } from '@capacitor/core';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -84,14 +84,22 @@ export class BalanceSheetMethodsService {
     if (this.platformService.isAppElectron || this.platformService.androidApp) {
       const site     = this.sitesService.getAssignedSite()
       const deviceName = this.getDeviceName();
-      this.getCurrentBalanceSheet()
+      // this.getCurrentBalanceSheet()
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
           return of({sheet: data, user: user})
+        }),
+        catchError( e => {
+          this.notify('Balance Sheet Error. User May not have Employee Assigned.', 'Altert Notification')
+          // const sheet = {} as IBalanceSheet
+          // sheet.id = 0
+          // sheet.message = `Balance Sheet Error ${e}`
+          return of({sheet: null, user: user, err: e})
         })
       )
+
+      return of('false')
     }
-    return of('false')
   }
 
   openBalanceSheet(id) {

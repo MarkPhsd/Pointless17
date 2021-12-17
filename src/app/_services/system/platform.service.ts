@@ -41,12 +41,19 @@ export class PlatformService {
     return localStorage.getItem('storedApiUrl');
   }
 
+  isApp(): boolean {
+    if (this.isAppElectron || this.androidApp)  {
+      return true
+    }
+    return false
+  }
+
   constructor(
     private electronService     : ElectronService,) {
     this.initAPIUrl();
     if (!this._apiUrl) {this._apiUrl =''};
     this.getPlatForm();
-    console.log('platFormInfo', this.platFormInfo)
+    // console.log('platFormInfo', this.platFormInfo)
   }
 
   initAPIUrl() {

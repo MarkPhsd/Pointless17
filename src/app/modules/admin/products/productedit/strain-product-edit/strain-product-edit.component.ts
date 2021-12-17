@@ -39,8 +39,7 @@ export class StrainProductEditComponent implements OnInit {
               private router: Router,
               public route: ActivatedRoute,
               public fb: FormBuilder,
-              private sanitizer : DomSanitizer,
-              private awsBucket: AWSBucketService,
+
               private _snackBar: MatSnackBar,
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,
@@ -128,9 +127,7 @@ export class StrainProductEditComponent implements OnInit {
   setValues(): boolean {
     this.product  = this.fbProductsService.setProductValues(this.product, this.productForm)
     if (this.product) {
-      // // //not form values
       this.product.urlImageMain  = this.urlImageMain
-      // this.product.urlImageOther = this.urlImageOther
       return true
     }
   }

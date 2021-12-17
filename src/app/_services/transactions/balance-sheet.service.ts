@@ -136,6 +136,7 @@ export interface IBalanceSheet {
   cashDropTotal:        number;
   balanceSheetEmployee: BalanceSheetEmployee;
   cashDrops            : CashDrop;
+  message              : string;
 }
 
 export interface CashDrop {

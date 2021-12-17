@@ -53,6 +53,8 @@ export class AuthenticationService {
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
+      console.log('apiUrl in AUthentication', this.apiUrl)
+
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
       const user  = JSON.parse(localStorage.getItem('user')) as IUser;
       this.updateUser(user);
@@ -117,6 +119,7 @@ export class AuthenticationService {
     }
 
     requestUserSetupToken(userName: string): Observable<IUserExists> {
+
       let url = `${this.apiUrl}/users/RequestUserSetupToken`
       return  this.http.post<any>(url, {userName: userName})
     };
