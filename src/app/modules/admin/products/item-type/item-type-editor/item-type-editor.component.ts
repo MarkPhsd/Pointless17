@@ -1,18 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subject } from 'rxjs';
+import { FormBuilder, FormGroup,} from '@angular/forms';
+import { ActivatedRoute,  } from '@angular/router';
 import { MatSnackBar} from '@angular/material/snack-bar';
-import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable,  } from 'rxjs';
-import { catchError, tap, map } from 'rxjs/operators';
-import { ISetting, TaxRate } from 'src/app/_interfaces';
-import { TaxesService } from 'src/app/_services/menu/taxes.service';
+import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 
@@ -32,7 +27,7 @@ export class ItemTypeEditorComponent   {
   inputForm         : FormGroup;
   itemType$         : Observable<IItemType>;
   selectedItemsCount: number;
-
+  itemType_PackageTypes = this.itemTypeService.packageTye;
   labelTypes        : ISetting[];
   receiptList$      : Observable<ISetting[]>;
   labelList$        : Observable<ISetting[]>;
@@ -42,6 +37,7 @@ export class ItemTypeEditorComponent   {
   labelTypeID     : number;
   printerName     : string;
   printLocationID : number;
+  packageType: string;
 	// this.receiptList$     =  this.settingService.getReceipts(site);
   //   this.labelList$       =  this.settingService.getLabels(site);
   //   this.prepReceiptList$ =  this.settingService.getPrepReceipts(site);
@@ -99,6 +95,7 @@ export class ItemTypeEditorComponent   {
         this.printerName = this.itemType.printerName
         this.prepTicketID = this.itemType.prepTicketID
         this.printLocationID = this.itemType.printLocationID
+        this.packageType = this.itemType.packageType;
       }
     }
   };
@@ -127,6 +124,7 @@ export class ItemTypeEditorComponent   {
                 item = this.inputForm.value;
                 item.id = id;
                 item.labelTypeID = this.labelTypeID;
+                console.log('updateItem', item);
                 return  this.updateItem(site, item)
               })
               this.onCancel()
@@ -151,6 +149,9 @@ export class ItemTypeEditorComponent   {
       item.labelTypeID = this.labelTypeID;
       item.printerName = this.printerName;
       item.prepTicketID =this.prepTicketID;
+
+      console.log('updateItem', item);
+
       if (this.itemType) {  item.imageName = this.itemType.imageName  }
       const product$ = this.itemTypeService.putItemTypeNoChildren(site, item)
       product$.subscribe(

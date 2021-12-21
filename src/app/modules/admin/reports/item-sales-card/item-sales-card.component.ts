@@ -18,6 +18,7 @@ export class ItemSalesCardComponent implements OnChanges {
   @Input() zrunID   : string;
   @Input() groupBy  : string;
   sales$:  Observable<IReportItemSaleSummary>;
+  showAll: boolean;
 
   constructor(private reportingItemsSalesService: ReportingItemsSalesService) { }
 
@@ -25,6 +26,10 @@ export class ItemSalesCardComponent implements OnChanges {
     this.refreshSales();
   }
 
+
+  togglesShowAll() {
+    this.showAll = !this.showAll;
+  }
   refreshSales() {
 
     if (this.groupBy === 'items') {

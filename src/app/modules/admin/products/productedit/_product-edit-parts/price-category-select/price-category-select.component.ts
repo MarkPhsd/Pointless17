@@ -1,7 +1,6 @@
 import { Component, OnInit, Input , EventEmitter, Output} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import { MenuService } from 'src/app/_services';
 import { FormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
@@ -23,7 +22,7 @@ export class PriceCategorySelectComponent implements OnInit {
   priceCategory        :   IPriceCategories;
   priceCategoriesPaged$:   Observable<IPriceCategoryPaged>;
 
-  constructor(private menuService: MenuService,
+  constructor(
                private sitesService: SitesService,
                private priceCategoryService: PriceCategoriesService,
                private menuPricingService: PriceCategoriesService,) {

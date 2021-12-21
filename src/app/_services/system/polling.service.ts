@@ -40,9 +40,17 @@ export class PollingService   {
   constructor(
               private siteService: SitesService,
               private http: HttpClient) {
+  }
 
-    const site = this.siteService.getAssignedSite();
+  getCurrentUrl() {
+    let site = this.siteService.getAssignedSite();
     this.apiUrl = site.url;
+    if (this.apiUrl == undefined) {
+      this.siteService.setDefaultSite()
+    }
+    site = this.siteService.getAssignedSite();
+    this.apiUrl = site.url;
+    return site;
   }
 
   poll() {
@@ -52,13 +60,17 @@ export class PollingService   {
         switchMap((time: number) =>
           timer(time, POLLING_INTERVAL).pipe(
             // <-- start immediately, then each 10s
-            concatMap(() =>
-              this.http.get(`${this.apiUrl}/Companies/GetPrimaryCompany`)
+            concatMap(() =>{
+              //make sure we always have the current url;
+              this.getCurrentUrl()
+              // console.log('this.apiUrl', this.getCurrentUrl())
+              return this.http.get(`${this.apiUrl}/Companies/GetPrimaryCompany`)
+            }
             ),
             catchError(() => {
               // <-- start timer again on error
               this._poll.next(false)
-              // console.log('Subscription failed');
+              console.log('Subscription failed');
               this.timer$.next(POLLING_INTERVAL);
               return NEVER; // <-- don't forward errors
             })
@@ -68,13 +80,12 @@ export class PollingService   {
       )
       .subscribe({
         next: (data: any) => {
-          // console.log('Subscription next');
+          console.log('Subscription next');
           this._poll.next(true)
         },
-
         complete: () => console.log('Subscription complete')
       }),  catchError => {
-        // console.log('Subscription failed');
+        console.log('Subscription failed');
         this._poll.next(false)
       };
   }

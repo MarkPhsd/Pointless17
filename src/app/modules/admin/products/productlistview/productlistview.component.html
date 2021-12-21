@@ -35,6 +35,23 @@
     </form-select-list>
   </div>
 
+  <div class="grid-item">
+    <form-select-list [formFieldName]   = "'viewAll'"
+                      [searchForm]      = "searchForm"
+                      [list$]           = "viewOptions$"
+                      (selectionChange) = "refreshActiveChange($event)"   >
+     <div fieldSearchDescription>Status</div>
+    </form-select-list>
+  </div>
+<!--
+  <div class="grid-item">
+    <mat-slide-toggle name              ="enabled"
+                      [(ngModel)]       ="active"
+                      (selectionChange) = "refreshActiveChange($event)" >
+      <mat-label>Active</mat-label>
+    </mat-slide-toggle>
+  </div> -->
+
   <div      class="grid-item">
     <button mat-button
             class="assign-button"

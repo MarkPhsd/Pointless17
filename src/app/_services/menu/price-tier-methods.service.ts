@@ -132,6 +132,9 @@ export class PriceTierMethodsService {
     }
   }
 
+  sortPriceTiers(priceTierPrices:  PriceTierPrice[]): PriceTierPrice[] {
+    return priceTierPrices.sort((a , b) => (+a.flatQuantity > +b.flatQuantity) ? 1: -1)
+  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

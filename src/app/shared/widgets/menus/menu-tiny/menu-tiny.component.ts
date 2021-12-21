@@ -35,36 +35,42 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
 
   initSubscription() {
-    this._user = this.authenticationService.user$.pipe(
-      switchMap(
-        user => {
-            this.user = user
-            if (!user) {
-              this.menus = [] as AccordionMenu[];
-              return EMPTY
-            }
-            return  this.menusService.getMainMenu(this.site, user)
-          }
-        )
-      ).subscribe( data => {
+    this._user = this.authenticationService.user$.subscribe(
+      user => {
+      this.user = user
+      this.refreshMenu(user)
+      if (!user) {
+        // console.log('returning no  user' , user)
         this.menus = [] as AccordionMenu[];
-        if (!data) {
-           console.log('no menu found')
-           return
-        }
-        this.config = this.mergeConfig(this.options);
-
-        if (data)
-          data.filter( item => {
-            if (item.active) {this.menus.push(item) } //= data
-          })
-        }, err => {
-          console.log('err no menu found', err)
-          this.menus = [] as AccordionMenu[];
       }
-    )
+    }
+  )
   }
 
+  refreshMenu(user: IUser) {
+
+    if (user == undefined) { return }
+    const site = this.siteService.getAssignedSite();
+    const menu$ = this.menusService.getMainMenu(this.site, user)
+
+    menu$.subscribe( data => {
+      this.menus = [] as AccordionMenu[];
+      if (!data) {
+
+         return
+      }
+      this.config = this.mergeConfig(this.options);
+
+      if (data)
+        data.filter( item => {
+          if (item.active) {this.menus.push(item) } //= data
+        })
+      }, err => {
+
+        this.menus = [] as AccordionMenu[];
+    }
+  )
+}
   constructor ( private menusService            : MenusService,
                 private userAuthorizationService: UserAuthorizationService,
                 private router                  : Router,
@@ -77,11 +83,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   async ngOnInit() {
     const site  = this.siteService.getAssignedSite();
     this.initSubscription()
-    this.menusService.mainMenuExists(site).subscribe( data => {
-      if (!data.result) {
-        this.initMenu();
-      }
-    })
+    this.initMenu();
   }
 
   initMenu() {
@@ -90,16 +92,14 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     menuCheck$.pipe(
       switchMap( data => {
         if (!data || !data.result) {
-          const user = this.authenticationService.userValue
-
-           if (user) {
-            return  this.menusService.createMainMenu(user , site)
+           if (this.user) {
+            return  this.menusService.createMainMenu(this.user , site)
           }
           return EMPTY;
         }
       })
     ).subscribe(data => {
-      this.initSubscription()
+      this.refreshMenu(this.user)
     })
   }
 

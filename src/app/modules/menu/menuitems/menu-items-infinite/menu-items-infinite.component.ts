@@ -159,6 +159,7 @@ constructor(private menuService: MenuService,
 async ngOnInit()  {
   this.value      = 1;
   this.bucketName =   await this.awsBucketService.awsBucket();
+  console.log('buck name menu items infinit', this.bucketName )
   this.initOrderBarSubscription()
   this.setItemsPerPage();
   await this.nextPage();
@@ -239,8 +240,7 @@ async addToList(pageSize: number, pageNumber: number)  {
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
-    // console.log('model', model);
-
+    model.active      = true;
     const site                     = this.siteService.getAssignedSite();
     const results$                 = this.menuService.getMenuItemsBySearchPaged(site, model);
     this.loading                   = true
@@ -320,7 +320,6 @@ getItemSrc(item:IMenuItem) {
 
   @HostListener('window:scroll', ['$event']) // <- Add scroll listener to window
   scrolled(event: any): void {
-    // console.log('scrolled')
     this.isNearBottom = this.isUserNearBottom();
   }
 

@@ -1,0 +1,7 @@
+
+.grid-flow {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
+}

@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, } from 'rxjs';
-import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
+import { ISite, IUser }   from 'src/app/_interfaces';
+
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
-import { SettingsService } from '../system/settings.service';
-import { AppInitService } from '../system/app-init.service';
+
+import { AppInitService, IAppConfig } from '../system/app-init.service';
+import { PlatformService } from '../system/platform.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -17,9 +19,13 @@ export class SitesService {
   site: ISite;
   apiUrl: any;
 
-  constructor( private http: HttpClient,
-               private auth: AuthenticationService,
+  constructor( private http            : HttpClient,
+               private auth            : AuthenticationService,
                private appInitService  : AppInitService,
+               private platformSevice  : PlatformService,
+               private httpClient      : HttpClient,
+               private snackBar        : MatSnackBar,
+
                ) {
       this.apiUrl   = this.appInitService.apiBaseUrl()
      }
@@ -97,6 +103,10 @@ export class SitesService {
     let site = {} as ISite
     const url = localStorage.getItem("site.url")
 
+    if (url == undefined) {
+      this.setDefaultSite();
+    }
+
     if (url) {
       site.metrcURL           = localStorage.getItem('site.metrcURL')
       site.metrcLicenseNumber = localStorage.getItem('site.metrcLicenseNumber')
@@ -115,6 +125,37 @@ export class SitesService {
     return site
   }
 
+ async setDefaultSite(): Promise<ISite> {
+    let site = {} as ISite
+
+    //if is app and is installed, then it's going to be stored in
+    if (!this.platformSevice.isApp()) {
+      const data  = await this.httpClient.get('./assets/app-config.json').pipe().toPromise() as IAppConfig
+      site.url    = data.apiUrl
+      localStorage.setItem("site.url"    ,  site.url)
+      localStorage.setItem("storedApiUrl",  site.url)
+      return site;
+    }
+
+    if ( this.platformSevice.isApp() ) {
+      site.url   = localStorage.getItem('storedApiUrl')
+      localStorage.setItem("site.url", site.url)
+      console.log('setDefaultSite '           , site.url)
+      console.log('data from set default site', site.url )
+      return site
+     }
+
+  }
+
+  // const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
+  // if (data) {
+  //   site.url                = data.apiUrl
+  //   localStorage.setItem("site.url", site.url)
+  //   localStorage.setItem("storedApiUrl", site.url)
+  // } else {
+  //   this.notify('No site assigned. Please seek technical assistance.', 'Internal Error', 3000)
+  // }
+
   setAssignedSite(site: ISite){
     if (site) {
       localStorage.setItem("site.url", site.url)
@@ -130,7 +171,7 @@ export class SitesService {
     }
   }
 
-  clearAssignedSite(){
+ async clearAssignedSite(){
 
     localStorage.removeItem("site.url") //, site.url)
     localStorage.removeItem("site.name") //, site.name)
@@ -142,7 +183,25 @@ export class SitesService {
     localStorage.removeItem("site.state")//, site.phone), site.state)
     localStorage.removeItem("site.zip") //, site.phone), site.zip)
     localStorage.removeItem("site.phone") //, site.phone)
+    const site = await this.setDefaultSite();
+    console.log('clear assigned site', site)
 
+  }
+
+  //matching code in app-init-service.
+  getLocalApiUrl() {
+    const result = localStorage.getItem('storedApiUrl')
+    console.log('getLocalAPIURL', result)
+    const site = {} as ISite;
+    site.url = result
+    if (result != null && result != '' ) {
+      return result;
+    }
+
+    if (this.platformSevice.isApp() ) {
+      localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
+      return localStorage.getItem('storedApiUrl')
+    }
   }
 
   getCurrentCache(): number {
@@ -175,5 +234,8 @@ export class SitesService {
     return this.getSite(id)
   }
 
+  notify(message: string, title: string, time: number){
+    this.snackBar.open(message, title, {duration: time})
+  }
 
 }

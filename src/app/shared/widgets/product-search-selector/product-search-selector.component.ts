@@ -1,6 +1,6 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component,  Input, Output, OnInit,  ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { FormBuilder, FormGroup,  FormControl} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';

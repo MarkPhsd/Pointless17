@@ -21,7 +21,13 @@
           "naturesherbsloglanemed"
         ],
         "clubskyhigh": [
-          "clubskhigh"
+          "clubskyhigh"
+        ],
+        "emergencyroom": [
+          "emergencyroom"
+        ],
+        "pointlesspos": [
+          "pointlesspos"
         ]
       }
     }

@@ -11,4 +11,5 @@ export class ValueFieldsComponent  {
   @Input() formArray: FormArrayName
   @Input() fieldName: string;
   @Input() fieldDescription: string;
+  @Input() fieldType = 'string';
 }

@@ -30,6 +30,7 @@ export class FbItemTypeService {
       printLocationID:      [''],
       printerName:          [''],
       requiresSerial  :     [''],
+      packageType         : ['']
     })
     return inputForm
   }

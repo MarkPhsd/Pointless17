@@ -1,3 +1,4 @@
+
 <div fxLayout="column"
      class="row-class"
      *ngIf="!displayCategories && menus">
@@ -17,7 +18,6 @@
       </div>
     </li>
   </ul>
-
 </div>
 
 <div fxLayout="column" class="row-class"
@@ -38,9 +38,7 @@
           *ngFor="let item of submenu" >
         <div *ngIf="!item.minimized">
           <div class="menu" *userAuthorized="item.userType">
-            <!-- color="accent" -->
-            <a mat-list-item
-
+              <a mat-list-item
                 routerLinkActive={{item.routerLinkActive}}
                 routerLink=      {{item.routerLink}}>
               <mat-icon>{{ item.icon }}</mat-icon>

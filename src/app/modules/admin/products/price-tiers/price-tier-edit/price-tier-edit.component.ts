@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { merge, Observable, of, Subject } from 'rxjs';
@@ -30,6 +30,13 @@ export class PriceTierEditComponent implements OnInit {
   showConversions   : boolean;
   showTime          : boolean;
 
+  endPriceValue        = [] as number[];
+  endPriceHappyHour    = [] as number[];
+
+  // get endPrice() {return this.inputForm.get("retail") as FormControl;}
+  // get retail()   { return this.inputForm.get("name")   as FormControl;}
+  // get quantity() { return this.inputForm.get("flatQuantity") as FormControl;}
+
   get priceTierPrices() : FormArray {
     return this.inputForm.get('priceTierPrices') as FormArray;
   }
@@ -48,10 +55,12 @@ export class PriceTierEditComponent implements OnInit {
           this.onValueChanged(changes);
       });
   }
+
   onValueChanged(changes) {
-    console.log('on value changed')
+    this.priceTierPrice = changes.data;
+    this.refreshEndPrice(changes.data, changes.rowIndex, this.endPriceValue)
+    this.refreshEndPrice(changes.data, changes.rowIndex, this.endPriceHappyHour)
     this.updatePrice(changes.data)
-    // console.log(changes)
   }
 
   constructor(  private _snackBar   : MatSnackBar,
@@ -68,8 +77,7 @@ export class PriceTierEditComponent implements OnInit {
 
     if (data) {
       this.priceTier = data
-      this.priceTier.priceTierPrices =this.priceTier.priceTierPrices.sort((a , b) => (+a.flatQuantity > +b.flatQuantity) ? 1: -1)
-      console.log(this.priceTier.priceTierPrices)
+      this.priceTier.priceTierPrices = this.priceTierMethods.sortPriceTiers(this.priceTier.priceTierPrices)
     }
 
     this.initWeightProfileObjservable();
@@ -86,7 +94,6 @@ export class PriceTierEditComponent implements OnInit {
 
     this.weightSelectForm.valueChanges.subscribe( data=> {
       const profile =  data as WeightProfile
-      console.log('data', data)
     })
   }
 
@@ -103,6 +110,17 @@ export class PriceTierEditComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('')
+    this.initEndPriceValues()
+  }
+
+  initEndPriceValues() {
+    let i = 0
+    let priceArray = [] as number[]
+    this.priceTier.priceTierPrices.forEach(data => {
+      this.endPriceValue.push(this.getEndPrice(data, i, priceArray ))
+      this.endPriceHappyHour.push(this.getEndPrice(data, i, priceArray ))
+      i += 1
+    })
   }
 
   async refreshData() {
@@ -212,8 +230,6 @@ export class PriceTierEditComponent implements OnInit {
   };
 
   saveAllItems() {
-    // let pricesArray = this.inputForm.controls['priceTierPrices'] as FormArray;
-    // let prices = pricesArray.value as PriceTierPrice[]
     this.priceTierMethods.saveAllPrices(this.inputForm.value)
   }
 
@@ -266,9 +282,7 @@ export class PriceTierEditComponent implements OnInit {
     try {
       const result = window.confirm('Are you sure you want to delete this price?')
       if (!result) { return }
-
       const price  = item.value as PriceTierPrice
-
       try {
         if (!price.id) {
           this.removeItem(i)
@@ -277,13 +291,9 @@ export class PriceTierEditComponent implements OnInit {
       } catch (error) {
         console.log('error ', error)
       }
-
-      console.log('deletePrice ')
-
       const site = this.siteService.getAssignedSite()
       if (!price) { return }
         this.priceTierPriceService.deletePrice(site, price.id).subscribe( data =>{
-
           this.removeItem(i)
         }
       )
@@ -292,21 +302,65 @@ export class PriceTierEditComponent implements OnInit {
     }
   }
 
+  refreshEndPrice(priceTierPrice: PriceTierPrice, i: number, priceArray: number[]) : number[] {
+    if (!priceArray || !priceTierPrice) {return }
+    const price = this.getEndPrice(priceTierPrice,i, priceArray)
+    if (priceArray.length>=i) {
+      priceArray[i] = price
+    } else {
+      priceArray.push(price)
+    }
+    return priceArray;
+  }
+
+  // const endPrice  = this.endPriceValue[i]
+  getEndPrice(priceTierPrice: PriceTierPrice, i: number, priceArray: number[]): number {
+    if (!priceArray || !priceTierPrice) {return }
+    const quantity  = priceTierPrice.flatQuantity;
+    const rate      = priceTierPrice.retail;
+    return          this.getEndPriceFromRateQuantity(quantity, rate);
+  }
+
+  getPriceFromRateQuantity() {
+    let i = 0;
+  }
+
+  // const retail          = priceTierPrice.retail;
+  refreshPrice(priceTierPriceControl: FormGroup, i : number) {
+    const priceTierPrice        = priceTierPriceControl.value as PriceTierPrice;
+    const quantity              = priceTierPrice.flatQuantity;
+    const endPrice              = this.endPriceValue[i];
+    const hhendPrice            = this.endPriceHappyHour[i];
+    priceTierPrice.retail       = this.getRateFromEndPriceQuantity(quantity, endPrice)
+    priceTierPrice.specialPrice = this.getRateFromEndPriceQuantity(quantity, hhendPrice)
+    priceTierPriceControl.patchValue(priceTierPrice)
+  }
+
+  getEndPriceFromRateQuantity(quantity: number, rate: number) : number {
+    if ((quantity && quantity !=0)  && rate) {
+      const value =  quantity * rate
+      return  quantity * rate
+    }
+    return 0
+  }
+
+  getRateFromEndPriceQuantity(quantity: number, endPrice: number): number {
+    let rate = 0;
+    if ((quantity && quantity !=0) && endPrice) {
+      const rate = endPrice / quantity
+      return rate
+    }
+    return rate
+  }
+
   removeItem(i) {
-
     const site  = this.siteService.getAssignedSite();
-    console.log('remove item', i, this.priceTierPrices.length);
-
     if (this.priceTierPrices.length >= i) {
-      // const item  = this.priceTierPrices.get(i) //.value as PriceTierPrice
-      // const price = item.value as PriceTierPrice
-      console.log('i remove item', i)
       try {
         this.priceTierPrices.removeAt(i)
       } catch (error) {
         console.log('remove item', error)
       }
-      // return price
     }
   }
 

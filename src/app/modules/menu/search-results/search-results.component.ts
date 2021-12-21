@@ -197,7 +197,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy,AfterViewInit {
     // if (this.categoryID )       { productSearchModel.categoryID  = this.categoryID.toString(); }
     // if (this.productTypeSearch) { productSearchModel.type        = this.productTypeSearch; }
     // if (this.brandID)           { productSearchModel.brandID     = this.brandID.toString(); }
-
+    productSearchModel.active      = true;
     productSearchModel.name       = search
     productSearchModel.barcode    = search
     productSearchModel.pageSize   = this.pageSize

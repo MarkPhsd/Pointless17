@@ -1,9 +1,10 @@
 import { Component, Output, OnInit,
-  ViewChild ,ElementRef, EventEmitter, OnDestroy, QueryList, ViewChildren, Input } from '@angular/core';
+         ViewChild ,ElementRef, EventEmitter,
+         OnDestroy, QueryList, ViewChildren, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -112,6 +113,23 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //list height
   @Input()  height = "90vh"
 
+  initSubscriptions() {
+    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
+        this.searchModel            = data
+        if (!this.searchModel) {
+          const searchModel       = {} as IPOSOrderSearchModel;
+          this.currentPage        = 1
+          searchModel.pageNumber  = 1;
+          searchModel.pageSize    = 25;
+          this.searchModel        = searchModel
+        }
+        console.log('search model', this.searchModel)
+        this.refreshSearch()
+        return
+      }
+    )
+  }
+
   constructor(  private _snackBar               : MatSnackBar,
                 private agGridService           : AgGridService,
                 private siteService             : SitesService,
@@ -163,21 +181,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     }
   }
 
-  initSubscriptions() {
-    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
-        this.searchModel            = data
-        if (!this.searchModel) {
-          const searchModel       = {} as IPOSOrderSearchModel;
-          this.currentPage        = 1
-          searchModel.pageNumber  = 1;
-          searchModel.pageSize    = 25;
-          this.searchModel        = searchModel
-        }
-        this.refreshSearch()
-        return
-      }
-    )
-  }
+
 
   //ag-grid
   //standard formating for ag-grid.
@@ -290,6 +294,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     if (this.searchModel) { searchModel = this.searchModel }
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
+    // console.log('init Search Model from orders-list', searchModel)
     // this.orderService.updateOrderSearchModel(searchModel)
     return searchModel
   }

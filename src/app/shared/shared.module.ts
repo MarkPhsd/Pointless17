@@ -118,6 +118,7 @@ import { MatDateRangeComponent } from './widgets/mat-date-range/mat-date-range.c
 import { QuicklinkModule } from 'ngx-quicklink';
 import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
 import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
+import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -205,6 +206,7 @@ import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/
     PosOrderTransactionDataComponent,
     PosPaymentEditComponent,
     PriceCategorySelectComponent,
+    PriceTierScheduleComponent,
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     ProgressUploaderComponent,
@@ -327,6 +329,7 @@ import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/
     PriceCategorySearchComponent,
     PriceCategorySelectComponent,
     PriceCategorySearchComponent,
+    PriceTierScheduleComponent,
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     IonicSwipeToDeleteComponent,

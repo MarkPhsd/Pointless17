@@ -13,7 +13,7 @@
     <!-- <div fxLayout="column" fxLayoutAlign="space-around start" fxFlex="50"  fxLayoutGap="20px" > -->
 
     <div>
-      <div *ngIf="platForm === 'web' ">
+      <div *ngIf="platForm === 'web' && !isElectronApp ">
 
         <h3>Print Test for Web </h3>
         <div>
@@ -29,9 +29,9 @@
 
       <div *ngIf="platForm === 'android' ">
 
-        <app-list-printers-electron
-            (outputPrinterName)="setAndroidReceiptPrinter($event)" >
-        </app-list-printers-electron>
+          <app-list-printers-electron
+              (outputPrinterName)="setAndroidReceiptPrinter($event)" >
+          </app-list-printers-electron>
 
         <h3>Print Test for Android</h3>
 

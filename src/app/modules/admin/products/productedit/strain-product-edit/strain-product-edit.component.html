@@ -1,12 +1,10 @@
-<div class="container" *ngIf="product">
+<ng-template #loading>
+  <mat-spinner [diameter]="100"></mat-spinner>
+</ng-template>
 
-  <!-- <div *ngIf="productForm.controls.fullProductName.errors?.required && productForm.controls.fullProductName.touched" class="error">
-    <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
-  </div>
-
-  <div *ngIf="productForm.controls.name.errors?.required && productForm.controls.name.touched" class="error">
-    <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
-  </div> -->
+<div class="container"
+    [formGroup]="productForm"
+     *ngIf="product && productForm ; else loading">
   <mat-card>
     <mat-card-title>
 
@@ -29,6 +27,10 @@
                 (outputupdateonCancel)  ="onCancel($event)"
                 (outputCopy)            ="copyItem($event)"
           ></app-edit-buttons-standard>
+            <mat-slide-toggle name="enabled"
+                        formControlName="active">
+               <mat-label class="mat-label">Active</mat-label>
+            </mat-slide-toggle>
         </div>
       </div>
 
@@ -36,7 +38,7 @@
 
     <mat-divider> </mat-divider>
 
-    <form [formGroup]="productForm"  id="fullProductName"  >
+    <div  id="fullProductName"  >
 
       <div class="grid-container">
 
@@ -59,8 +61,8 @@
               <mat-form-field appearance="outline">
                 <mat-label >Name</mat-label>
                 <input matInput
-                      type="text"
-                      formControlName="name"
+                        type="text"
+                        formControlName="name"
                        >
               </mat-form-field>
             </div>
@@ -95,12 +97,6 @@
             </div>
             <div>
 
-              <!-- <div>
-                <app-printer-location-selection [inputForm]="productForm"></app-printer-location-selection>
-              </div>
-              <div>
-                <exit-label-selection [inputForm]="productForm"></exit-label-selection>
-              </div> -->
             </div>
           </div>
 
@@ -110,11 +106,9 @@
               <h4><mat-icon>price_change</mat-icon>Prices</h4>
             </div>
 
-            <!-- {{itemType.useType}} -->
             <div class="grid-container-small">
-              <div>
+              <div *ngIf="itemType && itemType.useType != 'category'">
                 <app-price-category-select
-                  *ngIf="itemType.useType != 'category'"
                   [itemType]        ="itemType"
                   [priceCategoryID] ="product.priceCategory"
                   [inputForm]       ="productForm" >
@@ -168,28 +162,33 @@
             </div>
 
             <div *ngIf="itemType  && (itemType.name === 'retail' )">
-              <!-- //package -- like group of products with sub products
-              // -->
               <retail-product-edit [inputForm]="productForm"></retail-product-edit>
             </div>
 
             <div *ngIf="itemType  && (itemType.name === 'modifier' )">
-              <!-- //no real options other than web view. -->
+
             </div>
 
             <div *ngIf="itemType  && (itemType.name === 'grouping' )">
-              <!-- //department /category -->
+
             </div>
 
-            <div *ngIf="itemType  && (itemType.name === 'strain' ||
-                                      itemType.name === 'cannabis' ||
-                                      itemType.name ===  'med-cannabis')">
+            <div *ngIf="itemType  && itemType.type.toLowerCase() === 'cannabis'">
+
               <cannabis-item-edit [inputForm]="productForm"></cannabis-item-edit>
+
             </div>
+
+            <app-value-fields
+                  [inputForm]="productForm"
+                  [fieldName]="'gramCount'">
+                  Per Unit Quantity
+            </app-value-fields>
+
           </div>
 
       </div>
 
-    </form>
+    </div>
   </mat-card>
 </div>

@@ -1,12 +1,10 @@
-import { Component, Inject, Input,  OnDestroy,  OnInit,} from '@angular/core';
-import { AWSBucketService,  MenuService } from 'src/app/_services';
+import { Component, Inject,  OnInit,} from '@angular/core';
+import { MenuService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable } from 'rxjs';
-import { catchError, concatMap, map, mergeMap, tap } from 'rxjs/operators';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
@@ -106,9 +104,6 @@ export class StrainProductEditComponent implements OnInit {
       if (this.product) {
         this.productForm.patchValue(this.product)
       } else {
-        // this.product$.pipe(
-        //   tap(data => this.productForm.patchValue(data))
-        // );
       }
 
       this.product$.subscribe(

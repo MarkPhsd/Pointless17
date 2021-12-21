@@ -23,6 +23,11 @@
                   (outputupdateonCancel)  ="onCancel($event)"
                   (outputCopy)            ="copyItem($event)"
             ></app-edit-buttons-standard>
+             <mat-slide-toggle
+                        name="active"
+                        formControlName="active">
+               <mat-label>Active</mat-label>
+            </mat-slide-toggle>
           </div>
         </div>
       </mat-card-title>
@@ -98,13 +103,16 @@
                     </mat-form-field>
                   </div>
 
-                  <div >
-
-                    <app-price-category-select
-                                [priceCategoryID]="product.priceCategory"
-                                [inputForm]      ="productForm" >
+                  <div *ngIf="itemType" >
+                      <app-price-category-select
+                          *ngIf="itemType.useType != 'category'"
+                          [itemType]        ="itemType"
+                          [priceCategoryID] ="product.priceCategory"
+                          [inputForm]       ="productForm" >
                     </app-price-category-select>
                   </div>
+
+
 
                 </div>
 

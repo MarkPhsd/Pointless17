@@ -97,6 +97,23 @@
                   </mat-form-field>
                 </div>
 
+                <div class="filterItem" >
+                  <mat-form-field appearance="outline">
+                    <mat-label>Package Type</mat-label>
+                    <mat-select
+                                type="number"
+                                [formControlName]  ="'packageType'"
+                                name="packageType"
+                      >
+                      <mat-option value=0>Clear</mat-option>
+                      <mat-option *ngFor="let item of itemType_PackageTypes"
+                                  [value]="item">
+                        {{item}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
                 <div *ngIf="(receiptList$ | async) as receiptList">
                   <mat-label>Print item to a prep ticket</mat-label>
                   <mat-form-field appearance="outline">

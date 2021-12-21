@@ -148,14 +148,13 @@ export class UserSwitchingService {
       }
       , (err: HttpErrorResponse) => {
         this.snackBar.open("Try again.", "Failure", {verticalPosition: 'top', duration: 2000})
-        console.log(err)
+        // console.log(err)
      })
   }
 
   login(username: string, password: string): Observable<any> {
 
     const apiUrl =  this.appInitService.apiBaseUrl()
-    console.log('apiUrl', apiUrl)
 
     let url = `${apiUrl}/users/authenticate`
 
@@ -168,24 +167,19 @@ export class UserSwitchingService {
         // timeout(10000),
         switchMap( user => {
         if (user) {
-            try {
 
-              user.message = 'success'
-              const currentUser = this.setUserInfo(user, password)
+            user.message = 'success'
+            const currentUser = this.setUserInfo(user, password)
 
-              if (this.platformService.isApp()) {return this.changeUser(user) }
-              if (!this.platformService.isApp)  {return of(user)              }
+            if ( this.platformService.isApp()  ) { return this.changeUser(user) }
+            if (!this.platformService.isApp() )  { return of(user)              }
 
-            } catch (error) {
-              console.log('error', error)
-              return of(user)
-            }
-          } else {
-            const user = {message: 'failed'}
-            console.log('is failed')
-            return of(user)
-          }
-        })
+        } else {
+          const user = {message: 'failed'}
+          console.log('login failed')
+          return of(user)
+        }
+      })
 
       )
   }
@@ -277,13 +271,13 @@ export class UserSwitchingService {
 
 
     if (!this.platformService.isAppElectron || !this.platformService.androidApp)  {
-      console.log('logintoReturnURL')
+      // console.log('logintoReturnURL')
     }
 
     if (this.platformService.isAppElectron || this.platformService.androidApp)  {
          if (returnUrl === '/apisetting') {    returnUrl = '/app-main-menu'}
     }
-    console.log('loginToReturnUrl', returnUrl)
+    // console.log('loginToReturnUrl', returnUrl)
     this.router.navigate([returnUrl]);
     this.browseMenu();
   }

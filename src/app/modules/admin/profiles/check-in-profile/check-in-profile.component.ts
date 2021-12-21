@@ -51,17 +51,14 @@ export class CheckInProfileComponent implements OnInit {
   dateFrom          : any;
   dateTo            : any;
 
-
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
       this.currentOrder = data;
     })
-
     this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
       this.searchModel = data
       this.initFilter(data)
     })
-
   }
 
   constructor(
@@ -163,8 +160,10 @@ export class CheckInProfileComponent implements OnInit {
   refreshDateSearch() {
     if (!this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
     this.assignDates();
-    this.searchModel.completionDate_From = this.dateFrom.toISOString()
-    this.searchModel.completionDate_To   = this.dateTo.toISOString()
+    if (this.dateFrom) {
+      this.searchModel.completionDate_From = this.dateFrom.toISOString()
+      this.searchModel.completionDate_To   = this.dateTo.toISOString()
+    }
     this.refreshSearch()
   }
 
@@ -189,9 +188,10 @@ export class CheckInProfileComponent implements OnInit {
       search.suspendedOrder       = 0
       search.greaterThanZero      = 0
       search.closedOpenAllOrders  = 1;
-      search.clientID   = parseInt(this.id)
+      search.clientID             = parseInt(this.id)
       this.searchModel            = search;
     }
+    console.log('search model', this.searchModel)
   }
 
   assignDates() {

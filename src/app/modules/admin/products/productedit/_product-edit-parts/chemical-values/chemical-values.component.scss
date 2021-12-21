@@ -5,58 +5,9 @@
   height: 100%;
 }
 
-.flex-column  {
-  margin-top: 4px;
-}
-
-.chemicalInput {
-  width: 50px;
-}
-
-#inventoryMoveInstructions {
-  font-weight: 600;
-}
-
-.inventoryLocationControls {
-  float: right;
-}
-
-.inventoryControlLabels {
-  text-align:  left;
-}
-
-#inventoryAssignLocationsButton {
-  float: right;
-}
-
-.cancel-assignment {
-  float: right;
-}
-
-::ng-deep .mat-form-field-wrapper{
-   margin-bottom: -1.5em;
-   margin-left: 4px;
-   margin-right: 4px;
-}
-
-::ng-deep .mat-datepicker-content .mat-calendar
-{
-  zoom: 0.85;
-}
-
-::ng-deep  .md-datepicker-input-container {
-  width: 50px;
-}
-
 mat-form-field {
   font-size: .8em;
   margin: 4px 4px 4px 4px;
-}
-
-.assignment-header {
-  font-size: 1.2;
-  font-weight: 400;
-  margin-left: 5px;
 }
 
 .fields {
@@ -87,15 +38,6 @@ mat-form-field {
   gap: 2px;
 }
 
-.button-assign {
-  float: left;
-  margin: 2px 2px 2px 2px;
-}
-
-.btn-edit-pacakge {
-  float: left;
-  margin: 2px 2px 2px 2px;
-}
 
 .location-assignment {
   float: left;
@@ -105,39 +47,4 @@ mat-form-field {
 .select-conversion{
   // float: left;
   width: 100px !important;
-}
-
-.input-quantity{
-  // float: left;
-  width: 100px !important;
-}
-
-.cost {
-  width: 100px !important;
-  // float: left;
-}
-
-.strain-card {
-  // height: 85vh;
-  overflow: hidden;
-  // min-width: 725px;
-
-}
-
-.inventory-card {
-  min-width: 250px;
-  // overflow: hidden;
-}
-
-.inlineControls {
-  // float: left;
-  width: 50px
-}
-
-.package-list {
-  overflow-y: scroll;
-  overflow-x: hidden;
-  margin: 2px 2px 2px 2px;
-  padding: 0;
-  max-height: 225px;
 }

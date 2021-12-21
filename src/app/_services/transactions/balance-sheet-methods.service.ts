@@ -87,13 +87,15 @@ export class BalanceSheetMethodsService {
       // this.getCurrentBalanceSheet()
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
+          console.log('returning balance sheet', data)
+          if (data.id == 0 )  {
+             return of({sheet: null, user: user})
+          }
           return of({sheet: data, user: user})
         }),
         catchError( e => {
-          this.notify('Balance Sheet Error. User May not have Employee Assigned.', 'Altert Notification')
-          // const sheet = {} as IBalanceSheet
-          // sheet.id = 0
-          // sheet.message = `Balance Sheet Error ${e}`
+          this.notify('Balance sheet error. User may not have employee assigned.', 'Notification')
+
           return of({sheet: null, user: user, err: e})
         })
       )

@@ -198,6 +198,9 @@ export class AWSBucketService {
 
     const site = this.siteService.getAssignedSite();
 
+    if (!site.url) {
+      console.log('get Bucket, no url assigned', site.url)
+    }
     const controller = '/aws/'
 
     const parameter = "getAWSBucket"

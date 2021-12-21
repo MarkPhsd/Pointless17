@@ -7,7 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { IEmployee } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -15,6 +15,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { IPriceCategories } from 'src/app/_interfaces/menu/price-categories';
+import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 
 // http://jsfiddle.net/0ftj7w1q/
 
@@ -60,6 +61,8 @@ export class ProducteditComponent implements  OnInit  {
   departments$ : Observable<IMenuItem[]>;
   departments  : IMenuItem[];
 
+  itemType                = {} as IItemType;
+
   product = {} as IProduct;
   result: any;
   onlineDescription = '';
@@ -86,6 +89,7 @@ export class ProducteditComponent implements  OnInit  {
               private priceCategoryService: PriceCategoriesService,
               private siteService: SitesService,
               private fbProductsService: FbProductsService,
+              private itemTypeService  : ItemTypeService,
               private dialogRef: MatDialogRef<ProducteditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
             )
@@ -96,6 +100,9 @@ export class ProducteditComponent implements  OnInit  {
       this.id = this.route.snapshot.paramMap.get('id');
     }
     this.initializeForm()
+
+
+
 
   }
 
@@ -111,11 +118,12 @@ export class ProducteditComponent implements  OnInit  {
   async initializeForm()  {
 
     this.initFormFields()
+    const site = this.siteService.getAssignedSite();
 
     if (this.productForm && this.id) {
-      const site = this.siteService.getAssignedSite();
       this.product$ = this.menuService.getProduct(site, this.id).pipe(
           tap(data => {
+            console.log(data)
             this.product = data
             this.priceCategoryID = this.product.priceCategory
             this.productForm.patchValue(this.product)
@@ -123,12 +131,20 @@ export class ProducteditComponent implements  OnInit  {
         )
       );
 
-      this.product$.subscribe(
-        data => {
-          this.product = data
-          this.urlImageMain  = this.product?.urlImageMain;
-          this.urlImageOther = this.product?.urlImageOther;
+      this.product$.pipe(
+        switchMap(
+          data => {
+            this.product = data
+            this.urlImageMain  = this.product?.urlImageMain;
+            this.urlImageOther = this.product?.urlImageOther;
+            return this.itemTypeService.getItemType(site, data.prodModifierType)
+          }
+      )).subscribe( data => {
+        this.itemType = data
       })
+
+
+
     }
 
   };

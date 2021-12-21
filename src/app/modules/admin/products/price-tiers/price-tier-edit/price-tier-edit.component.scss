@@ -18,8 +18,20 @@
   grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
 }
 
+
+.grid-schedule-flow {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns:  150px  125px 125px 75px ;
+}
+
 .grid-container {
   width: 350px;
+}
+
+.price-tier-card {
+  margin-top: 4px;
 }
 
 .divider-margin {
@@ -29,9 +41,23 @@
   width: 75px;
   max-width: 75px;
 }
+.price-fields {
+  width: 75px;
+  max-width: 75px;
+}
+
 .prices-fields {
   width: 75px;
   max-width: 75px;
+}
+
+.date-fields {
+  width: 125px;
+  max-width: 125px;
+}
+.weekday-fields {
+  width: 150px;
+  max-width: 150px;
 }
 
 .border {

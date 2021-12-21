@@ -32,7 +32,8 @@ export interface ProductSearchModel {
   itemTypeName              : string;
   departmentName            : string;
   searchValue               : string;
-
+  active                    : boolean;
+  viewAll                   : number;
 }
 
 

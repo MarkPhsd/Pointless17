@@ -33,6 +33,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   site: ISite;
 
   initSubscriptions() {
+    console.log('side bar components get menu')
     this._user =    this.authorizationService.user$.subscribe(data => {
       this.user = data
       this.getMenu(this.site);

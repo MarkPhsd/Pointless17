@@ -9,7 +9,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
@@ -80,6 +80,14 @@ brands           : IUserProfile[];
 categories$      : Observable<IMenuItem[]>;
 departments$     : Observable<IMenuItem[]>;
 productTypes$    : Observable<IItemBasicB[]>;
+viewOptions$     = of(
+  [
+    {name: 'Active', id: 0},
+    {name: 'All', id: 1},
+    {name: 'Inactive', id: 2}
+  ]
+)
+
 
 //search form filters
 inputForm        : FormGroup;
@@ -88,6 +96,8 @@ productTypeSearch: number;
 productTypeID    : number;
 typeID           : number;
 brandID          : number;
+active           : boolean;
+viewAll           = 1;
 
 selected        : any[];
 selectedRows    : any;
@@ -161,6 +171,8 @@ setBrandID(event) {
   }
 }
 
+
+
 initClasses()  {
   const platForm      = this.platForm;
   this.gridDimensions =  'width: 100%; height: 100%;'
@@ -175,6 +187,7 @@ async initForm() {
     productTypeSearch : [this.productTypeSearch],
     brandID           : [this.brandID],
     categoryID        : [this.categoryID],
+    viewAll           : [1],
   });
 }
 
@@ -282,22 +295,38 @@ initProductSearchModel(): ProductSearchModel {
     if (this.productTypeSearch)         { searchModel.itemTypeID  = this.productTypeSearch.toString(); }
     if (this.brandID)                   { searchModel.brandID     = this.brandID.toString(); }
 
+    console.log('viewAll',  this.viewAll)
+    searchModel.viewAll    = this.viewAll;
+    searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
+
+    // console.log('viewAll',  this.viewAll)
+    // console.log('event',  searchModel)
+
     return searchModel
   }
 
   refreshCategoryChange(event) {
-    console.log('event', this.categoryID, event)
+    // console.log('event', this.categoryID, event)
     this.categoryID = event;
     this.refreshSearch();
   }
 
   refreshProductTypeChange(event) {
     this.productTypeSearch = event;
-    console.log('event', this.productTypeSearch, event)
+    // console.log('event', this.productTypeSearch, event)
     this.refreshSearch();
+  }
+
+  refreshActiveChange(event) {
+
+    this.viewAll = event;
+    // console.log(this.viewAll)
+    // console.log('event',  this.viewAll)
+    this.refreshSearch();
+
   }
 
   //this is called from subject rxjs obversablve above constructor.
@@ -352,6 +381,7 @@ initProductSearchModel(): ProductSearchModel {
   getRowData(params, startRow: number, endRow: number):  Observable<IProductSearchResultsPaged>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const productSearchModel  = this.initProductSearchModel();
+    console.log('product search model', productSearchModel)
     const site                = this.siteService.getAssignedSite()
     return this.menuService.getProductsBySearchForListsPaging(site, productSearchModel)
   }

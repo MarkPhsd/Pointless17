@@ -1,11 +1,10 @@
-import { T } from '@angular/cdk/keycodes';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { SitesService } from '../reporting/sites.service';
+
 
 export interface IAppConfig {
   apiUrl : string
@@ -33,7 +32,6 @@ export class AppInitService  {
               private platFormService: PlatformService,
               private _snackbar: MatSnackBar,
               private platformService: PlatformService,
-
               private router: Router,) {
 
     this.platFormService.getPlatForm()
@@ -54,8 +52,9 @@ export class AppInitService  {
   //this can be assigned in settings after an initial login.
 
   async init() {
-
+    console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
+    console.log('app initlaizing procedure', this.apiUrl, this.isApp());
 
     if ( this.apiUrl === undefined && this.isApp() ){
       this.useAppGate = false
@@ -63,11 +62,15 @@ export class AppInitService  {
       return
     }
 
-    if ( this.platFormService.webMode) {
-      console.log('init with web platform')
+    if ( this.platFormService.webMode ) {
           const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
           if (data) {
             this.apiUrl     = data.apiUrl
+            if (!data.apiUrl) {
+              this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
+              data.apiUrl     =  "https://ccsposdemo.ddns.net:4443/api"
+            }
+
             this.useAppGate = data.useAppGate
             this.logo       = data.logo;
             this.company    = data.company
@@ -86,27 +89,31 @@ export class AppInitService  {
       }
   }
 
+  //matching code in Site service
+  //matching code in app-init-service.
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
-    console.log('getLocalApiUrl 1', result)
+    console.log('getLocalAPIURL', result)
     const site = {} as ISite;
     site.url = result
-    if (result != '' ) {
+    if (result != null && result != '' ) {
       return result;
     }
-    return ''
+
+    if (this.isApp() ) {
+      localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
+      return localStorage.getItem('storedApiUrl')
+    }
   }
 
-
   setAPIUrl(apiUrl): string {
-    console.log('setAPIURL 1', apiUrl)
+
     if (apiUrl) {
       try {
         const url = new URL(apiUrl);
         if (url) {
           localStorage.setItem('storedApiUrl', apiUrl)
           this.setAssignedSite(apiUrl)
-          console.log('setAPIURL ', apiUrl)
           return apiUrl;
         }
       } catch (error) {
@@ -127,9 +134,8 @@ export class AppInitService  {
   }
 
   apiBaseUrl() {
-    console.log('apiBaseUrl ', this.isApp(), this.apiUrl,this.appConfig.apiUrl, localStorage.getItem('storedApiUrl'))
-
-    const urlSaved = localStorage.getItem('storedApiUrl')
+    this.init();
+    const urlSaved = this.getLocalApiUrl();
     if (this.isApp() && urlSaved != undefined) {
       this.apiUrl =  urlSaved
       return   this.apiUrl
@@ -137,11 +143,10 @@ export class AppInitService  {
 
     if (!this.isApp())  {
       return this.appConfig.apiUrl;
-      if (this.apiUrl) { return this.apiUrl };
     }
 
     if (!this.apiUrl) {
-      this.apiUrl = localStorage.getItem('storedApiUrl')
+      this.apiUrl = this.getLocalApiUrl();
       if ( this.apiUrl ){
         return  this.apiUrl
       }

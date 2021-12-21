@@ -127,7 +127,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   redirectAPIUrlRequired() {
     if (this.platformService.isApp())  {
       this.platformService.initAPIUrl();
-      if (this.platformService.apiUrl.length == 0) {
+      if (!this.platformService.apiUrl || this.platformService.apiUrl.length == 0) {
         this.router.navigate(['/apisetting']);
         return true
       }
@@ -150,11 +150,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async forgetMe() {
-    this.clearUserSettings();
+    await this.clearUserSettings();
+
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
-    this.siteService.clearAssignedSite();
-    if (!this.platformService.webMode) { return }
-    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
+    if (this.platformService.isApp())  {
       if (this.appInitService.appGateEnabled()) {
         this.router.navigate(['/appgate']);
       }
@@ -170,8 +169,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.userSwitchingService.loginToReturnUrl()
   }
 
-  clearUserSettings() {
-    this.authenticationService.clearUserSettings()
+  async clearUserSettings() {
+    this.authenticationService.clearUserSettings();
+    await this.siteService.clearAssignedSite();
   }
 
   getCompanyInfo() {
@@ -232,7 +232,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         {
           this.loading = false;
           this.loggedInUser = user
-
           if (this.loginElectronApp(user)) {
             return
           }

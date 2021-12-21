@@ -241,7 +241,7 @@ export class OrderMethodsService {
       // prompt.posOrderItem = posItem;
       // this.promptGroupService.updatePromptGroup(prompt);
       // encapsulation: ViewEncapsulation.None
-      console.log('productPrices.length', item.priceCategories.productPrices.length)
+      // console.log('productPrices.length', item.priceCategories.productPrices.length)
 
       const  newItem = {order: order, item: item, posItem: posItem}
       const dialogRef = this.dialog.open(PriceOptionsComponent,
@@ -269,7 +269,7 @@ export class OrderMethodsService {
 
       });
     } else {
-      console.log('Confirm no Prompt for price.')
+      // console.log('Confirm no Prompt for price.')
       this.order = order;
       this.updateProcess() //
       // this.initItemProcess();
@@ -331,9 +331,9 @@ export class OrderMethodsService {
   async handleProcessItem() {
     const process = this.itemProcessSection;
 
-    console.log('handleProcessItems', process)
+    // console.log('handleProcessItems', process)
     if (!this.processItem) {
-      console.log('no processItem')
+      // console.log('no processItem')
       this.orderService.updateOrderSubscription(this.order)
       return
     }
@@ -341,7 +341,7 @@ export class OrderMethodsService {
     switch(process) {
       case  0: {
           this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
-          console.log('Handle Process Item openPriceOptionPrompt', 0)
+          // console.log('Handle Process Item openPriceOptionPrompt', 0)
           break;
       }
       case  1: {
@@ -353,29 +353,29 @@ export class OrderMethodsService {
       case  2: {
         this.openPromptWalkThrough(this.order,this.processItem.item,this.processItem.posItem)
         //statements;
-        console.log('Handle Process Item openPromptWalkThrough', 2)
+        // console.log('Handle Process Item openPromptWalkThrough', 2)
         break;
       }
       case  3: {
         this.openQuantityPrompt(this.order,this.processItem.item,this.processItem.posItem);
         //statements;
-        console.log('Handle Process Item openQuantityPrompt', 3)
+        // console.log('Handle Process Item openQuantityPrompt', 3)
         break;
       }
       case  4: {
         this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
         //statements;
-        console.log('Handle Process Item openGiftCardPrompt', 4)
+        // console.log('Handle Process Item openGiftCardPrompt', 4)
         break;
       }
       case 5: {
         this.openPriceChangePrompt(this.order,this.processItem.item,this.processItem.posItem);
-        console.log('Handle Process Item openPriceChangePrompt', 5)
+        // console.log('Handle Process Item openPriceChangePrompt', 5)
         break;
       }
       case 6: {
         this.orderService.updateOrderSubscription(this.order);
-        console.log('Handle Process Item updateOrderSubscription', 6)
+        // console.log('Handle Process Item updateOrderSubscription', 6)
         // this.initItemProcess();
         break;
       }

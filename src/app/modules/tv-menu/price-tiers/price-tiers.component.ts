@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from 'src/environments/environment';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 @Component({
   selector: 'app-tvprice-tiers',
@@ -10,10 +10,10 @@ export class TVPriceTiersComponent implements OnInit {
 
   logo: string;
 
-  constructor() { }
+  constructor(private appInitService: AppInitService) { }
 
   ngOnInit(): void {
-    this.logo = `${environment.logo}`
+    this.logo = this.appInitService.logo;
   }
 
 }

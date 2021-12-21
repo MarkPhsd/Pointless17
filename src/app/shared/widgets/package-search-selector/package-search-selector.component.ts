@@ -1,14 +1,11 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
-
+import { Component,   Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { ActivatedRoute,  } from '@angular/router';
+import { FormBuilder, FormGroup,  FormControl} from '@angular/forms';
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Subject, fromEvent } from 'rxjs';
-
 import { IItemBasic } from 'src/app/_services';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/packages';
@@ -64,21 +61,21 @@ export class PackageSearchSelectorComponent implements OnInit {
     return this.itemType
   }
 
-  ngAfterViewInit() {
-    fromEvent(this.input.nativeElement,'keyup')
-        .pipe(
-            filter(Boolean),
-            debounceTime(250),
-            distinctUntilChanged(),
-            tap((event:KeyboardEvent) => {
-              console.log(event)
-              console.log(this.input.nativeElement.value)
-              const search  = this.input.nativeElement.value
-              this.refreshSearch(search);
-            })
-        )
-      .subscribe();
-  }
+  // ngAfterViewInit() {
+  //   fromEvent(this.input.nativeElement,'keyup')
+  //       .pipe(
+  //           filter(Boolean),
+  //           debounceTime(250),
+  //           distinctUntilChanged(),
+  //           tap((event:KeyboardEvent) => {
+  //             console.log(event)
+  //             console.log(this.input.nativeElement.value)
+  //             const search  = this.input.nativeElement.value
+  //             this.refreshSearch(search);
+  //           })
+  //       )
+  //     .subscribe();
+  // }
 
   refreshSearch(search: any){
     if (search) {

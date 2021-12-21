@@ -8,7 +8,12 @@
 
         <div class="grid">
           <div  class="totals_label">
-            <h4> <ng-content></ng-content> </h4>
+            <h4> <ng-content></ng-content>
+                 <span>
+                  <button mat-raised (click)="togglesShowAll()">
+                  <mat-icon>expand</mat-icon></button>
+                </span>
+              </h4>
             <div *ngIf="summary.resultMessage">
               <mat-icon>alert</mat-icon>
               {{summary.resultMessage}}
@@ -25,10 +30,13 @@
         </div>
 
         <div class="grid-body"
-             *ngFor="let sale of sales">
-          <div class="product-name">{{sale.productName }}                  </div>
-          <div class="totals">{{sale.itemTotal | currency }}   </div>
-          <div class="totals">{{sale.quantity }}               </div>
+             *ngFor="let sale of sales; let i = index;">
+          <div *ngIf="i < 11 || showAll" >
+            <div class="product-name">{{sale.productName }}                  </div>
+            <div class="totals">{{sale.itemTotal | currency }}   </div>
+            <div class="totals">{{sale.quantity }}               </div>
+          </div>
+
         </div>
 
         <div class="margin-divider">

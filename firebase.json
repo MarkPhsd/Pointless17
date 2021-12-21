@@ -91,6 +91,36 @@
         "destination": "/index.html"
       }
     ]
+  },
+  {
+    "target": "emergencyroom",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
+    "target": "pointlesspos",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 ]
 }
