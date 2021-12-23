@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { OrdersService } from 'src/app/_services';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -10,8 +10,6 @@ import { IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/a
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
-import { T } from '@angular/cdk/keycodes';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
 import { ISite }   from 'src/app/_interfaces';
 import { PromptWalkThroughService } from '../menuPrompt/prompt-walk-through.service';
@@ -20,7 +18,7 @@ import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-seri
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { PrintingService } from '../system/printing.service';
-import { MenuItem } from 'electron';
+import { PlatformService } from '../system/platform.service';
 
 export interface ProcessItem {
   order: IPOSOrder;
@@ -43,10 +41,12 @@ export class OrderMethodsService {
 
   processItem : ProcessItem
 
+  private _assingedPOSItem = new BehaviorSubject<PosOrderItem>(null);
+  public  assignedPOSItem$ = this._assingedPOSItem.asObservable();
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
-      // console.log('subscription order method service ', order)
     })
   }
 
@@ -62,6 +62,11 @@ export class OrderMethodsService {
     this.handleProcessItem()
   }
 
+  updateAssignedItem(item: PosOrderItem) {
+    //  console.log('what next')
+    this._assingedPOSItem.next(item)
+  }
+
   constructor(public route                    : ActivatedRoute,
               private dialog                  : MatDialog,
               private siteService             : SitesService,
@@ -71,7 +76,10 @@ export class OrderMethodsService {
               private productEditButtonService: ProductEditButtonService,
               private promptGroupService      : PromptGroupService,
               private printingService          :PrintingService,
+              private router: Router,
+              private platFormService:        PlatformService,
               private promptWalkService: PromptWalkThroughService,
+              // private devMode: DevModService,
              ) {
     this.initSubscriptions();
   }
@@ -98,32 +106,37 @@ export class OrderMethodsService {
     if (!order)         { order = this.order }
     const result        = await this.doesOrderExist(site);
 
-    if (!result) { return }
-    if (!order) {order = this.order}
-    if (order) {
+    this.assignedPOSItem$.subscribe(data => {
 
-      if (!item.itemType) {
-        this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
-        return
-      }
+      const passAlongItem  = data;
+      if (!result) { return }
+      if (!order) {order = this.order}
+      if (order) {
 
-      const newItem     = { orderID: order.id, quantity: quantity, menuItem: item }
-      const itemResult$ = this.posOrderItemService.postItem(site, newItem)
-
-      itemResult$.subscribe(data => {
-
-          if (data && data.resultErrorDescription) {
-            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-            return
-          }
-          if (data.order) {
-            this.addedItemOptions(data.order, item, data.posItem)
-          } else {
-            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-          }
+        if (!item.itemType) {
+          this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
+          return
         }
-      )
-    }
+
+        const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
+        const itemResult$ = this.posOrderItemService.postItem(site, newItem)
+
+        itemResult$.subscribe(data => {
+              if (data && data.resultErrorDescription) {
+                this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+                return
+              }
+              if (data.order) {
+                this.orderService.updateOrderSubscription(data.order)
+                this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
+              } else {
+                this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+              }
+            }
+          )
+        }
+      }
+    )
   }
 
   async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
@@ -152,6 +165,21 @@ export class OrderMethodsService {
       this.initItemProcess();
        return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
     }
+  }
+
+  menuItemAction(order: IPOSOrder, item: IMenuItem) {
+    const isApp = (this.platFormService.isApp());
+    if (isApp) {
+      this.addItemToOrder(this.order, item, 1)
+      return
+    }
+    if (!isApp) {
+      this.listItem(item.id);
+    }
+  }
+
+  listItem(id:number) {
+    this.router.navigate(["/menuitem/", {id:id}]);
   }
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
@@ -320,7 +348,6 @@ export class OrderMethodsService {
     processItem.item    = item;
     processItem.order   = order;
     processItem.posItem = posItem;
-    // console.log('addedItemOptions')
     this.processItem    = processItem;
     this._itemProcessSection.next(0)
     this.itemProcessSection = 0;
