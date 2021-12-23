@@ -36,7 +36,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   payload: payload;
   // @HostBinding('@pageAnimations') //messes with refreshing.
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
-
+  @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
   @Input() uiConfig : TransactionUISettings
     // @ViewChild('panel') element: ElementRef
   @Input() index  = 0;
@@ -83,7 +83,12 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
 
+  assignedPOSItem: PosOrderItem;
+  _assignedPOSItem: Subscription;
+
   transactionUISettings$  = this.uiSettingService.getSettings(true);
+  productnameClass = 'product-name'
+
 
   @HostListener("window:resize", [])
    updateItemsPerPage() {
@@ -101,6 +106,20 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
         this.isNotInSidePanel = data;
       }
     })
+
+    this._assignedPOSItem = this.orderMethodsService.assignedPOSItem$.subscribe( data => {
+      this.assignedPOSItem = data;
+      this.productnameClass = 'product-name'
+      if (data) {
+        if (data.id == this.orderItem.id) {
+          this.productnameClass = 'product-name-alt'
+        }
+        if (data.id != this.orderItem.id) {
+          this.productnameClass = 'product-name'
+        }
+      }
+    })
+
   }
 
   constructor(  private orderService: OrdersService,
@@ -144,8 +163,25 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
   }
 
+
   ngAfterViewInit() {
     this.resizeCheck();
+  }
+
+  assignItem() {
+    if (this.orderItem && this.assignedPOSItem) {
+      // console.log('orderitem', this.orderItem);
+      // console.log('assignedPOSItem', this.assignedPOSItem);
+
+      if (this.orderItem.id && this.assignedPOSItem.id) {
+        if (this.orderItem.id == this.assignedPOSItem.id) {
+          console.log('this is the same item so clear')
+          this.orderMethodsService.updateAssignedItem(null)
+          return
+        }
+      }
+    }
+    this.orderMethodsService.updateAssignedItem(this.orderItem)
   }
 
   @HostListener('window:resize', ['$event.target']) onResize()
@@ -167,6 +203,17 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
   editQuantity() {
     this.editProperties('quantity' , 'Change Quantity')
+  }
+
+  selectItem() {
+    if (this.productnameClass != 'product-name-alt') {
+      this.productnameClass == 'product-name-alt'
+    }
+    if (this.productnameClass != 'product-name') {
+      this.productnameClass == 'product-name-alt'
+    }
+    this.orderMethodsService.updateAssignedItem(this.orderItem)
+    // this.orderM
   }
 
   editProperties(editField: string, instructions: string) {
@@ -254,7 +301,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   async addItemToOrder() {
     if (this.menuItem) {
       const quantity  =  Number(1)
-      console.log('addItem To Order')
+      // console.log('addItem To Order')
       this.orderMethodsService.addItemToOrder(this.order, this.menuItem, quantity)
     }
   }

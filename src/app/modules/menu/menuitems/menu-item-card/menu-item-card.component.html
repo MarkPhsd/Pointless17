@@ -4,8 +4,7 @@
        fxLayoutAlign="space-around center">
     <div fxLayout="column"
          fxLayoutAlign="start center">
-      <img *ngIf="!isApp" [src]="imageUrl" id="product-image"  (click)="displayItem()"/>
-      <img *ngIf="isApp"  [src]="imageUrl" id="product-image"  (click)="addItemToOrder(menuItem)"/>
+      <img   [src]="imageUrl" id="product-image"  (click)="menuItemAction()"/>
     </div>
   </div>
 
@@ -32,7 +31,7 @@
           mat-button
           class="add-button"
           color="primary"
-          (click)="displayItem()" >
+          (click)="menuItemAction()" >
       <mat-icon>open_in_new</mat-icon>
       View
     </button>
@@ -42,7 +41,7 @@
           mat-button
           class="add-button"
           color="primary"
-          (click)="addItemToOrder(menuItem)" >
+          (click)="menuItemAction()" >
       <mat-icon>add</mat-icon>
       Add
     </button>

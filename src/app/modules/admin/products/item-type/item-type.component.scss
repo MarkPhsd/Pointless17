@@ -12,3 +12,9 @@
 .icon-setings {
   float: left;
 }
+
+.grid-flow {
+  display: grid;
+  grid-template-columns: auto auto auto auto;
+  gap: 10px;
+}

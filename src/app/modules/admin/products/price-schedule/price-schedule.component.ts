@@ -57,10 +57,12 @@ export class PriceScheduleComponent {
 
   initPriceScheduleService() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
-      this.priceSchedule = data
-      this.isMenuList = false
-      if (data.type == 'Menu List') {
-        this.isMenuList = true
+      if (data) {
+          this.priceSchedule = data
+          this.isMenuList = false
+          if (data.type == 'Menu List') {
+          this.isMenuList = true
+        }
       }
     })
 
@@ -136,6 +138,7 @@ export class PriceScheduleComponent {
         const item$ = this.priceScheduleService.getPriceSchedule(site, id)
         item$.subscribe(data => {
           this.priceSchedule = data
+          this.description = data.description;
           this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
           this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
         }
@@ -202,7 +205,7 @@ export class PriceScheduleComponent {
       // const priceSchedule = this.getPriceSchedule(this.inputForm)
       const item = this.inputForm.value as IPriceSchedule
       this.priceScheduleDataService.updatePriceSchedule(item)
-      console.log(this.priceSchedule)
+
       const item$ = this.priceScheduleService.save(site, this.priceSchedule)
       this.saveNotification = true
       item$.subscribe( data => {

@@ -17,6 +17,7 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
+import { Router } from '@angular/router';
 
 interface IIsOnline {
   result: string;
@@ -147,7 +148,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService   : NavigationService,
               private userSwitchingService: UserSwitchingService,
               public  platFormService     : PlatformService,
-              private fb              :       FormBuilder ) {
+              private router              : Router,
+              private fb                  : FormBuilder ) {
 
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
@@ -198,7 +200,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   goBack() {
     this.smallDeviceLimiter
-    this.location.back();
+    const hasHistory = this.router.navigated;
+    if (hasHistory) {
+      this.location.back();
+    }
   }
 
   smallDeviceLimiter() {

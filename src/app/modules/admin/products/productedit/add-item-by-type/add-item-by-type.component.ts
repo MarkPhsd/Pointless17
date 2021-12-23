@@ -1,14 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { IItemBasicB, MenuService } from 'src/app/_services';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
-import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ItemsService } from 'src/app/_services/transactions/items.services';
-
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-item-by-type',
@@ -25,10 +20,8 @@ export class AddItemByTypeComponent implements OnInit {
   itemTypeCategories: IItemType[];
 
   constructor(private itemTypeService: ItemTypeService,
-              private menusService: MenuService,
               private siteService:  SitesService,
               private productEditButtonService: ProductEditButtonService,
-              private _snackBar:    MatSnackBar,
               private dialogRef: MatDialogRef<AddItemByTypeComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any
               ){
@@ -55,13 +48,13 @@ export class AddItemByTypeComponent implements OnInit {
   }
 
   initList() {
-    const site = this.siteService.getAssignedSite();
-    const itemTypes = this.itemTypeService.getDefaultItemTypes();
-    const defaultItemTypes$ = this.itemTypeService.initItemTypes(site, itemTypes);
+    // const site = this.siteService.getAssignedSite();
+    // const itemTypes = this.itemTypeService.getDefaultItemTypes();
+    // const defaultItemTypes$ = this.itemTypeService.initItemTypes(site, itemTypes);
   }
 
   addItem(item) {
-    console.log('item', item)
+    // console.log('item', item)
     this.productEditButtonService.addItem(item.id)
   }
 

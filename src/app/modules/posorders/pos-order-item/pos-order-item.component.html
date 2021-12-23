@@ -3,6 +3,7 @@
   <mat-card
             id="panel"
             (swipeleft)="swipeOutItem()"
+            (tapClick)="assignItem()"
             class="custom-card"
           >
 
@@ -12,9 +13,9 @@
         <div class="grid-item-span-row" *ngIf="orderItem">
 
           <span >
-            {{index+1}}.
+            {{index+1}}:
           </span>
-          <span class="product-name" >
+          <span [class]="productnameClass" >
             {{ orderItem?.productName }}
           </span>
 

@@ -11,7 +11,7 @@ import { AddItemByTypeComponent } from 'src/app/modules/admin/products/producted
 import { IPriceCategories, PriceTiers, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { UnitTypeEditComponent } from 'src/app/modules/admin/products/unit-type-list/unit-type-edit/unit-type-edit.component';
-import { IPOSOrder, IPOSPayment, PosOrderItem } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, ISite, PosOrderItem } from 'src/app/_interfaces';
 import { ClientTypeEditComponent } from 'src/app/modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ServiceTypeEditComponent } from 'src/app/modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component';
 import { AdjustItemComponent } from 'src/app/modules/posorders/adjust/adjust-item/adjust-item.component';
@@ -28,7 +28,9 @@ import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/promp
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
 import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 import { PSMenuGroupEditComponent } from 'src/app/modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
-
+import { concatMap, map, switchMap, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { timer, combineLatest } from 'rxjs';
 export interface IBalanceDuePayload {
   order: IPOSOrder;
   paymentMethod: IPaymentMethod;
@@ -110,6 +112,8 @@ export class ProductEditButtonService {
     const site = this.siteService.getAssignedSite();
     product = await this.menuService.getProduct(site, id).pipe().toPromise();
 
+    console.log('product', product);
+
     if (product) {
       if (!product.prodModifierType) {
         product.prodModifierType = 1
@@ -187,41 +191,56 @@ export class ProductEditButtonService {
 
   }
 
+
+  getItemForNewEditor(id: number, productTypeID: number) : Observable<IProduct> {
+    const site = this.siteService.getAssignedSite();
+    const  product = {} as IProduct
+    let product$ : Observable<IProduct>;
+    if (id ) {
+       product$ = this.menuService.getProduct(site, id ) }
+    if (!id) {
+
+
+      product.prodModifierType = productTypeID
+       product$ = this.menuService.saveProduct(site, product )
+    }
+    return product$
+  }
+
   async openProductEditor(id: number,
                           productTypeID: number,
                          ) {
 
-    // if ( !id ) { return }
-    let  product = {} as IProduct
-
-    let  itemType = {} as IItemType
     const site = this.siteService.getAssignedSite();
-
-    if ( id ) {
-      product = await this.menuService.getProduct(site, id ).pipe().toPromise();
-      itemType = await this.itemTypeService.getItemType(site, product.prodModifierType).pipe().toPromise();
-      if (!itemType)  { itemType = {} as IItemType}
-      if (productTypeID == undefined) { itemType.id = 0 }
-      console.log('regular person')
-      this.openProductEditWindow(product, itemType);
-      return
-    }
-
-    if (productTypeID != 0) {
-       itemType = await this.itemTypeService.getItemType(site, productTypeID).pipe().toPromise();
-    }
-
-    if (!itemType) { itemType = {} as IItemType}
-    if (!product)  {
-      product    = {} as IProduct
-      product.id = 0
-    }
-
-    if (productTypeID == undefined) { itemType.id = 0 }
-
-    this.openProductEditWindow(product, itemType);
+    const itemType$ =  this.itemTypeService.getItemType(site, productTypeID)
+    console.log('productTypeID', productTypeID)
+    if (id != 0) {  this._opeEditProductEditor(id, productTypeID, itemType$, site); }
+    if (id == 0) {  this._openAddProductOpenEditor(id, productTypeID, itemType$, site); }
 
   }
+
+  private _opeEditProductEditor(id: number,productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
+      const product$ = this.getItemForNewEditor(id, productTypeID)
+      this._openProductEditor(product$,itemType$)
+  }
+
+  private _openAddProductOpenEditor(id: number, productTypeID: number, itemType$: Observable<IItemType>, site: ISite) {
+      const product = {} as IProduct;
+      product.id = 0
+      product.prodModifierType = productTypeID;
+      const product$ =  this.menuService.saveProduct( site, product )
+      this._openProductEditor(product$, itemType$)
+  }
+
+  private _openProductEditor(product$: Observable<IProduct>, itemType$: Observable<IItemType>) {
+
+    product$.pipe( concatMap( product => itemType$.pipe( map( itemType => {
+      this.openProductEditWindow(product, itemType)
+    } ))
+    )).subscribe()
+
+  }
+
 
   openChangeDueDialog(payment, paymentMethod, order: IPOSOrder) {
 
@@ -321,7 +340,7 @@ export class ProductEditButtonService {
         break;
       default:
         {
-          dialogRef = this.dialog.open(ProducteditComponent,
+          dialogRef = this.dialog.open(StrainProductEditComponent,
             { width:        '80vw',
               minWidth:     '900px',
               maxWidth:     '900px',

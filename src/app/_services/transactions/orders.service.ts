@@ -40,7 +40,7 @@ export class OrdersService {
 
   private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
   public currentOrder$        = this._currentOrder.asObservable();
-
+  public currentOrder         = {} as IPOSOrder
   private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
   public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
 
@@ -52,6 +52,7 @@ export class OrdersService {
 
   updateOrderSubscription(order: IPOSOrder) {
     this._currentOrder.next(order);
+    this.currentOrder = order
   }
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {

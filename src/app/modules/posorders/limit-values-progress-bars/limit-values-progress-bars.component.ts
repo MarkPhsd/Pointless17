@@ -22,25 +22,55 @@ export class LimitValuesProgressBarsComponent implements OnInit {
 
   constructor(    public route: ActivatedRoute,) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
-    console.log('LimitValuesProgressBarsComponent Main Panel', outPut)
     if (outPut) {
       this.mainPanel = true
     }
   }
 
   ngOnInit(): void {
+    this.refreshLimitProgress(this.order)
+  }
+
+  validateType(order:IPOSOrder): clientType {
     if (this.order) {
       if (this.order.clients_POSOrders) {
         if (this.order.clients_POSOrders.client_Type) {
           const type = this.order.clients_POSOrders.client_Type
-          this.refreshLimitProgress(type);
+          return type
         }
       }
     }
+    return null
   }
 
-  refreshLimitProgress(type: clientType) {
-    if (this.order) {
+  // getClientType()
+
+
+  refreshLimitProgress(order: IPOSOrder) {
+    if (order) {
+
+      const type = this.validateType(order)
+
+      if (!type) {
+        const order = this.order
+        const gramRatio = 28
+        if (order.gramCount != 0) {
+          this.gramCountProgress         = ((order.gramCount / gramRatio ) * 100).toFixed(0)
+        }
+        if (order.seedCount != 0){
+          this.seedCountProgress         = ((order.seedCount / gramRatio ) * 100).toFixed(0)
+        }
+        if (order.concentrateCount != 0) {
+          this.concentrateCountProgress  = ((order.concentrateCount / gramRatio ) * 100).toFixed(0)
+        }
+        if (order.extractCount != 0) {
+          this.extractCountProgress      = ((order.extractCount / gramRatio ) * 100).toFixed(0)
+        }
+        if (order.liquidCount  != 0) {
+          this.liquidCountProgress       = ((order.liquidCount / gramRatio ) * 100).toFixed(0)
+        }
+      }
+
       if (type) {
         const order = this.order
         if (order?.gramCount != 0) {

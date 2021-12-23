@@ -27,12 +27,13 @@
 
 .container {
     width: 125px;
-    height: 115px;
+    height: 150px;
     text-align: center;
     border: dashed 1px #979797;
     position: relative;
     margin: 0 auto;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     input {
       opacity: 0;
       position: absolute;

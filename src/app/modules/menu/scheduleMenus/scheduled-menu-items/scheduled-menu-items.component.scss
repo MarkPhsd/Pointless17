@@ -1,0 +1,93 @@
+@import "/src/mixins.scss";
+.card-click {
+  margin-bottom: 5px;
+  transition-timing-function: ease-in;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.card-click :hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.card-click :active {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.items-list-container-app {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  gap: 2px;
+  grid-auto-flow:dense;
+
+  padding-right: 2px;
+  padding-left: 2px;
+
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns : 1fr;
+  }
+
+  @include for-tablet-portrait-up   {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @include for-tablet-landscape-up {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @include for-desktop-up  {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @include for-big-desktop-up  {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.items-list-container {
+
+  @include for-phone-only  {
+
+
+  }
+
+  @include for-tablet-portrait-up   {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @include for-tablet-landscape-up {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @include for-desktop-up  {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @include for-big-desktop-up  {
+    max-height: 350px;
+    height    : 350px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}

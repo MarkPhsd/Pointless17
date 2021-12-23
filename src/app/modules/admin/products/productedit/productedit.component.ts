@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Inject, Input,  OnInit,} from '@angular/core';
 import { AWSBucketService, MenuService } from 'src/app/_services';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { FormBuilder, FormGroup, FormControl,  } from '@angular/forms';
+import { ActivatedRoute,  } from '@angular/router';
 import { Subject } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSnackBar} from '@angular/material/snack-bar';

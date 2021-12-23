@@ -220,6 +220,11 @@ import { ItemSortComponent } from '../modules/admin/products/price-schedule/item
 import { PSMenuGroupListComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
 import { PSMenuGroupEditComponent } from '../modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
 import { MenuItemExtendedPricesComponent } from '../modules/menu/menuitem/menu-item-extended-prices/menu-item-extended-prices.component';
+import { ScheduledMenuContainerComponent } from '../modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-container.component';
+import { ScheduledMenuItemsComponent } from '../modules/menu/scheduleMenus/scheduled-menu-items/scheduled-menu-items.component';
+import { ScheduledMenuItemComponent } from '../modules/menu/scheduleMenus/scheduled-menu-items/scheduled-menu-item/scheduled-menu-item.component';
+import { ScheduledMenuHeaderComponent } from '../modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-header/scheduled-menu-header.component';
+import { ScheduledMenuListComponent } from '../modules/menu/scheduleMenus/scheduled-menu-list/scheduled-menu-list.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -381,6 +386,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     RewardTypeResultsSelectorComponent,
     SearchPanelComponent,
     ScrollableDirective,
+    ScheduledMenuContainerComponent,
+    ScheduledMenuItemsComponent,
+    ScheduledMenuHeaderComponent,
+    ScheduledMenuListComponent,
+    ScheduledMenuItemComponent,
     SearchResultsComponent,
     ServiceTypeListComponent,
     ServiceTypeEditComponent,
@@ -406,7 +416,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TimeScheduleComponent,
     TypeFilterComponent,
     TypeResultsSelectorComponent,
-    // TruncateTextPipe,
     UploaderComponent,
     UnitTypeListComponent,
     UnitTypeEditComponent,

@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/operators';
 import { error, promise } from 'protractor';
 import { SitesService } from '../reporting/sites.service';
 import { AppInitService } from '../system/app-init.service';
+import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 export const InterceptorSkipHeader = 'X-Skip-Interceptor';
 
 //https://docs.aws.amazon.com/sdk-for-javascript/v2/developer-guide/s3-example-photo-album.html
@@ -36,13 +37,17 @@ export class AWSBucketService {
 
   async  awsBucket(): Promise<string> {
 
-    if (localStorage.getItem('awsbucket') == null ) {
-      if (this._awsBucket == null) {
-        await this.getBucket();
-      }
+    let bucket = localStorage.getItem('awsbucket')
+    // console.log('bucket from AwsBucket', bucket)
+
+    if (!bucket || bucket === '') {
+      await this.getBucket();
     }
 
-    return localStorage.getItem('awsbucket')
+    bucket =  localStorage.getItem('awsbucket');
+    // console.log('Bucket from AWS Storage', bucket)
+    return bucket
+
   }
 
   async  awsBucketURL(): Promise<string> {
@@ -53,6 +58,7 @@ export class AWSBucketService {
   constructor(private http: HttpClient,
               private siteService: SitesService,
               private appInitService  : AppInitService,
+              private httpCache: HttpClientCacheService
               ) {
     this.apiUrl =  this.appInitService.apiBaseUrl()
   }
@@ -169,7 +175,7 @@ export class AWSBucketService {
       })
   }
 
-  getURLFromAWSForBucketList(file:string): Observable<IKey>   {
+  getURLFromAWSForBucketList( file:string ): Observable<IKey>   {
     const controller =  "/aws/"
     const parameter = "getListOfobjects"
     return  this.http.get<IKey>(`${this.apiUrl}${controller}${parameter}`)
@@ -201,15 +207,15 @@ export class AWSBucketService {
     if (!site.url) {
       console.log('get Bucket, no url assigned', site.url)
     }
+
     const controller = '/aws/'
 
     const parameter = "getAWSBucket"
 
     const url = `${site.url}${controller}${parameter}`
 
-    this.http.get<IAWS_Temp_Key>(url).subscribe(data => {
+    this.httpCache.get<IAWS_Temp_Key>( {url: url, cacheMins: 60} ).subscribe(data => {
       this._awsBucket =  data.preassignedURL;
-      console.log('getBucket', data.preassignedURL)
       localStorage.setItem('awsbucket', `${data.preassignedURL}`)
       return data.preassignedURL;
     })

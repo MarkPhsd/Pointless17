@@ -265,21 +265,20 @@ export class UserSwitchingService {
   }
 
   loginToReturnUrl() {
+
     let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    if (returnUrl = '/') { returnUrl = '/app-main-menu' }
-    if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
 
-
-    if (!this.platformService.isAppElectron || !this.platformService.androidApp)  {
-      // console.log('logintoReturnURL')
+    if (this.platformService.isApp()) {
+      if (returnUrl === '/login') {  returnUrl = '/pos-orders'}
     }
 
-    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
-         if (returnUrl === '/apisetting') {    returnUrl = '/app-main-menu'}
+    if (!this.platformService.isApp()) {
+      if (returnUrl = '/') { returnUrl = '/app-main-menu' }
+      if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
-    // console.log('loginToReturnUrl', returnUrl)
+
     this.router.navigate([returnUrl]);
-    this.browseMenu();
+    // this.browseMenu();
   }
 
 

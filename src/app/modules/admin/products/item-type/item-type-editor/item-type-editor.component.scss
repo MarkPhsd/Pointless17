@@ -11,6 +11,22 @@
   padding: 2px;
 }
 
+.buttons-standard {
+  margin-bottom:  5px;
+  margin-top: 5px;
+}
+
+.grid-flow {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.toggle-footer {
+  margin-bottom: 5px;
+}
 mat-label {
   font-size: small;
 }
@@ -35,7 +51,7 @@ mat-card{
 }
 
 .content-container {
-   height     : 310px;
+   height     : 500px;
    overflow-y : auto;
    overflow-x   : hidden;
 }

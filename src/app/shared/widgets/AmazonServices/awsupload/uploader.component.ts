@@ -31,6 +31,7 @@ export class UploaderComponent implements OnInit {
   imageUrlToCheck:        string;
   notificationDurationInSeconds = 5;//snackbar
   aws$:  Observable<IAWS_Temp_Key>;
+  uploading  = false
 
   constructor(private awsBucket: AWSBucketService,
              private _snackBar: MatSnackBar,
@@ -83,6 +84,7 @@ export class UploaderComponent implements OnInit {
 
   confirmFileUpload(file: any ){
     let uploadFile = false
+    this.uploading = true;
     this.imageUrlToCheck = this.getImageURL(file.name)
 
     try {
@@ -94,18 +96,16 @@ export class UploaderComponent implements OnInit {
             console.log(data.preassignedURL)
             return this.awsBucket.uploadFile(file,  data.preassignedURL)
           }
-          // , catchError => {
-          //   console.log('error getting presigned url', catchError)
-          //   this.notifyEvent(`${catchError}`, 'Error' )
-          //   return EMPTY
-          // }
+
         )
       ).subscribe( data => {
-        console.log(data)
+        this.uploading = false;
         this.uploadFile_alt(file)
       })
 
      } catch (error) {
+       this.notifyEvent(`Failed to upload ${error}`, 'Error')
+      this.uploading = false;
       console.log(error)
      }
   };

@@ -1,0 +1,20 @@
+
+<div *ngIf="(scheduleMenus$ | async) as list" >
+
+  <mat-card >
+    <mat-card-content>
+      <div  class="grid-flow">
+        <div *ngFor="let item of list.results ; let i = index"
+             [@listAnimation]="list.length">
+          <scheduled-menu-container
+            [item]="item">
+          </scheduled-menu-container>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<ng-template #loading>
+  <mat-spinner></mat-spinner>
+</ng-template>

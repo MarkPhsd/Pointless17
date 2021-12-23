@@ -71,9 +71,12 @@ export class HttpClientCacheService {
     options.body = options.body || null
     options.cacheMins = options.cacheMins || 0
     const  key = this.getKey(verb, options)
+    console.log(key)
+    console.log(options )
 
     if (options.cacheMins > 0) {
       const data = this._cacheService.load(key)
+      console.log(data )
       // Return data from cache
       if (data !== null) {
         return of<T>(data)
@@ -98,7 +101,7 @@ export class HttpClientCacheService {
         )
     }
 
-    // return this.http.request<T>(verb, options.url, {
+
     return this.http.request<T>(verb, options.url, {observe: 'body'})
       .pipe(
         switchMap(response => {

@@ -26,6 +26,13 @@
   grid-template-columns:  150px  125px 125px 75px ;
 }
 
+.grid-schedule-flow-hh {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns:  150px  125px 125px 75px 75px ;
+}
+
 .grid-container {
   width: 350px;
 }

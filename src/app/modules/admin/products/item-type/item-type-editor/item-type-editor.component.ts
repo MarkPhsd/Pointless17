@@ -28,6 +28,9 @@ export class ItemTypeEditorComponent   {
   itemType$         : Observable<IItemType>;
   selectedItemsCount: number;
   itemType_PackageTypes = this.itemTypeService.packageTye;
+  itemType_UseTypes  = this.itemTypeService.useType;
+  itemType_Types     = this.itemTypeService.type;
+
   labelTypes        : ISetting[];
   receiptList$      : Observable<ISetting[]>;
   labelList$        : Observable<ISetting[]>;
@@ -105,11 +108,15 @@ export class ItemTypeEditorComponent   {
     return this.inputForm;
   }
 
-  save(){
-    this.update();
+  save(event){
+    this.update(null);
   }
 
-  async update(): Promise<boolean> {
+  saveExit(event) {
+    this.update(true);
+  }
+
+  async update(optionClose: any): Promise<boolean> {
     let result: boolean;
     return new Promise(resolve => {
       const site = this.siteService.getAssignedSite()
@@ -124,15 +131,12 @@ export class ItemTypeEditorComponent   {
                 item = this.inputForm.value;
                 item.id = id;
                 item.labelTypeID = this.labelTypeID;
-                console.log('updateItem', item);
                 return  this.updateItem(site, item)
               })
-              this.onCancel()
+              if (optionClose) { this.onCancel(null) }
             }
-            if (this.itemType) {
-              return  this.updateItem(site, this.itemType)
-            }
-            this.onCancel()
+            if (this.itemType) {   return  this.updateItem(site, this.itemType) }
+            if (optionClose) { this.onCancel(null) }
           } catch (error) {
             console.log(error)
           }
@@ -149,8 +153,6 @@ export class ItemTypeEditorComponent   {
       item.labelTypeID = this.labelTypeID;
       item.printerName = this.printerName;
       item.prepTicketID =this.prepTicketID;
-
-      console.log('updateItem', item);
 
       if (this.itemType) {  item.imageName = this.itemType.imageName  }
       const product$ = this.itemTypeService.putItemTypeNoChildren(site, item)
@@ -170,9 +172,9 @@ export class ItemTypeEditorComponent   {
   }
 
   async updateExit() {
-    const result = await this.update()
+    const result = await this.update(true)
     if (result) {
-      this.onCancel();
+      this.onCancel(null);
     }
   }
 
@@ -196,11 +198,11 @@ export class ItemTypeEditorComponent   {
     }
   }
 
-  onCancel() {
+  onCancel(event) {
     this.dialogRef.close();
   }
 
-  deleteItem() {
+  deleteItem(event) {
     const result = window.confirm('Are you sure you want to delete this item?')
     if (!result) { return }
     const item = this.inputForm.value;
@@ -209,14 +211,20 @@ export class ItemTypeEditorComponent   {
     const item$ = this.itemTypeService.delete(site, id)
     item$.subscribe(data => {
       this.notifyEvent('Item deleted.', 'Success');
-      this.onCancel();
+      this.onCancel(null);
     })
   }
+
 
   copyItem() {
     //do confirm of delete some how.
     //then
   }
+
+  // (outputeupdateItem)     ="save($event)"
+  // (outputupdateItemExit)  ="saveExit($event)"
+  // (outputupdatedeleteItem)="delete($event)"
+  // (outputupdateonCancel)  ="onCancel($event)"
 
    //image data
   received_URLImage(event) {

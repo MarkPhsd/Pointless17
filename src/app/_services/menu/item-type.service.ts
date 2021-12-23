@@ -123,6 +123,20 @@ export interface Tax {
 export class ItemTypeService {
 
 packageTye = ['Not-Specified', 'Marijuana Weighed', 'Marijuana - Packaged', 'Medicine - Weighed', 'Medicine Each', 'Seeds', 'Plants', 'Seeds', 'Concentrates', 'Solid', 'Liquid', 'Extract']
+type       = [
+   'grouping',
+   'restaurant',
+   'discounts',
+   'tobacco',
+   'cannabis',
+   'retail',
+   'med-cannabis',
+   'grocery',
+   'retail liquor',
+   'service liquor'
+  ]
+useType = ['product', 'adjustment', 'category']
+
 site: ISite;
 constructor(private http: HttpClient,
             private auth: AuthenticationService) { }
@@ -331,6 +345,32 @@ constructor(private http: HttpClient,
 
   }
 
+  postItemType(site: ISite, itemType: IItemType): Observable<IItemType> {
+
+    const controller = '/ItemTypes/';
+
+    const parameters = ``;
+
+    const endPoint = 'PostItemType';
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`;
+
+    return  this.http.post<IItemType>(url, itemType);
+
+  }
+
+  saveItemType(site: ISite, itemType: IItemType): Observable<IItemType> {
+
+      if ( !itemType.id || itemType.id == 0) {
+        return  this.postItemType(site, itemType)
+      }
+      if (itemType.id != 0) {
+        return  this.putItemType(site, itemType)
+      }
+
+  }
+
+
   putItemTypeNoChildren(site: ISite, itemType: IItemType): Observable<IItemType> {
 
     const controller = '/ItemTypes/';
@@ -361,33 +401,6 @@ constructor(private http: HttpClient,
   }
 
 
-  // postItemTypeList(site: ISite, itemType: IItemType[]): Observable<IItemType[]> {
-
-  //   const controller = '/ItemTypes/';
-
-  //   const parameters = '';
-
-  //   const endPoint = 'postItemTypeList';
-
-  //   const url = `${site.url}${controller}${endPoint}${parameters}`;
-
-  //   return  this.http.post<IItemType[]>(url, itemType);
-
-  // }
-
-  postItemType(site: ISite, itemType: IItemType): Observable<IItemType> {
-
-    const controller = '/ItemTypes/';
-
-    const parameters = `$id?=${itemType.id}`;
-
-    const endPoint = 'postIItemType';
-
-    const url = `${site.url}${controller}${endPoint}${parameters}`;
-
-    return  this.http.post<IItemType>(url, itemType);
-
-  }
 
   getDefaultItemTypes(): IItemType[]  {
 
@@ -436,7 +449,7 @@ constructor(private http: HttpClient,
         {id: 8, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Discount % Entire Order",itemType_Categories: categories, imageName: '',      icon: 'coupon',useType:'adjustment', sortOrder: 13, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 7, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Cash Discount on Order", itemType_Categories: categories, imageName: '',      icon: 'coupon',useType:'adjustment', sortOrder: 14, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 9,packageType: '',  taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Quantity Off Item",     itemType_Categories: categories, imageName: '',       icon: 'coupon',useType:'adjustment', sortOrder: 15, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 10, packageType: '',taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 1",         itemType_Categories: categories, imageName: '',       icon: ''      ,useType:'adjustment', sortOrder: 16, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 10,packageType: '',taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 1",         itemType_Categories: categories, imageName: '',       icon: ''      ,useType:'adjustment', sortOrder: 16, ageRequirement: 0, enabled: true,  type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 11,packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 2",         itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 17, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 12,packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0,prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Price Level 3",         itemType_Categories: categories, imageName: '',        icon: ''      , useType:'adjustment', sortOrder: 18, ageRequirement: 0, enabled: true, type:  'discounts',  useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 13,packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',  name : "Discount % One Item",   itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment', sortOrder: 19, ageRequirement: 0, enabled: true, type:  'discounts', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
@@ -460,37 +473,41 @@ constructor(private http: HttpClient,
 
         {id: 29,packageType: '', taxable: 1,  labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Retail",               itemType_Categories: categories, imageName: '',      icon: '', useType:'product',  sortOrder: 1, ageRequirement:0, enabled: true,           type: 'generic',  useGroupID: 11, weightedItem: true, expirationRequired: false, labelRequired: false, },
 
-        {id: 30,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Strain",                itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 2, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: true, expirationRequired: false, labelRequired: false, },
-        {id: 31,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Edible",                itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 32,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Non Edible",            itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 33,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Packed Bud",            itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 34,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Packed Shake",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 35,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Topicals",              itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 36,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Bulk Bud",              itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 37,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Strain -PCKG",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product',  sortOrder: 4, ageRequirement: 21, enabled: true,  type: 'cannabis', useGroupID: 7, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 30,packageType: 'Marijuana - Weighed',  taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Strain",                itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 2, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 31,packageType: 'Solid',                taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Edible",                itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 32,packageType: 'Solid',                taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Non Edible",            itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 33,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Packed Bud",            itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 34,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Packed Shake",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 35,packageType: 'Liquid',               taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Topicals",              itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 36,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Bulk Bud",              itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,   type: 'cannabis', useGroupID: 7, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 37,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Strain -PCKG",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product',  sortOrder: 4, ageRequirement: 21, enabled: true,  type: 'cannabis', useGroupID: 7, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 60,packageType: 'Extract',              taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Extract",               itemType_Categories: categories, imageName: '',       icon: 'extract', useType:'product',  sortOrder: 39, ageRequirement: 21, enabled: true, type:  'cannabis', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 61,packageType: 'Seeds',                taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Seeds",               itemType_Categories: categories, imageName: '',       icon: 'extract', useType:'product',  sortOrder: 39, ageRequirement: 21, enabled: true, type:  'cannabis', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
 
-        {id: 38,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Strain",            itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 2, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: true, expirationRequired: false, labelRequired: false, },
-        {id: 39,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Edible",            itemType_Categories: categories, imageName: '',      icon: 'brownie', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,type: 'med-cannabis', useGroupID: 8,  weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 40,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Non Edible",        itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8,  weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 41,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Packed Bud",        itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 42,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Packed Shake",      itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 43,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Topicals",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 44,packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Bulk Bud",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 45,packageType: '', taxable: 1, labelTypeID: 0, printLocationID: 0,prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Strain-PCKG",       itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 4, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 38,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Strain",            itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 2, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 39,packageType: 'Solid',                taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Edible",            itemType_Categories: categories, imageName: '',      icon: 'brownie',useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true,type: 'med-cannabis', useGroupID: 8,  weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 40,packageType: 'Solid',                taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Non Edible",        itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8,  weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 41,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Packed Bud",        itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 42,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Packed Shake",      itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 43,packageType: 'Liquid',               taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Topicals",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 44,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Bulk Bud",          itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 3, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 45,packageType: 'Marijuana - Packaged', taxable: 1, labelTypeID: 0, printLocationID: 0,prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Med-Strain-PCKG",       itemType_Categories: categories, imageName: '',      icon: 'flower', useType:'product', sortOrder: 4, ageRequirement: 21, enabled: true, type: 'med-cannabis', useGroupID: 8, weightedItem: true, expirationRequired: false, labelRequired: false, },
+        {id: 59,packageType: 'Med-Extract',          taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Med-Extract",               itemType_Categories: categories, imageName: '',      icon: 'extract', useType:'product',  sortOrder: 39, ageRequirement: 21, enabled: true, type:  'med-cannabis', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 62,packageType: 'Seeds',                taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Med-Seeds",               itemType_Categories: categories, imageName: '',       icon: 'extract', useType:'product',  sortOrder: 39, ageRequirement: 21, enabled: true, type:  'cannabis', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
 
-        {id: 46, packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Alcohol",               itemType_Categories: categories, imageName: '',       icon: 'alcohol', useType:'product', sortOrder: 34, ageRequirement:  21, enabled: true, type:  'retail liquor', useGroupID: 9, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 47, packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Wine",                  itemType_Categories: categories, imageName: '',       icon: 'wine'   , useType:'product', sortOrder: 35, ageRequirement:  21, enabled: true, type:  'retail liquor', useGroupID: 9, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 46, packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Alcohol",               itemType_Categories: categories, imageName: '',       icon: 'alcohol', useType:'product', sortOrder: 34, ageRequirement:  21, enabled: true, type:  'retail liquor', useGroupID: 9, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 47, packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Wine",                  itemType_Categories: categories, imageName: '',       icon: 'wine'   , useType:'product', sortOrder: 35, ageRequirement:  21, enabled: true, type:  'retail liquor', useGroupID: 9, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 48, packageType: '', taxable: 1, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Beer",                  itemType_Categories: categories, imageName: '',       icon: 'beer'   , useType:'product', sortOrder: 36,  ageRequirement: 21, enabled: true, type:  'retail liquor', useGroupID: 9, weightedItem: false, expirationRequired: false, labelRequired: false, },
 
         {id: 57, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Produce",              itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product',  sortOrder: 45 , ageRequirement: 0, enabled: true, type: 'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 49, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Produce Weighted",     itemType_Categories: categories, imageName: '',       icon: 'apple'  , useType:'product', sortOrder: 37, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10,  weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 50, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Fish Packaged",        itemType_Categories: categories, imageName: '',       icon: 'fish'   , useType:'product', sortOrder: 44, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 49, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Produce Weighted",     itemType_Categories: categories, imageName: '',       icon: 'apple'  , useType:'product', sortOrder: 37, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10,  weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 50, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Fish Packaged",        itemType_Categories: categories, imageName: '',       icon: 'fish'   , useType:'product', sortOrder: 44, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 51, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Fish Weighted",        itemType_Categories: categories, imageName: '',       icon: 'fish'   , useType:'product', sortOrder: 43, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 52, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Meat Packaged",        itemType_Categories: categories, imageName: '',       icon: 'meat'   , useType:'product', sortOrder: 40, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 53, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Poultry Weighted",     itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product', sortOrder: 41, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 54, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Poultry Packaged",     itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product', sortOrder: 42, ageRequirement: 0, enabled: true, type:  'grocery',  useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 55, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',  name : "Produce Packaged",     itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product', sortOrder: 38, ageRequirement: 0, enabled: true, type:  'grocery',  useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
-        {id: 56, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '', name : "Meat Weighted",        itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+        {id: 56, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Meat Weighted",        itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
 
       ]
     return productType;

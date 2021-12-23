@@ -1,14 +1,25 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,  } from '@angular/common/http';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, } from 'rxjs';
 import { ISalesPayments, ISalesReportingOrdersSummary, IUser, ISite, ISalesReportingFilter }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
-import { InterceptorSkipHeader } from '../../_http-interceptors/basic-auth.interceptor';
 import { formatDate } from '@angular/common';
-import { SitesService } from './sites.service';
-import { first } from 'rxjs/operators';
 import { AppInitService } from '../system/app-init.service';
+
+// this.symbolSearchService.getSymbolData('xl')
+// .switchMap(stock => {
+//   this.stock = stock;
+//   return Observable.combineLatest(
+//     this.symbolSearchService.getResearchReportData(stock),
+//     this.symbolSearchService.getPGRDataAndContextSummary(stock)
+//   )})
+// .subscribe(
+//   [report, summary] => {
+//     this.researchReport = report;
+//     this.contextSummary = summary;
+//   },
+//   err => this.sharedService.handleError
+// );
+
 
 export interface rowValue {
   date: string;

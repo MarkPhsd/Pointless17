@@ -1,0 +1,20 @@
+@import "/src/mixins.scss";
+.grid-flow {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+  }
+
+}
+
+.grid-item-image {
+  width: 40px;
+  height: 100%;
+}

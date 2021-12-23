@@ -27,12 +27,18 @@
               <span id="selectedRows"> </span>
             </div>
             <div fxFlex=20 fxLayout="column" fxLayoutAlign="space-between end" >
-              <div class="grid-container">
-                           <div class="grid-item">
-                  <button mat-button color="primary"
+              <div class="grid-flow">
+                <div class="grid-item">
+                    <button mat-button color="primary"
                         (click)="delete()">
                     <mat-icon>delete</mat-icon>Delete Selected</button>
                 </div>
+                <div class="grid-item">
+                  <button mat-button color="primary"
+                      (click)="add()">
+                  <mat-icon>add</mat-icon>Add</button>
+              </div>
+
               </div>
             </div>
           </div>

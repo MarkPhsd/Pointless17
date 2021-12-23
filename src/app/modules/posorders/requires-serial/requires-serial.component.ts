@@ -55,7 +55,6 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
   initFormSubscription() {
     this.inputForm.controls['serial'].valueChanges.subscribe(value => {
       if (value.length == 24) {
-        console.log(value)
         const item = value.toString().substr(0,24)
         this.applySerial(value)
       }
@@ -73,6 +72,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
     if (this.id && serial) {
       this.orderMethodService.appylySerial(this.id, serial).subscribe(data =>{
         if (data.order) {
+          console.log('Serial APplication')
           this.orderService.updateOrderSubscription(data.order)
           this.dialogRef.close({id: this.id, result : true, order: data.order});
         }

@@ -8,6 +8,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 import { IPagedList } from '../system/paging.service';
+import { DiscountInfo } from 'src/app/_interfaces/menu/price-schedule';
 
 // import { HttpClientService } from 'src/app/_http-interceptors/http-client.service';
 
@@ -21,6 +22,7 @@ export interface IProductSearchResults {
    urlImageMain: string;
    productCount: number;
    barcode     : string;
+   type        : string;
 }
 
 export interface IProductSearchResultsPaged {
@@ -142,13 +144,31 @@ export class MenuService {
 
   };
 
+  getMenuItemsBySchedule(site: ISite, id: number): Observable<DiscountInfo[]> {
+
+
+    const controller = '/MenuItems/'
+
+    const endPoint = 'GetMenuItemsBySchedule'
+
+    const parameters =`?id=${id}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    const cache =  this.sitesService.getCacheURI(uri)
+
+    return  this.httpCache.get<DiscountInfo[]>(cache)
+
+  };
+
+
   getMenuItemsByPage(site: ISite, pageNumber: number, pageSize: number): Observable<IMenuItem[]> {
 
     const controller = '/MenuItems/'
 
     const endPoint = 'GetMenuItemsByPage'
 
-    const parameters = '?pagenumber=${pageNumber}&pageSize=${pageSize}'
+    const parameters = `?pagenumber=${pageNumber}&pageSize=${pageSize}`
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -536,13 +556,13 @@ export class MenuService {
 
    saveProduct(site: ISite, product:IProduct): Observable<IProduct> {
 
-    if (product.id) {
+    if (product.id && product.id != 0) {
       return  this.putProduct(site, product.id, product);
 
     } else {
       return this.postProduct(site, product);
-
     }
+
   }
 
    postProduct(site: ISite, product: IProduct): Observable<IProduct> {

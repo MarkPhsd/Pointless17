@@ -1,18 +1,16 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional, ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
+import { Component,   OnInit,} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable, Subject  } from 'rxjs';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import {  GridApi } from '@ag-grid-community/all-modules';
-
 // import {AgGridAngular} from 'ag-grid-angular';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
-
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ItemTypeEditorComponent } from './item-type-editor/item-type-editor.component';
-import { AWSBucketService, IItemBasicB, MenuService } from 'src/app/_services';
+import { AWSBucketService, MenuService } from 'src/app/_services';
 import { ItemTypeDisplayAssignmentService } from 'src/app/_services/menu/item-type-display-assignment.service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 
@@ -96,7 +94,6 @@ export class ItemTypeComponent implements OnInit {
     const site        = this.siteService.getAssignedSite()
     this._itemTypes$  = this.itemTypeService.getItemTypes(site);
     const filePath    = this.urlPath
-
     const urlPath     =  await this.awsService.awsBucketURL();
     this._itemTypes$.subscribe(data => {
       if (urlPath) {
@@ -108,6 +105,7 @@ export class ItemTypeComponent implements OnInit {
           }
         )
       }
+      data = data.sort((a, b) => (a.name > b.name) ? 1 : -1)
       this.itemTypes$.next(data);
     })
 
@@ -143,8 +141,6 @@ export class ItemTypeComponent implements OnInit {
   prevStep() {
     this.accordionStep--;
   }
-
-
 
   initAGGridFeatures() {
     this.columnDefs =  [
@@ -246,15 +242,15 @@ export class ItemTypeComponent implements OnInit {
   }
 
   openItemEditor(id: number) {
+    // this.openEditor(id)
     let dialogRef: any;
-    console.log('open item editor', id)
     {
       if (id) {
         dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '500px',
-            minWidth:     '500px',
-            height:       '540px',
-            minHeight:    '540px',
+          { width:        '700px',
+            minWidth:     '700px',
+            height:       '740px',
+            minHeight:    '740px',
             data : {id: id}
           },
         )
@@ -279,15 +275,14 @@ export class ItemTypeComponent implements OnInit {
       selectedItems.push(id);
     })
 
-    console.log(selectedItems);
-
+    // this.openEditor(selectedItems)
     {
       if (selectedItems) {
         dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '500px',
-            minWidth:     '500px',
-            height:       '540px',
-            minHeight:    '540px',
+          { width:        '700px',
+            minWidth:     '700px',
+            height:       '740px',
+            minHeight:    '740px',
             data : { selectedItems: selectedItems }
           },
         )
@@ -301,16 +296,16 @@ export class ItemTypeComponent implements OnInit {
 
   //not implemented.
   editSelected() {
+    // this.openEditor(this.selected)
     if (this.selected) {
       let dialogRef: any;
 
       {
-
         dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '500px',
-            minWidth:     '500px',
-            height:       '425px',
-            minHeight:    '425px',
+          { width:        '700px',
+            minWidth:     '700px',
+            height:       '740px',
+            minHeight:    '740px',
             data : {selected: this.selected}
           },
         )
@@ -320,6 +315,25 @@ export class ItemTypeComponent implements OnInit {
         this.refreshData();
       });
     }
+  }
+
+  openEditor(data: any) {
+    let dialogRef: any;
+    {
+      dialogRef = this.dialog.open(ItemTypeEditorComponent,
+        { width:        '700px',
+          minWidth:     '700px',
+          height:       '740px',
+          minHeight:    '740px',
+          data : {data}
+        },
+      )
+
+    }
+    dialogRef.afterClosed().subscribe(result => {
+      this.refreshData();
+    });
+
   }
 
   async delete() {
@@ -345,13 +359,19 @@ export class ItemTypeComponent implements OnInit {
       }
   }
 
+  add() {
+
+    const itemType = {} as IItemType;
+    const site = this.siteService.getAssignedSite();
+    const itemType$ = this.itemTypeService.saveItemType(site, itemType)
+
+    itemType$.subscribe( ( data => {
+      this.openItemEditor(data.id)
+    }))
+
+  }
+
   onItemsMoved(event) {
-
-    // console.log('event', event)
-    console.log('avalible', event.available)
-
-    console.log('selected', event.selected)
-
   }
 
 }

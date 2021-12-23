@@ -41,7 +41,7 @@ export class PosOrderItemsComponent implements OnInit {
 
     this._order = this.orderService.currentOrder$.subscribe( order => {
       this.order = order
-      console.log('pos order items ', this.order )
+      // console.log('pos order items ', this.order )
       setTimeout(() => {
         this.scrollToBottom();
       }, 200);
@@ -73,12 +73,6 @@ export class PosOrderItemsComponent implements OnInit {
     // this.getUIConfig()
   }
 
-  // getUIConfig() {
-  //   const uiConfig  = {} as TransactionUISettings
-  //   const UI$ = this.uiSettingsService.getTransactionUISettings(true).subscribe(data => {
-  //     this.uiConfig = JSON.parse(data.text) as TransactionUISettings
-  //   })
-  // }
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
@@ -133,6 +127,8 @@ export class PosOrderItemsComponent implements OnInit {
       verticalPosition: 'bottom'
     });
   }
+
+
 
   scrollToBottom(): void {
     setTimeout(() => {

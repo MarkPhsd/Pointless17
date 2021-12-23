@@ -145,6 +145,7 @@
                         class="nav-item nav-link"
                         (click)="logout()">
                     <mat-icon>exit_to_app</mat-icon>
+                    <span *ngIf="!user">Log Out</span>
                 </button>
               </li>
 
@@ -172,6 +173,7 @@
                     aria-label="logout"
                     class="nav-item nav-link"
                     (click)="logout()">
+                    Sign In
                 <mat-icon>exit_to_app</mat-icon>
             </button>
           </div>
@@ -190,7 +192,7 @@
                         class="nav-item nav-link"
                         aria-label="logout"
                         (click)="logout()">
-                    Sign Out
+                    Log Out
                     <mat-icon>exit_to_app</mat-icon>
                 </button>
               </button>

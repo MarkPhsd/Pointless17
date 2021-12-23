@@ -31,7 +31,9 @@
       </div>
 
     </div>
-
+    <div *ngIf="showTime">
+        Time & Date based price will automatically apply when dates or time assigned. Separate weekdays by comma.
+    </div>
   </mat-card-content>
 </mat-card>
 
@@ -158,10 +160,8 @@
                                 priceTier.priceTierPrices[i].endTime != '')"
                               >
 
-                        <div >
-                          Time & Date based price will automatically apply when dates or time assigned. Separate weekdays by comma.
-                        </div>
-                        <div class="grid-schedule-flow">
+
+                        <div class="grid-schedule-flow-hh">
 
                           <div class="field">
                             <mat-form-field appearance="outline" class="weekday-fields">
@@ -205,7 +205,7 @@
                             </mat-form-field>
                           </div>
 
-                          <!-- <div class="field">
+                          <div class="field">
                               <mat-form-field appearance="outline"
                                               class="prices-fields">
                                 <mat-label >End Price</mat-label>
@@ -217,7 +217,7 @@
                                         [ngModelOptions]="{standalone: true}"
                                         class="form-control" >
                               </mat-form-field>
-                            </div> -->
+                          </div>
 
                         </div>
                       </div>

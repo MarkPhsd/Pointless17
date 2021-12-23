@@ -1,0 +1,26 @@
+<div *ngIf="schedule && awsBucket" >
+   <div [class]="itemslistcontainer"
+        *ngIf="(schedulMenuItems$ | async) as items; else loading">
+
+    <div class="card-click"
+        *ngFor="let item of (showAllFlag ? items : items.slice(0,itemCount))" >
+
+      <div *ngIf="item.menuItem"
+            (click)="menuItemAction(item.menuItem)">
+          <scheduled-menu-item
+            [menuItem]        ="item.menuItem"
+            [imagePath]       ="awsBucket"
+            [imageName]       ="item.menuItem.urlImageMain"
+            [isApp]           ="isApp"
+            >
+            {{item.menuItem.name | truncateText: 25}}
+          </scheduled-menu-item>
+        </div>
+      </div>
+   </div>
+</div>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>
+

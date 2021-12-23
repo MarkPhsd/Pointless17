@@ -9,6 +9,7 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 })
 export class MainMenuComponent   {
 
+  smoke  = "./assets/video/smoke.mp4"
   constructor() { }
 
 

@@ -78,7 +78,7 @@
                   <div *ngIf="isMenuList">
                     <mat-tab label="Description">
                         <div class="grid-item">
-                          <mat-card class="image-container">
+                          <mat-card >
                             <app-widget-uploader
                                   [(fileNames)]="priceSchedule.image"
                                   (messageOut) ="saveImageToSchedule($event)">
@@ -86,17 +86,27 @@
                               </app-widget-uploader>
                           </mat-card>
                         </div>
-                        <mat-label> Description </mat-label><br>
-                        <simple-tinymce name="description"
-                                        cols="50" rows="15"
-                                        formControlName="description"
-                                        [(ngModel)]="description">
-                        </simple-tinymce>
+
+
                     </mat-tab>
+
                   </div>
+
 
                 </div>
               </mat-tab-group>
+              <div  [formGroup]="inputForm"
+                    *ngIf="inputForm">
+                <mat-label> Description </mat-label><br>
+                <simple-tinymce name="description"
+                                cols="50" rows="15"
+                                style="height: 400px;"
+                                formControlName="description"
+                                [(ngModel)]="description"
+                                >
+                </simple-tinymce>
+              </div>
+
             <div>
           </div>
         </div>
@@ -115,6 +125,7 @@
     </div>
   </div>
 </div>
+
 
 <ng-template #loading>
   <h3>processing....</h3>

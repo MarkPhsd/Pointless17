@@ -1,7 +1,6 @@
 import { Component, Input, OnInit, OnDestroy} from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, OrdersService } from 'src/app/_services';
-import { DevService } from 'src/app/_services/';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuItemModalComponent } from './menu-item-modal/menu-item-modal.component';
@@ -71,7 +70,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.bucketName =   await this.awsBucket.awsBucket();
-    console.log("")
+    // console.log("")
     this.initSubscriptions();
   };
 
@@ -104,9 +103,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  async addItemToOrder(item) {
-    this.orderMethodService.addItemToOrder(this.order, item, 1)
+  menuItemAction() {
+   this.orderMethodService.menuItemAction(this.order,this.menuItem)
   }
+
 
   openDialog() {
     const dialogConfig = [
@@ -126,13 +126,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     });
   }
 
-  listItem(id:number) {
-    this.router.navigate(["/menuitem/", {id:id}]);
-  }
-
-  displayItem() {
-    this.listItem(this.id);
-  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

@@ -27,14 +27,17 @@
             {{ getItemName(item) }}
           </div>
           <div>
-            <img class="uploaded-image"  [src]="getImageURL(item)" [alt]="item">
+            <img class="uploaded-image" [src]="getImageURL(item)" [alt]="item">
           </div>
 
           <div class="delete" >
             <button mat-button (click)="deleteFile(item)"> <mat-icon>delete_forever</mat-icon></button>
           </div>
 
-          <!-- <mat-divider></mat-divider> -->
+          <ng-template *ngIf="uploading">
+            <mat-spinner [diameter]=50></mat-spinner>
+          </ng-template>
+
 
         </div>
       </div>

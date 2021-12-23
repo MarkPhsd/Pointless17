@@ -26,10 +26,10 @@ export class ItemSalesCardComponent implements OnChanges {
     this.refreshSales();
   }
 
-
   togglesShowAll() {
     this.showAll = !this.showAll;
   }
+
   refreshSales() {
 
     if (this.groupBy === 'items') {

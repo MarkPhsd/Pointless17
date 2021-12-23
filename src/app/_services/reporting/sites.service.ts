@@ -139,7 +139,10 @@ export class SitesService {
 
     if ( this.platformSevice.isApp() ) {
       site.url   = localStorage.getItem('storedApiUrl')
+      this.snackBar.open('site.url ' + site.url)
       localStorage.setItem("site.url", site.url)
+
+      this.snackBar.open(site.url, 'notificaton', {duration: 3000})
       console.log('setDefaultSite '           , site.url)
       console.log('data from set default site', site.url )
       return site
@@ -183,8 +186,10 @@ export class SitesService {
     localStorage.removeItem("site.state")//, site.phone), site.state)
     localStorage.removeItem("site.zip") //, site.phone), site.zip)
     localStorage.removeItem("site.phone") //, site.phone)
+
+    localStorage.removeItem('awsbucket')
     const site = await this.setDefaultSite();
-    console.log('clear assigned site', site)
+
 
   }
 
@@ -223,8 +228,6 @@ export class SitesService {
     const  cache = this.getCurrentCache();
 
     if (cache == null) {  return  { url: url, cacheMins: 0 }   }
-
-    // console.log('getCacheURI', `${url} url cacheMins: ${cache}`)/
 
     return { url: url, cacheMins: cache }
 

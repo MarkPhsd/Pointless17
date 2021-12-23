@@ -226,7 +226,6 @@ const routes: Routes = [
         { path: 'imagecapture', component: ImageCaptureComponent,data: { animation: 'isLeft'}},
         { path: 'review-edit', component: ReviewEditComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
 
-
         { path: 'cat-alternate', component: CategoriesAlternateComponent},
 
         //settings

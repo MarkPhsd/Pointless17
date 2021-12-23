@@ -1,0 +1,24 @@
+
+<mat-card class="mat-card">
+  <mat-card-content>
+    <div class="grid-flow">
+      <div>
+        <ng-content></ng-content>
+        </div>
+        <div >
+          <img  *ngIf="url"
+                loading   ="lazy"
+                draggable ="false"
+                [src]     ="url"
+                class     ="image"
+          >
+        </div>
+
+      <div>
+        {{menuItem?.retail | currency}}
+      </div>
+
+    </div>
+
+  </mat-card-content>
+</mat-card>

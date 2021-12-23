@@ -52,7 +52,7 @@
                         <div class="text">{{item.name  | truncateText: 15  }}</div>
                         <img  loading="lazy"
                               draggable="false"
-                              [src]="getCategorySource(item)"
+                              [src]="getItemSrc(item?.urlImageMain)"
                               (click)="listItems(item.id)"
                               class="grid-item"
                               alt="item">

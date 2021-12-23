@@ -10,6 +10,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -93,7 +94,6 @@ export class StrainProductEditComponent implements OnInit {
       if (this.product) {
         this.productForm.patchValue(this.product)
         this.urlImageMain = this.product.urlImageMain;
-        console.log('init form', this.product)
       }
     }
 
@@ -131,9 +131,14 @@ export class StrainProductEditComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     if (this.setValues())  {
       const product$ = this.menuService.saveProduct(site, this.product);
-      product$.subscribe(data => {
+      product$.pipe(switchMap(
+          data => {
+            this.product = data;
+            return this.itemTypeService.getItemType(site,this.product.prodModifierType)
+          }
+      )).subscribe(data => {
         this.notifyEvent('Item Updated', 'Success')
-        return true
+        this.itemType = data;
       })
     }
     return false
@@ -193,14 +198,6 @@ export class StrainProductEditComponent implements OnInit {
     if (this.id) {  this.updateItem(null); }
   };
 
-  // received_URLImageOther(event) {
-  //   let data = event
-  //   this.urlImageOther = data
-  //   if (this.product) {
-  //     // this.product.urlImageOther = this.urlImageOther
-  //   }
-  //   if (this.id) {  this.updateItem(null); }
-  // };
 
   removeItemFromArray(itemToRemove : string, arrayString : any): any {
     let images = '';

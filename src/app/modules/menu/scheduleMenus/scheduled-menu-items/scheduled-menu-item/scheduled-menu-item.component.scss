@@ -1,0 +1,46 @@
+.grid-flow-app {
+  display: grid;
+  grid-template-columns: 110px 45px 65px;
+  padding-left: 2px;
+  gap: 2px
+}
+
+.grid-flow {
+  display: grid;
+  grid-template-columns: 1fr 65px 55px;
+  padding: 2px;
+  gap: 1px
+}
+
+.mat-card {
+  max-height: 60px;
+  min-height: 60px;
+  height: 60px;
+  overflow: hidden;
+  padding: 1px
+}
+
+.image {
+  position: relative;
+  top: -10px;
+  height: 50px;
+  border-radius: 5px;
+  border-width: 2px;
+}
+
+
+// .card-click:
+
+
+
+// .card-click {
+//   margin-bottom: 5px;
+//   transition-timing-function: ease-in;
+//   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+// }
+
+// .card-click :hover {
+//   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+// }
+
+

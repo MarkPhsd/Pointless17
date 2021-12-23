@@ -12,37 +12,42 @@
       <div  class="grid-header-item transaction-data checmicals"
             >
             <app-progress-bar
-              *ngIf="order?.gramCount != 0"
-              [value]="order?.gramCount"
-              [percentage]="gramCountProgress">
+                *ngIf="order?.gramCount != 0"
+                [value]="order.gramCount"
+                [ratio]="28"
+                [percentage]="gramCountProgress">
                 Gram
             </app-progress-bar>
 
             <app-progress-bar
-              *ngIf="order?.concentrateCount != 0"
-              [value]="order?.concentrateCount"
-              [percentage]="concentrateCountProgress">
+                *ngIf="order?.concentrateCount != 0"
+                [value]="order.concentrateCount"
+                [ratio]="28"
+                [percentage]="concentrateCountProgress">
                 Concentrate
             </app-progress-bar>
 
             <app-progress-bar
-              *ngIf="order?.extractCount != 0"
-              [value]="order?.extractCount"
-              [percentage]="extractCountProgress">
+                *ngIf="order?.extractCount != 0"
+                [value]="order.extractCount"
+                [ratio]="28"
+                [percentage]="extractCountProgress">
                 Extract
             </app-progress-bar>
 
             <app-progress-bar
-              *ngIf="order?.liquidCount != 0"
-              [value]="order?.liquidCount"
-              [percentage]="liquidCountProgress">
+                *ngIf="order?.liquidCount != 0"
+                [value]="order.liquidCount"
+                [ratio]="28"
+                [percentage]="liquidCountProgress">
                 Liquid
             </app-progress-bar>
 
             <app-progress-bar
-              *ngIf="order?.seedCount != 0"
-              [value]="order?.seedCount"
-              [percentage]="seedCountProgress">
+                *ngIf="order?.seedCount != 0"
+                [value]="order.seedCount"
+                [ratio]="28"
+                [percentage]="seedCountProgress">
                 Seed
             </app-progress-bar>
 

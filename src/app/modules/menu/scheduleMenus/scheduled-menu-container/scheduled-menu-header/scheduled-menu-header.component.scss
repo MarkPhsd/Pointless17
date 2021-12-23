@@ -1,0 +1,77 @@
+@import "/src/mixins.scss";
+
+.grid-flow {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(300, 1fr) );
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  }
+}
+
+.header-grid-app {
+
+  display: grid;
+  grid-template-columns: 100px 1fr 200px ;
+  gap: 10px;
+
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  }
+
+}
+
+.header-grid {
+  display: grid;
+  grid-template-columns: 125px 225px ;
+  gap: 10px;
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  }
+}
+
+.grid-item-image {
+  object-fit: cover;
+  width: 100%;
+  // height: 300px;
+  border-radius: 5px;
+}
+
+.grid-item-image-app {
+  object-fit: cover;
+  width: 100%;
+  // height: 45px;
+  // max-height: 45px;
+  border-radius: 5px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 55px 245px;
+  gap: 10px;
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  }
+}
+
+.grid-text {
+  float: right;
+}
+
+button {
+  margin-top: 15px;
+}

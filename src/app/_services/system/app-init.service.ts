@@ -54,7 +54,7 @@ export class AppInitService  {
   async init() {
     console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
-    console.log('app initlaizing procedure', this.apiUrl, this.isApp());
+    // console.log('app initlaizing procedure', this.apiUrl, this.isApp());
 
     if ( this.apiUrl === undefined && this.isApp() ){
       this.useAppGate = false
@@ -62,11 +62,12 @@ export class AppInitService  {
       return
     }
 
-    if ( this.platFormService.webMode ) {
+    if ( this.platFormService.webMode  ) {
           const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
           if (data) {
             this.apiUrl     = data.apiUrl
             if (!data.apiUrl) {
+              this._snackbar.open('Using demo data', 'ALert', {duration: 3000} )
               this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
               data.apiUrl     =  "https://ccsposdemo.ddns.net:4443/api"
             }
@@ -76,7 +77,10 @@ export class AppInitService  {
             this.company    = data.company
             this.appConfig  = data ;
           }
+
           if (!data ) {
+            console.log('using Demo Data')
+            this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
             this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
             this.useAppGate = false;
             this.logo       = "http://cafecartel.com/temp/logo.png";
@@ -93,17 +97,19 @@ export class AppInitService  {
   //matching code in app-init-service.
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
-    console.log('getLocalAPIURL', result)
+    // console.log('getLocalAPIURL', result)
     const site = {} as ISite;
     site.url = result
     if (result != null && result != '' ) {
       return result;
     }
 
-    if (this.isApp() ) {
+    if (this.isApp() && !result ) {
+       this._snackbar.open('Using demo data  - getLocalApiUrl', 'Alert', {duration: 3000} )
       localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
       return localStorage.getItem('storedApiUrl')
     }
+
   }
 
   setAPIUrl(apiUrl): string {

@@ -100,42 +100,49 @@
             </div>
           </div>
 
-          <div class="grid-item">
+          <div class="grid-item" >
 
-            <div class="header">
-              <h4><mat-icon>price_change</mat-icon>Prices</h4>
-            </div>
+             <div *ngIf="itemType && itemType.useType === 'product'">
+                <div class="header">
+                  <h4><mat-icon>price_change</mat-icon>Prices</h4>
+                </div>
 
-            <div class="grid-container-small">
-              <div *ngIf="itemType && itemType.useType != 'category'">
-                <app-price-category-select
-                  [itemType]        ="itemType"
-                  [priceCategoryID] ="product.priceCategory"
-                  [inputForm]       ="productForm" >
-                </app-price-category-select>
-              </div>
-            </div>
+                <div class="grid-container-small">
+                  <div>
+                    <app-price-category-select
+                      [itemType]        ="itemType"
+                      [priceCategoryID] ="product.priceCategory"
+                      [inputForm]       ="productForm" >
+                    </app-price-category-select>
+                  </div>
+               </div>
+             </div>
 
-            <div class="header">
-              <h4><mat-icon>image</mat-icon>Images</h4>
-            </div>
+
+
             <div>
+              <div class="header">
+                  <h4><mat-icon>image</mat-icon>Images</h4>
+                </div>
                 <app-widget-uploader
                     [(fileNames)]="urlImageMain"
                     (messageOut) ="received_URLMainImage($event)"
                     (imageUrl)   ="updateUrlImageMain($event)">
                 </app-widget-uploader>
             </div>
+
           </div>
 
           <div class="grid-item">
+
             <div class="header">
               <h4> <mat-icon>list</mat-icon>  {{ itemType.name }}</h4>
             </div>
+
             <div *ngIf="itemType  && (
-                 itemType.name   === 'wine'
-              || itemType.name   === 'alcohol'
-              || itemType.name   === 'beer')">
+                     itemType.name   === 'wine'
+                  || itemType.name   === 'alcohol'
+                  || itemType.name   === 'beer')">
             </div>
 
             <div *ngIf="itemType  && (itemType.name === 'grocery')">
@@ -143,13 +150,20 @@
             </div>
 
             <div *ngIf="itemType  && (itemType.name === 'tobacco' )">
-              <!-- //age
-              //type pilsner white red etc. -->
+
             </div>
 
-            <div *ngIf="itemType  && (itemType.name === 'discount' )">
-              <!-- //type money off, percentage etc. -->
+            <div *ngIf="itemType  && ( itemType.type === 'discounts' )">
+              <div class="header">
+                <mat-icon>coupon</mat-icon>
+              </div>
+              <app-value-fields
+                    [inputForm]="productForm"
+                    [fieldName]="'style'">
+                    Value
+              </app-value-fields>
             </div>
+
 
             <div *ngIf="itemType  && (itemType.name === 'Generic')">
               <!-- //prompt modifier type
@@ -179,11 +193,16 @@
 
             </div>
 
-            <app-value-fields
-                  [inputForm]="productForm"
-                  [fieldName]="'gramCount'">
-                  Per Unit Quantity
+            <div *ngIf="itemType && (
+                  itemType.useType.toLowerCase() == 'product'
+                  )">
+
+              <app-value-fields
+              [inputForm]="productForm"
+              [fieldName]="'gramCount'">
+              Per Unit Quantity
             </app-value-fields>
+          </div>
 
           </div>
 

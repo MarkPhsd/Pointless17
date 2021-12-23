@@ -1,0 +1,49 @@
+  <mat-card >
+    <mat-card-subtitle>
+
+      <img *ngIf="url && !isApp"
+            loading="lazy"
+            draggable="false"
+            [src]="url"
+            [class]="gridItemImage"
+      />
+
+      <div class="grid-container">
+        <div  [class]="gridHeaderApp">
+
+          <div *ngIf="url && isApp">
+            <img
+                  loading="lazy"
+                  draggable="false"
+                  [src]="url"
+                  [class]="gridItemImage"
+            />
+          </div>
+
+          <div>
+             <button  *ngIf="!isApp" mat-button color='warn' (click)="toggleMenuItems()">
+             <mat-icon>{{iconName}}</mat-icon>{{textShow}}</button>
+          </div>
+
+          <div>
+            <h4>
+              {{name  | truncateText: 25  }}
+            </h4>
+          </div>
+
+        </div>
+      </div>
+
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <div
+          *ngIf="description && !isApp"
+          class="text"
+          [innerHTML]="description" >
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+

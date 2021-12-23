@@ -53,7 +53,7 @@ export class AuthenticationService {
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
-      console.log('apiUrl in AUthentication', this.apiUrl)
+      // console.log('apiUrl in AUthentication', this.apiUrl)
 
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
       const user  = JSON.parse(localStorage.getItem('user')) as IUser;

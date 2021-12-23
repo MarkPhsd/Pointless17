@@ -1,9 +1,8 @@
 
-import { ChangeDetectionStrategy, Component, ElementRef,AfterViewInit,
-  HostBinding, HostListener, Input, OnInit, EventEmitter,Output,
+import {  Component, ElementRef,AfterViewInit,
+   OnInit, EventEmitter,Output,
   ViewChild,
   ChangeDetectorRef} from '@angular/core';
-
 import { IProductCategory }  from 'src/app/_interfaces';
 import { AWSBucketService, IProductSearchResults, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
@@ -11,14 +10,13 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { ElectronService } from 'ngx-electron';
-import { Platform } from '@ionic/angular';
-
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 const { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -180,26 +178,11 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
                 private awsBucket:       AWSBucketService,
                 private router:          Router,
                 private siteService:     SitesService,
-                private el:              ElementRef,
-                private cdRef:           ChangeDetectorRef,
-                private electronService: ElectronService,
+                private platFormService :PlatformService,
    )
   {
 
-    if (this.electronService) {
-      if (this.electronService.remote != null)
-      {
-         this.appName = 'electron '
-         this.isApp = true
-      } else
-      {
-        this.isApp = false
-        this.platForm =  this.getPlatForm();
-        if (this.platForm == 'android') {
-          this.isApp = true;
-        }
-      }
-    }
+    this.isApp = this.platFormService.isApp();
     this.section = 1
     this.href = this.router.url;
     this.initClass('constructor');
@@ -272,9 +255,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   async getBucket() {
     this.bucket =   await this.awsBucket.awsBucket();
-    if (this.bucket == null) {
-      this.bucket = 'naturesherbs'
-    }
   }
 
   refreshMouseMove(pageX: any) {
@@ -294,9 +274,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.router.navigate(["/menuitems-infinite/", {categoryID:id}]);
   }
 
-  getCategorySource(item: IProductCategory) {
-    return this.getItemSrc(item.urlImageMain)
-  }
+  // getImageSource(imageName: string) {
+  //   return this.getItemSrc(imageName)
+  // }
 
   getItemSrc(nameArray: string) {
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
@@ -309,6 +289,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     productSearchModel.pageNumber = 1
     this.menuService.updateMeunuItemData(productSearchModel)
     return productSearchModel
+  }
+
+  initSearchModel(): ProductSearchModel {
+    let searchModel        = {} as ProductSearchModel;
+    searchModel = this.applyBrandSearchModel(searchModel)
+    return searchModel
   }
 
   async nextPage() {
@@ -400,11 +386,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       return this._searchItems$
     }
 
-    initSearchModel(): ProductSearchModel {
-      let searchModel        = {} as ProductSearchModel;
-      searchModel = this.applyBrandSearchModel(searchModel)
-      return searchModel
-    }
+
 
     applyBrandSearchModel(searchModel: ProductSearchModel) : ProductSearchModel {
       if (this.itemName.value) {

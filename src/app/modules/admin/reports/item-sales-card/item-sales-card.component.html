@@ -29,14 +29,15 @@
           <div class="totals">#         </div>
         </div>
 
-        <div class="grid-body"
-             *ngFor="let sale of sales; let i = index;">
-          <div *ngIf="i < 11 || showAll" >
-            <div class="product-name">{{sale.productName }}                  </div>
+        <!-- <div class="grid-body"
+             *ngFor="let sale of sales; let i = index;"> -->
+        <div  class="grid-body"
+              *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
+          <div >
+            <div class="product-name">{{sale.productName }}      </div>
             <div class="totals">{{sale.itemTotal | currency }}   </div>
             <div class="totals">{{sale.quantity }}               </div>
           </div>
-
         </div>
 
         <div class="margin-divider">

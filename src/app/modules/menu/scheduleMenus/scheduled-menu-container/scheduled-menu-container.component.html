@@ -1,0 +1,24 @@
+<div *ngIf="item">
+
+  <scheduled-menu-header
+    [name]="item.name"
+    [description]="item.description"
+    [url]="url"
+    [isApp]="isApp"
+    (outPutToggleView)="toggleItems()">
+  </scheduled-menu-header>
+
+  <div>
+    <mat-card class="items-container">
+      <mat-card-content>
+        <scheduled-menu-items
+          [schedule]="item"
+          [showAllFlag]="showAllFlag"
+        ></scheduled-menu-items>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+
+

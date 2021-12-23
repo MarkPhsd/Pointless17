@@ -81,7 +81,6 @@ constructor(private menuService: MenuService,
             private router: Router,
             public route: ActivatedRoute,
             private siteService: SitesService,
-            private renderer: Renderer2,
             private toolbarServiceUI : ToolBarUIService,
             private electronService: ElectronService,
     )
@@ -112,6 +111,8 @@ constructor(private menuService: MenuService,
     this.brandID     = model.brandID;
     this.typeID      = model.itemTypeID
     this.productName = model.name
+
+    if (!model.pageNumber) { model.pageNumber = 1}
     this.currentPage = model.pageNumber
 
     let  categoryResults = ''
@@ -235,8 +236,8 @@ async addToList(pageSize: number, pageNumber: number)  {
       }
     }
 
-    if (!pageNumber) {return}
-    if (!pageSize) {return}
+    if (!pageNumber || pageNumber == null) {pageNumber = 1}
+    if (!pageSize || pageSize == null)   {pageSize = 25}
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize

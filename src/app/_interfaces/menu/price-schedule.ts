@@ -1,5 +1,6 @@
 import { Type } from "@angular/core";
 import { IPagedList } from "src/app/_services/system/paging.service";
+import { IMenuItem } from "./menu-products";
 
 export interface PSMenuGroupPaged {
   results     : PriceMenuGroup[];
@@ -53,6 +54,8 @@ export interface IPriceSearchModel {
   timeFrameAlways:    boolean;
   allDates:           boolean;
   active:             boolean;
+  description      :  string;
+  image            :  string;
   name:               string;
   created:            string;
   lastEdited:         string;
@@ -60,6 +63,7 @@ export interface IPriceSearchModel {
   value:              number;
   pageNumber:         number;
   pageSize:           number;
+  currentPage       : number;
 }
 
 export interface IPriceSchedule {
@@ -103,6 +107,7 @@ export interface DiscountInfo {
   typeID?:  number;
   privateScheduleID: number;
   sort:     number;
+  menuItem: IMenuItem;
 }
 
 export enum AndOr {
