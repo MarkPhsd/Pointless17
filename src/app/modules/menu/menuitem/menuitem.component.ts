@@ -100,20 +100,9 @@ export class MenuitemComponent implements OnInit,OnDestroy {
 
     async addItemToOrder() {
       if (this.order) {
+        console.log('posOrderItemService addItemToOrder line 103')
         this.orderMethodsService.addItemToOrder(this.order, this.menuItem, this.quantity)
       }
-      // if (this.order) {
-      //   const site = this.siteService.getAssignedSite()
-      //   const newItem = { orderID: this.order.id, quantity: 1, menuItem: this.menuItem }
-      //   await this.posOrderItemService.postItem(site, newItem).subscribe(data => {
-      //     console.log(data)
-      //     if (data.order) {
-      //       this.orderService.updateOrderSubscription(data.order)
-      //     } else {
-      //       this.notifyEvent('Error occured, this item was not added.', 'Alert')
-      //     }
-      //   })
-      // }
     }
 
     onCancel() {

@@ -4,7 +4,8 @@
        fxLayoutAlign="space-around center">
     <div fxLayout="column"
          fxLayoutAlign="start center">
-      <img   [src]="imageUrl" id="product-image"  (click)="menuItemAction()"/>
+         <img *ngIf="isApp"  [src]="imageUrl" id="product-image"   (click)="menuItemAction(true)"/>
+         <img *ngIf="!isApp"    [src]="imageUrl" id="product-image"  (click)="menuItemAction(false)"/>
     </div>
   </div>
 
@@ -24,14 +25,28 @@
   <div fxLayout="row"
        fxLayoutAlign="center" >
 
-    <div id="price">{{menuItem.retail | currency}}</div>
+      <div *ngIf="menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts'">
+        <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
+                    menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
+            {{menuItem.itemType.name }} - {{ menuItem.cannabisType }}
+        </div>
+        <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
+                    menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
+            {{menuItem.itemType.name }} - {{menuItem.cannabisType | currency}}
+        </div>
+      </div>
+
+
+      <div *ngIf="menuItem && (!menuItem.itemType || menuItem.itemType.type != 'discounts')"
+            id="price">{{menuItem.retail | currency}}
+      </div>
 
     <button
           *ngIf="isApp"
           mat-button
           class="add-button"
           color="primary"
-          (click)="menuItemAction()" >
+          (click)="menuItemAction(false)" >
       <mat-icon>open_in_new</mat-icon>
       View
     </button>
@@ -41,7 +56,7 @@
           mat-button
           class="add-button"
           color="primary"
-          (click)="menuItemAction()" >
+          (click)="menuItemAction(true)" >
       <mat-icon>add</mat-icon>
       Add
     </button>

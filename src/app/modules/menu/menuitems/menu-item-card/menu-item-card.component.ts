@@ -103,8 +103,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     }
   }
 
-  menuItemAction() {
-   this.orderMethodService.menuItemAction(this.order,this.menuItem)
+  menuItemAction(add: boolean) {
+   this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
   }
 
 

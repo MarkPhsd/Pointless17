@@ -27,7 +27,7 @@ export class ItemTypeEditorComponent   {
   inputForm         : FormGroup;
   itemType$         : Observable<IItemType>;
   selectedItemsCount: number;
-  itemType_PackageTypes = this.itemTypeService.packageTye;
+  itemType_PackageTypes = this.itemTypeService.packageType;
   itemType_UseTypes  = this.itemTypeService.useType;
   itemType_Types     = this.itemTypeService.type;
 

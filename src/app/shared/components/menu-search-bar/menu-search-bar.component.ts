@@ -1,18 +1,17 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, ChangeDetectorRef,ViewChildren, QueryList } from '@angular/core';
+import { Component,  Inject,  Input, Output, OnInit,
+  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IProductSearchResults, IProductSearchResultsPaged } from 'src/app/_services/menu/menu.service';
+import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, IPOSOrder, IProduct, IUserProfile } from 'src/app/_interfaces';
-import { Capacitor, Plugins, KeyboardInfo } from '@capacitor/core';
+import { Capacitor, Plugins,  } from '@capacitor/core';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 
@@ -55,15 +54,18 @@ productTypes$    : Observable<any[]>;
 
 //search form filters
 searchForm       : FormGroup;
-categoryID       : any;
+categoryID       : number;
 productTypeSearch: any;
-productTypeID    : any;
-typeID           : any;
-brandID          : any;
+productTypeID    : number;
+typeID           : number;
+brandID          : number;
 name             : any;
 
-urlPath          :string;
+type    : any;
+category: any;
+brand   : any;
 
+urlPath          :string;
 id               : number;
 product          : IProduct
 
@@ -89,17 +91,17 @@ toggleButton        = 'toggle-buttons-wide';
 
 _order              :   Subscription;
 order               :   IPOSOrder;
-clientSearchModel = {} as ClientSearchModel;
+clientSearchModel   = {} as ClientSearchModel;
 
-endOfRecords            = false;
-loading                 = false;
-appName = ''
-isApp   = false;
-value: any;
+endOfRecords        = false;
+loading             = false;
+appName             = ''
+isApp               = false;
+value               : any;
 clientSearchResults$: Observable<ClientSearchResults>;
-itemsPerPage: number;
-totalRecords: number;
-pagingInfo:   IPagedList;
+itemsPerPage        : number;
+totalRecords        : number;
+pagingInfo          : IPagedList;
 
 itemNameInput: string;
 
@@ -116,9 +118,8 @@ constructor(
     private itemTypeService:        ItemTypeService,
     private contactsService:        ContactsService,
     private awsService     :        AWSBucketService,
-    private router:                 Router,
+    private router         :        Router,
     private orderService   :        OrdersService,
-    private posOrderItemService   : POSOrderItemServiceService,
   )
   {
     this.initForm();
@@ -148,11 +149,26 @@ constructor(
   }
 
   initForm() {
+
+    let categoryID = 0
+    let brandID = 0
+    let typeSearchID = 0
+
+    if (this.category) {
+      categoryID =this.category.id;
+    }
+    if (this.brand) {
+      brandID =this.brand.id;
+    }
+    if (this.productTypeSearch) {
+      typeSearchID =this.productTypeSearch.id;
+    }
+
     this.searchForm   = this.fb.group( {
       itemName          : [''],
-      productTypeSearch : [this.productTypeSearch],
-      brandID           : [this.brandID],
-      categoryID        : [this.categoryID],
+      productTypeSearch : [typeSearchID],
+      brandID           : [brandID],
+      categoryID        : [categoryID],
     })
   }
 
@@ -195,45 +211,42 @@ constructor(
 
   clearAll(){
     this.initProductSearchModel();
-    this.input.nativeElement.value = ''
+    this.input.nativeElement.value = '';
     this.input.nativeElement.focus();
     //set the toggle buttons as well:
-    this.categoryID = 0
-    this.brandID = 0
-    this.typeID = 0
+    this.categoryID  = 0;
+    this.brandID     = 0;
+    this.typeID      = 0;
     Keyboard.hide();
   }
 
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
-  assignCategory(item) {
+  assignCategory(id: number) {
     let productSearchModel              = {} as ProductSearchModel;
-    productSearchModel.categoryID       = item.id.toString();
-    productSearchModel.categoryName     = item.name.toString();
+    productSearchModel.categoryID       = id.toString();
     this.applyProductSearchModel(productSearchModel);
     this.refreshSearch();
   }
 
-  assignItemTypeID(item) {
-    let productSearchModel              = {} as ProductSearchModel;
-    productSearchModel.itemTypeID       = item.id.toString();
-    productSearchModel.itemTypeName     = item.name.toString();
-    this.applyProductSearchModel(productSearchModel);
-    this.refreshSearch();
-  }
-
-  assignDepartmentID(item) {
+  assignItemTypeID(id: number) {
     let productSearchModel                = {} as ProductSearchModel;
-    productSearchModel.departmentID       = item.id.toString();
-    productSearchModel.departmentName     = item.name.toString();
+    productSearchModel.itemTypeID         = id.toString();
+    this.applyProductSearchModel(productSearchModel);
+    this.refreshSearch();
+  }
+
+  assignDepartmentID(id: number) {
+    let productSearchModel                = {} as ProductSearchModel;
+    productSearchModel.departmentID       = id.toString();
     this.applyProductSearchModel(productSearchModel);
     this.refreshSearch();
   }
 
   initProductSearchModel() {
-    let productSearchModel        = {} as ProductSearchModel;
-    productSearchModel = this.applyProductSearchModel(productSearchModel)
+    let productSearchModel   = {} as ProductSearchModel;
+    productSearchModel       = this.applyProductSearchModel(productSearchModel)
     return productSearchModel
   }
 
@@ -244,25 +257,25 @@ constructor(
       productSearchModel.useNameInAllFields = true
     }
 
-    if (this.categoryID )               {
-      productSearchModel.categoryID       = this.categoryID.id.toString();
-      productSearchModel.categoryName     = this.categoryID.name.toString();
+    if (this.category )               {
+      productSearchModel.categoryID       = this.category.id.toString();
+      productSearchModel.categoryName     = this.category.name.toString();
     }
 
     if (this.productTypeSearch)         {
-      productSearchModel.itemTypeID      = this.productTypeSearch.id.toString();
+      productSearchModel.itemTypeID       = this.productTypeSearch.id.toString();
       productSearchModel.itemTypeName     = this.productTypeSearch.name.toString();
     }
 
-    if (this.brandID)                   {
-      productSearchModel.brandID          = this.brandID.id.toString();
-      productSearchModel.brandName        = this.brandID.company.toString();
+    if (this.brand)                   {
+      productSearchModel.brandID          = this.brand.id.toString();
+      productSearchModel.brandName        = this.brand.company.toString();
     }
 
     productSearchModel.barcode    = productSearchModel.name
     productSearchModel.pageSize   = this.pageSize
     productSearchModel.pageNumber = this.currentPage
-
+    console.log(productSearchModel)
     this.menuService.updateMeunuItemData(productSearchModel)
     return productSearchModel
 
@@ -270,13 +283,31 @@ constructor(
 
   //this is called from subject rxjs obversablve above constructor.
   refreshSearch(): Observable<IProductSearchResults[]> {
-    this.currentPage         = 1
-    const site               = this.siteService.getAssignedSite()
-    const searchModel        = this.initProductSearchModel();
-    this.startRow            = 1;
-    this.endRow              = this.pageSize;
-    this.listItems(searchModel)
-    return this._searchItems$
+    try {
+      this.currentPage         = 1
+      const site               = this.siteService.getAssignedSite()
+      const searchModel        = this.initProductSearchModel();
+      this.startRow            = 1;
+      this.endRow              = this.pageSize;
+      this.listItems(searchModel)
+      return this._searchItems$
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  refreshCategorySearch(item: any) {
+    this.category = item
+    console.log(this.category)
+    this.refreshSearch()
+  }
+  refreshBrandSearch(item: any) {
+    this.brand = item
+    this.refreshSearch()
+  }
+  refreshTypeSearch(item: any) {
+    this.type = item
+    this.refreshSearch()
   }
 
   listItems(model: ProductSearchModel) {

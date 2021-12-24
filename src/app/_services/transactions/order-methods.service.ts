@@ -43,6 +43,9 @@ export class OrderMethodsService {
 
   private _assingedPOSItem = new BehaviorSubject<PosOrderItem>(null);
   public  assignedPOSItem$ = this._assingedPOSItem.asObservable();
+  private assignPOSItem : PosOrderItem;
+
+  public get assignedPOSItem() {return this.assignPOSItem }
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
@@ -63,7 +66,8 @@ export class OrderMethodsService {
   }
 
   updateAssignedItem(item: PosOrderItem) {
-    //  console.log('what next')
+    this.assignPOSItem = item;
+    // this.processItem = null;
     this._assingedPOSItem.next(item)
   }
 
@@ -102,41 +106,45 @@ export class OrderMethodsService {
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
+
     const site          = this.siteService.getAssignedSite()
     if (!order)         { order = this.order }
     const result        = await this.doesOrderExist(site);
 
-    this.assignedPOSItem$.subscribe(data => {
+    let passAlongItem
+    if (this.assignedPOSItem) {
+      passAlongItem  = this.assignedPOSItem;
+    }
 
-      const passAlongItem  = data;
-      if (!result) { return }
-      if (!order) {order = this.order}
-      if (order) {
+    if (!result) { return }
+    if (!order) {order = this.order}
+    if (order) {
 
-        if (!item.itemType) {
-          this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
-          return
+    if (!item.itemType) {
+      this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
+      return
+    }
+
+    const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
+
+    console.log('addItemToOrder item', item, 'order', order, )
+    const itemResult$ = this.posOrderItemService.postItem(site, newItem)
+
+    itemResult$.subscribe(data => {
+          if (data && data.resultErrorDescription) {
+            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+            return
+          }
+          if (data.order) {
+            this.orderService.updateOrderSubscription(data.order)
+            this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
+          } else {
+            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
+          }
         }
+      )
+    }
 
-        const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
-        const itemResult$ = this.posOrderItemService.postItem(site, newItem)
-
-        itemResult$.subscribe(data => {
-              if (data && data.resultErrorDescription) {
-                this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-                return
-              }
-              if (data.order) {
-                this.orderService.updateOrderSubscription(data.order)
-                this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
-              } else {
-                this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-              }
-            }
-          )
-        }
-      }
-    )
   }
 
   async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
@@ -167,13 +175,13 @@ export class OrderMethodsService {
     }
   }
 
-  menuItemAction(order: IPOSOrder, item: IMenuItem) {
+  menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const isApp = (this.platFormService.isApp());
-    if (isApp) {
-      this.addItemToOrder(this.order, item, 1)
+    if (add) {
+      this.addItemToOrder(order, item, 1)
       return
     }
-    if (!isApp) {
+    if (!add) {
       this.listItem(item.id);
     }
   }

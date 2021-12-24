@@ -70,7 +70,7 @@ export class PollingService   {
             catchError(() => {
               // <-- start timer again on error
               this._poll.next(false)
-              console.log('Subscription failed');
+              // console.log('Subscription failed');
               this.timer$.next(POLLING_INTERVAL);
               return NEVER; // <-- don't forward errors
             })
@@ -80,7 +80,7 @@ export class PollingService   {
       )
       .subscribe({
         next: (data: any) => {
-          console.log('Subscription next');
+          // console.log('Subscription next');
           this._poll.next(true)
         },
         complete: () => console.log('Subscription complete')

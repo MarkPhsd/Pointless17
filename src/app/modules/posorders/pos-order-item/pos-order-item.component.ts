@@ -136,7 +136,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
                 private menuService        : MenuService,
                 private posOrderItemService: POSOrderItemServiceService,
                 private promptGroupservice : PromptGroupService,
-                private orderMethod        : OrderMethodsService,
                 private uiSettingService   : UISettingsService,
               )
   {
@@ -163,19 +162,15 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
   }
 
-
   ngAfterViewInit() {
     this.resizeCheck();
   }
 
   assignItem() {
     if (this.orderItem && this.assignedPOSItem) {
-      // console.log('orderitem', this.orderItem);
-      // console.log('assignedPOSItem', this.assignedPOSItem);
-
       if (this.orderItem.id && this.assignedPOSItem.id) {
         if (this.orderItem.id == this.assignedPOSItem.id) {
-          console.log('this is the same item so clear')
+          // console.log('this is the same item so clear')
           this.orderMethodsService.updateAssignedItem(null)
           return
         }
@@ -212,8 +207,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     if (this.productnameClass != 'product-name') {
       this.productnameClass == 'product-name-alt'
     }
-    this.orderMethodsService.updateAssignedItem(this.orderItem)
-    // this.orderM
+    // this.orderMethodsService.updateAssignedItem(this.orderItem)
   }
 
   editProperties(editField: string, instructions: string) {
@@ -299,9 +293,9 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   async addItemToOrder() {
+    console.log('add Item to Order')
     if (this.menuItem) {
       const quantity  =  Number(1)
-      // console.log('addItem To Order')
       this.orderMethodsService.addItemToOrder(this.order, this.menuItem, quantity)
     }
   }
@@ -392,57 +386,56 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   swipeOutItem(){
-    console.log('swpite out item')
     this.cancelItem(this.index,  this.orderItem)
   }
 
   async editPrompt() {
     const site = this.siteService.getAssignedSite();
     if (this.orderItem) {
-
       const item   = await this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id).pipe().toPromise()
       const prompt = await this.promptGroupservice.getPrompt(site, item.promptGroupID).pipe().toPromise();
-      this.orderMethod.openPromptWalkThroughWithItem(prompt, item)
+      this.orderMethodsService.openPromptWalkThroughWithItem(prompt, item)
     }
   }
 
-  // this.http.get("https://swapi.co/api/people/")
-  // .pipe(
-  //   mergeMap(persons => {
-  //     const home = persons.results.map(person => this.http.get(person.homeworld))
-  //     return forkJoin(...home);
-  //   })
-  // )
-  // .subscribe(home => {
-  //   console.log('home', home)
-  // })
-
-  // applyChoices() {
-  //   if (this.orderPromptGroup) {
-  //     const site = this.siteService.getAssignedSite();
-  //     this.posOrderItemService.postPromptItems(site, this.orderPromptGroup).pipe(
-  //           switchMap( data  => {
-  //             return  this.orderService.getOrder(site, data.orderID.toString())
-  //           }
-  //         )
-  //       ).subscribe(data => {
-  //         this.orderService.updateOrderSubscription(data)
-  //     })
-  //   }
-  // }
-
-        // this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id)
-      //   .pipe(
-      //     switchMap( item  => {
-      //       const prompt = this.promptGroupservice.getPrompt(site, item.id).pipe(
-      //           switchMap( prompt => {
-      //             return forkJoin(...prompt)
-      //         })
-      //       )
-      //     }
-      //   )
-      // ).subscribe(data => {
-      //   this.orderMethod.openPromptWalkThroughWithItem(data, item)
-      //   console.log(data)
-      // })
 }
+
+// this.http.get("https://swapi.co/api/people/")
+// .pipe(
+//   mergeMap(persons => {
+//     const home = persons.results.map(person => this.http.get(person.homeworld))
+//     return forkJoin(...home);
+//   })
+// )
+// .subscribe(home => {
+//   console.log('home', home)
+// })
+
+// applyChoices() {
+//   if (this.orderPromptGroup) {
+//     const site = this.siteService.getAssignedSite();
+//     this.posOrderItemService.postPromptItems(site, this.orderPromptGroup).pipe(
+//           switchMap( data  => {
+//             return  this.orderService.getOrder(site, data.orderID.toString())
+//           }
+//         )
+//       ).subscribe(data => {
+//         this.orderService.updateOrderSubscription(data)
+//     })
+//   }
+// }
+
+      // this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id)
+    //   .pipe(
+    //     switchMap( item  => {
+    //       const prompt = this.promptGroupservice.getPrompt(site, item.id).pipe(
+    //           switchMap( prompt => {
+    //             return forkJoin(...prompt)
+    //         })
+    //       )
+    //     }
+    //   )
+    // ).subscribe(data => {
+    //   this.orderMethod.openPromptWalkThroughWithItem(data, item)
+    //   console.log(data)
+    // })

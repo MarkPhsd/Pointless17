@@ -40,8 +40,8 @@
           </div>
 
           <div *ngIf="!smallDevice" id="location" >
-            <div class="site-name" *ngIf="site">
-              <h2 > {{ site.name  }} </h2>
+            <div class="site-name" *ngIf="site && site.name">
+              <h2 > {{ site.name.toUpperCase()  }} </h2>
             </div>
           </div>
 
@@ -82,14 +82,14 @@
               fxLayoutAlign="center center"
             >
               <li *ngIf="employeeName">
-                {{employeeName | truncateText : 8}}
+                {{employeeName.toUpperCase() | truncateText : 8}}
               </li>
 
               <li *ngIf="!smallDevice">
                 <div class="pos-name"
-                    *ngIf="(orderService.posName && showSearchForm) "
+                    *ngIf="(orderService && orderService.posName && showSearchForm) "
                     id="pos-name">
-                  <h2 > | POS {{ orderService.posName  }} | </h2>
+                  <h2 > | POS {{ orderService?.posName.toUpperCase()  }} | </h2>
                 </div>
               </li>
 

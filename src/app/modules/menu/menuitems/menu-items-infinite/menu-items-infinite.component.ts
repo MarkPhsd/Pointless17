@@ -160,7 +160,7 @@ constructor(private menuService: MenuService,
 async ngOnInit()  {
   this.value      = 1;
   this.bucketName =   await this.awsBucketService.awsBucket();
-  console.log('buck name menu items infinit', this.bucketName )
+  // console.log('buck name menu items infinit', this.bucketName )
   this.initOrderBarSubscription()
   this.setItemsPerPage();
   await this.nextPage();
@@ -219,7 +219,10 @@ scrollDown() {
 
 async addToList(pageSize: number, pageNumber: number)  {
 
-    const model = this.productSearchModelData
+    let model = this.productSearchModelData
+
+    if (!model) { model = {} as ProductSearchModel }
+
     if (!this.productSearchModelData) {
       const model = {} as ProductSearchModel;
       if (this.categoryID) {
@@ -315,7 +318,7 @@ getItemSrc(item:IMenuItem) {
     const threshold = 150;
     const position = window.scrollY + window.innerHeight; // <- Measure position differently
     const height = document.body.scrollHeight; // <- Measure height differently
-    console.log('isUserNearBottom' ,  position > height - threshold)
+    // console.log('isUserNearBottom' ,  position > height - threshold)
     return position > height - threshold;
   }
 

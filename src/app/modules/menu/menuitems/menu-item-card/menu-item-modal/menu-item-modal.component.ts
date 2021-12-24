@@ -13,6 +13,7 @@ import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-menu-item-modal',
@@ -53,8 +54,7 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
         public gallery            : Gallery,
         private siteService       : SitesService,
         private brandService      : ClientTableService,
-        private posOrderItemService: POSOrderItemServiceService,
-
+        private orderMethodsService: OrderMethodsService,
         private dialogRef         : MatDialogRef<MenuItemModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
        )
@@ -104,12 +104,9 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
   async addItemToOrder() {
     if (this.order) {
       const site = this.siteService.getAssignedSite()
-
       const newItem = { orderID: this.order.id, quantity: 1, menuItem: this.menuItem }
-      //!!! TestAddItemToOrder
-      await this.posOrderItemService.postItem(site, newItem).subscribe(data => {
-        this.orderService.updateOrderSubscription(data.order)
-      })
+      console.log('posOrderItemService addItemTo Order Menu Item Modal')
+      await  this.orderMethodsService.addItemToOrder(this.order, this.menuItem, 1)
     }
   }
 

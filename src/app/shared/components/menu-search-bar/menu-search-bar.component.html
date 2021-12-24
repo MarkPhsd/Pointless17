@@ -34,11 +34,7 @@
               (click)="clearAll()">
               Reset<mat-icon>reset</mat-icon></button>
     </div>
-    <!-- <div >
-      <button mat-button
-              (click)="clearAll()">
-              <mat-icon>refresh</mat-icon></button>
-    </div> -->
+
 
   </div>
 
@@ -59,8 +55,6 @@
           <mat-button-toggle-group
                                   name         = "type"
                                   aria-label   = "Font Style"
-                                  [(ngModel)]  = "categoryID"
-                                  (change)     = "refreshSearch()"
                                   vertical
               >
             <mat-button-toggle class="toggle-buttons"
@@ -72,6 +66,7 @@
                                 class="toggle-buttons"
                                 type="button"
                                 [value]="item"
+                                (tapClick)     = "refreshCategorySearch(item)"
                                 *ngFor="let item of list" >
               {{item.name | truncateText : 21}}
             </mat-button-toggle>
@@ -95,8 +90,6 @@
           <mat-button-toggle-group
                                   name="type"
                                   aria-label="Font Style"
-                                  [(ngModel)]  = "brandID"
-                                  (change)="refreshSearch()"
                                   vertical
               >
             <mat-button-toggle class="toggle-buttons"
@@ -108,6 +101,7 @@
                                 class="toggle-buttons"
                                 type="button"
                                 [value]="item"
+                                (tapClick)     = "refreshCategorySearch(item)"
                                 *ngFor="let item of brands" >
               {{item.company | truncateText : 21}}
             </mat-button-toggle>
@@ -128,10 +122,9 @@
 
       <div  class="grid-item"  *ngIf="(productTypes$ | async) as list">
         <mat-button-toggle-group
-                          name="type"
-                          aria-label="Font Style"
-                          [(ngModel)]  = "productTypeSearch"
-                          (change)="refreshSearch()"
+                          name          ="type"
+                          aria-label    ="Font Style"
+                          [(ngModel)]   = "productTypeSearch"
                           vertical
           >
 
@@ -145,6 +138,7 @@
                               class="toggle-buttons"
                               type="button"
                               [value]="item"
+                              (tapClick)     = "refreshCategorySearch(item)"
                               *ngFor="let item of list" >
             {{item.name | truncateText : 21}}
           </mat-button-toggle>

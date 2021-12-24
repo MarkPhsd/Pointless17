@@ -9,28 +9,22 @@
 
     <mat-card-content>
       <div class="grid-items">
-
         <div class="grid-item-span-row" *ngIf="orderItem">
-
           <span >
             {{index+1}}:
           </span>
           <span [class]="productnameClass" >
             {{ orderItem?.productName }}
           </span>
-
           <span class="product-name" *ngIf="orderItem.itemType">
             ( {{orderItem?.itemType?.name}} )
           </span>
-
           <span  *ngIf="quantity">
             {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
           </span>
-
           <span  *ngIf="mainPanel && orderItem.serialCode">
             {{ orderItem.serialCode }}
           </span>
-
           <span  *ngIf="mainPanel
                         && orderItem
                         && orderItem.modifierNote
@@ -38,17 +32,13 @@
                         && orderItem.modifierNote != ''">
             {{ orderItem.modifierNote }}
           </span>
-
           <span  *ngIf="mainPanel || bottomSheetOpen">
             <img *ngIf="imagePath" [src]="imagePath" />
           </span>
-
         </div>
 
         <span  *ngIf="mainPanel"
               >
-        <!-- <span  *ngIf="mainPanel"
-                    class="buttons-container"> -->
 
           <span *ngIf="(quantity && !orderItem.voidReason)">
             <button mat-raised-button
@@ -105,7 +95,6 @@
         </span>
 
         <div>
-
           <span *ngIf="orderItem.printed">
             <mat-icon  color="warn" >print</mat-icon>
             <span  *ngIf="mainPanel || bottomSheetOpen">
@@ -121,17 +110,9 @@
               Item voided:  {{ orderItem.voidReason }}
             </span>
           </div>
-
         </div>
 
       </div>
-
     </mat-card-content>
-
   </mat-card>
-
 </div>
-<!--
-<div *ngIf="uiConfig">
-  {{uiConfig | json}}
-</div> -->
