@@ -8,7 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPriceCategories, IPriceCategory2,
           IUnitTypePaged,
           PriceTiers,
-          ProductPrice, ProductPrice2 } from 'src/app/_interfaces/menu/price-categories';
+          ProductPrice, ProductPrice2, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { FbPriceCategoriesService } from 'src/app/_form-builder/fb-price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
@@ -17,6 +17,8 @@ import { PriceCategories } from 'src/app/_interfaces/menu/menu-products';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { C } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-price-categories-edit',
@@ -32,12 +34,15 @@ export class PriceCategoriesEditComponent implements OnInit {
   showWeightPrices        :  boolean;
   showConversions         :  boolean;
   showPriceTiers          :  boolean;
-  priceTiers$             : Observable<PriceTiers[]>;
+  toggleSearchSize        = [] as  boolean[];
 
   get productPrices() : FormArray {
     return this.inputForm.get('productPrices') as FormArray;
   }
 
+  priceTiers$             : Observable<PriceTiers[]>;
+  priceTiers              : PriceTiers[];
+  unitTypeList            : UnitType[];
   unitTypes$: Observable<IUnitTypePaged>;
   unitTypes :  IItemBasic[]
   fieldOptions = { prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }
@@ -70,9 +75,18 @@ export class PriceCategoriesEditComponent implements OnInit {
      // console.log('init sizes', data.results)
     })
     this.unitTypes$ = this.unitTypeService.getBasicTypes(site, unitSearchModel);
+
+    this.unitTypes$.subscribe (data => {
+      this.unitTypeList = data.results;
+    })
+
     this.refreshData_Sub(this.priceCategory);
 
     this.priceTiers$ = this.priceTiersService.getPriceTiers(site);
+    this.priceTiers$.subscribe(data => {
+      this.priceTiers = data;
+    })
+
   }
 
   ngOnInit() {
@@ -120,10 +134,9 @@ export class PriceCategoriesEditComponent implements OnInit {
     if (!this.priceCategory) {return }
 
     let pricing          = this.productPrices
-
     const item           = {} as ProductPrice;
     item.priceCategoryID = this.priceCategory.id;
-    item.webEnabled      =  1;
+    item.webEnabled      = 1;
     item.retail          = 0;
 
     let priceForm            = this.addArray();
@@ -137,24 +150,15 @@ export class PriceCategoriesEditComponent implements OnInit {
     if (!inputForm) { return }
     if (!items)     { return }
     let pricing = this.productPrices;
-
     pricing.clear();
-
     items.forEach( data =>
       {
         let price = this.addArray();
-        console.log('price patch', data)
         price.patchValue(data);
-        console.log(data)
+        // if (this.toggleSearchSize) { this.toggleSearchSize.push(false)  }
         pricing.push(price);
       }
     )
-  }
-
-
-
-  debugitem(item) {
-    console.log(item.value)
   }
 
   saveAllItems() {
@@ -168,18 +172,15 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   async updateItem(formArray): Promise<boolean> {
-
     if (!this.inputForm.valid)    { return  }
     if (!this.inputForm.value.id) {  return }
-
     try {
       const price2 = formArray as ProductPrice2;
       price2.webEnabled = 1;
       price2.priceCategoryID = this.inputForm.value.id;
-
       this.updateItemByItem(price2)
     } catch (error) {
-      // console.log('error', error)
+
     }
 
   };
@@ -202,6 +203,17 @@ export class PriceCategoriesEditComponent implements OnInit {
     } catch (error) {
       console.log('error', error)
     }
+  }
+
+  searchSize(i: number) {
+
+    if (i > this.toggleSearchSize.length) {
+      this.toggleSearchSize = [] as boolean[]
+      this.priceCategory.productPrices.forEach( i => {
+        this.toggleSearchSize.push(false)
+      })
+    }
+    this.toggleSearchSize[i] = !this.toggleSearchSize[i];
   }
 
   async updateCategory(item): Promise<boolean> {
@@ -266,10 +278,10 @@ export class PriceCategoriesEditComponent implements OnInit {
 
     if (!item.id) {
       this.removeItem(i)
+      this.toggleSearchSize.splice(i)
       return
     }
 
-    console.log(item)
     const productPrice  = item as ProductPrice
     const site = this.siteService.getAssignedSite()
     if (!productPrice) { return }
@@ -292,51 +304,33 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   addArray() {
-      return this.fb.group({
-        id:               [''],
-        priceCategoryID:  [''],
-        retail:           [''],
-        wholeSale:        [''],
-        unitTypeID:       [''],
-        hideFromMenu:     [''],
-        useforInventory:  [''],
-        pizzaMultiplier:  [''],
-        unitPartRatio:    [''],
-        partMultiplyer:   [''],
-        doNotDelete:      [''],
-        pizzaSize:        [''],
-        priceType:        [''],
-        barcode:          [''],
-        itemQuantity:     [''],
-        productID:        [''],
-        tierPriceGroup:   [''],
-        price1:           [''],
-        price2:           [''],
-        price3:           [''],
-        price4:           [''],
-        price5:           [''],
-        price6:           [''],
-        price7:           [''],
-        price8:           [''],
-        price9:           [''],
-        price10:          [''],
-        timeBasedPrice:   [''],
-        uid:              [''],
-        weekDays:         [''],
-        endTime:          [''],
-        startTime:        [''],
-        webEnabled:       [''],
-        specialDatePrice: [''],
-        startDate:        [''],
-        endDate:          [''],
-        gramPrice:        0,
-        eightPrice:       0,
-        halfPrice:        0,
-        quarterPrice:     0,
-        ouncePrice:       0,
-      }
-    )
+    return  this.fbPriceCategory.addPriceArray()
+  }
 
+  assignItem(data) {
+    if (data) {
+      const unitTypeID = data.unitTypeID
+      const index      = data.index;
+      const unitName   = data.unitName
+      const unitType   = data.unitType;
+      console.log(data)
+      if (data) {
+        let pricing = this.inputForm.controls['productPrices'] as FormArray;
+        // console.log('this.priceCategory.productPrices', this.priceCategory.productPrices)
+        if (this.priceCategory.productPrices.length>=index) {
+          this.priceCategory.productPrices[index].unitType   = unitType;
+          this.priceCategory.productPrices[index].unitTypeID = unitTypeID;
+        }
+
+        if (pricing && pricing.length>=index) {
+          // console.log('pricing patchvalue', pricing.at(index).value)
+          pricing.at(index).patchValue({unitTypeID: unitTypeID})
+          // console.log('pricing patchvalue', pricing.at(index).value)
+
+        }
+        this.toggleSearchSize[index] = !this.toggleSearchSize[index]
+      }
+    }
   }
 
   notifyEvent(message: string, action: string) {
@@ -348,50 +342,3 @@ export class PriceCategoriesEditComponent implements OnInit {
 
 }
 
-// initPrice() {
-
-//   return {
-//        id:  0,
-//        priceCategoryID:  0,
-//        retail:           0,
-//        wholeSale:        0,
-//        unitTypeID:       0,
-//        hideFromMenu:     0,
-//        useforInventory:  0,
-//        pizzaMultiplier:  0,
-//        unitPartRatio:    0,
-//        partMultiplyer:   0,
-//        doNotDelete:      0,
-//        pizzaSize:        0,
-//        priceType:        0,
-//        barcode:          0,
-//        itemQuantity:     0,
-//        productID:        0,
-//        tierPriceGroup:   0,
-//        price1:           0,
-//        price2:           0,
-//        price3:           0,
-//        price4:           0,
-//        price5:           0,
-//        price6:           0,
-//        price7:           0,
-//        price8:           0,
-//        price9:           0,
-//        price10:          0,
-//        timeBasedPrice:   0,
-//        uid:              0,
-//        weekDays:         '',
-//        endTime:          '',
-//        startTime:        '',
-//        webEnabled:       true,
-//        specialDatePrice: 0,
-//        startDate:        '',
-//        endDate:          '',
-//        gramPrice:  0,
-//        eightPrice: 0,
-//        halfPrice:  0,
-//        quarterPrice: 0,
-//        ouncePrice: 0,
-//      }
-
-//  }

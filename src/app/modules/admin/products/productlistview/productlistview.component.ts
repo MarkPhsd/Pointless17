@@ -24,6 +24,9 @@ import { Capacitor,  } from '@capacitor/core';
 import { Subscription } from 'rxjs';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
+import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
+import { Dialog } from 'electron';
+import { MatDialog } from '@angular/material/dialog';
 
 //https://stackoverflow.com/questions/48931298/ag-grid-pagination-with-infinite-scrolling
 // https://www.ag-grid.com/javascript-grid-cell-rendering/
@@ -129,6 +132,7 @@ constructor(  private _snackBar         : MatSnackBar,
               private agGridFormatingService : AgGridFormatingService,
               private contactsService        :  ContactsService,
               private awsService             : AWSBucketService,
+              private dialog: MatDialog,
             )
 {
   this.initForm();
@@ -170,6 +174,8 @@ setBrandID(event) {
     this.refreshSearch();
   }
 }
+
+
 
 
 
@@ -279,6 +285,10 @@ listAll(){
   control.setValue('')
   this.categoryID        = 0;
   this.productTypeSearch = 0;
+  this.brandID = 0
+  // this.brand = null
+  // this.category = null;
+  // this.productTypeSearch = null;
   this.refreshSearch()
 }
 
@@ -287,23 +297,17 @@ listAll(){
   //and other things are required per grid.
 initProductSearchModel(): ProductSearchModel {
     let searchModel        = {} as ProductSearchModel;
-    let search                    = ''
-
     if (this.itemName.value)            { searchModel.name        = this.itemName.value  }
     if (this.categoryID )               { searchModel.categoryID  = this.categoryID.toString(); }
     if (this.productTypeSearch)         { searchModel.itemTypeID  = this.productTypeSearch.toString(); }
     if (this.brandID)                   { searchModel.brandID     = this.brandID.toString(); }
 
-    console.log('viewAll',  this.viewAll)
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-
-    // console.log('viewAll',  this.viewAll)
-    // console.log('event',  searchModel)
-
+    console.log('search Model page number', this.currentPage)
     return searchModel
   }
 
@@ -331,13 +335,21 @@ initProductSearchModel(): ProductSearchModel {
   //this is called from subject rxjs obversablve above constructor.
   // : Observable<IProductSearchResults[]>
   refreshSearch() {
-    this.currentPage         = 1
+    // this.currentPage         = 1
     const site               = this.siteService.getAssignedSite()
     const productSearchModel = this.initProductSearchModel();
-    this.params.startRow     = 1;
-    this.params.endRow       = this.pageSize;
+    // this.params.startRow     = 1;
+    // this.params.endRow       = this.pageSize;
     this.onGridReady(this.params)
-    // return this._searchItems$
+
+  }
+
+  refreshGrid() {
+    // const site               = this.siteService.getAssignedSite()
+    // return this.menuService.getProductsBySearchForListsPaging(site, this.initProductSearchModel())
+    const currentPage = this.currentPage;
+    // this.initProductSearchModel()
+    this.onGridReady(this.params)
   }
 
   //this doesn't change the page, but updates the properties for getting data from the server.
@@ -380,7 +392,6 @@ initProductSearchModel(): ProductSearchModel {
   getRowData(params, startRow: number, endRow: number):  Observable<IProductSearchResultsPaged>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const productSearchModel  = this.initProductSearchModel();
-    console.log('product search model', productSearchModel)
     const site                = this.siteService.getAssignedSite()
     return this.menuService.getProductsBySearchForListsPaging(site, productSearchModel)
   }
@@ -397,10 +408,10 @@ initProductSearchModel(): ProductSearchModel {
     // if (!params) { return }
     if (params == undefined) { return }
 
-    if (!params.startRow ||  !params.endRow) {
-      params.startRow = 1
-      params.endRow = this.pageSize;
-    }
+    // if (!params.startRow ||  !params.endRow) {
+    //   params.startRow = 1
+    //   params.endRow = this.pageSize;
+    // }
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
@@ -554,7 +565,23 @@ initProductSearchModel(): ProductSearchModel {
       this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
       return
     }
-      this.productEditButtonService.editTypes(this.selected)
+    // this.productEditButtonService.editTypes(this.selected).subscribe(data=> this.refreshSearch())
+
+    let dialogRef: any;
+    const site = this.siteService.getAssignedSite();
+
+    dialogRef = this.dialog.open(EditSelectedItemsComponent,
+      { width:        '500px',
+        minWidth:     '500px',
+        height:       '550px',
+        minHeight:    '550px',
+        data   : this.selected
+      },
+    )
+
+    dialogRef.afterClosed().subscribe(result => {
+       this.refreshGrid()
+    });
   }
 
   onSortByNameAndPrice(sort: string) { }

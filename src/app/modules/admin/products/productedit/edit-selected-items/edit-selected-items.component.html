@@ -7,6 +7,7 @@
   <mat-card-subtitle>
     Any changes to this window will update all selected items.
     <button mat-button (click)="updateItems()"><mat-icon>update</mat-icon>Update</button>
+    <button mat-button (click)="exit()"><mat-icon>close</mat-icon>Close</button>
     <div *ngIf="selected">
       <!-- {{selected | json}} -->
     </div>

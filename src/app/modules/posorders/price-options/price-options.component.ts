@@ -2,10 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPOSOrder, IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem, ProductPrice } from 'src/app/_interfaces/menu/menu-products';
-import { OrdersService } from 'src/app/_services';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 export interface Item {
   order: IPOSOrder;
@@ -23,7 +20,6 @@ export class PriceOptionsComponent  {
   //prices
   //  const  newItem = {order: order, item: item, posItem: posItem}
   newItem : Item;
-
   prices  : ProductPrice[];
   menuItem: IMenuItem;
   price   : ProductPrice;
@@ -49,7 +45,9 @@ export class PriceOptionsComponent  {
   }
 
   async addItemPrice(price: ProductPrice) {
-    await this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item, price, this.newItem.posItem.quantity, this.newItem.posItem.id)
+    await this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item,
+                                                 price, this.newItem.posItem.quantity,
+                                                 this.newItem.posItem.id)
     this.dialogRef.close(true);
   }
 

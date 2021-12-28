@@ -35,10 +35,8 @@ export class StrainProductEditComponent implements OnInit {
   urlImageMain: string;
 
   constructor(private menuService: MenuService,
-              private router: Router,
               public route: ActivatedRoute,
               public fb: FormBuilder,
-
               private _snackBar: MatSnackBar,
               private itemTypeService  : ItemTypeService,
               private priceCategoryService: PriceCategoriesService,

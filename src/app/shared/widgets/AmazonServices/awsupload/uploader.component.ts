@@ -83,7 +83,6 @@ export class UploaderComponent implements OnInit {
   }
 
   confirmFileUpload(file: any ){
-    let uploadFile = false
     this.uploading = true;
     this.imageUrlToCheck = this.getImageURL(file.name)
 
@@ -93,10 +92,8 @@ export class UploaderComponent implements OnInit {
       presign$.pipe(
         switchMap( data => {
           if (data.preassignedURL)
-            console.log(data.preassignedURL)
             return this.awsBucket.uploadFile(file,  data.preassignedURL)
           }
-
         )
       ).subscribe( data => {
         this.uploading = false;

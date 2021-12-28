@@ -145,11 +145,7 @@ async function createWindow () {
     )
   }
 
-
 }
-
-
-
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -278,7 +274,6 @@ function readScale32() {
       }
   });
 }
-
 
 autoUpdater.on('update-downloaded', (ev, info) => {
   if (info) {

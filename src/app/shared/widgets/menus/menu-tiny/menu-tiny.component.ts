@@ -33,44 +33,40 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   _user             : Subscription;
   site              : ISite;
 
-
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
       user => {
-      this.user = user
-      this.refreshMenu(user)
-      if (!user) {
-        // console.log('returning no  user' , user)
-        this.menus = [] as AccordionMenu[];
+        this.user = user
+        if (!user) {  this.menus = [] as AccordionMenu[]; }
+        if (user)  { this.refreshMenu(user) }
       }
-    }
-  )
+    )
   }
 
   refreshMenu(user: IUser) {
 
-    if (user == undefined) { return }
+    if (!user) { return }
     const site = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(this.site, user)
+    this.menus = [] as AccordionMenu[];
 
     menu$.subscribe( data => {
-      this.menus = [] as AccordionMenu[];
-      if (!data) {
-
-         return
-      }
+      if (!data) { return }
       this.config = this.mergeConfig(this.options);
-
       if (data)
         data.filter( item => {
-          if (item.active) {this.menus.push(item) } //= data
+          this.addItemToMenu(item, this.menus)
         })
       }, err => {
+        console.log('error refresh menu', err)
+      }
+    )
+  }
 
-        this.menus = [] as AccordionMenu[];
-    }
-  )
-}
+  addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
+    if (item.active) {mainMenu.push(item) }
+  }
+
   constructor ( private menusService            : MenusService,
                 private userAuthorizationService: UserAuthorizationService,
                 private router                  : Router,
@@ -108,9 +104,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   mergeConfig(options: accordionConfig) {
-    const config = {
-      multi: true
-    };
+    const config = { multi: true  };
     return { ...config, ...options };
   }
 

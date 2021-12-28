@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { ProducteditComponent} from 'src/app/modules/admin/products/productedit/productedit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { StrainProductEditComponent } from 'src/app/modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
 import { EditSelectedItemsComponent } from 'src/app/modules/admin/products/productedit/edit-selected-items/edit-selected-items.component';
 import { AddItemByTypeComponent } from 'src/app/modules/admin/products/productedit/add-item-by-type/add-item-by-type.component';
-import { IPriceCategories, PriceTiers, UnitType } from 'src/app/_interfaces/menu/price-categories';
+import { IPriceCategories, PriceTiers, ProductPrice, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { UnitTypeEditComponent } from 'src/app/modules/admin/products/unit-type-list/unit-type-edit/unit-type-edit.component';
 import { IPOSOrder, IPOSPayment, ISite, PosOrderItem } from 'src/app/_interfaces';
@@ -28,9 +27,9 @@ import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/promp
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
 import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
 import { PSMenuGroupEditComponent } from 'src/app/modules/admin/products/price-schedule-menu-groups/psmenu-group-edit/psmenu-group-edit.component';
-import { concatMap, map, switchMap, tap } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
-import { timer, combineLatest } from 'rxjs';
+import { concatMap, map } from 'rxjs/operators';
+import { Observable,  } from 'rxjs';
+import { UnitTypePromptComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
 export interface IBalanceDuePayload {
   order: IPOSOrder;
   paymentMethod: IPaymentMethod;
@@ -62,7 +61,7 @@ export class ProductEditButtonService {
     }
   }
 
-  editTypes(selectedItems: any[]) {
+  editTypes(selectedItems: any[]): Observable<typeof dialogRef> {
 
     let dialogRef: any;
     const site = this.siteService.getAssignedSite();
@@ -75,6 +74,7 @@ export class ProductEditButtonService {
         data   : selectedItems
       },
     )
+    return dialogRef;
 
   }
 
@@ -394,6 +394,18 @@ export class ProductEditButtonService {
     )
   }
 
+  openUnitTypeLookup(productPrice: ProductPrice) {
+    let dialogRef: any;
+    return  this.dialog.open(UnitTypePromptComponent,
+      { width:        '375px',
+        minWidth:     '375px',
+        height:       '375px',
+        minHeight:    '375px',
+        data : productPrice
+      },
+    )
+  }
+
 
   openVoidItemDialog(posOrderItem: PosOrderItem ) {
     let dialogRef: any;
@@ -415,6 +427,7 @@ export class ProductEditButtonService {
             minHeight:    '600px',
             data : itemWithAction
         })
+
       }
 
   }

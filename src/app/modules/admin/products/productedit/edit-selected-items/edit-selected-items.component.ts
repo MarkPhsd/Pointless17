@@ -66,7 +66,9 @@ export class EditSelectedItemsComponent implements OnInit {
 
   }
 
-
+  exit () {
+    this.dialogRef.close()
+  }
   updateItems() {
     if (this.selected) {
 

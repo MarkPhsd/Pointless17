@@ -1,0 +1,17 @@
+<mat-card>
+  <mat-card-subtitle>
+
+  </mat-card-subtitle>
+  <mat-card-content *ngIf="productPrice && inputForm">
+    <unit-type-select
+      [inputForm]='inputForm'
+      [productPrice]='productPrice'
+      (itemSelect)='assignItem($event)'
+    ></unit-type-select>
+
+    <div *ngIf="productPrice" class="unit-label">
+
+    </div>
+
+  </mat-card-content>
+</mat-card>

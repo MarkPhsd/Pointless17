@@ -1,6 +1,7 @@
 <div class="buttons-format flex-container">
 
     <div *ngIf="enableAdd">
+      {{enableAdd}}
       <button
               mat-button
               class="button"
@@ -34,7 +35,7 @@
       </button>
     </div>
 
-    <div >
+    <div *ngIf='!hideSave' >
       <button mat-button
               class="button"
               (click)="updateItem()">

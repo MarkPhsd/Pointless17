@@ -127,10 +127,12 @@ export class OrderMethodsService {
 
     const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
 
-    console.log('addItemToOrder item', item, 'order', order, )
+    // console.log('addItemToOrder item', item, 'order', order, )
     const itemResult$ = this.posOrderItemService.postItem(site, newItem)
 
     itemResult$.subscribe(data => {
+          // this.notifyEvent(`Message Result. ${data.resultErrorDescription}`, 'Alert')
+
           if (data && data.resultErrorDescription) {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
             return

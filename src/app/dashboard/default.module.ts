@@ -225,6 +225,8 @@ import { ScheduledMenuItemsComponent } from '../modules/menu/scheduleMenus/sched
 import { ScheduledMenuItemComponent } from '../modules/menu/scheduleMenus/scheduled-menu-items/scheduled-menu-item/scheduled-menu-item.component';
 import { ScheduledMenuHeaderComponent } from '../modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-header/scheduled-menu-header.component';
 import { ScheduledMenuListComponent } from '../modules/menu/scheduleMenus/scheduled-menu-list/scheduled-menu-list.component';
+import { UnitTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/unit-type-select/unit-type-select.component';
+import { UnitTypePromptComponent } from '../modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -419,7 +421,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UploaderComponent,
     UnitTypeListComponent,
     UnitTypeEditComponent,
-    ItemTypeCategoryAssignmentComponent,
+    UnitTypePromptComponent,
+    UnitTypeSelectComponent,
     UsermessagesComponent,
     UseGroupTaxAssignmentComponent,
     WeekDaySelectionComponent,

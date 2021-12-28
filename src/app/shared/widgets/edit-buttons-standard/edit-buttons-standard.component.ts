@@ -25,6 +25,7 @@ export class EditButtonsStandardComponent  {
   @Input() printOption : boolean;
   @Input() viewOrder   : boolean;
   @Input() historyItem : boolean;
+  @Input() hideSave    : boolean;
 
   smallDevice = false;
 

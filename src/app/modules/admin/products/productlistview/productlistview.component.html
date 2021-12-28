@@ -62,6 +62,14 @@
     </button>
   </div>
 
+  <div      class="grid-item">
+    <button mat-button
+            class="assign-button"
+            (click)="refreshGrid()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </div>
   <div *ngIf="!hideAdd" class="header-items">
     <button mat-button
             (click)="childAddItem()">
