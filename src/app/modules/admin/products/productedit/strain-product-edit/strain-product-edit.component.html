@@ -27,10 +27,25 @@
                 (outputupdateonCancel)  ="onCancel($event)"
                 (outputCopy)            ="copyItem($event)"
           ></app-edit-buttons-standard>
+          <div>
             <mat-slide-toggle name="enabled"
-                        formControlName="active">
-               <mat-label class="mat-label">Active</mat-label>
+              formControlName="active">
+              <mat-label class="mat-label">Active</mat-label>
             </mat-slide-toggle>
+          </div>
+          <div>
+            <mat-slide-toggle name="webMode"
+                              formControlName="webProduct">
+              <mat-label class="mat-label">Web Enabled</mat-label>
+            </mat-slide-toggle>
+          </div>
+          <div>
+            <mat-slide-toggle name="webMode"
+                              formControlName="webWorkRequired">
+              <mat-label class="mat-label">Requires Work</mat-label>
+            </mat-slide-toggle>
+          </div>
+
         </div>
       </div>
 
@@ -38,7 +53,7 @@
 
     <mat-divider> </mat-divider>
 
-    <div  id="fullProductName"  >
+    <div class="info-container">
 
       <div class="grid-container">
 
@@ -162,8 +177,13 @@
                     [fieldName]="'style'">
                     Value
               </app-value-fields>
+              <app-value-fields
+                  [inputForm]="productForm"
+                  [fieldName]="'productCount'"
+                >
+                  Count
+              </app-value-fields>
             </div>
-
 
             <div *ngIf="itemType  && (itemType.name === 'Generic')">
               <!-- //prompt modifier type
@@ -198,10 +218,17 @@
                   )">
 
               <app-value-fields
-              [inputForm]="productForm"
-              [fieldName]="'gramCount'">
-              Per Unit Quantity
-            </app-value-fields>
+                [inputForm]="productForm"
+                [fieldName]="'gramCount'"
+              >
+                Per Unit Quantity
+              </app-value-fields>
+              <app-value-fields
+                [inputForm]="productForm"
+                [fieldName]="'productCount'"
+              >
+                Count
+              </app-value-fields>
           </div>
 
           </div>

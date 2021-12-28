@@ -10,7 +10,7 @@ import { AddItemByTypeComponent } from 'src/app/modules/admin/products/producted
 import { IPriceCategories, PriceTiers, ProductPrice, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { UnitTypeEditComponent } from 'src/app/modules/admin/products/unit-type-list/unit-type-edit/unit-type-edit.component';
-import { IPOSOrder, IPOSPayment, ISite, PosOrderItem } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSPayment, ISite, PaymentWithAction, PosOrderItem } from 'src/app/_interfaces';
 import { ClientTypeEditComponent } from 'src/app/modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ServiceTypeEditComponent } from 'src/app/modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component';
 import { AdjustItemComponent } from 'src/app/modules/posorders/adjust/adjust-item/adjust-item.component';
@@ -22,7 +22,6 @@ import { PaymentMethodEditComponent } from 'src/app/modules/admin/transactions/p
 import { IPaymentMethod, PaymentMethodsService } from '../transactions/payment-methods.service';
 import { ChangeDueComponent } from 'src/app/modules/posorders/components/balance-due/balance-due.component';
 import { AdjustPaymentComponent } from 'src/app/modules/posorders/adjust/adjust-payment/adjust-payment.component';
-import { PaymentWithAction } from '../transactions/pospayment.service';
 import { PromptGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-groups/prompt-group-edit/prompt-group-edit.component';
 import { PromptSubGroupEditComponent } from 'src/app/modules/admin/menuPrompt/prompt-sub-groups/prompt-sub-group-edit/prompt-sub-group-edit.component';
 import { PriceTierEditComponent } from 'src/app/modules/admin/products/price-tiers/price-tier-edit/price-tier-edit.component';
@@ -331,9 +330,9 @@ export class ProductEditButtonService {
       case 58 :
       case 59 :
         dialogRef = this.dialog.open(StrainProductEditComponent,
-          { width:        '80vw',
-            height:       '650px',
-            minHeight:    '745px',
+          { width:        '95%',
+            height:       '775px',
+            minHeight:    '775px',
             data : data
           },
         )
@@ -341,11 +340,9 @@ export class ProductEditButtonService {
       default:
         {
           dialogRef = this.dialog.open(StrainProductEditComponent,
-            { width:        '80vw',
-              minWidth:     '900px',
-              maxWidth:     '900px',
-              height:       '745px',
-              minHeight:    '745px',
+            { width:        '95%',
+              height:       '775px',
+              minHeight:    '775px',
               data : data
             },
           )

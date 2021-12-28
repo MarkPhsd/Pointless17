@@ -17,8 +17,6 @@ import { PriceCategories } from 'src/app/_interfaces/menu/menu-products';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { C } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-price-categories-edit',
@@ -35,6 +33,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   showConversions         :  boolean;
   showPriceTiers          :  boolean;
   toggleSearchSize        = [] as  boolean[];
+  saving                  : boolean;
 
   get productPrices() : FormArray {
     return this.inputForm.get('productPrices') as FormArray;
@@ -139,10 +138,17 @@ export class PriceCategoriesEditComponent implements OnInit {
     item.webEnabled      = 1;
     item.retail          = 0;
 
-    let priceForm            = this.addArray();
-    priceForm.patchValue(item);
-    pricing.push(priceForm)
-    this.priceCategory.productPrices.push(item)
+    let priceForm        =  this.fbPriceCategory.addPriceArray()
+    try {
+      if (priceForm) {
+        priceForm.patchValue(item);
+        pricing.push(priceForm);
+        if (!this.priceCategory.productPrices) { this.priceCategory.productPrices = [] as ProductPrice[] }
+        this.priceCategory.productPrices.push(item)
+      }
+    } catch (error) {
+      console.log('error', error)
+    }
 
   }
 
@@ -168,6 +174,7 @@ export class PriceCategoriesEditComponent implements OnInit {
       items.forEach(data => {
         this.updateItem(data);
       })
+      this.saving = false;
     }
   }
 
@@ -178,6 +185,7 @@ export class PriceCategoriesEditComponent implements OnInit {
       const price2 = formArray as ProductPrice2;
       price2.webEnabled = 1;
       price2.priceCategoryID = this.inputForm.value.id;
+      this.saving = true;
       this.updateItemByItem(price2)
     } catch (error) {
 
@@ -192,7 +200,6 @@ export class PriceCategoriesEditComponent implements OnInit {
       return new Promise(resolve => {
         const price$ = this.priceCategoryItemService.save(site, price)
         price$.subscribe( data => {
-          this.notifyEvent('Item Updated', 'Success')
           resolve(true)
         }, error => {
           this.notifyEvent(`Update item. ${error}`, "Failure")

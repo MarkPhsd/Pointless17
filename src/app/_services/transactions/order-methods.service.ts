@@ -105,50 +105,6 @@ export class OrderMethodsService {
     return this.posOrderItemService.appylySerial(site, id, serialCode, null)
   }
 
-  async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
-
-    const site          = this.siteService.getAssignedSite()
-    if (!order)         { order = this.order }
-    const result        = await this.doesOrderExist(site);
-
-    let passAlongItem
-    if (this.assignedPOSItem) {
-      passAlongItem  = this.assignedPOSItem;
-    }
-
-    if (!result) { return }
-    if (!order) {order = this.order}
-    if (order) {
-
-    if (!item.itemType) {
-      this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
-      return
-    }
-
-    const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
-
-    // console.log('addItemToOrder item', item, 'order', order, )
-    const itemResult$ = this.posOrderItemService.postItem(site, newItem)
-
-    itemResult$.subscribe(data => {
-          // this.notifyEvent(`Message Result. ${data.resultErrorDescription}`, 'Alert')
-
-          if (data && data.resultErrorDescription) {
-            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-            return
-          }
-          if (data.order) {
-            this.orderService.updateOrderSubscription(data.order)
-            this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
-          } else {
-            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert')
-          }
-        }
-      )
-    }
-
-  }
-
   async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
     const site          = this.siteService.getAssignedSite()
     if (!order)         { order = this.order }
@@ -170,15 +126,8 @@ export class OrderMethodsService {
     }
   }
 
-  async addItemToOrderWithBarcodePromise(site: ISite, newItem: NewItem):  Promise<ItemPostResults> {
-    if (newItem) {
-      this.initItemProcess();
-       return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
-    }
-  }
-
+  //determines if the users action will add the item or view the item on the order.
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
-    const isApp = (this.platFormService.isApp());
     if (add) {
       this.addItemToOrder(order, item, 1)
       return
@@ -192,44 +141,78 @@ export class OrderMethodsService {
     this.router.navigate(["/menuitem/", {id:id}]);
   }
 
-  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
-    if (order && barcode) {
-      this.initItemProcess();
-      let newItem = { orderID: order.id, quantity: quantity, barcode: barcode } as NewItem
-      return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
-    }
-    return null;
+  async addItemToOrderWithBarcodePromise(site: ISite, newItem: NewItem):  Promise<ItemPostResults> {
+    if (!newItem) {return}
+    return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
   }
 
-  async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
+  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
+    if (!order || !barcode) {return null;}
+    let newItem = { orderID: order.id, quantity: quantity, barcode: barcode } as NewItem
+    return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
+  }
 
-    const site = this.siteService.getAssignedSite()
-    const result = await this.doesOrderExist(site);
+  async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
+   await   this.processAddItem(order, null, item, quantity, null);
+  }
+
+  async processAddItem(order : IPOSOrder , barcode: string, item: IMenuItem, quantity: number, input: any) {
     this.initItemProcess();
-    if (!result) { return }
-    const order = this.order
 
-    //or we refresh the order with the new item added
-    const addItem$ = this.scanItemForOrder(site, order, barcode, 1);
-    addItem$.subscribe(
-        data=> {
-        if (data.posItemMenuItem) {
-          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
+    if (!order)         { order = this.order }
+    const site          = this.siteService.getAssignedSite()
+    const result        = await this.doesOrderExist(site);
+    if (!result) { return }
+
+    let passAlongItem
+    if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; }
+
+    if (!result) { return }
+    if (!order) {order = this.order}
+    if (order) {
+
+      if (!item && !barcode) {
+        if (!item.itemType) {
+          this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
+          return
         }
-        if (data.menuItemWithPrice) {
+      }
+
+      if (barcode)  {
+        const addItem$ = this.scanItemForOrder(site, order, barcode, 1);
+        this.processItemPostResults(addItem$)
+        return
+      }
+
+      if (item) {
+        const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
+        const addItem$ = this.posOrderItemService.postItem(site, newItem)
+        this.processItemPostResults(addItem$)
+        return
+      }
+
+    }
+  }
+
+  processItemPostResults(addItem$: Observable<ItemPostResults>) {
+    addItem$.subscribe(data => {
+        if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')}
+        if (data && data.resultErrorDescription) {
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert')
+          return
         }
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
-        }
-        if (data.menuItem) {
-          if (data.menuItem.length > 0) {
-          }
-        }
-        if (!data.order && data.menuItem) {
-          this.notifyEvent(`${data.resultErrorDescription}`, 'Error', )
+          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
+        } else {
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert')
         }
       }
     )
+  }
+
+  async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
+    this.processAddItem(this.order, barcode, null, quantity, input);
     input.nativeElement.value = ''
   }
 
@@ -276,11 +259,6 @@ export class OrderMethodsService {
     //the function will return true once complete.
     if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
       // remove unused prices if they exist?
-      // prompt.posOrderItem = posItem;
-      // this.promptGroupService.updatePromptGroup(prompt);
-      // encapsulation: ViewEncapsulation.None
-      // console.log('productPrices.length', item.priceCategories.productPrices.length)
-
       const  newItem = {order: order, item: item, posItem: posItem}
       const dialogRef = this.dialog.open(PriceOptionsComponent,
         {

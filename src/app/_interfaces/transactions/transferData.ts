@@ -213,7 +213,7 @@ export interface TransferItem {
   testingDate:                   string;
   cbd:                           string;
   thc:                           string;
-  gramCountMultiplier:           number;
+  inventoryCountUsage:           number;
   groupID:                       number;
   itemLoyaltyPointDiscount:      number;
   itemPercentageDiscountValue:   number;

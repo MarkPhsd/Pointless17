@@ -2,7 +2,7 @@ import {Component, HostBinding, OnDestroy, Output, HostListener,
         OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
         Renderer2, ViewChild, ElementRef, QueryList, ViewChildren, Input, EventEmitter}  from '@angular/core';
 import { IEmployee, IServiceType, IUser, IUserProfile } from 'src/app/_interfaces';
-import { IPOSPaymentsOptimzed , Paging , Result, ServiceType, Summary, IPOSPayment} from 'src/app/_interfaces/transactions/posorder';
+import { IPOSPaymentsOptimzed , Paging , Result, ServiceType, Summary, IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
 import { IItemBasic, UserService } from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
 import { AWSBucketService, MenuService} from 'src/app/_services';
@@ -14,7 +14,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import {  POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';

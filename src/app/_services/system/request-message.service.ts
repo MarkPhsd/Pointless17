@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { PaymentWithAction } from '../transactions/pospayment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ISite } from 'src/app/_interfaces';
 import { Observable } from 'rxjs';

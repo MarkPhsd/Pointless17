@@ -458,6 +458,7 @@ export class OrdersService {
     if (order) {
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
+      this.toolbarServiceUI.switchSearchBarSideBar()
       return
     }
   }

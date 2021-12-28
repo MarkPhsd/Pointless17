@@ -26,6 +26,7 @@ export interface ItemPostResults {
   itemTypeIsNothing: boolean;
   resultErrorDescription: string;
   menuItemWithPrice: IMenuItem
+  message:         string;
  }
 
  export interface  InventoryResults {

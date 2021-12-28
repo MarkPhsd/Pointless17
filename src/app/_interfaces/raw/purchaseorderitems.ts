@@ -113,7 +113,7 @@ export interface IPurchaseOrderItem {
   testingDate:                   string;
   cbd:                           string;
   thc:                           string;
-  gramCountMultiplier:           number;
+  inventoryCountUsage:           number;
   groupID:                       number;
   traceReportRunID:              number;
   traceZRUNID:                   number;

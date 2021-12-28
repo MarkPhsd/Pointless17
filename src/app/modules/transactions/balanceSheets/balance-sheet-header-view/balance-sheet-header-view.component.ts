@@ -2,12 +2,12 @@ import { Component, Input,OnDestroy,OnInit  } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { IServiceType } from 'src/app/_interfaces';
+import { IPaymentSearchModel, IServiceType } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
-import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
   selector: 'balance-sheet-header-view',

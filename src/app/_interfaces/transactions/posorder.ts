@@ -209,8 +209,9 @@ export interface PosOrderItem {
   promptGroupID               :  number;
   idRef                       :  number;
   posOrderMenuItem:              PosOrderMenuItem;
-  serialCode:                        string;
+  serialCode:                    string;
   history                     :  boolean;
+  inventoryCountUsage:           number;
 }
 
 export interface PosPayment {
@@ -324,6 +325,52 @@ export interface IPaymentResponse {
 
 }
 
+enum actions {
+  void = 1,
+  // priceAdjust = 2,
+  note = 3
+}
+
+
+export interface PaymentWithAction {
+  payment           : IPOSPayment;
+  action            : actions;
+  voidReasonID      : number;
+  voidReason        : string;
+  id                : number;
+  paymentMethod     : IPaymentMethod;
+  result            : boolean;
+}
+
+export interface IPaymentSearchModel {
+  completionDate_From:         string;
+  completionDate_To:           string;
+  orderDate_From:              string;
+  orderDate_To:                string;
+  serviceTypes:                string[];
+  serviceType:                 string;
+  serviceTypeID:               number;
+  closedOpenAllPayments:       number;
+  preAuthorizedPayments:       boolean;
+  employeeID:                  number;
+  pageSize:                    number;
+  pageNumber:                  number;
+  pageCount:                   number;
+  currentPage:                 number;
+  lastPage:                    number;
+  useNameInAllFieldsForSearch: boolean;
+  voidedPayments:              number;
+  preAuth:                     boolean;
+  clientID:                    number;
+  paymentMethodID              :number;
+  orderID                      :number;
+  id:                          number;
+  isCash                       : boolean;
+  isCreditCard                 : boolean;
+  tipInput                     : boolean;
+  zrun                         : number;
+  reportRunID                  : number;
+}
 
 // Public Property Payment As t_Payments
 // Public Property PaymentSuccess As Boolean

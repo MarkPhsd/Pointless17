@@ -32,7 +32,6 @@ export class PriceOptionsComponent  {
       const item = data as Item
       this.newItem = data;
 
-      console.log('data from MenuItem', this.newItem);
       if (this.newItem && this.newItem.item && this.newItem.item.priceCategories) {
       }
 

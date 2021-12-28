@@ -3,12 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription,Observable } from 'rxjs';
+import { PaymentWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { PaymentWithAction, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
   selector: 'app-adjust-payment',

@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-title *ngIf="priceCategory">
+  <mat-card-title *ngIf="priceCategory && !saving">
     <mat-icon>edit</mat-icon> {{priceCategory.name}}
     <mat-divider> </mat-divider>
   </mat-card-title>
@@ -138,7 +138,7 @@
                         (outputCopy)            = "copyItem(item)"
                         [hideExit]              = "true"
                         [enableAdd]             = "false"
-                        [hideSave]              = 'false'
+                        [hideSave]              = "true"
                         ></app-edit-buttons-standard>
                     </div>
 
@@ -259,14 +259,14 @@
 
                     </div>
 
-                    <!-- ||
-                    (priceCategory.productPrices[i].startDate != undefined ||
-                    priceCategory.productPrices[i].specialDatePrice != undefined ||
-                    priceCategory.productPrices[i].endDate != undefined ||
-                    priceCategory.productPrices[i].startTime != undefined ||
-                    priceCategory.productPrices[i].endTime != undefined) -->
+                    <!---->
 
-                    <div *ngIf="showTime"
+                  <div *ngIf="showTime  ||
+                              (priceCategory.productPrices[i].startDate != undefined ||
+                              priceCategory.productPrices[i].specialDatePrice != undefined ||
+                              priceCategory.productPrices[i].endDate != undefined ||
+                              priceCategory.productPrices[i].startTime != undefined ||
+                              priceCategory.productPrices[i].endTime != undefined) "
                           class="grid-time-container">
 
                       <div>
@@ -501,11 +501,11 @@
 
                   </div>
 
-                  <!-- || ((priceCategory.productPrices[i].partMultiplyer != 1
-                  && priceCategory.productPrices[i].partMultiplyer != undefined) ||
-                  (priceCategory.productPrices[i].unitPartRatio !=1
-                  && priceCategory.productPrices[i].partMultiplyer != undefined)) -->
-                  <div *ngIf="showConversions"
+                  <!---->
+                  <div *ngIf="showConversions  || ((priceCategory.productPrices[i].partMultiplyer != 1
+                        && priceCategory.productPrices[i].partMultiplyer != undefined) ||
+                        (priceCategory.productPrices[i].unitPartRatio !=1
+                        && priceCategory.productPrices[i].partMultiplyer != undefined)) "
                        class="grid-conversion-container">
                     <mat-card>
                       <div>
@@ -544,8 +544,8 @@
 
                   </div>
 
-                  <!-- || (priceCategory.productPrices[i].tierPriceGroup != 0 ) -->
-                  <div *ngIf="showPriceTiers" >
+                  <!-- -->
+                  <div *ngIf="showPriceTiers  || (priceCategory.productPrices[i].tierPriceGroup != 0 )" >
                     <span>
                       <mat-form-field appearance="outline">
                         <mat-label>Tier</mat-label>

@@ -14,14 +14,14 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { IPOSPayment, IPOSPaymentsOptimzed, IServiceType } from 'src/app/_interfaces';
+import { IPaymentSearchModel, IPOSPayment, IPOSPaymentsOptimzed, IServiceType } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
-import { IPaymentSearchModel, POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { PosPaymentEditComponent } from 'src/app/modules/posorders/pos-payment/pos-payment-edit/pos-payment-edit.component';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
   selector: 'app-pospayments',
