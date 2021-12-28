@@ -1,0 +1,36 @@
+<div  class="mat-form-field"
+      [formGroup]="searchForm">
+  <mat-form-field class="formFieldClass"
+                  appearance="outline"
+                  fxFlexFill >
+
+    <mat-label class="form-background">
+      <mat-icon>search</mat-icon>Unit Type Lookup
+    </mat-label>
+    <input
+            #input
+            type="text"
+            class="input-field"
+            placeholder="Unit Lookup"
+            matInput
+            formControlName="searchField"
+            [matAutocomplete]="auto">
+
+        <mat-autocomplete panelWidth    = "auto"
+                          #auto         = "matAutocomplete"
+                          [displayWith] = "displayFn.bind(this)">
+
+      <mat-option *ngFor="let item of (results$ | async)?.results"
+                  [value]="item">
+              {{item.name}}
+      </mat-option>
+
+    </mat-autocomplete>
+  </mat-form-field>
+
+</div>
+
+ <div  hidden="true"
+      [formGroup]='formfieldValue'>
+  <input formControlName="unitTypeID">
+</div>
