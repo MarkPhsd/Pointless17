@@ -15,10 +15,27 @@
 
   <mat-card-content>
     <div class="grid-forms">
-
       <div>
 
-        <div [formGroup]="inputForm" *ngIf="employee$; else loading;">
+        <div [formGroup]="inputForm"
+             *ngIf="employee$; else loading;">
+             <!-- Form is Valid {{this.inputForm.valid}} -->
+             <div *ngIf="inputForm.controls['email'].invalid && inputForm.controls['email'].touched"
+                  class="alert alert-danger">
+                    <div *ngIf="inputForm.controls['email'].errors.required">
+                      Email is required.
+                </div>
+             </div>
+
+             <div *ngIf="inputForm.controls['password'].invalid && inputForm.controls['password'].touched"
+                  class="alert alert-danger">
+                    <div *ngIf="inputForm.controls['password'].errors.required">
+                      PIN Code must be greater than 4 characters, and less than 10.
+                      This is not the primary password, and can be changed later.
+                </div>
+              </div>
+
+
           <div>
               <mat-form-field appearance="outline">
               <mat-label >First Name</mat-label>
@@ -87,7 +104,6 @@
             </mat-form-field>
           </div>
 
-
       </div>
       <ng-template #loading >
         <mat-spinner  diameter="100"></mat-spinner>
@@ -95,7 +111,8 @@
     </div>
 
     <div>
-      <div [formGroup]="clientForm" *ngIf="clientForm && client; else loadingclient;">
+      <div [formGroup]="clientForm"
+           *ngIf="clientForm && client; else loadingclient;">
 
         <div>
           <mat-form-field appearance="outline">
@@ -118,9 +135,11 @@
         </div>
 
         <div>
-          <button mat-raised-button (click)="viewContact()"><mat-icon>open</mat-icon>View</button>
+          <button mat-raised-button
+                  (click)="viewContact()">
+              <mat-icon>expand</mat-icon>View As User
+          </button>
         </div>
-
       </div>
 
       <ng-template #loadingclient >
@@ -128,9 +147,7 @@
       </ng-template>
 
     </div>
-
   </div>
-
   </mat-card-content>
 </mat-card>
 

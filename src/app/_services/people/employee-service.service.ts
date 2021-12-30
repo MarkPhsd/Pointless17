@@ -7,7 +7,7 @@ import { IEmployee } from '../../_interfaces/people/employees';
 import { employee, IClientTable, ISite, IUserProfile } from 'src/app/_interfaces';
 import { IItemBasic } from '../menu/menu.service';
 import { IPagedList } from '../system/paging.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface EmployeeSearchResults {
  results: employee[];
@@ -206,6 +206,12 @@ export class EmployeeService {
 
   }
 
+  //   <div *ngIf="requiredForm.controls['name'].invalid && requiredForm.controls['name'].touched" class="alert alert-danger">
+//   <div *ngIf="requiredForm.controls['name'].errors.required">
+//   Name is required.
+// </div>
+// </div>
+
   initForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
       id:                        [''],
@@ -217,7 +223,7 @@ export class EmployeeService {
       zip:                       [''],
       phone:                     [''],
       cell:                      [''],
-      email:                     [''],
+      email:                     ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")] ],
       emergencyContact:          [''],
       emergencyPhone:            [''],
       positionID:                [''],
@@ -228,7 +234,7 @@ export class EmployeeService {
       logonOnCheck1:             [''],
       logonCheck2:               [''],
       logonCheck3:               [''],
-      password:                  [''],
+      password:                  ['', [Validators.required, Validators.maxLength(10), Validators.minLength(4)] ],
       socialSecurity:            [''],
       payRate:                   [''],
       numberofHoursPrefered:     [''],
@@ -250,7 +256,7 @@ export class EmployeeService {
       upsize_ts:                 [''],
       driverFee:                 [''],
       commissionRate:            [''],
-      logonPassword:             [''],
+      logonPassword:            ['', Validators.required ],
       securityLevel:             [''],
       siteID:                    [''],
       regionMajorID:             [''],

@@ -123,7 +123,7 @@ export interface Tax {
 })
 export class ItemTypeService {
 
-packageType = ['Not-Specified', 'Marijuana Weighed', 'Marijuana - Packaged', 'Medicine - Weighed', 'Medicine Each', 'Seeds', 'Plants', 'Seeds', 'Concentrates', 'Solid', 'Liquid', 'Extract']
+packageType = ['Not-Specified', 'Marijuana Weighed', 'Marijuana - Packaged', 'Medicine - Weighed', 'Medicine Each', 'Seeds', 'Plants', 'Concentrates', 'Solid', 'Liquid', 'Extract']
 type       = [
    'grouping',
    'restaurant',

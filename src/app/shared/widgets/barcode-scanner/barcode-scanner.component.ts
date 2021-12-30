@@ -5,14 +5,14 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DlParserService } from 'src/app/_services/people/dl-parser.service';
 import { IUserProfile } from 'src/app/_interfaces';
 import { ActionSheetController } from '@ionic/angular';
-
 import { Plugins} from '@capacitor/core';
 import { CameraPreviewOptions }  from '@capacitor-community/camera-preview';
-
-const { CameraPreview } = Plugins;
-
 import '@capacitor-community/camera-preview';
-import { environment } from 'src/environments/environment';
+// import { environment } from 'src/environments/environment';
+
+// const { BarcodeScanner } = Plugins;
+const { CameraPreview, BarcodeScanner } = Plugins;
+
 // https://medium.com/cashify-engineering/barcode-reader-using-google-mobile-vision-88b3e9f31668
 // https://www.ionicanddjangotutorial.com/ionic-qrcode-scanning/
 // https://github.com/DutchConcepts/capacitor-barcode-scanner#usage
@@ -29,7 +29,6 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
   window: any;
   err   : string;
-
   user      : IUserProfile;
   result    : any;
   // barcodeScanner: BarcodeScannerPlugin
@@ -54,7 +53,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
               ) { }
 
   async ngOnInit() {
-    this.image = `${environment.logo}`
+    // this.image = `${environment.logo}`
 
     if (this.checkPermission) {
       this.startScan();
@@ -70,10 +69,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   public  cameraOn() {
 
     const cameraPreviewOptions: CameraPreviewOptions = {
-      position: 'rear',
-      parent: 'cameraPreview',
-      className: 'cameraPreview',
-      toBack: true,
+      position  : 'rear',
+      parent    : 'cameraPreview',
+      className : 'cameraPreview',
+      toBack    : true,
     };
 
   //  window.document.querySelector('ion-app').classList.add('lowOpacity');
@@ -121,16 +120,15 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   async startScan() {
     this.initData()
 
-    const { BarcodeScanner } = Plugins;
     BarcodeScanner.hideBackground();
 
-    const result = await BarcodeScanner.startScan();
+    // const result = await BarcodeScanner.startScan();
 
-    if (result.hasContent) {
-      this.resolveContent(result)
-    } else {
-      this.status = 'no content';
-    }
+    // if (result.hasContent) {
+    //   this.resolveContent(result)
+    // } else {
+    //   this.status = 'no content';
+    // }
 
     // this.cameraOff();
     this.stopScan();

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 // import { Plugins } from '@capacitor/core';
-import { Geolocation} from '@capacitor/core';
+// import { Geolocation} from '@capacitor/core';
+import { Geolocation } from '@capacitor/geolocation';
 // const {  Geolocation } = Plugins;
 import { google } from "google-maps";
 

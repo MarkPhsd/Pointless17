@@ -117,5 +117,13 @@ export class ToolBarUIService {
     this.resizeWindow();
   }
 
+  showSearchSideBar() {
+    this.searchBar = true
+    this.toolBar   = false
+    this._searchSideBar.next(true)
+    this._toolbarSideBar.next(false);
+    this.resizeWindow();
+  }
+
 
 }

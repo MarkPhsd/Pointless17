@@ -104,7 +104,7 @@ export interface employee {
   email:                     string;
   emergencyContact:          string;
   emergencyPhone:            string;
-  jobTypeID:                number;
+  jobTypeID:                 number;
   dob:                       string;
   courtesyTitle:             string;
   notes:                     string;

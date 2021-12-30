@@ -10,57 +10,30 @@
   <mat-card>
     <mat-card-title>
       <div class="grid-header">
-        <div>
           <div>
-            <h3>Profile Editor</h3>
+            <div>
+              <h3>Profile Editor</h3>
+            </div>
+            <div>
+              <h4>
+                {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}  | Account :  {{clientTable?.accountNumber}}
+              </h4>
+            </div>
           </div>
 
           <div>
-            <h4>
-              {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}  | Account :  {{clientTable?.accountNumber}}
-            </h4>
+            <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateUser($event)"
+              (outputupdateItemExit)  ="updateUserExit($event)"
+              (outputupdatedeleteItem)="deleteUser($event)"
+              (outputupdateonCancel)  ="navUserList($event)"
+              (outPutStartOrder)      ="startOrder($event)"
+              [enableStartOrder]      ="true"
+            ></app-edit-buttons-standard>
           </div>
-        </div>
-
-        <div >
-          <div class="grid-buttons">
-
-            <div>
-              <button mat-button
-                      class="button-margin"
-                      color="primary"
-                      (click)="updateUser()">
-                      <mat-icon>save</mat-icon>Save</button>
-            </div>
-
-            <div>
-              <button mat-button
-                      class="button-margin"
-                      color="primary"
-                      (click)="startOrder()">
-                    <mat-icon>receipt</mat-icon>New Order</button>
-            </div>
-
-            <div>
-              <button mat-button
-                      class="button-margin"
-                      color="primary"
-                      (click)="updateUserExit()">
-                      <mat-icon>save</mat-icon> Save & Exit</button>
-            </div>
-
-            <div>
-              <button mat-button
-                      class="button-margin"
-                      color="primary"
-                      (click)="navUserList()">
-                      <mat-icon>close</mat-icon>Exit</button>
-            </div>
-
-          </div>
-        </div>
 
       </div>
+      <mat-divider></mat-divider>
     </mat-card-title>
 
     <mat-card-content >
@@ -118,7 +91,7 @@
 
                 <div>
                    <app-orders-list
-                      [height]="'50vh'"
+                      [height]="'47vh'"
                   ></app-orders-list>
                 </div>
 
@@ -167,15 +140,13 @@
         <button mat-raised-button
                 class="button-margin"
                 color="warn"
-                (click)="deleteUser()">
+                (click)="deleteUser('demo')">
                 <mat-icon>delete</mat-icon>Delete</button>
       </div>
     </mat-card-actions>
 
   </mat-card>
 </div>
-
-
 
 <ng-template #loading >
   <mat-spinner></mat-spinner>

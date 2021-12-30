@@ -1,8 +1,16 @@
 <div class="buttons-format flex-container">
 
+      <div *ngIf="enableStartOrder" >
+        <button mat-button
+          class="button-margin"
+          color="primary"
+          (click)="onOutPutStartOrder()">
+          <mat-icon>add</mat-icon>Order
+        </button>
+      </div>
+
     <div *ngIf="enableAdd">
-      {{enableAdd}}
-      <button
+        <button
               mat-button
               class="button"
               (click)="onOutPutAdd()">
@@ -69,6 +77,7 @@
         <span *ngIf="!smallDevice">Exit</span>
       </button>
     </div>
+
 
 </div>
 

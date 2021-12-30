@@ -10,6 +10,7 @@ import { Capacitor,  } from '@capacitor/core';
 import { StringDecoder } from 'node:string_decoder';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { IBalanceSheet } from './balance-sheet.service';
+import { PlatformService } from '../system/platform.service';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -46,6 +47,7 @@ export class OrdersService {
 
   isApp                       = false;
 
+
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);
   }
@@ -60,6 +62,7 @@ export class OrdersService {
   }
 
   constructor(
+    private platFormService: PlatformService,
     private http: HttpClient,
     private _SnackBar: MatSnackBar,
     private toolbarServiceUI: ToolBarUIService,
@@ -454,12 +457,15 @@ export class OrdersService {
     }
   }
 
-  setActiveOrder(site, order) {
+  setActiveOrder(site, order: IPOSOrder) {
     if (order) {
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
-      this.toolbarServiceUI.switchSearchBarSideBar()
-      return
+      if (!order.history && this.platFormService.isApp()) {
+        this.toolbarServiceUI.showSearchSideBar()
+        return
+      }
+
     }
   }
 

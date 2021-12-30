@@ -15,7 +15,8 @@ export class EditButtonsStandardComponent  {
   @Output() outputupdateonCancel  : EventEmitter<any> = new EventEmitter<any>();
   @Output() outputCopy            : EventEmitter<any> = new EventEmitter<any>();
   @Output() outputViewOrder       : EventEmitter<any> = new EventEmitter<any>();
-  @Output() outPutAdd           : EventEmitter<any> = new EventEmitter<any>();
+  @Output() outPutStartOrder       : EventEmitter<any> = new EventEmitter<any>();
+  @Output() outPutAdd             : EventEmitter<any> = new EventEmitter<any>();
 
   @Input() enableAdd  : boolean;
   @Input() enableCopy  : boolean;
@@ -26,6 +27,7 @@ export class EditButtonsStandardComponent  {
   @Input() viewOrder   : boolean;
   @Input() historyItem : boolean;
   @Input() hideSave    : boolean;
+  @Input() enableStartOrder    : boolean;
 
   smallDevice = false;
 
@@ -77,6 +79,10 @@ export class EditButtonsStandardComponent  {
 
   onOutPutAdd(){
     this.outPutAdd.emit('demo')
+  }
+
+  onOutPutStartOrder(){
+    this.outPutStartOrder.emit('demo')
   }
 
 }

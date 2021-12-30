@@ -1,7 +1,7 @@
 import { OnInit, ElementRef, Renderer2, Input, Directive } from '@angular/core';
-import { Capacitor, Plugins, KeyboardInfo } from '@capacitor/core';
+import { Keyboard } from '@capacitor/keyboard';
+import { Capacitor } from '@capacitor/core'
 
-const { Keyboard } = Plugins;
 @Directive({
   selector: '[appAutoFocusInput]'
 })

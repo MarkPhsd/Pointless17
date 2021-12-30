@@ -67,7 +67,6 @@ export class OrderMethodsService {
 
   updateAssignedItem(item: PosOrderItem) {
     this.assignPOSItem = item;
-    // this.processItem = null;
     this._assingedPOSItem.next(item)
   }
 

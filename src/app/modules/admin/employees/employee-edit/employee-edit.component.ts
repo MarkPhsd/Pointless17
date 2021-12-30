@@ -7,12 +7,11 @@ import { EMPTY, Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { clientType, employee, IClientTable, IStatus, IUserProfile } from 'src/app/_interfaces';
-import { IPOSOrder, IPOSOrderSearchModel, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { AWSBucketService, ContactsService, OrdersService, UserService } from 'src/app/_services';
+import { AWSBucketService, ContactsService, UserService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
-import { EmployeeService } from 'src/app/_services/people/employee-service.service';
-import { IStatuses, StatusTypeService } from 'src/app/_services/people/status-type.service';
+import { EmployeeService, IEmployeeClient } from 'src/app/_services/people/employee-service.service';
+import { IStatuses } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
@@ -78,15 +77,13 @@ export class EmployeeEditComponent implements OnInit {
 
     if (!this.employee$) {return}
     let employee = {} as employee;
-
     const site     = this.siteService.getAssignedSite();
     console.log('continued initializeClient')
     const employee$ = this.employeeService.getEmployee(site, this.id)
-
     employee = await employee$.pipe().toPromise();
 
     if (!employee) {return }
-    console.log('initialize client employee checked', this.client )
+    // console.log('initialize client employee checked', this.client )
     const client = {} as IClientTable
     client.firstName = employee.firstName;
     client.lastName = employee.lastName;
@@ -104,7 +101,6 @@ export class EmployeeEditComponent implements OnInit {
           this.client = employeeClient.client;
           this.initClientForm(employeeClient.client)
           this.clientForm.patchValue(this.client)
-
           this.employee = employeeClient.employee
           this.client.employeeID = employee.id;
           this.employee.clientID = this.client.id;
@@ -151,29 +147,58 @@ export class EmployeeEditComponent implements OnInit {
     }
   }
 
-  update(event): void {
-    const site = this.siteService.getAssignedSite();
-    let result = ''
-    try {
-      const client   = this.clientForm.value as IClientTable;
-      const employee = this.inputForm.value as employee;
-      // employee.password = client.apiPassword;
-      const empClient$ = this.employeeService.saveEmployeeClient(site, { employee:  employee, client: client })
+  getEmployeeClientObservable(): Observable<IEmployeeClient> {
 
-      empClient$.subscribe(data =>{
-          console.log(data)
+    const site     = this.siteService.getAssignedSite();
+    let client = {} as IClientTable
+    let employee = {} as employee
+
+    if (this.clientForm) { client  = this.clientForm.value as IClientTable; }
+
+    if (this.inputForm && !this.inputForm.valid) {
+      this.notifyEvent('Error in form', "Failed to Save");
+      return EMPTY;
+    }
+
+    if (this.inputForm)  { employee = this.inputForm.value as employee; }
+
+    if (client && employee) {
+      if (employee.id == 0) {
+        const newEmployee$ = this.employeeService.postEmployee(site, employee)
+        return  newEmployee$.pipe(
+            switchMap(data => {
+              return  this.employeeService.saveEmployeeClient(site, { employee:  data, client: client })
+        }))
+      }
+
+      if (employee.id != 0) {
+          return  this.employeeService.saveEmployeeClient(site, { employee:  employee, client: client })
+        }
+      }
+
+    return EMPTY
+
+  }
+
+  update(event): void {
+
+    if (!this.clientForm && !this.inputForm) {
+      this.notifyEvent('Error in form', "Failed to Save")
+      return
+    }
+
+    // employee.password = client.apiPassword;
+    const empClient$ = this.getEmployeeClientObservable();
+
+    if (empClient$) {
+        empClient$.subscribe(data =>{
           this.notifyEvent('Saved', "Saved")
         },
         err => {
-          this.notifyEvent(err, "Failure")
+          this.notifyEvent('Adding employee failed, please input a unique PIN Code. It may need to be a be a long number', "Failure")
         }
       )
-
-      // this.notifyEvent(result, "Success")
-    } catch (error) {
-      this.notifyEvent(result, "Failure")
     }
-
   };
 
   saveClient() {
@@ -182,12 +207,10 @@ export class EmployeeEditComponent implements OnInit {
       const employee = this.employee;
       let client = {} as IClientTable;
       client = this.clientForm.value;
-
       client.firstName = employee.firstName;
       client.lastName = employee.lastName;
       client.phone = employee.phone;
       client.email = employee.email
-
       if (employee.terminationDate) {
         client.apiUserName = ''
         client.apiPassword = ''

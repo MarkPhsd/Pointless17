@@ -1,7 +1,5 @@
 include ':app'
 include ':capacitor-cordova-android-plugins'
 project(':capacitor-cordova-android-plugins').projectDir = new File('./capacitor-cordova-android-plugins/')
-// include ':dsiemvandroid'
-// project(':dsiemvandroid').projectDir = new File('../node_modules/pointless/dsiemvandroid')
 
 apply from: 'capacitor.settings.gradle'

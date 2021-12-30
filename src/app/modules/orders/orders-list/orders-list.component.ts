@@ -123,7 +123,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           searchModel.pageSize    = 25;
           this.searchModel        = searchModel
         }
-        console.log('search model', this.searchModel)
         this.refreshSearch()
         return
       }
@@ -181,8 +180,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     }
   }
 
-
-
   //ag-grid
   //standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
@@ -199,7 +196,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
-
                         label: 'Edit',
                         getLabelFunction: this.getLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
