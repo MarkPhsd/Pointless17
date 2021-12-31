@@ -5,6 +5,7 @@
 
   <ul id="accordion"
       class="accordion">
+
     <li class="menu-item"
         @fade
         *ngFor="let menu of menus; let i = index"
@@ -12,7 +13,7 @@
         <div *userAuthorized="menu.userType">
           <div class="menu"
                 (click)="toggle(menu, i)">
-              <mat-icon>{{ menu.icon }}</mat-icon>
+              <mat-icon *ngIf="menu.icon">{{ menu.icon }}</mat-icon>
               {{ menu.name }}
           </div>
       </div>
@@ -23,8 +24,8 @@
       *ngIf="displayCategories">
 
   <div class=" accordion  menu-header">
-    <mat-icon>{{menus[index].icon}}</mat-icon>
-    {{ menus[index].name }}
+    <mat-icon *ngIf="menus[index].icon">{{menus[index].icon}}</mat-icon>
+      {{ menus[index].name }}
     <mat-divider></mat-divider>
     <div class="menu-header-footer"></div>
   </div>
@@ -40,7 +41,7 @@
               <a mat-list-item
                 routerLinkActive={{item.routerLinkActive}}
                 routerLink=      {{item.routerLink}}>
-              <mat-icon>{{ item.icon }}</mat-icon>
+              <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
               {{ item.name }}
             </a>
           </div>
@@ -66,7 +67,7 @@
 
                           routerLinkActive={{item.routerLinkActive}}
                           routerLink=      {{item.routerLink}}>
-                    <mat-icon>{{ item.icon }}</mat-icon>
+                    <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
                     <span> {{ item.name }}</span>
                   </button>
                 </div>
@@ -84,7 +85,7 @@
               <a  mat-list-item
                       (click)="resetMenu()">
                 <mat-icon>navigate_before</mat-icon>
-                Back
+                  Back
               </a>
             </div>
           </li>

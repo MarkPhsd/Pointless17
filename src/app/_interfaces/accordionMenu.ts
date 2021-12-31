@@ -3,7 +3,6 @@ export type accordionConfig = {
   multi?: boolean
 };
 
-
 export interface AccordionMenu {
   id:                   number;
   name:                 string;

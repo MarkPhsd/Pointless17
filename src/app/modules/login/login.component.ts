@@ -92,7 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setAPIAlt() {
-    if (this.platformService.isAppElectron || this.platformService.androidApp)  {
+    if (this.platformService.isApp())  {
       this.counter  = this.counter +1
       if (this.counter > 5) {
         this.counter = 0;
@@ -198,7 +198,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   loginElectronApp(user) {
-    if (this.platformService.isAppElectron || this.platformService.androidApp) {
+    if (this.platformService.isApp()) {
       this.loggedInUser = user.user
       this.spinnerLoading = false
       const currentUser = user.user

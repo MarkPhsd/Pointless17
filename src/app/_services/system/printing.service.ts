@@ -68,7 +68,6 @@ export class PrintingService {
 
   async initDefaultLayouts() {
     const site = this.siteService.getAssignedSite();
-    //initialize generic items for testing.
     try {
       this.receiptLayoutSetting = await this.settingService.setDefaultReceiptLayout(site)
       this.receiptStyles        = await this.settingService.setDefaultReceiptStyles(site)
@@ -80,7 +79,6 @@ export class PrintingService {
   async initDefaultLabel() {
     const site = this.siteService.getAssignedSite();
     this.zplSetting           = await this.settingService.setDefaultZPLText(site);
-    console.log('initialized label')
   }
 
   async refreshInventoryLabel(zplText: string, data: IInventoryAssignment): Promise<string> {
@@ -163,9 +161,13 @@ export class PrintingService {
 
 
   listPrinters(): any {
-    const printWindow = new this.electronService.remote.BrowserWindow({ show:false })
-    printWindow.loadURL('http://github.com')
-    return printWindow.webContents.getPrinters();
+    try {
+      const printWindow = new this.electronService.remote.BrowserWindow({ show:false })
+      // printWindow.loadURL('http://github.com')
+      return printWindow.webContents.getPrinters();
+    } catch (error) {
+      return ['Error Getting Printers']
+    }
   }
 
    // const node = document.getElementById('printsection');
@@ -229,7 +231,7 @@ export class PrintingService {
   async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
 
     const printWindow         = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-    console.log('print electron options', options)
+    // console.log('print electron options', options)
     printWindow.loadURL(contents)
       .then((e) => {
         if (options.silent) {
@@ -344,7 +346,7 @@ export class PrintingService {
     } catch (error) {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
     }
-    console.log('printLabelElectron')
+    // console.log('printLabelElectron')
 
     const file = `file:///c://pointless//print.txt`
     const options = {

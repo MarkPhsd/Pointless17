@@ -20,6 +20,7 @@ export class ApiStoredValueComponent implements OnInit {
   message        : string;
   isElectronApp  : boolean;
   electronVersion: string;
+  isApp: boolean;
 
   constructor(
       private router               : Router,
@@ -44,6 +45,7 @@ export class ApiStoredValueComponent implements OnInit {
     this.initRender();
     this.getVersion();
     this.isElectronApp = this.electronService.isElectronApp;
+    this.isApp = this.platformService.isApp();
   }
 
   //for electrononly

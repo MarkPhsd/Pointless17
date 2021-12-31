@@ -5,14 +5,15 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DlParserService } from 'src/app/_services/people/dl-parser.service';
 import { IUserProfile } from 'src/app/_interfaces';
 import { ActionSheetController } from '@ionic/angular';
+
 import { Plugins} from '@capacitor/core';
 import { CameraPreviewOptions }  from '@capacitor-community/camera-preview';
+import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
+
+const { CameraPreview } = Plugins;
+
 import '@capacitor-community/camera-preview';
-// import { environment } from 'src/environments/environment';
-
-// const { BarcodeScanner } = Plugins;
-const { CameraPreview, BarcodeScanner } = Plugins;
-
+import { environment } from 'src/environments/environment';
 // https://medium.com/cashify-engineering/barcode-reader-using-google-mobile-vision-88b3e9f31668
 // https://www.ionicanddjangotutorial.com/ionic-qrcode-scanning/
 // https://github.com/DutchConcepts/capacitor-barcode-scanner#usage
@@ -29,6 +30,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
   window: any;
   err   : string;
+
   user      : IUserProfile;
   result    : any;
   // barcodeScanner: BarcodeScannerPlugin
@@ -38,12 +40,24 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   error: string;
   scanActive: boolean ;
   image: any;
+  scanStatus: string;
+  scanResult: string;
+  statusCheckPermision: string;
 
   @ViewChild('video') video: ElementRef
   videoElement: any;
 
   cameraActive = false;
   parser$: Observable<IUserProfile>;
+
+   startScanSub = async () => {
+    BarcodeScanner.hideBackground(); // make background of WebView transparent
+    const result = await BarcodeScanner.startScan(); // start scanning and wait for a result
+    // if the result has content
+    if (result.hasContent) {
+      console.log(result.content); // log the raw scanned content
+    }
+  };
 
   constructor(private _snackBar: MatSnackBar,
               private dlParserService: DlParserService,
@@ -53,9 +67,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
               ) { }
 
   async ngOnInit() {
-    // this.image = `${environment.logo}`
+    this.image = `${environment.logo}`
 
-    if (this.checkPermission) {
+    if (this.checkPermission()) {
+
       this.startScan();
       // this.rearCameraOn();
     }
@@ -63,22 +78,27 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.stopScan();
     this.stopReadingCamera();
   }
 
   public  cameraOn() {
 
     const cameraPreviewOptions: CameraPreviewOptions = {
-      position  : 'rear',
-      parent    : 'cameraPreview',
-      className : 'cameraPreview',
-      toBack    : true,
+      position: 'rear',
+      parent: 'cameraPreview',
+      className: 'cameraPreview',
+      toBack: true,
     };
 
-  //  window.document.querySelector('ion-app').classList.add('lowOpacity');
+    //window.document.querySelector('ion-app').classList.add('lowOpacity');
     CameraPreview.start(cameraPreviewOptions);
     this.cameraActive = true;
-
+    // const status = await BarcodeScanner.checkPermission({ force: true });
+    // if (status.granted) {
+    //   // the user granted permission
+    //   return true;
+    // }
   }
 
   async cameraOff() {
@@ -88,16 +108,17 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   async checkPermission() {
-    const { BarcodeScanner } = Plugins;
+    // const { BarcodeScanner } = Plugins;
     const status = await BarcodeScanner.checkPermission({ force: true });
     if (status.granted) {
-      return true;
+      // return true;
     }
+    this.statusCheckPermision = this.status
     return false;
   }
 
   prepare() {
-    const { BarcodeScanner } = Plugins;
+    // const { BarcodeScanner } = Plugins;
     this.scanActive = true
     try {
       BarcodeScanner.prepare();
@@ -108,36 +129,41 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   initData() {
-    this.status = 'Scanning'
-    this.error =''
-    this.result = ''
-    this.user = null;
-    this.status = 'Capturing Content.'
-    this.cameraActive = true
-    this.scanActive = true;
+    // this.status       = 'Scanning'
+    // this.error        = ''
+    // this.result       = ''
+    // this.user         = null;
+    // this.status       = 'Capturing Content.'
+    // this.cameraActive = true
+    // this.scanActive   = true;
   }
 
   async startScan() {
+
     this.initData()
-
+    BarcodeScanner.prepare();
     BarcodeScanner.hideBackground();
+    this.scanStatus = 'Scanning Started';
 
-    // const result = await BarcodeScanner.startScan();
+    const result = await BarcodeScanner.startScan();
 
-    // if (result.hasContent) {
-    //   this.resolveContent(result)
-    // } else {
-    //   this.status = 'no content';
-    // }
+    if (result.hasContent) {
+      this.stopScan();
+      this.scanResult = 'has Content ' + result
+      this.resolveContent(result)
+    } else {
+      this.stopScan();
+      this.scanResult = 'Content not resolved '
+      this.status = 'no content';
+    }
 
     // this.cameraOff();
-    this.stopScan();
 
   }
 
   resolveContent(result: any) {
 
-    this.result  =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
+    this.result   =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
     const parser$ =  this.dlParserService.parseDriverLicense(this.siteService.getAssignedSite(),  this.result)
 
     parser$.subscribe(data => {
@@ -156,7 +182,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
     this.scanActive = false;
 
-    const { BarcodeScanner } = Plugins;
+    // const { BarcodeScanner } = Plugins;
 
     BarcodeScanner.showBackground();
 

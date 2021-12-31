@@ -1,4 +1,3 @@
-
 <ion-header>
   <ion-toolbar color="primary">
     <div class="site-info">
@@ -10,12 +9,21 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-button (click)="cameraOn()"  *ngIf="!cameraActive">
+<ion-button (click)="cameraOn()"
+            *ngIf="!cameraActive">
   Scan
 </ion-button>
 
 <div>
-  Status: {{status}}
+  Status           : {{status}} <br>
+  <!-- Barcode Prepared : {{barcodePrepared}} <br>-->
+  Scan Status      : {{scanStatus}} <br>
+  Result           : {{result}} <br>
+  err              : {{err}}<br>
+  scanResult       : {{scanResult}}<br>
+  statusCheckPermision: {{statusCheckPermision}} <br>
+  <button mat-button (click)="startScan()">Scan</button>
+
 </div>
 
 <div *ngIf="error">Error: {{error}} </div>
@@ -36,12 +44,19 @@
     <div *ngIf="cameraActive"  class="cameraPreview" id="cameraPreview">
 
         <ion-button (click)="cameraOff()" expand="block" id="close">
-          <ion-icon name="close-circle" slot="icon-only"></ion-icon>
+          <ion-icon name="close-circle"
+                    slot="icon-only"></ion-icon>
         </ion-button>
 
         <!-- <ion-button (click)="captureImage()" expand="block" id="capture">
           <ion-icon name="camera" slot="icon-only"></ion-icon>
         </ion-button> -->
+
+        <ion-button (click)="startScan()" expand="block" id="flip">
+          <ion-icon name="camera-reverse" slot="icon-only">
+          </ion-icon>
+        </ion-button>
+
 
         <ion-button (click)="flipCamera()" expand="block" id="flip">
           <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>

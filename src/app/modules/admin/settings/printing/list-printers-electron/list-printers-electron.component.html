@@ -1,18 +1,21 @@
 
 <div *ngIf="isElectronServiceInitiated">
-<mat-form-field appearance="outline">
-  <mat-label><ng-content></ng-content></mat-label>
-  <mat-select
-              type="text"
-              formControlNamename="printerName"
-              [(ngModel)]="printerName"
-              (selectionChange)="emitPrinter()"
-            >
-    <div *ngIf="printerList">
-      <mat-option *ngFor="let item of printerList" [value]="item.name">
-        {{ item.name }}
-      </mat-option>
-    </div>
-  </mat-select>
-</mat-form-field>
+  <mat-form-field appearance="outline">
+    <mat-label><ng-content></ng-content></mat-label>
+    <mat-select
+                type="text"
+                formControlNamename="printerName"
+                [(ngModel)]="printerName"
+                (selectionChange)="emitPrinter()"
+              >
+      <div *ngIf="printerList; else loading">
+        <mat-option *ngFor="let item of printerList" [value]="item.name">
+          {{ item.name }}
+        </mat-option>
+      </div>
+    </mat-select>
+  </mat-form-field>
 </div>
+<ng-template #loading>
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

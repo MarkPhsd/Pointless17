@@ -10,9 +10,9 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 export class ListPrintersElectronComponent implements OnInit {
 
   @Output() outputPrinterName   :      EventEmitter<any> = new EventEmitter();
-
+  @Input()  printerList         : any;
   isElectronServiceInitiated    : boolean;
-  printerList                   : any;
+
   @Input()  printerName         : string
 
   constructor(private electronService: ElectronService,
@@ -22,15 +22,14 @@ export class ListPrintersElectronComponent implements OnInit {
     if (this.electronService.remote != null) {
       this.isElectronServiceInitiated = true
     }
-    if (this.isElectronServiceInitiated) {
-      this.listPrinters();
-    }
+    // if (this.isElectronServiceInitiated) {
+    //   this.listPrinters();
+    // }
   }
 
-  listPrinters(): any {
-    this.printerList = this.printingService.listPrinters();
-    console.log('Printer List', this.printerList)
-  }
+  // listPrinters(): any {
+  //   this.printerList = this.printingService.listPrinters();
+  // }
 
   emitPrinter() {
     this.outputPrinterName.emit(this.printerName)

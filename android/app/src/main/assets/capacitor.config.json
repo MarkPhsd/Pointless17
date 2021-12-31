@@ -1,6 +1,6 @@
 {
 	"appId": "www.pointlesspos.com",
-	"appName": "android",
+	"appName": "pointless",
 	"bundledWebRuntime": false,
 	"npmClient": "npm",
 	"webDir": "dist/CCSApp",

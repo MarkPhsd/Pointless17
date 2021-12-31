@@ -46,38 +46,37 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         this.user = user
         this.refreshMenu(user)
         if (!user) {
-          // console.log('returning no  user' , user)
           this.menus = [] as AccordionMenu[];
         }
       }
     )
   }
 
-
   refreshMenu(user: IUser) {
-
       if (user == undefined) { return }
       const site = this.siteService.getAssignedSite();
       const menu$ = this.menusService.getMainMenu(this.site, user)
 
       menu$.subscribe( data => {
         this.menus = [] as AccordionMenu[];
-        if (!data) {
-
-           return
-        }
+        if (!data) { return }
         this.config = this.mergeConfig(this.options);
-
         if (data)
           data.filter( item => {
-            if (item.active) {this.menus.push(item) } //= data
+            this.addItemToMenu(item, this.menus)
           })
         }, err => {
-
           this.menus = [] as AccordionMenu[];
       }
     )
   }
+
+  addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
+    if (item.active) {mainMenu.push(item) }
+    this.menus =  [...new Set(this.menus)]
+    console.log('this.menus', this.menus)
+  }
+
 
   constructor ( private menusService            : MenusService,
                 private router                  : Router,
@@ -92,6 +91,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     this.initSubscription()
     this.initMenu();
   }
+
 
   initMenu() {
     const site  = this.siteService.getAssignedSite();
@@ -112,6 +112,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     if (this._user) { this._user.unsubscribe() }
+    this.menus = [] as AccordionMenu[];
   }
 
   mergeConfig(options: accordionConfig) {

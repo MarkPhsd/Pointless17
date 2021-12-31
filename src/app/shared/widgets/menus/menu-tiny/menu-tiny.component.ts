@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
 import { EMPTY, Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
@@ -28,7 +28,6 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   displayCategories: boolean;
   index:             number;
   result:            boolean;
-
   user              : IUser;
   _user             : Subscription;
   site              : ISite;
@@ -38,7 +37,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       user => {
         this.user = user
         if (!user) {  this.menus = [] as AccordionMenu[]; }
-        if (user)  { this.refreshMenu(user) }
+        if (user )  { this.refreshMenu(user) }
       }
     )
   }
@@ -65,6 +64,8 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
     if (item.active) {mainMenu.push(item) }
+    this.menus =  [...new Set(this.menus)]
+    console.log('this.menus', this.menus)
   }
 
   constructor ( private menusService            : MenusService,

@@ -52,7 +52,7 @@ export class AppInitService  {
   //this can be assigned in settings after an initial login.
 
   async init() {
-    console.log('app-init.ervice init', )
+    // console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
     // console.log('app initlaizing procedure', this.apiUrl, this.isApp());
 

@@ -319,10 +319,7 @@ export class MenusService {
 
   createMainMenu(user: IUser, site: ISite): Observable<MenuGroup> {
 
-    // const user = this.auth.userValue
-    // console.log('createMainMenu', user)
     if (!user) {
-      // console.log('user not defined - createMainMenu')
       return null
     }
 

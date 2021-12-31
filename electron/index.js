@@ -113,7 +113,6 @@ async function createWindow () {
             if (item.name == 'timerInterval') {
               hexString = item.value;
               if (hexString) { interval = parseInt(hexString, 16); }
-              // log.info(`Scale Timer Interval: ${interval} `);
             }
           }
         }
@@ -139,7 +138,8 @@ async function createWindow () {
           }
         }
         if (mainWindow != null && interval != 0) {
-          setInterval( readScale32, interval);
+
+          setInterval(  readScale32, interval);
         }
       }
     )
@@ -196,7 +196,7 @@ app.on('ready', function ()  {
   }
 });
 
-function readScale() {
+async function readScale() {
   //testing nodes
 
   regKey.values(function (err, items /* array of RegistryItem */) {
@@ -228,7 +228,7 @@ function readScale() {
             }
           }
           if (scaleInfo) {
-            mainWindow.webContents.send('scaleInfo',  scaleInfo)
+             mainWindow.webContents.send('scaleInfo',  scaleInfo)
           }
         }
       } catch (error) {
@@ -236,7 +236,7 @@ function readScale() {
   });
 }
 
-function readScale32() {
+async function readScale32() {
   //testing nodes
   regKey32.values(function (err, items /* array of RegistryItem */) {
       if (err) {

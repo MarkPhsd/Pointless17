@@ -1,8 +1,11 @@
 import { Component} from '@angular/core';
 import { Printer, PrintOptions } from '@ionic-native/printer/ngx'
-import { Plugins } from '@capacitor/core';
-import 'ionic-zebra-label-printer';
-const { ZebraLabelPrinter } = Plugins;
+
+// import { Plugins } from '@capacitor/core';
+// import 'ionic-zebra-label-printer';
+// const { ZebraLabelPrinter } = Plugins;
+
+import { ZebraLabelPrinterPlugin } from 'ionic-zebra-label-printer';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { NavController, Platform, ToastController } from '@ionic/angular';
 

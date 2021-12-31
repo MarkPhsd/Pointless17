@@ -21,20 +21,17 @@ export class SettingsComponent implements OnInit {
   showPaymentMethods = false;
   user          :  IUser;
   role          :  string;
-
   accordionStep = -1;
   _accordionStep: Subscription;
 
   initSubscriptions() {
     this._accordionStep  = this.systemManagerService.accordionMenu$.subscribe( step => {
       this.accordionStep = step;
-      console.log('initSubscriptions', step)
     })
   }
 
   constructor(
       private AuthenticationService: AuthenticationService,
-      private platformService      : PlatformService,
       private dialog               : MatDialog,
       private systemManagerService : SystemManagerService,
       private router               : Router)
@@ -58,15 +55,13 @@ export class SettingsComponent implements OnInit {
     serviceTypeList() {
       this.routerNavigation('service-type-list')
     }
+
     gotoPayments() {
       this.routerNavigation('payments')
     }
 
     setStep(index: number) {
-      console.log('setStep')
       this.systemManagerService.updateAccordionStep(index)
-      // this.accordionStep = index;
-      console.log('setStep', index)
     }
 
     nextStep() {

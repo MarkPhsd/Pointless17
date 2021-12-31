@@ -30,7 +30,6 @@ const { Keyboard } = Plugins;
 //nice design based on cards.
 //https://zoaibkhan.com/blog/create-a-responsive-card-grid-in-angular-using-flex-layout-part-1/
 
-
 @Component({
   selector: 'app-categories',
   templateUrl: './categories.component.html',
@@ -128,6 +127,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   searchPhrase     :         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
+
   searchModel: ProductSearchModel
   searchItems$              : Subject<IProductSearchResults> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
@@ -243,7 +243,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
         Keyboard.hide();
       }, 200 )
     }
-
   }
 
   clearAll(){
@@ -288,12 +287,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
     this.menuService.updateMeunuItemData(productSearchModel)
-    return productSearchModel
+    return productSearchModel;
   }
 
   initSearchModel(): ProductSearchModel {
-    let searchModel        = {} as ProductSearchModel;
-    searchModel = this.applyBrandSearchModel(searchModel)
+    let searchModel       = {} as ProductSearchModel;
+    searchModel           = this.applyBrandSearchModel(searchModel)
     return searchModel
   }
 
@@ -302,7 +301,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     await this.addToList(this.searchModel.pageSize, this.searchModel.pageNumber )
   }
 
-
   onScrollDown() {
     this.scrollingInfo = 'scroll down'
     this.nextPage();
@@ -310,7 +308,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   onScrollUp() {
     console.log('scrolled up!!');
-    // this.scrollingInfo = 'scroll up'
   }
 
   async addToList(pageSize: number, pageNumber: number)  {
@@ -325,7 +322,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
     results$.subscribe(data => {
       this.loading = false;
-
 
       if (!data || data.results.length == 0 || data.results == null) {
         this.value = 100;
