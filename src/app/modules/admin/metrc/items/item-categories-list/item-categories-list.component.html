@@ -1,24 +1,33 @@
+<mat-card>
+  <button mat-button
+          color="primary"
+          (click)="importCategories()">
+          <mat-icon>download</mat-icon>Import
+  </button>
+  <button mat-button
+      color="primary"
+      (click)="searchItems()">
+      <mat-icon>refresh</mat-icon>Refresh
+  </button>
 
-<button mat-button mat-raised-button
-        color="primary"
-        (click)="importCategories()">Import</button>
+</mat-card>
 
-<div fxLayout="column" fx-flex fx-layout-align="space-between"></div>
+<mat-card *ngIf="mETRCItemsCategories$">
 
-<div *ngIf="mETRCItemsCategories$">
+    <ag-grid-angular
+      #agGrid
+      style                ="width: 100%; height: 75vh;"
+      id                   ="mySearchGrid"
+      class                ="ag-theme-material"
+      [columnDefs]         ="columnDefs"
+      [defaultColDef]      ="defaultColDef"
+      [rowData]            ="mETRCItemsCategories$ | async"
+      [frameworkComponents]="frameworkComponents"
+      (gridReady)          ="onGridReady($event)">
+    </ag-grid-angular>
 
-  <ag-grid-angular
-          #agGrid
-          id="myGrid"
-          [class]="agtheme"
-          [style]="gridDimensions"
-          [columnDefs]="columnDefs"
-          [defaultColDef]="defaultColDef"
-          [rowData]="mETRCItemsCategories$ | async"
-          [frameworkComponents]="frameworkComponents"
-          (gridReady)="onGridReady($event)">
-        </ag-grid-angular>
+</mat-card>
 
-<div>
+
 
 

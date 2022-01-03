@@ -29,7 +29,7 @@ export class MetrcFacilitiesService {
 
     const controller = '/MetrcFacilities/'
 
-    const endPoint = ``
+    const endPoint = `GetMetrcFacilities`
 
     const parameters = ''
 
@@ -55,9 +55,9 @@ export class MetrcFacilitiesService {
 
   importFacilities(site: ISite): Observable<METRCFacilities[]> {
 
-    const controller = '/MetrcFacilities/GetImportFacilities'
+    const controller = '/MetrcFacilities/'
 
-    const parameters = `?siteName=${site.name}`
+    const parameters = `GetImportFacilities?siteName=${site.name}`
 
     const url = `${site.url}${controller}${parameters}`
 

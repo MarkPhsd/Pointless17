@@ -1,12 +1,11 @@
-import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
+import { Component,  Inject,  Input,  OnInit, } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { AWSBucketService,  MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
-import { tap } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { CurrencyPipe } from '@angular/common';
@@ -19,8 +18,6 @@ import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.ser
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
-import { InteractivityChecker } from '@angular/cdk/a11y';
-import { PriceCategoryItemService } from 'src/app/_services/menu/price-category-item.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 
 @Component({
@@ -58,10 +55,8 @@ export class METRCProductsAddComponent implements OnInit {
 
   get f():                FormGroup  { return this.packageForm as FormGroup};
 
-
   bucketName:             string;
   awsBucketURL:           string;
-
 
   packageForm:            FormGroup;
   locationFormArray:      FormGroup;
@@ -80,10 +75,8 @@ export class METRCProductsAddComponent implements OnInit {
   cbd2:  any;
   cbn:   any;
   cbn2:  any;
-
   cbda:   any;
   cbda2:  any;
-
   site:                   ISite;
   conversions:            IUnitConversion[];
   menuItem:               IMenuItem;
@@ -92,14 +85,10 @@ export class METRCProductsAddComponent implements OnInit {
   intakeconversionQuantity: number;
   constructor(
           private conversionService: ConversionsService,
-          private router: Router,
           public route: ActivatedRoute,
           public fb: FormBuilder,
-          private sanitizer : DomSanitizer,
           private awsBucket: AWSBucketService,
           private _snackBar: MatSnackBar,
-          private menuPricingService: PriceCategoriesService,
-          private taxes: TaxesService,
           private siteService: SitesService,
           private menuService: MenuService,
           private metrcPackagesService: MetrcPackagesService,
@@ -121,10 +110,8 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   async ngOnInit() {
-
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
-
     this.unitsConverted = {} as IUnitsConverted;
     this.site =  this.siteService.getAssignedSite();
     this.conversions =  await this.conversionService.getGramsConversions();
@@ -133,7 +120,6 @@ export class METRCProductsAddComponent implements OnInit {
     this.inventoryLocations$.subscribe(data => {
       this.inventoryLocations = data
     })
-
     this.initForm();
   }
 

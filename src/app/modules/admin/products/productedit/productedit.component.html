@@ -23,11 +23,9 @@
                   (outputupdateonCancel)  ="onCancel($event)"
                   (outputCopy)            ="copyItem($event)"
             ></app-edit-buttons-standard>
-             <mat-slide-toggle
-                        name="active"
-                        formControlName="active">
-               <mat-label>Active</mat-label>
-            </mat-slide-toggle>
+
+            <app-activity-toggles [formGroup]="productForm"></app-activity-toggles>
+
           </div>
         </div>
       </mat-card-title>

@@ -1,19 +1,41 @@
-<button mat-button mat-raised-button class="button" color="primary" (click)="import()">Import</button>
+<mat-card>
+  <button mat-button
+          color="primary"
+          (click)="import()">
+          <mat-icon>download</mat-icon>Import
+  </button>
+  <button mat-button
+      color="primary"
+      (click)="searchItems()">
+      <mat-icon>refresh</mat-icon>Refresh
+  </button>
 
-<div *ngIf="mETRCFacilities$" class="agrid-container">
+  <div class="grid-item" *ngIf="searchForm">
+    <app-mat-select
+        (outputItem)="getAssignedSiteSelection($event)"
+        [list$]     ="sites$"
+        [fieldName] ="'selectedSiteID'"
+        [inputForm] ="searchForm"
+        >
+    </app-mat-select>
+  </div>
+
+</mat-card>
+
+<mat-card *ngIf="mETRCFacilities">
 
   <ag-grid-angular
     #agGrid
-    id="myGrid"
-    style="height: 85vh;"
-    class="ag-theme-balham"
-    [columnDefs]="columnDefs"
-    [defaultColDef]="defaultColDef"
-    [rowData]="mETRCFacilities$ | async"
+    style                ="width: 100%; height: 75vh;"
+    id                   ="mySearchGrid"
+    class                ="ag-theme-material"
+    [columnDefs]         ="columnDefs"
+    [defaultColDef]      ="defaultColDef"
+    [rowData]            ="mETRCFacilities"
     [frameworkComponents]="frameworkComponents"
-    (gridReady)="onGridReady($event)">
+    (gridReady)          ="onGridReady($event)">
   </ag-grid-angular>
 
-<div>
+</mat-card>
 
 

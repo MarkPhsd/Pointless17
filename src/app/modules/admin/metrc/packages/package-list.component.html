@@ -1,81 +1,75 @@
-<div fxLayout="column" fx-flex fx-layout-align="space-between" class="form-controls">
-  <form  [formGroup]="searchForm" id="searchForm" (ngSubmit)="searchLabels()">
+<mat-card>
 
-      <div class="grid-container">
+  <div fxLayout="column"
+      fx-flex
+      fx-layout-align="space-between"
+      class="form-controls">
 
-        <div class="grid-item">
+    <div  [formGroup]="searchForm"
+          id="searchForm"
+          (ngSubmit)="searchLabels()">
+        <div class="grid-container">
+          <div class="grid-item">
+            <mat-form-field appearance="outline">
+              <mat-label >Search</mat-label>
+              <input
+                    #input
+                    matInput
+                    type="text"
+                    id="searchProducts"
+                    formControlName="searchProducts"
+                    [(ngModel)]="searchProducts"
+                    class="form-control"
+                    [matAutocomplete]="auto">
+                    <mat-autocomplete panelWidth="auto"
+                                      #auto="matAutocomplete"
+                                      [displayWith]="displayFn.bind(this)">
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
 
-          <mat-form-field appearance="outline">
-            <mat-label >Search</mat-label>
-            <input
-                  #input
-                  matInput
-                  type="text"
-                  id="searchProducts"
-                  formControlName="searchProducts"
-                  [(ngModel)]="searchProducts"
-                  class="form-control"
-                  [matAutocomplete]="auto">
+          <div class="grid-item">
+            <app-mat-select
+                (outputItem)="getMetrcCategory($event)"
+                [list$]     ="metrcCategory$"
+                [fieldName] ="'metrcCategory'"
+                [inputForm] ="searchForm"
+                >
+            </app-mat-select>
+          </div>
 
-                  <mat-autocomplete panelWidth="auto"
-                                    #auto="matAutocomplete"
-                                    [displayWith]="displayFn.bind(this)">
-            </mat-autocomplete>
-           </mat-form-field>
-        </div>
+          <div class="grid-item">
+            <app-mat-select
+                (outputItem)="getAssignedSiteSelection($event)"
+                [list$]     ="sites$"
+                [fieldName] ="'selectedSiteID'"
+                [inputForm] ="searchForm"
+                >
+            </app-mat-select>
+          </div>
 
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label>METRC Categories</mat-label>
-              <mat-select
-                        type="text"
-                        (selectionChange)="getMetrcCategory($event)"
-                        formControlNamename="metrcCategory"
-                      >
-              <div *ngIf="(metrcCategory$ | async) as list">
-                <mat-option [value]=0>All</mat-option>
-                <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          <div class="grid-item">
+            <button mat-button
+                    mat-raised-button
+                    color="primary"
+                    (click)="searchItems()">Active</button>
+          </div>
 
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label>Sites</mat-label>
-            <mat-select
-                        type="text"
-                        (selectionChange)="getAssignedSiteSelection($event)"
-                        formControlNamename="selectedSiteID"
-                      >
-              <div *ngIf="(sites$ | async) as list">
-                <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          <div class="grid-item">
+            <button mat-button mat-raised-button
+                    color="primary"
+                    (click)="searchItems()">Imported
+            </button>
+          </div>
 
-        <div class="grid-item">
-          <button mat-button mat-raised-button  color="primary" (click)="searchItems()">Active</button>
-        </div>
-
-        <div class="grid-item">
-          <button mat-button mat-raised-button  color="primary" (click)="searchItems()">Imported</button>
-        </div>
-
+      </div>
     </div>
-  </form>
+  </div>
 
+</mat-card>
 
-</div>
-
-<div fxLayout="column" fx-flex fx-layout-align="space-between"></div>
-
-<div *ngIf="mETRCPackagesGet$" class="agrid-container">
+<mat-card *ngIf="mETRCPackagesGet$"
+          class="agrid-container">
 
   <ag-grid-angular
     #agGrid
@@ -89,6 +83,4 @@
     (gridReady)="onGridReady($event)">
   </ag-grid-angular>
 
-<div>
-
-
+</mat-card>

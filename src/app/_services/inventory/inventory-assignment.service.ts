@@ -18,7 +18,6 @@ export interface IInventoryAssignment {
   metrcPackageID:        number;
   locationID:            number;
   location:              string;
-
   unitOfMeasureName:     string;
   unitMulitplier:        number;
   baseQuantity:          number;
@@ -59,6 +58,7 @@ export interface IInventoryAssignment {
   adjustmentType:        string;
   invoiceID     :        number;
   invoiceCode   :        string;
+  thcContent             :number;
   serials:               Serial[];
 }
 

@@ -68,17 +68,18 @@ export class ApiStoredValueComponent implements OnInit {
 
   async  setAPIUrl(){
     await this.clearUserSettings();
+    this.authenticationService.clearUserSettings()
+
     const apiUrl = this.inputForm.controls['apiUrl'].value
     const result =  this.appInitService.setAPIUrl(apiUrl)
 
     if (!result || result == '') {return}
+
     this.appInitService.init();
-    this.authenticationService.clearUserSettings()
     this.currentAPIUrl = apiUrl;
   }
 
   async clearUserSettings() {
-    console.log('clear setting')
     this.authenticationService.clearUserSettings();
     await this.siteService.clearAssignedSite();
   }
@@ -99,9 +100,7 @@ export class ApiStoredValueComponent implements OnInit {
 
   getPong(): any {
     if (!this.electronService.isElectronApp) { return }
-    // console.log('pong')
     this.electronService.ipcRenderer.addListener('asynchronous-message', (event, pong) => {
-      // console.log('ping',event, pong)
     });
     return null
   }

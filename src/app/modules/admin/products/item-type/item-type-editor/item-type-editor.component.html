@@ -46,51 +46,26 @@
                           <mat-label>Enabled</mat-label>
                         </mat-slide-toggle>
                       </div>
-                      <div>
-                        <mat-slide-toggle
-                                          name= "labelRequired"
-                                          formControlName="labelRequired">
-                          <mat-label>Requireds Label Printed</mat-label>
-                        </mat-slide-toggle>
-                      </div>
-                      <div>
-                        <mat-slide-toggle
-                                          name= "requiresSerial"
-                                          formControlName="requiresSerial">
-                          <mat-label>Requires Serial</mat-label>
-                        </mat-slide-toggle>
-                      </div>
-                      <div>
-                        <mat-slide-toggle name= "weightedItem"
-                                          formControlName="weightedItem">
-                          <mat-label>Scale Weighted Item</mat-label>
-                        </mat-slide-toggle>
-                      </div>
 
-                      <div class="toggle-footer">
-                        <mat-slide-toggle name= "expirationRequired"
-                                          formControlName="expirationRequired">
-                          <mat-label>Expiration Date Required</mat-label>
-                        </mat-slide-toggle>
-                      </div>
-                      <div class="toggle-footer">
-                        <mat-slide-toggle name= "requireInStock"
-                                          formControlName="requireInStock">
-                          <mat-label>Require to Be In Inventory to Sell</mat-label>
-                        </mat-slide-toggle>
-                      </div>
+                      <item-type-toggles-edit
+                        [itemType] ="itemType"
+                        [inputForm]="inputForm">
+                      </item-type-toggles-edit>
 
+                      <span *ngIf="inputForm && (itemType && itemType.type === 'adjustment')">
 
-                      <div>
-                        <mat-form-field appearance="outline">
-                          <mat-label>Age Requirement</mat-label>
-                              <input matInput
-                              type             ="number"
-                              name             ="ageRequirement"
-                              formControlName  ="ageRequirement"
-                            class="form-control" >
-                        </mat-form-field>
-                      </div>
+                        <div>
+                          <mat-form-field appearance="outline">
+                            <mat-label>Age Requirement</mat-label>
+                                <input matInput
+                                type             ="number"
+                                name             ="ageRequirement"
+                                formControlName  ="ageRequirement"
+                              class="form-control" >
+                          </mat-form-field>
+                        </div>
+
+                      </span>
 
                       <div>
                         <mat-form-field appearance="outline">
@@ -183,73 +158,75 @@
                     </mat-form-field>
                   </div>
 
-                  <div *ngIf="(receiptList$ | async) as receiptList; else loadingPrep">
+                  <span *ngIf="inputForm && (itemType && itemType.type != 'adjustment')">
+                    <div *ngIf="(receiptList$ | async) as receiptList; else loadingPrep">
+                        <div>
+                          <mat-label>Prep Ticket</mat-label>
+                        </div>
+                        <div>
+                          <mat-form-field appearance="outline">
+                            <mat-select
+                                type="text"
+                                [(ngModel)]        ="prepTicketID"
+                                [formControlName]  = "'prepTicketID'"
+                                (selectionChange)="setPrepTicketID(prepTicketID)">
+                                <mat-option value=0>Clear</mat-option>
+                                <mat-option *ngFor="let item of receiptList" [value]="item.id">
+                                {{ item.name }}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                    </div>
+
+                    <ng-template #loadingPrep>
+                      ...loading prep printer locations
+                      <mat-spinner [diameter]="50"></mat-spinner>
+                    </ng-template>
+
+
+                    <div *ngIf="(printerLocations$ | async) as locations; else loadingLocation">
                       <div>
-                        <mat-label>Prep Ticket</mat-label>
+                        <mat-label>Print item to a Location</mat-label>
                       </div>
                       <div>
                         <mat-form-field appearance="outline">
+                          <mat-label>Location</mat-label>
                           <mat-select
                               type="text"
-                              [(ngModel)]        ="prepTicketID"
-                              [formControlName]  = "'prepTicketID'"
-                              (selectionChange)="setPrepTicketID(prepTicketID)">
+                              [(ngModel)]        ="printLocationID"
+                              [formControlName]  = "'printLocationID'"
+                              (selectionChange)="setLocationID(printLocationID)">
                               <mat-option value=0>Clear</mat-option>
-                              <mat-option *ngFor="let item of receiptList" [value]="item.id">
-                              {{ item.name }}
-                            </mat-option>
+                              <mat-option *ngFor="let item of locations"
+                                            [value]="item.id">
+                                  {{ item.name }}
+                              </mat-option>
                           </mat-select>
                         </mat-form-field>
                       </div>
-                  </div>
 
-                  <ng-template #loadingPrep>
-                    ...loading prep printer locations
-                    <mat-spinner [diameter]="50"></mat-spinner>
-                  </ng-template>
-
-
-                  <div *ngIf="(printerLocations$ | async) as locations; else loadingLocation">
-                    <div>
-                      <mat-label>Print item to a Location</mat-label>
                     </div>
+                    <ng-template #loadingLocation>
+                      ..loading printer Locations
+                      <mat-spinner [diameter]="50"></mat-spinner>
+                    </ng-template>
+
                     <div>
-                      <mat-form-field appearance="outline">
-                        <mat-label>Location</mat-label>
-                        <mat-select
-                            type="text"
-                            [(ngModel)]        ="printLocationID"
-                            [formControlName]  = "'printLocationID'"
-                            (selectionChange)="setLocationID(printLocationID)">
-                            <mat-option value=0>Clear</mat-option>
-                            <mat-option *ngFor="let item of locations"
-                                          [value]="item.id">
-                                {{ item.name }}
-                            </mat-option>
-                        </mat-select>
-                      </mat-form-field>
+                      <div>
+                        <mat-label>Exit Label Selection</mat-label>
+                      </div>
+                      <div>
+                        <app-label-view-selector
+                          [labelList$]      ="labelList$"
+                          [labelID]         ="itemType.labelTypeID"
+                          [labelImageHeight]="200"
+                          (outPutLabelID)   ="setLabelID($event)">
+                        </app-label-view-selector>
+                      </div>
                     </div>
 
-                  </div>
-                  <ng-template #loadingLocation>
-                    ..loading printer Locations
-                    <mat-spinner [diameter]="50"></mat-spinner>
-                  </ng-template>
-
-
-                  <div>
-                    <div>
-                      <mat-label>Exit Label Selection</mat-label>
-                    </div>
-                    <div>
-                      <app-label-view-selector
-                        [labelList$]      ="labelList$"
-                        [labelID]         ="itemType.labelTypeID"
-                        [labelImageHeight]="200"
-                        (outPutLabelID)   ="setLabelID($event)">
-                      </app-label-view-selector>
-                    </div>
-                  </div>
+                  </span>
                 </div>
             </div>
         </div>

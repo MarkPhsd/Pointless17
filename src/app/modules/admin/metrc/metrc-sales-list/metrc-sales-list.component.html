@@ -1,30 +1,22 @@
-<div fxLayout="column" fx-flex fx-layout-align="space-between" class="form-controls">
+<mat-card>
+
   <div class="grid-container">
 
     <div class="grid-item">
-      <form  [formGroup]="searchForm" id="searchForm" (ngSubmit)="searchLabels()">
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label>Sites</mat-label>
-              <mat-select
-                        type="text"
-                        (selectionChange)="getAssignedSiteSelection($event)"
-                        formControlNamename="selectedSiteID"
-                      >
-              <div *ngIf="(sites$ | async) as list">
-                <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </form>
+      <div class="grid-item">
+        <app-mat-select
+            (outputItem)="getAssignedSiteSelection($event)"
+            [list$]     ="sites$"
+            [fieldName] ="'selectedSiteID'"
+            [inputForm] ="searchForm"
+            >
+        </app-mat-select>
+      </div>
     </div>
 
     <div class="grid-item">
       <button
-              mat-raised-button
+              mat-button
               color="primary"
               (click)="showresults()"
               >
@@ -35,7 +27,7 @@
 
     <div class="grid-item">
       <button
-              mat-raised-button
+              mat-button
               color="primary"
               (click)="showresults()"
               >
@@ -46,7 +38,7 @@
 
     <div class="grid-item">
       <button
-              mat-raised-button
+              mat-button
               color="primary"
               (click)="showresults()"
               >
@@ -56,9 +48,10 @@
     </div>
 
   </div>
-</div>
 
-<div *ngIf="metrcSales$">
+</mat-card>
+
+<mat-card *ngIf="metrcSales$">
 
   <ag-grid-angular
       #agGrid

@@ -1,12 +1,14 @@
-import { Component, OnInit, SimpleChange, ViewChild } from '@angular/core';
+import { Component, OnInit,  ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable} from 'rxjs';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { MatDialog } from '@angular/material/dialog';
+import { SiteEditFormComponent } from './site-edit-form/site-edit-form.component';
 
 @Component({
   selector: 'app-site-edit',
@@ -20,40 +22,32 @@ export class SiteEditComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  dataSource: any;
+  dataSource              : any;
+  id                      : number;
 
-  metrcEnabled: boolean;
-  length: number;
-  pageSize: number;
-  pageSizeOptions: any;
+  metrcEnabled            : boolean;
+  length                  : number;
+  pageSize                : number;
+  pageSizeOptions         : any;
 
-  ccsSite: ISite;
-  ccsSites$: Observable<ISite[]>
-  ccsSites: ISite[]
-  ccsSite$: Observable<ISite>
-  imgName: string;
+  ccsSite                 : ISite;
+  ccsSites$               : Observable<ISite[]>
+  ccsSites                : ISite[]
+  ccsSite$                : Observable<ISite>
 
   columnsToDisplay = ['name', 'url', 'edit'];
 
   constructor(
             private _snackBar: MatSnackBar,
-            private fb: FormBuilder,
-            private sitesService: SitesService
+            private fb          : FormBuilder,
+            private sitesService: SitesService,
+            private dialog      : MatDialog,
   )
   {  }
 
   ngOnInit(): void {
     this.metrcEnabled = true
     this.pageSize = 10
-    this.initForm()
-    this.refreshTable();
-  }
-
-  ngAfterViewInit(){
-    this.refreshTable()
-  }
-
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
     this.refreshTable();
   }
 
@@ -71,110 +65,30 @@ export class SiteEditComponent implements OnInit {
           }
         },
         error => {
-          this.notifyEvent("Error, see console for details.", "Error")
+          // this.notifyEvent("Error, see console for details.", "Error")
           console.log("refreshTable", error)
         }
       );
       this.ccsSite = {} as ISite;
   };
 
-  editItem(id:number) {
-    this.initFormData(id)
-  }
-
-  initForm() {
-    this.sitesForm = this.fb.group({
-      name: ['', Validators.required],
-      url: ['', Validators.required],
-      city: ['', Validators.required],
-      address: ['', Validators.required],
-      state: ['', Validators.required],
-      zip: ['', Validators.required],
-      phone: ['', Validators.required],
-      metrcURL: [''],
-      metrcLicenseNumber: [''],
-      metrcUser: [''],
-      metrcKey: [''],
-      id: [''],
-    })
-    this.imgName = ""
-  }
-
-  initFormData(id: number) {
-
-    this.sitesService.getSite(id).subscribe(
-      data=> {
-        this.sitesForm.patchValue(data)
-        this.ccsSite = data
-        this.imgName = data.imgName
-      }, err => {
-        console.log(err)
-      }
+  editItem(id:number): Observable<typeof dialogRef> {
+    let dialogRef: any;
+    const site = this.sitesService.getAssignedSite();
+    dialogRef = this.dialog.open(SiteEditFormComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '650px',
+        minHeight:    '650px',
+        data   : id
+      },
     )
+    return dialogRef;
   }
 
   getLabel(rowData)  {
     console.log(rowData);
-    if(rowData && rowData.hasIndicator)
-      return 'Edit';
-      else return 'Edit';
-  }
-
-  updateSite() {
-    if (this.sitesForm.valid) {
-      this.applyChanges(this.sitesForm.value)
-    };
-  }
-
-  applyChanges(data) {
-    if (data.id) {
-      data.imgName = this.imgName
-      this.sitesService.updateSite(data.id, data).subscribe(data => {
-        this.notifyEvent(`updated`, `Success` )
-        this.refreshTable();
-      }, error => {
-        this.notifyEvent(`update ${error}`, `failure` )
-      })
-
-    } else {
-      this.sitesService.addSite(data).subscribe(data => {
-        this.notifyEvent(`${data.name} Added`, `Success` )
-        this.refreshTable();
-       }, error => {
-        this.notifyEvent(`error ${error}`, `failure` )
-      })
-    }
-
-    this.initForm()
-  }
-
-  async deleteCurrentSite() {
-
-    if (this.ccsSite) {
-      const id = this.ccsSite.id
-      this.initForm()
-      let site$ =  await this.sitesService.deleteSite(id)
-      site$.subscribe(data=>{
-        this.refreshTable();
-        this.notifyEvent("site deleted", "Deleted")
-      }, err => {
-        this.notifyEvent("Error deleting: " + err, "Error")
-      })
-    }
-
-  }
-
-  //image data
-  received_URLMainImage($event) {
-     this.imgName =  $event
-     this.updateSite();
-  };
-
-  notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
+    return 'Edit';
   }
 
 }

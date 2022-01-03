@@ -78,7 +78,7 @@ export class SitesService {
 
   }
 
-  async deleteSite(id: number): Promise<Observable<any>> {
+  deleteSite(id: number): Observable<any> {
 
     const endPoint = `/CCSSites/`
 
@@ -127,6 +127,7 @@ export class SitesService {
 
  async setDefaultSite(): Promise<ISite> {
     let site = {} as ISite
+    this.clearAssignedSite();
 
     //if is app and is installed, then it's going to be stored in
     if (!this.platformSevice.isApp()) {
@@ -139,25 +140,13 @@ export class SitesService {
 
     if ( this.platformSevice.isApp() ) {
       site.url   = localStorage.getItem('storedApiUrl')
-      this.snackBar.open('site.url ' + site.url)
+      this.snackBar.open('Set Default Site site.url ' + site.url)
       localStorage.setItem("site.url", site.url)
-
-      this.snackBar.open(site.url, 'notificaton', {duration: 3000})
-      console.log('setDefaultSite '           , site.url)
-      console.log('data from set default site', site.url )
+      // this.snackBar.open(site.url, 'Default Site', {duration: 3000})
       return site
      }
 
   }
-
-  // const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
-  // if (data) {
-  //   site.url                = data.apiUrl
-  //   localStorage.setItem("site.url", site.url)
-  //   localStorage.setItem("storedApiUrl", site.url)
-  // } else {
-  //   this.notify('No site assigned. Please seek technical assistance.', 'Internal Error', 3000)
-  // }
 
   setAssignedSite(site: ISite){
     if (site) {
@@ -186,9 +175,7 @@ export class SitesService {
     localStorage.removeItem("site.state")//, site.phone), site.state)
     localStorage.removeItem("site.zip") //, site.phone), site.zip)
     localStorage.removeItem("site.phone") //, site.phone)
-
     localStorage.removeItem('awsbucket')
-    const site = await this.setDefaultSite();
 
 
   }

@@ -100,6 +100,7 @@ export interface IMenuItem {
   priceCategories:          PriceCategories;
   itemType:                 ItemType;
   active:                   boolean;
+  thcContent               :number;
 }
 
 export interface ItemType {

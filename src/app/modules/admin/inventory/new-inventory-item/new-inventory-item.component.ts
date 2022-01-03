@@ -20,7 +20,7 @@ export class NewInventoryItemComponent implements OnInit {
   inputForm:                 FormGroup;
   id:                        any;
   site:                      ISite;
-  item:                      IInventoryAssignment;
+  item:                      IInventoryAssignment;p
   inventoryLocations:        IInventoryLocation[];
   inventoryAssignment$:      Observable<IInventoryAssignment>;
   searchForm:                FormGroup;

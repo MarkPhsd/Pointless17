@@ -1,4 +1,4 @@
-﻿import { CompanyService,AuthenticationService, AWSBucketService} from 'src/app/_services';
+﻿import { CompanyService,AuthenticationService} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -54,7 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private fb: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
-        private _renderer: Renderer2,
+        private _renderer      : Renderer2,
         private authenticationService: AuthenticationService,
         private userSwitchingService: UserSwitchingService,
         private _snackBar: MatSnackBar,
@@ -107,8 +107,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initLogo() {
-    const logo    = this.appInitService.logo;
-    if ( logo) {  this.logo = logo }
+    this.logo    = this.appInitService.logo;
+    if (!this.logo)  {
+      this.logo = 'http://cafecartel.com/temp/logo.png'
+    }
   }
 
   redirects() {
@@ -151,13 +153,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async forgetMe() {
     await this.clearUserSettings();
-
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
-    if (this.platformService.isApp())  {
-      if (this.appInitService.appGateEnabled()) {
-        this.router.navigate(['/appgate']);
-      }
-    }
   }
 
   async  browseMenu() {
@@ -171,7 +167,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async clearUserSettings() {
     this.authenticationService.clearUserSettings();
-    await this.siteService.clearAssignedSite();
+    await this.siteService.setDefaultSite();
   }
 
   getCompanyInfo() {
@@ -197,7 +193,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.router.navigate(['/resetpassword']);
   }
 
-  loginElectronApp(user) {
+  loginApp(user) {
     if (this.platformService.isApp()) {
       this.loggedInUser = user.user
       this.spinnerLoading = false
@@ -232,7 +228,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         {
           this.loading = false;
           this.loggedInUser = user
-          if (this.loginElectronApp(user)) {
+          if (this.loginApp(user)) {
             return
           }
 

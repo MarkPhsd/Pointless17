@@ -21,6 +21,7 @@ import { environment } from 'src/environments/environment';
 
 import { Observable } from 'rxjs';
 
+
 @Component({
   selector: 'app-barcode-scanner',
   templateUrl: './barcode-scanner.component.html',
@@ -67,14 +68,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
               ) { }
 
   async ngOnInit() {
-    this.image = `${environment.logo}`
-
+    // this.image = `${environment.logo}`
     if (this.checkPermission()) {
-
       this.startScan();
-      // this.rearCameraOn();
     }
-
   }
 
   ngOnDestroy(): void {
@@ -111,7 +108,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     // const { BarcodeScanner } = Plugins;
     const status = await BarcodeScanner.checkPermission({ force: true });
     if (status.granted) {
-      // return true;
+      return true;
     }
     this.statusCheckPermision = this.status
     return false;
@@ -149,7 +146,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
     if (result.hasContent) {
       this.stopScan();
-      this.scanResult = 'has Content ' + result
+      this.scanResult = 'has Content ' + result.content
       this.resolveContent(result)
     } else {
       this.stopScan();
@@ -163,16 +160,25 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
   resolveContent(result: any) {
 
-    this.result   =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
-    const parser$ =  this.dlParserService.parseDriverLicense(this.siteService.getAssignedSite(),  this.result)
+    const data   =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
+    console.log('result', data)
+
+    const site = this.siteService.getAssignedSite();
+    const parser$ =  this.dlParserService.parseDriverLicense(site, data)
 
     parser$.subscribe(data => {
-      this.user = data
-      if (this.user.id) {
-        this.router.navigate(["/profileEditor/", {id:this.user.id}]);
+
+      if (data.errorMessage || data.message == 'failure') {
+        this.notifyEvent(data.errorMessage, data.message)
+        return
+      }
+
+      if (data.id) {
+        this.router.navigate(["/profileEditor/", {id: data.id}]);
       }
 
     }, error => {
+      this.notifyEvent(error, 'Unexpected Error')
       this.error = error
     })
 

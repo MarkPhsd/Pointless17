@@ -286,9 +286,7 @@ listAll(){
   this.categoryID        = 0;
   this.productTypeSearch = 0;
   this.brandID = 0
-  // this.brand = null
-  // this.category = null;
-  // this.productTypeSearch = null;
+
   this.refreshSearch()
 }
 

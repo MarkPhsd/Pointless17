@@ -1,0 +1,150 @@
+<div [formGroup]="sitesForm" class="container" >
+  <mat-card>
+    <mat-card-title>
+      <div class="header-container">
+
+        <div *ngIf='ccsSite'>
+          {{ccsSite.name}}
+        </div>
+
+        <div >
+          <app-edit-buttons-standard
+          (outputeupdateItem)     ="updateSite($event)"
+          (outputupdatedeleteItem)="deleteCurrentSite($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
+          (outputupdateItemExit)="updateExit($event)"
+          ></app-edit-buttons-standard>
+        </div>
+
+      </div>
+    </mat-card-title>
+
+    <mat-card-content>
+
+      <div class='grid-container'>
+
+        <div>
+          <div>
+              <mat-form-field appearance="standard">
+                <mat-label >Site Name</mat-label>
+                <input matInput type="text"
+                        formControlName="name"
+                        class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="standard">
+                <mat-label >URL</mat-label>
+                <input matInput type="text"
+                      formControlName="url"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="standard">
+                <mat-label >Phone</mat-label>
+                <input matInput type="text"
+                      formControlName="phone"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+        </div>
+
+        <div>
+            <div>
+              <mat-form-field appearance="standard">
+                <mat-label >Address</mat-label>
+                <input matInput type="text"
+                        formControlName="address"
+                        class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="standard">
+                <mat-label >City</mat-label>
+                <input matInput type="text"
+                      formControlName="city"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="standard">
+                <mat-label >State</mat-label>
+                <input matInput type="text"
+                        formControlName="state"
+                        class="form-control" >
+              </mat-form-field>
+            </div>
+
+            <div>
+              <mat-form-field appearance="standard">
+                <mat-label >Zip</mat-label>
+                <input matInput type="text"
+                        formControlName="zip"
+                        class="form-control" >
+              </mat-form-field>
+            </div>
+        </div>
+
+        <div>
+            <div *ngIf="metrcEnabled">
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >METRC URL</mat-label>
+                  <input matInput type="text"
+                        formControlName="metrcURL"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >License Number</mat-label>
+                  <input matInput type="text"
+                        formControlName="metrcLicenseNumber"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div *ngIf="metrcEnabled">
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >METRC Key</mat-label>
+                  <input matInput type="text"
+                        formControlName="metrcKey"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-form-field appearance="standard">
+                  <mat-label >Metrc User</mat-label>
+                  <input matInput type="text"
+                        formControlName="metrcUser"
+                        class="form-control" >
+                </mat-form-field>
+              </div>
+            </div>
+
+
+        </div>
+
+        <div  fxLayout="column">
+          <h3>Choose Site Image</h3>
+          <app-widget-uploader   (messageOut)="received_URLMainImage($event)"
+                                [(fileNames)]="imgName"
+                                >
+          </app-widget-uploader>
+        </div>
+
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

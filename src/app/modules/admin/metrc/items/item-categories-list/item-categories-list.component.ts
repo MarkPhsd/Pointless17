@@ -12,11 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ItemCategoriesEditComponent } from '../item-categories-edit/item-categories-edit.component';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor } from '@capacitor/core';
 
 import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'app-item-categories-list',
@@ -77,15 +78,14 @@ export class ItemCategoriesListComponent implements OnInit {
     }
   }
 
-
   constructor(  private _snackBar: MatSnackBar,
       private router: Router,
       private agGridService: AgGridService,
       private fb: FormBuilder,
       private metrcItemsCategoriesService: MetrcItemsCategoriesService,
       private dialog: MatDialog,
-      public route: ActivatedRoute,
-
+      private sitesService: SitesService,
+      public  route: ActivatedRoute,
     )
   {
     this.searchItems()
@@ -103,11 +103,7 @@ export class ItemCategoriesListComponent implements OnInit {
 
   initGridResults() {
     this.initAGGridFeatures()
-
-    this.frameworkComponents = {
-      btnCellRenderer: ButtonRendererComponent
-    };
-
+    this.frameworkComponents = { btnCellRenderer: ButtonRendererComponent };
     this.defaultColDef = {
       flex: 1,
       minWidth: 100,
@@ -115,32 +111,32 @@ export class ItemCategoriesListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    try {
-      this.searchForm = this.fb.group(
-         { controlSearchItems: ['']
-        }
-      );
-    } catch (error) {
-
-    }
-
+    this.initSearchForm();
   };
+
+  initSearchForm() {
+    this.searchForm = this.fb.group(
+      { controlSearchItems: ['']
+     }
+   );
+  }
 
   initAGGridFeatures() {
 
     this.columnDefs =  [
-
       {
-       field: "Id",
-       cellRenderer: "btnCellRenderer",
-       cellRendererParams: {
-         onClick: this.editItemWithId.bind(this),
-         label: 'Edit',
-         getLabelFunction: this.getLabel.bind(this),
-         btnClass: 'btn'
-       },
-       minWidth: 75
-     },
+        field: "id",
+        cellRenderer: "btnCellRenderer",
+        cellRendererParams: {
+          onClick: this.editFromGrid.bind(this),
+          label: 'Edit',
+          getLabelFunction: this.getLabel.bind(this),
+          btnClass: 'btn btn-primary btn-sm'
+        },
+        minWidth: 65,
+        width: 65
+      },
+
       {headerName: 'Name', field: 'name', sortable: true, minWidth: 250},
       {headerName: 'Type',  sortable: true, field: 'productCategoryType',},
       {headerName: 'Quantity Type', field: 'quantityType', sortable: true},
@@ -148,6 +144,18 @@ export class ItemCategoriesListComponent implements OnInit {
 
     this.initGridOptions()
   }
+
+  // editFromGrid(e) {
+  //   if (e.rowData.id)  {
+  //     this.editItemWithId(e.rowData.id);
+  //   }
+  // }
+
+  // editItemWithId(id:any) {
+  //   this.openItemEditor(id);
+  // }
+
+
 
   initGridOptions()  {
     this.gridOptions = {
@@ -179,10 +187,15 @@ export class ItemCategoriesListComponent implements OnInit {
   }
 
   importCategories() {
-    const import$ = this.metrcItemsCategoriesService.importItemCategories()
+    const site = this.sitesService.getAssignedSite();
+    const import$ = this.metrcItemsCategoriesService.importItemCategories(site)
     import$.subscribe(data => {
       this.searchItems()
     })
+  }
+
+  refreshCategories( ) {
+
   }
 
   onSearchgridReady({ api } : {api: GridApi}) {
@@ -222,21 +235,17 @@ export class ItemCategoriesListComponent implements OnInit {
     this.rowDataClicked2 = e.rowData;
   }
 
-  editItemWithId(event) {
+  editFromGrid(event) {
     if (event.rowData.id) {
       const id = event.rowData.id
-      console.log('editItemWithId', id)
       this.openCategoriesDialog(id)
-      }
+    }
   }
 
-  editProduct(e){
-    this.notifyEvent(`Event ${e}`, "Success")
-    this.router.navigate(["/productedit/", {id:e.id}]);
-  }
-
-  onDeselectAll() {
-  }
+  // editProduct(e){
+  //   this.notifyEvent(`Event ${e}`, "Success")
+  //   this.router.navigate(["/productedit/", {id:e.id}]);
+  // }
 
   onExportToCsv() {
     this.gridApi.exportDataAsCsv();

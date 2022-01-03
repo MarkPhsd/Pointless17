@@ -227,6 +227,9 @@ import { ScheduledMenuHeaderComponent } from '../modules/menu/scheduleMenus/sche
 import { ScheduledMenuListComponent } from '../modules/menu/scheduleMenus/scheduled-menu-list/scheduled-menu-list.component';
 import { UnitTypeSelectComponent } from '../modules/admin/products/productedit/_product-edit-parts/unit-type-select/unit-type-select.component';
 import { UnitTypePromptComponent } from '../modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
+import { ActivityTogglesComponent } from '../modules/admin/products/productedit/_product-edit-parts/activity-toggles/activity-toggles.component';
+import { ItemTypeTogglesEditComponent } from '../modules/admin/products/item-type/item-type-editor/item-type-toggles-edit/item-type-toggles-edit.component';
+import { SiteEditFormComponent } from '../modules/admin/settings/site-edit/site-edit-form/site-edit-form.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -237,6 +240,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 @NgModule({
   declarations: [
     AccordionMenuItemEditComponent,
+    ActivityTogglesComponent,
     AdjustItemComponent,
     AdminComponent,
     AdminbrandslistComponent,
@@ -286,6 +290,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemTypeCategoryAssignmentComponent,
     ItemTypeDisplayAssignmentComponent,
     ItemTypeComponent,
+    ItemTypeTogglesEditComponent,
     ItemTypeEditorComponent,
     InstalledPrintersComponent,
     InventoryLocationsComponent,
@@ -401,6 +406,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     SitepointsComponent,
     SitepurchasesComponent,
     SiteEditComponent,
+    SiteEditFormComponent,
     SitesComponent,
     SoftwareComponent,
     StrainsAddComponent,

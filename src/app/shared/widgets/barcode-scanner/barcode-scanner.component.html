@@ -1,10 +1,10 @@
 <ion-header>
   <ion-toolbar color="primary">
-    <div class="site-info">
+    <span class="site-info">
       <button mat-button (click)="goHome()">
         <mat-icon >home</mat-icon>
       </button>
-    </div>
+    </span>
     <ion-title>DL Scanner</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -15,14 +15,23 @@
 </ion-button>
 
 <div>
-  Status           : {{status}} <br>
+  <!-- Status           : {{status}} <br> -->
   <!-- Barcode Prepared : {{barcodePrepared}} <br>-->
   Scan Status      : {{scanStatus}} <br>
-  Result           : {{result}} <br>
-  err              : {{err}}<br>
-  scanResult       : {{scanResult}}<br>
-  statusCheckPermision: {{statusCheckPermision}} <br>
-  <button mat-button (click)="startScan()">Scan</button>
+
+  <div *ngIf="err">
+    err              : {{err}}<br>
+
+  </div>
+
+  <div *ngIf="error">
+    Error              : {{error}}<br>
+  </div>
+
+  scanResult       : {{result}}<br>
+    <!-- Result           : {{result}} <br> -->
+  <!-- statusCheckPermision: {{statusCheckPermision}} <br> -->
+  <button mat-raised-button (click)="startScan()">Scan</button>
 
 </div>
 

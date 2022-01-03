@@ -119,7 +119,6 @@ export class AuthenticationService {
     }
 
     requestUserSetupToken(userName: string): Observable<IUserExists> {
-
       let url = `${this.apiUrl}/users/RequestUserSetupToken`
       return  this.http.post<any>(url, {userName: userName})
     };

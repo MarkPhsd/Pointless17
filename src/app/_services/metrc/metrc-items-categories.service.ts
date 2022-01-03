@@ -26,17 +26,15 @@ export class MetrcItemsCategoriesService {
     private sitesService: SitesService,
    ) {}
 
-  importItemCategories(): Observable<METRCItemsCategories[]> {
-
-    const site = this.sitesService.getAssignedSite();
+  importItemCategories(site: ISite): Observable<METRCItemsCategories[]> {
 
     const controller = '/MetrcCategories/'
 
-    const endPoint = `GetImportItemCategories`
+    const endPoint   = `GetImportItemCategories`
 
-    const parameters = ''
+    const parameters = `?siteName=${site.name}`
 
-    const url = `${site.url}${controller}${endPoint}${parameters}`
+    const url        = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<METRCItemsCategories[]>(url);
 

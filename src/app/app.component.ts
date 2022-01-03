@@ -1,16 +1,17 @@
 import { Component, QueryList, Renderer2, ViewChildren } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
-import { AuthenticationService, AWSBucketService, MenuService } from './_services';
+import { Router, NavigationEnd, ActivatedRoute,RouterOutlet } from '@angular/router';
+import { AuthenticationService, AWSBucketService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
-import { fadeInAnimation, slideInOutAnimation } from './_animations';
+import { fadeInAnimation } from './_animations';
 import { FormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet, ToastController } from '@ionic/angular';
 import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { ElectronService } from 'ngx-electron';
-import { SitesService } from './_services/reporting/sites.service';
-import { MenusService } from './_services/system/menus.service';
 import { Subscription } from 'rxjs';
+import { Title } from '@angular/platform-browser';
+import { filter, map } from 'rxjs/operators';
+
+
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
 @Component({
@@ -21,7 +22,7 @@ LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,Lice
 })
 export class AppComponent {
 
-  title = 'CCS Dashboard';
+  // title = 'CCS Dashboard';
   toggleTheme = new FormControl(false);
   user: IUser;
   _user: Subscription;
@@ -35,22 +36,20 @@ export class AppComponent {
     if (this.authenticationService.userValue) {
       this.user = this.authenticationService.userValue;
     }
-
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
     })
-
   }
 
   constructor(
       private platform:              Platform,
       private router:                Router,
+      private titleService          : Title,
+      private activatedRoute        : ActivatedRoute,
       private authenticationService: AuthenticationService,
       private statusBar:             StatusBar,
       private toastController:       ToastController,
       private awsService:            AWSBucketService,
-      private siteService         :  SitesService,
-      private menusService        :  MenusService,
 
   ) {
       this.initSubscription();
@@ -61,6 +60,25 @@ export class AppComponent {
 
       //aws settings
       this.awsService.awsBucket();
+      this.setTitle();
+  }
+
+  setTitle() {
+  //   const appTitle = this.titleService.getTitle();
+  //   console.log('app ', appTitle)
+  //   this.router
+  //     .events.pipe(
+  //       filter(event => event instanceof NavigationEnd),
+  //       map(() => {
+  //         const child = this.activatedRoute.firstChild;
+  //         if (child.snapshot.data['title']) {
+  //           return child.snapshot.data['title'];
+  //         }
+  //         return appTitle;
+  //       })
+  //     ).subscribe( pageTitle => {
+  //       this.titleService.setTitle(pageTitle);
+  //     });
   }
 
   initializeApp() {
@@ -72,6 +90,8 @@ export class AppComponent {
   logout() {
     this.authenticationService.logout();
   }
+
+
 
   // active hardware back button
   backButtonEvent() {

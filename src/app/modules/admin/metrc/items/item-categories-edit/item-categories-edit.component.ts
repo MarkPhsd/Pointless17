@@ -1,23 +1,17 @@
-import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
+import { Component,  Inject,  OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subject  } from 'rxjs';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
-import { IDatasource, IGetRowsParams,  GridApi, GridOptions } from 'ag-grid-community';
+import { Observable  } from 'rxjs';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
-import { MatDialog } from '@angular/material/dialog';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { AWSBucketService  } from 'src/app/_services';
-import { ISite } from 'src/app/_interfaces/site';
 import { tap } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
-import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
+import { FormBuilder, FormGroup} from '@angular/forms';
+import { ConversionsService } from 'src/app/_services/measurement/conversions.service';
 
 import {
   METRCItems,
@@ -113,13 +107,15 @@ export class ItemCategoriesEditComponent implements OnInit {
     }
   }
 
-  update() {
+  update(event) {
+    window.alert('This feature is not implemented')
   }
 
-  delete() {
+  delete(event) {
+    window.alert('This feature is not implemented')
   }
 
-  cancel() {
+  cancel(event) {
     this.dialogRef.close();
   }
 

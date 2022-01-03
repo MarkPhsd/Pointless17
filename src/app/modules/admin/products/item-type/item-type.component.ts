@@ -148,7 +148,7 @@ export class ItemTypeComponent implements OnInit {
        field: "id",
        cellRenderer: "btnCellRenderer",
        cellRendererParams: {
-         onClick: this.editProductFromGrid.bind(this),
+         onClick: this.editFromGrid.bind(this),
          label: 'Edit',
          getLabelFunction: this.getLabel.bind(this),
          btnClass: 'btn btn-primary btn-sm'
@@ -231,7 +231,7 @@ export class ItemTypeComponent implements OnInit {
     this.selected = selected
   }
 
-  editProductFromGrid(e) {
+  editFromGrid(e) {
     if (e.rowData.id)  {
       this.editItemWithId(e.rowData.id);
     }

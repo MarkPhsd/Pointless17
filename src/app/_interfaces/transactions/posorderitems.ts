@@ -24,6 +24,7 @@ export interface IPOSOrderItem {
   tax1:                          number;
   tax2:                          number;
   tax3:                          number;
+  thcContent                     :number;
   wicebt:                        number;
   caseQTY:                       number;
   stdRetail:                     number;

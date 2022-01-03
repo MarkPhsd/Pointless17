@@ -130,7 +130,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this._user) {
       this._user.unsubscribe();
     }
-
   }
 
   constructor(private authenticationService:  AuthenticationService,

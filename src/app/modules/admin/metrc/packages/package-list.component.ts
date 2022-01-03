@@ -121,17 +121,21 @@ export class PackageListComponent implements OnInit,AfterViewInit {
     this.sites$ =          this.siteService.getSites();
     this.metrcCategory$ =  this.metrcCategoriesService.getCategories();
 
+    this.initSearch();
+    this.searchItems();
+    this.initGridResults();
+    this.refreshGrid = true
+    if (!this.search) { this.search = ''}
+    this.initClasses()
+  }
+
+  initSearch() {
     this.searchForm = this.fb.group( {
       searchProducts: [''],
       metrcCategory:  [''],
       selectedSiteID: [''],
     });
 
-    this.searchItems();
-    this.initGridResults();
-    this.refreshGrid = true
-    if (!this.search) { this.search = ''}
-    this.initClasses()
   }
 
   initClasses()  {

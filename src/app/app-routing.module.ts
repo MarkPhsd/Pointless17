@@ -113,26 +113,26 @@ const routes: Routes = [
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
 
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
-        { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
+        { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },
 
         { path: 'app-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
-        { path: 'categories', component: CategoriesComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-        { path: 'brandslist', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-        { path: 'menuitems-infinite', component: MenuItemsInfiniteComponent ,canActivate: [AgeVerificationGuardService],   data: { animation:  'isLeft'} },
+        { path: 'categories', component: CategoriesComponent,canActivate: [AgeVerificationGuardService],   data: { title: 'Categories',  animation: 'isLeft'} },
+        { path: 'brandslist', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { title: 'Brands',  animation: 'isLeft'} },
+        { path: 'menuitems-infinite', component: MenuItemsInfiniteComponent ,canActivate: [AgeVerificationGuardService],   data: {  title: 'Menu Items',  animation:  'isLeft'} },
 
-        { path: 'menuitem',     component: MenuitemComponent, canActivate: [AgeVerificationGuardService],  data: { animation:  'isLeft'} },
+        { path: 'menuitem',     component: MenuitemComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Item',  animation:  'isLeft'} },
         { path: 'searchproducts', component: SearchResultsComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
 
-        { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: {  title: 'Dash Board',  animation: 'isLeft'} },
         { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
-        { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
-        { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
-        { path: 'sites',      component: SitesComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
+        { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {  title: 'Admin', animation:  'isLeft'} },
+        { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], data: {  title: 'Settings',  animation:  'isLeft'} },
+        { path: 'sites',      component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
         { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
-        { path: 'pos-orders', component: OrdersMainComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
+        { path: 'pos-orders', component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
         { path: 'pos-payment', component: PosPaymentComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
@@ -201,23 +201,23 @@ const routes: Routes = [
         { path: 'metrc-facilities-list', component: FacilitiesListComponent, canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
         //inventory InventoryListComponent
-        { path: 'inventory-list', component: InventoryListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'inventory-list', component: InventoryListComponent, canActivate: [AuthGuard], data: {  title: 'Inventory',  animation: 'isLeft'} },
         { path: 'inventory-locations', component: InventoryLocationsComponent,  canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         //profile look up editing
-        { path: 'profileEditor', component: ProfileEditorComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
-        { path: 'profileListing', component: ProfileLookupComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+        { path: 'profileEditor', component: ProfileEditorComponent, canActivate: [AuthGuard], data: { title: 'Profile',  animation: 'isLeft'}},
+        { path: 'profileListing', component: ProfileLookupComponent, canActivate: [AuthGuard], data: {  title: 'Profiles',  animation: 'isLeft'}},
 
-        { path: 'employee-list', component: EmployeeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
-        { path: 'employee-edit', component: EmployeeEditComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+        { path: 'employee-list', component: EmployeeListComponent, canActivate: [AuthGuard], data: {  title: 'Employees', animation: 'isLeft'}},
+        { path: 'employee-edit', component: EmployeeEditComponent, canActivate: [AuthGuard], data: {  title: 'Employee', animation: 'isLeft'}},
 
         //ClientSettings;
-        { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-        { path: 'client-type-edit', component: ClientTypeEditComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: {  title: 'Client Types',  animation: 'isLeft'} },
+        { path: 'client-type-edit', component: ClientTypeEditComponent, canActivate: [AuthGuard], data: {  title: 'Client Type Edit',  animation: 'isLeft'} },
 
         //transaction settings
-        { path: 'service-type-list', component: ServiceTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-        { path: 'service-type-edit', component: ServiceTypeEditComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'service-type-list', component: ServiceTypeListComponent, canActivate: [AuthGuard], data: { title: 'Servce Type',  animation: 'isLeft'} },
+        { path: 'service-type-edit', component: ServiceTypeEditComponent, canActivate: [AuthGuard], data: {  title: 'Service Type Edit', animation: 'isLeft'} },
 
         //edit payment settings
         { path: 'edit-payment-method', component: PaymentMethodEditComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
@@ -230,7 +230,7 @@ const routes: Routes = [
 
         //settings
         { path: 'side-menu-layout', component: MenuManagerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
-        { path: 'app-settings', component: SettingsComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+        { path: 'app-settings', component: SettingsComponent , canActivate: [AuthGuard], data: {  title: 'App Settings', animation: 'isLeft'}},
         { path: 'item-type-category-assignment', component: ItemTypeCategoryAssignmentComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         //printing
@@ -239,22 +239,22 @@ const routes: Routes = [
         //geo-location
         { path: 'location', component: IonicGeoLocationComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
-        { path: 'strains', component: StrainsAddComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+        { path: 'strains', component: StrainsAddComponent, canActivate: [AuthGuard], data: {  title: 'Strains', animation: 'isLeft'}},
 
         { path: 'keypad', component: KeyPadComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         { path: 'hammerjs', component: HammerCardComponent ,data: { animation: 'isLeft'}},
         // { path: 'pos-order-item', component: PosOrderItemComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
-        { path: 'company-edit', component: CompanyEditComponent,   canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'company-edit', component: CompanyEditComponent,   canActivate: [AuthGuard], data: {  title: 'Company',  animation: 'isLeft'} },
 
-        { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
+        { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
       ]
     },
 
-    { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: { animation: 'isLeft'}},
+    { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
 
-    { path: 'view-price-tiers', component: TierPricesComponent ,data: { animation: 'isLeft'}},
+    { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
 
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
     { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
@@ -267,12 +267,12 @@ const routes: Routes = [
     { path: 'brandslist2', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
     { path: 'catscroll', component: CategoryScrollComponent, data: { animation: 'isLeft'}},
 
-    { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+    { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { title: 'Item Search',  animation: 'isLeft'}},
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
-     { path: 'login', component: LoginComponent, data: { animation: 'isLeft'}},
-    { path: 'resetpassword', component: ResetpasswordComponent,data: { animation: 'isLeft'}},
-    { path: 'changepassword', component: ChangepasswordComponent,data: { animation: 'isLeft'}},
+    { path: 'login', component: LoginComponent, data: { animation: 'isLeft'}},
+    { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
+    { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},
 
     { path: 'api-setting', component: APISettingComponent , data: { animation: 'isLeft'}},
     { path: 'apisetting',  component: APISettingComponent , data: { animation: 'isLeft'}},

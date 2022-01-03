@@ -3,7 +3,7 @@ import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { NgxElectronModule } from 'ngx-electron';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { Printer } from '@ionic-native/printer/ngx';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, Title } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -141,7 +141,8 @@ export function init_app(appLoadService: AppInitService) {
       useFactory: init_app,
       deps: [AppInitService],
       multi: true
-    }
+    },
+    Title
 
 
   ],

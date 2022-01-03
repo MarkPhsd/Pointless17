@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -15,7 +15,6 @@ export interface TransactionUISettings {
 
 export interface WebAppSettings {
   usersEnabled: Boolean;
-
 }
 
 export interface InstalledAppSettings {
@@ -23,6 +22,9 @@ export interface InstalledAppSettings {
   promptBalanceSheet: boolean;
 }
 
+export interface MetrcSettings {
+  enabled: boolean;
+}
 
 export interface EndOfDayProcedures {
 
@@ -101,7 +103,7 @@ export class UISettingsService {
       displayNotes   : [],
       displayView    : [],
       displayAdd     : [],
-      displayQuantity: []
+      displayQuantity: [],
      })
     return fb
   }
@@ -153,5 +155,6 @@ export class UISettingsService {
     this.updateUISubscription(config)
     return setting
   }
+
 
 }

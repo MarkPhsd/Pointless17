@@ -127,6 +127,7 @@ export interface IProduct {
   retailPriceTier:              number;
   tax2:                         number;
   tax3:                         number;
+  thcContent                   :number;
   printLabelsByQuantity:        number;
   gender:                       number;
   lowestNegotiatedPrice:        number;

@@ -15,8 +15,8 @@ export interface METRCFacilities {
   supportLastPaidDate:   string;
   licenseID:             number;
   metrcFacilityTypeID:   number;
-  facilityType:     FacilityType;
-  license:          License;
+  facilityType:         FacilityType;
+  license:              License;
 }
 
 export interface FacilityType {

@@ -7,12 +7,12 @@ import { GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { METRCFacilities }  from 'src/app/_interfaces/metrcs/facilities';
-import { MatDialog } from '@angular/material/dialog';
+import { ISite } from 'src/app/_interfaces';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-facilities-list',
@@ -42,27 +42,44 @@ export class FacilitiesListComponent implements OnInit {
   numberOfPages = 1
   rowCount = 50
 
-
   //This is for the search Section//
   public searchForm: FormGroup;
   private readonly onDestroy = new Subject<void>();
   search: string;
   mETRCFacilities$: Observable<METRCFacilities[]>;
+  mETRCFacilities : METRCFacilities[]
   refreshGrid = true;
   //This is for the search Section//
+  sites$ : Observable<ISite[]>;
+  siteID: number;
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
-                private agGridService: AgGridService,
                 private fb: FormBuilder,
                 private siteService: SitesService,
                 private metrcFacilitiesService: MetrcFacilitiesService,
-                private dialog: MatDialog,
-	              public route: ActivatedRoute,
+	              public  route: ActivatedRoute,
               )
   {
     this.searchItems()
     this.initGridResults()
+    this.sites$ = this.siteService.getSites();
+    this.initForm();
+  }
+
+  initForm(){
+    const site = this.siteService.getAssignedSite()
+    this.fb.group( {
+      selectedSiteID: [site.id]
+    })
+  }
+
+  ngOnInit(): void {
+    console.log('')
+  };
+
+  getAssignedSiteSelection(event) {
+    this.siteID = parseInt(event);
   }
 
   initGridResults() {
@@ -76,18 +93,13 @@ export class FacilitiesListComponent implements OnInit {
     };
   }
 
-  ngOnInit(): void {
-    // this.searchForm = this.fb.group( { searchProducts: ''});
-    console.log('')
-  };
-
   initAGGridFeatures() {
     this.columnDefs =  [
       {
        field: "id",
        cellRenderer: "btnCellRenderer",
        cellRendererParams: {
-         onClick: this.editProductFromGrid.bind(this),
+         onClick: this.editFromGrid.bind(this),
          label: 'Edit',
          getLabelFunction: this.getLabel.bind(this),
          btnClass: 'btn btn-primary btn-sm'
@@ -95,8 +107,9 @@ export class FacilitiesListComponent implements OnInit {
        minWidth: 75
      },
       {headerName: 'Name', field: 'name', sortable: true, minWidth: 250},
-      {headerName: 'DisplayName',  sortable: true, field: 'displayName',},
-      {headerName: 'License', field: 'license.number', sortable: true},
+      {headerName: 'Exp',  sortable: true, field: 'supportExpirationDate',},
+      {headerName: 'Number', field: 'license.number', sortable: true},
+      {headerName: 'Type', field: 'license.licenseType', sortable: true},
 
     ]
     this.initGridOptions()
@@ -123,22 +136,30 @@ export class FacilitiesListComponent implements OnInit {
     }
   }
 
-
   import() {
     const mETRCFacilities$ =  this.metrcFacilitiesService.importFacilities(this.siteService.getAssignedSite())
     mETRCFacilities$.subscribe(data =>{
       this.searchItems();
     })
-
   }
 
   searchItems() {
-    // const packageFilter = {} as PackageFilter
-    // packageFilter.pageNumber =1
-    // packageFilter.pageSize = 100
-    // packageFilter.hasImported = false
+    let siteID = this.siteID
+    if (!siteID) {
+      const site = this.siteService.getAssignedSite()
+      siteID = site.id
+    }
 
-    this.mETRCFacilities$ = this.metrcFacilitiesService.getFacilities(this.siteService.getAssignedSite())
+    const site$ =  this.siteService.getSite(siteID)
+
+    site$.pipe(
+      switchMap(data => {
+       return  this.metrcFacilitiesService.getFacilities(data)
+      }
+    )).subscribe(data =>  {
+      this.mETRCFacilities = data;
+    })
+
   }
 
   onSearchgridReady({ api } : {api: GridApi}) {
@@ -181,23 +202,18 @@ export class FacilitiesListComponent implements OnInit {
     this.rowDataClicked2 = e.rowData;
   }
 
-  editProductFromGrid(e) {
-    console.log(e)
-
+  editFromGrid(e) {
     if (e.rowData.id)  {
-      this.getPackage(e.rowData.id);
+      // this.getPackage(e.rowData.id);
+      window.alert('This feature is not implemented.')
     }
   }
 
   async getPackage(id:any) {
-    console.log(id)
+
     this.metrcFacilitiesService.getFacility(id, this.siteService.getAssignedSite())
               .subscribe( data => {
 
-        // if (data.item.quantityType === 'CountBased') {
-        //   this.openStrainsDialog(data.id)
-        //   return
-        // }
       }
     )
 
