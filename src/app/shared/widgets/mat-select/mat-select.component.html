@@ -12,13 +12,26 @@
                   name="species"
                   (selectionChange)="setItemOutPut($event.value)"
               >
-              <div *ngIf="(list$ | async) as list" >
+
+              <span *ngIf="!list">
+                <div *ngIf="(list$ | async) as list" >
+                  <mat-option
+                      *ngFor="let item of list"
+                       [value]="item">
+                      {{item.name}}
+                  </mat-option>
+                </div>
+              </span>
+
+              <div *ngIf="list" >
                 <mat-option
                     *ngFor="let item of list"
                      [value]="item">
                     {{item.name}}
                 </mat-option>
               </div>
+
+
             </mat-select>
           </mat-form-field>
         </div>

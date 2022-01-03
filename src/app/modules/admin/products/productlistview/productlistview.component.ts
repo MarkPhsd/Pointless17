@@ -91,7 +91,6 @@ viewOptions$     = of(
   ]
 )
 
-
 //search form filters
 inputForm        : FormGroup;
 categoryID       : number;
@@ -134,166 +133,163 @@ constructor(  private _snackBar         : MatSnackBar,
               private awsService             : AWSBucketService,
               private dialog: MatDialog,
             )
-{
-  this.initForm();
-  this.initAgGrid(this.pageSize);
-}
-
-async ngOnInit() {
-  this.initClasses()
-
-  const clientSearchModel       = {} as ClientSearchModel;
-  clientSearchModel.pageNumber  = 1
-  clientSearchModel.pageSize    = 1000;
-
-  this.urlPath        = await this.awsService.awsBucketURL();
-  const site          = this.siteService.getAssignedSite()
-  this.rowSelection   = 'multiple'
-  this.categories$    = this.menuService.getListOfCategories(site)
-  this.departments$   = this.menuService.getListOfDepartments(site)
-  this.productTypes$  = this.itemTypeService.getBasicTypes(site)
-
-  const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
-  brandResults$.subscribe(data => {
-    this.brands = data.results
-  })
-
-  if (this.editOff) {
-    this.buttonName = 'Assign'
-    this.initSubscriptions();
-    this.gridlist = "grid-list-nopanel"
+  {
+    this.initForm();
+    this.initAgGrid(this.pageSize);
   }
-  if (!this.editOff) {
-    this.buttonName = 'Edit'
-  }
-};
 
-setBrandID(event) {
-  if (event && event.id) {
-    this.brandID = event.id
+  async ngOnInit() {
+    this.initClasses()
+
+    const clientSearchModel       = {} as ClientSearchModel;
+    clientSearchModel.pageNumber  = 1
+    clientSearchModel.pageSize    = 1000;
+
+    this.urlPath        = await this.awsService.awsBucketURL();
+    const site          = this.siteService.getAssignedSite()
+    this.rowSelection   = 'multiple'
+    this.categories$    = this.menuService.getListOfCategories(site)
+    this.departments$   = this.menuService.getListOfDepartments(site)
+    this.productTypes$  = this.itemTypeService.getBasicTypes(site)
+
+    const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
+    brandResults$.subscribe(data => {
+      this.brands = data.results
+    })
+
+    if (this.editOff) {
+      this.buttonName = 'Assign'
+      this.initSubscriptions();
+      this.gridlist = "grid-list-nopanel"
+    }
+    if (!this.editOff) {
+      this.buttonName = 'Edit'
+    }
+  };
+
+  setBrandID(event) {
+    if (event && event.id) {
+      this.brandID = event.id
+      this.refreshSearch();
+    }
+  }
+
+
+  initClasses()  {
+    const platForm      = this.platForm;
+    this.gridDimensions =  'width: 100%; height: 90%;'
+    this.agtheme  = 'ag-theme-material';
+    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
+    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+  }
+
+  async initForm() {
+    this.searchForm   = this.fb.group( {
+      itemName          : [''],
+      productTypeSearch : [this.productTypeSearch],
+      brandID           : [this.brandID],
+      categoryID        : [this.categoryID],
+      viewAll           : [1],
+    });
+  }
+
+  refreshSearchPhrase(event) {
     this.refreshSearch();
   }
-}
 
+  //ag-grid
+  //standard formating for ag-grid.
+  //requires addjustment of column defs, other sections can be left the same.
+  initAgGrid(pageSize: number) {
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
 
+    this.defaultColDef = {
+      flex: 2,
+      // minWidth: 100,
+    };
 
+    this.columnDefs =  [
 
-
-initClasses()  {
-  const platForm      = this.platForm;
-  this.gridDimensions =  'width: 100%; height: 90%;'
-  this.agtheme  = 'ag-theme-material';
-  if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-  if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
-}
-
-async initForm() {
-  this.searchForm   = this.fb.group( {
-    itemName          : [''],
-    productTypeSearch : [this.productTypeSearch],
-    brandID           : [this.brandID],
-    categoryID        : [this.categoryID],
-    viewAll           : [1],
-  });
-}
-
-refreshSearchPhrase(event) {
-  this.refreshSearch();
-}
-
-//ag-grid
-//standard formating for ag-grid.
-//requires addjustment of column defs, other sections can be left the same.
-initAgGrid(pageSize: number) {
-  this.frameworkComponents = {
-    btnCellRenderer: ButtonRendererComponent
-  };
-
-  this.defaultColDef = {
-    flex: 2,
-    // minWidth: 100,
-  };
-
-  this.columnDefs =  [
-    {
-    field: 'id',
-    cellRenderer: "btnCellRenderer",
-                  cellRendererParams: {
-                      onClick: this.editProductFromGrid.bind(this),
-                      label: this.buttonName,
-                      getLabelFunction: this.getLabel.bind(this),
-                      btnClass: 'btn btn-primary btn-sm'
-                    },
-                    minWidth: 125,
-                    maxWidth: 125,
-                    flex: 2,
-    },
-    {headerName: 'Name',     field: 'name',         sortable: true,
-                width   : 175,
-                minWidth: 175,
-                maxWidth: 275,
-                flex    : 1,
-    },
-    {headerName: 'Barcode',  field: 'barcode',      sortable: true,
-                width: 75,
-                minWidth: 125,
-                maxWidth: 150,
-                // flex: 1,
-    },
-    {headerName: 'Count',    field: 'productCount', sortable: true,
-                width: 90,
-                minWidth: 90,
-                maxWidth: 90,
+      {
+      field: 'id',
+      cellRenderer: "btnCellRenderer",
+                    cellRendererParams: {
+                        onClick: this.editProductFromGrid.bind(this),
+                        label: this.buttonName,
+                        getLabelFunction: this.getLabel.bind(this),
+                        btnClass: 'btn btn-primary btn-sm'
+                      },
+                      minWidth: 125,
+                      maxWidth: 125,
+                      flex: 2,
+      },
+      {headerName: 'Name',     field: 'name',         sortable: true,
+                  width   : 175,
+                  minWidth: 175,
+                  maxWidth: 275,
+                  flex    : 1,
+      },
+      {headerName: 'Barcode',  field: 'barcode',      sortable: true,
+                  width: 75,
+                  minWidth: 125,
+                  maxWidth: 150,
+                  // flex: 1,
+      },
+      {headerName: 'Count',    field: 'productCount', sortable: true,
+                  width: 90,
+                  minWidth: 90,
+                  maxWidth: 90,
+                  // flex: 2,
+      },
+      {headerName: 'Category', field: 'category',     sortable: true,
+                  width: 140,
+                  minWidth: 140,
+                  maxWidth: 200,
                 // flex: 2,
-    },
-    {headerName: 'Category', field: 'category',     sortable: true,
-                width: 140,
-                minWidth: 140,
-                maxWidth: 200,
-               // flex: 2,
-    },
-    {headerName: 'Type', field: 'type', sortable: true,
-                width: 100,
-                minWidth: 100,
-                maxWidth: 125,
-                 // flex: 2,
-                },
-    {headerName: 'Retail',   field: 'retail',       sortable: true,
-                cellRenderer: this.agGridService.currencyCellRendererUSD,
-                width: 100,
-                minWidth: 100,
-                maxWidth: 125,
-                // flex: 2,
-                },
-    { headerName: 'Image',
-                field: 'imageName',
-                width: 100,
-                minWidth: 100,
-                maxWidth: 100,
-                sortable: false,
-                autoHeight: true,
-                cellRendererFramework: AgGridImageFormatterComponent
-              }
-  ]
+      },
+      {headerName: 'Type', field: 'type', sortable: true,
+                  width: 100,
+                  minWidth: 100,
+                  maxWidth: 125,
+                  // flex: 2,
+                  },
+      {headerName: 'Retail',   field: 'retail',       sortable: true,
+                  cellRenderer: this.agGridService.currencyCellRendererUSD,
+                  width: 100,
+                  minWidth: 100,
+                  maxWidth: 125,
+                  // flex: 2,
+                  },
+      { headerName: 'Image',
+                  field: 'imageName',
+                  width: 100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  sortable: false,
+                  autoHeight: true,
+                  cellRendererFramework: AgGridImageFormatterComponent
+                }
+    ]
 
-  this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
 
-}
+  }
 
-listAll(){
-  const control = this.itemName
-  control.setValue('')
-  this.categoryID        = 0;
-  this.productTypeSearch = 0;
-  this.brandID = 0
-
-  this.refreshSearch()
-}
+  listAll(){
+    const control = this.itemName
+    control.setValue('')
+    this.categoryID        = 0;
+    this.productTypeSearch = 0;
+    this.brandID           = 0
+    this.refreshSearch()
+  }
 
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
-initProductSearchModel(): ProductSearchModel {
+  initProductSearchModel(): ProductSearchModel {
     let searchModel        = {} as ProductSearchModel;
     if (this.itemName.value)            { searchModel.name        = this.itemName.value  }
     if (this.categoryID )               { searchModel.categoryID  = this.categoryID.toString(); }
@@ -310,43 +306,27 @@ initProductSearchModel(): ProductSearchModel {
   }
 
   refreshCategoryChange(event) {
-    // console.log('event', this.categoryID, event)
     this.categoryID = event;
     this.refreshSearch();
   }
 
   refreshProductTypeChange(event) {
     this.productTypeSearch = event;
-    // console.log('event', this.productTypeSearch, event)
     this.refreshSearch();
   }
 
   refreshActiveChange(event) {
-
     this.viewAll = event;
-    // console.log(this.viewAll)
-    // console.log('event',  this.viewAll)
     this.refreshSearch();
-
   }
 
-  //this is called from subject rxjs obversablve above constructor.
-  // : Observable<IProductSearchResults[]>
   refreshSearch() {
-    // this.currentPage         = 1
     const site               = this.siteService.getAssignedSite()
     const productSearchModel = this.initProductSearchModel();
-    // this.params.startRow     = 1;
-    // this.params.endRow       = this.pageSize;
     this.onGridReady(this.params)
-
   }
 
   refreshGrid() {
-    // const site               = this.siteService.getAssignedSite()
-    // return this.menuService.getProductsBySearchForListsPaging(site, this.initProductSearchModel())
-    const currentPage = this.currentPage;
-    // this.initProductSearchModel()
     this.onGridReady(this.params)
   }
 
@@ -403,13 +383,7 @@ initProductSearchModel(): ProductSearchModel {
       params.api.sizeColumnsToFit();
     }
 
-    // if (!params) { return }
     if (params == undefined) { return }
-
-    // if (!params.startRow ||  !params.endRow) {
-    //   params.startRow = 1
-    //   params.endRow = this.pageSize;
-    // }
 
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
@@ -422,14 +396,11 @@ initProductSearchModel(): ProductSearchModel {
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
-
             if (this.numberOfPages !=0 && this.numberOfPages) {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
-
             let results        =  this.refreshImages(data.results)
             params.successCallback(results)
-
           }
         );
       }
@@ -438,7 +409,6 @@ initProductSearchModel(): ProductSearchModel {
     if (!datasource)   { return }
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
-
   }
 
   refreshImages(data) {
@@ -523,9 +493,7 @@ initProductSearchModel(): ProductSearchModel {
     if (e.rowData.id)  {
       if (this.buttonName === 'Edit') {
         this.editItemWithId(e.rowData.id);
-        // console.log('open item', e)
        } else {
-          // console.log('assign item', this.promptSubGroup, e)
           this.assignItem(e)
       }
     }
@@ -544,7 +512,6 @@ initProductSearchModel(): ProductSearchModel {
   }
 
   assignItem(e){
-    // console.log('assign item', this.promptSubGroup, e)
     if (this.promptSubGroup) {
       this.outputPromptItem.emit(e.rowData.id)
     }
@@ -563,11 +530,8 @@ initProductSearchModel(): ProductSearchModel {
       this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
       return
     }
-    // this.productEditButtonService.editTypes(this.selected).subscribe(data=> this.refreshSearch())
-
     let dialogRef: any;
     const site = this.siteService.getAssignedSite();
-
     dialogRef = this.dialog.open(EditSelectedItemsComponent,
       { width:        '500px',
         minWidth:     '500px',
@@ -576,7 +540,6 @@ initProductSearchModel(): ProductSearchModel {
         data   : this.selected
       },
     )
-
     dialogRef.afterClosed().subscribe(result => {
        this.refreshGrid()
     });

@@ -35,6 +35,7 @@ export class FbInventoryService {
       productID:             [''],
       dateCreated:           [''],
       expiration:            [''],
+   // facilityLicenseNumber  [''],
       facilityLicenseNumber: [''],
       batchDate:             [''],
       cost:                  [''],

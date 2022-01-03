@@ -13,6 +13,7 @@ export class MatSelectComponent {
   @Input()  inputForm: FormGroup;
   @Input()  fieldName: string;
   @Input()  list$    : Observable<any>;
+  @Input()  list     : any[]
   @Output() outputItem = new EventEmitter<any>();
   constructor() { }
 

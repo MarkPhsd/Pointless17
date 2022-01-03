@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Observable, } from 'rxjs';
-import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../../_services/system/authentication.service';
-import { ISite } from 'src/app/_interfaces';
-import { SitesService } from '../../_services/reporting/sites.service';
+import { ISite, Paging } from 'src/app/_interfaces';
 
 import {
   METRCPackage,
@@ -23,6 +21,12 @@ import {
   METRCPackagesRemediate
 } from '../../_interfaces/metrcs/packages';
 
+
+export interface PackageSearchResultsPaged {
+  results     : METRCPackage[];
+  paging      : Paging;
+  errorMessage: string;
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -34,7 +38,7 @@ export class MetrcPackagesService {
 
   constructor( private http: HttpClient,
     private auth: AuthenticationService,
-  ) {
+    ) {
     }
 
     getPackagesByID(id:any, site: ISite): Observable<METRCPackage> {
@@ -47,12 +51,11 @@ export class MetrcPackagesService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      console.log(url)
       return this.http.get<METRCPackage>(url);
 
     }
 
-    getPackagesByLabel(label:string, site: ISite): Observable<METRCPackage> {
+    getPackagesByLabel(site: ISite,label:string): Observable<METRCPackage[]> {
 
       const controller = '/METRCPackages/'
 
@@ -62,21 +65,31 @@ export class MetrcPackagesService {
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
-      return this.http.get<METRCPackage>(url);
+      return this.http.get<METRCPackage[]>(url);
 
     }
 
-    getActive(site: ISite, packageFilter: PackageFilter): Observable<METRCPackage[]> {
+    importActive(site: ISite): Observable<METRCPackage[]> {
+
+      const controller = '/METRCPackages/'
+
+      const endPoint = `ImportActivePackages?siteName=${site.name}`
+
+      const url = `${site.url}${controller}${endPoint}`
+
+      return this.http.get<METRCPackage[]>(url);
+
+    }
+
+    getPackagesBySearch(site: ISite, packageFilter: PackageFilter): Observable<PackageSearchResultsPaged> {
 
       const controller = '/METRCPackages/'
 
       const endPoint = `GetMETRCPackages`
 
-      packageFilter.hasImported = false
-
       const url = `${site.url}${controller}${endPoint}`
 
-      return this.http.post<METRCPackage[]>(url, packageFilter);
+      return this.http.post<PackageSearchResultsPaged>(url, packageFilter);
 
     }
 

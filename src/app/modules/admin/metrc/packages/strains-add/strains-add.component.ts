@@ -152,7 +152,6 @@ export class StrainsAddComponent implements OnInit {
         this.facility = {} as                   IItemFacilitiyBasic
         this.facility.displayName =             this.package.itemFromFacilityName
         this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber
-
         this.packageForm.patchValue(data)
 
         this.intakeConversion = await this.getUnitConversionToGrams(this.package.unitOfMeasureName)
@@ -186,7 +185,7 @@ export class StrainsAddComponent implements OnInit {
             cost:                             [0],
             price:                            [0],
             jointWeight:                      [1],
-
+            facilityLicenseNumber:            [data.itemFromFacilityLicenseNumber],
             intakeUOM:                        [data.unitOfMeasureName],
             intakeConversionValue:            [this.intakeConversion.value]
 
@@ -245,7 +244,7 @@ export class StrainsAddComponent implements OnInit {
       receivedDateTime:                  [''],
       receivedFromManifestNumber:        [''],
       receivedFrom:                      [''],
-      FacilityLicenseNumber:             [''],
+      facilityLicenseNumber:             [''],
       receivedFromFacilityName:          [''],
       isOnHold:                          [''],
       archivedDate:                      [''],
@@ -282,8 +281,6 @@ export class StrainsAddComponent implements OnInit {
       }
     )
   }
-
-
 
 
   getStringValue(item: string): string {

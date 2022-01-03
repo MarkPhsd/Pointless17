@@ -6,10 +6,10 @@
           <input
               #input
               matInput
-              type           ="text"
-              id             ="name"
-              formControlName="itemName"
-              [(ngModel)]    ="itemNameInput"
+              type             ="text"
+              id               ="name"
+              [formControlName]="itemName"
+              [(ngModel)]      ="itemNameInput"
             />
             <button *ngIf="itemNameInput" matSuffix
               mat-icon-button aria-label="Clear"

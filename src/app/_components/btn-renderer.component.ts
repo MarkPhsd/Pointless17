@@ -23,6 +23,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
   params: any;
   getLabelFunction: any;
+  getIconFunction:  any;
   btnClass: string;
   @Input() label= 'Edit';
   @Input() icon = 'edit';
@@ -32,7 +33,6 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
     if (!params.value) {
       this.showHide ='display:none;'
-      // console.log("showhide is true")
     }
 
     this.params = params;
@@ -45,6 +45,7 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
       this.label = this.getLabelFunction(params.data);
 
+      console.log(this.label)
       if (this.label ==='Intake') {
         this.icon = 'inventory'
         return

@@ -1,34 +1,25 @@
 <mat-card>
-
   <div fxLayout="column"
       fx-flex
       fx-layout-align="space-between"
       class="form-controls">
 
     <div  [formGroup]="searchForm"
-          id="searchForm"
-          (ngSubmit)="searchLabels()">
+          *ngIf="searchForm">
+
         <div class="grid-container">
-          <div class="grid-item">
-            <mat-form-field appearance="outline">
-              <mat-label >Search</mat-label>
-              <input
-                    #input
-                    matInput
-                    type="text"
-                    id="searchProducts"
-                    formControlName="searchProducts"
-                    [(ngModel)]="searchProducts"
-                    class="form-control"
-                    [matAutocomplete]="auto">
-                    <mat-autocomplete panelWidth="auto"
-                                      #auto="matAutocomplete"
-                                      [displayWith]="displayFn.bind(this)">
-              </mat-autocomplete>
-            </mat-form-field>
+          <div >
+            <search-debounce-input
+                      [searchForm]  ="searchForm"
+                      (outPutMethod)="refreshSearchPhrase($event)">
+              <div fieldDescription>
+              <mat-icon>search</mat-icon>
+                Search
+              </div>
+            </search-debounce-input>
           </div>
 
-          <div class="grid-item">
+          <div >
             <app-mat-select
                 (outputItem)="getMetrcCategory($event)"
                 [list$]     ="metrcCategory$"
@@ -38,9 +29,9 @@
             </app-mat-select>
           </div>
 
-          <div class="grid-item">
+          <div >
             <app-mat-select
-                (outputItem)="getAssignedSiteSelection($event)"
+                (outputItem)="refreshFilters($event)"
                 [list$]     ="sites$"
                 [fieldName] ="'selectedSiteID'"
                 [inputForm] ="searchForm"
@@ -48,17 +39,46 @@
             </app-mat-select>
           </div>
 
-          <div class="grid-item">
-            <button mat-button
-                    mat-raised-button
-                    color="primary"
-                    (click)="searchItems()">Active</button>
+          <div *ngIf="site && facilities && !loadingFacilities">
+            <mat-form-field
+              appearance="outline">
+              <mat-label><ng-content></ng-content></mat-label>
+              <mat-select
+                    type="number"
+                    formControlName ="facilityID"
+                    name="facilityID"
+                    (selectionChange)="setFacliity($event.value)"
+                >
+                <div  >
+                  <mat-option
+                      *ngFor="let item of facilities"
+                      [value]="item?.license?.number">
+                      <div *ngIf="item && item.license">
+                        {{item?.license?.number}}
+                      </div>
+                  </mat-option>
+                </div>
+              </mat-select>
+            </mat-form-field>
           </div>
 
-          <div class="grid-item">
-            <button mat-button mat-raised-button
+          <div *ngIf="site && loadingFacilities">....loading facilities</div>
+
+          <div  *ngIf="site && facility" >
+            <button mat-button mat-button
                     color="primary"
-                    (click)="searchItems()">Imported
+                    (click)="importActivePackages()">
+                    <mat-icon>download</mat-icon>
+                    Packages
+            </button>
+          </div>
+
+          <div >
+            <button mat-button
+                    mat-button
+                    color="primary"
+                    (click)="listResults()">
+                    <mat-icon>refresh</mat-icon>
             </button>
           </div>
 
@@ -68,19 +88,42 @@
 
 </mat-card>
 
-<mat-card *ngIf="mETRCPackagesGet$"
-          class="agrid-container">
+<mat-divider></mat-divider>
 
-  <ag-grid-angular
-    #agGrid
-    id              ="myGrid"
-    style           ="width: 100%; height: 80vh;"
-    [class]         ="agtheme"
-    [columnDefs]    ="columnDefs"
-    [defaultColDef] ="defaultColDef"
-    [rowData]       ="mETRCPackagesGet$ | async"
-    [frameworkComponents]="frameworkComponents"
-    (gridReady)="onGridReady($event)">
-  </ag-grid-angular>
+<div [class]="gridlist">
+  <div>
+    <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate"
+                        [value]="value">
+      </mat-progress-bar>
+    </div>
 
-</mat-card>
+    <ag-grid-angular
+          #agGrid
+          [style]              ="gridDimensions"
+          id                   ="myGrid"
+          [class]              ="agtheme"
+          [columnDefs]         ="columnDefs"
+          [defaultColDef]      ="defaultColDef"
+          [gridOptions]        ="gridOptions"
+          [rowSelection]       ="rowSelection"
+          [frameworkComponents]="frameworkComponents"
+          (selectionChanged)   ="onSelectionChanged($event)"
+          (gridReady)          ="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+
+  <div *ngIf="!hideAdd" >
+    <!-- <app-product-info-panel *ngIf="package"
+                            class="grid-list-item"
+                            [setProduct]="package"
+                            [id]="id">
+    </app-product-info-panel> -->
+  </div>
+</div>
+
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>
+
+

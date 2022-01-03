@@ -1,5 +1,6 @@
+<ng-template #loading><mat-spinner [diameter]="50"></mat-spinner></ng-template>
 
-<div class="body" *ngIf="package">
+<div class="body" *ngIf="package; else loading">
 
   <mat-card class="strain-card">
 
@@ -33,7 +34,7 @@
                 fxLayoutGap
                 class="fields"
                 >
-<!--
+              <!--
               <app-metrc-inventory-properties
                     [inputForm]   ="packageForm"
                     [package]     ="package"
@@ -67,19 +68,23 @@
                   fxLayoutAlign="start start"
                     fxLayoutGap >
 
-              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required && packageForm.controls.inventoryLocationID.touched" class="error">
+              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required
+                    && packageForm.controls.inventoryLocationID.touched" class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
               </div>
 
-              <div *ngIf="packageForm.controls.conversionName.errors?.required && packageForm.controls.conversionName.touched" class="error">
+              <div *ngIf="packageForm.controls.conversionName.errors?.required
+                    && packageForm.controls.conversionName.touched" class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
               </div>
 
-              <div *ngIf="packageForm.controls.inputQuantity.errors?.required && packageForm.controls.inputQuantity.touched" class="error">
+              <div *ngIf="packageForm.controls.inputQuantity.errors?.required
+                   && packageForm.controls.inputQuantity.touched" class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
               </div>
 
-              <div *ngIf="packageForm.controls.cost.errors?.required && packageForm.controls.cost.touched" class="error">
+              <div *ngIf="packageForm.controls.cost.errors?.required
+                   && packageForm.controls.cost.touched" class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
               </div>
 
@@ -87,9 +92,10 @@
                                     (outoutClosePackage)="onCancel($event)"
                                     [menuItem]="menuItem"
                                     [facility]="facility"
+                                    [facilityLicenseNumber]="facilityLicenseNumber"
                                     [packageForm]="packageForm"
                                     [package]="package">
-                      </app-strain-packages>
+              </app-strain-packages>
 
           </div>
 

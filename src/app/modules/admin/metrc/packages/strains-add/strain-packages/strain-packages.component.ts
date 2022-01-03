@@ -41,13 +41,14 @@ export class StrainPackagesComponent implements OnInit {
   @Input()   menuItem              : IMenuItem;
   @Input() packageForm           : FormGroup;
   @Input() facility = {} as        IItemFacilitiyBasic
+  @Input() facilityLicenseNumber : string;
   inventoryLocationID: number ;
 
   get f():                FormGroup  { return this.packageForm as FormGroup};
 
   //move to inventory
   conversionName        = '';
-  facilityLicenseNumber = '';
+
   inputQuantity         :    any;
   inventoryLocationName:  string;
   unitsConverted          = {} as  IUnitsConverted;
@@ -531,7 +532,12 @@ export class StrainPackagesComponent implements OnInit {
       return
     }
 
-    const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssignments[0].label,  this.inventoryAssignments)
+    const items = this.inventoryAssignments.forEach( item => {
+      item.facilityLicenseNumber = this.facilityLicenseNumber
+    })
+
+    const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssignments[0].label,
+                                                                  this.inventoryAssignments)
     inv$.subscribe( data => {
       this.outoutClosePackage.emit('close')
       this.notifyEvent('Inventory Packages Imported', 'Success');

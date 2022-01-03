@@ -1,5 +1,6 @@
+<ng-template #loading><mat-spinner diameter="50"></mat-spinner></ng-template>
 
-<div class="body"  *ngIf="item">
+<div class="body"  *ngIf="item ; else loading">
 
   <mat-card class="strain-card">
 

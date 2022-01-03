@@ -1,4 +1,7 @@
-<div [formGroup]="packageForm" fxLayout="column" fxFlex fxFlexFill>
+
+<div [formGroup]="packageForm"
+     *ngIf="packageForm && package"
+     fxLayout="column" fxFlex fxFlexFill>
   <div fxLayout="row" fxFlex fxFlexFill>
     <mat-card >
       <div id="inventoryMoveInstructions">Move inventory to location:</div>

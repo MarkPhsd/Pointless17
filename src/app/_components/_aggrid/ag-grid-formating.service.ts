@@ -60,6 +60,4 @@ initGridOptions(pageSize: number, columnDefs: any)  {
   }
 
 
-
-
 }

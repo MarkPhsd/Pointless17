@@ -1,4 +1,6 @@
-<div [formGroup]="searchForm" class="form-background">
+<div [formGroup]="searchForm"
+     *ngIf="searchForm"
+     class="form-background">
 
   <mat-form-field class="form-background"  appearance="outline" >
     <mat-label class="form-background">Search Item</mat-label>
@@ -12,7 +14,8 @@
            formControlName="packageName"
            [matAutocomplete]="auto">
 
-    <mat-autocomplete panelWidth="auto" #auto="matAutocomplete" [displayWith]="displayFn.bind(this)"  >
+    <mat-autocomplete panelWidth="auto" #auto="matAutocomplete"
+                     [displayWith]="displayFn.bind(this)"  >
       <mat-option *ngFor="let item of results$ | async"  [value]="item">
         {{item.name}}
       </mat-option>

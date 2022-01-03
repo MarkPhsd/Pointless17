@@ -59,8 +59,6 @@ export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
 
   selectItem(search){
     if (search) {
-      // this.searchPhrase.next(search)
-      // this.outPutMethod.emit(search)
       this.outPutMethod.emit(search)
     }
   }

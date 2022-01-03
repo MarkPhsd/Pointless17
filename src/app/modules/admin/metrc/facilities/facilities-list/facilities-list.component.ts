@@ -52,6 +52,7 @@ export class FacilitiesListComponent implements OnInit {
   //This is for the search Section//
   sites$ : Observable<ISite[]>;
   siteID: number;
+  site: ISite;
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
@@ -79,7 +80,16 @@ export class FacilitiesListComponent implements OnInit {
   };
 
   getAssignedSiteSelection(event) {
-    this.siteID = parseInt(event);
+    if (event.value) {
+      this.siteID = event.value
+      this.assignSite(this.siteID );
+    }
+  }
+
+  assignSite(id: number){
+    this.siteService.getSite(id).subscribe( data => {
+      this.site = data
+    })
   }
 
   initGridResults() {

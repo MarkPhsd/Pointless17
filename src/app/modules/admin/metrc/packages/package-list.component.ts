@@ -1,17 +1,16 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, AfterViewInit, ViewChild, Output, Inject } from '@angular/core';
+import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, Input, } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { fromEvent, Observable, Subject  } from 'rxjs';
-import { of } from 'rxjs';
+import { fromEvent, Observable, of, Subject  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
-import {IDatasource, IGetRowsParams,  GridApi, GridOptions } from '@ag-grid-community/all-modules';
+import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
+import { MetrcPackagesService, PackageSearchResultsPaged } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/packages';
 import { MatDialog } from '@angular/material/dialog';
 import { METRCProductsAddComponent } from 'src/app/modules/admin/metrc/packages/metrc-products-add/products-add.component';
@@ -28,86 +27,138 @@ import {
   METRCItemsCreate,
   METRCItemsUpdate
 } from 'src/app/_interfaces/metrcs/items';
-
+import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
+import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
+import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 
 @Component({
-  selector: 'app-package-list',
-  templateUrl: './package-list.component.html',
-  styleUrls: ['./package-list.component.scss']
+  selector    : 'app-package-list',
+  templateUrl : './package-list.component.html',
+  styleUrls   : ['./package-list.component.scss']
 })
 
 export class PackageListComponent implements OnInit,AfterViewInit {
 
+  //for list selecting.
+  @Input() hideAdd         : boolean;
+  @Input() hideEditSelected: boolean;
+  @Input() editOff         : boolean;
+  buttonName: string; //if edit off then it's 'Assign'
+  gridlist = "grid-list"
+
+  //needed for search component
+  searchForm:    FormGroup;
+  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+
+  get PaginationPageSize(): number {return this.pageSize;  }
+  get gridAPI(): GridApi {  return this.gridApi;  }
+
   @ViewChild('input', {static: true}) input: ElementRef;
   get platForm() {  return Capacitor.getPlatform(); }
-  searchGridApi:        GridApi;
-  searchGridColumnApi:  GridAlignColumnsDirective;
-  searchGridOptions:    any;
-  private gridApi:      GridApi;
-  private gridColumnApi:GridAlignColumnsDirective;
-  gridOptions:          any
-  columnDefs = [];
-  defaultColDef;
-  frameworkComponents:  any;
-  rowDataClicked1 = {};
-  rowDataClicked2 = {};
-  public rowData: any[];
-  public info: string;
-  paginationSize = 250
-  currentRow = 1;
-  currentPage = 1
-  pageNumber = 1
-  pageSize = 250
-  numberOfPages = 1
-  rowCount = 50
-  searchPhrase:         Subject<any> = new Subject();
 
-  metrcCategory$:   Observable<METRCItemsCategories[]>;
-  metrcCategory:    METRCItemsCategories;
+  params               : any;
+  private gridApi      : GridApi;
+  private gridColumnApi: GridAlignColumnsDirective;
+  gridOptions          : any
+  columnDefs           = [];
+  defaultColDef        ;
+  frameworkComponents = {
+    btnCellRenderer: ButtonRendererComponent
+  };
+  rowSelection         : any;
+  rowDataClicked1      = {};
+  rowDataClicked2      = {};
+  rowData:             any[];
+  pageSize                = 20
+  currentRow              = 1;
+  currentPage             = 1
+  numberOfPages           = 1
+  startRow                = 0;
+  endRow                  = 0;
+  recordCount             = 0;
+  isfirstpage             : boolean;
+  islastpage              : boolean;
+  selected            : any;
+  id                  : number;
+  value               : string;
+  metrcCategory$ :  Observable<METRCItemsCategories[]>;
+  metrcCategory  :  METRCItemsCategories;
   metrcCategoryID:  number;
+  label          :  string;
+  sites$ : Observable<ISite[]>;
+  siteID: number;
+  site: ISite;
 
-  sites$:           Observable<ISite[]>;
-  site:             ISite;
+  facility    : METRCFacilities;
+  facilities$ :  Observable<METRCFacilities[]>;
+  facilities  : METRCFacilities[];
+  facilityID  : number;
+
+  downloadVisible:  boolean;
   selectedSiteID:   number;
   searchProducts:   string;
+  loadingFacilities: boolean;
+
+  metrcPackage : METRCPackage;
+  metrcPackages: METRCPackage[];
+  metrcPackages$: Observable<METRCPackage[]>;
 
   gridDimensions: string;
   agtheme        = 'ag-theme-material';
 
-  mETRCPackagesGet$ = this.searchPhrase.pipe(
-    debounceTime(250),
-    distinctUntilChanged(),
-    switchMap(searchPhrase =>
-        this.refreshSearch(searchPhrase)
-    )
+
+  viewOptions$     = of(
+    [
+      {name: 'Active', id: 0},
+      {name: 'All', id: 1},
+      {name: 'Inactive', id: 2}
+    ]
   )
 
+  // mETRCPackagesGet$ = this.searchPhrase.pipe(
+  //   debounceTime(250),
+  //   distinctUntilChanged(),
+  //   switchMap(searchPhrase =>
+  //       this.refreshSearch(searchPhrase)
+  //   )
+  // )
+
   //This is for the search Section//
-  public searchForm: FormGroup;
   get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
   private readonly onDestroy = new Subject<void>();
   search: string;
   // mETRCPackagesGet$: Observable<METRCPackage[]>;
-  refreshGrid = true;
   //This is for the search Section//
   searchPaging: boolean;
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
-                private agGridService: AgGridService,
                 private fb: FormBuilder,
-                private metrcPackagesService: MetrcPackagesService,
                 private dialog: MatDialog,
-	              public route: ActivatedRoute,
-                private siteService: SitesService,
+                private agGridService         : AgGridService,
+                private agGridFormatingService: AgGridFormatingService,
+	              public route                  : ActivatedRoute,
+                private metrcPackagesService  : MetrcPackagesService,
+                private siteService           : SitesService,
                 private metrcCategoriesService: MetrcItemsCategoriesService,
+                private metrcFacilityService  : MetrcFacilitiesService,
               )
   {
 
   }
 
+
+
+  ngOnInit(): void {
+    this.sites$         = this.siteService.getSites();
+    this.metrcCategory$ = this.metrcCategoriesService.getCategories();
+    this.initClasses();
+    this.initForm();
+    this.initGridResults();
+  }
+
   initGridResults() {
-    this.initAGGridFeatures()
+    this.initAGGrid()
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
     };
@@ -117,36 +168,26 @@ export class PackageListComponent implements OnInit,AfterViewInit {
     };
   }
 
-  ngOnInit(): void {
-    this.sites$ =          this.siteService.getSites();
-    this.metrcCategory$ =  this.metrcCategoriesService.getCategories();
-
-    this.initSearch();
-    this.searchItems();
-    this.initGridResults();
-    this.refreshGrid = true
-    if (!this.search) { this.search = ''}
-    this.initClasses()
-  }
-
-  initSearch() {
+  initForm() {
     this.searchForm = this.fb.group( {
       searchProducts: [''],
-      metrcCategory:  [''],
+      metrcCategory : [''],
       selectedSiteID: [''],
+      facilityID    : [''],
     });
 
   }
 
   initClasses()  {
     const platForm = this.platForm;
-    this.gridDimensions =  'width: 100%; height: 100%;'
-    this.agtheme  = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 85%;' }
+    this.gridDimensions   =  'width: 100%; height: 89%;'
+    this.agtheme          = 'ag-theme-material';
+    if (platForm === 'capacitor') { this.gridDimensions = 'width: 100%; height: 85%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 85%;' }
   }
 
   ngAfterViewInit() {
+    if (!this.input) {return}
     fromEvent(this.input.nativeElement,'keyup')
             .pipe(
                 filter(Boolean),
@@ -160,12 +201,11 @@ export class PackageListComponent implements OnInit,AfterViewInit {
           .subscribe();
   }
 
-
-
   // btnClass: 'btn btn-primary btn-sm', minWidth: 50
-  initAGGridFeatures() {
+  initAGGrid() {
+
     this.columnDefs =  [
-      {
+     {
        field: "id",
        cellRenderer: "btnCellRenderer",
        cellRendererParams: {
@@ -184,34 +224,36 @@ export class PackageListComponent implements OnInit,AfterViewInit {
       {headerName: 'Category', field: 'productCategoryName', sortable: true,},
       {headerName: 'Type', field: 'packageType', sortable: true,},
     ]
-    this.initGridOptions()
+    // this.initGridOptions()
+    const filter = this.initSearchModel();
+    if (filter.pageSize == 0) {filter.pageSize = 25}
+    this.gridOptions = this.agGridFormatingService.initGridOptions(filter.pageSize, this.columnDefs);
+
   }
 
-  initGridOptions()  {
-    this.gridOptions = {
-      pagination: true,
-      paginationPageSize: 50,
-      cacheBlockSize: 25,
-      maxBlocksInCache: 800,
-      rowModelType: 'infinite',
-      infiniteInitialRowCount: 2,
+  setFacliity(event) {
+    if (event) {
+      this.facility = event;
     }
   }
 
-  initSearchGridOptions()  {
-    this.searchGridOptions = {
-      pagination: true,
-      paginationPageSize: this.paginationSize,
-      cacheBlockSize: this.paginationSize,
-      rowModelType: 'infinite',
-      infiniteInitialRowCount: 2,
+  refreshFilters(event) {
+    this.getAssignedSiteSelection(event)
+    if (this.site) {
+      this.facilities$ = this.metrcFacilityService.getFacilities(this.site)
+      this.loadingFacilities = true;
+      this.facilities$.subscribe(data => {
+        this.facilities = data;
+        this.loadingFacilities = false;
+      })
     }
   }
 
   getAssignedSiteSelection(event) {
-    if (event.value) {
-      this.selectedSiteID = event.value
-      this.assignSite(this.selectedSiteID);
+    if (event) {
+      this.selectedSiteID = event.value;
+      this.siteID         = event.id;
+      this.site           = event as ISite;
     }
   }
 
@@ -223,20 +265,18 @@ export class PackageListComponent implements OnInit,AfterViewInit {
 
   getAssignedSite(): ISite {
     if (this.site) {
-
       return this.site
     } else {
       return  this.siteService.getAssignedSite()
     }
   }
 
-
   getMetrcCategory(event) {
 
     this.metrcCategoryID = event.value
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
-      this.searchItems()
+      this.refreshSearch('')
       return
     }
 
@@ -250,88 +290,227 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   assignMetrcCategory(id: number) {
     this.metrcCategoriesService.getCategory(id).subscribe( data => {
       this.metrcCategory = data
-      this.searchItems()
+      this.refreshSearch('')
     })
   }
 
+  refreshSearchPhrase(event) {
+    this.refreshSearch(event);
+  }
 
-  searchLabels() {
-    if (this.searchProductsValue.value) {
-      const site = this.siteService.getAssignedSite()
-      const packageFilter = this.getPackageFilter();
-      packageFilter.label = this.searchProductsValue.value
-      packageFilter.productName = this.searchProductsValue.value
-
-      this.mETRCPackagesGet$ = this.metrcPackagesService.getActive(site, packageFilter)
+  importActivePackages() {
+    if (this.site) {
+      const import$ = this.metrcPackagesService.importActive(this.site)
+      import$.subscribe(data => {
+        console.log('data from import', data)
+        this.refreshSearch('');
+      })
     }
   }
 
-  searchItems() {
-    const packageFilter = this.getPackageFilter();
-    const site = this.siteService.getAssignedSite()
-    this.mETRCPackagesGet$ = this.metrcPackagesService.getActive(site, packageFilter)
-  }
-
   // mETRCPackagesGet
-  refreshSearch(search: string): Observable<METRCPackage[]> {
-    const packageFilter = this.getPackageFilter();
-    const site = this.siteService.getAssignedSite()
+  refreshSearch(search: string): Observable<PackageSearchResultsPaged> {
+    const packageFilter = this.initSearchModel();
 
-    if (this.metrcCategory) {  packageFilter.productCategoryName =   this.metrcCategory.name }
-    packageFilter.productName = search
-    packageFilter.label = search
+    if (this.metrcCategory)
+    {packageFilter.productCategoryName = this.metrcCategory.name }
+    if (!search) {
+      packageFilter.productName = search
+      packageFilter.label       = search
+    }
 
-    this.mETRCPackagesGet$ = this.metrcPackagesService.getActive(site, packageFilter)
-    return this.mETRCPackagesGet$
-
+    const results$   = this.metrcPackagesService.getPackagesBySearch(this.site, packageFilter)
+    return results$
   }
 
-  getPackageFilter(): PackageFilter {
+  listResults() {
+    const site               = this.siteService.getAssignedSite()
+    const productSearchModel = this.initSearchModel();
+    this.onGridReady(this.params)
+  }
+  // selectItem(search){
+  //   if (search) {
+  //     this.searchPaging = true
+  //     this.searchPhrase.next(search)
+  //   }
+  // }
+
+  // displayFn(search) {
+  //   this.searchPaging = true
+  //   this.search = search
+  //   this.selectItem(search)
+  //   return search;
+  // }
+
+  refreshGrid() {
+   this.onGridReady(this.params)
+  }
+
+  initSearchModel(): PackageFilter {
     const packageFilter = {} as PackageFilter
     packageFilter.pageNumber =1
-    packageFilter.pageSize = 100
+    packageFilter.pageSize = 25
     packageFilter.hasImported = false
-
     if ( this.searchProducts != '' ) {
       packageFilter.productName = this.searchProducts
       packageFilter.label = this.searchProducts
     }
-
     if (this.metrcCategory) {  packageFilter.productCategoryName =   this.metrcCategory.name }
-    console.log(packageFilter)
     return packageFilter;
   }
 
-  onSearchgridReady({ api } : {api: GridApi}) {
-    this.gridApi = api;
-    api.sizeColumnsToFit();
+  //this doesn't change the page, but updates the properties for getting data from the server.
+  setCurrentPage(startRow: number, endRow: number): number {
+    const tempStartRow = this.startRow
+    this.startRow      = startRow
+    this.endRow        = endRow;
+    if (tempStartRow > startRow) { return this.currentPage - 1 }
+    if (tempStartRow < startRow) { return this.currentPage + 1 }
+    return this.currentPage
   }
 
-  onSearchGridReady(params) {
-    this.searchItems()
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+  //ag-grid standard method.
+  getDataSource(params) {
+    return {
+    getRows: (params: IGetRowsParams) => {
+      const items$ = this.getRowData(params, params.startRow, params.endRow)
+      items$.subscribe(data =>
+        {
+          if (data.errorMessage) {
+            this.notifyEvent(data.errorMessage, 'Error');
+            return
+          }
+            const resp         = data.paging
+            this.isfirstpage   = resp.isFirstPage
+            this.islastpage    = resp.isFirstPage
+            this.currentPage   = resp.currentPage
+            this.numberOfPages = resp.pageCount
+            this.recordCount   = resp.recordCount
+            if (this.numberOfPages !=0 && this.numberOfPages) {
+              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+            }
+            params.successCallback(data.results)
+            this.rowData = data.results
+          }, err => {
+            console.log(err)
+          }
+      );
+      }
+    };
   }
 
-  onGridReady(params) {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+  //ag-grid standard method
+  getRowData(params, startRow: number, endRow: number):  Observable<PackageSearchResultsPaged>  {
+    this.currentPage          = this.setCurrentPage(startRow, endRow)
+    const productSearchModel  = this.initSearchModel();
+    const site                = this.siteService.getAssignedSite()
+    return this.metrcPackagesService.getPackagesBySearch(site, productSearchModel)
   }
 
-  getRowData():  Observable<METRCPackage[]>  {
-    const packageFilter = {} as PackageFilter
-    packageFilter.pageNumber =1
-    packageFilter.pageSize = 100
-    packageFilter.hasImported = false
+  //ag-grid standard method
+  async onGridReady(params: any) {
+    if (params)  {
+      this.params  = params
+      this.gridApi = params.api;
+      this.gridColumnApi = params.columnApi;
+      params.api.sizeColumnsToFit();
+    }
 
-    return this.metrcPackagesService.getActive(this.siteService.getAssignedSite(), packageFilter)
+    if (params == undefined) { return }
+
+    let datasource =  {
+      getRows: (params: IGetRowsParams) => {
+      const items$ =  this.getRowData(params, params.startRow, params.endRow)
+      items$.subscribe(data =>
+        {
+            const resp         =  data.paging
+            this.isfirstpage   = resp.isFirstPage
+            this.islastpage    = resp.isFirstPage
+            this.currentPage   = resp.currentPage
+            this.numberOfPages = resp.pageCount
+            this.recordCount   = resp.recordCount
+            if (this.numberOfPages !=0 && this.numberOfPages) {
+              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+            }
+            let results        =  data.results
+            params.successCallback(results)
+          }
+        );
+      }
+    };
+
+    if (!datasource)   { return }
+    if (!this.gridApi) { return }
+    this.gridApi.setDatasource(datasource);
+  }
+
+  // refreshImages(data) {
+  //   const urlPath = this.urlPath
+  //   if (urlPath) {
+  //     data.forEach( item =>
+  //       {
+  //         if (item.urlImageMain) {
+  //           const list = item.urlImageMain.split(',')
+  //           if (list[0]) {
+  //             item.imageName = `${urlPath}${list[0]}`
+  //           }
+  //         }
+  //       }
+  //     )
+  //   }
+  //   return data;
+  // }
+
+  //mutli select method for selection change.
+  onSelectionChanged(event) {
+
+    let selectedRows       = this.gridApi.getSelectedRows();
+    let selectedRowsString = '';
+    let maxToShow          = this.pageSize;
+    let selected           = []
+
+    selectedRows.forEach(function (selectedRow, index) {
+    if (index >= maxToShow) { return; }
+    if (index > 0) {  selectedRowsString += ', ';  }
+      selected.push(selectedRow.id)
+      selectedRowsString += selectedRow.name;
+    });
+
+    if (selectedRows.length > maxToShow) {
+    let othersCount = selectedRows.length - maxToShow;
+    selectedRowsString +=
+      ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
+    }
+
+    this.selected = selected
+    this.id = selectedRows[0].id;
+    this.getItem(this.label)
+    this.getItemHistory(this.id)
+  }
+
+  getItem(label: string) {
+    if (label) {
+      const site = this.siteService.getAssignedSite();
+      this.metrcPackagesService.getPackagesByLabel(site, label).subscribe(data => {
+         this.metrcPackage[0] = data;
+        }
+      )
+    }
+  }
+
+  async getItemHistory(id: any) {
+    const site = this.siteService.getAssignedSite();
+  }
+
+  onExportToCsv() {
+    this.gridApi.exportDataAsCsv();
   }
 
   getLabel(rowData)
   {
-    if(rowData && rowData.hasIndicator)
-      return 'Intake';
-      else return 'Intake';
+    // if(rowData && rowData.hasIndicator)
+    console.log('rowData', rowData)
+    return 'Intake'
   }
 
   onBtnClick1(e) {
@@ -343,18 +522,17 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   }
 
   editProductFromGrid(e) {
-
-
     if (e.rowData.id)  {
       this.getPackage(e.rowData.id);
     }
   }
 
   async getPackage(id:any) {
+    if (!this.site) { this.site = this.siteService.getAssignedSite();}
 
-    this.metrcPackagesService.getPackagesByID(id, this.siteService.getAssignedSite())
-              .subscribe( data => {
+    const metrc$ = this.metrcPackagesService.getPackagesByID(id, this.site)
 
+    metrc$.subscribe( data => {
         if (data.item.quantityType === 'WeightBased') {
           this.openStrainsDialog(data.id)
           return
@@ -363,10 +541,8 @@ export class PackageListComponent implements OnInit,AfterViewInit {
           this.openProductsDialog(data.id)
           return
         }
-
       }
     )
-
   }
 
   editProduct(e){
@@ -377,14 +553,8 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   onDeselectAll() {
   }
 
-  onExportToCsv() {
-    this.gridApi.exportDataAsCsv();
-  }
-
   onSortByNameAndPrice(sort: string) {
   }
-
-
 
   openStrainsDialog(id: any) {
     const dialogConfig = [
@@ -399,7 +569,7 @@ export class PackageListComponent implements OnInit,AfterViewInit {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      this.displayFn('')
+      // this.displayFn('')
     });
   }
 
@@ -417,24 +587,14 @@ export class PackageListComponent implements OnInit,AfterViewInit {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      this.displayFn('')
+      // this.displayFn('')
     });
 
   }
 
-  displayFn(search) {
-    this.searchPaging = true
-    this.search = search
-    this.selectItem(search)
-    return search;
-  }
 
-  selectItem(search){
-    if (search) {
-      this.searchPaging = true
-      this.searchPhrase.next(search)
-    }
-  }
+
+
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
