@@ -21,6 +21,15 @@
   }
 }
 
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // margin-top: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
+  overflow-y: auto;
+  overflow-x: hidden;
+}
 
 :host {
   display: flex;
@@ -39,22 +48,6 @@
 mat-raised-button {
   margin: 5rem 5rem 2rem 2rem;
   padding: 1rem 1rem 1rem 1rem;
-}
-
-.header-container {
-  --gap: 10px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: 200px 1fr;
-
-  @include for-phone-only  {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
-    justify-content: space-between;
-  }
 }
 
 
@@ -135,12 +128,6 @@ mat-form-field {
 
 .fields {
   margin: 4px ;
-}
-
-.grid-container {
-  display: grid;
-  grid-template-columns: .5fr 1fr 1fr ;
-  gap: 2px;
 }
 
 .item-input {

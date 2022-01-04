@@ -1,42 +1,48 @@
-<div *ngIf="inputForm">
-  <div [formGroup]="inputForm">
-      <div class="grid-container">
-            <div class="filterItem" >
-          <mat-form-field
-            [class]="class"
-            appearance="outline">
-            <mat-label><ng-content></ng-content></mat-label>
-            <mat-select
-                  type="number"
-                  [formControlName] ="fieldName"
-                  name="species"
-                  (selectionChange)="setItemOutPut($event.value)"
-              >
+  <ng-content></ng-content>
 
-              <span *ngIf="!list">
-                <div *ngIf="(list$ | async) as list; else loading" >
-                  <mat-option
-                      *ngFor="let item of list"
-                       [value]="item">
-                      {{item.name}}
-                  </mat-option>
-                </div>
-              </span>
+  <div [formGroup]="inputForm"
+       *ngIf="inputForm"
+       class="grid-container">
 
-              <div *ngIf="list" >
-                <mat-option
-                    *ngFor="let item of list; else loading"
-                     [value]="item">
-                    {{item.name}}
-                </mat-option>
-              </div>
+    <mat-form-field
+      [class]="class"
+      appearance="outline">
 
+      <mat-label>
+        <ng-content></ng-content>
+      </mat-label>
 
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
-    </div>
+      <mat-select
+            type="number"
+            [formControlName] ="fieldName"
+            (selectionChange)="setItemOutPut($event.value)"
+        >
+
+        <mat-option value="">
+           Clear
+        </mat-option>
+
+        <span *ngIf="!list">
+          <div *ngIf="(list$ | async) as list" >
+            <mat-option
+                *ngFor="let item of list"
+                  [value]="item">
+                {{item.name}}
+            </mat-option>
+          </div>
+        </span>
+
+        <span *ngIf="list" >
+          <mat-option
+              *ngFor="let item of list"
+                [value]="item">
+              {{item.name}}
+          </mat-option>
+        </span>
+
+      </mat-select>
+    </mat-form-field>
+
   </div>
 
  <ng-template #loading>

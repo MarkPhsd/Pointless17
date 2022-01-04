@@ -1,5 +1,11 @@
 @import "/src/mixins.scss";
 
+mat-form-field {
+  font-size: .9em;
+  margin: 3px ;
+}
+
+
 .grid-list-container {
   display: grid;
   grid-template-columns: 1fr 200px;
@@ -8,9 +14,15 @@
   height: 90vh;
 }
 
+.margin {
+  top: -3px;
+  // margin-top: 3px;
+}
+
 .grid-container-selectors {
   display: flex;
   flex-wrap: wrap;
+  gap: 5px;
 }
 
 .grid-list-item {
@@ -18,6 +30,14 @@
   overflow: hidden;
 }
 
+.grid-item {
+  margin-right: 5px;
+  font-size: .9em;
+}
+
+.toggle{
+  margin-top: 10px;
+}
 .loader {
   margin: 5px;
 }
@@ -25,8 +45,7 @@
 .grid-container {
   display: grid;
   gap: 5px;
-  // grid-auto-flow: dense;
-  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
 }
 
 .grid-dimensions {
@@ -45,23 +64,24 @@
   display: grid;
   grid-template-columns: 1fr ;
   gap: 7px;
+  height: 80vh;
 
-  @media (max-width: 599px)  {
-    height: 69vh;
-  }
-  @media (min-width: 600px)   {
-    height: 74vh;
-  }
-  @media (min-width: 900px) {
-    height: 74vh;
-  }
-  @media (min-width: 1200px)  {
-    height: 82vh;
-  }
+  // @media (max-width: 599px)  {
+  //   height: 80vh;
+  // }
+  // @media (min-width: 600px)   {
+  //   height: 80vh;
+  // }
+  // @media (min-width: 900px) {
+  //   height: 80vh;
+  // }
+  // @media (min-width: 1200px)  {
+  //   height: 80vh;
+  // }
 
-  @media (min-width: 1800px)  {
-    height: 81vh;
-  }
+  // @media (min-width: 1800px)  {
+  //   height: 80vh;
+  // }
 }
 
   .grid-list-nopanel {
@@ -69,28 +89,29 @@
     display: grid;
     grid-template-columns: 1fr 20vw;
     gap: 7px;
+    height: 80vh;
 
-    @media (max-width: 599px)  {
-      height: 65vh;
-    }
-    @media (min-width: 600px)   {
-      height: 65vh;
-    }
-    @media (min-width: 900px) {
-      height: 65vh;
-    }
-    @media (min-width: 1200px)  {
-      height: 70vh;
-    }
+    // @media (max-width: 599px)  {
+    //   height: 75vh;
+    // }
+    // @media (min-width: 600px)   {
+    //   height: 75vh;
+    // }
+    // @media (min-width: 900px) {
+    //   height: 75vh;
+    // }
+    // @media (min-width: 1200px)  {
+    //   height: 75vh;
+    // }
 
-    @media (min-width: 1800px)  {
-      height: 70vh;
-    }
+    // @media (min-width: 1800px)  {
+    //   height: 75vh;
+    // }
 
   }
 
   .mat-toggle {
-    top: -5px;
+    top: 5px;
     margin-top: 5px;
     margin-left: 5px;
   }
@@ -107,10 +128,6 @@
     margin: 3px 3px 3px 3px;
   }
 
-  .form-fields {
-    margin: 0;
-    padding: 0;
-  }
 
   .view-items {
     float: left;

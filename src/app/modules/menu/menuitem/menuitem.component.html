@@ -1,7 +1,7 @@
 
-<div *ngIf="menuItem$"  class="gallery-container">
-  <div *ngIf="(menuItem$ | async) as menuItem; else loading">
-
+<ng-template #loading><mat-spinner [diameter]="75"></mat-spinner> </ng-template>
+<div *ngIf="menuItem; else loading"
+      class="gallery-container">
     <mat-card >
       <mat-card-title class="exit">
 
@@ -135,9 +135,4 @@
       </mat-card-content>
     </mat-card>
   </div>
-</div>
 
-
-<ng-template #loading >
-  <mat-spinner></mat-spinner>
-</ng-template>

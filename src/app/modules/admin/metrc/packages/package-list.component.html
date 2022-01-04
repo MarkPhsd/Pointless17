@@ -1,5 +1,3 @@
-
-
 <div fxLayout="column" fx-flex fx-layout-align="space-between"
       class="grid-container"
       [formGroup]="searchForm"
@@ -7,7 +5,7 @@
 
   <div class="grid-container-selectors">
 
-      <div >
+      <div class="grid-item">
         <search-debounce-input
                   [itemNameControl]="'searchProducts'"
                   [searchForm]  ="searchForm"
@@ -19,38 +17,30 @@
         </search-debounce-input>
       </div>
 
-      <div >
+      <div class="grid-item">
+        <form-select-list [searchForm]      = "searchForm"
+                          [formFieldName]   ="'metrcCategory'"
+                          [list$]           = "metrcCategory$"
+                          (selectionChange) = "getMetrcCategory($event)">
+        <div #fieldSearchDescription>Category</div>
+        </form-select-list>
+      </div>
+
+      <div class="grid-item  margin">
         <app-mat-select
-            (outputItem)="getMetrcCategory($event)"
-            [list$]     ="metrcCategory$"
-            [fieldName] ="'metrcCategory'"
-            [inputForm] ="searchForm"
-            >
+                [inputForm]           = "searchForm"
+                [fieldName]           = "'selectedSiteID'"
+                [list$]               = "sites$"
+                (outputItem)          = "refreshFilters($event)">
+           <div>Choose Site</div>
         </app-mat-select>
       </div>
 
-      <div  class="mat-toggle">
-        <mat-slide-toggle name="hasImported"
-                          class="mat-label"
-                          formControlName="hasImported">
-          <mat-label class="mat-label">Imported</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-      <div >
-        <app-mat-select
-            (outputItem)="refreshFilters($event)"
-            [list$]     ="sites$"
-            [fieldName] ="'selectedSiteID'"
-            [inputForm] ="searchForm"
-            >
-        </app-mat-select>
-      </div>
-
-      <div *ngIf="site && facilities && !loadingFacilities">
+      <div class="grid-item  margin"
+           *ngIf="site && facilities && !loadingFacilities">
         <mat-form-field
           appearance="outline"
-          class="form-field">
+          >
           <mat-label><ng-content></ng-content></mat-label>
           <mat-select
                 type="number"
@@ -71,9 +61,11 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="site && loadingFacilities">....loading facilities</div>
+      <div class="grid-item toggle"
+           *ngIf="site && loadingFacilities">
+           ....loading facilities</div>
 
-      <div  *ngIf="site && facility" >
+      <div class="grid-item" *ngIf="site && facility" >
         <button mat-button mat-button
                 color="primary"
                 (click)="importActivePackages()">
@@ -82,16 +74,25 @@
         </button>
       </div>
 
-      <div  *ngIf="viewOptions$">
-        <form-select-list [formFieldName]   = "'active'"
-                          [searchForm]      = "searchForm"
-                          [list$]           = "viewOptions$"
-                          (selectionChange) = "refreshActiveChange($event)"   >
-          <div fieldSearchDescription>Status</div>
+      <div class="grid-item"
+           *ngIf="viewOptions$">
+        <form-select-list [searchForm]= "searchForm"
+                [formFieldName]   ="'active'"
+                [list$]           = "viewOptions$"
+                (selectionChange) = "refreshActiveChange($event)">
+        <div fieldSearchDescription>Status</div>
         </form-select-list>
       </div>
 
-      <div >
+      <div class="grid-item toggle">
+        <mat-slide-toggle name="hasImported"
+                          class="mat-label"
+                          formControlName="hasImported">
+          <mat-label class="mat-label">Imported</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="grid-item">
         <button mat-button
                 mat-button
                 color="primary"

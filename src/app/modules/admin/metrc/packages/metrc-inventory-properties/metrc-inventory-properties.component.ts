@@ -7,7 +7,7 @@ import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.se
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
-  selector: 'app-metrc-inventory-properties',
+  selector: 'metrc-inventory-properties',
   templateUrl: './metrc-inventory-properties.component.html',
   styleUrls: ['./metrc-inventory-properties.component.scss']
 })

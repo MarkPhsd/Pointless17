@@ -1,32 +1,38 @@
-<div *ngIf="inputForm && package"  [formGroup]="inputForm">
+<div *ngIf="inputForm && package"
+     [formGroup]="inputForm">
 
-    <app-product-search-selector fxFlexFill
-          class="fields"
-          [itemType]=1
-          [productName]="package.item.name"
-          [searchForm]="inputForm"
-          (itemSelect)="getStrain($event)">
-          >
-    </app-product-search-selector>
+    <div>
+      <app-product-search-selector
+        [itemType]=1
+        [productName]="package.item.name"
+        [searchForm]="inputForm"
+        (itemSelect)="getStrain($event)">
+        >
+      </app-product-search-selector>
+    </div>
 
-    <app-facility-search-selector fxFlexFill
-          class="fields"
+    <div>
+      <app-facility-search-selector
           [item]="facility"
           [searchForm]="inputForm"
           (itemSelect)="getVendor($event)">
           >
-    </app-facility-search-selector>
+      </app-facility-search-selector>
+    </div>
 
-    <mat-form-field appearance="outline" fxFlexFill class="fields" >
+    <div>
+      <mat-form-field appearance="outline">
       <mat-label >Batch Number</mat-label>
       <input matInput
             [(ngModel)] ="productionBatchNumber"
             type="text"
             formControlName="productionBatchNumber"
             class="max-width" >
-    </mat-form-field>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" fxFlexFill class="fields" >
+    <div>
+      <mat-form-field appearance="outline" >
       <mat-label>Expiration</mat-label>
       <input matInput
             type="text"
@@ -35,9 +41,11 @@
             [matDatepicker]="picker">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+          </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" fxFlexFill class="fields">
+    <div>
+      <mat-form-field appearance="outline" >
       <mat-label>Batch Date</mat-label>
       <input matInput
               type="text"
@@ -45,30 +53,36 @@
               [matDatepicker]="picker2">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
-    </mat-form-field>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" fxFlexFill class="fields" >
+    <div>
+      <mat-form-field appearance="outline" >
       <mat-label >METRC Category</mat-label>
       <input matInput
               type="text"
               formControlName="productCategoryName"
             >
-    </mat-form-field>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" fxFlexFill class="fields" >
+    <div>
+      <mat-form-field appearance="outline"  >
       <mat-label >METRC Category Type</mat-label>
       <input matInput
               type="text"
               formControlName="productCategoryType"
             >
-    </mat-form-field>
+      </mat-form-field>
+    </div>
 
-    <mat-form-field appearance="outline" fxFlexFill class="fields" >
+    <div>
+      <mat-form-field appearance="outline"  >
       <mat-label >METRC Quantity Type</mat-label>
       <input matInput
               type="text"
               formControlName="quantityType"
             >
-    </mat-form-field>
-
+      </mat-form-field>
+    </div>
 </div>

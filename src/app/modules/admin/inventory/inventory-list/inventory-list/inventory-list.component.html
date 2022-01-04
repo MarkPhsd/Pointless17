@@ -1,9 +1,7 @@
 <div fxLayout="column" fx-flex fx-layout-align="space-between" class="form-controls">
-    <form  [formGroup]="searchForm" id="searchForm" (ngSubmit)="onSearch()">
-
+  <div  [formGroup]="searchForm" id="searchForm" (ngSubmit)="refreshSearch()">
       <div class="grid-container">
         <div class="grid-item">
-
           <mat-form-field appearance="outline">
             <mat-label >Search </mat-label>
             <input
@@ -40,7 +38,7 @@
           </mat-form-field>
         </div>
 
-        <div class="grid-item">
+        <div class="grid-item"  *ngIf="(metrcCategory$ | async) as list">
           <mat-form-field appearance="outline">
             <mat-label>METRC Categories</mat-label>
              <mat-select
@@ -48,12 +46,10 @@
                         (selectionChange)="getMetrcCategory($event)"
                         formControlNamename="metrcCategory"
                       >
-              <div *ngIf="(metrcCategory$ | async) as list">
                 <mat-option [value]=0>All</mat-option>
                 <mat-option *ngFor="let item of list" [value]="item.id">
                   {{ item.name }}
                 </mat-option>
-              </div>
             </mat-select>
           </mat-form-field>
         </div>
@@ -97,54 +93,42 @@
 
         <div class="grid-item">
           <button mat-button
-                   (click)="onSearch()"><mat-icon>refresh</mat-icon> List All</button>
+                   (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh</button>
+          <button mat-button
+                   (click)="listAll()"><mat-icon>list</mat-icon>List All</button>
 
           <button class="info-buttons"
                   mat-button
                   (click)="addInventoryItem()"><mat-icon>add</mat-icon> Add</button>
-
         </div>
     </div>
-  </form>
+  </div>
 </div>
 
 <mat-divider></mat-divider>
 
-<div fxLayout="row" class="panels">
-  <div  fxLayout="column" fxFlex="80">
-    <div *ngIf="searchPaging" >
-
-      <ag-grid-angular
-            #agGrid
-            class                ="ag-theme-material agrid-container"
-            [defaultColDef]      ="defaultColDef"
-            [columnDefs]         ="columnDefs"
-            [rowSelection]       ="rowSelection"
-            (selectionChanged)   ="onSelectionChanged($event)"
-            [rowData]            ="inventoryAssignment$ | async"
-            [frameworkComponents]="frameworkComponents"
-            [tooltipShowDelay]   ="tooltipShowDelay"
-            (gridReady)          ="onSearchGridReady($event)">
-      </ag-grid-angular>
+<div [class]="gridlist">
+  <div>
+    <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
 
-    <div *ngIf="!searchPaging" class="agrid-container">
       <ag-grid-angular
             #agGrid
-            class                ="ag-theme-material agrid-container"
-            [defaultColDef]      ="defaultColDef"
+            [style]              ="gridDimensions"
+            id                   ="myGrid"
+            [class]              ="agtheme"
             [columnDefs]         ="columnDefs"
+            [defaultColDef]      ="defaultColDef"
+            [gridOptions]        ="gridOptions"
             [rowSelection]       ="rowSelection"
-            [gridOptions]        = "gridOptions"
-            (selectionChanged)   ="onSelectionChanged($event)"
             [frameworkComponents]="frameworkComponents"
-            [tooltipShowDelay]   ="tooltipShowDelay"
+            (selectionChanged)   ="onSelectionChanged($event)"
             (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
-    </div>
-  </div>
 
-  <div  fxLayout="column" fxFlex="20">
+    </div>
+
     <div *ngIf="inventoryAssignmentHistory">
       <app-inventory-history-list class="history-panel"
                                   [setInventoryAssignment]="inventoryAssignment"
@@ -152,8 +136,9 @@
                                   [id]="id">
       </app-inventory-history-list>
     </div>
-  </div>
-
 </div>
 
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>
 

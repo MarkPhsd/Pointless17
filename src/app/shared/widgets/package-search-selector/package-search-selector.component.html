@@ -1,14 +1,13 @@
 <div [formGroup]="searchForm"
      *ngIf="searchForm"
-     class="form-background">
+    >
 
-  <mat-form-field class="form-background"  appearance="outline" >
-    <mat-label class="form-background">Search Item</mat-label>
+  <mat-form-field   appearance="outline" >
+    <mat-label>Search Item</mat-label>
 
     <input
            #input
            type="text"
-           class="form-background"
            placeholder="Search Items"
            matInput
            formControlName="packageName"

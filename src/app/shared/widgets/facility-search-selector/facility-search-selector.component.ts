@@ -7,8 +7,6 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject, fromEvent } from 'rxjs';
 import { MetrcFacilitiesService, IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 
-
-
 @Component({
   selector: 'app-facility-search-selector',
   templateUrl: './facility-search-selector.component.html',

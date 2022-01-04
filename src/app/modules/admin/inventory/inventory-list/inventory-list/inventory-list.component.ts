@@ -1,34 +1,31 @@
-import { Component, ElementRef, EventEmitter, HostBinding, Input, OnInit, AfterViewInit, ViewChild, Output, Inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { fromEvent, Observable, Subject  } from 'rxjs';
+import { Observable, of, Subject  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from 'rxjs/operators';
-import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter } from 'src/app/_services/inventory/inventory-assignment.service';
-import { ISite } from 'src/app/_interfaces';
+import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
+import { ClientSearchModel, ISite, IUserProfile } from 'src/app/_interfaces';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatDialog } from '@angular/material/dialog';
 import { IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { IGetRowsParams,  GridApi, GridOptions, ICellRendererParams  } from '@ag-grid-community/all-modules';
+import { IGetRowsParams,  GridApi,  } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 
 import {
-  METRCItems,
   METRCItemsCategories,
-  MetrcItemsBrands,
-  METRCItemsCreate,
-  METRCItemsUpdate
 } from 'src/app/_interfaces/metrcs/items';
-import { MoveInventoryLocationComponent } from '../../move-inventory-location/move-inventory-location.component';
-import { InventoryListToolTipComponent } from '../inventory-list-tool-tip/inventory-list-tool-tip.component';
-import { NavParams } from '@ionic/angular';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
+import { Capacitor,  } from '@capacitor/core';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src/app/_services';
+import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 
 export interface InventoryStatusList {
   name: string;
@@ -41,90 +38,116 @@ export interface InventoryStatusList {
   styleUrls: ['./inventory-list.component.scss']
 })
 
-export class InventoryListComponent implements OnInit, AfterViewInit {
+export class InventoryListComponent implements OnInit {
 
-  @ViewChild('input', {static: true}) input: ElementRef;
-  @Output() itemSelect  = new EventEmitter();
+    InventorySearchResultsPaged: InventorySearchResultsPaged;
+    inventoryAssignment        : IInventoryAssignment;
+    inventoryAssignmentHistory : IInventoryAssignment[];
+    @ViewChild('input', {static: true}) input: ElementRef;
+    @Output() itemSelect  = new EventEmitter();
 
-  id:                   any;
-  item:                 string;
-  search:               string;
-  searchPhrase:         Subject<any> = new Subject();
+    id:                   any;
+    item:                 string;
+    search:               string;
+    searchPhrase:         Subject<any> = new Subject();
+    public searchForm: FormGroup;
+    // inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
+    // _iInventoryAssignment$ = this.searchPhrase.pipe(
+    //   debounceTime(250),
+    //   distinctUntilChanged(),
+    //   switchMap(searchPhrase =>
+    //       this.refreshSearch(searchPhrase)
+    //   )
+    // )
 
+    //needed for search component
 
-  // _inventoryAssignment$             : Observable<IInventoryAssignment[]>;
-  inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
-  _iInventoryAssignment$ = this.searchPhrase.pipe(
-    debounceTime(250),
-    distinctUntilChanged(),
-    switchMap(searchPhrase =>
-        this.refreshSearch(searchPhrase)
+    get itemName() { return this.searchForm.get("itemName") as FormControl;}
+    get platForm()         {  return Capacitor.getPlatform(); }
+    get PaginationPageSize(): number {return this.pageSize;  }
+    get gridAPI(): GridApi {  return this.gridApi;  }
+
+    //AgGrid
+    params               : any;
+    private gridApi      : GridApi;
+    private gridColumnApi: GridAlignColumnsDirective;
+    gridOptions          : any
+    columnDefs           = [];
+    defaultColDef        ;
+    frameworkComponents  : any;
+    rowSelection         : any;
+    rowDataClicked1      = {};
+    rowDataClicked2      = {};
+    rowData:             any[];
+    pageSize                = 20
+    pageNumber          : number;
+    currentRow              = 1;
+    currentPage             = 1
+    numberOfPages           = 1
+    startRow                = 0;
+    endRow                  = 0;
+    recordCount             = 0;
+    isfirstpage             : boolean;
+    islastpage              : boolean;
+    // pageSize              : number;
+    //This is for the filter Section//
+    brands           : IUserProfile[];
+    categories$      : Observable<IMenuItem[]>;
+    departments$     : Observable<IMenuItem[]>;
+    productTypes$    : Observable<IItemBasicB[]>;
+    viewOptions$     = of(
+      [
+        {name: 'Active', id: 0},
+        {name: 'All', id: 1},
+        {name: 'Inactive', id: 2}
+      ]
     )
-  )
 
-  searchGridApi:         GridApi;
-  searchGridColumnApi:   GridAlignColumnsDirective;
-  searchGridOptions:     any;
-  //AgGrid
-  private gridApi:       GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
-  gridOptions:           any
-  columnDefs =           [];
-  defaultColDef;
+    //search form filters
+    inputForm        : FormGroup;
+    categoryID       : number;
+    productTypeSearch: number;
+    productTypeID    : number;
+    typeID           : number;
+    brandID          : number;
+    active           : boolean;
+    viewAll           = 1;
 
-  // public modules:        any[] = AllCommunityModules;
-  frameworkComponents:   any;
-  tooltipShowDelay:      any;
-  rowDataClicked1 =      {};
-  rowDataClicked2 =      {};
-  public rowData:        any[];
-  public info:           string;
-  paginationSize =       50
-  currentRow =           1;
-  currentPage =          1
-  pageNumber =           1
-  pageSize =             50
-  numberOfPages =        1
-  rowCount =             50
-  startRow: number;
-  endRow  : number;
+    selected        : any[];
+    selectedRows    : any;
+    agtheme         = 'ag-theme-material';
+    gridDimensions
+    urlPath:        string;
+    value : any;
 
-  rowSelection              :  any;
-  inventoryAssignment       :  IInventoryAssignment;
-  inventoryAssignmentHistory: IInventoryAssignment[];
+    gridlist = "grid-list"
+    sites$:               Observable<ISite[]>;
+    site:                 ISite;
+    selectedSiteID:       number;
 
-  //list select
-  sites$:               Observable<ISite[]>;
-  site:                 ISite;
-  selectedSiteID:       number;
+    metrcCategory$:       Observable<METRCItemsCategories[]>;
+    metrcCategory:        METRCItemsCategories;
+    metrcCategoryID:      number;
 
-  metrcCategory$:       Observable<METRCItemsCategories[]>;
-  metrcCategory:        METRCItemsCategories;
-  metrcCategoryID:      number;
+    locations$:           Observable<IInventoryLocation[]>;
+    inventoryLocation:    IInventoryLocation;
+    inventoryLocationID:  number;
 
-  locations$:           Observable<IInventoryLocation[]>;
-  inventoryLocation:    IInventoryLocation;
-  inventoryLocationID:  number;
-
-  inventoryFilter:      InventoryFilter;
-  inventoryStatus:      InventoryStatusList
-  inventoryStatusID:    number
-  inventoryStatusList  = [
-                          {id: 1, name: 'In Stock - For Sale'},
-                          {id: 2, name: 'In Stock - Not for Sale'},
-                          {id: 3, name: 'Sold Out'},
-                          {id: 0, name:  'All'}
-  ] as InventoryStatusList[]
+    inventoryFilter:      InventoryFilter;
+    inventoryStatus:      InventoryStatusList
+    inventoryStatusID:    number
+    inventoryStatusList  = [
+                            {id: 1, name: 'In Stock - For Sale'},
+                            {id: 2, name: 'In Stock - Not for Sale'},
+                            {id: 3, name: 'Sold Out'},
+                            {id: 0, name:  'All'}
+    ] as InventoryStatusList[]
 
   //This is for the search Section//
-  public searchForm: FormGroup;
+
   get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
   get selectedSiteValue()   { return this.searchForm.get("selectedSiteID") as FormControl;}
   private readonly onDestroy = new Subject<void>();
-
-  searchPaging:               boolean;
-  refreshGrid:                boolean;
-  //This is for the search Section//
 
   constructor(  private _snackBar: MatSnackBar,
                 private inventoryAssignmentService: InventoryAssignmentService,
@@ -134,55 +157,80 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
                 private siteService: SitesService,
                 private metrcCategoriesService: MetrcItemsCategoriesService,
                 private locationService: InventoryLocationsService,
-                private dialog: MatDialog,
-                private inventoryEditButon: InventoryEditButtonService,
+                private dialog                  : MatDialog,
+                private inventoryEditButon     : InventoryEditButtonService,
+                private menuService            : MenuService,
+                private itemTypeService        : ItemTypeService,
+                private contactsService        : ContactsService,
+                private awsService             : AWSBucketService,
+                private agGridFormatingService : AgGridFormatingService,
+
               )
   {
-
-
-
+    this.initAgGrid();
   }
 
-  ngOnInit(): void {
-
-    this.sites$ =          this.siteService.getSites();
+  async ngOnInit() {
+    this.initClasses();
+    this.sites$         =          this.siteService.getSites();
     this.metrcCategory$ =  this.metrcCategoriesService.getCategories();
-    this.locations$ = this.locationService.getLocations();
+    this.locations$     = this.locationService.getLocations();
 
-    this.searchForm = this.fb.group( {
-        searchProducts:     [''],
-        selectedSiteID:     [''],
-        inventoryLocations: [''],
-        inventoryStatusID:  [''],
-      }
-    );
+    this.initForm()
 
-    this.initGridResults();
+    const clientSearchModel       = {} as ClientSearchModel;
+    clientSearchModel.pageNumber  = 1
+    clientSearchModel.pageSize    = 1000;
 
-    this.refreshGrid = true
+    this.urlPath        = await this.awsService.awsBucketURL();
+    const site          = this.siteService.getAssignedSite()
+    this.rowSelection   = 'multiple'
+    this.categories$    = this.menuService.getListOfCategories(site)
+    this.departments$   = this.menuService.getListOfDepartments(site)
+    this.productTypes$  = this.itemTypeService.getBasicTypes(site)
 
+    const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
+    brandResults$.subscribe(data => {
+      this.brands = data.results
+    })
+
+    // this.buttonName = 'Edit'
+    // this.refreshGrid = true
     if (!this.search) { this.search = ''}
   };
 
-  ngAfterViewInit() {
-    fromEvent(this.input.nativeElement,'keyup')
-        .pipe(
-            filter(Boolean),
-            debounceTime(500),
-            distinctUntilChanged(),
-            tap((event:KeyboardEvent) => {
-              const search  = this.input.nativeElement.value
-              this.refreshSearch(search);
-            })
-        )
-      .subscribe();
+  initClasses()  {
+    const platForm      = this.platForm;
+    this.gridDimensions = 'width: 100%; height: 90%;'
+    this.agtheme        = 'ag-theme-material';
+    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
+    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
+  initForm() {
+    this.searchForm = this.fb.group( {
+      searchProducts:     [''],
+      selectedSiteID:     [''],
+      inventoryLocations: [''],
+      inventoryStatusID:  [''],
+    })
+  }
 
-  initAGGridFeatures() {
+  refreshSearchPhrase(event) {
+    this.itemName.setValue(event)
+    this.refreshSearch();
+  }
 
+  initAgGrid() {
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
+
+    this.defaultColDef = {
+      flex: 2,
+      // minWidth: 100,
+    };
     this.columnDefs =  [
-
       {headerName: 'id',  sortable: true, field: 'id',  hide: true, },
       {headerName: 'Name',  sortable: true, field: 'productName',  minWidth: 150},
       {headerName: 'Sku', field: 'sku', sortable: true},
@@ -195,86 +243,108 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
       {headerName: 'Cost', field: 'cost', sortable: true,
                     cellRenderer: this.currencyCellRendererUSD},
     ]
-
     this.rowSelection = 'single';
 
-    this.tooltipShowDelay = 0;
-
-    this.initGridOptions()
-
+    this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
 
   }
 
-  // agGridService
-  currencyCellRendererUSD(params: any) {
-
-    if (isNaN(params) != true)  {  return 0.00 }
-
-    var inrFormat = new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 2
-    });
-
-    if (inrFormat.format(params.value) == '$NaN') { return ''}
-    return inrFormat.format(params.value);
-
+  listAll(){
+    const control = this.itemName
+    if (control) {
+      control.setValue('')
+    }
+    this.categoryID        = 0;
+    this.productTypeSearch = 0;
+    this.brandID           = 0
+    this.refreshSearch()
   }
 
-  initGridResults() {
 
-    this.initAGGridFeatures()
 
-    this.frameworkComponents =  { inventoryListToolTipComponent: InventoryListToolTipComponent,
-                                  btnCellRenderer: ButtonRendererComponent  }
+  initSearchModel(): InventoryFilter {
+    let searchModel             = {} as InventoryFilter;
+    searchModel.productName     = this.search
+    searchModel.label           = this.search
+    searchModel.sku             = this.search
+    searchModel.inventoryStatus = this.inventoryStatusID
+    //if location
+    if (this.inventoryLocation) {searchModel.location = this.inventoryLocation.name }
+    if (this.metrcCategory)     {searchModel.productCategoryName = this.metrcCategory.name}
 
-    this.defaultColDef = {
-      flex:             1,
-      minWidth:         100,
-      filter:           true,
-      resizable:        true,
-      // editable:         true,
-      sortable:         true,
-      tooltipComponent: 'inventoryListToolTipComponent',
-      // cellRendererFramework: InventoryListToolTipComponent,
-      // cellRendererParams: (params: ICellRendererParams) => this.formatToolTip(params.data)
+    searchModel.pageSize    = this.pageSize
+    searchModel.pageNumber = this.pageNumber
+    this.id = 0
+    return searchModel
+  }
+
+  refreshCategoryChange(event) {
+    this.categoryID = event;
+    this.refreshSearch();
+  }
+
+  refreshProductTypeChange(event) {
+    this.productTypeSearch = event;
+    this.refreshSearch();
+  }
+
+  refreshActiveChange(event) {
+    this.viewAll = event;
+    this.refreshSearch();
+  }
+
+  setBrandID(event) {
+    if (event && event.id) {
+      this.brandID = event.id
+      this.refreshSearch();
+    }
+  }
+
+  refreshSearch() {
+    const site               = this.siteService.getAssignedSite()
+    const productSearchModel = this.initSearchModel();
+    this.onGridReady(this.params)
+  }
+
+  refreshGrid() {
+    this.onGridReady(this.params)
+  }
+
+  //this d
+  //this doesn't change the page, but updates the properties for getting data from the server.
+  setCurrentPage(startRow: number, endRow: number): number {
+    const tempStartRow = this.startRow
+    this.startRow      = startRow
+    this.endRow        = endRow;
+    if (tempStartRow > startRow) { return this.currentPage - 1 }
+    if (tempStartRow < startRow) { return this.currentPage + 1 }
+    return this.currentPage
+  }
+
+  //ag-grid standard method.
+  getDataSource(params) {
+    return {
+    getRows: (params: IGetRowsParams) => {
+      const items$ = this.getRowData(params, params.startRow, params.endRow)
+      items$.subscribe(data =>
+        {
+            const resp =  data.paging
+            this.isfirstpage   = resp.isFirstPage
+            this.islastpage    = resp.isFirstPage
+            this.currentPage   = resp.currentPage
+            this.numberOfPages = resp.pageCount
+            this.recordCount   = resp.recordCount
+            if (this.numberOfPages !=0 && this.numberOfPages) {
+              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+            }
+            params.successCallback(data.results)
+            this.rowData = data.results
+          }, err => {
+            console.log(err)
+          }
+      );
+      }
     };
-  }
-
-  formatToolTip(params: any) {
-    // USE THIS FOR TOOLTIP LINE BREAKS
-    const adjustmentNote = params.adjustmentNote;
-    const adjustmentType = params.adjustmentType;
-    const lineBreak = true;
-    const toolTipArray = [adjustmentNote, adjustmentType]
-    return { toolTipArray, lineBreak }
-
-    // USE THIS FOR SINGLE LINE TOOLTIP
-    // const lineBreak = false;
-    // const toolTipString = 'Hello World'
-    // return { toolTipString, lineBreak }
-  }
-
-  initGridOptions()  {
-    this.gridOptions = {
-      pagination: true,
-      paginationPageSize: 50,
-      cacheBlockSize: 50,
-      maxBlocksInCache: 800,
-      rowModelType: 'infinite',
-      infiniteInitialRowCount: 2,
-    }
-  }
-
-  initSearchGridOptions()  {
-    this.searchGridOptions = {
-      pagination: true,
-      paginationPageSize: this.paginationSize,
-      cacheBlockSize: this.paginationSize,
-      // maxBlocksInCache: 2,
-      rowModelType: 'infinite',
-      infiniteInitialRowCount: 2,
-    }
   }
 
   addInventoryItem() {
@@ -285,25 +355,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  listAll(){
 
-    this.pageNumber = 1
-    this.currentPage = this.currentPage  + 1
-    this.inventoryFilter = this.initSearchModel('')
-    this._iInventoryAssignment$ = this.inventoryAssignmentService.getInventory(this.site, this.inventoryFilter)
-    this.getRowData(1, 50)
-
-  }
-
-  refreshData() {
-
-    const inv$ = this.inventoryAssignmentService.getInventory(this.site, this.inventoryFilter)
-    inv$.subscribe ( data => {
-      this.inventoryAssignment$.next(data)
-    })
-
-
-  }
 
   getAssignedSiteSelection(event) {
     if (event.value) {
@@ -327,11 +379,10 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
   }
 
   getMetrcCategory(event) {
-
     this.metrcCategoryID = event.value
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
-      this.searchItems()
+      // this.searchItems()
       return
     }
     if (event.value) {
@@ -343,7 +394,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
   assignMetrcCategory(id: number) {
     this.metrcCategoriesService.getCategory(id).subscribe( data => {
       this.metrcCategory = data
-      this.searchItems()
+      // this.searchItems()
     })
   }
 
@@ -351,7 +402,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
     this.inventoryLocationID = event.value
     if (this.inventoryLocationID == 0) {
       this.inventoryLocation = null
-      this.searchItems()
+      // this.searchItems()
       return
     }
     if (event.value) {
@@ -363,7 +414,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
     this.locationService.getLocation(id).subscribe( data => {
       this.inventoryLocation = data
       console.log(data)
-      this.searchItems()
+      // this.searchItems()
     })
   }
 
@@ -372,7 +423,7 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
       this.assignInventoryStatus(event.value);
     } else {
       this.inventoryStatus.id = 0
-      this.searchItems()
+      // this.searchItems()
     }
   }
 
@@ -382,168 +433,102 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
         if ( data.name === name ) {
           this.inventoryStatus = data;
           this.inventoryStatusID  = this.inventoryStatus.id
-          this.searchItems()
+          // this.searchItems()
           return
         }
       }
     )
   }
 
-  initSearchModel(search: string): InventoryFilter {
-    let searchModel = {} as InventoryFilter;
-    searchModel.productName = search
-    searchModel.label = search
-    searchModel.sku = search
-    searchModel.inventoryStatus = this.inventoryStatusID
-    //if location
-    if (this.inventoryLocation) {searchModel.location = this.inventoryLocation.name }
-    if (this.metrcCategory)     {searchModel.productCategoryName = this.metrcCategory.name}
-    searchModel.pageSize  = this.pageSize
-    searchModel.pageNumber = this.pageNumber
-    this.id = 0
-    return searchModel
+  //ag-grid standard method
+  getRowData(params, startRow: number, endRow: number):  Observable<InventorySearchResultsPaged>  {
+    this.currentPage          = this.setCurrentPage(startRow, endRow)
+    const searchModel         = this.initSearchModel();
+    const site                = this.siteService.getAssignedSite()
+    return this.inventoryAssignmentService.getInventory(site, searchModel)
   }
 
-  refreshSearch(search: string) : Observable<IInventoryAssignment[]>  {
-
-    const site =   this.getAssignedSite()
-    this.searchPaging = true
-    // this.search = search //for update of forms when the dialog's close.
-    if (site) {
-      const searchModel = this.initSearchModel(search);
-      const inv$ = this.inventoryAssignmentService.getActiveInventory(site, searchModel).subscribe( data => {
-        this.inventoryAssignment$.next(data)
-      })
-      return  this._iInventoryAssignment$
-
-    } else {
-
-      this.inventoryAssignment$.next(null)// = null
+  //ag-grid standard method
+  async onGridReady(params: any) {
+    console.log('params', params)
+    if (params)  {
+      this.params  = params
+      this.gridApi = params.api;
+      this.gridColumnApi = params.columnApi;
+      params.api.sizeColumnsToFit();
     }
-  }
 
-  searchItems() {
-    const site = this.getAssignedSite()
-    if (site) {
-      const search = this.searchProductsValue.value
-      const searchModel = this.initSearchModel(search);
-      const inv =  this.inventoryAssignmentService.getActiveInventory(site, searchModel)
-      inv.subscribe( data => {
-        this.inventoryAssignment$.next(data)
-      })
-    } else {
-      console.log("site not defined")
-    }
-  }
+    if (params == undefined) { return }
 
-  // iInventoryAssignment$ = this.searchPhrase.pipe(
-  //   debounceTime(250),
-  //   distinctUntilChanged(),
-  //   switchMap(searchPhrase =>
-  //       this.refreshSearch(searchPhrase)
-  //   )
-  // )
+    let datasource =  {
+      getRows: (params: IGetRowsParams) => {
+      const items$ =  this.getRowData(params, params.startRow, params.endRow)
 
-  getRowData(startRow: number, endRow: number) : Observable<IInventoryAssignment[]> { //:  { //  Observable<IInventoryAssignment[]>  {
-
-    //this routine converts the StartRows and Endrows to pageNumber and PageSize.
-    //this means we have to keep track of the current page.
-    //the grid only captures the star rows and current rows. So it doesn't know
-    //what page we are on.
-    //we can display the current page on the screen using currentPage
-    startRow = this.currentPage
-    console.log(startRow, endRow)
-
-    this.pageNumber = this.currentPage
-    this.currentPage = this.currentPage  + 1
-    if (startRow == 0)  { startRow = 1 }
-
-    if (!this.searchProductsValue.value)
-    {
-      if (this.searchPaging) {
-        this.pageNumber = 1
-        this.searchPaging = !this.searchPaging
+      items$.subscribe(data =>
+        {
+          if (data.errorMessage) {
+            this.notifyEvent(data.errorMessage, 'Failure')
+            return
+          }
+            const resp         =  data.paging
+            this.isfirstpage   = resp.isFirstPage
+            this.islastpage    = resp.isFirstPage
+            this.currentPage   = resp.currentPage
+            this.numberOfPages = resp.pageCount
+            this.recordCount   = resp.recordCount
+            if (this.numberOfPages !=0 && this.numberOfPages) {
+              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
+            }
+            params.successCallback(data.results)
+          }
+        );
       }
-      this.searchItems()
-    }
+    };
 
-    return this.inventoryAssignment$
-
+    if (!datasource)   { return }
+    if (!this.gridApi) { return }
+    this.gridApi.setDatasource(datasource);
   }
 
+    //mutli select method for selection change.
   onSelectionChanged(event) {
-    console.log('onSelectionChanged', event)
-    const  selectedRows = this.gridApi.getSelectedRows();
+
+    let selectedRows       = this.gridApi.getSelectedRows();
+    let selectedRowsString = '';
+    let maxToShow          = this.pageSize;
+    let selected           = []
+
+    if (selectedRows.length == 0) { return }
+    selectedRows.forEach(function (selectedRow, index) {
+    if (index >= maxToShow) { return; }
+    if (index > 0) {  selectedRowsString += ', ';  }
+      selected.push(selectedRow.id)
+      selectedRowsString += selectedRow.name;
+    });
+
+    if (selectedRows.length > maxToShow) {
+    let othersCount = selectedRows.length - maxToShow;
+    selectedRowsString +=
+      ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
+    }
+
+    this.selected = selected
     this.id = selectedRows[0].id;
     this.getInventoryHistory(this.id)
+    // this.getItemHistory(this.id)
   }
 
   async getInventoryHistory(id: any) {
     const site = this.siteService.getAssignedSite();
     if (id) {
-
       this.inventoryAssignmentService.getInventoryAssignment(site, id ).subscribe(data =>{
         this.inventoryAssignment = data;
       })
-
       const history$ = this.inventoryAssignmentService.getInventoryAssignmentHistory(site, id)
       history$.subscribe(data=>{
-        this.inventoryAssignmentHistory = data
+        this.inventoryAssignmentHistory = data;
       })
     }
-  }
-
-  onSearchgridReady({ api } : {api: GridApi}) {
-    this.gridApi = api;
-    api.sizeColumnsToFit();
-  }
-
-  onSearchGridReady(params) {
-    this.searchItems()
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-    console.log(params)
-  }
-
-  ongridReady({ api } : {api: GridApi}) {
-    this.gridApi = api;
-    api.sizeColumnsToFit();
-  }
-
-  onGridReady(params: any) {
-    this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
-    let datasource = {
-      getRows: (params: IGetRowsParams) => {
-        this.info = "Getting datasource rows, start: " + params.startRow + ", end: " + params.endRow;
-        this.getRowData(params.startRow, params.endRow)
-          .subscribe(data =>
-              {
-                if (this.paginationSize > data.length) {
-                  this.paginationSize = data.length
-                  this.refreshGrid = false
-                  this.initAGGridFeatures()
-                  this.refreshGrid = true
-                }
-                params.successCallback(data)
-              }, err => {
-                console.log(err)
-              }
-            );
-       }
-    };
-    params.api.setDatasource(datasource);
-  }
-
-  onSearch(){
-    if (this.searchProductsValue.value) {
-      this.searchPaging = true
-      this.pageNumber = 1
-      this.currentPage = 1
-    } else {
-      this.searchPaging = false
-    }
-    this.searchItems()
   }
 
   getLabel(rowData)
@@ -568,7 +553,6 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
   }
 
   editItemWithId(id:any) {
-
     return
   }
 
@@ -576,18 +560,14 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
   }
 
   onExportToCsv() {
-    if (!this.searchPaging) {
-      this.gridApi.exportDataAsCsv();
-    } else {
-      this.searchGridApi.exportDataAsCsv();
-    }
+    this.gridApi.exportDataAsCsv();
   }
 
   onSortByNameAndPrice(sort: string) {
   }
 
   displayFn(search) {
-    this.searchPaging = true
+    // this.searchPaging = true
     this.selectItem(search)
     this.item = search
     this.search = search
@@ -596,9 +576,30 @@ export class InventoryListComponent implements OnInit, AfterViewInit {
 
   selectItem(search){
     if (search) {
-      this.searchPaging = true
+      // this.searchPaging = true
       this.searchPhrase.next(search)
     }
+  }
+
+  formatToolTip(params: any) {
+    // USE THIS FOR TOOLTIP LINE BREAKS
+    const adjustmentNote = params.adjustmentNote;
+    const adjustmentType = params.adjustmentType;
+    const lineBreak = true;
+    const toolTipArray = [adjustmentNote, adjustmentType]
+    return { toolTipArray, lineBreak }
+  }
+
+  // agGridService
+  currencyCellRendererUSD(params: any) {
+    if (isNaN(params) != true)  {  return 0.00 }
+    var inrFormat = new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 2
+    });
+    if (inrFormat.format(params.value) == '$NaN') { return ''}
+    return inrFormat.format(params.value);
   }
 
   notifyEvent(message: string, action: string) {

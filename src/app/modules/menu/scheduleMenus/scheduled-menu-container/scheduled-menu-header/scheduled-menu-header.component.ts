@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Title } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'scheduled-menu-header',
@@ -11,7 +13,7 @@ export class ScheduledMenuHeaderComponent implements OnInit {
   @Input() description: string;
   @Input() name: string;
   @Input() isApp: boolean;
-
+  href : string;
   // @OutPut() outPutToggleView = new EventEmitter()<any>;
   showAllFlag: boolean;
   iconName   = 'expand';
@@ -19,15 +21,26 @@ export class ScheduledMenuHeaderComponent implements OnInit {
   @Output() outPutToggleView = new EventEmitter<boolean>();
   gridItemImage= 'grid-item-image'
   gridHeaderApp = 'header-grid';
-  constructor() {
-
-   }
+  constructor(
+    private router:          Router,
+    private titleService: Title) {
+    this.href = this.router.url;
+  }
 
   ngOnInit(): void {
     console.log('')
     if (this.isApp) {
       this.gridItemImage= 'grid-item-image-app'
       this.gridHeaderApp = 'header-grid-app';
+    }
+    this.setTitle()
+  }
+
+  setTitle() {
+    if (this.name) {
+      if (this.href === '/scheduled-menu') {
+        this.titleService.setTitle(this.name)
+      }
     }
   }
 

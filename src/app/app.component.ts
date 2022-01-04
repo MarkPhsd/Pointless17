@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { filter, map } from 'rxjs/operators';
 
-
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
 @Component({
@@ -44,8 +43,8 @@ export class AppComponent {
   constructor(
       private platform:              Platform,
       private router:                Router,
-      private titleService          : Title,
-      private activatedRoute        : ActivatedRoute,
+      private titleService          :Title,
+      private activatedRoute        :ActivatedRoute,
       private authenticationService: AuthenticationService,
       private statusBar:             StatusBar,
       private toastController:       ToastController,
@@ -64,21 +63,53 @@ export class AppComponent {
   }
 
   setTitle() {
-  //   const appTitle = this.titleService.getTitle();
-  //   console.log('app ', appTitle)
-  //   this.router
-  //     .events.pipe(
-  //       filter(event => event instanceof NavigationEnd),
-  //       map(() => {
-  //         const child = this.activatedRoute.firstChild;
-  //         if (child.snapshot.data['title']) {
-  //           return child.snapshot.data['title'];
-  //         }
-  //         return appTitle;
-  //       })
-  //     ).subscribe( pageTitle => {
-  //       this.titleService.setTitle(pageTitle);
-  //     });
+    const appTitle = this.titleService.getTitle();
+
+    // this.router
+    //   .events.pipe(
+    //     filter(event => event instanceof NavigationEnd),
+    //     map( outPut => {
+    //       console.log('outPut ', outPut);
+    //       if (this.activatedRoute.firstChild) {
+    //         const child = this.activatedRoute.firstChild;
+    //         const data = child.snapshot.data;
+    //         if (child && data && data.title)
+    //         {
+    //           console.log('rout data', data)
+    //           return appTitle;
+    //         }
+    //       }
+    //     })
+    //   ).subscribe( pageTitle => {
+    //     this.titleService.setTitle(pageTitle);
+    //   });
+    try {
+      this.router.events.subscribe(event => {
+        if(event instanceof NavigationEnd) {
+          const title = this.getTitle( this.router.routerState, this.router.routerState.root).join('-');
+          console.log('title', title)
+          if (!title) {
+            this.titleService.setTitle('Pointless');
+            return
+          }
+          this.titleService.setTitle(title);
+        }
+      });
+    } catch (error) {
+
+    }
+  }
+
+  getTitle(state, parent) {
+    var data = [];
+    if(parent && parent.snapshot.data && parent.snapshot.data.title) {
+      data.push(parent.snapshot.data.title);
+    }
+
+    if(state && parent) {
+      data.push(... this.getTitle(state, state.firstChild(parent)));
+    }
+    return data;
   }
 
   initializeApp() {

@@ -198,6 +198,11 @@ export class StrainsAddComponent implements OnInit {
 
         this.intakeConversion = await this.getUnitConversionToGrams(this.package.unitOfMeasureName)
 
+        let active = true
+        if (this.package.active != 0)  {
+          active = false;
+        }
+
         this.packageForm = this.fb.group({
 
             productCategoryName:              [data.item.productCategoryName, Validators.required],
@@ -231,8 +236,9 @@ export class StrainsAddComponent implements OnInit {
             intakeUOM:                        [data.unitOfMeasureName],
             intakeConversionValue:            [this.intakeConversion.value],
 
-            active        : [''],
-            hasImported   : [''],
+
+            active        : [active],
+            hasImported   : [this.package.inventoryImported],
 
         })
       } catch (error) {

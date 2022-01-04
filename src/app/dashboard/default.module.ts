@@ -231,6 +231,7 @@ import { ActivityTogglesComponent } from '../modules/admin/products/productedit/
 import { ItemTypeTogglesEditComponent } from '../modules/admin/products/item-type/item-type-editor/item-type-toggles-edit/item-type-toggles-edit.component';
 import { SiteEditFormComponent } from '../modules/admin/settings/site-edit/site-edit-form/site-edit-form.component';
 import { ActivityTogglesMetrcComponent } from '../modules/admin/metrc/packages/metrc-inventory-properties/activity-toggles-metrc/activity-toggles-metrc.component';
+import { MetrcIntakeHeaderComponent } from '../modules/admin/metrc/packages/metrc-inventory-properties/metrc-intake-header/metrc-intake-header.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -314,6 +315,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MetrcIndividualPackageComponent,
     MetrcInventoryPropertiesComponent,
     MainMenuComponent,
+    MetrcIntakeHeaderComponent,
     MenuItemsInfiniteComponent,
     MetrcSalesListComponent,
     METRCProductsAddComponent,

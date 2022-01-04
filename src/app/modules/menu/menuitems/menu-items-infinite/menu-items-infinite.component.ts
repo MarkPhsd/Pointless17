@@ -8,6 +8,7 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { ElectronService } from 'ngx-electron';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-menu-items-infinite',
@@ -76,13 +77,14 @@ isApp           = false;
 
 getPlatForm() {  return Capacitor.getPlatform(); }
 
-constructor(private menuService: MenuService,
-            private awsBucketService: AWSBucketService,
-            private router: Router,
-            public route: ActivatedRoute,
-            private siteService: SitesService,
+constructor(private menuService      : MenuService,
+            private awsBucketService : AWSBucketService,
+            private router           : Router,
+            public  route            : ActivatedRoute,
+            private siteService      : SitesService,
             private toolbarServiceUI : ToolBarUIService,
-            private electronService: ElectronService,
+            private electronService  : ElectronService,
+            private titleService     : Title,
     )
 {
 
@@ -160,11 +162,18 @@ constructor(private menuService: MenuService,
 async ngOnInit()  {
   this.value      = 1;
   this.bucketName =   await this.awsBucketService.awsBucket();
-  // console.log('buck name menu items infinit', this.bucketName )
+
   this.initOrderBarSubscription()
   this.setItemsPerPage();
   await this.nextPage();
+  this.setTitle()
 }
+
+  setTitle() {
+    if (this.productSearchModelData) {
+      this.titleService.setTitle('Items Search Results')
+    }
+  }
 
 ngOnDestroy(): void {
   if (this._orderBar) { this._orderBar.unsubscribe(); }

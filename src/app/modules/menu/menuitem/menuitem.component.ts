@@ -3,7 +3,7 @@ import { AWSBucketService, MenuService, OrdersService, UserService } from 'src/a
 import { IMenuItem  }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, Title } from '@angular/platform-browser';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {Location} from '@angular/common';
@@ -13,6 +13,8 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { switchMap } from 'rxjs/operators';
+import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 // https://www.npmjs.com/package/ngx-gallery
 
@@ -35,7 +37,7 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     quantity:               number;
     id:                     string;
 
-    menuItem = {} as        IMenuItem;
+    menuItem:               IMenuItem;
     menuItem$:              Observable<IMenuItem>;
     brand$:                 Observable<IClientTable>;
 
@@ -58,10 +60,10 @@ export class MenuitemComponent implements OnInit,OnDestroy {
           private siteService       : SitesService,
           private brandService      : ClientTableService,
           private location          : Location,
-          private posOrderItemService: POSOrderItemServiceService,
-          private userService       : UserService,
           private userAuthorization : UserAuthorizationService,
           private orderMethodsService : OrderMethodsService,
+          private appInitService        : AppInitService,
+          private titleService      : Title,
          )
     {
       this.roles = localStorage.getItem(`roles`)
@@ -122,22 +124,16 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     }
 
     getItem(id: any) {
-
-      const site = this.siteService.getAssignedSite();
-      this.menuItem$ = this.menuService.getMenuItemByID(site,id)
-      let promise =  this.menuItem$.pipe().toPromise()
-
-       promise.then(data =>
-        {
+      const site     = this.siteService.getAssignedSite();
+      const menuItem$ = this.menuService.getMenuProduct(site,id)
+      // let promise    =  this.menuItem$.pipe().toPromise()
+      menuItem$.subscribe(data => {
           this.menuItem = data;
-          this.brand$    =  this.brandService.getClient(site, data.brandID)
-
-        },
-        error => {
+          this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
+          this.brand$ = this.brandService.getClient(site, data.brandID)
         }
       )
     };
-
 
     goBackToList() {
       try {

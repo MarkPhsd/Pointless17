@@ -9,11 +9,12 @@
     </mat-card-title>
     <mat-card-subtitle>
 
-      <div class="grid-header">
+      <div class="header-container">
         <div>
-          <div class="item-info">Facility Code / Name: {{package.itemFromFacilityLicenseNumber}} / {{package.itemFromFacilityName}} </div>
-          <div class="item-info">Name: {{package.item.name}} | Intaking as {{intakeConversion.name}}  </div>
-          <div class="item-info">Testing State: {{package.labTestingState}}</div>
+          <metrc-intake-header
+            [intakeConversion]="intakeConversion"
+            [package]="package">
+          </metrc-intake-header>
           <div [formGroup]="packageForm">
             <activity-toggles-metrc
                 [inputForm]="packageForm">
@@ -29,89 +30,61 @@
           ></app-edit-buttons-standard>
         </div>
       </div>
-
       <mat-divider></mat-divider>
     </mat-card-subtitle>
 
     <mat-card-content>
       <div  [formGroup]="packageForm"
-            fxLayout="row"
-            fxLayoutAlign="space-around start"
-            fxFlex
-            fxLayoutGap
-            fxFill
+            class      ="grid-container"
           >
 
-        <div fxLayout="column"
-              fxLayoutAlign="start start"
-              fxFlex
-              fxFill
-              fxLayoutGap
-              class="fields"
-              >
-            <!--
-            <app-metrc-inventory-properties
-                  [inputForm]   ="packageForm"
-                  [package]     ="package"
-                  >
-            </app-metrc-inventory-properties> -->
-            <div>
-              <app-metrc-inventory-properties
-                    [inputForm]   ="packageForm"
-                    [package]     ="package"
-                    (outputMenuItem)="getStrain($event)"
-                    (outputVendor)  ="getVendor($event)"
-                    >
-              </app-metrc-inventory-properties>
-            </div>
+        <div >
+          <metrc-inventory-properties
+                [inputForm]     ="packageForm"
+                [package]       ="package"
+                (outputMenuItem)="getStrain($event)"
+                (outputVendor)  ="getVendor($event)"
+                >
+          </metrc-inventory-properties>
         </div>
 
-        <div fxLayout="column"
-            fxLayoutAlign="start start"
-            fxFlex ="33"
-            class="fields"
-            fxLayoutGap>
-
-            <app-chemical-values [inputForm]="packageForm">
-            </app-chemical-values>
-
+        <div>
+          <app-chemical-values
+            [inputForm]="packageForm">
+          </app-chemical-values>
         </div>
 
-        <div fxLayout="column"
-                fxFill
-                fxFlex
-                fxLayoutAlign="start start"
-                  fxLayoutGap >
+        <div>
+          <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required
+                && packageForm.controls.inventoryLocationID.touched" class="error">
+            <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
+          </div>
 
-            <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required
-                  && packageForm.controls.inventoryLocationID.touched" class="error">
-              <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
-            </div>
+          <div *ngIf="packageForm.controls.conversionName.errors?.required
+                && packageForm.controls.conversionName.touched" class="error">
+            <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
+          </div>
 
-            <div *ngIf="packageForm.controls.conversionName.errors?.required
-                  && packageForm.controls.conversionName.touched" class="error">
-              <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
-            </div>
+          <div *ngIf="packageForm.controls.inputQuantity.errors?.required
+                && packageForm.controls.inputQuantity.touched" class="error">
+            <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
+          </div>
 
-            <div *ngIf="packageForm.controls.inputQuantity.errors?.required
-                  && packageForm.controls.inputQuantity.touched" class="error">
-              <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
-            </div>
+          <div *ngIf="packageForm.controls.cost.errors?.required
+                && packageForm.controls.cost.touched" class="error">
+            <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
+          </div>
 
-            <div *ngIf="packageForm.controls.cost.errors?.required
-                  && packageForm.controls.cost.touched" class="error">
-              <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
-            </div>
-
+          <span *ngIf=" package && !package.inventoryImported">
             <app-strain-packages  (outputPackage)="getNewPackage($event)"
-                                  (outoutClosePackage)="onCancel($event)"
-                                  [menuItem]="menuItem"
-                                  [facility]="facility"
-                                  [facilityLicenseNumber]="facilityLicenseNumber"
-                                  [packageForm]="packageForm"
-                                  [package]="package">
+              (outoutClosePackage)="onCancel($event)"
+              [menuItem]="menuItem"
+              [facility]="facility"
+              [facilityLicenseNumber]="facilityLicenseNumber"
+              [packageForm]="packageForm"
+              [package]="package">
             </app-strain-packages>
-
+          </span>
         </div>
 
       </div>

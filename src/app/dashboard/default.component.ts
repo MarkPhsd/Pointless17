@@ -1,8 +1,8 @@
-import { Component, HostBinding, OnInit,AfterViewInit,
+import { Component, HostBinding, OnInit, AfterViewInit,
          Renderer2, OnDestroy, HostListener,
          ChangeDetectorRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router, NavigationEnd, ActivatedRoute,RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
@@ -10,8 +10,6 @@ import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
 import { AuthenticationService } from '../_services';
 import { IUser } from '../_interfaces';
-import { Title } from '@angular/platform-browser';
-import { filter, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-default',
@@ -79,11 +77,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private cd              : ChangeDetectorRef,
                private appInitService  : AppInitService,
                private authorizationService: AuthenticationService,
-               private titleService          : Title,
-               private activatedRoute        : ActivatedRoute,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
-
     if (this.platForm == 'web') {
       this.sidebarMode   =  'side'
     }
@@ -94,37 +89,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderTheme();
     this.initSubscriptions();
     this.refreshToolBarType();
-    this.setTitle();
   }
-
-  setTitle() {
-
-    try {
-      this.router
-      .events.pipe(
-        filter(event => event instanceof NavigationEnd),
-        map(() => {
-          const child = this.activatedRoute.firstChild;
-          console.log('child', child)
-          if (child) {
-            if ( child.snapshot.data ) {
-              return child.snapshot.data;
-            }
-          }
-          return ('Pointless');
-        })
-      ).subscribe( data => {
-
-        console.log('default pageTitle', data)
-
-      });
-    } catch (error) {
-      console.log('empty Page Title')
-    }
-
-  }
-
-
 
   ngAfterViewInit() {
     this.cd.detectChanges();
@@ -169,7 +134,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     // xs (for phones - screens less than 768px wide)
     this.refreshToolBarType()
   }
-
 
   refreshToolBarType() {
     if (window.innerHeight >= 750) {

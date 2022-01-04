@@ -149,6 +149,12 @@ export class METRCProductsAddComponent implements OnInit {
       this.packageForm.patchValue(data)
       this.baseUnitsRemaining = this.intakeconversionQuantity
       this.initialQuantity = this.intakeconversionQuantity
+
+      let active = true
+      if (this.package.active == 0)  {
+        active = false;
+      }
+
       this.packageForm = this.fb.group({
 
         productCategoryName:              [data.item.productCategoryName, Validators.required],
@@ -182,10 +188,10 @@ export class METRCProductsAddComponent implements OnInit {
         intakeUOM:                        [data.unitOfMeasureName],
         intakeConversionValue:            [this.intakeConversion.value],
 
-        active        : [''],
-        hasImported   : [''],
+        hasImported   : [this.package.inventoryImported],
+        active        : [active],
+
       })
-      console.log('form initiated')
     }
   }
 
@@ -206,9 +212,16 @@ export class METRCProductsAddComponent implements OnInit {
     if (this.hasImportedControl) {
       this.package.inventoryImported = this.hasImportedControl.value
     }
+
+    console.log('this.activeControl.value', this.activeControl.value)
     if (this.activeControl) {
-      this.package.active = this.activeControl.value
+      if (this.activeControl.value) {
+        this.package.active = 1
+      } else {
+        this.package.active = 0
+      }
     }
+
     package$.subscribe(data => {
       this.notifyEvent('Item saved', 'Success')
       if (event) {
@@ -231,7 +244,6 @@ export class METRCProductsAddComponent implements OnInit {
   onCancel(event) {
     this.dialogRef.close()
   }
-
 
   initFields() {
     this.packageForm = this.inventoryAssignmentService.initFields(this.packageForm)

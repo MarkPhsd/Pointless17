@@ -183,10 +183,10 @@ export class PackageListComponent implements OnInit {
 
   initClasses()  {
     const platForm = this.platForm;
-    this.gridDimensions   =  'width: 100%; height: 89%;'
+    this.gridDimensions   =  'width: 100%; height: 90%;'
     this.agtheme          = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions = 'width: 100%; height: 85%;' }
-    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 85%;' }
+    if (platForm === 'capacitor') { this.gridDimensions = 'width: 100%; height: 90%;' }
+    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
   // ngAfterViewInit() {
@@ -251,6 +251,7 @@ export class PackageListComponent implements OnInit {
   }
 
   refreshFilters(event) {
+    console.log('event', event)
     this.getAssignedSiteSelection(event)
     if (this.site) {
       this.facilities$ = this.metrcFacilityService.getFacilities(this.site)
@@ -564,8 +565,8 @@ export class PackageListComponent implements OnInit {
     const dialogRef = this.dialog.open(StrainsAddComponent,
       { width:      '900px',
         minWidth:   '900px',
-        height:     '775px',
-        minHeight:  '775px',
+        height:     '800px',
+        minHeight:  '800px',
         data : {id: id}
       },
     )
@@ -580,10 +581,10 @@ export class PackageListComponent implements OnInit {
       { data: { id: id } }
     ]
     const dialogRef = this.dialog.open(METRCProductsAddComponent,
-      { height:     '750px',
-        minHeight:  '750px',
-        width:      '805px',
-        minWidth:   '805px',
+      { width:      '800px',
+        minWidth:   '800px',
+        height:     '800px',
+        minHeight:  '800px',
         data : {id: id}
       },
     )

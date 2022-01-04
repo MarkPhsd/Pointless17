@@ -2,11 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { Observable } from 'rxjs';
-import { ISite}  from 'src/app/_interfaces';
+import { ISite, Paging}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { FormBuilder, FormGroup } from '@angular/forms';
+
+export interface InventorySearchResultsPaged {
+  results     : IInventoryAssignment[];
+  paging      : Paging;
+  errorMessage: string;
+}
 
 export interface IInventoryAssignment {
   id:                    number;
@@ -135,7 +141,7 @@ export class InventoryAssignmentService {
 
   const controller =  `/InventoryAssignments/`
 
-  const endPoint = `GetInventoryHistoryList`
+  const endPoint = `getInventoryHistoryList`
 
   const parameters = `?id=${id}`
 
@@ -145,21 +151,21 @@ export class InventoryAssignmentService {
 
  }
 
- getInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<IInventoryAssignment[]> {
+ getInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<InventorySearchResultsPaged> {
 
     const controller =  `/InventoryAssignments/`
 
-    const endPoint = `postInventory`
+    const endPoint = `getInventoryList`
 
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}`
 
-    return  this.http.post<IInventoryAssignment[]>(url, inventoryFilter)
+    return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter)
 
   }
 
-  getActiveInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<IInventoryAssignment[]> {
+  getActiveInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<InventorySearchResultsPaged> {
 
     inventoryFilter.noActiveCount = true
 
@@ -171,12 +177,12 @@ export class InventoryAssignmentService {
 
     const url = `${site.url}${controller}${endPoint}`
 
-    return  this.http.post<IInventoryAssignment[]>(url, inventoryFilter)
+    return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter)
 
   }
 
 
-  getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable<IInventoryAssignment[]> {
+  getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable<InventorySearchResultsPaged> {
 
     const inventoryFilter = {}  as InventoryFilter;
 
@@ -186,18 +192,18 @@ export class InventoryAssignmentService {
 
     const controller =  `/InventoryAssignments/`
 
-    const endPoint = `postInventory`
+    const endPoint = `getInventoryList`
 
     const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<IInventoryAssignment[]>(url, inventoryFilter )
+    return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter )
 
 
  }
 
- getInventoryByType(site: ISite,pageNumber: number, pageSize: number, type: string): Observable<IInventoryAssignment[]> {
+ getInventoryByType(site: ISite,pageNumber: number, pageSize: number, type: string): Observable<InventorySearchResultsPaged> {
 
   const inventoryFilter = {}  as InventoryFilter;
 
@@ -208,7 +214,7 @@ export class InventoryAssignmentService {
 
   const controller =  `/InventoryAssignments/`
 
-  const endPoint = `GetInventoryList`
+  const endPoint = `getInventoryList`
 
   const parameters = ``
 

@@ -17,6 +17,7 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { Title } from '@angular/platform-browser';
 const { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -179,6 +180,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
                 private router:          Router,
                 private siteService:     SitesService,
                 private platFormService :PlatformService,
+                private titleService    : Title,
    )
   {
 
@@ -201,6 +203,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     searchModel.currentPage = 1;
     searchModel.pageSize = 1;
     this.searchModel = searchModel;
+
     this.addToList(searchModel.pageNumber, searchModel.pageSize)
   }
 

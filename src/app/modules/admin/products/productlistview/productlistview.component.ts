@@ -109,6 +109,7 @@ value : any;
 id              : number;
 product         : IProduct;
 
+
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
 promptSubGroup  : PromptSubGroups;
@@ -122,13 +123,13 @@ initSubscriptions() {
 constructor(  private _snackBar         : MatSnackBar,
               private promptSubGroupService  : PromptSubGroupsService,
               private menuService            : MenuService,
+              private itemTypeService        : ItemTypeService,
+              private contactsService        :  ContactsService,
               private agGridService          : AgGridService,
               private fb                     : FormBuilder,
               private siteService            : SitesService,
-              private itemTypeService        : ItemTypeService,
               private productEditButtonService: ProductEditButtonService,
               private agGridFormatingService : AgGridFormatingService,
-              private contactsService        :  ContactsService,
               private awsService             : AWSBucketService,
               private dialog: MatDialog,
             )
@@ -291,7 +292,7 @@ constructor(  private _snackBar         : MatSnackBar,
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
-  initProductSearchModel(): ProductSearchModel {
+  initSearchModel(): ProductSearchModel {
     let searchModel        = {} as ProductSearchModel;
     if (this.itemName.value)            { searchModel.name        = this.itemName.value  }
     if (this.categoryID )               { searchModel.categoryID  = this.categoryID.toString(); }
@@ -324,7 +325,7 @@ constructor(  private _snackBar         : MatSnackBar,
 
   refreshSearch() {
     const site               = this.siteService.getAssignedSite()
-    const productSearchModel = this.initProductSearchModel();
+    const productSearchModel = this.initSearchModel();
     this.onGridReady(this.params)
   }
 
@@ -371,7 +372,7 @@ constructor(  private _snackBar         : MatSnackBar,
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<IProductSearchResultsPaged>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
-    const productSearchModel  = this.initProductSearchModel();
+    const productSearchModel  = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
     return this.menuService.getProductsBySearchForListsPaging(site, productSearchModel)
   }

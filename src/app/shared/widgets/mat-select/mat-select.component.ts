@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class MatSelectComponent {
 
-  @Input()  class=''
+  @Input()  class='mat-form-field'
   @Input()  inputForm: FormGroup;
   @Input()  fieldName: string;
   @Input()  list$    : Observable<any>;
@@ -18,12 +18,12 @@ export class MatSelectComponent {
   constructor() { }
 
   setOutPut(event) {
-    // console.log('item output', event)
+    console.log('item output', event)
     this.outputItem.emit(event)
   }
 
   setItemOutPut(item) {
-    // console.log('item output', item)
+    console.log('item output', item)
     this.outputItem.emit(item)
   }
 }

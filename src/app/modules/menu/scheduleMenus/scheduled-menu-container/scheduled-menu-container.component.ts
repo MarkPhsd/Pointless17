@@ -13,6 +13,7 @@ import { IPriceSchedule,
          PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'scheduled-menu-container',
@@ -111,6 +112,7 @@ export class ScheduledMenuContainerComponent implements OnInit {
   url: string;
 
   constructor(
+                private titleService    :       Title,
                 private awsBucketService:       AWSBucketService,
                 private platFormService:        PlatformService,
                 private siteService:            SitesService,

@@ -5,7 +5,6 @@
   flex-direction: column;
   height: 100%;
 }
-
 .header-container {
   --gap: 10px;
   display: grid;
@@ -22,6 +21,20 @@
   }
 }
 
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // margin-top: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 500px;
+}
+
+.mat-card-content {
+  height: 510px;
+}
 
 .flex-column  {
   margin-top: 4px;
@@ -118,12 +131,6 @@ mat-form-field {
 
 .fields {
   margin: 4px 4px 4px 4px;
-}
-
-.grid-container {
-  display: flex;
-  // grid-template-columns:  350px 350px ;
-  gap: 5px;
 }
 
 .item-input {
