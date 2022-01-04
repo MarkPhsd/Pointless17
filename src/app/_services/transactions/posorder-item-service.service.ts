@@ -144,7 +144,7 @@ export class POSOrderItemServiceService {
 
     const controller = "/POSOrderItems/"
 
-    const endPoint  = "PostUniquBarcodeItem"
+    const endPoint  = "PostUniqueBarcodeItem"
 
     const parameters = ``
 

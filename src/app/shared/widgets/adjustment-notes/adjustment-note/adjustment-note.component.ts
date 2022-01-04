@@ -1,10 +1,7 @@
-import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
+import { Component, OnInit, ViewChild, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable} from 'rxjs';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
-import { ISite } from 'src/app/_interfaces';
-import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
@@ -45,13 +42,11 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
                 private currencyPipe : CurrencyPipe,
   )
   {
-
     if (data) {
       this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
-
    }
 
   ngOnInit(): void {
@@ -72,31 +67,32 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
 
   applyChanges() {
     const site = this.siteService.getAssignedSite()
+    const inv = this.inventoryAssignment
+    if (inv) {
+      'get the item then update the item'
+      inv.adjustmentNote        =  this.f.get('adjustmentNotes').value
+      inv.adjustmentType        =  this.adjustmentType //f.get('adjustmentType').value
+      inv.employeeName          =  localStorage.getItem('username')
+      inv.packageCountRemaining =  this.f.get('packageCountRemaining').value
+      if (inv.unitMulitplier == 0) { inv.unitMulitplier = 1}
+      inv.baseQuantityRemaining = inv.packageCountRemaining * inv.unitMulitplier;
+      const d = new Date();
+      inv.adjustmentDate = d.toISOString()
 
-    'get the item then update the item'
-    this.inventoryAssignment.adjustmentNote =         this.f.get('adjustmentNotes').value
-    this.inventoryAssignment.adjustmentType =         this.adjustmentType //f.get('adjustmentType').value
-    this.inventoryAssignment.employeeName  =          localStorage.getItem('username')
-    this.inventoryAssignment.packageCountRemaining =  this.f.get('packageCountRemaining').value
-
-    const d = new Date();
-    this.inventoryAssignment.adjustmentDate = d.toISOString()
-
-    console.log(this.inventoryAssignment)
-    if (this.inventoryAssignment) {
-      this.inventoryAssignmentService.editInventory(site, this.id, this.inventoryAssignment).subscribe(data => {
-        this.notifyEvent(`updated`, `Success` )
-        this.onCancel();
-      }, error => {
-        this.notifyEvent(`Update failed ${error}`, `Failure` )
-      })
+      if (this.inventoryAssignment) {
+        this.inventoryAssignmentService.editInventory(site, this.id, inv).subscribe(data => {
+          this.notifyEvent(`updated`, `Success` )
+          this.onCancel();
+        }, error => {
+          this.notifyEvent(`Update failed ${error}`, `Failure` )
+          this.inventoryAssignment = inv
+        })
+      }
+      this.initForm()
     }
-    this.initForm()
   }
 
-
   initForm() {
-
     this.inputForm = this.fb.group({
       adjustmentType:         ['', Validators.required],
       adjustmentNotes:        [''],
@@ -105,7 +101,6 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
       price:                  [''],
       id:                     [''],
     })
-
   }
 
   initFormData(id: number) {
@@ -122,9 +117,7 @@ export class InventoryAdjustmentNoteComponent implements OnInit {
 
   onCancel() {
     this.dialogRef.close();
-
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

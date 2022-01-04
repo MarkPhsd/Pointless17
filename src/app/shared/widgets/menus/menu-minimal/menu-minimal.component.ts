@@ -72,10 +72,11 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   }
 
   addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
+    if (!mainMenu && item) { return }
     if (item.active) {mainMenu.push(item) }
     this.menus =  [...new Set(this.menus)]
-    console.log('this.menus', this.menus)
   }
+
 
 
   constructor ( private menusService            : MenusService,

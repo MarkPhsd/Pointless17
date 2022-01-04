@@ -72,7 +72,7 @@ export class RequiresSerialComponent implements OnInit, OnDestroy {
     if (this.id && serial) {
       this.orderMethodService.appylySerial(this.id, serial).subscribe(data =>{
         if (data.order) {
-          console.log('Serial APplication')
+          console.log('Serial Application')
           this.orderService.updateOrderSubscription(data.order)
           this.dialogRef.close({id: this.id, result : true, order: data.order});
         }

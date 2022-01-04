@@ -359,9 +359,13 @@ export class OrderMethodsService {
           break;
       }
       case  1: {
-          // console.log('pre process serial', this.processItem.item, this.processItem.posItem.id, false, '')
-          this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')
-          // console.log('Handle Process Item promptSerial', 1)
+          if (!this.processItem.posItem.serialCode) {
+            // console.log('pre process serial', this.processItem.item, this.processItem.posItem.id, false, '')
+            this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')
+            // console.log('Handle Process Item promptSerial', 1)
+          } else {
+            this.updateProcess();
+          }
           break;
         }
       case  2: {

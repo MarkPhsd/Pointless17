@@ -1,89 +1,91 @@
-<div  class="grid-container" *ngIf="searchForm">
-  <div class="grid-item">
-    <search-debounce-input [searchForm]  ="searchForm"
-                           (outPutMethod)="refreshSearchPhrase($event)">
-      <div fieldDescription>
-          <mat-icon>search</mat-icon>
-          Search
-      </div>
-    </search-debounce-input>
-  </div>
+<div fxLayout="column" fx-flex fx-layout-align="space-between"
+     class="grid-container"
+     *ngIf="searchForm" >
 
-  <div class="grid-item">
-    <form-select-list [searchForm]      = "searchForm"
-                      [formFieldName]   ="'categoryID'"
-                      [list$]           = "categories$"
-                      (selectionChange) = "refreshCategoryChange($event)">
-     <div fieldSearchDescription>Category</div>
-    </form-select-list>
-  </div>
+  <div class="grid-container-selectors">
+    <div class="grid-item">
+      <search-debounce-input
+                            [itemNameControl] = "'itemName'"
+                            [searchForm]      = "searchForm"
+                            (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
+        </div>
+      </search-debounce-input>
+    </div>
 
-  <div class="grid-item">
-    <app-brand-type-select
-                      [inputForm]      = "searchForm"
-                      [formFieldClass] = "'mat-form-field-2 form-background'"
-                      (itemSelect)     = "setBrandID($event)">
-      </app-brand-type-select>
-  </div>
+    <div class="grid-item"
+        *ngIf="categories$">
+      <form-select-list [searchForm]      = "searchForm"
+                        [formFieldName]   ="'categoryID'"
+                        [list$]           = "categories$"
+                        (selectionChange) = "refreshCategoryChange($event)">
+      <div fieldSearchDescription>Category</div>
+      </form-select-list>
+    </div>
 
-  <div class="grid-item">
-    <form-select-list [formFieldName]   = "'productTypeSearch'"
-                      [searchForm]      = "searchForm"
-                      [list$]           = "productTypes$"
-                      (selectionChange) = "refreshProductTypeChange($event)"   >
-     <div fieldSearchDescription>Type</div>
-    </form-select-list>
-  </div>
+    <div class="grid-item">
+      <app-brand-type-select
+                        [inputForm]      = "searchForm"
+                        [formFieldClass] = "'mat-form-field-2 form-background'"
+                        (itemSelect)     = "setBrandID($event)">
+        </app-brand-type-select>
+    </div>
 
-  <div class="grid-item">
-    <form-select-list [formFieldName]   = "'viewAll'"
-                      [searchForm]      = "searchForm"
-                      [list$]           = "viewOptions$"
-                      (selectionChange) = "refreshActiveChange($event)"   >
-     <div fieldSearchDescription>Status</div>
-    </form-select-list>
-  </div>
+    <div class="grid-item"
+        *ngIf="productTypes$">
+      <form-select-list [formFieldName]   = "'productTypeSearch'"
+                        [searchForm]      = "searchForm"
+                        [list$]           = "productTypes$"
+                        (selectionChange) = "refreshProductTypeChange($event)"   >
+      <div fieldSearchDescription>Type</div>
+      </form-select-list>
+    </div>
 
-  <!--
-  <div class="grid-item">
-    <mat-slide-toggle name              ="enabled"
-                      [(ngModel)]       ="active"
-                      (selectionChange) = "refreshActiveChange($event)" >
-      <mat-label>Active</mat-label>
-    </mat-slide-toggle>
-  </div> -->
+    <div class="grid-item"
+        *ngIf="viewOptions$">
+      <form-select-list [formFieldName]   = "'viewAll'"
+                        [searchForm]      = "searchForm"
+                        [list$]           = "viewOptions$"
+                        (selectionChange) = "refreshActiveChange($event)"   >
+      <div fieldSearchDescription>Status</div>
+      </form-select-list>
+    </div>
 
-  <div      class="grid-item">
-    <button mat-button
-            class="assign-button"
-            (click)="listAll()">
-      <mat-icon>list</mat-icon>
-      List All
-    </button>
-  </div>
+    <div class="grid-item">
+      <button mat-button
+              class="assign-button"
+              (click)="listAll()">
+        <mat-icon>list</mat-icon>
+        List All
+      </button>
+    </div>
 
-  <div      class="grid-item">
-    <button mat-button
-            class="assign-button"
-            (click)="refreshGrid()">
-      <mat-icon>refresh</mat-icon>
-      Refresh
-    </button>
-  </div>
-  <div *ngIf="!hideAdd" class="header-items">
-    <button mat-button
-            (click)="childAddItem()">
-      <mat-icon>add_box</mat-icon>Add</button>
-  </div>
+    <div class="grid-item">
+      <button mat-button
+              class="assign-button"
+              (click)="refreshGrid()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
 
-  <div *ngIf="!hideEditSelected"  class="header-items">
-    <button mat-button
-            (click)="editSelectedItems()">
-      <mat-icon>edit</mat-icon>
-      Edit Selected
-    </button>
-  </div>
+    <div *ngIf="!hideAdd" class="header-items">
+      <button mat-button
+              (click)="childAddItem()">
+        <mat-icon>add_box</mat-icon>Add</button>
+    </div>
 
+    <div *ngIf="!hideEditSelected"  class="header-items">
+      <button mat-button
+              (click)="editSelectedItems()">
+        <mat-icon>edit</mat-icon>
+        Edit Selected
+      </button>
+    </div>
+
+  </div>
 </div>
 
 <mat-divider></mat-divider>

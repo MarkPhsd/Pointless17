@@ -8,7 +8,6 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Observable, of, Subject, Subscription,   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
-// https://blog.bitsrc.io/6-ways-to-unsubscribe-from-observables-in-angular-ab912819a78f
 import {Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
@@ -36,12 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   openOrderBar:                      boolean;
   @HostBinding('class') className = '';
 
-
-  isApp     : boolean;
-
-  // get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
-  // searchForm: FormGroup;
-
+  isApp                      : boolean;
   company                    = {} as ICompany;
   compName:                  string;
   userName:                  string;
@@ -63,18 +57,18 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   isAPIOnline$:   Observable<any>;
   site:           ISite;
   sitePickerWidth = 50;
-  searchForm    : FormGroup;
+  searchForm      : FormGroup;
 
-  scannerEnabled: boolean;
-  private toolBar   :  boolean;
+  scannerEnabled  : boolean;
+  private toolBar :  boolean;
 
   showPOSFunctions    =   false;
   showTableLayout     =   false;
   scaleName           :   any;
   scaleValue          :   any;
-  smallDevice : boolean;
-  isUserStaff  = false;
-  isAdmin      = false;
+  smallDevice         : boolean;
+  isUserStaff         = false;
+  isAdmin             = false;
 
   _order              :   Subscription;
   order               :   IPOSOrder;
@@ -87,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   scaleInfo           : ScaleInfo;
   _scaleInfo          : Subscription;
-  scaleSetup           : ScaleSetup;
+  scaleSetup          : ScaleSetup;
   displayWeight       : string;
 
   _openOrderBar       : Subscription;
@@ -115,22 +109,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    if (this._openOrderBar) {
-      this._openOrderBar.unsubscribe();
-    }
-    if (this._scaleInfo) {
-      this._scaleInfo.unsubscribe();
-    }
-    if (this._order) {
-      this._order.unsubscribe();
-    }
-    if (this._user) {
-      this._user.unsubscribe();
-    }
-  }
 
   constructor(private authenticationService:  AuthenticationService,
               private pollingService        : PollingService,
@@ -176,10 +154,24 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.pollingService.poll();
   }
 
+  ngOnDestroy(): void {
+    if (this._openOrderBar) {
+      this._openOrderBar.unsubscribe();
+    }
+    if (this._scaleInfo) {
+      this._scaleInfo.unsubscribe();
+    }
+    if (this._order) {
+      this._order.unsubscribe();
+    }
+    if (this._user) {
+      this._user.unsubscribe();
+    }
+  }
+
   refreshScannerOption() {
     this.scannerEnabled = false
-
-    if (!this.platFormService.webMode) {
+    if (this.platFormService.isApp()) {
       this.scannerEnabled = true;
       this.isApp = true
     }
@@ -206,9 +198,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   smallDeviceLimiter() {
-    if (this.smallDevice) {
-      this.toolbarUIService.updateOrderBar(false)
-    }
+    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
   }
 
   @HostListener("window:resize", [])
@@ -230,12 +220,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   getUserInfo() {
 
-    this.userName =  '';
-    this.userRoles = '';
-    this.showPOSFunctions = false;
-    this.isAdmin          = false;
-    this.isUserStaff      = false;
-    this.employeeName = ''
+    this.initUserInfo();
     let user: IUser;
 
     if (this.user) {
@@ -260,6 +245,15 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isUserStaff = true
       this.showPOSFunctions = true;
     }
+  }
+
+  initUserInfo() {
+    this.userName =  '';
+    this.userRoles = '';
+    this.showPOSFunctions = false;
+    this.isAdmin          = false;
+    this.isUserStaff      = false;
+    this.employeeName = ''
   }
 
   initSite() {
@@ -305,7 +299,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   navPOSOrders() {
-    // routerLinkActive="list-item-active" routerLink="/pos-orders"
     this.smallDeviceLimiter();
     this.navigationService.navPOSOrders()
   }
@@ -317,7 +310,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   toggleSideBar() {
     this.outPutToggleSideBar.emit(!this.openOrderBar)
     this.toolbarUIService.switchToolBarSideBar()
-    return
   }
 
   toggleSearchMenu() {
@@ -326,10 +318,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleOrderBar(event) {
-    // this.openOrderBar = !this.openOrderBar
-    if (this.openOrderBar){
-      this.smallDeviceLimiter();
-    }
+    if (this.openOrderBar){ this.smallDeviceLimiter();    }
     this.toolbarUIService.updateOrderBar(this.openOrderBar)
   }
 

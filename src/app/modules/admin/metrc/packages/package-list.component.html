@@ -1,92 +1,107 @@
-<mat-card>
-  <div fxLayout="column"
-      fx-flex
-      fx-layout-align="space-between"
-      class="form-controls">
 
-    <div  [formGroup]="searchForm"
-          *ngIf="searchForm">
 
-        <div class="grid-container">
-          <div >
-            <search-debounce-input
-                      [searchForm]  ="searchForm"
-                      (outPutMethod)="refreshSearchPhrase($event)">
-              <div fieldDescription>
-              <mat-icon>search</mat-icon>
-                Search
-              </div>
-            </search-debounce-input>
+<div fxLayout="column" fx-flex fx-layout-align="space-between"
+      class="grid-container"
+      [formGroup]="searchForm"
+      *ngIf="searchForm" >
+
+  <div class="grid-container-selectors">
+
+      <div >
+        <search-debounce-input
+                  [itemNameControl]="'searchProducts'"
+                  [searchForm]  ="searchForm"
+                  (outPutMethod)="refreshSearchPhrase($event)">
+          <div fieldDescription>
+          <mat-icon>search</mat-icon>
+            Search
           </div>
-
-          <div >
-            <app-mat-select
-                (outputItem)="getMetrcCategory($event)"
-                [list$]     ="metrcCategory$"
-                [fieldName] ="'metrcCategory'"
-                [inputForm] ="searchForm"
-                >
-            </app-mat-select>
-          </div>
-
-          <div >
-            <app-mat-select
-                (outputItem)="refreshFilters($event)"
-                [list$]     ="sites$"
-                [fieldName] ="'selectedSiteID'"
-                [inputForm] ="searchForm"
-                >
-            </app-mat-select>
-          </div>
-
-          <div *ngIf="site && facilities && !loadingFacilities">
-            <mat-form-field
-              appearance="outline">
-              <mat-label><ng-content></ng-content></mat-label>
-              <mat-select
-                    type="number"
-                    formControlName ="facilityID"
-                    name="facilityID"
-                    (selectionChange)="setFacliity($event.value)"
-                >
-                <div  >
-                  <mat-option
-                      *ngFor="let item of facilities"
-                      [value]="item?.license?.number">
-                      <div *ngIf="item && item.license">
-                        {{item?.license?.number}}
-                      </div>
-                  </mat-option>
-                </div>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div *ngIf="site && loadingFacilities">....loading facilities</div>
-
-          <div  *ngIf="site && facility" >
-            <button mat-button mat-button
-                    color="primary"
-                    (click)="importActivePackages()">
-                    <mat-icon>download</mat-icon>
-                    Packages
-            </button>
-          </div>
-
-          <div >
-            <button mat-button
-                    mat-button
-                    color="primary"
-                    (click)="listResults()">
-                    <mat-icon>refresh</mat-icon>
-            </button>
-          </div>
-
+        </search-debounce-input>
       </div>
-    </div>
-  </div>
 
-</mat-card>
+      <div >
+        <app-mat-select
+            (outputItem)="getMetrcCategory($event)"
+            [list$]     ="metrcCategory$"
+            [fieldName] ="'metrcCategory'"
+            [inputForm] ="searchForm"
+            >
+        </app-mat-select>
+      </div>
+
+      <div  class="mat-toggle">
+        <mat-slide-toggle name="hasImported"
+                          class="mat-label"
+                          formControlName="hasImported">
+          <mat-label class="mat-label">Imported</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div >
+        <app-mat-select
+            (outputItem)="refreshFilters($event)"
+            [list$]     ="sites$"
+            [fieldName] ="'selectedSiteID'"
+            [inputForm] ="searchForm"
+            >
+        </app-mat-select>
+      </div>
+
+      <div *ngIf="site && facilities && !loadingFacilities">
+        <mat-form-field
+          appearance="outline"
+          class="form-field">
+          <mat-label><ng-content></ng-content></mat-label>
+          <mat-select
+                type="number"
+                formControlName ="facilityID"
+                name="facilityID"
+                (selectionChange)="setFacliity($event.value)"
+            >
+            <div  >
+              <mat-option
+                  *ngFor="let item of facilities"
+                  [value]="item?.license?.number">
+                  <div *ngIf="item && item.license">
+                    {{item?.license?.number}}
+                  </div>
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="site && loadingFacilities">....loading facilities</div>
+
+      <div  *ngIf="site && facility" >
+        <button mat-button mat-button
+                color="primary"
+                (click)="importActivePackages()">
+                <mat-icon>download</mat-icon>
+                Packages
+        </button>
+      </div>
+
+      <div  *ngIf="viewOptions$">
+        <form-select-list [formFieldName]   = "'active'"
+                          [searchForm]      = "searchForm"
+                          [list$]           = "viewOptions$"
+                          (selectionChange) = "refreshActiveChange($event)"   >
+          <div fieldSearchDescription>Status</div>
+        </form-select-list>
+      </div>
+
+      <div >
+        <button mat-button
+                mat-button
+                color="primary"
+                (click)="refreshGrid()">
+                <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+  </div>
+</div>
 
 <mat-divider></mat-divider>
 
@@ -113,13 +128,13 @@
     </ag-grid-angular>
   </div>
 
-  <div *ngIf="!hideAdd" >
+
     <!-- <app-product-info-panel *ngIf="package"
                             class="grid-list-item"
                             [setProduct]="package"
                             [id]="id">
     </app-product-info-panel> -->
-  </div>
+
 </div>
 
 <div style="flex-grow:0">

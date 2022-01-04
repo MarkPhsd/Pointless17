@@ -84,6 +84,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
+    if (!mainMenu && item) { return }
     if (item.active) {mainMenu.push(item) }
     this.menus =  [...new Set(this.menus)]
   }
@@ -94,19 +95,24 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     if (!this.user) {return}
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
-    menuCheck$.pipe(
-      switchMap( data => {
-        console.log('data', data)
-        if (!data.result) {
-           if (this.user) {
-            return  this.menusService.createMainMenu(this.user , site)
+    try {
+      menuCheck$.pipe(
+        switchMap( data => {
+
+          if (!data.result) {
+             if (this.user) {
+              return  this.menusService.createMainMenu(this.user , site)
+            }
+            return EMPTY;
           }
-          return EMPTY;
-        }
+        })
+      ).subscribe(data => {
+        this.refreshMenu(this.user)
       })
-    ).subscribe(data => {
-      this.refreshMenu(this.user)
-    })
+
+    } catch (error) {
+      console.log('error occured in init menu.')
+    }
   }
 
   mergeConfig(options: accordionConfig) {

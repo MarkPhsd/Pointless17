@@ -1,18 +1,28 @@
-<div>
-  <mat-slide-toggle name="enabled"
-    formControlName="active">
-    <mat-label class="mat-label">Active</mat-label>
-  </mat-slide-toggle>
-</div>
-<div>
-  <mat-slide-toggle name="webMode"
-                    formControlName="webProduct">
-    <mat-label class="mat-label">Web Enabled</mat-label>
-  </mat-slide-toggle>
-</div>
-<div>
-  <mat-slide-toggle name="webMode"
-                    formControlName="webWorkRequired">
-    <mat-label class="mat-label">Requires Work</mat-label>
-  </mat-slide-toggle>
+<div
+   [formGroup]="inputForm"
+   >
+
+  <div  class="mat-label" >
+    <mat-slide-toggle
+      class="mat-label"
+      name="enabled"
+      formControlName="active">
+      <mat-label class="mat-label">Active</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle name="webMode"
+                      class="mat-label"
+                      formControlName="webProduct">
+      <mat-label class="mat-label">Web Enabled</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle name="webMode"
+                      class="mat-label"
+                      formControlName="webWorkRequired">
+      <mat-label class="mat-label">Requires Work</mat-label>
+    </mat-slide-toggle>
+  </div>
+
 </div>

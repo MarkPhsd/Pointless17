@@ -1,9 +1,7 @@
-import { Component,  Inject,  Input,  OnInit, } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, Validators, FormArray} from '@angular/forms';
+import { Component, Inject,  OnInit, } from '@angular/core';
+import { ActivatedRoute,  } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { AWSBucketService,  MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -18,7 +16,6 @@ import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.ser
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
-import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 
 @Component({
   selector: 'app-products-add',
@@ -26,8 +23,6 @@ import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.
   styleUrls: ['./products-add.component.scss']
 })
 export class METRCProductsAddComponent implements OnInit {
-
-
   //move to inventory
   conversionName:         string;
   inputQuantity:          number;
@@ -54,6 +49,8 @@ export class METRCProductsAddComponent implements OnInit {
   facilityLicenseNumber:  string;
 
   get f():                FormGroup  { return this.packageForm as FormGroup};
+  get hasImportedControl()          { return this.packageForm.get("hasImported") as FormControl;}
+  get activeControl()          { return this.packageForm.get("active") as FormControl;}
 
   bucketName:             string;
   awsBucketURL:           string;
@@ -83,10 +80,11 @@ export class METRCProductsAddComponent implements OnInit {
 
   intakeConversion:         IUnitConversion;
   intakeconversionQuantity: number;
+
   constructor(
           private conversionService: ConversionsService,
-          public route: ActivatedRoute,
-          public fb: FormBuilder,
+          public  route: ActivatedRoute,
+          public  fb: FormBuilder,
           private awsBucket: AWSBucketService,
           private _snackBar: MatSnackBar,
           private siteService: SitesService,
@@ -153,105 +151,95 @@ export class METRCProductsAddComponent implements OnInit {
       this.initialQuantity = this.intakeconversionQuantity
       this.packageForm = this.fb.group({
 
-            productCategoryName:              [data.item.productCategoryName, Validators.required],
-            productCategoryType:              [data.item.productCategoryType, Validators.required],
-            quantityType:                     [data.item.quantityType, Validators.required],
-            ProductName:                      [data.item.name, Validators.required],
-            packageType:                      [data.packageType, Validators.required],
-            expiration:                       ['', Validators.required],
+        productCategoryName:              [data.item.productCategoryName, Validators.required],
+        productCategoryType:              [data.item.productCategoryType, Validators.required],
+        quantityType:                     [data.item.quantityType, Validators.required],
+        ProductName:                      [data.item.name, Validators.required],
+        packageType:                      [data.packageType, Validators.required],
+        expiration:                       ['', Validators.required],
 
-            productionBatchNumber:            ['', Validators.required],
-            batchDate:                        ['', Validators.required],
+        productionBatchNumber:            ['', Validators.required],
+        batchDate:                        ['', Validators.required],
+        facilityLicenseNumber            :[  ],
+        thc:                              [''],
+        thc2:                             [''],
+        thca:                             [''],
+        thca2:                            [''],
+        cbn:                              [''],
+        cbn2:                             [''],
+        cbd:                              [''],
+        cbd2:                             [''],
+        cbda2:                            [''],
+        cbda:                             [''],
 
-            thc:                              [''],
-            thc2:                             [''],
-            thca:                             [''],
-            thca2:                            [''],
-            cbn:                              [''],
-            cbn2:                             [''],
-            cbd:                              [''],
-            cbd2:                             [''],
-            cbda2:                            [''],
-            cbda:                             [''],
+        conversionName:                   ['', Validators.required],
+        inputQuantity:                    ['', Validators.required],
+        inventoryLocationID:              ['', Validators.required],
+        cost:                             [0],
+        price:                            [0],
+        jointWeight:                      [0],
 
-            conversionName:                  ['', Validators.required],
-            inputQuantity:                    ['', Validators.required],
-            inventoryLocationID:              ['', Validators.required],
-            cost:                             [0],
-            price:                            [0],
-            jointWeight:                      [0],
+        intakeUOM:                        [data.unitOfMeasureName],
+        intakeConversionValue:            [this.intakeConversion.value],
 
-            intakeUOM:                        [data.unitOfMeasureName],
-            intakeConversionValue:            [this.intakeConversion.value]
-
+        active        : [''],
+        hasImported   : [''],
       })
+      console.log('form initiated')
     }
+  }
+
+  updateItem(event) {
+    this.update(false)
+  }
+
+  updateItemExit(event) {
+    this.update(true)
+  }
+
+  update(event) {
+
+    if (!this.package) { return }
+    const site = this.siteService.getAssignedSite();
+    const package$ =this.metrcPackagesService.putPackage(site,this.id, this.package)
+
+    if (this.hasImportedControl) {
+      this.package.inventoryImported = this.hasImportedControl.value
+    }
+    if (this.activeControl) {
+      this.package.active = this.activeControl.value
+    }
+    package$.subscribe(data => {
+      this.notifyEvent('Item saved', 'Success')
+      if (event) {
+        this.onCancel(null)
+      }
+    })
+  }
+
+  deleteItem(event) {
+    const alert = window.confirm('Are you sure you want to delete this item? It will reimport when you download again.')
+    if (!alert) {return}
+    const site = this.siteService.getAssignedSite();
+    const package$ =this.metrcPackagesService.deletePackage(site,this.id)
+    package$.subscribe(data => {
+      this.notifyEvent('Item deleted', 'Success')
+      this.onCancel(null)
+    })
+  }
+
+  onCancel(event) {
+    this.dialogRef.close()
+  }
+
+
+  initFields() {
+    this.packageForm = this.inventoryAssignmentService.initFields(this.packageForm)
   }
 
   async getUnitConversionToGrams(unitName: string): Promise<IUnitConversion> {
     return  await this.conversionService.getConversionItemByName(unitName)
   }
-
-
-  initFields() {
-    this.packageForm = this.fb.group({
-      id:                                [''],
-      label:                             [''],
-      packageType:                       [''],
-      sourceHarvestName:                 [''],
-      locationID:                        [''],
-      locationName:                      [''],
-      locationTypeName:                  [''],
-      quantity:                          [''],
-      unitOfMeasureName:                 [''],
-      unitOfMeasureAbbreviation:         [''],
-      patientLicenseNumber:              [''],
-      itemFromFacilityLicenseNumber:     [''],
-      itemFromFacilityName:              [''],
-      itemStrainName:                    [''],
-      note:                              [''],
-      packagedDate:                      [''],
-      initialLabTestingState:            [''],
-      labTestingState:                   [''],
-      labTestingStateDate:               [''],
-      isProductionBatch:                 [''],
-      productionBatchNumber:             [''],
-      sourceProductionBatchNumbers:      [''],
-      isTradeSample:                     [''],
-      isTradeSamplePersistent:           [''],
-      isDonation:                        [''],
-      isDonationPersistent:              [''],
-      sourcePackageIsDonation:           [''],
-      isTestingSample:                   [''],
-      isProcessValidationTestingSample:  [''],
-      productRequiresRemediation:        [''],
-      containsRemediatedProduct:         [''],
-      remediationDate:                   [''],
-      receivedDateTime:                  [''],
-      receivedFromManifestNumber:        [''],
-      receivedFromFacilityLicenseNumber: [''],
-      receivedFromFacilityName:          [''],
-      isOnHold:                          [''],
-      archivedDate:                      [''],
-      finishedDate:                      [''],
-      lastModified:                      [''],
-      remainingCount:                    [''],
-      inventoryImported:                 [''],
-      metrcItemID:                       [''],
-      productID:                         [''],
-      productName:                       [''],
-      productCategoryName:               [''],
-
-
-      //non data codes
-      batchDate:                         [''],
-      cost:                              [0],
-      price:                             [0],
-      jointWeight:                       [0],
-      }
-    )
-  }
-
 
   getStrain(event) {
     const itemStrain = event
@@ -266,7 +254,6 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   getVendor(event) {
-
     const facility = event
     if (facility) {
       this.facilityLicenseNumber = `${facility.displayName} - ${facility.metrcLicense}`
@@ -292,7 +279,6 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   async isValidEntry(): Promise<boolean> {
-
     //check out if the amouunt being input is greater than the allowed amouunt.
     if (this.inputQuantity > this.unitsConverted.unitOutPutQuantity ) {
       this.notifyEvent('Use a smaller quantity.', 'Alert')
@@ -313,19 +299,14 @@ export class METRCProductsAddComponent implements OnInit {
       this.notifyEvent('Input a batch #.', 'Alert')
       return false
     }
-
     return true
   }
 
-
   async addInventoryAssignmentGroup() {
-
     const result =  this.isValidEntry()
-    console.log("Valid ", !this.isValidEntry())
-
     //validate entry first:
      if (  !result ) { return  }
-    console.log("Valid ", !this.isValidEntry())
+    // console.log("Valid ", !this.isValidEntry())
 
     const f = this.f
     this.unitsRemaining = 0
@@ -374,7 +355,7 @@ export class METRCProductsAddComponent implements OnInit {
 
     const d = new Date();
     inventoryAssignment.dateCreated =           d.toISOString()
-    console.log('inventory dateCreated', inventoryAssignment)
+
     try {
       inventoryAssignment.packageType =         this.getStringValue('packageType')
       inventoryAssignment.productCategoryName = this.getStringValue('productCategoryName')
@@ -407,11 +388,8 @@ export class METRCProductsAddComponent implements OnInit {
 
     }
     this.inventoryAssigments.push(inventoryAssignment)
-
     this.unitOfMeasure = {} as IUnitConversion
-
     this.resetInventoryFormAssignmentValues();
-
   }
 
   getStringValue(item: string): string {
@@ -445,7 +423,6 @@ export class METRCProductsAddComponent implements OnInit {
 
   resetInventoryFormAssignmentValues() {
     //reset assignmentValues
-    console.log('resetInventoryFormAssignmentValues - ran')
     this.inputQuantity = 0;
     this.conversionName = '';
     this.inventoryLocationID = 0;
@@ -460,47 +437,35 @@ export class METRCProductsAddComponent implements OnInit {
     }
   }
 
-
   //joints multiply by conversion rate. joinWeight should always equal 1 if jointWeight is not in use
   //converts units from provided value to desired sale value.
   getAvailableUnits(name) {
-
     this.unitsConverted = {} as IUnitsConverted;
-
     if (this.package) {
       this.unitsConverted.unitConvertTo = {} as IUnitConversion
       this.unitsConverted.unitConvertFrom = {} as IUnitConversion
-
       this.unitsConverted.unitConvertFrom =
         this.conversionService.getConversionItemByName('Grams')
 
       this.unitsConverted.unitConvertTo =
         this.conversionService.getConversionItemByName(name)
-
       this.unitsConverted.baseQuantity = this.baseUnitsRemaining
-
       this.unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(this.unitsConverted, 0)
-
     }
 
     this.getAvailableUnitsByQuantity();
-
   }
 
   async getAvailableUnitsByQuantity() {
     const site =  this.siteService.getAssignedSite();
      //base is always grams
      this.baseUnitsRemaining = this.inventoryAssignmentService.getSummaryOfGramsUsed(site, this.inventoryAssigments, this.initialQuantity );
-
     if (this.unitsConverted) {
-
       if (this.unitsConverted.unitConvertTo) {
         const quantity = (+this.baseUnitsRemaining / +this.unitsConverted.unitConvertTo.value) - +this.inputQuantity
         this.unitsRemaining  = parseInt(quantity.toFixed(2))
       }
-
     }
-
     this.unitsRemaining = 0
   }
 
@@ -521,7 +486,7 @@ export class METRCProductsAddComponent implements OnInit {
     // okay so we have to add the list of inventory assignments to a list.
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,  this.inventoryAssigments)
     inv$.subscribe( data => {
-      this.onCancel();
+      this.onCancel(null);
       this.notifyEvent('Inventory Packages Imported', 'Success');
       }, error => {
         this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
@@ -529,10 +494,6 @@ export class METRCProductsAddComponent implements OnInit {
     )
 
   }
-
-//  (outputMenuItem)="getSelectedMenuItem($event)"
-// (outputVender)  ="getSelectedVendorItem($event)"
-
   getSelectedMenuItem(event) {
     if (event) {
       this.menuItem = event;
@@ -566,12 +527,10 @@ export class METRCProductsAddComponent implements OnInit {
           price:                            [ inv.price],
           jointWeight:                      [ 1 ],
           expiration:                       [ inv.expiration],
-
         })
         await this.getAvailableUnitsByQuantity()
       }
     }
-
   }
 
   generateSku(sku: string, index: number): any {
@@ -583,10 +542,6 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   importStrain() {
-  }
-
-  onCancel() {
-    this.dialogRef.close();
   }
 
   notifyEvent(message: string, action: string) {

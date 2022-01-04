@@ -13,7 +13,7 @@ import { C } from '@angular/cdk/keycodes';
 const { Keyboard } = Plugins;
 
 @Component({
-  selector: 'app-list-product-search-input',
+  selector: 'list-product-search-input',
   templateUrl: './list-product-search-input.component.html',
   styleUrls: ['./list-product-search-input.component.scss']
 })
@@ -107,7 +107,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
     this._order.unsubscribe();
   }
 
-  //this is called from subject rxjs obversablve above constructor.
   async refreshSearch() {
     const barcode =  this.input.nativeElement.value
     await this.addItemToOrder(barcode)

@@ -14,7 +14,7 @@
               >
 
               <span *ngIf="!list">
-                <div *ngIf="(list$ | async) as list" >
+                <div *ngIf="(list$ | async) as list; else loading" >
                   <mat-option
                       *ngFor="let item of list"
                        [value]="item">
@@ -25,7 +25,7 @@
 
               <div *ngIf="list" >
                 <mat-option
-                    *ngFor="let item of list"
+                    *ngFor="let item of list; else loading"
                      [value]="item">
                     {{item.name}}
                 </mat-option>
@@ -39,3 +39,6 @@
     </div>
   </div>
 
+ <ng-template #loading>
+   ...loading <ng-content></ng-content>
+ </ng-template>

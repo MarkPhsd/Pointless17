@@ -51,7 +51,6 @@ gridlist = "grid-list"
 //needed for search component
 searchForm:    FormGroup;
 get itemName() { return this.searchForm.get("itemName") as FormControl;}
-
 get platForm()         {  return Capacitor.getPlatform(); }
 get PaginationPageSize(): number {return this.pageSize;  }
 get gridAPI(): GridApi {  return this.gridApi;  }
@@ -134,12 +133,12 @@ constructor(  private _snackBar         : MatSnackBar,
               private dialog: MatDialog,
             )
   {
-    this.initForm();
     this.initAgGrid(this.pageSize);
   }
 
   async ngOnInit() {
     this.initClasses()
+    this.initForm();
 
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
@@ -174,7 +173,6 @@ constructor(  private _snackBar         : MatSnackBar,
     }
   }
 
-
   initClasses()  {
     const platForm      = this.platForm;
     this.gridDimensions =  'width: 100%; height: 90%;'
@@ -183,7 +181,7 @@ constructor(  private _snackBar         : MatSnackBar,
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
-  async initForm() {
+  initForm() {
     this.searchForm   = this.fb.group( {
       itemName          : [''],
       productTypeSearch : [this.productTypeSearch],
@@ -194,6 +192,7 @@ constructor(  private _snackBar         : MatSnackBar,
   }
 
   refreshSearchPhrase(event) {
+    this.itemName.setValue(event)
     this.refreshSearch();
   }
 
@@ -279,7 +278,10 @@ constructor(  private _snackBar         : MatSnackBar,
 
   listAll(){
     const control = this.itemName
-    control.setValue('')
+    if (control) {
+      control.setValue('')
+    }
+
     this.categoryID        = 0;
     this.productTypeSearch = 0;
     this.brandID           = 0
@@ -301,7 +303,7 @@ constructor(  private _snackBar         : MatSnackBar,
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    console.log('search Model page number', this.currentPage)
+    // console.log('search Model', searchModel)
     return searchModel
   }
 
@@ -436,6 +438,7 @@ constructor(  private _snackBar         : MatSnackBar,
     let maxToShow          = this.pageSize;
     let selected           = []
 
+    if (selectedRows.length == 0) { return }
     selectedRows.forEach(function (selectedRow, index) {
     if (index >= maxToShow) { return; }
     if (index > 0) {  selectedRowsString += ', ';  }
@@ -489,7 +492,7 @@ constructor(  private _snackBar         : MatSnackBar,
   }
 
   editProductFromGrid(e) {
-    // console.log('this.buttonName', this.buttonName)
+    if (!e) {return}
     if (e.rowData.id)  {
       if (this.buttonName === 'Edit') {
         this.editItemWithId(e.rowData.id);

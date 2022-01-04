@@ -1,66 +1,86 @@
-<div *ngIf="package">
-  <mat-card class="strain-card">
+<ng-template #loading><mat-spinner [diameter]="50"></mat-spinner></ng-template>
+
+<mat-card
+    *ngIf="package && packageForm; else loading"
+    class="strain-card"
+    >
     <mat-card-title>
       <div><h3>Label: {{package.label}}</h3></div>
     </mat-card-title>
 
     <mat-card-subtitle>
-      <div class="item-info">Facility Code / Name: {{package.itemFromFacilityLicenseNumber}} / {{package.itemFromFacilityName}} </div>
+      <div class="grid-header">
+        <div>
+          <div class="item-info">Facility Code / Name: {{package.itemFromFacilityLicenseNumber}} / {{package.itemFromFacilityName}} </div>
+          <div class="item-info">Name: {{package.item.name}} | Intaking as {{intakeConversion.name}}  </div>
+          <div class="item-info">Testing State: {{package.labTestingState}}</div>
+          <span [formGroup]="packageForm">
+            <activity-toggles-metrc
+                [inputForm]="packageForm">
+            </activity-toggles-metrc>
+          </span>
+        </div>
+        <div>
+          <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+          ></app-edit-buttons-standard>
 
-      <div class="item-info">Name: {{package.item.name}} | Intaking as {{intakeConversion.name}}  </div>
-
-      <div class="item-info">Testing State: {{package.labTestingState}}</div>
+        </div>
+      </div>
       <mat-divider></mat-divider>
     </mat-card-subtitle>
 
-    <mat-card-content >
+  <mat-card-content >
 
-      <!-- <div *ngIf="packageForm">
-        <div *ngIf="packageForm.controls.expiration.errors?.required && packageForm.controls.expiration.touched" class="error">
-         <mat-icon color="warn">warning</mat-icon> Expiration required.
-        </div>
-        <div *ngIf="packageForm.controls.ProductName.errors?.required && packageForm.controls.ProductName.touched" class="error">
-           <mat-icon color="warn">warning</mat-icon> Name required.
-        </div>
+    <!-- <div *ngIf="packageForm">
+      <div *ngIf="packageForm.controls.expiration.errors?.required && packageForm.controls.expiration.touched" class="error">
+        <mat-icon color="warn">warning</mat-icon> Expiration required.
+      </div>
+      <div *ngIf="packageForm.controls.ProductName.errors?.required && packageForm.controls.ProductName.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Name required.
+      </div>
 
-       <div *ngIf="packageForm.controls.quantityType.errors?.required && packageForm.controls.quantityType.touched" class="error">
-           <mat-icon color="warn">warning</mat-icon> QuantityType required.
-        </div>
+      <div *ngIf="packageForm.controls.quantityType.errors?.required && packageForm.controls.quantityType.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> QuantityType required.
+      </div>
 
-        <div *ngIf="packageForm.controls.productionBatchNumber.errors?.required && packageForm.controls.productionBatchNumber.touched" class="error">
-           <mat-icon color="warn">warning</mat-icon> Production BatchNumber required.
-        </div>
-        <div *ngIf="packageForm.controls.batchDate.errors?.required && packageForm.controls.batchDate.touched" class="error">
-          <mat-icon color="warn">warning</mat-icon> Batch Date required.
-        </div>
+      <div *ngIf="packageForm.controls.productionBatchNumber.errors?.required && packageForm.controls.productionBatchNumber.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Production BatchNumber required.
+      </div>
+      <div *ngIf="packageForm.controls.batchDate.errors?.required && packageForm.controls.batchDate.touched" class="error">
+        <mat-icon color="warn">warning</mat-icon> Batch Date required.
+      </div>
 
-        <div *ngIf="packageForm.controls.productCategoryType.errors?.required && packageForm.controls.productCategoryType.touched" class="error">
-           <mat-icon color="warn">warning</mat-icon> Category Type required.
-        </div>
-      </div>  -->
-      <div [formGroup]="packageForm"  >
+      <div *ngIf="packageForm.controls.productCategoryType.errors?.required && packageForm.controls.productCategoryType.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Category Type required.
+      </div>
+    </div>  -->
 
-        <div fxLayout="row"
-             fxFlex
-             fxFill
-             fxLayoutAlign="center start">
-           <div fxLayout="column"
-                  fxLayoutAlign="start start"
-                  fxFlex
-                  fxFill
-                  fxLayoutGap
-                  class="fields"
+    <div [formGroup]="packageForm"  >
+
+      <div fxLayout="row"
+            fxFlex
+            fxFill
+            fxLayoutAlign="center start">
+
+          <div fxLayout="column"
+                fxLayoutAlign="start start"
+                fxFlex
+                fxFill
+                fxLayoutGap
+                class="fields"
+                >
+
+            <app-metrc-inventory-properties
+                  [inputForm]   ="packageForm"
+                  [package]     ="package"
+                  (outputMenuItem)="getSelectedMenuItem($event)"
+                  (outputVendor)  ="getVendor($event)"
                   >
-
-            <div>
-              <app-metrc-inventory-properties
-                    [inputForm]   ="packageForm"
-                    [package]     ="package"
-                    (outputMenuItem)="getSelectedMenuItem($event)"
-                    (outputVendor)  ="getVendor($event)"
-                    >
-              </app-metrc-inventory-properties>
-            </div>
+            </app-metrc-inventory-properties>
           </div>
 
           <div fxLayout="column"
@@ -70,19 +90,23 @@
               fxLayoutGap
               class="fields"
               >
-              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required && packageForm.controls.inventoryLocationID.touched" class="error">
+              <div *ngIf="packageForm.controls.inventoryLocationID.errors?.required && packageForm.controls.inventoryLocationID.touched"
+                    class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Location required. -->
               </div>
 
-              <div *ngIf="packageForm.controls.conversionName.errors?.required && packageForm.controls.conversionName.touched" class="error">
+              <div *ngIf="packageForm.controls.conversionName.errors?.required && packageForm.controls.conversionName.touched"
+                    class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Conversion value required. -->
               </div>
 
-              <div *ngIf="packageForm.controls.inputQuantity.errors?.required && packageForm.controls.inputQuantity.touched" class="error">
+              <div *ngIf="packageForm.controls.inputQuantity.errors?.required && packageForm.controls.inputQuantity.touched"
+                    class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Quantity value required. -->
               </div>
 
-              <div *ngIf="packageForm.controls.cost.errors?.required && packageForm.controls.cost.touched" class="error">
+              <div *ngIf="packageForm.controls.cost.errors?.required && packageForm.controls.cost.touched"
+                    class="error">
                 <!-- <mat-icon color="warn">warning</mat-icon> Cost value required. -->
               </div>
 
@@ -212,8 +236,8 @@
 
               </mat-card>
 
-
-              <div *ngIf="inventoryAssigments" fxFlex fxFlexFill>
+              <div *ngIf="inventoryAssigments"
+                    fxFlex fxFlexFill>
                 <mat-card class="package-list" >
                   <div *ngFor="let item of inventoryAssigments ;let i = index">
                     <app-metrc-individual-package
@@ -230,8 +254,7 @@
 
 
           </div>
-        </div>
       </div>
-    </mat-card-content>
-  </mat-card>
-</div>
+    </div>
+  </mat-card-content>
+</mat-card>

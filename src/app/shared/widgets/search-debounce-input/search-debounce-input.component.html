@@ -1,14 +1,19 @@
-<!-- <div *ngIf="searchForm"> -->
-  <div  [formGroup]="searchForm"
+<!-- <div > -->
+  <div
+        [formGroup]="searchForm"
         class="grid-item" >
-        <mat-form-field appearance="outline" class="form-fields">
-        <mat-label ><ng-content select="[fieldDescription]"></ng-content></mat-label>
+        <mat-form-field appearance="outline"
+                        class="form-fields">
+        <mat-label >
+          <ng-content select="[fieldDescription]">
+          </ng-content>
+        </mat-label>
           <input
               #input
               matInput
               type             ="text"
               id               ="name"
-              [formControlName]="itemName"
+              [formControlName]="itemNameControl"
               [(ngModel)]      ="itemNameInput"
             />
             <button *ngIf="itemNameInput" matSuffix

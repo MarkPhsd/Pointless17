@@ -1,4 +1,4 @@
-
+@import "/src/mixins.scss";
 
 .grid-list-container {
   display: grid;
@@ -8,16 +8,14 @@
   height: 90vh;
 }
 
+.grid-container-selectors {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .grid-list-item {
   height: 95%;
   overflow: hidden;
-}
-
-.grid-item-2 {
-  top: 0px;
-  position: relative;
-  margin-top: -5px;
-  // font-size: .9em;
 }
 
 .loader {
@@ -27,12 +25,12 @@
 .grid-container {
   display: grid;
   gap: 5px;
-  grid-auto-flow: dense;
-  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+  // grid-auto-flow: dense;
+  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
 }
 
 .grid-dimensions {
-  width: 100%; height: 900%;
+  width: 100%; height: 90%;
 }
 
 .grid-dimensions-electron {
@@ -44,9 +42,8 @@
 }
 
 .grid-list {
-
   display: grid;
-  grid-template-columns: 1fr 20vw;
+  grid-template-columns: 1fr ;
   gap: 7px;
 
   @media (max-width: 599px)  {
@@ -65,48 +62,38 @@
   @media (min-width: 1800px)  {
     height: 81vh;
   }
-
 }
 
-.grid-list-nopanel {
+  .grid-list-nopanel {
 
-  display: grid;
-  grid-template-columns: 1fr 20vw;
-  gap: 7px;
+    display: grid;
+    grid-template-columns: 1fr 20vw;
+    gap: 7px;
 
-  @media (max-width: 599px)  {
-    height: 65vh;
+    @media (max-width: 599px)  {
+      height: 65vh;
+    }
+    @media (min-width: 600px)   {
+      height: 65vh;
+    }
+    @media (min-width: 900px) {
+      height: 65vh;
+    }
+    @media (min-width: 1200px)  {
+      height: 70vh;
+    }
+
+    @media (min-width: 1800px)  {
+      height: 70vh;
+    }
+
   }
-  @media (min-width: 600px)   {
-    height: 65vh;
+
+  .mat-toggle {
+    top: -5px;
+    margin-top: 5px;
+    margin-left: 5px;
   }
-  @media (min-width: 900px) {
-    height: 65vh;
-  }
-  @media (min-width: 1200px)  {
-    height: 70vh;
-  }
-
-  @media (min-width: 1800px)  {
-    height: 70vh;
-  }
-
-}
-
-.mat-card {
-  margin-bottom: 5px;
-}
-
-.form-fields {
-  margin: 0;
-  padding: 0;
-}
-
-
-table
-{
-  width: 100%;
-}
 
   .agGridButton {
     font-size: 1em;
@@ -117,26 +104,6 @@ table
 
   button {
     padding: 3px 3px 3px 3px;
-    margin: 3px 3px 3px 3px;
-    // height: 38px;
-  }
-
-  .header-items {
-    float: left;
-  }
-
-  ::ng-deep .mat-form-field .mat-form-field-wrapper {
-    font-size: .8em;
-    padding: -3px -3px;
-    margin: 4px 4px 4px 4px;
-  }
-
-  .form-controls {
-    font-size: .8em;
-  }
-
-  mat-form-field {
-    font-size: .9em;
     margin: 3px 3px 3px 3px;
   }
 
@@ -149,6 +116,7 @@ table
     float: left;
     margin-top: 13px;
   }
+
   .view-button {
     // float: right;
     margin-top: 9px;

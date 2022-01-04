@@ -37,7 +37,7 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
   styleUrls   : ['./package-list.component.scss']
 })
 
-export class PackageListComponent implements OnInit,AfterViewInit {
+export class PackageListComponent implements OnInit {
 
   //for list selecting.
   @Input() hideAdd         : boolean;
@@ -49,6 +49,8 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   //needed for search component
   searchForm:    FormGroup;
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get hasImportedControl() { return this.searchForm.get("hasImported") as FormControl;}
+  get activeControl() { return this.searchForm.get("active") as FormControl;}
 
   get PaginationPageSize(): number {return this.pageSize;  }
   get gridAPI(): GridApi {  return this.gridApi;  }
@@ -107,10 +109,11 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   agtheme        = 'ag-theme-material';
 
 
+  viewAll           = 1;
   viewOptions$     = of(
     [
-      {name: 'Active', id: 0},
-      {name: 'All', id: 1},
+      {name: 'Active', id: 1},
+      {name: 'All', id: 0},
       {name: 'Inactive', id: 2}
     ]
   )
@@ -147,8 +150,6 @@ export class PackageListComponent implements OnInit,AfterViewInit {
 
   }
 
-
-
   ngOnInit(): void {
     this.sites$         = this.siteService.getSites();
     this.metrcCategory$ = this.metrcCategoriesService.getCategories();
@@ -174,6 +175,8 @@ export class PackageListComponent implements OnInit,AfterViewInit {
       metrcCategory : [''],
       selectedSiteID: [''],
       facilityID    : [''],
+      active        : [''],
+      hasImported   : [''],
     });
 
   }
@@ -186,24 +189,31 @@ export class PackageListComponent implements OnInit,AfterViewInit {
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 85%;' }
   }
 
-  ngAfterViewInit() {
-    if (!this.input) {return}
-    fromEvent(this.input.nativeElement,'keyup')
-            .pipe(
-                filter(Boolean),
-                debounceTime(250),
-                distinctUntilChanged(),
-                tap((event:KeyboardEvent) => {
-                  const search  = this.input.nativeElement.value
-                  this.refreshSearch(search);
-                })
-            )
-          .subscribe();
-  }
+  // ngAfterViewInit() {
+  //   if (!this.input) {return}
+  //   fromEvent(this.input.nativeElement,'keyup')
+  //           .pipe(
+  //               filter(Boolean),
+  //               debounceTime(250),
+  //               distinctUntilChanged(),
+  //               tap((event:KeyboardEvent) => {
+  //                 const search  = this.input.nativeElement.value
+  //                 this.refreshSearch();
+  //               })
+  //           )
+  //         .subscribe();
+  // }
 
   // btnClass: 'btn btn-primary btn-sm', minWidth: 50
   initAGGrid() {
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
 
+    this.defaultColDef = {
+      flex: 2,
+      // minWidth: 100,
+    };
     this.columnDefs =  [
      {
        field: "id",
@@ -212,7 +222,10 @@ export class PackageListComponent implements OnInit,AfterViewInit {
          onClick: this.editProductFromGrid.bind(this),
          label: 'Intake',
          getLabelFunction: this.getLabel.bind(this),
-         btnClass: 'agGridButton', minWidth: 60
+         btnClass: 'agGridButton',
+         minWidth: 155,
+         maxWidth: 155,
+         flex: 2,
        },
      },
       {headerName: 'Label', field: 'label', sortable: true, minWidth: 175},
@@ -276,7 +289,7 @@ export class PackageListComponent implements OnInit,AfterViewInit {
     this.metrcCategoryID = event.value
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
-      this.refreshSearch('')
+      this.refreshSearch()
       return
     }
 
@@ -290,67 +303,49 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   assignMetrcCategory(id: number) {
     this.metrcCategoriesService.getCategory(id).subscribe( data => {
       this.metrcCategory = data
-      this.refreshSearch('')
+      this.refreshSearch()
     })
   }
 
   refreshSearchPhrase(event) {
-    this.refreshSearch(event);
+    this.itemName.setValue(event)
+    this.refreshSearch();
   }
 
   importActivePackages() {
     if (this.site) {
       const import$ = this.metrcPackagesService.importActive(this.site)
       import$.subscribe(data => {
-        console.log('data from import', data)
-        this.refreshSearch('');
+        // console.log('data from import', data)
+        this.refreshSearch();
       })
     }
   }
 
-  // mETRCPackagesGet
-  refreshSearch(search: string): Observable<PackageSearchResultsPaged> {
-    const packageFilter = this.initSearchModel();
-
-    if (this.metrcCategory)
-    {packageFilter.productCategoryName = this.metrcCategory.name }
-    if (!search) {
-      packageFilter.productName = search
-      packageFilter.label       = search
-    }
-
-    const results$   = this.metrcPackagesService.getPackagesBySearch(this.site, packageFilter)
-    return results$
-  }
-
-  listResults() {
+  refreshSearch() {
     const site               = this.siteService.getAssignedSite()
-    const productSearchModel = this.initSearchModel();
+    const packageFilter      = this.initSearchModel();
     this.onGridReady(this.params)
   }
-  // selectItem(search){
-  //   if (search) {
-  //     this.searchPaging = true
-  //     this.searchPhrase.next(search)
-  //   }
-  // }
-
-  // displayFn(search) {
-  //   this.searchPaging = true
-  //   this.search = search
-  //   this.selectItem(search)
-  //   return search;
-  // }
 
   refreshGrid() {
-   this.onGridReady(this.params)
+    const site               = this.siteService.getAssignedSite()
+    // const productSearchModel = this.initSearchModel();
+    this.onGridReady(this.params)
   }
 
   initSearchModel(): PackageFilter {
-    const packageFilter = {} as PackageFilter
-    packageFilter.pageNumber =1
-    packageFilter.pageSize = 25
-    packageFilter.hasImported = false
+    const packageFilter       = {} as PackageFilter
+    packageFilter.pageNumber  =  1
+    packageFilter.pageSize    = 25
+
+    if (this.activeControl && this.activeControl.value) {
+        packageFilter.active = 0
+    }
+    if ( this.hasImportedControl &&  this.hasImportedControl.value) {
+      packageFilter.hasImported = this.hasImportedControl.value
+    }
+
     if ( this.searchProducts != '' ) {
       packageFilter.productName = this.searchProducts
       packageFilter.label = this.searchProducts
@@ -461,6 +456,12 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   //   return data;
   // }
 
+  refreshActiveChange(event) {
+    this.viewAll = event;
+    this.refreshSearch();
+  }
+
+
   //mutli select method for selection change.
   onSelectionChanged(event) {
 
@@ -509,7 +510,7 @@ export class PackageListComponent implements OnInit,AfterViewInit {
   getLabel(rowData)
   {
     // if(rowData && rowData.hasIndicator)
-    console.log('rowData', rowData)
+    // console.log('rowData', rowData)
     return 'Intake'
   }
 

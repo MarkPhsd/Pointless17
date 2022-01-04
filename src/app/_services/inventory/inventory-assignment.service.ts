@@ -6,6 +6,7 @@ import { ISite}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 export interface IInventoryAssignment {
   id:                    number;
@@ -100,6 +101,7 @@ export class InventoryAssignmentService {
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
+    private fb  : FormBuilder,
     private siteService: SitesService)
   {
   }
@@ -326,6 +328,85 @@ deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
     inventoryAssignment.dateCreated           = d.toISOString()
 
     return inventoryAssignment
+  }
+
+  initFields(inputForm: FormGroup) {
+    inputForm = this.fb.group({
+      id:                                [''],
+      label:                             [''],
+      packageType:                       [''],
+      sourceHarvestName:                 [''],
+      locationID:                        [''],
+      locationName:                      [''],
+      locationTypeName:                  [''],
+      quantity:                          [''],
+      quantityType:                      [''],
+      unitOfMeasureName:                 [''],
+      unitOfMeasureAbbreviation:         [''],
+      patientLicenseNumber:              [''],
+      itemFromFacilityLicenseNumber:     [''],
+      itemFromFacilityName:              [''],
+      itemStrainName:                    [''],
+      note:                              [''],
+      packagedDate:                      [''],
+      initialLabTestingState:            [''],
+      labTestingState:                   [''],
+      labTestingStateDate:               [''],
+      isProductionBatch:                 [''],
+      productionBatchNumber:             [''],
+      sourceProductionBatchNumbers:      [''],
+      isTradeSample:                     [''],
+      isTradeSamplePersistent:           [''],
+      isDonation:                        [''],
+      isDonationPersistent:              [''],
+      sourcePackageIsDonation:           [''],
+      isTestingSample:                   [''],
+      isProcessValidationTestingSample:  [''],
+      productRequiresRemediation:        [''],
+      containsRemediatedProduct:         [''],
+      remediationDate:                   [''],
+      receivedDateTime:                  [''],
+      receivedFromManifestNumber:        [''],
+      receivedFrom:                      [''],
+      facilityLicenseNumber:             [''],
+      receivedFromFacilityName:          [''],
+      isOnHold:                          [''],
+      archivedDate:                      [''],
+      finishedDate:                      [''],
+      lastModified:                      [''],
+      remainingCount:                    [''],
+      inventoryImported:                 [''],
+      metrcItemID:                       [''],
+      productID:                         [''],
+      productName:                       [''],
+      productCategoryName:               [''],
+      productCategoryType:               [''],
+      inventoryLocationID :              [''],
+      expiration:                        [''],
+      conversionName  :                  [''],
+
+      thc:                              [''],
+      thc2:                             [''],
+      thca:                             [''],
+      thca2:                            [''],
+      cbn:                              [''],
+      cbn2:                             [''],
+      cbd:                              [''],
+      cbd2:                             [''],
+      cbda2:                            [''],
+      cbda:                             [''],
+
+      //non data codes
+      batchDate:                         [''],
+      cost:                              [0],
+      price:                             [0],
+      jointWeight:                       [1],
+      inputQuantity:                     [0],
+      active        : [''],
+      hasImported   : [''],
+      }
+    )
+    return inputForm
   }
 
 }

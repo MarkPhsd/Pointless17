@@ -41,6 +41,34 @@ export class MetrcPackagesService {
     ) {
     }
 
+    deletePackage(id:any, site: ISite): Observable<METRCPackage> {
+
+      const controller = '/METRCPackages/'
+
+      const endPoint = `DeleteMETRCPackage`
+
+      const parameters = `?id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.delete<METRCPackage>(url);
+
+    }
+
+    putPackage( site: ISite ,id:any, metrcPackage: METRCPackage): Observable<METRCPackage> {
+
+      const controller = '/METRCPackages/'
+
+      const endPoint = `PutMETRCPackage`
+
+      const parameters = `?id=${id}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return this.http.put<METRCPackage>(url, metrcPackage);
+
+    }
+
     getPackagesByID(id:any, site: ISite): Observable<METRCPackage> {
 
       const controller = '/METRCPackages/'
@@ -313,6 +341,6 @@ export class MetrcPackagesService {
 
 
     generateSku(sku: string, index: number): string {
-      return `mt${sku.substring(sku.length - 7)}-${index}`
+      return `mt-${sku.substring(sku.length - 7)}-${index}`
     }
 }

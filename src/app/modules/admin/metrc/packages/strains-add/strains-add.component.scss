@@ -1,7 +1,26 @@
 // body{ overflow-x: hidden;}
+@import "/src/mixins.scss";
+
 .body {
   background-color: aliceblue;
 }
+
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
 
 :host {
   display: flex;
@@ -22,10 +41,26 @@ mat-raised-button {
   padding: 1rem 1rem 1rem 1rem;
 }
 
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
 
 mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
+  padding: 5px ;
+  margin:  3px ;
 }
 
 .example-tab-icon {
@@ -51,7 +86,6 @@ h1 {
   padding: 25px;
   margin-bottom: 25px;
 }
-
 
 #inventoryMoveInstructions {
   font-weight: 600;
@@ -90,7 +124,7 @@ h1 {
 
 mat-form-field {
   font-size: .8em;
-  margin: 4px 4px 4px 4px;
+  margin: 4px ;
 }
 
 .assignment-header {
@@ -100,7 +134,7 @@ mat-form-field {
 }
 
 .fields {
-  margin: 4px 4px 4px 4px;
+  margin: 4px ;
 }
 
 .grid-container {
@@ -158,11 +192,8 @@ mat-form-field {
 }
 
 .strain-card {
-  // height: 85vh;
   overflow: hidden;
-  // min-width: 725px;
-
-}
+  }
 
 .inventory-card {
   min-width: 250px;

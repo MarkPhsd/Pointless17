@@ -12,12 +12,12 @@ import { IProductSearchResults } from 'src/app/_services';
 export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
 
   itemNameInput: string;
-  @Output() outPutMethod = new EventEmitter();
-  @Output() itemSelect   = new EventEmitter();
-
+  @Output() outPutMethod   = new EventEmitter();
+  @Output() itemSelect     = new EventEmitter();
+  @Input()  searchForm:    FormGroup;
+  @Input()  itemNameControl : string;
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
-  @Input()  searchForm:        FormGroup;
 
   searchPhrase:      Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
@@ -30,6 +30,7 @@ export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
       distinctUntilChanged(),
       switchMap(searchPhrase =>
       {  // this.refreshSearch()/
+        console.log('searchPhrase Debounced', searchPhrase)
         this.outPutMethod.emit(searchPhrase)
         return null
       }

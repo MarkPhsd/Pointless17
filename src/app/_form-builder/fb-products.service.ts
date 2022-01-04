@@ -219,7 +219,7 @@ export class FbProductsService {
         isUsed:                       [''],
         strainName:                   [''],
         strainID:                     [''],
-        workWorkRequired:             [''],
+        webWorkRequired:             [''],
         lastEdited:                   [''],
         abv:                          [''],
         promptGroupID:                [''],

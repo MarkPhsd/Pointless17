@@ -8,6 +8,12 @@
   height: 90vh;
 }
 
+
+.grid-container-selectors {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .grid-list-item {
   height: 95%;
   overflow: hidden;

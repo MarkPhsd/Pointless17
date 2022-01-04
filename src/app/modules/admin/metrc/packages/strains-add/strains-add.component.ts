@@ -14,12 +14,10 @@ import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
-import { InteractivityChecker } from '@angular/cdk/a11y';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 
@@ -35,6 +33,10 @@ export class StrainsAddComponent implements OnInit {
   facilityLicenseNumber:  string;
 
   get f():                FormGroup  { return this.packageForm as FormGroup};
+
+  get hasImportedControl()          { return this.packageForm.get("hasImported") as FormControl;}
+  get activeControl()          { return this.packageForm.get("active") as FormControl;}
+
   packageForm:            FormGroup;
   bucketName:             string;
   awsBucketURL:           string;
@@ -89,9 +91,9 @@ export class StrainsAddComponent implements OnInit {
       this.package = await this.metrcPackagesService.getPackagesByID(this.id, site).pipe().toPromise();
 
       if (this.package) {
-        this.bucketName =   await this.awsBucket.awsBucket();
-        this.awsBucketURL = await this.awsBucket.awsBucketURL();
-        this.site =  this.siteService.getAssignedSite();
+        this.bucketName   =  await this.awsBucket.awsBucket();
+        this.awsBucketURL =  await this.awsBucket.awsBucketURL();
+        this.site         =  this.siteService.getAssignedSite();
         this.initForm();
       }
     } catch (error) {
@@ -99,10 +101,6 @@ export class StrainsAddComponent implements OnInit {
     }
 
 
-  }
-
-  onCancel(event) {
-    this.dialogRef.close();
   }
 
   initForm() {
@@ -131,6 +129,50 @@ export class StrainsAddComponent implements OnInit {
         )
       }
     }
+  }
+
+  updateItem(event) {
+    this.update(false)
+  }
+
+  updateItemExit(event) {
+    this.update(true)
+  }
+
+  update(event) {
+
+    if (!this.package) { return }
+    const site = this.siteService.getAssignedSite();
+    const package$ =this.metrcPackagesService.putPackage(site,this.id, this.package)
+
+    if (this.hasImportedControl) {
+      this.package.inventoryImported = this.hasImportedControl.value
+    }
+    if (this.activeControl) {
+      this.package.active = this.activeControl.value
+    }
+
+    package$.subscribe(data => {
+      this.notifyEvent('Item saved', 'Success')
+      if (event) {
+        this.onCancel(null)
+      }
+    })
+  }
+
+  deleteItem(event) {
+    const alert = window.confirm('Are you sure you want to delete this item? It will reimport when you download again.')
+    if (!alert) {return}
+    const site = this.siteService.getAssignedSite();
+    const package$ =this.metrcPackagesService.deletePackage(site,this.id)
+    package$.subscribe(data => {
+      this.notifyEvent('Item deleted', 'Success')
+      this.onCancel(null)
+    })
+  }
+
+  onCancel(event) {
+    this.dialogRef.close()
   }
 
   getVendor(event) {
@@ -187,13 +229,15 @@ export class StrainsAddComponent implements OnInit {
             jointWeight:                      [1],
             facilityLicenseNumber:            [data.itemFromFacilityLicenseNumber],
             intakeUOM:                        [data.unitOfMeasureName],
-            intakeConversionValue:            [this.intakeConversion.value]
+            intakeConversionValue:            [this.intakeConversion.value],
+
+            active        : [''],
+            hasImported   : [''],
 
         })
       } catch (error) {
         console.log(error)
       }
-
     }
   }
 
@@ -207,79 +251,7 @@ export class StrainsAddComponent implements OnInit {
   }
 
   initFields() {
-    this.packageForm = this.fb.group({
-      id:                                [''],
-      label:                             [''],
-      packageType:                       [''],
-      sourceHarvestName:                 [''],
-      locationID:                        [''],
-      locationName:                      [''],
-      locationTypeName:                  [''],
-      quantity:                          [''],
-      quantityType:                      [''],
-      unitOfMeasureName:                 [''],
-      unitOfMeasureAbbreviation:         [''],
-      patientLicenseNumber:              [''],
-      itemFromFacilityLicenseNumber:     [''],
-      itemFromFacilityName:              [''],
-      itemStrainName:                    [''],
-      note:                              [''],
-      packagedDate:                      [''],
-      initialLabTestingState:            [''],
-      labTestingState:                   [''],
-      labTestingStateDate:               [''],
-      isProductionBatch:                 [''],
-      productionBatchNumber:             [''],
-      sourceProductionBatchNumbers:      [''],
-      isTradeSample:                     [''],
-      isTradeSamplePersistent:           [''],
-      isDonation:                        [''],
-      isDonationPersistent:              [''],
-      sourcePackageIsDonation:           [''],
-      isTestingSample:                   [''],
-      isProcessValidationTestingSample:  [''],
-      productRequiresRemediation:        [''],
-      containsRemediatedProduct:         [''],
-      remediationDate:                   [''],
-      receivedDateTime:                  [''],
-      receivedFromManifestNumber:        [''],
-      receivedFrom:                      [''],
-      facilityLicenseNumber:             [''],
-      receivedFromFacilityName:          [''],
-      isOnHold:                          [''],
-      archivedDate:                      [''],
-      finishedDate:                      [''],
-      lastModified:                      [''],
-      remainingCount:                    [''],
-      inventoryImported:                 [''],
-      metrcItemID:                       [''],
-      productID:                         [''],
-      productName:                       [''],
-      productCategoryName:               [''],
-      productCategoryType:               [''],
-      inventoryLocationID :              [''],
-      expiration:                        [''],
-      conversionName  :                  [''],
-
-      thc:                              [''],
-      thc2:                             [''],
-      thca:                             [''],
-      thca2:                            [''],
-      cbn:                              [''],
-      cbn2:                             [''],
-      cbd:                              [''],
-      cbd2:                             [''],
-      cbda2:                            [''],
-      cbda:                             [''],
-
-      //non data codes
-      batchDate:                         [''],
-      cost:                              [0],
-      price:                             [0],
-      jointWeight:                       [1],
-      inputQuantity:                     [0],
-      }
-    )
+    this.packageForm = this.inventoryAssignmentService.initFields(this.packageForm)
   }
 
 

@@ -1,0 +1,23 @@
+<div
+   [formGroup]="inputForm"
+   >
+
+  <div  class="mat-label" >
+    <mat-slide-toggle
+            class="mat-label"
+            name="enabled"
+            formControlName="active">
+      <mat-label class="mat-label">Active</mat-label>
+    </mat-slide-toggle>
+  </div>
+
+  <div  class="mat-label">
+    <mat-slide-toggle
+            name="hasImported"
+            class="mat-label"
+            formControlName="hasImported">
+      <mat-label class="mat-label">Has Imported</mat-label>
+    </mat-slide-toggle>
+  </div>
+
+</div>
