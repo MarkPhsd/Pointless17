@@ -25,35 +25,6 @@
           <div class="item-info"> {{item.facilityLicenseNumber}} </div>
 
 
-          <div *ngIf="inputForm" [formGroup]="inputForm">
-            <div class="subtitle grid-container">
-
-              <div class="item-label">
-                <mat-label>Not Avalible For Sale</mat-label>
-              </div>
-
-              <div class="item-info">
-                <mat-slide-toggle
-                        class="price-values"
-                        formGroupName  ="notAvalibleForSale"
-                        formControlName="notAvalibleForSale">
-                </mat-slide-toggle>
-              </div>
-
-              <div class="item-label">
-                <mat-label>Requires Attention</mat-label>
-              </div>
-
-              <div class="item-label">
-                <mat-slide-toggle
-                        class="price-values"
-                        formGroupName  ="requiresAttention"
-                        formControlName="requiresAttention">
-                </mat-slide-toggle>
-              </div>
-
-            </div>
-          </div>
 
         </div>
 
@@ -107,6 +78,7 @@
 
               <div class="subtitle grid-container">
 
+
                 <div class="header-column">Fixed Values</div>
 
                 <div > </div>
@@ -155,7 +127,37 @@
                 <div class="item-label">Expiration</div>
                 <div class="item-info">{{item.expiration | date: 'short' }} </div>
 
+                <div class="grid-spanner">
+
+                  <div class="subtitle grid-container"
+                      *ngIf="inputForm" [formGroup]="inputForm">
+                    <div class="item-label">
+                      <mat-label>Not Avalible For Sale</mat-label>
+                    </div>
+                    <div class="item-info">
+                      <mat-slide-toggle
+                              class="price-values"
+                              formGroupName  ="notAvalibleForSale"
+                              formControlName="notAvalibleForSale">
+                      </mat-slide-toggle>
+                    </div>
+
+                    <div class="item-label">
+                      <mat-label>Requires Attention</mat-label>
+                    </div>
+                    <div class="item-label">
+                      <mat-slide-toggle
+                              class="price-values"
+                              formGroupName  ="requiresAttention"
+                              formControlName="requiresAttention">
+                      </mat-slide-toggle>
+                    </div>
+                  </div>
+
+                </div>
               </div>
+
+
 
             </div>
 

@@ -1,25 +1,17 @@
-import { Component,  Inject,  Input,  OnInit, Optional, AfterContentInit, AfterViewInit} from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { DomSanitizer } from '@angular/platform-browser';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
+import { Component,  Inject,   OnInit,} from '@angular/core';
+import { ActivatedRoute,  } from '@angular/router';
+import { FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TaxesService } from 'src/app/_services/menu/taxes.service';
 import { AWSBucketService, MenuService,  } from 'src/app/_services';
 import { ISite } from 'src/app/_interfaces/site';
-import { tap } from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
-import { CurrencyPipe } from '@angular/common';
-import * as numeral from 'numeral';
 import { IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
-import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
-import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
+import { InventoryAssignmentService} from 'src/app/_services/inventory/inventory-assignment.service';
 import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.service';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ConversionsService, IUnitConversion, IUnitsConverted } from 'src/app/_services/measurement/conversions.service';
-import { FakeDataService } from 'src/app/_services/system/fake-data.service';
-import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
+import { ConversionsService, IUnitConversion } from 'src/app/_services/measurement/conversions.service';
 
 @Component({
   selector: 'app-strains-add',
@@ -34,8 +26,8 @@ export class StrainsAddComponent implements OnInit {
 
   get f():                FormGroup  { return this.packageForm as FormGroup};
 
-  get hasImportedControl()          { return this.packageForm.get("hasImported") as FormControl;}
-  get activeControl()          { return this.packageForm.get("active") as FormControl;}
+  get hasImportedControl(){ return this.packageForm.get("hasImported") as FormControl;}
+  get activeControl()     { return this.packageForm.get("active") as FormControl;}
 
   packageForm:            FormGroup;
   bucketName:             string;
@@ -54,23 +46,17 @@ export class StrainsAddComponent implements OnInit {
 
   constructor(
           private conversionService: ConversionsService,
-          private router: Router,
           public route: ActivatedRoute,
           public fb: FormBuilder,
-          private sanitizer : DomSanitizer,
           private awsBucket: AWSBucketService,
           private _snackBar: MatSnackBar,
-          private menuPricingService: PriceCategoriesService,
-          private taxes: TaxesService,
           private siteService: SitesService,
           private menuService: MenuService,
           private metrcPackagesService: MetrcPackagesService,
-          private inventoryLocationsService: InventoryLocationsService,
           private dialogRef: MatDialogRef<StrainsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
-          private currencyPipe : CurrencyPipe,
           private inventoryAssignmentService: InventoryAssignmentService,
-          private fakeData: FakeDataService,
+
           )
      {
 
@@ -125,6 +111,7 @@ export class StrainsAddComponent implements OnInit {
       if (itemStrain.id) {
         this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data => {
           this.menuItem = data
+
           }
         )
       }
@@ -145,12 +132,8 @@ export class StrainsAddComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     const package$ =this.metrcPackagesService.putPackage(site,this.id, this.package)
 
-    if (this.hasImportedControl) {
-      this.package.inventoryImported = this.hasImportedControl.value
-    }
-    if (this.activeControl) {
-      this.package.active = this.activeControl.value
-    }
+    if (this.hasImportedControl) { this.package.inventoryImported = this.hasImportedControl.value }
+    if (this.activeControl) { this.package.active = this.activeControl.value }
 
     package$.subscribe(data => {
       this.notifyEvent('Item saved', 'Success')
@@ -161,10 +144,10 @@ export class StrainsAddComponent implements OnInit {
   }
 
   deleteItem(event) {
-    const alert = window.confirm('Are you sure you want to delete this item? It will reimport when you download again.')
+    const alert    = window.confirm('Are you sure you want to delete this item? It will reimport when you download again.')
     if (!alert) {return}
-    const site = this.siteService.getAssignedSite();
-    const package$ =this.metrcPackagesService.deletePackage(site,this.id)
+    const site     = this.siteService.getAssignedSite();
+    const package$ = this.metrcPackagesService.deletePackage(site,this.id)
     package$.subscribe(data => {
       this.notifyEvent('Item deleted', 'Success')
       this.onCancel(null)
@@ -199,12 +182,12 @@ export class StrainsAddComponent implements OnInit {
         this.intakeConversion = await this.getUnitConversionToGrams(this.package.unitOfMeasureName)
 
         let active = true
-        if (this.package.active != 0)  {
-          active = false;
-        }
+        if (this.package.active != 0)  { active = false; }
+
+        // this can use to assign the item to the form.
+        // if (this.menuItem ) { }
 
         this.packageForm = this.fb.group({
-
             productCategoryName:              [data.item.productCategoryName, Validators.required],
             productCategoryType:              [data.item.productCategoryType, Validators.required],
             quantityType:                     [data.item.quantityType, Validators.required],
@@ -213,7 +196,6 @@ export class StrainsAddComponent implements OnInit {
             expiration:                       ['', Validators.required],
             productionBatchNumber:            ['', Validators.required],
             batchDate:                        ['', Validators.required],
-
             thc:                              [''],
             thc2:                             [''],
             thca:                             [''],
@@ -224,7 +206,6 @@ export class StrainsAddComponent implements OnInit {
             cbd2:                             [''],
             cbda2:                            [''],
             cbda:                             [''],
-
             conversionName:                   ['', Validators.required],
             // inputQuantity:                    ['', Validators.required, Validators.pattern(/^-?(0|[1-9]\d*)?$/)],
             inputQuantity:                    [0, Validators.required], // ['', Validators.required,   Validators.pattern("^[0-9]*$")],
@@ -236,9 +217,8 @@ export class StrainsAddComponent implements OnInit {
             intakeUOM:                        [data.unitOfMeasureName],
             intakeConversionValue:            [this.intakeConversion.value],
 
-
-            active        : [active],
-            hasImported   : [this.package.inventoryImported],
+            active                            : [active],
+            hasImported                       : [this.package.inventoryImported],
 
         })
       } catch (error) {
@@ -251,7 +231,7 @@ export class StrainsAddComponent implements OnInit {
     this.initItemFormData(metrcPackage)
   }
 
-    //move to service.
+  //move to service.
   async getUnitConversionToGrams(unitName: string): Promise<IUnitConversion> {
     return  await this.conversionService.getConversionItemByName(unitName)
   }
@@ -259,7 +239,6 @@ export class StrainsAddComponent implements OnInit {
   initFields() {
     this.packageForm = this.inventoryAssignmentService.initFields(this.packageForm)
   }
-
 
   getStringValue(item: string): string {
     try {

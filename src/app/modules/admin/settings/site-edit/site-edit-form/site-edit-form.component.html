@@ -3,6 +3,10 @@
     <mat-card-title>
       <div class="header-container">
 
+        <div *ngIf='!ccsSite  && sitesForm'>
+          New Site.
+        </div>
+
         <div *ngIf='ccsSite'>
           {{ccsSite.name}}
         </div>
@@ -18,6 +22,26 @@
 
       </div>
     </mat-card-title>
+
+    <mat-card-subtitle>
+      <div *ngIf='!ccsSite && sitesForm'>
+        <ul>
+          <li>
+           Enter a site name
+          </li>
+          <li>
+            You can pick a logo for customers to see or leave blank if your logo is the same for all locatoins.
+           </li>
+           <li>
+            The url for the api must conform to this example:
+            https://example.com/api
+           </li>
+           <li>
+             An address is required.
+           </li>
+        </ul>
+      </div>
+    </mat-card-subtitle>
 
     <mat-card-content>
 
@@ -35,7 +59,7 @@
 
             <div>
               <mat-form-field appearance="standard">
-                <mat-label >URL</mat-label>
+                <mat-label >API URL</mat-label>
                 <input matInput type="text"
                       formControlName="url"
                       class="form-control" >

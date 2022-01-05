@@ -28,6 +28,18 @@ mat-card{
   margin:  3px 3px 3px 3px;
 }
 
+.data {
+  overflow-y: auto;
+  // height: 200px;
+  overflow-x: hidden;
+}
+
+.data2 {
+  overflow-y: auto;
+  height: 500px;
+  overflow-x: hidden;
+}
+
 .example-tab-icon {
   margin-right: 8px;
 }

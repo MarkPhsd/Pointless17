@@ -63,7 +63,7 @@ gridOptions          : any
 columnDefs           = [];
 defaultColDef        ;
 frameworkComponents  : any;
-rowSelection         : any;
+rowSelection         = 'multiple'
 rowDataClicked1      = {};
 rowDataClicked2      = {};
 rowData:             any[];
@@ -105,10 +105,9 @@ selectedRows    : any;
 agtheme         = 'ag-theme-material';
 gridDimensions
 urlPath:        string;
-value : any;
+value           : any;
 id              : number;
 product         : IProduct;
-
 
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
@@ -120,7 +119,7 @@ initSubscriptions() {
   })
  }
 
-constructor(  private _snackBar         : MatSnackBar,
+constructor(  private _snackBar              : MatSnackBar,
               private promptSubGroupService  : PromptSubGroupsService,
               private menuService            : MenuService,
               private itemTypeService        : ItemTypeService,
@@ -147,7 +146,6 @@ constructor(  private _snackBar         : MatSnackBar,
 
     this.urlPath        = await this.awsService.awsBucketURL();
     const site          = this.siteService.getAssignedSite()
-    this.rowSelection   = 'multiple'
     this.categories$    = this.menuService.getListOfCategories(site)
     this.departments$   = this.menuService.getListOfDepartments(site)
     this.productTypes$  = this.itemTypeService.getBasicTypes(site)
@@ -304,7 +302,6 @@ constructor(  private _snackBar         : MatSnackBar,
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    // console.log('search Model', searchModel)
     return searchModel
   }
 

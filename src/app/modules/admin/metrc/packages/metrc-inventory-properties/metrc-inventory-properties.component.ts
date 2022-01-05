@@ -51,6 +51,7 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
       if (itemStrain.id) {
         this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data => {
           this.menuItem = data
+
           this.outputMenuItem.emit(data)
           }
         )

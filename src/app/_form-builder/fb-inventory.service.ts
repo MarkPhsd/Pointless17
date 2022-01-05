@@ -41,7 +41,7 @@ export class FbInventoryService {
       cost:                  [''],
       price:                 [''],
       priceScheduleID:       [''],
-      notAvalibleForSale:    [''],
+      notAvalibleForSale:    [false],
       thc:                   [''],
       thc2:                  [''],
       thca2:                 [''],
@@ -60,6 +60,8 @@ export class FbInventoryService {
       adjustmentNote:        [''],
       adjustmentDate:        [''],
       adjustmentType:        [''],
+      invoiceCode:           [''],
+      invoiceID   :          ['']
     })
 
     return fb;

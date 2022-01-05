@@ -336,6 +336,54 @@ deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
     return inventoryAssignment
   }
 
+
+  assignProductToInventory(menuItem: IMenuItem,  item: IInventoryAssignment) {
+    if (item && menuItem) {
+      item.productName = menuItem.name
+      item.sku         = menuItem.sku;
+      item.productID   = menuItem.id;
+      item.cost        = menuItem.wholeSale;
+      item.price       = menuItem.retail;
+      item.notAvalibleForSale =  false;
+      if (menuItem.itemType) {
+        item.packageType = menuItem.itemType.name;
+      }
+      return item
+    }
+  }
+
+  setItemValues(inputForm: FormGroup, item: IInventoryAssignment) {
+    if (!item && !inputForm) {return item}
+    const  controls = inputForm.controls
+    try {
+      item.packageCountRemaining = controls['packageQuantity'].value;
+      item.baseQuantityRemaining = item.packageCountRemaining;
+
+      item.dateCreated = new Date().toISOString();
+      item.intakeConversionValue =1
+      item.jointWeight = 1;
+      item.baseQuantity = controls['packageQuantity'].value;
+      item.price = controls['price'].value;
+      item.cost  = controls['cost'].value;
+    } catch (error) {
+      console.log('error on set item values', error)
+      return item
+    }
+    return item
+  }
+  assignChemicals(menuItem: IMenuItem, item: IInventoryAssignment) {
+    if (!item && !menuItem) {return item}
+    item.thc   = +menuItem.thc
+    item.thc2  = +menuItem.thc2
+    item.thca  = +menuItem.thca
+    item.thca2 = +menuItem.thca2
+    item.cbd   = +menuItem.cbd
+    item.cbd2  = +menuItem.cbd2
+    item.cbn   = +menuItem.cbn
+    item.cbd2  = +menuItem.cbd2
+    item.cbda2 = +menuItem.cbda2
+    return item
+  }
   initFields(inputForm: FormGroup) {
     inputForm = this.fb.group({
       id:                                [''],

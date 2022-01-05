@@ -1,8 +1,21 @@
-<h2>Site Editor</h2>
+<h2>  <mat-icon>location_on</mat-icon>  Site Editor</h2>
+<mat-card>
+ Sites allow you to change the location you are working with, inventory, sales etc.
+  <br>
+  Also, your customers can choose to change the location from the location icon at the top toolbar.
+  This will allow them to view your different locations options.
+</mat-card>
+<span>
+  <button mat-raised-button
+    (click)="refreshTable()"><mat-icon>refresh</mat-icon>Refresh
+  </button>
+</span>
 
-<button mat-raised-button
-       (click)="refreshTable()"><mat-icon>refresh</mat-icon>Refresh
-</button>
+<span>
+  <button mat-raised-button
+        (click)="editItem(0)"><mat-icon>add</mat-icon>Add Site
+  </button>
+</span>
 
 <div *ngIf="dataSource">
   <div  class="table-container">

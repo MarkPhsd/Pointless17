@@ -3,118 +3,118 @@
      *ngIf="packageForm && package"
      fxLayout="column" fxFlex fxFlexFill>
   <div fxLayout="row" fxFlex fxFlexFill>
-    <mat-card >
-      <div id="inventoryMoveInstructions">Move inventory to location:</div>
-      <div *ngIf="package">Taking in: {{package.quantity}}  {{package.unitOfMeasureName}} </div>
-      <div *ngIf="baseUnitsRemaining"> Grams remaining {{ baseUnitsRemaining }}</div>
-      <div *ngIf="unitOfMeasure">  Convert to {{conversionName}} </div>
+
+    <mat-card>
+        <div id="inventoryMoveInstructions">Move inventory to location:</div>
+        <div *ngIf="package">Taking in: {{ package.quantity }}  {{ package.unitOfMeasureName }} </div>
+        <div *ngIf="baseUnitsRemaining"> Grams remaining {{ (baseUnitsRemaining).toFixed(2) }}</div>
+        <div *ngIf="unitOfMeasure">  Convert to {{conversionName}} </div>
 
         <div *ngIf="unitsConverted && unitsConverted.unitConvertTo">
-          Usable Packages {{ unitsConverted.unitOutPutQuantity }}
+          Usable Packages {{ (unitsConverted.unitOutPutQuantity).toFixed(2) }}
         </div>
 
+        <div *ngIf="unitsRemaining"> Packages Remaining {{unitsRemaining}} </div>
+        <div *ngIf="unitsConverted">
+          <div *ngIf="unitsConverted.ouputRemainder">Grams remaining: {{ (unitsConverted.ouputRemainder).toFixed(2) }}</div>
+        </div>
 
-      <div *ngIf="unitsRemaining"> Packages Remaining {{unitsRemaining}} </div>
-      <div *ngIf="unitsConverted">
-        <div *ngIf="unitsConverted.ouputRemainder">Grams remaining: {{unitsConverted.ouputRemainder}}</div>
-      </div>
-
-      <div>
-        <mat-form-field appearance="outline" class="location-assignment fields">
-          <mat-label>Locations</mat-label>
-          <mat-select
-                      type               ="text"
-                      [(ngModel)]        ="inventoryLocationID"
-                      formControlName    ="inventoryLocationID"
-                      (selectionChange)  ="getLocationAssignment($event.value)"
-              >
-            <div *ngIf="(inventoryLocations$ | async) as list">
-              <mat-option *ngFor="let item of list" [value]="item.id">
-                {{item.name}}
-              </mat-option>
-            </div>
-          </mat-select>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="select-conversion fields" >
-          <mat-label>Conversion</mat-label>
+        <div>
+          <mat-form-field appearance="outline" class="location-assignment fields">
+            <mat-label>Locations</mat-label>
             <mat-select
-                        type             ="text"
-                        [(ngModel)]      ="conversionName"
-                        formControlName  ="conversionName"
-                        (selectionChange)="getAvailableUnitsByConversion($event.value)"
-                        >
-
-            <div *ngIf="(conversions) as list" >
-              <mat-option *ngFor="let item of list" [value]="item.name">
-                {{item.name}} ({{item.value}})
-              </mat-option>
-            </div>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-         <!-- [ngModel]="inputQuantity" -->
-
-      <div>
-        <mat-form-field appearance="outline"  class="location-assignment fields">
-          <mat-label >Quantity</mat-label>
-          <input  matInput
-                  type            ="text"
-                  [(ngModel)]     ="inputQuantity"
-                  formControlName ="inputQuantity"
-                  (change)        ="getAvailableUnitsByInputQuantity($event)"
-          >
+                        type               ="text"
+                        [(ngModel)]        ="inventoryLocationID"
+                        formControlName    ="inventoryLocationID"
+                        (selectionChange)  ="getLocationAssignment($event.value)"
+                >
+              <div *ngIf="(inventoryLocations$ | async) as list">
+                <mat-option *ngFor="let item of list" [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </div>
+            </mat-select>
           </mat-form-field>
 
-          <mat-form-field  appearance="outline" class="select-conversion fields">
-            <mat-label >Cost</mat-label>
-            <input  matInput
-                    type           ="text"
-                    formControlName="cost"
-                    (change)="transformAmount($event)"
-                    [(ngModel)]="cost"
-            >
-        </mat-form-field>
-      </div>
+          <mat-form-field appearance="outline" class="select-conversion fields" >
+            <mat-label>Conversion</mat-label>
+              <mat-select
+                          type             ="text"
+                          [(ngModel)]      ="conversionName"
+                          formControlName  ="conversionName"
+                          (selectionChange)="getAvailableUnitsByConversion($event.value)"
+                          >
 
-      <!-- (change)="getQuantityByJointCount($event)" -->
-      <div *ngIf="unitsConverted">
-        <div *ngIf="unitsConverted.unitConvertTo">
-          <div *ngIf="unitsConverted.unitConvertTo.name === 'Joints'">
-            <mat-form-field appearance="outline" class="location-assignment fields" >
-              <mat-label >Weight</mat-label>
-                <input  matInput
-                        type           ="text"
-                        formControlName="jointWeight"
-                        [(ngModel)]    ="jointWeight"
-                        (change)       ="getQuantityByJointCount($event)"
-                    >
-            </mat-form-field>
-
-
-            <mat-form-field appearance="outline" class="select-conversion fields"  >
-              <mat-label >Price</mat-label>
-                <input  matInput
-                        [(ngModel)]     ="price"
-                        type            ="text"
-                        formControlName ="price"
-                        (blur)          ="transformPriceAmount($event)"
-                  >
-            </mat-form-field>
-          </div>
+              <div *ngIf="(conversions) as list" >
+                <mat-option *ngFor="let item of list" [value]="item.name">
+                  {{item.name}} ({{item.value}})
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
         </div>
-      </div>
-      <div *ngIf="unitsConverted">
-        <div *ngIf="unitsConverted.unitConvertTo">
-          <div *ngIf="unitsConverted.unitConvertTo.name === 'Joints'">
-            <div *ngIf="jointWeight && inputQuantity">
-              Total Weight {{ jointWeight * inputQuantity  }}
+
+         <!-- [ngModel]="inputQuantity" -->
+        <div>
+          <mat-form-field appearance="outline"  class="location-assignment fields">
+            <mat-label >Quantity</mat-label>
+            <input  matInput
+                    type            ="text"
+                    [(ngModel)]     ="inputQuantity"
+                    formControlName ="inputQuantity"
+                    (change)        ="getAvailableUnitsByInputQuantity($event)"
+            >
+            </mat-form-field>
+
+            <mat-form-field  appearance="outline" class="select-conversion fields">
+              <mat-label >Cost</mat-label>
+              <input  matInput
+                      type           ="text"
+                      formControlName="cost"
+                      (change)="transformAmount($event)"
+                      [(ngModel)]="cost"
+              >
+          </mat-form-field>
+        </div>
+
+        <!-- (change)="getQuantityByJointCount($event)" -->
+        <div *ngIf="unitsConverted">
+          <div *ngIf="unitsConverted.unitConvertTo">
+            <div *ngIf="unitsConverted.unitConvertTo.name === 'Joints'">
+              <mat-form-field appearance="outline" class="location-assignment fields" >
+                <mat-label >Weight</mat-label>
+                  <input  matInput
+                          type           ="text"
+                          formControlName="jointWeight"
+                          [(ngModel)]    ="jointWeight"
+                          (change)       ="getQuantityByJointCount($event)"
+                      >
+              </mat-form-field>
+
+
+              <mat-form-field appearance="outline" class="select-conversion fields"  >
+                <mat-label >Price</mat-label>
+                  <input  matInput
+                          [(ngModel)]     ="price"
+                          type            ="text"
+                          formControlName ="price"
+                          (blur)          ="transformPriceAmount($event)"
+                    >
+              </mat-form-field>
             </div>
           </div>
         </div>
-      </div>
-      <br>
+
+        <div *ngIf="unitsConverted">
+          <div *ngIf="unitsConverted.unitConvertTo">
+            <div *ngIf="unitsConverted.unitConvertTo.name === 'Joints'">
+              <div *ngIf="jointWeight && inputQuantity">
+                Total Weight {{ (jointWeight * inputQuantity).toFixed(2)  }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
 
         <div class="button-assign" *ngIf="baseUnitsRemaining != 0  &&  unitsConverted">
           <button mat-raised-button
@@ -136,20 +136,19 @@
           </button>
         </div>
 
-        <!-- &&  unitsConverted -->
-      <div *ngIf="baseUnitsRemaining == 0">
-        <button mat-raised-button
-                class     ="button"
-                color     ="primary"
-                type      ="button"
-                (click)   ="completePackageImport()">
-          Complete Package
-        </button>
-      </div>
+        <div *ngIf="baseUnitsRemaining == 0">
+          <button mat-raised-button
+                  class     ="button"
+                  color     ="primary"
+                  type      ="button"
+                  (click)   ="completePackageImport()">
+            Complete Package
+          </button>
+        </div>
 
     </mat-card>
-  </div>
 
+  </div>
 
   <div *ngIf="inventoryAssignments" fxFlex fxFlexFill>
     <mat-card class="package-list" >

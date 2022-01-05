@@ -79,10 +79,10 @@
                         <mat-form-field appearance="outline"  class="fields" >
                           <mat-label>Expiration</mat-label>
                           <input matInput
-                          type="text"
-                          formControlName="expiration"
-                          name="expiration"
-                          [matDatepicker]="picker">
+                                  type="text"
+                                  formControlName="expiration"
+                                  name="expiration"
+                                  [matDatepicker]="picker">
                           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                           <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
@@ -92,8 +92,8 @@
                         <mat-form-field appearance="outline"  class="fields" >
                           <mat-label > Category Type</mat-label>
                           <input matInput
-                          type="text"
-                          formControlName="productCategoryName"
+                                  type="text"
+                                  formControlName="productCategoryName"
                           >
                         </mat-form-field>
                       </div>
@@ -101,10 +101,21 @@
                       <mat-form-field appearance="outline"  class="fields" >
                         <mat-label > Vendor Invoice #</mat-label>
                         <input matInput
-                            type="text"
-                            formControlName="invoiceNumber"
+                                type="text"
+                                formControlName="invoiceCode"
                           >
                       </mat-form-field>
+
+
+                      <div  class="mat-label">
+                        <mat-slide-toggle
+                                name="notAvalibleForSale"
+                                class="mat-label"
+                                formControlName="notAvalibleForSale">
+                          <mat-label class="mat-label">Disable</mat-label>
+                        </mat-slide-toggle>
+                      </div>
+
 
                     </div>
                 </div>
@@ -150,6 +161,19 @@
                             >
                       </mat-form-field>
                     </div>
+
+                    <div>
+                      <mat-form-field  appearance="outline" class="price-values fields">
+                        <mat-label >Price</mat-label>
+                        <input  matInput
+                            type           ="text"
+                            formControlName="price"
+                            name           ="price"
+                            class          ="price-values"
+                            >
+                      </mat-form-field>
+                    </div>
+
 
                   </div>
 

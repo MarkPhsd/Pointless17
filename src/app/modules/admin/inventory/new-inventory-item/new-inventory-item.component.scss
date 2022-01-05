@@ -22,6 +22,10 @@
   }
 }
 
+.grid-spanner {
+  grid-column-end: span 2;
+}
+
 .mat-input-element {
   font-size: small;
 }

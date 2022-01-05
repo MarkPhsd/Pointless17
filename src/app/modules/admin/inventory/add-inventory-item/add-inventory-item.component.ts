@@ -49,24 +49,17 @@ export class AddInventoryItemComponent implements OnInit {
   {
 
     if (data) {
-
       this.id = data.id
-
     } else {
-
       this.id = this.route.snapshot.paramMap.get('id');
-
     }
     this.item = {} as IInventoryAssignment
   }
 
   ngOnInit() {
-
     try {
       this.locations$ = this.inventoryLocationsService.getLocations();
       this.site =  this.siteService.getAssignedSite();
-
-
       this.inputForm = this.fbInventory.initForm(this.inputForm)
 
       if (this.id !=0) {
@@ -76,16 +69,11 @@ export class AddInventoryItemComponent implements OnInit {
           this.inputForm = this.fbInventory.initForm(this.inputForm)
           this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
           this.productName = this.item.productName
-
         })
-
       }
-
     } catch (error) {
       console.log(error)
     }
-
-
   }
 
   async updateItem(event): Promise<boolean> {
@@ -94,19 +82,20 @@ export class AddInventoryItemComponent implements OnInit {
       if (this.inputForm.valid) {
         if (this.id != 0) {
 
-          this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
-          const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, this.item)
-          const item  = await item$.pipe().toPromise()
+          let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
+          const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
+          item  = await item$.pipe().toPromise()
+          this.item = item
           this.notifySave(item)
           return
 
         }
 
         if (this.id == 0) {
-
-          this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
+          let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
+          // this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
           const item$ = this.inventoryAssignmentService.addInventoryItem(this.site, this.item)
-          const item  = await item$.pipe().toPromise()
+          item  = await item$.pipe().toPromise()
           this.notifySave(item)
           return
 
@@ -115,26 +104,20 @@ export class AddInventoryItemComponent implements OnInit {
     }
   }
 
+
   notifySave(item) {
-
-
     if (item) {
       this.notifyEvent('Inventory info updated.', 'Success')
       return
     }
-
     console.log('updateitem failed')
     this.notifyEvent('Inventory info not  updated.', 'failed')
     return  false
-
   }
 
   async updateItemExit(event) {
     const result = await this.updateItem(null)
-    console.log('result', result)
-    if (result) {
-      this.onCancel(event)
-    }
+    this.onCancel(event)
   }
 
   deleteItem(event) {
@@ -148,8 +131,6 @@ export class AddInventoryItemComponent implements OnInit {
         return
       }
     )
-
-    // this.notifyEvent('Not implemented. Please disable item from sales', 'Failed')
   }
 
   getItem(event) {
@@ -157,7 +138,10 @@ export class AddInventoryItemComponent implements OnInit {
     if (item) {
       if (item.id) {
         this.menuService.getMenuItemByID(this.site, item.id).subscribe(data => {
-          this.menuItem = data
+            this.menuItem = data
+            this.item = this.inventoryAssignmentService.assignProductToInventory(data, item)
+            this.item = this.inventoryAssignmentService.assignChemicals(data, item)
+            this.inputForm = this.fbInventory.intitFormData(this.inputForm, item)
           }
         )
       }
@@ -165,7 +149,6 @@ export class AddInventoryItemComponent implements OnInit {
   }
 
   getVendor(event) {
-
     const facility = event
     if (facility) {
       this.facilityLicenseNumber = `${facility.displayName} `
@@ -180,12 +163,9 @@ export class AddInventoryItemComponent implements OnInit {
     return this.inventoryLocation
   }
 
-
-
   onCancel(event) {
     this.dialogRef.close();
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
@@ -193,6 +173,5 @@ export class AddInventoryItemComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
-
 
 }
