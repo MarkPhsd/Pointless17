@@ -87,7 +87,8 @@
       <div class="grid-item toggle">
         <mat-slide-toggle name="hasImported"
                           class="mat-label"
-                          formControlName="hasImported">
+                          formControlName="hasImported"
+                          (toggleChange)="refreshGrid()">
           <mat-label class="mat-label">Imported</mat-label>
         </mat-slide-toggle>
       </div>

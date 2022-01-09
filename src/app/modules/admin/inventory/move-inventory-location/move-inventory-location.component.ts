@@ -93,6 +93,7 @@ export class MoveInventoryLocationComponent implements OnInit {
 
     if ( this.inventoryAssignment.packagedOrBulk == 0 )  {
       if (parseInt(this.quantityMoving.toString()) == this.quantityMoving) {
+        console.log(parseInt(this.quantityMoving.toString()) , this.quantityMoving)
       } else {
         this.notifyEvent('Only whole values allowed.', '')
         this.quantityMoving = 0
@@ -107,83 +108,101 @@ export class MoveInventoryLocationComponent implements OnInit {
     }
 
 
-    await  this.getMovingPackageCounts()
     return true
   }
 
   async  updateInventory() {
         //the couunt we use is the packageCountremaining.
-    const result = await !this.changeIsValid() ;
-
+    const result = this.changeIsValid() ;
+    if (!result) {
+      return
+    }
+    console.log('this.quantityMoving', this.quantityMoving)
     if (this.inventoryAssignment.packageCountRemaining != this.quantityMoving) {
       if (this.inventoryAssignment.packageCountRemaining >= this.quantityMoving) {
-        this.copyToNewPackage()
+        console.log('copying to new package')
+        await this.copyToNewPackage()
+        return
       }
     }
 
-    if (this.inventoryAssignment.packageCountRemaining != this.quantityMoving ) {
+    if (this.inventoryAssignment.packageCountRemaining === this.quantityMoving ) {
       this.changeLocation();
+      return
     }
 
   }
 
-  async getMovingPackageCounts() {
-
-    // exitingItem:         IInventoryLocation;
-    // newItem    :         IInventoryLocation;
+  async getMovingPackageCounts(): Promise<IInventoryAssignment[]> {
 
     this.newItem                       = await this.inventoryAssignment$.pipe().toPromise() //(data=>{ this.newItem = data })
-
 
     //the new item will start with what the old item currently has
     this.newItem.baseQuantity          = this.newItem.baseQuantityRemaining
     this.newItem.packageQuantity       = this.newItem.packageCountRemaining
 
     //to remove the base of the original package.
-    const newBaseQuantity              = this.newItem .baseQuantityRemaining
+    const newBaseQuantity              = this.newItem.baseQuantityRemaining
 
-    const  baseQuantityToMove          = this.newItem.unitMulitplier * this.quantityMoving * this.newItem.jointWeight
-    const  newPackageQuantity          = this.quantityMoving
+    const  baseCalculated              = this.newItem.unitMulitplier * this.quantityMoving * this.newItem.jointWeight;
+    const  baseQuantityToMove          = baseCalculated;
+    const  newPackageQuantity          = this.quantityMoving;
 
     this.newItem.baseQuantity          = baseQuantityToMove;
     this.newItem.baseQuantityRemaining = baseQuantityToMove;
     this.newItem.packageQuantity       = newPackageQuantity;
     this.newItem.packageCountRemaining = newPackageQuantity;
 
-    this.newItem.id = 0;
+    const item = await this.setLocation(this.newItem);
+    if (item) {  this.newItem = item; }
 
-    this.existingItem = await this.inventoryAssignment$.pipe().toPromise()
-
-    const existingBase                      = this.existingItem.baseQuantity
-    this.existingItem.baseQuantity          = existingBase
+    this.newItem.id                         = 0;
+    this.existingItem                       = await this.inventoryAssignment$.pipe().toPromise();
+    const existingBase                      = this.existingItem.baseQuantity;
+    this.existingItem.baseQuantity          = existingBase;
     this.existingItem.baseQuantityRemaining = existingBase - baseQuantityToMove;
     this.existingItem.packageQuantity       = this.existingItem.packageQuantity       - newPackageQuantity;
     this.existingItem.packageCountRemaining = this.existingItem.packageCountRemaining - newPackageQuantity;
 
+    const packages = [] as IInventoryAssignment[];
+    packages.push(this.existingItem)
+    packages.push(this.newItem)
+    return packages
+  }
+
+  async setLocation(item: IInventoryAssignment): Promise<IInventoryAssignment> {
+    const location = this.inventoryLocation;
+    if (location) {
+      item.location = location.name;
+      item.locationID = location.id;
+    }
+    return item
   }
 
 
-  copyToNewPackage(){
+  getValue(item: string): number {
+    try {
+      const f = this.searchForm;
+      if (f.get(item).value === undefined || f.get(item).value === null) { return 0} else {
+        return  f.get(item).value
+      }
+    } catch (error) {
+      return 0
+    }
+  }
 
-    this.getMovingPackageCounts()
-    const site = this.siteService.getAssignedSite();
 
-    const items = [] as IInventoryAssignment[];
-
-    items.push(this.existingItem);
-    items.push(this.newItem);
-
-    console.log(items)
-    const new$ =  this.inventoryAssignmentService.moveInventory(site, items);
+  async copyToNewPackage(){
+    const site     =  this.siteService.getAssignedSite();
+    const packages =  await  this.getMovingPackageCounts()
+    const new$     =  this.inventoryAssignmentService.moveInventory(site, packages);
     new$.subscribe( data => {
+      this.dialogRef.close('true')
       this.notifyEvent('New . Package moved', 'Success')
     })
-
   }
 
-
-
-  changeLocation() {
+  async changeLocation() {
 
     if (this.inventoryLocation) {
       if (!this.changeIsValid) { return }
@@ -200,8 +219,7 @@ export class MoveInventoryLocationComponent implements OnInit {
       //and put the existing one with the change.
 
       this.inventoryAssignmentService.editInventory(site,
-
-        this.inventoryAssignment.id,
+          this.inventoryAssignment.id,
           this.inventoryAssignment
 
           ).subscribe( data=> {

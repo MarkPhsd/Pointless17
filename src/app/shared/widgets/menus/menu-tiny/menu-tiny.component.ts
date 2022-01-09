@@ -8,6 +8,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { fadeAnimation } from 'src/app/_animations';
 import { switchMap } from 'rxjs/operators';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 
 @Component({
   selector: 'app-menu-tiny',
@@ -34,12 +35,43 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
-      user => {
+        user => {
+        user = JSON.parse(localStorage.getItem('user')) as IUser;
         this.user = user
-        if (!user) { this.menus = [] as AccordionMenu[]; }
-        if (user ) { this.refreshMenu(user) }
+        if (!user || !user.password) {
+          this.menus = [] as AccordionMenu[];
+          return
+        }
+        this.user = user;
+        this.refreshMenu(user)
       }
     )
+  }
+
+  refreshMenu(user: IUser) {
+    this.initMenus()
+    if (!user || !user.password) {return}
+    const site  = this.siteService.getAssignedSite();
+    const menu$ = this.menusService.getMainMenu(site)
+
+    menu$.subscribe( data => {
+      if (!data) { return }
+      this.config = this.mergeConfig(this.options);
+      if (data)
+        data.filter( item => {
+          this.addItemToMenu(item, this.menus)
+        })
+      }, err => {
+        console.log('error refresh menu', err)
+      }
+    )
+
+  }
+
+  addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
+    if (!mainMenu && item) { return }
+    if (item.active) {mainMenu.push(item) }
+    this.menus =  [...new Set(this.menus)]
   }
 
   constructor ( private menusService            : MenusService,
@@ -53,66 +85,37 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const site  = this.siteService.getAssignedSite();
-    this.initMenu();
     this.initSubscription()
   }
 
   ngOnDestroy() {
     if (this._user) { this._user.unsubscribe() }
-    this.menus = [] as AccordionMenu[];
+    this.initMenus();
   }
 
-  refreshMenu(user: IUser) {
-    if (!user) { return }
-    const site  = this.siteService.getAssignedSite();
-    this.menus  = [] as AccordionMenu[];
-    if (!this.user) {return}
-    const menu$ = this.menusService.getMainMenu(this.site, user)
-
-    menu$.subscribe( data => {
-      if (!data) { return }
-      this.config = this.mergeConfig(this.options);
-      if (data)
-        data.filter( item => {
-          this.addItemToMenu(item, this.menus)
-        })
-        // this.menus =  [...new Set(this.menus)]
-      }, err => {
-        console.log('error refresh menu', err)
-      }
-    )
-  }
-
-  addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
-    if (!mainMenu && item) { return }
-    if (item.active) {mainMenu.push(item) }
-    this.menus =  [...new Set(this.menus)]
+  initMenus() {
+    this.menus   = [] as AccordionMenu[];
+    this.submenu = [] as SubMenu[];
   }
 
   initMenu() {
+    this.initMenus()
+    if (!this.user || !this.user.password) {return}
     const site       = this.siteService.getAssignedSite();
-    this.menus  = [] as AccordionMenu[];
-    if (!this.user) {return}
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
-    try {
-      menuCheck$.pipe(
-        switchMap( data => {
-
-          if (!data.result) {
-             if (this.user) {
-              return  this.menusService.createMainMenu(this.user , site)
-            }
-            return EMPTY;
+    menuCheck$.pipe(
+      switchMap( data => {
+        if (!data.result) {
+            if (this.user) {
+            return  this.menusService.createMainMenu(this.user , site)
           }
-        })
-      ).subscribe(data => {
-        this.refreshMenu(this.user)
+          return EMPTY;
+        }
       })
-
-    } catch (error) {
-      console.log('error occured in init menu.')
-    }
+    ).subscribe(data => {
+      this.refreshMenu(this.user)
+    })
   }
 
   mergeConfig(options: accordionConfig) {

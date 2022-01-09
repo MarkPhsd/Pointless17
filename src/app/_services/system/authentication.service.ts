@@ -24,6 +24,7 @@ export interface IUserExists {
 
 export class AuthenticationService {
 
+    apiUrl                      : any;
     public  externalAPI         : boolean;
 
     private _user               = new BehaviorSubject<IUser>(null);
@@ -32,11 +33,12 @@ export class AuthenticationService {
     private _userx              = new BehaviorSubject<IUser>(null);
     public  userx$              = this._userx.asObservable();
 
-    apiUrl: any;
-
     updateUser(user: IUser) {
       this._user.next(user)
-      localStorage.setItem('user', JSON.stringify(user));
+      if (user) {
+
+        localStorage.setItem('user', JSON.stringify(user));
+      }
     }
 
     updateUserX(user: IUser) {
@@ -51,10 +53,7 @@ export class AuthenticationService {
         private platFormservice : PlatformService,
         private orderService    : OrdersService,
     ) {
-
       this.apiUrl = this.appInitService.apiBaseUrl()
-      // console.log('apiUrl in AUthentication', this.apiUrl)
-
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
       const user  = JSON.parse(localStorage.getItem('user')) as IUser;
       this.updateUser(user);
@@ -86,9 +85,7 @@ export class AuthenticationService {
     }
 
     setUserSubject(user:IUser) {
-      if (!user || !user.password || !user.username) {
-        return
-      }
+      if (!user || !user.password || !user.username) {return}
       user.authdata = window.btoa( `${user.username}:${user.password}`);
       localStorage.setItem("ami21", 'true');
       this.updateUser(user);
@@ -114,6 +111,7 @@ export class AuthenticationService {
     clearUserSettings(){
       localStorage.removeItem("ami21");
       localStorage.removeItem('user');
+      localStorage.removeItem('userx');
       this.updateUser(null);
       this.updateUserX(null);
     }

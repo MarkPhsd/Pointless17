@@ -15,7 +15,6 @@ import { METRCPackage, PackageFilter }  from 'src/app/_interfaces/metrcs/package
 import { MatDialog } from '@angular/material/dialog';
 import { METRCProductsAddComponent } from 'src/app/modules/admin/metrc/packages/metrc-products-add/products-add.component';
 import { StrainsAddComponent } from 'src/app/modules/admin/metrc/packages/strains-add/strains-add.component';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { ISite } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
@@ -30,6 +29,7 @@ import {
 import { METRCFacilities } from 'src/app/_interfaces/metrcs/facilities';
 import { MetrcFacilitiesService } from 'src/app/_services/metrc/metrc-facilities.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
+import { AgGridAngular } from 'ag-grid-angular';
 
 @Component({
   selector    : 'app-package-list',
@@ -39,6 +39,7 @@ import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-form
 
 export class PackageListComponent implements OnInit {
 
+  @ViewChild('agGrid') agGrid: AgGridAngular;
   //for list selecting.
   @Input() hideAdd         : boolean;
   @Input() hideEditSelected: boolean;
@@ -96,6 +97,7 @@ export class PackageListComponent implements OnInit {
   facilities  : METRCFacilities[];
   facilityID  : number;
 
+  // hasImported = false;
   downloadVisible:  boolean;
   selectedSiteID:   number;
   searchProducts:   string;
@@ -108,7 +110,7 @@ export class PackageListComponent implements OnInit {
   gridDimensions: string;
   agtheme        = 'ag-theme-material';
 
-
+  urlPath : string;
   viewAll           = 1;
   viewOptions$     = of(
     [
@@ -336,23 +338,27 @@ export class PackageListComponent implements OnInit {
   }
 
   initSearchModel(): PackageFilter {
-    const packageFilter       = {} as PackageFilter
-    packageFilter.pageNumber  =  1
-    packageFilter.pageSize    = 25
+    const searchModel       = {} as PackageFilter
+
+    searchModel.pageSize   = this.pageSize
+    searchModel.pageNumber = this.currentPage
 
     if (this.activeControl && this.activeControl.value) {
-        packageFilter.active = 0
-    }
-    if ( this.hasImportedControl &&  this.hasImportedControl.value) {
-      packageFilter.hasImported = this.hasImportedControl.value
+      searchModel.active = 0
     }
 
-    if ( this.searchProducts != '' ) {
-      packageFilter.productName = this.searchProducts
-      packageFilter.label = this.searchProducts
+    if (this.hasImportedControl &&  this.hasImportedControl.value) {
+      searchModel.hasImported = this.hasImportedControl.value
     }
-    if (this.metrcCategory) {  packageFilter.productCategoryName =   this.metrcCategory.name }
-    return packageFilter;
+
+    if (this.searchProducts != '') {
+      searchModel.productName = this.searchProducts
+      searchModel.label = this.searchProducts
+    }
+
+    if (this.metrcCategory) {  searchModel.productCategoryName =   this.metrcCategory.name }
+    return searchModel;
+
   }
 
   //this doesn't change the page, but updates the properties for getting data from the server.
@@ -363,36 +369,6 @@ export class PackageListComponent implements OnInit {
     if (tempStartRow > startRow) { return this.currentPage - 1 }
     if (tempStartRow < startRow) { return this.currentPage + 1 }
     return this.currentPage
-  }
-
-  //ag-grid standard method.
-  getDataSource(params) {
-    return {
-    getRows: (params: IGetRowsParams) => {
-      const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-          if (data.errorMessage) {
-            this.notifyEvent(data.errorMessage, 'Error');
-            return
-          }
-            const resp         = data.paging
-            this.isfirstpage   = resp.isFirstPage
-            this.islastpage    = resp.isFirstPage
-            this.currentPage   = resp.currentPage
-            this.numberOfPages = resp.pageCount
-            this.recordCount   = resp.recordCount
-            if (this.numberOfPages !=0 && this.numberOfPages) {
-              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-            }
-            params.successCallback(data.results)
-            this.rowData = data.results
-          }, err => {
-            console.log(err)
-          }
-      );
-      }
-    };
   }
 
   //ag-grid standard method
@@ -420,11 +396,13 @@ export class PackageListComponent implements OnInit {
       items$.subscribe(data =>
         {
             const resp         =  data.paging
+            if (!resp) {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
+
             if (this.numberOfPages !=0 && this.numberOfPages) {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
@@ -440,28 +418,27 @@ export class PackageListComponent implements OnInit {
     this.gridApi.setDatasource(datasource);
   }
 
-  // refreshImages(data) {
-  //   const urlPath = this.urlPath
-  //   if (urlPath) {
-  //     data.forEach( item =>
-  //       {
-  //         if (item.urlImageMain) {
-  //           const list = item.urlImageMain.split(',')
-  //           if (list[0]) {
-  //             item.imageName = `${urlPath}${list[0]}`
-  //           }
-  //         }
-  //       }
-  //     )
-  //   }
-  //   return data;
-  // }
+  refreshImages(data) {
+    const urlPath = this.urlPath
+    if (urlPath) {
+      data.forEach( item =>
+        {
+          if (item.urlImageMain) {
+            const list = item.urlImageMain.split(',')
+            if (list[0]) {
+              item.imageName = `${urlPath}${list[0]}`
+            }
+          }
+        }
+      )
+    }
+    return data;
+  }
 
   refreshActiveChange(event) {
     this.viewAll = event;
     this.refreshSearch();
   }
-
 
   //mutli select method for selection change.
   onSelectionChanged(event) {
@@ -510,8 +487,6 @@ export class PackageListComponent implements OnInit {
 
   getLabel(rowData)
   {
-    // if(rowData && rowData.hasIndicator)
-    // console.log('rowData', rowData)
     return 'Intake'
   }
 
@@ -571,12 +546,13 @@ export class PackageListComponent implements OnInit {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      // this.displayFn('')
+      // if (result && result.completed) {
+        this.refreshGrid()
+      // }
     });
   }
 
   openProductsDialog(id: any) {
-
     const dialogConfig = [
       { data: { id: id } }
     ]
@@ -589,14 +565,19 @@ export class PackageListComponent implements OnInit {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      // this.displayFn('')
+      // if (result && result.completed || (result)) {
+        this.refreshGrid()
+      // }
     });
-
   }
 
-
-
-
+  deleteRow() {
+    try {
+      //refresh Grid
+    } catch (error) {
+      console.log('delete Row')
+    }
+  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

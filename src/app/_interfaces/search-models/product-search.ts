@@ -11,6 +11,7 @@ export interface ProductSearchModel {
   departmentID:                 string;
   type:                         number;
   retail:                       number;
+  viewAll                   : number;
   priceGreaterTrueSmallerFalse: boolean;
   tags:                         string;
   description:                  string;
@@ -33,7 +34,10 @@ export interface ProductSearchModel {
   departmentName            : string;
   searchValue               : string;
   active                    : boolean;
-  viewAll                   : number;
+  metrcCategory             : string;
+  species                   : string;
+  web                       : boolean;
+  exactNameMatch            : boolean;
 }
 
 

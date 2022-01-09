@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { Observable  } from 'rxjs';
-import {  ISite }  from 'src/app/_interfaces';
+import { ISite }  from 'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 
 export interface   IDisplayAssignment{
@@ -16,7 +16,6 @@ export interface   IDisplayAssignment{
   providedIn: 'root'
 })
 export class ItemTypeDisplayAssignmentService {
-
 
   site: ISite;
   constructor(private http: HttpClient,

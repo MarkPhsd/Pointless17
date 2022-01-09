@@ -1,87 +1,94 @@
 <!-- <mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading"> -->
-  <mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading">
-    <mat-card-title>
-      <div class="mat-form-field">Move inventory.</div>
+<mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading">
+  <mat-card-title>
+    <div class="mat-form-field">Move inventory.</div>
 
-      <div
-           class="mat-form-field">
-           {{item.productName}} <br>
-           {{item.sku}}
+    <div
+          class="mat-form-field">
+          {{item.productName}} <br>
+          {{item.sku}}
+    </div>
+
+  </mat-card-title>
+
+  <mat-card-content>
+
+    <div  *ngIf="inventoryAssignment">
+      <h3>Original Values</h3>
+      <div class="grid-container">
+        <div class="labels">Base QTY </div>
+        <div class="fields">{{inventoryAssignment.baseQuantityRemaining.toFixed(2)}}</div>
+        <div class="labels">Packages</div>
+        <div class="fields">{{inventoryAssignment.packageCountRemaining.toFixed(2)}}</div>
+      </div>
+    </div>
+
+    <div class="grid-container">
+      <div  *ngIf="existingItem">
+        <h4>Existing</h4>
+        <div class="grid-container">
+          <div class="labels">Base Change QTY </div>
+          <div class="fields">{{existingItem.baseQuantityRemaining.toFixed(2)}}</div>
+          <div class="labels">Packages</div>
+          <div class="fields">{{existingItem.packageCountRemaining.toFixed(2)}}</div>
+        </div>
       </div>
 
-    </mat-card-title>
-
-    <mat-card-content>
-
-      <div  *ngIf="inventoryAssignment">
-        <h3>Original Values</h3>
+      <div  *ngIf="newItem">
+        <h4>New Pack Line</h4>
         <div class="grid-container">
           <div class="labels">Base QTY </div>
-          <div class="fields">{{inventoryAssignment.baseQuantityRemaining}}</div>
+          <div class="fields">{{newItem.baseQuantityRemaining.toFixed(2)}}</div>
           <div class="labels">Packages</div>
-          <div class="fields">{{inventoryAssignment.packageCountRemaining}}</div>
+          <div class="fields">{{newItem.packageCountRemaining.toFixed(2)}}</div>
         </div>
       </div>
 
-      <div class="grid-container">
-        <div  *ngIf="existingItem">
-          <h4>Existing</h4>
-          <div class="grid-container">
-            <div class="labels">Base Change QTY </div>
-            <div class="fields">{{existingItem.baseQuantityRemaining}}</div>
-            <div class="labels">Packages</div>
-            <div class="fields">{{existingItem.packageCountRemaining}}</div>
-          </div>
-        </div>
-
-        <div  *ngIf="newItem">
-          <h4>New Pack Line</h4>
-          <div class="grid-container">
-            <div class="labels">Base QTY </div>
-            <div class="fields">{{newItem.baseQuantityRemaining}}</div>
-            <div class="labels">Packages</div>
-            <div class="fields">{{newItem.packageCountRemaining}}</div>
-          </div>
-        </div>
-
-      </div>
+    </div>
 
 
-      <form  [formGroup]="searchForm" id="searchForm" >
-           <mat-form-field appearance="outline">
-              <mat-label>Locations</mat-label>
-              <mat-select
-                        type="text"
-                        (selectionChange)="getLocation($event)"
-                        formControlNamename="inventoryLocations"
-                      >
-              <div *ngIf="metrcLocations$| async">
-                <mat-option [value]=0>All</mat-option>
-                <mat-option *ngFor="let item of metrcLocations$ | async" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-
+    <form  [formGroup]="searchForm" id="searchForm" >
           <mat-form-field appearance="outline">
-            <mat-label >Quantity</mat-label>
-            <input matInput
-                    type="number"s
-                    (change) = "changeIsValid()"
-                    [(ngModel)] = "quantityMoving"
-                    formControlName="quantityMoving"
-                    class="form-control" >
-          </mat-form-field>
+            <mat-label>Locations</mat-label>
+            <mat-select
+                      type="text"
+                      (selectionChange)="getLocation($event)"
+                      formControlNamename="inventoryLocations"
+                    >
+            <div *ngIf="metrcLocations$| async">
+              <mat-option [value]=0>All</mat-option>
+              <mat-option *ngFor="let item of metrcLocations$ | async"
+                          [value]="item.id">
+                {{ item.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
 
-      </form>
+        <mat-form-field appearance="outline">
+          <mat-label >Quantity</mat-label>
+          <input matInput
+                  type="number"s
+                  (change) = "changeIsValid()"
+                  [(ngModel)] = "quantityMoving"
+                  formControlName="quantityMoving"
+                  class="form-control" >
+        </mat-form-field>
 
-    </mat-card-content>
+    </form>
 
-    <mat-card-footer>
-      <button mat-button mat-raised-button  color="primary" (click)="onCancel()">Cancel</button>
-      <button mat-button mat-raised-button  color="primary" (click)="updateInventory()">Save Change</button>
-    </mat-card-footer>
+  </mat-card-content>
+
+  <mat-card-footer>
+    <button mat-button mat-raised-button
+            color="primary"
+            (click)="onCancel()">Cancel
+    </button>
+    <button mat-button mat-raised-button
+            color="primary"
+            (click)="updateInventory()">Save Change
+    </button>
+  </mat-card-footer>
 </mat-card>
 
 <ng-template #loading >

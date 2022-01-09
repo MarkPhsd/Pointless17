@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   async getMenu(site: ISite) {
-    const accordionMenu$ =  this.menusService.getMainMenu(site, this.user)
+    const accordionMenu$ =  this.menusService.getMainMenu(site)
     accordionMenu$.subscribe(data => {
       console.log('getMenu success', data)
       this.accordionMenu = data;

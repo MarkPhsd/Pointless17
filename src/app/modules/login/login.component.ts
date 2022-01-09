@@ -1,4 +1,4 @@
-﻿import { CompanyService,AuthenticationService} from 'src/app/_services';
+﻿import { CompanyService, AuthenticationService} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -12,72 +12,85 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-    selector:   'login-dashboard',
-    templateUrl:'./login.component.html',
-    styleUrls: ['./login.component.scss'],
-    animations: [ fadeInAnimation ],
-  })
+    selector   : 'login-dashboard',
+    templateUrl: './login.component.html',
+    styleUrls  : ['./login.component.scss'],
+    animations : [ fadeInAnimation ],
+})
 
 export class LoginComponent implements OnInit, OnDestroy {
 
   @Input() statusMessage: string;
 
   spinnerLoading: boolean;
-  compName: string;
-  company = {} as ICompany;
-  logo: string;
+  compName   : string;
+  company    = {} as ICompany;
+  logo       : string;
 
-  loading = false;
-  submitted = false;
-  returnUrl: string;
-  error = '';
+  loading    = false;
+  submitted  = false;
+  returnUrl  : string;
+  error      = '';
   companyName: string;
-  id: any;
+  id         : any;
 
-  isApp    : boolean;
-  loginForm: FormGroup;
-  amI21: any;
+  isApp     : boolean;
+  loginForm : FormGroup;
+  amI21     : any;
 
-  counter =0;
+  counter   =0;
   loggedInUser : IUser;
-  _user: Subscription;
+  _user     : Subscription;
+
+  _loginStatus    : Subscription;
+  loginStatusvalue: number;
 
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
       this.loggedInUser = user
     })
+
+    this._loginStatus = this.userSwitchingService.loginStatus$.subscribe( data => {
+      console.log('login status changed ', data)
+      this.loginStatusvalue = data;
+      this.updateLoginStatus(data);
+    })
   }
+
   // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
+  get f() {
+    if (!this.loginForm) { this.initForm() }
+    return this.loginForm.controls;
+   }
 
   constructor(
-        private fb: FormBuilder,
-        private route: ActivatedRoute,
-        private router: Router,
-        private _renderer      : Renderer2,
+        private fb                   : FormBuilder,
+        private route                : ActivatedRoute,
+        private router               : Router,
+        private _renderer            : Renderer2,
         private authenticationService: AuthenticationService,
-        private userSwitchingService: UserSwitchingService,
-        private _snackBar: MatSnackBar,
-        private companyService: CompanyService,
-        private siteService: SitesService,
-        public platformService : PlatformService,
-        private appInitService: AppInitService,
+        private userSwitchingService : UserSwitchingService,
+        private _snackBar            : MatSnackBar,
+        private companyService       : CompanyService,
+        private siteService          : SitesService,
+        public platformService       : PlatformService,
+        private appInitService       : AppInitService,
     )
   {
     this.redirects();
   }
 
   async ngOnInit() {
-    if (!this.platformService.webMode) { this.amI21 = true  }
-    if (this.platformService.webMode)  { this.amI21 = false }
+    this.initForm();
+    if (!this.platformService.isApp()) { this.amI21 = true  }
+    if (this.platformService.isApp())  { this.amI21 = false }
+    await this.initCompanyInfo()
     this.refreshTheme()
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.initForm();
-    await this.initCompanyInfo()
   }
 
   ngOnDestroy(): void {
-    if (this._user) { this._user.unsubscribe()}
+    if (this._user) { this._user.unsubscribe() }
   }
 
   initForm() {
@@ -85,6 +98,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+  }
+
+  redirects() {
+    if (this.redirectAPIUrlRequired()){ return }
+    if (this.redirectUserLoggedIn())  { return }
   }
 
   switchUser() {
@@ -102,24 +120,17 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async initCompanyInfo() {
-    this.compName    = this.appInitService.company
+    this.compName    = this.appInitService.company;
     this.initLogo();
   }
 
   initLogo() {
-    this.logo    = this.appInitService.logo;
-    if (!this.logo)  {
-      this.logo = 'http://cafecartel.com/temp/logo.png'
-    }
-  }
-
-  redirects() {
-    if (this.redirectAPIUrlRequired())  { return }
-    if (this.redirectUserLoggedIn())  { return }
+    this.logo  = this.appInitService.logo;
+    if (!this.logo)  { this.logo = 'http://cafecartel.com/temp/logo.png' }
   }
 
   redirectUserLoggedIn() {
-    const user = this.authenticationService.userValue
+    const user = this.authenticationService.userValue;
     if (user) {
       this.router.navigate(['/app-main-menu']);
       return true
@@ -157,12 +168,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async  browseMenu() {
-    this.userSwitchingService.browseMenu()
+    this.userSwitchingService.browseMenu();
   }
 
   loginToReturnUrl() {
     this.spinnerLoading = false;
-    this.userSwitchingService.loginToReturnUrl()
+    this.userSwitchingService.loginToReturnUrl();
   }
 
   async clearUserSettings() {
@@ -180,25 +191,111 @@ export class LoginComponent implements OnInit, OnDestroy {
           localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
           localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
         }
-      }, error  => {
       }
     );
   }
 
-  registerUser(){
-    this.router.navigate(['/register-user']);
+  registerUser()  { this.router.navigate(['/register-user']);}
+
+  changePassword(){ this.router.navigate(['/resetpassword']);}
+
+  validateForm(inputForm: FormGroup) : boolean {
+    try {
+      if (inputForm.invalid) {
+        this.userSwitchingService.updateLoginStatus(3)
+        return false;
+      }
+    } catch (error) {
+      console.log('error occured', error)
+      return false
+    }
+    return true
   }
 
-  changePassword(){
-    this.router.navigate(['/resetpassword']);
+  updateLoginStatus(option: number) {
+
+    if (option == 0) {
+      this.submitted      = true;
+      this.statusMessage  = ""
+      this.spinnerLoading = true;
+      return
+    }
+
+    if (option == 1) {
+      this.statusMessage   = 'Error logging in. Please check your name and pasword.'
+      this.spinnerLoading = false;
+      this.initForm();
+      return
+    }
+
+    if (option == 2) {
+      this.statusMessage   = 'logging in...'
+      this.spinnerLoading = false;
+      this.initForm();
+      return
+    }
+
+    if (option == 3) {
+      this.statusMessage = 'User name and password required.'
+      this.spinnerLoading = false;
+      this.initForm();
+      return
+    }
+
+    if (option == 5) {
+      this.loggedInUser.message == 'failed'
+      this.loggedInUser.errorMessage = 'Error logging in.'
+      this.statusMessage = "Service is not accessible, check connection."
+      this.initForm();
+      return
+    }
+
+  }
+
+  async  onSubmit() {
+    this.userSwitchingService.updateLoginStatus(0)
+    this.updateLoginStatus(0)
+    if (!this.validateForm(this.loginForm)) { return }
+
+    this.userSwitchingService.login(this.f.username.value, this.f.password.value)
+      .pipe()
+      .subscribe(
+        user =>
+        {
+          if (user) {
+            if (user.message === 'failed') {
+              this.userSwitchingService.updateLoginStatus(1)
+              this.updateLoginStatus(1)
+              this.authenticationService.updateUser(null);
+              return
+            }
+
+            if (this.platformService.isApp()) {  if (this.loginApp(user)) { return } }
+
+            if (user.message.toLowerCase() === 'success') {
+              this.userSwitchingService.processLogin(user)
+              this.userSwitchingService.updateLoginStatus(2)
+              this.updateLoginStatus(2)
+              return
+            }
+          }
+        },
+        error => {
+          this.userSwitchingService.updateLoginStatus(0)
+          this.updateLoginStatus(0)
+          const message = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
+          this.notifyEvent(message, 'error')
+          return
+        }
+    );
   }
 
   loginApp(user) {
     if (this.platformService.isApp()) {
-      this.loggedInUser = user.user
+      this.loggedInUser   = user.user
       this.spinnerLoading = false
-      const currentUser = user.user
-      const sheet = user.sheet
+      const currentUser   = user.user
+      const sheet         = user.sheet
       this.userSwitchingService.processLogin(currentUser)
       if (sheet) {
         if (sheet.message) {
@@ -213,54 +310,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  async  onSubmit() {
-    this.submitted = true;
-    this.statusMessage = ""
-    this.spinnerLoading = true;
-    if (this.loginForm.invalid) {
-      this.statusMessage = 'User name and password required.'
-      return;
-    }
-    (this.userSwitchingService.login(this.f.username.value, this.f.password.value))
-      .pipe()
-      .subscribe(
-        user =>
-        {
-          this.loading = false;
-          this.loggedInUser = user
-          if (this.loginApp(user)) {
-            return
-          }
-
-          if (this.loggedInUser && this.loggedInUser.message === 'success') {
-            this.userSwitchingService.processLogin(user)
-            this.spinnerLoading = false;
-            this.initForm()
-            return
-          }
-
-          if (this.loggedInUser && (this.loggedInUser.message  == 'failed')) {
-            this.loggedInUser.message == 'failed'
-            this.loggedInUser.errorMessage = 'Error logging in. '
-            this.statusMessage = "Service is not accessible, check connection."
-          }
-
-        },
-        error => {
-          console.log('login error occured', error)
-          this.spinnerLoading = false;
-          this.statusMessage = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
-          this.loading = false;
-          return
-        }
-    );
-  }
-
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,
       verticalPosition: 'top'
     });
   }
+
 }
 

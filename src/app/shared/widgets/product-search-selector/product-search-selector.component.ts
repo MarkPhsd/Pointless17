@@ -20,40 +20,24 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   @Input()  searchForm:       FormGroup;
   @Input()  itemType:         number; //removed default 1
+  @Input()  metrcCategoryName : string;
   @Input()  searchField:      FormControl;
   @Input()  productName:      string;
+  @Input() doNotPassName     :string;
   searchPhrase:               Subject<any> = new Subject();
-  productSearchModel =  {} as ProductSearchModel;
+  searchModel =  {} as ProductSearchModel;
   item:                       IItemBasic;
   site:                       ISite;
 
   results$ = this.searchPhrase.pipe(
     debounceTime(150),
     distinctUntilChanged(),
-    switchMap(searchPhrase =>
-        this.menuService.getItemsNameBySearch(this.site,  searchPhrase, this.itemType)
+    switchMap(searchPhrase => {
+      this.searchModel.name = searchPhrase;
+      return this.menuService.getItemBasicBySearch(this.site,  this.searchModel)
+     }
     )
   )
-
-  constructor(
-    private router: Router,
-    public route: ActivatedRoute,
-    private menuService: MenuService,
-    private fb: FormBuilder,
-    private siteService: SitesService,
-    )
-  {
-    this.getItemType()
-    this.site = this.siteService.getAssignedSite();
-  }
-
-  ngOnInit() {
-    if (this.searchForm){
-      this.searchForm = this.fb.group({
-        productName: this.productName,
-      })
-    }
-  }
 
   ngAfterViewInit() {
     fromEvent(this.input.nativeElement,'keyup')
@@ -66,32 +50,82 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
             this.refreshSearch(search);
           })
       )
-      .subscribe();
+    .subscribe();
   }
 
-  refreshSearch(search: any){
-    if (search) {
-      this.searchPhrase.next( search )
+  constructor(
+    private router: Router,
+    public route: ActivatedRoute,
+    private menuService: MenuService,
+    private fb: FormBuilder,
+    private siteService: SitesService,
+    )
+  {
+    if (this.searchModel &&  this.metrcCategoryName) {
+      this.searchModel.metrcCategory = this.metrcCategoryName
     }
+    this.site = this.siteService.getAssignedSite();
+  }
+
+  ngOnInit() {
+
+    if (this.doNotPassName) { return }
+    if (this.searchForm){
+      this.searchForm = this.fb.group({
+        productName: this.productName,
+      })
+    }
+  }
+
+  // refreshSearch(search: any){
+  //   if (search) {
+  //     this.searchPhrase.next( search )
+  //   }
+  // }
+
+  // searchItems(name: string) {
+  //   this.searchPhrase.next(name);
+  // }
+
+  // selectItem(item: IItemBasic){
+  //   this.itemSelect.emit(item)
+  // }
+
+  // displayFn(item) {
+  //   this.selectItem(item)
+  //   this.item = item
+  //   return item.name;
+  // }
+
+  // getItemType(): number {
+  //   if ( this.itemType ) {this.itemType = 1}
+  //   return this.itemType
+  // }
+
+  refreshSearch(search: any){
+    if (search) {this.searchPhrase.next( search )}
   }
 
   searchItems(name: string) {
     this.searchPhrase.next(name);
   }
 
-  selectItem(item: IItemBasic){
+  selectItem(item: IItemBasic) {
     this.itemSelect.emit(item)
   }
 
-  displayFn(item) {
-    this.selectItem(item)
-    this.item = item
-    return item.name;
-  }
-
-  getItemType(): number {
-    if ( this.itemType) {this.itemType = 1}
-    return this.itemType
+  onChange(item: any) {
+    const menuItem = item.option.value as IItemBasic;
+    const menuItemName =`${menuItem.name}`
+    if (item) {
+      this.selectItem(menuItem)
+      this.item = item
+      if (!item || !item.name){
+        return ''
+      }  else {
+        return menuItemName
+      }
+    }
   }
 
 }

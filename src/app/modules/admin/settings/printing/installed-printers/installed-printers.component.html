@@ -1,10 +1,10 @@
-<!-- <div class="header">
+<div class="header">
   <h2>Print Settings </h2>
   <p>These setting change based on the device type you are using. </p>
   <p><mat-icon>web</mat-icon> Web:     Printing options for the web are limited to dialog windows, there is no automated printing.</p>
   <p><mat-icon>android</mat-icon> Android: Printers require an associated bluetooth printer.</p>
   <p><mat-icon>windows</mat-icon> Windows: When installed as an application on Windows, windows installed printers are listed.</p>
-</div> -->
+</div>
 
 <mat-divider></mat-divider>
 <div class="grid-printing">
@@ -58,7 +58,7 @@
 
     <div *ngIf="isElectronApp">
 
-      <div *ngIf="electronPrinterList">
+      <!-- <div *ngIf="electronPrinterList">
         <button mat-raised-button
                (click)='showElectronPrinterSelection()'
                *ngIf="!showElectronPrinters"
@@ -66,14 +66,14 @@
         </button>
       </div>
 
-      <div *ngIf="showElectronPrinters">
+      <div *ngIf="showElectronPrinters"> -->
         <app-list-printers-electron
           [printerName]      ="electronReceiptPrinter"
           [printerList]      ="electronPrinterList"
           (outputPrinterName)="setElectronPrinterName($event)" >
           Receipt Printer
         </app-list-printers-electron>
-      </div>
+      <!-- </div> -->
 
       <div *ngIf="electronReceiptPrinter" class="defaultElectronPrinter">Default Printer: {{electronReceiptPrinter}}</div>
 

@@ -135,64 +135,53 @@ export class METRCProductsAddComponent implements OnInit {
 
   async initItemFormData(data: METRCPackage) {
     if (data) {
-      this.package = data
+        this.package = data
 
-      this.intakeConversion = await this.getUnitConversionToGrams(this.package.unitOfMeasureName)
-      //convert the package quantity to the grams quantity
-      this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+        if (this.package.unitOfMeasureName) {
+          this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName)
+          //convert the package quantity to the grams quantity
+          this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+          this.baseUnitsRemaining = this.intakeconversionQuantity
+          this.initialQuantity    = this.intakeconversionQuantity
+        }
 
-      this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
-      this.facility = {} as                   IItemFacilitiyBasic
-      this.facility.displayName =             this.package.itemFromFacilityName
-      this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber
+        this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
+        this.facility = {} as                   IItemFacilitiyBasic
+        this.facility.displayName =             this.package.itemFromFacilityName
+        this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber
 
-      this.packageForm.patchValue(data)
-      this.baseUnitsRemaining = this.intakeconversionQuantity
-      this.initialQuantity = this.intakeconversionQuantity
+        this.packageForm.patchValue(data)
+        this.setProductNameEmpty(this.packageForm);
 
-      let active = true
-      if (this.package.active == 0)  {
-        active = false;
-      }
+        let active = true
+        if (this.package.active == 0)  {   active = false;   }
 
-      this.packageForm = this.fb.group({
+        const facility = `${data.itemFromFacilityLicenseNumber}-${data.itemFromFacilityName}`
 
-        productCategoryName:              [data.item.productCategoryName, Validators.required],
-        productCategoryType:              [data.item.productCategoryType, Validators.required],
-        quantityType:                     [data.item.quantityType, Validators.required],
-        ProductName:                      [data.item.name, Validators.required],
-        packageType:                      [data.packageType, Validators.required],
-        expiration:                       ['', Validators.required],
-
-        productionBatchNumber:            ['', Validators.required],
-        batchDate:                        ['', Validators.required],
-        facilityLicenseNumber            :[  ],
-        thc:                              [''],
-        thc2:                             [''],
-        thca:                             [''],
-        thca2:                            [''],
-        cbn:                              [''],
-        cbn2:                             [''],
-        cbd:                              [''],
-        cbd2:                             [''],
-        cbda2:                            [''],
-        cbda:                             [''],
-
-        conversionName:                   ['', Validators.required],
-        inputQuantity:                    ['', Validators.required],
-        inventoryLocationID:              ['', Validators.required],
-        cost:                             [0],
-        price:                            [0],
-        jointWeight:                      [0],
-
-        intakeUOM:                        [data.unitOfMeasureName],
-        intakeConversionValue:            [this.intakeConversion.value],
-
-        hasImported   : [this.package.inventoryImported],
-        active        : [active],
-
+        this.packageForm.patchValue({
+          productCategoryName:              [data.item.productCategoryName],
+          productCategoryType:              [data.item.productCategoryType],
+          quantityType:                     [data.item.quantityType],
+          // productName:                      [data.item.name],
+          productname                    :  [''],
+          inputQuantity:                    [0],
+          inventoryLocationID:              [0],
+          cost:                             [0],
+          price:                            [0],
+          jointWeight:                      [1],
+          facilityLicenseNumber:            [facility],
+          intakeConversionValue:            [this.intakeConversion.value],
+          active                      :     [active],
       })
+
     }
+  }
+
+  setProductNameEmpty(inputForm: FormGroup) {
+    inputForm.patchValue({
+      productName: [''],
+      productID:  ['']
+    })
   }
 
   updateItem(event) {
@@ -213,7 +202,6 @@ export class METRCProductsAddComponent implements OnInit {
       this.package.inventoryImported = this.hasImportedControl.value
     }
 
-    console.log('this.activeControl.value', this.activeControl.value)
     if (this.activeControl) {
       if (this.activeControl.value) {
         this.package.active = 1
@@ -237,20 +225,16 @@ export class METRCProductsAddComponent implements OnInit {
     const package$ =this.metrcPackagesService.deletePackage(site,this.id)
     package$.subscribe(data => {
       this.notifyEvent('Item deleted', 'Success')
-      this.onCancel(null)
+      this.onCancel('true')
     })
   }
 
   onCancel(event) {
-    this.dialogRef.close()
+    this.dialogRef.close(event)
   }
 
   initFields() {
     this.packageForm = this.inventoryAssignmentService.initFields(this.packageForm)
-  }
-
-  async getUnitConversionToGrams(unitName: string): Promise<IUnitConversion> {
-    return  await this.conversionService.getConversionItemByName(unitName)
   }
 
   getStrain(event) {
@@ -258,7 +242,11 @@ export class METRCProductsAddComponent implements OnInit {
     if (itemStrain) {
       if (itemStrain.id) {
         this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data => {
-          this.menuItem = data
+            if (data) {
+              this.menuItem = data
+            } else {
+              this.menuItem = null;
+            }
           }
         )
       }
@@ -268,7 +256,7 @@ export class METRCProductsAddComponent implements OnInit {
   getVendor(event) {
     const facility = event
     if (facility) {
-      this.facilityLicenseNumber = `${facility.displayName} - ${facility.metrcLicense}`
+      this.facilityLicenseNumber = `${facility.metrcLicense}-${facility.displayName}`
       this.facility = event;
     }
   }
@@ -292,7 +280,9 @@ export class METRCProductsAddComponent implements OnInit {
 
   async isValidEntry(): Promise<boolean> {
     //check out if the amouunt being input is greater than the allowed amouunt.
-    if (this.inputQuantity > this.unitsConverted.unitOutPutQuantity ) {
+    // console.log('this.unitsConverted.unitOutPutQuantity', this.unitsConverted.unitOutPutQuantity);
+    // console.log('this.inputquantity', this.inputQuantity);
+    if (this.inputQuantity >  this.baseUnitsRemaining  ) {
       this.notifyEvent('Use a smaller quantity.', 'Alert')
       return false
     }
@@ -332,10 +322,11 @@ export class METRCProductsAddComponent implements OnInit {
     inventoryAssignment.metrcPackageID = this.package.id
 
     let inventoryLocation = this.getLocationAssignment(this.inventoryLocationID);
-    inventoryAssignment.locationID = this.inventoryLocation.id
-    inventoryAssignment.location = this.inventoryLocation.name
-    inventoryAssignment.intakeUOM = this.intakeConversion.name
-    inventoryAssignment.intakeConversionValue = this.intakeConversion.value
+    inventoryAssignment.locationID                 = this.inventoryLocation.id
+    inventoryAssignment.location                   = this.inventoryLocation.name
+    inventoryAssignment.intakeUOM                  = this.intakeConversion.name
+    inventoryAssignment.intakeConversionValue      = this.intakeConversion.value
+
 
     if (!this.inventoryLocation.activeLocation) {
       inventoryAssignment.notAvalibleForSale  = true
@@ -370,7 +361,7 @@ export class METRCProductsAddComponent implements OnInit {
 
     try {
       inventoryAssignment.packageType =         this.getStringValue('packageType')
-      inventoryAssignment.productCategoryName = this.getStringValue('productCategoryName')
+      inventoryAssignment.productCategoryName = this.package.productCategoryName;
       inventoryAssignment.thc =                 this.getValue('thc')
       inventoryAssignment.thc2 =                this.getValue('thc2')
       inventoryAssignment.thca2 =               this.getValue('thca2')
@@ -381,6 +372,8 @@ export class METRCProductsAddComponent implements OnInit {
       inventoryAssignment.cbd2 =                this.getValue('cbd2')
       inventoryAssignment.cbda =                this.getValue('cbda')
       inventoryAssignment.cbda2 =               this.getValue('cbda2')
+      inventoryAssignment.thcContent =          this.getValue('thcContent')
+      inventoryAssignment.productionBatchNumber=this.getStringValue('productionBatchNumber')
       inventoryAssignment.batchDate =           this.getStringValue('batchDate')
       inventoryAssignment.expiration =          this.getStringValue('expiration')
     } catch (error) {
@@ -496,7 +489,8 @@ export class METRCProductsAddComponent implements OnInit {
   completePackageImport() {
     const site=  this.siteService.getAssignedSite();
     // okay so we have to add the list of inventory assignments to a list.
-    const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,  this.inventoryAssigments)
+    const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,
+                                                                  this.inventoryAssigments)
     inv$.subscribe( data => {
       this.onCancel(null);
       this.notifyEvent('Inventory Packages Imported', 'Success');

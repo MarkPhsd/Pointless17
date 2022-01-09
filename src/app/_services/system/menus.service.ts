@@ -234,9 +234,7 @@ export class MenusService {
     return 'admin,manager'
   }
 
-  getMenu(site: ISite, menuName: string, user: IUser): Observable<AccordionMenu[]> {
-
-      if (!user) {return}
+  getMenu(site: ISite, menuName: string): Observable<AccordionMenu[]> {
 
       const controller = "/MenuGroups/"
 
@@ -250,8 +248,8 @@ export class MenusService {
 
     }
 
-  getMainMenu(site: ISite, user: IUser): Observable<AccordionMenu[]> {
-     return this.getMenu(site, 'main', user)
+  getMainMenu(site: ISite): Observable<AccordionMenu[]> {
+     return this.getMenu(site, 'main')
   }
 
   //PutSubMenuGrouplist

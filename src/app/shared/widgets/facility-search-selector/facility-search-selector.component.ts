@@ -26,9 +26,23 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
     debounceTime(250),
     distinctUntilChanged(),
     switchMap(searchPhrase =>
-        this.metrcFacilitiesService.getItemsNameBySearch(this.site,  searchPhrase)
+      this.metrcFacilitiesService.getItemsNameBySearch(this.site,  searchPhrase)
     )
   )
+
+  ngAfterViewInit() {
+    fromEvent(this.input.nativeElement,'keyup')
+            .pipe(
+                filter(Boolean),
+                debounceTime(500),
+                distinctUntilChanged(),
+                tap((event:KeyboardEvent) => {
+                  const search  = this.input.nativeElement.value
+                  this.refreshSearch(search);
+                })
+            )
+    .subscribe();
+  }
 
   constructor(
     private router: Router,
@@ -58,20 +72,6 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
     console.log('')
   }
 
-  ngAfterViewInit() {
-    fromEvent(this.input.nativeElement,'keyup')
-            .pipe(
-                filter(Boolean),
-                debounceTime(500),
-                distinctUntilChanged(),
-                tap((event:KeyboardEvent) => {
-                  const search  = this.input.nativeElement.value
-                  this.refreshSearch(search);
-                })
-            )
-          .subscribe();
-  }
-
   refreshSearch(search: any){
     if (search) {
       this.searchPhrase.next( search )
@@ -82,25 +82,23 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
     this.searchPhrase.next(name);
   }
 
-  selectItem(item: IItemFacilitiyBasic){
+  selectItem(item: IItemFacilitiyBasic) {
+    console.log('item', item)
     this.itemSelect.emit(item)
   }
 
-  displayFn(item: IItemFacilitiyBasic) {
+  onChange(item: any) {
+    console.log('On Change', item)
+    const facility = item.option.value as IItemFacilitiyBasic;
+    const facilityDisplay =`${facility.displayName} - ${facility.metrcLicense}`
     if (item) {
-      this.selectItem(item)
+      this.selectItem(facility)
       this.item = item
-
       if (!item || !item.displayName){
-
         return ''
-
       }  else {
-
-        return `${this.item.displayName} ${this.item.metrcLicense}`
-
+        return facilityDisplay
       }
-
     }
   }
 

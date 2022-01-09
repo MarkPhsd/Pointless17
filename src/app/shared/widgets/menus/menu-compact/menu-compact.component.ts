@@ -36,7 +36,7 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
               this.menus = [] as AccordionMenu[];
               return EMPTY
             }
-            return  this.menusService.getMainMenu(this.site, user)
+            return  this.menusService.getMainMenu(this.site)
           }
         )
       ).subscribe( data => {

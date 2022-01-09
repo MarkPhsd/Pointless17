@@ -17,5 +17,6 @@ export interface IUser {
     metrcKey: string;
     loginAttempts: number;
     message: string;
-    errorMessage: string
+    errorMessage: string;
+
 }

@@ -291,7 +291,7 @@ export class MenuService {
 
   };
 
-  getBasicLists(site: ISite, type: string):  Observable<IMenuItem[]>  {
+  getGetCategoriesList(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
 
@@ -314,15 +314,15 @@ export class MenuService {
   }
 
   getListOfCategories(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getBasicLists(site, `category`);
+    return this.getGetCategoriesList(site, `category`);
   }
 
   getListOfDepartments(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getBasicLists(site, `department`);
+    return this.getGetCategoriesList(site, `department`);
   }
 
   getListOfSubCategories(site: ISite):  Observable<IMenuItem[]>  {
-    return this.getBasicLists(site, `subcategory`);
+    return this.getGetCategoriesList(site, `subcategory`);
   }
 
   getCategoryAsyncList(site: ISite): Observable<IProductCategory[]> {
@@ -424,6 +424,20 @@ export class MenuService {
 
   }
 
+  getItemBasicBySearch(site: ISite, productSearchModel: ProductSearchModel): Observable<IItemBasic[]> {
+
+    const controller =  "/MenuItems/"
+
+    const endPoint = "GetItemBasicBySearch"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.post<IItemBasic[]>(url, productSearchModel)
+
+  }
+
   getItemsNameBySearch(site: ISite, name: string, type: number): Observable<IItemBasic[]> {
 
     const controller =  "/MenuItems/"
@@ -441,7 +455,6 @@ export class MenuService {
     // return this.httpCache.get<IItemBasic[]>(url)
 
   }
-
 
   getProductListSearch(site: ISite, search:string): Observable<IMenuItem[]> {
 

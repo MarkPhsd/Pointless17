@@ -1,4 +1,4 @@
-import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
+import { Component,  EventEmitter,  Inject,  Input,  OnInit, Optional, Output, } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,6 +17,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 
+
 @Component({
   selector: 'app-inventory-history-list',
   templateUrl: './inventory-history-list.component.html',
@@ -27,7 +28,7 @@ export class InventoryHistoryListComponent implements OnInit {
   @Input() inventoryAssignments: IInventoryAssignment[];
   @Input() id                  : number;
   // @Input() inventoryAssignment : IInventoryAssignment;
-
+  @Output() outputRefresh = new EventEmitter();
   toggleLabelEvents: string;
 
   inventoryAssignment: IInventoryAssignment;
@@ -44,9 +45,10 @@ export class InventoryHistoryListComponent implements OnInit {
   labelList$      : Observable<ISetting[]>;
   labelID         : number;
 
-  printingEnabled = false;
-  electronEnabled = false;
+  printingEnabled  = false;
+  electronEnabled  = false;
   lastLabelPrinter = ""
+  electronPrinterList : any;
 
   constructor(
        public route              : ActivatedRoute,
@@ -65,7 +67,7 @@ export class InventoryHistoryListComponent implements OnInit {
        )
   {
     // this.toggleLabelEvents = false;
-
+    this.listPrinters();
   }
 
   onToggleLabelEvents(option) {
@@ -75,6 +77,10 @@ export class InventoryHistoryListComponent implements OnInit {
 
     // return
 
+  }
+
+  listPrinters(): any {
+    this.electronPrinterList = this.printingService.listPrinters();
   }
 
   getLastPrinterName(): string {
@@ -202,9 +208,19 @@ export class InventoryHistoryListComponent implements OnInit {
   }
 
   openMoveInventoryDialog(id: any) {
-    if (this.inventoryAssignment) {
-      this.inventoryEditButon.openMoveInventoryDialog(this.inventoryAssignment.id)
-    }
+    const dialogRef = this.dialog.open(MoveInventoryLocationComponent,
+      { width:      '400px',
+        minWidth:   '400px',
+        height:     '650px',
+        minHeight:  '650px',
+        data : {id: id}
+      },
+    )
+
+    dialogRef.afterClosed().subscribe(result => {
+        this.outputRefresh.emit('true')
+    });
+
   }
 
   openProductDialog(id: any) {

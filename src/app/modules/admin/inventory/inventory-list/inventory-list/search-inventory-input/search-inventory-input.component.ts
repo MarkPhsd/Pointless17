@@ -5,11 +5,11 @@ import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs
 import { IProductSearchResults } from 'src/app/_services';
 
 @Component({
-  selector: 'search-debounce-input',
-  templateUrl: './search-debounce-input.component.html',
-  styleUrls: ['./search-debounce-input.component.scss']
+  selector: 'search-inventory-input',
+  templateUrl: './search-inventory-input.component.html',
+  styleUrls: ['./search-inventory-input.component.scss']
 })
-export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
+export class SearchInventoryInputComponent implements OnInit,AfterViewInit {
 
   itemNameInput: string;
   @Output() outPutMethod   = new EventEmitter();
@@ -20,7 +20,7 @@ export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
   @ViewChild('input', {static: true}) input: ElementRef;
 
   searchPhrase:      Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get(this.itemNameControl) as FormControl;}
+  get itemName() { return this.searchForm.get("itemName") as FormControl;}
 
   private readonly onDestroy = new Subject<void>();
   // //search with debounce
@@ -29,8 +29,7 @@ export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
     debounceTime(250),
       distinctUntilChanged(),
       switchMap(searchPhrase =>
-      {  // this.refreshSearch()/
-        console.log('searchPhrase Debounced', searchPhrase)
+      {
         this.outPutMethod.emit(searchPhrase)
         return null
       }
@@ -66,7 +65,6 @@ export class SearchDebounceInputComponent implements OnInit, AfterViewInit {
 
   clearInput() {
     const item =  this.itemName
-    if (!item) {return}
     item.setValue('')
   }
 }

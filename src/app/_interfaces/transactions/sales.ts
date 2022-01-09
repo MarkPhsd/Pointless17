@@ -10,7 +10,6 @@ export interface IOrderItem {
     unitPrice:number;
 }
 
-
 export interface ISalesDates {
     amountPaid: number|null;
 }

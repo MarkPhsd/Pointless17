@@ -1,116 +1,114 @@
-<div fxLayout="column" fx-flex fx-layout-align="space-between" class="form-controls">
-  <div  [formGroup]="searchForm" id="searchForm" (ngSubmit)="refreshSearch()">
-      <div class="grid-container">
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label >Search </mat-label>
-            <input
-                 #input
-                  matInput
-                  type="text"
-                  id="searchProducts"
-                  formControlName="searchProducts"
-                  class="form-control"
-                  [matAutocomplete]="auto">
+<div fxLayout="column"
+     fx-flex
+     fx-layout-align="space-between"
+     class="grid-container"
+     *ngIf="searchForm" >
 
-                  <mat-autocomplete panelWidth="auto"
-                                    #auto="matAutocomplete"
-                                    [displayWith]="displayFn.bind(this)">
-            </mat-autocomplete>
-          </mat-form-field>
+  <div [formGroup]="searchForm"
+        (ngSubmit)="refreshSearch()"
+        class="grid-container-selectors">
 
+    <div class="grid-item margin-2">
+      <search-debounce-input
+                [itemNameControl] = "'itemName'"
+                [searchForm]      = "searchForm"
+                (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
         </div>
+      </search-debounce-input>
+    </div>
 
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label>Sites</mat-label>
-             <mat-select
-                        type="text"
-                        (selectionChange)="getAssignedSiteSelection($event)"
-                        formControlNamename="selectedSiteID"
-                      >
-              <div *ngIf="(sites$ | async) as list">
-                <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-        </div>
+    <div class="grid-item">
+      <mat-form-field appearance="outline">
+        <mat-label>Sites</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="getAssignedSiteSelection($event)"
+                    formControlNamename="selectedSiteID"
+                  >
+          <div *ngIf="(sites$ | async) as list">
+            <mat-option *ngFor="let item of list" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-        <div class="grid-item"  *ngIf="(metrcCategory$ | async) as list">
-          <mat-form-field appearance="outline">
-            <mat-label>METRC Categories</mat-label>
-             <mat-select
-                        type="text"
-                        (selectionChange)="getMetrcCategory($event)"
-                        formControlNamename="metrcCategory"
-                      >
-                <mat-option [value]=0>All</mat-option>
-                <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
+    <div class="grid-item"
+          *ngIf="(metrcCategory$ | async) as list">
+      <mat-form-field appearance="outline">
+        <mat-label>METRC Categories</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="getMetrcCategory($event)"
+                    formControlNamename="metrcCategory"
+                  >
+            <mat-option [value]=0>All</mat-option>
+            <mat-option *ngFor="let item of list"
+                        [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label>Locations</mat-label>
-             <mat-select
-                        type="text"
-                        (selectionChange)="getLocation($event)"
-                        formControlNamename="inventoryLocations"
-                      >
-              <div *ngIf="(locations$ | async) as list">
-                <mat-option [value]=0>All</mat-option>
-                <mat-option *ngFor="let item of list" [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-        </div>
+    <div class="grid-item">
+      <mat-form-field appearance="outline">
+        <mat-label>Locations</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="getLocation($event)"
+                    formControlNamename="inventoryLocations"
+                  >
+          <div *ngIf="(locations$ | async) as list">
+            <mat-option [value]=0>All</mat-option>
+            <mat-option *ngFor="let item of list" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-        <div class="grid-item">
-          <mat-form-field appearance="outline">
-            <mat-label>Status</mat-label>
-             <mat-select
-                        type="text"
-                        (selectionChange)="getInventoryStatus($event)"
-                        formControlNamename="inventoryStatusID"
-                      >
-              <div *ngIf="inventoryStatusList">
+    <div class="grid-item">
+      <mat-form-field appearance="outline">
+        <mat-label>Status</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="getInventoryStatus($event)"
+                    formControlNamename="inventoryStatusID"
+                  >
+          <div *ngIf="inventoryStatusList">
 
-                <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
-                  {{ item.name }}
-                </mat-option>
+            <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
+              {{ item.name }}
+            </mat-option>
 
-              </div>
-            </mat-select>
-          </mat-form-field>
-        </div>
+          </div>
+        </mat-select>
+      </mat-form-field>
+    </div>
 
-        <div>
-            <button mat-button
-              (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
-            </button>
-        </div>
+    <div>
+        <button mat-button
+          (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
+        </button>
+    </div>
 
-        <div>
-            <button mat-button
-                  (click)="listAll()"><mat-icon>list</mat-icon>List All
-          </button>
-        </div>
+    <div>
+        <button mat-button
+              (click)="listAll()"><mat-icon>list</mat-icon>List All
+      </button>
+    </div>
 
-        <div>
-          <button class="info-buttons"
-                  mat-button
-                  (click)="addInventoryItem()"><mat-icon>add</mat-icon> Add
-          </button>
-        </div>
-
-
+    <div>
+      <button class="info-buttons"
+              mat-button
+              (click)="addInventoryItem()"><mat-icon>add</mat-icon> Add
+      </button>
     </div>
   </div>
 </div>
@@ -143,6 +141,7 @@
       <app-inventory-history-list class="history-panel"
                                   [setInventoryAssignment]="inventoryAssignment"
                                   [inventoryAssignments]="inventoryAssignmentHistory"
+                                  (outputRefresh)="refreshSearchOut($event)"
                                   [id]="id">
       </app-inventory-history-list>
     </div>

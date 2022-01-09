@@ -13,7 +13,9 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
-      // console.log('interceptor user')
+      // console.log('update user in basic auth', data)
+      // this.user  = JSON.parse(localStorage.getItem('user')) as IUser;
+
     })
   }
 
@@ -76,8 +78,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
                 setHeaders: {
                     Authorization: `Basic ${authdata}`
                     }
-                });
-
+              });
               this.authenticationService.externalAPI = true
               return next.handle(request);
               // console.log("mectrurl authdata", authdata)

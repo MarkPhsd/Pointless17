@@ -16,7 +16,6 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
-
 import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
@@ -26,6 +25,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 export interface InventoryStatusList {
   name: string;
@@ -51,16 +51,7 @@ export class InventoryListComponent implements OnInit {
     search:               string;
     searchPhrase:         Subject<any> = new Subject();
     public searchForm: FormGroup;
-    // inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
-    // _iInventoryAssignment$ = this.searchPhrase.pipe(
-    //   debounceTime(250),
-    //   distinctUntilChanged(),
-    //   switchMap(searchPhrase =>
-    //       this.refreshSearch(searchPhrase)
-    //   )
-    // )
-
-    //needed for search component
+    inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
 
     get itemName() { return this.searchForm.get("itemName") as FormControl;}
     get platForm()         {  return Capacitor.getPlatform(); }
@@ -168,15 +159,14 @@ export class InventoryListComponent implements OnInit {
               )
   {
     this.initAgGrid();
+    this.initForm()
   }
 
   async ngOnInit() {
     this.initClasses();
-    this.sites$         =          this.siteService.getSites();
-    this.metrcCategory$ =  this.metrcCategoriesService.getCategories();
+    this.sites$         = this.siteService.getSites();
+    this.metrcCategory$ = this.metrcCategoriesService.getCategories();
     this.locations$     = this.locationService.getLocations();
-
-    this.initForm()
 
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
@@ -216,11 +206,10 @@ export class InventoryListComponent implements OnInit {
     })
   }
 
-  refreshSearchPhrase(event) {
-    this.itemName.setValue(event)
+  refreshSearchOut(event) {
+
     this.refreshSearch();
   }
-
   initAgGrid() {
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
@@ -283,9 +272,7 @@ export class InventoryListComponent implements OnInit {
       },
     ]
     // this.rowSelection = 'single';
-
     this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
-
   }
 
   listAll(){
@@ -299,8 +286,6 @@ export class InventoryListComponent implements OnInit {
     this.refreshSearch()
   }
 
-
-
   initSearchModel(): InventoryFilter {
     let searchModel             = {} as InventoryFilter;
     searchModel.productName     = this.search
@@ -310,11 +295,19 @@ export class InventoryListComponent implements OnInit {
     //if location
     if (this.inventoryLocation) {searchModel.location = this.inventoryLocation.name }
     if (this.metrcCategory)     {searchModel.productCategoryName = this.metrcCategory.name}
-
     searchModel.pageSize    = this.pageSize
     searchModel.pageNumber = this.pageNumber
     this.id = 0
     return searchModel
+  }
+
+  refreshSearchPhrase(event) {
+    console.log(event)
+    if (this.itemName) {
+      this.itemName.setValue(event)
+    }
+    this.search = event;
+    this.refreshSearch();
   }
 
   refreshCategoryChange(event) {
@@ -349,7 +342,6 @@ export class InventoryListComponent implements OnInit {
     this.onGridReady(this.params)
   }
 
-  //this d
   //this doesn't change the page, but updates the properties for getting data from the server.
   setCurrentPage(startRow: number, endRow: number): number {
     const tempStartRow = this.startRow
@@ -360,32 +352,6 @@ export class InventoryListComponent implements OnInit {
     return this.currentPage
   }
 
-  //ag-grid standard method.
-  getDataSource(params) {
-    return {
-    getRows: (params: IGetRowsParams) => {
-      const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            const resp =  data.paging
-            this.isfirstpage   = resp.isFirstPage
-            this.islastpage    = resp.isFirstPage
-            this.currentPage   = resp.currentPage
-            this.numberOfPages = resp.pageCount
-            this.recordCount   = resp.recordCount
-            if (this.numberOfPages !=0 && this.numberOfPages) {
-              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-            }
-            params.successCallback(data.results)
-            this.rowData = data.results
-          }, err => {
-            console.log(err)
-          }
-      );
-      }
-    };
-  }
-
   addInventoryItem() {
     try {
       this.inventoryEditButon.addInventoryDialog(0)
@@ -393,8 +359,6 @@ export class InventoryListComponent implements OnInit {
       console.log(error)
     }
   }
-
-
 
   getAssignedSiteSelection(event) {
     if (event.value) {
@@ -453,7 +417,6 @@ export class InventoryListComponent implements OnInit {
     this.locationService.getLocation(id).subscribe( data => {
       this.inventoryLocation = data
       console.log(data)
-      // this.searchItems()
     })
   }
 
@@ -472,7 +435,6 @@ export class InventoryListComponent implements OnInit {
         if ( data.name === name ) {
           this.inventoryStatus = data;
           this.inventoryStatusID  = this.inventoryStatus.id
-          // this.searchItems()
           return
         }
       }

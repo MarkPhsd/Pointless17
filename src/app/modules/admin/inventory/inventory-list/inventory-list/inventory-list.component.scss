@@ -28,6 +28,15 @@
   margin: 5px;
 }
 
+.margin-2 {
+  margin-top: 4px;
+}
+
+.grid-container-selectors {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .grid-container {
   display: grid;
   gap: 5px;

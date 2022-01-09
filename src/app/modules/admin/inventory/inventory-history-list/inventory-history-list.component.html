@@ -53,10 +53,11 @@
 
         <div *ngIf="electronEnabled || printingEnabled">
           <app-list-printers-electron
-                                    [printerName]="printerName"
-                                    (outputPrinterName)="getPrinterName($event)"
+                  [printerName]      ="printerName"
+                  (outputPrinterName)="getPrinterName($event)"
+                  [printerList]      ="electronPrinterList">
+          ZPL Label Printer</app-list-printers-electron>
 
-                                    ></app-list-printers-electron>
           <div [formGroup]="printForm">
             <mat-form-field appearance="outline">
               <mat-label >Print Quantity</mat-label>

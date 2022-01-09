@@ -1,5 +1,3 @@
-
-
 .grid-list-container {
   display: grid;
   grid-template-columns: 1fr 200px;
@@ -7,6 +5,7 @@
   // overflow: hidden;
   height: 90vh;
 }
+
 .grid-container-selectors {
   display: flex;
   flex-wrap: wrap;

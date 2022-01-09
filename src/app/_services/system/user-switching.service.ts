@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { EMPTY, Observable, of, Subscription } from 'rxjs';
-import { map, switchMap, timeout,   } from 'rxjs/operators';
+import { BehaviorSubject, EMPTY, Observable, of, Subscription } from 'rxjs';
+import { map, switchMap,   } from 'rxjs/operators';
 import { IUser } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
@@ -33,14 +33,21 @@ export class UserSwitchingService {
 
   isElectron: boolean;
 
+  private _loginStatus         = new BehaviorSubject<number>(0);
+  public  loginStatus$         = this._loginStatus.asObservable();
+
+  updateLoginStatus(value: number) {
+    this._loginStatus.next(value)
+  }
+
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe(user => {
       this.user = user;
     })
   }
 
+  //enter or chain observables here.
   changeUser(user: IUser): Observable<any> {
-    //ente or chain observables here.
     return this.sheetMethodsService.promptBalanceSheet(user)
   }
 
@@ -61,8 +68,6 @@ export class UserSwitchingService {
     private platformService : PlatformService,
     private encryptionService: EncryptionService,
     private electronService: ElectronService
-
-
   ) {
     this.initSubscriptions();
     this.initializeAppUser();
@@ -71,11 +76,9 @@ export class UserSwitchingService {
   initializeAppUser() {
     const temp = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
     if (temp) { return }
-
     const appUser = {} as ElectronDimensions;
     const user = JSON.stringify(appUser)
     localStorage.setItem('appUser', user)
-
     this.isElectron =  this.electronService.isElectronApp
   }
 
@@ -91,22 +94,15 @@ export class UserSwitchingService {
   setAppUser() {
     //then we can set the user to the secret user
     const appUser = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;
-
     const iUser = {} as IUser;
     iUser.username  = this.encryptionService.decrypt(appUser.height, appUser.depth)
     iUser.password = this.encryptionService.decrypt(appUser.width, appUser.depth)
 
-    // this.authenticationService.updateUser(iUser)
   }
 
   saveAppUser(appUser: ElectronDimensions) {
-    // height: string;
-    // width : string;
-    // depth : string;
-
     appUser.height = this.encryptionService.encrypt(appUser.height, appUser.depth)
     appUser.width  = this.encryptionService.encrypt(appUser.width, appUser.depth)
-
     const user = JSON.stringify(appUser);
     localStorage.setItem('electronFeature', user);
   }
@@ -159,24 +155,26 @@ export class UserSwitchingService {
     let url = `${apiUrl}/users/authenticate`
 
     this.clearSubscriptions();
-
+    this.authenticationService.clearUserSettings();
     const userLogin = { username, password };
+    const timeOut    = 3 * 1000;
 
     return  this.http.post<any>(url, userLogin)
       .pipe(
-        // timeout(10000),
+        // timeout(timeOut),
         switchMap( user => {
         if (user) {
 
-            user.message = 'success'
-            const currentUser = this.setUserInfo(user, password)
-
-            if ( this.platformService.isApp()  ) { return this.changeUser(user) }
-            if (!this.platformService.isApp() )  { return of(user)              }
-
+          if (user.message.toLowerCase() === 'failed') {
+            const user = {message: 'failed'}
+            return of(user)
+          }
+          user.message = 'success'
+          const currentUser = this.setUserInfo(user, password)
+          if ( this.platformService.isApp()  )  { return this.changeUser(user) }
+          if ( !this.platformService.isApp() )  { return of(user)              }
         } else {
           const user = {message: 'failed'}
-          console.log('login failed')
           return of(user)
         }
       })
@@ -186,26 +184,27 @@ export class UserSwitchingService {
 
   setUserInfo(user: IUser, password) {
     const currentUser = {} as IUser;
-    if (!user.roles) { user.roles = 'user' }
-    if (!user.firstName) {
-      user.firstName= user.username
-    }
+    if (!user.roles)     { user.roles = 'user' }
+    if (!user.firstName) { user.firstName= user.username }
     localStorage.setItem("ami21", 'true')
-    currentUser.password  = password;
-    currentUser.roles     = user.roles
-    currentUser.roles     = currentUser.roles.toLowerCase()
-    currentUser.id        = user.id
-    currentUser.employeeID= user.employeeID
-    currentUser.username  = user.username;
-    currentUser.phone     = user.phone;
-    currentUser.email     = user.email;
-    currentUser.token     = user.token;
+    currentUser.password     = password;
+    currentUser.roles        = user.roles
+    currentUser.roles        = currentUser.roles.toLowerCase()
+    currentUser.id           = user.id
+    currentUser.employeeID   = user.employeeID
+    currentUser.username     = user.username;
+    currentUser.phone        = user.phone;
+    currentUser.email        = user.email;
+    currentUser.token        = user.token;
     currentUser.errorMessage = user.errorMessage
-    currentUser.message = user.message
+    currentUser.message      = user.message
     user.authdata = window.btoa(user.username + ':' + user.password);
+    currentUser.authdata     = user.authdata
 
-    localStorage.setItem('loggedUser', JSON.stringify(currentUser))
+    localStorage.setItem('user', JSON.stringify(currentUser))
+    console.log('user to be stringified', currentUser)
     this.authenticationService.updateUser(currentUser)
+    console.log('update authentication service user', currentUser)
     return currentUser
   }
 
@@ -235,6 +234,10 @@ export class UserSwitchingService {
       },
     )
   }
+
+
+
+
 
   processLogin(user: IUser) {
     //login the user based on the message response of the user.

@@ -71,9 +71,9 @@
 
               <div id="inventoryMoveInstructions">Move inventory to location:</div>
               <div *ngIf="package">Taking in: {{package.quantity}}  {{package.unitOfMeasureName}} </div>
-              <div *ngIf="baseUnitsRemaining "> Grams remaining {{ baseUnitsRemaining }}</div>
-              <div *ngIf="unitOfMeasure">  Convert to {{conversionName}} {{unitOfMeasure.value}} </div>
-              <div *ngIf="unitsConverted"> Usable amount {{unitsConverted.unitOutPutQuantity}}</div>
+              <div *ngIf="baseUnitsRemaining "> Remaining {{ baseUnitsRemaining }}</div>
+              <!-- <div *ngIf="unitOfMeasure">  Convert to {{conversionName}} {{unitOfMeasure.value}} </div> -->
+              <!-- <div *ngIf="unitsConverted"> Usable amount {{unitsConverted.unitOutPutQuantity}}</div> -->
               <div *ngIf="unitsRemaining"> Packages Remaining {{unitsRemaining}} </div>
               <div *ngIf="unitsConverted.ouputRemainder">Left over: {{unitsConverted.ouputRemainder}}</div>
 

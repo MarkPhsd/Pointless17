@@ -10,6 +10,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
+import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
 
 @Component({
   selector: 'app-item-type-editor',
@@ -44,6 +46,10 @@ export class ItemTypeEditorComponent   {
 	// this.receiptList$     =  this.settingService.getReceipts(site);
   //   this.labelList$       =  this.settingService.getLabels(site);
   //   this.prepReceiptList$ =  this.settingService.getPrepReceipts(site);
+
+  typeName         : string;
+  metrcCategories$ : Observable<METRCItemsCategories[]>;
+
   constructor(
       private fb: FormBuilder,
       private fbItemTypeService: FbItemTypeService,
@@ -53,25 +59,23 @@ export class ItemTypeEditorComponent   {
       private settingService: SettingsService,
       private siteService: SitesService,
       private printerLocationsService: PrinterLocationsService,
+      private metrcCategoryService: MetrcItemsCategoriesService,
       private dialogRef: MatDialogRef<ItemTypeEditorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
       @Inject(MAT_DIALOG_DATA) public selectedItems: number,
       )
   {
 
-    const form =  this.initFormFields()
-    const site = this.siteService.getAssignedSite();
+    const form             =  this.initFormFields()
+    const site             =  this.siteService.getAssignedSite();
+    this.metrcCategories$  =  this.metrcCategoryService.getCategories();
     this.receiptList$      =  this.settingService.getReceipts(site);
     this.printerLocations$ =  this.printerLocationsService.getLocations();
 
     if (data) {
       this.id = data.id
-      if (!this.id) {
-        return
-      }
-      if (this.id) {
-        this.initializeForm(this.id, form)
-      }
+      if (!this.id) { return }
+      if (this.id) {  this.initializeForm(this.id, form)  }
       return
     }
 
@@ -94,11 +98,12 @@ export class ItemTypeEditorComponent   {
       this.itemType = await this.itemType$.pipe().toPromise();
       if (this.itemType) {
         this.inputForm.patchValue(this.itemType)
-        this.labelTypeID = this.itemType.labelTypeID
-        this.printerName = this.itemType.printerName
-        this.prepTicketID = this.itemType.prepTicketID
+        this.labelTypeID     = this.itemType.labelTypeID
+        this.printerName     = this.itemType.printerName
+        this.prepTicketID    = this.itemType.prepTicketID
         this.printLocationID = this.itemType.printLocationID
-        this.packageType = this.itemType.packageType;
+        this.packageType     = this.itemType.packageType;
+        this.typeName        = this.itemType.type;
       }
     }
   };

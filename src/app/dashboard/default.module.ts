@@ -232,6 +232,7 @@ import { ItemTypeTogglesEditComponent } from '../modules/admin/products/item-typ
 import { SiteEditFormComponent } from '../modules/admin/settings/site-edit/site-edit-form/site-edit-form.component';
 import { ActivityTogglesMetrcComponent } from '../modules/admin/metrc/packages/metrc-inventory-properties/activity-toggles-metrc/activity-toggles-metrc.component';
 import { MetrcIntakeHeaderComponent } from '../modules/admin/metrc/packages/metrc-inventory-properties/metrc-intake-header/metrc-intake-header.component';
+import { SearchInventoryInputComponent } from '../modules/admin/inventory/inventory-list/inventory-list/search-inventory-input/search-inventory-input.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -301,6 +302,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     InventoryHistoryListComponent,
     InventoryComponent,
     InventoryHistoryItemComponent,
+    SearchInventoryInputComponent,
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,

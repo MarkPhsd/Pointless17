@@ -23,7 +23,7 @@ export class DepartmentSelectComponent implements OnInit {
 
   ngOnInit(): void {
     const site        =      this.sitesService.getAssignedSite();
-    this.departments$ =      this.menuService.getBasicLists(site, 'department');
+    this.departments$ =      this.menuService.getListOfDepartments(site);
   }
 
   getDepartment(event) {

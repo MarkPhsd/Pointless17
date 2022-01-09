@@ -210,22 +210,23 @@ export class StrainPackagesComponent implements OnInit {
       if (usingJointsField) {
         //now we can set the InputQuantity if the join Value exists, and if we are using joints.
         this.inputQuantity = Math.floor(this.unitsConverted.unitOutPutQuantity / this.jointWeight)
-        console.log('usingJointsField outputUnitQuantity', this.inputQuantity)
+        // console.log('usingJointsField outputUnitQuantity', this.inputQuantity)
         totalInputQuantity = this.inputQuantity * this.jointWeight
-        console.log('usingJointsField outputUnitQuantity', totalInputQuantity)
+        // console.log('usingJointsField outputUnitQuantity', totalInputQuantity)
       }
       //verify the amount doesn't exceed avalible resources.
       if ( this.doesInputQuantityExcceedTotal(totalInputQuantity) ) { return 0 }
       //gets the summary of the remaining  packages.
       const remainingValue  = this.conversionService.getBaseUnitsConvertedTo(this.unitsConverted, this.baseUnitsRemaining, totalInputQuantity);
       // this.baseUnitsRemaining = remainingValue
-      console.log('remaining Value', remainingValue)
-      this.unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(unitsConverted,this.jointWeight )
+      // console.log('remaining Value', remainingValue)
+      unitsConverted = this.conversionService.getAvailibleQuantityByUnitType(unitsConverted,this.jointWeight )
 
       if (unitsConverted) {
-
         unitsConverted.ouputRemainder  = remainingValue;
+        this.unitsConverted = unitsConverted
       }
+
       return remainingValue;
     } catch (error) {
       console.log(error)
@@ -324,7 +325,6 @@ export class StrainPackagesComponent implements OnInit {
       inventoryAssignment.unitMulitplier        = unitConversion.value
       if (this.unitsConverted.unitConvertTo) {
         inventoryAssignment = this.conversionService.getConversionQuantities(inventoryAssignment, this.unitsConverted, this.inputQuantity, this.jointWeight)
-        console.log('inventoryAssignment AddInventory', inventoryAssignment)
         if (!this.inventoryAssignments) { this.inventoryAssignments = {} as IInventoryAssignment[]}
         this.inventoryAssignments.unshift(inventoryAssignment)
         this.unitOfMeasure = {} as IUnitConversion

@@ -270,9 +270,7 @@ constructor(  private _snackBar              : MatSnackBar,
                   cellRendererFramework: AgGridImageFormatterComponent
                 }
     ]
-
-      this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
-
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
   listAll(){
@@ -280,10 +278,10 @@ constructor(  private _snackBar              : MatSnackBar,
     if (control) {
       control.setValue('')
     }
-
     this.categoryID        = 0;
     this.productTypeSearch = 0;
     this.brandID           = 0
+    this.initForm()
     this.refreshSearch()
   }
 
@@ -340,32 +338,6 @@ constructor(  private _snackBar              : MatSnackBar,
     return this.currentPage
   }
 
-  //ag-grid standard method.
-  getDataSource(params) {
-    return {
-    getRows: (params: IGetRowsParams) => {
-      const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            const resp =  data.paging
-            this.isfirstpage   = resp.isFirstPage
-            this.islastpage    = resp.isFirstPage
-            this.currentPage   = resp.currentPage
-            this.numberOfPages = resp.pageCount
-            this.recordCount   = resp.recordCount
-            if (this.numberOfPages !=0 && this.numberOfPages) {
-              this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-            }
-            params.successCallback(data.results)
-            this.rowData = data.results
-          }, err => {
-            console.log(err)
-          }
-      );
-      }
-    };
-  }
-
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<IProductSearchResultsPaged>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
@@ -388,9 +360,12 @@ constructor(  private _snackBar              : MatSnackBar,
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
+
       items$.subscribe(data =>
         {
             const resp         =  data.paging
+            console.log('data', data)
+            if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
             this.currentPage   = resp.currentPage
@@ -542,7 +517,9 @@ constructor(  private _snackBar              : MatSnackBar,
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-       this.refreshGrid()
+      if (result) {
+        this.refreshGrid()
+      }
     });
   }
 
@@ -550,8 +527,8 @@ constructor(  private _snackBar              : MatSnackBar,
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-    duration: 2000,
-    verticalPosition: 'top'
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 

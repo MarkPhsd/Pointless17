@@ -3,6 +3,7 @@
      *ngIf="searchForm" >
 
   <div class="grid-container-selectors">
+
     <div class="grid-item">
       <search-debounce-input
                             [itemNameControl] = "'itemName'"
@@ -95,7 +96,6 @@
     <div *ngIf="value" class="loader">
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
-
     <ag-grid-angular
           #agGrid
           [style]              ="gridDimensions"

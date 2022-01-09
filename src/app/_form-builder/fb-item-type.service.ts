@@ -25,12 +25,17 @@ export class FbItemTypeService {
       icon:                 [''],
       imageName:            [''],
       taxable:              [''],
-      prepTicketID:         [''],
-      labelTypeID:          [''],
-      printLocationID:      [''],
-      printerName:          [''],
-      requiresSerial  :     [''],
-      packageType         : ['']
+      prepTicketID        : [''],
+      labelTypeID         : [''],
+      printerName         : [''],
+      printLocationID     : [''],
+      // itemType_Categories : ItemTypeCategory[];
+      requiresSerial      : [''],
+      packageType         : [''],
+      requireInStock      : [''],
+      requiresStock       : [''],
+      metrcCategoryID     : [''],
+      preptTicketID       : [''],
     })
     return inputForm
   }
@@ -38,6 +43,5 @@ export class FbItemTypeService {
   intitFormData(inputForm: FormGroup,data: IItemType) {
     inputForm.patchValue(data)
   }
-
 
 }

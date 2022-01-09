@@ -1,8 +1,9 @@
- <div [formGroup]="searchForm" class="form-background">
-
-  <mat-form-field class="form-background"  appearance="outline" fxFlexFill >
+ <div [formGroup]="searchForm"
+      class="form-background">
+  <mat-form-field class="form-background"
+                  appearance="outline"
+                  fxFlexFill >
     <mat-label class="form-background">Search Item</mat-label>
-
     <input
            #input
            type="text"
@@ -11,10 +12,9 @@
            matInput
            formControlName="productName"
            [matAutocomplete]="auto">
-
     <mat-autocomplete panelWidth="auto"
                       #auto="matAutocomplete"
-                      [displayWith]="displayFn.bind(this)"  >
+                      (optionSelected)="onChange($event)">
       <mat-option *ngFor="let item of results$ | async"
                   [value]="item">
              {{item.name}}
@@ -22,6 +22,7 @@
     </mat-autocomplete>
 
  </mat-form-field>
-
 </div>
 
+
+<!-- [displayWith]="displayFn.bind(this) -->

@@ -133,10 +133,7 @@ export class AppInitService  {
       localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
       return localStorage.getItem('storedApiUrl')
     }
-
   }
-
-
 
   setAssignedSite(apiUrl) {
     const site = {} as ISite

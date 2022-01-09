@@ -33,7 +33,6 @@ export class InventoryEditButtonService {
 
     this.menuService.getProduct( site, item.productID ).subscribe( data=> {
       const productTypeID = data.prodModifierType
-
       this.openInventoryEditor(item.id, productTypeID)
     })
 
@@ -53,7 +52,7 @@ export class InventoryEditButtonService {
           },
         )
         dialogRef.afterClosed().subscribe(result => {
-          // return result
+
         });
     } catch (error) {
       console.log(error)

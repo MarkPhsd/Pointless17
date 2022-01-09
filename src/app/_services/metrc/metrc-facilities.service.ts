@@ -39,17 +39,17 @@ export class MetrcFacilitiesService {
 
   }
 
-  getFacility(id: any, site: ISite): Observable<METRCFacilities[]> {
+  getFacility(id: any, site: ISite): Observable<METRCFacilities> {
 
     const controller = '/MetrcFacilities/'
 
-    const endPoint = `getFacilityByID`
+    const endPoint = `getMetrcFacility`
 
-    const parameters = '?id=${id}'
+    const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<METRCFacilities[]>(url);
+    return this.http.get<METRCFacilities>(url);
 
   }
 

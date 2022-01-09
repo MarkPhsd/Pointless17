@@ -36,13 +36,19 @@
               <mat-card-content>
                   <div class="center">
 
-                    <div class="center" [formGroup]="loginForm"  (ngSubmit)="onSubmit()" >
+                    <div class="center"
+                          [formGroup]="loginForm"
+                          (ngSubmit)="onSubmit()" >
                         <div>
                           <mat-form-field appearance="fill">
                             <mat-label>User</mat-label>
-                            <input matInput type="text" formControlName="username" class="form-control"
-                                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                            <input matInput
+                                   type="text"
+                                   formControlName="username"
+                                   class="form-control"
+                                  [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                            <div *ngIf="submitted && f.username.errors"
+                                 class="invalid-feedback">
                                 <div *ngIf="f.username.errors.required">Username is required</div>
                             </div>
                           </mat-form-field>

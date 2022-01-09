@@ -3,12 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-
 import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
-import { SystemService } from 'src/app/_services/system/system.service';
 
 // https://marceljuenemann.github.io/angular-drag-and-drop-lists/demo/#/nested
 // https://material.angular.io/cdk/drag-drop/overview
@@ -53,9 +51,8 @@ export class MenuManagerComponent implements OnInit  {
 
   getMainMenu(){
     const site  =  this.siteService.getAssignedSite();
-    console.log('this.user', this.user)
     if (!this.user) {return}
-    const accordionMenu$ = this.menusService.getMainMenu(site, this.user);
+    const accordionMenu$ = this.menusService.getMainMenu(site);
     accordionMenu$.subscribe( data => {
       this.accordionMenus = data
     })
@@ -84,24 +81,18 @@ export class MenuManagerComponent implements OnInit  {
     if (this.user) {
 
       const deleteMenu = await this.menusService.deleteMenu(site).pipe().toPromise();
-      console.log('deletemenu', deleteMenu)
       const menu$      =  this.menusService.createMainMenu(this.user, site)
-      console.log('create main menu')
       const menu       =  await menu$.pipe().toPromise()
-      console.log('created main menu', menu)
 
       //if the main menus hav ebeen created delete the sub menu's and make them also
       if (menu.id) {
         const clearMenu$ = this.menusService.deleteMenuGroup(site,menu.id)
         clearMenu$.pipe(switchMap (data => {
-          console.log('createMainMenu', menu)
           return  this.menusService.createMainMenu(this.user, site)
           })).pipe(switchMap(menu => {
-            console.log('getMainMenu', menu)
-            return this.menusService.getMainMenu(site, this.user);
+            return this.menusService.getMainMenu(site);
             })
           ).subscribe(accordionMenu=> {
-            console.log('created accordionMenu', menu)
             this.accordionMenus = accordionMenu
           })
         }

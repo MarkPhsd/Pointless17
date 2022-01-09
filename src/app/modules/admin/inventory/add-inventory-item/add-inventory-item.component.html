@@ -1,13 +1,10 @@
 
-<div class="body"  *ngIf="item">
-
+<div class="body"
+     *ngIf="item">
   <mat-card class="strain-card">
-
     <mat-card-title>
-
       <div><h3>Item: {{item.productName}} </h3></div>
       <div><h3>Label:{{item.label}}       </h3></div>
-
     </mat-card-title>
 
     <mat-card-subtitle>
@@ -36,149 +33,142 @@
       </div>
 
     <mat-divider></mat-divider>
-
     </mat-card-subtitle>
-
       <mat-card-content >
+        <div [formGroup]="inputForm">
+          <div fxLayout="row"
+                fxFlex
+                fxLayoutGap=15
+                fxLayoutAlign="center start">
 
-          <div [formGroup]="inputForm">
-            <div fxLayout="row"
-                  fxFlex
+              <div  fxLayout="column"
+                    fxLayoutAlign="start start"
+                    fxFlex="40"
+                    fxLayoutGap=15
+                    class="fields" >
 
-                  fxLayoutGap=15
-                  fxLayoutAlign="center start">
+                  <app-product-search-selector
+                      class         = "fields"
+                      [itemType]    = 1
+                      [productName] = "productName"
+                      [searchForm]  = "inputForm"
+                      (itemSelect)  = "getItem($event)">
+                      >
+                  </app-product-search-selector>
 
-                <div  fxLayout="column"
-                      fxLayoutAlign="start start"
-                      fxFlex="40"
-                      fxLayoutGap=15
-                      class="fields" >
+                  <div *ngIf="menuItem">
 
-                    <app-product-search-selector
-                        class         = "fields"
-                        [itemType]    = 1
-                        [productName] = "productName"
-                        [searchForm]  = "inputForm"
-                        (itemSelect)  = "getItem($event)">
-                        >
-                    </app-product-search-selector>
-
-                    <div *ngIf="menuItem">
-
-                      <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
-                        <app-facility-search-selector
-                            class="fields"
-                            [item]="facility"
-                            [searchForm]="inputForm"
-                            (itemSelect)="getVendor($event)">
-                            >
-                        </app-facility-search-selector>
-                      </div>
-
-                      <div>
-                        <mat-form-field appearance="outline"  class="fields" >
-                          <mat-label>Expiration</mat-label>
-                          <input matInput
-                                  type="text"
-                                  formControlName="expiration"
-                                  name="expiration"
-                                  [matDatepicker]="picker">
-                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                          <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-                      </div>
-
-                      <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
-                        <mat-form-field appearance="outline"  class="fields" >
-                          <mat-label > Category Type</mat-label>
-                          <input matInput
-                                  type="text"
-                                  formControlName="productCategoryName"
+                    <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
+                      <app-facility-search-selector
+                          class="fields"
+                          [item]="facility"
+                          [searchForm]="inputForm"
+                          (itemSelect)="getVendor($event)">
                           >
-                        </mat-form-field>
-                      </div>
+                      </app-facility-search-selector>
+                    </div>
 
-                      <mat-form-field appearance="outline"  class="fields" >
-                        <mat-label > Vendor Invoice #</mat-label>
+                    <div>
+                      <mat-form-field appearance="outline"
+                                      class="fields" >
+                        <mat-label>Expiration</mat-label>
                         <input matInput
                                 type="text"
-                                formControlName="invoiceCode"
-                          >
+                                formControlName="expiration"
+                                name="expiration"
+                                [matDatepicker]="picker">
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
                       </mat-form-field>
-
-
-                      <div  class="mat-label">
-                        <mat-slide-toggle
-                                name="notAvalibleForSale"
-                                class="mat-label"
-                                formControlName="notAvalibleForSale">
-                          <mat-label class="mat-label">Disable</mat-label>
-                        </mat-slide-toggle>
-                      </div>
-
-
                     </div>
-                </div>
 
-                <div  fxLayout="column"
-                      fxLayoutAlign="start start"
-                      fxFlex="40"
-                      fxLayoutGap=15
-                      class="fields">
-
-                  <div class="grid-container-fields" *ngIf="menuItem">
-
-                    <div>
-                      <mat-form-field appearance="outline" class="price-values fields">
-                        <mat-label > Quantity</mat-label>
+                    <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
+                      <mat-form-field appearance="outline"  class="fields" >
+                        <mat-label > Category Type</mat-label>
                         <input matInput
-                            type="text"
-                            formControlName="packageQuantity"
-                          >
+                                type="text"
+                                formControlName="productCategoryName"
+                        >
                       </mat-form-field>
                     </div>
 
-                    <div>
-                      <mat-form-field  appearance="outline" class="price-values fields">
-                      <mat-label >Cost</mat-label>
-                      <input  matInput
-                          type           ="text"
-                          formControlName="cost"
-                          name           ="cost"
-                          class          ="price-values"
-                          >
-                      </mat-form-field>
-                    </div>
+                    <mat-form-field appearance="outline"  class="fields" >
+                      <mat-label > Vendor Invoice #</mat-label>
+                      <input matInput
+                              type="text"
+                              formControlName="invoiceCode"
+                        >
+                    </mat-form-field>
 
-                    <div>
-                      <mat-form-field  appearance="outline" class="price-values fields">
-                        <mat-label >Price</mat-label>
-                        <input  matInput
-                            type           ="text"
-                            formControlName="price"
-                            name           ="price"
-                            class          ="price-values"
-                            >
-                      </mat-form-field>
-                    </div>
 
-                    <div>
-                      <mat-form-field  appearance="outline" class="price-values fields">
-                        <mat-label >Price</mat-label>
-                        <input  matInput
-                            type           ="text"
-                            formControlName="price"
-                            name           ="price"
-                            class          ="price-values"
-                            >
-                      </mat-form-field>
+                    <div  class="mat-label">
+                      <mat-slide-toggle
+                              name="notAvalibleForSale"
+                              class="mat-label"
+                              formControlName="notAvalibleForSale">
+                        <mat-label class="mat-label">Disable</mat-label>
+                      </mat-slide-toggle>
                     </div>
 
 
                   </div>
+              </div>
 
+              <div  fxLayout="column"
+                    fxLayoutAlign="start start"
+                    fxFlex="40"
+                    fxLayoutGap=15
+                    class="fields">
 
+                <div class="grid-container-fields" *ngIf="menuItem">
+
+                  <div>
+                    <mat-form-field appearance="outline" class="price-values fields">
+                      <mat-label > Quantity</mat-label>
+                      <input matInput
+                          type="text"
+                          formControlName="packageQuantity"
+                        >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field  appearance="outline" class="price-values fields">
+                    <mat-label >Cost</mat-label>
+                    <input  matInput
+                        type           ="text"
+                        formControlName="cost"
+                        name           ="cost"
+                        class          ="price-values"
+                        >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field  appearance="outline" class="price-values fields">
+                      <mat-label >Price</mat-label>
+                      <input  matInput
+                          type           ="text"
+                          formControlName="price"
+                          name           ="price"
+                          class          ="price-values"
+                          >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field  appearance="outline" class="price-values fields">
+                      <mat-label >Price</mat-label>
+                      <input  matInput
+                          type           ="text"
+                          formControlName="price"
+                          name           ="price"
+                          class          ="price-values"
+                          >
+                    </mat-form-field>
+                  </div>
                 </div>
+              </div>
             </div>
           </div>
       </mat-card-content>

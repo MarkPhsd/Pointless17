@@ -1,25 +1,23 @@
-<!-- <div > -->
-  <div
-        [formGroup]="searchForm"
-        class="grid-item" >
-        <mat-form-field appearance="outline"
-                        class="form-fields">
-        <mat-label >
-          <ng-content select="[fieldDescription]">
-          </ng-content>
-        </mat-label>
-          <input
+
+  <div [formGroup] ="searchForm">
+    <mat-form-field appearance="outline">
+      <mat-label >
+        <ng-content select="[fieldDescription]">
+        </ng-content>
+      </mat-label>
+        <input
               #input
               matInput
               type             ="text"
               id               ="name"
               [formControlName]="itemNameControl"
               [(ngModel)]      ="itemNameInput"
-            />
-            <button *ngIf="itemNameInput" matSuffix
-              mat-icon-button aria-label="Clear"
-              (click)="itemNameInput=''">
-              <mat-icon>close</mat-icon>
-            </button>
-        </mat-form-field>
+          />
+        <button *ngIf="itemNameInput"
+                  matSuffix
+                mat-icon-button aria-label="Clear"
+                (click)="itemNameInput=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
   </div>

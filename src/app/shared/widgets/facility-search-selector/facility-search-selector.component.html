@@ -14,15 +14,13 @@
            [matAutocomplete]="auto">
 
       <mat-autocomplete panelWidth="auto"
-                      #auto="matAutocomplete"
-                      [displayWith]="displayFn.bind(this)"  >
-
-
+                        #auto="matAutocomplete"
+                        (optionSelected)="onChange($event)"
+                        >
         <mat-option *ngFor="let item of results$ | async"  [value]="item">
-          {{item.displayName}} - {{item.metrcLicense}}
+          {{item.metrcLicense}}-{{item.displayName}}
         </mat-option>
-      <!-- <div *ngIf="results$">
-      </div> -->
+
     </mat-autocomplete>
 
  </mat-form-field>
@@ -31,3 +29,4 @@
 
 </div>
 
+<!-- removed from auto complete [displayWith]="displayFn.bind(this)"  -->

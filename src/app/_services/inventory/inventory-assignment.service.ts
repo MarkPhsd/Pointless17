@@ -20,30 +20,25 @@ export interface IInventoryAssignment {
   productName:           string;
   productCategoryName:   string;
   itemStrainName:        string;
+  unitOfMeasureName:     string;
+  unitMulitplier:        number;
   sku:                   string;
   label:                 string;
   metrcPackageID:        number;
   locationID:            number;
   location:              string;
-  unitOfMeasureName:     string;
-  unitMulitplier:        number;
   baseQuantity:          number;
-  baseQuantityRemaining: number;
   packageQuantity:       number;
-  packageCountRemaining: number;
   unitConvertedtoName:   string;
-  jointWeight:           number;
-  intakeUOM:             string;
-  intakeConversionValue: number;
-  packagedOrBulk:        number;
   productID:             number;
+  packageCountRemaining: number;
+  baseQuantityRemaining: number;
   dateCreated:           string;
   expiration:            string;
   facilityLicenseNumber: string;
   batchDate:             string;
   cost:                  number;
   price:                 number;
-  priceScheduleID:       number;
   notAvalibleForSale:    boolean;
   thc:                   number;
   thc2:                  number;
@@ -58,14 +53,20 @@ export interface IInventoryAssignment {
   employeeID:            number;
   employeeName:          string;
   requiresAttention:     boolean;
+  jointWeight:           number;
   beginDate:             string;
   endDate:               string;
-  adjustmentNote:        string;
-  adjustmentDate:        string;
+  intakeUOM:             string;
+  intakeConversionValue: number;
   adjustmentType:        string;
-  invoiceID     :        number;
-  invoiceCode   :        string;
-  thcContent             :number;
+  adjustmentDate:        string;
+  adjustmentNote:        string;
+  invoice:               string;
+  packagedOrBulk:        number;
+  priceScheduleID:       number;
+  invoiceCode:           string;
+  thcContent:            number;
+  productionBatchNumber: string;
   serials:               Serial[];
 }
 
@@ -74,13 +75,14 @@ export interface Serial {
   inventoryAssignmentID: number;
   sku:                   string;
   quantity:              number;
-  adjustmentNote:        string;
-  adjustmentDate:        string;
-  adjustmentType:        string;
   serialCode:            string;
+  adjustmentType:        string;
+  adjustmentDate:        string;
+  adjustmentNote:        string;
   beginDate:             string;
   endDate:               string;
 }
+
 
 export interface InventoryFilter {
   productName:          string;
@@ -253,6 +255,7 @@ moveInventory(site: ISite, iInventoryAssignment: IInventoryAssignment[]): Observ
 
 addInventoryList(site: ISite, label: string, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
 
+  console.log(iInventoryAssignment)
   const controller =  `/InventoryAssignments/`
 
   const endPoint = `PostInventoryAssignments`

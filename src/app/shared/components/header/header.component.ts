@@ -106,9 +106,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.user  = data
       this.getUserInfo()
     })
-
   }
-
 
   constructor(private authenticationService:  AuthenticationService,
               private pollingService        : PollingService,
@@ -142,9 +140,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   async  ngOnInit() {
     this.getUserInfo();
     this.refreshScannerOption()
-    this.searchForm = this.fb.group( {
-      searchProducts: ''
-    });
+    this.searchForm = this.fb.group( {  searchProducts: '' });
     this.renderTheme();
     this.refreshTheme()
     this.initCompany();
@@ -219,21 +215,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getUserInfo() {
-
     this.initUserInfo();
     let user: IUser;
 
-    if (this.user) {
-      user = this.user
-    } else {
-      user = JSON.parse(localStorage.getItem('user')) as IUser;
+    if (this.user) { user = this.user  }
+    if (!this.user) {
+       user = JSON.parse(localStorage.getItem('user')) as IUser;
     }
 
     if (!user) {  return null }
 
-    this.isAdmin = false;
-    this.userName =  user.username
-    this.userRoles = user.roles.toLowerCase();
+    this.isAdmin      = false;
+    this.userName     =  user.username
+    this.userRoles    = user.roles.toLowerCase();
     this.employeeName = user.username;
 
     if (user.roles === 'admin') {
@@ -242,18 +236,18 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
-      this.isUserStaff = true
+      this.isUserStaff      = true
       this.showPOSFunctions = true;
     }
   }
 
   initUserInfo() {
-    this.userName =  '';
-    this.userRoles = '';
+    this.userName         = '';
+    this.userRoles        = '';
     this.showPOSFunctions = false;
     this.isAdmin          = false;
     this.isUserStaff      = false;
-    this.employeeName = ''
+    this.employeeName     = '';
   }
 
   initSite() {

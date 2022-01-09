@@ -1,4 +1,5 @@
-<span *ngIf="inputForm && (itemType && itemType.type != 'adjustment')">
+<span *ngIf="inputForm &&
+      (itemType && itemType.type != 'adjustment')">
 
   <div>
     <mat-slide-toggle
@@ -7,6 +8,7 @@
       <mat-label>Requireds Label Printed</mat-label>
     </mat-slide-toggle>
   </div>
+
   <div>
     <mat-slide-toggle
                       name= "requiresSerial"
@@ -22,7 +24,7 @@
   </div>
 
   <div class="toggle-footer">
-    <mat-slide-toggle name= "expirationRequired"
+    <mat-slide-toggle name           = "expirationRequired"
                       formControlName="expirationRequired">
       <mat-label>Expiration Date Required</mat-label>
     </mat-slide-toggle>

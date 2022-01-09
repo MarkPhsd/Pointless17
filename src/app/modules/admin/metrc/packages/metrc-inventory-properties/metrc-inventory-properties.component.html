@@ -3,21 +3,26 @@
 
     <div>
       <app-product-search-selector
-        [itemType]=1
-        [productName]="package.item.name"
-        [searchForm]="inputForm"
-        (itemSelect)="getStrain($event)">
+        [doNotPassName]     ='true'
+        [metrcCategoryName] = "package.productCategoryName"
+        [searchForm] ="inputForm"
+        (itemSelect) ="getCatalogItem($event)">
         >
       </app-product-search-selector>
+      <!-- <app-addMenuItem [productName]="productName"></app-addMenuItem> -->
     </div>
 
     <div>
       <app-facility-search-selector
-          [item]="facility"
           [searchForm]="inputForm"
           (itemSelect)="getVendor($event)">
           >
       </app-facility-search-selector>
+    </div>
+
+    <div >
+      <mat-label>Source harvest:</mat-label>
+      {{package?.sourceHarvestName}}
     </div>
 
     <div>

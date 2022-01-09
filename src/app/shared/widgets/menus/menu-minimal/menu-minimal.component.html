@@ -56,15 +56,13 @@
     </button>
 
     <ul id="accordion"
-      class="accordion">
+        class="accordion">
         <li>
           <mat-menu #menu="matMenu">
             <div  *ngFor="let item of submenu">
               <div  *userAuthorized="item.userType">
                 <div *ngIf="item.minimized">
-                  <!-- color="accent" -->
                   <button mat-menu-item
-
                           routerLinkActive={{item.routerLinkActive}}
                           routerLink=      {{item.routerLink}}>
                     <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
