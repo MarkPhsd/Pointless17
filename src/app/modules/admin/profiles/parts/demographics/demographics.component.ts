@@ -10,7 +10,7 @@ export class ProfileDemographicsComponent implements OnInit {
 
   @Input() inputForm : FormGroup;
   @Input() isAuthorized: boolean;
-
+  @Input() isStaff      : boolean;
   constructor() { }
 
   ngOnInit(): void {

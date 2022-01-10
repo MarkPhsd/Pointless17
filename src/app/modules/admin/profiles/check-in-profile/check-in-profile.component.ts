@@ -37,7 +37,7 @@ export class CheckInProfileComponent implements OnInit {
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
 
   public selectedIndex          : number;
-  isAuthorized                  : boolean ;
+  isAuthorized                  : boolean;
   isStaff                       : boolean;
   minumumAllowedDateForPurchases: Date
 
@@ -50,6 +50,7 @@ export class CheckInProfileComponent implements OnInit {
   dateRangeForm     : FormGroup;
   dateFrom          : any;
   dateTo            : any;
+  isUser            : boolean;
 
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
@@ -79,21 +80,19 @@ export class CheckInProfileComponent implements OnInit {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.isUser       =  this.userAuthorization.isUserAuthorized('user')
     this.initSubscriptions();
     this.refreshOrderSearch()
   }
 
   async ngOnInit() {
-    const site = this.siteService.getAssignedSite();
-    this.bucketName =   await this.awsBucket.awsBucket();
-    this.awsBucketURL = await this.awsBucket.awsBucketURL();
+    const site         = this.siteService.getAssignedSite();
+    this.bucketName    = await this.awsBucket.awsBucket();
+    this.awsBucketURL  = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
-
     this.fillForm( this.id );
-
-    const currentYear = new Date().getFullYear();
+    const currentYear  = new Date().getFullYear();
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
-
     this.initDateRangeForm();
   }
 
@@ -102,8 +101,8 @@ export class CheckInProfileComponent implements OnInit {
   }
 
   listAllOrders() {
-    const site = this.siteService.getAssignedSite();
-    const searchModel = {} as IPOSOrderSearchModel;
+    const site           = this.siteService.getAssignedSite();
+    const searchModel    = {} as IPOSOrderSearchModel;
     searchModel.clientID = parseInt (this.id)
     this.orderService.updateOrderSearchModel(searchModel)
   }
@@ -149,54 +148,29 @@ export class CheckInProfileComponent implements OnInit {
   subscribeToDatePicker() {
 
     if (this.dateRangeForm) {
-      // this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
-      //   if (!res) {return}
-      //   this.dateFrom = res
-      //   // this.searchModel.completionDate_From = this.dateFrom.toISOString() ;
-      // })
-
-      // this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
-      //   if (!res) {return}
-      //   this.dateTo = res
-      //   // this.searchModel.completionDate_To =  this.dateTo.toISOString() ;
-      // })
-
       this.dateRangeForm.valueChanges.subscribe(res=>{
         if (this.dateRangeForm.get('start').value && this.dateRangeForm.get('end').value) {
-
           this.dateFrom = this.dateRangeForm.get('start').value
           this.dateTo = this.dateRangeForm.get('end').value
 
-          console.log('start', this.dateRangeForm.get('start').value)
-          console.log('end', this.dateRangeForm.get('end').value)
-
           this.searchModel.completionDate_From = this.dateFrom.toISOString() ;
           this.searchModel.completionDate_To   =  this.dateTo.toISOString()
-
-          console.log('start ISO', this.dateFrom.toISOString())
-          console.log('end   ISO', this.dateTo.toISOString())
-
 
           this.refreshDateSearch()
         }
       })
     }
 
-    console.log('subscribe changed', this.dateTo, this.dateFrom )
-
   }
 
   refreshDateSearch() {
     if (!this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
-    console.log(this.dateFrom , this.dateTo)
 
     if (this.dateFrom != null && this.dateTo != null) {
       this.searchModel.completionDate_From = this.dateFrom.toISOString()
       this.searchModel.completionDate_To   = this.dateTo.toISOString()
       this.refreshOrderSearch()
     }
-
-    console.log('search', this.searchModel)
 
   }
 
@@ -208,7 +182,6 @@ export class CheckInProfileComponent implements OnInit {
     }
     this.searchModel.clientID        = parseInt(this.id)
     const search                     = this.searchModel;
-
     this.initOrderSearch(search)
   }
 
@@ -225,7 +198,6 @@ export class CheckInProfileComponent implements OnInit {
       search.clientID             = parseInt(this.id)
       this.searchModel            = search;
     }
-    // console.log('search model', this.searchModel)
   }
 
   refreshOrdersByDates() {
@@ -277,6 +249,7 @@ export class CheckInProfileComponent implements OnInit {
       client$.pipe(
         switchMap(data =>
           {
+            this.notifyEvent('Account updated', 'Success')
             if (!data) { return EMPTY }
             if (this.currentOrder) {
               return this.orderService.getOrder(site, this.currentOrder.id.toString(), false)
@@ -305,7 +278,6 @@ export class CheckInProfileComponent implements OnInit {
   }
 
   sanitize(html) {
-
     return this.sanitizer.bypassSecurityTrustHtml(html);
   }
 
@@ -322,7 +294,6 @@ export class CheckInProfileComponent implements OnInit {
 
   // Action triggered when user swipes
   swipe(selectedIndex: any, action = this.SWIPE_ACTION.RIGHT) {
-
     // Out of range
     if ( selectedIndex < 0 || selectedIndex > 1 ) return;
 
@@ -342,6 +313,12 @@ export class CheckInProfileComponent implements OnInit {
   }
 
   deleteUser(event) {
+
+    if (this.isStaff && !this.isAuthorized) {
+      this.notifyEvent('This operation is not allowed.', 'Failed')
+      return
+    }
+
     const result =  window.confirm('Are you sure you want to delete this profile?')
 
     if (result == true && this.clientTable) {
@@ -357,6 +334,5 @@ export class CheckInProfileComponent implements OnInit {
   startOrder(event) {
     this.postNewCheckIn()
   }
-
 
 }

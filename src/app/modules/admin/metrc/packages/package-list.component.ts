@@ -4,8 +4,8 @@ import { fromEvent, Observable, of, Subject  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
-import "ag-grid-community/dist/styles/ag-grid.css";
-import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+// import "ag-grid-community/dist/styles/ag-grid.css";
+// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -65,9 +65,7 @@ export class PackageListComponent implements OnInit {
   gridOptions          : any
   columnDefs           = [];
   defaultColDef        ;
-  frameworkComponents = {
-    btnCellRenderer: ButtonRendererComponent
-  };
+  frameworkComponents = { btnCellRenderer: ButtonRendererComponent };
   rowSelection         : any;
   rowDataClicked1      = {};
   rowDataClicked2      = {};
@@ -185,7 +183,8 @@ export class PackageListComponent implements OnInit {
 
   initClasses()  {
     const platForm = this.platForm;
-    this.gridDimensions   =  'width: 100%; height: 90%;'
+    this.gridDimensions   = 'width: 100%; height: 90%;'
+    // agtheme            = 'ag-theme-alpine-dark';
     this.agtheme          = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions = 'width: 100%; height: 90%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }

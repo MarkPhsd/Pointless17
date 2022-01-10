@@ -1,24 +1,33 @@
 <div *ngIf="inputForm"
     [formGroup]="inputForm"
     class="grid-flow">
-  <div >
+
+  <div>
     <div>
       <h4>License Info</h4>
     </div>
 
     <div>
-      <mat-form-field appearance="outline">
-        <mat-label >Account </mat-label>
-        <input matInput type="text" id="accountNumber" formControlName="accountNumber"  class="form-control" >
+      <mat-form-field
+        class="form-control"
+        appearance="outline">
+        <mat-label >DL/ID Number </mat-label>
+        <input matInput type="text"
+              id="accountNumber"
+              formControlName="dlNumber"
+              >
       </mat-form-field>
     </div>
 
     <div>
-      <mat-form-field class="example-full-width" appearance="outline">
+      <mat-form-field
+          class="form-control"
+          appearance="outline">
         <mat-label>DOB</mat-label>
         <input matInput
               [matDatepicker]="picker"
               formControlName="dob"
+              class="form-control"
             >
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
@@ -26,11 +35,14 @@
     </div>
 
     <div>
-      <mat-form-field class="example-full-width" appearance="outline">
+      <mat-form-field
+        class="form-control"
+        appearance="outline">
         <mat-label>Expiration</mat-label>
         <input matInput
               [matDatepicker]="picker2"
               formControlName="followUp"
+              class="form-control"
             >
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker2></mat-datepicker>
@@ -38,37 +50,53 @@
     </div>
 
   </div>
+
   <div >
+    <div>
+      <h4>Address </h4>
+    </div>
     <div >
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        class="form-control-address"
+        appearance="outline">
         <mat-label >Address</mat-label>
-        <input matInput type="text" id="dlAddress" formControlName="dlAddress"  class="form-control" >
+        <input matInput type="text" id="dlAddress"
+               formControlName="dlAddress"
+               class="form-control" >
       </mat-form-field>
     </div>
 
     <div >
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        class="form-control-address"
+        appearance="outline">
         <mat-label >Address 2</mat-label>
         <input matInput type="text" id="dlAddress2" formControlName="dlAddress2"  class="form-control" >
       </mat-form-field>
     </div>
 
     <div >
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        class="form-control-address"
+        appearance="outline">
         <mat-label >City</mat-label>
         <input matInput type="text" id="dlAddress2" formControlName="dlCity"  class="form-control" >
       </mat-form-field>
     </div>
 
     <div >
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        class="form-control-address"
+        appearance="outline">
         <mat-label >State</mat-label>
         <input matInput type="text" id="dlAddress2" formControlName="dlState"  class="form-control" >
       </mat-form-field>
     </div>
 
     <div >
-      <mat-form-field appearance="outline">
+      <mat-form-field
+        class="form-control-address"
+        appearance="outline">
         <mat-label >Zip</mat-label>
         <input matInput type="text" id="dlAddress2" formControlName="dlZip"  class="form-control" >
       </mat-form-field>

@@ -111,4 +111,5 @@ export interface IClientTable {
   employeeID:               number;
   dlExp:                    string;
   med:                      string;
+  dlNumber            :     string;
 }

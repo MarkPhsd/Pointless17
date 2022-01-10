@@ -18,14 +18,15 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._poll = this.pollingService.poll$.subscribe( data => {
       this.connectedToApi = data;
-      // console.log('initSubscriptions', data)
     })
   }
 
   constructor(private pollingService: PollingService) { }
 
   ngOnInit(): void {
-    this.pollingService.poll();
+    setTimeout( data => {
+      this.pollingService.poll();
+    }, 1000)
     this.initSubscriptions()
   }
 

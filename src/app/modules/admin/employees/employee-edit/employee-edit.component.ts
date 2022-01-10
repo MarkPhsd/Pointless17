@@ -31,18 +31,22 @@ export class EmployeeEditComponent implements OnInit {
   employee$   : Observable<employee>;
   @Input() id : any;
 
-  client: IClientTable;
-  employee: employee;
+  client      : IClientTable;
+  employee    : employee;
 
   //for swipping
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
 
   public selectedIndex: number;
-  isAuthorized  : boolean ;
-  isStaff       : boolean ;
+  isAuthorized        : boolean ;
+  isStaff             : boolean ;
+  passwordsMatch      = true;
 
   minumumAllowedDateForPurchases: Date
+  confirmPassword: FormGroup;
 
+  password1
+  password2
   constructor(
               private router: Router,
               public route: ActivatedRoute,
@@ -56,42 +60,35 @@ export class EmployeeEditComponent implements OnInit {
               private fbContactsService: FbContactsService,
               private userAuthorization       : UserAuthorizationService,
             ) {
-
     this.id = this.route.snapshot.paramMap.get('id');
     this.initForm()
     const site = this.siteService.getAssignedSite();
     if (this.id) {
       this.employee$ = this.employeeService.getEmployee(site, this.id)
-
       this.fillForm(this.id);
     }
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
-  }
-
-  getClient() {
-
+    this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.initConfirmPassword()
   }
 
   async initializeClient() {
 
     if (!this.employee$) {return}
-    let employee = {} as employee;
-    const site     = this.siteService.getAssignedSite();
-    console.log('continued initializeClient')
+    let employee    = {} as employee;
+    const site      = this.siteService.getAssignedSite();
     const employee$ = this.employeeService.getEmployee(site, this.id)
-    employee = await employee$.pipe().toPromise();
+    employee        = await employee$.pipe().toPromise();
 
     if (!employee) {return }
-    // console.log('initialize client employee checked', this.client )
-    const client = {} as IClientTable
-    client.firstName = employee.firstName;
-    client.lastName = employee.lastName;
-    client.phone = employee.phone;
-    client.email = employee.email
+    const client      = {} as IClientTable
+    client.firstName  = employee.firstName;
+    client.lastName   = employee.lastName;
+    client.phone      = employee.phone;
+    client.email      = employee.email
     client.employeeID = employee.id;
-    client.id = employee.clientID;
-    this.client = client;
+    client.id         = employee.clientID;
+    this.client       = client;
 
     this.clientTableService.postClientWithEmployee(site, employee).subscribe(employeeClient => {
           console.log(employeeClient)
@@ -106,18 +103,16 @@ export class EmployeeEditComponent implements OnInit {
           this.employee.clientID = this.client.id;
           this.inputForm.patchValue(employeeClient.employee)
           return EMPTY
-          return this.employeeService.putEmployee(site, employee.id,employee)
         }
       )
-
-  }
-
-  updateClient() {
   }
 
   initClientForm(client: IClientTable) {
     this.clientForm = this.clientForm = this.fbContactsService.initForm(this.clientForm)
+    client.password    = '';
+    client.apiPassword = ''
     this.clientForm.patchValue(client)
+    this.validateMatchingPasswords2();
   }
 
   async ngOnInit() {
@@ -125,6 +120,7 @@ export class EmployeeEditComponent implements OnInit {
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
     this.initializeClient();
+    this.initConfirmPassword();
   }
 
   async fillForm(id: any) {
@@ -136,28 +132,61 @@ export class EmployeeEditComponent implements OnInit {
     this.inputForm.patchValue(employee)
   }
 
+  initConfirmPassword()  {
+    this.confirmPassword = this.fb.group( {
+      confirmPassword: ['']
+    })
+    this.validateMatchingPasswords();
+  }
+
   initForm() {
     this.inputForm = this.employeeService.initForm(this.inputForm)
     return this.inputForm
   };
 
   viewContact() {
-    if (this.client) {
-      this.router.navigate(["/profileEditor/", {id:this.client.id}]);
-    }
+    if (this.client) {  this.router.navigate(["/profileEditor/", {id:this.client.id}]); }
   }
 
-  getEmployeeClientObservable(): Observable<IEmployeeClient> {
+  validateMatchingPasswords() {
+    this.confirmPassword.valueChanges.subscribe( data => {
+      if (this.confirmPassword) {
+        this.password1 = this.confirmPassword.controls['confirmPassword'].value;
+        if (this.password1 == this.password2) {
+          this.passwordsMatch = true;
+          return
+        }
+      }
+      this.passwordsMatch = false
+    })
+  }
 
+  validateMatchingPasswords2() {
+    this.clientForm.valueChanges.subscribe( data => {
+      if (this.clientForm) {
+        this.password2 = this.clientForm.controls['apiPassword'].value;
+        if (this.password1 == this.password2) {
+          this.passwordsMatch = true;
+          return
+        }
+      }
+      this.passwordsMatch = false
+    })
+  }
+  getEmployeeClientObservable(): Observable<IEmployeeClient> {
     const site     = this.siteService.getAssignedSite();
-    let client = {} as IClientTable
-    let employee = {} as employee
+    let client     = {} as IClientTable
+    let employee   = {} as employee
 
     if (this.clientForm) { client  = this.clientForm.value as IClientTable; }
 
-    if (this.inputForm && !this.inputForm.valid) {
+    if (!this.inputForm || !this.inputForm.valid) {
       this.notifyEvent('Error in form', "Failed to Save");
       return EMPTY;
+    }
+
+    if (!this.passwordsMatch && (this.password1 != '' && this.password2 !='')) {
+      this.notifyEvent('Passwords do not match', "");
     }
 
     if (this.inputForm)  { employee = this.inputForm.value as employee; }
@@ -170,36 +199,28 @@ export class EmployeeEditComponent implements OnInit {
               return  this.employeeService.saveEmployeeClient(site, { employee:  data, client: client })
         }))
       }
-
       if (employee.id != 0) {
-          return  this.employeeService.saveEmployeeClient(site, { employee:  employee, client: client })
-        }
+        return  this.employeeService.saveEmployeeClient(site, { employee:  employee, client: client })
       }
+    }
 
     return EMPTY
-
   }
 
   update(event): void {
-
-    if (!this.clientForm && !this.inputForm) {
-      this.notifyEvent('Error in form', "Failed to Save")
-      return
-    }
-
-    // employee.password = client.apiPassword;
     const empClient$ = this.getEmployeeClientObservable();
-
     if (empClient$) {
-        empClient$.subscribe(data =>{
+        empClient$.subscribe(data => {
           this.notifyEvent('Saved', "Saved")
         },
         err => {
-          this.notifyEvent('Adding employee failed, please input a unique PIN Code. It may need to be a be a long number', "Failure")
+          const message = 'Adding employee failed, please input a unique PIN Code. It may need to be a be a long number';
+          this.notifyEvent(message, "Failure")
         }
       )
     }
   };
+
 
   saveClient() {
     const site = this.siteService.getAssignedSite();
@@ -214,6 +235,7 @@ export class EmployeeEditComponent implements OnInit {
       if (employee.terminationDate) {
         client.apiUserName = ''
         client.apiPassword = ''
+        client.roles = 'user'
       }
       this.clientTableService.putClient(site, client.id, client).subscribe( data => {
         this.notifyEvent('Saved', "Success")

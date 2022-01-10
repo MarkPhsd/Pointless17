@@ -13,9 +13,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
-      // console.log('update user in basic auth', data)
-      // this.user  = JSON.parse(localStorage.getItem('user')) as IUser;
-
     })
   }
 
@@ -26,9 +23,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
   }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-      const user = this.user;
-      // this.authenticationService.externalAPI = false;
-      // console.log(user)
+      const user = this.authenticationService.userValue;
 
       if (request.headers.has(InterceptorSkipHeader)) {
         //     //we might have to have two login options here, because this area was changed to userx
@@ -47,10 +42,8 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         return next.handle(request.clone({ headers }));
       }
 
-
-      // console.log('interceptor ', request.url)
       if (user) {
-        user.authdata = window.btoa(user.username + ':' + user.password);
+        user.authdata = window.btoa(user.username + ':' + user.token);
         if (  user.authdata) {
           request = request.clone({
             setHeaders: {
@@ -64,8 +57,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
 
 
       {
-        // localStorage.setItem('metrcUser', JSON.stringify(user.metrcUser));
-        // localStorage.setItem('metrcKey', JSON.stringify(user.metrcKey));
         const metrcURL = localStorage.getItem('site.metrcURL')
         if (metrcURL) {
           const ismetrcURL = request.url.startsWith(metrcURL);

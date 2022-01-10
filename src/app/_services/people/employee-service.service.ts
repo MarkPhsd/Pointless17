@@ -211,7 +211,8 @@ export class EmployeeService {
 //   Name is required.
 // </div>
 // </div>
-
+// , [Validators.required, Validators.maxLength(10), Validators.minLength(4)]
+// , [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]
   initForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
       id:                        [''],
@@ -223,7 +224,7 @@ export class EmployeeService {
       zip:                       [''],
       phone:                     [''],
       cell:                      [''],
-      email:                     ['', [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")] ],
+      email:                     [''],
       emergencyContact:          [''],
       emergencyPhone:            [''],
       positionID:                [''],
@@ -234,7 +235,7 @@ export class EmployeeService {
       logonOnCheck1:             [''],
       logonCheck2:               [''],
       logonCheck3:               [''],
-      password:                  ['', [Validators.required, Validators.maxLength(10), Validators.minLength(4)] ],
+      password:                  ['' ],
       socialSecurity:            [''],
       payRate:                   [''],
       numberofHoursPrefered:     [''],
@@ -256,7 +257,7 @@ export class EmployeeService {
       upsize_ts:                 [''],
       driverFee:                 [''],
       commissionRate:            [''],
-      logonPassword:            ['', Validators.required ],
+      logonPassword:             [''],
       securityLevel:             [''],
       siteID:                    [''],
       regionMajorID:             [''],

@@ -29,9 +29,7 @@ export class ProfileEditorComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private siteService: SitesService,
     public contactservice: ContactsService) {
-
       this.id = this.route.snapshot.paramMap.get('id');
-
   }
 
   ngOnInit(){

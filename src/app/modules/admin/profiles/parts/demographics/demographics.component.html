@@ -1,7 +1,7 @@
 <div *ngIf="inputForm"
     [formGroup]="inputForm"
     class="grid-flow">
-  <div >
+  <div>
       <div>
           <mat-form-field  appearance="outline">
           <mat-label >Title</mat-label>
@@ -27,29 +27,29 @@
       <div>
           <mat-form-field appearance="outline">
           <mat-label >Last Name</mat-label>
-          <input matInput
-                 type="text"
-                 id="title"
-                 formControlName="lastName"
-                 class="form-control" >
-            </mat-form-field>
+            <input  matInput
+                    type="text"
+                    id="title"
+                    formControlName="lastName"
+                    class="form-control" >
+          </mat-form-field>
       </div>
 
       <div>
           <mat-form-field appearance="outline">
           <mat-label >Phone</mat-label>
-          <input matInput
-                type="text"
-                id="title"
-                formControlName="phone"
-                class="form-control" >
+          <input  matInput
+                  type="text"
+                  id="title"
+                  formControlName="phone"
+                  class="form-control" >
           </mat-form-field>
       </div>
 
       <div>
           <mat-form-field appearance="outline">
           <mat-label >Email</mat-label>
-          <input matInput
+          <input  matInput
                   type="text"
                   id="title"
                   formControlName="email"
@@ -57,27 +57,28 @@
           </mat-form-field>
       </div>
 
+      <div>
+        <mat-form-field appearance="outline">
+        <mat-label >User Login</mat-label>
+        <input  matInput
+                type="text"
+                id="title"
+                formControlName="apiUserName"
+                class="form-control" >
+        </mat-form-field>
+    </div>
+
   </div>
 
   <div>
-
     <div>
-      <mat-form-field appearance="outline">
-      <mat-label >Loyalty Points</mat-label>
-      <input matInput type="text"
-            id="title"
-            formControlName="loyaltyPoints"
-            class="form-control" >
-      </mat-form-field>
-    </div>
 
-    <div>
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>DOB</mat-label>
         <input matInput
-              [matDatepicker]="picker"
-              formControlName="dob"
-            >
+               [disabled]="!isAuthorized"
+               [matDatepicker]="picker"
+               formControlName="dob">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
       </mat-form-field>
@@ -86,27 +87,52 @@
     <div>
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>Expiration</mat-label>
-        <input matInput
-              [matDatepicker]="picker2"
-              formControlName="followUp"
-            >
+        <input  matInput
+                [disabled]="!isAuthorized"
+                [matDatepicker]="picker2"
+                formControlName="followUp">
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker2></mat-datepicker>
       </mat-form-field>
     </div>
 
+    <div>
+      <mat-label>DL/ID Number</mat-label>
+      <span>
+        <h4>
+          {{inputForm.controls['dlNumber']?.value}}
+        </h4>
+      </span>
+    </div>
+
   </div>
 
   <div>
-    <div >
-      <app-client-types-lookup [inputForm]="inputForm" ></app-client-types-lookup>
+    <div>
+      <mat-form-field appearance="outline">
+      <mat-label >Loyalty Points</mat-label>
+      <input  matInput
+              type="text"
+              [disabled]="!isAuthorized"
+              id="title"
+              formControlName="loyaltyPoints"
+              class="form-control" >
+      </mat-form-field>
     </div>
+
+    <div *ngIf="isAuthorized" >
+      <app-client-types-lookup
+          [inputForm]="inputForm">
+      </app-client-types-lookup>
+    </div>
+
     <div>
       <mat-form-field appearance="outline">
         <mat-label>Tax Option</mat-label>
-        <mat-select   [disabled]="!isAuthorized"
-                      type="number"
-                      formControlName ="taxSales"
+        <mat-select
+                    [disabled]="!isAuthorized"
+                    type="number"
+                    formControlName ="taxSales"
                     >
           <mat-option [value]="1">Non Taxable Client</mat-option>
           <mat-option [value]="0">Taxable Client</mat-option>
@@ -114,10 +140,10 @@
       </mat-form-field>
     </div>
 
-    <div>
+    <div *ngIf="isAuthorized" >
       <mat-form-field appearance="outline">
         <mat-label>Price Level Option</mat-label>
-        <mat-select   [disabled]="!isAuthorized"
+        <mat-select
                       type="number"
                       formControlName ="priceTier"
                     >
@@ -130,22 +156,32 @@
       </mat-form-field>
     </div>
 
-    <div >
+    <div>
       <app-status-lookup
           [inputForm]="inputForm"
       ></app-status-lookup>
+    </div>
+
+    <div>
+      <mat-form-field appearance="outline">
+      <mat-label >MED</mat-label>
+      <input matInput type="text"
+            id="title"
+            [disabled]="!isAuthorized && !isStaff"
+            formControlName="med"
+            class="form-control" >
+      </mat-form-field>
     </div>
   </div>
 
   <div>
     <mat-form-field appearance="outline"
         id="customer-notes">
-      <mat-label>Customer Notes</mat-label>
+      <mat-label>Notes</mat-label>
         <textarea matInput
                   rows="10"
                   columns="40"
                   formControlName="notes"
-
         ></textarea>
     </mat-form-field>
   </div>

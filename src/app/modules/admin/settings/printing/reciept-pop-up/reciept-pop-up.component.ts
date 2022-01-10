@@ -73,6 +73,7 @@ export class RecieptPopUpComponent implements OnInit, AfterViewInit {
     this._order       = this.orderService.currentOrder$.subscribe(data => {
       this.order      = data;
       this.orders     = [];
+      if (!data) {return}
       this.orders.push(data)
       if (data.posPayments) {
         this.payments   = data.posPayments

@@ -16,7 +16,8 @@
             </div>
             <div>
               <h4>
-                {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}  | Account :  {{clientTable?.accountNumber}}
+                {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}
+                | Account :  {{clientTable?.accountNumber}}
               </h4>
             </div>
           </div>
@@ -43,19 +44,25 @@
               flex md-scroll-y
               (swipeleft)="swipe(id, $event.type)"
               (swiperight)="swipe(id, $event.type)">
+
           <mat-tab-group mat-align-tabs="start"
                          md-stretch-tabs
                          [(selectedIndex)]="selectedIndex"
                          (selectedIndexChange)="selectChange()">
+
             <mat-tab label="Demographics"
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
               <app-profile-demographics
                 [inputForm]="inputForm"
-                [isAuthorized]="isAuthorized">
+                [isAuthorized]="isAuthorized"
+                [isStaff]="isStaff">
               </app-profile-demographics>
             </mat-tab>
-            <mat-tab label="Addresses "  (swipeleft)="swipe(1, $event.type)" (swiperight)="swipe(1, $event.type)">
+
+            <mat-tab label="Addresses"
+                    (swipeleft)="swipe(1, $event.type)"
+                    (swiperight)="swipe(1, $event.type)">
               <div class="grid-flow" >
                 <div>
                   <app-profile-billing-address
@@ -70,7 +77,10 @@
               </div>
             </mat-tab>
 
-            <mat-tab label="DL Info"  (swipeleft)="swipe(1, $event.type)" (swiperight)="swipe(1, $event.type)">
+            <mat-tab label="DL Info"
+                     *ngIf="isAuthorized || isStaff"
+                     (swipeleft)="swipe(1, $event.type)"
+                     (swiperight)="swipe(1, $event.type)">
               <app-profile-idcard-info
                 [inputForm]="inputForm"
                 [isAuthorized]="isAuthorized">
@@ -98,7 +108,8 @@
               </div>
             </mat-tab>
 
-            <mat-tab label="Settings"
+            <mat-tab *ngIf="isAuthorized"
+                     label="Settings"
                      (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
               <div  class="grid-flow">
@@ -107,9 +118,8 @@
                     <mat-form-field appearance="outline">
                       <mat-label>Select Role</mat-label>
                       <mat-select
-                                    type="text"
-                                    formControlName ="roles"
-                                  >
+                                  type="text"
+                                  formControlName ="roles">
                               <mat-option [value]="'admin'">admin</mat-option>
                               <mat-option [value]="'manager'">manager</mat-option>
                               <mat-option [value]="'employee'">employee</mat-option>

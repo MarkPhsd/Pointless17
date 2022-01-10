@@ -60,11 +60,11 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     }
   };
 
-  constructor(private _snackBar: MatSnackBar,
-              private dlParserService: DlParserService,
-              private siteService: SitesService,
-              public actionSheetController: ActionSheetController,
-              private router: Router,
+  constructor(private _snackBar             : MatSnackBar,
+              private dlParserService       : DlParserService,
+              private siteService           : SitesService,
+              public actionSheetController  : ActionSheetController,
+              private router                : Router,
               ) { }
 
   async ngOnInit() {
@@ -80,7 +80,6 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   public  cameraOn() {
-
     const cameraPreviewOptions: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
@@ -161,8 +160,6 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   resolveContent(result: any) {
 
     const data   =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
-    console.log('result', data)
-
     const site = this.siteService.getAssignedSite();
     const parser$ =  this.dlParserService.parseDriverLicense(site, data)
 

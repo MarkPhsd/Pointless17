@@ -121,6 +121,8 @@ export class FbContactsService {
         onlineDescription: [''], //        string;
         onlineDescriptionTag: [''], //     string;
         employeeID: [''], //               number;
+        med       : [''],
+        dlNumber  : [''],
       })
     return fb
   }

@@ -169,6 +169,7 @@ export class UserSwitchingService {
             const user = {message: 'failed'}
             return of(user)
           }
+          console.log('current user ', user)
           user.message = 'success'
           const currentUser = this.setUserInfo(user, password)
           if ( this.platformService.isApp()  )  { return this.changeUser(user) }

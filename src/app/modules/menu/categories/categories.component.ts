@@ -1,15 +1,13 @@
 
 import {  Component, ElementRef,AfterViewInit,
    OnInit, EventEmitter,Output,
-  ViewChild,
-  ChangeDetectorRef} from '@angular/core';
-import { IProductCategory }  from 'src/app/_interfaces';
+  ViewChild
+  } from '@angular/core';
 import { AWSBucketService, IProductSearchResults, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
@@ -119,18 +117,18 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
-  currentPage : number;
-  startRow    : number;
-  endRow      : number;
-  loading     : boolean;
-  endOfRecords: boolean;
+  currentPage      : number;
+  startRow         : number;
+  endRow           : number;
+  loading          : boolean;
+  endOfRecords     : boolean;
   searchForm       : FormGroup;
   searchPhrase     :         Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName()   { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
   searchModel: ProductSearchModel
-  searchItems$              : Subject<IProductSearchResults> = new Subject();
+  searchItems$     : Subject<IProductSearchResults> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
       distinctUntilChanged(),
@@ -166,7 +164,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   throttle         = 300;
   scrollDistance   = 1;
   scrollUpDistance = 1.5;
-
+  itemTypeID    = 4;
   scrollContainer  :   any;
   isNearBottom     :   any;
 
@@ -180,10 +178,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
                 private router:          Router,
                 private siteService:     SitesService,
                 private platFormService :PlatformService,
-                private titleService    : Title,
    )
   {
-
     this.isApp = this.platFormService.isApp();
     this.section = 1
     this.href = this.router.url;
@@ -196,14 +192,13 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   init() {
-    const site = this.siteService.getAssignedSite()
-    const searchModel = {} as ProductSearchModel;
-    searchModel.itemTypeID = '4'
-    searchModel.pageSize = 25;
+    const site              = this.siteService.getAssignedSite()
+    const searchModel       = {} as ProductSearchModel;
+    searchModel.itemTypeID  = this.itemTypeID.toString()
+    searchModel.pageSize    = 25;
     searchModel.currentPage = 1;
-    searchModel.pageSize = 1;
-    this.searchModel = searchModel;
-
+    searchModel.pageSize    = 1;
+    this.searchModel        = searchModel;
     this.addToList(searchModel.pageNumber, searchModel.pageSize)
   }
 
@@ -325,9 +320,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
     results$.subscribe(data => {
       this.loading = false;
-
       if (!data || data.results.length == 0 || data.results == null) {
-        this.value = 100;
+        this.value        = 100;
         this.loading      = false
         this.endOfRecords = true
         return
@@ -337,7 +331,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       this.itemsPerPage = this.itemsPerPage + data.results.length;
 
       if (this.categories) {
-        // this.menuItems = this.menuItems.concat(data.results)
         if (data.results) {
           data.results.forEach( item => {
             this.categories.push(item)
@@ -369,32 +362,30 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
 
     //this is called from subject rxjs obversablve above constructor.
-    async refreshSearch() {
-      this.currentPage         = 1
-      const site               = this.siteService.getAssignedSite()
-      const searchModel        = this.initSearchModel();
-      this.startRow            = 1;
-      this.endRow              = 25
-      this.searchModel = searchModel
-      this.productSearchResults = {} as IProductSearchResults
-      this.searchModel.pageSize    = 25
-      this.searchModel.pageNumber  = 1
-      this.searchModel.currentPage = 1
-      this.searchModel.itemTypeID  = '4'
-      await this.addToList(this.searchModel.pageSize, this.searchModel.pageNumber )
-      return this._searchItems$
+  async refreshSearch() {
+    this.currentPage             = 1
+    const site                   = this.siteService.getAssignedSite()
+    const searchModel            = this.initSearchModel();
+    this.startRow                = 1;
+    this.endRow                  = 25
+    this.searchModel = searchModel
+    this.productSearchResults    = {} as IProductSearchResults
+    this.searchModel.pageSize    = 25
+    this.searchModel.pageNumber  = 1
+    this.searchModel.currentPage = 1
+    this.searchModel.itemTypeID  = this.itemTypeID.toString()
+    await this.addToList(this.searchModel.pageSize, this.searchModel.pageNumber )
+    return this._searchItems$
+  }
+
+  applyBrandSearchModel(searchModel: ProductSearchModel) : ProductSearchModel {
+    if (this.itemName.value) {
+      searchModel.categoryName  = this.input.nativeElement.value
     }
-
-
-
-    applyBrandSearchModel(searchModel: ProductSearchModel) : ProductSearchModel {
-      if (this.itemName.value) {
-        searchModel.categoryName        = this.input.nativeElement.value
-      }
-      searchModel.pageSize   = 25
-      searchModel.pageNumber = 1
-      return searchModel;
-    }
+    searchModel.pageSize        = 25
+    searchModel.pageNumber      = 1
+    return searchModel;
+  }
 
 
 }
