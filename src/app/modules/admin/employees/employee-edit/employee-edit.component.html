@@ -19,7 +19,14 @@
 
         <div [formGroup]="inputForm"
              *ngIf="employee$; else loading;">
-             <!-- Form is Valid {{this.inputForm.valid}} -->
+             <!-- inputForm {{ inputForm.valid }} -->
+             <div *ngIf="inputForm.controls['phone'].invalid && inputForm.controls['phone'].touched"
+                  class="alert alert-danger">
+                    <div *ngIf="inputForm.controls['phone'].errors.required">
+                      Phone is required.
+                </div>
+             </div>
+
              <div *ngIf="inputForm.controls['email'].invalid && inputForm.controls['email'].touched"
                   class="alert alert-danger">
                     <div *ngIf="inputForm.controls['email'].errors.required">
@@ -34,7 +41,6 @@
                       This is not the primary password, and can be changed later.
                 </div>
               </div>
-
 
           <div>
               <mat-form-field appearance="outline">
@@ -78,7 +84,7 @@
 
           <div>
             <mat-form-field appearance="outline">
-            <mat-label >Numeric Password</mat-label>
+            <mat-label >PIN</mat-label>
             <input matInput
                     type="password"
                     formControlName="password"
@@ -113,7 +119,7 @@
     <div>
       <div [formGroup]="clientForm"
            *ngIf="clientForm && client; else loadingclient;">
-
+        <!-- ClientForm {{ clientForm.valid }} -->
         <div>
           <mat-form-field appearance="outline">
             <mat-label >User Name</mat-label>
@@ -133,6 +139,22 @@
                   class="form-control" >
           </mat-form-field>
         </div>
+
+        <div *ngIf="this.clientForm.controls['apiPassword'].value"
+             [formGroup]="confirmPassword">
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >Confirm Password</mat-label>
+              <input matInput
+                    type="password"
+                    formControlName="confirmPassword"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+        </div>
+        <mat-label *ngIf="this.clientForm.controls['apiPassword'].value && !passwordsMatch"> Passwords do not match </mat-label>
+        <mat-label *ngIf="this.password1 != '' && this.password2 != '' 
+                          && (this.password1 == this.password2) "> Passwords match. </mat-label>
 
         <div>
           <button mat-raised-button
