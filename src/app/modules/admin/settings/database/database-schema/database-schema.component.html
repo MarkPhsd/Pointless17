@@ -2,7 +2,11 @@
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </div>
 <div class="spinner">
-  <button mat-raised-button color="primary" (click)="updateSchema()">Update Schema</button>
+  <button mat-raised-button
+          color="primary"
+          (click)="updateSchema()">
+          Update Schema
+  </button>
 </div>
 
 <br>
@@ -12,7 +16,9 @@
 
   <div *ngIf="schema$">
     <div class="grid-container">
-        <div #allTheseThings *ngFor="let item of schema$ | async; let last = last"  class="grid-container">
+        <div #allTheseThings
+            *ngFor="let item of schema$ | async; let last = last"
+            class="grid-container">
             <div *ngIf="item.errorHappened">
               {{item.name}}  {{item.result}}
             </div>

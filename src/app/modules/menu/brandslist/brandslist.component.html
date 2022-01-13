@@ -73,12 +73,13 @@
                     <div>
                       <div class="text">{{item.company  | truncateText: 15  }}</div>
                       <img
-                         loading="lazy"
+                         loading ="lazy"
                          draggable="false"
-                         [src]="getBrandSource(item)"
-                         (click)="listItems(item.id)"
-                         class="grid-item"
-                         alt="item">
+                         [src]    ="getBrandSource(item)"
+                         onerror   = "this.src='../assets/images/placeholderimage.png'"
+                         (click)  ="listItems(item.id)"
+                         class    ="grid-item"
+                         alt      ="item">
                     </div>
                   </div>
                 </div>

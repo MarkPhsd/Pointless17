@@ -10,3 +10,16 @@
   object-fit: cover;
   width: 300px;
 }
+
+.text {
+  // font-size: 1.1em;
+  // margin: 5px;
+}
+
+.grid-info {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 140px 140px;
+  width: 300px;
+}

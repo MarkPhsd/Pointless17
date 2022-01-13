@@ -27,10 +27,10 @@
 
         <div class="grid" *ngIf="!sale.resultsMessage" >
           <div class="grid-item totals_label">Net (pre-tax):</div>
-          <div class="grid-item totals">{{sale.netSales | currency }} <br>  </div>
+          <div class="grid-item tax">{{sale.netSales | currency }} <br>  </div>
 
-          <div class="grid-item other_label">Non-Taxable:</div>
-          <div class="grid-item other">{{sale.nonTaxableSalesTotal | currency}}</div>
+          <div class="grid-item tax_label">Non-Taxable:</div>
+          <div class="grid-item tax">{{sale.nonTaxableSalesTotal | currency}}</div>
 
           <div class="grid-item tax_label"> Tax 1: </div>
           <div class="grid-item tax">{{sale.taxTotal1 | currency }}  </div>

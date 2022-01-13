@@ -274,6 +274,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             if (user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
+              this.userSwitchingService.assignCurrentOrder(user)
               this.userSwitchingService.updateLoginStatus(2)
               this.updateLoginStatus(2)
               return

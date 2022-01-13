@@ -14,12 +14,11 @@
             </button>
           </div>
 
-          <div *ngIf="user">
+          <div *ngIf="isUserStaff || isAdmin">
             <button aria-label="menu"
                     mat-button
                    (click)="toggleSideBar()">
               <mat-icon >menu</mat-icon>
-
             </button>
           </div>
 
@@ -56,10 +55,10 @@
           <div>
             <api-status-display></api-status-display>
           </div>
-
+<!--
           <div *ngIf="smallDevice">
             <app-cart-button> </app-cart-button>
-          </div>
+          </div> -->
 
           <div *ngIf="smallDevice &&  ( (isUserStaff && platFormService.platForm !='web') || (isAdmin) )">
             <button mat-button
@@ -79,8 +78,8 @@
                >
           <ul
               fxFlex fxLayout="row"
-              fxLayoutAlign="center center"
-            >
+              fxLayoutAlign="center center">
+
               <li *ngIf="employeeName">
                 {{employeeName.toUpperCase() | truncateText : 8}}
               </li>
@@ -97,7 +96,7 @@
                 <button mat-button
                         color="accent"
                         aria-label="POS"
-                      (click)="navPOSOrders()">
+                        (click)="navPOSOrders()">
                   <mat-icon>point_of_sale</mat-icon>
                 </button>
               </li>
@@ -157,13 +156,12 @@
       <div fxFlex fxLayout="row" fxLayoutAlign="end center" >
         <div class="grid-flow">
 
-          <!-- visible theme switcher on large screen -->
           <div *ngIf="!smallDevice && !isUserStaff">
             <app-toggle-theme></app-toggle-theme>
           </div>
 
           <!-- Cart on all screens -->
-          <div class="cart-button" *ngIf="!smallDevice">
+          <div class="cart-button" >
             <app-cart-button> </app-cart-button>
           </div>
 
@@ -212,12 +210,12 @@
 
               <mat-divider class="mat-divider"></mat-divider>
 
-                <mat-card>
-                  <div  mat-menu-item
-                        *ngIf="smallDevice || isUserStaff">
-                      <app-toggle-theme></app-toggle-theme>
-                  </div>
-                </mat-card>
+              <mat-card>
+                <div  mat-menu-item
+                      *ngIf="smallDevice || isUserStaff">
+                    <app-toggle-theme></app-toggle-theme>
+                </div>
+              </mat-card>
 
               <mat-divider class="mat-divider"></mat-divider>
 

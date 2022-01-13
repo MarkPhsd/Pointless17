@@ -37,9 +37,16 @@ export class EditButtonsStandardComponent  {
       this.enableCopy   = false
       this.enableUpdate = true
       this.enableDelete = false
-      if ( this.userauthorizationService.isUserAuthorized('admin') ||  this.userauthorizationService.isUserAuthorized('admin') ) {
-        this.enableDelete = true
-      }
+
+      // if ( this.userauthorizationService.isUserAuthorized('manager') ||
+      //   this.userauthorizationService.isUserAuthorized('admin') ) {
+      //   this.enableDelete = true
+      //   this.enableStartOrder = true
+      // }
+      // if (this.userauthorizationService.isUserAuthorized('user')) {
+      //   this.enableStartOrder = false
+      // }
+
       this.updateItemsPerPage();
   }
 

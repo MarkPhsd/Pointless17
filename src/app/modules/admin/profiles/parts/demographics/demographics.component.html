@@ -57,7 +57,7 @@
           </mat-form-field>
       </div>
 
-      <div>
+      <div *ngIf="isAuthorized" >
         <mat-form-field appearance="outline">
         <mat-label >User Login</mat-label>
         <input  matInput
@@ -66,17 +66,15 @@
                 formControlName="apiUserName"
                 class="form-control" >
         </mat-form-field>
-    </div>
+      </div>
 
   </div>
 
   <div>
-    <div>
-
+    <div *ngIf="isAuthorized" >
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>DOB</mat-label>
         <input matInput
-               [disabled]="!isAuthorized"
                [matDatepicker]="picker"
                formControlName="dob">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -84,11 +82,10 @@
       </mat-form-field>
     </div>
 
-    <div>
+    <div *ngIf="isAuthorized" >
       <mat-form-field class="example-full-width" appearance="outline">
         <mat-label>Expiration</mat-label>
         <input  matInput
-                [disabled]="!isAuthorized"
                 [matDatepicker]="picker2"
                 formControlName="followUp">
         <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
@@ -96,24 +93,79 @@
       </mat-form-field>
     </div>
 
-    <div>
-      <mat-label>DL/ID Number</mat-label>
-      <span>
-        <h4>
-          {{inputForm.controls['dlNumber']?.value}}
-        </h4>
-      </span>
-    </div>
+  </div>
 
+  <div *ngIf="!isAuthorized && !isStaff">
+
+    <mat-card>
+      <mat-card-subtitle>
+        Account Info
+      </mat-card-subtitle>
+
+      <div class="grid-info">
+
+        <div class='text'>
+          Username:
+        </div>
+        <div>
+          {{inputForm.controls['apiUserName']?.value}}
+        </div>
+
+        <div  class='text'>
+          DOB:
+        </div>
+        <div  class='text'>
+          {{inputForm.controls['dob']?.value}}
+        </div>
+
+        <span *ngIf="inputForm.controls['dlNumber']?.value"  class='text'>
+            <div>
+              DL Number:
+            </div>
+            <div>
+              {{inputForm.controls['dlNumber']?.value}}
+          </div>
+
+            <div>
+              DL EXP:
+            </div>
+            <div>
+              {{inputForm.controls['dlExp']?.value}}
+            </div>
+        </span>
+
+          <div class='text'>
+            Expiration
+          </div>
+          <div class='text'>
+            {{inputForm.controls['followUp']?.value}}
+        </div>
+
+          <div class='text'>
+            Rewards Points:
+          </div>
+          <div class='text'>
+            {{inputForm.controls['loyaltyPoints']?.value}}
+          </div>
+
+          <div  class='text'>
+            Med:
+          </div>
+          <div  class='text'>
+            {{inputForm.controls['med']?.value}}
+          </div>
+
+        </div>
+    </mat-card>
   </div>
 
   <div>
-    <div>
+
+    <div  *ngIf="isAuthorized" >
       <mat-form-field appearance="outline">
       <mat-label >Loyalty Points</mat-label>
       <input  matInput
               type="text"
-              [disabled]="!isAuthorized"
               id="title"
               formControlName="loyaltyPoints"
               class="form-control" >
@@ -126,11 +178,10 @@
       </app-client-types-lookup>
     </div>
 
-    <div>
+    <div *ngIf="isAuthorized">
       <mat-form-field appearance="outline">
         <mat-label>Tax Option</mat-label>
         <mat-select
-                    [disabled]="!isAuthorized"
                     type="number"
                     formControlName ="taxSales"
                     >
@@ -156,22 +207,23 @@
       </mat-form-field>
     </div>
 
-    <div>
+    <div *ngIf="isStaff || isAuthorized">
       <app-status-lookup
           [inputForm]="inputForm"
       ></app-status-lookup>
     </div>
 
-    <div>
+    <div *ngIf="isStaff || isAuthorized">
       <mat-form-field appearance="outline">
       <mat-label >MED</mat-label>
       <input matInput type="text"
             id="title"
-            [disabled]="!isAuthorized && !isStaff"
             formControlName="med"
             class="form-control" >
       </mat-form-field>
     </div>
+
+
   </div>
 
   <div>

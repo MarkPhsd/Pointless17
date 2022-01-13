@@ -86,7 +86,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   assignedPOSItem: PosOrderItem;
   _assignedPOSItem: Subscription;
 
-  transactionUISettings$  = this.uiSettingService.getSettings(true);
+  transactionUISettings$  = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass = 'product-name'
 
 

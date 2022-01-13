@@ -1,9 +1,10 @@
+@import "/src/mixins.scss";
+
 .mat-card-container {
   max-width: 375px;
   margin-top: 5px;
   margin-bottom: 5px;
 }
-
 
 .mat-divider {
   margin-top: 15px;
@@ -35,8 +36,6 @@
   font-weight: 700px;
 }
 
-
-
 .grid-item {
   align-items: flex-start;
   text-align: left;
@@ -61,14 +60,14 @@ mat-card-title {
   margin-top           : 5px ;
   padding-top:           10px;
   display              : grid;
-  grid-template-columns: 170px 100px 60px;
+  grid-template-columns: 130px 95px 50px;
   grid-template-rows   : auto;
   grid-gap             : 2px;
   margin-left          : 25px;
   justify-content      : space-between;
   max-width            : 350px;
   font-size            : 1em;
-  margin-bottom: 10px;
+  margin-bottom        : 10px;
 }
 
 .grid-body {
@@ -80,9 +79,25 @@ mat-card-title {
   margin-left          : 5px;
   max-width            : 350px;
   font-size            : 1em;
+
+  @include for-phone-only {
+    grid-template-columns: 145px 70px 60px;
+  }
+
 }
 
 .totals {
+  font-size     : 1em;
+  // white-space   : nowrap;
+  // overflow      : hidden;
+  // text-overflow : ellipsis;
+  // text-transform: capitalize;
+  float         : right;
+  align-items   : flex-end;
+  text-align    : right;
+}
+
+.totalslabel {
   font-size     : 1em;
   // white-space   : nowrap;
   // overflow      : hidden;
@@ -97,6 +112,9 @@ mat-card-title {
   float         : left;
   align-items   : flex-start;
   text-align    : left;
+  overflow      : clip;
+  text-overflow : ellipsis;
+  white-space   : nowrap;
 }
 
 .headers {

@@ -261,7 +261,7 @@ async addToList(pageSize: number, pageNumber: number)  {
     results$.subscribe(data => {
       this.currentPage += 1;
       //no records returned
-      if (data.results.length == 0 || data == null) {
+      if (data.results.length == 0 || data == null || (!data || !data.results)) {
         this.value = 100;
         this.loading = false;
         this.endOfRecords = true

@@ -49,35 +49,7 @@ button{
   min-width: 120px;
 }
 
-.example-button-row {
-  display: table-cell;
-  width: 490px;
-}
 
-.example-button-row .mat-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-.example-flex-container {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
-
-.example-button-container {
-  display: flex;
-  justify-content: center;
-  width: 120px;
-}
-
-h4 {
-  margin-top: 0;
-  margin-bottom: 5px;
-}
-
-.stat-cards {
-  opacity: .8;
-}
 
 .headers {
   font-size: 2.1 em;
@@ -86,22 +58,6 @@ h4 {
 .menu-items {
   font-size:  2em;
 }
-
-#mat-card {
-   border-radius: 5px;
-
-  .mat-card-header{
-    padding: 5px;
-  }
-  .mat-card{
-    padding: 0;
-  }
-
-  .mat-card-content{
-    padding: 5px;
-    overflow: hidden;
-  }
- }
 
 .grid-item {
   align-items: flex-end;
@@ -114,17 +70,15 @@ h4 {
 
 .grid-container-header {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr ;
-  grid-template-rows: auto;
-  gap: 1em 1em;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
+  gap: 1em;
   height: 5vh;
   overflow: hidden;
 }
 
 .grid-container {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr ;
-  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 1em 1em;
   height: 45vh;
   overflow: hidden;

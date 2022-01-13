@@ -25,6 +25,8 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const user = this.authenticationService.userValue;
 
+      // console.log(user)
+
       if (request.headers.has(InterceptorSkipHeader)) {
         //     //we might have to have two login options here, because this area was changed to userx
         //     this.authenticationService.externalAPI = true

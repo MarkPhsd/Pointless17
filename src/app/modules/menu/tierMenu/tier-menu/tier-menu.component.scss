@@ -15,19 +15,12 @@
   position: fixed;
   top: 0;
   left: 0;
-  // mix-blend-mode:color;
 }
 
 .bg {
-  /* The image used */
-    // background-image: url('https://assets3.thrillist.com/v1/image/2876839/1584x1054/crop;jpeg_quality=60.jpg');
-  /* Full height */
-
   background-color: rgb(64, 94, 87);
   z-index: -3;
-
 }
-
 
 .container {
   width:  85vw;
@@ -110,8 +103,6 @@ h4 {
   overflow: scroll;
   gap: 1em 1em;
 }
-
-
 
 .bg {
   /* The image used */

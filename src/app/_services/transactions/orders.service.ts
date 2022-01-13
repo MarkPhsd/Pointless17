@@ -136,6 +136,21 @@ export class OrdersService {
 
   }
 
+  getUserCurrentOrder(site: ISite, userID: number) {
+    let history = false;
+    if (history === undefined) {history = false};
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "getUserCurrentOrder"
+
+    const parameters = `?userID=${userID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
+
   // Public Property results As PagedList(Of POSOrder)
   // Public Property Paging As Pagination
   // Public Property Summary As POSOrdersSummarized
@@ -413,8 +428,8 @@ export class OrdersService {
   async newOrderWithPayload(site: ISite, serviceType: IServiceType): Promise<boolean> {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
-    const order$ = this.postOrderWithPayload(site, orderPayload)
-    const result = await order$.pipe().toPromise()
+    const order$       = this.postOrderWithPayload(site, orderPayload)
+    const result       = await order$.pipe().toPromise()
       .then(
         order => {
           this.setActiveOrder(site, order)

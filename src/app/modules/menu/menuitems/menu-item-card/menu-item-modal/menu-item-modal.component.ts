@@ -68,7 +68,9 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
 
     this.getItem(this.id);
 
-    if ( this.platForm  === "Electron" || this.platForm === "android" || this.platForm === "capacitor")
+    if ( this.platForm  === "Electron"
+         || this.platForm === "android"
+         || this.platForm === "capacitor")
     { this.isApp = true }
 
   }

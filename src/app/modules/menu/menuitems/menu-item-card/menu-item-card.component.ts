@@ -32,7 +32,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() imageUrl  : string;
   @Input() menuItem  : IMenuItem;
   bucketName         : string;
-  placeHolderImage   : String = 'productPlaceHolder.jpg';
+  placeHolderImage   : String = "../assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
 
@@ -69,9 +69,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+
     this.bucketName =   await this.awsBucket.awsBucket();
     // console.log("")
     this.initSubscriptions();
+
   };
 
   ngOnDestroy(): void {

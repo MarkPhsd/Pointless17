@@ -1,7 +1,9 @@
 <mat-card>
 
   <mat-card-title>
-    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+    <div fxLayout="column"
+         fxLayoutAlign="center center"
+         class="row-height">
       Items
     </div>
   </mat-card-title>
@@ -22,7 +24,7 @@
 
 
     <div class="gridContainer" *ngIf="headers">
-     <div class="grid-container">
+      <div class="grid-container">
         <div class="headers gridScroller" *ngFor="let header of headers">
           <div *ngFor="let flower of flowers" >
             <div *ngIf="flower.priceTier === header" >

@@ -6,12 +6,38 @@
   <ion-item-sliding
             class="nopadd"
             *ngFor="let item of order.posOrderItems; let i = index" >
+
+    <!-- <div   *ngIf="uiConfig &&
+          (
+          (mainPanel || bottomSheetOpen)
+          || order.history ||
+          (item.id == item.idRef || item.prompGrouptID == 0)
+          )">
+      visible
+    </div>
+    <div   *ngIf="uiConfig &&
+            (
+              order.history ||
+            ((item.id == item.idRef ||  !item.idRef) || item.prompGrouptID == 0)
+            )">
+      visible no ref
+    </div>
+    <div   *ngIf="
+            (item.id == item.idRef || item.prompGrouptID == 0)
+             ">
+      visible
+    </div>
+    <div >
+             {{item.id}} == {{item.idRef}}
+    </div> -->
+
     <div class="nopadd"
         *ngIf="uiConfig &&
-               ((mainPanel || bottomSheetOpen)
+               (
+                (mainPanel || bottomSheetOpen)
                 || order.history ||
-               (item.id == item.idRef || item.prompGrouptID == 0))"
-                           >
+                ((item.id == item.idRef ||  !item.idRef) || item.prompGrouptID == 0)
+               )">
 
       <ion-item >
         <pos-order-item

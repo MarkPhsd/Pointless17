@@ -138,7 +138,6 @@ async function createWindow () {
           }
         }
         if (mainWindow != null && interval != 0) {
-
           setInterval(  readScale32, interval);
         }
       }
@@ -333,7 +332,6 @@ function createDefaultWindow() {
   win.on('closed', () => {
     win = null;
   });
-  // win.loadURL(`file://${__dirname}/version.html#v${app.getVersion()}`);
   win.loadURL(`file://${__dirname}/app/version.html`);
   return win;
 }

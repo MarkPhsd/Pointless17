@@ -1,8 +1,7 @@
-import { Component, OnInit, SimpleChange , ChangeDetectionStrategy, Output} from '@angular/core';
-import { ITVMenuPriceTiers, TVMenuPriceTierItem, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { Component, OnInit, Output, EventEmitter} from '@angular/core';
+import { ITVMenuPriceTiers, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable} from 'rxjs';
-import { EventEmitter } from 'stream';
 
 @Component({
   selector: 'tiers-with-prices',

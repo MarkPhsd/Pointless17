@@ -1,7 +1,8 @@
 
 import {  Component, ElementRef,AfterViewInit,
    OnInit, EventEmitter,Output,
-  ViewChild
+  ViewChild,
+  Input
   } from '@angular/core';
 import { AWSBucketService, IProductSearchResults, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
@@ -126,6 +127,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   searchPhrase     :         Subject<any> = new Subject();
   get itemName()   { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
+  placeHolderImage   : String = "../assets/images/placeholderimage.png"
 
   searchModel: ProductSearchModel
   searchItems$     : Subject<IProductSearchResults> = new Subject();
@@ -140,7 +142,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   productSearchResults : IProductSearchResults
   categories$:    Observable<IMenuItem[]>;
   categories:     IMenuItem[];
-  isDown  =       false;
+  isDown          = false;
   startX:         any;
   scrollLeft:     any;
   href:           string;
@@ -150,21 +152,21 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   private destroy$ = new Subject<void>();
   singlePage:     boolean;
   public style    = {};
-  platForm =  this.getPlatForm()
-  appName = ''
-  isApp   = false;
+  platForm        =  this.getPlatForm()
+  appName         = ''
+  isApp           = false;
 
-  value: any;
-  itemsPerPage  : number;
-  totalRecords  : number;
-  pagingInfo    : IPagedList;
-  scrollingInfo : any;
-  endofItems    : boolean;
-  toggleSearch  : boolean;
+  value           : any;
+  itemsPerPage    : number;
+  totalRecords    : number;
+  pagingInfo      : IPagedList;
+  scrollingInfo   : any;
+  endofItems      : boolean;
+  toggleSearch    : boolean;
   throttle         = 300;
   scrollDistance   = 1;
   scrollUpDistance = 1.5;
-  itemTypeID    = 4;
+  @Input()  itemTypeID    = 4;
   scrollContainer  :   any;
   isNearBottom     :   any;
 
@@ -189,6 +191,11 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   async  ngOnInit() {
    await this.getBucket()
    this.init()
+  }
+
+  getPlaceHolder() {
+    console.log(this.placeHolderImage)
+    return this.placeHolderImage // this.placeHolderImage
   }
 
   init() {
@@ -268,12 +275,13 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   listItems(id:number) {
     this.initProductSearchModel(id)
-    this.router.navigate(["/menuitems-infinite/", {categoryID:id}]);
+    if (this.itemTypeID == 4) {
+      this.router.navigate(["/menuitems-infinite/", {categoryID:id}]);
+    }
+    if (this.itemTypeID == 6) {
+      this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
+    }
   }
-
-  // getImageSource(imageName: string) {
-  //   return this.getItemSrc(imageName)
-  // }
 
   getItemSrc(nameArray: string) {
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
@@ -281,14 +289,22 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
 
   initProductSearchModel(id: number): ProductSearchModel {
     let productSearchModel        = {} as ProductSearchModel;
-    { productSearchModel.categoryID  = id.toString(); }
+
+    if (this.itemTypeID == 6) {
+     { productSearchModel.departmentID  = id.toString(); }
+    }
+
+    if (this.itemTypeID == 4) {
+      { productSearchModel.categoryID  = id.toString(); }
+    }
+
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
     this.menuService.updateMeunuItemData(productSearchModel)
     return productSearchModel;
   }
 
-  initSearchModel(): ProductSearchModel {
+  initSearchModel():      ProductSearchModel {
     let searchModel       = {} as ProductSearchModel;
     searchModel           = this.applyBrandSearchModel(searchModel)
     return searchModel
@@ -309,7 +325,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   async addToList(pageSize: number, pageNumber: number)  {
-
     const model                    = this.searchModel
     if (!model.currentPage)        { model.currentPage = 1}
     model.pageNumber               = model.currentPage
@@ -357,7 +372,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
         }
       }
     )
-
   };
 
 

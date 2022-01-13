@@ -85,7 +85,7 @@ export class MenusService {
       submenus: [
         { name: 'Find Profile',    method: '' ,minimized: true, routerLink: '/profileListing', routerLinkActive: 'profileListing', icon: 'person_search', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
         { name: 'Scan',            method: '' ,minimized: true, routerLink: '/barcodescanner', routerLinkActive: 'barcodescanner', icon: 'qr_code_scanner', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getStaff(), meunyType: 0},
-        { name: 'Employees',       method: '' ,minimized: true, routerLink: '/employee-list',  routerLinkActive: 'employee-list', icon:   'employee', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Employees',       method: '' ,minimized: true, routerLink: '/employee-list',  routerLinkActive: 'employee-list',  icon: 'groups', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {

@@ -1,8 +1,7 @@
-import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
-import * as angular from 'angular';
+import { Component,  OnInit,  } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, delay, repeatWhen } from 'rxjs/operators';
-import { IFlowerMenu, ITVMenuPriceTiers, TVMenuPriceTierItem, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { IFlowerMenu, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger, state, style, animate, transition } from '@angular/animations';
 

@@ -119,6 +119,7 @@ import { QuicklinkModule } from 'ngx-quicklink';
 import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
 import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
+import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -241,6 +242,7 @@ import { PriceTierScheduleComponent } from '../modules/admin/products/price-tier
     SearchDebounceInputComponent,
     MatSelectNGModelComponent,
     MatDateRangeComponent,
+    UIHomePageSettingsComponent,
   ],
 
   imports: [
@@ -360,7 +362,7 @@ import { PriceTierScheduleComponent } from '../modules/admin/products/price-tier
     UnitTypeFieldsComponent,
     ValueFieldsComponent,
     WebEnabledComponent,
-
+    UIHomePageSettingsComponent,
   ],
 
   providers: [

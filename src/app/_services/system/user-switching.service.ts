@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, EMPTY, Observable, of, Subscription } from 'rxjs';
 import { map, switchMap,   } from 'rxjs/operators';
-import { IUser } from 'src/app/_interfaces';
+import { IUser, IUserProfile } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -149,27 +149,21 @@ export class UserSwitchingService {
   }
 
   login(username: string, password: string): Observable<any> {
-
     const apiUrl =  this.appInitService.apiBaseUrl()
-
     let url = `${apiUrl}/users/authenticate`
-
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
     const userLogin = { username, password };
     const timeOut    = 3 * 1000;
-
     return  this.http.post<any>(url, userLogin)
       .pipe(
         // timeout(timeOut),
         switchMap( user => {
         if (user) {
-
           if (user.message.toLowerCase() === 'failed') {
             const user = {message: 'failed'}
             return of(user)
           }
-          console.log('current user ', user)
           user.message = 'success'
           const currentUser = this.setUserInfo(user, password)
           if ( this.platformService.isApp()  )  { return this.changeUser(user) }
@@ -179,8 +173,7 @@ export class UserSwitchingService {
           return of(user)
         }
       })
-
-      )
+    )
   }
 
   setUserInfo(user: IUser, password) {
@@ -262,6 +255,16 @@ export class UserSwitchingService {
     }
 
     this.setAppUser()
+  }
+
+  assignCurrentOrder(user: IUserProfile)  {
+    const site = this.siteService.getAssignedSite()
+    if (user.roles == 'user' && user.id) {
+      const order$ = this.orderService.getUserCurrentOrder(site, user.id)
+      order$.subscribe(data => {
+        this.orderService.updateOrderSubscription(data)
+      })
+    }
   }
 
   async  browseMenu() {

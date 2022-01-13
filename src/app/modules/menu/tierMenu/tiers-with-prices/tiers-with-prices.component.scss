@@ -1,0 +1,239 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  min-width: 450px;
+}
+
+.headings {
+  font-size: 3em;
+  font-weight: 600;
+  text-align   : right;
+
+  text-overflow: ellipsis;
+  overflow     : hidden;
+  white-space  : nowrap;
+
+  @include for-phone-only {
+    font-size  : 1em;
+    line-height: 1em;
+    overflow     : clip;
+    white-space  : nowrap;
+    text-align   : right;
+  }
+
+
+  @include for-big-desktop-up {
+    font-size  : 3em;
+    font-weight: 500;
+    overflow     : clip;
+    white-space  : nowrap;
+    text-align   : right;
+  }
+
+  @include for-desktop-up {
+    font-size  : 3em;
+    font-weight: 500;
+    line-height: 1.2em;
+    overflow     : clip;
+    white-space  : nowrap;
+    text-align   : right;
+  }
+
+}
+
+.headingstext {
+  font-size: 3em;
+  font-weight: 600;
+  text-align   : left;
+
+  overflow: clip;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  @include for-phone-only {
+    font-size  : 1em;
+    line-height: 1em;
+  }
+
+  @include for-big-desktop-up {
+    font-size  : 3em;
+    font-weight: 500;
+    white-space  : nowrap;
+    text-align   : left;
+  }
+
+  @include for-desktop-up {
+    font-size  : 3em;
+    font-weight: 500;
+    line-height: 1.2em;
+    white-space  : nowrap;
+    text-align   : left;
+  }
+}
+
+.prices {
+  font-size    : 2em;
+  font-weight  : 500;
+  text-align   : right;
+  margin-top   : 5px;
+  overflow: clip;
+  text-overflow:clip;
+  white-space: nowrap;
+
+  @include for-phone-only {
+    font-size    : 1em;
+    font-weight  : 400;
+  }
+
+  @include for-big-desktop-up {
+    font-size    : 3em;
+    font-weight  : 500;
+    line-height  : 1.2em;
+    margin-bottom: 5px;
+    height       : 70px;
+  }
+
+  @include for-desktop-up {
+    font-size    : 3em;
+    font-weight  : 500;
+    line-height  : 1.2em;
+    margin-bottom: 5px;
+    height       : 70px;
+  }
+}
+
+.description {
+  font-size    : 2em;
+  font-weight  : 500;
+
+  text-align   : left;
+
+  overflow: clip;
+  text-overflow: ellipsis;
+  // white-space: nowrap;
+
+  @include for-phone-only {
+    font-size    : 1em;
+    font-weight  : 400;
+    margin-top:    5px;
+    margin-bottom: 5px;
+
+  }
+
+  @include for-big-desktop-up {
+    font-size    : 2em;
+    font-weight  : 500;
+    line-height  : 1.2em;
+
+    margin-top:    5px;
+    margin-bottom: 5px;
+    height       : 70px;
+  }
+
+  @include for-desktop-up {
+    font-size    : 2em;
+    font-weight  : 500;
+    line-height  : 1.2em;
+
+    margin-top:    5px;
+    margin-bottom: 5px;
+    height       : 70px;
+
+  }
+}
+
+
+.logo {
+  display: flex;
+  justify-content: center;
+}
+
+.grid-container {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  margin-right: 10px;
+
+  @include for-phone-only {
+    --gap                : 5px;
+    display              : grid;
+    gap                  : var(--gap);
+    grid-template-columns: repeat(6, 55px );
+    margin-right         : 4px;
+    max-width            : 375px;
+  }
+
+  @include for-tablet-portrait-up {
+    --gap: 15px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+    margin-right: 10px;
+  }
+
+}
+
+.viewbutton {
+    font-size    : .9em;
+    margin-bottom: 5px;
+    height       : 70px;
+    text-overflow: ellipsis;
+    overflow     : hidden;
+    white-space  : nowrap;
+    text-align   : left;
+    min-width    : 75px;
+    width        : 75px;
+
+    // @include for-phone-only {
+    //   font-size    : .9em;
+    //   line-height  : .9em;
+    //   min-width    : 75px;
+    //   width        : 75px;
+    // }
+
+    // @include for-big-desktop-up {
+    //   font-size    : 3em;
+    //   font-weight  : 500;
+    //   line-height  : 1.2em;
+    //   min-width    : 75px;
+    //   width        : 75px;
+
+    //   text-overflow: ellipsis;
+    //   margin-bottom: 5px;
+    //   height       : 70px;
+    //   overflow     : hidden;
+    //   white-space  : nowrap;
+    //   text-align   : right;
+    // }
+
+    // @include for-big-desktop {
+    //   font-size    : 3em;
+    //   font-weight  : 500;
+    //   line-height  : 1.2em;
+    //   min-width    : 75px;
+    //   width        : 75px;
+
+    //   text-overflow: ellipsis;
+    //   margin-bottom: 5px;
+    //   height       : 70px;
+    //   overflow     : hidden;
+    //   white-space  : nowrap;
+    //   text-align   : right;
+    // }
+
+    // @include for-desktop-up {
+    //   font-size    : 3em;
+    //   font-weight  : 500;
+    //   line-height  : 1em;
+    //   min-width    : 75px;
+    //   width        : 75px;
+    //   text-overflow: ellipsis;
+    //   margin-bottom: 5px;
+    //   height       : 70px;
+    //   overflow     : hidden;
+    //   white-space  : nowrap;
+    //   text-align   : right;
+    // }
+
+}

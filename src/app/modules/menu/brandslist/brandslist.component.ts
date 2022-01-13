@@ -114,6 +114,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   searchPhrase     :         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
+  placeHolderImage   : String = "../assets/images/placeholderimage.png"
 
   searchItems$              : Subject<ClientSearchResults[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
@@ -257,9 +258,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
 
   async getBucket() {
     this.bucket =   await this.awsBucket.awsBucket();
-    if (this.bucket == null) {
-      this.bucket = 'naturesherbs'
-    }
+    console.log('bucket', this.bucket)
   }
 
   showAll() {
@@ -271,6 +270,10 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   }
 
   getItemSrc(nameArray: string) {
+    if (this.bucket) {
+
+      return
+    }
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
   }
 

@@ -88,7 +88,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const site  = this.siteService.getAssignedSite();
+    this.initMenu()
     this.initSubscription()
   }
 
@@ -106,7 +106,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   initMenu() {
     this.initMenus()
     const site  = this.siteService.getAssignedSite();
-    if (!this.user || !this.user.password) {return}
+    if (!this.user || !this.user.token) {return}
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
     menuCheck$.pipe(

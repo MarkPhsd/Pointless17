@@ -1,14 +1,14 @@
-<!-- <div *ngIf="searchForm"> -->
-  <div class="mat-form-field"
+
+  <div *ngIf="searchForm"
+       [class]="formFieldClass"
        [formGroup]="searchForm">
     <mat-form-field [class]="formFieldClass"
                     appearance="outline" fxFlexFill >
-
       <mat-label class="form-background"><mat-icon>search</mat-icon>Brand Lookup</mat-label>
       <input
               #input
               type="text"
-              class="input-field"
+              [class]="formFieldClass"
               placeholder="Brand Lookup"
               matInput
               formControlName="brandIDLookup"
@@ -28,7 +28,8 @@
 
   </div>
 
-  <div  hidden="true"  [formGroup]="inputForm">
+  <div  hidden="true"
+        [formGroup]="inputForm">
     <input  formControlName="brandID">
   </div>
 <!--

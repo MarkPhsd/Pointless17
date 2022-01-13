@@ -57,6 +57,23 @@
     </div>
   </div>
 
+  <div *ngIf="itemType  && (
+        itemType.name.toLowerCase()   === 'wine'
+    || itemType.name.toLowerCase()   === 'alcohol'
+    || itemType.name.toLowerCase()   === 'beer')">
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'caseRetail'"
+      >
+      Case Price
+    </app-value-fields>
+    <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'caseQty'"
+      >
+      Case Quantity
+    </app-value-fields>
+  </div>
 </div>
 
 

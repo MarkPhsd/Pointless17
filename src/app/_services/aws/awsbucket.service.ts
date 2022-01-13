@@ -81,7 +81,6 @@ export class AWSBucketService {
   }
 
   addImageArraytoArray(imageArray: any[], otherImageArray: any []): any[] {
-
     if (otherImageArray) {
       if (imageArray) {
         otherImageArray.forEach( image =>  {
@@ -99,32 +98,34 @@ export class AWSBucketService {
   }
 
   getImageURLPath(bucket: string, imageName: string ): string {
-
     if (imageName) {
       return   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
     } else {
-      return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.jpg`);
+      return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
     }
   }
 
-   getImageURLPathAlt(bucket: string, imageName: string ): string {
+  getPlaceHolderImage(): string {
+    return   encodeURI(`${this.awsBucketURL}placeholderproduct.png`);
+  }
 
+  getImageURLPathAlt(bucket: string, imageName: string ): string {
     if (imageName) {
       return   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
     } else {
-      return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.jpg`);
+      return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
     }
   }
 
   getImageURLFromNameArray(bucket: string, nameArray: string): string {
 
-    if (!nameArray) {  return this.getImageURLPath(bucket, "placeholderproduct.jpg") }
+    if (!nameArray) {  return this.getImageURLPath(bucket, "placeholderproduct.png") }
 
     const imageName =  nameArray.split(",")
 
     if (imageName) {
       if (imageName[0] == undefined || imageName[0] == '' || imageName[0] == ',' ) {
-        return  this.getImageURLPath(bucket, "placeholderproduct.jpg")
+        return  this.getImageURLPath(bucket, "placeholderproduct.png")
       } else {
         return  this.getImageURLPath(bucket,  imageName[0])
       }

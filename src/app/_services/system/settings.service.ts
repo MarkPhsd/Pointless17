@@ -164,6 +164,20 @@ export class SettingsService {
   }
 
 
+  getSettingByNameNoRoles(site: ISite, name: String):  Observable<ISetting> {
+
+    const controller = "/settings/"
+
+    const endPoint = 'getSettingByNameNoRoles';
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<ISetting>(url);
+
+  }
+
   getSettingBySetting(site: ISite, setting: ISetting):  Observable<ISetting> {
 
     const controller = "/settings/"
@@ -409,6 +423,27 @@ export class SettingsService {
 
   }
 
+  getSettingByNameCachedNoRoles(site: ISite, name: String):  Observable<ISetting> {
+    let appCache =  JSON.parse(localStorage.getItem('appCache'))
+
+    const controller = "/settings/"
+
+    const endPoint = 'getSettingByNameCachedNoRoles';
+
+    const parameters = `?name=${name}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    if (appCache) {
+      if (appCache.value) {
+        const url = { url: uri, cacheMins: 0}
+        return  this.httpCache.get<ISetting>(url)
+      }
+    }
+
+    return this.http.get<ISetting>(uri);
+
+  }
 
   // async initSetting(){
 

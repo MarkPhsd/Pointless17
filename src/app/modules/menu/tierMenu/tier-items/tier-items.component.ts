@@ -8,35 +8,32 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   templateUrl: './tier-items.component.html',
   styleUrls: ['./tier-items.component.scss'],
 })
-export class TierItemsComponent implements OnInit, OnChanges {
+export class TierItemsComponent implements OnInit {
 
   @Input() priceTier: string;
 
-  headers: any;
+  headers : any;
   flowers$: Observable<IFlowerMenu[]>;
-  flowers: IFlowerMenu[]
+  flowers : IFlowerMenu[]
 
   constructor(private tvMenuPriceTierService: TvMenuPriceTierService,
               private siteService:            SitesService,
               ) {
       }
 
-  ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-    if (this.flowers$) {
-    this.refreshFlowers();
-    }
-  }
+  // ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
+  //   if (this.flowers$) {
+  //      this.refreshFlowers();
+  //   }
+  // }
 
   ngOnInit(): void {
-
-    this.flowers$  = this.tvMenuPriceTierService.getFlowers(this.siteService.getAssignedSite())
-
+    const site = this.siteService.getAssignedSite();
+    this.flowers$  = this.tvMenuPriceTierService.getFlowers(site)
     this.refreshFlowers();
-
   }
 
   refreshFlowers() {
-
     if (this.priceTier) {
       this.headers = [this.priceTier]
      } else {

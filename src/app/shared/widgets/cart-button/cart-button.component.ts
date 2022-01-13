@@ -59,6 +59,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     }
   }
 
+  addNewOrder() {
+    this.orderService.updateOrderSubscription(null);
+  }
+
   initOrderBarSubscription() {
     this.toolbarServiceUI.orderBar$.subscribe(data => {
       // console.log('bar updated', data)

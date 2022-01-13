@@ -4,8 +4,10 @@
        fxLayoutAlign="space-around center">
     <div fxLayout="column"
          fxLayoutAlign="start center">
-         <img *ngIf="isApp"  [src]="imageUrl" id="product-image"   (click)="menuItemAction(true)"/>
-         <img *ngIf="!isApp"    [src]="imageUrl" id="product-image"  (click)="menuItemAction(false)"/>
+         <img *ngIf="isApp"   [src]="imageUrl" onerror   = "this.src='../assets/images/placeholderimage.png'"
+              id="product-image"   (click)="menuItemAction(true)"/>
+         <img *ngIf="!isApp"  [src]="imageUrl" onerror   = "this.src='../assets/images/placeholderimage.png'"
+              id="product-image"  (click)="menuItemAction(false)"/>
     </div>
   </div>
 

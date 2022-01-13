@@ -270,7 +270,11 @@ export class CheckInProfileComponent implements OnInit {
   };
 
   navUserList(event) {
-    this.goBackToList();
+    if (this.isStaff || this.isAuthorized) {
+      this.goBackToList();
+      return
+    }
+    this.router.navigate(["app-main-menu"]);
   };
 
   goBackToList() {

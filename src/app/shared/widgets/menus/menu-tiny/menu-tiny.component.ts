@@ -84,7 +84,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    const site  = this.siteService.getAssignedSite();
+    this.initMenu()
     this.initSubscription()
   }
 
@@ -100,15 +100,19 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   initMenu() {
     this.initMenus()
-    if (!this.user || !this.user.password) {return}
+    const user = JSON.parse(localStorage.getItem('user')) as IUser;
+    if (!user || !user.token) {return}
+    console.log('initialize meny tiny')
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
     menuCheck$.pipe(
       switchMap( data => {
+        console.log('menu check', data)
         if (!data.result) {
-            if (this.user) {
-            return  this.menusService.createMainMenu(this.user , site)
+            if (user) {
+              console.log('create menu')
+            return  this.menusService.createMainMenu(user , site)
           }
           return EMPTY;
         }

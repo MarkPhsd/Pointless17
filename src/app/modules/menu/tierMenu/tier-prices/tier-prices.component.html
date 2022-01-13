@@ -1,9 +1,12 @@
 <mat-card>
 
   <mat-card-title>
-    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-        <img [src]="logo" [alt]="company"  class="logo">
-        <h2> </h2>
+    <div fxLayout="column"
+         fxLayoutAlign="center center"
+         class="row-height">
+        <img [src]="logo"
+             [alt]="company"
+             class="logo">
     </div>
   </mat-card-title>
 
@@ -13,13 +16,17 @@
       (outPutSetPriceTier)="setPriceTier($event)">
     </tiers-with-prices>
 
-    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-      <div  fxLayout="row" class="itemlist"  fxlayoutGap="20px" class="stat-cards">
+    <!-- <div fxLayout="column"
+         fxLayoutAlign="center center" class="row-height">
+      <div  fxLayout="row"
+            class="itemlist"
+            fxlayoutGap="20px"
+            class="stat-cards"> -->
         <app-tier-items
               [priceTier]="priceTier"
         ></app-tier-items>
-      </div>
-    </div>
+      <!-- </div>
+    </div> -->
 
   </mat-card-content>
 </mat-card>

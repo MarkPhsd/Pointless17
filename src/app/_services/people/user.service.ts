@@ -25,7 +25,6 @@ export class UserService {
     // getUserRole()
 
    getProfile():  Observable<IUserProfile>  {
-
       const user = this.auth.userValue
       if (user) {
         const username = user.username

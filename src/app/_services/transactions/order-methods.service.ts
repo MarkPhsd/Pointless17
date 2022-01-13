@@ -31,9 +31,9 @@ export interface ProcessItem {
 })
 export class OrderMethodsService {
 
-  order                   : IPOSOrder;
-  _order                  : Subscription;
-  subscriptionInitialized : boolean;
+  order                           : IPOSOrder;
+  _order                          : Subscription;
+  subscriptionInitialized         : boolean;
 
   private itemProcessSection      = 0
   private _itemProcessSection     = new BehaviorSubject<number>(null);
@@ -43,7 +43,7 @@ export class OrderMethodsService {
 
   private _assingedPOSItem = new BehaviorSubject<PosOrderItem>(null);
   public  assignedPOSItem$ = this._assingedPOSItem.asObservable();
-  private assignPOSItem : PosOrderItem;
+  private assignPOSItem    : PosOrderItem;
 
   public get assignedPOSItem() {return this.assignPOSItem }
 
@@ -82,7 +82,6 @@ export class OrderMethodsService {
               private router: Router,
               private platFormService:        PlatformService,
               private promptWalkService: PromptWalkThroughService,
-              // private devMode: DevModService,
              ) {
     this.initSubscriptions();
   }
@@ -185,7 +184,7 @@ export class OrderMethodsService {
 
       if (item) {
         const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
-        const addItem$ = this.posOrderItemService.postItem(site, newItem)
+        const addItem$    = this.posOrderItemService.postItem(site, newItem)
         this.processItemPostResults(addItem$)
         return
       }

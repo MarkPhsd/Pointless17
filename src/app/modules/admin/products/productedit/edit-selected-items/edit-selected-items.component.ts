@@ -20,6 +20,9 @@ export class EditSelectedItemsComponent implements OnInit {
   get itemTypeID()    { return this.inputForm.get("prodModifierType") as FormControl;}
   get species()       { return this.inputForm.get("species") as FormControl;}
   get brandID()       { return this.inputForm.get("brandID") as FormControl;}
+  get active()       { return this.inputForm.get("active") as FormControl;}
+  get webProduct()       { return this.inputForm.get("webProduct") as FormControl;}
+  get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as FormControl;}
 
   // constructor(
   //   private fb: FormBuilder) { }
@@ -62,6 +65,9 @@ export class EditSelectedItemsComponent implements OnInit {
       prodModifierType: [],
       species:          [],
       brandID:          [],
+      active:           [],
+      webProduct:       [],
+      webWorkRequired:  [],
     })
 
   }
@@ -73,58 +79,44 @@ export class EditSelectedItemsComponent implements OnInit {
     if (this.selected) {
 
       const selected = this.selected
-      console.log('productmodifiertype', this.itemTypeID.value)
+
       if (this.categoryID.value !=0 && this.categoryID.value != undefined) {
-        this.updateCategoryID(this.categoryID.value, this.selected)
+        // this.updateCategoryID(this.categoryID.value, this.selected)
+        this.updateField(this.categoryID.value, this.selected, 'categoryID')
       }
       if (this.departmentID.value !=0 && this.departmentID.value != undefined) {
-        this.updateDeparmentID(this.departmentID.value, this.selected)
+        // this.updateDeparmentID(this.departmentID.value, this.selected)
+        this.updateField(this.departmentID.value, this.selected, 'departmentID')
       }
       if (this.itemTypeID.value !=0 && this.itemTypeID.value != undefined) {
-        this.updateItemTypeID(this.itemTypeID.value, this.selected)
+        // this.updateItemTypeID(this.itemTypeID.value, this.selected)
+        this.updateField(this.itemTypeID.value, this.selected, 'itemTypeID')
       }
       if (this.species.value != '' && this.species.value != undefined) {
-        this.updateSpecies(this.species.value, this.selected)
+        // this.updateSpecies(this.species.value, this.selected)
+        this.updateField(this.species.value, this.selected, 'species')
       }
       if (this.brandID.value != '' && this.brandID.value != undefined) {
-        this.updateBrandID(this.brandID.value, this.selected)
+        // this.updateBrandID(this.brandID.value, this.selected)
+        this.updateField(this.brandID.value, this.selected, 'brandID')
       }
-
+      if (this.active.value != '' && this.active.value != undefined) {
+        // this.updateActive(this.active.value, this.selected)
+        this.updateField(this.active.value, this.selected, 'active')
+      }
+      if (this.webProduct.value != '' && this.webProduct.value != undefined) {
+        // this.updateWebProduct(this.webProduct.value, this.selected)
+        this.updateField(this.webProduct.value, this.selected, 'webProduct')
+      }
+      if (this.webWorkRequired.value != '' && this.webWorkRequired.value != undefined) {
+        this.updateField(this.webWorkRequired.value, this.selected, 'webWorkRequired')
+      }
     }
   }
 
-  updateBrandID(id: number, listOfItems: any) {
+  updateField(id: number, listOfItems: any, name: string) {
     const site   =  this.siteService.getAssignedSite();
-    const items$ =  this.menuService.updateField(site, 'BrandID', id, listOfItems)
-    this.updates(items$)
-  }
-
-  updateCategoryID(id: number, listOfItems: any) {
-    const site   = this.siteService.getAssignedSite();
-    const items$ =  this.menuService.updateField(site, 'categoryID', id, listOfItems)
-    items$.subscribe( data => {
-      this.snack.open('items Updated', 'success')
-    }, err => {
-      this.snack.open(err, 'Failure')
-    })
-    // this.updates(items$)
-  }
-
-  updateDeparmentID(id: number, listOfItems: any) {
-    const site   = this.siteService.getAssignedSite();
-    const items$ =  this.menuService.updateField(site, 'DepartmentID', id, listOfItems)
-    this.updates(items$)
-  }
-
-  updateItemTypeID(id: number, listOfItems: any) {
-    const site   = this.siteService.getAssignedSite();
-    const items$ =   this.menuService.updateField(site, 'prodModifierType', id, listOfItems)
-    this.updates(items$)
-  }
-
-  updateSpecies(type: string, listOfItems: any) {
-    const site   = this.siteService.getAssignedSite();
-    const items$ =  this.menuService.updateField(site, 'species', type, listOfItems)
+    const items$ =  this.menuService.updateField(site, name, id, listOfItems)
     this.updates(items$)
   }
 
@@ -138,3 +130,57 @@ export class EditSelectedItemsComponent implements OnInit {
 
 }
 
+
+
+// updateActive(id: number, listOfItems: any) {
+//   const site   =  this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'active', id, listOfItems)
+//   this.updates(items$)
+// }
+
+// updateWebProduct(id: number, listOfItems: any) {
+//   const site   =  this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'webProduct', id, listOfItems)
+//   this.updates(items$)
+// }
+
+// updateWebWorkRequired(id: number, listOfItems: any) {
+//   const site   =  this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'webWorkRequired', id, listOfItems)
+//   this.updates(items$)
+// }
+
+// updateBrandID(id: number, listOfItems: any) {
+//   const site   =  this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'BrandID', id, listOfItems)
+//   this.updates(items$)
+// }
+
+// updateCategoryID(id: number, listOfItems: any) {
+//   const site   = this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'categoryID', id, listOfItems)
+//   items$.subscribe( data => {
+//     this.snack.open('items Updated', 'success')
+//   }, err => {
+//     this.snack.open(err, 'Failure')
+//   })
+//   // this.updates(items$)
+// }
+
+// updateDeparmentID(id: number, listOfItems: any) {
+//   const site   = this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'DepartmentID', id, listOfItems)
+//   this.updates(items$)
+// }
+
+// updateItemTypeID(id: number, listOfItems: any) {
+//   const site   = this.siteService.getAssignedSite();
+//   const items$ =   this.menuService.updateField(site, 'prodModifierType', id, listOfItems)
+//   this.updates(items$)
+// }
+
+// updateSpecies(type: string, listOfItems: any) {
+//   const site   = this.siteService.getAssignedSite();
+//   const items$ =  this.menuService.updateField(site, 'species', type, listOfItems)
+//   this.updates(items$)
+// }

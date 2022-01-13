@@ -39,19 +39,19 @@
             <div class="grid-item">Avg</div>
             <div class="grid-item">Tip</div>
 
-            <div *ngIf="groupBy === 'Employee'" class="grid-item">#    </div>
-            <div *ngIf="groupBy !=  'Employee'" class="grid-item">#    </div>
+            <div *ngIf="groupBy === 'Employee'" class="grid-item">    </div>
+            <div *ngIf="groupBy !=  'Employee'" class="grid-item">    </div>
           </div>
 
           <div class="grid-headerfooter"
                *ngFor="let payment of payments" >
 
             <span *ngIf="groupBy === 'Employee'">
-              <div class="totals"
+              <div class="employeeName"
                   *ngIf="payment.employeeName">
                 {{ payment.employeeName | truncateText: 10 }}
               </div>
-              <div class="totals"
+              <div class="employeeName"
                   *ngIf="!payment.employeeName">
                 Missing
               </div>

@@ -14,10 +14,10 @@
         <div  class="flex-item"
               *ngIf="mainPanel">
           <app-order-header-demo-graphics
-            [canRemoveClient]="canRemoveClient"
-            [order]="order"
-            (outPutOpenClient)="openClient()"
-            (outPutRemoveClient)="removeClient()"
+            [canRemoveClient]     ="canRemoveClient"
+            [order]               ="order"
+            (outPutOpenClient)    ="openClient()"
+            (outPutRemoveClient)  ="removeClient()"
             (outPutAssignCustomer)="assignCustomer($event)"
             >
           </app-order-header-demo-graphics>
@@ -32,8 +32,7 @@
       </div>
 
       <div [class]="infobuttonpanel">
-        <div
-            *ngIf="mainPanel" >
+        <div *ngIf="mainPanel">
           <pos-order-function-buttons
                 (outPutPrintLabel)  ="printLabels()"
                 (outPutRePrintLabel)="rePrintLabels()"
@@ -54,7 +53,6 @@
 
         </div>
         <div  *ngIf="!mainPanel" >
-
           <button mat-raised-button
                   class="button"
                   color="primary"
@@ -67,7 +65,6 @@
               <mat-icon>edit</mat-icon>
               Edit Cart
             </div>
-
           </button>
 
           <button  mat-raised-button
@@ -78,20 +75,14 @@
             Payments
           </button>
         </div>
-
-
       </div>
-
     </div>
 
-    <!-- *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (mainPanel && !smallDevice)" -->
-    <div *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (!mainPanel && !smallDevice)">
-
+     <div *ngIf="(!smallDevice && mainPanel) || (!mainPanel && smallDevice) || (!mainPanel && !smallDevice)">
       <pos-order-items
                         [mainPanel] ="mainPanel"
                         [order]     ="order">
       </pos-order-items>
-
     </div>
 
   </div>

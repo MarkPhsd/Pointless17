@@ -1,58 +1,63 @@
 <mat-card>
 
   <mat-card-title>
-    <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+    <div fxLayout="column" fxLayoutAlign="center center" >
       <img [src]="logo" [alt]="company"  class="logo">
       <h2> </h2>
     </div>
-
   </mat-card-title>
 
-<mat-card-content>
-  <div fxLayout="column">
-    <div fxLayout="row" fxLayoutAlign="space-around center">
-      <div fxLayout="column">
-        <div class="grid-container">
-          <div class="grid-item headings">
-            Tier
-          </div>
-          <div class="grid-item headings">
-            Gram
-          </div>
-          <div class="grid-item headings">
-            8th
-          </div>
-          <div class="grid-item headings">
-            Quarter
-          </div>
-          <div class="grid-item headings">
-            Half
-          </div>
-          <div class="grid-item headings">
-            Ounce
-          </div>
-        </div>
+  <!-- class="grid-item headings" -->
+  <mat-card-content>
+    <!-- <div fxLayout="column">
+      <div fxLayout="row" fxLayoutAlign="space-around center">
+        <div fxLayout="column"> -->
+          <div class="grid">
+            <div class="grid-title">
+              Tier
+            </div >
 
-        <div *ngFor="let tier of tvPriceMenuTiers$ | async">
-          <div class="grid-container" >
-            <div class="grid-item  prices">
-              {{tier.name}}
+            <div class="grid-title">
+              Gram
             </div>
-            <div *ngFor="let item of tier.tvMenuPriceTierItems">
-              <div class="grid-itemprices prices">
-                  {{ item?.currentPrice | currency }}
+
+            <div  class="grid-title">
+              8th
+            </div>
+
+            <div  class="grid-title">
+              Quarter
+            </div>
+
+            <div  class="grid-title">
+              Half
+            </div>
+
+            <div  class="grid-title">
+              Ounce
+            </div>
+          </div>
+
+          <div *ngFor="let tier of tvPriceMenuTiers$ | async">
+            <div class="grid" >
+              <div class="grid-item  prices">
+                {{tier.name}}
+              </div>
+              <div *ngFor="let item of tier.tvMenuPriceTierItems">
+                <div class="grid-itemprices prices">
+                    {{ item?.currentPrice | currency }}
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        <!-- </div>
       </div>
-    </div>
-  </div>
+    </div> -->
   </mat-card-content>
 </mat-card>
 
 <ng-template #loading >
-<h2>Please wait...is loading.</h2>
-<mat-spinner></mat-spinner>
+  <h2>...loading.</h2>
+  <mat-spinner></mat-spinner>
 </ng-template>
 

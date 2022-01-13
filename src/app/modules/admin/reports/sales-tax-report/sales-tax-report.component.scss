@@ -46,6 +46,7 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  // text-align: right;
 }
 
 .totals_label{
@@ -59,6 +60,7 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  text-align: left;
 }
 
 .discounts_label{
@@ -100,6 +102,7 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  text-align: right;
 }
 
 .tax{
@@ -113,6 +116,7 @@ mat-card {
   float: left;
   align-items: baseline;
   line-height: 1em;
+  text-align: right;
 }
 
 .other {

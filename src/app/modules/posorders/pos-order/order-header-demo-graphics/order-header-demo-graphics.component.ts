@@ -30,7 +30,7 @@ export class OrderHeaderDemoGraphicsComponent  {
   openClient() {
     if (this.order) {
       if (this.order.clients_POSOrders) {
-        this.router.navigate(["/profileEditor/", {id: this.order.clientID}]);
+        this.router.navigate(["/profileEditor", {id: this.order.clientID}]);
         return;
       }
     }

@@ -26,6 +26,8 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
   @Input() searchField:       FormControl;
   @Input() id                 : number;
   @Input() name:              string;
+  // @Input() formFieldClass     = 'formFieldClass';
+
   searchPhrase:               Subject<any> = new Subject();
   item:                       IUserProfile;
   site:                       ISite;
@@ -35,7 +37,7 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
   brands$                   : Observable<ClientSearchResults>;
   brands                    : IUserProfile[]
 
-  @Input()  formFieldClass = 'mat-form-field form-background'
+  @Input()  formFieldClass = 'formFieldClass'
 
   results$ = this.searchPhrase.pipe(
     debounceTime(225),

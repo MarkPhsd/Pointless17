@@ -1,10 +1,9 @@
 <mat-card [class]="classcontainer">
     <mat-card-subtitle>
-
       <div class="header-grid" >
 
         <div  class="grid-title" >
-          <div class="header-title" >Categories</div>
+          <div class="header-title" ><ng-content></ng-content></div>
         </div>
 
         <div>
@@ -25,16 +24,20 @@
 
       </div>
 
-      <div *ngIf="value" class="loader">
-        <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+      <div *ngIf="value"
+            class="loader">
+        <mat-progress-bar mode="determinate"
+                          [value]="value"></mat-progress-bar>
       </div>
 
     </mat-card-subtitle>
 
     <mat-card-content>
       <div class="parent-container" >
-        <div fxLayout="row" class="panels">
-          <div  fxLayout="column" fxFlex="99">
+        <div fxLayout="row"
+             class="panels">
+          <div  fxLayout="column"
+                fxFlex="99">
 
             <div  *ngIf="categories"
                   [class]="orderslist"
@@ -46,16 +49,19 @@
                   [scrollWindow]          ="false">
 
                 <div  class="grid-flow">
-                  <div *ngFor="let item of categories; let i = index" [@listAnimation]="categories.length">
-                    <div class="grid-item">
+                  <div *ngFor="let item of categories; let i = index"
+                        [@listAnimation]="categories.length">
+                  <div class="grid-item">
                       <div>
                         <div class="text">{{item.name  | truncateText: 15  }}</div>
-                        <img  loading="lazy"
-                              draggable="false"
-                              [src]="getItemSrc(item?.urlImageMain)"
-                              (click)="listItems(item.id)"
-                              class="grid-item"
-                              alt="item">
+                        <img  loading   = "lazy"
+                              draggable = "false"
+                              [src]     = "getItemSrc(item?.urlImageMain)"
+                              err-SRC   = "getPlaceHolder()"
+                              onerror   = "this.src='../assets/images/placeholderimage.png'"
+                              (click)   = "listItems(item.id)"
+                              class     = "grid-item"
+                              [alt]     = "item?.description">
                       </div>
                     </div>
                   </div>

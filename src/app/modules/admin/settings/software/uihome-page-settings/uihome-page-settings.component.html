@@ -4,41 +4,48 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-
     <div  *ngIf="inputForm"
           [formGroup]="inputForm">
-
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayNotes"
+                  formControlName="brandsEnabled"
                   (change)="updateSetting()">
-          <mat-label>Display Notes</mat-label>
+          <mat-label>Brands</mat-label>
         </mat-slide-toggle>
       </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayQuantity"
+                  formControlName="departmentsEnabled"
                   (change)="updateSetting()">
-          <mat-label>Display Quantity</mat-label>
+          <mat-label>Departments</mat-label>
         </mat-slide-toggle>
       </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayAdd"
+                  formControlName="categoriesEnabled"
                   (change)="updateSetting()">
-          <mat-label>Display Add Button</mat-label>
+          <mat-label>Categories</mat-label>
         </mat-slide-toggle>
       </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="displayView"
+                  formControlName="typesEnabled"
                   (change)="updateSetting()">
-          <mat-label>Display View</mat-label>
+          <mat-label>Types</mat-label>
         </mat-slide-toggle>
       </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="tierMenuEnabled"
+                  (change)="updateSetting()">
+          <mat-label>Tier Menu</mat-label>
+        </mat-slide-toggle>
+      </div>
+
     </div>
   </mat-card-content>
 

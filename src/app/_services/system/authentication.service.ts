@@ -6,6 +6,7 @@ import { IUser } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { OrdersService } from '..';
+import { ToolBarUIService } from './tool-bar-ui.service';
 
 export interface IUserExists {
   id:           number;
@@ -52,6 +53,7 @@ export class AuthenticationService {
         private appInitService  : AppInitService,
         private platFormservice : PlatformService,
         private orderService    : OrdersService,
+        private toolbarUIService : ToolBarUIService,
     ) {
       this.apiUrl = this.appInitService.apiBaseUrl()
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
@@ -93,6 +95,8 @@ export class AuthenticationService {
 
     logout() {
       this.clearUserSettings();
+      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.updateToolBarSideBar(false)
       if (this.platFormservice.webMode) {
         if (this.appInitService.useAppGate) {
           this.router.navigate(['/appgate']);

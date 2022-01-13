@@ -14,13 +14,41 @@
   </mat-card-subtitle>
 
   <mat-card-content>
+    <div [formGroup]="inputForm">
 
-    <div [formGroup]='inputForm'>
       <product-type-select     [inputForm]="inputForm"></product-type-select>
       <app-department-select   [inputForm]="inputForm"></app-department-select>
       <app-category-select     [inputForm]="inputForm"></app-category-select>
       <app-brand-type-select   [inputForm]="inputForm"> </app-brand-type-select>
       <app-species-list        [inputForm]="inputForm"></app-species-list>
+      <!-- <app-activity-toggles    [formGroup]="inputForm"></app-activity-toggles> -->
+      <div  class="mat-label" >
+        <mat-slide-toggle
+            class="mat-label"
+            name="enabled"
+            formControlName="active">
+          <mat-label class="mat-label">Active</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div  class="mat-label">
+        <mat-slide-toggle
+            name="webMode"
+            class="mat-label"
+            formControlName="webProduct">
+          <mat-label class="mat-label">Web Enabled</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div  class="mat-label">
+        <mat-slide-toggle
+              name="webMode"
+              class="mat-label"
+              formControlName="webWorkRequired">
+          <mat-label class="mat-label">Requires Work</mat-label>
+        </mat-slide-toggle>
+      </div>
+
     </div>
 
   </mat-card-content>

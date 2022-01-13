@@ -10,13 +10,33 @@
 
     <scheduled-menu-list></scheduled-menu-list>
 
-    <app-categories ></app-categories>
-
     <mat-divider></mat-divider>
 
-    <app-brandslist ></app-brandslist>
+    <div *ngIf="homePageSetings">
 
-    <!-- <app-tier-menu></app-tier-menu> -->
+      <div *ngIf="homePageSetings.departmentsEnabled">
+        <app-categories  [itemTypeID]="6">
+          Department Search
+        </app-categories>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div *ngIf="homePageSetings.categoriesEnabled">
+        <app-categories  [itemTypeID]="4">
+          Category Search
+        </app-categories>
+        <mat-divider></mat-divider>
+      </div>
+
+      <div *ngIf="homePageSetings.brandsEnabled">
+        <app-brandslist ></app-brandslist>
+      </div>
+
+      <div *ngIf="homePageSetings.tierMenuEnabled">
+        <app-tier-menu></app-tier-menu>
+      </div>
+
+    </div>
 
   </div>
 </div>

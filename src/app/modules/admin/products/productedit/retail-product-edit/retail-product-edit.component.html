@@ -1,35 +1,37 @@
-<div>
-  <mat-form-field appearance="outline">
-    <mat-label> Barcode</mat-label>
-    <input matInput type="text"
-          formControlName="barcode"
-          class="form-control" >
-  </mat-form-field>
-</div>
+<div *ngIf="inputForm">
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label >Class</mat-label>
+      <input matInput type="text"
+            formControlName="class"
+            class="form-control" >
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label >Subclass</mat-label>
+      <input matInput type="text"
+            formControlName="subClass"
+            class="form-control" >
+    </mat-form-field>
+  </div>
+
+  <div>
+    <mat-form-field appearance="outline">
+      <mat-label >Color</mat-label>
+      <input matInput type="text"
+            formControlName="colorDesc"
+            class="form-control" >
+    </mat-form-field>
+  </div>
+
+  <app-value-fields
+    [inputForm]="inputForm"
+    [fieldName]="'countryOfOrigin'"
+    >
+    Country Of Origin
+  </app-value-fields>
 
 <div>
-  <mat-form-field appearance="outline">
-    <mat-label >Class</mat-label>
-    <input matInput type="text"
-          formControlName="class"
-          class="form-control" >
-  </mat-form-field>
-</div>
-
-<div>
-  <mat-form-field appearance="outline">
-    <mat-label >Subclass</mat-label>
-    <input matInput type="text"
-          formControlName="subClass"
-          class="form-control" >
-  </mat-form-field>
-</div>
-
-<div>
-  <mat-form-field appearance="outline">
-    <mat-label >Color</mat-label>
-    <input matInput type="text"
-          formControlName="colorDesc"
-          class="form-control" >
-  </mat-form-field>
-</div>
