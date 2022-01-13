@@ -15,15 +15,15 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
 export class RegisterAccountMainComponent implements OnInit {
 
   @Input() statusMessage: string;
-  compName: string;
-  company = {} as ICompany;
-  logo: string;
-  loading = false;
-  submitted = false;
-  returnUrl: string;
-  error = '';
+  compName   : string;
+  company    = {} as ICompany;
+  logo       : string;
+  loading    = false;
+  submitted  = false;
+  returnUrl  : string;
+  error      = '';
   companyName: string;
-  id: any;
+  id         : any;
 
   loginForm: FormGroup;
   // convenience getter for easy access to form fields
@@ -34,11 +34,9 @@ export class RegisterAccountMainComponent implements OnInit {
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: AuthenticationService,
-      private companyService: CompanyService,
       private appInitService: AppInitService,
       private sitesService: SitesService,
   ) {
-    // redirect to home if already logged in
     if (this.authenticationService.userValue) {
       this.router.navigate(['/app-main-menu']);
     }
@@ -51,22 +49,16 @@ export class RegisterAccountMainComponent implements OnInit {
 
   initLogo() {
     const logo        = this.appInitService.logo;
-    if ( logo)  {
-      this.logo   = logo
-    }
+    if ( logo)  { this.logo   = logo }
   }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
     });
-    this.getCompanyInfo();
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    if (this.company) {
-      this.compName = this.company.compName
-    }
-    this.logo = `${environment.logo}`
-    this.compName = `${environment.company}`
+    this.logo = `${this.appInitService.logo}`
+    this.compName = `${this.appInitService.company}`
   }
 
   async onSubmit(){
@@ -76,29 +68,12 @@ export class RegisterAccountMainComponent implements OnInit {
     if (this.loginForm.invalid) {
       return;
     }
-    // this.router.navigate(["/adminbranditem/", {id:id}]);
-    const result =  this.authenticationService.requestUserSetupToken(this.f.username.value).pipe().toPromise()
+    const result = await this.authenticationService.requestUserSetupToken(this.f.username.value).pipe().toPromise()
     if (result)  {
-      this.router.navigate(['/register-token', { data: JSON.stringify(result) } ]);
+      this.router.navigate(['/register-token', { data: result.userName } ]);
     }
   }
 
-  getCompanyInfo() {
-    try {
-        const site = this.sitesService.getAssignedSite();
-        this.companyService.getCompany(site).subscribe(data =>
-        {
-          this.company  = data
-          localStorage.setItem('company/compName', JSON.stringify(this.company.compName))
-          localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
-          localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
-        }, error  => {
-          this.statusMessage ="Offline"
-        }
-      );
-    } catch (error) {
-      this.statusMessage ="Offline"
-    }
-  }
+
 
 }

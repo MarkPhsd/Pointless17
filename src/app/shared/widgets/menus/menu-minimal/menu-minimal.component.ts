@@ -45,7 +45,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         user => {
         user = JSON.parse(localStorage.getItem('user')) as IUser;
         this.user = user
-        if (!user || !user.password) {
+        if (!user || !user.token) {
           this.menus = [] as AccordionMenu[];
           return
         }
@@ -57,7 +57,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   refreshMenu(user: IUser) {
     this.initMenus()
-    if (!user || !user.password) {return}
+    if (!user || !user.token) {return}
     const site = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(site)
 

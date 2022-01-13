@@ -181,7 +181,7 @@ export class UserSwitchingService {
     if (!user.roles)     { user.roles = 'user' }
     if (!user.firstName) { user.firstName= user.username }
     localStorage.setItem("ami21", 'true')
-    currentUser.password     = password;
+    // currentUser.password     = password;
     currentUser.roles        = user.roles
     currentUser.roles        = currentUser.roles.toLowerCase()
     currentUser.id           = user.id
@@ -192,11 +192,10 @@ export class UserSwitchingService {
     currentUser.token        = user.token;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
-    user.authdata = window.btoa(user.username + ':' + user.password);
+    user.authdata = window.btoa(user.username + ':' + user.token);
     currentUser.authdata     = user.authdata
-
     localStorage.setItem('user', JSON.stringify(currentUser))
-    console.log('user to be stringified', currentUser)
+
     this.authenticationService.updateUser(currentUser)
     console.log('update authentication service user', currentUser)
     return currentUser

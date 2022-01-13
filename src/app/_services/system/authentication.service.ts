@@ -88,7 +88,7 @@ export class AuthenticationService {
 
     setUserSubject(user:IUser) {
       if (!user || !user.password || !user.username) {return}
-      user.authdata = window.btoa( `${user.username}:${user.password}`);
+      user.authdata = window.btoa( `${user.username}:${user.token}`);
       localStorage.setItem("ami21", 'true');
       this.updateUser(user);
     }

@@ -1,12 +1,9 @@
-import { CompanyService,AuthenticationService, IUserExists} from 'src/app/_services';
+import { AuthenticationService, IUserExists} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
-import { first } from 'rxjs/operators';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { fadeInAnimation } from 'src/app/_animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { environment } from 'src/environments/environment';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 
@@ -44,57 +41,41 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
       private router: Router,
       private _snackBar: MatSnackBar,
       private authenticationService: AuthenticationService,
-      private companyService: CompanyService,
       private sitesService: SitesService,
       private appInitService: AppInitService
   ) {
-
-    // this.id = this.route.snapshot.paramMap.get('id');
-    this.userExists = JSON.parse( this.route.snapshot.paramMap.get('data') )
-
-    console.log(this.userExists)
-
-    if (this.userExists) {
-      // redirect to home if already logged in
-      if (this.authenticationService.userValue) {
-        this.router.navigate(['/app-main-menu']);
-      }
-    }
-    this.initLogo()
+    this.userName =  JSON.parse( this.route.snapshot.paramMap.get('data') )
   }
 
   ngOnInit(): void {
-
-    this.loginForm = this.fb.group({
-      token: ['', Validators.required],
-      userName: [this.userName, Validators.required],
-      password: ['', Validators.required],
-      confirmPassword: ['', Validators.required],
-    });
-
+    this.initForm();
     this.getCompanyInfo();
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.initLogo()
+  }
 
-    if (this.company === undefined) {
-    } else {
-      this.compName = this.company.compName
-    }
-    this.compName = `${environment.company}`
+  initForm() {
+    this.loginForm = this.fb.group({
+      token            : ['', Validators.required],
+      userName         : [this.userName, Validators.required],
+      password         : ['', Validators.required],
+      confirmPassword  : ['', Validators.required],
+    });
   }
 
   initLogo() {
     const logo        = this.appInitService.logo;
-    if ( logo)  {
-      this.logo   = logo
-    }
+    if ( logo)  {  this.logo   = logo}
+    this.compName = `${this.appInitService.company}`
   }
 
+  getCompanyInfo() {
+    const site = this.sitesService.getAssignedSite();
+  }
 
   goBack(){
+    this.initForm()
     this.router.navigate(['/login'])
   }
-
 
   onSubmit(){
     this.submitted = true;
@@ -134,6 +115,7 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
       this.authenticationService.assignUserNameAndPassword(user).subscribe(
         data =>
         {
+          this.initForm()
           if (data.userExists) {
             this.notifyEvent(`${data} . You may login`, 'Success')
             this.router.navigate(['/']);
@@ -142,6 +124,7 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
           }
         },
         error => {
+          this.initForm()
           this.statusMessage = "Error connecting"
           this.error = error;
           console.log(error)
@@ -149,29 +132,6 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
        });
     }
 
-  }
-
-  // { path: 'register-existing-user', component: RegisterAccountExistingUserComponent, data: { animation: 'isLeft'}},
-  // { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
-  // { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
-
-  getCompanyInfo() {
-    try {
-        const site = this.sitesService.getAssignedSite();
-        this.companyService.getCompany(site).subscribe(data =>
-        {
-          this.company  = data
-          localStorage.setItem('company/compName', JSON.stringify(this.company.compName))
-          localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
-          localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
-        }, error  => {
-          this.statusMessage ="Offline"
-        }
-      );
-
-    } catch (error) {
-      this.statusMessage ="Offline"
-    }
   }
 
   notifyEvent(message: string, action: string) {

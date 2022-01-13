@@ -33,12 +33,13 @@
                   </mat-form-field>
                     <br>
                     <mat-form-field appearance="fill">
-                        <mat-label>Enter User Name</mat-label>
+                        <mat-label>User Name</mat-label>
                         <input matInput type="text" formControlName="userName" class="form-control"
                             [ngClass]="{ 'is-invalid': submitted && f.userName.errors }" />
                         <div *ngIf="submitted && f.userName.errors" class="invalid-feedback">
                             <div *ngIf="f.userName.errors.required">Unique User Name Required</div>
                         </div>
+                        <mat-hint>Email or Phone</mat-hint>
                     </mat-form-field>
                     <br>
                     <mat-form-field appearance="fill">
@@ -65,6 +66,7 @@
                       </div>
                     </div>
                     {{ statusMessage }}
+                    <api-status-display>Service may be unavalible</api-status-display>
                 </form>
               </div>
             <br>
@@ -79,7 +81,7 @@
     </div>
     <br>
     <ng-template #loading >
-      <h2>Please wait...is loading.</h2>
+      <h2>Please wait ...loading.</h2>
       <mat-spinner></mat-spinner>
     </ng-template>
   </div>

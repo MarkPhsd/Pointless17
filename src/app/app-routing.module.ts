@@ -41,7 +41,6 @@ import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv
 import { TierMenuComponent } from './modules/menu/tierMenu/tier-menu/tier-menu.component';
 import { PriceCategoriesComponent } from './modules/admin/products/pricing/price-categories/price-categories.component';
 import { TVPriceTiersComponent } from './modules/tv-menu/price-tiers/price-tiers.component';
-import { RegisterAccountExistingUserComponent } from './modules/login/registration/register-account-existing-user/register-account-existing-user.component';
 import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
@@ -277,7 +276,6 @@ const routes: Routes = [
     { path: 'api-setting', component: APISettingComponent , data: { title: 'API Setting',  animation: 'isLeft'}},
     { path: 'apisetting',  component: APISettingComponent , data: { title: 'API Setting', animation: 'isLeft'}},
 
-    { path: 'register-existing-user', component: RegisterAccountExistingUserComponent, data: { animation: 'isLeft'}},
     { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
     { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
 

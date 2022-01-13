@@ -140,9 +140,7 @@ export class CheckInProfileComponent implements OnInit {
     if (this.dateRangeForm.get("end").value) {
       this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value.toISOString();
     }
-
     this.subscribeToDatePicker();
-
   }
 
   subscribeToDatePicker() {
@@ -152,10 +150,8 @@ export class CheckInProfileComponent implements OnInit {
         if (this.dateRangeForm.get('start').value && this.dateRangeForm.get('end').value) {
           this.dateFrom = this.dateRangeForm.get('start').value
           this.dateTo = this.dateRangeForm.get('end').value
-
           this.searchModel.completionDate_From = this.dateFrom.toISOString() ;
           this.searchModel.completionDate_To   =  this.dateTo.toISOString()
-
           this.refreshDateSearch()
         }
       })
@@ -165,13 +161,11 @@ export class CheckInProfileComponent implements OnInit {
 
   refreshDateSearch() {
     if (!this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
-
     if (this.dateFrom != null && this.dateTo != null) {
       this.searchModel.completionDate_From = this.dateFrom.toISOString()
       this.searchModel.completionDate_To   = this.dateTo.toISOString()
       this.refreshOrderSearch()
     }
-
   }
 
   refreshOrderSearch() {
@@ -270,15 +264,15 @@ export class CheckInProfileComponent implements OnInit {
   };
 
   navUserList(event) {
-    if (this.isStaff || this.isAuthorized) {
-      this.goBackToList();
-      return
-    }
-    this.router.navigate(["app-main-menu"]);
+    this.goBackToList()
   };
 
   goBackToList() {
-    this.router.navigate(["profileListing"]);
+    if (this.isStaff) {
+      this.router.navigate(["profileListing"]);
+      return
+    }
+    this.router.navigate(["app-main-menu"]);
   }
 
   sanitize(html) {
@@ -330,7 +324,7 @@ export class CheckInProfileComponent implements OnInit {
       const client$ = this.contactservice.deleteClient(site, this.clientTable.id)
       client$.subscribe( data => {
         this.notifyEvent('This profile has been removed.', 'Success')
-        this.router.navigateByUrl('/profileListing')
+        this.goBackToList()
       })
     }
   }

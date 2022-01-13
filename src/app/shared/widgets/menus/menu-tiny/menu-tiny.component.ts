@@ -37,8 +37,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this._user = this.authenticationService.user$.subscribe(
         user => {
         user = JSON.parse(localStorage.getItem('user')) as IUser;
+        console.log('user update', user )
         this.user = user
-        if (!user || !user.password) {
+        if (!user || !user.token) {
           this.menus = [] as AccordionMenu[];
           return
         }
@@ -50,7 +51,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
   refreshMenu(user: IUser) {
     this.initMenus()
-    if (!user || !user.password) {return}
+    if (!user || !user.token) {return}
     const site  = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(site)
 

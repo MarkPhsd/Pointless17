@@ -24,9 +24,7 @@ export class SitepointsComponent implements OnInit {
   constructor( private sitesService: SitesService,  private userService: UserService) { }
 
   ngOnInit(): void {
-
     this.refreshComponent();
-
   }
 
   refreshComponent()
@@ -34,25 +32,26 @@ export class SitepointsComponent implements OnInit {
 
     let user: IUserProfile;
     this.sites = [];
-
     this.sitesService.getSites().subscribe(data =>
       {
         this.sites = data
-
         for (let site of this.sites) {
-
           this.userService.getRemoteProfile(site).subscribe(
 
             values => {
                 user = values
-                site.userLoyaltyPoints = user.loyaltyPoints;
-                site.status = site.userLoyaltyPoints.toString();
+                if (user) {
+                  if (user.loyaltyPoints) {
+                    site.userLoyaltyPoints = user.loyaltyPoints;
+                  }
+                  if (site.userLoyaltyPoints) {
+                    site.status = site.userLoyaltyPoints.toString();
+                  }
+                }
               },
               error => {
-               //console.log("error" ,error)
-               site.status = "Site offline"
+                site.status = "Site offline"
               }
-
             )
           }
         }

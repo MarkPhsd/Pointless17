@@ -65,15 +65,15 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   initOrderBarSubscription() {
     this.toolbarServiceUI.orderBar$.subscribe(data => {
-      // console.log('bar updated', data)
       this.openOrderBar = data
-      // console.log('openOrderBar', this.openOrderBar)
     })
   }
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
-      this.order = data
+      if (data && data.id) {
+        this.order = data
+      }
     })
   }
 
@@ -97,10 +97,11 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         this.order$.next(this._order$)
         this.order$.subscribe( data => {
           data.subscribe(data => {
-            this.order = data
-            console.log('assign current order')
-            this.order$.next(this.orderService.currentOrder$)
-            this.toolbarServiceUI.updateOrderBar(true)
+            if (data && data.id) {
+              this.order = data
+              this.order$.next(this.orderService.currentOrder$)
+              this.toolbarServiceUI.updateOrderBar(true)
+            }
           })
         })
       }
@@ -165,7 +166,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   refreshOrder() {
-    // console.log('refresh orderRunning')
     if (!this.refreshCurrentOrderCheck) {  this.assignCurrentOrder() }
   }
 

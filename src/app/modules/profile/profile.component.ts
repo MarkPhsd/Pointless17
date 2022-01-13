@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { IUserProfile}  from 'src/app/_interfaces';
-import { OrdersService, UserService } from 'src/app/_services';
-import { DevService } from 'src/app/_services/system/dev-service.service';
+import { UserService } from 'src/app/_services';
 
 @Component({
   selector: 'app-profile',
@@ -11,42 +10,31 @@ import { DevService } from 'src/app/_services/system/dev-service.service';
 
 export class ProfileComponent implements OnInit {
 
-  constructor(private userService: UserService,
-              private devMode: DevService,
-
-              ) {
-    }
-
   user = {} as IUserProfile;
   showRoles: boolean;
   devModeOn: boolean;
 
-  ngOnInit(): void {
-    this.refreshProfileDetails();
-    this.devModeOn = this.devMode.getdevMode();
+  constructor(private userService: UserService,
+            ) {
   }
 
-  DisplayRoles(){
-    if (this.user.roles == 'user')
-    {
-    }else{
-      this.showRoles = true;
+  ngOnInit(): void {
+    this.refreshProfileDetails();
+  }
+
+  displayRoles(){
+    if (this.user.roles != 'user') {
+        this.showRoles = true;
     }
   };
 
   refreshProfileDetails(){
-
-    try {
-        this.userService.getProfile().subscribe(data =>
-          {
-            this.user = data
-            this.DisplayRoles()
-          }
-        )
-        } catch (error) {
-          console.log('error', error)
-        }
+    this.userService.getProfile().subscribe(data =>
+      {
+        this.user = data
+        this.displayRoles()
+      }
+    )
   }
-
 
 }

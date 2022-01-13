@@ -253,7 +253,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async  onSubmit() {
-    this.userSwitchingService.updateLoginStatus(0)
+    // this.userSwitchingService.updateLoginStatus(0)
     this.updateLoginStatus(0)
     if (!this.validateForm(this.loginForm)) { return }
 
@@ -264,7 +264,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         {
           if (user) {
             if (user.message === 'failed') {
-              this.userSwitchingService.updateLoginStatus(1)
+              // this.userSwitchingService.updateLoginStatus(1)
               this.updateLoginStatus(1)
               this.authenticationService.updateUser(null);
               return
@@ -275,14 +275,14 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)
-              this.userSwitchingService.updateLoginStatus(2)
+              // this.userSwitchingService.updateLoginStatus(2)
               this.updateLoginStatus(2)
               return
             }
           }
         },
         error => {
-          this.userSwitchingService.updateLoginStatus(0)
+          // this.userSwitchingService.updateLoginStatus(0)
           this.updateLoginStatus(0)
           const message = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
           this.notifyEvent(message, 'error')

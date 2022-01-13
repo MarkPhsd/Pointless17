@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, Subscription, } from 'rxjs';
+import { Observable, of, Subscription, } from 'rxjs';
 import { ISite, IUser }   from 'src/app/_interfaces';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -235,6 +235,9 @@ export class MenusService {
   }
 
   getMenu(site: ISite, menuName: string): Observable<AccordionMenu[]> {
+
+      const user = JSON.parse(localStorage.getItem('user')) as IUser;
+      if (!user || !user.token || user.token == '') { return of(null)}
 
       const controller = "/MenuGroups/"
 
