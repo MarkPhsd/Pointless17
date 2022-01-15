@@ -8,6 +8,10 @@ ion-content, body, container {
   z-index: 10;
 }
 
+.site-info {
+  float:right
+}
+
 .cameraPreview {
   display: flex;
   width: 100%;
@@ -60,4 +64,16 @@ ion-content, body, container {
 
 #flip::part(native) {
   border-radius: 30px;
+}
+
+.mat-card {
+  opacity: 50%;
+}
+
+.card-text {
+  // opacity: 50%;
+}
+
+.button{
+  opacity: 100%;
 }

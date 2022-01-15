@@ -68,6 +68,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
           data.filter( item => {
             this.addItemToMenu(item, this.menus)
           })
+          this.menus =  [...new Set(this.menus)]
         }, err => {
       }
     )

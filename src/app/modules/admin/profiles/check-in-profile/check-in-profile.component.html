@@ -53,6 +53,7 @@
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
               <app-profile-demographics
+                [client]="clientTable"
                 [inputForm]="inputForm"
                 [isAuthorized]="isAuthorized"
                 [isStaff]="isStaff">

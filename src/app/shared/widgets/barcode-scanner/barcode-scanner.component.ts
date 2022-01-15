@@ -56,6 +56,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     const result = await BarcodeScanner.startScan(); // start scanning and wait for a result
     // if the result has content
     if (result.hasContent) {
+      this.result = result.content;
       console.log(result.content); // log the raw scanned content
     }
   };
@@ -80,6 +81,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   public  cameraOn() {
+    this.initDisplayResults();
     const cameraPreviewOptions: CameraPreviewOptions = {
       position: 'rear',
       parent: 'cameraPreview',
@@ -90,16 +92,20 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     //window.document.querySelector('ion-app').classList.add('lowOpacity');
     CameraPreview.start(cameraPreviewOptions);
     this.cameraActive = true;
-    // const status = await BarcodeScanner.checkPermission({ force: true });
-    // if (status.granted) {
-    //   // the user granted permission
-    //   return true;
-    // }
+    this.scanStatus = 'Scanning'
+  }
+
+  initDisplayResults() {
+    this.result = ''
+    this.err = ''
+    this.scanStatus = ''
   }
 
   async cameraOff() {
+    this.initDisplayResults();
     this.cameraActive = false
     await CameraPreview.stop();
+    await BarcodeScanner.stopScan();
     this.stopScan();
   }
 
@@ -113,30 +119,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  prepare() {
-    // const { BarcodeScanner } = Plugins;
-    this.scanActive = true
-    try {
-      BarcodeScanner.prepare();
-    } catch (error) {
-      this.err = `${this.err}. ${error}`
-    }
-    this.status = "prepared"
-  }
-
-  initData() {
-    // this.status       = 'Scanning'
-    // this.error        = ''
-    // this.result       = ''
-    // this.user         = null;
-    // this.status       = 'Capturing Content.'
-    // this.cameraActive = true
-    // this.scanActive   = true;
-  }
-
   async startScan() {
 
-    this.initData()
     BarcodeScanner.prepare();
     BarcodeScanner.hideBackground();
     this.scanStatus = 'Scanning Started';
@@ -145,7 +129,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
     if (result.hasContent) {
       this.stopScan();
-      this.scanResult = 'has Content ' + result.content
+      this.scanResult = 'Content Resolved ' + result.content
+      console.log(result.content)
       this.resolveContent(result)
     } else {
       this.stopScan();
@@ -161,6 +146,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
     const data   =  result.content.replace(/(\r\n|\n|\r)/gm, "--");
     const site = this.siteService.getAssignedSite();
+    this.result = result.content;
+    console.log(data)
     const parser$ =  this.dlParserService.parseDriverLicense(site, data)
 
     parser$.subscribe(data => {
@@ -182,29 +169,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   async stopScan() {
-
+    this.initDisplayResults();
     this.scanActive = false;
-
-    // const { BarcodeScanner } = Plugins;
-
     BarcodeScanner.showBackground();
-
     BarcodeScanner.stopScan();
-
-    this.status = "Not scanning";
-
-  }
-
-  askUser() {
-
-    this.prepare();
-    const c = confirm('Do you want to scan a barcode?');
-    if (c) {
-      this.startScan();
-    } else {
-      this.stopScan();
-    }
-
   }
 
   flipCamera() {
@@ -220,7 +188,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   }
 
   async stopReadingCamera() {
-    // await this.cameraOff();
+    await this.cameraOff();
     this.stopScan();
   }
 

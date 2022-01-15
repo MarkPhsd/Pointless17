@@ -262,6 +262,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         user =>
         {
+          this.initForm();
           if (user) {
             if (user.message === 'failed') {
               // this.userSwitchingService.updateLoginStatus(1)

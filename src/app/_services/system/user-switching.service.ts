@@ -197,7 +197,7 @@ export class UserSwitchingService {
     localStorage.setItem('user', JSON.stringify(currentUser))
 
     this.authenticationService.updateUser(currentUser)
-    console.log('update authentication service user', currentUser)
+    // console.log('update authentication service user', currentUser)
     return currentUser
   }
 

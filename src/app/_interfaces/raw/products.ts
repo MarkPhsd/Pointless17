@@ -193,5 +193,6 @@ export interface IProduct {
   abv                           :string;
   promptGroupID               : number;
   active                      : boolean;
+  glutenFree                  : boolean;
 }
 

@@ -8,7 +8,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { fadeAnimation } from 'src/app/_animations';
 import { switchMap } from 'rxjs/operators';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+
 
 @Component({
   selector: 'app-menu-tiny',
@@ -37,7 +37,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this._user = this.authenticationService.user$.subscribe(
         user => {
         user = JSON.parse(localStorage.getItem('user')) as IUser;
-        console.log('user update', user )
+
         this.user = user
         if (!user || !user.token) {
           this.menus = [] as AccordionMenu[];
@@ -62,6 +62,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
         data.filter( item => {
           this.addItemToMenu(item, this.menus)
         })
+        this.menus =  [...new Set(this.menus)]
       }, err => {
         console.log('error refresh menu', err)
       }
@@ -76,10 +77,10 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   constructor ( private menusService            : MenusService,
-    private userAuthorizationService: UserAuthorizationService,
-    private router                  : Router,
-    private siteService             : SitesService,
-    private authenticationService   : AuthenticationService,
+                private userAuthorizationService: UserAuthorizationService,
+                private router                  : Router,
+                private siteService             : SitesService,
+                private authenticationService   : AuthenticationService,
     ) {
     this.site  =  this.siteService.getAssignedSite();
   }
@@ -121,6 +122,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     ).subscribe(data => {
       this.refreshMenu(this.user)
     })
+
   }
 
   mergeConfig(options: accordionConfig) {

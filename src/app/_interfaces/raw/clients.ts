@@ -112,4 +112,5 @@ export interface IClientTable {
   dlExp:                    string;
   med:                      string;
   dlNumber            :     string;
+  age                      :number;
 }

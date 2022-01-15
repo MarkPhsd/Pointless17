@@ -1,75 +1,66 @@
 <ion-header>
   <ion-toolbar color="primary">
+
     <span class="site-info">
       <button mat-button (click)="goHome()">
-        <mat-icon >home</mat-icon>
+        <mat-icon >close</mat-icon> Exit
       </button>
     </span>
-    <ion-title>DL Scanner</ion-title>
+    <span>
+      <ion-title>ID / Driver License  Scanner</ion-title>
+    </span>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-button (click)="cameraOn()"
-            *ngIf="!cameraActive">
-  Scan
-</ion-button>
+<div class="mat-card">
+  <mat-card>
 
-<div>
-  <!-- Status           : {{status}} <br> -->
-  <!-- Barcode Prepared : {{barcodePrepared}} <br>-->
-  Scan Status      : {{scanStatus}} <br>
+    <div class="card-text">
 
-  <div *ngIf="err">
-    err              : {{err}}<br>
+      <div *ngIf="scanStatus">
+        Scan Status      : {{scanStatus}}
+      </div>
+      <div *ngIf="scanStatus">
+        status           : {{status}}
+      </div>
+      <div *ngIf="result">
+        scanResult       : {{result}}
+      </div>
+      <div *ngIf="err">
+        err              : {{err}}>
+      </div>
+      <div *ngIf="error">
+        Error              : {{error}}
+      </div>
 
-  </div>
-
-  <div *ngIf="error">
-    Error              : {{error}}<br>
-  </div>
-
-  scanResult       : {{result}}<br>
-    <!-- Result           : {{result}} <br> -->
-  <!-- statusCheckPermision: {{statusCheckPermision}} <br> -->
-  <button mat-raised-button (click)="startScan()">Scan</button>
-
-</div>
-
-<div *ngIf="error">Error: {{error}} </div>
-
-<div *ngIf="user">
-  <!-- <div>
-    Name:  {{user?.firstName}} {{user?.lastName}}
-  </div>
-  <div>
-    Account: {{user?.accountNumber}}
-    <br>
-    ID: {{user.id}}
-  </div> -->
+    </div>
+  </mat-card>
 </div>
 
 <ion-content>
   <div class="overlay" [style.z-index]="cameraActive ? 10 : 0">
-    <div *ngIf="cameraActive"  class="cameraPreview" id="cameraPreview">
-
+    <div
+          class="cameraPreview"
+          id="cameraPreview">
+          <!-- *ngIf="cameraActive" -->
         <ion-button (click)="cameraOff()" expand="block" id="close">
           <ion-icon name="close-circle"
                     slot="icon-only"></ion-icon>
         </ion-button>
 
-        <!-- <ion-button (click)="captureImage()" expand="block" id="capture">
+        <ion-button (click)="startScan()" expand="block" id="capture">
           <ion-icon name="camera" slot="icon-only"></ion-icon>
-        </ion-button> -->
+        </ion-button>
 
         <ion-button (click)="startScan()" expand="block" id="flip">
           <ion-icon name="camera-reverse" slot="icon-only">
           </ion-icon>
         </ion-button>
 
-
-        <ion-button (click)="flipCamera()" expand="block" id="flip">
+        <!-- <ion-button (click)="flipCamera()" expand="block" id="flip">
           <ion-icon name="camera-reverse" slot="icon-only"></ion-icon>
-        </ion-button>
+        </ion-button> -->
       </div>
 
     </div>

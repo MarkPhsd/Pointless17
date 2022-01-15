@@ -2,16 +2,15 @@
 
   <mat-card-title>
     <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-      Items
+      Flower Menu
     </div>
   </mat-card-title>
 
   <mat-card-content>
 
-    <div class="gridContainer" *ngIf="headers">
-     <div class="grid-container">
-
-        <div class="headers" *ngFor="let header of headers">
+    <div *ngIf="headers">
+        <div class="headers"
+            *ngFor="let header of headers">
 
           <div class="grid-item menu-items">
             <div class="headers">
@@ -19,23 +18,25 @@
             </div>
           </div>
 
-          <br><br>
+          <mat-divider></mat-divider>
 
-          <div *ngFor="let flower of flowers$ | async" >
-            <div *ngIf="flower.priceTier === header" >
-                <div class="grid-item menu-items ">
-                  <button mat-raised-button class="viewbutton">
-                    <mat-icon>open_in_new</mat-icon>
-                  </button>
+          <div   class="grid-container">
+            <ng-container
+                  *ngFor="let flower of (flowers$ | async)" >
+              <span *ngIf="flower.priceTier === header && flower.flower.length>0">
+                <div  class="grid-item" >
                   {{flower.flower}}
                 </div>
-            </div>
-          </div>
-
+              </span>
+            </ng-container>
         </div>
+
       </div>
     </div>
-
   </mat-card-content>
-
 </mat-card>
+
+     <!-- <button mat-button
+                          class="viewbutton">
+      <mat-icon>open_in_new</mat-icon>
+    </button> -->

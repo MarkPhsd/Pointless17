@@ -11,6 +11,7 @@ import { StringDecoder } from 'node:string_decoder';
 import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { IBalanceSheet } from './balance-sheet.service';
 import { PlatformService } from '../system/platform.service';
+import { Router } from '@angular/router';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -18,7 +19,7 @@ export interface POSOrdersPaged {
 }
 
 export interface OrderPayload {
-  userID: number;
+  userID      : number;
   serviceType : IServiceType;
   deviceName  : string;
   client      : IUserProfile;
@@ -62,10 +63,11 @@ export class OrdersService {
   }
 
   constructor(
-    private platFormService: PlatformService,
-    private http: HttpClient,
-    private _SnackBar: MatSnackBar,
-    private toolbarServiceUI: ToolBarUIService,
+        private platFormService: PlatformService,
+        private http: HttpClient,
+        private _SnackBar: MatSnackBar,
+        private toolbarServiceUI: ToolBarUIService,
+        private router: Router,
             )
   {
     if (    this.platForm  === "Electron"
@@ -421,7 +423,8 @@ export class OrdersService {
   //////////////////async await functions.
   async newDefaultOrder(site: ISite): Promise<boolean>  {
     if (!site)        {  return }
-    const result = await this.newOrderWithPayload(site, null)
+    const result = await this.newOrderWithPayload(site, null);
+    this.navToMenu();
     return result
   }
 
@@ -433,21 +436,37 @@ export class OrdersService {
       .then(
         order => {
           this.setActiveOrder(site, order)
+
+          this.navToMenu();
           return true
         }, catchError => {
           this.notificationEvent(`Error submitting Order # ${catchError}`, "Posted")
           return false
         }
     )
+
     return result
+  }
+
+  navToMenu() {
+    if (this.router.url != '/app-main-menu'){
+
+      if (this.router.url.substring(0, '/menuitems-infinite'.length) != '/menuitems-infinite') {
+        console.log('items dont match', this.router.url.substring(0, '/menuitems-infinite'.length))
+        this.router.navigate(['/app-main-menu']);
+        return
+      }
+
+    }
   }
 
   getPayLoadDefaults(serviceType: IServiceType): OrderPayload {
     const orderPayload = {} as OrderPayload;
     orderPayload.client = null;
     orderPayload.serviceType = serviceType;
+    orderPayload.deviceName = this.getCurrentAssignedBalanceSheetDeviceName();
     const order = {} as IPOSOrder;
-    order.deviceName = this.getCurrentAssignedBalanceSheetDeviceName()
+    order.deviceName =  orderPayload.deviceName;
     order.employeeID = parseInt(this.getEmployeeID());
     orderPayload.order = order
     return orderPayload
@@ -462,12 +481,13 @@ export class OrdersService {
     return '0'
   }
 
-  getCurrentAssignedBalanceSheetDeviceName() {
+  getCurrentAssignedBalanceSheetDeviceName(): string {
     try {
-      if (localStorage.getItem('currentDeviceName')) {
-        return localStorage.getItem('currentDeviceName').toLowerCase();
+      if (localStorage.getItem('devicename')) {
+        return localStorage.getItem('devicename')
       }
     } catch (error) {
+
       return '';
     }
   }

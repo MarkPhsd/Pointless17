@@ -29,9 +29,9 @@
                 (outputCopy)            ="copyItem($event)"
           ></app-edit-buttons-standard>
 
-          <app-activity-toggles
+        <!-- <app-activity-toggles
               [inputForm]="productForm">
-          </app-activity-toggles>
+          </app-activity-toggles> -->
 
         </div>
       </div>
@@ -62,6 +62,7 @@
               <app-category-select [inputForm]="productForm"></app-category-select>
               <app-department-select [inputForm]="productForm" ></app-department-select>
               <product-type-select [inputForm]="productForm"></product-type-select>
+
               <app-brand-type-select
                       [formFieldClass]="'formFieldClass-standard'"
                       [id] = "brandID.value"
@@ -119,11 +120,11 @@
               <h4> <mat-icon>list</mat-icon> {{ itemType.name }}</h4>
             </div>
 
-            <div *ngIf="itemType && itemType.name && (
-                     itemType.name.toLowerCase() === 'wine'
-                  || itemType.name.toLowerCase() === 'alcohol'
-                  || itemType.name.toLowerCase() === 'beer')">
-                <app-value-fields
+             <div *ngIf="itemType && itemType.name && (
+                        itemType.useType.toLowerCase() === 'retail liquor' ||
+                        itemType.useType.toLowerCase() === 'service liquor'   )">
+
+                <!-- <app-value-fields
                   [inputForm]="productForm"
                   [fieldName]="'countryOfOrigin'"
                   >
@@ -143,29 +144,34 @@
                 </app-value-fields>
                 <app-value-fields
                   [inputForm]="productForm"
-                  [fieldName]="'proof'"
+                  [fieldName]="'abv'"
                   >
                   ABV
-                </app-value-fields>
+                </app-value-fields> -->
+
             </div>
 
-            <div *ngIf="itemType && itemType.name && (itemType.name.toLowerCase() === 'grocery')">
-              <food-product-edit [inputForm]="productForm"></food-product-edit>
-              <app-value-fields
-                [inputForm]="productForm"
-                [fieldName]="'countryOfOrigin'"
-                >
-                Country Of Origin
-              </app-value-fields>
-            </div>
+            <div *ngIf="itemType && itemType.useType && (itemType.type.toLowerCase() === 'grocery' ||
+                                                         itemType.type.toLowerCase() === 'tobacco' ||
+                                                         itemType.type.toLowerCase() === 'restaurant')">
 
-            <div *ngIf="itemType && itemType.name && (itemType.name.toLowerCase() === 'tobacco' )">
+              <!-- <food-product-edit [inputForm]="productForm"></food-product-edit> -->
+
               <app-value-fields
                 [inputForm]="productForm"
-                [fieldName]="'countryOfOrigin'"
-                >
+                [fieldName]="'countryOfOrigin'">
                 Country Of Origin
               </app-value-fields>
+
+              <div  class="mat-toggle">
+                <mat-slide-toggle
+                    name="glutenFree"
+                    class="mat-label"
+                    formControlName="glutenFree">
+                  <mat-label class="mat-label">Gluten Free</mat-label>
+                </mat-slide-toggle>
+              </div>
+
             </div>
 
             <div *ngIf="itemType && itemType.name && ( itemType.type.toLowerCase() === 'discounts' )">
@@ -185,28 +191,32 @@
               </app-value-fields>
             </div>
 
-            <div *ngIf="itemType && itemType.name &&  (itemType.name.toLowerCase() === 'generic')">
+            <div *ngIf="itemType && itemType.type &&  (itemType.name.toLowerCase() === 'generic')">
               <prompt-group-select
                  [inputForm]="productForm"
               ></prompt-group-select>
             </div>
 
-            <div *ngIf="itemType && itemType.name &&  (itemType.name.toLowerCase() === 'retail' )">
+            <div *ngIf="itemType && itemType.type &&  (itemType.type.toLowerCase() === 'retail' )">
               <retail-product-edit [inputForm]="productForm"></retail-product-edit>
+              <app-value-fields
+                [inputForm]="productForm"
+                [fieldName]="'countryOfOrigin'"
+                >
+                Country Of Origin
+              </app-value-fields>
             </div>
 
-            <div *ngIf="itemType && itemType.name &&  (itemType.name.toLowerCase() === 'modifier' )">
+            <div *ngIf="itemType && itemType.type &&  (itemType.type.toLowerCase() === 'modifier' )">
 
             </div>
 
-            <div *ngIf="itemType && itemType.name &&  (itemType.name.toLowerCase() === 'grouping' )">
+            <div *ngIf="itemType && itemType.type &&  (itemType.type.toLowerCase() === 'grouping' )">
 
             </div>
 
             <div *ngIf="itemType && itemType.type &&  itemType.type.toLowerCase() === 'cannabis'">
-
               <cannabis-item-edit [inputForm]="productForm"></cannabis-item-edit>
-
             </div>
 
             <div *ngIf="itemType && itemType.useType &&  (
@@ -226,7 +236,7 @@
                 Count
               </app-value-fields>
 
-          </div>
+            </div>
 
           </div>
 

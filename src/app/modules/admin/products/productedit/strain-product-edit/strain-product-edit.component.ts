@@ -85,32 +85,15 @@ export class StrainProductEditComponent implements OnInit {
   };
 
   initializeForm()  {
+
     const site = this.siteService.getAssignedSite();
     this.initFormFields();
 
-    if (this.productForm) {
-      if (this.product) {
+    if (this.productForm && this.product) {
         this.productForm.patchValue(this.product)
         this.urlImageMain = this.product.urlImageMain;
-      }
     }
 
-    return ;
-
-    if (this.id) {
-
-      if (this.product) {
-        this.productForm.patchValue(this.product)
-      } else {
-      }
-
-      this.product$.subscribe(
-        data => {
-          this.product = data
-          this.priceCategoryID = data.priceCategory;
-          this.productForm.patchValue(data)
-      })
-    }
   };
 
   initFormFields() {
@@ -146,6 +129,7 @@ export class StrainProductEditComponent implements OnInit {
     if  (this.updateItem(event)) {
       this.onCancel(event);
     }
+
   };
 
   openPriceCategory() {

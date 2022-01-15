@@ -9,7 +9,6 @@ import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
 import { Location } from '@angular/common';
-import { switchMap } from 'rxjs/operators';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
@@ -141,7 +140,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       await  this.getSheet(this.id)
     }
     if(!this.id) {
-      this.getCurrentSheet();
+      this.newBalanceSheet();
     }
   };
 

@@ -26,7 +26,6 @@ export class FbProductsService {
 
   initForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-
         id:                           [''],
         name:                         [''],
         sku:                          [''],
@@ -224,9 +223,8 @@ export class FbProductsService {
         abv:                          [''],
         promptGroupID:                [''],
         active:                       [''],
+        glutenFree                :   [''],
       })
-
       return fb;
-
     }
 }

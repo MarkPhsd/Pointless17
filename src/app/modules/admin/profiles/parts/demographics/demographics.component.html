@@ -80,6 +80,7 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker touchUi #picker></mat-datepicker>
       </mat-form-field>
+
     </div>
 
     <div *ngIf="isAuthorized" >
@@ -93,77 +94,85 @@
       </mat-form-field>
     </div>
 
-  </div>
+    <div>
+      <mat-card>
+        <mat-card-subtitle>
+          Account Info
+        </mat-card-subtitle>
 
-  <div *ngIf="!isAuthorized && !isStaff">
+        <div class="grid-info">
 
-    <mat-card>
-      <mat-card-subtitle>
-        Account Info
-      </mat-card-subtitle>
-
-      <div class="grid-info">
-
-        <div class='text'>
-          Username:
-        </div>
-        <div>
-          {{inputForm.controls['apiUserName']?.value}}
-        </div>
-
-        <div  class='text'>
-          DOB:
-        </div>
-        <div  class='text'>
-          {{inputForm.controls['dob']?.value}}
-        </div>
-
-        <span *ngIf="inputForm.controls['dlNumber']?.value"  class='text'>
-            <div>
-              DL Number:
-            </div>
-            <div>
-              {{inputForm.controls['dlNumber']?.value}}
+          <div class='text'>
+            Username:
           </div>
-
-            <div>
-              DL EXP:
-            </div>
-            <div>
-              {{inputForm.controls['dlExp']?.value}}
-            </div>
-        </span>
-
-          <div class='text'>
-            Expiration
-          </div>
-          <div class='text'>
-            {{inputForm.controls['followUp']?.value}}
-        </div>
-
-          <div class='text'>
-            Rewards Points:
-          </div>
-          <div class='text'>
-            {{inputForm.controls['loyaltyPoints']?.value}}
+          <div>
+            {{inputForm.controls['apiUserName']?.value}}
           </div>
 
           <div  class='text'>
-            Med:
+            DOB:
           </div>
           <div  class='text'>
-            {{inputForm.controls['med']?.value}}
+            {{inputForm.controls['dob']?.value  | date: 'shortDate'}}
           </div>
 
-        </div>
-    </mat-card>
+          <div *ngIf="inputForm.controls['dob']?.value" class='text'>
+            Age:
+          </div>
+          <div *ngIf="inputForm.controls['dob']?.value"  class='text'>
+            {{client.age}}
+          </div>
+
+
+          <span *ngIf="inputForm.controls['dlNumber']?.value"  class='text'>
+              <div>
+                DL Number:
+              </div>
+              <div>
+                {{inputForm.controls['dlNumber']?.value}}
+            </div>
+
+              <div>
+                DL EXP:
+              </div>
+              <div>
+                {{inputForm.controls['dlExp']?.value  | date: 'shortDate' }}
+              </div>
+          </span>
+
+            <div class='text'>
+              Expiration:
+            </div>
+            <div class='text'>
+              {{inputForm.controls['followUp']?.value | date: 'shortDate' }}
+            </div>
+
+            <div class='text'>
+              Rewards Points:
+            </div>
+            <div class='text'>
+              {{inputForm.controls['loyaltyPoints']?.value}}
+            </div>
+
+            <div *ngIf="inputForm.controls['med']?.value" class='text'>
+              Med:
+            </div>
+            <div *ngIf="inputForm.controls['med']?.value" class='text'>
+              {{inputForm.controls['med']?.value}}
+            </div>
+
+          </div>
+      </mat-card>
+    </div>
+
   </div>
+
 
   <div>
 
     <div  *ngIf="isAuthorized" >
       <mat-form-field appearance="outline">
-      <mat-label >Loyalty Points</mat-label>
+      <mat-label >Reward Points</mat-label>
       <input  matInput
               type="text"
               id="title"
@@ -222,7 +231,6 @@
             class="form-control" >
       </mat-form-field>
     </div>
-
 
   </div>
 

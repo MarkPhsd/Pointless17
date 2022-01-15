@@ -25,8 +25,8 @@ export class EditButtonsStandardComponent  {
   @Input() hideExit    : boolean;
   @Input() printOption : boolean;
   @Input() viewOrder   : boolean;
-  @Input() historyItem : boolean;
-  @Input() hideSave    : boolean;
+  @Input() historyItem         : boolean;
+  @Input() hideSave            : boolean;
   @Input() enableStartOrder    : boolean;
 
   smallDevice = false;
@@ -38,14 +38,15 @@ export class EditButtonsStandardComponent  {
       this.enableUpdate = true
       this.enableDelete = false
 
-      // if ( this.userauthorizationService.isUserAuthorized('manager') ||
-      //   this.userauthorizationService.isUserAuthorized('admin') ) {
-      //   this.enableDelete = true
-      //   this.enableStartOrder = true
-      // }
-      // if (this.userauthorizationService.isUserAuthorized('user')) {
-      //   this.enableStartOrder = false
-      // }
+      if ( this.userauthorizationService.isUserAuthorized('manager') ||
+        this.userauthorizationService.isUserAuthorized('admin') ) {
+        this.enableDelete = true
+        // this.enableStartOrder = true
+      }
+
+      if (this.userauthorizationService.isUserAuthorized('user')) {
+        this.enableStartOrder = false
+      }
 
       this.updateItemsPerPage();
   }

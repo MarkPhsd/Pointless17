@@ -117,6 +117,7 @@ export class BalanceSheetMethodsService {
         this.updateBalanceSheet(sheet)
         return  this.sheetService.getSheetCalculations(site, sheet)
     })).subscribe( sheet => {
+      // this.notify('Balance Sheet Calculated')
       this.updateBalanceSheet(sheet)
     })
 

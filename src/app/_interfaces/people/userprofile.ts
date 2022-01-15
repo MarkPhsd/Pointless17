@@ -74,6 +74,7 @@ export interface IUserProfile {
   employee:                  employee;
   openOrderCount:            number;
   itemCount     :            number;
+  age           :            number;
 }
 
 export interface clientType {
