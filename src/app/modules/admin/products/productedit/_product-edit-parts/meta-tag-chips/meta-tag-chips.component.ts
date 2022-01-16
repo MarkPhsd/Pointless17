@@ -74,8 +74,10 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   async ngOnInit() {
 
     //the nput from the parent shouold work
-    this.initMetaTags( this.metaTags.value)// this.metaTagsList
-    console.log(this.metaTagList)
+    if (this.metaTags) {
+      this.initMetaTags( this.metaTags.value)// this.metaTagsList
+    }
+    // console.log(this.metaTagList)
     return
 
   }
@@ -108,13 +110,10 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   }
 
   addtoDataList(value: string) {
-
     const tag = {} as IMetaTag;
     tag.name = value
     const tags$ = this.metaTagService.post(this.site, tag)
     tags$.subscribe()
-    // this.metaTags.setValue(null);
-
   }
 
 
@@ -132,14 +131,11 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   }
 
   remove(item: string): void {
-
     const index = this.itemTags.indexOf(item);
     if (index >= 0) {
       this.itemTags.splice(index, 1);
     }
-
     this.setMetaTagsToProduct();
-
   }
 
   setMetaTagsToProduct() {
@@ -155,8 +151,9 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
       }
     })
 
-    this.inputForm.patchValue({metaTags: tags})
-    this.inputForm.patchValue({metaTag: tags})
+    if (tags) {
+      this.inputForm.patchValue({metaTag: tags})
+    }
 
   }
 
@@ -176,9 +173,10 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
           tags = `${tags},${data}`
         }
       })
-
-    this.metaTags.setValue(tags)
-    this.setMetaTagsToProduct()
+      if (tags) {
+        this.metaTags.setValue(tags)
+        this.setMetaTagsToProduct()
+      }
 
   }
 

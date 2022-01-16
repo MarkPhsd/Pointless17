@@ -96,6 +96,7 @@ export class PaymentMethodsService {
 
   }
 
+
   getCacheMethod(site: ISite, id: number):  Observable<IPaymentMethod> {
 
     const controller = '/PaymentMethods/'

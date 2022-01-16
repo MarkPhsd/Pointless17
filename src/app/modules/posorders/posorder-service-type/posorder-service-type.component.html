@@ -1,0 +1,16 @@
+
+<mat-card class="card-dimensions">
+  <mat-card-content>
+    <ng-content></ng-content>
+    <app-mat-toggle-selector
+        class="card-height"
+        [list$]            = "serviceTypes$"
+        [hideAllOption]    = "'true'"
+        [toggleDimensions] = "'toggle-group-tall'"
+        [buttonDimensions] = "'button-dimensions-tall'"
+        (outPutItem)       = "applyServiceType($event)"
+      >
+    </app-mat-toggle-selector>
+  </mat-card-content>
+</mat-card>
+

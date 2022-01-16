@@ -5,14 +5,13 @@
     <mat-chip-list  appearance="outline"  #chipList aria-label="Fruit selection"  >
 
       <mat-chip
-        *ngFor="let item of (itemTags || [])"
-        [selectable]="selectable"
-        [removable]="removable"
-        (removed)="remove(item)">
+          *ngFor="let item of (itemTags || [])"
+          [selectable]="selectable"
+          [removable]="removable"
+          (removed)="remove(item)">
         {{item | json}}
         <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
       </mat-chip>
-
 
       <input
             placeholder="New item..."
@@ -29,17 +28,17 @@
                       panelWidth="auto"
                       (optionSelected)="selected($event)"
                       [displayWith]="displayFn.bind(this)">
-
-
-      <mat-option *ngFor="let item of results$ | async" [value]="item">
+      <mat-option *ngFor="let item of results$ | async"
+                  [value]="item">
         {{item.name}}
       </mat-option>
-
-
     </mat-autocomplete>
   </mat-form-field>
 
-  <div [hidden]="true" [formGroup]="inputForm">
+  <div
+       *ngIf="inputForm"
+       [hidden]="true"
+       [formGroup]="inputForm">
 
     <input  matInput
             type="text"

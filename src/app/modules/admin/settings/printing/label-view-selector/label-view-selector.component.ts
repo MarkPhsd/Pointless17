@@ -97,7 +97,7 @@ export class LabelViewSelectorComponent implements OnInit {
       return
     }
     if (this.product) {
-      console.log('this product', this.zplSetting)
+      // console.log('this product', this.zplSetting)
       this.refreshLabel(this.zplSetting.text, this.product)
       return
     }

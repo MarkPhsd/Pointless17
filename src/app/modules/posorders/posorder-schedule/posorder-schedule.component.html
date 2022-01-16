@@ -1,0 +1,41 @@
+<mat-card>
+  <mat-card-subtitle>
+    Schedule Order
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="grid-container">
+      <div>
+        Schedule Date
+      </div>
+
+      <posorder-shipping-address
+      ></posorder-shipping-address>
+      <div></div>
+
+      <posorder-service-type >
+        Select Service Type
+      </posorder-service-type>
+
+      <div class      ="order-notes"
+           *ngIf      ="inputForm"
+           [formGroup]="inputForm"
+           >
+
+        <div>
+          <mat-form-field
+              appearance="outline"
+              id="customer-notes">
+            <mat-label>Notes</mat-label>
+              <textarea matInput
+                        rows="10"
+                        columns="40"
+                        formControlName="notes"
+              ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>

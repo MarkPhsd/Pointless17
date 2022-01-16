@@ -364,7 +364,7 @@ constructor(  private _snackBar              : MatSnackBar,
       items$.subscribe(data =>
         {
             const resp         =  data.paging
-            console.log('data', data)
+            // console.log('data', data)
             if (!resp)         {return}
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
@@ -477,7 +477,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
   editItemWithId(id:any) {
     if(!id) {
-      console.log(id)
+      // console.log(id)
       return
     }
     this.productEditButtonService.openProductDialog(id);

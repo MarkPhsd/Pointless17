@@ -1,4 +1,6 @@
-<div *ngIf="inputForm" [formGroup]="inputForm" class="grid-container" >
+<div *ngIf="inputForm"
+     [formGroup]="inputForm"
+     class="grid-container" >
 
   <div>
     <mat-form-field appearance="outline">
@@ -40,42 +42,38 @@
     </div>
   </div>
 
-  <div *ngIf="itemType && itemType.type != undefined">
+  <div *ngIf="itemType && itemType.type">
     <div *ngIf=" (
-             itemType.type === 'Retail Liquor'
+               itemType.type.toLowerCase() === 'retail liquor'
+            || itemType.type.toLowerCase() === 'service liquor'
              ||itemType.type.toLowerCase() === 'retail'
           )">
 
       <div class="mat-form-field">
-      <mat-form-field appearance="outline">
-      <mat-label >CRV</mat-label>
-      <input matInput type="text"
-            formControlName="crv"
-            class="form-control" >
-      </mat-form-field>
+        <mat-form-field appearance="outline">
+        <mat-label >CRV</mat-label>
+        <input matInput type="text"
+              formControlName="crv"
+              class="form-control" >
+        </mat-form-field>
       </div>
-    </div>
+
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'caseRetail'"
+        >
+        Case Price
+      </app-value-fields>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'caseQty'"
+        >
+        Case Quantity
+      </app-value-fields>
+  </div>
   </div>
 
-  <div *ngIf="itemType  && (
-        itemType.name.toLowerCase()   === 'wine'
-    || itemType.name.toLowerCase()   === 'alcohol'
-    || itemType.name.toLowerCase()   === 'beer')">
-    <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'caseRetail'"
-      >
-      Case Price
-    </app-value-fields>
-    <app-value-fields
-      [inputForm]="inputForm"
-      [fieldName]="'caseQty'"
-      >
-      Case Quantity
-    </app-value-fields>
-  </div>
 </div>
-
 
 
 

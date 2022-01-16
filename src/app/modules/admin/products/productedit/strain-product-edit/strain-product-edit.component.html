@@ -1,5 +1,5 @@
 <ng-template #loading>
-  <mat-spinner [diameter]="100"></mat-spinner>
+  <mat-spinner [diameter]="70"></mat-spinner>
 </ng-template>
 
 <div class="container"
@@ -20,6 +20,7 @@
             </div>
           </h4>
         </div>
+
         <div >
           <app-edit-buttons-standard
                 (outputeupdateItem)     ="updateItem($event)"
@@ -29,13 +30,12 @@
                 (outputCopy)            ="copyItem($event)"
           ></app-edit-buttons-standard>
 
-        <!-- <app-activity-toggles
+          <app-activity-toggles
               [inputForm]="productForm">
-          </app-activity-toggles> -->
-
+          </app-activity-toggles>
         </div>
-      </div>
 
+      </div>
     </mat-card-title>
 
     <mat-divider> </mat-divider>
@@ -215,7 +215,9 @@
 
             </div>
 
-            <div *ngIf="itemType && itemType.type &&  itemType.type.toLowerCase() === 'cannabis'">
+            <div  *ngIf="itemType && itemType.type &&
+                          (itemType.type.toLowerCase() === 'cannabis' ||
+                          itemType.type.toLowerCase() === 'med-cannabis')">
               <cannabis-item-edit [inputForm]="productForm"></cannabis-item-edit>
             </div>
 

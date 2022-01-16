@@ -1,177 +1,160 @@
-<div *ngIf="product && productForm; else loading"  class="container">
-  <div [formGroup]="productForm"  id="fullProductName" >
 
-    <mat-card >
-      <mat-card-title >
-        <div class="header-container" >
-          <div>
-            <h4>
-              <div *ngIf="product.id == 0">
-                Add Item:  {{ product?.name  }}  {{ product?.barcode }}
-              </div>
-              <div *ngIf="product.id != 0">
-                Edit Item: {{ product?.name  }}  {{ product?.barcode }}
-              </div>
-            </h4>
-          </div>
-          <div>
-
-            <app-edit-buttons-standard
-                  (outputeupdateItem)     ="updateItem($event)"
-                  (outputupdateItemExit)  ="updateItemExit($event)"
-                  (outputupdatedeleteItem)="deleteItem($event)"
-                  (outputupdateonCancel)  ="onCancel($event)"
-                  (outputCopy)            ="copyItem($event)"
-            ></app-edit-buttons-standard>
-
-            <app-activity-toggles [formGroup]="productForm"></app-activity-toggles>
-
-          </div>
-        </div>
-      </mat-card-title>
-
-      <mat-card-content >
-        <div>
-          <div *ngIf="productForm.controls.fullProductName.errors?.required && productForm.controls.fullProductName.touched" class="error">
-            <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
-          </div>
-
-          <div *ngIf="productForm.controls.name.errors?.required && productForm.controls.name.touched" class="error">
-            <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
-          </div>
-        </div>
-
-        <div class="info-group">
-          <mat-tab-group mat-align-tabs="start"  >
-            <mat-tab label="Basic">
-              <div class="grid-container">
-
-                <div class="grid-item">
-                    <div class="grid-item">
-                      <mat-form-field appearance="outline">
-                        <mat-label >Display Name</mat-label>
-                        <input matInput
-                              type             ="text"
-                              formControlName  ="fullProductName"
-                              class="form-control" >
-                      </mat-form-field>
-                    </div>
-
-                    <div class="grid-item">
-                      <mat-form-field appearance="outline">
-                        <mat-label >Short Name</mat-label>
-                        <input matInput
-                              type             ="text"
-                              formControlName  ="name"
-                              class="form-control" >
-                      </mat-form-field>
-                    </div>
-
-                    <div class="grid-item">
-                      <app-category-select     [inputForm]="productForm"> </app-category-select>
-                    </div>
-
-                    <div class="grid-item">
-                      <app-department-select   [inputForm]="productForm"> </app-department-select>
-                    </div>
-
-                    <div class="grid-item">
-                      <product-type-select
-                                      [inputForm]="productForm">
-                      </product-type-select>
-                    </div>
-
-                    <div class="grid-item">
-                      <app-brand-type-select
-                                        [id] = "brandID.value"
-                                        [inputForm]="productForm">
-                      </app-brand-type-select>
-                    </div>
-
-                </div>
-
-                <div class="grid-item">
-                  <div >
-                    <mat-form-field appearance="outline">
-                      <mat-label >Barcode </mat-label>
-                      <input matInput
-                            type             ="text"
-                            formControlName  ="barcode"
-                            class="form-control" >
-                    </mat-form-field>
-                  </div>
-
-                  <div *ngIf="itemType" >
-                      <app-price-category-select
-                          *ngIf="itemType.useType != 'category'"
-                          [itemType]        ="itemType"
-                          [priceCategoryID] ="product.priceCategory"
-                          [inputForm]       ="productForm" >
-                    </app-price-category-select>
-                  </div>
-
-                </div>
-
-                <div class="grid-item">
-                  <div class="meta-tags" *ngIf="product.metaTags">
-                    <app-meta-tag-chips  [inputForm]="productForm"></app-meta-tag-chips>
-                  </div>
-
-                  <div class="meta-tags" *ngIf="!product.metaTags">
-                    <app-meta-tag-chips  [inputForm]="productForm"></app-meta-tag-chips>
-                  </div>
-                </div>
-
-                <div class="grid-item">
-                  <mat-card class="image-container">
-                    <app-widget-uploader
-                        [(fileNames)]="urlImageMain"
-                        (messageOut) ="received_URLMainImage($event)"
-                        (imageUrl)   ="updateUrlImageMain($event)">
-                    </app-widget-uploader>
-                  </mat-card>
-                </div>
-
-              </div>
-
-            </mat-tab>
-
-            <mat-tab label="Content" >
-            </mat-tab>
-          </mat-tab-group>
-        </div>
-    </mat-card-content>
-  </mat-card>
-
-  <mat-card >
-
-    <div class="document-content">
-      <mat-divider></mat-divider>
-      <mat-label>Short Description </mat-label><br>
-      <simple-tinymce name="onlineShortDescription"
-                      cols="50" rows="15"
-                      formControlName="onlineShortDescription"
-                      [(ngModel)]="onlineShortDescription">
-      </simple-tinymce>
-
-      <mat-label>Description </mat-label><br>
-      <simple-tinymce cols="50"
-                      rows="25"
-                      style="height: 400px;"
-                      name="onlineDescription"
-                      formControlName="onlineDescription"
-                      [ngModel]="onlineDescription">
-      </simple-tinymce>
-    </div>
-
-  </mat-card>
-  </div>
-</div>
-
-<ng-template #loading >
-  <mat-spinner></mat-spinner>
+<ng-template #loading>
+  <mat-spinner [diameter]="70"></mat-spinner>
 </ng-template>
 
-<!-- <div *ngIf="productForm">
-  {{productForm.value | json}}
-</div> -->
+
+<div [formGroup]="productForm"
+      id="fullProductName"
+      class="container"
+      *ngIf="product && productForm; else loading" >
+
+  <mat-card >
+    <mat-card-title >
+
+      <div class="header-container" >
+        <div>
+          <h4>
+            <div *ngIf="product.id == 0">
+              Add Item:  {{ product?.name  }}  {{ product?.barcode }}
+            </div>
+            <div *ngIf="product.id != 0">
+              Edit Item: {{ product?.name  }}  {{ product?.barcode }}
+            </div>
+          </h4>
+        </div>
+
+        <div>
+          <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+                (outputCopy)            ="copyItem($event)"
+          ></app-edit-buttons-standard>
+
+          <app-activity-toggles
+              [inputForm]="productForm">
+          </app-activity-toggles>
+        </div>
+
+      </div>
+    </mat-card-title>
+
+    <mat-divider> </mat-divider>
+
+    <mat-card-content >
+      <div>
+        <div *ngIf="productForm.controls.fullProductName.errors?.required &&
+                    productForm.controls.fullProductName.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
+        </div>
+
+        <div *ngIf="productForm.controls.name.errors?.required &&
+                    productForm.controls.name.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
+        </div>
+      </div>
+
+      <div class="info-group">
+        <mat-tab-group mat-align-tabs="start"  >
+          <mat-tab label="Basic">
+            <div class="grid-container">
+
+              <div class="grid-item">
+                  <app-value-fields
+                      [inputForm]="productForm"
+                      [fieldName]="'fullProductName'">
+                      Long Name
+                  </app-value-fields>
+
+                  <app-value-fields
+                        [inputForm]="productForm"
+                        [fieldName]="'name'">
+                    Name
+                  </app-value-fields>
+
+                  <app-category-select   [inputForm]="productForm"> </app-category-select>
+                  <app-department-select [inputForm]="productForm"> </app-department-select>
+                  <product-type-select   [inputForm]="productForm"> </product-type-select>
+
+                  <app-brand-type-select
+                                    [formFieldClass]="'formFieldClass-standard'"
+                                    [id] = "brandID.value"
+                                    [inputForm]="productForm">
+                  </app-brand-type-select>
+
+              </div>
+
+              <div class="grid-item">
+
+                <app-value-fields
+                      [inputForm]="productForm"
+                      [fieldName]="'barcode'">
+                      Barcode
+                </app-value-fields>
+
+                <div *ngIf="itemType" >
+                    <app-price-category-select
+                        *ngIf="itemType.useType != 'category'"
+                        [itemType]        ="itemType"
+                        [priceCategoryID] ="product.priceCategory"
+                        [inputForm]       ="productForm" >
+                  </app-price-category-select>
+                </div>
+
+              </div>
+
+              <div class="grid-item">
+                <div class="meta-tags" *ngIf="product && product.metaTags">
+                  <app-meta-tag-chips  [inputForm]="productForm"></app-meta-tag-chips>
+                </div>
+
+                <div class="meta-tags" *ngIf="!product.metaTags">
+                  <app-meta-tag-chips  [inputForm]="productForm"></app-meta-tag-chips>
+                </div>
+              </div>
+
+              <div class="grid-item">
+                <mat-card class="image-container">
+                  <app-widget-uploader
+                      [(fileNames)]="urlImageMain"
+                      (messageOut) ="received_URLMainImage($event)"
+                      (imageUrl)   ="updateUrlImageMain($event)">
+                  </app-widget-uploader>
+                </mat-card>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Content" >
+
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+  </mat-card-content>
+</mat-card>
+
+<mat-card >
+
+  <div class="document-content">
+    <mat-divider></mat-divider>
+    <mat-label>Short Description </mat-label><br>
+    <simple-tinymce name="onlineShortDescription"
+                    cols="50" rows="15"
+                    formControlName="onlineShortDescription"
+                    [(ngModel)]="onlineShortDescription">
+    </simple-tinymce>
+
+    <mat-label>Description </mat-label><br>
+    <simple-tinymce cols="50"
+                    rows="25"
+                    style="height: 400px;"
+                    name="onlineDescription"
+                    formControlName="onlineDescription"
+                    [ngModel]="onlineDescription">
+    </simple-tinymce>
+  </div>
+
+</mat-card>
+</div>

@@ -233,6 +233,9 @@ import { SiteEditFormComponent } from '../modules/admin/settings/site-edit/site-
 import { ActivityTogglesMetrcComponent } from '../modules/admin/metrc/packages/metrc-inventory-properties/activity-toggles-metrc/activity-toggles-metrc.component';
 import { MetrcIntakeHeaderComponent } from '../modules/admin/metrc/packages/metrc-inventory-properties/metrc-intake-header/metrc-intake-header.component';
 import { SearchInventoryInputComponent } from '../modules/admin/inventory/inventory-list/inventory-list/search-inventory-input/search-inventory-input.component';
+import { POSOrderServiceTypeComponent } from '../modules/posorders/posorder-service-type/posorder-service-type.component';
+import { POSOrderScheduleComponent } from '../modules/posorders/posorder-schedule/posorder-schedule.component';
+import { POSOrderShippingAddressComponent } from '../modules/posorders/posorder-shipping-address/posorder-shipping-address.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -350,6 +353,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PosPaymentComponent,
     POSPaymentsComponent,
     PosPaymentComponent,
+    POSOrderScheduleComponent,
+    POSOrderServiceTypeComponent,
+    POSOrderShippingAddressComponent,
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,

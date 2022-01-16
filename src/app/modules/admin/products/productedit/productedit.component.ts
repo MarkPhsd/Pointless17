@@ -123,7 +123,7 @@ export class ProducteditComponent implements  OnInit  {
     if (this.productForm && this.id) {
       this.product$ = this.menuService.getProduct(site, this.id).pipe(
           tap(data => {
-            console.log(data)
+            // console.log(data)
             this.product = data
             this.priceCategoryID = this.product.priceCategory
             this.productForm.patchValue(this.product)
@@ -285,7 +285,7 @@ export class ProducteditComponent implements  OnInit  {
         }
       });
     }
-    console.log('images',images)
+    // console.log('images',images)
     return images
   }
 
@@ -296,7 +296,7 @@ export class ProducteditComponent implements  OnInit  {
   }
 
   getProductTypeID(event) {
-    console.log(event)
+    // console.log(event)
     if (event) {
       this.productTypeID = event
     }

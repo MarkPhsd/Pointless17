@@ -215,7 +215,6 @@ export class CheckInProfileComponent implements OnInit {
     const client$ =this.clientTableService.getClient(site, id)
     client$.subscribe(data => {
       this.inputForm.patchValue(data)
-      console.log(data)
       return
     })
   }

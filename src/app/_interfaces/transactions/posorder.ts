@@ -29,6 +29,8 @@ export interface IPOSOrderSearchModel {
   greaterThanZero:             number;
   clientID:                    number;
   orderID           :          number;
+  scheduleDate_To   :          string;
+  scheduleDate_From :          string;
 }
 
 

@@ -1,13 +1,14 @@
 import { Component, OnInit , Input, HostListener} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -49,6 +50,8 @@ export class PosPaymentComponent implements OnInit {
   smallDevice = false;
   orderItemsPanel = ''
 
+  SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
@@ -69,6 +72,7 @@ export class PosPaymentComponent implements OnInit {
               private editDialog      : ProductEditButtonService,
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private printingService :PrintingService,
+              private platFormService : PlatformService,
               private fb              : FormBuilder) { }
 
   ngOnInit(): void {
@@ -77,13 +81,34 @@ export class PosPaymentComponent implements OnInit {
     this.toolbarUI.updateOrderBar(false)
     this.initForms();
     this.initSubscriptions();
-    this.paymentMethods$ = this.paymentMethodService.getCacheList(site);
+    this.getPaymentMethods(site)
+
     if (this.order) {
       const searchModel = {} as IPaymentSearchModel
       searchModel.orderID = this.order.id
     }
+
     this.refreshIsOrderPaid()
     this.updateItemsPerPage();
+  }
+
+  getPaymentMethods(site: ISite) {
+    console.log('getpaymentMethods is app', this.platFormService.isApp())
+    const paymentMethods$ = this.paymentMethodService.getCacheList(site);
+
+    if (this.platFormService.isApp()) {
+      this.paymentMethods$ = paymentMethods$
+      return
+    }
+
+    paymentMethods$.subscribe(data => {
+      if (!this.platFormService.isApp()) {
+        const list = data.filter( item => item.enabledOnline == true)
+        this.paymentMethods$ = of(list)
+        return
+      }
+    })
+
   }
 
   @HostListener("window:resize", [])
@@ -341,6 +366,26 @@ export class PosPaymentComponent implements OnInit {
       this.posPayment.checkNumber = event
     }
   }
+
+    // Action triggered when user swipes
+    swipe(selectedIndex: any, action = this.SWIPE_ACTION.RIGHT) {
+      // Out of range
+      if ( selectedIndex < 0 || selectedIndex > 1 ) return;
+
+      // Swipe left, next tab
+      if (action === this.SWIPE_ACTION.LEFT) {
+        const isLast = selectedIndex === 1;
+        selectedIndex = isLast ? 0 : selectedIndex + 1;
+        console.log("Swipe right - INDEX: " +  selectedIndex);
+      }
+
+      // Swipe right, previous tab
+      if (action === this.SWIPE_ACTION.RIGHT) {
+        const isFirst = selectedIndex === 0;
+        selectedIndex = isFirst ? 1 :  selectedIndex - 1;
+        console.log("Swipe left - INDEX: " + selectedIndex);
+      }
+    }
 
   resetPaymentMethod() {
     this.initForms();
