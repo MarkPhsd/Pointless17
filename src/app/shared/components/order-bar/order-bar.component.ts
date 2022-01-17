@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IUserProfile }  from 'src/app/_interfaces';
 import { UserService} from 'src/app/_services';
 import {
   BreakpointObserver,

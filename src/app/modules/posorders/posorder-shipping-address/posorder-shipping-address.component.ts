@@ -33,6 +33,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     private fb :                FormBuilder ) { }
 
   ngOnInit(): void {
+    this.initSubscriptions();
     this.initForm();
   }
 
@@ -47,7 +48,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   initForm() {
     if (this.order && this.order.clients_POSOrders) {
       const client = this.order.clients_POSOrders;
-      this.fb.group({
+      this.inputForm = this.fb.group({
         address  :[client.address],
         city     :[],
         address2 :[client.city],
@@ -60,7 +61,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   }
 
   initEmptyForm() {
-    this.fb.group({
+    this.inputForm = this.fb.group({
       address  :[''],
       city     :[''],
       address2 :[''],

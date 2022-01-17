@@ -71,12 +71,12 @@ export class HttpClientCacheService {
     options.body = options.body || null
     options.cacheMins = options.cacheMins || 0
     const  key = this.getKey(verb, options)
-    console.log(key)
-    console.log(options )
+    // console.log(key)
+    // console.log(options )
 
     if (options.cacheMins > 0) {
       const data = this._cacheService.load(key)
-      console.log(data )
+      // console.log(data )
       // Return data from cache
       if (data !== null) {
         return of<T>(data)

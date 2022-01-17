@@ -32,7 +32,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   async initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-      console.log('balance updated', data)
+      // console.log('balance updated', data)
     })
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data

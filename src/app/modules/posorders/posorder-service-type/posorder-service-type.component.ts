@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
@@ -12,12 +12,14 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
   templateUrl: './posorder-service-type.component.html',
   styleUrls: ['./posorder-service-type.component.scss']
 })
-export class POSOrderServiceTypeComponent implements OnInit {
+export class POSOrderServiceTypeComponent  {
 
-  @Input() inputForm: FormGroup;
+  inputForm            : FormGroup;
   serviceTypes$        : Observable<IServiceType[]>;
   order                : IPOSOrder;
   _order               : Subscription;
+
+  item: any;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -29,38 +31,36 @@ export class POSOrderServiceTypeComponent implements OnInit {
     private orderService      : OrdersService,
     private sitesService      : SitesService,
     private platFormService   : PlatformService,
-    private serviceTypeService: ServiceTypeService, ) { }
+    private serviceTypeService: ServiceTypeService, ) {
 
-  ngOnInit(): void {
-    console.log('')
+    this.initSubscriptions();
+    const site = this.sitesService.getAssignedSite();
+    this.getPaymentMethods(site);
   }
 
   getPaymentMethods(site: ISite) {
-    const paymentMethods$ = this.serviceTypeService.getSaleTypesCached(site);
-
+    const serviceTypes$ = this.serviceTypeService.getSaleTypes(site);
+    this.serviceTypes$ = serviceTypes$
     if (this.platFormService.isApp()) {
-      this.serviceTypes$ = paymentMethods$
+      this.serviceTypes$ = serviceTypes$
       return
     }
-
-    paymentMethods$.subscribe(data => {
+    serviceTypes$.subscribe(data => {
       if (!this.platFormService.isApp()) {
         const list = data.filter( item => item.onlineOrder == true)
         this.serviceTypes$ = of(list)
         return
       }
     })
-
   }
 
   applyServiceType(item: IServiceType) {
-
-    if (this.order) {
+    // this.item = item
+    if (this.order && item) {
       this.order.serviceType = item.name;
       this.order.serviceTypeID = item.id;
       this.orderService.updateOrderSubscription(this.order)
     }
-
   }
 
 }

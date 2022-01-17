@@ -87,7 +87,7 @@ export class AppComponent {
       this.router.events.subscribe(event => {
         if(event instanceof NavigationEnd) {
           const title = this.getTitle( this.router.routerState, this.router.routerState.root).join('-');
-          console.log('title', title)
+          // console.log('title', title)
           if (!title) {
             this.titleService.setTitle('Pointless');
             return

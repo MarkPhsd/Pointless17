@@ -1,7 +1,8 @@
 
 <mat-card class="card-dimensions">
   <mat-card-content>
-    <ng-content></ng-content>
+    <ng-content></ng-content> : {{order?.serviceType}}
+    {{item | json}}
     <app-mat-toggle-selector
         class="card-height"
         [list$]            = "serviceTypes$"

@@ -236,6 +236,7 @@ import { SearchInventoryInputComponent } from '../modules/admin/inventory/invent
 import { POSOrderServiceTypeComponent } from '../modules/posorders/posorder-service-type/posorder-service-type.component';
 import { POSOrderScheduleComponent } from '../modules/posorders/posorder-schedule/posorder-schedule.component';
 import { POSOrderShippingAddressComponent } from '../modules/posorders/posorder-shipping-address/posorder-shipping-address.component';
+import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -356,6 +357,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     POSOrderScheduleComponent,
     POSOrderServiceTypeComponent,
     POSOrderShippingAddressComponent,
+    POSOrderScheduleCardComponent,
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,

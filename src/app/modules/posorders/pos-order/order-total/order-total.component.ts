@@ -15,7 +15,7 @@ export class OrderTotalComponent implements OnInit {
   transactionDataClass ="transaction-data"
   constructor(  public  route: ActivatedRoute) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
-    console.log('OrderTotalComponent main panel', outPut, this.mainPanel )
+    // console.log('OrderTotalComponent main panel', outPut, this.mainPanel )
     if (outPut) {
       this.mainPanel = true
     }

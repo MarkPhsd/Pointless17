@@ -9,12 +9,12 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
-  selector   : 'pos-order-schedule',
-  templateUrl: './posorder-schedule.component.html',
-  styleUrls  : ['./posorder-schedule.component.scss']
+  selector: 'posorder-schedule-card',
+  templateUrl: './posorder-schedule-card.component.html',
+  styleUrls: ['./posorder-schedule-card.component.scss']
 })
-export class POSOrderScheduleComponent implements OnInit,OnDestroy {
-  inputForm            : FormGroup;
+export class POSOrderScheduleCardComponent implements OnInit,OnDestroy {
+
   order                : IPOSOrder;
   _order               : Subscription;
 
@@ -26,43 +26,24 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
   constructor(
     private orderService      : OrdersService,
-    private router            : Router,
-    private fb :                FormBuilder ) { }
+    private router:            Router,
+   ) { }
 
   ngOnInit(): void {
+
     this.initSubscriptions();
-    this.initForm();
   }
 
   ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
     if (this._order) {
       this._order.unsubscribe()
     }
   }
 
-  initForm() {
-    if (this.order && this.order.clients_POSOrders) {
-      const client = this.order.clients_POSOrders;
-      this.fb.group({
-        address  :[client.address],
-        city     :[],
-        address2 :[client.city],
-        state    :[client.state],
-        zip      :[client.zip],
-      })
-      return
-    }
-    this.fb.group({
-      address  :[''],
-      city     :[''],
-      address2 :[''],
-      state    :[''],
-      zip      :[''],
-    })
-  }
-
-  save() {
-    this.router.navigate(['pos-payment'])
+  schedule() {
+    this.router.navigate(['pos-order-schedule'])
   }
 
 }

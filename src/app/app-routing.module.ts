@@ -102,6 +102,7 @@ import { APISettingComponent } from './modules/login/apisetting/apisetting.compo
 import { PriceTiersComponent } from './modules/admin/products/price-tiers/price-tiers.component';
 import { TierPricesComponent } from './modules/menu/tierMenu/tier-prices/tier-prices.component';
 import { PSMenuGroupListComponent } from './modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
+import { POSOrderScheduleComponent } from './modules/posorders/posorder-schedule/posorder-schedule.component';
 
 
 const routes: Routes = [
@@ -124,7 +125,7 @@ const routes: Routes = [
         { path: 'searchproducts', component: SearchResultsComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
 
         { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: {  title: 'Dash Board',  animation: 'isLeft'} },
-        { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+        { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { title: 'Reports', animation: 'isLeft'} },
 
         { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {  title: 'Admin', animation:  'isLeft'} },
         { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], data: {  title: 'Settings',  animation:  'isLeft'} },
@@ -133,7 +134,7 @@ const routes: Routes = [
 
         { path: 'pos-orders', component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
-        { path: 'pos-payment', component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'payment', animation: 'isLeft'} },
+        { path: 'pos-payment', component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
 
         //PosOperationsComponent
         { path: 'operations', component: PosOperationsComponent, canActivate: [AuthGuard], data: {title: 'Operations', animation: 'isLeft'} },
@@ -248,6 +249,8 @@ const routes: Routes = [
         { path: 'company-edit', component: CompanyEditComponent,   canActivate: [AuthGuard], data: {  title: 'Company Edit',  animation: 'isLeft'} },
 
         { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
+
+        {path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}}
       ]
     },
 

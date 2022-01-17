@@ -9,7 +9,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { fadeAnimation } from 'src/app/_animations';
 import { switchMap } from 'rxjs/operators';
 
-
 @Component({
   selector: 'app-menu-tiny',
   templateUrl: './menu-tiny.component.html',
@@ -64,7 +63,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
         })
         this.menus =  [...new Set(this.menus)]
       }, err => {
-        console.log('error refresh menu', err)
+        // console.log('error refresh menu', err)
       }
     )
 
@@ -101,27 +100,38 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   }
 
   initMenu() {
+
     this.initMenus()
     const user = JSON.parse(localStorage.getItem('user')) as IUser;
     if (!user || !user.token) {return}
-    console.log('initialize meny tiny')
+
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
-    menuCheck$.pipe(
-      switchMap( data => {
-        console.log('menu check', data)
-        if (!data.result) {
-            if (user) {
-              console.log('create menu')
-            return  this.menusService.createMainMenu(user , site)
+    try {
+      menuCheck$.pipe(
+        switchMap( data => {
+          if (!data) {return EMPTY}
+          if (!data.result) {
+              if (user) {
+                // console.log('create menu')
+              return  this.menusService.createMainMenu(user , site)
+            }
+            return EMPTY;
           }
-          return EMPTY;
-        }
+        })
+
+      ).subscribe( data => {
+
+        this.refreshMenu(this.user)
+
+      }, error=> {
+        // console.log('error', error)
       })
-    ).subscribe(data => {
-      this.refreshMenu(this.user)
-    })
+    } catch (error) {
+      console.log('error', error)
+    }
+
 
   }
 

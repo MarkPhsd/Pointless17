@@ -1,27 +1,47 @@
 <mat-card>
   <mat-card-subtitle>
-    Schedule Order
+    <div>
+      Schedule Order
+    </div>
+    <div *ngIf="!order.clients_POSOrders">
+      To schedule an order, a customer must be associated with it.
+      <div class="grid-header-item">
+        <app-order-header-demo-graphics
+            [canRemoveClient]="'false'"
+            [order]          ="order">
+        </app-order-header-demo-graphics>
+      </div>
+    </div>
   </mat-card-subtitle>
 
   <mat-card-content>
     <div class="grid-container">
+
       <div>
-        Schedule Date
+
+        <mat-form-field appearance="outline">
+          <mat-label>Choose a date</mat-label>
+          <input matInput [matDatepicker]="picker">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <div>
+          <posorder-service-type>
+            Select Service Type
+          </posorder-service-type>
+        </div>
+
       </div>
 
-      <posorder-shipping-address
-      ></posorder-shipping-address>
-      <div></div>
+      <div>
+        <posorder-shipping-address></posorder-shipping-address>
+      </div>
 
-      <posorder-service-type >
-        Select Service Type
-      </posorder-service-type>
-
-      <div class      ="order-notes"
-           *ngIf      ="inputForm"
+      <div class="order-notes"
+           *ngIf      ="order && inputForm"
            [formGroup]="inputForm"
            >
-
         <div>
           <mat-form-field
               appearance="outline"
@@ -37,5 +57,9 @@
       </div>
 
     </div>
+
   </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="save()"><mat-icon aria-label="save">save</mat-icon>Save and Continue </button>
+  </mat-card-actions>
 </mat-card>

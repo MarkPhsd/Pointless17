@@ -328,31 +328,34 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   subscribeToDatePicker()
     {
     if (this.dateRangeForm) {
-    this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
-      if (!res) {return}
-      this.dateFrom = res //this.dateRangeForm.get("start").value
-    })
+      this.dateRangeForm.get('start').valueChanges.subscribe(res=>{
+        if (!res) {return}
+        this.dateFrom = res //this.dateRangeForm.get("start").value
+      }
+    )
 
     this.dateRangeForm.get('end').valueChanges.subscribe(res=>{
       if (!res) {return}
       this.dateTo = res
-    })
+      }
+    )
 
     this.dateRangeForm.valueChanges.subscribe(res=>{
-      if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("start").value) {
-        this.refreshDateSearch()
-      }
-    })
+        if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("start").value) {
+          this.refreshDateSearch()
+        }
+        }
+      )
     }
   }
 
   emitDatePickerData(event) {
     if (this.dateRangeForm) {
-    if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("start").value) {
-      this.dateFrom = this.dateRangeForm.get("start").value
-      this.dateTo = (  this.dateRangeForm.get("end").value )
-      this.refreshDateSearch()
-    }
+      if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("start").value) {
+        this.dateFrom = this.dateRangeForm.get("start").value
+        this.dateTo = (  this.dateRangeForm.get("end").value )
+        this.refreshDateSearch()
+      }
     }
   }
 
@@ -363,10 +366,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       this.dateTo   = this.dateRangeForm.get("end").value
 
       if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
-      this.searchModel.completionDate_From = '';
-      this.searchModel.completionDate_To   = '';
-      this.refreshSearch()
-      return
+        this.searchModel.completionDate_From = '';
+        this.searchModel.completionDate_To   = '';
+        this.refreshSearch()
+        return
       }
 
       this.searchModel.completionDate_From = this.dateFrom.toISOString()

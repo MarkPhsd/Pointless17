@@ -121,7 +121,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private el                : ElementRef) {
 
       const outPut = this.route.snapshot.paramMap.get('mainPanel');
-      console.log('order Total Main Panel Check', outPut)
+      // console.log('order Total Main Panel Check', outPut)
       if (outPut) {
         this.mainPanel = true
       }
@@ -219,7 +219,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   logAnimation(event) {
-    console.log(event)
+    // console.log(event)
   }
 
   getImageUrl(imageName: string): any {
@@ -280,7 +280,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (result) {
       const site = this.siteService.getAssignedSite();
       const order = await this.orderService.deleteOrder(site, this.order.id).pipe().toPromise();
-      console.log('order')
+      // console.log('order')
       if (order === 'Order deleted.') {
         this.notifyEvent('Order Deleted', 'Success')
         this.orderService.updateOrderSubscription(null)
@@ -401,7 +401,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     //get cached label printer name
     const printer = await this.printingService.getElectronLabelPrinterCached().pipe().toPromise();
     if (!printer || !printer.text) {
-      console.log('printer', printer)
+      // console.log('printer', printer)
       return;
     }
     const printerName = printer.text
@@ -409,24 +409,24 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.menuItemService.getMenuItemByID(site, item.productID).pipe(
       switchMap(data => {
         if ( !data  || data == "No Records" || !data.itemType) {
-          console.log('no data')
+          // console.log('no data')
           return EMPTY
         }
 
-        console.log('data.itemType', data.itemType)
+        // console.log('data.itemType', data.itemType)
         if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printerName ) ) {
             if (data.itemType.labelTypeID !=0 ) {
               return   this.settingService.getSetting(site, data.itemType.labelTypeID)
             }
         } else {
-          console.log('No print option')
+          // console.log('No print option')
           return this.orderItemService.setItemAsPrinted(site, item )
         }
 
     })).pipe(
       switchMap( data => {
         // //get the PrintString Format
-        console.log('getting Text From label setting',  data)
+        // console.log('getting Text From label setting',  data)
         const content = this.renderingService.interpolateText(item, data.text)
         const result  = this.printingService.printLabelElectron(content, printerName)
 
@@ -438,7 +438,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })).subscribe( data => {
       this.refreshOrder();
       // do something aboutt the inventory notification or don't
-      console.log('item printed')
+      // console.log('item printed')
     })
   }
 

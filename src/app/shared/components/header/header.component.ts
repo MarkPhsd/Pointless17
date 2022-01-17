@@ -8,7 +8,7 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Observable, of, Subject, Subscription,   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
-import {Location} from '@angular/common';
+import { Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';

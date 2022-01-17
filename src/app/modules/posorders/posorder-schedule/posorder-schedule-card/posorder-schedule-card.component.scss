@@ -1,0 +1,16 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  // grid-auto-flow:dense;
+
+  // @include for-phone-only  {
+  //   display: grid;
+  //   grid-template-columns: 1fr;
+  //   gap: 5px;
+  // }
+}
+
+mat-card {
+  width: 350px;
+}

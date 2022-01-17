@@ -19,6 +19,11 @@
             [order]          ="order">
         </app-order-header-demo-graphics>
       </div>
+
+      <div class="grid-header-item">
+        <posorder-schedule-card></posorder-schedule-card>
+      </div>
+
     </div>
 
     <div class="results-panel">
@@ -49,6 +54,7 @@
                       [buttonDimensions] = "'button-dimensions-tall'"
                       (outPutItem)       = "getPaymentMethod($event)"
                     >
+                    Payment Method
                   </app-mat-toggle-selector>
                 </mat-card-content>
               </mat-card>

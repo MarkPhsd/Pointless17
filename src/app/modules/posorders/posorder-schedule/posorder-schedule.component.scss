@@ -1,6 +1,37 @@
+@import "/src/mixins.scss";
 
 #customer-notes {
   margin:  5;
   object-fit: cover;
-  width: 300px;
+  width: 400px;
+}
+
+grid-container {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 10px;
+
+}
+
+// mat-card {
+//   width: 450px;
+// }
+
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat( auto-fit, minmax(400px, 1fr) );
+  grid-auto-flow:dense;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
 }

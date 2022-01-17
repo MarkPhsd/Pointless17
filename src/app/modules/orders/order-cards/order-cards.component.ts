@@ -119,7 +119,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
-        console.log('initSubscriptions')
+        // console.log('initSubscriptions')
         this.nextPage(true)
       })
     } catch (error) {
@@ -166,7 +166,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   onScrollDown() {
     this.scrollingInfo = 'scroll down'
-    console.log('scrolled down')
+    // console.log('scrolled down')
     this.nextPage(false);
   }
 
@@ -175,7 +175,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   async nextPage(reset: boolean) {
-    console.log('next page', this.pageSize, 'currentPage', this.currentPage, 'reset', reset)
+    // console.log('next page', this.pageSize, 'currentPage', this.currentPage, 'reset', reset)
     await this.addToList(this.pageSize, this.currentPage, reset)
   }
 
@@ -297,7 +297,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   @HostListener('window:scroll', ['$event']) // <- Add scroll listener to window
     scrolled(event: any): void {
-    console.log('scrolled')
+    // console.log('scrolled')
     this.isNearBottom = this.isUserNearBottom();
   }
 }

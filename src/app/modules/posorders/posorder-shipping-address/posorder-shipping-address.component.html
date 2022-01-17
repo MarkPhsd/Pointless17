@@ -1,42 +1,42 @@
+<div *ngIf="inputForm"
+     [formGroup]="inputForm">
+  <mat-card>
+    <mat-card-subtitle>
+      Delivery Address
+    </mat-card-subtitle>
+    <mat-card-content>
 
-<mat-card>
-  <mat-card-subtitle>
-    Delivery Address
-  </mat-card-subtitle>
-  <mat-card-content>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'address'">
+        Address
+      </app-value-fields>
 
-    <div *ngIf      ="inputForm"
-        [formGroup]="inputForm">
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'address2'">
+        Unit/Apt/Suite
+      </app-value-fields>
 
-        <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'address'">
-          Address
-        </app-value-fields>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'state'">
+        State
+      </app-value-fields>
 
-        <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'address2'">
-          Unit/Apt/Suite
-        </app-value-fields>
+      <app-value-fields
+        [inputForm]="inputForm"
+        [fieldName]="'zip'">
+        Zip
+      </app-value-fields>
 
-        <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'state'">
-          State
-        </app-value-fields>
 
-        <app-value-fields
-          [inputForm]="inputForm"
-          [fieldName]="'zip'">
-          Zip
-        </app-value-fields>
+      <mat-card-actions>
+        <button mat-button aria-label="save" (click)="save()"><mat-icon aria-label="save">save</mat-icon></button>
+        <button mat-button aria-label="save" (click)="delete()"><mat-icon aria-label="delete">delete</mat-icon></button>
+      </mat-card-actions>
 
-    </div>
+    </mat-card-content>
+  </mat-card>
 
-    <button mat-button aria-label="save" (click)="save()"><mat-icon aria-label="save">save</mat-icon></button>
-
-    <button mat-button aria-label="save" (click)="delete()"><mat-icon aria-label="delete">Clear</mat-icon></button>
-
-  </mat-card-content>
-</mat-card>
+</div>

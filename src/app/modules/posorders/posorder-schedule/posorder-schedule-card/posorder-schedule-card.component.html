@@ -1,0 +1,29 @@
+<mat-card *ngIf="order">
+  <mat-card-subtitle>
+     <button mat-raised-button (click)="schedule()"><mat-icon>edit</mat-icon>Schedule</button>
+  </mat-card-subtitle>
+  <mat-card-content>
+
+    <div class="grid-container">
+      <div *ngIf="order.preferredScheduleDate">Schedule</div>
+      <div *ngIf="order.preferredScheduleDate"> {{order.preferredScheduleDate | date: 'shortDate'}} </div>
+
+      <div *ngIf="order.shipAddress"><mat-icon>delivery_dining</mat-icon>Address</div>
+      <div *ngIf="order.shipAddress">{{order.shipAddress}} - {{order.shipAddress2}}  </div>
+
+      <div *ngIf="order.shipCity">City</div>
+      <div *ngIf="order.shipCity">{{order.shipCity}}</div>
+
+      <div *ngIf="order.shipCity">State/Zip</div>
+      <div *ngIf="order.shipCity">{{order.shipCity}}, {{order.shipPostalCode}}  </div>
+
+      <div>Phone</div>
+      <div> {{order?.clients_POSOrders?.phone}} </div>
+      <div>Email</div>
+      <div> {{order?.clients_POSOrders?.email}} </div>
+
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
