@@ -58,34 +58,28 @@
 
     <div *ngIf="isElectronApp">
 
-      <!-- <div *ngIf="electronPrinterList">
-        <button mat-raised-button
-               (click)='showElectronPrinterSelection()'
-               *ngIf="!showElectronPrinters"
-               >Show Printers <mat-icon>print</mat-icon>
-        </button>
-      </div>
-
-      <div *ngIf="showElectronPrinters"> -->
-        <app-list-printers-electron
+      <app-list-printers-electron
           [printerName]      ="electronReceiptPrinter"
           [printerList]      ="electronPrinterList"
           (outputPrinterName)="setElectronPrinterName($event)" >
           Receipt Printer
-        </app-list-printers-electron>
-      <!-- </div> -->
+      </app-list-printers-electron>
 
       <div *ngIf="electronReceiptPrinter" class="defaultElectronPrinter">Default Printer: {{electronReceiptPrinter}}</div>
 
-      <div *ngIf="electronSetting && (receiptList$ | async) as list; else loadingDefaultReceipt">
-        <default-receipt-selector
-          [receiptList]        = "list"
-          [receiptID]          = "electronReceiptID"
-          (outPutReceiptName)  = "setElectronReceiptID($event)" >
-          Default Receipt
-        </default-receipt-selector>
+      <div *ngIf="electronSetting && receiptList$">
+        <div *ngIf="(receiptList$ | async) as list; else loadingDefaultReceipt">
+          <default-receipt-selector
+            [receiptList]        = "receiptList$"
+            [receiptID]          = "electronReceiptID"
+            (outPutReceiptName)  = "setElectronReceiptID($event)" >
+            Default Receipt
+          </default-receipt-selector>
+        </div>
       </div>
+
       <ng-template #loadingDefaultReceipt>...loading default receipts </ng-template>
+
       <h3>Print Test for Windows/Linux</h3>
       <div>
         <button mat-raised-button color="primary"(click)="printElectron()">
@@ -228,11 +222,4 @@
 
   </div>
 </div>
-<!--
-<mat-card>
-  <div [hidden] ="true" id="download" class="border-section">
-    <img #canvas>
-    <a #downloadLink></a>
-  </div>
-</mat-card> -->
 

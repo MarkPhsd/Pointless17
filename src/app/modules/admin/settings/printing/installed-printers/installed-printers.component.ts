@@ -2,30 +2,23 @@ import { Component, ElementRef, OnInit, Renderer2, ViewChild, AfterViewInit, Inp
 import { ElectronService } from 'ngx-electron';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as path from 'path';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
-import { HttpClient } from '@angular/common/http';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import * as  printJS from "print-js";
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 // import { SafeHtmlPipe } from 'src/app/_pipes/safe-html.pipe';
-import { LabelaryService, zplLabel } from 'src/app/_services/labelary/labelary.service';
 import { Observable } from 'rxjs';
 import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printing.component';
-import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
-import { Capacitor, Plugins } from '@capacitor/core';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-import html2canvas from 'html2canvas';
 import domtoimage from 'dom-to-image';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
-import { switchMap } from 'rxjs/operators';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { ConsoleService } from 'src/app/_services/system/console.service';
+import { IItemBasic } from 'src/app/_services';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
@@ -90,9 +83,9 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   result                    : any;
   isElectronServiceInitiated = false;
 
-  receiptList$    :  Observable<ISetting[]>;
-  labelList$      :  Observable<ISetting[]>;
-  prepReceiptList$:  Observable<ISetting[]>;
+  receiptList$    :  Observable<IItemBasic[]>;
+  labelList$      :  Observable<IItemBasic[]>;
+  prepReceiptList$:  Observable<IItemBasic[]>;
   receiptID       :  number;
 
   isElectronApp  : boolean;
@@ -599,34 +592,38 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   setElectronReceiptID(event) {
     if (!this.electronSetting) { return }
-    console.log('set electron Receipt ID', event)
+    const site = this.siteService.getAssignedSite();
+    this.settingService.getSetting(site,event.id).subscribe( data=> {
 
-    this.electronReceipt             = event.name
-    this.electronReceiptID           = event.id
-    this.electronSetting.value       = this.electronReceipt
-    this.electronSetting.option1     = this.electronReceiptID.toString();
-    console.log(this.electronSetting)
+      this.electronReceipt             = event.name
+      this.electronReceiptID           = event.id
+      this.electronSetting.value       = this.electronReceipt
+      this.electronSetting.option1     = this.electronReceiptID.toString();
+      console.log(this.electronSetting)
+    })
     this.setElectronReceipt(this.electronSetting);
   }
 
   setElectronPrinterName(event) {
-    console.log('set Electron Printer', event)
     this.electronReceiptPrinter = event
+    const site = this.siteService.getAssignedSite();
 
-    if (!this.electronSetting) {
-      this.electronSetting = {} as ISetting;
-     }
-    this.electronSetting.text   = event
-    this.electronReceiptPrinter = event;
-    this.setElectronReceipt(this.electronSetting);
+    this.settingService.getSettingByName(site, 'defaultElectronReceiptPrinter').subscribe( data=> {
+        if (!this.electronSetting) {
+          this.electronSetting = {} as ISetting;
+        }
+        this.electronSetting.text   = data.text
+        this.electronReceiptPrinter = data.text;
+        console.log('set Electron PrinterName', this.electronReceiptPrinter)
+        this.setElectronReceipt(this.electronSetting);
+    })
   }
 
   setElectronLabelPrinterName(event) {
     this.electronLabelPrinter = event
     if (!this.electronLabelPrinter) { return }
-    console.log(event)
     if (!this.electronLabelPrinterSetting) { this.electronLabelPrinterSetting = {} as ISetting}
-    this.electronLabelPrinterSetting.name   = 'electronLabelPrinter'
+    this.electronLabelPrinterSetting.name   = 'defaultElectronReceiptPrinter'
     this.electronLabelPrinterSetting.text   = event
     this.electronLabelPrinter               = event;
     this.setElectronLabel(this.electronLabelPrinterSetting);

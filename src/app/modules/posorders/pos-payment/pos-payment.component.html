@@ -1,18 +1,14 @@
 <div *ngIf="order">
-
   <div [class]="orderlayout">
-
     <div class="transaction-data">
-      <!-- <div class="grid-header-item">
-        <pos-order-transaction-data [order]="order">
-        </pos-order-transaction-data>
-      </div> -->
+
       <div class="grid-header-item">
         <app-payment-balance
           [mainPanel]="true"
           [order]="order">
         </app-payment-balance>
       </div>
+
       <div class="grid-header-item">
         <app-order-header-demo-graphics
             [canRemoveClient]="'false'"
@@ -27,6 +23,7 @@
     </div>
 
     <div class="results-panel">
+
       <div class="order-completed" *ngIf="paymentsEqualTotal">
         <mat-card class="card-dimensions">
           <mat-card-content>
@@ -37,12 +34,23 @@
               <h1>
                 Order paid for and completed!
               </h1>
+              <div>
+                Thank you for your order. Please review the instructions on your receipt.
+              </div>
+              <button mat-raised-button color="primary" (click)="navToMenu()"><mat-icon>menu</mat-icon> Continue Shopping </button>
+              <!-- <div *ngIf="serviceType"
+                    [innerHTML]="serviceType.description">
+              </div>
+
+               <div *ngIf="serviceType"
+                    [innerHTML]="serviceType.instructions">
+              </div> -->
             </div>
           </mat-card-content>
         </mat-card>
       </div>
 
-      <div *ngIf="!paymentsEqualTotal">
+      <div *ngIf="!paymentsEqualTotal && paymentIsReady">
             <div class="grid-header-item" *ngIf="stepSelection == 1">
               <mat-card class="card-dimensions">
                 <mat-card-content>
@@ -80,7 +88,9 @@
                       </button>
                     </span>
                     <span>
-                      <button mat-button (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon></button>
+                      <button mat-button
+                             (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon>
+                      </button>
                     </span>
                   </div>
 
@@ -192,7 +202,28 @@
                 </mat-card-content>
               </mat-card>
             </div>
+            <div *ngIf="!platFormService.isApp()">
+              <div *ngFor="let item of (paymentMethods$ | async)">
+                <div *ngIf="item.id  == paymentMethod.id &&  item.instructions">
+                  <h3>{{item.name}}</h3>
+                  <mat-hint>
+                    <div [innerHTML]="item.instructions" ></div>
+                  </mat-hint>
+                  <mat-divider></mat-divider>
+                </div>
+              </div>
+            </div>
+
       </div>
+
+      <div *ngIf="!platFormService.isApp() && !paymentIsReady">
+        <div *ngIf="message">
+        <mat-icon>alert</mat-icon>{{message}}
+        </div>
+        <pos-order-schedule
+        ></pos-order-schedule>
+      </div>
+
     </div>
   </div>
 </div>

@@ -1,7 +1,9 @@
 import { Component, OnInit , Input, HostListener} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
+import { EMPTY, Observable, of, Subscription } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
@@ -10,11 +12,13 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -33,6 +37,7 @@ export class PosPaymentComponent implements OnInit {
   paymentMethods$ :   Observable<IPaymentMethod[]>;
   paymentMethod   :   IPaymentMethod;
   serviceTypes$   :   Observable<IServiceType[]>;
+  serviceType     :   IServiceType;
   _searchModel    :   Subscription;
   searchModel     :   IPaymentSearchModel;
   paymentAmountForm : FormGroup;
@@ -42,20 +47,30 @@ export class PosPaymentComponent implements OnInit {
   showInput       =   true // initialize keypad open
   stepSelection   =   1;
 
-  paymentSummary$    :  Observable<IPOSPaymentsOptimzed>;
-  paymentSummary     :  IPOSPaymentsOptimzed;
+  paymentSummary$    : Observable<IPOSPaymentsOptimzed>;
+  paymentSummary     : IPOSPaymentsOptimzed;
   paymentsEqualTotal : boolean;
 
   orderlayout = 'order-layout'
   smallDevice = false;
   orderItemsPanel = ''
 
+  orderDefaultType = false;
+  paymentIsReady: boolean;
+
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
+
+  message: string;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
-      this.order = data
-      this.refreshIsOrderPaid();
+      if (data) {
+        this.order = data
+        this.refreshIsOrderPaid();
+      }
+      if (data && data.serviceTypeID) {
+        this.updateOrderSchedule(data.serviceTypeID);
+      }
     })
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
@@ -66,13 +81,16 @@ export class PosPaymentComponent implements OnInit {
               private orderMethodsService: OrderMethodsService,
               private sitesService    : SitesService,
               private orderService    : OrdersService,
+              private serviceTypeService: ServiceTypeService,
+              private settingService  : SettingsService,
               private paymentMethodService: PaymentMethodsService,
               private matSnackBar     : MatSnackBar,
               private toolbarUI       : ToolBarUIService,
               private editDialog      : ProductEditButtonService,
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private printingService :PrintingService,
-              private platFormService : PlatformService,
+              public  platFormService : PlatformService,
+              private router          : Router,
               private fb              : FormBuilder) { }
 
   ngOnInit(): void {
@@ -93,7 +111,6 @@ export class PosPaymentComponent implements OnInit {
   }
 
   getPaymentMethods(site: ISite) {
-    console.log('getpaymentMethods is app', this.platFormService.isApp())
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
 
     if (this.platFormService.isApp()) {
@@ -139,6 +156,55 @@ export class PosPaymentComponent implements OnInit {
     })
   }
 
+  updateOrderSchedule(serviceTypeID: number){
+
+    const site = this.sitesService.getAssignedSite();
+    this.settingService.getSettingByNameCached(site,'DefaultOrderType').pipe(
+      switchMap(data => {
+      if (data) {
+        if (+data.value != this.order.serviceTypeID) {
+          return this.serviceTypeService.getType(site, +data.value)
+        }
+        if (this.platFormService.isApp() ) {
+          return this.serviceTypeService.getType(site, +data.value)
+        }
+        return of(false)
+      }
+      return of(null)
+    })).subscribe(result => {
+        if (!result) { return }
+        this.serviceType = result;
+        this.processPaymentReady(result)
+      }
+    )
+
+  }
+
+  processPaymentReady(serviceType: IServiceType) {
+
+    if (serviceType) {
+      if (serviceType.deliveryService && !this.order.shipAddress ) {
+        this.paymentIsReady  = false;
+        this.message = `Address  required.`
+        return false
+      }
+      if (serviceType.promptScheduleTime && !this.order.preferredScheduleDate) {
+        this.paymentIsReady = false;
+        this.message = `Schedule date required.`
+        return
+      }
+
+      if (serviceType.orderMinimumTotal > 0 && this.order.subTotal < serviceType.orderMinimumTotal) {
+        this.paymentIsReady = false;
+        this.message = `Minumun purchase amount of $ ${serviceType.orderMinimumTotal} required.`
+        return
+      }
+
+      this.paymentIsReady = true;
+    }
+
+  }
+
   initPaymentForm() {
     this.paymentAmountForm = this.fb.group( {
       itemName   : [''],
@@ -172,7 +238,6 @@ export class PosPaymentComponent implements OnInit {
   }
 
   processResults(paymentResponse: IPaymentResponse) {
-
     let result = 0
     // if (paymentResponse) { console.log(paymentResponse) }
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
@@ -181,7 +246,6 @@ export class PosPaymentComponent implements OnInit {
       } else {
       }
     }
-
     this.orderService.updateOrderSubscription(paymentResponse.order)
     this.resetPaymentMethod();
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
@@ -198,12 +262,16 @@ export class PosPaymentComponent implements OnInit {
     if (payment && paymentMethod) {
       if (paymentMethod.isCreditCard) {
         //open tip input option - same as cash
-        this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        if (this.platFormService.isApp()) {
+          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        }
         this.printingService.previewReceipt()
         return 1
       }
       if (payment.amountReceived >= payment.amountPaid) {
-        this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        if (this.platFormService.isApp()) {
+          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        }
         this.printingService.previewReceipt()
         return 1
       }
@@ -396,6 +464,10 @@ export class PosPaymentComponent implements OnInit {
   notify(message: string, title: string, duration: number) {
     if (duration == 0 ) {duration = 1000}
     this.matSnackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
+  }
+
+  navToMenu() {
+    this.router.navigate(['/app-main-menu'])
   }
 
 }

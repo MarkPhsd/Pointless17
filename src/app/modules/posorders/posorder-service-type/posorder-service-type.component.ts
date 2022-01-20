@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
@@ -18,7 +18,8 @@ export class POSOrderServiceTypeComponent  {
   serviceTypes$        : Observable<IServiceType[]>;
   order                : IPOSOrder;
   _order               : Subscription;
-
+  serviceTypes         : IServiceType[]
+  @Output() outPutSelectServiceType = new EventEmitter();
   item: any;
 
   initSubscriptions() {
@@ -30,7 +31,7 @@ export class POSOrderServiceTypeComponent  {
   constructor(
     private orderService      : OrdersService,
     private sitesService      : SitesService,
-    private platFormService   : PlatformService,
+    public platFormService   : PlatformService,
     private serviceTypeService: ServiceTypeService, ) {
 
     this.initSubscriptions();
@@ -41,6 +42,7 @@ export class POSOrderServiceTypeComponent  {
   getPaymentMethods(site: ISite) {
     const serviceTypes$ = this.serviceTypeService.getSaleTypes(site);
     this.serviceTypes$ = serviceTypes$
+
     if (this.platFormService.isApp()) {
       this.serviceTypes$ = serviceTypes$
       return
@@ -49,7 +51,11 @@ export class POSOrderServiceTypeComponent  {
       if (!this.platFormService.isApp()) {
         const list = data.filter( item => item.onlineOrder == true)
         this.serviceTypes$ = of(list)
+        this.serviceTypes  = list;
         return
+      }
+      if (!data) {
+        this.serviceTypes$ = of(data)
       }
     })
   }
@@ -57,9 +63,10 @@ export class POSOrderServiceTypeComponent  {
   applyServiceType(item: IServiceType) {
     // this.item = item
     if (this.order && item) {
-      this.order.serviceType = item.name;
-      this.order.serviceTypeID = item.id;
-      this.orderService.updateOrderSubscription(this.order)
+      // this.order.serviceType = item.name;
+      // this.order.serviceTypeID = item.id;
+      // this.orderService.updateOrderSubscription(this.order)
+      this.outPutSelectServiceType.emit(item)
     }
   }
 

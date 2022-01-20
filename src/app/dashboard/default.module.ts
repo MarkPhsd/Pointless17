@@ -237,6 +237,7 @@ import { POSOrderServiceTypeComponent } from '../modules/posorders/posorder-serv
 import { POSOrderScheduleComponent } from '../modules/posorders/posorder-schedule/posorder-schedule.component';
 import { POSOrderShippingAddressComponent } from '../modules/posorders/posorder-shipping-address/posorder-shipping-address.component';
 import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
+import { InventoryCountsViewComponent } from '../modules/admin/inventory/inventory-counts-view/inventory-counts-view.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -306,6 +307,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     InventoryHistoryListComponent,
     InventoryComponent,
     InventoryHistoryItemComponent,
+    InventoryCountsViewComponent,
     SearchInventoryInputComponent,
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,

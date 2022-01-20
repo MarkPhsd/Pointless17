@@ -9,14 +9,13 @@ export class RenderingService {
   constructor() { }
 
   interpolateText(item: any, text: string) {
+    if (!item && !text) { return }
 
     try {
       if (!item && text) {
         _.templateSettings.interpolate = /\${([\s\S]+?)}/g;
 
         text =  this.getFormater(text)
-
-        // console.log(text)
 
         const compiled = _.template( text );
         console.log('compiled - no item', compiled)
@@ -45,17 +44,13 @@ export class RenderingService {
           // console.log('compiledResult', compiledResult )
           // console.log('compiledText'  , compiledText )
 
-          if (item) {
-            return  compiledResult
-          }
+          if (item) { return  compiledResult }
 
         } catch (error) {
-          // console.log(error)
           return error
         }
       }
     } catch (error) {
-      // console.log(error)
     }
   }
 
@@ -77,7 +72,9 @@ export class RenderingService {
     let  stringArray = []
     if (obj) {
       obj.forEach( data => {
-        stringArray.push( this.interpolateText(data, text))
+        if (data) {
+          stringArray.push( this.interpolateText(data, text))
+        }
       })
     }
     return stringArray

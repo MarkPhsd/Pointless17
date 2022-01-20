@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable } from 'rxjs';
 import { IServiceType, ISite }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 
@@ -15,8 +13,9 @@ export class ServiceTypeService {
 
   constructor( private http        : HttpClient,
                 private httpCache  : HttpClientCacheService,
-                private auth       : AuthenticationService,
                 private siteService: SitesService) { }
+
+
 
   getType(site: ISite, id: number):  Observable<IServiceType> {
 

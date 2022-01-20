@@ -13,7 +13,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
   templateUrl: './posorder-schedule-card.component.html',
   styleUrls: ['./posorder-schedule-card.component.scss']
 })
-export class POSOrderScheduleCardComponent implements OnInit,OnDestroy {
+export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
 
   order                : IPOSOrder;
   _order               : Subscription;
@@ -30,7 +30,6 @@ export class POSOrderScheduleCardComponent implements OnInit,OnDestroy {
    ) { }
 
   ngOnInit(): void {
-
     this.initSubscriptions();
   }
 

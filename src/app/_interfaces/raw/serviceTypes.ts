@@ -16,4 +16,8 @@ export interface IServiceType {
   icon       :           string;
   apiOrder          :    boolean;
   onlineOrder       :    boolean;
+  instructions:          string;
+  promptScheduleTime  :  boolean;
+  deliveryService     : boolean;
+  orderMinimumTotal  :  number;
 }

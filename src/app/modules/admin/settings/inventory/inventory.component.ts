@@ -11,7 +11,7 @@ import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-re
   styleUrls: ['./inventory.component.scss']
 })
 
-export class InventoryComponent implements OnInit {
+export class InventoryComponent  {
 
   @Input() role: string;
 
@@ -25,9 +25,6 @@ export class InventoryComponent implements OnInit {
     private adustmentReasonsService: AdjustmentReasonsService
 ) { }
 
-  ngOnInit(): void {
-    console.log('')
-  }
 
   openAdjustmentReasonsDialog() {
     this.adustmentReasonsService.openAdjustmentReasonEdit();

@@ -3,8 +3,9 @@
     <ng-content></ng-content>
   </h4>
 </div>
-<div [class]="toggleDimensions">
-  <mat-button-toggle-group
+<div [class]="toggleDimensions" *ngIf="(list$ | async) as list">
+
+    <mat-button-toggle-group
           name         = "type"
           [(ngModel)]  = "id"
           (change)="changeSelection()"
@@ -22,7 +23,7 @@
             [value]="item"
             [class]="buttonDimensions"
             (change)="setItem(item)"
-            *ngFor="let item of (list$ | async)" >
+            *ngFor="let item of list" >
           {{item.name}}
       </mat-button-toggle>
     </mat-button-toggle-group>

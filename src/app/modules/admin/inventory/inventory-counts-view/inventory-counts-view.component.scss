@@ -1,0 +1,10 @@
+.grid-container {
+  display: grid;
+  grid-template-columns: 50px 1fr 1fr;
+  gap: 5px;
+}
+
+.instock-total{
+  margin-top: 5px;
+  font-size: 1em;
+}

@@ -1,15 +1,18 @@
 <!-- <mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading"> -->
 <mat-card *ngIf="(inventoryAssignment$ | async) as item; else loading">
+
   <mat-card-title>
-    <div class="mat-form-field">Move inventory.</div>
-
-    <div
-          class="mat-form-field">
-          {{item.productName}} <br>
-          {{item.sku}}
-    </div>
-
+    <div class="mat-form-field">Move inventory</div>
   </mat-card-title>
+  <mat-card-subtitle>
+    <div class="mat-form-field">
+        {{item.productName}}
+    </div>
+    <div>
+      {{item.sku}}
+    </div>
+  </mat-card-subtitle>
+
 
   <mat-card-content>
 

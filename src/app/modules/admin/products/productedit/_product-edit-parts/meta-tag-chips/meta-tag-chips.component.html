@@ -1,9 +1,8 @@
+<div *ngIf="product && inputForm">
 
   <mat-form-field >
     <mat-label>Meta Tags</mat-label>
-
     <mat-chip-list  appearance="outline"  #chipList aria-label="Fruit selection"  >
-
       <mat-chip
           *ngFor="let item of (itemTags || [])"
           [selectable]="selectable"
@@ -16,8 +15,8 @@
       <input
             placeholder="New item..."
             #input
-            [(ngModel)]="metaTagList"
-            [formControl]="metaTags"
+            [(ngModel)]      ="metaTagList"
+            [formControl]    ="metaTags"
             [matAutocomplete]="auto"
             [matChipInputFor]="chipList"
             [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -39,12 +38,10 @@
        *ngIf="inputForm"
        [hidden]="true"
        [formGroup]="inputForm">
-
     <input  matInput
             type="text"
             name="metaTags"
             formControlName="metaTags">
-
   </div>
 
-
+</div>

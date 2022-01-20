@@ -50,7 +50,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
       this.pOSPaymentService.updateItemWithAction(data);
       this.list$  = this.adjustMentService.getReasonsByFilter(site, 2);
-
       this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     }
   }
@@ -67,33 +66,41 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
     if (setting) {
       const site = this.siteService.getAssignedSite();
-
-      // this.paymentWithAction.returnToInventory  = this.inventoryReturnDiscard
+      console.log('setting', setting)
       this.paymentWithAction.voidReason = setting.name
       this.paymentWithAction.voidReasonID = setting.id
       let response = {} as PaymentWithAction;
       this.paymentWithAction.action = 1;
       const method = this.paymentWithAction.paymentMethod;
+      let response$: Observable<PaymentWithAction>;
 
       if (this.paymentWithAction) {
         if (method) {
           if (method.isCreditCard) {
             this.notifyEvent('Payment Must be Voided by CC Service', 'Result')
-            response = await this.pOSPaymentService.voidPayment(site, this.paymentWithAction).pipe().toPromise();
+            response$ = this.pOSPaymentService.voidPayment(site, this.paymentWithAction)//.pipe().toPromise();
+            this.updateResponse(response$)
           } else {
-            response = await this.pOSPaymentService.voidPayment(site, this.paymentWithAction).pipe().toPromise();
-          }
-          console.log(response)
-          if (response.result) {
-            this.updateSubscription()
-            this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
-            this.closeDialog();
+            response$ = this.pOSPaymentService.voidPayment(site, this.paymentWithAction)//.pipe().toPromise();
+            this.updateResponse(response$)
           }
         }
       }
     }
 
   }
+
+  updateResponse(response$: Observable<PaymentWithAction>) {
+    response$.subscribe( response => {
+        if (response && response.result) {
+          this.updateSubscription()
+          this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
+          this.closeDialog();
+        }
+      }
+    )
+  }
+
 
   async updateSubscription() {
     //update the order service.

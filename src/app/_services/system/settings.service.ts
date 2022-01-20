@@ -7,6 +7,7 @@ import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { AdjustmentReason } from './adjustment-reasons.service';
 import { AppInitService } from './app-init.service';
+import { IItemBasic } from '..';
 
 interface IIsOnline {
   result: string;
@@ -65,6 +66,20 @@ export class SettingsService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<ISetting[]>(url);
+
+  }
+
+  getSettingsByDescriptionBasic(site: ISite, description: String):  Observable<IItemBasic[]> {
+
+    const controller = "/settings/"
+
+    const endPoint = 'getSettingsByDescriptionBasic';
+
+    const parameters = `?description=${description}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IItemBasic[]>(url);
 
   }
 
@@ -131,9 +146,9 @@ export class SettingsService {
 
   }
 
-  getReceipts(site: ISite):  Observable<ISetting[]> {
+  getReceipts(site: ISite):  Observable<IItemBasic[]> {
 
-    return this.getSettingsByDescription(site, 'receiptLayouts')
+    return this.getSettingsByDescriptionBasic(site, 'receiptLayouts')
 
   }
 

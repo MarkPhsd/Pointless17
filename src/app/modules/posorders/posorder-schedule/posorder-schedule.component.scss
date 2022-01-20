@@ -13,10 +13,7 @@ grid-container {
 
 }
 
-// mat-card {
-//   width: 450px;
-// }
-
+// mat-car
 
 .grid-container {
   --gap: 10px;
@@ -34,4 +31,8 @@ grid-container {
     align-content: center;
     justify-content: space-between;
   }
+}
+
+.item {
+  margin: 5px;
 }

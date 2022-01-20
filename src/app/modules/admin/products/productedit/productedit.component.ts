@@ -29,6 +29,7 @@ import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.ser
 export class ProducteditComponent implements  OnInit  {
 
   productForm: FormGroup;
+  itemTags   : string;
 
   get f()             { return this.productForm;}
   get fullProductName(){return this.productForm.get("fullProductName") as FormControl;}
@@ -52,8 +53,8 @@ export class ProducteditComponent implements  OnInit  {
   displayContent         :boolean;
   bucketName:             string;
   awsBucketURL:           string;
-  dispatcherID: number
-  showDescription: boolean;
+  dispatcherID          : number
+  showDescription       : boolean;
 
   id: string;
   product$     : Observable<IProduct>;
@@ -100,15 +101,11 @@ export class ProducteditComponent implements  OnInit  {
       this.id = this.route.snapshot.paramMap.get('id');
     }
     this.initializeForm()
-
-
-
-
   }
 
   async ngOnInit() {
-    this.bucketName =       await this.awsBucket.awsBucket();
-    this.awsBucketURL =     await this.awsBucket.awsBucketURL();
+    this.bucketName   =    await this.awsBucket.awsBucket();
+    this.awsBucketURL =    await this.awsBucket.awsBucketURL();
   };
 
   refreshDisplayContent() {
@@ -126,6 +123,7 @@ export class ProducteditComponent implements  OnInit  {
             // console.log(data)
             this.product = data
             this.priceCategoryID = this.product.priceCategory
+            this.itemTags        = this.product.metaTags;
             this.productForm.patchValue(this.product)
           }
         )
@@ -137,16 +135,13 @@ export class ProducteditComponent implements  OnInit  {
             this.product = data
             this.urlImageMain  = this.product?.urlImageMain;
             this.urlImageOther = this.product?.urlImageOther;
+            this.itemTags      = this.product.metaTags;
             return this.itemTypeService.getItemType(site, data.prodModifierType)
           }
       )).subscribe( data => {
         this.itemType = data
       })
-
-
-
     }
-
   };
 
   initFormFields() {
@@ -156,7 +151,6 @@ export class ProducteditComponent implements  OnInit  {
   setValues(): boolean {
     this.product  = this.fbProductsService.setProductValues(this.product, this.productForm)
     if (this.product) {
-
       // // //not form values
       this.product.urlImageMain  = this.urlImageMain
       this.product.urlImageOther = this.urlImageOther
@@ -166,10 +160,9 @@ export class ProducteditComponent implements  OnInit  {
 
   async updateItem(event): Promise<boolean> {
     let result: boolean;
-
     return new Promise(resolve => {
        if (this.productForm.valid) {
-         this.setValues();
+        this.setValues();
         this.setNonFormValues()
         const site = this.siteService.getAssignedSite()
         const product$ = this.menuService.saveProduct(site, this.product)
@@ -226,8 +219,7 @@ export class ProducteditComponent implements  OnInit  {
 
       this.product.fullProductName          = this.fullProductName.value
       if (this.name.value == '') { this.product.name  = this.product.fullProductName }
-
-      this.product.metaTags                 = this.metaTags.value
+      this.product.metaTags                 = this.itemTags;
       this.product.msrp                     = this.msrp.value
       this.product.priceCategory            = this.priceCategory.value
       this.product.retail                   = this.retail.value
@@ -245,6 +237,11 @@ export class ProducteditComponent implements  OnInit  {
       this.product.urlImageMain             = this.urlImageMain
       this.product.urlImageOther            = this.urlImageOther
     }
+  }
+
+  setItemTags(event) {
+    console.log(' edit item tags', event)
+    this.itemTags = event;
   }
 
   notifyEvent(message: string, action: string) {
@@ -288,7 +285,6 @@ export class ProducteditComponent implements  OnInit  {
     // console.log('images',images)
     return images
   }
-
 
   openPriceCategory() {
     if (!this.product) { return }

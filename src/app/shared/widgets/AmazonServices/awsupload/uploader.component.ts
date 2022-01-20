@@ -41,8 +41,6 @@ export class UploaderComponent implements OnInit {
 
   async ngOnInit() {
 
-    console.log('filanames', this.fileNames)
-
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
 
@@ -134,7 +132,6 @@ export class UploaderComponent implements OnInit {
          }
       );
 
-      console.log("this.fileNames of Push", this.fileNames)
       const newArray = [...new Set(this.fileNames.split(","))];
 
       this.fileNames = "";

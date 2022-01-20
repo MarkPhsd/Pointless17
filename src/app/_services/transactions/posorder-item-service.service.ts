@@ -194,8 +194,6 @@ export class POSOrderItemServiceService {
 
     newItem = this.getNewItemWeight(newItem);
 
-    console.log(newItem)
-
     const controller = "/POSOrderItems/";
 
     const endPoint = "PostItem";

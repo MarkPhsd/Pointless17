@@ -12,6 +12,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
+import { IItemBasic } from 'src/app/_services';
 
 @Component({
   selector: 'app-item-type-editor',
@@ -34,9 +35,9 @@ export class ItemTypeEditorComponent   {
   itemType_Types     = this.itemTypeService.type;
 
   labelTypes        : ISetting[];
-  receiptList$      : Observable<ISetting[]>;
+  receiptList$      : Observable<IItemBasic[]>;
   labelList$        : Observable<ISetting[]>;
-  prepReceiptList$  : Observable<ISetting[]>;
+  prepReceiptList$  : Observable<IItemBasic[]>;
   printerLocations$ : Observable<IPrinterLocation[]>;
   prepTicketID    : number;
   labelTypeID     : number;

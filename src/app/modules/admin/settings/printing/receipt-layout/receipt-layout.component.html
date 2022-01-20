@@ -1,87 +1,89 @@
 <div class="back-ground-override">
 
-<div   *ngIf="!isLabel"
-        #printsection
-        id="printsection"
-        [class]="setPrinterWidthClass"
-        >
+  <div   *ngIf="!isLabel"
+          #printsection
+          id="printsection"
+          [class]="setPrinterWidthClass"
+          >
 
-  <div  *ngIf="liveEdit">
+    <div  *ngIf="liveEdit">
 
-    <div     *ngIf="headerText && orders">
-      <div   *ngFor="let order of orders">
-        <div [innerHTML]="getInterpolatedHTML(headerText, order)" >  </div>
+      <div     *ngIf="headerText && orders">
+        <div   *ngFor="let order of orders">
+          <div [innerHTML]="getInterpolatedHTML(headerText, order)" >  </div>
+        </div>
       </div>
-    </div>
 
-    <div      *ngIf="items && itemText">
-      <div    *ngFor="let item of items">
-        <div  [class]="gridReceiptClass"
-              [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
+      <div      *ngIf="items && itemText">
+        <div    *ngFor="let item of items">
+          <div  [class]="gridReceiptClass"
+                [innerHTML]="getInterpolatedHTML(itemText, item)" >  </div>
+        </div>
       </div>
-    </div>
 
-    <div *ngIf="footerText && orders">
-      <div *ngFor="let order of orders">
-          <div [innerHTML]="getInterpolatedHTML(footerText, order)" >  </div>
+      <div *ngIf="footerText && orders">
+        <div *ngFor="let order of orders">
+            <div [innerHTML]="getInterpolatedHTML(footerText, order)" >  </div>
+        </div>
       </div>
-    </div>
 
-    <div *ngIf="paymentsText && payments">
-      <div *ngFor="let payment of payments">
-          <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+      <div *ngIf="paymentsText && payments">
+        <div *ngFor="let payment of payments">
+            <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+        </div>
       </div>
-    </div>
 
-    <div *ngIf="subFooterText && orderTypes">
-      <div *ngFor="let orderType of orderTypes">
-          <div [innerHTML]="getInterpolatedHTML(subFooterText, orderType)" >  </div>
-      </div>
-    </div>
-  </div>
-
-  <div *ngIf="!liveEdit" class="background">
-    <div   *ngIf="interpolatedHeaderTexts">
-
-      <div *ngFor="let item of interpolatedHeaderTexts; let i = index">
-        <div
-           [innerHTML]="interpolatedHeaderTexts[i]" >  </div>
-      </div>
-    </div>
-
-    <div      *ngIf="interpolatedItemTexts">
-      <div    *ngFor="let item of interpolatedItemTexts; let i = index">
-        <div  [class]="gridReceiptClass"
-              [innerHTML]="interpolatedItemTexts[i]" >  </div>
-      </div>
-    </div>
-
-    <div   *ngIf="interpolatedFooterTexts">
-      <div *ngFor="let order of interpolatedFooterTexts; let i = index">
-        <div
-          [innerHTML]="interpolatedFooterTexts[i]" >  </div>
-      </div>
-    </div>
-
-    <div   *ngIf="interpolatedPaymentsTexts">
-      <div *ngFor="let payment of interpolatedPaymentsTexts; let i = index">
-          <div
-           [innerHTML]="interpolatedPaymentsTexts[i]" >  </div>
-      </div>
-    </div>
-
-    <div   *ngIf="interpolatedSubFooterTexts">
-      <div *ngFor="let orderType of interpolatedSubFooterTexts; let i = index">
-        <div
-          [innerHTML]="interpolatedSubFooterTexts[i]" >
+      <div *ngIf="subFooterText && orderTypes">
+        <div *ngFor="let orderType of orderTypes">
+            <div [innerHTML]="getInterpolatedHTML(subFooterText, orderType)" >  </div>
         </div>
       </div>
     </div>
+
+    <div *ngIf="!liveEdit" class="background">
+      <div   *ngIf="interpolatedHeaderTexts">
+        <div *ngFor="let item of interpolatedHeaderTexts; let i = index">
+          <div
+            [innerHTML]="interpolatedHeaderTexts[i]" >  </div>
+        </div>
+      </div>
+
+      <div      *ngIf="interpolatedItemTexts">
+        <div    *ngFor="let item of interpolatedItemTexts; let i = index">
+          <div  [class]="gridReceiptClass"
+                [innerHTML]="interpolatedItemTexts[i]" >  </div>
+        </div>
+      </div>
+
+      <div   *ngIf="interpolatedFooterTexts">
+        <div *ngFor="let order of interpolatedFooterTexts; let i = index">
+          <div
+            [innerHTML]="interpolatedFooterTexts[i]" >  </div>
+        </div>
+      </div>
+
+      <div   *ngIf="interpolatedPaymentsTexts">
+        <div *ngFor="let payment of interpolatedPaymentsTexts; let i = index">
+          <!-- <div *ngIf="payment && payment.paymentMethod">
+            <div [innerHTML]="interpolatedPaymentsTexts[i]" >
+            </div>
+          </div> -->
+          <div *ngFor="let payment of payments">
+            <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+          </div>
+        </div>
+      </div>
+
+      <div   *ngIf="interpolatedSubFooterTexts">
+        <div *ngFor="let orderType of interpolatedSubFooterTexts; let i = index">
+          <div
+            [innerHTML]="interpolatedSubFooterTexts[i]" >
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-
-
-</div>
-
 </div>
 
 

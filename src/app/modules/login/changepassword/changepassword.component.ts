@@ -11,6 +11,7 @@ import { fadeInAnimation } from 'src/app/_animations';
   styleUrls: ['./changepassword.component.scss'],
 })
 export class ChangepasswordComponent implements OnInit {
+
   loginForm: FormGroup;
   loading   = false;
   submitted = false;
@@ -36,10 +37,10 @@ export class ChangepasswordComponent implements OnInit {
 
   ngOnInit() {
       this.loginForm = this.formBuilder.group({
-          username: ['', Validators.required],
+          username:        ['', Validators.required],
           confirmpassword: ['', Validators.required],
-          password: ['', Validators.required],
-          resetcode: ['', Validators.required],
+          password:        ['', Validators.required],
+          resetcode:       ['', Validators.required],
       });
 
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
@@ -54,8 +55,6 @@ export class ChangepasswordComponent implements OnInit {
 
   updatePassword(){
     try {
-
-
       const user    = {} as IUser;
       user.username = this.f.username.value
       user.password = this.f.password.value
@@ -72,7 +71,7 @@ export class ChangepasswordComponent implements OnInit {
       if(this.f.password.value == this.f.confirmpassword.value){
         let result = this.authenticationService.updatePassword(user);
         this.statusMessage = "Updated. Routing to login."
-        this.router.navigate(['/']);
+        this.router.navigate(['/login']);
       }else
       {
         this.statusMessage = "Passwords do not match."

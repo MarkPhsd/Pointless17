@@ -8,6 +8,7 @@
 <div class="settings" *ngIf="role">
 
   <div *ngIf="role === 'admin' || role === 'manager'">
+
     <mat-accordion class="example-headers-align" multi="false">
       <mat-expansion-panel [expanded]="accordionStep === 0"
                            (opened)="setStep(0)"
@@ -22,7 +23,9 @@
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <app-database-schema></app-database-schema>
+        <div *ngIf="accordionStep ==0">
+          <app-database-schema></app-database-schema>
+        </div>
 
         <mat-action-row>
           <button mat-button color="warn"    (click)="prevStep()">Previous</button>
@@ -43,7 +46,7 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div class="grid-settings-2">
+      <div *ngIf="accordionStep ==1" class="grid-settings-2">
 
         <div>
             <button mat-raised-button
@@ -62,7 +65,6 @@
           <app-software-settings></app-software-settings>
         </div>
       </div>
-
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
@@ -125,7 +127,9 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <app-ionic-geo-location></app-ionic-geo-location>
+      <div  *ngIf="accordionStep ==5" >
+        <app-ionic-geo-location></app-ionic-geo-location>
+      </div>
 
       <mat-action-row>
         <button mat-button color="warn"    (click)="prevStep()">Previous</button>
@@ -144,11 +148,13 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div *ngIf="role === 'admin'">
-        <button mat-button color="accent"
-                (click)="gotoPayments()">
-                <mat-icon>settings</mat-icon> Settings
-        </button>
+      <div  *ngIf="accordionStep ==6" >
+        <div *ngIf="role === 'admin'">
+          <button mat-button color="accent"
+                  (click)="gotoPayments()">
+                  <mat-icon>settings</mat-icon> Settings
+          </button>
+        </div>
       </div>
 
       <mat-action-row>
@@ -168,7 +174,9 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <app-device-info></app-device-info>
+      <div  *ngIf="accordionStep ==7" >
+        <app-device-info></app-device-info>
+      </div>
 
       <mat-action-row>
         <button mat-button color="warn"    (click)="prevStep()">Previous</button>

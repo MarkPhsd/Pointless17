@@ -12,6 +12,13 @@ export interface InventorySearchResultsPaged {
   results     : IInventoryAssignment[];
   paging      : Paging;
   errorMessage: string;
+  total       : number;
+}
+
+export interface AvalibleInventoryResults {
+  results     : IInventoryAssignment[];
+  total       : number;
+  errorMessage: string;
 }
 
 export interface IInventoryAssignment {
@@ -112,6 +119,21 @@ export class InventoryAssignmentService {
     private fb  : FormBuilder,
     private siteService: SitesService)
   {
+  }
+
+  getAvalibleInventory(site: ISite, productID: number, active: boolean): Observable<AvalibleInventoryResults> {
+
+      const controller =  `/InventoryAssignments/`
+
+      const endPoint = `getAvalibleInventory`
+
+      // const parameters = `?pagenumber=${pageNumber}&pageSize=${pageSize}`
+      const parameters = `?ProductID=${productID}&avaible=${active}`
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return  this.http.get<AvalibleInventoryResults>(url)
+
   }
 
   getSummaryOfGramsUsed(site: ISite, inventoryAssigments: IInventoryAssignment[], packageQuantity: number): any {

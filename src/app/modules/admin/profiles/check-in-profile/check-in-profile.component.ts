@@ -298,14 +298,12 @@ export class CheckInProfileComponent implements OnInit {
     if (action === this.SWIPE_ACTION.LEFT) {
       const isLast = selectedIndex === 1;
       selectedIndex = isLast ? 0 : selectedIndex + 1;
-      console.log("Swipe right - INDEX: " +  selectedIndex);
     }
 
     // Swipe right, previous tab
     if (action === this.SWIPE_ACTION.RIGHT) {
       const isFirst = selectedIndex === 0;
       selectedIndex = isFirst ? 1 :  selectedIndex - 1;
-      console.log("Swipe left - INDEX: " + selectedIndex);
     }
   }
 

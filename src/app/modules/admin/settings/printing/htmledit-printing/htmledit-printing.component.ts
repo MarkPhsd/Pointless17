@@ -35,6 +35,8 @@ export class HTMLEditPrintingComponent implements OnInit {
   @Input() setting: ISetting;
   setting$        : Observable<ISetting>;
   inputForm       : FormGroup;
+  liveEditForm    : FormGroup;
+  liveEdit        : boolean;
 
   receiptText = '';
   isLabel:  boolean;
@@ -67,6 +69,7 @@ export class HTMLEditPrintingComponent implements OnInit {
   interpolatedPaymentsTexts = [] as string[];
   interpolatedSubFooterTexts = [] as string[];
 
+
   constructor(
               private settingsService  : SettingsService,
               private siteService      : SitesService,
@@ -77,6 +80,7 @@ export class HTMLEditPrintingComponent implements OnInit {
               public  route            : ActivatedRoute,
               private renderingService : RenderingService,
               private fakeData         : FakeDataService,
+              private fb               : FormBuilder,
               @Inject(MAT_DIALOG_DATA) public data: any
               )
   {
@@ -101,12 +105,22 @@ export class HTMLEditPrintingComponent implements OnInit {
     this.initializeForm()
     this.initSubComponent( this.setting, this.receiptStyles )
     this.isLabel = true
+    this.initLiveEditForm();
   }
 
   async initializeForm()  {
     this.initFormFields();
     this.refresh();
   };
+
+  initLiveEditForm() {
+    this.liveEditForm = this.fb.group({
+      liveEdit: ['']
+    })
+    this.liveEditForm.valueChanges.subscribe(data => {
+      this.liveEdit = this.liveEditForm.controls['liveEdit'].value;
+    })
+  }
 
   refresh() {
     if (!this.inputForm || !this.setting) { return }
@@ -138,6 +152,7 @@ export class HTMLEditPrintingComponent implements OnInit {
   refreshOrderData() {
     this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.setting.option5, this.order)
   }
+
   refreshItemData() {
     this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.setting.text, this.items)
   }
@@ -157,8 +172,8 @@ export class HTMLEditPrintingComponent implements OnInit {
 
   initSubComponent(receiptPromise, receiptStylePromise) {
     try {
+      //init sub coomponent
       if (receiptPromise && receiptStylePromise) {
-        //init sub coomponent
         this.receiptLayoutSetting =  receiptPromise
         this.headerText           =  this.receiptLayoutSetting.option6
         this.footerText           =  this.receiptLayoutSetting.option5

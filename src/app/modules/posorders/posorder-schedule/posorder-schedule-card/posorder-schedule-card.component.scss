@@ -12,5 +12,9 @@
 }
 
 mat-card {
-  width: 350px;
+  width: 325px;
+}
+
+.grid-item-span {
+  grid-column-end: span 2;
 }

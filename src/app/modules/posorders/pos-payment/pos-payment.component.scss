@@ -50,17 +50,25 @@
 .transaction-data {
   display: grid;
   gap: 5px;
-  grid-template-columns: repeat( auto-fit, minmax(275px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(355px, 1fr) );
   border-radius: 3px;
 
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(275px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(355px, 1fr) );
     margin: 5px ;
   }
 }
+
+.cart-button {
+  // display: grid;
+  // grid-template-columns: auto;
+  // border-radius: 10px;
+  // height: 100px;
+  width: 355px;
+ }
 
 .grid-header-item {
   margin: 15px;
@@ -68,6 +76,24 @@
   flex-direction: row;
   align-content: center;
   justify-content: center;
+
+  @include for-phone-only  {
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: left;
+  }
+}
+
+.grid-button-item {
+  // margin: 15px;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+  height: 55px;
+  width: 100%;
 
   @include for-phone-only  {
     margin: 5px;

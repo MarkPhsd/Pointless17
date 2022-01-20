@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit,Input, Output  } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -10,6 +9,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
   templateUrl: './default-receipt-selector.component.html',
   styleUrls: ['./default-receipt-selector.component.scss']
 })
+
 export class DefaultReceiptSelectorComponent implements OnInit {
 
   @Input()  receipt           : ISetting;
@@ -18,19 +18,17 @@ export class DefaultReceiptSelectorComponent implements OnInit {
   @Input()  receiptList       : Observable<any>;
   @Output() outPutReceiptName : EventEmitter<any> = new EventEmitter();
 
-  constructor(private settingsService: SettingsService, private siteService: SitesService) { }
+  constructor(private settingsService: SettingsService,
+              private siteService: SitesService) { }
 
   async ngOnInit() {
     //this requires we get the receiptID, then assign it to the item as the default item, selected item.
-    console.log('receiptID', this.receiptID)
     if (this.receiptID) {
       const site = this.siteService.getAssignedSite();
-
       const item$ = this.settingsService.getSetting(site, this.receiptID).subscribe(data=> {
         this.receipt = data;
         this.receiptName = data.value
       })
-
     }
   }
 
@@ -42,9 +40,6 @@ export class DefaultReceiptSelectorComponent implements OnInit {
       this.outPutReceiptName.emit(this.receipt)
     })
   }
-
-
-
 }
 
 // function site(site: any, receiptID: any) {

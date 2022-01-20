@@ -204,4 +204,8 @@ export class StrainProductEditComponent implements OnInit {
     // this.urlImageOther_ctl.setValue($event)
   }
 
+  parentFunc(event){
+    console.log(event)
+  }
+
 }

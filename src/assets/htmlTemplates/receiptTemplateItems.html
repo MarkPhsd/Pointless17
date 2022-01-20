@@ -1,16 +1,17 @@
+<div class="items-span-columns-2 itemName">
+  ${item.productName}
 
-
-  <div class="quantity">${item.quantity} ${item.unitName} </div>
-
-  <div class="itemName">${item.productName}
-    <span *ngIf="item.unitName.trim().length>0 && item.isWeightedItem"> $ ${item.unitPrice.toFixed(2)} / ${item.unitName}    </span>
-    <div *ngIf="item.serialCode">
-      ${item.serialCode}
-    </div>
+  <div *ngIf="item.serialCode">    ${item.serialCode}   </div>
+  <div class="items-span-columns-3 itemName" *ngIf="+quantity>1">
+    ${item.quantity} ${item.unitName}  @  $ ${item.unitPrice} / ${item.unitName}
   </div>
 
-  <div class="item-price">$
-    ${ item.total.toFixed(2) }
+  <div *ngIf="item.modifierNote != item.serialCode"
+       class="items-span-columns-3  itemName">
+    ${item.modifierNote}
   </div>
+</div>
 
-
+<div class="item-price">$
+  ${item.total.toFixed(2) }
+</div>

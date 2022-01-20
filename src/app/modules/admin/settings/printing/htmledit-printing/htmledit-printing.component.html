@@ -68,6 +68,20 @@
               </mat-form-field>
             </div>
 
+            <div *ngIf="liveEditForm"
+                 [formGroup]="liveEditForm">
+              <div class="instructions">
+                Live Edit
+              </div>
+              <div>
+                <mat-checkbox
+                      type             ="checkbox"
+                      formControlName  ="liveEdit"
+                      class="form-control" >
+                </mat-checkbox>
+              </div>
+
+            </div>
             <div *ngIf="!isLabel">
               <mat-form-field appearance="outline">
                 <mat-label> {{setting.option9}}</mat-label>
@@ -126,7 +140,7 @@
 
             <div *ngIf="!isLabel">
               <mat-form-field appearance="outline" class="description">
-                <mat-label>Payments</mat-label>
+                <mat-label>Order Total & Footer</mat-label>
                 <textarea
                           matInput
                           type             ="text"
@@ -142,7 +156,7 @@
 
             <div *ngIf="!isLabel">
               <mat-form-field appearance="outline" class="description">
-                <mat-label>Footer</mat-label>
+                <mat-label>Payments</mat-label>
                 <textarea
                           matInput
                           type             ="text"
@@ -150,12 +164,12 @@
                           [(ngModel)]      ="setting.option7"
                           rows             ="10"
                           cols             ="30"
-
                     >
                 </textarea>
               </mat-form-field>
               <br>
             </div>
+
             <div *ngIf="!isLabel">
               <mat-form-field appearance="outline" class="description">
                 <mat-label>Footer</mat-label>
@@ -166,7 +180,6 @@
                           [(ngModel)]      ="setting.option8"
                           rows             ="10"
                           cols             ="30"
-
                     >
                 </textarea>
               </mat-form-field>
@@ -193,7 +206,7 @@
                                 [payments]="payments"
                                 [orderType]="orderTypes"
                                 [testdata]="true"
-                                [liveEdit]="true"
+                                [liveEdit]="liveEdit"
                                 [isLabel]="isLabel"
                                 [styles]="receiptStyles"
                                 [interpolatedHeaderTexts]  ="interpolatedHeaderTexts"

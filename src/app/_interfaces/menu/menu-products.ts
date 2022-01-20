@@ -103,6 +103,7 @@ export interface IMenuItem {
   thcContent               :number;
 }
 
+//also in itemtype service - should consolidate
 export interface ItemType {
   id:                   number;
   name:                 string;
@@ -127,7 +128,9 @@ export interface ItemType {
   printerLocation     : IPrinterLocation;
   requiresSerial      : boolean;
   packageType         : string;
-
+  requireInStock      : boolean;
+  metrcCategoryID :    number;
+  preptTicketID       : number;
 }
 
 export interface ItemTypeCategory {

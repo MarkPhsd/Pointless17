@@ -1,9 +1,6 @@
-import { ReturnStatement } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { tap } from 'rxjs/operators';
-
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { IServiceType } from '../_interfaces';
 import { SitesService } from '../_services/reporting/sites.service';
 import { ServiceTypeService } from '../_services/transactions/service-type-service.service';
@@ -45,6 +42,10 @@ export class FbServiceTypeService {
             apiOrder:              [''], // number;
             onlineOrder:           [''], //string;
             description:           [''],
+            instructions         : [''],
+            deliveryService      : [''],
+            promptScheduleTime   : [''],
+            orderMinimumTotal    : ['']
           }
         )
         return fb

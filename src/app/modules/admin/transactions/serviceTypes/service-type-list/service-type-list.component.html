@@ -1,8 +1,10 @@
 <div class="grid-container">
   <div class="grid-item">
-      <div  [formGroup]="searchForm" >
+    <!--  -->
+      <div  *ngIf="searchForm"
+           [formGroup]="searchForm" >
         <mat-form-field appearance="outline" class="form-fields">
-          <mat-label >Search Items</mat-label>
+          <mat-label>Search Items</mat-label>
             <input
                     #input
                     matInput
@@ -44,7 +46,7 @@
     </ag-grid-angular>
   </div>
 
-  <div>
+  <div class='service-type-default'>
     <app-mat-toggle-selector
         [list$]="serviceType$"
         [id]="defaultID"

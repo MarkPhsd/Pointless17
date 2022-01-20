@@ -9,20 +9,24 @@
       <mat-card-subtitle >
         <div class="grid">
 
-          <div class="grid-item">
+          <div class="grid-header">
+
             <div class="grid-demographics">
 
+              <div id="product-name">{{ menuItem?.name }}</div>
+
               <div class="species" id="product-name">
-                <button mat-raised-button color="accent">
-                  {{ menuItem?.species }}
-                </button>
+                <div>
+                  <button mat-raised-button color="accent">
+                    {{ menuItem?.species }}
+                  </button>
+                </div>
               </div>
 
               <div id="brand-name" *ngIf="brand$ | async as brand">
                 {{ brand.companyName }}
               </div>
 
-              <div id="product-name">{{ menuItem?.name }}</div>
               <div id="barcode">{{ menuItem?.barcode}}</div>
 
               <div class="prices">
@@ -32,17 +36,38 @@
                 </menu-item-extended-prices>
               </div>
 
-              <div class="manager-info" *ngIf="isUserStaff">
+              <div class="manager-info"
+                  *ngIf="menuItem && menuItem.itemType
+                         && !menuItem.itemType.requireInStock">
                 <div class="pricing-box"  >
                   <div id="unitDescription"> </div>
-                  <div id="price"> Count {{ menuItem?.productCount  }} </div>
+                  <div id="price"> Count {{ menuItem?.productCount }} </div>
                 </div>
               </div>
 
+              <div class="instock-option"
+                 *ngIf="menuItem && menuItem.itemType
+                       && menuItem.itemType.requireInStock">
+                <inventory-counts-view
+                  [showList]="false"
+                  [showAddButton]="true"
+                  [productID]="menuItem.id">
+                  Add to Cart
+                </inventory-counts-view>
+              </div>
+
+            </div>
+
+            <div>
+              <div class="onlineShortDescription"
+                [innerHTML]="menuItem?.onlineShortDescription">
+              </div>
             </div>
           </div>
 
-          <div class="grid-save-add-buttons">
+          <div class="grid-save-add-buttons"
+               *ngIf="menuItem && menuItem.itemType
+                     && !menuItem.itemType.requireInStock">
 
             <div id="addToWishList">
               <button mat-button
@@ -104,8 +129,8 @@
 
             <div>
               <div id="onlineDescription"
-                  class="grid-item-gallery"
-                  [innerHTML]="menuItem?.onlineDescription">
+                    class="grid-item-gallery"
+                    [innerHTML]="menuItem?.onlineDescription">
               </div>
 
               <div class="center">
@@ -125,9 +150,6 @@
               <div id="specialDescription"> {{ menuItem?.specialDescription }} </div>
             </div>
 
-            <div class="onlineShortDescription"
-                [innerHTML]="menuItem?.onlineShortDescription">
-            </div>
 
           </div>
 

@@ -48,6 +48,9 @@ export class OrdersService {
 
   isApp                       = false;
 
+  getCurrentOrder() {
+    return this.currentOrder;
+  }
 
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);
@@ -435,8 +438,8 @@ export class OrdersService {
     const result       = await order$.pipe().toPromise()
       .then(
         order => {
-          this.setActiveOrder(site, order)
 
+          this.setActiveOrder(site, order)
           this.navToMenu();
           return true
         }, catchError => {
@@ -450,10 +453,8 @@ export class OrdersService {
 
   navToMenu() {
     if (this.router.url != '/app-main-menu'){
-
       if (this.router.url.substring(0, '/menuitems-infinite'.length) != '/menuitems-infinite') {
-        console.log('items dont match', this.router.url.substring(0, '/menuitems-infinite'.length))
-        this.router.navigate(['/app-main-menu']);
+         this.router.navigate(['/app-main-menu']);
         return
       }
 
@@ -494,6 +495,7 @@ export class OrdersService {
 
   setActiveOrder(site, order: IPOSOrder) {
     if (order) {
+
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
       if (!order.history && this.platFormService.isApp()) {

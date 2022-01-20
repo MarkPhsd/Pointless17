@@ -35,10 +35,6 @@
 
         <div class="grid-headers">
 
-          <div class="instructions">
-            To enable tax for this type of transaction.
-          </div>
-
           <div>
             <mat-label >Taxable</mat-label>
           </div>
@@ -48,11 +44,8 @@
                   type             ="checkbox"
                   formControlName  ="taxItems"
                   class="form-control" >
+              <mat-hint> To enable tax for this type of transaction.</mat-hint>
             </mat-checkbox>
-          </div>
-
-          <div class="instructions">
-            Not all transactions should be shown on the POS. Enabling shows on the POS.
           </div>
 
           <div>
@@ -63,12 +56,24 @@
                   type             ="text"
                   formControlName  ="showOrderType"
                   class="form-control" >
+              <mat-hint> Not all transactions should be shown on the POS. Enabling shows on the POS.</mat-hint>
             </mat-checkbox>
           </div>
 
-          <div class="instructions">
-            This enables the order as an option for online users.
-          </div >
+
+          <div>
+            <mat-label >Sale Type </mat-label>
+          </div>
+          <div>
+            <mat-checkbox
+                  type             ="text"
+                  formControlName  ="isRegisterTransaction"
+                  class="form-control" >
+              <mat-hint>This should be marked for all transactions used in sales.</mat-hint>
+            </mat-checkbox>
+          </div>
+
+
 
           <div>
             <mat-label >Online Order</mat-label>
@@ -78,11 +83,9 @@
                   type             ="text"
                   formControlName  ="onlineOrder"
                   class="form-control" >
-            </mat-checkbox>
-          </div>
+              <mat-hint>This enables the order as an option for online users.</mat-hint>
 
-          <div class="instructions">
-            This order type can be used by third party API's.
+            </mat-checkbox>
           </div>
 
           <div>
@@ -93,8 +96,45 @@
                   type             ="text"
                   formControlName  ="apiOrder"
                   class="form-control" >
+              <mat-hint> This order type can be used by third party API's.</mat-hint>
             </mat-checkbox>
           </div>
+
+          <div>
+            <mat-label >Prompt Schedule Time</mat-label>
+          </div>
+          <div>
+            <mat-checkbox
+                  type             ="text"
+                  formControlName  ="promptScheduleTime"
+                  class="form-control" >
+                  <mat-hint>Requires user set preferred schedule date for order to be fufilled.</mat-hint>
+            </mat-checkbox>
+          </div>
+
+          <div>
+            <mat-label>Delivery Service</mat-label>
+          </div>
+          <div>
+            <mat-checkbox
+                  type             ="text"
+                  formControlName  ="deliveryService"
+                  class="form-control" >
+                  <mat-hint>Requires user put in addresss for delivery.</mat-hint>
+            </mat-checkbox>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >Minimum Order Value </mat-label>
+              <input matInput
+                    type             ="number"
+                    formControlName  ="orderMinimumTotal"
+                    class="form-control" >
+              <mat-hint>Uses pre-tax sub total.</mat-hint>
+            </mat-form-field>
+          </div>
+
         </div>
 
         <mat-divider [vertical]="true"></mat-divider>
@@ -102,12 +142,27 @@
         <div  class="grid-fields">
           <div class="instructions">
             <mat-label><h4>Description for receipts.</h4></mat-label><br>
+            <mat-hint>Express gratitude, provide refund policy, etc...</mat-hint>
             <simple-tinymce cols="50"
                             rows="20"
                             style="height: 200px;"
                             name="description"
                             formControlName="description"
                             [ngModel]="description">
+            </simple-tinymce>
+          </div>
+        </div>
+
+        <div  class="grid-fields">
+          <div class="instructions">
+            <mat-label><h4>Instructions.</h4></mat-label><br>
+            <mat-hint>These are displayed on the browser to help customers.</mat-hint>
+            <simple-tinymce cols="50"
+                            rows="20"
+                            style="height: 200px;"
+                            name="instructions"
+                            formControlName="instructions"
+                          >
             </simple-tinymce>
           </div>
         </div>

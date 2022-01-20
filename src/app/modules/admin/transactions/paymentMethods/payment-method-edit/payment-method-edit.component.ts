@@ -21,6 +21,7 @@ export class PaymentMethodEditComponent  implements OnInit {
   bucketName             :string;
   awsBucketURL           :string;
   inputForm              :FormGroup;
+  instructions: string;
 
   constructor(
     private paymentMethodService    : PaymentMethodsService,

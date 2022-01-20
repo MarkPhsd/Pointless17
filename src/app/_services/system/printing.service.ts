@@ -17,6 +17,10 @@ import { BtPrintingService } from './bt-printing.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { Router } from '@angular/router';
+import { PlatformService } from './platform.service';
+import { OrdersService } from '..';
+import { UserAuthorizationService } from './user-authorization.service';
 
 export interface printOptions {
   silent: true;
@@ -50,6 +54,10 @@ export class PrintingService {
                 private labelaryService   : LabelaryService,
                 private fakeDataService   : FakeDataService,
                 private btPrintingService : BtPrintingService,
+                private orderService      : OrdersService,
+                private router            : Router,
+                private userAuthService         : UserAuthorizationService,
+                private platFormService   : PlatformService,
                 private dialog            : MatDialog,) {
 
     if (this.electronService.remote != null) {
@@ -451,6 +459,18 @@ export class PrintingService {
         height: '90vh',
       },
     )
+    dialogRef.afterClosed().subscribe(result => {
+      if (this.router.url == 'pos-payment') {
+        if (!this.platFormService.isApp()) {
+          const user = this.userAuthService.currentUser()
+          if (user && user.roles == 'user') {
+            if (this.order.balanceRemaining == 0) {
+              this.orderService.updateOrderSubscription(null)
+            }
+          }
+        }
+      }
+    });
   }
 
 }

@@ -117,7 +117,7 @@ export class MoveInventoryLocationComponent implements OnInit {
     if (!result) {
       return
     }
-    console.log('this.quantityMoving', this.quantityMoving)
+
     if (this.inventoryAssignment.packageCountRemaining != this.quantityMoving) {
       if (this.inventoryAssignment.packageCountRemaining >= this.quantityMoving) {
         console.log('copying to new package')
@@ -136,7 +136,7 @@ export class MoveInventoryLocationComponent implements OnInit {
   async getMovingPackageCounts(): Promise<IInventoryAssignment[]> {
 
     this.newItem                       = await this.inventoryAssignment$.pipe().toPromise() //(data=>{ this.newItem = data })
-
+    console.log('this new item', this.newItem)
     //the new item will start with what the old item currently has
     this.newItem.baseQuantity          = this.newItem.baseQuantityRemaining
     this.newItem.packageQuantity       = this.newItem.packageCountRemaining
@@ -217,6 +217,7 @@ export class MoveInventoryLocationComponent implements OnInit {
 
       //we have to push a new inventory assignment
       //and put the existing one with the change.
+      console.log('     this.inventoryAssignment',      this.inventoryAssignment   )
 
       this.inventoryAssignmentService.editInventory(site,
           this.inventoryAssignment.id,

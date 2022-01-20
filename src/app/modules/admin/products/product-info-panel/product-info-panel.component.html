@@ -1,6 +1,8 @@
 <mat-card class="mat-card-view">
   <mat-card-content>
 
+
+
     <div fxLayout="column" fxLayoutAlign="space-around start" >
       <div class="grid-container grids-container">
         <button class="info-buttons"  mat-button color="accent" (click)="editWebProduct()"><mat-icon>web</mat-icon>Web Info</button>
@@ -16,9 +18,20 @@
       >
       <mat-button-toggle value="labels" (click)="onToggleLabelEvents('labels')">Labels</mat-button-toggle>
       <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')">Events</mat-button-toggle>
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('inv')">INV</mat-button-toggle>
     </mat-button-toggle-group>
 
     <br>
+
+    <div *ngIf="toggleLabelEvents == 'inv'">
+      <div class="inventory-count" >
+        <inventory-counts-view
+          [productID]="product.id"
+          [active]="'true'" >
+          Inventory Values
+        </inventory-counts-view>
+      </div>
+    </div>
 
     <div *ngIf="toggleLabelEvents == 'labels'">
 
@@ -61,9 +74,6 @@
 
     </div>
 
-    <div *ngIf="toggleLabelEvents == 'events'">
-        <br>
-    </div>
 
   </mat-card-content>
 

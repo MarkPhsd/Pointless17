@@ -30,6 +30,16 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
+  initSubscriptions() {
+    this._order = this.orderService.currentOrder$.subscribe( data => {
+      if (data && data.id) {
+        this.order = data
+        return
+      }
+      this.order = null;
+    })
+  }
+
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
@@ -45,11 +55,13 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._order.unsubscribe();
+    this.order                    = null;
     this.refreshCurrentOrderCheck = false
     this.openOrderBar             = false
+
     if (this._order){
-       this._order.unsubscribe()
+      this.order = null
+      this._order.unsubscribe()
     }
     if (this._orderBar) {
       this._orderBar.unsubscribe()
@@ -57,6 +69,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     if (this.id) {
       clearInterval(this.id);
     }
+
   }
 
  async addNewOrder() {
@@ -71,14 +84,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     })
   }
 
-  initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
-      if (data && data.id) {
-        this.order = data
-      }
-    })
-  }
-
   isPosNameDefined(): boolean {
     if (this.orderService.posName != '' && this.orderService.posName != undefined  && this.orderService.posName != null)
     {return true}
@@ -87,6 +92,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   async assignCurrentOrder() {
 
     let cartEnabled = false
+
     if (this.isPosNameDefined()) { cartEnabled = true }
     if (this.order)              { cartEnabled = true}
 

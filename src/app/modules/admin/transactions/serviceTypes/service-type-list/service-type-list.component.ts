@@ -1,7 +1,6 @@
 
 import { Component, Output, OnInit,
   ViewChild ,ElementRef, EventEmitter, AfterViewInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -100,15 +99,15 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
             private productEditButtonService: ProductEditButtonService,
             private agGridFormatingService  : AgGridFormatingService,
             private awsService              : AWSBucketService,
-  ) { }
-
-  async ngOnInit() {
-    const site          = this.siteService.getAssignedSite();
-    this.rowSelection   = 'multiple'
-    this.urlPath        = await this.awsService.awsBucketURL();
-    this.serviceType$   = this.serviceTypeService.getAllServiceTypes(site);
+  ) {
     this.initForm();
     this.initAgGrid(this.pageSize);
+  }
+
+  async ngOnInit() {
+    this.urlPath        = await this.awsService.awsBucketURL();
+    const site          = this.siteService.getAssignedSite();
+    this.rowSelection   = 'multiple'
     this.serviceType$   = this.serviceTypeService.getAllServiceTypes(site);
     this.settingsService.getSettingByName(site, 'DefaultOrderType').subscribe( data => {
       if (data) {
@@ -164,7 +163,6 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
 
       this.defaultColDef = {
         flex: 2,
-        // minWidth: 100,
       };
 
       this.columnDefs =  [
@@ -187,8 +185,19 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
                     maxWidth: 275,
                     flex    : 1,
         },
+        {field: 'onlineOrder',    headerName: 'Online',         sortable: true,
+                width   : 175,
+                minWidth: 175,
+                maxWidth: 275,
+                flex    : 1,
+        },
+        {field: 'deliveryService', headerName: 'Delivery',         sortable: true,
+                width   : 175,
+                minWidth: 175,
+                maxWidth: 275,
+                flex    : 1,
+        },
       ]
-
       this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
 
     }
@@ -202,7 +211,6 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
     //and other things are required per grid.
     initSearchModel(): IServiceType {
       let searchModel         = {} as IServiceType;
-      // let search              = ''
       searchModel.name        = this.searchItemsValue.value
       return searchModel
     }
@@ -243,11 +251,10 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
               this.recordCount = 100;
               params.successCallback(data)
               this.rowData = data
-
             }, err => {
               console.log(err)
             }
-        );
+          );
         }
       };
     }
@@ -262,7 +269,6 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
 
     //ag-grid standard method
     async onGridReady(params: any) {
-
       if (params)  {
         this.params         = params
         this.gridApi        = params.api;
@@ -270,17 +276,13 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
         params.api.sizeColumnsToFit();
       }
 
-      if (params == undefined) {
-        console.log('params is not defined')
-        return
-      }
+      if (params == undefined) { return  }
 
       if (!params.startRow ||  params.endRow) {
         params.startRow = 1
         params.endRow = this.pageSize;
       }
 
-      console.log(params.startRow, params.endRow)
       let datasource =  {
         getRows: (params: IGetRowsParams) => {
         const items$ =  this.getRowData(params, params.startRow, params.endRow)
@@ -291,8 +293,7 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
               this.currentPage   = 1
               this.numberOfPages = 1
               this.recordCount   = 100;
-              let results        =  data // this.refreshImages(data.results)
-              params.successCallback(results)
+              params.successCallback(data)
             }
           );
         }
@@ -301,7 +302,6 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
       if (!datasource)   { return }
       if (!this.gridApi) { return }
       this.gridApi.setDatasource(datasource);
-
     }
 
     refreshImages(data) {

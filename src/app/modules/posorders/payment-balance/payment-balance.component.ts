@@ -49,6 +49,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private toolBarUI       : ToolBarUIService,
               private matSnackBar   : MatSnackBar,
               private printingService: PrintingService,
+              private toolbarUIService  : ToolBarUIService,
               private router: Router) {
    }
 
@@ -63,13 +64,17 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       if ( this.order.balanceRemaining > 0)  {
         this.paymentsEqualTotal = false;
       }
-
     }
     this.initSubscriptions();
-
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-
    }
+
+
+    editCart() {
+      this.router.navigate(["/currentorder/",{mainPanel:true}]);
+      this.toolbarUIService.updateOrderBar(false)
+      this.toolbarUIService.resetOrderBar(true)
+    }
 
    editPayment(payment: IPOSPayment) {
     //get payment

@@ -10,10 +10,8 @@ import {Location} from '@angular/common';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { switchMap } from 'rxjs/operators';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 
 // https://www.npmjs.com/package/ngx-gallery

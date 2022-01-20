@@ -171,7 +171,20 @@
                 class="form-control" >
             </mat-checkbox>
           </div>
+
       </div>
+
+      <div>
+        <mat-label>Customer Use Instructions </mat-label><br>
+        <simple-tinymce cols="50"
+            rows="25"
+            style="height: 400px;"
+            name="instructions"
+            formControlName="instructions"
+            [ngModel]="instructions">
+         </simple-tinymce>
+      </div>
+
     </mat-card-content>
   </mat-card>
 </div>

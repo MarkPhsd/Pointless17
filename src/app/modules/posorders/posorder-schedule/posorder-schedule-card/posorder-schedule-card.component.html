@@ -1,6 +1,10 @@
 <mat-card *ngIf="order">
   <mat-card-subtitle>
-     <button mat-raised-button (click)="schedule()"><mat-icon>edit</mat-icon>Schedule</button>
+     <button mat-raised-button
+             color="primary"
+             (click)="schedule()">
+      <mat-icon>edit</mat-icon>Schedule
+    </button>
   </mat-card-subtitle>
   <mat-card-content>
 
@@ -22,6 +26,9 @@
       <div>Email</div>
       <div> {{order?.clients_POSOrders?.email}} </div>
 
+      <div class="grid-item-span">
+        {{order.productOrderMemo}}
+      </div>
     </div>
 
   </mat-card-content>

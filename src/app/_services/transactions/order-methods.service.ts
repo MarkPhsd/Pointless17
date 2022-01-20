@@ -80,7 +80,6 @@ export class OrderMethodsService {
               private promptGroupService      : PromptGroupService,
               private printingService          :PrintingService,
               private router: Router,
-              private platFormService:        PlatformService,
               private promptWalkService: PromptWalkThroughService,
              ) {
     this.initSubscriptions();
@@ -88,8 +87,9 @@ export class OrderMethodsService {
 
   async doesOrderExist(site: ISite): Promise<boolean> {
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
-    if (!this.order) {
+    if (!this.order || (this.order.id == undefined)) {
       const result = await this.orderService.newDefaultOrder(site)
+
       if (!result) {
         this.notifyEvent(`No order assigned.`, 'Alert')
       }
@@ -110,6 +110,7 @@ export class OrderMethodsService {
     if (!result) { return }
     if (order) {
       const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
+
       const itemResult$ = this.posOrderItemService.putItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
@@ -160,14 +161,24 @@ export class OrderMethodsService {
     if (!order)         { order = this.order }
     const site          = this.siteService.getAssignedSite()
     const result        = await this.doesOrderExist(site);
-    if (!result) { return }
 
-    let passAlongItem
+
+    if (!result) { return }
+    let passAlongItem;
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; }
-
     if (!result) { return }
-    if (!order) {order = this.order}
-    if (order) {
+
+    order = this.orderService.getCurrentOrder()
+    console.log('order', order)
+
+    if (!order || order.id == undefined) {
+      this.order = null
+      this.orderService.updateOrderSubscription(null)
+      this.notifyEvent(`Order not started, please try adding item again.`, 'Alert')
+      return
+    }
+
+    if (order && order.id) {
 
       if (!item && !barcode) {
         if (!item.itemType) {

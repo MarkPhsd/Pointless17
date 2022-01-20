@@ -3,8 +3,21 @@
   <mat-card-subtitle>
     <ng-content></ng-content>
 
-    <app-order-header
-        [order]="order"></app-order-header>
+    <div class="grid-header">
+
+      <div class='cart-button'>
+        <button mat-raised-button
+              (click)="editCart()">
+          <mat-icon>shopping_cart</mat-icon>Edit
+        </button>
+      </div>
+
+      <div>
+        <app-order-header  [order]="order"></app-order-header>
+      </div>
+
+    </div>
+
     <app-order-total
       [mainPanel]="mainPanel"
       [order]="order">

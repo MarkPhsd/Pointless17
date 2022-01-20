@@ -1,12 +1,13 @@
 <div *ngIf="value"
-     [class]="spinnerText"
+    [class]="spinnerText"
      > {{ description }} <br>
       %{{ value }}
 </div>
 
-<div class="grid-item-thc" *ngIf="value" >
+<div class="grid-item-thc"
+     *ngIf="value" >
 
-  <div class="twitter-like">
+  <div class="twitter-like classParent" >
     <div>
       <mat-spinner
         class="track"

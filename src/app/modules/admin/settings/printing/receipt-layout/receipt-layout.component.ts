@@ -63,60 +63,33 @@ export class ReceiptLayoutComponent implements OnInit {
     this._order = this.orderService.currentOrder$.pipe(
       switchMap(
         data => {
-          if (!data)  {
-            return EMPTY
-          }
-          this.order = data
+          if (!data)  {return EMPTY   }
+          this.order      = data
           this.items      = this.order.posOrderItems
           this.payments   = this.order.posPayments
-
-          // let posOrder = {} as IPOSOrder
+          this.orders=[]
+          if (this.order) { this.orders.push(this.order)}
 
           const datepipe: DatePipe = new DatePipe('en-US')
-          if (data.orderDate) {
-            this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')
-          }
+          if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
+          if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
+          if ( this.payments) { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
 
-          if (this.items) {
-            this.items = this.items.filter( item => item.quantity != 0  );
-          }
-
-          if ( this.payments) {
-            this.payments = this.payments.filter(item => item.amountPaid != 0 );
-          }
-
-          this.orders=[]
-
-          try {
-            if (this.order) {
-              this.orders.push(this.order)
-            }
-          } catch (error) {
-            return EMPTY
-          }
           return this.serviceTypeService.getType(this.site, data.serviceTypeID)
         }
       )
-    ).pipe(
-      switchMap( data => {
+    ).subscribe(data   => {
+        if (!data) { return }
         this.orderType = data
         this.orderTypes = []
         this.orderTypes.push(this.orderType)
         if (this.subFooterText) {
           this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes)
         }
-        // return this.printingService.printReady$;
         this.printingService.updatePrintReady(true)
-        return EMPTY
-      }
-    )).subscribe(data => {
-
-      }, err => {
-        console.log(err)
+        return this.order
       }
     )
-
-
   }
 
   constructor(
@@ -159,26 +132,39 @@ export class ReceiptLayoutComponent implements OnInit {
     }
   }
 
+  scrubOrders(order: IPOSOrder) {
+    if (order) {
+      if (!order.preferredScheduleDate) {
+        const dt = new Date()
+        order.preferredScheduleDate = '     '
+      }
+      this.orders[0] = order;
+    }
+  }
+
   async getInterpolatedData() {
+    this.scrubOrders(this.orders[0])
 
     try {
-      if (this.orders) {
+      if (this.orders && this.headerText) {
         this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.headerText, this.orders)
         this.interpolatedFooterTexts    = this.renderingService.refreshStringArrayData(this.footerText, this.orders)
       }
-      if (this.items) {
+      if (this.items && this.itemText) {
         this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items)
       }
-      if (this.payments) {
+      if (this.payments && this.paymentsText) {
         this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsText, this.payments)
       }
 
-      if (this.orders) {
+      if (this.orders && this.orders[0].serviceTypeID) {
           this.serviceTypeService.getType(this.site, this.orders[0].serviceTypeID).subscribe(data => {
-            this.orderType = data
-            this.orderTypes = []
-            this.orderTypes.push(this.orderType)
-            this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes)
+            if (data) {
+              this.orderType = data
+              this.orderTypes = []
+              this.orderTypes.push(this.orderType)
+              this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes)
+            }
           }
         )
       } else {
@@ -200,10 +186,12 @@ export class ReceiptLayoutComponent implements OnInit {
   }
 
   getInterpolatedHTMLNoItem(html) {
+    if (!html) { return }
     return  this.renderingService.interpolateText('', html)
   }
 
   getInterpolatedHTML(html: any, item: any) {
+    if (!item || !html) { return}
      return  this.renderingService.interpolateText(item, html)
   }
 
@@ -211,8 +199,6 @@ export class ReceiptLayoutComponent implements OnInit {
     const site                = this.siteService.getAssignedSite();
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
     const receiptStyles       = await receiptStyle$.pipe().toPromise()
-    // console.log('receiptStyles', receiptStyles.text)
-
     if (receiptStyles) {
       const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
       const style = document.createElement('style');

@@ -3,7 +3,7 @@ import { Component, OnInit, Output, EventEmitter,
 import { FormBuilder,FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
-import { ICompany, IPOSOrder, ISite, IUser,  }  from 'src/app/_interfaces';
+import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Observable, of, Subject, Subscription,   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -89,6 +89,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   user                : IUser;
   _user               : Subscription;
 
+  message: string;
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
@@ -148,9 +150,21 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initSite();
     this.updateItemsPerPage();
     this.pollingService.poll();
+    this.initUserOrder();
+  }
+
+  //if there is a current order for this user, then we can assign it here.
+  initUserOrder(){
+    if (this.user && (!this.order || (!this.order.id || this.order.id == 0)) ) {
+      const userProfile = {} as IUserProfile;
+      userProfile.id = this.user.id;
+      userProfile.roles = this.user.roles;
+      this.userSwitchingService.assignCurrentOrder(userProfile)
+    }
   }
 
   ngOnDestroy(): void {
+
     if (this._openOrderBar) {
       this._openOrderBar.unsubscribe();
     }

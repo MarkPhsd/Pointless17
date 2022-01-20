@@ -12,10 +12,21 @@ mat-card {
     width      : 335px;
     min-width : 335px;
     max-width : 335px;
-    // min-height: 155px;
     overflow-y: auto;
     overflow-x: hidden;
   }
+}
+
+.cart-button {
+  margin-right: 10px;
+}
+
+.grid-header {
+  display: grid;
+  min-width : 330px;
+  max-width : 330px;
+  grid-template-columns: 75px 1fr;
+  gap: 5px;
 }
 
 .transaction-data {

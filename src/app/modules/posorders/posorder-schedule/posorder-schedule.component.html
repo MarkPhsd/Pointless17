@@ -1,7 +1,10 @@
-<mat-card>
+<mat-card *ngIf="order">
   <mat-card-subtitle>
     <div>
       Schedule Order
+    </div>
+    <div *ngIf="errorMessage">
+      <mat-icon>alert</mat-icon>  {{errorMessage}}
     </div>
     <div *ngIf="!order.clients_POSOrders">
       To schedule an order, a customer must be associated with it.
@@ -15,51 +18,83 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <div class="grid-container">
+    <mat-tab-group  mat-align-tabs="start"
+                    md-stretch-tabs
+                    [(selectedIndex)]="selectedIndex"
+                    (selectedIndexChange)="selectChange()">
 
-      <div>
+        <mat-tab label="Sale Type">
+          <div>
+            <posorder-service-type
+              (outPutSelectServiceType)='selectedServiceType($event)'>
+              Select Service Type
+            </posorder-service-type>
+          </div>
+        </mat-tab>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Choose a date</mat-label>
-          <input matInput [matDatepicker]="picker">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
+        <mat-tab *ngIf="serviceType && serviceType.deliveryService"
+                 label="Delivery Information">
+          <div>
+            <posorder-shipping-address
+                (outPutSaveAddress)= "saveShippingAddress($event)">
+            </posorder-shipping-address>
+          </div>
+        </mat-tab>
 
-        <div>
-          <posorder-service-type>
-            Select Service Type
-          </posorder-service-type>
-        </div>
+        <mat-tab (click)="selectedIndex==2"
+                *ngIf="serviceType && serviceType.promptScheduleTime"
+                 label="Schedule Information">
 
-      </div>
+          <div  *ngIf="serviceType && serviceType.instructions" [innerHTML]="serviceType.instructions"></div>
 
-      <div>
-        <posorder-shipping-address></posorder-shipping-address>
-      </div>
+          <div class="item">
+            <mat-form-field appearance="outline">
+              <mat-label>Choose a date</mat-label>
+              <input matInput
+                     [matDatepicker]="picker"
+                     [(ngModel)]= "scheduledDate"
+                     >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-      <div class="order-notes"
-           *ngIf      ="order && inputForm"
-           [formGroup]="inputForm"
-           >
-        <div>
-          <mat-form-field
-              appearance="outline"
-              id="customer-notes">
-            <mat-label>Notes</mat-label>
-              <textarea matInput
-                        rows="10"
-                        columns="40"
-                        formControlName="notes"
-              ></textarea>
-          </mat-form-field>
-        </div>
-      </div>
+          <div>
+            <button mat-raised-button color="primary" (click)="saveShippingTime()">
+              <mat-icon aria-label="save">save</mat-icon> Next
+            </button>
+          </div>
 
-    </div>
+        </mat-tab>
 
+        <mat-tab (click)="selectedIndex == 3" label="Special Requests">
+          <div class="order-notes"
+              *ngIf      ="order && inputFormNotes"
+              [formGroup]="inputFormNotes">
+            <div>
+              <mat-form-field
+                  appearance="outline"
+                  id="customer-notes">
+                <mat-label>Notes</mat-label>
+                  <textarea matInput
+                            rows="10"
+                            columns="40"
+                            formControlName="productOrderMemo"
+                  ></textarea>
+              </mat-form-field>
+            </div>
+          </div>
+        </mat-tab>
+
+    </mat-tab-group>
   </mat-card-content>
+
   <mat-card-actions>
-    <button mat-raised-button color="primary" (click)="save()"><mat-icon aria-label="save">save</mat-icon>Save and Continue </button>
+
+    <div *ngIf="selectedIndex == 3 || (showSaveButton && selectedIndex != 0) ">
+      <button mat-raised-button color="primary" (click)="save()">
+        <mat-icon aria-label="save">save</mat-icon>Save and Continue
+      </button>
+    </div>
   </mat-card-actions>
 </mat-card>
