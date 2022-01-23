@@ -76,13 +76,13 @@
 
           <span *ngIf=" package && !package.inventoryImported">
             <app-strain-packages
-              (outputPackage)="getNewPackage($event)"
-              (outoutClosePackage)="closePackage($event)"
-              [menuItem]="menuItem"
-              [facility]="facility"
-              [facilityLicenseNumber]="facilityLicenseNumber"
-              [packageForm]="packageForm"
-              [package]="package">
+              (outputPackage)         ="getNewPackage($event)"
+              (outoutClosePackage)    ="closePackage($event)"
+              [menuItem]              ="menuItem"
+              [facility]              ="facility"
+              [facilityLicenseNumber] ="facilityLicenseNumber"
+              [packageForm]           ="packageForm"
+              [package]               ="package">
             </app-strain-packages>
           </span>
         </div>

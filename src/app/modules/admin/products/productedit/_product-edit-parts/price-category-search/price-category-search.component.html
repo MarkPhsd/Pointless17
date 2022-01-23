@@ -1,26 +1,27 @@
-<div [formGroup]="searchForm"
-      class="form-background">
+<div  class="form-background"
+      [formGroup]="searchForm">
 
   <mat-form-field class="form-background"
-                  appearance="outline" fxFlexFill >
-
+                  appearance="outline"
+                  fxFlexFill >
     <mat-label class="form-background">Price Lookup</mat-label>
+
     <input
             #input
-            type="text"
-            class="input-field"
-            placeholder="Price Categories"
             matInput
-            formControlName="priceCategoryLookup"
+            type             ="text"
+            class            ="input-field"
+            placeholder      ="Price Categories"
+            formControlName  ="priceCategoryLookup"
             [matAutocomplete]="auto">
 
         <mat-autocomplete panelWidth    = "auto"
                           #auto         = "matAutocomplete"
-                          [displayWith] = "displayFn.bind(this)">
+                          (optionSelected)="onChange($event)">
 
         <mat-option *ngFor="let item of results$ | async"
                     [value]="item">
-              {{item.name}}
+            {{item.name}}
         </mat-option>
 
     </mat-autocomplete>
@@ -28,6 +29,8 @@
 
 </div>
 
-<div hidden="true" [formGroup]="inputForm">
+<div hidden="true"
+     *ngIf="inputForm"
+     [formGroup]="inputForm">
   <input  formControlName="priceCategory">
 </div>

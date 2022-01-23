@@ -247,8 +247,8 @@ export class ItemTypeComponent implements OnInit {
     {
       if (id) {
         dialogRef = this.dialog.open(ItemTypeEditorComponent,
-          { width:        '700px',
-            minWidth:     '700px',
+          { width:        '800px',
+            minWidth:     '800px',
             height:       '740px',
             minHeight:    '740px',
             data : {id: id}

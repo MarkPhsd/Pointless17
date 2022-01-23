@@ -1,26 +1,21 @@
-import {Component, HostBinding, OnDestroy, Output, HostListener,
-        OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
-        Renderer2, ViewChild, ElementRef, QueryList, ViewChildren, Input, EventEmitter}  from '@angular/core';
-import { IEmployee, IServiceType, IUser, IUserProfile } from 'src/app/_interfaces';
-import { IPOSPaymentsOptimzed , Paging , Result, ServiceType, Summary, IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
-import { IItemBasic, UserService } from 'src/app/_services';
+import {Component, OnDestroy, Output,
+        OnInit, AfterViewInit,
+         ViewChild, ElementRef, EventEmitter}  from '@angular/core';
+import { IServiceType, IUser } from 'src/app/_interfaces';
+import {  IPOSPayment, IPaymentSearchModel} from 'src/app/_interfaces/transactions/posorder';
+import { IItemBasic,  } from 'src/app/_services';
 import { OrdersService } from 'src/app/_services';
-import { AWSBucketService, MenuService} from 'src/app/_services';
-import { trigger, transition, animate, style, query, stagger} from '@angular/animations';
-import { ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPriceSearchModel } from 'src/app/_interfaces/menu/price-schedule';
-import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
-import {  POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { debounceTime, distinctUntilChanged, filter,tap } from 'rxjs/operators';
+import { Observable, fromEvent, Subscription } from 'rxjs';
+import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'app-pos-payments-filter',
@@ -95,17 +90,12 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       private paymentMethodsService: PaymentMethodsService,
       private posPaymentService    : POSPaymentService,
       private orderService         : OrdersService,
-      private awsBucketService     : AWSBucketService,
-      private router               : Router,
       public  route                : ActivatedRoute,
       private siteService          : SitesService,
-      private renderer             : Renderer2,
       private serviceTypes         : ServiceTypeService,
-      private userService          : UserService,
       private matSnack             : MatSnackBar,
-      private toolbarServiceUI     : ToolBarUIService,
       private userAuthorization    : UserAuthorizationService,
-      private fb: FormBuilder,
+      private fb:                    FormBuilder,
       )
     {
       this.initForm();

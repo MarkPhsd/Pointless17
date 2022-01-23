@@ -2,14 +2,9 @@ import { Component,  Inject,  Input, Output, OnInit, Optional,
   ViewChild ,ElementRef, AfterViewInit, EventEmitter, OnDestroy, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { AuthenticationService, AWSBucketService, ContactsService } from 'src/app/_services';
+import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog } from '@angular/material/dialog';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { IItemBasic } from 'src/app/_services/menu/menu.service';
-
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
@@ -18,13 +13,11 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { ClientSearchModel, employee, IEmployee, IPOSPayment, IPOSPaymentsOptimzed, IProduct, IServiceType, IUserProfile } from 'src/app/_interfaces';
+import { employee,} from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet, IBalanceSheetPagedResults } from 'src/app/_services/transactions/balance-sheet.service';
+import { BalanceSheetSearchModel, IBalanceSheet} from 'src/app/_services/transactions/balance-sheet.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { EmployeeEditComponent } from '../employee-edit/employee-edit.component';

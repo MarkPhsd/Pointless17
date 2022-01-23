@@ -3,33 +3,29 @@
      class="grid-container" >
 
   <div>
-    <mat-form-field appearance="outline">
-      <mat-label >Basic Retail</mat-label>
-        <input  matInput
-            type              =  "text"
-            name              =  "retail"
-            [formControlName] = "'retail'"
-          />
-    </mat-form-field>
-  </div>
+    <app-value-fields
+      [inputForm]= "inputForm"
+      [fieldName]="'retail'">
+      Cost
+    </app-value-fields>
 
-  <div>
-    <mat-form-field appearance="outline">
-      <mat-label >MSRP</mat-label>
-      <input  matInput
-          type               ="text"
-          name               ="msrp"
-          [formControlName]  ="'msrp'"
-        />
-    </mat-form-field>
-  </div>
+  <!-- <app-value-fields
+      [inputForm]= "inputForm"
+      [fieldName]="'wholesale'">
+    MSRP
+  </app-value-fields> -->
+
+   <app-value-fields
+      [inputForm]= "inputForm"
+      [fieldName]="'wholesale'">
+    Cost
+  </app-value-fields>
 
   <div class="grid-container-2col" >
     <div>
       <app-price-category-search
-        [id]         ="priceCategory"
-        [inputForm]  ="inputForm"
-        >
+          [id]         ="priceCategory"
+          [inputForm]  ="inputForm"  >
       </app-price-category-search>
     </div>
 

@@ -44,10 +44,23 @@ export interface ItemPostResults {
    overRide  : boolean;
  }
 
-export interface NewItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number}
+export interface NewItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number, portionValue: string, packaging: string}
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number}
 
+// Public Property OrderID As Integers
+// Public Property ItemID As Integer
+// Public Property MenuItem As MenuItem
+// Public Property Quantity As Decimal
+// Public Property Barcode As String
+// Public Property OverRide As Boolean
+// Public Property Weight As Double
+// Public Property POSOrderItem As POSOrderItem
+// Public Property PassAlongItem As POSOrderItem
+// Public Property ErrorMessage As String
+// Public Property Price As ProductPrice
+// Public Property Packaging As String
+// Public Property PortionValue As String
 
 enum actions {
   void = 1,
@@ -136,7 +149,7 @@ export class POSOrderItemServiceService {
   }
 
 
-  addItemToOrderWithBarcode(site: ISite, newItem: any):  Observable<ItemPostResults> {
+  addItemToOrderWithBarcode(site: ISite, newItem: NewItem):  Observable<ItemPostResults> {
 
     if (!newItem ) { return }
 
@@ -144,6 +157,7 @@ export class POSOrderItemServiceService {
 
     const controller = "/POSOrderItems/"
 
+    console.log( 'newItem',  newItem )
     const endPoint  = "PostUniqueBarcodeItem"
 
     const parameters = ``

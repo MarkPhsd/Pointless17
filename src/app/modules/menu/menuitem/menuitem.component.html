@@ -12,115 +12,155 @@
           <div class="grid-header">
 
             <div class="grid-demographics">
-
-              <div id="product-name">{{ menuItem?.name }}</div>
-
-              <div class="species" id="product-name">
-                <div>
-                  <button mat-raised-button color="accent">
-                    {{ menuItem?.species }}
-                  </button>
+                <div class="item-span" >
+                  <span *ngIf="menuItem && menuItem.species"  >
+                    <button mat-raised-button color="accent">
+                      {{ menuItem?.species }}
+                    </button>
+                  </span>
+                  <div>
+                    <h1>
+                      {{ menuItem?.name.toUpperCase() }}
+                    </h1>
+                  </div>
                 </div>
-              </div>
 
-              <div id="brand-name" *ngIf="brand$ | async as brand">
-                {{ brand.companyName }}
-              </div>
+                <div class="item-span"
+                     id="brand-name"
+                     *ngIf="brand$ | async as brand">
+                  {{ brand.companyName }}
+                </div>
 
-              <div id="barcode">{{ menuItem?.barcode}}</div>
+                <div class="item-span" *ngIf="menuItem.barcode" id="barcode">{{ menuItem?.barcode}}</div>
 
-              <div class="prices">
-                <menu-item-extended-prices
-                  [isUserStaff]="isUserStaff"
-                  [menuItem]="menuItem">
-                </menu-item-extended-prices>
-              </div>
+                <div class="prices"  *ngIf="isUserStaff">
+                  <menu-item-extended-prices
+                    [isUserStaff]="isUserStaff"
+                    [menuItem]="menuItem">
+                  </menu-item-extended-prices>
+                </div>
 
-              <div class="manager-info"
+                <div class="item-span manager-info"
+                    *ngIf="menuItem && menuItem.itemType
+                          && !menuItem.itemType.requireInStock">
+                  <div class ="pricing-box"  >
+                    <div id  ="unitDescription"> </div>
+                    <div id  ="price"> Count {{ menuItem?.productCount }} </div>
+                  </div>
+                </div>
+
+                <div class="item-span instock-option"
                   *ngIf="menuItem && menuItem.itemType
-                         && !menuItem.itemType.requireInStock">
-                <div class="pricing-box"  >
-                  <div id="unitDescription"> </div>
-                  <div id="price"> Count {{ menuItem?.productCount }} </div>
+                        && menuItem.itemType.requireInStock">
+                  <inventory-counts-view
+                      [showList]="false"
+                      [showAddButton]="true"
+                      [productID]="menuItem.id"
+                      (outPutAddItem)="addItemByCode($event)">
+                      Add to Cart
+                  </inventory-counts-view>
                 </div>
-              </div>
 
-              <div class="instock-option"
-                 *ngIf="menuItem && menuItem.itemType
-                       && menuItem.itemType.requireInStock">
-                <inventory-counts-view
-                  [showList]="false"
-                  [showAddButton]="true"
-                  [productID]="menuItem.id">
-                  Add to Cart
-                </inventory-counts-view>
-              </div>
+                <div class="grid-save-add-buttons"
+                     *ngIf="menuItem && menuItem.itemType
+                      && !menuItem.itemType.requireInStock">
 
-            </div>
+                      <div id="addToWishList">
+                      <button mat-raised-button
+                              class="button"
+                        >Add To Wishlist</button>
+                    </div>
 
-            <div>
-              <div class="onlineShortDescription"
-                [innerHTML]="menuItem?.onlineShortDescription">
+                    <div id="addItemToOrder">
+                      <button  mat-raised-button
+                                class="button"
+                                (click)="addItemToOrder()" >
+                        <mat-icon>add</mat-icon>Add To Order</button>
+                    </div>
+
+                    <div *ngIf="productForm"
+                          class="column-3-span">
+                        <app-quantiy-selector
+                          [inputForm]  = "productForm"
+                          (outPutValue)="changeQuantity($event)">
+                      </app-quantiy-selector>
+                    </div>
+                </div>
+
+                <div  *ngIf="menuItem.itemType && menuItem.itemType.instructions"
+                      class="item-span"
+                      [innerHTML]="menuItem?.itemType.instructions">
+                </div>
+
+                <div  class="mat-packaging"
+                      *ngIf="packagingMaterial && packagingMaterial.length>0">
+                  <div *ngIf='packaging'>
+                    {{packaging}} assigned.
+                  </div>
+                  <div *ngIf='!packaging'>
+                    <mat-label >Choose Packaging Material</mat-label>
+                  </div>
+                  <div *ngFor="let item of packagingMaterial">
+                    <button class="package-buttons"
+                            mat-raised-button color="accent"
+                            (click)="packaging=item">{{item}}</button>
+                  </div>
+                </div>
+
+                <div class="mat-packaging"
+                      *ngIf="menuItem.itemType.portionValue">
+                    <mat-form-field appearance="outline"
+                                    class="form-fields">
+                      <mat-label>
+                        Portion Value
+                      </mat-label>
+                      <mat-select
+                                  type="'text'"
+                                  [(ngModel)]       = "portionValue"
+                                  formControlName   = "portionValue">
+                          <mat-option [value]="">
+                            Clear
+                          </mat-option>
+                          <mat-option *ngFor="let item of menuItem.itemType.portionValue.split(',')"
+                                      [value]="item">
+                            {{ item }}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                </div>
+
+
               </div>
-            </div>
           </div>
 
-          <div class="grid-save-add-buttons"
-               *ngIf="menuItem && menuItem.itemType
-                     && !menuItem.itemType.requireInStock">
-
-            <div id="addToWishList">
-              <button mat-button
-                      class="button"
-                >Add To Wishlist</button>
+          <div >
+            <div  *ngIf="menuItem.onlineShortDescription || menuItem.metaTags"
+                  class="onlineShortDescription"
+                  [innerHTML]="menuItem?.onlineShortDescription">
             </div>
 
-            <div id="addItemToOrder">
-              <button  mat-button
-                       class="button"
-                       (click)="addItemToOrder()" >
-                <mat-icon>add</mat-icon>Add To Order</button>
-              </div>
+            <div class="center mat-chips">
 
-            <div class="column-3-span">
-
-              <div class="buttons-quantity">
-
-                <div id="addItemToOrder">
-                  <button mat-raised-button class="button"
-                          (click)="changeQuantity(1)">
-                  <mat-icon>exposure_plus_1</mat-icon></button>
-                </div>
-
-                <div >
-                  <mat-form-field
-                                  appearance="outline"
-                                  class="quantity-input"
-                                  >
-                    <mat-label >quantity</mat-label>
-                    <input matInput
-                          type             ="text"
-                          [(ngModel)]="quantity"
-                          class="form-control" >
-                  </mat-form-field>
-                </div>
-
-                <div id="addItemToOrder">
-                  <button mat-raised-button
-                          class="button"
-                          (click)="changeQuantity(-1)" >
-                          <mat-icon>exposure_neg_1</mat-icon>
-                  </button>
-                </div>
-              </div>
+              <span *ngIf="menuItem.glutenFree">
+                <button mat-fab color="warn" aria-label="Gluten Free">
+                  GF
+                </button>
+              </span>
+              <app-chips-display
+                [items]="menuItem.metaTags">
+              </app-chips-display>
             </div>
+
           </div>
+
+
+
         </div>
       </mat-card-subtitle>
 
       <mat-card-content >
 
-        <div class="flexy">
+        <div class="flex">
           <div class="grid">
 
             <div class="gallery">
@@ -134,25 +174,18 @@
               </div>
 
               <div class="center">
-                <app-chemical-spinners
+              <app-chemical-spinners
                   [menuItem]="menuItem">
                 </app-chemical-spinners>
               </div>
 
-              <div class="center">
-                <app-chips-display
-                    [items]="menuItem.metaTags">
-                </app-chips-display>
-              </div>
             </div>
 
             <div *ngIf="menuItem.specialDescription">
               <div id="specialDescription"> {{ menuItem?.specialDescription }} </div>
             </div>
 
-
           </div>
-
         </div>
       </mat-card-content>
     </mat-card>

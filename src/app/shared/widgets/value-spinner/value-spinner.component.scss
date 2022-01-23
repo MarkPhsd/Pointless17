@@ -4,6 +4,15 @@
   transform: translate(-15%, -50%);
   font-size: 1.4em;
   text-align: center;
+
+  @supports (-moz-appearance:none) {
+    position: relative;
+    top        : 75px;
+    transform: translate(-15%, -40%);
+    font-size: 1.4em;
+    text-align: center;
+  }
+
 }
 
 .spinner-text-android {
@@ -12,6 +21,7 @@
   transform: translate(-15%, -50%);
   font-size: 1.3em;
   text-align: center;
+
 }
 
 :host ::ng-deep .track circle{
@@ -47,3 +57,4 @@
   display: inline-block;
   vertical-align: middle;
 }
+

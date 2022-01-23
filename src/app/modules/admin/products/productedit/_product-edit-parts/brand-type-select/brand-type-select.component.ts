@@ -1,33 +1,30 @@
-import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, OnChanges} from '@angular/core';
-import { BrandslistComponent } from 'src/app/modules/menu/brandslist/brandslist.component';
+import { Component, OnInit, Input , EventEmitter,
+        Output, ViewChild, ElementRef, AfterViewInit} from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile } from 'src/app/_interfaces';
-
 import { ContactsService, IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-
 import { FormBuilder, FormControl, FormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeDetectionStrategy, NgModule } from "@angular/core";
+import { ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-brand-type-select',
   templateUrl: './brand-type-select.component.html',
-  styleUrls: ['./brand-type-select.component.scss']
+  styleUrls: ['./brand-type-select.component.scss'],
 })
-export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChanges {
-
+export class BrandTypeSelectComponent implements  AfterViewInit {
+// , AfterViewInit, OnChanges
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
+
   itemNameInput: string; //for clear button
+  @Input() formFieldClass     = 'formFieldClass'
   @Input() inputForm:         FormGroup;
   @Input() searchForm:        FormGroup;
   @Input() searchField:       FormControl;
-  @Input() id                 : number;
+  @Input() id               : number;
   @Input() name:              string;
-  // @Input() formFieldClass     = 'formFieldClass';
-
   searchPhrase:               Subject<any> = new Subject();
   item:                       IUserProfile;
   site:                       ISite;
@@ -37,8 +34,6 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
   brands$                   : Observable<ClientSearchResults>;
   brands                    : IUserProfile[]
 
-  @Input()  formFieldClass = 'formFieldClass'
-
   results$ = this.searchPhrase.pipe(
     debounceTime(225),
     distinctUntilChanged(),
@@ -47,72 +42,60 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
     )
   )
 
-  searchList(searchPhrase) {
+  searchList(searchPhrase):  Observable<ClientSearchResults> {
     const site = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
     return this.contactsService.getLiveBrands(site, model)
   }
 
+  ngAfterViewInit() {
+    fromEvent(this.input.nativeElement,'keyup')
+      .pipe(
+          filter(Boolean),
+          debounceTime(225),
+          distinctUntilChanged(),
+          tap((event:KeyboardEvent) => {
+            const search  = this.input.nativeElement.value
+            this.refreshSearch(search);
+          })
+      )
+    .subscribe();
+  }
+
   constructor(  private contactsService: ContactsService,
                 private fb             : FormBuilder,
-                private router         : Router,
-                public  route           : ActivatedRoute,
+                public  route          : ActivatedRoute,
                 private siteService    : SitesService,
                ) {
 
     this.site = this.siteService.getAssignedSite();
+
+    if (this.inputForm) {
+      this.id = this.inputForm.controls['brandID'].value;
+    }
+    this.initForm();
+    this.getName(this.id)
+
+  }
+
+  initForm(){
     this.searchForm = this.fb.group({
       brandIDLookup: [],
     })
-
   }
 
-  async init() {
-
-    if (this.inputForm) {
-      if (this.id) {
-        const model   = this.initModel(this.id)
-        const site    = this.siteService.getAssignedSite();
-        const results$ = this.contactsService.getLiveBrands(site, model)
-        results$.subscribe (data => {
-          const items = data.results
-          if (items) {
-            this.searchForm = this.fb.group({
-              brandIDLookup   : [items[0]],
-            })
-          }
-        })
-      }
-    }
-  }
-
-  async ngOnInit() {
-    this.init()
-  }
-
-  async ngOnChanges() {
-    this.init()
-  }
-
-
-  ngAfterViewInit() {
-    this.init()
-    if (this.searchForm && this.input) {
-      try {
-        fromEvent(this.input.nativeElement,'keyup')
-        .pipe(
-            filter(Boolean),
-            debounceTime(250),
-            distinctUntilChanged(),
-            tap((event:KeyboardEvent) => {
-              const search  = this.input.nativeElement.value
-              this.refreshSearch(search);
-            })
-        )
-        .subscribe();
-      } catch (error) {
-        console.log(error)
-      }
+  getName(id: number) {
+    if (!id)             {return null}
+    const site  = this.siteService.getAssignedSite();
+    if(site) {
+      let model = this.initModel(this.id)
+      this.contactsService.getLiveBrands(site, model).subscribe(data => {
+        if (data && data.results) {
+          const price =  { priceCategoryLookup: data.results[0].company  }
+          console.log(price)
+          this.searchForm.patchValue( price )
+        }
+      })
     }
   }
 
@@ -127,26 +110,30 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
     this.searchPhrase.next(name);
   }
 
-  selectItem(item: any){
+  selectItem(item: IUserProfile){
     if (!item) { return }
-    this.brandLookupControl.setValue(item.id)
     this.itemSelect.emit(item)
+
+    const lookup = { brandID : item.id }
+    this.inputForm.patchValue( lookup )
+
+    const brand =  { brandIDLookup: item.company }
+    console.log('brand', brand)
+    this.searchForm.patchValue( brand )
   }
 
-  displayFn(item) {
-    if (!item) { return }
-    this.selectItem(item)
-    return item ? item.company : '';
-  }
+  onChange(selected: any) {
+    const item = selected.option.value as IUserProfile;
 
-  async  getName(id: number): Promise<any> {
-    if (!id) {return null}
-    if (id == 0) {return null}
-    if (id == undefined) {return null}
-    const site  = this.siteService.getAssignedSite();
-    if(site) {
-      const  item =  await this.contactsService.getContact(site, id.toString()).pipe().toPromise();
-      return item
+    if (item) {
+      this.selectItem(item)
+
+      this.item = item
+      if (!item || !item.company){
+        return ''
+      }  else {
+        return item.company;
+      }
     }
   }
 
@@ -159,6 +146,7 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
     model.accountNumber = searchPhrase
     return model;
   }
+
   initModel(id: number): ClientSearchModel {
     const model = {} as ClientSearchModel
     model.pageSize    = 100;
@@ -168,4 +156,5 @@ export class BrandTypeSelectComponent implements OnInit, AfterViewInit, OnChange
   }
 
 }
+
 

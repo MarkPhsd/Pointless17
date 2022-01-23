@@ -6,7 +6,7 @@ import { Observable, Subject } from 'rxjs';
 import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { FormControl, FormGroup } from '@angular/forms';
-import { IEmployee, IServiceType, ISite } from 'src/app/_interfaces';
+import { employee, IServiceType, ISite } from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MetrcSalesService } from 'src/app/_services/metrc/metrc-sales.service';
@@ -55,10 +55,10 @@ export class MetrcSalesListComponent implements OnInit {
   selectedSiteID:        number;
   //search Observables
   serviceTypes$: Observable<IServiceType[]>;
-  employees$: Observable<IEmployee[]>;
-  drivers$:  Observable<IEmployee[]>;
-  dispatchers$: Observable<IEmployee[]>;
-  employeeID: FormControl;
+  employees$:    Observable<employee[]>;
+  drivers$:      Observable<employee[]>;
+  dispatchers$:  Observable<employee[]>;
+  employeeID:    FormControl;
 
   sites$: Observable<ISite[]>;
   site: ISite;

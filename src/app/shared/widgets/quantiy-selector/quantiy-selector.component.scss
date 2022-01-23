@@ -1,0 +1,21 @@
+.quantity-input {
+  width    : 55px;
+  height   : 50px;
+  font-size: 1.2em;
+  padding  : 0;
+  margin   : 0;
+  font-size: smaller;
+}
+
+.buttons-quantity {
+  display        : flex;
+  flex-direction : row;
+  justify-content :flex-start;
+}
+
+.button {
+  margin-left: 5px;
+  margin-right: 5px;
+  height: 50px;
+  font-size: smaller;
+}

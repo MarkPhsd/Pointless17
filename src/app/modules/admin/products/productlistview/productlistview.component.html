@@ -26,6 +26,16 @@
       </form-select-list>
     </div>
 
+    <div class="grid-item"
+          *ngIf="categories$">
+        <form-select-list [searchForm]      = "searchForm"
+                          [formFieldName]   ="'departmentID'"
+                          [list$]           = "departments$"
+                          (selectionChange) = "refreshDepartmentChange($event)">
+        <div fieldSearchDescription>Department</div>
+        </form-select-list>
+      </div>
+
     <div class="grid-item">
       <app-brand-type-select
                         [inputForm]      = "searchForm"

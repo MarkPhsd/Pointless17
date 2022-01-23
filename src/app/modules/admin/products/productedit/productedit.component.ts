@@ -8,7 +8,6 @@ import { MatSnackBar} from '@angular/material/snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
 import { Observable } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
-import { IEmployee } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
@@ -16,6 +15,7 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { IPriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { employee } from 'src/app/_interfaces';
 
 // http://jsfiddle.net/0ftj7w1q/
 
@@ -58,7 +58,7 @@ export class ProducteditComponent implements  OnInit  {
 
   id: string;
   product$     : Observable<IProduct>;
-  dispatchers$ : Observable<IEmployee[]>;
+  dispatchers$ : Observable<employee[]>;
   departments$ : Observable<IMenuItem[]>;
   departments  : IMenuItem[];
 

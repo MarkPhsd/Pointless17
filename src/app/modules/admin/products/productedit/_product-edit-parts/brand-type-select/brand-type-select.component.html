@@ -1,26 +1,27 @@
-
-  <div *ngIf="searchForm"
-       [class]="formFieldClass"
+  <div [class]="formFieldClass"
        [formGroup]="searchForm">
+
     <mat-form-field [class]="formFieldClass"
-                    appearance="outline" fxFlexFill >
+                    appearance="outline"
+                    fxFlexFill >
       <mat-label class="form-background"><mat-icon>search</mat-icon>Brand Lookup</mat-label>
+
       <input
               #input
-              type="text"
-              [class]="formFieldClass"
-              placeholder="Brand Lookup"
               matInput
-              formControlName="brandIDLookup"
+              type             ="text"
+              [class]          ="formFieldClass"
+              placeholder      ="Brand Lookup"
+              formControlName  ="brandIDLookup"
               [matAutocomplete]="auto">
 
           <mat-autocomplete panelWidth    = "auto"
                             #auto         = "matAutocomplete"
-                            [displayWith] = "displayFn.bind(this)">
+                            (optionSelected)="onChange($event)">
 
         <mat-option *ngFor="let item of (results$ | async)?.results"
                       [value]="item">
-                {{item.company}} -- {{item.account}}
+            {{item.company}} -- {{item.account}}
         </mat-option>
 
       </mat-autocomplete>
@@ -28,10 +29,8 @@
 
   </div>
 
-  <div  hidden="true"
-        [formGroup]="inputForm">
+  <div      hidden="true"
+            [formGroup]="inputForm">
     <input  formControlName="brandID">
   </div>
-<!--
-</div> -->
-<!-- -->
+

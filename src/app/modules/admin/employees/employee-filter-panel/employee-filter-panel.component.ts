@@ -1,5 +1,5 @@
 import { Component, OnInit , ViewChild, EventEmitter,Output, ElementRef} from '@angular/core';
-import { IUser, JobType } from 'src/app/_interfaces';
+import { IUser, jobTypes } from 'src/app/_interfaces';
 import {IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeSearchModel, EmployeeService} from 'src/app/_services/people/employee-service.service';
@@ -41,7 +41,7 @@ export class EmployeeFilterPanelComponent implements OnInit {
   employees$    :   Observable<IItemBasic[]>;
   searchModel   = {} as   EmployeeSearchModel;
   _searchModel  : Subscription;
-  jobTypes$     : Observable<JobType[]>;
+  jobTypes$     : Observable<jobTypes[]>;
 
   isAuthorized : boolean;
   isStaff      : boolean;

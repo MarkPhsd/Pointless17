@@ -18,7 +18,6 @@ import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-seri
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { PrintingService } from '../system/printing.service';
-import { PlatformService } from '../system/platform.service';
 
 export interface ProcessItem {
   order: IPOSOrder;
@@ -145,9 +144,10 @@ export class OrderMethodsService {
     return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
   }
 
-  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number): Observable<ItemPostResults> {
+  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number, portionValue: string, packaging: string): Observable<ItemPostResults> {
     if (!order || !barcode) {return null;}
-    let newItem = { orderID: order.id, quantity: quantity, barcode: barcode } as NewItem
+
+    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue  } as NewItem
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
@@ -155,13 +155,17 @@ export class OrderMethodsService {
    await   this.processAddItem(order, null, item, quantity, null);
   }
 
-  async processAddItem(order : IPOSOrder , barcode: string, item: IMenuItem, quantity: number, input: any) {
+  async processAddItem(order : IPOSOrder ,
+                       barcode: string,
+                       item: IMenuItem,
+                       quantity: number,
+                       input: any) {
+
     this.initItemProcess();
 
     if (!order)         { order = this.order }
     const site          = this.siteService.getAssignedSite()
     const result        = await this.doesOrderExist(site);
-
 
     if (!result) { return }
     let passAlongItem;
@@ -169,7 +173,6 @@ export class OrderMethodsService {
     if (!result) { return }
 
     order = this.orderService.getCurrentOrder()
-    console.log('order', order)
 
     if (!order || order.id == undefined) {
       this.order = null
@@ -179,7 +182,6 @@ export class OrderMethodsService {
     }
 
     if (order && order.id) {
-
       if (!item && !barcode) {
         if (!item.itemType) {
           this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
@@ -188,13 +190,22 @@ export class OrderMethodsService {
       }
 
       if (barcode)  {
-        const addItem$ = this.scanItemForOrder(site, order, barcode, 1);
+        const addItem$ = this.scanItemForOrder(site, order, barcode, 1,  input?.packaging,  input?.portionValue)
         this.processItemPostResults(addItem$)
         return
       }
 
+      let packaging = ''
+      let portionValue = ''
+      if (input) {
+        packaging        = input.packaging;
+        portionValue     = input.portionValue;
+      }
+
       if (item) {
-        const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem }
+        const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
+                              packaging: packaging, portionValue: portionValue, barcode: '', weight: 0 } as NewItem
+        console.log('newItem', newItem)
         const addItem$    = this.posOrderItemService.postItem(site, newItem)
         this.processItemPostResults(addItem$)
         return
@@ -221,8 +232,8 @@ export class OrderMethodsService {
   }
 
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
+    console.log('barcode', barcode)
     this.processAddItem(this.order, barcode, null, quantity, input);
-    input.nativeElement.value = ''
   }
 
   promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string) {

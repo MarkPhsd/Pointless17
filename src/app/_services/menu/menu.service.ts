@@ -607,7 +607,6 @@ export class MenuService {
       return  this.httpClient.put<any>(url, product)
 
     }
-
   };
 
   getSpeciesType(): IItemBasic[] {
@@ -623,6 +622,12 @@ export class MenuService {
     }
   }
 
+  getPackagingMaterialArray(menuItem: IMenuItem): string[] {
+    if (menuItem.itemType && menuItem.itemType.packagingMaterial) {
+      return menuItem.itemType.packagingMaterial.split(',')
+    }
+    return null
+  }
 
   private handleError(error: any) {
     return throwError(error);

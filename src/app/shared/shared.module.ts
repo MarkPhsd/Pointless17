@@ -120,6 +120,7 @@ import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-heade
 import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
+import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -229,6 +230,7 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,
+    QuantiySelectorComponent,
     ToggleThemeComponent,
     TruncateTextPipe,
     UnitTypeFieldsComponent,
@@ -348,6 +350,7 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
     ProgressBarComponent,
     RetailProductEditComponent,
     RequestMessagesComponent,
+    QuantiySelectorComponent,
     SalesTaxReportComponent,
     ScaleSettingsComponent,
     ScaleReaderComponent,

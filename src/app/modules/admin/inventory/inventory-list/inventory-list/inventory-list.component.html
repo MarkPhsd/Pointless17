@@ -4,7 +4,7 @@
      class="grid-container"
      *ngIf="searchForm" >
 
-  <div [formGroup]="searchForm"
+  <div  [formGroup]="searchForm"
         (ngSubmit)="refreshSearch()"
         class="grid-container-selectors">
 
@@ -37,25 +37,27 @@
       </mat-form-field>
     </div>
 
-    <div class="grid-item"
-          *ngIf="(metrcCategory$ | async) as list">
-      <mat-form-field appearance="outline">
-        <mat-label>METRC Categories</mat-label>
-          <mat-select
-                    type="text"
-                    (selectionChange)="getMetrcCategory($event)"
-                    formControlNamename="metrcCategory"
-                  >
-            <mat-option [value]=0>All</mat-option>
-            <mat-option *ngFor="let item of list"
-                        [value]="item.id">
-              {{ item.name }}
-            </mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div  class="grid-item"
+          *ngIf="(metrcCategory) as list">
+      <div *ngIf="list.length>0">
+        <mat-form-field appearance="outline">
+          <mat-label>METRC Categories</mat-label>
+            <mat-select
+                      type="text"
+                      (selectionChange)="getMetrcCategory($event)"
+                      formControlNamename="metrcCategory"
+                    >
+              <mat-option [value]=0>All</mat-option>
+              <mat-option *ngFor="let item of list"
+                          [value]="item.id">
+                {{ item.name }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
     </div>
 
-    <div class="grid-item">
+    <div class="grid-item" *ngIf="(locations$ | async) as list">
       <mat-form-field appearance="outline">
         <mat-label>Locations</mat-label>
           <mat-select
@@ -63,12 +65,12 @@
                     (selectionChange)="getLocation($event)"
                     formControlNamename="inventoryLocations"
                   >
-          <div *ngIf="(locations$ | async) as list">
-            <mat-option [value]=0>All</mat-option>
-            <mat-option *ngFor="let item of list" [value]="item.id">
-              {{ item.name }}
-            </mat-option>
-          </div>
+
+          <mat-option [value]=0>All</mat-option>
+          <mat-option *ngFor="let item of list" [value]="item.id">
+            {{ item.name }}
+          </mat-option>
+
         </mat-select>
       </mat-form-field>
     </div>
@@ -117,11 +119,16 @@
 
 <div [class]="gridlist">
   <div>
-    <div *ngIf="value" class="loader">
-      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
-    </div>
+      <div *ngIf="value"
+          class="loader">
+        <mat-progress-bar
+            mode="determinate"
+            [value]="value">
+        </mat-progress-bar>
+      </div>
 
       <ag-grid-angular
+            *ngIf ="columnDefs.length>0; else loading"
             #agGrid
             [style]              ="gridDimensions"
             id                   ="myGrid"
@@ -151,3 +158,6 @@
   <span id="selectedRows"> </span>
 </div>
 
+<ng-template #loading>
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

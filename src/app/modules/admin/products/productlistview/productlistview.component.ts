@@ -25,7 +25,6 @@ import { Subscription } from 'rxjs';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { EditSelectedItemsComponent } from '../productedit/edit-selected-items/edit-selected-items.component';
-import { Dialog } from 'electron';
 import { MatDialog } from '@angular/material/dialog';
 
 //https://stackoverflow.com/questions/48931298/ag-grid-pagination-with-infinite-scrolling
@@ -50,7 +49,12 @@ gridlist = "grid-list"
 
 //needed for search component
 searchForm:    FormGroup;
-get itemName() { return this.searchForm.get("itemName") as FormControl;}
+get itemName() {
+  if (this.searchForm) {
+    return this.searchForm.get("itemName") as FormControl;
+  }
+}
+
 get platForm()         {  return Capacitor.getPlatform(); }
 get PaginationPageSize(): number {return this.pageSize;  }
 get gridAPI(): GridApi {  return this.gridApi;  }
@@ -95,6 +99,7 @@ inputForm        : FormGroup;
 categoryID       : number;
 productTypeSearch: number;
 productTypeID    : number;
+departmentID     : number;
 typeID           : number;
 brandID          : number;
 active           : boolean;
@@ -133,12 +138,12 @@ constructor(  private _snackBar              : MatSnackBar,
               private dialog: MatDialog,
             )
   {
+    this.initForm();
     this.initAgGrid(this.pageSize);
   }
 
   async ngOnInit() {
     this.initClasses()
-    this.initForm();
 
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
@@ -186,12 +191,14 @@ constructor(  private _snackBar              : MatSnackBar,
       productTypeSearch : [this.productTypeSearch],
       brandID           : [this.brandID],
       categoryID        : [this.categoryID],
+      departmentID      : [this.departmentID],
       viewAll           : [1],
     });
   }
 
   refreshSearchPhrase(event) {
-    this.itemName.setValue(event)
+    const item = { itemName: event }
+    this.searchForm.patchValue(item)
     this.refreshSearch();
   }
 
@@ -274,7 +281,9 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   listAll(){
+
     const control = this.itemName
+
     if (control) {
       control.setValue('')
     }
@@ -285,26 +294,36 @@ constructor(  private _snackBar              : MatSnackBar,
     this.refreshSearch()
   }
 
+
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
   initSearchModel(): ProductSearchModel {
     let searchModel        = {} as ProductSearchModel;
-    if (this.itemName.value)            { searchModel.name        = this.itemName.value  }
+
+    if (this.itemName) {
+      if (this.itemName.value)          { searchModel.name        = this.itemName.value  }
+    }
+
     if (this.categoryID )               { searchModel.categoryID  = this.categoryID.toString(); }
     if (this.productTypeSearch)         { searchModel.itemTypeID  = this.productTypeSearch.toString(); }
     if (this.brandID)                   { searchModel.brandID     = this.brandID.toString(); }
-
+    if (this.departmentID)              { searchModel.departmentID= this.departmentID.toString()}
     searchModel.viewAll    = this.viewAll;
     searchModel.active     = this.active;
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    return searchModel
+    return searchModel;
   }
 
   refreshCategoryChange(event) {
     this.categoryID = event;
+    this.refreshSearch();
+  }
+
+  refreshDepartmentChange(event) {
+    this.departmentID = event;
     this.refreshSearch();
   }
 
@@ -477,7 +496,6 @@ constructor(  private _snackBar              : MatSnackBar,
 
   editItemWithId(id:any) {
     if(!id) {
-      // console.log(id)
       return
     }
     this.productEditButtonService.openProductDialog(id);
@@ -494,7 +512,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   getProductTypeID(event) {
-  if (event) { this.productTypeID = event }
+    if (event) {this.productTypeID = event }
   }
 
   childAddItem() {

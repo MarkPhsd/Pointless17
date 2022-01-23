@@ -83,12 +83,10 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
   }
 
   selectItem(item: IItemFacilitiyBasic) {
-    console.log('item', item)
     this.itemSelect.emit(item)
   }
 
   onChange(item: any) {
-    console.log('On Change', item)
     const facility = item.option.value as IItemFacilitiyBasic;
     const facilityDisplay =`${facility.displayName} - ${facility.metrcLicense}`
     if (item) {

@@ -338,8 +338,6 @@ export class MetrcPackagesService {
       return this.http.post<METRCPackagesRemediate[]>(url, mETRCPackagesRemediate);
     }
 
-
-
     generateSku(sku: string, index: number): string {
       return `mt-${sku.substring(sku.length - 7)}-${index}`
     }

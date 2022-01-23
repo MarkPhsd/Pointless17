@@ -52,6 +52,8 @@ export interface IPOSOrderItem {
   promptGroupID :                number;
   posOrderMenuItem:              PosOrderMenuItem;
   serialCode:                    string;
+  packagingMaterial             :string;
+  portionValue                  :string;
 }
 
 export interface PosOrderMenuItem {

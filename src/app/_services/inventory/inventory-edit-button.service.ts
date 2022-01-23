@@ -1,13 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Component, Input, OnInit } from '@angular/core';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProducteditComponent} from 'src/app/modules/admin/products/productedit/productedit.component';
 // import { ItemPercentageDiscountProductEditComponent } from 'src/app/modules/admin/productedit/item-percentage-discount-product-edit/item-percentage-discount-product-edit.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { StrainProductEditComponent } from 'src/app/modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
 import { NewInventoryItemComponent } from 'src/app/modules/admin/inventory/new-inventory-item/new-inventory-item.component';
 import { IInventoryAssignment } from './inventory-assignment.service';
 import { MoveInventoryLocationComponent } from 'src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component';
@@ -32,8 +28,14 @@ export class InventoryEditButtonService {
     const site = this.siteService.getAssignedSite();
 
     this.menuService.getProduct( site, item.productID ).subscribe( data=> {
-      const productTypeID = data.prodModifierType
+
+      let productTypeID = 0;
+      if (data) {
+        const productTypeID = data.prodModifierType
+      }
+
       this.openInventoryEditor(item.id, productTypeID)
+
     })
 
   }
@@ -145,6 +147,8 @@ export class InventoryEditButtonService {
               data : {id: id}
             },
           )
+
+
         }
         break;
 
@@ -181,7 +185,8 @@ export class InventoryEditButtonService {
 
     if (dialogRef) {
       dialogRef.afterClosed().subscribe(result => {
-        //then we can emit back up to the component.
+
+          // this.outputRefresh.emit('true')
 
         });
       }

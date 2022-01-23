@@ -1,6 +1,5 @@
 
 export interface ProductSearchModel {
-
   barcode:                      string;
   name:                         string;
   subCategory:                  string;
@@ -38,6 +37,7 @@ export interface ProductSearchModel {
   species                   : string;
   web                       : boolean;
   exactNameMatch            : boolean;
+  sku                       : string;
 }
 
 

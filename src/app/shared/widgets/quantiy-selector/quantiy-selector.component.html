@@ -1,0 +1,31 @@
+  <div *ngIf="inputForm"
+       [formGroup]="inputForm"
+       class="buttons-quantity">
+
+    <div id="addItemToOrder">
+      <button mat-raised-button class="button"
+              (click)="changeQuantity(1)">
+      <mat-icon>exposure_plus_1</mat-icon></button>
+    </div>
+
+    <div class='quantity-input' >
+      <mat-form-field
+                      appearance="outline"
+                      class="quantity-input"
+                      >
+        <mat-label >quantity</mat-label>
+        <input matInput
+               type             ="text"
+               formControlName ="quantity"
+               [(ngModel)]     ="quantity">
+      </mat-form-field>
+    </div>
+
+    <div id="addItemToOrder">
+      <button mat-raised-button
+              class="button"
+              (click)="changeQuantity(-1)" >
+              <mat-icon>exposure_neg_1</mat-icon>
+      </button>
+    </div>
+  </div>

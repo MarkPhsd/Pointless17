@@ -1,0 +1,39 @@
+
+// body{ overflow-x: hidden;}
+@import "/src/mixins.scss";
+
+.itemInfoColumns {
+  width: 200px;
+}
+
+.item-label {
+  float: left;
+}
+
+.item-info {
+  float: right;
+}
+
+.header-column {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
+  gap: 2px;
+}
+
+.header-container {
+  --gap: 5px;
+  display: grid;
+  width: 300px;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
+}
+
+.grid-spanner {
+  grid-column-end: span 2;
+}

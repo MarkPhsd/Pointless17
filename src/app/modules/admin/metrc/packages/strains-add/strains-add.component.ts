@@ -59,7 +59,6 @@ export class StrainsAddComponent implements OnInit {
           private dialogRef: MatDialogRef<StrainsAddComponent>,
           @Inject(MAT_DIALOG_DATA) public data: any,
           private inventoryAssignmentService: InventoryAssignmentService,
-
           )
      {
 

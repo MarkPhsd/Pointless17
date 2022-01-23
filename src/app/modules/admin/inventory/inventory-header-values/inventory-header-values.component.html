@@ -1,0 +1,54 @@
+<div class="header-container">
+  <div class="header-column">Fixed Values</div>
+  <div></div>
+
+  <div  class="item-label">Intake UOM</div>
+  <div  class="item-info">{{item.intakeUOM}} </div>
+
+  <div  class="item-label">UOM</div>
+  <div  class="item-info">{{item.unitOfMeasureName}} </div>
+
+  <div  class="item-label">Multiplier</div>
+  <div  class="item-info">{{item.unitMulitplier}} </div>
+
+  <div  class="item-label">Base Quantity</div>
+  <div  class="item-info">{{item.baseQuantity}} </div>
+
+  <div  class="item-label">Base Remaining</div>
+  <div  class="item-info">{{item.baseQuantityRemaining}} </div>
+
+  <div [hidden]="item.packageType != undefined && item.packageType != ''"
+      class="item-label">Type</div>
+  <div [hidden]="item.packageType != undefined && item.packageType != ''"
+      class="item-info">{{item.packageType}} </div>
+
+  <div class="item-label">Converted To Units</div>
+  <div class="item-info">{{item.unitConvertedtoName}} </div>
+
+  <div  class="item-label">Start Package Count</div>
+  <div  class="item-info">{{item.packageQuantity}} </div>
+
+  <div  class="item-label">Packages Remaining</div>
+  <div  class="item-info">{{item.packageCountRemaining}} </div>
+
+  <div *ngIf="item.jointWeight != 1 && item.jointWeight != undefined"
+      class="item-label">Pre Roll Weight (if applicable)</div>
+  <div *ngIf="item.jointWeight != 1 && item.jointWeight != undefined"
+      class="item-info">{{item.jointWeight}} </div>
+
+  <div class="item-label">Dates</div>
+  <div class="item-info"></div>
+
+  <div [hidden]="item.batchDate != undefined && item.batchDate != ''"
+      class="item-label">Batch </div>
+  <div [hidden]="item.batchDate != undefined && item.batchDate != ''"
+      class="item-info">{{item.batchDate | date: 'short' }} </div>
+
+  <div class="item-label">Created</div>
+  <div class="item-info">{{item.dateCreated | date: 'short' }} </div>
+
+  <div class="item-label">Expiration</div>
+  <div class="item-info">{{item.expiration | date: 'short' }} </div>
+
+
+</div>

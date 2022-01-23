@@ -5,10 +5,8 @@
   <mat-card class="strain-card">
 
     <mat-card-title>
-
       <div><h3>Item: {{item.productName}} </h3></div>
       <div><h3>Label:{{item.label}}       </h3></div>
-
     </mat-card-title>
 
     <mat-card-subtitle>
@@ -24,6 +22,15 @@
           <div class="item-label">Facility Code</div>
           <div class="item-info"> {{item.facilityLicenseNumber}} </div>
 
+          <app-product-search-selector
+              class         = "fields"
+              [productName] = "item.productName"
+              [itemType]    = 1
+              [searchForm]  = "inputForm"
+              (itemSelect)  = "getItem($event)">
+              >
+            Change Item
+          </app-product-search-selector>
 
 
         </div>
@@ -34,7 +41,7 @@
                 (outputeupdateItem)     ="updateItem($event)"
                 (outputupdateItemExit)  ="updateItemExit($event)"
                 (outputupdatedeleteItem)="deleteItem($event)"
-                (outputupdateonCancel)  ="onCancel($event)"
+                (outputupdateonCancel)  ="onCancel('false')"
           ></app-edit-buttons-standard>
         </div>
       </div>
@@ -77,55 +84,11 @@
               >
 
               <div class="subtitle grid-container">
-
-
-                <div class="header-column">Fixed Values</div>
-
-                <div > </div>
-
-                <div  class="item-label">Intake UOM</div>
-                <div  class="item-info">{{item.intakeUOM}} </div>
-
-                <div  class="item-label">UOM</div>
-                <div  class="item-info">{{item.unitOfMeasureName}} </div>
-
-                <div  class="item-label">Multiplier</div>
-                <div  class="item-info">{{item.unitMulitplier}} </div>
-
-                <div  class="item-label">Base Quantity</div>
-                <div  class="item-info">{{item.baseQuantity}} </div>
-
-                <div  class="item-label">Base Remaining</div>
-                <div  class="item-info">{{item.baseQuantityRemaining}} </div>
-
-                <div [hidden]="item.packageType != undefined && item.packageType != ''"   class="item-label">Type</div>
-                <div [hidden]="item.packageType != undefined && item.packageType != ''"  class="item-info">{{item.packageType}} </div>
-
-                <div class="item-label">Converted To Units</div>
-                <div class="item-info">{{item.unitConvertedtoName}} </div>
-
-                <div  class="item-label">Start Package Count</div>
-                <div  class="item-info">{{item.packageQuantity}} </div>
-
-                <div  class="item-label">Packages Remaining</div>
-                <div  class="item-info">{{item.packageCountRemaining}} </div>
-
-                <div *ngIf="item.jointWeight != 0 && item.jointWeight != undefined "  class="item-label">Joint Weight</div>
-                <div *ngIf="item.jointWeight != 0 && item.jointWeight != undefined "  class="item-info">{{item.jointWeight}} </div>
-
-                <div class="item-label">Dates</div>
-                <div class="item-info"></div>
-
-                <div [hidden]="item.batchDate != undefined && item.batchDate != ''"
-                      class="item-label">Batch </div>
-                <div [hidden]="item.batchDate != undefined && item.batchDate != ''"
-                      class="item-info">{{item.batchDate | date: 'short' }} </div>
-
-                <div class="item-label">Created</div>
-                <div class="item-info">{{item.dateCreated | date: 'short' }} </div>
-
-                <div class="item-label">Expiration</div>
-                <div class="item-info">{{item.expiration | date: 'short' }} </div>
+                <div >
+                  <app-inventory-header-values
+                    [item]="item">
+                  </app-inventory-header-values>
+                </div>
 
                 <div class="grid-spanner">
 
@@ -157,8 +120,6 @@
                 </div>
               </div>
 
-
-
             </div>
 
           </div>
@@ -170,7 +131,9 @@
                 fxLayoutGap=15
                 >
 
-              <div [formGroup]="inputForm">
+              <div *ngIf="menuItem && menuItem.itemType.type == 'cannabis' ||
+                          menuItem && menuItem.itemType.type == 'med-cannabis'"
+                   [formGroup]="inputForm">
                 <app-chemical-values [inputForm]="inputForm">
                 </app-chemical-values>
               </div>
@@ -206,6 +169,18 @@
                         >
               </mat-form-field>
             </div>
+
+            <div  class="header-column">Features</div>
+            <div>
+              <app-value-fields
+                  [fieldType]="'text'"
+                  [inputForm]="inputForm"
+                  [fieldName]="'sku'"
+                >Change Sku
+              </app-value-fields>
+              <mat-hint>Changing the sku will require re-labeling.</mat-hint>
+            </div>
+
           </div>
 
       </div>

@@ -300,8 +300,6 @@ addInventoryItem(site: ISite,  iInventoryAssignment: IInventoryAssignment): Obse
 
   const url = `${site.url}${controller}${endPoint}${parameters}`
 
-  console.log('iInventoryAssignment', iInventoryAssignment)
-  console.log('url', url)
   return  this.http.post<IInventoryAssignment>(url, iInventoryAssignment)
 
 
@@ -320,7 +318,6 @@ deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
   return  this.http.delete<IInventoryAssignment[]>(url)
 
 }
-
 
   setNonConvertingFieldValues(inventoryAssignment: IInventoryAssignment,
                                         facility, inventoryLocation , intakeConversion, menuItem: IMenuItem, metrcPackage: METRCPackage ): IInventoryAssignment {
@@ -365,7 +362,7 @@ deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
   assignProductToInventory(menuItem: IMenuItem,  item: IInventoryAssignment) {
     if (item && menuItem) {
       item.productName = menuItem.name
-      item.sku         = menuItem.sku;
+      item.label       = menuItem.sku;
       item.productID   = menuItem.id;
       item.cost        = menuItem.wholeSale;
       item.price       = menuItem.retail;
@@ -377,25 +374,41 @@ deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
     }
   }
 
+  generateSku(sku: string, index: number): string {
+    return `ps-${sku.substring(sku.length - 7)}-${index}`
+  }
+
   setItemValues(inputForm: FormGroup, item: IInventoryAssignment) {
     if (!item && !inputForm) {return item}
     const  controls = inputForm.controls
     try {
-      item.packageCountRemaining = controls['packageQuantity'].value;
-      item.baseQuantityRemaining = item.packageCountRemaining;
 
       item.dateCreated = new Date().toISOString();
+      item.expiration   = controls['expiration'].value;
+      item.packageCountRemaining = controls['packageQuantity'].value;
+
+      item.baseQuantityRemaining = item.packageCountRemaining;
+      item.packageQuantity       = item.packageCountRemaining;
+      item.baseQuantity          = item.packageCountRemaining;
+      item.jointWeight           = 1;
+      item.notAvalibleForSale    = controls['notAvalibleForSale'].value;
+      item.invoice               = controls['invoiceCode'].value;
+      item.location              = controls['location'].value;
+      item.locationID            = controls['locationID'].value;
+      item.unitOfMeasureName     = controls['unitOfMeasureName'].value;
       item.intakeConversionValue =1
-      item.jointWeight = 1;
-      item.baseQuantity = controls['packageQuantity'].value;
+      if (  item.jointWeight == 0) {  item.jointWeight = 1; }
+
       item.price = controls['price'].value;
       item.cost  = controls['cost'].value;
+
     } catch (error) {
       console.log('error on set item values', error)
       return item
     }
     return item
   }
+
   assignChemicals(menuItem: IMenuItem, item: IInventoryAssignment) {
     if (!item && !menuItem) {return item}
     item.thc   = +menuItem.thc
@@ -409,6 +422,7 @@ deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
     item.cbda2 = +menuItem.cbda2
     return item
   }
+
   initFields(inputForm: FormGroup) {
     inputForm = this.fb.group({
       id:                                [''],

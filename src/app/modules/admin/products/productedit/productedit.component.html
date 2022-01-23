@@ -9,7 +9,7 @@
       class="container"
       *ngIf="product && productForm; else loading" >
 
-  <mat-card >
+  <mat-card class='mat-card-info'>
     <mat-card-title >
 
       <div class="header-container" >
@@ -79,9 +79,9 @@
                   <product-type-select   [inputForm]="productForm"> </product-type-select>
 
                   <app-brand-type-select
-                                    [formFieldClass]="'formFieldClass-standard'"
+                                    [formFieldClass]= "'formFieldClass-standard'"
                                     [id]            = "brandID.value"
-                                    [inputForm]     ="productForm">
+                                    [inputForm]     = "productForm">
                   </app-brand-type-select>
               </div>
 

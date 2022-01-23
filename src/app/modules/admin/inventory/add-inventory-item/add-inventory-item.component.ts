@@ -7,7 +7,7 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -23,12 +23,16 @@ export class AddInventoryItemComponent implements OnInit {
   id:                        any;
   site:                      ISite;
   item:                      IInventoryAssignment;
-  inventoryLocations:        IInventoryLocation[];
-  inventoryAssignment$:      Observable<IInventoryAssignment>;
   searchForm:                FormGroup;
   quantityMoving:            number;
-  locations$               : Observable<IInventoryLocation[]>;
   inventoryLocation:         IInventoryLocation;
+
+  inventoryAssignment$:      Observable<IInventoryAssignment>;
+  inventoryAssignments  :    IInventoryAssignment[];
+  inventoryLocations:        IInventoryLocation[];
+  locations$               : Observable<IInventoryLocation[]>;
+  inventoryLocations$  :     Observable<IInventoryLocation[]>;
+
   inventoryLocationID:       number;
   facilityLicenseNumber:     string;
   menuItem:                  IMenuItem;
@@ -40,7 +44,6 @@ export class AddInventoryItemComponent implements OnInit {
     private siteService: SitesService,
     public  route: ActivatedRoute,
     private menuService: MenuService,
-    private fb: FormBuilder,
     private fbInventory: FbInventoryService,
     private inventoryAssignmentService: InventoryAssignmentService,
     private inventoryLocationsService: InventoryLocationsService,
@@ -59,6 +62,7 @@ export class AddInventoryItemComponent implements OnInit {
   ngOnInit() {
     try {
       this.locations$ = this.inventoryLocationsService.getLocations();
+      this.inventoryLocations$ = this.locations$;
       this.site =  this.siteService.getAssignedSite();
       this.inputForm = this.fbInventory.initForm(this.inputForm)
 
@@ -71,39 +75,50 @@ export class AddInventoryItemComponent implements OnInit {
           this.productName = this.item.productName
         })
       }
+
+      this.locations$.subscribe(data => {
+        this.inventoryLocations = data;
+      })
     } catch (error) {
       console.log(error)
     }
   }
 
-  async updateItem(event): Promise<boolean> {
+
+
+  async updateItem(event) {
 
     if (this.inputForm) {
       if (this.inputForm.valid) {
-        if (this.id != 0) {
 
+        const packageQuantity = this.inputForm.controls['packageQuantity'].value
+        const baseQuantity = { baseQuantity: packageQuantity}
+
+        this.inputForm.patchValue(baseQuantity)
+
+        if (this.id != 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
-          item  = await item$.pipe().toPromise()
-          this.item = item
-          this.notifySave(item)
-          return
-
+          this.updateInventory(item$)
         }
 
         if (this.id == 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
-          // this.item   = this.fbInventory.setItemValues(this.item, this.inputForm)
           const item$ = this.inventoryAssignmentService.addInventoryItem(this.site, this.item)
-          item  = await item$.pipe().toPromise()
-          this.notifySave(item)
-          return
-
+          this.updateInventory(item$)
         }
       }
     }
   }
 
+  private updateInventory(item$: Observable<IInventoryAssignment>) {
+
+    item$.subscribe(data => {
+      this.notifySave(data)
+      return
+    })
+
+  }
 
   notifySave(item) {
     if (item) {
@@ -156,11 +171,15 @@ export class AddInventoryItemComponent implements OnInit {
     }
   }
 
-  getLocationAssignment(id): IInventoryLocation {
-    this.inventoryLocation = this.inventoryLocations.find(data =>
-      id == data.id
-    )
-    return this.inventoryLocation
+  getLocationAssignment(id) {
+    if (this.inventoryLocations) {
+      this.inventoryLocation = this.inventoryLocations.find(data =>
+        {
+          const item = { locationID: data.id, location: data.name}
+          this.inputForm.patchValue(item)
+        }
+      )
+    }
   }
 
   onCancel(event) {
@@ -169,7 +188,7 @@ export class AddInventoryItemComponent implements OnInit {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 1000,
       verticalPosition: 'top'
     });
   }

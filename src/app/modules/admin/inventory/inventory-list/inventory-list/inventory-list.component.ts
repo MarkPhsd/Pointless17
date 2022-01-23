@@ -25,7 +25,6 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 
 export interface InventoryStatusList {
   name: string;
@@ -53,7 +52,13 @@ export class InventoryListComponent implements OnInit {
     public searchForm: FormGroup;
     inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
 
-    get itemName() { return this.searchForm.get("itemName") as FormControl;}
+    get itemName() {
+      if (!this.searchForm) { this.initForm()}
+      if (this.searchForm) {
+        return this.searchForm.get("itemName") as FormControl;
+      }
+    }
+
     get platForm()         {  return Capacitor.getPlatform(); }
     get PaginationPageSize(): number {return this.pageSize;  }
     get gridAPI(): GridApi {  return this.gridApi;  }
@@ -118,6 +123,7 @@ export class InventoryListComponent implements OnInit {
 
     metrcCategory$:       Observable<METRCItemsCategories[]>;
     metrcCategory:        METRCItemsCategories;
+    metrcCategories      :  METRCItemsCategories[];
     metrcCategoryID:      number;
 
     locations$:           Observable<IInventoryLocation[]>;
@@ -158,14 +164,13 @@ export class InventoryListComponent implements OnInit {
 
               )
   {
-    this.initAgGrid();
     this.initForm()
   }
 
   async ngOnInit() {
     this.initClasses();
     this.sites$         = this.siteService.getSites();
-    this.metrcCategory$ = this.metrcCategoriesService.getCategories();
+
     this.locations$     = this.locationService.getLocations();
 
     const clientSearchModel       = {} as ClientSearchModel;
@@ -184,8 +189,16 @@ export class InventoryListComponent implements OnInit {
       this.brands = data.results
     })
 
-    // this.buttonName = 'Edit'
-    // this.refreshGrid = true
+    this.metrcCategory$ = this.metrcCategoriesService.getCategories()
+    this.metrcCategory$.subscribe(data => {
+        this.metrcCategories = data;
+        this.initAgGrid();
+      }, err => {
+        console.log('err', err)
+        this.initAgGrid();
+      }
+    )
+
     if (!this.search) { this.search = ''}
   };
 
@@ -199,6 +212,7 @@ export class InventoryListComponent implements OnInit {
 
   initForm() {
     this.searchForm = this.fb.group( {
+      itemName      :     [''],
       searchProducts:     [''],
       selectedSiteID:     [''],
       inventoryLocations: [''],
@@ -207,9 +221,9 @@ export class InventoryListComponent implements OnInit {
   }
 
   refreshSearchOut(event) {
-
     this.refreshSearch();
   }
+
   initAgGrid() {
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
@@ -219,59 +233,80 @@ export class InventoryListComponent implements OnInit {
       flex: 2,
       // minWidth: 100,
     };
-    this.columnDefs =  [
-      {headerName: 'id',  sortable: true, field: 'id',  hide: true, },
-      {headerName: 'Name',  sortable: true, field: 'productName',
-      width   : 175,
-      minWidth: 175,
-      maxWidth: 275,
-      flex    : 2,},
-      {headerName: 'Sku', field: 'sku', sortable: true,
-      width   : 175,
-      minWidth: 175,
-      maxWidth: 275,
-      flex    : 1,
-       },
-      {headerName: 'Location', field: 'location', sortable: true,
-      width   : 175,
-      minWidth: 175,
-      maxWidth: 275,
-      flex    : 1,
-       },
-      {headerName: 'Category', field: 'productCategoryName', sortable: true,
-      width   : 175,
-      minWidth: 175,
-      maxWidth: 275,
-      flex    : 1,
-       },
-      {headerName: 'Count', field: 'packageCountRemaining', sortable: true,
-      width   : 175,
-      minWidth: 175,
-      maxWidth: 275,
-      flex    : 1,
-       },
-      {headerName: 'PKG Type', field: 'unitConvertedtoName', sortable: true,
-      width   : 150,
-      minWidth: 150,
-      maxWidth: 275,
-      flex    : 1,
-       },
-      {headerName: 'Retail', field: 'price', sortable: true,
-                    cellRenderer: this.currencyCellRendererUSD,
-                    width   : 150,
-                    minWidth: 150,
-                    maxWidth: 275,
-                    flex    : 1,
-      },
-      {headerName: 'Cost', field: 'cost', sortable: true,
-                    cellRenderer: this.currencyCellRendererUSD,
-                    width   : 150,
-                    minWidth: 150,
-                    maxWidth: 275,
-                    flex    : 1,
-      },
-    ]
-    // this.rowSelection = 'single';
+
+    let item = {headerName: 'id',  sortable: true, field: 'id',  hide: true, } as any;
+
+    this.columnDefs.push(item)
+
+    item =  {headerName: 'Name',  sortable: true, field: 'productName',
+                width   : 175,
+                minWidth: 175,
+                maxWidth: 275,
+                flex    : 2,} as any;
+    this.columnDefs.push(item)
+
+    item =  {headerName: 'Sku', field: 'sku', sortable: true,
+              width   : 175,
+              minWidth: 175,
+              maxWidth: 275,
+              flex    : 1,
+              } as any;
+    this.columnDefs.push(item)
+
+    item =  {headerName: 'Location', field: 'location', sortable: true,
+              width   : 175,
+              minWidth: 175,
+              maxWidth: 275,
+              flex    : 1,
+              }
+    this.columnDefs.push(item)
+
+    if (this.metrcCategories.length>0) {
+      item =  {headerName: 'Category', field: 'productCategoryName', sortable: true,
+                width   : 175,
+                minWidth: 175,
+                maxWidth: 275,
+                flex    : 1,
+              }
+      this.columnDefs.push(item)
+    }
+
+    item =  {headerName: 'Count', field: 'packageCountRemaining', sortable: true,
+              width   : 175,
+              minWidth: 175,
+              maxWidth: 275,
+              flex    : 1,
+               }
+    this.columnDefs.push(item)
+
+    item = {headerName: 'PKG Type', field: 'unitConvertedtoName', sortable: true,
+              width   : 150,
+              minWidth: 150,
+              maxWidth: 275,
+              flex    : 1,
+               }
+    this.columnDefs.push(item)
+
+    item =  {headerName: 'Retail', field: 'price', sortable: true,
+                            cellRenderer: this.currencyCellRendererUSD,
+                            width   : 150,
+                            minWidth: 150,
+                            maxWidth: 275,
+                            flex    : 1,
+              }
+    this.columnDefs.push(item)
+
+    item =  {headerName: 'Cost', field: 'cost', sortable: true,
+                            cellRenderer: this.currencyCellRendererUSD,
+                            width   : 150,
+                            minWidth: 150,
+                            maxWidth: 275,
+                            flex    : 1,
+              }
+    this.columnDefs.push(item)
+
+    this.rowSelection = 'single';
+
     this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
   }
 
@@ -292,22 +327,27 @@ export class InventoryListComponent implements OnInit {
     searchModel.label           = this.search
     searchModel.sku             = this.search
     searchModel.inventoryStatus = this.inventoryStatusID
+
     //if location
+    if (this.itemName && this.searchForm) {
+      if (this.itemName.value)  { searchModel.productName   = this.itemName.value  }
+    }
+
     if (this.inventoryLocation) {searchModel.location = this.inventoryLocation.name }
     if (this.metrcCategory)     {searchModel.productCategoryName = this.metrcCategory.name}
     searchModel.pageSize    = this.pageSize
-    searchModel.pageNumber = this.pageNumber
+    searchModel.pageNumber  = this.pageNumber
     this.id = 0
     return searchModel
   }
 
   refreshSearchPhrase(event) {
-    console.log(event)
     if (this.itemName) {
-      this.itemName.setValue(event)
+      const item = { itemName: event }
+      this.searchForm.patchValue(item)
+      this.search = event;
+      this.refreshSearch();
     }
-    this.search = event;
-    this.refreshSearch();
   }
 
   refreshCategoryChange(event) {
@@ -451,7 +491,6 @@ export class InventoryListComponent implements OnInit {
 
   //ag-grid standard method
   async onGridReady(params: any) {
-    console.log('params', params)
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -516,11 +555,12 @@ export class InventoryListComponent implements OnInit {
     this.selected = selected
     this.id = selectedRows[0].id;
     this.getInventoryHistory(this.id)
-    // this.getItemHistory(this.id)
+
   }
 
   async getInventoryHistory(id: any) {
     const site = this.siteService.getAssignedSite();
+    this.id = id;
     if (id) {
       this.inventoryAssignmentService.getInventoryAssignment(site, id ).subscribe(data =>{
         this.inventoryAssignment = data;

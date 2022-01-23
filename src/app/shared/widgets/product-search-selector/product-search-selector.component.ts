@@ -23,9 +23,9 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   @Input()  metrcCategoryName : string;
   @Input()  searchField:      FormControl;
   @Input()  productName:      string;
-  @Input() doNotPassName     :string;
+  @Input() doNotPassName      :string;
   searchPhrase:               Subject<any> = new Subject();
-  searchModel =  {} as ProductSearchModel;
+  searchModel                 =  {} as ProductSearchModel;
   item:                       IItemBasic;
   site:                       ISite;
 
@@ -68,39 +68,13 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   }
 
   ngOnInit() {
-
     if (this.doNotPassName) { return }
-    if (this.searchForm){
-      this.searchForm = this.fb.group({
-        productName: this.productName,
-      })
-    }
+    // if (this.searchForm){
+    //   this.searchForm = this.fb.group({
+    //     productName: this.productName,
+    //   })
+    // }
   }
-
-  // refreshSearch(search: any){
-  //   if (search) {
-  //     this.searchPhrase.next( search )
-  //   }
-  // }
-
-  // searchItems(name: string) {
-  //   this.searchPhrase.next(name);
-  // }
-
-  // selectItem(item: IItemBasic){
-  //   this.itemSelect.emit(item)
-  // }
-
-  // displayFn(item) {
-  //   this.selectItem(item)
-  //   this.item = item
-  //   return item.name;
-  // }
-
-  // getItemType(): number {
-  //   if ( this.itemType ) {this.itemType = 1}
-  //   return this.itemType
-  // }
 
   refreshSearch(search: any){
     if (search) {this.searchPhrase.next( search )}

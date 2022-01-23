@@ -59,9 +59,9 @@
                 Name
               </app-value-fields>
 
-              <app-category-select [inputForm]="productForm"></app-category-select>
+              <app-category-select   [inputForm]="productForm"></app-category-select>
               <app-department-select [inputForm]="productForm" ></app-department-select>
-              <product-type-select [inputForm]="productForm"></product-type-select>
+              <product-type-select   [inputForm]="productForm"></product-type-select>
 
               <app-brand-type-select
                       [formFieldClass]="'formFieldClass-standard'"
@@ -84,12 +84,10 @@
           </div>
 
           <div class="grid-item" >
-
               <div *ngIf="itemType &&  (itemType.useType && itemType.useType.toLowerCase() === 'product')">
                 <div class="header">
                   <h4><mat-icon>price_change</mat-icon>Prices</h4>
                 </div>
-
                 <div *ngIf="itemType" class="grid-container-small">
                   <div>
                     <app-price-category-select

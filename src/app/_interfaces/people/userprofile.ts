@@ -105,7 +105,7 @@ export interface employee {
   email:                     string;
   emergencyContact:          string;
   emergencyPhone:            string;
-  jobTypeID:                 number;
+  positionID:                number;
   dob:                       string;
   courtesyTitle:             string;
   notes:                     string;
@@ -145,8 +145,18 @@ export interface employee {
   commissionPercentageLevel: number;
   commissionGroupID:         number;
   apiPassword:               string;
-  jobTypes:                  jobTypes;
-  clientID:                  number;
+  jobType:                   jobTypes;
+  metrcLicenseNumber:        string;
+  metrcStatus:               string;
+  metrcType:                 string;
+  metrcGranted:              string;
+  metrcExpires:              string;
+  metrcHired:                string;
+  metrcMGR:                  boolean;
+  metrcLastLogin:            string;
+  stateIDNumber:             string;
+  stateIDExpiration:         string;
+  clientID        :          number;
 }
 
 export interface jobTypes {

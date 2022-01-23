@@ -2,7 +2,6 @@
 export * from './raw/clients';
 export * from './people/company';
 export * from './events';
-export * from './people/employees';
 export * from './item';
 export * from './menu/menu-categories';
 export * from './models';

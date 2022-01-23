@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ISite, JobType } from 'src/app/_interfaces';
+import { ISite, jobTypes } from 'src/app/_interfaces';
 import { AuthenticationService } from '../system/authentication.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class JobTypesService {
 
   }
 
-  getType(site: ISite, id: any) :  Observable<JobType> {
+  getType(site: ISite, id: any) :  Observable<jobTypes> {
 
     const controller = '/jobType/'
 
@@ -25,11 +25,11 @@ export class JobTypesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<JobType>(url)
+    return this.http.get<jobTypes>(url)
 
   }
 
-  getTypes(site: ISite) :  Observable<JobType[]> {
+  getTypes(site: ISite) :  Observable<jobTypes[]> {
 
     const controller = '/jobType/'
 
@@ -39,11 +39,11 @@ export class JobTypesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<JobType[]>(url)
+    return this.http.get<jobTypes[]>(url)
 
   }
 
-  putJobType(site: ISite, id: any, type: JobType):  Observable<JobType> {
+  putjobTypes(site: ISite, id: any, type: jobTypes):  Observable<jobTypes> {
 
     const controller = '/jobType/'
 
@@ -57,7 +57,7 @@ export class JobTypesService {
 
   }
 
-  postJobType(site: ISite,  type: JobType) :  Observable<JobType> {
+  postJobType(site: ISite,  type: jobTypes) :  Observable<jobTypes> {
 
     const controller = '/jobType/'
 
@@ -71,7 +71,7 @@ export class JobTypesService {
 
   }
 
-  delete(site: ISite,   id: any, type: JobType):  Observable<JobType> {
+  delete(site: ISite,   id: any, type: jobTypes):  Observable<jobTypes> {
 
     const controller = '/jobType/'
 

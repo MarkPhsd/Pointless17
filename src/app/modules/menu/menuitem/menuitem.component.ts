@@ -6,7 +6,7 @@ import { Observable, Subject, Subscription } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import {Location} from '@angular/common';
+import { Location} from '@angular/common';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
@@ -39,11 +39,15 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     menuItem$:              Observable<IMenuItem>;
     brand$:                 Observable<IClientTable>;
 
-    _order  :   Subscription;
-    order   :  IPOSOrder;
+    _order           :   Subscription;
+    order            :   IPOSOrder;
 
-    isUserStaff: boolean;
-    roles : string;
+    isUserStaff      : boolean;
+    roles            : string;
+    packagingMaterial: string[];
+
+    packaging        : string;
+    portionValue     = ''
 
     spinnerMode             = 'determinate';
     @Input() user:          IUserProfile;
@@ -60,7 +64,7 @@ export class MenuitemComponent implements OnInit,OnDestroy {
           private location          : Location,
           private userAuthorization : UserAuthorizationService,
           private orderMethodsService : OrderMethodsService,
-          private appInitService        : AppInitService,
+          private appInitService    : AppInitService,
           private titleService      : Title,
          )
     {
@@ -75,15 +79,17 @@ export class MenuitemComponent implements OnInit,OnDestroy {
 
     async ngOnInit() {
       this.quantity = 1
-      this.productForm = this.fb.group({
-        quantity: "1"
-      });
+      this.initProductForm();
       this.initSubscriptions();
     };
 
+    initProductForm() {
+      this.productForm = this.fb.group({
+        quantity: ['1'],
+      });
+    }
+
     ngOnDestroy(): void {
-      //Called once, before the instance is destroyed.
-      //Add 'implements OnDestroy' to the class.
       this._order.unsubscribe();
     }
 
@@ -92,7 +98,6 @@ export class MenuitemComponent implements OnInit,OnDestroy {
         console.log('initSubscriptions')
         this._order = this.orderService.currentOrder$.subscribe( data => {
           this.order = data
-          console.log('initSubscriptions', this.order)
         })
       } catch (error) {
       }
@@ -109,12 +114,9 @@ export class MenuitemComponent implements OnInit,OnDestroy {
       // this.dialogRef.close();
     }
 
-    changeQuantity(quantity: number) {
-      if (quantity == -1) {
-        if (this.quantity == 1) {
-          return
-        }
-      }
+    changeQuantity(quantity) {
+      console.log('quantity', quantity)
+      if (quantity == -1) { if (this.quantity == 1) { return  } }
       this.quantity = this.quantity + quantity;
       this.productForm = this.fb.group({
         quantity: this.quantity
@@ -124,14 +126,21 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     getItem(id: any) {
       const site     = this.siteService.getAssignedSite();
       const menuItem$ = this.menuService.getMenuProduct(site,id)
-      // let promise    =  this.menuItem$.pipe().toPromise()
       menuItem$.subscribe(data => {
           this.menuItem = data;
           this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
           this.brand$ = this.brandService.getClient(site, data.brandID)
+          this.packagingMaterial = this.menuService.getPackagingMaterialArray(data)
         }
       )
     };
+
+    addItemByCode(item) {
+      if (item) {
+        console.log('sku', item.sku)
+        this.orderMethodsService.scanBarcodeAddItem(item.sku, 1, {packaging: this.packaging, portionValue: this.portionValue} )
+      }
+    }
 
     goBackToList() {
       try {
@@ -142,7 +151,6 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     }
 
     exit() {
-      //exit
       this.location.back();
     }
 

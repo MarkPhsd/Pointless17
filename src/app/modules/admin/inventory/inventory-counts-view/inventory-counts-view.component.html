@@ -13,14 +13,21 @@
           <div>SKU</div>
           <div>QTY</div>
         </div>
-        <div class='grid-container'
-              *ngFor="let item of results.results">
-          <div>{{item.unitOfMeasureName}}</div>
-          <div>{{item.sku}}</div>
-          <div>{{item.packageCountRemaining}}</div>
+        <div *ngFor="let item of results.results">
+            <div class='grid-container'>
+              <div>{{item.unitOfMeasureName}}</div>
+              <div>{{item.sku}}</div>
+              <div>{{item.packageCountRemaining}}</div>
+              <div *ngIf="isAdmin">
+                  <button mat-button (click)="editInventoryItem(item)">
+                    <mat-icon>edit</mat-icon><ng-content #name></ng-content>
+                  </button>
+              </div>
+            </div>
+          <mat-divider></mat-divider>
         </div>
-        <mat-divider></mat-divider>
       </div>
+
       <div *ngIf="results.total > 0" class="instock-total">
         In Stock:  {{results.total}}
       </div>

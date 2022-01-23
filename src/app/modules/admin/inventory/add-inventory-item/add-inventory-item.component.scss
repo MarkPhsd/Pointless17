@@ -31,98 +31,10 @@
   width: 50px;
 }
 
-mat-raised-button {
-  margin: 5rem 5rem 2rem 2rem;
-  padding: 1rem 1rem 1rem 1rem;
-}
-
-.item-info {
-  font-size: .9em;
-}
-
-mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
-}
-
-.example-tab-icon {
-  margin-right: 8px;
-}
-
-simple-tinymce {
-  padding:5px;
-}
-
-h1 {
-  font-size: 1.5em;
-  text-decoration: underline;
-}
-
-.range-description {
-  margin-top: 1.5em;
-  margin-right: 1em;
-}
-
-.custom-card {
-  background-color: gray;
-  padding: 25px;
-  margin-bottom: 25px;
-}
-
-
-#inventoryMoveInstructions {
-  font-weight: 600;
-}
-
-.inventoryLocationControls {
-  float: right;
-}
-
-.inventoryControlLabels {
-  text-align:  left;
-}
-
-#inventoryAssignLocationsButton {
-  float: right;
-}
-
-.cancel-assignment {
-  float: right;
-}
-
-::ng-deep .mat-form-field-wrapper{
-   margin-bottom: -1.5em;
-   margin-left: 4px;
-   margin-right: 4px;
-}
-
-::ng-deep .mat-datepicker-content .mat-calendar
-{
-  zoom: 0.85;
-}
-
-::ng-deep  .md-datepicker-input-container {
-  width: 50px;
-}
-
-mat-form-field {
-  font-size: .8em;
-  margin: 4px 4px 4px 4px;
-}
-
-.assignment-header {
-  font-size: 1.2;
-  font-weight: 400;
-  margin-left: 5px;
-}
-
-.fields {
-  margin: 4px 4px 4px 4px;
-}
 
 .grid-container {
-  display: flex;
-  // grid-template-columns:  350px 350px ;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 5px;
 }
 
@@ -137,8 +49,8 @@ mat-form-field {
 }
 
 .item-input {
-  max-width: 75px;
-  width: 50px;
+  max-width: 200px;
+  width: 200px;
 }
 
 .range-description {
@@ -193,12 +105,10 @@ mat-form-field {
 
 .inventory-card {
   min-width: 200px;
-  // overflow: hidden;
 }
 
 .inlineControls {
-  // float: left;
-  width: 50px
+  width: 50px;
 }
 
 .package-list {

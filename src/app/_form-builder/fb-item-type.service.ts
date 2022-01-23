@@ -36,6 +36,9 @@ export class FbItemTypeService {
       requiresStock       : [''],
       metrcCategoryID     : [''],
       preptTicketID       : [''],
+      instructions:         [''],
+      packagingMaterial     : [''],
+      portionValue       :  [''],
     })
     return inputForm
   }

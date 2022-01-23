@@ -43,6 +43,7 @@ export class ItemTypeEditorComponent   {
   labelTypeID     : number;
   printerName     : string;
   printLocationID : number;
+  instructions    : string;
   packageType: string;
 	// this.receiptList$     =  this.settingService.getReceipts(site);
   //   this.labelList$       =  this.settingService.getLabels(site);
@@ -159,6 +160,11 @@ export class ItemTypeEditorComponent   {
       item.labelTypeID = this.labelTypeID;
       item.printerName = this.printerName;
       item.prepTicketID =this.prepTicketID;
+
+      if (!item) {
+        this._snackBar.open(`Update item problem`, 'Succcess', { duration: 2000} )
+        return
+      }
 
       if (this.itemType) {  item.imageName = this.itemType.imageName  }
       const product$ = this.itemTypeService.putItemTypeNoChildren(site, item)

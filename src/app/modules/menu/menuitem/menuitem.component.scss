@@ -14,6 +14,10 @@ mat-card {
   overflow-x: hidden;
 }
 
+.instructions {
+  float: left;
+}
+
 input {
   color: #b2cecf;
   background-color: #221E1D ;
@@ -32,14 +36,12 @@ input {
 }
 
 #gallery{
-  width: 100%;
-  border-radius: 5px;
+  width: 100%;  border-radius: 5px;
   object-fit: cover;
   max-width: 100%;
   max-height: 100%;
   border-radius: 5px;
   margin-bottom: 15px;
-
 }
 
 .gallery {
@@ -55,7 +57,7 @@ input {
   white-space: nowrap;
   text-overflow: ellipsis;
   text-transform: capitalize;
-  float: left;
+  float: right;
   margin: 0px 5px 5px 5px;
   padding: 0px 5px 5px 5px;
   align-items: baseline;
@@ -306,23 +308,11 @@ input {
   justify-content: flex-start;
 }
 
-.quantity-input {
-  width    : 55px;
-  height   : 90px;
-  font-size: 1.2em;
-  padding  : 0;
-  margin   : 0;
-  transform: translate(5%, -25%);
-}
 
-.buttons-quantity {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-}
+
 
 mat-form-field {
-  font-size: large;
+  font-size: smaller;
 }
 
 .center {
@@ -356,8 +346,13 @@ mat-form-field {
   margin-bottom: 5px;
 }
 
-.species {
+.grid-span {
   grid-row: 1 / 2;
+}
+
+.item-span {
+  // grid-column: span 2;
+  grid-column: 1 / span 2;
 }
 
 .grid-header {
@@ -366,11 +361,19 @@ mat-form-field {
   gap: 10px;
 }
 
-.grid-demographics {
+.grid-title {
   display: grid;
-  grid-template-columns: 1fr ;
+  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
   gap: 10px;
 }
+
+.grid-demographics {
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 10px;
+}
+
+
 
 .grid-prices {
   display: grid;
@@ -400,11 +403,22 @@ mat-form-field {
   margin               : 5px;
 }
 
+.mat-chips {
+  margin-top: 5px;
+}
 
+.mat-packaging {
+  margin: 5px;
+}
 
+.package-buttons {
+  width:  200px;
+  max-width: 200px;
+  margin: 5px;
+}
 .center {
   position: relative;
-  transform: translate(10%, -50%);
+  // transform: translate(10%, -50%);
 }
 
 .grid {

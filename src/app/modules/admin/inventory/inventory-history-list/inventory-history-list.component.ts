@@ -16,7 +16,8 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
-
+import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-inventory-history-list',
@@ -132,22 +133,36 @@ export class InventoryHistoryListComponent implements OnInit {
 
   async editProduct() {
        // get the id if there is one
-
+    const site = this.siteService.getAssignedSite();
     if (this.id) {
       const id = this.id
-      if (this.inventoryAssignment) {
+      if (this.inventoryAssignment.id == id) {
         const productID = this.inventoryAssignment.productID
-        const site = this.siteService.getAssignedSite();
-        const menuItem$ =  this.menuService.getMenuItemByID(site, productID)
-
-        menuItem$.subscribe(data => {
-          if (id) {
-            this.productEditButton.openProductEditor(productID, data.prodModifierType)
+        this.openProductEditor(productID)
+      } else {
+        this.inventoryAssignmentService.getInventoryAssignment(site, id).pipe(
+          switchMap(data => {
+              return this.menuService.getMenuItemByID(site, data.productID)
+          })).subscribe( item => {
+            if (item) {
+              this.productEditButton.openProductEditor(item.id, item.prodModifierType)
+            }
           }
-        })
+        )
       }
     }
   }
+
+  openProductEditor(productID: number) {
+    const site = this.siteService.getAssignedSite();
+    const menuItem$ =  this.menuService.getMenuItemByID(site, productID)
+    menuItem$.subscribe(item => {
+      if (item) {
+        this.productEditButton.openProductEditor(productID, item.prodModifierType)
+      }
+    })
+  }
+
 
   changeLocation() {
    // get the id if there is one
@@ -203,7 +218,7 @@ export class InventoryHistoryListComponent implements OnInit {
 
   editInventoryItem() {
     if (this.inventoryAssignment) {
-      this.inventoryEditButon.openInventoryDialog(this.inventoryAssignment)
+      this.openInventoryDialog(this.inventoryAssignment.id)
     }
   }
 
@@ -218,8 +233,37 @@ export class InventoryHistoryListComponent implements OnInit {
     )
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result && result != 'false') {
         this.outputRefresh.emit('true')
+        this.id = 0;
+        this.inventoryAssignment = null;
+      }
     });
+
+  }
+
+  openInventoryDialog(id: number) {
+
+    const dialogRef = this.dialog.open(NewInventoryItemComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '750px',
+        minHeight:    '750px',
+        data : {id: id}
+      },
+    )
+
+    if (dialogRef) {
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && result != 'false') {
+        this.outputRefresh.emit('true')
+        this.id = 0;
+        this.inventoryAssignment = null;
+      }
+
+      });
+    }
 
   }
 

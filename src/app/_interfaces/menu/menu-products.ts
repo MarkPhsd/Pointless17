@@ -96,11 +96,13 @@ export interface IMenuItem {
   strainName:               boolean;
   isUsed:                   boolean;
   promptGroupID           : number;
+  abv                     : string;
+  active:                   boolean;
+  thcContent              : number;
+  glutenFree              : boolean;
+  itemType:                 ItemType;
   productPrice:             ProductPrice;
   priceCategories:          PriceCategories;
-  itemType:                 ItemType;
-  active:                   boolean;
-  thcContent               :number;
 }
 
 //also in itemtype service - should consolidate
@@ -131,6 +133,9 @@ export interface ItemType {
   requireInStock      : boolean;
   metrcCategoryID :    number;
   preptTicketID       : number;
+  packagingMaterial   : string;
+  portionValue        : string;
+  instructions        : string;
 }
 
 export interface ItemTypeCategory {
