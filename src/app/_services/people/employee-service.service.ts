@@ -48,6 +48,14 @@ export class EmployeeService {
   private _searchModel       = new BehaviorSubject<EmployeeSearchModel>(null);
   public searchModel$        = this._searchModel.asObservable();
 
+
+  private _currentEditEmployee       = new BehaviorSubject<employee>(null);
+  public currentEditEmployee$        = this._currentEditEmployee.asObservable();
+
+  updateCurrentEditEmployee(employee:  employee) {
+    this._currentEditEmployee.next(employee);
+  }
+
   updateSearchModel(searchModel:  EmployeeSearchModel) {
     this._searchModel.next(searchModel);
   }
@@ -125,6 +133,7 @@ export class EmployeeService {
     return this.http.get<employee>(url);
 
   }
+
   //GetSaleTypes
 
   // getDrivers(site: ISite):  Observable<IEmployee[]> { return this.getEmployeesByJobType(site,'driver') }
@@ -181,6 +190,20 @@ export class EmployeeService {
     const controller = `/employees/`
 
     const endPoint = 'putEmployee'
+
+    const parameters = ``;
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.put<employee>(url, employee);
+
+  }
+
+  putEmployeeMetrcKey(site: ISite, id: number, employee: employee):  Observable<employee> {
+
+    const controller = `/employees/`
+
+    const endPoint = 'PutEmployeeMetrcKey'
 
     const parameters = ``;
 
@@ -273,8 +296,10 @@ export class EmployeeService {
       metrcHired:                [''],
       metrcMGR:                  [''],
       metrcLastLogin:            [''],
-      StateIDNumber:             [''],
-      StateIDExpiration:         [''],
+      stateIDNumber:             [''],
+      stateIDExpiration:         [''],
+      metrcKey:                  [''],
+      metrcPass:                 [''],
     })
     return fb
   }

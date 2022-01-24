@@ -10,7 +10,7 @@ import { AddItemByTypeComponent } from 'src/app/modules/admin/products/producted
 import { IPriceCategories, PriceTiers, ProductPrice, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { UnitTypeEditComponent } from 'src/app/modules/admin/products/unit-type-list/unit-type-edit/unit-type-edit.component';
-import { IPOSOrder, IPOSPayment, ISite, PaymentWithAction, PosOrderItem } from 'src/app/_interfaces';
+import { employee, IPOSOrder, IPOSPayment, ISite, PaymentWithAction, PosOrderItem } from 'src/app/_interfaces';
 import { ClientTypeEditComponent } from 'src/app/modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ServiceTypeEditComponent } from 'src/app/modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component';
 import { AdjustItemComponent } from 'src/app/modules/posorders/adjust/adjust-item/adjust-item.component';
@@ -29,6 +29,7 @@ import { PSMenuGroupEditComponent } from 'src/app/modules/admin/products/price-s
 import { concatMap, map } from 'rxjs/operators';
 import { Observable,  } from 'rxjs';
 import { UnitTypePromptComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
+import { EmployeeMetrcKeyEntryComponent } from 'src/app/modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
 export interface IBalanceDuePayload {
   order: IPOSOrder;
   paymentMethod: IPaymentMethod;
@@ -189,6 +190,20 @@ export class ProductEditButtonService {
     )
 
   }
+
+  openEmployeeMetrcKeyEntryComponent(data: employee) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(EmployeeMetrcKeyEntryComponent,
+      { width:        '500px',
+        minWidth:     '500px',
+        height:       '420px',
+        minHeight:    '420px',
+        data : data
+      },
+    )
+
+  }
+
 
 
   getItemForNewEditor(id: number, productTypeID: number) : Observable<IProduct> {

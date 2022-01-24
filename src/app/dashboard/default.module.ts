@@ -239,6 +239,7 @@ import { POSOrderShippingAddressComponent } from '../modules/posorders/posorder-
 import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-schedule/posorder-schedule-card/posorder-schedule-card.component';
 import { InventoryCountsViewComponent } from '../modules/admin/inventory/inventory-counts-view/inventory-counts-view.component';
 import { InventoryHeaderValuesComponent } from '../modules/admin/inventory/inventory-header-values/inventory-header-values.component';
+import { EmployeeMetrcKeyEntryComponent } from '../modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -292,6 +293,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EmployeeEditComponent,
     EmployeeFilterPanelComponent,
     EmployeeListComponent,
+    EmployeeMetrcKeyEntryComponent,
     FacilitiesListComponent,
     FlatRateEditComponent,
     FlatRateListComponent,

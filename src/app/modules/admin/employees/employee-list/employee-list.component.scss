@@ -89,7 +89,9 @@ mat-form-field{
 }
 
 .filter-panel {
-
+  height: 85%;
+  overflow-y: auto;
+  overflow-x: hidden;
   @include for-phone-only  {
     visibility: hidden;
   }

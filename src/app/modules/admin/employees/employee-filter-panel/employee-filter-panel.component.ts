@@ -1,5 +1,5 @@
 import { Component, OnInit , ViewChild, EventEmitter,Output, ElementRef} from '@angular/core';
-import { IUser, jobTypes } from 'src/app/_interfaces';
+import { employee, IUser, jobTypes } from 'src/app/_interfaces';
 import {IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeSearchModel, EmployeeService} from 'src/app/_services/people/employee-service.service';
@@ -10,6 +10,7 @@ import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { JobTypesService } from 'src/app/_services/people/job-types.service';
 import { Router } from '@angular/router';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'employee-filter-panel',
@@ -38,11 +39,12 @@ export class EmployeeFilterPanelComponent implements OnInit {
   toggleTerminated             = "1"
   printForm          : FormGroup;
   user               = {} as IUser;
-  employees$    :   Observable<IItemBasic[]>;
-  searchModel   = {} as   EmployeeSearchModel;
-  _searchModel  : Subscription;
-  jobTypes$     : Observable<jobTypes[]>;
+  employees$        :   Observable<IItemBasic[]>;
+  searchModel       = {} as   EmployeeSearchModel;
+  _searchModel      : Subscription;
+  jobTypes$         : Observable<jobTypes[]>;
 
+  isAdmin      : boolean;
   isAuthorized : boolean;
   isStaff      : boolean;
   filterForm: FormGroup;
@@ -52,6 +54,8 @@ export class EmployeeFilterPanelComponent implements OnInit {
   dateRange: string;
 
   counter: number;
+  _currentEmployee: Subscription;
+  currentEmployee: employee;
 
   //Do this next!!
   initSubscriptions() {
@@ -60,6 +64,9 @@ export class EmployeeFilterPanelComponent implements OnInit {
         if (!data) {
           this.initSearchModel();
         }
+    })
+    this._currentEmployee = this.employeeService.currentEditEmployee$.subscribe( data => {
+      this.currentEmployee = data;
     })
 
   }
@@ -72,6 +79,7 @@ export class EmployeeFilterPanelComponent implements OnInit {
       private userAuthorization       : UserAuthorizationService,
       private jobTypeService          : JobTypesService,
       private router                  : Router,
+      private productEditButtonService: ProductEditButtonService,
     )
   {
   this.initAuthorization();
@@ -93,6 +101,8 @@ export class EmployeeFilterPanelComponent implements OnInit {
   }
 
   initAuthorization() {
+    this.isAdmin =  this.userAuthorization.isUserAuthorized('admin')
+
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
   }
@@ -111,6 +121,16 @@ export class EmployeeFilterPanelComponent implements OnInit {
       if (!search.terminated) {  search.terminated  = "0";  }
       this.toggleTerminated   = search.terminated.toString();
     }
+  }
+
+  applyMetrcKey(){
+
+    if (this.currentEmployee) {
+      this.productEditButtonService.openEmployeeMetrcKeyEntryComponent(this.currentEmployee)
+    }
+    // openEmployeeMetrcKeyEntryComponent(data: employee) {
+    //   let dialogRef: any;
+    //   dialogRef = this.dialog.open(EmployeeMetrcKeyEntryComponent,
   }
 
   setJobType(event) {

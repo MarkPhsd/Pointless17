@@ -171,15 +171,13 @@ export class AddInventoryItemComponent implements OnInit {
     }
   }
 
-  getLocationAssignment(id) {
-    if (this.inventoryLocations) {
-      this.inventoryLocation = this.inventoryLocations.find(data =>
-        {
-          const item = { locationID: data.id, location: data.name}
-          this.inputForm.patchValue(item)
-        }
-      )
+  getLocationAssignment(id): IInventoryLocation {
+    const item =  this.inventoryLocations.find(data => id == data.id  )
+    if (item) {
+      this.inputForm.patchValue({locationID: item.id, location: item.name})
+      return item
     }
+    return null
   }
 
   onCancel(event) {

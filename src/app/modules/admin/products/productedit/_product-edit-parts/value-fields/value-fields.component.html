@@ -5,11 +5,23 @@
             class="mat-fields quantity"
             appearance="outline">
         <mat-label><ng-content></ng-content></mat-label>
-        <input matInput
-              [type]="fieldType"
-              [formControlName]="fieldName"
-              class="form-control" >
-      </mat-form-field>
+
+        <div *ngIf="passwordMask">
+          <input matInput
+                appAppPasswordMask
+                [type]="fieldType"
+                [formControlName]="fieldName"
+                class="form-control" >
+        </div>
+
+        <div *ngIf="!passwordMask">
+          <input matInput
+                [type]="fieldType"
+                [formControlName]="fieldName"
+                class="form-control" >
+        </div>
+
+        </mat-form-field>
     </div>
   </div>
 </div>

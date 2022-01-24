@@ -1,7 +1,19 @@
 <mat-card class="mat-card-view">
   <mat-card-content>
+
+
     <button mat-button (click)="newEmployee()">New <mat-icon>add</mat-icon></button>
     <button mat-button (click)="initSearchModel()">Reset <mat-icon>refresh</mat-icon></button>
+
+    <button *ngIf="isAdmin && currentEmployee"
+            mat-raised-button
+            (click)="applyMetrcKey()"
+            aria-label="metrc key"><mat-icon>qr_code</mat-icon>
+            METRC
+    </button>
+
+    <mat-divider></mat-divider>
+
 
     <mat-button-toggle-group
           name        ="toggleOpenClosedAll"
@@ -23,6 +35,7 @@
               Employee
       </app-mat-toggle-selector>
     </div>
+
 
   </mat-card-content>
 </mat-card>

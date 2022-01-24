@@ -27,7 +27,7 @@ import { EmployeeEditComponent } from '../employee-edit/employee-edit.component'
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
-export class EmployeeListComponent implements OnInit {
+export class EmployeeListComponent implements OnInit , AfterViewInit{
 
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
@@ -480,6 +480,7 @@ export class EmployeeListComponent implements OnInit {
       const site = this.siteService.getAssignedSite();
       this.employeeService.getEmployee(site, this.id).subscribe(data => {
          this.employee = data;
+         this.employeeService.updateCurrentEditEmployee(data)
         }
       )
     }

@@ -33,8 +33,8 @@ export class UnitTypeEditComponent implements OnInit {
     private siteService             : SitesService,
     private dialog                  : MatDialog,
     private fbPriceCategory         : FbUnitTypeService,
-    private dialogRef: MatDialogRef<UnitTypeEditComponent>,
     private unitTypeService: UnitTypesService,
+    private dialogRef: MatDialogRef<UnitTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: UnitType
     )
   {
