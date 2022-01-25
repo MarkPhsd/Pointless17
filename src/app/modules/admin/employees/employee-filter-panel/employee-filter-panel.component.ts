@@ -47,32 +47,31 @@ export class EmployeeFilterPanelComponent implements OnInit {
   isAdmin      : boolean;
   isAuthorized : boolean;
   isStaff      : boolean;
-  filterForm: FormGroup;
+  filterForm   : FormGroup;
   // calDate: IDatePicker;
-  dateFrom: Date;
-  dateTo: Date;
-  dateRange: string;
+  dateFrom     : Date;
+  dateTo       : Date;
+  dateRange    : string;
 
-  counter: number;
+  counter         : number;
   _currentEmployee: Subscription;
-  currentEmployee: employee;
+  currentEmployee : employee;
 
   //Do this next!!
   initSubscriptions() {
       this._searchModel = this.employeeService.searchModel$.subscribe( data => {
         this.searchModel  = data
+
         if (!data) {
-          this.initSearchModel();
+          this.searchModel =    this.initSearchModel();
         }
     })
     this._currentEmployee = this.employeeService.currentEditEmployee$.subscribe( data => {
       this.currentEmployee = data;
     })
-
   }
 
   constructor(
-      private _snackBar               : MatSnackBar,
       private employeeService         : EmployeeService,
       private fb                      : FormBuilder,
       private siteService             : SitesService,
@@ -86,12 +85,15 @@ export class EmployeeFilterPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.searchModel) {
+      this.searchModel =    this.initSearchModel();
+    }
+    const site = this.siteService.getAssignedSite();
+    this.jobTypes$ = this.jobTypeService.getTypes(site)
     this.initPlatForm();
     this.initSearchForm();
     this.initSubscriptions();
     this.initFormFromSearchModel();
-    const site = this.siteService.getAssignedSite();
-    this.jobTypes$ = this.jobTypeService.getTypes(site)
   }
 
   async initSearchForm() {
@@ -102,7 +104,6 @@ export class EmployeeFilterPanelComponent implements OnInit {
 
   initAuthorization() {
     this.isAdmin =  this.userAuthorization.isUserAuthorized('admin')
-
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
   }
@@ -115,10 +116,10 @@ export class EmployeeFilterPanelComponent implements OnInit {
 
   initFormFromSearchModel() {
     if (this.searchModel) {
-    const search = this.searchModel;
+      const search = this.searchModel;
       if (!search.jobTypeID) { search.jobTypeID = 0}
-      this.selectedjobTypeID          = search.jobTypeID;
-      if (!search.terminated) {  search.terminated  = "0";  }
+      this.selectedjobTypeID   = search.jobTypeID;
+      if (!search.terminated) {  search.terminated  = "1";  }
       this.toggleTerminated   = search.terminated.toString();
     }
   }
@@ -128,40 +129,34 @@ export class EmployeeFilterPanelComponent implements OnInit {
     if (this.currentEmployee) {
       this.productEditButtonService.openEmployeeMetrcKeyEntryComponent(this.currentEmployee)
     }
-    // openEmployeeMetrcKeyEntryComponent(data: employee) {
-    //   let dialogRef: any;
-    //   dialogRef = this.dialog.open(EmployeeMetrcKeyEntryComponent,
   }
 
   setJobType(event) {
     if (!event) { return }
     if (! this.searchModel) {  this.searchModel = {} as EmployeeSearchModel  }
     this.searchModel.jobTypeID = event.id
+    this.selectedjobTypeID = event.id;
     this.refreshSearch()
   }
 
-  initSearchModel() {
-
+  initSearchModel(): EmployeeSearchModel {
     const site = this.siteService.getAssignedSite()
-    this.searchModel = {} as EmployeeSearchModel
-
-    this.employeeService.updateSearchModel(this.searchModel)
+    if (!this.searchModel) {
+      this.searchModel = {} as EmployeeSearchModel
+      this.searchModel.pageNumber = 1;
+      this.searchModel.pageSize   = 25;
+    }
 
     this.searchModel.terminated  = this.toggleTerminated
-
-    this.searchModel.pageNumber = 1;
-    this.searchModel.pageSize   = 25;
-
-    this.initSearchForm();
+    this.searchModel.jobTypeID   = this.selectedjobTypeID;
 
     return this.searchModel
   }
 
   refreshSearch() {
-    this.initSearchModel()
-    const search = this.searchModel;
+    const search = this.initSearchModel()
+    console.log('outputing search model', search);
     this.employeeService.updateSearchModel( search )
-    this.outputRefreshSearch.emit('true');
   }
 
   newEmployee() {

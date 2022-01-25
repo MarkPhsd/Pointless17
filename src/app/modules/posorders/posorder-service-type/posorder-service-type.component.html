@@ -1,9 +1,9 @@
 
 <mat-card class="card-dimensions">
   <mat-card-content>
-    <ng-content></ng-content> : {{order?.serviceType}}
+  <ng-content></ng-content> : {{order?.serviceType}}
   <app-mat-toggle-selector
-        class              ="card-height"
+        [class]            = "'card-height'"
         [list$]            = "serviceTypes$"
         [hideAllOption]    = "'true'"
         [toggleDimensions] = "'toggle-group-tall'"
@@ -16,7 +16,7 @@
 
 <div *ngIf="!platFormService.isApp()">
   <div *ngFor="let item of serviceTypes">
-    <div *ngIf="item.instructions">
+    <div *ngIf="item.instructions" class="instructions">
       <h3>{{item.name}}</h3>
       <mat-hint>
         <div [innerHTML]="item.instructions" ></div>

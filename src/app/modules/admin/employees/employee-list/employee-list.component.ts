@@ -21,13 +21,29 @@ import { BalanceSheetSearchModel, IBalanceSheet} from 'src/app/_services/transac
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { EmployeeEditComponent } from '../employee-edit/employee-edit.component';
+import { toNamespacedPath } from 'path/win32';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
+export interface rowItem {
+  field: string,
+  cellRenderer: string,
+  cellRendererParams: any;
+  minWidth: number;
+  maxWidth: number;
+  width   : number;
+  flex: number;
+  headerName: string;
+  sortable: boolean;
+}
 @Component({
   selector: 'employee-list',
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
 export class EmployeeListComponent implements OnInit , AfterViewInit{
+
+
+
 
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
@@ -79,7 +95,7 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
   //search form filters
   searchForm:        FormGroup;
   inputForm        : FormGroup;
-
+  jobTypeID     : number;
   selected        : any[];
   selectedRows    : any;
   agtheme         = 'ag-theme-material';
@@ -101,6 +117,7 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
   constructor(  private _snackBar               : MatSnackBar,
                 private employeeService         : EmployeeService,
                 private fb                      : FormBuilder,
+                private productEditButtonService: ProductEditButtonService,
                 private siteService             : SitesService,
                 private agGridFormatingService  : AgGridFormatingService,
                 private awsService              : AWSBucketService,
@@ -154,7 +171,6 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
 
   ngAfterViewInit() {
     if (this.input) {
-      console.log('ngAfterViewInit refreshInputHook')
       fromEvent(this.input.nativeElement,'keyup')
       .pipe(
         filter(Boolean),
@@ -169,21 +185,26 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
     }
   }
 
+
   initSubscriptions() {
     try {
       this._searchModel = this.employeeService.searchModel$.subscribe( data => {
-        this.searchModel            = data
+          this.searchModel            = data
+
           if (!this.searchModel) {
             const searchModel       = {} as EmployeeSearchModel;
             this.currentPage        = 1
+            searchModel.terminated  = "1"
             searchModel.pageNumber  = 1;
             searchModel.pageSize    = 25;
             this.searchModel        = searchModel
           }
+          this.refreshSearch_sub()
         }
       )
+
     } catch (error) {
-      console.log('init subscription error', error)
+
     }
   }
 
@@ -199,57 +220,74 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
       flex: 2,
     };
 
-    this.columnDefs =  [
-      {
+
+     let item  =   {
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
                         onClick: this.editItemWithId.bind(this),
                         label: 'Edit',
-                        getLabelFunction: this.getLabel.bind(this),
+                        getLabelFunction: this.getLabel.bind(this, 'Edit'),
                         btnClass: 'btn btn-primary btn-sm'
                       },
                       minWidth: 125,
                       maxWidth: 125,
+                      width   : 100,
                       flex: 2,
-      },
-      {headerName: 'ID',     field: 'id',         sortable: true,
+                      headerName: '',
+                      sortable: false,
+      } as rowItem
+      this.columnDefs.push(item);
+
+      const site = this.siteService.getAssignedSite();
+      if (site.metrcURL && site.metrcKey.length>1) {
+
+        let item  =   {
+          field: 'id',
+          cellRenderer: "btnCellRenderer",
+                        cellRendererParams: {
+                            onClick: this.applyMetrcKey.bind(this),
+                            label: 'METRC',
+                            getLabelFunction: this.getLabel.bind(this, 'METRC'),
+                            btnClass: 'btn btn-primary btn-sm'
+                          },
+                          minWidth: 125,
+                          maxWidth: 125,
+                          width   : 100,
+                          flex: 2,
+                          headerName: '',
+                          sortable: false,
+          } as rowItem
+
+          this.columnDefs.push(item);
+      }
+
+
+
+      item =   {headerName: 'Last Name',     field: 'lastName', sortable: true,
+        width   : 100,
+        minWidth: 200,
+        maxWidth: 200,
+        flex    : 2,
+      } as any
+      this.columnDefs.push(item);
+
+      item =   {headerName: 'First Name',     field: 'firstName', sortable: true,
+        width   : 100,
+        minWidth: 200,
+        maxWidth: 200,
+        flex    : 2,
+      } as any
+      this.columnDefs.push(item);
+
+      item =   {headerName: 'Termination',     field: 'terminationDate', sortable: true,
           width   : 100,
-          minWidth: 100,
-          maxWidth: 100,
+          minWidth: 200,
+          maxWidth: 200,
           flex    : 2,
-      },
-      {headerName: 'Last Name',     field: 'lastName', sortable: true,
-        width   : 100,
-        minWidth: 200,
-        maxWidth: 200,
-        flex    : 2,
-      },
-      {headerName: 'First Name',     field: 'firstName', sortable: true,
-        width   : 100,
-        minWidth: 200,
-        maxWidth: 200,
-        flex    : 2,
-      },
-      {headerName: 'Termination',     field: 'terminationDate', sortable: true,
-        width   : 100,
-        minWidth: 200,
-        maxWidth: 200,
-        flex    : 2,
-     },
-      // {headerName: 'Termination',     field: 'jobType.name',         sortable: true,
-      //              width   : 100,
-      //             minWidth: 100,
-      //             maxWidth: 150,
-      //             flex    : 1,
-      // },
-      // {headerName: 'Termination',     field: 'terminationDate',         sortable: true,
-      //              width   : 100,
-      //             minWidth: 100,
-      //             maxWidth: 150,
-      //             flex    : 1,
-      // },
-    ]
+      } as any
+      this.columnDefs.push(item);
+
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
@@ -275,28 +313,42 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
   initSearchModel(): EmployeeSearchModel {
+
     let searchModel        = {} as EmployeeSearchModel;
+    searchModel.jobTypeID  = 0
+    searchModel.pageSize   = this.pageSize
+    searchModel.pageNumber = this.currentPage
+    searchModel.terminated = "1"
+
+    if (this.jobTypeID && this.jobTypeID !=0 ) {
+      searchModel.jobTypeID  = this.jobTypeID;
+    }
+
     if (this.searchModel) {
       searchModel = this.searchModel
     }
-    searchModel.pageSize   = this.pageSize
-    searchModel.pageNumber = this.currentPage
-    this.employeeService.updateSearchModel(searchModel)
+
     return searchModel
   }
 
   refreshSearchAny(event) {
-    this.refreshSearch();
+
+    this.employeeService.searchModel$.subscribe(data => {
+      this.searchModel = data;
+      console.log('update search', data)
+      return this.refreshSearch_sub()
+    })
+
   }
 
   //this is called from subject rxjs obversablve above constructor.
-  refreshSearch(): Observable<BalanceSheetSearchModel> {
-    this.currentPage         = 1
-    const searchModel = this.initSearchModel();
+  refreshSearch(): Observable<EmployeeSearchModel> {
+    // this.currentPage         = 1
+    const searchModel        = this.initSearchModel();
     return this.refreshSearch_sub()
   }
 
-  refreshSearch_sub(): Observable<BalanceSheetSearchModel> {
+  refreshSearch_sub(): Observable<EmployeeSearchModel> {
     if (this.params){
       this.params.startRow     = 1;
       this.params.endRow       = this.pageSize;
@@ -353,13 +405,16 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<EmployeeSearchResults>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
+    this.searchModel.currentPage = this.currentPage;
     const searchModel         = this.initSearchModel();
+    console.log('search Model get row data', searchModel)
     const site                = this.siteService.getAssignedSite()
     return this.employeeService.getEmployeeBySearch(site, searchModel)
   }
 
   //ag-grid standard method
   async onGridReady(params: any) {
+    if (!params) { return }
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
@@ -367,6 +422,7 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
       params.api.sizeColumnsToFit();
       this.autoSizeAll(false)
     }
+
     this.onFirstDataRendered(this.params)
 
     // if (!params) { return }
@@ -469,13 +525,15 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
     selectedRowsString +=
       ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
-    // document.querySelector('#selectedRows').innerHTML = selectedRowsString;
-    this.selected = selected
-    this.id = selectedRows[0].id;
-    this.getItem(this.id)
+    if (selected) {
+      this.selected = selected
+      this.id = selectedRows[0].id;
+      this.getItem(this.id)
+    }
   }
 
   getItem(id: number) {
+    this.employeeService.updateCurrentEditEmployee(null);
     if (id) {
       const site = this.siteService.getAssignedSite();
       this.employeeService.getEmployee(site, this.id).subscribe(data => {
@@ -490,11 +548,14 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
     this.gridApi.exportDataAsCsv();
   }
 
-  getLabel(rowData)
+
+
+  getLabel(rowData, name: string)
   {
-    if(rowData && rowData.hasIndicator)
-      return 'Edit';
-      else return 'Edit';
+    if(rowData && rowData.hasIndicator){
+      console.log('name', name)
+      return name
+    }
   }
 
   onBtnClick1(e) {
@@ -515,6 +576,19 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
     // const sheet = await this.balanceSheetService.getSheet(site, id).pipe().toPromise();
     // this.balanceSheetService.updateBalanceSheet(sheet)
     this.router.navigate(['/employee-edit', {id:item.rowData.id}]);
+  }
+
+  applyMetrcKey(item:any){
+    if(!item) {
+      console.log(item)
+      return
+    }
+    const id   = item.rowData.id;
+    const site = this.siteService.getAssignedSite()
+    this.employeeService.getEmployee(site, id).subscribe(data => {
+       this.employeeService.updateCurrentEditEmployee(data)
+       this.productEditButtonService.openEmployeeMetrcKeyEntryComponent(data)
+    })
   }
 
   onSortByNameAndPrice(sort: string) { }

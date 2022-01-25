@@ -1,6 +1,6 @@
 import { Component,  Input,  OnInit, OnDestroy} from '@angular/core';
 import { AWSBucketService, MenuService, OrdersService, UserService } from 'src/app/_services';
-import { IMenuItem  }  from 'src/app/_interfaces/menu/menu-products';
+import { IMenuItem,   }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject, Subscription } from 'rxjs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
@@ -13,6 +13,11 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
+import { T } from '@angular/cdk/keycodes';
+import { ITVMenuPriceTiers, TVMenuPriceTierItem, TvMenuPriceTierService, IFlowerMenu } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
+import { switchMap } from 'rxjs/operators';
+import { PriceTiers } from 'src/app/_interfaces/menu/price-categories';
 
 // https://www.npmjs.com/package/ngx-gallery
 
@@ -52,6 +57,11 @@ export class MenuitemComponent implements OnInit,OnDestroy {
     spinnerMode             = 'determinate';
     @Input() user:          IUserProfile;
 
+    flowerMenu   : IFlowerMenu;
+    priceTiers   : PriceTiers
+
+    childNotifier : Subject<boolean> = new Subject<boolean>();
+
     constructor(private menuService: MenuService,
           private router            : Router,
           public route              : ActivatedRoute,
@@ -65,23 +75,58 @@ export class MenuitemComponent implements OnInit,OnDestroy {
           private userAuthorization : UserAuthorizationService,
           private orderMethodsService : OrderMethodsService,
           private appInitService    : AppInitService,
-          private titleService      : Title,
+          private priceTierService  : PriceTierService,
+           private titleService     : Title,
+          private tierPriceService  : TvMenuPriceTierService,
+
          )
     {
       this.roles = localStorage.getItem(`roles`)
       this.isUserStaff = this.userAuthorization.isCurrentUserStaff()
-
-      this.id = this.route.snapshot.paramMap.get('id');
-      this.getItem(this.id);
+      this.initMenuItemWindow();
     }
 
-    childNotifier : Subject<boolean> = new Subject<boolean>();
+    initMenuItemWindow() {
+      const site = this.siteService.getAssignedSite();
+
+      this.tierPriceService.tierFlowerMenu$.pipe(
+        switchMap( data => {
+          this.flowerMenu = data;
+          return  this.priceTierService.getPriceTier(site,  data.priceTierID)
+          }
+        )).subscribe(data => {
+          this.priceTiers = data;
+      })
+
+      this.menuService.currentMeuItem$.subscribe( data=> {
+        if (data) {
+          this.menuItem = data;
+          this.setMenuItem(data)
+          return
+        }
+      })
+
+      if ( this.route.snapshot.paramMap.get('id') ) {
+        this.id = this.route.snapshot.paramMap.get('id');
+        this.getItem(this.id);
+      }
+    }
+
+    //   this.tvMenuPriceTierService.updateTierFlowerMenu(flower)
+    // updateTier(tier: ITVMenuPriceTiers){
+    //   this._tier.next(tier)
+    // }
+
+    // updateTierFlowerMenu(tier: IFlowerMenu){
+    //   this._tierFlowerMenu.next(tier)
+    // }
 
     async ngOnInit() {
       this.quantity = 1
       this.initProductForm();
       this.initSubscriptions();
     };
+
 
     initProductForm() {
       this.productForm = this.fb.group({
@@ -95,7 +140,7 @@ export class MenuitemComponent implements OnInit,OnDestroy {
 
     initSubscriptions() {
       try {
-        console.log('initSubscriptions')
+        // console.log('initSubscriptions')
         this._order = this.orderService.currentOrder$.subscribe( data => {
           this.order = data
         })
@@ -105,7 +150,7 @@ export class MenuitemComponent implements OnInit,OnDestroy {
 
     async addItemToOrder() {
       if (this.order) {
-        console.log('posOrderItemService addItemToOrder line 103')
+        // console.log('posOrderItemService addItemToOrder line 103')
         this.orderMethodsService.addItemToOrder(this.order, this.menuItem, this.quantity)
       }
     }
@@ -125,15 +170,24 @@ export class MenuitemComponent implements OnInit,OnDestroy {
 
     getItem(id: any) {
       const site     = this.siteService.getAssignedSite();
-      const menuItem$ = this.menuService.getMenuProduct(site,id)
-      menuItem$.subscribe(data => {
-          this.menuItem = data;
-          this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
-          this.brand$ = this.brandService.getClient(site, data.brandID)
-          this.packagingMaterial = this.menuService.getPackagingMaterialArray(data)
-        }
-      )
+      if (id != null && id != undefined) {
+        const menuItem$ = this.menuService.getMenuProduct(site,id)
+        menuItem$.subscribe(data => {
+            this.setMenuItem(data)
+          }
+        )
+      }
     };
+
+    setMenuItem(menuItem: IMenuItem) {
+      this.menuItem = menuItem;
+      if (menuItem) {
+        const site     = this.siteService.getAssignedSite();
+        this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
+        this.brand$ = this.brandService.getClient(site, menuItem.brandID)
+        this.packagingMaterial = this.menuService.getPackagingMaterialArray(menuItem)
+      }
+    }
 
     addItemByCode(item) {
       if (item) {

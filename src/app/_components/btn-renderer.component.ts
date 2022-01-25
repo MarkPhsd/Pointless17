@@ -45,7 +45,6 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
 
       this.label = this.getLabelFunction(params.data);
 
-      // console.log(this.label)
       if (this.label ==='Intake') {
         this.icon = 'inventory'
         return
@@ -70,7 +69,10 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
         // this.icon = 'add'
         return
       }
-
+      if (this.label === 'METRC') {
+        this.icon = 'qr_code'
+        return
+      }
 
     }
   }

@@ -18,6 +18,7 @@ import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-seri
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { PrintingService } from '../system/printing.service';
+import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 
 export interface ProcessItem {
   order: IPOSOrder;
@@ -134,6 +135,35 @@ export class OrderMethodsService {
       this.listItem(item.id);
     }
   }
+
+    //determines if the users action will add the item or view the item on the order.
+    menuItemActionPopUp(order: IPOSOrder, item: IMenuItem, add: boolean) {
+      if (add) {
+        this.addItemToOrder(order, item, 1)
+        return
+      }
+      if (!add) {
+        this.openPopupItem()
+      }
+    }
+
+
+    openPopupItem() {
+
+      const dialogRef = this.dialog.open(MenuItemModalComponent,
+        {
+          width:     '90vw',
+          height:    '90vh',
+          maxHeight: '90vh',
+        },
+      )
+
+      dialogRef.afterClosed().subscribe(result => {
+        return result;
+      });
+    }
+
+
 
   listItem(id:number) {
     this.router.navigate(["/menuitem/", {id:id}]);

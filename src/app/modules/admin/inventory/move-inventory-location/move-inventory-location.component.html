@@ -28,9 +28,9 @@
 
     <div class="grid-container">
       <div  *ngIf="existingItem">
-        <h4>Existing</h4>
+        <h4>Change Existing</h4>
         <div class="grid-container">
-          <div class="labels">Base Change QTY </div>
+          <div class="labels">Base  QTY </div>
           <div class="fields">{{existingItem.baseQuantityRemaining.toFixed(2)}}</div>
           <div class="labels">Packages</div>
           <div class="fields">{{existingItem.packageCountRemaining.toFixed(2)}}</div>
@@ -85,7 +85,7 @@
   <mat-card-footer>
     <button mat-button mat-raised-button
             color="primary"
-            (click)="onCancel()">Cancel
+            (click)="onCancel(false)">Cancel
     </button>
     <button mat-button mat-raised-button
             color="primary"

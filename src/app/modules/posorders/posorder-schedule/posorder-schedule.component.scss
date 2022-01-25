@@ -1,27 +1,30 @@
 @import "/src/mixins.scss";
 
+mat-card {
+  width: 450px;
+
+  @include for-phone-only  {
+    width: 350px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
 #customer-notes {
   margin:  5;
   object-fit: cover;
-  width: 400px;
+  // width: 400px;
 }
-
-grid-container {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  gap: 10px;
-
-}
-
-// mat-car
 
 .grid-container {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
   // grid-template-columns: repeat(2, 1fr);
-  grid-template-columns: repeat( auto-fit, minmax(400px, 1fr) );
-  grid-auto-flow:dense;
+  grid-template-columns: repeat( auto-fit, minmax(350, 1fr) );
 
   @include for-phone-only  {
     display: flex;
@@ -35,4 +38,14 @@ grid-container {
 
 .item {
   margin: 5px;
+}
+
+.sale-type-tab {
+  overflow  : hidden;
+  height    : 350px;
+  max-height: 350px;
+}
+
+mat-tab {
+  overflow: hidden;
 }

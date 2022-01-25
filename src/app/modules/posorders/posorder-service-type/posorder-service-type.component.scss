@@ -1,4 +1,16 @@
 
 .card-dimensions {
-  width: 400px;
+  // width: 400px;
+  // height: 400px;
+}
+
+mat-card {
+  height    : 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.instructions {
+  margin-bottom: 5px;
+  margin-top: 5px;
 }

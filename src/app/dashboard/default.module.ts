@@ -240,6 +240,7 @@ import { POSOrderScheduleCardComponent } from '../modules/posorders/posorder-sch
 import { InventoryCountsViewComponent } from '../modules/admin/inventory/inventory-counts-view/inventory-counts-view.component';
 import { InventoryHeaderValuesComponent } from '../modules/admin/inventory/inventory-header-values/inventory-header-values.component';
 import { EmployeeMetrcKeyEntryComponent } from '../modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
+import { TierPriceLineComponent } from '../modules/menu/tierMenu/tiers-with-prices/tier-price-line/tier-price-line.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -439,6 +440,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TaxRateListComponent,
     TierMenuComponent,
     TierItemsComponent,
+    TierPriceLineComponent,
     TierPricesComponent,
     TiersWithPricesComponent,
     TimeScheduleComponent,

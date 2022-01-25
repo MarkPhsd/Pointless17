@@ -1,0 +1,27 @@
+<div *ngIf="tier" class="description">
+  <div>
+    {{tier.name}}
+  </div>
+
+  <div *ngIf="!menuPopup && !priceTiers">
+    <div  class="prices"
+          *ngFor="let item of tier.tvMenuPriceTierItems">
+        {{ item?.currentPrice | currency }}
+    </div>
+  </div>
+
+  <div *ngIf="menuPopup && priceTiers">
+
+    <div  class="prices"
+          *ngFor="let item of priceTiers.priceTierPrices">
+
+      <button mat-raised-button
+            color="warn"
+            (click)="addItem(item)">
+          <mat-icon>add</mat-icon>
+          {{item.flatQuantity}} @ {{ item?.currentPrice | currency }}
+      </button>
+
+    </div>
+  </div>
+</div>

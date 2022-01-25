@@ -110,23 +110,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
 
-  openDialog() {
-    const dialogConfig = [
-      { data: { id: this.id } }
-    ]
-    const dialogRef = this.dialog.open(MenuItemModalComponent,
-      {
-        width:     '90vw',
-        maxWidth:  '1000px',
-        height:    '90vh',
-        maxHeight: '90vh',
-        data : {id: this.id}
-      },
-    )
-    dialogRef.afterClosed().subscribe(result => {
-      return result;
-    });
-  }
 
 
   notifyEvent(message: string, action: string) {

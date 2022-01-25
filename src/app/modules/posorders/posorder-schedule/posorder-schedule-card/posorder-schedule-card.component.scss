@@ -1,20 +1,27 @@
+@import "/src/mixins.scss";
 .grid-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
-  // grid-auto-flow:dense;
-
-  // @include for-phone-only  {
-  //   display: grid;
-  //   grid-template-columns: 1fr;
-  //   gap: 5px;
-  // }
-}
-
-mat-card {
-  width: 325px;
 }
 
 .grid-item-span {
   grid-column-end: span 2;
+}
+
+mat-card {
+  width     : 100%;
+  min-width : 335px;
+  max-width : 335px;
+  min-height: 155px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    width      : 335px;
+    min-width : 335px;
+    max-width : 335px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }

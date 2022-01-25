@@ -1,16 +1,20 @@
 
-<ng-template #loading><mat-spinner [diameter]="75"></mat-spinner> </ng-template>
+<ng-template #loading><mat-spinner
+          [diameter]="75"></mat-spinner>
+</ng-template>
+
 <div *ngIf="menuItem; else loading"
       class="gallery-container">
-    <mat-card >
+
+    <mat-card>
+
       <mat-card-title class="exit">
 
       </mat-card-title>
+
       <mat-card-subtitle >
         <div class="grid">
-
           <div class="grid-header">
-
             <div class="grid-demographics">
                 <div class="item-span" >
                   <span *ngIf="menuItem && menuItem.species"  >
@@ -63,7 +67,17 @@
 
                 <div class="grid-save-add-buttons"
                      *ngIf="menuItem && menuItem.itemType
-                      && !menuItem.itemType.requireInStock">
+                            &&  priceTiers">
+                    <tier-price-line
+                        [menuPopup]="true"
+                        [priceTiers]="priceTiers">
+                    </tier-price-line>
+                </div>
+
+                <div class="grid-save-add-buttons"
+                     *ngIf="menuItem && menuItem.itemType
+                      && !menuItem.itemType.requireInStock
+                      && !priceTiers">
 
                       <div id="addToWishList">
                       <button mat-raised-button
@@ -105,6 +119,10 @@
                             mat-raised-button color="accent"
                             (click)="packaging=item">{{item}}</button>
                   </div>
+                </div>
+
+                <div  class="mat-packaging"
+                      *ngIf="packagingMaterial && packagingMaterial.length>0">
                 </div>
 
                 <div class="mat-packaging"

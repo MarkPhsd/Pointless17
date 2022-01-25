@@ -1,7 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ISite, UnitType } from 'src/app/_interfaces';
 import { AuthenticationService } from '..';
 import { SitesService } from '../reporting/sites.service';
@@ -36,16 +36,32 @@ export interface TVMenuPriceTierItem {
 }
 
 export interface IFlowerMenu {
-  id:        number;
-  flower:    string;
-  priceTier: string;
+  id         : number;
+  flower     : string;
+  priceTier  : string;
+  priceTierID: number;
 }
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class TvMenuPriceTierService {
+
+  private _tier = new BehaviorSubject<ITVMenuPriceTiers>(null);
+  public tier$  = this._tier.asObservable();
+
+  private _tierFlowerMenu = new BehaviorSubject<IFlowerMenu>(null);
+  public tierFlowerMenu$  = this._tierFlowerMenu.asObservable();
+
+
+  updateTier(tier: ITVMenuPriceTiers){
+    this._tier.next(tier)
+  }
+
+  updateTierFlowerMenu(tier: IFlowerMenu){
+    this._tierFlowerMenu.next(tier)
+  }
+
 
   constructor( private http: HttpClient,
                private auth: AuthenticationService,
@@ -76,6 +92,20 @@ export class TvMenuPriceTierService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.get<IFlowerMenu[]>(url)
+
+  }
+
+  getPriceTierByID(site: ISite, id: number):  Observable<ITVMenuPriceTiers>  {
+
+    const controller =  `/TVMenuPriceTiers/`
+
+    const endPoint = `GetFlowers?id=${id}`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<ITVMenuPriceTiers>(url)
 
   }
 

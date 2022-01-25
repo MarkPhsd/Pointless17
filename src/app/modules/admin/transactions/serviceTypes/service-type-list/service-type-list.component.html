@@ -46,7 +46,7 @@
     </ag-grid-angular>
   </div>
 
-  <div class='service-type-default'>
+  <div class='service-type-default' *ngIf="serviceType$">
     <app-mat-toggle-selector
         [list$]="serviceType$"
         [id]="defaultID"

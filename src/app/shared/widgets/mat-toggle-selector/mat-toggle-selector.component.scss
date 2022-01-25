@@ -1,16 +1,20 @@
-// mat-button-toggle {
-//   width    : 165px;
-//   max-width: 165px;
-//   min-width: 165px;
-//   margin-left: 5px;
-// }
+@import "/src/mixins.scss";
+
 
 .toggle-buttons-wide {
   // width    : 300px;
   // max-width: 300px;
   // min-width: 300px;
+
   width: 95%;
   margin-left: 5px;
+
+  @include for-phone-only  {
+    max-width: 350px;
+    width:  325px;
+
+  }
+
 }
 
 .button-dimensions {
@@ -20,12 +24,25 @@
 .button-dimensions-tall {
   height: 75px;
   margin-bottom: 5px;
+
+
 }
 
 .mat-button-toggle  {
   height: 60px;
 }
 
+.toggle-buttons-height {
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    max-width: 350px;
+    width:  325px;
+
+  }
+}
 .toggle-buttons {
   // width    :  185px;
   // max-width:  185px;
@@ -34,6 +51,12 @@
   align-content: center;
   width: 95%;
   margin-left: 5px;
+
+  @include for-phone-only  {
+    max-width: 350px;
+    width:  325px;
+
+  }
 }
 
 .grid-item {
@@ -49,20 +72,52 @@
 
 .toggle-group {
   width: 100%;
-  // height: 240px;
+  height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
+
+  @include for-phone-only  {
+    max-width: 275px;
+    width:  275px;
+
+  }
 }
+
+.toggle-group-short {
+  width: 100%;
+  height: 450h;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  @include for-phone-only  {
+    max-width: 275px;
+    width:  275px;
+
+  }
+}
+
 
 .toggle-group-tall {
   width: 385px;
-  // height: 385px;
+  height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
+
+  @include for-phone-only  {
+    max-width: 275px;
+    width:  275px;
+
+  }
 }
 
 mat-button-toggle-group {
   width: 100%;
+
+  @include for-phone-only  {
+    max-width: 275px;
+    width:  275px;
+
+  }
 }
 
 mat-button-toggle {
@@ -71,4 +126,5 @@ mat-button-toggle {
   align-items: center;
   flex-direction: row;
   display: flex;
+
 }

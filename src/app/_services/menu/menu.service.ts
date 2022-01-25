@@ -55,6 +55,12 @@ export class MenuService {
   private _menuItemsData       = new BehaviorSubject<ProductSearchModel>(null);
   public  menuItemsData$       = this._menuItemsData.asObservable();
 
+  private _currentMeuItem  = new BehaviorSubject<IMenuItem>(null);
+  public currentMeuItem$          = this._currentMeuItem.asObservable();
+
+
+
+
   site: ISite;
   constructor(
               private httpCache: HttpClientCacheService,
@@ -85,6 +91,11 @@ export class MenuService {
   updateMeunuItemData(items: ProductSearchModel) {
     this._menuItemsData.next(items);
   }
+
+  updateCurrentMenuItem(menuItem: IMenuItem) {
+    this._currentMeuItem.next(menuItem);
+  }
+
 
   showSearch(value:any)
   {

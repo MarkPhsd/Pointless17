@@ -17,7 +17,8 @@
       </div>
 
       <div class="grid-header-item">
-        <posorder-schedule-card></posorder-schedule-card>
+        <posorder-schedule-card>
+        </posorder-schedule-card>
       </div>
 
     </div>
@@ -71,7 +72,6 @@
             <div class="grid-header-item" *ngIf="stepSelection == 2">
               <mat-card class="card-dimensions">
                 <mat-card-content>
-
                   <div class="item-container"  *ngIf="paymentMethod">
                     <div>
                       <h4>
@@ -202,6 +202,7 @@
                 </mat-card-content>
               </mat-card>
             </div>
+
             <div *ngIf="!platFormService.isApp()">
               <div *ngFor="let item of (paymentMethods$ | async)">
                 <div *ngIf="item.id  == paymentMethod.id &&  item.instructions">
@@ -227,23 +228,3 @@
     </div>
   </div>
 </div>
-
-<!--
-Payment Method List - list of tenders
-
-Make Payment - button expands number pad.
-			   Allows for using enabled Method.
-
-Split By Item
-
-Split by Quantity button expands number pad. Prints # of Receipts with Split Amount.
-
-Print Check Button
-
-Input Value - KeyPad
-
-Quick Cash Payment Amount
-
-5, 10, 20 50 buttons.
-
- -->

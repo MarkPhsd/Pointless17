@@ -25,7 +25,9 @@
                   *ngFor="let flower of (flowers$ | async)" >
               <span *ngIf="flower.priceTier === header && flower.flower.length>0">
                 <div  class="grid-item" >
-                  {{flower.flower}}
+                  <button mat-button (click)="navMenuItem(flower)">
+                    {{flower.flower}}
+                  </button>
                 </div>
               </span>
             </ng-container>

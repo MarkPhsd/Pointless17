@@ -4,9 +4,6 @@
     <div fxLayout="column"
          fxLayoutAlign="center center"
          class="row-height">
-        <!-- <img [src]="logo"
-             [alt]="company"
-             class="logo"> -->
     </div>
   </mat-card-title>
 
@@ -16,18 +13,9 @@
       (outPutSetPriceTier)="setPriceTier($event)">
     </tiers-with-prices>
 
-    <!-- <div fxLayout="column"
-         fxLayoutAlign="center center" class="row-height">
-      <div  fxLayout="row"
-            class="itemlist"
-            fxlayoutGap="20px"
-            class="stat-cards"> -->
         <app-tier-items
               [priceTier]="priceTier"
         ></app-tier-items>
-      <!-- </div>
-    </div> -->
-
   </mat-card-content>
 </mat-card>
 

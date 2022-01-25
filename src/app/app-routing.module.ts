@@ -216,7 +216,7 @@ const routes: Routes = [
         { path: 'client-type-edit', component: ClientTypeEditComponent, canActivate: [AuthGuard], data: {  title: 'Client Type Edit',  animation: 'isLeft'} },
 
         //transaction settings
-        { path: 'service-type-list', component: ServiceTypeListComponent, canActivate: [AuthGuard], data: { title: 'Servce Type',  animation: 'isLeft'} },
+        { path: 'service-type-list', component: ServiceTypeListComponent, canActivate: [AuthGuard], data: { title: 'Service Type List',  animation: 'isLeft'} },
         { path: 'service-type-edit', component: ServiceTypeEditComponent, canActivate: [AuthGuard], data: {  title: 'Service Type Edit', animation: 'isLeft'} },
 
         //edit payment settings

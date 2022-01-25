@@ -1,7 +1,9 @@
 import { Component, Input, OnChanges, OnInit, SimpleChange,  } from '@angular/core';
 import { Observable,  } from 'rxjs';
-import { IFlowerMenu,  TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { MenuService } from 'src/app/_services/menu/menu.service';
+import { IFlowerMenu,  ITVMenuPriceTiers,  TVMenuPriceTierItem,  TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-tier-items',
@@ -16,8 +18,13 @@ export class TierItemsComponent implements OnInit {
   flowers$: Observable<IFlowerMenu[]>;
   flowers : IFlowerMenu[]
 
+  // id:   priceTier: flower.priceTier
+
   constructor(private tvMenuPriceTierService: TvMenuPriceTierService,
-              private siteService:            SitesService,
+              private siteService:              SitesService,
+              private menuService             : MenuService,
+              private orderMethodsService     : OrderMethodsService,
+
               ) {
       }
 
@@ -44,5 +51,18 @@ export class TierItemsComponent implements OnInit {
       )
     }
   }
+
+  navMenuItem(flower: IFlowerMenu) {
+    if (flower) {
+      this.tvMenuPriceTierService.updateTierFlowerMenu(flower)
+
+      const site = this.siteService.getAssignedSite();
+      this.menuService.getMenuItemByID(site, flower.id).subscribe(data => {
+        this.menuService.updateCurrentMenuItem(data)
+        this.orderMethodsService.menuItemActionPopUp(null, data, false)
+      })
+    }
+  }
+
 
 }

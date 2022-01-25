@@ -120,7 +120,6 @@ export class MoveInventoryLocationComponent implements OnInit {
 
     if (this.inventoryAssignment.packageCountRemaining != this.quantityMoving) {
       if (this.inventoryAssignment.packageCountRemaining >= this.quantityMoving) {
-        console.log('copying to new package')
         await this.copyToNewPackage()
         return
       }
@@ -136,7 +135,7 @@ export class MoveInventoryLocationComponent implements OnInit {
   async getMovingPackageCounts(): Promise<IInventoryAssignment[]> {
 
     this.newItem                       = await this.inventoryAssignment$.pipe().toPromise() //(data=>{ this.newItem = data })
-    console.log('this new item', this.newItem)
+
     //the new item will start with what the old item currently has
     this.newItem.baseQuantity          = this.newItem.baseQuantityRemaining
     this.newItem.packageQuantity       = this.newItem.packageCountRemaining
@@ -144,14 +143,17 @@ export class MoveInventoryLocationComponent implements OnInit {
     //to remove the base of the original package.
     const newBaseQuantity              = this.newItem.baseQuantityRemaining
 
-    const  baseCalculated              = this.newItem.unitMulitplier * this.quantityMoving * this.newItem.jointWeight;
+    const  baseCalculated              = (this.newItem.unitMulitplier * this.quantityMoving) * this.newItem.jointWeight;
     const  baseQuantityToMove          = baseCalculated;
     const  newPackageQuantity          = this.quantityMoving;
+
 
     this.newItem.baseQuantity          = baseQuantityToMove;
     this.newItem.baseQuantityRemaining = baseQuantityToMove;
     this.newItem.packageQuantity       = newPackageQuantity;
     this.newItem.packageCountRemaining = newPackageQuantity;
+
+    console.log('newPackageQuantity', newPackageQuantity)
 
     const item = await this.setLocation(this.newItem);
     if (item) {  this.newItem = item; }
@@ -159,14 +161,20 @@ export class MoveInventoryLocationComponent implements OnInit {
     this.newItem.id                         = 0;
     this.existingItem                       = await this.inventoryAssignment$.pipe().toPromise();
     const existingBase                      = this.existingItem.baseQuantity;
+    console.log('Base Quantity', this.existingItem.baseQuantity, existingBase, baseQuantityToMove)
     this.existingItem.baseQuantity          = existingBase;
     this.existingItem.baseQuantityRemaining = existingBase - baseQuantityToMove;
+
+    console.log('Package Quantity', this.existingItem.packageQuantity, newPackageQuantity)
     this.existingItem.packageQuantity       = this.existingItem.packageQuantity       - newPackageQuantity;
     this.existingItem.packageCountRemaining = this.existingItem.packageCountRemaining - newPackageQuantity;
 
     const packages = [] as IInventoryAssignment[];
     packages.push(this.existingItem)
     packages.push(this.newItem)
+
+    //change
+    // return;
     return packages
   }
 
@@ -195,9 +203,10 @@ export class MoveInventoryLocationComponent implements OnInit {
   async copyToNewPackage(){
     const site     =  this.siteService.getAssignedSite();
     const packages =  await  this.getMovingPackageCounts()
+    // return
     const new$     =  this.inventoryAssignmentService.moveInventory(site, packages);
     new$.subscribe( data => {
-      this.dialogRef.close('true')
+      this.onCancel(true)
       this.notifyEvent('New . Package moved', 'Success')
     })
   }
@@ -217,7 +226,9 @@ export class MoveInventoryLocationComponent implements OnInit {
 
       //we have to push a new inventory assignment
       //and put the existing one with the change.
-      console.log('     this.inventoryAssignment',      this.inventoryAssignment   )
+
+      //change
+      // return;
 
       this.inventoryAssignmentService.editInventory(site,
           this.inventoryAssignment.id,
@@ -226,7 +237,7 @@ export class MoveInventoryLocationComponent implements OnInit {
           ).subscribe( data=> {
 
             this.notifyEvent('Inventory location changed.', 'Success')
-            this.onCancel()
+            this.onCancel(true)
 
         }, error =>{
           this.notifyEvent(`Inventory location failed to change. ${error}`, 'failed')
@@ -240,8 +251,8 @@ export class MoveInventoryLocationComponent implements OnInit {
 
   }
 
-  onCancel() {
-    this.dialogRef.close();
+  onCancel(event) {
+    this.dialogRef.close(event);
   }
 
   notifyEvent(message: string, action: string) {

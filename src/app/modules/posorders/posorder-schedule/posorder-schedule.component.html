@@ -1,11 +1,14 @@
 <mat-card *ngIf="order">
+
   <mat-card-subtitle>
     <div>
       Schedule Order
     </div>
+
     <div *ngIf="errorMessage">
       <mat-icon>alert</mat-icon>  {{errorMessage}}
     </div>
+
     <div *ngIf="!order.clients_POSOrders">
       To schedule an order, a customer must be associated with it.
       <div class="grid-header-item">
@@ -19,17 +22,16 @@
 
   <mat-card-content>
     <mat-tab-group  mat-align-tabs="start"
-                    md-stretch-tabs
+
                     [(selectedIndex)]="selectedIndex"
                     (selectedIndexChange)="selectChange()">
 
-        <mat-tab label="Sale Type">
-          <div>
+        <mat-tab label="Sale Type"
+                class="sale-type-tab">
             <posorder-service-type
               (outPutSelectServiceType)='selectedServiceType($event)'>
               Select Service Type
             </posorder-service-type>
-          </div>
         </mat-tab>
 
         <mat-tab *ngIf="serviceType && serviceType.deliveryService"
@@ -45,7 +47,8 @@
                 *ngIf="serviceType && serviceType.promptScheduleTime"
                  label="Schedule Information">
 
-          <div  *ngIf="serviceType && serviceType.instructions" [innerHTML]="serviceType.instructions"></div>
+          <div  *ngIf="serviceType && serviceType.instructions"
+                [innerHTML]="serviceType.instructions"></div>
 
           <div class="item">
             <mat-form-field appearance="outline">
@@ -90,9 +93,9 @@
   </mat-card-content>
 
   <mat-card-actions>
-
-    <div *ngIf="selectedIndex == 3 || (showSaveButton && selectedIndex != 0) ">
-      <button mat-raised-button color="primary" (click)="save()">
+    <div *ngIf="selectedIndex == 3 || (showSaveButton && selectedIndex != 0)">
+      <button mat-raised-button color="primary"
+              (click)="save()">
         <mat-icon aria-label="save">save</mat-icon>Save and Continue
       </button>
     </div>

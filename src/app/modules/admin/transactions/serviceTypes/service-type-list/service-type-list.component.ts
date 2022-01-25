@@ -108,6 +108,7 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
     this.urlPath        = await this.awsService.awsBucketURL();
     const site          = this.siteService.getAssignedSite();
     this.rowSelection   = 'multiple'
+
     this.serviceType$   = this.serviceTypeService.getAllServiceTypes(site);
     this.settingsService.getSettingByName(site, 'DefaultOrderType').subscribe( data => {
       if (data) {
@@ -115,6 +116,7 @@ export class ServiceTypeListComponent implements OnInit, AfterViewInit {
         this.defaultID  = parseInt(data.value);
       }
     })
+
   }
 
   setDefaultID(event) {
