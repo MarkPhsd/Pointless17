@@ -38,7 +38,7 @@ export class ConversionsService {
       {name: 'Half Ounces', value:  14},
       {name: 'Ounces',      value:  28},
       {name: 'Joints',      value:  1},
-      {name: 'lbs',         value:  453.592},
+      {name: 'Pounds',      value:  453.592},
       {name: 'KiloGrams',   value:  1000},
       {name: 'Each',        value:  1}
     ]

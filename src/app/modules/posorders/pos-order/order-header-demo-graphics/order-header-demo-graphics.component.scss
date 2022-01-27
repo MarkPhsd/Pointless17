@@ -1,68 +1,23 @@
 @import "/src/mixins.scss";
 
-// mat-card {
-
-//   width     : 100%;
-//   min-width : 275px;
-//   width     : 275px;
-//   max-width : 275px;
-//   min-height: 75px;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-
-//   @include for-phone-only  {
-//     width     : 100%;
-//     min-width : 335px;
-//     max-width : 335px;
-//     min-height: 75px;
-//     overflow-y: auto;
-//     overflow-x: hidden;
-//   }
-// }
-
-// mat-card {
-//   width     : 100%;
-//   min-width : 335px;
-//   max-width : 335px;
-//   min-height: 155px;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-
-//   @include for-phone-only  {
-//     width      : 335px;
-//     min-width : 335px;
-//     max-width : 335px;
-//     overflow-y: auto;
-//     overflow-x: hidden;
-//   }
-// }
-
 mat-card {
   width     : 100%;
-  min-width : 335px;
-  max-width : 335px;
-  // min-height: 155px;
   overflow-y: auto;
   overflow-x: hidden;
 
   @include for-phone-only  {
-    width      : 335px;
-    min-width : 335px;
-    max-width : 335px;
+    width     : 100%;
     overflow-y: auto;
     overflow-x: hidden;
   }
 }
 
-
-
 .grid-contact {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  // grid-auto-flow: row;
   justify-content: space-between;
   width: 100%;
-  gap: 10px;
+  gap: 5px;
 }
 
 .grid-item-button {
@@ -74,7 +29,7 @@ mat-card {
 .transaction-data {
   display: grid;
   grid-template-columns: 60px 1fr;
-  width: 300px;
+  // width: 300px;
   border-radius: 3px;
   margin: 5px 5px ;
   overflow-y: auto;

@@ -1,5 +1,5 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter, OnDestroy, HostListener } from '@angular/core';
+import { Component,   OnInit,
+  ViewChild ,ElementRef, AfterViewInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService,  } from 'src/app/_services';
@@ -15,13 +15,12 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { employee,} from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { Capacitor, Plugins } from '@capacitor/core';
+import { Capacitor,  } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, IBalanceSheet} from 'src/app/_services/transactions/balance-sheet.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { EmployeeSearchModel, EmployeeSearchResults, EmployeeService } from 'src/app/_services/people/employee-service.service';
 import { EmployeeEditComponent } from '../employee-edit/employee-edit.component';
-import { toNamespacedPath } from 'path/win32';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 export interface rowItem {
@@ -42,13 +41,9 @@ export interface rowItem {
 })
 export class EmployeeListComponent implements OnInit , AfterViewInit{
 
-
-
-
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
-  @Output() itemSelect  = new EventEmitter();
 
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
@@ -113,6 +108,9 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
   isAuthorized    :   boolean;
   isStaff         :   boolean;
   smallDevice       = false;
+
+  buttonName      = 'Edit';
+  metrcButtonName = 'METRC'
 
   constructor(  private _snackBar               : MatSnackBar,
                 private employeeService         : EmployeeService,
@@ -226,8 +224,8 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
                         onClick: this.editItemWithId.bind(this),
-                        label: 'Edit',
-                        getLabelFunction: this.getLabel.bind(this, 'Edit'),
+                        label:  this.buttonName,
+                        getLabelFunction: this.getLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
                       },
                       minWidth: 125,
@@ -240,15 +238,17 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
       this.columnDefs.push(item);
 
       const site = this.siteService.getAssignedSite();
-      if (site.metrcURL && site.metrcKey.length>1) {
+      console.log('site', site)
+
+      if (site.metrcURL ) {
 
         let item  =   {
           field: 'id',
           cellRenderer: "btnCellRenderer",
                         cellRendererParams: {
                             onClick: this.applyMetrcKey.bind(this),
-                            label: 'METRC',
-                            getLabelFunction: this.getLabel.bind(this, 'METRC'),
+                            label: this.metrcButtonName,
+                            getLabelFunction: this.getCheckInLabel.bind(this),
                             btnClass: 'btn btn-primary btn-sm'
                           },
                           minWidth: 125,
@@ -550,13 +550,20 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
 
 
 
-  getLabel(rowData, name: string)
+  getLabel(rowData)
   {
-    if(rowData && rowData.hasIndicator){
-      console.log('name', name)
-      return name
-    }
+    if(rowData && rowData.hasIndicator)
+      return this.buttonName
+      else return this.buttonName
   }
+
+  getCheckInLabel(rowData)
+  {
+    if(rowData && rowData.hasIndicator)
+      return this.metrcButtonName
+      else return this.metrcButtonName
+  }
+
 
   onBtnClick1(e) {
     this.rowDataClicked1 = e.rowData;

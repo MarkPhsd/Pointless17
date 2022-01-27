@@ -1,14 +1,43 @@
+@import "/src/mixins.scss";
+
+// .button {
+//   width     : 160px;
+//   max-width : 160px;
+//   min-width : 160px;
+//   height    : 75px;
+//   min-height: 75px;
+//   font-size: 1em;
+// }
+
+// .grid-container {
+//   --gap: 5px;
+//   display: grid;
+//   gap: var(--gap);
+//   grid-template-columns: repeat( auto-fit, minmax(165px, 1fr) );
+
+//   @include for-phone-only {
+//     --gap                : 5px;
+//     display              : grid;
+//     gap                  : var(--gap);
+//     grid-template-columns: 1fr;
+//     margin-right         : 4px;
+//     max-width            : 375px;
+//   }
+
+// }
+
+
 .gallery-container {
-  // height: 100%;
-  overflow-y: auto;
+  height: 86vh;
+  overflow-y: hidden;
   overflow-x: hidden;
-  height: 95%;
-  // max-height: 700px;
+
 }
 
 mat-card {
   // width: calc(98% );
-  height: calc(100%);
+  // height: calc(100%);
+  height: 85vh;
   margin: 5px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -143,9 +172,6 @@ input {
   top:          25px;
   position: inherit;
 }
-
-
-
 
 
 #notification {
@@ -308,17 +334,14 @@ input {
   justify-content: flex-start;
 }
 
-
-
-
 mat-form-field {
   font-size: smaller;
 }
 
 .center {
-  min-height   : 100px;
-  margin-top   : 80px;
-  margin-bottom: 5px;
+  // min-height   : 100px;
+  margin-top   : 10px;
+  margin-bottom: 10px;
   position: relative;
 }
 
@@ -334,6 +357,28 @@ mat-form-field {
   margin  : 10px;
   border-radius: 5px;
 }
+
+.grid-item-gallery {
+
+  @include for-phone-only {
+    max-width            : 275px;
+  }
+
+}
+
+// getPopUpWidth(defaultSize: string) {
+//   let deviceSize = '90vw'
+//   let smallDevice = false
+//   if (window.innerWidth >= 768) {
+//     smallDevice = false
+//     deviceSize = defaultSize
+//   }
+//   if (window.innerWidth < 768) {
+//     smallDevice = true
+//     deviceSize = '100vw'
+//   }
+//   return deviceSize
+// }
 
 .exit {
   display        : flex;
@@ -406,6 +451,11 @@ mat-form-field {
 .mat-chips {
   margin-top: 5px;
 }
+
+.gf-chips {
+  margin: 5px;
+}
+
 
 .mat-packaging {
   margin: 5px;

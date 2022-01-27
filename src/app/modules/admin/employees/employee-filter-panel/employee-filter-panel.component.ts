@@ -3,7 +3,6 @@ import { employee, IUser, jobTypes } from 'src/app/_interfaces';
 import {IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeSearchModel, EmployeeService} from 'src/app/_services/people/employee-service.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
@@ -20,7 +19,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 export class EmployeeFilterPanelComponent implements OnInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
-  @Output() itemSelect  = new EventEmitter();
+
   value : string;
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   searchForm: FormGroup;
@@ -61,7 +60,6 @@ export class EmployeeFilterPanelComponent implements OnInit {
   initSubscriptions() {
       this._searchModel = this.employeeService.searchModel$.subscribe( data => {
         this.searchModel  = data
-
         if (!data) {
           this.searchModel =    this.initSearchModel();
         }
@@ -85,9 +83,7 @@ export class EmployeeFilterPanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.searchModel) {
-      this.searchModel =    this.initSearchModel();
-    }
+    this.searchModel =    this.initSearchModel();
     const site = this.siteService.getAssignedSite();
     this.jobTypes$ = this.jobTypeService.getTypes(site)
     this.initPlatForm();
@@ -139,13 +135,23 @@ export class EmployeeFilterPanelComponent implements OnInit {
     this.refreshSearch()
   }
 
+  resetSearch() {
+    const search  = this.initSearchModel();
+    this.employeeService.updateSearchModel(search)
+    this.refreshSearch()
+  }
+
   initSearchModel(): EmployeeSearchModel {
     const site = this.siteService.getAssignedSite()
-    if (!this.searchModel) {
-      this.searchModel = {} as EmployeeSearchModel
-      this.searchModel.pageNumber = 1;
-      this.searchModel.pageSize   = 25;
-    }
+
+    this.searchModel = {} as EmployeeSearchModel
+    this.searchModel.pageNumber = 1;
+    this.searchModel.pageSize   = 25;
+
+    this.toggleTerminated = "1"
+    this.selectedjobTypeID = 0;
+    this.initSearchForm();
+    this.searchModel.name = ''
 
     this.searchModel.terminated  = this.toggleTerminated
     this.searchModel.jobTypeID   = this.selectedjobTypeID;
@@ -153,9 +159,26 @@ export class EmployeeFilterPanelComponent implements OnInit {
     return this.searchModel
   }
 
+  getSearchModel(): EmployeeSearchModel {
+
+    let search = this.searchModel;
+    if (!this.searchModel) {
+      search =  this.initSearchModel()
+    }
+
+    return search;
+  }
+
+
+  refreshSearchPhrase(event) {
+    const search = this.getSearchModel()
+    search.name = event;
+    this.employeeService.updateSearchModel( search )
+
+  }
+
   refreshSearch() {
-    const search = this.initSearchModel()
-    console.log('outputing search model', search);
+    const search = this.getSearchModel()
     this.employeeService.updateSearchModel( search )
   }
 

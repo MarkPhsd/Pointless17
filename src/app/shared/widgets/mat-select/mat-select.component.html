@@ -1,4 +1,4 @@
-  <ng-content></ng-content>
+
 
   <div [formGroup]="inputForm"
        *ngIf="inputForm"
@@ -8,17 +8,13 @@
       [class]="class"
       appearance="outline">
 
-      <mat-label>
-        <ng-content></ng-content>
-      </mat-label>
-
+      <mat-label> <ng-content></ng-content>   </mat-label>
       <mat-select
             type="number"
             [formControlName] ="fieldName"
             (selectionChange)="setItemOutPut($event.value)"
         >
-
-        <mat-option value="">
+        <mat-option value="" *ngIf="!hideClear">
            Clear
         </mat-option>
 
@@ -39,7 +35,6 @@
               {{item.name}}
           </mat-option>
         </span>
-
       </mat-select>
     </mat-form-field>
 

@@ -1,16 +1,20 @@
 <mat-card class="mat-card-view">
   <mat-card-content>
 
-
     <button mat-button (click)="newEmployee()">New <mat-icon>add</mat-icon></button>
-    <button mat-button (click)="initSearchModel()">Reset <mat-icon>refresh</mat-icon></button>
-<!--
-    <button *ngIf="isAdmin && currentEmployee"
-            mat-raised-button
-            (click)="applyMetrcKey()"
-            aria-label="metrc key"><mat-icon>qr_code</mat-icon>
-            METRC
-    </button> -->
+    <button mat-button (click)="resetSearch()">Reset <mat-icon>refresh</mat-icon></button>
+
+    <div class="grid-item">
+      <search-debounce-input
+                            [itemNameControl] = "'itemName'"
+                            [searchForm]      = "searchForm"
+                            (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
+        </div>
+      </search-debounce-input>
+    </div>
 
     <mat-divider></mat-divider>
 

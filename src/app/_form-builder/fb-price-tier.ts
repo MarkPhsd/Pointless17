@@ -18,6 +18,7 @@ export class FbPriceTierService {
   initForm(fb: FormGroup): FormGroup {
     fb = this.fb.group({
       id:                           [''],
+      webEnabled:                   [''],
       name:                         [''],
       priceTierPrices:      this.fb.array([
       ]),

@@ -60,4 +60,3 @@ export class TvPriceTierMenuItemsComponent implements OnInit {
   }
 
 }
-//const unique = [...new Set(data.map(item => item.group))]; // [ 'A', 'B']

@@ -40,47 +40,7 @@
                   </mat-form-field>
                 </div>
 
-                <div>
-                  <mat-slide-toggle name="enabled"
-                                    formControlName="enabled">
-                    <mat-label>Enabled</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div>
-                  <mat-slide-toggle
-                                    name= "labelRequired"
-                                    formControlName="labelRequired">
-                    <mat-label>Requireds Label Printed</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div>
-                  <mat-slide-toggle
-                                    name= "requiresSerial"
-                                    formControlName="requiresSerial">
-                    <mat-label>Requires Serial</mat-label>
-                  </mat-slide-toggle>
-                </div>
-                <div>
-                  <mat-slide-toggle name= "weightedItem"
-                                    formControlName="weightedItem">
-                    <mat-label>Scale Weighted Item</mat-label>
-                  </mat-slide-toggle>
-                </div>
-
-                <div class="toggle-footer">
-                  <mat-slide-toggle name           = "expirationRequired"
-                                    formControlName="expirationRequired">
-                    <mat-label>Expiration Date Required</mat-label>
-                  </mat-slide-toggle>
-                </div>
-                <div class="toggle-footer">
-                  <mat-slide-toggle name= "requireInStock"
-                                    formControlName="requireInStock">
-                    <mat-label>Require to Be In Inventory to Sell</mat-label>
-                  </mat-slide-toggle>
-                </div>
+                <item-type-toggles-edit [inputForm]="inputForm"></item-type-toggles-edit>
 
                 <div>
                   <h4>Image / Icon</h4>

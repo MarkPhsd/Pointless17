@@ -19,7 +19,7 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './facilities-list.component.html',
   styleUrls: ['./facilities-list.component.scss']
 })
-export class FacilitiesListComponent implements OnInit {
+export class FacilitiesListComponent {
 
   searchGridApi: GridApi;
   searchGridColumnApi: GridAlignColumnsDirective;
@@ -42,6 +42,8 @@ export class FacilitiesListComponent implements OnInit {
   numberOfPages = 1
   rowCount = 50
 
+  importing: boolean;
+
   //This is for the search Section//
   public searchForm: FormGroup;
   private readonly onDestroy = new Subject<void>();
@@ -51,8 +53,9 @@ export class FacilitiesListComponent implements OnInit {
   refreshGrid = true;
   //This is for the search Section//
   sites$ : Observable<ISite[]>;
-  siteID: number;
-  site: ISite;
+  siteID  : number;
+  site   : ISite;
+  sites: ISite[];
 
   constructor(  private _snackBar: MatSnackBar,
                 private router: Router,
@@ -64,29 +67,29 @@ export class FacilitiesListComponent implements OnInit {
   {
     this.searchItems()
     this.initGridResults()
-    this.sites$ = this.siteService.getSites();
+    this.siteService.getSites().subscribe(data => {
+      this.sites = data;
+    })
     this.initForm();
   }
 
   initForm(){
     const site = this.siteService.getAssignedSite()
-    this.fb.group( {
+    this.searchForm =  this.fb.group( {
       selectedSiteID: [site.id]
     })
   }
 
-  ngOnInit(): void {
-    console.log('')
-  };
-
   getAssignedSiteSelection(event) {
-    if (event.value) {
-      this.siteID = event.value
-      this.assignSite(this.siteID );
+    if (event) {
+      this.siteID = event.id
+      this.site = event;
+      // this.assignSite(event);
     }
   }
 
   assignSite(id: number){
+    if (!id) {return}
     this.siteService.getSite(id).subscribe( data => {
       this.site = data
     })
@@ -147,10 +150,34 @@ export class FacilitiesListComponent implements OnInit {
   }
 
   import() {
-    const mETRCFacilities$ =  this.metrcFacilitiesService.importFacilities(this.siteService.getAssignedSite())
+
+    const site = this.getValidSite()
+    // console.log('site', site)
+    if (!site) { return }
+
+    const mETRCFacilities$ =  this.metrcFacilitiesService.importFacilities(site)
+
+    this.importing = true;
+
     mETRCFacilities$.subscribe(data =>{
       this.searchItems();
+      this.importing = false;
+    }, err => {
+      this.importing = false
     })
+
+  }
+
+  getValidSite() {
+
+    const site   = this.site;
+
+    if (!site.metrcURL) {
+      this.notifyEvent('No URL Defined', 'Failed');
+      return
+    }
+
+    return site
   }
 
   searchItems() {
@@ -159,6 +186,7 @@ export class FacilitiesListComponent implements OnInit {
       const site = this.siteService.getAssignedSite()
       siteID = site.id
     }
+    if (!siteID) {return}
 
     const site$ =  this.siteService.getSite(siteID)
 

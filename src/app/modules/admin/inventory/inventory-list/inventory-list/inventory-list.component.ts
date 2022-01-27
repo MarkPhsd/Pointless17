@@ -394,7 +394,10 @@ export class InventoryListComponent implements OnInit {
 
   addInventoryItem() {
     try {
-      this.inventoryEditButon.addInventoryDialog(0)
+      const result =   this.inventoryEditButon.addInventoryDialog(0)
+      if (result) {
+        this.refreshSearch();
+      }
     } catch (error) {
       console.log(error)
     }

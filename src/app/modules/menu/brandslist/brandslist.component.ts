@@ -145,7 +145,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   isApp                   = false;
   value: any;
 
-  orderslist       = 'orders-list'
+  orderslist       = 'orders-list shine'
   clientSearchResults$: Observable<ClientSearchResults>;
   itemsPerPage     : number;
   totalRecords     : number;
@@ -195,12 +195,12 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     if (this.href === '/brandslist') {
       this.singlePage = true
       this.classcontainer = 'parent-container-single-page'
-      this.orderslist = 'orders-list-single-page'
+      this.orderslist = 'orders-list-single-page shine'
     }
     if (this.href != '/brandslist') {
       this.singlePage = false
       this.classcontainer = 'parent-container'
-      this.orderslist     = 'orders-list'
+      this.orderslist     = 'orders-list shine'
     }
   }
 

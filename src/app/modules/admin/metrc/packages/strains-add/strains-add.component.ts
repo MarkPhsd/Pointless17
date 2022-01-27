@@ -196,7 +196,12 @@ export class StrainsAddComponent implements OnInit {
         if (this.package.unitOfMeasureName) {
           this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName)
           //convert the package quantity to the grams quantity
-          this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+          if (!this.intakeConversion.value) {this.intakeConversion.value = 1}
+          if (this.intakeConversion) {
+            this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+          } else {
+            this.notifyEvent('Intake conversion not initialized', 'Alert')
+          }
           this.baseUnitsRemaining = this.intakeconversionQuantity
           this.initialQuantity    = this.intakeconversionQuantity
         }

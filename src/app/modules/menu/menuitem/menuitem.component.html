@@ -4,12 +4,14 @@
 </ng-template>
 
 <div *ngIf="menuItem; else loading"
-      class="gallery-container">
-
+      >
     <mat-card>
-
-      <mat-card-title class="exit">
-
+      <mat-card-title>
+        <button *ngIf="showCloseButton"
+                mat-raised-button
+                (click)="exit()">
+            <mat-icon>close</mat-icon>
+        </button>
       </mat-card-title>
 
       <mat-card-subtitle >
@@ -35,9 +37,13 @@
                   {{ brand.companyName }}
                 </div>
 
-                <div class="item-span" *ngIf="menuItem.barcode" id="barcode">{{ menuItem?.barcode}}</div>
+                <div class="item-span"
+                    *ngIf="menuItem.barcode"
+                     id="barcode">{{ menuItem?.barcode}}
+                </div>
 
-                <div class="prices"  *ngIf="isUserStaff">
+                <div class="prices"
+                     *ngIf="isUserStaff">
                   <menu-item-extended-prices
                     [isUserStaff]="isUserStaff"
                     [menuItem]="menuItem">
@@ -45,7 +51,7 @@
                 </div>
 
                 <div class="item-span manager-info"
-                    *ngIf="menuItem && menuItem.itemType
+                     *ngIf="menuItem && menuItem.itemType
                           && !menuItem.itemType.requireInStock">
                   <div class ="pricing-box"  >
                     <div id  ="unitDescription"> </div>
@@ -58,7 +64,7 @@
                         && menuItem.itemType.requireInStock">
                   <inventory-counts-view
                       [showList]="false"
-                      [showAddButton]="true"
+                      [showAddButton]="!priceTiersShown"
                       [productID]="menuItem.id"
                       (outPutAddItem)="addItemByCode($event)">
                       Add to Cart
@@ -67,28 +73,19 @@
 
                 <div class="grid-save-add-buttons"
                      *ngIf="menuItem && menuItem.itemType
-                            &&  priceTiers">
-                    <tier-price-line
-                        [menuPopup]="true"
-                        [priceTiers]="priceTiers">
-                    </tier-price-line>
-                </div>
-
-                <div class="grid-save-add-buttons"
-                     *ngIf="menuItem && menuItem.itemType
                       && !menuItem.itemType.requireInStock
                       && !priceTiers">
 
-                      <div id="addToWishList">
+                      <!-- <div id="addToWishList">
                       <button mat-raised-button
-                              class="button"
-                        >Add To Wishlist</button>
-                    </div>
+                              class="button">
+                        Add To Wishlist</button>
+                    </div> -->
 
                     <div id="addItemToOrder">
                       <button  mat-raised-button
                                 class="button"
-                                (click)="addItemToOrder()" >
+                                (click)="addItemToOrder()">
                         <mat-icon>add</mat-icon>Add To Order</button>
                     </div>
 
@@ -121,12 +118,10 @@
                   </div>
                 </div>
 
-                <div  class="mat-packaging"
-                      *ngIf="packagingMaterial && packagingMaterial.length>0">
-                </div>
-
                 <div class="mat-packaging"
-                      *ngIf="menuItem.itemType.portionValue">
+                      *ngIf="menuItem
+                            && menuItem.itemType
+                            && menuItem.itemType.portionValue">
                     <mat-form-field appearance="outline"
                                     class="form-fields">
                       <mat-label>
@@ -147,19 +142,45 @@
                     </mat-form-field>
                 </div>
 
+                <div  class="mat-packaging"
+                      [formGroup]="productForm"
+                      *ngIf="productForm && menuItem
+                            && menuItem.itemType
+                            && menuItem.itemType.enableCustomNote">
+                    <mat-form-field appearance="outline"
+                        id="customer-notes">
+                      <mat-label>Notes</mat-label>
+                      <mat-hint>Input notes to help prepare this item.</mat-hint>
+                      <textarea matInput
+                                  rows="10"
+                                  columns="40"
+                                  formControlName="itemNote"
+                        ></textarea>
+                    </mat-form-field>
+                </div>
 
               </div>
           </div>
 
-          <div >
+          <div>
+
             <div  *ngIf="menuItem.onlineShortDescription || menuItem.metaTags"
                   class="onlineShortDescription"
                   [innerHTML]="menuItem?.onlineShortDescription">
             </div>
 
-            <div class="center mat-chips">
+            <div class="item-span"
+                 *ngIf="menuItem && menuItem.itemType
+                        &&  priceTiers">
+                <tier-price-line
+                    (outputNewItem)="addItemWithTierPrice($event)"
+                    [menuPopup]="true"
+                    [priceTiers]="priceTiers">
+                </tier-price-line>
+            </div>
 
-              <span *ngIf="menuItem.glutenFree">
+            <div class="center gf-chips">
+              <span *ngIf="menuItem.glutenFree || menuItem.metaTags">
                 <button mat-fab color="warn" aria-label="Gluten Free">
                   GF
                 </button>
@@ -168,35 +189,30 @@
                 [items]="menuItem.metaTags">
               </app-chips-display>
             </div>
-
           </div>
-
-
 
         </div>
       </mat-card-subtitle>
 
       <mat-card-content >
-
-        <div class="flex">
+        <!-- <div class="flex"> -->
           <div class="grid">
-
-            <div class="gallery">
+            <div class="gallery"  *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
               <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
             </div>
 
             <div>
-              <div id="onlineDescription"
+              <div  *ngIf=" menuItem.onlineDescription"
+                    id="onlineDescription"
                     class="grid-item-gallery"
                     [innerHTML]="menuItem?.onlineDescription">
               </div>
 
               <div class="center">
-              <app-chemical-spinners
+                <app-chemical-spinners
                   [menuItem]="menuItem">
                 </app-chemical-spinners>
               </div>
-
             </div>
 
             <div *ngIf="menuItem.specialDescription">
@@ -204,8 +220,8 @@
             </div>
 
           </div>
-        </div>
+        <!-- </div> -->
       </mat-card-content>
     </mat-card>
-  </div>
+</div>
 

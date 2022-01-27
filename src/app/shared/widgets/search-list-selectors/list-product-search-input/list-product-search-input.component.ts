@@ -110,6 +110,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
   async refreshSearch() {
     const barcode =  this.input.nativeElement.value
     await this.addItemToOrder(barcode)
+    this.searchForm.patchValue({itemName: ''})
   }
 
   addItemToOrder(barcode: string) {

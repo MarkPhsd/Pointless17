@@ -28,9 +28,24 @@
         </div>
       </div>
 
-      <div *ngIf="results.total > 0" class="instock-total">
+
+      <div *ngIf="results.total > 0 && isStaff" class="instock-total">
         In Stock:  {{results.total}}
       </div>
+
+
+      <div *ngIf="results.total > 0 && !isStaff" class="instock-total">
+        <div *ngIf="results.total>100">
+          In Stock
+        </div>
+        <div *ngIf="results.total<50">
+          In Stock, less than 50
+        </div>
+        <div *ngIf="results.total<10">
+          In Stock, less than 10
+        </div>
+      </div>
+
       <div *ngIf="results.total < 1" class="instock-total">
         Out of Stock.
       </div>

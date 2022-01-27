@@ -15,6 +15,8 @@ export class MatSelectComponent {
   @Input()  list$    : Observable<any>;
   @Input()  list     : any[]
   @Output() outputItem = new EventEmitter<any>();
+  @Input() hideClear: boolean;
+
   constructor() { }
 
   setOutPut(event) {

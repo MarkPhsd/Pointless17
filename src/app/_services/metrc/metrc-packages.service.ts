@@ -83,13 +83,14 @@ export class MetrcPackagesService {
 
     }
 
-    getPackagesByLabel(site: ISite,label:string): Observable<METRCPackage[]> {
+    getPackagesByLabel(site: ISite,label:string, facility: string): Observable<METRCPackage[]> {
+
 
       const controller = '/METRCPackages/'
 
       const endPoint = `GetMETRCPackageByLabel`
 
-      const parameters = `${label}`
+      const parameters = `?label=${label}&facilityName=${facility}`
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -97,11 +98,23 @@ export class MetrcPackagesService {
 
     }
 
-    importActive(site: ISite): Observable<METRCPackage[]> {
+    importActive(site: ISite, facility: string): Observable<METRCPackage[]> {
 
       const controller = '/METRCPackages/'
 
-      const endPoint = `ImportActivePackages?siteName=${site.name}`
+      const endPoint = `ImportActivePackages?siteName=${site.name}&facilityName=${facility}`
+
+      const url = `${site.url}${controller}${endPoint}`
+
+      return this.http.get<METRCPackage[]>(url);
+
+    }
+
+    importActiveByDaysBack(site: ISite, numberOfDays: number, facility: string): Observable<METRCPackage[]> {
+
+      const controller = '/METRCPackages/'
+
+      const endPoint = `ImportActivePackages?siteName=${site.name}&DaysBackCount=${numberOfDays}&facilityName=${facility}`
 
       const url = `${site.url}${controller}${endPoint}`
 

@@ -10,6 +10,7 @@ import { Platform } from '@angular/cdk/platform';
 export class ValueSpinnerComponent {
 
   @Input() value      : any;
+  finalValue : number;
   @Input() description: any;
   @Input() spinnerMode = 'determiniate';
   @Input() spinnerText = 'spinner-text';
@@ -27,5 +28,15 @@ export class ValueSpinnerComponent {
       this.spinnerText = 'spinner-text-android'
       this.platformName = 'android'
     }
+
+    this.timeOutSpinner();
+  }
+
+  timeOutSpinner() {
+    setTimeout( () => {
+      this.finalValue = this.value
+    }, 500)
    }
+
+
 }

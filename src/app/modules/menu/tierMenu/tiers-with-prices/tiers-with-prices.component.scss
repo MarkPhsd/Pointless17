@@ -42,8 +42,8 @@ mat-card {
 }
 
 .headingstext {
-  font-size: 3em;
-  font-weight: 600;
+  font-size    : 2em;
+  font-weight  : 600;
   text-align   : left;
 
   overflow: clip;
@@ -56,14 +56,14 @@ mat-card {
   }
 
   @include for-big-desktop-up {
-    font-size  : 3em;
+    font-size  : 2em;
     font-weight: 500;
     white-space  : nowrap;
     text-align   : left;
   }
 
   @include for-desktop-up {
-    font-size  : 3em;
+    font-size  : 2em;
     font-weight: 500;
     line-height: 1.2em;
     white-space  : nowrap;
@@ -86,7 +86,7 @@ mat-card {
   }
 
   @include for-big-desktop-up {
-    font-size    : 3em;
+    font-size    : 2em;
     font-weight  : 500;
     line-height  : 1.2em;
     margin-bottom: 5px;
@@ -94,7 +94,7 @@ mat-card {
   }
 
   @include for-desktop-up {
-    font-size    : 3em;
+    font-size    : 2em;
     font-weight  : 500;
     line-height  : 1.2em;
     margin-bottom: 5px;

@@ -2,7 +2,7 @@
 <div *ngIf="menuItem" class="grid-spinners">
 
 
-  <div *ngIf="menuItem.thc">
+  <div *ngIf="menuItem.thc" class="spinner">
     <app-value-spinner
         [color]="'warn'"
         [colorTrack]="'accent'"
@@ -12,7 +12,7 @@
     </app-value-spinner>
   </div>
 
-  <div *ngIf="menuItem.thca">
+  <div *ngIf="menuItem.thca" class="spinner">
     <app-value-spinner
         [color]="'warn'"
         [colorTrack]="'accent'"
@@ -22,7 +22,7 @@
     </app-value-spinner>
   </div>
 
-  <div *ngIf="menuItem.cbd">
+  <div *ngIf="menuItem.cbd" class="spinner">
     <app-value-spinner
       [color]="'accent'"
       [colorTrack]="'warn'"
@@ -32,7 +32,7 @@
   </app-value-spinner>
   </div>
 
-  <div *ngIf="menuItem.cbda">
+  <div *ngIf="menuItem.cbda" class="spinner">
     <app-value-spinner
         [color]="'accent'"
         [colorTrack]="'warn'"
@@ -42,7 +42,7 @@
     </app-value-spinner>
   </div>
 
-  <div *ngIf="menuItem.cbn">
+  <div *ngIf="menuItem.cbn" class="spinner">
     <app-value-spinner
         [color]="'accent'"
         [colorTrack]="'warn'"

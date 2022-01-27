@@ -49,7 +49,7 @@ export class MenuItemGalleryComponent implements OnInit {
           this.items =  this._imagesMain.map(image => new ImageItem({ src: image, thumb: image }));
         }
       } catch (error) {
-        console.log(error)
+
       }
     }
 

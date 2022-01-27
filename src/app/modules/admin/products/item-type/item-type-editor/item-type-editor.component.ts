@@ -186,7 +186,7 @@ export class ItemTypeEditorComponent   {
   async updateExit() {
     const result = await this.update(true)
     if (result) {
-      this.onCancel(null);
+      this.onCancel(true);
     }
   }
 
@@ -211,7 +211,7 @@ export class ItemTypeEditorComponent   {
   }
 
   onCancel(event) {
-    this.dialogRef.close();
+    this.dialogRef.close(Event);
   }
 
   deleteItem(event) {

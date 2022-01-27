@@ -1,0 +1,14 @@
+<div *ngIf="isAuthorized && inputForm"
+      [formGroup]='inputForm'>
+  <mat-form-field appearance="outline">
+    <mat-label>Select Role</mat-label>
+    <mat-select
+                type="text"
+                formControlName ="roles">
+            <mat-option [value]="'admin'">admin</mat-option>
+            <mat-option [value]="'manager'">manager</mat-option>
+            <mat-option [value]="'employee'">employee</mat-option>
+            <mat-option [value]="'user'">user</mat-option>
+      </mat-select>
+  </mat-form-field>
+</div>

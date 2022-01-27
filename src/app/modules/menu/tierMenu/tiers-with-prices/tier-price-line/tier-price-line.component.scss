@@ -1,112 +1,31 @@
 @import "/src/mixins.scss";
 
-
-.prices {
-  font-size    : 2em;
-  font-weight  : 500;
-  text-align   : right;
-  margin-top   : 5px;
-  overflow: clip;
-  text-overflow:clip;
-  white-space: nowrap;
-
-  @include for-phone-only {
-    font-size    : 1em;
-    font-weight  : 400;
-  }
-
-  @include for-big-desktop-up {
-    font-size    : 3em;
-    font-weight  : 500;
-    line-height  : 1.2em;
-    margin-bottom: 5px;
-    height       : 70px;
-  }
-
-  @include for-desktop-up {
-    font-size    : 3em;
-    font-weight  : 500;
-    line-height  : 1.2em;
-    margin-bottom: 5px;
-    height       : 70px;
-  }
-}
-
-.description {
-  font-size    : 2em;
-  font-weight  : 500;
-
-  text-align   : left;
-
-  overflow: clip;
-  text-overflow: ellipsis;
-  // white-space: nowrap;
-
-  @include for-phone-only {
-    font-size    : 1em;
-    font-weight  : 400;
-    margin-top:    5px;
-    margin-bottom: 5px;
-
-  }
-
-  @include for-big-desktop-up {
-    font-size    : 2em;
-    font-weight  : 500;
-    line-height  : 1.2em;
-
-    margin-top:    5px;
-    margin-bottom: 5px;
-    height       : 70px;
-  }
-
-  @include for-desktop-up {
-    font-size    : 2em;
-    font-weight  : 500;
-    line-height  : 1.2em;
-
-    margin-top:    5px;
-    margin-bottom: 5px;
-    height       : 70px;
-
-  }
+.button {
+  width     : 160px;
+  max-width : 160px;
+  min-width : 160px;
+  height    : 75px;
+  min-height: 75px;
+  font-size: 1em;
 }
 
 .grid-container {
-  --gap: 15px;
+  --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-  margin-right: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(165px, 1fr) );
 
   @include for-phone-only {
     --gap                : 5px;
     display              : grid;
     gap                  : var(--gap);
-    grid-template-columns: repeat(6, 55px );
+    grid-template-columns: 1fr;
     margin-right         : 4px;
     max-width            : 375px;
   }
 
-  @include for-tablet-portrait-up {
-    --gap: 15px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
-    margin-right: 10px;
-  }
-
 }
 
-.viewbutton {
-    font-size    : .9em;
-    margin-bottom: 5px;
-    height       : 70px;
-    text-overflow: ellipsis;
-    overflow     : hidden;
-    white-space  : nowrap;
-    text-align   : left;
-    min-width    : 75px;
-    width        : 75px;
 
-}
+
+

@@ -257,7 +257,9 @@ export class ItemTypeComponent implements OnInit {
       }
     }
     dialogRef.afterClosed().subscribe(result => {
-      this.refreshData();
+      if (result) {
+        this.refreshData();
+      }
     });
   }
 

@@ -24,9 +24,19 @@
   <span  class="grid-container"
           *ngFor="let tier of tvPriceMenuTiers$ | async">
 
+    <div class="headingstext" >
+      {{tier.name}}
+    </div>
+    <!--
     <tier-price-line
         [tier]="tier">
     </tier-price-line>
+    -->
+
+    <div  class="prices"
+        *ngFor="let item of tier.tvMenuPriceTierItems">
+        {{ item?.currentPrice | currency }}
+    </div>
 
     <mat-divider></mat-divider>
 

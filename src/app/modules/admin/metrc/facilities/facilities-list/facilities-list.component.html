@@ -4,19 +4,26 @@
           (click)="import()">
           <mat-icon>download</mat-icon>Import
   </button>
+  <div *ngIf="importing">
+    <mat-spinner [diameter]="50">
+    </mat-spinner>
+    ...importing
+  </div>
+
   <button mat-button
       color="primary"
       (click)="searchItems()">
       <mat-icon>refresh</mat-icon>Refresh
   </button>
 
-  <div class="grid-item" *ngIf="searchForm">
+  <div class="grid-item" *ngIf="searchForm && sites" >
     <app-mat-select
-        (outputItem)="getAssignedSiteSelection($event)"
-        [list$]     ="sites$"
-        [fieldName] ="'selectedSiteID'"
-        [inputForm] ="searchForm"
+        (outputItem)= "getAssignedSiteSelection($event)"
+        [list]      = "sites"
+        [fieldName] = "'selectedSiteID'"
+        [inputForm] = "searchForm"
         >
+        Select Site
     </app-mat-select>
   </div>
 

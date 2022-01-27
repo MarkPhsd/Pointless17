@@ -26,21 +26,20 @@
         </form-select-list>
       </div>
 
-      <div class="grid-item  margin">
+      <div class="grid-item">
         <app-mat-select
+                [hideClear]           = "true"
                 [inputForm]           = "searchForm"
                 [fieldName]           = "'selectedSiteID'"
                 [list$]               = "sites$"
                 (outputItem)          = "refreshFilters($event)">
-           <div>Choose Site</div>
+           Choose Site
         </app-mat-select>
       </div>
 
-      <div class="grid-item  margin"
+      <div class="grid-item selector"
            *ngIf="site && facilities && !loadingFacilities">
-        <mat-form-field
-          appearance="outline"
-          >
+        <mat-form-field  appearance="outline">
           <mat-label><ng-content></ng-content></mat-label>
           <mat-select
                 type="number"
@@ -61,11 +60,22 @@
         </mat-form-field>
       </div>
 
-      <div class="grid-item toggle"
+      <div class="grid-item "
            *ngIf="site && loadingFacilities">
            ....loading facilities</div>
 
-      <div class="grid-item" *ngIf="site && facility" >
+      <div class="grid-item "
+           *ngIf="site && facilityNumber" >
+          <app-value-fields
+            [fieldType]="'number'"
+            [inputForm]="searchForm"
+            [fieldName]="'numberOfdays'">
+            Number of Days
+          </app-value-fields>
+      </div>
+
+      <div class="grid-item"
+            *ngIf="(site && facilityNumber) && !importing " >
         <button mat-button mat-button
                 color="primary"
                 (click)="importActivePackages()">
@@ -74,17 +84,22 @@
         </button>
       </div>
 
+      <div *ngIf="importing">
+        <div>..Please wait will the packages Import. </div>
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </div>
+
       <div class="grid-item"
            *ngIf="viewOptions$">
-        <form-select-list [searchForm]= "searchForm"
-                [formFieldName]   ="'active'"
-                [list$]           = "viewOptions$"
-                (selectionChange) = "refreshActiveChange($event)">
-        <div fieldSearchDescription>Status</div>
+          <form-select-list [searchForm]= "searchForm"
+                  [formFieldName]   ="'active'"
+                  [list$]           = "viewOptions$"
+                  (selectionChange) = "refreshActiveChange($event)">
+          <div fieldSearchDescription>Status</div>
         </form-select-list>
       </div>
 
-      <div class="grid-item toggle">
+      <div class="grid-item ">
         <mat-slide-toggle name="hasImported"
                           class="mat-label"
                           formControlName="hasImported"

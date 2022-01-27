@@ -76,22 +76,26 @@ export class SiteEditFormComponent implements OnInit {
   }
 
   deleteCurrentSite(event) {
-    if (this.ccsSite) {
-      const id = this.ccsSite.id
-      this.initForm()
-      const site$ =  this.sitesService.deleteSite(id)
-      site$.subscribe(data=>{
-        this.notifyEvent("site deleted", "Deleted")
-      }, err => {
-        this.notifyEvent("Error deleting: " + err, "Error")
-      })
+    const confirm = window.confirm('Are you sure you want to delete this site?')
+    if (confirm) {
+      if (this.ccsSite) {
+        const id = this.ccsSite.id
+        this.initForm()
+        const site$ =  this.sitesService.deleteSite(id)
+        site$.subscribe(data=>{
+          this.notifyEvent("site deleted", "Deleted")
+        }, err => {
+          this.notifyEvent("Error deleting: " + err, "Error")
+        })
+      }
     }
   }
 
   //image data
-  received_URLMainImage($event) {
-      this.imgName =  $event
-      this.updateSite(null);
+  received_URLMainImage(event) {
+    this.imgName =  event
+    console.log(event)
+    this.updateSite(null);
    };
 
   updateSite(event) {
@@ -109,10 +113,9 @@ export class SiteEditFormComponent implements OnInit {
 
   applyChanges(data) {
     if (data.id) {
-      data.imgName = this.imgName
-      this.sitesService.updateSite(data.id, data).subscribe(data => {
+        data.imgName = this.imgName
+        this.sitesService.updateSite(data.id, data).subscribe(data => {
         this.notifyEvent(`updated`, `Success` )
-        // this.refreshTable();
       }, error => {
         this.notifyEvent(`update ${error}`, `failure` )
       })
@@ -120,7 +123,6 @@ export class SiteEditFormComponent implements OnInit {
     } else {
       this.sitesService.addSite(data).subscribe(data => {
         this.notifyEvent(`${data.name} Added`, `Success` )
-        // this.refreshTable();
        }, error => {
         this.notifyEvent(`error ${error}`, `failure` )
       })

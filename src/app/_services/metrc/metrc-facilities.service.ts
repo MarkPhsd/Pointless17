@@ -56,11 +56,13 @@ export class MetrcFacilitiesService {
   importFacilities(site: ISite): Observable<METRCFacilities[]> {
 
     const controller = '/MetrcFacilities/'
+    console.log('importFacilities', site.name)
 
     const parameters = `GetImportFacilities?siteName=${site.name}`
 
     const url = `${site.url}${controller}${parameters}`
 
+    console.log('url', url)
     return this.http.get<METRCFacilities[]>(url);
 
   }

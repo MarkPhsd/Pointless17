@@ -40,7 +40,7 @@ export class InventoryEditButtonService {
 
   }
 
-  addInventoryDialog(id: number) {
+  addInventoryDialog(id: number): boolean {
 
     try {
       const site = this.siteService.getAssignedSite();
@@ -54,11 +54,12 @@ export class InventoryEditButtonService {
           },
         )
         dialogRef.afterClosed().subscribe(result => {
-
+          return true
         });
     } catch (error) {
-      console.log(error)
+
     }
+    return false
 
   }
 

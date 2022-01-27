@@ -35,9 +35,10 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
       if (data) {
         this.order = data;
         this.refreshValues();
-        console.log('order updated')
       }
     })
+
+
   }
 
   constructor(private InventoryAssignmentService: InventoryAssignmentService,
@@ -59,12 +60,14 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
       this._order.unsubscribe()
     }
   }
+
   refreshValues() {
     const site = this.siteService.getAssignedSite();
     if (this.productID && this.active) {
       this.results$ = this.InventoryAssignmentService.getAvalibleInventory(site,this.productID, this.active)
       this.results$.subscribe(data => {
         this.results = data;
+        this.InventoryAssignmentService.updateAvalibleInventoryResults(this.results)
       })
     }
   }

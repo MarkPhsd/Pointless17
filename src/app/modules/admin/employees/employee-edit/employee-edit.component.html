@@ -119,7 +119,7 @@
     <div>
       <div [formGroup]="clientForm"
            *ngIf="clientForm && client; else loadingclient;">
-        <!-- ClientForm {{ clientForm.valid }} -->
+
         <div>
           <mat-form-field appearance="outline">
             <mat-label >User Name</mat-label>
@@ -140,9 +140,7 @@
           </mat-form-field>
         </div>
 
-        <div *ngIf="this.clientForm.controls['apiPassword'].value"
-             [formGroup]="confirmPassword">
-          <div>
+        <div *ngIf="this.clientForm.controls['apiPassword'].value">
             <mat-form-field appearance="outline">
               <mat-label >Confirm Password</mat-label>
               <input matInput
@@ -150,10 +148,15 @@
                     formControlName="confirmPassword"
                     class="form-control" >
             </mat-form-field>
-          </div>
         </div>
+
+        <app-profile-roles
+          [isAuthorized]="isAuthorized"
+          [inputForm] ='clientForm'>
+        </app-profile-roles>
+
         <mat-label *ngIf="this.clientForm.controls['apiPassword'].value && !passwordsMatch"> Passwords do not match </mat-label>
-        <mat-label *ngIf="this.password1 != '' && this.password2 != '' 
+        <mat-label *ngIf="this.password1 != '' && this.password2 != ''
                           && (this.password1 == this.password2) "> Passwords match. </mat-label>
 
         <div>

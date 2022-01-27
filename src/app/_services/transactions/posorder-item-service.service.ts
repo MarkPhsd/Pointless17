@@ -44,9 +44,9 @@ export interface ItemPostResults {
    overRide  : boolean;
  }
 
-export interface NewItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number, portionValue: string, packaging: string}
-export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number}
-export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number}
+export interface NewItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number, portionValue: string, packaging: string, itemNote: string}
+export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
+export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
 
 // Public Property OrderID As Integers
 // Public Property ItemID As Integer
@@ -157,7 +157,6 @@ export class POSOrderItemServiceService {
 
     const controller = "/POSOrderItems/"
 
-    console.log( 'newItem',  newItem )
     const endPoint  = "PostUniqueBarcodeItem"
 
     const parameters = ``

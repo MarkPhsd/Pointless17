@@ -4,8 +4,6 @@ import { fromEvent, Observable, of, Subject  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
-// import "ag-grid-community/dist/styles/ag-grid.css";
-// import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -89,7 +87,7 @@ export class PackageListComponent implements OnInit {
   sites$ : Observable<ISite[]>;
   siteID: number;
   site: ISite;
-
+  facilityNumber: string;
   facility    : METRCFacilities;
   facilities$ :  Observable<METRCFacilities[]>;
   facilities  : METRCFacilities[];
@@ -104,6 +102,7 @@ export class PackageListComponent implements OnInit {
   metrcPackage : METRCPackage;
   metrcPackages: METRCPackage[];
   metrcPackages$: Observable<METRCPackage[]>;
+  importing     = false;
 
   gridDimensions: string;
   agtheme        = 'ag-theme-material';
@@ -173,10 +172,11 @@ export class PackageListComponent implements OnInit {
     this.searchForm = this.fb.group( {
       searchProducts: [''],
       metrcCategory : [''],
-      selectedSiteID: [''],
+      selectedSiteID: ['Select Site'],
       facilityID    : [''],
       active        : [''],
       hasImported   : [''],
+      numberOfdays  : [10],
     });
 
   }
@@ -247,7 +247,8 @@ export class PackageListComponent implements OnInit {
 
   setFacliity(event) {
     if (event) {
-      this.facility = event;
+
+       this.facilityNumber = event;
     }
   }
 
@@ -316,14 +317,27 @@ export class PackageListComponent implements OnInit {
 
   importActivePackages() {
     if (this.site) {
-      const import$ = this.metrcPackagesService.importActive(this.site)
+      const daysBack = this.searchForm.controls['numberOfdays'].value as number
+      const facility = this.facilityNumber
+      this.importing = true
+      const import$ = this.metrcPackagesService.importActiveByDaysBack(this.site, daysBack,facility)
       import$.subscribe(data => {
+        this.importing = false
         // console.log('data from import', data)
         this.refreshSearch();
+      }, err=> {
+        this.notify(`Import error occured. Check your settings and try again. ${err}`, `Please try Again`, 4000 )
+        this.importing = false
       })
     }
   }
 
+  notify(message, title, duragtion) {
+    this._snackBar.open(message, title, {
+      duration: duragtion,
+      verticalPosition: 'top'
+    });
+  }
   refreshSearch() {
     const site               = this.siteService.getAssignedSite()
     const packageFilter      = this.initSearchModel();
@@ -469,10 +483,13 @@ export class PackageListComponent implements OnInit {
   getItem(label: string) {
     if (label) {
       const site = this.siteService.getAssignedSite();
-      this.metrcPackagesService.getPackagesByLabel(site, label).subscribe(data => {
-         this.metrcPackage[0] = data;
-        }
-      )
+      const facility = this.facilityNumber;
+      if (facility) {
+        this.metrcPackagesService.getPackagesByLabel(site, label, facility).subscribe(data => {
+           this.metrcPackage[0] = data;
+          }
+        )
+      }
     }
   }
 

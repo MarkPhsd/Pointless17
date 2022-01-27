@@ -1,42 +1,93 @@
 @import "/src/mixins.scss";
 
-.grid-spinners  {
-    @include for-phone-only  {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 50px;
-      max-width: 325px;
-    }
-
-    @include for-tablet-portrait-up   {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 50px;
-      max-width: 325px;
-      // background-color: rgb(53, 12, 70);
-    }
-
-    @include for-tablet-landscape-up {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 50px;
-      max-width: 325px;
-      // background-color: rgb(18, 153, 41);
-    }
-
-    @include for-desktop-up  {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 50px;
-      max-width: 305px;
-    }
-    @include for-big-desktop-up  {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 100px;
-      max-width: 305px;
-    }
+.spacer {
+  margin-bottom: 10px;
 }
+
+.grid-spinners  {
+
+  @include for-phone-only  {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    max-width: 325px;
+  }
+
+  @include for-tablet-portrait-up   {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    max-width: 325px;
+    // background-color: rgb(53, 12, 70);
+  }
+
+  @include for-tablet-landscape-up {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    max-width: 325px;
+    // background-color: rgb(18, 153, 41);
+  }
+
+  @include for-desktop-up  {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 50px;
+    max-width: 305px;
+  }
+  @include for-big-desktop-up  {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 100px;
+    max-width: 305px;
+  }
+}
+
+
+// .grid-spinners  {
+
+
+//     @include for-phone-only  {
+//       display: grid;
+//       grid-template-columns: repeat(2, 1fr);
+//       // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+//       // gap: 50px;
+//       // max-width: 325px;
+//     }
+
+//     @include for-tablet-portrait-up   {
+//       display: grid;
+//       grid-template-columns: repeat(2, 1fr);
+//       // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+//       gap: 50px;
+//       max-width: 325px;
+//       // background-color: rgb(53, 12, 70);
+//     }
+
+//     @include for-tablet-landscape-up {
+//       display: grid;
+//       grid-template-columns: repeat(2, 1fr);
+//       // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+//       gap: 50px;
+//       max-width: 325px;
+//       // background-color: rgb(18, 153, 41);
+//     }
+
+//     @include for-desktop-up  {
+//       display: grid;
+//       grid-template-columns: repeat(2, 1fr);
+//       // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+//       gap: 10px;
+//       max-width: 305px;
+//     }
+//     @include for-big-desktop-up  {
+//       display: grid;
+//       grid-template-columns: repeat(2, 1fr);
+//       // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+//       gap: 100px;
+//       max-width: 305px;
+//     }
+// }
 
 
 

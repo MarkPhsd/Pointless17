@@ -1,5 +1,6 @@
-<div class="grid-item grid-item-gallery">
-  <div *ngIf="items">
+<div  *ngIf="items && (items.length == 1 || items.length > 1)"
+      class="grid-item grid-item-gallery">
+  <div>
     <div   *ngIf="items.length == 1">
       <img class     ="gallery"
            [src]     ="items[0].data.src "

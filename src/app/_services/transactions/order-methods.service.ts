@@ -21,9 +21,9 @@ import { PrintingService } from '../system/printing.service';
 import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 
 export interface ProcessItem {
-  order: IPOSOrder;
-  item: IMenuItem;
-  posItem: IPurchaseOrderItem;
+  order   : IPOSOrder;
+  item    : IMenuItem;
+  posItem : IPurchaseOrderItem;
 }
 
 @Injectable({
@@ -138,7 +138,8 @@ export class OrderMethodsService {
 
     //determines if the users action will add the item or view the item on the order.
     menuItemActionPopUp(order: IPOSOrder, item: IMenuItem, add: boolean) {
-      if (add) {
+
+       if (add) {
         this.addItemToOrder(order, item, 1)
         return
       }
@@ -148,11 +149,28 @@ export class OrderMethodsService {
     }
 
 
+    getPopUpWidth(defaultSize: string) {
+      let deviceSize = '90vw'
+      let smallDevice = false
+      if (window.innerWidth >= 768) {
+        smallDevice = false
+        deviceSize = defaultSize
+      }
+      if (window.innerWidth < 768) {
+        smallDevice = true
+        deviceSize = '100vw'
+      }
+      return deviceSize
+    }
+
     openPopupItem() {
 
+      const deviceSize = this.getPopUpWidth('90vw')
+      console.log('opening', deviceSize)
       const dialogRef = this.dialog.open(MenuItemModalComponent,
         {
-          width:     '90vw',
+          width:        deviceSize,
+          maxWidth:     deviceSize,
           height:    '90vh',
           maxHeight: '90vh',
         },
@@ -193,6 +211,8 @@ export class OrderMethodsService {
 
     this.initItemProcess();
 
+    if (quantity == 0 ) { quantity = 1}
+
     if (!order)         { order = this.order }
     const site          = this.siteService.getAssignedSite()
     const result        = await this.doesOrderExist(site);
@@ -220,27 +240,27 @@ export class OrderMethodsService {
       }
 
       if (barcode)  {
-        const addItem$ = this.scanItemForOrder(site, order, barcode, 1,  input?.packaging,  input?.portionValue)
+        const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
         this.processItemPostResults(addItem$)
         return
       }
 
       let packaging = ''
       let portionValue = ''
+      let itemNote = ''
       if (input) {
-        packaging        = input.packaging;
-        portionValue     = input.portionValue;
+        packaging        = input?.packaging;
+        portionValue     = input?.portionValue;
+        itemNote         = input?.itemNote;
       }
 
       if (item) {
         const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
-                              packaging: packaging, portionValue: portionValue, barcode: '', weight: 0 } as NewItem
-        console.log('newItem', newItem)
+                              packaging: packaging, portionValue: portionValue, barcode: '', weight: 1, itemNote: itemNote } as NewItem
         const addItem$    = this.posOrderItemService.postItem(site, newItem)
         this.processItemPostResults(addItem$)
         return
       }
-
     }
   }
 
@@ -262,7 +282,7 @@ export class OrderMethodsService {
   }
 
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
-    console.log('barcode', barcode)
+    console.log('scan barcode item', quantity)
     this.processAddItem(this.order, barcode, null, quantity, input);
   }
 

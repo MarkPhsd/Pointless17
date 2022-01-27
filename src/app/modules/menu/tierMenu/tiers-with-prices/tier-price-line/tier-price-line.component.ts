@@ -1,11 +1,12 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IMenuItem,  } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
-import { ITVMenuPriceTiers, TVMenuPriceTierItem } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { ITVMenuPriceTiers } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { NewItem } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PriceTiers,PriceTierPrice, } from 'src/app/_interfaces/menu/price-categories';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tier-price-line',
@@ -13,6 +14,8 @@ import { PriceTiers,PriceTierPrice, } from 'src/app/_interfaces/menu/price-categ
   styleUrls: ['./tier-price-line.component.scss']
 })
 export class TierPriceLineComponent {
+
+  @Output() outputNewItem = new EventEmitter();
   @Input() priceTiers: PriceTiers;
   priceTierPrice     : PriceTierPrice;
   @Input() tier : ITVMenuPriceTiers;
@@ -21,35 +24,50 @@ export class TierPriceLineComponent {
 
   initSubscriptions() {
     this.menuService.currentMeuItem$.subscribe(data => {
-      this.menuItem = data;
+      if (data) {
+        this.menuItem = data;
+      }
     })
   }
 
   constructor(
     private menuService        : MenuService,
+    private _snackBar          : MatSnackBar,
     private siteService:         SitesService,
     private orderMethodsService: OrderMethodsService,
 
   ) {
-    if (this.tier) {
-      this.initPrices(this.tier);
-    }
-   }
-
-  initPrices(tier: any) {
-
+    this.initSubscriptions();
   }
 
   addItem(item: PriceTierPrice) {
+
     const newItem = {} as NewItem;
-    newItem.menuItem
-    newItem.menuItem
-    if (newItem.menuItem) {
-      newItem.menuItem.priceTierID  = this.priceTiers.id
-      // this.priceTiers.priceTierPrices
-      newItem.weight = +item.flatQuantity;
+    if (this.menuItem) {
+      newItem.menuItem = this.menuItem
+      if (newItem.menuItem) {
+        newItem.menuItem.priceTierID  = this.priceTiers.id
+        newItem.weight = +item.flatQuantity;
+        newItem.quantity = 1
+        this.outputNewItem.emit(newItem)
+        return
+      }
     }
-    const site = this.siteService.getAssignedSite();
-    this.orderMethodsService.addItemToOrderWithBarcodePromise(site, newItem)
+
+    if (this.menuItem) {
+      console.log('menuItem', this.menuItem)
+      this.notifyEvent('Item not added', 'error')
+    }
+
   }
+
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: 'top'
+    });
+  }
+
+
+
 }

@@ -53,7 +53,6 @@ export class TvMenuPriceTierService {
   private _tierFlowerMenu = new BehaviorSubject<IFlowerMenu>(null);
   public tierFlowerMenu$  = this._tierFlowerMenu.asObservable();
 
-
   updateTier(tier: ITVMenuPriceTiers){
     this._tier.next(tier)
   }

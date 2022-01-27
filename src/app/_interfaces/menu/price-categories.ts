@@ -2,13 +2,9 @@
 import { IPagedList } from "src/app/_services/system/paging.service";
 
 export interface IPriceCategoryPaged {
-
   results      : IPriceCategories[]
   paging       : IPagedList
-
 }
-
-
 
 export interface IPriceCategories {
   id:            number;
@@ -86,23 +82,23 @@ export interface PriceTiers {
 export interface PriceTierPrice {
   id:             number;
   productPriceID: number; //pricetier
-  quantityFrom:   number;
-  quantityTo:     number;
-  retail:         number;
-  price1:         number;
-  price2:         number;
-  price3:         number;
-  price4:         number;
-  price5:         number;
-  price6:         number;
-  price7:         number;
-  price8:         number;
-  price9:         number;
+  quantityFrom:   any;
+  quantityTo:     any;
+  retail:         any;
+  price1:         any;
+  price2:         any;
+  price3:         any;
+  price4:         any;
+  price5:         any;
+  price6:         any;
+  price7:         any;
+  price8:         any;
+  price9:         any;
   startTime:      string;
   endTime:        string;
-  specialPrice:   number;
+  specialPrice:   any;
   weekDays:       string;
-  flatQuantity:   number;
+  flatQuantity:   any;
   priceName:      string;
   rateOrPrice:    boolean;
 }

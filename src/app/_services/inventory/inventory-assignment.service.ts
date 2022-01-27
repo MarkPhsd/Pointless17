@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ISite, Paging}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -113,12 +113,21 @@ export interface InventoryFilter {
 
 export class InventoryAssignmentService {
 
+  private _avalibleInventoryResults = new BehaviorSubject<AvalibleInventoryResults>(null);
+  public avalibleInventoryResults$ = this._avalibleInventoryResults.asObservable()
+  public avalibleInventoryResults: AvalibleInventoryResults;
+
   constructor(
     private http: HttpClient,
     private auth: AuthenticationService,
     private fb  : FormBuilder,
     private siteService: SitesService)
   {
+  }
+
+  updateAvalibleInventoryResults(results) {
+    this.avalibleInventoryResults = results
+    this._avalibleInventoryResults.next(results)
   }
 
   getAvalibleInventory(site: ISite, productID: number, active: boolean): Observable<AvalibleInventoryResults> {

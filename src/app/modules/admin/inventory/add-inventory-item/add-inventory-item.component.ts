@@ -124,15 +124,14 @@ export class AddInventoryItemComponent implements OnInit {
     if (item) {
       this.notifyEvent('Inventory info updated.', 'Success')
       return
-    }
-    console.log('updateitem failed')
+    } console.log('updateitem failed')
     this.notifyEvent('Inventory info not  updated.', 'failed')
     return  false
   }
 
   async updateItemExit(event) {
     const result = await this.updateItem(null)
-    this.onCancel(event)
+    this.onCancel(true)
   }
 
   deleteItem(event) {
@@ -181,7 +180,7 @@ export class AddInventoryItemComponent implements OnInit {
   }
 
   onCancel(event) {
-    this.dialogRef.close();
+    this.dialogRef.close(event);
   }
 
   notifyEvent(message: string, action: string) {

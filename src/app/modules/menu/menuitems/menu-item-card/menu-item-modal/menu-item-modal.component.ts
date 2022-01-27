@@ -11,8 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog'
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { Capacitor, Plugins } from '@capacitor/core';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { Capacitor,  } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -158,7 +157,8 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
     }
   }
 
-  exit() {
+  exit(event) {
+    console.log('even happened', event)
     this.dialogRef.close();
   }
 

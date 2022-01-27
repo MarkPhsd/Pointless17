@@ -24,16 +24,33 @@ mat-form-field {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
+
+  // display:grid;
+  // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  // gap: 20px;
+}
+
+.grid-item {
+  font-size: .9em;
+  // width: 135px;
+  // max-width: 135px;
+  margin: 5px
+}
+
+.selector {
+  top: -5px;
+  position: relative;
+
+}
+
+.number-input {
+  width: 45px;
+  max-width: 45px;
 }
 
 .grid-list-item {
   height: 95%;
   overflow: hidden;
-}
-
-.grid-item {
-  margin-right: 5px;
-  font-size: .9em;
 }
 
 .toggle{

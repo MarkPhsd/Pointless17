@@ -114,20 +114,16 @@
                      (swiperight)="swipe(1, $event.type)">
               <div  class="grid-flow">
                 <div>
-                  <div *ngIf="isAuthorized">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Select Role</mat-label>
-                      <mat-select
-                                  type="text"
-                                  formControlName ="roles">
-                              <mat-option [value]="'admin'">admin</mat-option>
-                              <mat-option [value]="'manager'">manager</mat-option>
-                              <mat-option [value]="'employee'">employee</mat-option>
-                              <mat-option [value]="'user'">user</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                  </div>
 
+
+                  <!-- <div> -->
+
+                    <app-profile-roles
+                      [isAuthorized]="isAuthorized"
+                      [inputForm] ="inputForm">
+                    </app-profile-roles>
+
+                  <!-- </div> -->
                   <div class="form-field"
                        *ngIf="isAuthorized && inputForm">
                     <employee-lookup
