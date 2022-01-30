@@ -176,15 +176,34 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       // }
     }
 
+    getQuantity() {
+      if (this.quantity == 0 || !this.quantity) { this.quantity = 1}
+      return this.quantity
+    }
+
+    validateUser() {
+      return this.userAuthorization.validateUser();
+    }
+
     async addItemWithTierPrice(event) {
 
       let newItem = event as NewItem;
+
+      const valid = this.validateUser();
+      if (!valid) { return }
+
+      if (!event) {
+        this.notifyEvent('No item found.', 'Error')
+        return
+      }
+
       if (!newItem) { return }
 
-      const data = this.inventoryAssignmentService.avalibleInventoryResults;
       const menuItem = this.menuItem;
 
-      const quantity = +newItem.weight * +newItem.quantity;
+      const quantity       = +newItem.quantity * newItem.weight;
+      newItem.quantity     = this.getQuantity();
+
       const stockRequired = this.getIsStockRequired(menuItem);
       const stockAvalible = this.validateInventoryRequirement(menuItem,quantity);
 
@@ -193,16 +212,19 @@ export class MenuitemComponent implements OnInit, OnDestroy {
         await  this.orderMethodsService.scanBarcodeAddItem(menuItem.barcode , quantity, null)
         return
       }
+      if (this.inventoryAssignmentService && this.inventoryAssignmentService.avalibleInventoryResults) {
+        const data = this.inventoryAssignmentService.avalibleInventoryResults;
+        if (data) {
+          if (data.results && data.results.length>0) {
+            const inventory = this.getAvalibleInventory(data, quantity)
+            if (inventory && inventory.packageCountRemaining >0 ) {
+              newItem.barcode  = inventory.sku;
+              newItem          = this.setItemValuesFromInput(newItem)
+              const  site      = this.siteService.getAssignedSite();
+              const addResult =  this.orderMethodsService.scanBarcodeAddItem(newItem.barcode , quantity, null)
 
-      if (data) {
-        if (data.results.length>0) {
-          const inventory = this.getAvalibleInventory(data, quantity)
-          if (inventory && inventory.packageCountRemaining >0 ) {
-            newItem.barcode  = inventory.sku;
-            newItem = this.setItemValuesFromInput(newItem)
-            const  site      = this.siteService.getAssignedSite();
-            await  this.orderMethodsService.scanBarcodeAddItem(newItem.barcode , quantity, null)
-            return
+              return
+            }
           }
         }
       }
@@ -226,28 +248,34 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     validateInventoryRequirement(menuItem: IMenuItem, quantity: number) {
 
       let stockRequired = this.getIsStockRequired(menuItem);
+      if ( this.inventoryAssignmentService && this.inventoryAssignmentService.avalibleInventoryResults) {
+        const data = this.inventoryAssignmentService.avalibleInventoryResults;
+        if (!data && stockRequired) {
+          this.notifyEvent('Inventory not avalible. Please try a different quantity', 'Failed')
+          return false
+        }
 
-      const data = this.inventoryAssignmentService.avalibleInventoryResults;
-      if (!data && stockRequired ) {
-        this.notifyEvent('Inventory not avalible. Please try a different quantity', 'Failed')
-        return false
+        if (data) {
+          const inventory = this.getAvalibleInventory(data, quantity)
+          if (!inventory || (inventory.packageCountRemaining == 0 || inventory.packageCountRemaining < 0) ) {
+            this.notifyEvent('Inventory not avalible. Please try a different quantity', 'Failed')
+          }
+          return true
+        }
       }
-
-      const inventory = this.getAvalibleInventory(data, quantity)
-      if (!inventory || (inventory.packageCountRemaining == 0 || inventory.packageCountRemaining < 0) ) {
-        this.notifyEvent('Inventory not avalible. Please try a different quantity', 'Failed')
-        return false
-      }
-
+      return false
     }
 
     getAvalibleInventory(inv: AvalibleInventoryResults, quantityRequested: number) : IInventoryAssignment {
       let inventory = {} as IInventoryAssignment;
-      if (inv){
+      if (inv && inv.results){
+        console.log(inv.results)
         inv.results.forEach( data => {
-          if (data.packageCountRemaining > quantityRequested) {
-            inventory = data;
-            return
+          if (data) {
+            if (data.packageCountRemaining > quantityRequested) {
+              inventory = data;
+              return
+            }
           }
         })
       }
@@ -268,24 +296,26 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     getItem(id: any) {
       const site     = this.siteService.getAssignedSite();
-      if (id != null && id != undefined) {
-        const menuItem$ = this.menuService.getMenuProduct(site,id)
+      if (id && (id != null && id != undefined)) {
+        const menuItem$ = this.menuService.getMenuProduct(site, id)
         menuItem$.subscribe(data => {
-            this.setMenuItem(data)
+            if (data) {
+              this.setMenuItem(data)
+            }
           }
         )
       }
     };
 
     setMenuItem(menuItem: IMenuItem) {
-      this.menuItem = menuItem;
       if (menuItem) {
+        this.menuItem = menuItem;
         const site     = this.siteService.getAssignedSite();
         this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
         this.brand$ = this.brandService.getClient(site, menuItem.brandID)
         this.packagingMaterial = this.menuService.getPackagingMaterialArray(menuItem)
 
-        if (menuItem.priceCategories && menuItem.priceCategories.productPrices.length>0 ) {
+        if (menuItem.priceCategories &&  menuItem.priceCategories.productPrices && menuItem.priceCategories.productPrices.length>0 ) {
           const tier = menuItem.priceCategories.productPrices[0].priceTiers;
           this.priceTiers = tier
         }
@@ -295,7 +325,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
 
     addItemByCode(item) {
       if (item) {
-        console.log('sku', item.sku)
         this.orderMethodsService.scanBarcodeAddItem(item.sku, 1, {packaging: this.packaging, portionValue: this.portionValue} )
       }
     }

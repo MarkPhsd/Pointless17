@@ -4,7 +4,7 @@
   ... getting inventory
 </ng-template>
 
-<mat-card *ngIf="productID && productID !=0 && results; else loading ">
+<mat-card *ngIf="!refresh || (productID && productID !=0 && results) ; else loading ">
   <mat-card-content>
     <div  *ngIf="results" >
       <div *ngIf="showList">
@@ -12,6 +12,7 @@
           <div>UOM</div>
           <div>SKU</div>
           <div>QTY</div>
+          <div>Edit</div>
         </div>
         <div *ngFor="let item of results.results">
             <div class='grid-container'>
@@ -33,7 +34,6 @@
         In Stock:  {{results.total}}
       </div>
 
-
       <div *ngIf="results.total > 0 && !isStaff" class="instock-total">
         <div *ngIf="results.total>100">
           In Stock
@@ -49,6 +49,17 @@
       <div *ngIf="results.total < 1" class="instock-total">
         Out of Stock.
       </div>
+
+      <div *ngIf="showList && isAdmin">
+          <button mat-button (click)="setCountToInventory()">
+          <mat-icon>refresh</mat-icon>
+          <div>
+            Reconcile Count with Inventory
+          </div>
+          </button>
+      </div>
+
+
       <div *ngIf="showAddButton">
         <button mat-raised-button (click)="addItem()">
           <mat-icon>add</mat-icon><ng-content #name></ng-content>

@@ -107,12 +107,12 @@ export class UISettingsService {
   getSetting(name: string): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
-    if (user && user.username && user.token) {
+
+    if (user && user.username && user.token && (user.roles != '' && user.roles != 'user' )) {
       return this.settingsService.getSettingByName(site, name)
     }
-    if (!user) {
-      return this.settingsService.getSettingByNameNoRoles(site, name)
-    }
+
+    return this.settingsService.getSettingByNameNoRoles(site, name)
   }
 
   async  saveConfig(fb: FormGroup, name: string): Promise<ISetting>  {

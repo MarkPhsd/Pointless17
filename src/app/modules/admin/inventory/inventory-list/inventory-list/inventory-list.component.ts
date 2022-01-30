@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, Subject  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -116,7 +116,8 @@ export class InventoryListComponent implements OnInit {
     urlPath:        string;
     value : any;
 
-    gridlist = "grid-list"
+    smallDevice: boolean;
+    gridlist    = "grid-list"
     sites$:               Observable<ISite[]>;
     site:                 ISite;
     selectedSiteID:       number;
@@ -204,10 +205,20 @@ export class InventoryListComponent implements OnInit {
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions = 'width: 100%; height: 90%;'
+    this.gridDimensions = 'width: 100%; height: 100%;'
     this.agtheme        = 'ag-theme-material';
-    if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-    if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+    if (this.smallDevice) {
+      this.gridDimensions = 'width: 100%; height: 70%;'
+    }
+  }
+
+  @HostListener("window:resize", [])
+    updateDeviceSize() {
+    this.smallDevice = false
+    if (window.innerWidth < 768) {
+      this.smallDevice = true
+    }
+    this.initClasses();
   }
 
   initForm() {
@@ -558,7 +569,6 @@ export class InventoryListComponent implements OnInit {
     this.selected = selected
     this.id = selectedRows[0].id;
     this.getInventoryHistory(this.id)
-
   }
 
   async getInventoryHistory(id: any) {

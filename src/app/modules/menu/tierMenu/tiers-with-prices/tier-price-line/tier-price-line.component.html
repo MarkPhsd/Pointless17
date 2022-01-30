@@ -4,7 +4,7 @@
 
     <div  class="button"
           *ngFor="let item of priceTiers.priceTierPrices">
-        <div  class="button">
+        <div class="button">
           <button mat-raised-button
                   class="button"
                   (click)="addItem(item)"
@@ -15,7 +15,7 @@
                 {{item.priceName}}
               </div>
 
-              {{item.flatQuantity}} g
+              {{item.flatQuantity}} G
               <span *ngIf="item.rateOrPrice">
                 @ {{ (item.retail * item.flatQuantity).toFixed(2) | currency }}
               </span>

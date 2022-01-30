@@ -142,19 +142,19 @@ export class POSOrderItemServiceService {
       const scaleInfo = this.scaleInfo
       if  (scaleInfo) {
         let weight = scaleInfo.value;
-        newItem.weight = weight
+        newItem.weight = weight;
+        newItem.quantity = 1;
       }
     }
     return newItem;
   }
-
 
   addItemToOrderWithBarcode(site: ISite, newItem: NewItem):  Observable<ItemPostResults> {
 
     if (!newItem ) { return }
 
     newItem = this.getNewItemWeight(newItem);
-
+    console.log('new weighted item', newItem)
     const controller = "/POSOrderItems/"
 
     const endPoint  = "PostUniqueBarcodeItem"

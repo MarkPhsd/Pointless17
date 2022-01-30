@@ -113,4 +113,7 @@ export interface IClientTable {
   med:                      string;
   dlNumber            :     string;
   age                      :number;
+  accountDisabled         : boolean;
+  accountLocked          : boolean;
+  accountDelay           :  string;
 }

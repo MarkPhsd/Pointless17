@@ -13,6 +13,8 @@ import { IClientTable, IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Capacitor,  } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu-item-modal',
@@ -43,6 +45,8 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
 
   isApp: boolean;
 
+  childNotifier : Subject<boolean> = new Subject<boolean>();
+
   constructor(private menuService: MenuService,
         private router            : Router,
         public  route              : ActivatedRoute,
@@ -53,28 +57,26 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
         public gallery            : Gallery,
         private siteService       : SitesService,
         private brandService      : ClientTableService,
+        private platFormService   : PlatformService,
         private orderMethodsService: OrderMethodsService,
         private dialogRef         : MatDialogRef<MenuItemModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any
        )
   {
 
+    this.isApp =  this.platFormService.isApp();
+
     if (data) {
-      this.id = data.id
+      if (data.id) {
+        this.id = data.id
+      }
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
+      if (!this.id) { return }
     }
 
     this.getItem(this.id);
-
-    if ( this.platForm  === "Electron"
-         || this.platForm === "android"
-         || this.platForm === "capacitor")
-    { this.isApp = true }
-
   }
-
-  childNotifier : Subject<boolean> = new Subject<boolean>();
 
   async ngOnInit() {
 
@@ -131,23 +133,19 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
 
     const site = this.siteService.getAssignedSite();
 
+    if (!id || id == 0) {     return ; }
+
     this.menuItem$ = this.menuService.getMenuItemByID(site,id)
 
-    let promise =  this.menuItem$.pipe().toPromise()
-
-     promise.then(data =>
-      {
+    this.menuItem$.subscribe(data => {
+      if (data) {
         this.menuItem = data;
-
-        this.brand$    =  this.brandService.getClient(site, data.brandID)
-
-
-      },
-      error => {
+        if (data.brandID) {
+          this.brand$    =  this.brandService.getClient(site, data.brandID)
+        }
       }
-    )
+    })
   };
-
 
   goBackToList() {
     try {

@@ -5,6 +5,7 @@ import { IPagedList } from "src/app/_services/system/paging.service";
 export interface ClientSearchResults {
  results: IUserProfile[];
  paging: IPagedList;
+ message : string;
 }
 
 export interface ClientSearchModel {

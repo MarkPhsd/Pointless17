@@ -12,6 +12,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-product-info-panel',
@@ -49,6 +50,7 @@ export class ProductInfoPanelComponent implements OnInit {
        private printingService   : PrintingService,
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
+       private _snackBar         : MatSnackBar,
        )
   {
     // this.toggleLabelEvents = false;
@@ -59,6 +61,16 @@ export class ProductInfoPanelComponent implements OnInit {
     // { this.toggleLabelEvents  = 'events'}
     this.toggleLabelEvents  = option;
     // return
+  }
+
+  setProductCount(number) {
+    if (this.product) {
+      const site = this.siteService.getAssignedSite();
+      this.product.productCount = number;
+      this.menuService.putProduct(site, this.product.id, this.product).subscribe(data => {
+        this.notifyEvent('Count updated, you may need to refresh your search to see updates.', 'Success')
+      })
+    }
   }
 
   getLastPrinterName(): string {
@@ -177,5 +189,11 @@ export class ProductInfoPanelComponent implements OnInit {
     this.printingService.setLastLabelUsed(this.labelSetting.id)
   }
 
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+    duration: 2000,
+    verticalPosition: 'top'
+    });
+  }
 
 }

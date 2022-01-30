@@ -368,7 +368,15 @@ mat-spinner
 }
 
 mat-dialog-container {
-  padding: 0  !important;
+  @include for-phone-only {
+    padding: 0  !important;
+  }
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.custom-dialog-container .mat-dialog-container {
+  overflow-y: hidden;
 }
 
 .shine {

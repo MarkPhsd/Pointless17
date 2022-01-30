@@ -42,60 +42,58 @@
                      id="barcode">{{ menuItem?.barcode}}
                 </div>
 
-                <div class="prices"
-                     *ngIf="isUserStaff">
-                  <menu-item-extended-prices
-                    [isUserStaff]="isUserStaff"
-                    [menuItem]="menuItem">
-                  </menu-item-extended-prices>
-                </div>
+                <div class="item-span">
 
-                <div class="item-span manager-info"
-                     *ngIf="menuItem && menuItem.itemType
-                          && !menuItem.itemType.requireInStock">
-                  <div class ="pricing-box"  >
-                    <div id  ="unitDescription"> </div>
-                    <div id  ="price"> Count {{ menuItem?.productCount }} </div>
+                  <div class="prices"
+                      *ngIf="isUserStaff">
+                    <menu-item-extended-prices
+                      [isUserStaff]="isUserStaff"
+                      [menuItem]="menuItem">
+                    </menu-item-extended-prices>
                   </div>
-                </div>
 
-                <div class="item-span instock-option"
-                  *ngIf="menuItem && menuItem.itemType
-                        && menuItem.itemType.requireInStock">
-                  <inventory-counts-view
-                      [showList]="false"
-                      [showAddButton]="!priceTiersShown"
-                      [productID]="menuItem.id"
-                      (outPutAddItem)="addItemByCode($event)">
-                      Add to Cart
-                  </inventory-counts-view>
-                </div>
+                  <div *ngIf="menuItem && menuItem.itemType
+                              && !menuItem.itemType.requireInStock">
+                    <menu-item-product-count
+                      [productCount]='menuItem.productCount'
+                      [isUserStaff] ='isUserStaff'>
+                    </menu-item-product-count>
+                  </div>
 
-                <div class="grid-save-add-buttons"
-                     *ngIf="menuItem && menuItem.itemType
-                      && !menuItem.itemType.requireInStock
-                      && !priceTiers">
 
-                      <!-- <div id="addToWishList">
-                      <button mat-raised-button
-                              class="button">
-                        Add To Wishlist</button>
-                    </div> -->
+                  <div class="item-span instock-option"
+                    *ngIf="menuItem && menuItem.itemType
+                          && menuItem.itemType.requireInStock">
+                    <inventory-counts-view
+                        [showList]      ="false"
+                        [showAddButton] ="!priceTiersShown"
+                        [productID]     ="menuItem.id"
+                        (outPutAddItem) ="addItemByCode($event)">
+                        Add to Cart
+                    </inventory-counts-view>
+                  </div>
 
-                    <div id="addItemToOrder">
-                      <button  mat-raised-button
-                                class="button"
-                                (click)="addItemToOrder()">
-                        <mat-icon>add</mat-icon>Add To Order</button>
-                    </div>
+                  <div class="grid-save-add-buttons"
+                      *ngIf="menuItem && menuItem.itemType
+                        && !menuItem.itemType.requireInStock
+                        && !priceTiers">
 
-                    <div *ngIf="productForm"
-                          class="column-3-span">
-                        <app-quantiy-selector
-                          [inputForm]  = "productForm"
-                          (outPutValue)="changeQuantity($event)">
-                      </app-quantiy-selector>
-                    </div>
+                      <div id="addItemToOrder">
+                        <button  mat-raised-button
+                                  class="button"
+                                  (click)="addItemToOrder()">
+                          <mat-icon>add</mat-icon>Add To Order</button>
+                      </div>
+
+                      <div *ngIf="productForm"
+                            class="column-3-span">
+                          <app-quantiy-selector
+                            [inputForm]  = "productForm"
+                            (outPutValue)="changeQuantity($event)">
+                        </app-quantiy-selector>
+                      </div>
+                  </div>
+
                 </div>
 
                 <div  *ngIf="menuItem.itemType && menuItem.itemType.instructions"
@@ -174,8 +172,9 @@
                         &&  priceTiers">
                 <tier-price-line
                     (outputNewItem)="addItemWithTierPrice($event)"
-                    [menuPopup]="true"
-                    [priceTiers]="priceTiers">
+                    [menuPopup]    ="true"
+                    [menuItem]     ="menuItem"
+                    [priceTiers]   ="priceTiers">
                 </tier-price-line>
             </div>
 

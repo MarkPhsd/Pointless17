@@ -1,18 +1,18 @@
 <div class="header-flex">
 
-  <div
-        [formGroup]="searchForm"
-        class="grid-item" >
-    <mat-form-field appearance="outline" class="form-fields">
-        <mat-label >Search Items</mat-label>
-          <input
-                  #input
-                  matInput
-                  type           ="text"
-                  id             ="name"
-                  formControlName="itemName">
-    </mat-form-field>
-  </div>
+    <div  *ngIf="searchForm"
+          [formGroup]="searchForm"
+          class="grid-item">
+      <search-debounce-input
+                [itemNameControl] = "'itemName'"
+                [searchForm]      = "searchForm"
+                (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
+        </div>
+      </search-debounce-input>
+    </div>
 
   <div>
     <span>

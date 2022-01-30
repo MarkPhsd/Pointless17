@@ -1,0 +1,7 @@
+<div class ="pricing-box">
+  <div id  ="price"  *ngIf="!isUserStaff && ( productCount > 0)"> In Stock </div>
+  <div id  ="price"  *ngIf="!isUserStaff && (!productCount
+                                           || productCount == 0
+                                           || productCount < 0)"> Out of Stock </div>
+  <div id  ="price" *ngIf="isUserStaff"> Count {{ productCount }} </div>
+</div>

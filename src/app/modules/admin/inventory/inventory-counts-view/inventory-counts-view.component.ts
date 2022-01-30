@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, SimpleChanges, OnChanges,OnDestroy, EventEmitter } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
-import { IPOSOrder } from 'src/app/_interfaces';
+import { IPOSOrder, IProduct } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
@@ -19,13 +19,22 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   @Input() showAddButton: boolean;
   @Input() showList = true;
 
+  product: IProduct;
+
+  @Input() set setProductID(productID: number) {
+    this.productID = productID
+    this.refreshValues()
+    }
+
   @Output() outPutAddItem :   EventEmitter<IInventoryAssignment> = new EventEmitter();
+  @Output() outPutSetCount :   EventEmitter<number> = new EventEmitter();
 
   results$ : Observable<AvalibleInventoryResults>;
   results : AvalibleInventoryResults;
 
   isStaff: boolean;
   isAdmin: boolean
+  refresh : boolean;
 
   private _order : Subscription;
   private order  : IPOSOrder;
@@ -37,8 +46,6 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
         this.refreshValues();
       }
     })
-
-
   }
 
   constructor(private InventoryAssignmentService: InventoryAssignmentService,
@@ -62,16 +69,28 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   }
 
   refreshValues() {
+    console.log('refresh', this.productID)
     const site = this.siteService.getAssignedSite();
+    this.refresh = true
+
     if (this.productID && this.active) {
-      this.results$ = this.InventoryAssignmentService.getAvalibleInventory(site,this.productID, this.active)
+      this.results$ = this.InventoryAssignmentService.getAvalibleInventory(site, this.productID, this.active)
       this.results$.subscribe(data => {
-        this.results = data;
-        this.InventoryAssignmentService.updateAvalibleInventoryResults(this.results)
+        if (data) {
+          this.results = data;
+          this.refresh = false
+          this.InventoryAssignmentService.updateAvalibleInventoryResults(this.results)
+          console.log('this.results', this.results)
+        }
       })
     }
   }
 
+  setCountToInventory() {
+    if (this.results) {
+      this.outPutSetCount.emit(this.results.total)
+    }
+  }
 
   editInventoryItem(item) {
     if (this.isAdmin) {
@@ -86,11 +105,9 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
   }
 
   addItem(){
-
     if (this.results && this.results.results) {
       const item = this.results.results[this.results.results.length -1]
       this.outPutAddItem.emit(item)
-
       return
     }
   }

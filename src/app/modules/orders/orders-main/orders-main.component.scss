@@ -1,16 +1,16 @@
 @import "/src/mixins.scss";
-// https://blog.logrocket.com/flexible-layouts-without-media-queries/
+
 .parent-container {
   overflow: hidden;
-  height: 100%;
+  // height: 100%;
 }
 
 .grid-container {
-
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: 1fr 300px;
+  overflow: hidden;
 
   @include for-phone-only  {
     --gap: 5px;
@@ -18,25 +18,20 @@
     gap: var(--gap);
     grid-template-columns: 1fr;
   }
-
 }
 
 .grid-flow {
   --gap: 20px;
   display: grid;
   gap: var(--gap);
-
   grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
-
   @include for-phone-only  {
     --gap: 10px;
     display: grid;
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(140px, 1fr) );
   }
-
 }
-
 
 .item {
   padding: 1.35rem;
@@ -44,22 +39,19 @@
   border-radius: 4px;
 }
 
-
 .card-container {
-  overflow: hidden;
-  display: flex;
+  overflow  : hidden;
+  display   : flex;
   flex-direction: row;
   flex-basis: auto;
-  // flex-wrap:;
-  flex-grow: inherit;
-  gap: 5px;
-  height: 95%;
+  flex-grow : inherit;
+  gap       : 5px;
+  height    : 95%;
 }
 
 .filter-container {
   overflow-x: hidden;
   overflow-y: auto;
-  // height: 70vh;
   height: 84vh;
   max-height: 84vh;
   max-width:  275px;

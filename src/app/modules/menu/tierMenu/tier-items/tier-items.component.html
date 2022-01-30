@@ -25,8 +25,15 @@
                   *ngFor="let flower of (flowers$ | async)" >
               <span *ngIf="flower.priceTier === header && flower.flower.length>0">
                 <div  class="grid-item" >
-                  <button mat-button (click)="navMenuItem(flower)">
-                    {{flower.flower}}
+                  <!-- <img  [src]="imageUrl" onerror= "this.src='../assets/images/placeholderimage.png'"
+                        id="product-image"   /> -->
+                  <button
+                          class="button-dimensions"
+                          mat-button (click)="navMenuItem(flower)">
+                    <mat-icon>open_with</mat-icon>
+                    <span class='button-text'>
+                      {{flower.flower | truncateText: 18}}
+                    </span>
                   </button>
                 </div>
               </span>

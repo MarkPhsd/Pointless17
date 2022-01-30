@@ -68,20 +68,22 @@
                   [scrollWindow]          ="false">
 
               <div class="grid-flow">
-                <div *ngFor="let item of brands; let i = index">
-                  <div class="grid-item">
-                    <div class="shine">
+                <div *ngFor="let item of brands; let i = index"
+                    >
+
+                    <div>
                       <div class="text">{{item.company  | truncateText: 15  }}</div>
-                      <img
-                         loading ="lazy"
-                         draggable="false"
-                         [src]    ="getBrandSource(item)"
-                         onerror   = "this.src='../assets/images/placeholderimage.png'"
-                         (click)  ="listItems(item.id)"
-                         class    ="grid-item shine"
-                         alt      ="item">
-                    </div>
-                  </div>
+                        <img
+                            loading  ="lazy"
+                            draggable="false"
+                            [src]    ="getBrandSource(item?.onlineDescriptionImage)"
+                            err-SRC  = "getPlaceHolder()"
+                            onerror  = "this.src='../assets/images/placeholderimage.png'"
+                            (click)  ="listItems(item.id)"
+                            class    = "grid-item shine"
+                            [alt]    ="item?.name">
+                      </div>
+
                 </div>
               </div>
 

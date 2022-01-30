@@ -3,11 +3,11 @@
   <div *ngIf="isAuthorized">
     <button mat-button (click)="changeView()">
       <mat-icon>
-        <span *ngIf="viewType==1">view_list</span>
-        <span *ngIf="viewType==0">view_module</span>
+        <span *ngIf="viewType == 1">view_list</span>
+        <span *ngIf="viewType == 0">view_module</span>
       </mat-icon>
-      <span *ngIf="viewType==1">View List</span>
-      <span *ngIf="viewType==0">View Grid</span>
+      <span *ngIf="viewType == 1">View List</span>
+      <span *ngIf="viewType == 0">View Grid</span>
     </button>
   </div>
 
@@ -21,20 +21,25 @@
    <button mat-button (click)="newOrderOptions()">
      <mat-icon>add</mat-icon><span>Other New</span>
    </button>
-
   </div>
 
   <div class="grid-container">
 
     <span *ngIf="viewType == 1">
-      <app-order-cards></app-order-cards>
+      <app-order-cards
+        ></app-order-cards>
     </span>
 
     <span *ngIf="viewType == 0">
-      <app-orders-list></app-orders-list>
+
+      <app-orders-list
+        [height]="listHeight">
+      </app-orders-list>
     </span>
 
     <div *ngIf="!smallDevice" class="filter-container">
+
+
       <app-order-filter-panel>
       </app-order-filter-panel>
     </div>

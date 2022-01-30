@@ -15,6 +15,9 @@
               <h3>Profile Editor</h3>
             </div>
             <div>
+              <div *ngIf="clientTable.accountDisabled">
+                <h1>Alert - Account is Disabled - Orders can't be processed.</h1>
+              </div>
               <h4>
                 {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}
                 | Account :  {{clientTable?.accountNumber}}
@@ -29,6 +32,7 @@
               (outputupdatedeleteItem)="deleteUser($event)"
               (outputupdateonCancel)  ="navUserList($event)"
               (outPutStartOrder)      ="startOrder($event)"
+              [enableDelete]= "false"
             ></app-edit-buttons-standard>
           </div>
 
@@ -141,15 +145,37 @@
       </form>
     </mat-card-content>
 
+
+
     <mat-card-actions>
       <div *ngIf="isAuthorized">
+        <div  [formGroup]="inputForm">
+          <div>
+            <mat-slide-toggle
+                    name="accountDisabled"
+                    class="mat-label"
+                    formControlName="accountDisabled">
+              <mat-label class="mat-label">Disabled</mat-label>
+            </mat-slide-toggle>
+          </div>
+          <div>
+            <mat-slide-toggle
+                    name="accountLocked"
+                    class="mat-label"
+                    formControlName="accountLocked">
+              <mat-label class="mat-label">Locked</mat-label>
+            </mat-slide-toggle>
+          </div>
+        </div>
+
         <button mat-raised-button
-                class="button-margin"
-                color="warn"
-                (click)="deleteUser('demo')">
-                <mat-icon>delete</mat-icon>Delete</button>
-      </div>
-    </mat-card-actions>
+              class="button-margin"
+              color="warn"
+              (click)="deleteUser('demo')">
+              <mat-icon>delete</mat-icon>Delete</button>
+
+    </div>
+  </mat-card-actions>
 
   </mat-card>
 </div>

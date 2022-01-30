@@ -119,10 +119,13 @@ export class FbContactsService {
         roles: [''], //                    string;
         onlineDescriptionImage: [''], //   string;
         onlineDescription: [''], //        string;
-        onlineDescriptionTag: [''], //     string;
-        employeeID: [''], //               number;
-        med       : [''],
-        dlNumber  : [''],
+        onlineDescriptionTag      : [''], //     string;
+        employeeID                : [''], //               number;
+        med                       : [''],
+        dlNumber                  : [''],
+        accountDisabled           : [''],
+        accountLocked             : [''],
+        accountDelay              : [''],
       })
     return fb
   }

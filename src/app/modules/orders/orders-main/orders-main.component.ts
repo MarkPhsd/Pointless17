@@ -19,7 +19,7 @@ export class OrdersMainComponent  {
   smallDevice  : boolean;
   viewType     = 1;
   isAuthorized : boolean;
-
+  listHeight = '84vh'
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
@@ -37,8 +37,10 @@ export class OrdersMainComponent  {
   @HostListener("window:resize", [])
   adjustWindow(){
     this.smallDevice = false
+    this.listHeight = '70vh'
     if (window.innerWidth < 768) {
       this.smallDevice = true
+      this.listHeight = '68vh'
     }
   }
 

@@ -76,7 +76,6 @@ export class CheckInProfileComponent implements OnInit {
               private fb                  : FormBuilder,
               private userAuthorization   : UserAuthorizationService,
             ) {
-
     this.id = this.route.snapshot.paramMap.get('id');
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')

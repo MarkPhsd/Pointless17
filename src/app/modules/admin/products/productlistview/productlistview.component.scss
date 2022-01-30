@@ -48,7 +48,7 @@
 .grid-list {
 
   display: grid;
-  grid-template-columns: 1fr 20vw;
+  grid-template-columns: 1fr 275px;
   gap: 7px;
 
   @media (max-width: 599px)  {

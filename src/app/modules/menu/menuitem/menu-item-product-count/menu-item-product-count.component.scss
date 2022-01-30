@@ -1,0 +1,27 @@
+#price {
+  font-weight: 600;
+  font-size: 1em;
+  width: 100%;
+  margin: 0px 5px 5px 5px;
+  padding: 0px 5px 5px 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  align-items: baseline;
+  line-height: 1em;
+}
+
+.pricing-box {
+  border       : 2px;
+  border-radius: 5px;
+  margin       : 6px;
+  padding      : 5px;
+  border-style : solid;
+  width        : 145px;
+  max-width:     145px;
+  height:        50px;
+  max-height:   50px;
+  top:          25px;
+  position: inherit;
+}

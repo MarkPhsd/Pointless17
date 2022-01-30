@@ -22,16 +22,11 @@
   <mat-divider></mat-divider>
 
   <span  class="grid-container"
-          *ngFor="let tier of tvPriceMenuTiers$ | async">
+          *ngFor="let tier of tvPriceMenuTiers">
 
     <div class="headingstext" >
       {{tier.name}}
     </div>
-    <!--
-    <tier-price-line
-        [tier]="tier">
-    </tier-price-line>
-    -->
 
     <div  class="prices"
         *ngFor="let item of tier.tvMenuPriceTierItems">

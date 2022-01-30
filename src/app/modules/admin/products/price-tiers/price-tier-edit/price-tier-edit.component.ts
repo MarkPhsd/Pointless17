@@ -198,26 +198,36 @@ export class PriceTierEditComponent implements OnInit {
     }
   }
 
-  async updatePriceTier(item): Promise<boolean> {
-    let result: boolean;
+  getBasicTierFromForm(): PriceTiers {
     if (!this.inputForm.valid) { return }
-    const priceTierValue = this.inputForm.value;
+    const priceTier = this.inputForm.value as PriceTiers;
+    const price_Temp  = {} as PriceTiers;
+    price_Temp.id = priceTier.id;
+    price_Temp.name = priceTier.name;
+    if (!priceTier.webEnabled) { price_Temp.webEnabled = 0}
+    if (priceTier.webEnabled) { price_Temp.webEnabled = -1}
+    price_Temp.uid = priceTier.uid;
+    return price_Temp;
+  }
 
-    if (!priceTierValue) {return }
+  async updatePriceTier(item): Promise<boolean> {
+    if (!this.inputForm.valid) { return }
+    const priceTier = this.getBasicTierFromForm();
+    console.log('price tier', priceTier);
 
-    let  priceTier = {} as PriceTiers
-    priceTier.id = priceTierValue.id
-    priceTier.uid = priceTierValue.uid
-    priceTier.name = priceTierValue.name
+    if (!priceTier) {
+      this.notifyEvent('price tier is not valid', 'failed')
+      return
+    }
 
     this.saveAllItems();
 
     return new Promise(resolve => {
       const site = this.siteService.getAssignedSite()
-      const product$ = this.priceTierService.savePriceTier(site, priceTier)
-      product$.subscribe( data => {
+      const priceTier$ = this.priceTierService.savePriceTier(site, priceTier)
+      priceTier$.subscribe( data => {
         this.notifyEvent('Item Updated', 'Success')
-        this.priceTier = data;
+        // this.priceTier = data;
         this.refreshData()
         resolve(true)
         }, error => {

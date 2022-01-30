@@ -242,6 +242,7 @@ import { InventoryHeaderValuesComponent } from '../modules/admin/inventory/inven
 import { EmployeeMetrcKeyEntryComponent } from '../modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
 import { TierPriceLineComponent } from '../modules/menu/tierMenu/tiers-with-prices/tier-price-line/tier-price-line.component';
 import { ProfileRolesComponent } from '../modules/admin/profiles/profile-roles/profile-roles.component';
+import { MenuItemProductCountComponent } from '../modules/menu/menuitem/menu-item-product-count/menu-item-product-count.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -324,6 +325,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuitemComponent,
     MenuItemCardComponent,
     MenuItemExtendedPricesComponent,
+    MenuItemProductCountComponent,
     MenuManagerComponent,
     MessagesToUserComponent,
     MetrcIndividualPackageComponent,

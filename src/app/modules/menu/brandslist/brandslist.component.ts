@@ -145,7 +145,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   isApp                   = false;
   value: any;
 
-  orderslist       = 'orders-list shine'
+  orderslist       = 'orders-list'
   clientSearchResults$: Observable<ClientSearchResults>;
   itemsPerPage     : number;
   totalRecords     : number;
@@ -195,34 +195,40 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     if (this.href === '/brandslist') {
       this.singlePage = true
       this.classcontainer = 'parent-container-single-page'
-      this.orderslist = 'orders-list-single-page shine'
+      this.orderslist = 'orders-list-single-page'
     }
     if (this.href != '/brandslist') {
       this.singlePage = false
       this.classcontainer = 'parent-container'
-      this.orderslist     = 'orders-list shine'
+      this.orderslist     = 'orders-list'
     }
   }
 
   async ngOnInit()  {
     await this.getBucket()
     const site = this.siteService.getAssignedSite();
-    const clientSearchModel       = {} as ClientSearchModel;
-    clientSearchModel.pageNumber  = 1
-    clientSearchModel.pageSize    = 25;
-    this.clientSearchModel        = clientSearchModel;
-    this.clientSearchResults$     = this.contactsService.getLiveBrands(site, clientSearchModel)
+    const searchModel       = {} as ClientSearchModel;
+    searchModel.pageNumber  = 1
+    searchModel.pageSize    = 25;
+    this.clientSearchModel        = searchModel;
+    // this.addToList(searchModel.pageNumber, searchModel.pageSize)
+    this.initFirstSearch(site, searchModel);
+  }
+
+  async initFirstSearch(site, searchModel) {
+    this.clientSearchModel.pageNumber   = 1
+    this.clientSearchModel.currentPage  = 1
+    this.clientSearchResults$     = this.contactsService.getLiveBrands(site, searchModel)
     const data                    = await this.clientSearchResults$.pipe().toPromise();
     if (!data) { return }
     this.brands                   = data.results
     if (!this.brands) { return }
     if (this.brands.length == 0 ) { this.noBrands = true }
-    this.initClass('ngoninit');
   }
 
   ngAfterViewInit() {
     this.initSearchOption();
-    this.initClass('ngAfterViewInit');
+    // this.initClass('ngAfterViewInit');
   }
 
   initSearchOption() {
@@ -265,15 +271,15 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     this.router.navigate(["/brandslist/"]);
   }
 
-  getBrandSource(item: IUserProfile) {
-    return this.getItemSrc(item.onlineDescriptionImage)
+  getBrandSource(imageName: string) {
+    return this.getItemSrc(imageName)
   }
 
   getItemSrc(nameArray: string) {
-    if (this.bucket) {
+    // if (this.bucket) {
 
-      return
-    }
+    //   return
+    // }
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
   }
 
@@ -286,7 +292,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
 
   initProductSearchModel(id: number): ProductSearchModel {
     let productSearchModel        = {} as ProductSearchModel;
-    productSearchModel.brandID  = id.toString();
+    productSearchModel.brandID    = id.toString();
     productSearchModel.pageSize   = 25
     productSearchModel.pageNumber = 1
     this.menuService.updateMeunuItemData(productSearchModel)
@@ -339,6 +345,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     this.loading                   = true
 
     results$.subscribe(data => {
+      console.log('data.results', data.results)
       if (!data || data.results.length == 0 || data.results == null) {
         this.value = 100;
         this.loading = false;

@@ -1,6 +1,6 @@
 import { Component, Output, OnInit,
          ViewChild ,ElementRef, EventEmitter,
-         OnDestroy, QueryList, ViewChildren, Input } from '@angular/core';
+         OnDestroy, QueryList, ViewChildren, Input, HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -109,9 +109,9 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   searchBar      : boolean;
 
   itemsPerPage      = 20
-
+  smallDevice : boolean;
   //list height
-  @Input()  height = "90vh"
+  @Input() height = "78vh"
 
   initSubscriptions() {
     this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
@@ -123,6 +123,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           searchModel.pageSize    = 25;
           this.searchModel        = searchModel
         }
+        console.log('search model', this.searchModel)
         this.refreshSearch()
         return
       }
@@ -142,13 +143,14 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   {
     this.initSubscriptions();
     this.initAgGrid(this.pageSize);
+    this.initClasses();
   }
 
   async ngOnInit() {
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
     this.initAuthorization();
-    this.initClasses()
+    this.initClasses();
   };
 
   initAuthorization() {
@@ -157,21 +159,24 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   initClasses()  {
     const platForm      = this.platForm;
+    if (!this.height) { this.height = "82vh" }
     let height = this.height
-    if (!height) {
-      height = "80vh"
-    }
-
     this.gridDimensions = `width: 100%; height: ${height}`
     this.agtheme        = 'ag-theme-material';
-
-    if (!height) {
-      height = "80vh"
-    }
-
     if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
     if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
+    if (this.smallDevice) {
+      this.gridDimensions = 'width: 100%; height: 68vh;'
+    }
+  }
 
+  @HostListener("window:resize", [])
+    updateItemsPerPage() {
+      this.smallDevice = false
+      if (window.innerWidth < 768) {
+        this.smallDevice = true
+      }
+      this.initClasses();
   }
 
   ngOnDestroy(): void {

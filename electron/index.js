@@ -61,6 +61,7 @@ const menuTemplateDev = [
 
 async function createWindow () {
   let url = ''
+  url = `file://${__dirname}/app/index.html`
   if (!isDevMode) { url = `file://${__dirname}/app/index.html`  }
   if (isDevMode)  { url = `http://192.168.0.16:4200/index.html` }
 
@@ -86,16 +87,15 @@ async function createWindow () {
 
   if (isDevMode) {
     // Set our above template to the Menu Object if we are in development mode, dont want users having the devtools.
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateDev));
+    // Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplateDev));
     // If we are developers we might as well open the devtools by default.
-    mainWindow.webContents.openDevTools();
+    // mainWindow.webContents.openDevTools();
   }
 
   if(!isDevMode) {
     splashScreen = new CapacitorSplashScreen(mainWindow);
     splashScreen.init();
   } else {
-    log.info(`Pointless loading Window From devmode : ${isDevMode} url ${url}`);
     mainWindow.loadURL(url);
     mainWindow.webContents.on('dom-ready', () => {
       mainWindow.show();

@@ -12,8 +12,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class TierItemsComponent implements OnInit {
 
-  @Input() priceTier: string;
-
+  @Input()  priceTier: string;
+  imageUrl: string;
   headers : any;
   flowers$: Observable<IFlowerMenu[]>;
   flowers : IFlowerMenu[]
@@ -64,6 +64,15 @@ export class TierItemsComponent implements OnInit {
       })
     }
   }
+
+  // this.imageUrl = this.getItemSrc(data.image)
+  // getItemSrc(image: string) {
+  //   if (!image) {
+  //     return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
+  //   } else {
+  //     return this.awsBucket.getImageURLPath(this.bucketName, image)
+  //   }
+  // }
 
 
 }

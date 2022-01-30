@@ -7,6 +7,7 @@ import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { OrdersService } from '..';
 import { ToolBarUIService } from './tool-bar-ui.service';
+import { LoginComponent } from 'src/app/modules/login';
 
 export interface IUserExists {
   id:           number;
@@ -97,12 +98,13 @@ export class AuthenticationService {
       this.clearUserSettings();
       this.toolbarUIService.updateOrderBar(false)
       this.toolbarUIService.updateToolBarSideBar(false)
-      if (this.platFormservice.webMode) {
+      if (!this.platFormservice.isApp()) {
         if (this.appInitService.useAppGate) {
           this.router.navigate(['/appgate']);
           return
         }
       }
+
       this.router.navigate(['/login']);
       this.clearSubscriptions()
     }

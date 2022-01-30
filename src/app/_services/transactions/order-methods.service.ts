@@ -19,6 +19,7 @@ import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/p
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { PrintingService } from '../system/printing.service';
 import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
+import { UserAuthorizationService } from '../system/user-authorization.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -79,10 +80,12 @@ export class OrderMethodsService {
               private productEditButtonService: ProductEditButtonService,
               private promptGroupService      : PromptGroupService,
               private printingService          :PrintingService,
+              private userAuthorization : UserAuthorizationService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
     this.initSubscriptions();
+
   }
 
   async doesOrderExist(site: ISite): Promise<boolean> {
@@ -128,6 +131,10 @@ export class OrderMethodsService {
   //determines if the users action will add the item or view the item on the order.
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     if (add) {
+      if (item && item.itemType.requireInStock) {
+        this.listItem(item.id);
+        return
+      }
       this.addItemToOrder(order, item, 1)
       return
     }
@@ -148,7 +155,6 @@ export class OrderMethodsService {
       }
     }
 
-
     getPopUpWidth(defaultSize: string) {
       let deviceSize = '90vw'
       let smallDevice = false
@@ -166,15 +172,23 @@ export class OrderMethodsService {
     openPopupItem() {
 
       const deviceSize = this.getPopUpWidth('90vw')
-      console.log('opening', deviceSize)
+      let panelClass= ''
+      if (deviceSize=='90vw') {
+      }
+      panelClass = 'custom-dialog-container';
+
       const dialogRef = this.dialog.open(MenuItemModalComponent,
         {
           width:        deviceSize,
           maxWidth:     deviceSize,
-          height:    '90vh',
-          maxHeight: '90vh',
+          height:       '90vh',
+          maxHeight:    '90vh',
+          panelClass:   panelClass
         },
       )
+
+      //panelClass: 'custom-dialog-container'
+
 
       dialogRef.afterClosed().subscribe(result => {
         return result;
@@ -203,12 +217,28 @@ export class OrderMethodsService {
    await   this.processAddItem(order, null, item, quantity, null);
   }
 
+  validateUser(): boolean {
+    const valid = this.userAuthorization.validateUser()
+    console.log('valid', valid)
+    if (!valid) {
+      this.notifyEvent('Please login, or create your account to place an order. Carts require a registerd user to be created.', 'Alert')
+      return false
+    } {
+      return true
+    }
+  }
+
   async processAddItem(order : IPOSOrder ,
                        barcode: string,
                        item: IMenuItem,
                        quantity: number,
                        input: any) {
 
+    const valid = this.validateUser()
+
+    if (!valid) { return }
+
+    console.log('triggered')
     this.initItemProcess();
 
     if (quantity == 0 ) { quantity = 1}
@@ -217,10 +247,10 @@ export class OrderMethodsService {
     const site          = this.siteService.getAssignedSite()
     const result        = await this.doesOrderExist(site);
 
-    if (!result) { return }
+    if (!result) { return false }
     let passAlongItem;
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; }
-    if (!result) { return }
+    if (!result) { return false }
 
     order = this.orderService.getCurrentOrder()
 
@@ -228,21 +258,21 @@ export class OrderMethodsService {
       this.order = null
       this.orderService.updateOrderSubscription(null)
       this.notifyEvent(`Order not started, please try adding item again.`, 'Alert')
-      return
+      return false
     }
 
     if (order && order.id) {
       if (!item && !barcode) {
         if (!item.itemType) {
           this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
-          return
+          return false
         }
       }
 
       if (barcode)  {
         const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
         this.processItemPostResults(addItem$)
-        return
+        return false
       }
 
       let packaging = ''
@@ -259,31 +289,54 @@ export class OrderMethodsService {
                               packaging: packaging, portionValue: portionValue, barcode: '', weight: 1, itemNote: itemNote } as NewItem
         const addItem$    = this.posOrderItemService.postItem(site, newItem)
         this.processItemPostResults(addItem$)
-        return
+        return true
       }
     }
   }
 
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
     addItem$.subscribe(data => {
-        if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')}
+
+      if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')}
+
         if (data && data.resultErrorDescription) {
           this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert')
           return
         }
+
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order)
           this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
         } else {
           this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert')
         }
+
+        if (this.openDialogsExist) {
+          this.notification('Item added to cart.', 'Check Cart')
+        }
+
       }
     )
   }
 
+  notification(message: string, title: string)  {
+    if (this.openDialogsExist()) {
+      this._snackBar.open(message, title, {
+        duration: 2000,
+        verticalPosition: 'top'
+      });
+    }
+  }
+
+  openDialogsExist(): boolean {
+    if (!this.dialog.openDialogs || !this.dialog.openDialogs.length) return;
+    // this.dialog.closeAll();
+    return true
+  }
+
+
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
-    console.log('scan barcode item', quantity)
-    this.processAddItem(this.order, barcode, null, quantity, input);
+     this.processAddItem(this.order, barcode, null, quantity, input);
   }
 
   promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string) {
@@ -547,7 +600,7 @@ export class OrderMethodsService {
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 5000,
-      verticalPosition: 'bottom'
+      verticalPosition: 'top'
     });
   }
 }

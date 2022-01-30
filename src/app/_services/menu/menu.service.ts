@@ -1,6 +1,6 @@
 import { Injectable, Input } from '@angular/core';
 import { AuthenticationService } from '../system/authentication.service';
-import { BehaviorSubject, Observable, Subject, throwError  } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, Subject, throwError  } from 'rxjs';
 import { IProduct, IProductCategory, ISite }  from 'src/app/_interfaces';
 import { IMenuItem } from '../../_interfaces/menu/menu-products';
 import { ProductSearchModel } from '../../_interfaces/search-models/product-search';
@@ -541,6 +541,8 @@ export class MenuService {
   };
 
   getMenuItemByID(site: ISite, id: any): Observable<any> {
+
+    if (!id)  { return EMPTY };
 
     const controller =  '/MenuItems/'
 

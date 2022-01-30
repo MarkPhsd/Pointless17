@@ -14,6 +14,15 @@ export class UserAuthorizationService {
     return JSON.parse(localStorage.getItem('user')) as IUser;
   }
 
+
+  validateUser() {
+    const user = this.currentUser()
+    if (user && user.username && user.roles)  {
+      return true
+    }
+    return false
+  }
+
   isUserAuthorized(requiredArray: string): boolean {
     const user = JSON.parse(localStorage.getItem('user')) as IUser;
 

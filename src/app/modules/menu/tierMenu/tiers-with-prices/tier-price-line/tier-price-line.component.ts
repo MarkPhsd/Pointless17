@@ -7,6 +7,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { NewItem } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PriceTiers,PriceTierPrice, } from 'src/app/_interfaces/menu/price-categories';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'tier-price-line',
@@ -34,15 +35,29 @@ export class TierPriceLineComponent {
     private menuService        : MenuService,
     private _snackBar          : MatSnackBar,
     private siteService:         SitesService,
+    private userAuthorization : UserAuthorizationService,
     private orderMethodsService: OrderMethodsService,
 
   ) {
     this.initSubscriptions();
   }
 
+  validateUser() {
+    const valid =   this.userAuthorization.validateUser();
+    if (!valid) {
+      this.notifyEvent('Please login or register to place orders.', 'Alert')
+    }
+    return valid
+  }
+
   addItem(item: PriceTierPrice) {
 
+    const valid = this.validateUser();
+
+    if (!valid) { return }
+
     const newItem = {} as NewItem;
+
     if (this.menuItem) {
       newItem.menuItem = this.menuItem
       if (newItem.menuItem) {
@@ -54,8 +69,9 @@ export class TierPriceLineComponent {
       }
     }
 
+
+
     if (this.menuItem) {
-      console.log('menuItem', this.menuItem)
       this.notifyEvent('Item not added', 'error')
     }
 

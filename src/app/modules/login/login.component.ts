@@ -47,13 +47,23 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
-      this.loggedInUser = user
+      if (user) {
+        this.loggedInUser = user
+      }
+      if (!user) {
+        this.loggedInUser = null;
+      }
     })
 
     this._loginStatus = this.userSwitchingService.loginStatus$.subscribe( data => {
-      console.log('login status changed ', data)
-      this.loginStatusvalue = data;
-      this.updateLoginStatus(data);
+      if (!data) {
+        this.loggedInUser = null;
+        this.updateLoginStatus(null);
+      }
+      if (data) {
+        this.loginStatusvalue = data;
+        this.updateLoginStatus(data);
+      }
     })
   }
 
@@ -61,7 +71,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   get f() {
     if (!this.loginForm) { this.initForm() }
     return this.loginForm.controls;
-   }
+  }
 
   constructor(
         private fb                   : FormBuilder,
@@ -86,10 +96,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.platformService.isApp())  { this.amI21 = false }
     await this.initCompanyInfo()
     this.refreshTheme()
+    this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   ngOnDestroy(): void {
+    this.statusMessage = ''
     if (this._user) { this._user.unsubscribe() }
   }
 
@@ -98,6 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
+
   }
 
   redirects() {
@@ -125,7 +138,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initLogo() {
-    this.logo  = this.appInitService.logo;
+    this.logo        = this.appInitService.logo;
     if (!this.logo)  { this.logo = 'http://cafecartel.com/temp/logo.png' }
   }
 
@@ -162,18 +175,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  async forgetMe() {
+  async  forgetMe() {
     await this.clearUserSettings();
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
+    this.statusMessage = ''
   }
 
   async  browseMenu() {
     this.userSwitchingService.browseMenu();
+    this.statusMessage = ''
   }
 
   loginToReturnUrl() {
     this.spinnerLoading = false;
     this.userSwitchingService.loginToReturnUrl();
+    this.statusMessage = ''
   }
 
   async clearUserSettings() {
@@ -273,10 +289,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             if (this.platformService.isApp()) {  if (this.loginApp(user)) { return } }
 
-            if (user.message.toLowerCase() === 'success') {
+            if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)
-              // this.userSwitchingService.updateLoginStatus(2)
               this.updateLoginStatus(2)
               return
             }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ISite, Paging}  from 'src/app/_interfaces';
+import { ISite, IUser, Paging}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
@@ -134,12 +134,19 @@ export class InventoryAssignmentService {
 
       const controller =  `/InventoryAssignments/`
 
-      const endPoint = `getAvalibleInventory`
+      let endPoint = `getAvalibleInventory`
 
-      // const parameters = `?pagenumber=${pageNumber}&pageSize=${pageSize}`
-      const parameters = `?ProductID=${productID}&avaible=${active}`
+      const user =  JSON.parse(localStorage.getItem('user')) as IUser
+
+      if (!user || !user.roles || user.roles == '') {
+        endPoint  = `getAvalibleInventoryNoRoles`
+      }
+
+      const parameters = `?ProductID=${productID}&availible=${active}`
 
       const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      console.log('url', url)
 
       return  this.http.get<AvalibleInventoryResults>(url)
 

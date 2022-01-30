@@ -27,6 +27,13 @@ export class TiersWithPricesComponent implements OnInit {
 
   initMenuPrices() {
     this.tvPriceMenuTiers$  = this.tvMenuPriceTierService.getTVMenuPriceTiers(this.siteService.getAssignedSite())
+
+    this.tvPriceMenuTiers$.subscribe(data => {
+      this.tvPriceMenuTiers= data;
+      this.tvPriceMenuTiers = this.tvPriceMenuTiers.filter(data => {
+        return data.webEnabled
+      })
+    })
   }
 
   setPriceTier(name: string) {

@@ -1,7 +1,6 @@
-<mat-card class="mat-card-view">
+<mat-card *ngIf="product"
+          class="mat-card-view">
   <mat-card-content>
-
-
 
     <div fxLayout="column" fxLayoutAlign="space-around start" >
       <div class="grid-container grids-container">
@@ -23,11 +22,12 @@
 
     <br>
 
-    <div *ngIf="toggleLabelEvents == 'inv'">
-      <div class="inventory-count" >
+    <div *ngIf="toggleLabelEvents == 'inv' && product && product.id">
+      <div class="inventory-count">
         <inventory-counts-view
-          [productID]="product.id"
-          [active]="'true'" >
+          [setProductID]="product.id"
+          (outPutSetCount)="setProductCount($event)"
+          [active]   ="'true'" >
           Inventory Values
         </inventory-counts-view>
       </div>
@@ -37,10 +37,10 @@
 
       <br>
         <app-label-view-selector
-              [labelID]="labelID"
+              [labelID]           ="labelID"
               (outputLabelSetting)="getLabelSetting($event)"
-              [setProduct]="product"
-              [labelImageHeight]="150"
+              [setProduct]        ="product"
+              [labelImageHeight]  ="150"
               >
         </app-label-view-selector>
 
@@ -48,7 +48,6 @@
           <app-list-printers-electron
                                     [printerName]="printerName"
                                     (outputPrinterName)="getPrinterName($event)"
-
                                     ></app-list-printers-electron>
           <div [formGroup]="printForm">
             <mat-form-field appearance="outline">

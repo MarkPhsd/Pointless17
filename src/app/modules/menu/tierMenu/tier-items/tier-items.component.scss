@@ -34,16 +34,31 @@
 .grid-item {
   text-align: left;
   font-size: 1.2em;
+  min-width: 160px;
   @include for-phone-only {
     font-size: 1em;
   }
 }
 
+.button-dimensions {
+  width: 170px;
+  min-width: 170px;
+  height: 75px;
+  text-align    : left;
+}
+
+.button-text {
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-align    : left;
+  overflow      : hidden;
+  max-width     : 160px;
+}
 .grid-container {
   --gap: 15px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat(3, 1fr); // auto-fit, minmax(350px, 1fr) );
+  grid-template-columns:  repeat( auto-fit, minmax(160px, 1fr) ); // auto-fit, minmax(160px, 1fr);// repeat(3, 1fr); // auto-fit, minmax(350px, 1fr) );
   margin-top: 15px;
   margin-right: 10px;
 

@@ -9,7 +9,7 @@ import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { C } from '@angular/cdk/keycodes';
-
+// https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
 @Component({

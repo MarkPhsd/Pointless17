@@ -1,14 +1,10 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, Input,
-         SimpleChange, OnChanges, SimpleChanges, AfterViewInit,ElementRef } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatPaginator, PageEvent} from '@angular/material/paginator';
+         AfterViewInit,ElementRef } from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 'src/app/_interfaces';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ContactsService, OrdersService,AWSBucketService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { catchError, delay } from 'rxjs/operators';
-import { MatSort } from '@angular/material/sort';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -20,7 +16,6 @@ import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 
 @Component({
@@ -131,8 +126,10 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
                 private agGridFormatingService: AgGridFormatingService,
                 private awsService: AWSBucketService,
               ) {
+
       this.initForm();
       this.initAgGrid(this.pageSize);
+
     }
 
     async ngOnInit() {
@@ -274,6 +271,10 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
       this.refreshSearch()
     }
 
+    refreshSearchPhrase(event) {
+      this.refreshSearch()
+    }
+
     //this is called from subject rxjs obversablve above constructor.
     refreshSearch(): Observable<ClientSearchModel[]> {
       this.currentPage         = 1
@@ -395,7 +396,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
 
   getCheckInLabel(rowData)
   {
-    if(rowData && rowData.hasIndicator)
+    if(rowData && rowData.hasIndicator && !rowData.accountDisabled)
       return this.buttoncheckInName
       else return this.buttoncheckInName
   }
@@ -494,11 +495,19 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
 
     order$.subscribe(
       data => {
-        this.notifyEvent(`Order Submitted Order # ${data.id}`, "Posted")
+        if (!data) {
+          this.notifyEvent(`Order was not submitted`, "Error", 2000 )
+          return
+        }
+        if (data.id == 0 && data.resultMessage){
+          this.notifyEvent(`Order was not submitted ${data.resultMessage}`, "Error", 2000 )
+          return
+        }
+        this.notifyEvent(`Order Submitted Order # ${data.id}`, "Posted", 3000)
       },
       catchError => {
         console.log(catchError)
-        this.notifyEvent("Order was not submitted", "Error")
+        this.notifyEvent(`Order was not submitted ${order.resultMessage}`, "Error", 2000 )
       }
     )
   }
@@ -523,10 +532,10 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
     const numberRemoved = this.orderService.deleteCheckInsOfClient(this.siteService.getAssignedSite(), clientID)
 
     if (numberRemoved > 0 )  {
-      this.notifyEvent("Pending Orders Removed", numberRemoved)
+      this.notifyEvent("Pending Orders Removed", numberRemoved, 2000 )
     } else
     {
-      this.notifyEvent("Pending Orders Not Removed", "")
+      this.notifyEvent("Pending Orders Not Removed", "", 2000 )
     }
 
   }
@@ -545,9 +554,9 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
     }
   }
 
-  notifyEvent(message: string, action: string) {
+  notifyEvent(message: string, action: string , duration: number) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: duration,
       verticalPosition: 'top'
     });
   }

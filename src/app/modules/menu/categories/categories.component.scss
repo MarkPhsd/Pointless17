@@ -77,12 +77,6 @@ $white: #efefef;
   height: 75vh;
 }
 
-.grid-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-}
 
 .button {
   width: 150px;
@@ -108,6 +102,13 @@ mat-card {
   cursor: grabbing;
   cursor: -webkit-grabbing;
   transform: scale(1);
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 img {
