@@ -29,7 +29,7 @@ log.info('App starting...');
 if (os.platform().trim() == "win32" || os.arch().trim() == "x64") {
   const options = {
       provider: 'generic',
-      url: 'https://cafecartel.com/pointless'
+      url: 'https://pointlesspos.com/download'
   }
   const autoUpdater = new NsisUpdater(options)
   log.info(options)

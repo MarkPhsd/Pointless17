@@ -31,6 +31,23 @@ export class ServiceTypeService {
 
   }
 
+
+  getTypeCached(site: ISite, id: number):  Observable<IServiceType> {
+
+    const controller = '/ServiceType/'
+
+    const endPoint = `getServiceType`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri = { url: url, cacheMins: 120}
+
+    return this.httpCache.get<IServiceType>(uri);
+
+  }
+
   getTypesBySearch(site: ISite, searchModel: IServiceType):  Observable<IServiceType[]> {
 
     const controller = '/ServiceType/'

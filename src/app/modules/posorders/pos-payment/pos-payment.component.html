@@ -16,10 +16,19 @@
         </app-order-header-demo-graphics>
       </div>
 
-      <div class="grid-header-item">
+      <!-- <div *ngIf="serviceType">
+        name {{serviceType.name}}
+        serviceType.promptScheduleTime {{serviceType.promptScheduleTime}}
+        serviceType.deliveryService {{serviceType.deliveryService}}
+      </div>
+      *ngIf="serviceType && (serviceType.promptScheduleTime || serviceType.deliveryService)" -->
+      <div
+           class="grid-header-item">
         <posorder-schedule-card>
         </posorder-schedule-card>
       </div>
+      <!-- promptScheduleTime  :  boolean;
+      deliveryService     : boolean; -->
 
     </div>
 
@@ -38,14 +47,7 @@
               <div>
                 Thank you for your order. Please review the instructions on your receipt.
               </div>
-              <button mat-raised-button color="primary" (click)="navToMenu()"><mat-icon>menu</mat-icon> Continue Shopping </button>
-              <!-- <div *ngIf="serviceType"
-                    [innerHTML]="serviceType.description">
-              </div>
-
-               <div *ngIf="serviceType"
-                    [innerHTML]="serviceType.instructions">
-              </div> -->
+              <button mat-raised-button color="primary" (click)="closeCart()"><mat-icon>menu</mat-icon> Continue Shopping </button>
             </div>
           </mat-card-content>
         </mat-card>
@@ -53,8 +55,26 @@
 
       <div *ngIf="!paymentsEqualTotal && paymentIsReady">
             <div class="grid-header-item" *ngIf="stepSelection == 1">
-              <mat-card class="card-dimensions">
+              <mat-card *ngIf="order.wicTotal !=0 || order.ebtTotal != 0 " >
                 <mat-card-content>
+
+                <span class="item-buttons-container" *ngIf="order.wicTotal !=0 ">
+                  <button class="payment-buttons" mat-raised-button (click)="applyWICPayment()">
+                    <mat-icon color="warn">credit_card</mat-icon>WIC Payment
+                  </button>
+                </span>
+
+                <span class="item-buttons-container" *ngIf="order.ebtTotal !=0 ">
+                  <button class="payment-buttons"  mat-raised-button (click)="applyEBTPayment()">
+                    <mat-icon color="warn">credit_card</mat-icon>EBT Payment
+                  </button>
+                </span>
+
+              </mat-card-content>
+              </mat-card>
+
+              <mat-card class="card-dimensions">
+                <mat-card-content class="payment-dimensions">
                   <app-mat-toggle-selector
                       class="card-height"
                       [list$]            = "paymentMethods$"
@@ -217,7 +237,7 @@
 
       </div>
 
-      <div *ngIf="!platFormService.isApp() && !paymentIsReady">
+      <div *ngIf="!paymentsEqualTotal && !platFormService.isApp() && !paymentIsReady">
         <div *ngIf="message">
         <mat-icon>alert</mat-icon>{{message}}
         </div>

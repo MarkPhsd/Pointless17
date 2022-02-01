@@ -40,7 +40,9 @@
                   </mat-form-field>
                 </div>
 
-                <item-type-toggles-edit [inputForm]="inputForm"></item-type-toggles-edit>
+                <item-type-toggles-edit
+                    [inputForm]="inputForm">
+                </item-type-toggles-edit>
 
                 <div>
                   <h4>Image / Icon</h4>
@@ -123,7 +125,24 @@
                   </mat-form-field>
                 </div>
 
-                <div class="filterItem" *ngIf="typeName === 'cannabis'"  >
+
+                <div class="filterItem"  *ngIf="itemType && (itemType.type === 'grocery' || itemType.useType === 'grocery')">
+                  <mat-form-field appearance="outline">
+                    <mat-label>WIC & EBT Option</mat-label>
+                    <mat-select
+                                type="number"
+                                [formControlName]  ="'wicEBT'"
+                                name="taxable"
+                      >
+                      <mat-option *ngFor="let item of wicEBTList"
+                                  [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="filterItem" *ngIf="itemType && (itemType.type === 'cannabis' || itemType.type === 'med-cannabis')"  >
                   <mat-form-field appearance="outline">
                     <mat-label>Package Type</mat-label>
                     <mat-select

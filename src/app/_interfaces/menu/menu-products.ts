@@ -136,6 +136,7 @@ export interface ItemType {
   portionValue        : string;
   instructions        : string;
   enableCustomNote   : boolean;
+  wicebt             : number;
 }
 
 export interface ItemTypeCategory {

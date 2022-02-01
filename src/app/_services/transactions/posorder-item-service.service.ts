@@ -71,7 +71,7 @@ export interface ItemWithAction {
   posItem           : PosOrderItem;
   action            : actions;
   voidReasonID      : number;
-  returnToInventory : boolean;
+returnToInventory : boolean;
   voidReason        : string;
   id                : number;
   resultMessage     : string;

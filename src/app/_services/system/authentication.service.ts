@@ -38,7 +38,6 @@ export class AuthenticationService {
     updateUser(user: IUser) {
       this._user.next(user)
       if (user) {
-
         localStorage.setItem('user', JSON.stringify(user));
       }
     }
@@ -118,6 +117,7 @@ export class AuthenticationService {
       localStorage.removeItem("ami21");
       localStorage.removeItem('user');
       localStorage.removeItem('userx');
+      localStorage.removeItem('site')
       this.updateUser(null);
       this.updateUserX(null);
     }

@@ -87,6 +87,11 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     private toolbarServiceUI : ToolBarUIService,
     )
   {
+
+  }
+
+  async ngOnInit()  {
+
     this.stateValue = this.route.snapshot.paramMap.get('value');
     this.initOrderBarSubscription();
     this.updateItemsPerPage();
@@ -101,9 +106,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       return
     }
 
-  }
-
-  async ngOnInit()  {
     this.value = 1;
     // await this.nextPage(false);
     this.initSubscriptions();
@@ -119,8 +121,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
-        // console.log('initSubscriptions')
         this.nextPage(true)
+        console.log('subscription updated', data)
       })
     } catch (error) {
     }
@@ -135,16 +137,19 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   initOrderBarSubscription() {
+
     this.toolbarServiceUI.orderBar$.subscribe(data => {
       this.orderBar = data
       this.refreshGridClass()
       }
     )
+
     this.toolbarServiceUI.searchSideBar$.subscribe(data => {
         this.searchBar = data
         this.refreshGridClass()
       }
     )
+
     this.toolbarServiceUI.toolbarSideBar$.subscribe(data => {
       this.menuBar = data
       this.refreshGridClass()
@@ -219,7 +224,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.loading      = true
 
     results$.subscribe(data => {
-
+      console.log('results updated', data)
       if (!this.orders)  { this.orders = [] as IPOSOrder[] }
       this.currentPage += 1;
 

@@ -237,7 +237,13 @@ export class MenusService {
   getMenu(site: ISite, menuName: string): Observable<AccordionMenu[]> {
 
       const user = JSON.parse(localStorage.getItem('user')) as IUser;
-      if (!user || !user.token || user.token == '') { return of(null)}
+      if (!user || !user.token || !user.token || user.token == '' ) { return of(null)}
+
+      if (!user || !user.roles ||  !user.username ) {
+        return of(null)
+      }
+
+      // console.log(`getMenu user menuName: ${menuName}`, user)
 
       const controller = "/MenuGroups/"
 

@@ -1,6 +1,6 @@
 {
   "name": "pointLess",
-  "version": "1.0.171",
+  "version": "1.0.178",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -37,7 +37,7 @@
     "publish": [
       {
         "provider": "generic",
-        "url": "https://cafecartel.com/pointless"
+        "url": "https://pointlesspos.com/download"
       }
     ]
   }

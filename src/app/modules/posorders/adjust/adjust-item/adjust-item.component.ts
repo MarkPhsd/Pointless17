@@ -67,12 +67,12 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       this.itemWithAction.returnToInventory  = this.inventoryReturnDiscard
       this.itemWithAction.voidReason = setting.name
       this.itemWithAction.voidReasonID = setting.id
-      let response = '';
+      let response$
 
       if (this.itemWithAction) {
         switch (this.itemWithAction.action) {
           case 1: //void
-              response = await this.itemService.voidPOSOrderItem(site, this.itemWithAction).pipe().toPromise();
+              response$ = await this.itemService.voidPOSOrderItem(site, this.itemWithAction)
               break;
           case 2: //priceAdjust
 
@@ -81,11 +81,13 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
 
               break;
         }
-        if (response === 'Item voided') {
-          this.updateSubscription()
-          this.notifyEvent('Item voided', 'Result')
-          this.closeDialog();
-        }
+        response$.subscribe(data => {
+          if (data === 'Item voided') {
+            this.updateSubscription()
+            this.notifyEvent('Item voided', 'Result')
+            this.closeDialog();
+          }
+        })
       }
     }
 

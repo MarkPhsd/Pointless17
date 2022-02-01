@@ -40,6 +40,7 @@ export class FbItemTypeService {
       packagingMaterial     : [''],
       portionValue       :  [''],
       enableCustomNote    : [''],
+      wicEBT            : [''],
     })
     return inputForm
   }

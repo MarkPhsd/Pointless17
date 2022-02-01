@@ -12,6 +12,7 @@
       <div *ngIf="!list$">
         No Void Options Setup
       </div>
+
       <div>
         <div *ngIf="list$">
           <app-mat-toggle-selector
@@ -32,15 +33,14 @@
             <mat-button-toggle
                  [style.width.px]="195"
                  class="toggle-buttons"
-                 [value]="true"
+                 [value]="false"
                    >
                 Discard
             </mat-button-toggle>
-
             <mat-button-toggle
                 [style.width.px]="195"
                 class="toggle-buttons"
-                [value]="false"
+                [value]="true"
                 >
               Return to Inventory
           </mat-button-toggle>

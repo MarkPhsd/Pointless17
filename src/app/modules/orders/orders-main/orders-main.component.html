@@ -31,15 +31,12 @@
     </span>
 
     <span *ngIf="viewType == 0">
-
       <app-orders-list
         [height]="listHeight">
       </app-orders-list>
     </span>
 
     <div *ngIf="!smallDevice" class="filter-container">
-
-
       <app-order-filter-panel>
       </app-order-filter-panel>
     </div>

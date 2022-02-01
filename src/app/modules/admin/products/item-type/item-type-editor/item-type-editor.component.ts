@@ -20,7 +20,7 @@ import { IItemBasic } from 'src/app/_services';
   styleUrls: ['./item-type-editor.component.scss']
 })
 export class ItemTypeEditorComponent   {
-
+  wicEBTList        = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
   taxesSetting      = [{id: 0, name: 'Never'},{id: 1, name: 'Taxable'},{id: 2, name: 'According To Transaction'}]
   something         : any;
   itemTypes         = [] as IItemType[];
@@ -39,11 +39,11 @@ export class ItemTypeEditorComponent   {
   labelList$        : Observable<ISetting[]>;
   prepReceiptList$  : Observable<IItemBasic[]>;
   printerLocations$ : Observable<IPrinterLocation[]>;
-  prepTicketID    : number;
-  labelTypeID     : number;
-  printerName     : string;
-  printLocationID : number;
-  instructions    : string;
+  prepTicketID      : number;
+  labelTypeID       : number;
+  printerName       : string;
+  printLocationID   : number;
+  instructions      : string;
   packageType: string;
 	// this.receiptList$     =  this.settingService.getReceipts(site);
   //   this.labelList$       =  this.settingService.getLabels(site);

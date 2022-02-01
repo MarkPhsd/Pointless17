@@ -121,11 +121,12 @@ export class CartButtonComponent implements OnInit, OnDestroy {
         // this.toggleOpenOrderBar();
       }
     }
-
   }
 
   refreshAssignedPOSOrder() {
-    this._order$  =  this.orderService.getCurrentPOSOrder(this.siteService.getAssignedSite() ,this.orderService.posName )
+    const site = this.siteService.getAssignedSite()
+    const posName = this.orderService.posName
+    this._order$  =  this.orderService.getCurrentPOSOrder(site, posName )
       .pipe(
         repeatWhen(notifications =>
           notifications.pipe(delay(1500)),

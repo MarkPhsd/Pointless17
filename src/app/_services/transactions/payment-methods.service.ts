@@ -114,6 +114,20 @@ export class PaymentMethodsService {
 
   }
 
+  getPaymentMethodByName(site: ISite, name: string): Observable<IPaymentMethod> {
+
+    const controller = "/PaymentMethods/"
+
+    const endPoint  = "getPaymentMethod"
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPaymentMethod>(url);
+
+  }
+
 
   getPaymentMethod(site: ISite, id: number): Observable<IPaymentMethod> {
 

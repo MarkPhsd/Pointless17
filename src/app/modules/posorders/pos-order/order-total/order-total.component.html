@@ -5,7 +5,15 @@
   <div> {{ order?.taxTotal | currency }}</div>
   <div>Total </div>
   <div> {{ order?.total | currency }}</div>
+
+  <div *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
+  <div *ngIf="order.wicTotal && order.wicTotal != 0"> {{ order?.wicTotal | currency }}</div>
+
+  <div *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
+  <div *ngIf="order.wicTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
+
   <div>Items </div>
   <div> {{ order?.itemCount }}</div>
+
 </div>
 

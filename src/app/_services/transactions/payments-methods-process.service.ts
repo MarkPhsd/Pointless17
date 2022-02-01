@@ -92,6 +92,12 @@ export class PaymentsMethodsProcessService {
 
     if (paymentMethod && posPayment && order)
 
+      if (paymentMethod.wic) {
+        return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+      }
+      if (paymentMethod.ebt) {
+        return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+      }
       //cash
       if (paymentMethod.isCash) {
         return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)

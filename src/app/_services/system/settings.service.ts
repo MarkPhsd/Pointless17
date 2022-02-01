@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, } from 'rxjs';
-import { ISetting, ISite }   from 'src/app/_interfaces';
+import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { AdjustmentReason } from './adjustment-reasons.service';
@@ -165,6 +165,14 @@ export class SettingsService {
   }
 
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
+
+    const user =  JSON.parse(localStorage.getItem('user')) as IUser
+    // console.log('user', user)
+    if (!user || !user.roles ||  !user.username ) {
+      return this.getSettingByNameNoRoles(site, name)
+    }
+
+    // console.log(`getSettingByName user name: ${name}`, user)
 
     const controller = "/settings/"
 

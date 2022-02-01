@@ -10,11 +10,11 @@
   margin-left: 5px;
 
   @include for-phone-only  {
-    max-width: 350px;
+   //changed 2/1/2020
+   width: 95%;
+    // max-width: 350px;
     width:  325px;
-
   }
-
 }
 
 .button-dimensions {
@@ -24,8 +24,6 @@
 .button-dimensions-tall {
   height: 75px;
   margin-bottom: 5px;
-
-
 }
 
 .mat-button-toggle  {
@@ -36,26 +34,20 @@
   max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
-
   @include for-phone-only  {
     max-width: 350px;
     width:  325px;
-
   }
 }
+
 .toggle-buttons {
-  // width    :  185px;
-  // max-width:  185px;
-  // min-width:  185px;
   justify-content: center;
   align-content: center;
   width: 95%;
   margin-left: 5px;
-
   @include for-phone-only  {
     max-width: 350px;
     width:  325px;
-
   }
 }
 
@@ -72,10 +64,9 @@
 
 .toggle-group {
   width: 100%;
-  height: 85vh;
+  // height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
-
   @include for-phone-only  {
     max-width: 275px;
     width:  275px;
