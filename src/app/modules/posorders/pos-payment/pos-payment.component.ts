@@ -35,7 +35,7 @@ export class PosPaymentComponent implements OnInit {
   posPayment      =      {} as IPOSPayment;
   employees$      :   Observable<IItemBasic[]>;
   paymentMethods$ :   Observable<IPaymentMethod[]>;
-  paymentMethod   :   IPaymentMethod;
+  paymentMethod   = {} as  IPaymentMethod;
   serviceTypes$   :   Observable<IServiceType[]>;
   serviceType     :   IServiceType;
   _searchModel    :   Subscription;
@@ -63,15 +63,26 @@ export class PosPaymentComponent implements OnInit {
   message: string;
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
+    this._order = this.orderService.currentOrder$.pipe(
+      switchMap( data => {
       if (data) {
         this.order = data
         this.refreshIsOrderPaid();
       }
       if (data && data.serviceTypeID) {
         this.updateOrderSchedule(data.serviceTypeID);
+        const site = this.sitesService.getAssignedSite();
+        // console.log('serviceTypeID data', data.serviceTypeID)
+        return this.serviceTypeService.getTypeCached(site, data.serviceTypeID)
       }
+      return EMPTY
+      }
+
+    )).subscribe(data => {
+      this.serviceType = data
+      // console.log('data', this.serviceType)
     })
+
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
     })
@@ -253,7 +264,6 @@ export class PosPaymentComponent implements OnInit {
     } else {
       this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something happened.',3000)
     }
-
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
@@ -461,12 +471,45 @@ export class PosPaymentComponent implements OnInit {
     this.stepSelection = 1;
   }
 
+  applyEBTPayment() {
+
+  }
+
+ async applyWICPayment() {
+    let paymentResponse  = {} as IPaymentResponse
+    this.notify('Payment method not implemented', 'error', 1000)
+    if (this.order && this.order.wicTotal !=0){
+      const amount = this.order.wicTotal
+      this.posPayment.amountReceived = amount;
+      const site   = this.sitesService.getAssignedSite()
+      const method = await this.paymentMethodService.getPaymentMethodByName(site, 'wic').toPromise()
+
+
+      if (!method) {
+        this.notify('payment method not found', 'error', 1000)
+        return
+      }
+      paymentResponse = await this.paymentsMethodsService.getResults(amount, method, this.posPayment, this.order)
+      if (!paymentResponse) {
+        this.notify('Payment not processed', 'failure', 1000)
+        return
+      }
+      this.processResults(paymentResponse)
+    }
+  }
+
   notify(message: string, title: string, duration: number) {
     if (duration == 0 ) {duration = 1000}
     this.matSnackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
   }
 
   navToMenu() {
+    this.router.navigate(['/app-main-menu'])
+  }
+
+  closeCart() {
+    this.orderService.currentOrder = null
+    this.orderService.updateOrderSubscription(null)
     this.router.navigate(['/app-main-menu'])
   }
 
