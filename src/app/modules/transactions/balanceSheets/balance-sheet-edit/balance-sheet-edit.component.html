@@ -13,7 +13,7 @@
             [sheetType]="sheetType"
             [sheet]="sheet">
           </balance-sheet-header-view>
-      </div>
+        </div>
 
         <div>
           <balance-sheet-calculations-view
@@ -22,15 +22,17 @@
           </balance-sheet-calculations-view>
         </div>
 
-        <div>
-          <app-edit-buttons-standard
-              (outputeupdateItem)     ="updateItem($event)"
-              (outputupdateItemExit)  ="updateItemExit($event)"
-              (outputupdatedeleteItem)="deleteItem($event)"
-              (outputupdateonCancel)  ="onCancel($event)"
-              (outputPrint)           ="print($event)"
-              [printOption]           ="true"
-            ></app-edit-buttons-standard>
+        <div >
+          <!-- <div class="button-items"> -->
+            <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+                (outputPrint)           ="print($event)"
+                [printOption]           ="true"
+              ></app-edit-buttons-standard>
+          <!-- </div> -->
         </div>
       </div>
 

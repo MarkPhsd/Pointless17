@@ -48,12 +48,23 @@ export class StrainProductEditComponent implements OnInit {
   {
     if (data) {
       // this.id = data.id
-      this.product = data.product
-      this.itemType = data.itemType
+      if (data.product) {
+        this.product = data.product
+        if (this.product.id) {
+          this.id = this.product.id.toString();
+          if (this.product && data.itemType && data.itemType.id) {
+            if (!this.product.prodModifierType ) {
+              this.product.prodModifierType = parseInt(data.itemType.id);
+            }
+          }
+        }
+        if (data.itemType) {
+          this.itemType = data.itemType
+        }
+      }
+
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
-      //then we need to get the item .
-      //ngoninit
     }
   }
 
@@ -70,8 +81,13 @@ export class StrainProductEditComponent implements OnInit {
 
     if (!this.product) { return }
 
+    if (this.itemType) {
+      this.product.prodModifierType = this.itemType.id;
+      console.log('current item type, product.itemType', this.itemType.id)
+    }
+
     if (!this.itemType) {
-      if (this.product) {
+      if (this.product && this.product.prodModifierType && this.product.prodModifierType != 0) {
         this.itemTypeService.getItemType(site, this.product.prodModifierType).subscribe(itemType=> {
           this.itemType = itemType
         }, catchError  => {

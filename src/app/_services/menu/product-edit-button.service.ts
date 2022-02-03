@@ -227,7 +227,6 @@ export class ProductEditButtonService {
 
     const site = this.siteService.getAssignedSite();
     const itemType$ =  this.itemTypeService.getItemType(site, productTypeID)
-    console.log('productTypeID', productTypeID)
     if (id != 0) {  this._opeEditProductEditor(id, productTypeID, itemType$, site); }
     if (id == 0) {  this._openAddProductOpenEditor(id, productTypeID, itemType$, site); }
 
@@ -276,9 +275,6 @@ export class ProductEditButtonService {
   }
 
   openProductEditWindow(product: IProduct, itemType: ItemType) {
-
-    console.log('product ' ,product)
-    console.log('itemType ' ,itemType)
 
     const data = { product, itemType}
     let dialogRef: any;

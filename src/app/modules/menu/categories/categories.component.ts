@@ -274,14 +274,18 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   listItems(id:number) {
+
     this.initProductSearchModel(id)
+
     if (this.itemTypeID == 4) {
-      this.router.navigate(["/menuitems-infinite/", {categoryID:id}]);
+      this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
     }
     if (this.itemTypeID == 6) {
-      this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
+      this.router.navigate(["/menuitems-infinite/", {departmentID:id,  typeID: 4}]);
     }
+
   }
+
 
   getItemSrc(nameArray: string) {
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)

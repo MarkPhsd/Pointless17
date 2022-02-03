@@ -118,7 +118,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.updateDisplayOutput()
   }
 
-
   returnEnterPress(){
     // this.returnEnter(this.value)
 
@@ -136,11 +135,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   deleteLastItem() {
     const len = this.value.length;
-    console.log('len', len)
     if (len == 1 || len == 0) {
-      console.log('value', this.value)
       this.value = ''
-      console.log('new value', this.value)
       this.refreshDisplay();
       return
     }
@@ -149,7 +145,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   refreshDisplay() {
-
     if (!this.value) {
       this.inputForm.controls['itemName'].setValue('')
       return

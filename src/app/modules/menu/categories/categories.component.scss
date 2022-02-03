@@ -115,7 +115,7 @@ img {
   width: 15vh;
   height: 15vh;
   border-radius: 50%;
-
+  margin-top: 3px;
   @include for-phone-only  {
     min-width: 12vh;
     min-height: 12vh;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input,  } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
@@ -12,10 +12,10 @@ import { MenusService } from 'src/app/_services/system/menus.service';
   templateUrl: './menu-group-item-edit.component.html',
   styleUrls: ['./menu-group-item-edit.component.scss']
 })
-export class MenuGroupItemEditComponent implements OnInit {
+export class MenuGroupItemEditComponent implements OnInit, OnChanges {
 
   @Input() item$          : Observable<SubMenu>;
-  item                    : SubMenu;
+  @Input() item           : SubMenu;
   @Input() id             : number;
   inputForm               : FormGroup;
   minimized                  : boolean;
@@ -27,19 +27,22 @@ export class MenuGroupItemEditComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private menusService: MenusService,
   )
-  { }
+  {}
 
   ngOnInit() {
     this.refreshData();
+    this.refreshForm();
   }
+  ngOnChanges(): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    this.refreshForm();
 
-  ngOnChanges() {
-    this.refreshData();
   }
-
   refreshData() {
     const site = this.siteService.getAssignedSite();
     if (this.id) {
+      console.log('refresh data', this.id)
       const item$ = this.menusService.getSubMenuByID(site, this.id);
       item$.subscribe( data => {
         this.item = data

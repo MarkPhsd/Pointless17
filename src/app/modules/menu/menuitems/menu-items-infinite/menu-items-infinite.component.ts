@@ -51,6 +51,7 @@ currentPage       = 1 //paging component
 pageSize          = 25;
 itemsPerPage      = 25
 
+@Input() departmentID : string;
 @Input() categoryID:       string;
 @Input() brandID  :          string;
 @Input() typeID   :          string;
@@ -103,15 +104,23 @@ constructor(private menuService      : MenuService,
     }
   }
 
-  this.someValue = this.route.snapshot.paramMap.get('value');
+  // const departmentID  = this.route.snapshot.paramMap.get('departmentID');
+  // const itemTypeID = this.route.snapshot.paramMap.get('itemTypeID');
+  // const categoryID = this.route.snapshot.paramMap.get('categoryID');
+
   this.initSearchService();
   let reRoute = true
 
   if (this.productSearchModelData)  {
     const model = this.productSearchModelData
+
+
     this.categoryID  = model.categoryID
+
     this.brandID     = model.brandID;
+
     this.typeID      = model.itemTypeID
+
     this.productName = model.name
 
     if (!model.pageNumber) { model.pageNumber = 1}
@@ -140,10 +149,12 @@ constructor(private menuService      : MenuService,
   }
 
   try {
+    this.departmentID = this.route.snapshot.paramMap.get('categoryID');
     this.categoryID = this.route.snapshot.paramMap.get('categoryID');
     this.brandID = this.route.snapshot.paramMap.get('brandID');
     this.typeID = this.route.snapshot.paramMap.get('typeID');
     this.productName = this.route.snapshot.paramMap.get('productName');
+
   } catch (error) {
     console.log('constructor error', error)
   }

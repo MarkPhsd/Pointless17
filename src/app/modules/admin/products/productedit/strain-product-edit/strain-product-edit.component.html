@@ -46,12 +46,12 @@
             <div class="header">
               <h4><mat-icon>subject</mat-icon> Basics </h4>
             </div>
-
+<!--
               <app-value-fields
                   [inputForm]="productForm"
                   [fieldName]="'fullProductName'">
                   Long Name
-              </app-value-fields>
+              </app-value-fields> -->
 
               <app-value-fields
                     [inputForm]="productForm"
@@ -90,7 +90,7 @@
                 </div>
                 <div *ngIf="itemType" class="grid-container-small">
                   <div>
-                    <app-price-category-select
+                  <app-price-category-select
                       [itemType]        ="itemType"
                       [priceCategoryID] ="product.priceCategory"
                       [inputForm]       ="productForm" >
@@ -119,10 +119,10 @@
             </div>
 
              <div *ngIf="itemType && itemType.name && (
-                        itemType.useType.toLowerCase() === 'retail liquor' ||
-                        itemType.useType.toLowerCase() === 'service liquor'   )">
+                        itemType.type.toLowerCase() === 'retail liquor' ||
+                        itemType.type.toLowerCase() === 'service liquor'   )">
 
-                <!-- <app-value-fields
+                <app-value-fields
                   [inputForm]="productForm"
                   [fieldName]="'countryOfOrigin'"
                   >
@@ -145,7 +145,7 @@
                   [fieldName]="'abv'"
                   >
                   ABV
-                </app-value-fields> -->
+                </app-value-fields>
 
             </div>
 

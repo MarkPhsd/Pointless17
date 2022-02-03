@@ -19,7 +19,7 @@ export class BrandTypeSelectComponent implements  AfterViewInit {
   @Output() itemSelect  = new EventEmitter();
 
   itemNameInput: string; //for clear button
-  @Input() formFieldClass     = 'formFieldClass'
+  @Input() formFieldClass     = 'formFieldClass-standard'
   @Input() inputForm:         FormGroup;
   @Input() searchForm:        FormGroup;
   @Input() searchField:       FormControl;

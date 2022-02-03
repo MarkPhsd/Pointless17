@@ -1,12 +1,10 @@
 <div *ngIf="item">
-
   <div *ngIf="inputForm">
     <div [formGroup]="inputForm">
       <mat-card>
         <mat-card-title>
           Edit
           {{item.name}} <br>
-          <!-- {{item.icon}} -->
         </mat-card-title>
 
         <mat-card-content>
@@ -75,17 +73,11 @@
 
               </div>
 
-              <!-- sortOrder:            number; -->
-              <!-- menuGroupID:          number; -->
-              <!-- userType:             string; -->
-              <!-- routerLink:           string; -->
-              <!-- routerLinkActive:     string; -->
               <div  class="fields">
                 method:               {{item.method}}
               </div>
             </div>
 
-            <!-- {{inputForm.value | json}} -->
         </mat-card-content>
 
         <mat-card-actions>

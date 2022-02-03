@@ -10,8 +10,6 @@ export class FbNavMenuService {
   constructor(private fb: FormBuilder) { }
 
   initAccordionForm(inputForm: FormGroup) {
-
-
     inputForm = this.fb.group( {
       id:                    [''],
       name:                  [''],
@@ -60,9 +58,7 @@ export class FbNavMenuService {
       submenus:              [''], //SubMenu[];
     })
     return inputForm
-
   }
-
 
   intitFormData(inputForm: FormGroup, data: any) {
     inputForm.patchValue(data)

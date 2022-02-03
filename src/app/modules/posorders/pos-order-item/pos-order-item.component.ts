@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef,  HostListener, Input, OnInit, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, ElementRef,  HostListener,
+         Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -39,56 +40,55 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
   @Input() uiConfig : TransactionUISettings
     // @ViewChild('panel') element: ElementRef
-  @Input() index  = 0;
-  @Input() orderItem: PosOrderItem;
-  @Input() order: IPOSOrder;
-  @Input() menuItem: IMenuItem;
-  @Input() mainImage: string;
+  @Input() index          = 0;
+  @Input() orderItem      : PosOrderItem;
+  @Input() order          : IPOSOrder;
+  @Input() menuItem       : IMenuItem;
+  @Input() mainImage      : string;
   @Input() placeHolderImage = 'productPlaceHolder.jpg';
-  @Input() quantity: number;
-  @Input() unitPrice: number;
-  @Input() subTotal: number;
-  @Input() total: number;
-  @Input() printed: string;
+  @Input() quantity       : number;
+  @Input() unitPrice      : number;
+  @Input() subTotal       : number;
+  @Input() total          : number;
+  @Input() printed        : string;
   @Input() onlineShortDescription: string;
-  @Input() id: number;
-  @Input() productID: number;
-  @Input() productName: string;
-  @Input() thc =  50;
-  @Input() cbd =  50;
+  @Input() id             : number;
+  @Input() productID      : number;
+  @Input() productName    : string;
+  @Input() thc            =  50;
+  @Input() cbd            =  50;
   @Input() hideAddAnotherOne: number;
-  @Input() mainPanel: boolean;
+  @Input() mainPanel      : boolean;
 
-  orderPromptGroup: IPromptGroup;
-  menuItem$: Observable<IMenuItem>;
-  isNotInSidePanel: boolean
-  sidePanelWidth: number
-  sidePanelPercentAdjust: number
+  orderPromptGroup        : IPromptGroup;
+  menuItem$               : Observable<IMenuItem>;
+  isNotInSidePanel        : boolean
+  sidePanelWidth          : number
+  sidePanelPercentAdjust  : number
 
-  animationState        : string;
-  color: ThemePalette = 'primary';
-  mode: ProgressSpinnerMode = 'determinate';
-  value = 50;
+  animationState          : string;
+  color                   : ThemePalette = 'primary';
+  mode                    : ProgressSpinnerMode = 'determinate';
+  value                   = 50;
   bucketName:             string;
   awsBucketURL:           string;
   itemName   :            string;
-  imagePath   :            string;
+  imagePath   :           string;
 
-  smallDevice : boolean;
-  customcard  = '';
-  showEdit    : boolean;
-  showView    : boolean;
-  promptOption : boolean;
+  smallDevice           : boolean;
+  customcard            = '';
+  showEdit              : boolean;
+  showView              : boolean;
+  promptOption          : boolean;
 
-  bottomSheetOpen  : boolean ;
-  _bottomSheetOpen : Subscription;
+  bottomSheetOpen       : boolean ;
+  _bottomSheetOpen      : Subscription;
 
-  assignedPOSItem: PosOrderItem;
-  _assignedPOSItem: Subscription;
+  assignedPOSItem       : PosOrderItem;
+  _assignedPOSItem      : Subscription;
 
-  transactionUISettings$  = this.uiSettingService.getSetting('UITransactionSetting');
-  productnameClass = 'product-name'
-
+  transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
+  productnameClass       = 'product-name'
 
   @HostListener("window:resize", [])
    updateItemsPerPage() {
@@ -119,7 +119,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
         }
       }
     })
-
   }
 
   constructor(  private orderService: OrdersService,
@@ -221,12 +220,14 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
     //a little formating
     let height  = '400px';
+    let width   = '300px'
     if (editField == 'quantity') {
-      height = '275px'
+      height = '465px'
+      width  = '425px'
     }
 
     dialogRef = this.dialog.open(PosOrderItemEditComponent,
-      { width     : '300px',
+      { width     : width,
         minWidth  : '300px',
         height    : height,
         minHeight : height,
@@ -272,7 +273,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     if (this.menuItem) {
       this.router.navigate(["/menuitem/", {id: this.productID}]);
       return
-  } else {
+    } else {
       if (this.productID){
         this.router.navigate(["/menuitem/", {id: this.productID}]);
         return
@@ -281,7 +282,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
     if (this.orderItem) {
       this.router.navigate(["/menuitem/", {id: this.orderItem.productID}]);
-
     }
   }
 
@@ -293,14 +293,19 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   async addItemToOrder() {
-    console.log('add Item to Order')
+    if (!this.menuItem) {
+      this.notifyEvent(`Feature not yet implemented.`, 'alert')
+      return
+    }
+    this.notifyEvent(`item ${this.menuItem.name}`, 'alert')
+
     if (this.menuItem) {
       const quantity  =  Number(1)
       this.orderMethodsService.addItemToOrder(this.order, this.menuItem, quantity)
     }
   }
 
-  updateItemQuantity( quantity:number) {
+  updateItemQuantity( quantity: number) {
     if (!this.printed){
       if (this.orderItem) {
         const site = this.siteService.getAssignedSite()
@@ -330,14 +335,12 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   openDialog() {
     const item = this.orderItem
     const data = { id: item.productID }
-
     const dialogRef = this.dialog.open(MenuItemModalComponent,
       { width: '90vw',
         height: '70vh',
         data :  data ,
       },
     )
-
   }
 
   increaseByOne(){
@@ -397,45 +400,4 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       this.orderMethodsService.openPromptWalkThroughWithItem(prompt, item)
     }
   }
-
 }
-
-// this.http.get("https://swapi.co/api/people/")
-// .pipe(
-//   mergeMap(persons => {
-//     const home = persons.results.map(person => this.http.get(person.homeworld))
-//     return forkJoin(...home);
-//   })
-// )
-// .subscribe(home => {
-//   console.log('home', home)
-// })
-
-// applyChoices() {
-//   if (this.orderPromptGroup) {
-//     const site = this.siteService.getAssignedSite();
-//     this.posOrderItemService.postPromptItems(site, this.orderPromptGroup).pipe(
-//           switchMap( data  => {
-//             return  this.orderService.getOrder(site, data.orderID.toString())
-//           }
-//         )
-//       ).subscribe(data => {
-//         this.orderService.updateOrderSubscription(data)
-//     })
-//   }
-// }
-
-      // this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id)
-    //   .pipe(
-    //     switchMap( item  => {
-    //       const prompt = this.promptGroupservice.getPrompt(site, item.id).pipe(
-    //           switchMap( prompt => {
-    //             return forkJoin(...prompt)
-    //         })
-    //       )
-    //     }
-    //   )
-    // ).subscribe(data => {
-    //   this.orderMethod.openPromptWalkThroughWithItem(data, item)
-    //   console.log(data)
-    // })

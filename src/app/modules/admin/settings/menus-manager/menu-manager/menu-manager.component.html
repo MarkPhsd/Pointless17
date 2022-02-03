@@ -30,7 +30,6 @@
               >
               <mat-icon>{{item.icon}}</mat-icon>
               {{item.name}}
-
           </div>
         </div>
       </div>
@@ -55,12 +54,13 @@
       <div class="cards">
         <div *ngIf="accordionMenu">
           <app-accordion-menu-item-edit
-              [id]="accordionMenu.id">
+              [item]="accordionMenu">
           </app-accordion-menu-item-edit>
         </div>
 
         <div *ngIf="submenuItem">
-          <app-menu-group-item-edit [id]="submenuItem.id">
+          <app-menu-group-item-edit
+              [item]="submenuItem">
           </app-menu-group-item-edit>
         </div>
 

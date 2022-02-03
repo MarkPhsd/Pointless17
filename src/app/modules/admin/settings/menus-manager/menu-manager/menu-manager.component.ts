@@ -56,7 +56,6 @@ export class MenuManagerComponent implements OnInit  {
     accordionMenu$.subscribe( data => {
       this.accordionMenus = data
     })
-
   }
 
   assignSubMenuItem(event) {
@@ -75,8 +74,6 @@ export class MenuManagerComponent implements OnInit  {
     const result = window.confirm('Do you want to reset the menu?')
 
     if (!result) {return}
-
-    console.log('init menu', this.user)
 
     if (this.user) {
 
@@ -116,7 +113,7 @@ export class MenuManagerComponent implements OnInit  {
     //assign the sortOrder the number of the index.
     if (this.submenu) {
       this.menusService.putSubMenuGrouplist(site, this.submenu).subscribe( data=> {
-        console.log(this.submenu)
+
       })
     }
   }

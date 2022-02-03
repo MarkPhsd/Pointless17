@@ -582,7 +582,7 @@ export class OrderMethodsService {
         const orderID = orderItem.orderID
         this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe( item=> {
           if (item) {
-            this.notifyEvent('Item Deleted', "")
+            this.notifyEvent('Item Deleted', "Success")
             this.order.posOrderItems.splice(index, 1)
             this.orderService.updateOrderSubscription(item.order)
           }
@@ -599,7 +599,7 @@ export class OrderMethodsService {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 5000,
+      duration: 2000,
       verticalPosition: 'top'
     });
   }

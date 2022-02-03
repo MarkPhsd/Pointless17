@@ -5,9 +5,7 @@
     <div [formGroup]="inputForm">
       <mat-card>
         <mat-card-title>
-          Edit
-          {{item.name}} <br>
-          <!-- {{item.icon}} -->
+          Edit  {{item.name}} <br>
         </mat-card-title>
 
         <mat-card-content>
@@ -38,7 +36,7 @@
                   <mat-label >Router Link</mat-label>
                   <input matInput
                         type="text"
-                        formControlName="RouterLink"
+                        formControlName="routerLink"
                         class="form-control" >
                 </mat-form-field>
               </div>
@@ -76,12 +74,7 @@
 
               </div>
 
-              <!-- sortOrder:            number; -->
-              <!-- menuGroupID:          number; -->
-              <!-- userType:             string; -->
-              <!-- routerLink:           string; -->
-              <!-- routerLinkActive:     string; -->
-              <div  class="fields">
+              <div *ngIf="item.method" class="fields">
                 method:               {{item.method}}
               </div>
             </div>

@@ -1,15 +1,14 @@
-import { Component, OnInit,Input } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, Input } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { switchMap, } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { clientType, employee, IClientTable, IStatus, IUserProfile } from 'src/app/_interfaces';
-import { AWSBucketService, ContactsService, UserService } from 'src/app/_services';
+import { employee, IClientTable } from 'src/app/_interfaces';
+import { AWSBucketService} from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { EmployeeService, IEmployeeClient } from 'src/app/_services/people/employee-service.service';
 import { IStatuses } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -24,6 +23,7 @@ export class EmployeeEditComponent implements OnInit {
 
   inputForm   : FormGroup;
   clientForm  : FormGroup;
+  confirmPassword: FormGroup;
   bucketName  :  string;
   awsBucketURL:  string;
 
@@ -43,7 +43,7 @@ export class EmployeeEditComponent implements OnInit {
   passwordsMatch      = true;
 
   minumumAllowedDateForPurchases: Date
-  confirmPassword: FormGroup;
+
 
   password1
   password2
@@ -137,6 +137,7 @@ export class EmployeeEditComponent implements OnInit {
       confirmPassword: ['']
     })
     this.validateMatchingPasswords();
+    // this.validateMatchingPasswords2();
   }
 
   initForm() {
@@ -149,30 +150,41 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   validateMatchingPasswords() {
-    this.confirmPassword.valueChanges.subscribe( data => {
-      if (this.confirmPassword) {
-        this.password1 = this.confirmPassword.controls['confirmPassword'].value;
-        if (this.password1 == this.password2) {
-          this.passwordsMatch = true;
-          return
+    try {
+      this.confirmPassword.valueChanges.subscribe( data => {
+        if (!this.confirmPassword) { this.initConfirmPassword()}
+        if (this.confirmPassword) {
+          this.password1 = this.confirmPassword.controls['confirmPassword'].value;
+          if (this.password1 == this.password2) {
+            this.passwordsMatch = true;
+            return
+          }
         }
-      }
-      this.passwordsMatch = false
-    })
+        this.passwordsMatch = false
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   validateMatchingPasswords2() {
-    this.clientForm.valueChanges.subscribe( data => {
-      if (this.clientForm) {
-        this.password2 = this.clientForm.controls['apiPassword'].value;
-        if (this.password1 == this.password2) {
-          this.passwordsMatch = true;
-          return
+    try {
+      this.clientForm.valueChanges.subscribe( data => {
+        if (this.clientForm) {
+          this.password2 = this.clientForm.controls['apiPassword'].value;
+          if (this.password1 == this.password2) {
+            this.passwordsMatch = true;
+            return
+          }
         }
-      }
-      this.passwordsMatch = false
-    })
+        this.passwordsMatch = false
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
+
+
   getEmployeeClientObservable(): Observable<IEmployeeClient> {
     const site     = this.siteService.getAssignedSite();
     let client     = {} as IClientTable
@@ -203,7 +215,6 @@ export class EmployeeEditComponent implements OnInit {
         return  this.employeeService.saveEmployeeClient(site, { employee:  employee, client: client })
       }
     }
-
     return EMPTY
   }
 
@@ -220,7 +231,6 @@ export class EmployeeEditComponent implements OnInit {
       )
     }
   };
-
 
   saveClient() {
     const site = this.siteService.getAssignedSite();

@@ -1,0 +1,21 @@
+.grid-container {
+  // display: grid;
+  // grid-template-columns: 150px;
+  // gap: 10;
+
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // grid-template-columns: repeat(1, 1fr);
+  grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
+  // grid-auto-flow:dense;"Item De
+  padding: 10px;
+  // margin: 10;
+  margin: 10px;
+  // width: 150px;
+  // max-width: 150px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  // min-height: 450px;
+
+}

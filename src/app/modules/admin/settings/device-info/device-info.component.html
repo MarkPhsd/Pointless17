@@ -43,18 +43,22 @@
         </mat-checkbox>
       </div>
 
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label>Device Name</mat-label>
-          <input  matInput
+        <div>
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label>Device Name</mat-label>
+                <input  matInput
                   [(ngModel)]="deviceName"
                   type="text" >
-        </mat-form-field>
+            </mat-form-field>
+          </div>
+          <div>
+              <button mat-raised-button (click)="saveDeviceName()">
+              <mat-icon>save</mat-icon>Save Name</button>
+          </div>
+        </div>
       </div>
-      <div>
-        <button mat-buton (click)="saveDeviceName()">
-        <mat-icon>save</mat-icon>Save Device Name</button>
-      </div>
+    <div>
 
     </div>
   </mat-card-content>

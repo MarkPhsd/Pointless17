@@ -3,9 +3,8 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
+import { PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -52,26 +51,28 @@ export class PosOrderItemEditComponent  {
       if (this.editField == 'quantity') {
         this.inputForm = this._fb.group({
           quantity: [this.posOrderItem.quantity],
+          itemName: [],
         })
       }
 
     }
   }
 
+  saveChange(event) {
+    const item = this.getItemValue();
+    item.quantity = event;
+    console.log('save changes update quantity',event)
+    this.updateQuantity(item)
+  }
+
   save() {
     if (this.posOrderItem) {
-      console.log('this.edifield', this.editField)
-
       const site = this.siteService.getAssignedSite();
       const item = this.getItemValue();
       if (item && site) {
 
         if (this.editField == 'quantity'  ) {
-            this.posOrderItemService.changeItemQuantity(site, item ).subscribe( data => {
-              console.log('save', data);
-              this.orderService.updateOrderSubscription(data)
-              this.onCancel();
-          })
+          this.updateQuantity(item)
           return
         }
 
@@ -82,10 +83,17 @@ export class PosOrderItemEditComponent  {
           })
           return
         }
-
       }
     }
 
+  }
+
+  updateQuantity(item: PosOrderItem) {
+    const site = this.siteService.getAssignedSite();
+    this.posOrderItemService.changeItemQuantity(site, item ).subscribe( data => {
+      this.orderService.updateOrderSubscription(data)
+      this.onCancel();
+    })
   }
 
   getItemValue() {

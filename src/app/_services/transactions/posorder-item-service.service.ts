@@ -331,7 +331,6 @@ export class POSOrderItemServiceService {
 
   }
 
-
   deletePOSOrderItem(site: ISite, id: number): Observable<ItemPostResults> {
 
     const controller = "/POSOrderItems/"
@@ -345,7 +344,6 @@ export class POSOrderItemServiceService {
     return  this.http.delete<ItemPostResults>(url)
 
   }
-
 
   setItemAsPrinted( site: ISite, item: PosOrderItem ) : Observable<any> {
 

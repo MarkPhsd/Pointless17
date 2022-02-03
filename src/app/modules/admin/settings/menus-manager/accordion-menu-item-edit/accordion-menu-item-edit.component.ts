@@ -12,10 +12,10 @@ import { MenusService } from 'src/app/_services/system/menus.service';
   templateUrl: './accordion-menu-item-edit.component.html',
   styleUrls: ['./accordion-menu-item-edit.component.scss']
 })
-export class AccordionMenuItemEditComponent implements OnInit, OnChanges {
+export class AccordionMenuItemEditComponent implements OnInit {//, OnChanges {
 
   @Input() item$          : Observable<AccordionMenu>;
-  item                    : AccordionMenu;
+  @Input() item           : AccordionMenu;
   @Input() id             : number;
   inputForm               : FormGroup;
   active                  : boolean;
@@ -30,16 +30,12 @@ export class AccordionMenuItemEditComponent implements OnInit, OnChanges {
   { }
 
   ngOnInit() {
-    this.refreshData();
-  }
-
-  ngOnChanges() {
+    this.refreshForm();
     this.refreshData();
   }
 
   refreshData() {
     const site = this.siteService.getAssignedSite()
-
     if (this.id) {
       const item$ = this.menusService.getAccordionMenuByID(site, this.id);
       item$.subscribe( data => {
