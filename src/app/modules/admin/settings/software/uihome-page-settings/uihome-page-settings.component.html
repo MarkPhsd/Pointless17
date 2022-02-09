@@ -46,6 +46,29 @@
         </mat-slide-toggle>
       </div>
 
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="tierMenuEnabled"
+                  (change)="updateSetting()">
+          <mat-label>Tier Menu</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <app-value-fields
+          [fieldType]     ="'text'"
+          [inputForm]     ="inputForm"
+          [fieldName]     ="'menuItemSize'">
+          Pixel Width of Menu Item
+      </app-value-fields>
+
+      <app-value-fields
+          [fieldType]     ="'number'"
+          [inputForm]     ="inputForm"
+          [fieldName]     ="'itemsPerPage'">
+          Items Per Page
+      </app-value-fields>
+
     </div>
   </mat-card-content>
 

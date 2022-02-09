@@ -1,12 +1,16 @@
-<div class="total-card">
-  Order {{order.id}} - {{order.serviceType}}
-</div>
-<div class="total-card">
-   {{order.employeeName}}
-</div>
-<div *ngIf="order.completionDate" class="total-card">
-  Started  {{order.orderDate | date: 'shortDate'}} - {{order.orderDate | date: 'shortTime'}}
- </div>
-<div *ngIf="order.completionDate" class="total-card">
-  Completed  {{order.completionDate | date: 'shortDate'}} - {{order.completionDate | date: 'shortTime'}}
- </div>
+<span *ngIf="order">
+  <div class="total-card">
+    <h4>
+      <span  *ngIf="!isOrderClaimed" > <mat-icon color="warn">lock</mat-icon> </span> Order {{order?.id}} - {{order?.serviceType}}
+    </h4>
+  </div>
+  <div class="total-card">
+    <div  *ngIf="order.employeeName">{{order?.employeeName}}  </div>
+  </div>
+  <div *ngIf="order.completionDate" class="total-card">
+    Started  {{order.orderDate | date: 'shortDate'}} - {{order?.orderDate | date: 'shortTime'}}
+  </div>
+  <div *ngIf="order.completionDate" class="total-card">
+    Completed  {{order.completionDate | date: 'shortDate'}} - {{order?.completionDate | date: 'shortTime'}}
+  </div>
+</span>

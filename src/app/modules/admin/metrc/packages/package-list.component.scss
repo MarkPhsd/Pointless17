@@ -1,11 +1,9 @@
 @import "/src/mixins.scss";
 
-
 mat-form-field {
   font-size: .9em;
   margin: 3px ;
 }
-
 
 .grid-list-container {
   display: grid;
@@ -24,23 +22,26 @@ mat-form-field {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-
-  // display:grid;
-  // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-  // gap: 20px;
 }
 
 .grid-item {
   font-size: .9em;
-  // width: 135px;
-  // max-width: 135px;
   margin: 5px
 }
 
-.selector {
+.site-select {
   top: -5px;
   position: relative;
+}
 
+.selector-small {
+  font-size: .9em;
+  // margin: 5px
+}
+
+.selector {
+  // top: -5px;
+  position: relative;
 }
 
 .number-input {
@@ -132,6 +133,10 @@ mat-form-field {
     top: 5px;
     margin-top: 5px;
     margin-left: 5px;
+  }
+
+  .short-field {
+    width: 50px;
   }
 
   .agGridButton {

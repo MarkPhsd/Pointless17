@@ -31,7 +31,7 @@ interface IIsOnline {
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
-  @Output() outPutToggleSearchBar:      EventEmitter<any> = new EventEmitter();
+  @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
   openOrderBar:                      boolean;
   @HostBinding('class') className = '';
 

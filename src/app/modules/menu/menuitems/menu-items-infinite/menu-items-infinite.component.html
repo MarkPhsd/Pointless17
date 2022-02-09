@@ -1,10 +1,6 @@
-
-
-
 <div class="parent-container">
-
   <div *ngIf="value" class="loader">
-      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+    <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
   </div>
 
   <div fxLayout="row" class="panels">
@@ -17,7 +13,7 @@
               [infiniteScrollThrottle]="50"
               (scrolled)="onScrollDown()"
               (scrolledUp)="onScrollUp()"
-              [scrollWindow]="false"   >
+              [scrollWindow]="false">
 
           <div class="grid-flow">
             <div *ngFor="let menuItem of menuItems; let i = index">

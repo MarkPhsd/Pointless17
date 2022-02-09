@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { OrdersService } from 'src/app/_services';
+import { MenuService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
@@ -20,6 +20,7 @@ import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { PrintingService } from '../system/printing.service';
 import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { UserAuthorizationService } from '../system/user-authorization.service';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -81,6 +82,7 @@ export class OrderMethodsService {
               private promptGroupService      : PromptGroupService,
               private printingService          :PrintingService,
               private userAuthorization : UserAuthorizationService,
+              private menuService              : MenuService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -128,8 +130,13 @@ export class OrderMethodsService {
     }
   }
 
-  //determines if the users action will add the item or view the item on the order.
+  ///1. List item. 2. Add Item 3. View Sub Groups of Items.
+  //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
+
+    const searchResults = this.updateMenuSearchModel(item)
+    if (searchResults) { return }
+
     if (add) {
       if (item && item.itemType.requireInStock) {
         this.listItem(item.id);
@@ -138,64 +145,88 @@ export class OrderMethodsService {
       this.addItemToOrder(order, item, 1)
       return
     }
+
+    this.listItem(item.id);
+
+  }
+
+  updateMenuSearchModel(item: IMenuItem) : boolean {
+
+    if (!item) {   return false }
+    // this.menuService.updateMeunuItemData(model);
+    const model =  {} as ProductSearchModel;
+    if (item.itemType.name.toLowerCase() == 'category') {
+      model.categoryID   = item.categoryID.toString()
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
+      return true
+    }
+    if (item.itemType.name.toLowerCase() == 'sub category') {
+      model.subCategory  = item.name
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
+      return true
+    }
+    if (item.itemType.name.toLowerCase() == 'department') {
+      model.departmentID = item.id.toString()
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
+      return true
+    }
+
+    return false
+
+  }
+
+  //determines if the users action will add the item or view the item on the order.
+  menuItemActionPopUp(order: IPOSOrder, item: IMenuItem, add: boolean) {
+    if (add) {
+      this.addItemToOrder(order, item, 1)
+      return
+    }
     if (!add) {
-      this.listItem(item.id);
+      this.openPopupItem()
     }
   }
 
-    //determines if the users action will add the item or view the item on the order.
-    menuItemActionPopUp(order: IPOSOrder, item: IMenuItem, add: boolean) {
-
-       if (add) {
-        this.addItemToOrder(order, item, 1)
-        return
-      }
-      if (!add) {
-        this.openPopupItem()
-      }
+  getPopUpWidth(defaultSize: string) {
+    let deviceSize = '90vw'
+    let smallDevice = false
+    if (window.innerWidth >= 768) {
+      smallDevice = false
+      deviceSize = defaultSize
     }
-
-    getPopUpWidth(defaultSize: string) {
-      let deviceSize = '90vw'
-      let smallDevice = false
-      if (window.innerWidth >= 768) {
-        smallDevice = false
-        deviceSize = defaultSize
-      }
-      if (window.innerWidth < 768) {
-        smallDevice = true
-        deviceSize = '100vw'
-      }
-      return deviceSize
+    if (window.innerWidth < 768) {
+      smallDevice = true
+      deviceSize = '100vw'
     }
+    return deviceSize
+  }
 
-    openPopupItem() {
+  openPopupItem() {
 
-      const deviceSize = this.getPopUpWidth('90vw')
-      let panelClass= ''
-      if (deviceSize=='90vw') {
-      }
-      panelClass = 'custom-dialog-container';
-
-      const dialogRef = this.dialog.open(MenuItemModalComponent,
-        {
-          width:        deviceSize,
-          maxWidth:     deviceSize,
-          height:       '90vh',
-          maxHeight:    '90vh',
-          panelClass:   panelClass
-        },
-      )
-
-      //panelClass: 'custom-dialog-container'
-
-
-      dialogRef.afterClosed().subscribe(result => {
-        return result;
-      });
+    const deviceSize = this.getPopUpWidth('90vw')
+    let panelClass= ''
+    if (deviceSize=='90vw') {
     }
+    panelClass = 'custom-dialog-container';
 
+    const dialogRef = this.dialog.open(MenuItemModalComponent,
+      {
+        width:        deviceSize,
+        maxWidth:     deviceSize,
+        height:       '90vh',
+        maxHeight:    '90vh',
+        panelClass:   panelClass
+      },
+    )
 
+    //panelClass: 'custom-dialog-container'
+
+    dialogRef.afterClosed().subscribe(result => {
+      return result;
+    });
+  }
 
   listItem(id:number) {
     this.router.navigate(["/menuitem/", {id:id}]);
@@ -334,7 +365,6 @@ export class OrderMethodsService {
     return true
   }
 
-
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
      this.processAddItem(this.order, barcode, null, quantity, input);
   }
@@ -433,6 +463,47 @@ export class OrderMethodsService {
       this.initItemProcess();
     }
   }
+
+  deleteOrder(id: number) {
+    const site = this.siteService.getAssignedSite();
+    const confirm = window.confirm('Are you sure you want to delete this order?')
+    // return ;
+    if (this.order) {
+      const orderDelete$ = this.orderService.deleteOrder(site, this.order.id)
+      orderDelete$.subscribe(data => {
+        if (data) {
+          this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+          this.clearOrder();
+          if (this.router.url == '/pos-orders') {
+            //then refresh orders
+            return
+          }
+
+          this.router.navigate(['app-main-menu'])
+        }
+        if (!data) {
+          this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+        }
+      }, err => {
+        this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+      })
+    }
+  }
+
+  clearOrder() {
+    this.orderService.updateOrderSubscription(null);
+    const url = this.router.url;
+    if (url === '/currentorder' || url === '/currentorder;mainPanel=true'
+        || url === '/pos-payment' || url === '/pos-order-schedule') {
+      this.router.navigate(['/pos-orders'])
+      return
+    }
+    if (url === '/pos-orders') {
+      // this.router.navigate(['app-main-menu'])
+    }
+
+  }
+
 
   closeOrder(site: ISite, order: IPOSOrder) {
     if (order) {

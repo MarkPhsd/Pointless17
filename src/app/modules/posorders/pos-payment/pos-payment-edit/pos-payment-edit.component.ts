@@ -1,5 +1,4 @@
 import { Component, OnInit ,OnDestroy,Optional } from '@angular/core';
-import { Route } from '@angular/compiler/src/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService  } from 'src/app/_services';

@@ -2,7 +2,8 @@
   "database": {
     "rules": "database.rules.json"
   },
-  "hosting": [{
+  "hosting": [
+  {
     "target": "ccsapi",
     "public": "dist/CCSApp",
     "ignore": [

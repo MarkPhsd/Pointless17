@@ -122,7 +122,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
         this.nextPage(true)
-        console.log('subscription updated', data)
+        // console.log('subscription updated', data)
       })
     } catch (error) {
     }
@@ -209,6 +209,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
+        // console.log('data', data)
         this.orderService.setActiveOrder(site, data)
       }
     )
@@ -224,7 +225,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.loading      = true
 
     results$.subscribe(data => {
-      console.log('results updated', data)
+      // console.log('results updated', data)
       if (!this.orders)  { this.orders = [] as IPOSOrder[] }
       this.currentPage += 1;
 

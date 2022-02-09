@@ -7,8 +7,8 @@ import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assi
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import html2canvas from 'html2canvas';
-import domtoimage from 'dom-to-image';
+import  html2canvas from 'html2canvas';
+import  domtoimage from 'dom-to-image';
 import { jsPDF } from "jspdf";
 import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';

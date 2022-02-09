@@ -1,27 +1,21 @@
 <div *ngIf="inputForm">
   <div [formGroup]="inputForm">
-    <div class="filterItem" >
-      <mat-form-field
-            class="mat-fields quantity"
-            appearance="outline">
-        <mat-label><ng-content></ng-content></mat-label>
-
+    <mat-form-field
+          [class]="fieldsClass"
+          appearance="outline">
+      <mat-label><ng-content></ng-content></mat-label>
         <div *ngIf="passwordMask">
           <input matInput
+                [class]="fieldsClass"
                 appAppPasswordMask
                 [type]="fieldType"
-                [formControlName]="fieldName"
-                class="form-control" >
+                [formControlName]="fieldName">
         </div>
-
         <div *ngIf="!passwordMask">
           <input matInput
                 [type]="fieldType"
-                [formControlName]="fieldName"
-                class="form-control" >
+                [formControlName]="fieldName">
         </div>
-
-        </mat-form-field>
-    </div>
+    </mat-form-field>
   </div>
 </div>

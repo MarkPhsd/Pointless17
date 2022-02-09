@@ -13,12 +13,12 @@ ${item.productName}
 ^CFA,30
 ^FO55,255^FD
 ^FB600, 6^FD
-${item.price}  Batch ID 10/15/2020
+${item.price}  Batch 10/15/2020
 ^FS
 ^CFA,30
 ^FO55,315^FD
 ^FB600, 6^FD
-METRC ${item.label}
+${item.label}
 ^FS
 ^CFA,30
 ^FO55,345^FD
@@ -29,6 +29,6 @@ METRC ${item.label}
 ^FT25,480^A1B,28,28
 ^FB600,1,0,C
 ^FD
-Natures &
+Pointless
 ^FS
 ^XZ

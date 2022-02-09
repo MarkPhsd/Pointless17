@@ -48,7 +48,6 @@ export class ToolBarUIService {
   updateToolBarSideBar(value: boolean) {
     this.toolBar = value
     this.searchBar = false;
-
     this._toolbarSideBar.next(value);
     this.resizeWindow();
   }

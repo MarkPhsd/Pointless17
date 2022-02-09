@@ -13,7 +13,7 @@
                 ((item.id == item.idRef ||  !item.idRef) || item.prompGrouptID == 0)
                )">
 
-      <ion-item >
+      <ion-item *ngIf="item" >
         <pos-order-item
                     [class]="gridScroller"
                     [index]="i"

@@ -87,15 +87,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   constructor(
-      private orderService: OrdersService,
-      private router: Router,
-      public  route: ActivatedRoute,
-      private siteService: SitesService,
-      private serviceTypes   : ServiceTypeService,
-      private matSnack: MatSnackBar,
-      private fb: FormBuilder,
-      private userAuthorization       : UserAuthorizationService,
-      private _bottomSheet: MatBottomSheet
+      private orderService    : OrdersService,
+      private router          : Router,
+      public  route           : ActivatedRoute,
+      private siteService     : SitesService,
+      private serviceTypes    : ServiceTypeService,
+      private matSnack        : MatSnackBar,
+      private fb              : FormBuilder,
+      private userAuthorization  : UserAuthorizationService,
+      private _bottomSheet    : MatBottomSheet
   )
   {
     this.initSubscriptions();
@@ -175,6 +175,11 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.initForm();
     this.initDateForm();
     this.refreshSearch();
+    this.clearOrder();
+  }
+
+  clearOrder() {
+    this.orderService.updateOrderSubscription(null);
   }
 
   initEmployeeList(){

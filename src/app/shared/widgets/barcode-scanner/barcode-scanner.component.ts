@@ -5,7 +5,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DlParserService } from 'src/app/_services/people/dl-parser.service';
 import { IUserProfile } from 'src/app/_interfaces';
 import { ActionSheetController } from '@ionic/angular';
-
 import { Plugins} from '@capacitor/core';
 import { CameraPreviewOptions }  from '@capacitor-community/camera-preview';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
@@ -18,9 +17,7 @@ import { environment } from 'src/environments/environment';
 // https://www.ionicanddjangotutorial.com/ionic-qrcode-scanning/
 // https://github.com/DutchConcepts/capacitor-barcode-scanner#usage
 // (window.document.querySelector('ion-app') as HTMLElement).classList.remove('cameraView');
-
 import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-barcode-scanner',

@@ -327,6 +327,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
+  testCredit() {
+    // this.router.navigate('payments')
+    this.router.navigate(['/payments'])
+  }
+
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 2000,

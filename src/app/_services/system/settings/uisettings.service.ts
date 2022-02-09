@@ -11,6 +11,7 @@ export interface TransactionUISettings {
   displayAdd     : boolean;
   displayQuantity: boolean;
   id:             number;
+  lockOrders    : boolean;
 }
 
 export interface WebAppSettings {
@@ -31,11 +32,13 @@ export interface EndOfDayProcedures {
 }
 
 export interface UIHomePageSettings {
-  brandsEnabled: boolean;
-  categoriesEnabled: boolean;
-  typesEnabled: boolean;
+  brandsEnabled     : boolean;
+  categoriesEnabled : boolean;
+  typesEnabled      : boolean;
   departmentsEnabled: boolean;
   tierMenuEnabled   : boolean;
+  menuItemSize      : number; //pixels
+  itemsPerPage: number;
 }
 
 @Injectable({
@@ -91,7 +94,7 @@ export class UISettingsService {
   ////////////// TransactionUISettings
   async  subscribeToCachedConfig(): Promise<TransactionUISettings> {
     const setting = await this.getSetting('UITransactionSetting').toPromise();
-     const config = JSON.parse(setting.text) as TransactionUISettings
+    const config = JSON.parse(setting.text) as TransactionUISettings
     this.updateUISubscription(config);
     return config
   }
@@ -149,6 +152,7 @@ export class UISettingsService {
       displayView    : [],
       displayAdd     : [],
       displayQuantity: [],
+
      })
     return fb
   }
@@ -161,6 +165,8 @@ export class UISettingsService {
       categoriesEnabled : [],
       departmentsEnabled: [],
       tierMenuEnabled   : [],
+      itemsPerPage      : [''],
+      menuItemSize      : [''],
      })
     return fb
   }
@@ -173,6 +179,8 @@ export class UISettingsService {
       categoriesEnabled : [config.categoriesEnabled],
       departmentsEnabled: [config.departmentsEnabled],
       tierMenuEnabled   : [config.tierMenuEnabled],
+      itemsPerPage      : [config.itermsPerPage],
+      menuItemSize      : [config.menuItemSize],
      })
     return fb
   }

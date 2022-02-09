@@ -10,9 +10,14 @@
 }
 
 .grid-flow {
-  --gap: 20px;
+  --gap: 5px;
+  margin-top: 2px;
   display: grid;
   gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.grid-flow-custom {
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
 }
 

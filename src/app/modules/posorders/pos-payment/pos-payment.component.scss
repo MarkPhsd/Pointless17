@@ -62,36 +62,39 @@ mat-card {
 
 //delete
 .transaction-data {
-  display               : grid;
-  gap                   : 5px;
-  grid-template-columns : repeat( auto-fit, minmax(355px, 1fr) );
+  // display               : grid;
+  // gap                   : 5px;
+  // grid-template-columns : repeat( auto-fit, minmax(355px, 1fr) );
   border-radius         : 3px;
-  grid-auto-flow        : dense;
-
+  // grid-auto-flow        : dense;
+  margin-right          : 50px;
+  margin-top: 5px;
+  margin-left: 10px;
+  margin-bottom: 10px;
   @include for-phone-only  {
-    --gap                : 5px;
-    display              : grid;
-    gap                  : var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(355px, 1fr) );
+    // --gap                : 5px;
+    // display              : grid;
+    // gap                  : var(--gap);
+    // grid-template-columns: repeat( auto-fit, minmax(355px, 1fr) );
     margin               : 5px ;
-    grid-auto-flow        : dense;
+    // grid-auto-flow       : dense;
   }
 }
 
-
 .grid-header-item {
 
-  margin    : 15px;
+  margin    : 10px;
   width     : 100%;
   // min-width : 435px;
   // max-width : 455px;
 
   @include for-phone-only  {
     margin: 5px;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    justify-content: left;
+    // display: flex;
+    // flex-direction: row;
+    // align-content: center;
+    // justify-content: left;
+    width     : 100%;
   }
 }
 

@@ -1,13 +1,54 @@
-
 <div class="container">
-  <p>dsi-emvpayment works!</p>
-  <div>
-    <button mat-raised-button color="primary" (click) ="checkPermission()">checkPermission</button>
-    result: {{result | json}}
-  </div>
-  <div>
-    <button mat-raised-button  color="primary" (click) ="getInstance()">getInstance</button>
-    instance {{instance | json}}
-  </div>
+  <mat-card >
+    <mat-card-subtitle  *ngIf="isApp && androidApp">
+      <h4>Android</h4>
+      DSI Payment System Avalible in App Mode
+    </mat-card-subtitle>
+
+    <mat-card-content *ngIf="isApp && androidApp">
+      <div class="grid-container">
+
+          <div class="button">
+            <button class="button" mat-raised-button color="primary" (click) ="checkPermission()">Permission Check</button>
+            {{result | json}}
+          </div>
+
+          <div class="button">
+            <button class="button" mat-raised-button  color="primary" (click) ="getInstance()">Instance Check</button>
+            {{instance | json}}
+          </div>
+
+          <div class="button">
+            <button class="button" mat-raised-button  color="primary" (click) ="getEcho()">Check Echo</button>
+            {{echoResponse}}
+          </div>
+
+          <div class="button">
+            <button class="button" mat-raised-button  color="primary" (click) ="reset()">Reset</button>
+          </div>
+
+          <div class="button">
+            <button class="button" mat-raised-button  color="primary" (click) ="login()">Login</button>
+          </div>
+
+        </div>
+    </mat-card-content>
+
+    <mat-card-subtitle  *ngIf="!isApp && !androidApp">
+      <h4>Web Interface</h4>
+    </mat-card-subtitle>
+
+    <mat-card-content *ngIf="!androidApp">
+      <div class="button">
+        <button class="button"
+                mat-raised-button
+                color="primary"
+                (click)="getEcho()">Check Echo</button>
+        {{echoResponse}}
+      </div>
+    </mat-card-content>
+
+    {{err}}
+  </mat-card>
 
 </div>

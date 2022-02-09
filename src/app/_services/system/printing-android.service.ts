@@ -67,10 +67,8 @@ export class PrintingAndroidService {
 // https://github.com/Ans0n-Ti0/EscPosEncoder
 
   async printAndroidPOSReceipt( order: IPOSOrder, macAddress: string) {
-
     const result = this.encoodReceipt(order);
     this.printFromAndroid(macAddress, result)
-
   }
 
   encoodReceipt(Order: IPOSOrder) {

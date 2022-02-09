@@ -269,13 +269,32 @@ constructor(  private _snackBar              : MatSnackBar,
                   },
       { headerName: 'Image',
                   field: 'imageName',
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 100,
+                  width: 75,
+                  minWidth: 75,
+                  maxWidth: 75,
                   sortable: false,
                   autoHeight: true,
                   cellRendererFramework: AgGridImageFormatterComponent
-                }
+                  },
+      {
+                  headerName: "Active",
+                  width:    100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  flex: 1,
+                  field: "active",
+                  cellRenderer: function(params) {
+                    var input = document.createElement('input');
+                    input.type="checkbox";
+                    input.checked=params.value;
+                    input.disabled = true;
+                    input.addEventListener('click', function (event) {
+                        params.value=!params.value;
+                        params.node.data.fieldName = params.value;
+                    });
+                    return input;
+                  }
+        },
     ]
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }

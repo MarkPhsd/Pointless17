@@ -7,8 +7,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { Title } from '@angular/platform-browser';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-menu-items-infinite',
@@ -73,7 +73,6 @@ _orderBar      : Subscription;
 orderBar       : boolean;
 
 platForm        =  this.getPlatForm()
-appName         = ''
 isApp           = false;
 
 getPlatForm() {  return Capacitor.getPlatform(); }
@@ -84,77 +83,25 @@ constructor(private menuService      : MenuService,
             public  route            : ActivatedRoute,
             private siteService      : SitesService,
             private toolbarServiceUI : ToolBarUIService,
-            private electronService  : ElectronService,
             private titleService     : Title,
+            private platFormService  : PlatformService,
     )
 {
 
-  if (this.electronService) {
-    if (this.electronService.remote != null)
-    {
-      this.appName = 'electron '
-      this.isApp = true
-    } else
-    {
-      this.isApp = false
-      this.platForm =  this.getPlatForm();
-      if (this.platForm == 'android') {
-        this.isApp = true;
-      }
-    }
-  }
+}
 
-  // const departmentID  = this.route.snapshot.paramMap.get('departmentID');
-  // const itemTypeID = this.route.snapshot.paramMap.get('itemTypeID');
-  // const categoryID = this.route.snapshot.paramMap.get('categoryID');
+initSearchProcess() {
 
-  this.initSearchService();
-  let reRoute = true
+  this.isApp = this.platFormService.isApp()
 
-  if (this.productSearchModelData)  {
-    const model = this.productSearchModelData
-
-
-    this.categoryID  = model.categoryID
-
-    this.brandID     = model.brandID;
-
-    this.typeID      = model.itemTypeID
-
-    this.productName = model.name
-
-    if (!model.pageNumber) { model.pageNumber = 1}
-    this.currentPage = model.pageNumber
-
-    let  categoryResults = ''
-    if (model.categoryName && model.categoryName != undefined ) {
-       categoryResults = model.categoryName;
-       let reRoute = false
-    }
-
-    let  departmentName = ''
-    if (model.departmentName && model.departmentName != undefined ) {
-      departmentName = 'departments ' + model.departmentName;
-      let reRoute = false
-    }
-
-    let  itemTypeName = ''
-    if (model.itemTypeName && model.itemTypeName != undefined) {
-      itemTypeName = 'types ' + model.itemTypeName;
-      let reRoute = false
-    }
-
-    this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
-    return
-  }
+  let reRoute = true;
 
   try {
-    this.departmentID = this.route.snapshot.paramMap.get('categoryID');
-    this.categoryID = this.route.snapshot.paramMap.get('categoryID');
-    this.brandID = this.route.snapshot.paramMap.get('brandID');
-    this.typeID = this.route.snapshot.paramMap.get('typeID');
-    this.productName = this.route.snapshot.paramMap.get('productName');
-
+      this.departmentID = this.route.snapshot.paramMap.get('departmentID');
+      this.categoryID   = this.route.snapshot.paramMap.get('categoryID');
+      this.brandID      = this.route.snapshot.paramMap.get('brandID');
+      this.typeID       = this.route.snapshot.paramMap.get('typeID');
+      this.productName  = this.route.snapshot.paramMap.get('productName');
   } catch (error) {
     console.log('constructor error', error)
   }
@@ -168,23 +115,60 @@ constructor(private menuService      : MenuService,
     this.currentPage = parseInt (this.route.snapshot.paramMap.get('currentPage'))
   }
 
+  // console.log('categoryID', this.categoryID)
+
+}
+
+initSearchFromModel() {
+  this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
+      // const model = this.productSearchModelData
+      this.categoryID  = model.categoryID
+      this.brandID     = model.brandID;
+      this.typeID      = model.itemTypeID
+      this.productName = model.name
+
+      if (!model.pageNumber) { model.pageNumber = 1}
+      this.currentPage = model.pageNumber
+
+      let  categoryResults = ''
+      if (model.categoryName && model.categoryName != undefined ) {
+        categoryResults = model.categoryName;
+        let reRoute = false
+      }
+
+      let  departmentName = ''
+      if (model.departmentName && model.departmentName != undefined ) {
+        departmentName = 'departments ' + model.departmentName;
+        let reRoute = false
+      }
+
+      let  itemTypeName = ''
+      if (model.itemTypeName && model.itemTypeName != undefined) {
+        itemTypeName = 'types ' + model.itemTypeName;
+        let reRoute = false
+      }
+
+      this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
+      return
+    }
+  )
 }
 
 async ngOnInit()  {
+  this.initSearchProcess();
   this.value      = 1;
   this.bucketName =   await this.awsBucketService.awsBucket();
-
   this.initOrderBarSubscription()
   this.setItemsPerPage();
   await this.nextPage();
   this.setTitle()
 }
 
-  setTitle() {
-    if (this.productSearchModelData) {
-      this.titleService.setTitle('Items Search Results')
-    }
+setTitle() {
+  if (this.productSearchModelData) {
+    this.titleService.setTitle('Items Search Results')
   }
+}
 
 ngOnDestroy(): void {
   if (this._orderBar) { this._orderBar.unsubscribe(); }
@@ -195,16 +179,10 @@ ngAfterViewInit() {
   this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
 }
 
-initSearchService() {
-  this._productSearchModel = this.menuService.menuItemsData$.subscribe( data => {
-    this.productSearchModelData = data
-  })
-}
 
 initOrderBarSubscription() {
   this.toolbarServiceUI.orderBar$.subscribe(data => {
     this.orderBar = data
-    // console.log(data)
     if (this.orderBar) {
       this.grid = "grid-smaller"
     }
@@ -215,17 +193,16 @@ initOrderBarSubscription() {
 }
 
 onScrollDown() {
-  // console.log('scrolled down!!');
   this.scrollingInfo = 'scroll down'
   this.nextPage();
 }
 
 onScrollUp() {
-  // console.log('scrolled up!!');
   this.scrollingInfo = 'scroll up'
 }
 
 setItemsPerPage() {
+
 }
 
 async nextPage() {
@@ -238,41 +215,31 @@ scrollDown() {
 }
 
 async addToList(pageSize: number, pageNumber: number)  {
-
     let model = this.productSearchModelData
-
     if (!model) { model = {} as ProductSearchModel }
 
-    if (!this.productSearchModelData) {
-      const model = {} as ProductSearchModel;
-      if (this.categoryID) {
-        model.categoryID    = this.categoryID;
-      }
-      if (this.brandID)    {
-        model.brandID     = this.brandID
-      }
-      if (this.typeID)     {
-        model.itemTypeID  = this.typeID
-      }
-      if (this.brandID)    {
-        model.name        = this.productName
-      }
+    // console.log('categoryID', this.categoryID);
+    if (model) {
+      if (this.categoryID) { model.categoryID  = this.categoryID; }
+      if (this.brandID)    { model.brandID     = this.brandID     }
+      if (this.typeID)     { model.itemTypeID  = this.typeID      }
+      if (this.brandID)    { model.name        = this.productName }
     }
 
     if (!pageNumber || pageNumber == null) {pageNumber = 1}
-    if (!pageSize || pageSize == null)   {pageSize = 25}
+    if (!pageSize   || pageSize == null)     {pageSize = 25}
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     model.active      = true;
-    const site                     = this.siteService.getAssignedSite();
-    const results$                 = this.menuService.getMenuItemsBySearchPaged(site, model);
-    this.loading                   = true
+    const site        = this.siteService.getAssignedSite();
+    // console.log('productSearchModelData', model )
+    const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
+    this.loading      = true
 
     results$.subscribe(data => {
       this.currentPage += 1;
-      //no records returned
-      if (data.results.length == 0 || data == null || (!data || !data.results)) {
+      if (data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
         this.value = 100;
         this.loading = false;
         this.endOfRecords = true
@@ -280,11 +247,8 @@ async addToList(pageSize: number, pageNumber: number)  {
       }
 
       if (!this.menuItems)  { this.menuItems = [] as IMenuItem[] }
-
       this.itemsPerPage = this.itemsPerPage + data.results.length;
-
       if (this.menuItems) {
-        // this.menuItems = this.menuItems.concat(data.results)
         data.results.forEach( item => {
           this.menuItems.push(item)
         })

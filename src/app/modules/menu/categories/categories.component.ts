@@ -16,7 +16,6 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { Title } from '@angular/platform-browser';
 const { Keyboard } = Plugins;
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
@@ -281,7 +280,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
     }
     if (this.itemTypeID == 6) {
-      this.router.navigate(["/menuitems-infinite/", {departmentID:id,  typeID: 4}]);
+      this.router.navigate(["/menuitems-infinite/", {departmentID:id}]);
     }
 
   }

@@ -1,32 +1,97 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+// import { DSIEMV } from 'dsiemv-android-plugin';
 // import 'dsiemv-android-plugin';
-import { Plugins} from '@capacitor/core';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { Router } from '@angular/router';
+// need to use interfaces direct from plugin.
+// web interface works as dsemandroid
+// import { shared}
+// import { Plugins} from '@capacitor/core'
+// const { DSIEMV } = Plugins;
+// {dsiemvandroid } from
 
 @Component({
   selector: 'app-dsi-emvpayment',
   templateUrl: './dsi-emvpayment.component.html',
   styleUrls: ['./dsi-emvpayment.component.scss']
 })
+
 export class DsiEMVPaymentComponent  {
-  result: any;
-  instance: any;
-  constructor() { }
+  isApp       = this.platFormService.isApp();
+  androidApp  = this.platFormService.androidApp;
+  result      : any;
+  instance    : any;
+  echoResponse: any;
+  echoPluginResponse: any;
+  err: any
+  constructor(
+    private platFormService: PlatformService,
+    private router: Router,
+    // private DsiEmvPaymentsService: DsiEmvPaymentsService
+  ) { }
   status: any;
 
+  reset() {
+    this.result = ''
+    this.instance = ''
+  }
   async checkPermission() {
-  //   const { dsiemvandroid } = Plugins;
-  //   const options = { value: ' '}
-  //   const status = await dsiemvandroid.echo( options );
-    this.result = status
+    //   const dsiemvandroidPlugin = typeof  dsiEMVAndroidinstancePlugin
+    //   const options = { value: ' echo this '}
+    //   const status = await dsiemvandroidPlugin. ();
+    //   console.log('status', status)
+    //   this.result = status
   }
 
   async getInstance() {
-  //   const { dsiEMVAndroidinstance } = Plugins;
-  //   const options = { value: 'CCS APP - '}
-  //   const status = await dsiEMVAndroidinstance.getInstance();
-    this.instance = status
+    // try {
+    //   const status = await DSIEMV.getInstance();
+    //   this.instance = status
+    // } catch (error) {
+    //   console.log(error)
+    //   this.err = error
+    //   this.instance = 'Instance Implementation not available.'
+    // }
   }
 
+  async setFoundation() {
+    // try {
+    //   const status = await DSIEMV.foundation();
+    //   this.instance = status
+    // } catch (error) {
+    //   console.log(error)
+    //   this.err = error
+    //   this.echoResponse = 'Implementation not available.'
+    // }
+  }
 
+  async getEcho() {
 
+    const options = { value: ' Get Echo. Following output is from Plugin: '}
+    if (this.androidApp) {
+      // try {
+      //   const status = await DSIEMV.echo(options)
+      //   this.echoResponse = status.value;
+      // } catch (error) {
+      //   console.log(error)
+      //   this.echoResponse = 'Implementation not available.'
+      //   this.err = error
+      // }
+    }
+
+    if (!this.isApp) {
+      // try {
+      //   const status = await DSIEMV.echo(options)
+      //   this.echoResponse = status.value;
+      // } catch (error) {
+      //   console.log(error)
+      //   this.echoResponse = 'Implementation not available.'
+      //   this.err = error
+      // }
+    }
+  }
+
+  login() {
+    this.router.navigate(['login'])
+  }
 }

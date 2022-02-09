@@ -24,10 +24,12 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
   constructor(private pollingService: PollingService) { }
 
   ngOnInit(): void {
+
     setTimeout( data => {
       this.pollingService.poll();
-    }, 1000)
+    }, 5000)
     this.initSubscriptions()
+
   }
 
   ngOnDestroy(): void {

@@ -1,3 +1,4 @@
+@import "/src/mixins.scss";
 
 .gallery-container {
   align-items: center;
@@ -5,7 +6,17 @@
   vertical-align: top;
   margin:  5px;
   // border-radius: 3px;
+}
 
+img {
+  width: 95%;
+  max-width: 400px;
+  margin: 5px;
+  @include for-phone-only {
+    width: 75%;
+    margin-left: 5px;
+    max-width: 400px;
+  }
 }
 
 .gallery {
@@ -16,23 +27,8 @@
   grid-row     : 1 / 2;
   width        : 95%;
   margin-left  : 10px;
-
   max-height   : 400px;
 
-  // @media only screen and (min-width: 600px) {
-  //   display              : flex;
-  //   flex-direction       : column ;
-  //   align-content        : center;
-  //   grid-gap             : 10px;
-  // }
-
-  // @media only screen and (min-width: 768px) {
-  //   grid-row: 1 / 2;
-  //   width   : 95%;
-  //   margin  : 10px;
-  //   border-radius: 5px;
-  //   max-height: 400px;
-  // }
 
   @media only screen and (min-width: 992px) {
     grid-row: 1 / 2;

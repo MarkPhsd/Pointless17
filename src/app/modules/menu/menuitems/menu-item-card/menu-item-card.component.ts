@@ -36,9 +36,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   _order             : Subscription;
   order              : IPOSOrder;
 
-  platForm =  this.getPlatForm()
-  appName = ''
-  isApp   = false;
+  platForm  =  this.getPlatForm()
+  appName   = ''
+  isApp     = false;
+  isProduct : boolean;
+  isCategory: boolean;
   getPlatForm() {  return Capacitor.getPlatform(); }
 
   constructor(
@@ -69,12 +71,24 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     this.bucketName =   await this.awsBucket.awsBucket();
-    // console.log("")
     this.initSubscriptions();
+    this.isProduct = this.getIsNonProduct(this.menuItem)
 
   };
+
+  getIsNonProduct(menuItem: IMenuItem): boolean {
+    if (!menuItem) { return false}
+    if (menuItem) {
+      if (!menuItem.itemType)   {return false}
+      if (menuItem.itemType.type === 'discounts') { return false}
+      if (menuItem.itemType.type === 'grouping') {
+        this.isCategory = true;
+        return false
+      }
+    }
+    return true
+  }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -106,11 +120,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   menuItemAction(add: boolean) {
+
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
+
   }
-
-
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

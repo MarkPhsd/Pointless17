@@ -19,15 +19,28 @@ mat-card {
 }
 
 .cart-button {
-  margin-right: 10px;
+  // margin-right: 10px;
+  margin: 10px;
+  width: 150px;
+  height: 75px;
 }
 
 .grid-header {
   display: grid;
-  min-width : 330px;
-  max-width : 330px;
-  grid-template-columns: 75px 1fr;
+  width: 100%;
+  grid-template-columns:  1fr 150px;
   gap: 5px;
+}
+
+.totals {
+  font-size     : 1em;
+  // white-space   : nowrap;
+  // overflow      : hidden;
+  // text-overflow : ellipsis;
+  // text-transform: capitalize;
+  float         : right;
+  align-items   : flex-end;
+  text-align    : right;
 }
 
 .transaction-data {

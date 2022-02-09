@@ -1,23 +1,46 @@
 <div class="item-container">
-
   <div fxLayout="row"
        fxLayoutAlign="space-around center">
-    <div fxLayout="column"
-         fxLayoutAlign="start center">
-         <img *ngIf="isApp"   [src]="imageUrl" onerror   = "this.src='../assets/images/placeholderimage.png'"
-              id="product-image"   (click)="menuItemAction(true)"/>
-         <img *ngIf="!isApp"  [src]="imageUrl" onerror   = "this.src='../assets/images/placeholderimage.png'"
-              id="product-image"  (click)="menuItemAction(false)"/>
+  <div fxLayout="column"
+       fxLayoutAlign="start center">
+         <!-- {{ menuItem.name  | truncateText: 15  }} -->
+         <!-- <div class="text" *ngIf="isCategory"> {{ getItem(menuItem.name)  }}
+
+         </div> -->
+
+         <img *ngIf="isApp && !isCategory"
+               [src]="imageUrl"
+               onerror   = "this.src='../assets/images/placeholderimage.png'"
+               id="product-image"
+               (click)="menuItemAction(true)"/>
+
+         <img  *ngIf="!isApp && !isCategory"
+               [src]="imageUrl"
+               onerror   = "this.src='../assets/images/placeholderimage.png'"
+               id="product-image"
+               (click)="menuItemAction(false)"/>
+
+          <img  *ngIf="isCategory"
+                [src]="imageUrl"
+                onerror   = "this.src='../assets/images/placeholderimage.png'"
+                class="category-img"
+                (click)="menuItemAction(true)"/>
+
+
     </div>
   </div>
 
-  <div class="product-name">{{ getItem(menuItem.name)  }}</div>
+  <div class="product-name"
+     >
+        {{ menuItem.name  | truncateText: 20   }}
+
+  </div>
 
   <div id="advertisement">
   </div>
 
   <div class="product-name" id="star-rating">
-    <div  *ngIf="menuItem.ratingAverage && menuItem.ratingCount &&
+    <div  *ngIf="isProduct && menuItem.ratingAverage && menuItem.ratingCount &&
             menuItem.ratingAverage != 0 && menuItem.ratingCount != 0
             ">
       reviews:  {{menuItem.ratingAverage}} rating: {{menuItem.ratingCount}}
@@ -38,30 +61,40 @@
         </div>
       </div>
 
-
-      <div *ngIf="menuItem && (!menuItem.itemType || menuItem.itemType.type != 'discounts')"
-            id="price">{{menuItem.retail | currency}}
+      <div *ngIf="isProduct && !isCategory"
+            id="price">
+        {{menuItem.retail | currency}}
       </div>
 
-    <button
-          *ngIf="isApp"
-          mat-button
-          class="add-button"
-          color="primary"
-          (click)="menuItemAction(false)" >
-      <mat-icon>open_in_new</mat-icon>
-      View
-    </button>
+      <button
+            *ngIf="isApp"
+            mat-button
+            class="add-button"
+            color="primary"
+            (click)="menuItemAction(false)" >
+        <mat-icon>open_in_new</mat-icon>
+         View
 
-    <button
-          *ngIf="!isApp"
-          mat-button
-          class="add-button"
-          color="primary"
-          (click)="menuItemAction(true)" >
-      <mat-icon>add</mat-icon>
-      Add
-    </button>
+      </button>
+
+      <button
+            *ngIf="!isApp && !isCategory"
+            mat-button
+            class="add-button"
+            color="primary"
+            (click)="menuItemAction(true)" >
+
+          <div *ngIf="!isProduct">
+            <mat-icon>open_in_new</mat-icon>
+            View
+          </div>
+
+          <div *ngIf="isProduct">
+            <mat-icon>add</mat-icon>
+            Add
+          </div>
+
+      </button>
 
   </div>
 

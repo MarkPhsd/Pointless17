@@ -5,6 +5,32 @@
   <div *ngIf="order.history">
     <h5>Transaction can not be modified.</h5>
   </div>
+
+  <div>
+    <button   mat-raised-button class="button"
+              color="warn"
+              aria-label="delete"
+              (click)="deleteOrder()">
+        <mat-icon>delete</mat-icon>
+        <span *ngIf="!smallDevice">
+          Delete
+        </span>
+    </button>
+  </div>
+
+  <div>
+    <button mat-raised-button
+            class="button"
+            color="warn"
+            aria-label="Clear"
+            (click)="clearOrder()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span *ngIf="!smallDevice">
+          Leave Order
+        </span>
+    </button>
+  </div>
+
   <div>
     <button mat-raised-button class="button" color="primary"  (click)="printLabels()">
       <mat-icon>print</mat-icon>
@@ -19,38 +45,11 @@
     </button>
   </div>
 
-  <div>
-    <button mat-raised-button class="button" color="primary" (click)="printReceipt()">
-      <mat-icon>print</mat-icon>
-      <span *ngIf="!smallDevice">
-         Receipt
-       </span>
-    </button>
-  </div>
-
-  <div>
-    <button mat-raised-button class="button" color="primary" (click)="makePayment()">
-      <mat-icon>credit_card</mat-icon>
-      <span *ngIf="!smallDevice">
-         Check Out / Pay
-       </span>
-    </button>
-  </div>
-
-  <div  *ngIf="!order.history && (!itemsPrinted && !paymentsMade)">
-    <button mat-raised-button class="button" color="primary" (click)="deleteOrder()">
-      <mat-icon>delete</mat-icon>
-      <span *ngIf="!smallDevice">
-        Void
-      </span>
-    </button>
-  </div>
-
   <div  *ngIf="!order.history && isAuthorized && (itemsPrinted || paymentsMade)">
     <button mat-raised-button class="button" color="primary" (click)="voidOrder()">
       <mat-icon>delete</mat-icon>
       <span *ngIf="!smallDevice">
-        Delete
+        Void
       </span>
     </button>
   </div>
@@ -78,4 +77,23 @@
               (click)="removeSuspension()">Remove Suspension</button>
     </span>
   </div>
+
+  <div>
+    <button mat-raised-button class="button" color="primary" (click)="printReceipt()">
+      <mat-icon>print</mat-icon>
+      <span *ngIf="!smallDevice">
+         Receipt
+       </span>
+    </button>
+  </div>
+
+  <div>
+    <button mat-raised-button class="button" color="primary" (click)="makePayment()">
+      <mat-icon>credit_card</mat-icon>
+      <span *ngIf="!smallDevice">
+         Check Out / Pay
+       </span>
+    </button>
+  </div>
+
 </div>

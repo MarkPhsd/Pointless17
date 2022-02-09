@@ -169,11 +169,13 @@ export class PackageListComponent implements OnInit {
   }
 
   initForm() {
+    const site = this.siteService.getAssignedSite();
+    const metrcLicenseNumber = site.metrcLicenseNumber
     this.searchForm = this.fb.group( {
       searchProducts: [''],
       metrcCategory : [''],
       selectedSiteID: ['Select Site'],
-      facilityID    : [''],
+      facilityID    : [metrcLicenseNumber],
       active        : [''],
       hasImported   : [''],
       numberOfdays  : [10],
@@ -190,22 +192,6 @@ export class PackageListComponent implements OnInit {
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
 
-  // ngAfterViewInit() {
-  //   if (!this.input) {return}
-  //   fromEvent(this.input.nativeElement,'keyup')
-  //           .pipe(
-  //               filter(Boolean),
-  //               debounceTime(250),
-  //               distinctUntilChanged(),
-  //               tap((event:KeyboardEvent) => {
-  //                 const search  = this.input.nativeElement.value
-  //                 this.refreshSearch();
-  //               })
-  //           )
-  //         .subscribe();
-  // }
-
-  // btnClass: 'btn btn-primary btn-sm', minWidth: 50
   initAGGrid() {
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
@@ -247,13 +233,13 @@ export class PackageListComponent implements OnInit {
 
   setFacliity(event) {
     if (event) {
-
        this.facilityNumber = event;
     }
   }
 
   refreshFilters(event) {
-    console.log('event', event)
+
+    this.initSiteSelection()
     this.getAssignedSiteSelection(event)
     if (this.site) {
       this.facilities$ = this.metrcFacilityService.getFacilities(this.site)
@@ -261,8 +247,17 @@ export class PackageListComponent implements OnInit {
       this.facilities$.subscribe(data => {
         this.facilities = data;
         this.loadingFacilities = false;
+        this.facility = {} as METRCFacilities;
+        this.facilityNumber = this.site.metrcLicenseNumber
+        const item = {facilityID: this.site.metrcLicenseNumber }
+        this.searchForm.patchValue(item)
       })
     }
+  }
+
+  initSiteSelection() {
+    this.facilityNumber = '';
+    this.site = null;
   }
 
   getAssignedSiteSelection(event) {
@@ -288,7 +283,6 @@ export class PackageListComponent implements OnInit {
   }
 
   getMetrcCategory(event) {
-
     this.metrcCategoryID = event.value
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
@@ -300,7 +294,6 @@ export class PackageListComponent implements OnInit {
       this.metrcCategoryID = event.value
       this.assignMetrcCategory(this.metrcCategoryID);
     }
-
   }
 
   assignMetrcCategory(id: number) {
@@ -317,19 +310,43 @@ export class PackageListComponent implements OnInit {
 
   importActivePackages() {
     if (this.site) {
-      const daysBack = this.searchForm.controls['numberOfdays'].value as number
       const facility = this.facilityNumber
       this.importing = true
-      const import$ = this.metrcPackagesService.importActiveByDaysBack(this.site, daysBack,facility)
+      const import$ = this.metrcPackagesService.importActiveByDaysBack(this.site, this.getNumberOfDays() ,facility)
       import$.subscribe(data => {
         this.importing = false
-        // console.log('data from import', data)
         this.refreshSearch();
       }, err=> {
-        this.notify(`Import error occured. Check your settings and try again. ${err}`, `Please try Again`, 4000 )
+        this.notify(`Import error occured. Check your settings and try again. ${err}`, `Please try Again`, 2000 )
         this.importing = false
       })
     }
+  }
+
+  resetImportActivePackages() {
+    const result = window.confirm('This will delete the packages and re-import, are you sure you want to do this?')
+    if (!result ) { return }
+    if (this.site) {
+      const facility = this.facilityNumber
+      this.importing = true
+      const import$ = this.metrcPackagesService.resetImportActivePackages(this.site, this.getNumberOfDays(), facility)
+      import$.subscribe(data => {
+        this.importing = false
+        this.refreshSearch();
+      }, err=> {
+        this.notify(`Import error occured. Check your settings and try again. ${err}`, `Please try Again`, 2000 )
+        this.importing = false
+      })
+    }
+  }
+
+  getNumberOfDays(){
+    if (this.searchForm) {
+      let daysBack = this.searchForm.controls['numberOfdays'].value as number
+      if (daysBack == 0) { daysBack = 10}
+      return daysBack
+    }
+    return 10;
   }
 
   notify(message, title, duragtion) {
@@ -338,6 +355,7 @@ export class PackageListComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
+
   refreshSearch() {
     const site               = this.siteService.getAssignedSite()
     const packageFilter      = this.initSearchModel();

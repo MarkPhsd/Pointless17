@@ -19,6 +19,21 @@
   max-width: 200px;
 }
 
+.category-img {
+  width: 15vh;
+  height: 15vh;
+  border-radius: 50%;
+  margin-top: 3px;
+
+  @include for-phone-only {          width: 13vh; height: 13vh;  }
+  @include for-tablet-landscape-up { width: 16vh; height: 16vh;}
+  @include for-tablet-portrait-up  { width: 15vh; height: 15vh;}
+  @include for-tablet-portrait-up  { width: 14vh;  height: 14vh;}
+  @include for-desktop-up  {  width: 20vh; height: 20vh;}
+  @include for-big-desktop-up {  width: 22vh;  height: 22vh}
+
+}
+
 #product-image {
   object-fit: cover;
   max-width: 100%;
@@ -26,28 +41,12 @@
   transition: box-shadow 400ms;
   border-radius: 5px;
 
-  @include for-phone-only {
-    height: 13vh;
-  }
-
-  @include for-tablet-landscape-up {
-    height: 16vh;
-  }
-
-  @include for-tablet-portrait-up  {
-    height: 15vh;
-  }
-  @include for-tablet-portrait-up  {
-    height: 14vh;
-  }
-
-  @include for-desktop-up  {
-    height: 20vh;
-  }
-
-  @include for-big-desktop-up {
-    height: 22vh;
-  }
+  @include for-phone-only {height: 13vh;  }
+  @include for-tablet-landscape-up {height: 16vh;}
+  @include for-tablet-portrait-up  {height: 15vh;}
+  @include for-tablet-portrait-up  { height: 14vh;}
+  @include for-desktop-up  {height: 20vh;}
+  @include for-big-desktop-up {height: 22vh}
 
 }
 
@@ -94,7 +93,6 @@
     font-weight: 400;
     font-size: .9;
     text-align: center;
-    // width: 75%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -102,7 +100,6 @@
   }
 
   @media (min-width: 400px)   {
-
     font-weight: 500;
     font-size: 1em;
     text-align: center;
@@ -112,7 +109,6 @@
     text-overflow: ellipsis;
     text-transform: capitalize;
   }
-
 }
 
 #advertisement {
@@ -196,3 +192,5 @@
   height:     150px;
   overflow-x: scroll;
 }
+
+

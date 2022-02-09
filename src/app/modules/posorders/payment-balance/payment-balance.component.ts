@@ -32,7 +32,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   async initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-      // console.log('balance updated', data)
+
     })
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
@@ -87,8 +87,6 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    }
 
    ngOnDestroy(): void {
-     //Called once, before the instance is destroyed.
-     //Add 'implements OnDestroy' to the class.
      if (this._currentPayment) {
       this._currentPayment.unsubscribe();
      }

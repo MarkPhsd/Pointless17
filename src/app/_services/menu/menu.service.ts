@@ -23,6 +23,7 @@ export interface IProductSearchResults {
    productCount: number;
    barcode     : string;
    type        : string;
+   active      : boolean;
 }
 
 export interface IProductSearchResultsPaged {
@@ -58,8 +59,10 @@ export class MenuService {
   private _currentMeuItem  = new BehaviorSubject<IMenuItem>(null);
   public currentMeuItem$          = this._currentMeuItem.asObservable();
 
-
   site: ISite;
+
+
+
   constructor(
               private httpCache: HttpClientCacheService,
               private httpClient: HttpClient,
@@ -93,7 +96,6 @@ export class MenuService {
   updateCurrentMenuItem(menuItem: IMenuItem) {
     this._currentMeuItem.next(menuItem);
   }
-
 
   showSearch(value:any)
   {

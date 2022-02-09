@@ -5,6 +5,11 @@ import { catchError, delay, delayWhen, finalize, first, map, repeatWhen, retryWh
 import { Observable, Subject ,fromEvent, Subscription, throwError, timer } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { IUser } from 'src/app/_interfaces';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cart-button',
@@ -30,6 +35,12 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
+  isUserStaff             : boolean;
+
+  user$               : Observable<IUser>;
+  _user               : Subscription;
+  user                : IUser;
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       if (data && data.id) {
@@ -38,13 +49,29 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       }
       this.order = null;
     })
+
+    this._user = this.authenticationService.user$.subscribe(user => {
+      this.user = user;
+      this.isUserStaff = false;
+      if (user) {
+        if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
+          this.isUserStaff      = true
+        }
+      }
+    })
   }
 
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
+    private userSwitchingService  : UserSwitchingService,
+    private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
+    private snackBar      :         MatSnackBar,
+    private orderMethodService    : OrderMethodsService,
+    private router:                 Router,
     ) {
+
    }
 
   ngOnInit(): void {
@@ -90,16 +117,11 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   async assignCurrentOrder() {
-
     let cartEnabled = false
-
     if (this.isPosNameDefined()) { cartEnabled = true }
     if (this.order)              { cartEnabled = true}
-
     if ( cartEnabled ) {
-
       this.refreshCurrentOrderCheck = true
-
       if (this.isPosNameDefined()) {
         this.refreshAssignedPOSOrder();
         this.order$.next(this._order$)
@@ -113,7 +135,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
           })
         })
       }
-
     }
 
     if (this.isPosNameDefined()) {
@@ -173,6 +194,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       );
     }
   }
+
 
   refreshOrder() {
     if (!this.refreshCurrentOrderCheck) {  this.assignCurrentOrder() }

@@ -6,6 +6,7 @@ import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
   templateUrl: './pos-order-function-buttons.component.html',
   styleUrls: ['./pos-order-function-buttons.component.scss']
 })
+
 export class PosOrderFunctionButtonsComponent {
 
   @Output() outPutPrint         = new EventEmitter();
@@ -18,6 +19,7 @@ export class PosOrderFunctionButtonsComponent {
   @Output() outPutShowItems     = new EventEmitter();
   @Output() outPutSuspendOrder  = new EventEmitter();
   @Output() outPutRemoveSuspension  = new EventEmitter();
+  @Output() outPutClearOrder    = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -55,9 +57,6 @@ export class PosOrderFunctionButtonsComponent {
   makePayment() {
     this.outPutMakePayment.emit(true)
   }
-  deleteOrder() {
-    this.outPutDeleteOrder.emit(true)
-  }
   voidOrder() {
     this.outPutVoidOrder.emit(true)
   }
@@ -67,4 +66,12 @@ export class PosOrderFunctionButtonsComponent {
   removeSuspension() {
     this.outPutRemoveSuspension.emit(true)
   }
+  deleteOrder() {
+
+    this.outPutDeleteOrder.emit(true)
+  }
+  clearOrder() {
+    this.outPutClearOrder.emit(true)
+  }
+
 }

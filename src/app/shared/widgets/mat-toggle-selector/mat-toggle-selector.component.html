@@ -4,7 +4,7 @@
   </h4>
 </div>
 
-<div [class]="toggleDimensions" *ngIf="list">
+<div [class]="toggleDimensions" *ngIf="list; else loading">
     <mat-button-toggle-group
           name         = "type"
           [(ngModel)]  = "id"
@@ -32,5 +32,6 @@
     </mat-button-toggle-group>
 </div>
 
-
-<!-- [style.width.percent]="95" -->
+<ng-template #loading>
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

@@ -35,9 +35,9 @@
             <div *ngIf="groupBy === 'Employee'" class="grid-item">Staff </div>
             <div *ngIf="groupBy !=  'Employee'" class="grid-item">Method</div>
 
-            <div class="grid-item">Amount</div>
-            <div class="grid-item">Avg</div>
-            <div class="grid-item">Tip</div>
+            <div class="totals">Amount</div>
+            <div class="totals">Avg</div>
+            <div class="totals">Tip</div>
 
             <div *ngIf="groupBy === 'Employee'" class="grid-item">    </div>
             <div *ngIf="groupBy !=  'Employee'" class="grid-item">    </div>
@@ -61,15 +61,15 @@
               {{ payment.paymentMethod }}
             </div>
 
-            <div  class="grid-item">
+            <div  class="totals">
               {{payment.amountPaid | currency }}
             </div>
 
-            <div  class="grid-item" *ngIf=" payment.count != 0">
+            <div  class="totals" *ngIf=" payment.count != 0">
               {{payment.amountPaid / payment.count | currency }}
             </div>
 
-            <div class="grid-item calculation">
+            <div class="totals calculation">
               {{payment.tipAmount | currency }}
             </div>
 
@@ -84,24 +84,24 @@
         <mat-card-footer>
 
           <div class="grid-footer">
-            <div class="grid-item ">
+            <div class="totals">
               Credit Total
             </div>
-            <div class="grid-item ">
+            <div class="totals ">
               {{sales.creditTotal | currency }}
             </div>
-            <div class="grid-item" >
+            <div class="totals" >
             </div>
-            <div class="grid-item ">
+            <div class="totals">
             </div>
           </div>
 
           <div class="grid-footer"
                *ngIf="payments">
             <div class="grid-item">-----</div>
-            <div class="grid-item">Total</div>
-            <div class="grid-item">Avg</div>
-            <div class="grid-item">Count</div>
+            <div class="totals">Total</div>
+            <div class="totals">Avg</div>
+            <div class="totals">Count</div>
           </div>
 
 
@@ -110,13 +110,13 @@
             <div class="grid-item ">
               Total
             </div>
-            <div class="grid-item ">
+            <div class="totals">
               {{sales.total | currency }}
             </div>
-            <div class="grid-item" *ngIf=" sales.count != 0">
+            <div class="totals" *ngIf=" sales.count != 0">
               {{sales.total / sales.count | currency }}
             </div>
-            <div class="grid-item ">
+            <div class="totals">
               {{sales.count }}
             </div>
           </div>

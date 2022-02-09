@@ -55,10 +55,6 @@
           <div>
             <api-status-display></api-status-display>
           </div>
-<!--
-          <div *ngIf="smallDevice">
-            <app-cart-button> </app-cart-button>
-          </div> -->
 
           <div *ngIf="smallDevice &&  ( (isUserStaff && platFormService.platForm !='web') || (isAdmin) )">
             <button mat-button
@@ -148,7 +144,6 @@
                     <span *ngIf="!user">Log Out</span>
                 </button>
               </li>
-
           </ul>
 
         </mat-card>
@@ -178,7 +173,8 @@
 
           <div *ngIf="user">
             <button   aria-label="user"
-                      mat-button [matMenuTriggerFor]="menu">
+                      mat-button
+                     [matMenuTriggerFor]="menu">
               <mat-icon>person_outline</mat-icon>
             </button>
 

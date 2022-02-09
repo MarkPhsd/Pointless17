@@ -98,6 +98,7 @@ export interface IPOSOrder {
   voidReason            : string;
   resultMessage         : string;
   history               : boolean;
+  orderLocked:            string;
   wicTotal              : number;//    As Double
   ebtTotal              : number;// As Double
   stateTotal            : number;// As Double

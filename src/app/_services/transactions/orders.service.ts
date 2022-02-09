@@ -12,6 +12,8 @@ import { ToolBarUIService } from '../system/tool-bar-ui.service';
 import { IBalanceSheet } from './balance-sheet.service';
 import { PlatformService } from '../system/platform.service';
 import { Router } from '@angular/router';
+import { SitesService } from '../reporting/sites.service';
+import { timeStamp } from 'node:console';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -47,19 +49,64 @@ export class OrdersService {
   public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
 
   isApp                       = false;
+  private orderClaimed                : boolean;
 
   getCurrentOrder() {
+    if (!this.currentOrder) {
+      this.currentOrder = this.getStateOrder();
+    }
     return this.currentOrder;
   }
+
+  get IsOrderClaimed() { return this.orderClaimed};
 
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);
   }
 
-  updateOrderSubscription(order: IPOSOrder) {
-    this._currentOrder.next(order);
-    this.currentOrder = order
+  updateOrderSubscriptionClearOrder(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite();
+      this.releaseOrder(site, id).subscribe()
+    }
+    localStorage.removeItem('orderSubscription')
+    this.toolbarServiceUI.updateOrderBar(false)
   }
+
+  updateOrderSubscription(order: IPOSOrder) {
+
+    this._currentOrder.next(order);
+    if (order == null) {
+      order = this.getStateOrder();
+      if (order) {
+        this.toolbarServiceUI.updateOrderBar(false)
+        return
+      }
+    }
+
+    this.currentOrder = order;
+    this.orderClaimed = false;
+    this.setStateOrder(order);
+
+    const site = this.siteService.getAssignedSite();
+    if (order) {
+      this.claimOrder(site, order.id.toString(), order.history).subscribe(result => {
+        this.orderClaimed = true
+      })
+    }
+
+  }
+
+  setStateOrder(order) {
+    const orderJson = JSON.stringify(order)
+    localStorage.setItem('orderSubscription', orderJson)
+  }
+
+  getStateOrder(){
+    const order = localStorage.getItem('orderSubscription');
+    return JSON.parse(order) as IPOSOrder
+  }
+
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     this._posSearchModel.next(searchModel);
@@ -71,12 +118,15 @@ export class OrdersService {
         private _SnackBar: MatSnackBar,
         private toolbarServiceUI: ToolBarUIService,
         private router: Router,
+        private siteService: SitesService,
             )
   {
-    if (    this.platForm  === "Electron"
-         || this.platForm === "android"
-         || this.platForm === "capacitor")
-    { this.isApp = true }
+    this.isApp = this.platFormService.isApp()
+    const order = this.getStateOrder();
+    console.log('current order from state', this.getStateOrder())
+    if (order) {
+      this.updateOrderSubscription(order)
+    }
   }
 
   setPOSName(name: string): boolean {
@@ -187,7 +237,36 @@ export class OrdersService {
     return  this.http.post<IOrdersPaged>(url, sheet )
   }
 
+  claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
+    if (history === undefined) {history = false};
 
+    if (history) { return }
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "claimOrder"
+
+    const parameters = `?ID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+
+  }
+
+  releaseOrder(site: ISite, id: number):  Observable<any>  {
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "releaseOrder"
+
+    const parameters = `?ID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+
+  }
 
   getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
 

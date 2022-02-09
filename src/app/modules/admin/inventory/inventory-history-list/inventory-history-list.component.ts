@@ -18,6 +18,7 @@ import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
 import { switchMap } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-inventory-history-list',
@@ -64,6 +65,7 @@ export class InventoryHistoryListComponent implements OnInit {
        private menuService       : MenuService,
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
+       private _snackBar         : MatSnackBar,
 
        )
   {
@@ -177,11 +179,11 @@ export class InventoryHistoryListComponent implements OnInit {
   }
 
   printLegal() {
-
+    this._snackBar.open('Feature not implemented', 'Alert')
   }
 
   printSerial() {
-
+    this._snackBar.open('Feature not implemented', 'Alert')
   }
 
   printSku() {
@@ -190,7 +192,6 @@ export class InventoryHistoryListComponent implements OnInit {
     // const printString = this.renderingService.interpolateText(item, zplString )
     if (this.labelSetting && this.inventoryAssignment) {
       const content = this.renderingService.interpolateText(this.inventoryAssignment, this.labelSetting.text)
-
       //then get the quantity from this.printQuantity
       if(this.printQuantity == null) { this.printQuantity == 1}
       for (let i = 0; i < this.printQuantity; i++) {

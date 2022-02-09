@@ -52,7 +52,7 @@ export class AuthenticationService {
         private http            : HttpClient,
         private appInitService  : AppInitService,
         private platFormservice : PlatformService,
-        private orderService    : OrdersService,
+        // private orderService    : OrdersService,
         private toolbarUIService : ToolBarUIService,
     ) {
       this.apiUrl = this.appInitService.apiBaseUrl()
@@ -109,8 +109,8 @@ export class AuthenticationService {
     }
 
     clearSubscriptions() {
-      this.orderService.updateOrderSubscription(null)
-      this.orderService.updateOrderSearchModel(null);
+      // this.orderService.updateOrderSubscription(null)
+      // this.orderService.updateOrderSearchModel(null);
     }
 
     clearUserSettings(){
@@ -118,6 +118,7 @@ export class AuthenticationService {
       localStorage.removeItem('user');
       localStorage.removeItem('userx');
       localStorage.removeItem('site')
+      localStorage.removeItem('orderSubscription')
       this.updateUser(null);
       this.updateUserX(null);
     }

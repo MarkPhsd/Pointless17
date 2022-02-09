@@ -1,17 +1,17 @@
 @import "/src/mixins.scss";
 
 mat-card {
-  width: 450px;
-
-  @include for-phone-only  {
-    width: 350px;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-content: center;
-    justify-content: space-between;
-  }
+  width: 100%;
+  margin: 10px;
+  // @include for-phone-only  {
+  //   width: 350px;
+  //   display: flex;
+  //   flex-direction: row;
+  //   flex-wrap: wrap;
+  //   justify-content: center;
+  //   align-content: center;
+  //   justify-content: space-between;
+  // }
 }
 #customer-notes {
   margin:  5;

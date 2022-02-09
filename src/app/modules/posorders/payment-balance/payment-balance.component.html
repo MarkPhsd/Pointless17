@@ -5,15 +5,19 @@
 
     <div class="grid-header">
 
-      <div class='cart-button'>
-        <button mat-raised-button
-              (click)="editCart()">
-          <mat-icon>shopping_cart</mat-icon>Edit
-        </button>
+      <div>
+        <app-order-header
+          [order]="order">
+        </app-order-header>
       </div>
 
-      <div>
-        <app-order-header  [order]="order"></app-order-header>
+      <div class="cart-button">
+        <button
+              mat-raised-button
+              color="alert"
+              (click)="editCart()">
+          <mat-icon>edit</mat-icon><mat-icon>shopping_cart</mat-icon>Edit
+        </button>
       </div>
 
     </div>
@@ -27,13 +31,13 @@
       <div>
         Remaining Balance
       </div>
-      <div>
+      <div class="totals">
         {{order.balanceRemaining | currency}}
       </div>
       <div>
         Payments
       </div>
-      <div>
+      <div class="totals">
         {{order.totalPayments | currency}}
       </div>
     </div>
@@ -67,8 +71,8 @@
           <div  *ngIf="item.tipAmount > 0">
             Tip {{item.tipAmount  | currency}}
           </div>
-          <div *ngIf="item.paymentMethod.isCash && item.amountPaid > 0">
-            <span *ngIf="item.amountPaid - item.amountReceived !=0">
+          <div class="totals" *ngIf="item.paymentMethod.isCash && item.amountPaid > 0">
+            <span  *ngIf="item.amountPaid - item.amountReceived !=0">
               {{  (item.amountReceived - item.amountPaid)  | currency }}
             </span>
           </div>

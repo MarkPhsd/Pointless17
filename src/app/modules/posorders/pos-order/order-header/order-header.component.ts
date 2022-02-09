@@ -1,5 +1,6 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces';
+import { OrdersService } from 'src/app/_services';
 
 @Component({
   selector: 'app-order-header',
@@ -7,9 +8,19 @@ import { IPOSOrder } from 'src/app/_interfaces';
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent  {
-  @Input() order: IPOSOrder
 
-  constructor() { }
+  @Input() order: IPOSOrder
+  isOrderClaimed: boolean;
+
+  constructor(
+             private  ordersService:   OrdersService,
+    ) {
+
+    this.ordersService.currentOrder$.subscribe(data => {
+      this.isOrderClaimed = this.ordersService.IsOrderClaimed
+    })
+
+  }
 
 
 }

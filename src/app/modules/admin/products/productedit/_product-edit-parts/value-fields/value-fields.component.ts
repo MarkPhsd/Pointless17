@@ -13,4 +13,5 @@ export class ValueFieldsComponent  {
   @Input() fieldDescription: string;
   @Input() fieldType = 'string';
   @Input() passwordMask: boolean;
+  @Input() fieldsClass = "fields"
 }

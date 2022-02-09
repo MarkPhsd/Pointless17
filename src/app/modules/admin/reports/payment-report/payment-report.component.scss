@@ -41,9 +41,22 @@
   margin         : 0px 5px 5px 5px;
   padding        : 0px 5px 5px 5px;
   white-space    : nowrap;
-  text-align     : right;
+  // text-align     : right;
   text-overflow  : ellipsis;
   text-transform : capitalize;
+
+  float         : right;
+  align-items   : flex-end;
+  text-align    : right;
+}
+
+.grid-item {
+  align-items    : flex-start;
+  text-align     : left;
+  text-overflow  : ellipsis;
+  text-transform : capitalize;
+  margin-bottom  : 2px;
+
 }
 
 .grid {
@@ -51,15 +64,16 @@
   grid-template-columns: 1fr auto ;
   grid-template-rows: auto;
   grid-gap: 2px;
-  // height: calc(100vh - 10px);
 }
 
 .grid-headerfooter {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 85px 100px 85px 85px 85px;
+  grid-template-columns: 55px 75px 85px 85px 85px;
   margin-left: 15px;
+
+
 
   white-space   : nowrap;
   overflow      : hidden;
@@ -67,7 +81,7 @@
   text-transform: capitalize;
 
   @include for-phone-only {
-    grid-template-columns:  85px 100px 85px 85px 85px;
+    grid-template-columns:  55px 75px 85px 85px 85px;
   }
 
 }
@@ -84,7 +98,7 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 85px 100px 85px 85px 85px;
+  grid-template-columns: 55px 75px 85px 85px 85px;
   margin-left: 30px;
   font-size: .9em;
   margin-top: 5px;
@@ -122,11 +136,7 @@
   text-align: left;
 }
 
-.grid-item {
-  // background-color: rgba(169, 163, 163, 0.8);
-  align-items: flex-start;
-  text-align: left;
-}
+
 
 .employeeName {
   text-align     : left;

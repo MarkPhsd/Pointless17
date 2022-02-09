@@ -20,6 +20,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { EMPTY, } from 'rxjs';
 
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -117,6 +118,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private orderItemService  : POSOrderItemServiceService,
               private renderingService  : RenderingService,
               private settingService    : SettingsService,
+              private orderMethodService: OrderMethodsService,
               // private printingService : Printing
               private el                : ElementRef) {
 
@@ -137,7 +139,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
-      this.infobuttonpanel = 'flex-item'
+      this.infobuttonpanel = 'grid-buttons'
       this.gridspan3       = ''
       this.gridRight       = 'grid-order-header';
     }
@@ -150,7 +152,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     if (!this.mainPanel) {
       this.orderItemsPanel = 'item-list-side-panel'
-      this.infobuttonpanel ='flex-grid'
+      this.infobuttonpanel ='grid-buttons'
       this.gridspan3       = ''
       this.gridRight       = 'grid-header-order-total'
     }
@@ -258,6 +260,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+
+  clearOrder(event) {
+    this.orderMethodService.clearOrder()
+  }
+
   public toggleOpenOrderBar() {
     this.router.navigate(["/currentorder/",{mainPanel:true}]);
     this.openOrderBar = false
@@ -275,21 +282,22 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-  async deleteOrder() {
-    const result = window.confirm('Are you sure?')
-    if (result) {
-      const site = this.siteService.getAssignedSite();
-      const order = await this.orderService.deleteOrder(site, this.order.id).pipe().toPromise();
-      // console.log('order')
-      if (order === 'Order deleted.') {
-        this.notifyEvent('Order Deleted', 'Success')
-        this.orderService.updateOrderSubscription(null)
-        this.router.navigateByUrl('pos-orders')
-      } else {
-        this.notifyEvent('Order not deleted. Please check if you have items to void or payments to void',
-                          'Failed')
-      }
-    }
+  async deleteOrder(event) {
+
+      this.orderMethodService.deleteOrder(this.order.id)
+          // const result = window.confirm('Are you sure?')
+    // if (result) {
+    //   const site = this.siteService.getAssignedSite();
+    //   const order = await this.orderService.deleteOrder(site, this.order.id).pipe().toPromise();
+    //   // console.log('order')
+    //   if (order === 'Order deleted.') {
+    //     this.notifyEvent('Order Deleted', 'Success')
+    //     this.orderService.updateOrderSubscription(null)
+    //     this.router.navigateByUrl('pos-orders')
+    //   } else {
+    //     this.notifyEvent('Order not deleted. Please check if you have items to void or payments to void',
+    //                       'Failed')
+    //   }
   }
 
   ngOnDestroy() {
