@@ -3,48 +3,111 @@
     <ng-content></ng-content>
   </mat-card-subtitle>
 
+  <ng-template #loading>... loading
+    <mat-spinner [diameter]="25"></mat-spinner>
+  </ng-template>
+
   <mat-card-content>
-    <div  *ngIf="inputForm"
+
+    <div  *ngIf="inputForm; else loading"
           [formGroup]="inputForm">
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="brandsEnabled"
-                 >
-          <mat-label>Brands</mat-label>
-        </mat-slide-toggle>
-      </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="departmentsEnabled"
-                  >
-          <mat-label>Departments</mat-label>
-        </mat-slide-toggle>
-      </div>
+      <div class="grid-views">
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="categoriesEnabled"
-                  >
-          <mat-label>Categories</mat-label>
-        </mat-slide-toggle>
-      </div>
+        <div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="typesEnabled"
-                  >
-          <mat-label>Types</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div>Customer View </div>
+          <mat-divider></mat-divider>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="tierMenuEnabled"
-                  >
-          <mat-label>Tier Menu</mat-label>
-        </mat-slide-toggle>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="brandsEnabled"
+                    >
+              <mat-label>Brands</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="departmentsEnabled"
+                      >
+              <mat-label>Departments</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="categoriesEnabled"
+                      >
+              <mat-label>Categories</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="typesEnabled"
+                      >
+              <mat-label>Types</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="tierMenuEnabled"
+                      >
+              <mat-label>Tier Menu</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+        </div>
+
+        <div>
+          <div>Staff View </div>
+          <mat-divider></mat-divider>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffBrandsEnabled"
+                      >
+              <mat-label>Brands</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffDepartmentsEnabled"
+                      >
+              <mat-label>Departments</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffCategoriesEnabled"
+                      >
+              <mat-label>Categories</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffTypesEnabled"
+                      >
+              <mat-label>Types</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffTierMenuEnabled"
+                      >
+              <mat-label>Tier Menu</mat-label>
+            </mat-slide-toggle>
+          </div>
+        </div>
+
       </div>
+      <div>Paging and Search results </div>
+      <mat-divider></mat-divider>
 
       <app-value-fields
           [fieldType]     ="'text'"
@@ -61,6 +124,8 @@
       </app-value-fields>
 
     </div>
+
+
     <div>
       <button mat-raised-button
               color="primary"

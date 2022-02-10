@@ -91,6 +91,10 @@ export class UserSwitchingService {
     return true
   }
 
+  getCurrentUser() {
+
+  }
+
   setAppUser() {
     //then we can set the user to the secret user
     const appUser = JSON.parse(localStorage.getItem('appUser')) as ElectronDimensions;

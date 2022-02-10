@@ -40,8 +40,15 @@ export interface UIHomePageSettings {
   typesEnabled      : boolean;
   departmentsEnabled: boolean;
   tierMenuEnabled   : boolean;
-  menuItemSize      : number; //pixels
-  itemsPerPage: number;
+
+  staffBrandsEnabled : boolean;
+  staffCategoriesEnabled: boolean;
+  staffDepartmentsEnabled: boolean;
+  staffTierMenuEnabled  : boolean;
+  staffTypesEnabled   : boolean;
+
+  menuItemSize        : number; //pixels
+  itemsPerPage        : number;
 }
 
 @Injectable({
@@ -159,6 +166,12 @@ export class UISettingsService {
       tierMenuEnabled   : [],
       itemsPerPage      : [''],
       menuItemSize      : [''],
+
+      staffBrandsEnabled    : [''],
+      staffCategoriesEnabled: [''],
+      staffDeparmentsEnabled: [''],
+      staffTierMenuEnabled  : [''],
+      staffTypesEnabled  : [],
      })
     return fb
   }
@@ -173,6 +186,14 @@ export class UISettingsService {
       tierMenuEnabled   : [config.tierMenuEnabled],
       itemsPerPage      : [config.itermsPerPage],
       menuItemSize      : [config.menuItemSize],
+
+      staffBrandsEnabled    : [config.staffBrandsEnabled],
+      staffCategoriesEnabled: [config.staffCategoriesEnabled],
+      staffDepartmentsEnabled: [config.staffDepartmentsEnabled],
+      staffTierMenuEnabled  : [config.staffTierMenuEnabled],
+      staffTypesEnabled  : [config.staffTypesEnabled],
+
+
      })
     return fb
   }
