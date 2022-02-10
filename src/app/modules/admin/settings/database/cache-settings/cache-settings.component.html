@@ -34,7 +34,19 @@
     </div>
   </div>
 
-
+  <div>
+    <div class="fields">
+      Estimated cache size: {{cacheSizeCurrent}}
+    </div>
+    <div class="fields">
+      <button mat-raised-button
+              color="warn"
+              (click)="deleteLocalStorage()">Delete Cache</button>
+    </div>
+    <div class="fields">
+      Deleting the cache will log you out. It will not affect other users.
+    </div>
+  </div>
   <api-stored-value></api-stored-value>
 
 </div>

@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
 import { ElectronService } from 'ngx-electron';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -36,8 +37,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   _order             : Subscription;
   order              : IPOSOrder;
 
-  platForm  =  this.getPlatForm()
-  appName   = ''
   isApp     = false;
   isProduct : boolean;
   isCategory: boolean;
@@ -45,36 +44,20 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   constructor(
     private awsBucket: AWSBucketService,
-    private router: Router,
-    public route: ActivatedRoute,
-    private dialog: MatDialog,
+    public  route: ActivatedRoute,
     private orderService: OrdersService,
     private _snackBar: MatSnackBar,
-    private electronService: ElectronService,
     private orderMethodService: OrderMethodsService,
+    private platFormService   : PlatformService,
     )
   {
-    if (this.electronService) {
-      if (this.electronService.remote != null)
-      {
-        this.appName = 'electron '
-        this.isApp = true
-      } else
-      {
-        this.isApp = false
-        this.platForm =  this.getPlatForm();
-        if (this.platForm == 'android') {
-          this.isApp = true;
-        }
-      }
-    }
+    this.isApp    = this.platFormService.isApp()
   }
 
   async ngOnInit() {
     this.bucketName =   await this.awsBucket.awsBucket();
     this.initSubscriptions();
     this.isProduct = this.getIsNonProduct(this.menuItem)
-
   };
 
   getIsNonProduct(menuItem: IMenuItem): boolean {
@@ -120,9 +103,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   menuItemAction(add: boolean) {
-
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
-
   }
 
   notifyEvent(message: string, action: string) {

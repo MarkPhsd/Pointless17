@@ -151,25 +151,27 @@ export class OrderMethodsService {
   }
 
   updateMenuSearchModel(item: IMenuItem) : boolean {
-
     if (!item) {   return false }
-    // this.menuService.updateMeunuItemData(model);
+
     const model =  {} as ProductSearchModel;
     if (item.itemType.name.toLowerCase() == 'category') {
+      console.log('updateMenuSearchModel categoryID', item, item.itemType.name)
       model.categoryID   = item.categoryID.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
       return true
     }
-    if (item.itemType.name.toLowerCase() == 'sub category') {
+    if (item.prodModifierType == 5) {
+      console.log('updateMenuSearchModel subCategory', item, item.itemType.name)
       model.subCategory  = item.name
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
       return true
     }
-    if (item.itemType.name.toLowerCase() == 'department') {
+    if (item.prodModifierType == 6) {
       model.departmentID = item.id.toString()
       this.menuService.updateMeunuItemData(model)
+      console.log('updateMenuSearchModel departmentID', item, item.itemType.name)
       this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
       return true
     }

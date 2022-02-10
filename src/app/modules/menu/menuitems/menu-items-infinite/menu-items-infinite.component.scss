@@ -12,6 +12,7 @@
 .grid-flow {
   --gap: 5px;
   margin-top: 2px;
+  margin-right: 2px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
@@ -29,6 +30,22 @@
   overflow-x: scroll;
 }
 
+.grid-item :hover {
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+  // transition-timing-function: ease-in;
+  // -moz-box-shadow: 0 0 10px rgb(195, 230, 180);
+  // -webkit-box-shadow: 0 0 10px rgb(195, 230, 180);
+  // box-shadow: 0 0 10px rgb(195, 230, 180);
+}
+
+.grid-item :active:hover {
+  box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
+  // transition-timing-function: ease-in;
+  // -moz-box-shadow: 0 0 10px #ccc;
+  // -webkit-box-shadow: 0 0 10px #ccc;
+  // box-shadow: 0 0 10px rgb(95, 97, 94);
+}
+
 .orders-container {
   overflow-x: hidden;
   overflow-y: auto;
@@ -36,14 +53,14 @@
   margin: 5px;
 }
 
-.mat-dialog-actions {
-  justify-content: center;
-}
-
 .orders-list {
   overflow-x: hidden;
   overflow-y: auto;
   height: 85vh;
+}
+
+.mat-dialog-actions {
+  justify-content: center;
 }
 
 .end-of-line {

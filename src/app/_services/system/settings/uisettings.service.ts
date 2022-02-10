@@ -12,6 +12,10 @@ export interface TransactionUISettings {
   displayQuantity: boolean;
   id:             number;
   lockOrders    : boolean;
+
+  deleteUnClosedPrintedOrders: boolean;
+  closeOrderTimeCutOff: string;
+
 }
 
 export interface WebAppSettings {

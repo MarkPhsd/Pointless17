@@ -6,6 +6,7 @@ import { ITheme }  from 'src/app/_interfaces';
 @Injectable({
   providedIn: 'root'
 })
+
 export class ThemesService {
   theme: Observable<ITheme[]>;
 
