@@ -203,16 +203,14 @@ async addToList(pageSize: number, pageNumber: number)  {
     let model   = this.productSearchModelData;
 
     if (!model) { model = {} as ProductSearchModel }
-    if (model)  {
-
-      this.departmentID    = this.route.snapshot.paramMap.get('departmentID');
-      this.categoryID      = this.route.snapshot.paramMap.get('categoryID');
-
-      model.categoryID = this.categoryID
+    const value = this.route.snapshot.paramMap.get('value');
+    if (model && !value)  {
+      this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
+      this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
+      model.categoryID   = this.categoryID
       model.departmentID = this.departmentID
-
-
       this.brandID       = this.route.snapshot.paramMap.get('brandID')
+
       if (this.brandID) {
         if (this.brandID) { model.brandID       = this.brandID     }
       }
@@ -221,10 +219,7 @@ async addToList(pageSize: number, pageNumber: number)  {
       if (this.typeID) {
         if (this.typeID) { model.itemTypeID       = this.typeID     }
       }
-
     }
-
-    console.log('model 2 ', model)
 
     if (!pageNumber || pageNumber == null) {pageNumber = 1 }
     if (!pageSize   || pageSize == null  ) {pageSize   = 25}
@@ -235,7 +230,7 @@ async addToList(pageSize: number, pageNumber: number)  {
     const site        = this.siteService.getAssignedSite();
     const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
     this.loading      = true
-
+    // console.log(model)
 
     results$.subscribe(data => {
       this.currentPage += 1;

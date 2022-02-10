@@ -12,7 +12,6 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, IPOSOrder, IProduct, IUserProfile } from 'src/app/_interfaces';
 import { Capacitor, Plugins,  } from '@capacitor/core';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 
 // import { Keyboard } from '@capafcitor/keyboard';
@@ -275,7 +274,6 @@ constructor(
     productSearchModel.barcode    = productSearchModel.name
     productSearchModel.pageSize   = this.pageSize
     productSearchModel.pageNumber = this.currentPage
-    console.log(productSearchModel)
     this.menuService.updateMeunuItemData(productSearchModel)
     return productSearchModel
 
@@ -298,7 +296,6 @@ constructor(
 
   refreshCategorySearch(item: any) {
     this.category = item
-    console.log(this.category)
     this.refreshSearch()
   }
   refreshBrandSearch(item: any) {
