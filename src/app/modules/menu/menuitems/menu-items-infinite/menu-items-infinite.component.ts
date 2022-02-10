@@ -1,4 +1,5 @@
-import {Component, HostBinding, HostListener, OnInit, AfterViewInit,OnDestroy , ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
+import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
+        ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
 import {AWSBucketService, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -19,87 +20,88 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 
 export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDestroy {
 
-@ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
-// @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
-@ViewChildren('item') itemElements: QueryList<any>;
+  @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
+  // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
+  @ViewChildren('item') itemElements: QueryList<any>;
 
-scrollContainer:   any;
-isNearBottom   :   any;
+  scrollContainer:   any;
+  isNearBottom   :   any;
 
-productSearchModel
-array = [];
-sum = 15;
-throttle = 300;
-scrollDistance = 1;
-scrollUpDistance = 1.5;
-direction    = "";
-modalOpen    = false;
-endOfRecords = false;
-pagingInfo: any;
-p: any //html page
-items             = [];
-pageOfItems:      Array<any>;
-lengthOfArray:    number
+  productSearchModel
+  array = [];
+  sum = 15;
+  throttle = 300;
+  scrollDistance = 1;
+  scrollUpDistance = 1.5;
+  direction    = "";
+  modalOpen    = false;
+  endOfRecords = false;
+  pagingInfo: any;
+  p: any //html page
+  items             = [];
+  pageOfItems:      Array<any>;
+  lengthOfArray:    number
 
-statusmessage     = '';
-section           = 1;
+  statusmessage     = '';
+  section           = 1;
 
-menuItems$:       Observable<IMenuItem[]>
-menuItems:        IMenuItem[];
-value             : any;
-currentPage       = 1 //paging component
-pageSize          = 25;
-itemsPerPage      = 25
+  menuItems$:       Observable<IMenuItem[]>
+  menuItems:        IMenuItem[];
+  value             : any;
+  currentPage       = 1 //paging component
+  pageSize          = 25;
+  itemsPerPage      = 25
 
-@Input() departmentID : string;
-@Input() categoryID:       string;
-@Input() brandID  :          string;
-@Input() typeID   :          string;
-@Input() productName:      string;
+  @Input() departmentID : string;
+  @Input() categoryID:       string;
+  @Input() subCategoryID : string;
+  @Input() brandID  :          string;
+  @Input() typeID   :          string;
+  @Input() productName:      string;
 
-bucketName        :   string;
-scrollingInfo     :   string;
-endofItems        :   boolean;
-loading           :   boolean;
-totalRecords      :   number;
+  bucketName        :   string;
+  scrollingInfo     :   string;
+  endofItems        :   boolean;
+  loading           :   boolean;
+  totalRecords      :   number;
 
-_productSearchModel          : Subscription;
-productSearchModelData       : ProductSearchModel;
-someValue         : any;
-searchDescription : string //for description of results
+  _productSearchModel          : Subscription;
+  productSearchModelData       : ProductSearchModel;
+  someValue         : any;
+  searchDescription : string //for description of results
 
-grid              = "grid"
-_orderBar         : Subscription;
-orderBar          : boolean;
-platForm          =  this.getPlatForm()
-isApp             = false;
+  grid              = "grid"
+  _orderBar         : Subscription;
+  orderBar          : boolean;
+  platForm          =  this.getPlatForm()
+  isApp             = false;
 
-getPlatForm() {  return Capacitor.getPlatform(); }
+  getPlatForm() {  return Capacitor.getPlatform(); }
 
-initOrderBarSubscription() {
-  this.toolbarServiceUI.orderBar$.subscribe(data => {
-    this.orderBar = data
-    if (this.orderBar) {
-      this.grid = "grid-smaller"
-    }
-    if (!this.orderBar) {
-      this.grid = "grid"
-    }
-  })
-}
+  initOrderBarSubscription() {
+    this.toolbarServiceUI.orderBar$.subscribe(data => {
+      this.orderBar = data
+      if (this.orderBar) {
+        this.grid = "grid-smaller"
+      }
+      if (!this.orderBar) {
+        this.grid = "grid"
+      }
+    })
+  }
 
-constructor(private menuService      : MenuService,
-            private awsBucketService : AWSBucketService,
-            private router           : Router,
-            public  route            : ActivatedRoute,
-            private siteService      : SitesService,
-            private toolbarServiceUI : ToolBarUIService,
-            private titleService     : Title,
-            private platFormService  : PlatformService,
-    )
-{
-  this.isApp = this.platFormService.isApp()
-}
+  constructor(private menuService      : MenuService,
+              private awsBucketService : AWSBucketService,
+              private router           : Router,
+              public  route            : ActivatedRoute,
+              private siteService      : SitesService,
+              private toolbarServiceUI : ToolBarUIService,
+              private titleService     : Title,
+              private platFormService  : PlatformService,
+      )
+  {
+    this.isApp = this.platFormService.isApp()
+  }
 
 async ngOnInit()  {
   //this is called on page refresh, or sending the person the link to this page.
@@ -153,6 +155,7 @@ initSearchProcess() {
   console.log('initSearchProcess update')
   try {
       this.departmentID = this.route.snapshot.paramMap.get('departmentID');
+      this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');  // not implemented.
       this.categoryID   = this.route.snapshot.paramMap.get('categoryID');
       this.brandID      = this.route.snapshot.paramMap.get('brandID');
       this.typeID       = this.route.snapshot.paramMap.get('typeID');
@@ -167,6 +170,7 @@ initSearchFromModel() {
   this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
 
       this.initSearchProcess();
+      this.subCategoryID = model.subCategoryID; // not implemented.
       this.departmentID = model.departmentID
       this.categoryID   = model.categoryID
       this.brandID      = model.brandID;
