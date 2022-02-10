@@ -8,6 +8,7 @@ export interface ProductSearchModel {
   brandID:                      string;
   categoryID:                   string;
   departmentID:                 string;
+  subCategoryID:                 string;
   type:                         number;
   retail:                       number;
   viewAll                   : number;

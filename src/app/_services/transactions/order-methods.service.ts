@@ -133,10 +133,8 @@ export class OrderMethodsService {
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.
   //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
-
     const searchResults = this.updateMenuSearchModel(item)
     if (searchResults) { return }
-
     if (add) {
       if (item && item.itemType.requireInStock) {
         this.listItem(item.id);
@@ -145,9 +143,7 @@ export class OrderMethodsService {
       this.addItemToOrder(order, item, 1)
       return
     }
-
     this.listItem(item.id);
-
   }
 
   updateMenuSearchModel(item: IMenuItem) : boolean {
@@ -163,7 +159,7 @@ export class OrderMethodsService {
     }
     if (item.prodModifierType == 5) {
       console.log('updateMenuSearchModel subCategory', item, item.itemType.name)
-      model.subCategory  = item.name
+      model.subCategory  = item.id.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
       return true
