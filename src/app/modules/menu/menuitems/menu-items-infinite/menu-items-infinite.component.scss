@@ -16,6 +16,28 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  overflow-y: visible;
+
+  @include for-tablet-landscape-up {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+    overflow-y: visible;
+  }
+
+  @include for-phone-only {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(115px, 1fr) );
+    overflow-y: visible;
+  }
+
 }
 
 .grid-flow-custom {
@@ -48,7 +70,7 @@
 
 .orders-container {
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   padding-right: 5px;
   margin: 5px;
 }

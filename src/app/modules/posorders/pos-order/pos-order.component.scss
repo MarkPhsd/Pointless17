@@ -44,6 +44,14 @@ h3, .h3 {
   }
 }
 
+.buttons-container {
+  width: 100%;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+}
+
 .grid-buttons {
   margin    : 5px;
   // width     : 360px;

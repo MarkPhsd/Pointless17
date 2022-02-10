@@ -66,7 +66,7 @@
                                 class="toggle-buttons"
                                 type="button"
                                 [value]="item"
-                                (tapClick)     = "refreshCategorySearch(item)"
+                                (change)     = "refreshCategorySearch(item)"
                                 *ngFor="let item of list" >
               {{item.name | truncateText : 21}}
             </mat-button-toggle>
@@ -101,7 +101,7 @@
                                 class="toggle-buttons"
                                 type="button"
                                 [value]="item"
-                                (tapClick)     = "refreshCategorySearch(item)"
+                                (change)     = "refreshBrandSearch(item)"
                                 *ngFor="let item of brands" >
               {{item.company | truncateText : 21}}
             </mat-button-toggle>
@@ -138,7 +138,7 @@
                               class="toggle-buttons"
                               type="button"
                               [value]="item"
-                              (tapClick)     = "refreshCategorySearch(item)"
+                              (change)     = "refreshTypeSearch(item)"
                               *ngFor="let item of list" >
             {{item.name | truncateText : 21}}
           </mat-button-toggle>

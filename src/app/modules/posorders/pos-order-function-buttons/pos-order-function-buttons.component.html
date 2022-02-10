@@ -31,15 +31,19 @@
     </button>
   </div>
 
-  <div>
+  <div *ngIf="isAuthorized">
     <button mat-raised-button class="button" color="primary"  (click)="printLabels()">
       <mat-icon>print</mat-icon>
        Labels
     </button>
   </div>
 
-  <div>
-    <button mat-raised-button class="button" color="primary"  (click)="rePrintLabels()">
+  <div *ngIf="isAuthorized">
+    <button mat-raised-button
+            class="button"
+            color="primary"
+            (click)="rePrintLabels()"
+                      >
       <mat-icon>print</mat-icon>
         Re-Print Labels
     </button>

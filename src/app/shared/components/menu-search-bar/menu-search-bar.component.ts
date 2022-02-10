@@ -213,9 +213,15 @@ constructor(
     this.input.nativeElement.value = '';
     this.input.nativeElement.focus();
     //set the toggle buttons as well:
-    this.categoryID  = 0;
-    this.brandID     = 0;
-    this.typeID      = 0;
+    this.categoryID        = 0;
+    this.brandID           = 0;
+    this.typeID            = 0;
+    this.productTypeSearch = null;
+    this.productTypeID     = null;
+    this.typeID            = null;
+    this.brandID           = null;
+    this.name              = null;
+
     Keyboard.hide();
   }
 
@@ -251,6 +257,12 @@ constructor(
 
   applyProductSearchModel(productSearchModel: ProductSearchModel) : ProductSearchModel {
 
+    productSearchModel.type         = null;
+    productSearchModel.categoryID   = null;
+    productSearchModel.departmentID = null;
+    productSearchModel.name         = null;
+    productSearchModel.barcode      = null;
+
     if (this.itemName.value) {
       productSearchModel.name               =  this.input.nativeElement.value
       productSearchModel.useNameInAllFields = true
@@ -263,6 +275,7 @@ constructor(
 
     if (this.productTypeSearch)         {
       productSearchModel.itemTypeID       = this.productTypeSearch.id.toString();
+      productSearchModel.type             = this.productTypeSearch.id.toString();
       productSearchModel.itemTypeName     = this.productTypeSearch.name.toString();
     }
 
@@ -275,6 +288,7 @@ constructor(
     productSearchModel.pageSize   = this.pageSize
     productSearchModel.pageNumber = this.currentPage
     this.menuService.updateMeunuItemData(productSearchModel)
+    console.log('productSearchModel', productSearchModel)
     return productSearchModel
 
   }

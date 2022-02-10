@@ -1,38 +1,45 @@
 @import "/src/mixins.scss";
 
 .buttons-container2 {
-  display: flex;
-  flex-direction: row;
-  justify-content: center  space-between;
-  gap: 5px;
-  max-width: 400px;
-}
+  // display: flex;
+  // flex-direction: row;
+  // justify-content: center  space-between;
+  // gap: 5px;
+  // max-width: 400px;
 
-.buttons-container {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(170px, 1fr) );
   grid-auto-flow: row;
-  @include for-phone-only  {
-    --gap: 10px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
-    grid-auto-flow: row;
-  }
+}
+
+.buttons-container {
+  --gap: 10px;
+  display: grid;
+  margin-left: 10px;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  grid-auto-flow: row;
+  // @include for-phone-only  {
+  //   --gap: 10px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
+  //   grid-auto-flow: row;
+  // }
 
 }
 
 button {
   margin: 5px;
-  width: 150px;
-  height: 55px;
+  width: 175px;
+  height: 85px;
 
   @include for-phone-only  {
     margin: 2px 2px;
-    width: 140px;
-    height: 35px;
+    width: 175px;
+    height: 65px;
     // height: 40px;
   }
 

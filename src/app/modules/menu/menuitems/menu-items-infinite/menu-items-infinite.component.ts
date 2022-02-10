@@ -125,6 +125,10 @@ async ngOnInit()  {
   this.initSearchProcess();
   this.initSearchFromModel();
   this.setItemsPerPage();
+
+  this.pageSize = 25;
+  this.currentPage = 1;
+
   await this.nextPage();
 
   this.initOrderBarSubscription()
@@ -161,7 +165,7 @@ initSearchProcess() {
 initSearchFromModel() {
 
   this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
-      console.log('initSearchFromModel update')
+
       this.initSearchProcess();
       this.departmentID = model.departmentID
       this.categoryID   = model.categoryID
@@ -217,12 +221,12 @@ async addToList(pageSize: number, pageNumber: number)  {
 
       this.typeID       = this.route.snapshot.paramMap.get('typeID')
       if (this.typeID) {
-        if (this.typeID) { model.itemTypeID       = this.typeID     }
+        if (this.typeID) { model.itemTypeID     = this.typeID     }
       }
     }
 
     if (!pageNumber || pageNumber == null) {pageNumber = 1 }
-    if (!pageSize   || pageSize == null  ) {pageSize   = 25}
+    if (!pageSize   || pageSize   == null) {pageSize   = 25}
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
@@ -230,7 +234,6 @@ async addToList(pageSize: number, pageNumber: number)  {
     const site        = this.siteService.getAssignedSite();
     const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
     this.loading      = true
-    // console.log(model)
 
     results$.subscribe(data => {
       this.currentPage += 1;

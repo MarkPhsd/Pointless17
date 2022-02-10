@@ -9,7 +9,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="brandsEnabled"
-                  (change)="updateSetting()">
+                 >
           <mat-label>Brands</mat-label>
         </mat-slide-toggle>
       </div>
@@ -17,7 +17,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="departmentsEnabled"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Departments</mat-label>
         </mat-slide-toggle>
       </div>
@@ -25,7 +25,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="categoriesEnabled"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Categories</mat-label>
         </mat-slide-toggle>
       </div>
@@ -33,7 +33,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="typesEnabled"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Types</mat-label>
         </mat-slide-toggle>
       </div>
@@ -41,16 +41,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="tierMenuEnabled"
-                  (change)="updateSetting()">
-          <mat-label>Tier Menu</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="tierMenuEnabled"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Tier Menu</mat-label>
         </mat-slide-toggle>
       </div>
@@ -69,6 +60,11 @@
           Items Per Page
       </app-value-fields>
 
+    </div>
+    <div>
+      <button mat-raised-button
+              color="primary"
+              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
     </div>
   </mat-card-content>
 

@@ -14,8 +14,7 @@ export interface TransactionUISettings {
   lockOrders    : boolean;
 
   deleteUnClosedPrintedOrders: boolean;
-  closeOrderTimeCutOff: string;
-
+  closeOrderTimeCutOff       : string;
 }
 
 export interface WebAppSettings {
@@ -149,17 +148,6 @@ export class UISettingsService {
 
   }
 
-  initForm(fb: FormGroup): FormGroup {
-    fb = this._fb.group({
-      id             : [],
-      displayNotes   : [],
-      displayView    : [],
-      displayAdd     : [],
-      displayQuantity: [],
-
-     })
-    return fb
-  }
 
   initHomePageForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
@@ -189,6 +177,19 @@ export class UISettingsService {
     return fb
   }
 
+  initForm(fb: FormGroup): FormGroup {
+    fb = this._fb.group({
+      id             : [],
+      displayNotes   : [],
+      displayView    : [],
+      displayAdd     : [],
+      displayQuantity: [],
+      deleteUnClosedPrintedOrders : [],
+      closeOrderTimeCutOff        : [],
+     })
+    return fb
+  }
+
   initUITransactionsForm(config: TransactionUISettings, fb: FormGroup): FormGroup {
 
     fb = this._fb.group({
@@ -196,8 +197,10 @@ export class UISettingsService {
       displayNotes   : [config.displayNotes],
       displayView    : [config.displayView],
       displayAdd     : [config.displayAdd],
-      displayQuantity: [config.displayQuantity]
-     })
+      displayQuantity: [config.displayQuantity],
+      deleteUnClosedPrintedOrders : [config.deleteUnClosedPrintedOrders],
+      closeOrderTimeCutOff        : [config.closeOrderTimeCutOff],
+    })
     return fb
   }
 

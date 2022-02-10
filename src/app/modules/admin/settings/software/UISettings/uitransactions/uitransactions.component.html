@@ -1,17 +1,17 @@
+
+<div  *ngIf="inputForm"
+    [formGroup]="inputForm">
+
 <mat-card>
   <mat-card-subtitle>
     <ng-content></ng-content>
   </mat-card-subtitle>
 
   <mat-card-content>
-
-    <div  *ngIf="inputForm"
-          [formGroup]="inputForm">
-
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="displayNotes"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Display Notes</mat-label>
         </mat-slide-toggle>
       </div>
@@ -19,7 +19,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="displayQuantity"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Display Quantity</mat-label>
         </mat-slide-toggle>
       </div>
@@ -27,7 +27,7 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="displayAdd"
-                  (change)="updateSetting()">
+                >
           <mat-label>Display Add Button</mat-label>
         </mat-slide-toggle>
       </div>
@@ -35,11 +35,39 @@
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="displayView"
-                  (change)="updateSetting()">
+                  >
           <mat-label>Display View</mat-label>
         </mat-slide-toggle>
       </div>
-    </div>
-  </mat-card-content>
 
+      <mat-divider></mat-divider>
+      <h3>End of Day</h3>
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="deleteUnClosedPrintedOrders"
+                  >
+          <mat-label>Delete Unclosed Un Printed Orders</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div>
+        <app-value-fields
+          [fieldType]     ="'number'"
+          [inputForm]     ="inputForm"
+          [fieldName]     ="'closeOrderTimeCutOff'">
+
+          Last time to close order
+          </app-value-fields>
+      </div>
+
+      <div>
+        <button mat-raised-button
+                color="primary"
+                (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
+      </div>
+
+
+  </mat-card-content>
 </mat-card>
+
+</div>

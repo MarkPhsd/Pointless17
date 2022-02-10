@@ -139,7 +139,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
-      this.infobuttonpanel = 'grid-buttons'
+      // this.infobuttonpanel = 'grid-buttons'
+      this.infobuttonpanel = 'grid-order-header'
       this.gridspan3       = ''
       this.gridRight       = 'grid-order-header';
     }
@@ -147,7 +148,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.mainPanel && !this.smallDevice) {
       this.orderlayout     = 'order-layout reverse'
       this.gridRight       = 'order-layout-buttons'// 'grid-order-header reverse'
-      this.infobuttonpanel = 'grid-order-header'
+      // this.infobuttonpanel = 'grid-order-header'
     }
 
     if (!this.mainPanel) {
