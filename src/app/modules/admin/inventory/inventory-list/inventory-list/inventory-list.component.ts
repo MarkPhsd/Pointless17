@@ -15,7 +15,7 @@ import { IGetRowsParams,  GridApi,  } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import {
   METRCItemsCategories,
 } from 'src/app/_interfaces/metrcs/items';
@@ -66,7 +66,7 @@ export class InventoryListComponent implements OnInit {
     //AgGrid
     params               : any;
     private gridApi      : GridApi;
-    private gridColumnApi: GridAlignColumnsDirective;
+    // private gridColumnApi: GridAlignColumnsDirective;
     gridOptions          : any
     columnDefs           = [];
     defaultColDef        ;
@@ -508,7 +508,7 @@ export class InventoryListComponent implements OnInit {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      this.gridColumnApi = params.columnApi;
+      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 

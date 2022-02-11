@@ -104,7 +104,7 @@ export class MenuService {
 
   clearSearch()
   {
-    this.searchIsLoaded.next();
+    this.searchIsLoaded.next(null);
   }
 
   getsearchIsLoaded(): Observable<any> {

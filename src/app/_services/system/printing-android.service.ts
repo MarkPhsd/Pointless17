@@ -1,22 +1,10 @@
-import { ElementRef, Injectable, Renderer2 } from '@angular/core';
+import { Injectable } from '@angular/core';
 import * as _ from "lodash";
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Settings } from 'electron/main';
-import { ISetting, ISite } from 'src/app/_interfaces';
-import { observable } from 'rxjs';
+import { ISetting,  } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { HttpClient } from '@angular/common/http';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import html2canvas from 'html2canvas';
-import domtoimage from 'dom-to-image';
-import { jsPDF } from "jspdf";
-import * as  printJS from "print-js";
-import { RenderingService } from './rendering.service';
-import { LabelaryService, zplLabel } from '../labelary/labelary.service';
-import { FakeDataService } from './fake-data.service';
 import { BtPrintingService } from './bt-printing.service';
 import  EscPosEncoder  from 'esc-pos-encoder-ionic';
 
@@ -34,14 +22,8 @@ export class PrintingAndroidService {
 
   constructor(  private electronService: ElectronService,
                 private snack: MatSnackBar,
-                private settingService: SettingsService,
-                private siteService: SitesService,
-                private renderingService: RenderingService,
-                private labelaryService: LabelaryService,
-                private fakeDataService: FakeDataService,
                 private btPrintingService: BtPrintingService,
-                private http: HttpClient,) {
-
+              ) {
     if (this.electronService.remote != null) {
       this.isElectronServiceInitiated = true
     }
@@ -58,14 +40,11 @@ export class PrintingAndroidService {
     let result = encoder
       .initialize()
       .image(image, 128, 128, 'atkinson')
-
       .encode()
     this.btPrintingService.sendToBluetoothPrinter(macAddress, result)
-
 }
 
 // https://github.com/Ans0n-Ti0/EscPosEncoder
-
   async printAndroidPOSReceipt( order: IPOSOrder, macAddress: string) {
     const result = this.encoodReceipt(order);
     this.printFromAndroid(macAddress, result)

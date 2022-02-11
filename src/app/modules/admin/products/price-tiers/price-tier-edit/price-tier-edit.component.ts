@@ -1,3 +1,4 @@
+import { isNull } from '@angular/compiler/src/output/output_ast';
 import { Component, Inject, OnInit } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef,  MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -45,7 +46,7 @@ export class PriceTierEditComponent implements OnInit {
 
   priceTierPricesChanges() {
     // cleanup any prior subscriptions before re-establishing new ones
-    this.changesUnsubscribe.next();
+    this.changesUnsubscribe.next(null);
 
     merge(...this.priceTierPrices.controls.map((control: AbstractControl, index: number) =>
               control.valueChanges.pipe(

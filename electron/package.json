@@ -1,6 +1,6 @@
 {
-  "name": "pointLess",
-  "version": "1.0.178",
+  "name": "pointless",
+  "version": "1.0.180",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -13,7 +13,7 @@
     "deploy Multi Platform": "build --win --x64 --ia32 --p always"
   },
   "dependencies": {
-    "@capacitor/electron": "^2.4.8",
+    "@capacitor/electron": "^2.5.0",
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.4.0",
     "electron-updater": "^4.0.6",

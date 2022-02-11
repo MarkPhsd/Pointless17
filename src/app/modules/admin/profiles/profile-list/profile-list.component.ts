@@ -11,7 +11,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter, tap } from 'rxjs/operators';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -59,7 +59,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
     //AgGrid
     params               : any;
     private gridApi      : GridApi;
-    private gridColumnApi: GridAlignColumnsDirective;
+    // private gridColumnApi: GridAlignColumnsDirective;
     gridOptions          : any
     columnDefs           = [];
     defaultColDef        ;
@@ -327,7 +327,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      this.gridColumnApi = params.columnApi;
+      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 

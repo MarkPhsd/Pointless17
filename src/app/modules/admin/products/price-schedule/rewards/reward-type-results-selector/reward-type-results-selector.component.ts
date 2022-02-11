@@ -8,7 +8,7 @@ import { IProductSearchResults, IProductSearchResultsPaged, MenuService } from '
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -58,7 +58,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
   //AgGrid
   params                  : any;
   private gridApi         : GridApi;
-  private gridColumnApi   : GridAlignColumnsDirective;
+  // private gridColumnApi   : GridAlignColumnsDirective;
   gridOptions             : any
   columnDefs              = [];
   defaultColDef           ;
@@ -207,7 +207,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
 
   onSearchGridReady(params) {
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    // this.gridColumnApi = params.columnApi;
     if (!this.searchItems$) {
       this.navItemsByCategory()
     }
@@ -235,7 +235,7 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
     if (params)  {
       this.params        = params
       this.gridApi       = params.api;
-      this.gridColumnApi = params.columnApi;
+      // this.gridColumnApi = params.columnApi;
     }
 
     if (params == undefined) {

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 import { Observable } from 'rxjs';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
@@ -28,7 +28,7 @@ export class OrderItemListComponent implements OnInit {
 
   private gridApi: GridApi;
   gridOptions: {};
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   columnDefs = [];
   defaultColDef;
   frameworkComponents: any;
@@ -105,7 +105,7 @@ export class OrderItemListComponent implements OnInit {
 
   onPOSGridReady(params) {
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    // this.gridColumnApi = params.columnApi;
   }
 
   formatNumber(number) {

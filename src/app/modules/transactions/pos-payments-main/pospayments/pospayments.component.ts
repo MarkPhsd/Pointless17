@@ -8,7 +8,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { Observable, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -56,7 +56,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   //AgGrid
   params               : any;
   private gridApi      : GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   gridOptions          : any
   columnDefs           = [];
   defaultColDef        ;
@@ -96,7 +96,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   searchModel     :   IPaymentSearchModel;
   isAuthorized    :   boolean;
 
-  constructor(  private _snackBar               : MatSnackBar,
+  constructor(  private snackBar                : MatSnackBar,
                 private pOSPaymentService       : POSPaymentService,
                 private agGridService           : AgGridService,
                 private fb                      : FormBuilder,
@@ -349,7 +349,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      this.gridColumnApi = params.columnApi;
+      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 
@@ -501,7 +501,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   onSortByNameAndPrice(sort: string) { }
 
   notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
+    this.snackBar.open(message, action, {
     duration: 2000,
     verticalPosition: 'top'
     });

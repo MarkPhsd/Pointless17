@@ -12,7 +12,7 @@ export class MessageService {
     }
 
     clearMessages() {
-        this.subject.next();
+        this.subject.next(null);
     }
 
     getMessage(): Observable<any> {
@@ -28,7 +28,7 @@ export class MessageService {
     }
 
     clearVisible() {
-      this.subject.next();
+      this.subject.next(null);
   }
 
 }

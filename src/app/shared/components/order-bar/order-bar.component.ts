@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { UserService} from 'src/app/_services';
 import {
   BreakpointObserver,
   Breakpoints,
@@ -13,6 +12,7 @@ import { map } from 'rxjs/operators';
   templateUrl: './order-bar.component.html',
   styleUrls: ['./order-bar.component.scss']
 })
+
 export class OrderBarComponent implements OnInit {
 
   @ViewChild('drawer') drawer: any;
@@ -23,17 +23,13 @@ export class OrderBarComponent implements OnInit {
           .observe(Breakpoints.Handset)
           .pipe(map((result: BreakpointState) => result.matches));
 
-  constructor(private userService: UserService,
-              private breakpointObserver: BreakpointObserver) { }
+  constructor(private breakpointObserver: BreakpointObserver) { }
 
   ngOnInit(): void {
     this.refreshSideBar();
   }
 
   refreshSideBar(){
-
   }
-
-
 
 }

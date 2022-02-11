@@ -179,7 +179,7 @@ export class PosPaymentComponent implements OnInit {
         if (this.platFormService.isApp() ) {
           return this.serviceTypeService.getType(site, +data.value)
         }
-        return of(false)
+        return of(null)
       }
       return of(null)
     })).subscribe(result => {

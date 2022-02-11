@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subject ,fromEvent } from 'rxjs';
 import { FormBuilder } from '@angular/forms';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -23,11 +23,11 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 export class FlatRateListComponent implements OnInit {
 
   searchGridApi:         GridApi;
-  searchGridColumnApi:   GridAlignColumnsDirective;
+  // searchGridColumnApi:   GridAlignColumnsDirective;
   searchGridOptions:     any;
   //AgGrid
   private gridApi:       GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   gridOptions:           any
   columnDefs = [];
   defaultColDef;
@@ -83,7 +83,7 @@ export class FlatRateListComponent implements OnInit {
   onSearchGridReady(params) {
     // this.searchItems()
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    // this.gridColumnApi = params.columnApi;
   }
 
   openItemEditor(id: number) {

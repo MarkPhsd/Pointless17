@@ -36,7 +36,6 @@ if (os.platform().trim() == "win32" || os.arch().trim() == "x64") {
   autoUpdater.checkForUpdatesAndNotify()
 }
 
-
 // Place holders for our windows so they don't get garbage collected.
 let mainWindow  = null ;
 // Placeholder for SplashScreen ref
@@ -50,10 +49,10 @@ const menuTemplateDev = [
     label: 'Options',
     submenu: [
       {
-        label: 'Open Dev Tools',
-        click() {
-          mainWindow.openDevTools();
-        },
+        // label: 'Open Dev Tools',
+        // click() {
+        //   // mainWindow.openDevTools();
+        // },
       },
     ],
   },
@@ -285,7 +284,7 @@ autoUpdater.on('update-downloaded', (ev, info) => {
     // Wait 5 seconds, then quit and install
     // In your application, you don't need to wait 5 seconds.
     // You could call autoUpdater.quitAndInstall(); immediately
-    //testing nodes
+    // testing nodes
     setTimeout(function() {
       log.info('checking autoUpdater for Quit And Install' )
       autoUpdater.quitAndInstall();

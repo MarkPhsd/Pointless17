@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { Observable } from 'rxjs';
 import { GridApi} from 'ag-grid-community';
@@ -23,7 +23,7 @@ export class PosOrderListComponent implements OnInit {
 
   //AgGrid
   private gridApi: GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   columnDefs = [];
   defaultColDef;
   frameworkComponents: any;
@@ -76,7 +76,7 @@ export class PosOrderListComponent implements OnInit {
 
   onPOSGridReady(params) {
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    // this.gridColumnApi = params.columnApi;
   }
 
 

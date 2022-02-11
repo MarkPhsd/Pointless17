@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { GridApi } from 'ag-grid-community';
 import { Observable, Subject } from 'rxjs';
 import { IMETRCSales } from 'src/app/_interfaces/transactions/metrc-sales';
@@ -24,7 +24,7 @@ export class MetrcSalesListComponent implements OnInit {
 
   //AgGrid
   private gridApi: GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   columnDefs = [];
   defaultColDef;
   frameworkComponents: any;
@@ -142,7 +142,7 @@ export class MetrcSalesListComponent implements OnInit {
 
   onGridReady(params) {
     this.gridApi = params.api;
-    this.gridColumnApi = params.columnApi;
+    // this.gridColumnApi = params.columnApi;
   }
 
   onDeselectAll() {

@@ -67,7 +67,7 @@ export class CurrencyFormatterDirective implements OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.setValue(this.unformatValue(this.ngControl.value));
-    this.destroy$.next();
+    this.destroy$.next(null);
     this.destroy$.complete();
   }
 

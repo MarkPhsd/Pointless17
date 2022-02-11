@@ -2,7 +2,7 @@ import { Component, ElementRef, OnInit, AfterViewInit, ViewChild, Input, } from 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { fromEvent, Observable, of, Subject  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
+// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import  {GridApi, IGetRowsParams, } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
@@ -59,7 +59,7 @@ export class PackageListComponent implements OnInit {
 
   params               : any;
   private gridApi      : GridApi;
-  private gridColumnApi: GridAlignColumnsDirective;
+  // private gridColumnApi: GridAlignColumnsDirective;
   gridOptions          : any
   columnDefs           = [];
   defaultColDef        ;
@@ -415,7 +415,7 @@ export class PackageListComponent implements OnInit {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      this.gridColumnApi = params.columnApi;
+      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 

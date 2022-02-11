@@ -21,7 +21,7 @@
     "emitDecoratorMetadata": true,
     "target": "es2016",
     "module": "es2020",
-    "types": ["node", "googlemaps", "jest"],
+    "types": ["node"],
     "lib": [
       "es2020",
       "dom"
