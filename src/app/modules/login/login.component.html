@@ -46,7 +46,7 @@
                                    type="text"
                                    formControlName="username"
                                    class="form-control"
-                                  [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                                   [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                             <div *ngIf="submitted && f.username.errors"
                                  class="invalid-feedback">
                                 <div *ngIf="f.username.errors.required">Username is required</div>
@@ -57,8 +57,11 @@
                         <div>
                           <mat-form-field appearance="fill">
                               <mat-label>Password</mat-label>
-                              <input matInput type="password" formControlName="password" class="form-control"
-                                  [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                              <input matInput
+                                     type="password"
+                                     formControlName="password"
+                                     class="form-control"
+                                     [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                                   <div *ngIf="f.password.errors.required">Password is required</div>
                               </div>

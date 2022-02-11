@@ -462,10 +462,14 @@ export class OrderMethodsService {
     }
   }
 
-  deleteOrder(id: number) {
+  deleteOrder(id: number, confirmed: boolean) {
     const site = this.siteService.getAssignedSite();
-    const confirm = window.confirm('Are you sure you want to delete this order?')
-    // return ;
+
+    if (!confirmed) {
+      const confirm = window.confirm('Are you sure you want to delete this order?')
+      if (!confirm) { return }
+    }
+
     if (this.order) {
       const orderDelete$ = this.orderService.deleteOrder(site, this.order.id)
       orderDelete$.subscribe(data => {

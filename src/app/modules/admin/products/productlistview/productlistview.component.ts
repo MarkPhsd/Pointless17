@@ -359,6 +359,7 @@ constructor(  private _snackBar              : MatSnackBar,
   refreshSearch() {
     const site               = this.siteService.getAssignedSite()
     const productSearchModel = this.initSearchModel();
+    console.log(productSearchModel)
     this.onGridReady(this.params)
   }
 

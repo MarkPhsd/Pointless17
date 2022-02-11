@@ -284,21 +284,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   async deleteOrder(event) {
-
-      this.orderMethodService.deleteOrder(this.order.id)
-          // const result = window.confirm('Are you sure?')
-    // if (result) {
-    //   const site = this.siteService.getAssignedSite();
-    //   const order = await this.orderService.deleteOrder(site, this.order.id).pipe().toPromise();
-    //   // console.log('order')
-    //   if (order === 'Order deleted.') {
-    //     this.notifyEvent('Order Deleted', 'Success')
-    //     this.orderService.updateOrderSubscription(null)
-    //     this.router.navigateByUrl('pos-orders')
-    //   } else {
-    //     this.notifyEvent('Order not deleted. Please check if you have items to void or payments to void',
-    //                       'Failed')
-    //   }
+    this.orderMethodService.deleteOrder(this.order.id, false)
   }
 
   ngOnDestroy() {
