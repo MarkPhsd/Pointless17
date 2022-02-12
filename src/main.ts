@@ -1,12 +1,12 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
 import { AppModule } from './app/app.module';
 import { environment } from './environments/environment';
 
 import 'hammerjs';
 import { overArgs } from 'lodash';
-const electronService = new ElectronService;
+// const electronService = new ElectronService;
 // const autoUpdater = require('ngx-electron').autoUpdater
 
 if (environment.production) {
@@ -25,5 +25,5 @@ function closeNotification() {
 }
 
 function restartApp() {
-  electronService.ipcRenderer.send('restart_app');
+  // electronService.ipcRenderer.send('restart_app');
 }

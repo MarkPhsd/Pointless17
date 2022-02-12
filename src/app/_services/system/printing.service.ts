@@ -32,8 +32,6 @@ export interface printOptions {
   providedIn: 'root'
 })
 
-
-
 export class PrintingService {
 
   zplSetting            : ISetting;
@@ -52,8 +50,6 @@ export class PrintingService {
                 private siteService       : SitesService,
                 private renderingService  : RenderingService,
                 private labelaryService   : LabelaryService,
-                private fakeDataService   : FakeDataService,
-                private btPrintingService : BtPrintingService,
                 private orderService      : OrdersService,
                 private router            : Router,
                 private userAuthService         : UserAuthorizationService,

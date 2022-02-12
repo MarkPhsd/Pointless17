@@ -1,9 +1,14 @@
 <div class="header">
   <h2>Print Settings </h2>
+  <p>
+    Current Plat Form: {{platForm}}
+  </p>
   <p>These setting change based on the device type you are using. </p>
-  <p><mat-icon>web</mat-icon> Web:     Printing options for the web are limited to dialog windows, there is no automated printing.</p>
+  <p><mat-icon>web</mat-icon>    Web:     Printing options for the web are limited to dialog windows, there is no automated printing.</p>
   <p><mat-icon>android</mat-icon> Android: Printers require an associated bluetooth printer.</p>
-  <p><mat-icon>windows</mat-icon> Windows: When installed as an application on Windows, windows installed printers are listed.</p>
+  <p><mat-icon>windows</mat-icon> <span *ngIf="isElectronApp" >
+    This is a windows App.
+  </span> You should see your windows installed printers to select a receipt printer.</p>
 </div>
 
 <mat-divider></mat-divider>

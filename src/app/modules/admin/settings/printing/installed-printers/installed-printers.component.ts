@@ -14,7 +14,7 @@ import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printin
 import { MatDialog } from '@angular/material/dialog';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
-import domtoimage from 'dom-to-image';
+import   domtoimage from 'dom-to-image';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
@@ -127,11 +127,12 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private fakeData              : FakeDataService,
               private renderingService      : RenderingService,
               private platFormService       : PlatformService,
+
               // private cs : ConsoleService,
   ) {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
-    this.isElectronApp = this.electronService.isElectronApp;
+    this.isElectronApp = this.platFormService.isAppElectron;
   }
 
   async ngOnInit() {
