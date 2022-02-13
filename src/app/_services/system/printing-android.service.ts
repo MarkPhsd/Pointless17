@@ -24,9 +24,9 @@ export class PrintingAndroidService {
                 private snack: MatSnackBar,
                 private btPrintingService: BtPrintingService,
               ) {
-    if (this.electronService.remote != null) {
-      this.isElectronServiceInitiated = true
-    }
+    // if (this.electronService.remote != null) {
+    //   this.isElectronServiceInitiated = true
+    // }
   }
 
   async printAndroidImage(image: any, macAddress: string) {

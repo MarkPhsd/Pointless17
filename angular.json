@@ -95,7 +95,7 @@
             "production": {
               "browserTarget": "CCSApp:build:production"
             },
-            "ci": {
+             "ci": {
               "progress": false
             }
           }

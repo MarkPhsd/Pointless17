@@ -66,14 +66,14 @@ export class AgeVerificationGuardService {
       return
     }
 
-    const result = this.electronService.remote
-    const isElectron = (result != null);
+    // const result = this.electronService.remote
+    // const isElectron = (result != null);
 
-    if (isElectron) {
-      this.platForm = 'electron'
-      this.isAppElectron = true;
-      return
-    }
+    // if (isElectron) {
+    //   this.platForm = 'electron'
+    //   this.isAppElectron = true;
+    //   return
+    // }
 
   }
 
