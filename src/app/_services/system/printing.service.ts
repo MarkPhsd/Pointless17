@@ -12,8 +12,6 @@ import  domtoimage from 'dom-to-image';
 import { jsPDF } from "jspdf";
 import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
-import { FakeDataService } from './fake-data.service';
-import { BtPrintingService } from './bt-printing.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -56,10 +54,10 @@ export class PrintingService {
                 private platFormService   : PlatformService,
                 private dialog            : MatDialog,) {
 
-    if (this.electronService.remote != null) {
-      this.isElectronServiceInitiated = true
-      console.log('electron services initiated')
-    }
+    // if (this.electronService.remote != null) {
+    //   this.isElectronServiceInitiated = true
+    //   console.log('electron services initiated')
+    // }
   }
 
   getPrintReady(): Observable<boolean> {
@@ -163,12 +161,11 @@ export class PrintingService {
     }
   }
 
-
   listPrinters(): any {
     try {
-      const printWindow = new this.electronService.remote.BrowserWindow({ show:false })
+      let printWindow : any //new this.electronService.remote.BrowserWindow({ show:false })
       // printWindow.loadURL('http://github.com')
-      return printWindow.webContents.getPrinters();
+      // return printWindow.webContents.getPrinters();
     } catch (error) {
       return ['Error Getting Printers']
     }
@@ -182,11 +179,10 @@ export class PrintingService {
       domtoimage.toPng(node, options).then(
       data =>
       {
-          //Initialize JSPDF
-          const doc = new jsPDF('p', 'mm', 'a4');
-          doc.addImage(data, 'PNG', 0, 0, 250, 250);//change values to your preference
-          doc.save('invoice.pdf');
-
+        //Initialize JSPDF
+        const doc = new jsPDF('p', 'mm', 'a4');
+        doc.addImage(data, 'PNG', 0, 0, 250, 250);//change values to your preference
+        doc.save('invoice.pdf');
       }, error =>
       {
         this.snack.open(error, 'PNG Error error')
@@ -234,7 +230,8 @@ export class PrintingService {
 
   async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
 
-    const printWindow         = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    // const printWindow         = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    let printWindow: any;
     // console.log('print electron options', options)
     printWindow.loadURL(contents)
       .then((e) => {

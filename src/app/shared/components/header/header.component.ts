@@ -128,11 +128,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private router              : Router,
               private fb                  : FormBuilder ) {
 
-    this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
-    this.initSearchObservable();
-    this.messageService.sendMessage('show');
-    this.platFormService.getPlatForm();
-    this.initSubscriptions();
+
   }
 
   ngOnChanges() {
@@ -140,6 +136,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async  ngOnInit() {
+
+    this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
+    this.initSearchObservable();
+    this.messageService.sendMessage('show');
+    this.platFormService.getPlatForm();
+    this.initSubscriptions();
+
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });

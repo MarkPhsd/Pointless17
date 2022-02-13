@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, Renderer2, ViewChild, AfterViewInit, Input, RendererStyleFlags2 } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, RendererStyleFlags2 } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -116,7 +116,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   electronPrinterList : any;
 
   constructor(
-              private electronService       : ElectronService,
               private printingService       : PrintingService,
               private printingAndroidService: PrintingAndroidService,
               private btPrinterService      : BtPrintingService,
@@ -352,10 +351,10 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       scriptUrl: ""
     }));
 
-    const printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-    const id          = printWindow.id
-    printWindow.webContents.insertCSS(`html body {${this.receiptStyles.text}}`)
-    printWindow.loadURL(file)
+    // const printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    // const id          = printWindow.id
+    // printWindow.webContents.insertCSS(`html body {${this.receiptStyles.text}}`)
+    // printWindow.loadURL(file)
   }
 
   getPrintContent(htmlContent: any) {

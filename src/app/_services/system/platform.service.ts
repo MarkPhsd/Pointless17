@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { IClipboardService } from 'ag-grid-community';
 import { ElectronService } from 'ngx-electron';
 import { IPCService } from './ipc.service';
 

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef,AfterViewInit,
-        HostBinding, HostListener, Input, OnInit, EventEmitter,Output,
+import { Component, ElementRef,AfterViewInit,
+         OnInit, EventEmitter,Output,
         ViewChild} from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, IUserProfile }  from 'src/app/_interfaces';
 import { AWSBucketService, ContactsService, MenuService} from 'src/app/_services';
@@ -13,6 +13,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
 // horizontal scroll
@@ -161,35 +162,16 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   classcontainer   : string;
 
   constructor(
+      private platformService: PlatformService,
+      private fb             : FormBuilder,
+      private router         : Router,
+      private siteService    : SitesService,
       private contactsService: ContactsService,
-      private awsBucket: AWSBucketService,
-      private menuService: MenuService,
-      private router: Router,
-      private siteService: SitesService,
-      private electronService: ElectronService,
-      private fb: FormBuilder,
+      private awsBucket      : AWSBucketService,
+      private menuService    : MenuService,
+
       )
-  {
-
-    if (this.electronService) {
-      if (this.electronService.remote != null)
-      {
-        this.appName = 'electron '
-        this.isApp = true
-      } else
-      {
-        this.isApp = false
-        if (this.platForm == 'android') {
-          this.isApp = true;
-        }
-      }
-    }
-
-    this.initForm();
-    this.section = 1;
-    this.href = this.router.url;
-    this.initClass('constructor');
-  }
+  {  }
 
   initClass(placement) {
     if (this.href === '/brandslist') {
@@ -205,6 +187,11 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit()  {
+    this.isApp =  this.platformService.isApp();
+    this.initForm();
+    this.section = 1;
+    this.href = this.router.url;
+    this.initClass('constructor');
     await this.getBucket()
     const site = this.siteService.getAssignedSite();
     const searchModel       = {} as ClientSearchModel;

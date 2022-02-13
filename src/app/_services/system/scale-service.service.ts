@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
+import { PlatformService } from './platform.service';
+import { IPCService } from './ipc.service';
 
 export interface ScaleInfo {
   value        : string;
@@ -35,38 +37,49 @@ export class ScaleService  {
 
   constructor(
     private electronService: ElectronService,
+    private platformService: PlatformService,
+    private IPCService :     IPCService,
     ) {
-    this.readScaleEvent();
+      return
+      if (!this.IPCService.isElectronApp) { return }
+      this.readScaleEvent();
   }
 
   readScaleEvent() {
-    const scaleSetup = this.getScaleSetup()
-    if (!scaleSetup || !scaleSetup.enabled) { return }
-    if (this.electronService.remote != null) {
-    this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
-        {
-          const info         = {} as ScaleInfo;
-          info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
-          info.type          = args.type;
-          info.mode          = args.mode;
-          info.scaleStatus   = args.status;
-          info.valueToDivide = args.valueToDivide
-          this.updateSubscription(info)
-        },
-      );
+    try {
+      const scaleSetup = this.getScaleSetup()
+      if (!scaleSetup || !scaleSetup.enabled) { return }
+      if (this.platformService.isAppElectron) {
+      this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+          {
+            const info         = {} as ScaleInfo;
+            info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
+            info.type          = args.type;
+            info.mode          = args.mode;
+            info.scaleStatus   = args.status;
+            info.valueToDivide = args.valueToDivide
+            this.updateSubscription(info)
+          },
+        );
+      }
+    } catch (error) {
+      console.log('error read scale' , error)
     }
   }
 
   async readScale() {
-    if (this.isElectronServiceInitiated) {
-      const scaleInfo = this.getScaleInfo();
-      this.updateSubscription(scaleInfo)
-      return  scaleInfo
-    }
+    if (!this.IPCService.isElectronApp) { return }
+
+    const scaleInfo = this.getScaleInfo();
+    if (!scaleInfo) { return }
+    this.updateSubscription(scaleInfo)
+    return  scaleInfo
+
     return  null;
   }
 
   getScaleWeighFormat(value: string, decimalPlaces: number): string {
+    if (!this.IPCService.isElectronApp) { return }
     try {
       // console.log(value)
       value = value.replace('[', '')
@@ -84,13 +97,16 @@ export class ScaleService  {
   }
 
   getScaleInfo(): ScaleInfo {
-    this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
-      return scaleInfo
-    });
+    if (this.IPCService.isElectronApp) {
+      this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
+        return scaleInfo
+      });
+    }
     return null
   }
 
   getScaleSetup(): ScaleSetup {
+    if (!this.IPCService.isElectronApp) { return }
     let scaleSetup =  JSON.parse(localStorage.getItem('ScaleSetup')) as ScaleSetup;
 
     if (scaleSetup) { return scaleSetup; }
@@ -104,6 +120,7 @@ export class ScaleService  {
   }
 
   initializeScaleSetup() {
+    if (!this.IPCService.isElectronApp) { return }
     let scaleSetup = {}  as ScaleSetup;
     scaleSetup.decimalPlaces      = 2;
     scaleSetup.timer              = 500;

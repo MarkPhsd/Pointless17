@@ -5,12 +5,15 @@ import { IpcRenderer } from 'electron';
   providedIn: 'root'
 })
 export class IPCService {
+
   private _ipc: IpcRenderer | undefined;
   private isElectron: boolean;
 
-  get isElectronApp() { return this.isElectron}
+  get isElectronApp() { return this.isElectron }
 
   constructor() {
+    return
+
     if (window.require) {
       try {
         this._ipc       = window.require('electron').ipcRenderer;
@@ -21,5 +24,11 @@ export class IPCService {
     } else {
       console.warn('Electron\'s IPC was not loaded');
     }
+   }
+
+   listPrinters() {
+     if (this.isElectron && this._ipc) {
+      // this._ipc.
+     }
    }
 }

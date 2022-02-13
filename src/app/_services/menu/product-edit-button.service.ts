@@ -112,8 +112,6 @@ export class ProductEditButtonService {
     const site = this.siteService.getAssignedSite();
     product = await this.menuService.getProduct(site, id).pipe().toPromise();
 
-    console.log('product', product);
-
     if (product) {
       if (!product.prodModifierType) {
         product.prodModifierType = 1
