@@ -50,13 +50,17 @@ export class ApiStoredValueComponent implements OnInit {
 
   //for electrononly
   initRender() {
-    if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
-      this.ngZone.run(() => {
-          this.version = arg
-          this.electronVersion = arg
-      });
-    })
+    try {
+      if (!this.electronService.isElectronApp) { return }
+      this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
+        this.ngZone.run(() => {
+            this.version = arg
+            this.electronVersion = arg
+        });
+      })
+    } catch (error) {
+      this.version  = 'unknown error'
+    }
   }
 
   ngOnInit(): void {

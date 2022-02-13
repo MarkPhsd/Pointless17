@@ -241,7 +241,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       .subscribe();
     }
 
-    if (this.platForm != 'web') {
+    if (this.platForm == 'android') {
       setTimeout(()=> {
         this.input.nativeElement.focus();
         Keyboard.hide();
@@ -253,7 +253,9 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.initSearchModel();
     this.input.nativeElement.value = ''
     this.input.nativeElement.focus();
-    Keyboard.hide();
+    if (this.platForm == 'android') {
+      Keyboard.hide();
+    }
   }
 
   async getBucket() {

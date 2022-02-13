@@ -7,7 +7,6 @@ import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 import { SystemService } from 'src/app/_services/system/system.service';
 import { AuthenticationService } from 'src/app/_services';
 
-
 @Component({
   selector: 'app-cache-settings',
   templateUrl: './cache-settings.component.html',

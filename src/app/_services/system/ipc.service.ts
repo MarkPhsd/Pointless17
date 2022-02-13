@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IpcRenderer } from 'electron';
+import { ScaleInfo } from './scale-service.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,6 @@ export class IPCService {
   get isElectronApp() { return this.isElectron }
 
   constructor() {
-    return
-
     if (window.require) {
       try {
         this._ipc       = window.require('electron').ipcRenderer;
@@ -31,4 +30,26 @@ export class IPCService {
       // this._ipc.
      }
    }
+
+   readScale(): ScaleInfo {
+     if (this._ipc) {
+      //  this._ipc.on('scaleReadInfo')
+       this._ipc.on('scaleInfo', (event, scaleInfo) => {
+        return scaleInfo
+      });
+    }
+    return null
+   }
+
+   getVersion(): ScaleInfo {
+    if (this._ipc) {
+     //  this._ipc.on('scaleReadInfo')
+      this._ipc.on('getVersion', (event, scaleInfo) => {
+       return scaleInfo
+     });
+   }
+   return null
+  }
+
+
 }

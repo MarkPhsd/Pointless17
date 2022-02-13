@@ -40,7 +40,6 @@ export class ScaleService  {
     private platformService: PlatformService,
     private IPCService :     IPCService,
     ) {
-      return
       if (!this.IPCService.isElectronApp) { return }
       this.readScaleEvent();
   }
@@ -75,7 +74,6 @@ export class ScaleService  {
     this.updateSubscription(scaleInfo)
     return  scaleInfo
 
-    return  null;
   }
 
   getScaleWeighFormat(value: string, decimalPlaces: number): string {
@@ -98,9 +96,11 @@ export class ScaleService  {
 
   getScaleInfo(): ScaleInfo {
     if (this.IPCService.isElectronApp) {
-      this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
-        return scaleInfo
-      });
+
+      // this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
+      //   return scaleInfo
+      // });
+      return this.IPCService.readScale()
     }
     return null
   }
@@ -121,7 +121,7 @@ export class ScaleService  {
 
   initializeScaleSetup() {
     if (!this.IPCService.isElectronApp) { return }
-    let scaleSetup = {}  as ScaleSetup;
+    let scaleSetup                  = {}  as ScaleSetup;
     scaleSetup.decimalPlaces      = 2;
     scaleSetup.timer              = 500;
     scaleSetup.enabled            = true;
