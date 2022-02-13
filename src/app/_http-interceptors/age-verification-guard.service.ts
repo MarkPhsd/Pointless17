@@ -1,14 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-
-import {Location} from '@angular/common';
+import { Router,  ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { ElectronService } from 'ngx-electron';
-import { SettingsService } from '../_services/system/settings.service';
-import { SitesService } from '../_services/reporting/sites.service';
-import { ISetting } from '../_interfaces';
 import { AppInitService } from '../_services/system/app-init.service';
+import { PlatformService } from '../_services/system/platform.service';
 
 @Injectable({ providedIn: 'root' })
 
@@ -21,10 +16,8 @@ export class AgeVerificationGuardService {
 
   constructor(
     private router: Router,
-    private authenticationService: AuthenticationService,
     private electronService: ElectronService,
-    private sitesService: SitesService,
-    private settingsService: SettingsService,
+    private platFormService: PlatformService,
     private appInitService  : AppInitService,
 ) { }
 
@@ -66,9 +59,9 @@ export class AgeVerificationGuardService {
       return
     }
 
-    const result = this.electronService.remote
-    const isElectron = (result != null);
-
+    // const result = this.electronService.remote
+    // const isElectron = (result != null);
+    const isElectron = this.platFormService.isAppElectron
     if (isElectron) {
       this.platForm = 'electron'
       this.isAppElectron = true;

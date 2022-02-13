@@ -18,15 +18,11 @@ export class PrintingAndroidService {
   receiptStyles         : ISetting;
   item                  : IInventoryAssignment;
   order                 : IPOSOrder
-  isElectronServiceInitiated = false
 
   constructor(  private electronService: ElectronService,
                 private snack: MatSnackBar,
                 private btPrintingService: BtPrintingService,
               ) {
-    if (this.electronService.remote != null) {
-      this.isElectronServiceInitiated = true
-    }
   }
 
   async printAndroidImage(image: any, macAddress: string) {
