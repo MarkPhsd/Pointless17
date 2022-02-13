@@ -47,12 +47,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
-      if (user) {
-        this.loggedInUser = user
-      }
-      if (!user) {
-        this.loggedInUser = null;
-      }
+      if (user)  { this.loggedInUser = user }
+      if (!user) { this.loggedInUser = null; }
     })
 
     this._loginStatus = this.userSwitchingService.loginStatus$.subscribe( data => {
@@ -110,7 +106,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
-
   }
 
   redirects() {

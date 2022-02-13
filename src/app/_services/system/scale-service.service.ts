@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from './platform.service';
-import { IPCService } from './ipc.service';
+import { IPCService } from 'src/app/_services/system/ipc.service';
 
 export interface ScaleInfo {
   value        : string;

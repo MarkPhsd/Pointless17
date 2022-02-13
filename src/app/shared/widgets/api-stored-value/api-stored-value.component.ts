@@ -5,6 +5,7 @@ import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
+import { IPCService } from 'src/app/_services/system/ipc.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
@@ -20,18 +21,19 @@ export class ApiStoredValueComponent implements OnInit {
   message        : string;
   isElectronApp  : boolean;
   electronVersion: string;
-  isApp: boolean;
+  isApp          : boolean;
 
   constructor(
       private router               : Router,
-      public  platFormService       : PlatformService,
+      public  platFormService      : PlatformService,
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
-      public  electronService       : ElectronService,
+      public  electronService      : ElectronService,
       private platformService      : PlatformService,
       private siteService          : SitesService,
-      private ngZone: NgZone
+      private ngZone               : NgZone,
+      private IPCService           : IPCService,
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
@@ -51,8 +53,8 @@ export class ApiStoredValueComponent implements OnInit {
   //for electrononly
   initRender() {
     try {
-      if (!this.electronService.isElectronApp) { return }
-      this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
+      if (!this.platFormService.isAppElectron) { return }
+      this.IPCService._ipc.invoke('getVersion', (event, arg) => {
         this.ngZone.run(() => {
             this.version = arg
             this.electronVersion = arg
@@ -71,6 +73,7 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   async  setAPIUrl(){
+
     await this.clearUserSettings();
     this.authenticationService.clearUserSettings()
 
@@ -90,23 +93,32 @@ export class ApiStoredValueComponent implements OnInit {
 
   checkForUpdate() {
     if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.send('getVersion', 'ping');
-    this.electronService.ipcRenderer.addListener('getVersion', (event, pong) => {
+    this.IPCService._ipc.send('getVersion', 'ping');
+
+    this.IPCService._ipc.addListener('getVersion', (event, pong) => {
       this.electronVersion = event;
       this.version = event;
     });
   }
 
   getVersion() {
-    if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.send('getVersion', 'ping');
+    try{
+      if (!this.platFormService.isAppElectron) { return }
+      this.IPCService._ipc.sendSync('getVersion', 'ping');
+    } catch (error) {
+      this.version  = error
+    }
   }
 
   getPong(): any {
-    if (!this.electronService.isElectronApp) { return }
-    this.electronService.ipcRenderer.addListener('asynchronous-message', (event, pong) => {
-    });
-    return null
+    try{
+      if (!this.electronService.isElectronApp) { return }
+        this.IPCService._ipc.addListener('asynchronous-message', (event, pong) => {
+      });
+      return null
+    } catch (error) {
+      this.version  = error
+    }
   }
 }
 

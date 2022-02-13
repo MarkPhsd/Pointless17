@@ -1,5 +1,7 @@
-import { Component,   Output,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, ChangeDetectorRef,ViewChildren, QueryList } from '@angular/core';
+import { Component,Output,
+         ViewChild ,ElementRef,
+         AfterViewInit, EventEmitter,OnDestroy,
+          } from '@angular/core';
 import { OrdersService } from 'src/app/_services';
 import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -60,7 +62,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
   {
     this.initForm();
     this.initSubscriptions();
-    if (this.platForm != 'web') {
+    if (this.platForm != 'android') {
       this.keyboardDisplayOn = true
       Keyboard.hide()
     }
@@ -95,7 +97,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
   }
 
   hideKeyboardTimeOut() {
-    if (this.platForm != 'web') {
+    if (this.platForm != 'android') {
       setTimeout(()=> {
           this.input.nativeElement.focus();
           Keyboard.hide()

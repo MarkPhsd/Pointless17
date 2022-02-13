@@ -5,9 +5,10 @@ import { ScaleInfo } from './scale-service.service';
 @Injectable({
   providedIn: 'root'
 })
+
 export class IPCService {
 
-  private _ipc: IpcRenderer | undefined;
+  public _ipc: IpcRenderer | undefined;
   private isElectron: boolean;
 
   get isElectronApp() { return this.isElectron }
@@ -33,7 +34,6 @@ export class IPCService {
 
    readScale(): ScaleInfo {
      if (this._ipc) {
-      //  this._ipc.on('scaleReadInfo')
        this._ipc.on('scaleInfo', (event, scaleInfo) => {
         return scaleInfo
       });
@@ -41,15 +41,23 @@ export class IPCService {
     return null
    }
 
-   getVersion(): ScaleInfo {
+   getVersion(): any {
     if (this._ipc) {
-     //  this._ipc.on('scaleReadInfo')
-      this._ipc.on('getVersion', (event, scaleInfo) => {
-       return scaleInfo
+      this._ipc.on('getVersion', (event, data) => {
+       return data
      });
    }
    return null
   }
 
+  requestVersion(): any {
+    if (this._ipc) {
+
+      this._ipc.on('getVersion', (event, data) => {
+       return data
+     });
+   }
+   return null
+  }
 
 }

@@ -50,7 +50,7 @@ export class PlatformService {
   }
 
   constructor(
-      private ipcService                 : IPCService,
+      private ipcService          : IPCService,
       private electronService     : ElectronService,) {
 
     this.initAPIUrl();

@@ -241,6 +241,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
       .subscribe();
     }
 
+
     if (this.platForm == 'android') {
       setTimeout(()=> {
         this.input.nativeElement.focus();
