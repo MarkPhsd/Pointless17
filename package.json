@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.0.106",
+  "version": "1.0.186",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -72,6 +72,7 @@
     "@tensorflow-models/coco-ssd": "^2.2.2",
     "@tensorflow/tfjs": "^3.7.0",
     "@tinymce/tinymce-angular": "^4.2.4",
+    "@types/electron": "^1.6.10",
     "@types/google-maps": "^3.2.3",
     "@types/numeral": "^2.0.1",
     "@types/underscore": "^1.11.2",

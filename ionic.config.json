@@ -2,7 +2,7 @@
   "defaultProject": "CCSApp",
   "projects": {
     "CCSApp": {
-      "name": "CCSApp",
+      "name": "Pointless POS",
       "integrations": {
         "capacitor": {},
         "cordova": {}

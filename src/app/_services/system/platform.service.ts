@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Capacitor, Plugins } from '@capacitor/core';
+import { IClipboardService } from 'ag-grid-community';
 import { ElectronService } from 'ngx-electron';
+import { IPCService } from './ipc.service';
 
 export interface platFormInfo {
   platForm            : string;
@@ -49,6 +51,7 @@ export class PlatformService {
   }
 
   constructor(
+      private ipcService                 : IPCService,
       private electronService     : ElectronService,) {
 
     this.initAPIUrl();
@@ -74,7 +77,7 @@ export class PlatformService {
         this.platFormInfo.androidApp = true
         this.platFormInfo.platForm = 'android'
       }
-      if (this.electronService.isElectronApp) {
+      if (this.ipcService.isElectronApp) {
         this.platFormInfo.isAppElectron = true
         this.platFormInfo.platForm = 'electron'
       }

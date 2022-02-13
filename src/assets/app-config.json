@@ -1,5 +1,5 @@
 {
-  "apiUrl": "https://localhost:44309/api",
+  "apiUrl": "https://naturesllmed.servemp3.com:4444/api",
   "useAppGate" : false,
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",
