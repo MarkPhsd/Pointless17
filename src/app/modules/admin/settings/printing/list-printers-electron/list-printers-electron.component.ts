@@ -19,9 +19,9 @@ export class ListPrintersElectronComponent implements OnInit {
               private printingService: PrintingService) { }
 
   ngOnInit(): void {
-    // if (this.electronService.remote != null) {
-    //   this.isElectronServiceInitiated = true
-    // }
+    if (this.electronService.remote != null) {
+      this.isElectronServiceInitiated = true
+    }
     // if (this.isElectronServiceInitiated) {
     //   this.listPrinters();
     // }
