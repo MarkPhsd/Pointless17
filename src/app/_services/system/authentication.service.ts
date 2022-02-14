@@ -147,7 +147,7 @@ export class AuthenticationService {
 
     updatePassword(user: IUser): any {
       let url = `${this.apiUrl}/users/updatePassword`
-      return this.http.post<any>(url, { token: user.resetCode, userName: user.username, password: user.password } )
+      return this.http.post<any>(url, { token: user.token, userName: user.username, password: user.password } )
       .subscribe(
           data => {
           return "Password updated.";
@@ -160,7 +160,7 @@ export class AuthenticationService {
 
     _updatePassword(user: IUser) {
       const url = `${this.apiUrl}/users/updatePassword`
-      return this.http.post<any>(url, { token: user.resetCode, userName: user.username, password: user.password } )
+      return this.http.post<any>(url, { token: user.token, userName: user.username, password: user.password } )
       .subscribe(
           data => {
           return "Password updated.";

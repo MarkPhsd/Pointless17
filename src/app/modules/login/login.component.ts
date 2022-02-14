@@ -119,6 +119,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   setAPIAlt() {
     if (this.platformService.isApp())  {
+      console.log('counter', this.counter)
       this.counter  = this.counter +1
       if (this.counter > 5) {
         this.counter = 0;
@@ -273,12 +274,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe(
         user =>
         {
+          // console.log('user', user)
           this.initForm();
           if (user) {
-            if (user.message === 'failed') {
-              // this.userSwitchingService.updateLoginStatus(1)
+
+            if (!user || user.message === 'failed' || (user.errorMessage  && user.errorMessage != '') || ( user.user && user.user.errorMessage)) {
               this.updateLoginStatus(1)
               this.authenticationService.updateUser(null);
+              console.log('error no user')
               return
             }
 

@@ -14,25 +14,7 @@ export class IPCService {
   get isElectronApp() { return this.isElectron }
 
   constructor() {
-    if ((window).require) {
-      try {
-<<<<<<< HEAD
-
-      } catch (e) {
-        // throw e;
-    }
-  }}
-=======
-        this._ipc       = window.require('electron').ipcRenderer;
-        this.isElectron = true;
-      } catch (e) {
-        throw e;
-      }
-    } else {
-      console.warn('Electron\'s IPC was not loaded');
-    }
    }
->>>>>>> parent of 6173ff66... Not working
 
    listPrinters() {
      if (this.isElectron && this._ipc) {

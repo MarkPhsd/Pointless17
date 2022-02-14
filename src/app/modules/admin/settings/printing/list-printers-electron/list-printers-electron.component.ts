@@ -11,26 +11,27 @@ export class ListPrintersElectronComponent implements OnInit {
 
   @Output() outputPrinterName   :      EventEmitter<any> = new EventEmitter();
   @Input()  printerList         : any;
-  isElectronServiceInitiated    : boolean;
+  isElectronApp    : boolean;
 
   @Input()  printerName         : string
 
   constructor(private electronService: ElectronService,
+
               private printingService: PrintingService) { }
 
   ngOnInit(): void {
-    // if (this.electronService.remote != null) {
-    //   this.isElectronServiceInitiated = true
-    // }
-    // if (this.isElectronServiceInitiated) {
-    //   this.listPrinters();
-    // }
-    console.log('')
+
+    this.isElectronApp = this.electronService.isElectronApp;
+
+    if (this.isElectronApp) {
+      this.listPrinters();
+    }
   }
 
-  // listPrinters(): any {
-  //   this.printerList = this.printingService.listPrinters();
-  // }
+  listPrinters(): any {
+    this.printerList = this.printingService.listPrinters();
+    console.log('printerList', this.printerList)
+  }
 
   emitPrinter() {
     this.outputPrinterName.emit(this.printerName)

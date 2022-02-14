@@ -1,5 +1,5 @@
-
-<div *ngIf="isElectronServiceInitiated">
+isElectronServiceInitiated : {{  isElectronApp}}
+<div *ngIf="isElectronApp">
   <mat-form-field appearance="outline">
     <mat-label><ng-content></ng-content></mat-label>
     <mat-select
