@@ -49,7 +49,8 @@ export class ScaleService  {
       const scaleSetup = this.getScaleSetup()
       if (!scaleSetup || !scaleSetup.enabled) { return }
       if (this.platformService.isAppElectron) {
-      this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+
+      this.electronService.ipcRenderer.on('readScale', (event, args) =>
           {
             const info         = {} as ScaleInfo;
             info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
