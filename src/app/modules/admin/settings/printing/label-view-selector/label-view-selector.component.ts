@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { IProduct, ISetting } from 'src/app/_interfaces';
 import { Observable } from 'rxjs';
+import { ElectronService } from 'ngx-electron';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -42,7 +43,7 @@ export class LabelViewSelectorComponent implements OnInit {
     }
   }
 
-  constructor(
+  constructor( private electronService  : ElectronService,
               private snack             : MatSnackBar,
               private settingService    : SettingsService,
               private siteService       : SitesService,

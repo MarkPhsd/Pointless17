@@ -13,5 +13,4 @@ module.exports = {
           winreg: false,
       },
   },
-  target: 'electron-renderer'
 }
