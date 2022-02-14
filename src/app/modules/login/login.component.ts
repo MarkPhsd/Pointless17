@@ -10,6 +10,7 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { Subscription } from 'rxjs';
+import { IPCService } from 'src/app/_services/system/ipc.service';
 
 @Component({
     selector   : 'login-dashboard',
@@ -81,6 +82,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private siteService          : SitesService,
         public platformService       : PlatformService,
         private appInitService       : AppInitService,
+        private ipcService           : IPCService,
     )
   {
     this.redirects();
@@ -118,6 +120,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   setAPIAlt() {
+    const result = this.ipcService.isElectronApp
+    this.router.navigate(['/apisetting']);
     if (this.platformService.isApp())  {
       this.counter  = this.counter +1
       if (this.counter > 5) {

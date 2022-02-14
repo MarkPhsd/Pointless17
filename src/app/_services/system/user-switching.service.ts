@@ -15,7 +15,7 @@ import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
 import { EncryptionService } from '../encryption/encryption.service';
 import { BalanceSheetMethodsService } from '../transactions/balance-sheet-methods.service';
-import { ElectronService } from 'ngx-electron';
+import { IPCService } from './ipc.service';
 
 export interface ElectronDimensions {
   height: string;
@@ -67,7 +67,7 @@ export class UserSwitchingService {
     private route           : ActivatedRoute,
     private platformService : PlatformService,
     private encryptionService: EncryptionService,
-    private electronService: ElectronService
+    private electronService: IPCService
   ) {
     this.initSubscriptions();
     this.initializeAppUser();

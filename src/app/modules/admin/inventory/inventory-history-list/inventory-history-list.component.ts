@@ -1,16 +1,12 @@
-import { Component,  EventEmitter,  Inject,  Input,  OnInit, Optional, Output, } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { Component,  EventEmitter,  Inject,  Input,  OnInit, Output, } from '@angular/core';
+import { MatDialog, } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
-import { InventoryAdjustmentNoteComponent } from 'src/app/shared/widgets/adjustment-notes/adjustment-note/adjustment-note.component';
 import { MoveInventoryLocationComponent } from '../move-inventory-location/move-inventory-location.component';
-import { ProducteditComponent } from '../../products/productedit/productedit.component';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
-import { SettingsService } from 'src/app/_services/system/settings.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -19,6 +15,7 @@ import { InventoryEditButtonService } from 'src/app/_services/inventory/inventor
 import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
 import { switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IPCService } from 'src/app/_services/system/ipc.service';
 
 @Component({
   selector: 'app-inventory-history-list',
@@ -57,15 +54,14 @@ export class InventoryHistoryListComponent implements OnInit {
        private dialog            : MatDialog,
        private inventoryAssignmentService: InventoryAssignmentService,
        private siteService       : SitesService,
-       private settingService    : SettingsService,
        private fb                : FormBuilder,
-       private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,
        private menuService       : MenuService,
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
        private _snackBar         : MatSnackBar,
+       private ipcService        : IPCService,
 
        )
   {
@@ -105,7 +101,7 @@ export class InventoryHistoryListComponent implements OnInit {
     }
 
     this.initForm()
-    this.electronEnabled =  this.electronService.isElectronApp
+    this.electronEnabled =  this.ipcService.isElectronApp
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
   }

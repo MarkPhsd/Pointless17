@@ -13,7 +13,6 @@ import { IBalanceSheet } from './balance-sheet.service';
 import { PlatformService } from '../system/platform.service';
 import { Router } from '@angular/router';
 import { SitesService } from '../reporting/sites.service';
-import { timeStamp } from 'node:console';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -89,7 +88,13 @@ export class OrdersService {
     this.setStateOrder(order);
 
     const site = this.siteService.getAssignedSite();
-    if (order) {
+
+    // if (order && order.id) {
+    //   this.notificationEvent('Order Not initialized.', 'Alert')
+    //   return
+    // }
+
+    if (order && order.id) {
       this.claimOrder(site, order.id.toString(), order.history).subscribe(result => {
         this.orderClaimed = true
       })

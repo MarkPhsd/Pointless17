@@ -1,6 +1,5 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { NgxElectronModule } from 'ngx-electron';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { Printer } from '@ionic-native/printer/ngx';
 import { BrowserModule, Title } from '@angular/platform-browser';
@@ -28,13 +27,10 @@ import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/r
 import { AgGridModule } from 'ag-grid-angular'
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
 import { ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { RouteReuseStrategy } from '@angular/router';
-
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
-
 import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
 import { HttpClientCacheService } from './_http-interceptors/http-client-cache.service';
 import { CacheClientService } from './_http-interceptors/cache-client.service';
@@ -103,7 +99,6 @@ export function init_app(appLoadService: AppInitService) {
     LayoutModule,
     IonicModule.forRoot(),
     NGXMaterialModule,
-    NgxElectronModule,
     ReactiveFormsModule,
     SharedModule
   ],

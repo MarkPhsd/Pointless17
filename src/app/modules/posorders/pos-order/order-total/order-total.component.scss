@@ -1,3 +1,5 @@
+@import "/src/mixins.scss";
+
 .transaction-data-side-panel {
   display: grid;
   grid-template-columns: 60px 1fr;
@@ -7,18 +9,12 @@
   overflow-y: auto;
   overflow-x: hidden;
   font-size: larger;
+  @include for-phone-only  {
+    font-size: .8em;
+  }
 }
 
-// .transaction-data {
-//   display: grid;
-//   grid-template-columns: 1fr 1fr;
-//   // width: 300px;
-//   border-radius: 3px;
-//   margin: 5px 5px ;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-//   font-size: larger;
-// }
+
 .transaction-data {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -28,15 +24,17 @@
   overflow-y: auto;
   overflow-x: hidden;
   font-size: larger;
+  @include for-phone-only  {
+    font-size: .8em;
+  }
 }
 
 .totals {
   font-size     : 1em;
-  // white-space   : nowrap;
-  // overflow      : hidden;
-  // text-overflow : ellipsis;
-  // text-transform: capitalize;
   float         : right;
   align-items   : flex-end;
   text-align    : right;
+  @include for-phone-only  {
+    font-size:1.1em;
+  }
 }

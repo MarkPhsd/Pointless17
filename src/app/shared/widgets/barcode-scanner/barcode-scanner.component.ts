@@ -9,7 +9,6 @@ import { Plugins} from '@capacitor/core';
 import { CameraPreviewOptions }  from '@capacitor-community/camera-preview';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import '@capacitor-community/camera-preview';
-import { environment } from 'src/environments/environment';
 
 const { CameraPreview } = Plugins;
 // https://medium.com/cashify-engineering/barcode-reader-using-google-mobile-vision-88b3e9f31668

@@ -10,7 +10,6 @@ import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 

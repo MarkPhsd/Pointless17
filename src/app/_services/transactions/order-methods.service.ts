@@ -503,9 +503,7 @@ export class OrderMethodsService {
     if (url === '/pos-orders') {
       // this.router.navigate(['app-main-menu'])
     }
-
   }
-
 
   closeOrder(site: ISite, order: IPOSOrder) {
     if (order) {

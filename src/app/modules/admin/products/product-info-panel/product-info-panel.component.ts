@@ -1,18 +1,16 @@
 import { Component,  Input,  OnInit } from '@angular/core';
-import { MatDialog} from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { ActivatedRoute, } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
-import { SettingsService } from 'src/app/_services/system/settings.service';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { ElectronService } from 'ngx-electron';
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { MenuService } from 'src/app/_services';
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IPCService } from 'src/app/_services/system/ipc.service';
 
 @Component({
   selector: 'app-product-info-panel',
@@ -45,12 +43,12 @@ export class ProductInfoPanelComponent implements OnInit {
        private menuService       : MenuService,
        private siteService       : SitesService,
        private fb                : FormBuilder,
-       private electronService   : ElectronService,
        private renderingService  : RenderingService,
        private printingService   : PrintingService,
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
        private _snackBar         : MatSnackBar,
+       private ipcService        : IPCService,
        )
   {
     // this.toggleLabelEvents = false;
@@ -92,7 +90,7 @@ export class ProductInfoPanelComponent implements OnInit {
     }
 
     this.initForm()
-    this.electronEnabled =  this.electronService.isElectronApp
+    this.electronEnabled =  this.ipcService.isElectronApp
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
   }

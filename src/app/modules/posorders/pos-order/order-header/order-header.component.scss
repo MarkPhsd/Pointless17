@@ -1,13 +1,5 @@
-// .transaction-data {
-//   display: grid;
-//   grid-template-columns: 60px 1fr;
-//   // width: 300px;
-//   border-radius: 3px;
-//   margin: 5px 5px ;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-//   font-size: larger;
-// }
+@import "/src/mixins.scss";
+
 
 .transaction-data {
   display: grid;
@@ -18,4 +10,18 @@
   overflow-y: auto;
   overflow-x: hidden;
   font-size: larger;
+}
+
+.total-header {
+  font-size: 1.2em;
+  @include for-phone-only  {
+    font-size: 1.1em;
+  }
+}
+
+.total-card {
+  font-size: 1em;
+  @include for-phone-only  {
+    font-size: .8em;
+  }
 }

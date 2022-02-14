@@ -7,7 +7,6 @@ import { trigger, transition, animate, style, query, stagger } from '@angular/an
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';

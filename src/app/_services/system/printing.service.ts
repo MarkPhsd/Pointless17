@@ -5,7 +5,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
 import  domtoimage from 'dom-to-image';
@@ -19,6 +18,7 @@ import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { OrdersService } from '..';
 import { UserAuthorizationService } from './user-authorization.service';
+import { IPCService } from './ipc.service';
 
 export interface printOptions {
   silent: true;
@@ -42,7 +42,7 @@ export class PrintingService {
   private _printReady       = new BehaviorSubject<boolean>(null);
   public printReady$        = this._printReady.asObservable();
 
-  constructor(  private electronService   : ElectronService,
+  constructor(  private ipcService        : IPCService,
                 private snack             : MatSnackBar,
                 private settingService    : SettingsService,
                 private siteService       : SitesService,

@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, RendererStyleFlags2 } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/_services/system/settings.service';

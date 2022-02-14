@@ -56,6 +56,14 @@
           },
 
           "configurations": {
+            "dev": {
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "buildOptimizer": false,
+              "sourceMap": true,
+              "optimization": false,
+              "namedChunks": true
+           },
             "production": {
               "fileReplacements": [
                 {
@@ -93,6 +101,9 @@
             "browserTarget": "CCSApp:build"
           },
           "configurations": {
+            "dev": {
+              "browserTarget": "CCSApp:build:dev"
+            },
             "production": {
               "browserTarget": "CCSApp:build:production"
             },

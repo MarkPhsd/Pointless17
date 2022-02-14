@@ -3,10 +3,10 @@ import * as _ from "lodash";
 import { ISetting,  } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { BtPrintingService } from './bt-printing.service';
 import  EscPosEncoder  from 'esc-pos-encoder-ionic';
+import { IPCService } from './ipc.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class PrintingAndroidService {
   order                 : IPOSOrder
   isElectronServiceInitiated = false
 
-  constructor(  private electronService: ElectronService,
+  constructor(  private electronService: IPCService,
                 private snack: MatSnackBar,
                 private btPrintingService: BtPrintingService,
               ) {

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
@@ -15,7 +14,7 @@ export class ListPrintersElectronComponent implements OnInit {
 
   @Input()  printerName         : string
 
-  constructor(private electronService: ElectronService,
+  constructor(
               private printingService: PrintingService) { }
 
   ngOnInit(): void {

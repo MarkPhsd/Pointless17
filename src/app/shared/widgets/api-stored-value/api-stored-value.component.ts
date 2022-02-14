@@ -1,7 +1,7 @@
 import { Component, OnInit,NgZone  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
@@ -23,13 +23,14 @@ export class ApiStoredValueComponent implements OnInit {
   electronVersion: string;
   isApp          : boolean;
 
+
   constructor(
       private router               : Router,
       public  platFormService      : PlatformService,
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
-      public  electronService      : ElectronService,
+      private matSnack             : MatSnackBar,
       private platformService      : PlatformService,
       private siteService          : SitesService,
       private ngZone               : NgZone,
@@ -46,7 +47,6 @@ export class ApiStoredValueComponent implements OnInit {
 
     this.initRender();
     this.getVersion();
-    this.isElectronApp = this.electronService.isElectronApp;
     this.isApp = this.platformService.isApp();
   }
 
@@ -92,13 +92,21 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   checkForUpdate() {
-    if (!this.electronService.isElectronApp) { return }
+    if (!this.IPCService.isElectronApp) { return }
     this.IPCService._ipc.send('getVersion', 'ping');
-
     this.IPCService._ipc.addListener('getVersion', (event, pong) => {
       this.electronVersion = event;
       this.version = event;
     });
+  }
+
+  checkNode() {
+    this.matSnack.open('checkNode ' + this.IPCService.isNodeRequired, 'status')
+  }
+
+  checkIfIsElectron() {
+    this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
+
   }
 
   getVersion() {
@@ -112,7 +120,7 @@ export class ApiStoredValueComponent implements OnInit {
 
   getPong(): any {
     try{
-      if (!this.electronService.isElectronApp) { return }
+      if (!this.IPCService.isElectronApp) { return }
         this.IPCService._ipc.addListener('asynchronous-message', (event, pong) => {
       });
       return null
