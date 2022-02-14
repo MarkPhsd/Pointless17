@@ -1,6 +1,5 @@
 import { Component, OnInit,NgZone  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
@@ -30,11 +29,11 @@ export class ApiStoredValueComponent implements OnInit {
       private fb                   : FormBuilder,
       private authenticationService: AuthenticationService,
       private appInitService       : AppInitService,
+      public  electronService      : ElectronService,
       private platformService      : PlatformService,
       private siteService          : SitesService,
       private ngZone               : NgZone,
       private IPCService           : IPCService,
-      private matSnack             : MatSnackBar,
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
@@ -45,28 +44,24 @@ export class ApiStoredValueComponent implements OnInit {
       }
     }
 
-    this.isElectronApp = this.IPCService.isElectronApp;
+    this.initRender();
+    this.getVersion();
+    this.isElectronApp = this.electronService.isElectronApp;
     this.isApp = this.platformService.isApp();
   }
 
   //for electrononly
   initRender() {
     try {
-      if (!this.IPCService.isElectronApp) { return }
-
-      if (!this.IPCService._ipc) {
-        this.version = 'IPC not available.';
-        return;
-      }
-      this.IPCService._ipc.send('getVersion', 'ping');
-      this.IPCService._ipc.on('getVersion', (event, arg) => {
+      if (!this.platFormService.isAppElectron) { return }
+      this.IPCService._ipc.invoke('getVersion', (event, arg) => {
         this.ngZone.run(() => {
-            this.version = arg;
-            this.electronVersion = arg;
+            this.version = arg
+            this.electronVersion = arg
         });
       })
     } catch (error) {
-      this.version = error;
+      this.version  = 'unknown error'
     }
   }
 
@@ -96,22 +91,11 @@ export class ApiStoredValueComponent implements OnInit {
     await this.siteService.clearAssignedSite();
   }
 
-
-  checkNode() {
-    this.matSnack.open('checkNode ' + this.IPCService.isNodeRequired, 'status')
-  }
   checkForUpdate() {
-
-    const result = this.IPCService.isElectronApp
-    this.matSnack.open('this result ' + result, 'status')
-    if (!this.isElectronApp) { return }
-
-    this.matSnack.open('Open 2','test')
+    if (!this.electronService.isElectronApp) { return }
     this.IPCService._ipc.send('getVersion', 'ping');
-    console.log('pong2')
-    this.matSnack.open('Open 32','test')
+
     this.IPCService._ipc.addListener('getVersion', (event, pong) => {
-      console.log('pong3', pong)
       this.electronVersion = event;
       this.version = event;
     });
@@ -128,7 +112,7 @@ export class ApiStoredValueComponent implements OnInit {
 
   getPong(): any {
     try{
-      if (!this.IPCService.isElectronApp) { return }
+      if (!this.electronService.isElectronApp) { return }
         this.IPCService._ipc.addListener('asynchronous-message', (event, pong) => {
       });
       return null

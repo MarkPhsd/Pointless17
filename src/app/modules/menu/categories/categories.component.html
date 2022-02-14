@@ -48,8 +48,8 @@
 
                 <div  class="grid-flow">
                   <div *ngFor="let item of categories; let i = index"
-                      >
-                      <div [@listAnimation]="categories.length>0">
+                       [@listAnimation]="categories.length">
+                      <div>
                         <div class="text">{{item.name  | truncateText: 15  }}</div>
                           <div class="grid-item">
                             <img

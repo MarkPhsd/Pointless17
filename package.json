@@ -13,9 +13,9 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with IP": "ng serve --configuration=dev --public-host --host=192.168.0.16 --port=4200",
+    "start with IP": "ng serve --public-host --host=192.168.0.16 --port=4200",
     "startLocal": "ng serve  --host=localhost --port=4200",
-    "build": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all ",
+    "build": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all --sourceMap=true",
     "buildNoSourceMap": "ng build   --configuration production --buildOptimizer=true --outputHashing=all",
     "buildHighMem": "node  --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build ",
     "test": "ng test",
