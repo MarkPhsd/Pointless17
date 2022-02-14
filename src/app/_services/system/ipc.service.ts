@@ -32,17 +32,13 @@ export class IPCService {
    }
 
   constructor() {
-    if (window.require) {
+    if ((window).require) {
       try {
-        this._ipc       = window.require('electron').ipcRenderer;
+
       } catch (e) {
         // throw e;
-      }
-    } else {
-      console.warn('Electron\'s IPC was not loaded');
     }
-   }
-
+  }}
 
    listPrinters() {
     //  if (this.isElectron && this._ipc) {
@@ -52,28 +48,35 @@ export class IPCService {
 
    readScale(): ScaleInfo {
      if (this._ipc) {
-       this._ipc.on('scaleInfo', (event, scaleInfo) => {
-        return scaleInfo
+       this._ipc.on('readScale', (event, data) => {
+        console.log('scaleInfo event', data);
+        console.log('scaleInfo data', data)
+        return data
       });
     }
     return null
    }
 
    getVersion(): any {
-    if (this._ipc) {
-      this._ipc.on('getVersion', (event, data) => {
-       return data
-     });
+      // log.info('Requested Version')
+      if (this._ipc) {
+        this._ipc.on('getVersion', (event, data) => {
+        console.log('getVersion event', event);
+        console.log('getVersion data', data)
+        return data
+      });
    }
    return null
   }
 
   requestVersion(): any {
     if (this._ipc) {
-
       this._ipc.on('getVersion', (event, data) => {
-       return data
-     });
+        console.log('requestVersion  event', event);
+        console.log('requestVersion data', data)
+        return data
+      }
+    );
    }
    return null
   }

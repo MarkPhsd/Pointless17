@@ -1,7 +1,4 @@
 <mat-card fxFlex="100%" *ngIf="isApp">
-  <mat-card-title>
-      <h2>App Setting</h2>
-    </mat-card-title>
   <mat-card-subtitle>
       <h2>You are using the installed Pointless App</h2>
       <h2>Version: {{version}}</h2>
@@ -29,6 +26,12 @@
         </mat-form-field>
       </div>
 
+      <button mat-raised-button
+             (click)="checkForUpdate()">
+        Check Version</button>
+      <button mat-raised-button
+        (click)="checkNode()">
+           Check Node</button>
       <button mat-raised-button color="primary"
       (click)="checkNode()">check Node</button>
 
@@ -41,7 +44,7 @@
       <button mat-raised-button color="primary"
               routerLinkActive="list-item-active"
               routerLink="/login">Exit</button>
-
+      isElectronApp {{isElectronApp}}
   </mat-card-content>
 
 </mat-card>

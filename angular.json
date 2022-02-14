@@ -31,7 +31,8 @@
               "src/assets",
               { "glob": "**/*",
                 "input": "node_modules/tinymce",
-                "output": "/tinymce/" },
+                "output": "/tinymce/"
+              },
               {
                 "glob": "**/*.svg",
                 "input": "node_modules/ionicons/dist/ionicons/svg",
@@ -71,14 +72,16 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "sourceMap"       : true,
-              "optimization"    : true,
-              "buildOptimizer"  : true,
-              "outputHashing"   : "all",
-              "namedChunks"     : false,
-              "aot"             : true,
-              "extractLicenses" : true,
-              "vendorChunk"     : false,
+
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+
               "budgets": [
                 {
                   "type": "initial",

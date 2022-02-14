@@ -68,6 +68,7 @@ export class PlatformService {
     this.platFormInfo.webMode = false
 
     try {
+
       const platForm            = Capacitor.getPlatform();
       this.platFormInfo.platForm = platForm
       if (platForm === 'android') {
@@ -79,6 +80,7 @@ export class PlatformService {
         this.platFormInfo.platForm = 'electron'
       }
       return this.platFormInfo
+
     } catch (error) {
       return this.platFormInfo
     }

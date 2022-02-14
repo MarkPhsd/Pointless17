@@ -98,7 +98,7 @@ export class ScaleService  {
       // this.electronService.ipcRenderer.on('scaleInfo', (event, scaleInfo) => {
       //   return scaleInfo
       // });
-      return this.IPCService.readScale()
+      // return this.IPCService.readScale()
     }
     return null
   }

@@ -53,15 +53,21 @@ export class ApiStoredValueComponent implements OnInit {
   //for electrononly
   initRender() {
     try {
-      if (!this.platFormService.isAppElectron) { return }
-      this.IPCService._ipc.invoke('getVersion', (event, arg) => {
+      if (!this.IPCService.isElectronApp) { return }
+
+      if (!this.IPCService._ipc) {
+        this.version = 'IPC not available.';
+        return;
+      }
+      this.IPCService._ipc.send('getVersion', 'ping');
+      this.IPCService._ipc.on('getVersion', (event, arg) => {
         this.ngZone.run(() => {
-            this.version = arg
-            this.electronVersion = arg
+            this.version = arg;
+            this.electronVersion = arg;
         });
       })
     } catch (error) {
-      this.version  = 'unknown error'
+      this.version = error;
     }
   }
 
@@ -91,18 +97,20 @@ export class ApiStoredValueComponent implements OnInit {
     await this.siteService.clearAssignedSite();
   }
 
+
+  checkNode() {
+    this.matSnack.open('checkNode ' + this.IPCService.isNodeRequired, 'status')
+  }
   checkForUpdate() {
     if (!this.IPCService.isElectronApp) { return }
     this.IPCService._ipc.send('getVersion', 'ping');
     this.IPCService._ipc.addListener('getVersion', (event, pong) => {
+      console.log('pong3', pong)
       this.electronVersion = event;
       this.version = event;
     });
   }
 
-  checkNode() {
-    this.matSnack.open('checkNode ' + this.IPCService.isNodeRequired, 'status')
-  }
 
   checkIfIsElectron() {
     this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
