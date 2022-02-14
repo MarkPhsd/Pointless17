@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -8,11 +8,10 @@ import { ActionSheetController } from '@ionic/angular';
 import { Plugins} from '@capacitor/core';
 import { CameraPreviewOptions }  from '@capacitor-community/camera-preview';
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
-
-const { CameraPreview } = Plugins;
-
 import '@capacitor-community/camera-preview';
 import { environment } from 'src/environments/environment';
+
+const { CameraPreview } = Plugins;
 // https://medium.com/cashify-engineering/barcode-reader-using-google-mobile-vision-88b3e9f31668
 // https://www.ionicanddjangotutorial.com/ionic-qrcode-scanning/
 // https://github.com/DutchConcepts/capacitor-barcode-scanner#usage
@@ -148,12 +147,10 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     const parser$ =  this.dlParserService.parseDriverLicense(site, data)
 
     parser$.subscribe(data => {
-
       if (data.errorMessage || data.message == 'failure') {
         this.notifyEvent(data.errorMessage, data.message)
         return
       }
-
       if (data.id) {
         this.router.navigate(["/profileEditor/", {id: data.id}]);
       }

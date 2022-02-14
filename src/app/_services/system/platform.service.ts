@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Capacitor, Plugins } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { IPCService } from './ipc.service';
 
 export interface platFormInfo {
@@ -12,16 +11,15 @@ export interface platFormInfo {
   webMode             : boolean;
 }
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({providedIn: 'root'})
+
 export class PlatformService {
 
   platFormInfo    = {}  as platFormInfo;
   private _apiUrl       : any;
 
   get isAppElectron() {
-    const info = this.electronService.isElectronApp
+    const info = this.ipcService.isElectronApp
     return  info
   }
 
@@ -51,7 +49,7 @@ export class PlatformService {
 
   constructor(
       private ipcService          : IPCService,
-      private electronService     : ElectronService,) {
+     ) {
 
     this.initAPIUrl();
 
