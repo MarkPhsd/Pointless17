@@ -26,7 +26,7 @@ export class ImageCaptureComponent implements OnInit, OnDestroy {
 
   logger: string;
 
-  scannerButton: boolean = false;
+  scannerButton:    false;
   driversLicense: IDriversLicense;
 
   @ViewChild('video')

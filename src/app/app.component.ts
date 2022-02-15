@@ -52,12 +52,8 @@ export class AppComponent {
 
   ) {
       this.initSubscription();
-
       this.initializeApp();
-      // Initialize BackButton Event.
       this.backButtonEvent();
-
-      //aws settings
       this.awsService.awsBucket();
       this.setTitle();
 
@@ -73,25 +69,6 @@ export class AppComponent {
 
   setTitle() {
     const appTitle = this.titleService.getTitle();
-
-    // this.router
-    //   .events.pipe(
-    //     filter(event => event instanceof NavigationEnd),
-    //     map( outPut => {
-    //       console.log('outPut ', outPut);
-    //       if (this.activatedRoute.firstChild) {
-    //         const child = this.activatedRoute.firstChild;
-    //         const data = child.snapshot.data;
-    //         if (child && data && data.title)
-    //         {
-    //           console.log('rout data', data)
-    //           return appTitle;
-    //         }
-    //       }
-    //     })
-    //   ).subscribe( pageTitle => {
-    //     this.titleService.setTitle(pageTitle);
-    //   });
     try {
       this.router.events.subscribe(event => {
         if(event instanceof NavigationEnd) {

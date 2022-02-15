@@ -19,18 +19,30 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "emitDecoratorMetadata": true,
+    "allowJs": true,
     "target": "es2016",
     "module": "es2020",
-    "types": ["node",  ],
+    "types": ["node"],
     "lib": [
       "es2020",
       "dom"
     ],
-
+    "paths" : {
+      "constants": ["./node_modules/constants-browserify"],
+      "crypto": ["./node_modules/crypto-browserify"],
+      "http": ["./node_modules/stream-http"],
+      "https": ["./node_modules/https-browserify"],
+      "os": ["./node_modules/os-browserify"],
+      "stream": ["./node_modules/stream-browserify"],
+      "zlib": ["./node_modules/browserify-zlib"],
+      "fs": ["./node_modules/fs"],
+      "child_process": ["./node_modules/child_process"],
+      "winreg": ["./node_modules/winreg"]
+    }
   },
   "angularCompilerOptions": {
+    "strictTemplates": true,
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
   }
 }
 

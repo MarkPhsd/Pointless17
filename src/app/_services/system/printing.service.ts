@@ -317,7 +317,7 @@ export class PrintingService {
   printTestLabelElectron(printString: string, printerName: string): boolean {
     const fileName = `c:\\pointless\\print.txt`;
     try {
-      window.fs.writeFileSync(fileName, printString);
+      // window.fs.writeFileSync(fileName, printString);
     } catch (error) {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
       return false
@@ -343,7 +343,7 @@ export class PrintingService {
   printLabelElectron(printString: string, printerName: string): boolean {
     const fileName = `c:\\pointless\\print.txt`;
     try {
-      window.fs.writeFileSync(fileName, printString);
+      // window.fs.writeFileSync(fileName, printString);
     } catch (error) {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
     }

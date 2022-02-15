@@ -62,7 +62,7 @@ import 'zone.js';  // Included with Angular CLI.
  */
  declare global {
   interface Window {
-      fs       : any;
+      // fs       : any;
       // os       : any;
       // zlib     : any;
       // http     : any;

@@ -31,11 +31,10 @@ export class IPCService {
   constructor() {
     // Conditional imports
     if (this.isElectronApp) {
-      this.ipcRenderer = window.require('electron').ipcRenderer;
-      this.webFrame = window.require('electron').webFrame;
-
+      this.ipcRenderer  = window.require('electron').ipcRenderer;
+      this.webFrame     = window.require('electron').webFrame;
       this.childProcess = window.require('child_process');
-      this.fs = window.require('fs');
+      this.fs           = window.require('fs');
       // Notes :
       // * A NodeJS's dependency imported with 'window.require' MUST BE present in `dependencies` of both `app/package.json`
       // and `package.json (root folder)` in order to make it work here in Electron's Renderer process (src folder)
