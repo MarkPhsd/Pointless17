@@ -1,5 +1,5 @@
-import { Component, QueryList, Renderer2, ViewChildren } from '@angular/core';
-import { Router, NavigationEnd, ActivatedRoute,RouterOutlet } from '@angular/router';
+import { Component, QueryList,  ViewChildren } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 import { AuthenticationService, AWSBucketService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
@@ -9,7 +9,7 @@ import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
-import { filter, map } from 'rxjs/operators';
+import { IPCService } from './_services/system/ipc.service';
 
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
@@ -44,11 +44,11 @@ export class AppComponent {
       private platform:              Platform,
       private router:                Router,
       private titleService          :Title,
-      private activatedRoute        :ActivatedRoute,
       private authenticationService: AuthenticationService,
       private statusBar:             StatusBar,
       private toastController:       ToastController,
       private awsService:            AWSBucketService,
+      private ipcService          :  IPCService,
 
   ) {
       this.initSubscription();
@@ -60,6 +60,15 @@ export class AppComponent {
       //aws settings
       this.awsService.awsBucket();
       this.setTitle();
+
+      console.log('is Electron Service', ipcService.isElectronApp)
+      if (ipcService.isElectronApp) {
+        console.log(process.env);
+        console.log('Run in electron');
+        console.log('Electron ipcRenderer', this.ipcService.ipcRenderer);
+        console.log('NodeJS childProcess', this.ipcService.childProcess);
+      }
+
   }
 
   setTitle() {
