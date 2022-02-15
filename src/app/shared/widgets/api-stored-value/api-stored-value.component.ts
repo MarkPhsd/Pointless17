@@ -37,29 +37,41 @@ export class ApiStoredValueComponent implements OnInit {
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
-  }
 
-  //for electrononly
-  initRender() {
-    if (!this.electronService.isElectronApp) { return }
-    // this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
-    //   this.ngZone.run(() => {
-    //       this.version = arg
-    //       this.electronVersion = arg
-    //   });
-    // })
-  }
-
-  ngOnInit(): void {
     if (this.platformService.isApp())  {
       if (this.router.url === '/app-apisetting') {
         this.router.navigate(['/login'])
       }
     }
+
     this.initRender();
     this.getVersion();
     this.isElectronApp = this.electronService.isElectronApp;
     this.isApp = this.platformService.isApp();
+  }
+
+  //for electrononly
+  initRender() {
+    try {
+      if (!this.IPCService.isElectronApp) { return }
+
+      if (!this.IPCService._ipc) {
+        this.version = 'IPC not available.';
+        return;
+      }
+      this.IPCService._ipc.send('getVersion', 'ping');
+      this.IPCService._ipc.on('getVersion', (event, arg) => {
+        this.ngZone.run(() => {
+            this.version = arg;
+            this.electronVersion = arg;
+        });
+      })
+    } catch (error) {
+      this.version = error;
+    }
+  }
+
+  ngOnInit(): void {
     const currentAPIUrl = localStorage.getItem('storedApiUrl');
     this.inputForm = this.fb.group({
       apiUrl: [currentAPIUrl],
@@ -86,6 +98,9 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
 
+  checkNode() {
+    this.matSnack.open('checkNode ' + this.IPCService.isNodeRequired, 'status')
+  }
   checkForUpdate() {
     if (!this.electronService.isElectronApp) { return }
     this.IPCService._ipc.send('getVersion', 'ping');
@@ -97,10 +112,15 @@ export class ApiStoredValueComponent implements OnInit {
     });
   }
 
+<<<<<<< HEAD
+
   checkIfIsElectron() {
-    // this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
+    this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
+
   }
 
+=======
+>>>>>>> parent of 6173ff66... Not working
   getVersion() {
     try{
       if (!this.platFormService.isAppElectron) { return }

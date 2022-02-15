@@ -88,7 +88,7 @@ export class OrdersService {
     this.setStateOrder(order);
 
     const site = this.siteService.getAssignedSite();
-    if (order &&  order.id) {
+    if (order) {
       this.claimOrder(site, order.id.toString(), order.history).subscribe(result => {
         this.orderClaimed = true
       })

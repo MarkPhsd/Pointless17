@@ -163,11 +163,10 @@ export class PrintingService {
 
   listPrinters(): any {
     try {
-      // let win = new BrowserWindow({ width: 800, height: 600 })
-      // win.loadURL('https://github.com')
-      // return win.webContents.getPrinters();
+      let printWindow : any //new this.electronService.remote.BrowserWindow({ show:false })
+      // printWindow.loadURL('http://github.com')
+      // return printWindow.webContents.getPrinters();
     } catch (error) {
-      console.log('error getting printers', error)
       return ['Error Getting Printers']
     }
   }
@@ -230,8 +229,9 @@ export class PrintingService {
   }
 
   async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
-    // const printWindow         = new BrowserWindow({ width: 350, height: 600 })
-    let printWindow : any
+
+    // const printWindow         = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    let printWindow: any;
     // console.log('print electron options', options)
     printWindow.loadURL(contents)
       .then((e) => {

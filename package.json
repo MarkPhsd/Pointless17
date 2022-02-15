@@ -13,8 +13,8 @@
   },
   "scripts": {
     "ng": "ng",
-    "start with IP": "ng serve --configuration dev  --public-host --host=192.168.0.16 --port=4200",
-    "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
+    "start with IP": "ng serve --public-host --host=192.168.0.16 --port=4200",
+    "startLocal": "ng serve  --host=localhost --port=4200",
     "build": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all ",
     "buildNoSourceMap": "ng build   --configuration production --buildOptimizer=true --outputHashing=all",
     "buildHighMem": "node  --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build ",
@@ -96,6 +96,12 @@
     "css-star-rating": "^1.2.4",
     "css-what": "^5.0.1",
     "dom-to-image": "^2.6.0",
+<<<<<<< HEAD
+=======
+    "electron": "^11.0.0",
+    "electron-log": "^4.4.0",
+    "electron-updater": "^4.3.9",
+>>>>>>> parent of e29b282e... No remote no ICP working
     "esc-pos-encoder-ionic": "^1.1.3",
     "fs": "0.0.1-security",
     "glob-parent": "^6.0.0",
@@ -115,7 +121,6 @@
     "material-icons": "^1.10.2",
     "ng-gallery": "^5.0.0",
     "ngx-device-detector": "^2.1.1",
-    "ngx-electron": "^2.2.0",
     "ngx-infinite-scroll": "^10.0.1",
     "ngx-numeral": "0.0.1-beta.0",
     "ngx-pagination": "^5.1.1",

@@ -1,8 +1,8 @@
 {
-  "apiUrl": "https://ockosherwebapi.ddns.net/api",
+  "apiUrl": "https://localhost:44309/api",
   "useAppGate" : false,
   "appGateMessage": "Are you over 21? If so press yes to continue.",
   "company": "Pointless POS",
   "logo"   : "",
-  "appUrl" : "https://ockosherstore.web.app/"
+  "appUrl" : "https://pointlesspos.web.app/"
 }

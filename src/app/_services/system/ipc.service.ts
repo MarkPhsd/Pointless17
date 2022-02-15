@@ -43,8 +43,7 @@ export class IPCService {
       // ipcRenderer.invoke can serve many common use cases.
       // https://www.electronjs.org/docs/latest/api/ipc-renderer#ipcrendererinvokechannel-args
     }
-
-   }
+  }
 
    listPrinters() {
      if (this.isElectron && this._ipc) {

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, RendererStyleFlags2 } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -37,6 +37,7 @@ import { IItemBasic } from 'src/app/_services';
 // https://stackoverflow.com/questions/12941083/execute-and-get-the-output-of-a-shell-command-in-node-js
 // https://www.codota.com/code/javascript/functions/child_process/exec
 // https://jscomplete.com/learn/node-beyond-basics/child-processes
+
 
 @Component({
   selector: 'app-installed-printers',
@@ -87,7 +88,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   prepReceiptList$:  Observable<IItemBasic[]>;
   receiptID       :  number;
 
-  isElectronApp         : boolean;
+  isElectronApp  : boolean;
   electronSetting       : ISetting;
   electronReceiptPrinter: string;
   electronReceipt       : string;
@@ -152,6 +153,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   async  getAndroidPrinterAssignment() {
+
     if (this.platFormService.androidApp) {
       this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
       this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
