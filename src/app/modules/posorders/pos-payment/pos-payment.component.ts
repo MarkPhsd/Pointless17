@@ -29,7 +29,6 @@ export class PosPaymentComponent implements OnInit {
 
   @Input() order  :   IPOSOrder;
   id              :   number;
-
   _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
   currentPayment$ :   Observable<IPOSPayment>;//     = this._currentPayment.asObservable();
   posPayment      =      {} as IPOSPayment;

@@ -31,10 +31,8 @@ import { ErrorHandler, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { RouteReuseStrategy } from '@angular/router';
-
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
-
 import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
 import { HttpClientCacheService } from './_http-interceptors/http-client-cache.service';
 import { CacheClientService } from './_http-interceptors/cache-client.service';

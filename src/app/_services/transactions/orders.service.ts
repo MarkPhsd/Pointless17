@@ -13,7 +13,6 @@ import { IBalanceSheet } from './balance-sheet.service';
 import { PlatformService } from '../system/platform.service';
 import { Router } from '@angular/router';
 import { SitesService } from '../reporting/sites.service';
-import { timeStamp } from 'node:console';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -94,7 +93,6 @@ export class OrdersService {
         this.orderClaimed = true
       })
     }
-
   }
 
   setStateOrder(order) {

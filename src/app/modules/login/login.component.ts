@@ -261,7 +261,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.initForm();
       return
     }
-
   }
 
   async  onSubmit() {

@@ -19,6 +19,7 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "emitDecoratorMetadata": true,
+    "allowJs": true,
     "target": "es2016",
     "module": "es2020",
     "types": ["node"],
@@ -40,8 +41,9 @@
     }
   },
   "angularCompilerOptions": {
+    "strictTemplates": true,
     "fullTemplateTypeCheck": true,
-    "strictInjectionParameters": true
+
   }
 }
 

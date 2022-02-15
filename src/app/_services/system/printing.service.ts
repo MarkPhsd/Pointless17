@@ -19,7 +19,6 @@ import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { OrdersService } from '..';
 import { UserAuthorizationService } from './user-authorization.service';
-// import { BrowserWindow} from '@electron/remote';
 
 export interface printOptions {
   silent: true;
