@@ -1,5 +1,6 @@
 import { Component, OnInit,NgZone  } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ElectronService } from 'ngx-electron';
 import { AuthenticationService } from 'src/app/_services';
@@ -34,6 +35,7 @@ export class ApiStoredValueComponent implements OnInit {
       private siteService          : SitesService,
       private ngZone               : NgZone,
       private IPCService           : IPCService,
+      private matSnack             : MatSnackBar,
     ) {
 
     this.currentAPIUrl = localStorage.getItem('storedApiUrl');
@@ -99,7 +101,7 @@ export class ApiStoredValueComponent implements OnInit {
 
 
   checkNode() {
-    this.matSnack.open('checkNode ' + this.IPCService.isNodeRequired, 'status')
+    this.matSnack.open('checkNode ' + this.IPCService.isElectronApp, 'status')
   }
   checkForUpdate() {
     if (!this.electronService.isElectronApp) { return }
@@ -112,15 +114,12 @@ export class ApiStoredValueComponent implements OnInit {
     });
   }
 
-<<<<<<< HEAD
 
   checkIfIsElectron() {
     this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
 
   }
 
-=======
->>>>>>> parent of 6173ff66... Not working
   getVersion() {
     try{
       if (!this.platFormService.isAppElectron) { return }

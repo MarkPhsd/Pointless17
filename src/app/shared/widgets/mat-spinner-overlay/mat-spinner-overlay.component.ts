@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-mat-spinner-overlay',
@@ -7,12 +7,12 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class MatSpinnerOverlayComponent   {
 
-  @Input() value       : number = 100;
-  @Input() diameter    : number = 100;
-  @Input() mode        : string ="indeterminate";
-  @Input() strokeWidth : number = 10;
-  @Input() overlay     : boolean = true;
-  @Input() color       : string = "primary";
+  @Input() value       :  100;
+  @Input() diameter    :  100;
+  @Input() mode        : "indeterminate";
+  @Input() strokeWidth :  10;
+  @Input() overlay     :  true;
+  @Input() color       : "primary";
 
 
 }

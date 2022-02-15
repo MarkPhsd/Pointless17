@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IpcRenderer } from 'electron';
 import { ScaleInfo } from './scale-service.service';
-
 import { ipcRenderer, webFrame } from 'electron';
 import * as childProcess from 'child_process';
 import * as fs from 'fs';
@@ -19,13 +18,19 @@ export class IPCService {
 
   public _ipc: IpcRenderer | undefined;
 
-  get isElectron(): boolean {
+  get isElectronApp(): boolean {
+    try {
+      console.log('window.process.type', window.process.type)
+    } catch (error) {
+
+    }
+
     return !!(window && window.process && window.process.type);
   }
 
   constructor() {
     // Conditional imports
-    if (this.isElectron) {
+    if (this.isElectronApp) {
       this.ipcRenderer = window.require('electron').ipcRenderer;
       this.webFrame = window.require('electron').webFrame;
 
@@ -46,7 +51,7 @@ export class IPCService {
   }
 
    listPrinters() {
-     if (this.isElectron && this._ipc) {
+     if (this.isElectronApp && this._ipc) {
       // this._ipc.
      }
    }

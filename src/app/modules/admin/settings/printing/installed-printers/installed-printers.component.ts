@@ -19,6 +19,7 @@ import { PrintingAndroidService } from 'src/app/_services/system/printing-androi
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IItemBasic } from 'src/app/_services';
+import { IPCService } from 'src/app/_services/system/ipc.service';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
@@ -88,7 +89,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   prepReceiptList$:  Observable<IItemBasic[]>;
   receiptID       :  number;
 
-  isElectronApp  : boolean;
+  isElectronApp         : boolean;
   electronSetting       : ISetting;
   electronReceiptPrinter: string;
   electronReceipt       : string;
@@ -126,12 +127,13 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private fakeData              : FakeDataService,
               private renderingService      : RenderingService,
               private platFormService       : PlatformService,
+              private icpService            : IPCService,
 
               // private cs : ConsoleService,
   ) {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
-    this.isElectronApp = this.platFormService.isAppElectron;
+    this.isElectronApp = this.icpService.isElectronApp;
   }
 
   async ngOnInit() {

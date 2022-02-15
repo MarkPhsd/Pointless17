@@ -1,6 +1,5 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
-import { NgxElectronModule } from 'ngx-electron';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { Printer } from '@ionic-native/printer/ngx';
 import { BrowserModule, Title } from '@angular/platform-browser';
@@ -47,7 +46,7 @@ import { DsiEMVPaymentComponent } from './modules/admin/dsi-emvpayment/dsi-emvpa
 import { AgGridToggleComponent } from './_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { NGXMaterialModule } from './ngx-material.module';
 import { AppInitService } from './_services/system/app-init.service';
-
+import { ElectronService, NgxElectronModule } from 'ngx-electron';
 // import { NGXMaterialModule } from './ngx-material.module';
 
 // import { NgxKeypadModule } from 'ngx-keypad';

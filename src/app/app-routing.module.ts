@@ -40,7 +40,6 @@ import { HammerCardComponent } from './shared/widgets/hammer-card/hammer-card.co
 import { TvPriceSpecialsComponent } from './modules/tv-menu/tv-price-specials/tv-price-specials.component';
 import { TierMenuComponent } from './modules/menu/tierMenu/tier-menu/tier-menu.component';
 import { PriceCategoriesComponent } from './modules/admin/products/pricing/price-categories/price-categories.component';
-import { TVPriceTiersComponent } from './modules/tv-menu/price-tiers/price-tiers.component';
 import { RegisterAccountExistingUserWithTokenComponent } from './modules/login/registration/register-account-existing-user-with-token/register-account-existing-user-with-token.component';
 import { RegisterAccountMainComponent } from './modules/login/registration/register-account-main/register-account-main.component';
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
