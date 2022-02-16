@@ -12,6 +12,15 @@
     <div  *ngIf="inputForm; else loading"
           [formGroup]="inputForm">
 
+      <div>
+        <app-value-fields
+            [fieldType]     ="'text'"
+            [inputForm]     ="inputForm"
+            [fieldName]     ="'displayCompanyName'">
+            Company Name Display
+        </app-value-fields>
+      </div>
+
       <div class="grid-views">
 
         <div>
@@ -106,6 +115,7 @@
         </div>
 
       </div>
+
       <div>Paging and Search results </div>
       <mat-divider></mat-divider>
 
@@ -123,6 +133,31 @@
           Items Per Page
       </app-value-fields>
 
+      <mat-divider></mat-divider>
+
+      <div class="grid-views">
+        <div class="grid-item">
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="urlImageMain"
+                (messageOut) ="received_Image($event)"
+                >
+                Upload Background Image
+            </app-widget-uploader>
+          </mat-card>
+        </div>
+
+        <div class="grid-item">
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="logoImage"
+                (messageOut) ="received_Logo($event)"
+                >
+                Upload Logo
+            </app-widget-uploader>
+          </mat-card>
+        </div>
+      </div>
     </div>
 
 

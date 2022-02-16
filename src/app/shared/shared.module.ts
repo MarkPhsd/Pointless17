@@ -121,6 +121,8 @@ import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
 import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
+import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
+import { UploaderComponent } from './widgets/AmazonServices';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -140,6 +142,7 @@ import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-sel
     ApiStatusDisplayComponent,
     AutofocusDirective,
     ChangeDueComponent,
+    BackgroundCoverComponent,
     ButtonRendererComponent,
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
@@ -180,9 +183,11 @@ import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-sel
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
     ListProductSearchInputComponent,
+    MatDateRangeComponent,
     MatSelectComponent,
     MatSpinnerOverlayComponent,
     MatToggleSelectorComponent,
+    MatSelectNGModelComponent,
     MetaTagChipsComponent,
     MenuCompactComponent,
     MenuCompactComponent,
@@ -242,9 +247,8 @@ import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-sel
     ValueSpinnerComponent,
     ProgressBarComponent,
     SearchDebounceInputComponent,
-    MatSelectNGModelComponent,
-    MatDateRangeComponent,
     UIHomePageSettingsComponent,
+    UploaderComponent,
   ],
 
   imports: [
@@ -362,10 +366,11 @@ import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-sel
     TaxFieldsComponent,
     TiersCardComponent,
     TruncateTextPipe,
+    UIHomePageSettingsComponent,
     UnitTypeFieldsComponent,
+    UploaderComponent,
     ValueFieldsComponent,
     WebEnabledComponent,
-    UIHomePageSettingsComponent,
   ],
 
   providers: [

@@ -1,6 +1,6 @@
 {
   "appId": "www.pointlesspos.com",
-  "appName": "android",
+  "appName": "Pointless",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "dist/CCSApp",
@@ -28,6 +28,6 @@
     "hostname": "Pointless",
     "iosScheme": "ionic",
     "androidScheme": "http",
-    "url": "http://192.168.0.16:4200/"
+    "url": "https://ccsapi.web.app/"
   }
 }

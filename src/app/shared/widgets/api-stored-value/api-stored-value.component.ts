@@ -54,24 +54,15 @@ export class ApiStoredValueComponent implements OnInit {
 
   //for electrononly
   initRender() {
-    try {
-      if (!this.IPCService.isElectronApp) { return }
-
-      if (!this.IPCService._ipc) {
-        this.version = 'IPC not available.';
-        return;
-      }
-      this.IPCService._ipc.send('getVersion', 'ping');
-      this.IPCService._ipc.on('getVersion', (event, arg) => {
-        this.ngZone.run(() => {
-            this.version = arg;
-            this.electronVersion = arg;
-        });
-      })
-    } catch (error) {
-      this.version = error;
-    }
+    if (!this.electronService.isElectronApp) { return }
+    this.electronService.ipcRenderer.on('getVersion', (event, arg) => {
+      this.ngZone.run(() => {
+          this.version = arg
+          this.electronVersion = arg
+      });
+    })
   }
+
 
   ngOnInit(): void {
     const currentAPIUrl = localStorage.getItem('storedApiUrl');
@@ -81,15 +72,11 @@ export class ApiStoredValueComponent implements OnInit {
   }
 
   async  setAPIUrl(){
-
     await this.clearUserSettings();
     this.authenticationService.clearUserSettings()
-
     const apiUrl = this.inputForm.controls['apiUrl'].value
     const result =  this.appInitService.setAPIUrl(apiUrl)
-
     if (!result || result == '') {return}
-
     this.appInitService.init();
     this.currentAPIUrl = apiUrl;
   }
@@ -103,12 +90,12 @@ export class ApiStoredValueComponent implements OnInit {
   checkNode() {
     this.matSnack.open('checkNode ' + this.IPCService.isElectronApp, 'status')
   }
+
   checkForUpdate() {
     if (!this.electronService.isElectronApp) { return }
     this.IPCService._ipc.send('getVersion', 'ping');
 
     this.IPCService._ipc.addListener('getVersion', (event, pong) => {
-      console.log('pong3', pong)
       this.electronVersion = event;
       this.version = event;
     });
@@ -117,16 +104,11 @@ export class ApiStoredValueComponent implements OnInit {
 
   checkIfIsElectron() {
     this.matSnack.open('Is Electron ' +  this.IPCService.isElectronApp, 'status')
-
   }
 
   getVersion() {
-    try{
-      if (!this.platFormService.isAppElectron) { return }
-      this.IPCService._ipc.sendSync('getVersion', 'ping');
-    } catch (error) {
-      this.version  = error
-    }
+    if (!this.electronService.isElectronApp) { return }
+    this.electronService.ipcRenderer.send('getVersion', 'ping');
   }
 
   getPong(): any {

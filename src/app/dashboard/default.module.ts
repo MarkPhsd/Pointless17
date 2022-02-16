@@ -28,7 +28,6 @@ import { ItemsService } from 'src/app/_services/transactions/items.services';
 import { UsermessagesComponent } from 'src/app/shared/widgets/usermessages/usermessages.component';
 import { WishlistComponent } from 'src/app/modules/profile/wishlist/wishlist.component';
 import { DndDirective, ScrollableDirective } from 'src/app/_directives/';
-import { UploaderComponent } from 'src/app/shared/widgets/AmazonServices';
 import { CategorieslistviewComponent } from 'src/app/modules/admin/products/categorieslistview/categoriestlistview.component';
 import { MenuitemComponent } from 'src/app/modules/menu/menuitem/menuitem.component';
 import { AdminbrandslistComponent } from 'src/app/modules/admin/products/adminbrandslist/adminbrandslist.component';
@@ -450,7 +449,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TimeScheduleComponent,
     TypeFilterComponent,
     TypeResultsSelectorComponent,
-    UploaderComponent,
     UnitTypeListComponent,
     UnitTypeEditComponent,
     UnitTypePromptComponent,

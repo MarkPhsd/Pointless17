@@ -340,6 +340,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.loading                   = true
 
     results$.subscribe(data => {
+
       this.loading = false;
       if (!data || data.results.length == 0 || data.results == null) {
         this.value        = 100;

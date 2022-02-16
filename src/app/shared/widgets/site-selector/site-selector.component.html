@@ -1,14 +1,14 @@
 <div class="canvas">
 
   <mat-card>
-    <h4>
-      Pick your location!
-    </h4>
+    <h4> Pick your location!</h4>
   </mat-card>
 
   <div class="container"
        *ngIf="sites$; else loading">
-    <mat-card *ngFor="let site of sites$ | async" (click)="setSite(site.id)" >
+
+    <mat-card *ngFor="let site of sites$ | async"
+              (click)="setSite(site.id)" >
         <mat-card-title>
           <div class="site-name" >
             {{site.name}}
@@ -22,31 +22,36 @@
               <img class="site-image" [src]="getImageURL(site.imgName)">
             </div>
         </div>
-        <div fxLayout="column"  fxLayoutGap fxLayoutAlign="space-around center">
-
-            <div class="site-address" >
-              {{site.address}}
-            </div>
-            <div class="site-address" >
-              {{site.city}}, {{site.state}} {{site.zip}}
-            </div>
-            <div class="site-address" >
-              {{site.phone}}
-            </div>
+        <div fxLayout="column"
+             fxLayoutGap
+             fxLayoutAlign="space-around center">
+          <div class="site-address" >
+            {{site.address}}
+          </div>
+          <div class="site-address" >
+            {{site.city}}, {{site.state}} {{site.zip}}
+          </div>
+          <div class="site-address" >
+            {{site.phone}}
+          </div>
         </div>
       </mat-card-content>
     </mat-card>
+
   </div>
 
-  <div fxLayout="column"  fxLayoutGap fxLayoutAlign="space-around center" >
-    <mat-dialog-actions>
+  <div fxLayout="column"
+       fxLayoutGap
+       fxLayoutAlign="space-around center" >
+
       <button mat-raised-button
               color="primary"
               class="big-button"
               mat-dialog-close>
         <mat-icon>close</mat-icon>
-        Cancel </button>
-    </mat-dialog-actions>
+        Cancel
+      </button>
+
   </div>
 
   <ng-template #loading >

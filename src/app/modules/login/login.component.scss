@@ -5,13 +5,17 @@ html {
   overflow: hidden;
 }
 
+.registration  {
+  padding: 10px;
+  margin-top    : 5px;
+  // margin-bottom : 5px;
+}
+
 .bg {
   /* The image used */
-  background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
-
+  // background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
   /* Full height */
   height: 100vh;
-
   /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
@@ -23,15 +27,10 @@ html {
 }
 
 .center {
-  // opacity         : .8;
+  max-width       : 395px;
   display         : grid;
   place-items     : center;
   justify-content : space-evenly;
-}
-
-.registration {
-  margin-top: 20px;
-
 }
 
 .spinner {
@@ -46,6 +45,10 @@ button{
 .logo {
   display: flex;
   justify-content: center;
+}
+
+.login-window {
+  max-width: 500px;
 }
 
 .row-height {

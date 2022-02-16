@@ -1,6 +1,6 @@
-import { Component,Output,
+import { Component,Output,OnInit,
          ViewChild ,ElementRef,
-         AfterViewInit, EventEmitter,OnDestroy,
+          EventEmitter,OnDestroy,
           } from '@angular/core';
 import { OrdersService } from 'src/app/_services';
 import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
@@ -19,7 +19,7 @@ const { Keyboard } = Plugins;
   templateUrl: './list-product-search-input.component.html',
   styleUrls: ['./list-product-search-input.component.scss']
 })
-export class ListProductSearchInputComponent implements  OnDestroy, AfterViewInit {
+export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -59,22 +59,22 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
     private orderService   :        OrdersService,
     private orderMethodService    : OrderMethodsService,
   )
-  {
-    this.initForm();
-    this.initSubscriptions();
-    if (this.platForm != 'android') {
-      this.keyboardDisplayOn = true
-      Keyboard.hide()
-    }
-  }
+  {   }
 
-  async ngAfterViewInit() {
-    await  this.initForm();
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this.initForm();
     if (!this.input ) {
       return
     }
     this.initSearchSubscription()
     this.hideKeyboardTimeOut();
+    if ( this.platForm != 'android' ) {return}
+    this.keyboardDisplayOn = true
+    if (this.platForm != 'android') {
+      // Keyboard.hide()
+    }
   }
 
   initSearchSubscription() {
@@ -97,6 +97,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
   }
 
   hideKeyboardTimeOut() {
+    if ( this.platForm != 'android' ) {return}
     if (this.platForm != 'android') {
       setTimeout(()=> {
           this.input.nativeElement.focus();
@@ -106,6 +107,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, AfterViewIni
   }
 
   ngOnDestroy() {
+    if (!this._order) {return}
     this._order.unsubscribe();
   }
 

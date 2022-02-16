@@ -102,6 +102,7 @@ import { PriceTiersComponent } from './modules/admin/products/price-tiers/price-
 import { TierPricesComponent } from './modules/menu/tierMenu/tier-prices/tier-prices.component';
 import { PSMenuGroupListComponent } from './modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
 import { POSOrderScheduleComponent } from './modules/posorders/posorder-schedule/posorder-schedule.component';
+import { BackgroundCoverComponent } from './shared/widgets/background-cover/background-cover.component';
 
 
 const routes: Routes = [
@@ -286,6 +287,8 @@ const routes: Routes = [
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
 
     { path: 'app-widget-card', component: CardComponent, data: { animation: 'isLeft'}},
+
+    { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
     { path: '**', component: PageNotFoundComponent},
   ];
 

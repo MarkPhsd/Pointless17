@@ -14,6 +14,7 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
   _poll               : Subscription;
   connectedToApi      : boolean;
   apiStatus           : string;
+  initApp             = true
 
   initSubscriptions() {
     this._poll = this.pollingService.poll$.subscribe( data => {
@@ -24,12 +25,11 @@ export class ApiStatusDisplayComponent implements OnInit, OnDestroy {
   constructor(private pollingService: PollingService) { }
 
   ngOnInit(): void {
-
     setTimeout( data => {
       this.pollingService.poll();
+      this.initSubscriptions()
+      this.initApp = false;
     }, 5000)
-    this.initSubscriptions()
-
   }
 
   ngOnDestroy(): void {

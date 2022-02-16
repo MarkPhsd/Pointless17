@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
-
 export interface IAppConfig {
   apiUrl : string
   useAppGate: boolean;
@@ -23,8 +22,8 @@ export class AppInitService  {
   appConfig         = {} as IAppConfig;
   private apiUrl    : any;
   public  useAppGate: boolean;
-  public logo       : string;
-  public company    : string;
+  public  logo       : string;
+  public  company    : string;
   // public get appConfig
   private httpClient: HttpClient;
 
@@ -73,7 +72,6 @@ export class AppInitService  {
           data.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
           this.setAPIUrl(this.apiUrl)
         }
-
         this.useAppGate = data.useAppGate
         this.logo       = data.logo;
         this.company    = data.company
@@ -94,9 +92,7 @@ export class AppInitService  {
         this.appConfig.company= 'Pointless'
       }
       if (this.apiUrl) {
-
       }
-
     }
   }
 

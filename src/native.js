@@ -1,1 +1,1 @@
-window.fs = require('fs');
+// window.fs = require('fs');

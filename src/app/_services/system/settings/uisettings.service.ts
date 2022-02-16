@@ -49,6 +49,11 @@ export interface UIHomePageSettings {
 
   menuItemSize        : number; //pixels
   itemsPerPage        : number;
+
+  backgroundImage     : string;
+
+  logoHomePage        : string;  //  : [config.logoHomePage],
+  displayCompanyName  : string;  //     : [config.displayCompanyName],
 }
 
 @Injectable({
@@ -171,12 +176,17 @@ export class UISettingsService {
       staffCategoriesEnabled: [''],
       staffDeparmentsEnabled: [''],
       staffTierMenuEnabled  : [''],
-      staffTypesEnabled  : [],
+      staffTypesEnabled     : [],
+      backgroundImage       : [],
+      logoHomePage          : [],
+      displayCompanyName    : [],
+
      })
     return fb
   }
 
   initHomePageSettingsForm(config: any, fb: FormGroup): FormGroup {
+    if (!config) { return this.initHomePageForm(fb) }
     fb = this._fb.group({
       id                : [config.id],
       brandsEnabled     : [config.brandsEnabled],
@@ -187,12 +197,14 @@ export class UISettingsService {
       itemsPerPage      : [config.itermsPerPage],
       menuItemSize      : [config.menuItemSize],
 
-      staffBrandsEnabled    : [config.staffBrandsEnabled],
-      staffCategoriesEnabled: [config.staffCategoriesEnabled],
-      staffDepartmentsEnabled: [config.staffDepartmentsEnabled],
-      staffTierMenuEnabled  : [config.staffTierMenuEnabled],
-      staffTypesEnabled  : [config.staffTypesEnabled],
-
+      staffBrandsEnabled      : [config.staffBrandsEnabled],
+      staffCategoriesEnabled  : [config.staffCategoriesEnabled],
+      staffDepartmentsEnabled : [config.staffDepartmentsEnabled],
+      staffTierMenuEnabled    : [config.staffTierMenuEnabled],
+      staffTypesEnabled       : [config.staffTypesEnabled],
+      backgroundImage         : [config.backgroundImage],
+      logoHomePage            : [config.logoHomePage],
+      displayCompanyName      : [config.displayCompanyName],
 
      })
     return fb

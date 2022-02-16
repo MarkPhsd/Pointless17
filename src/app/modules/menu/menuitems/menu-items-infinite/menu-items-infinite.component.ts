@@ -170,6 +170,7 @@ initSearchFromModel() {
   this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
 
       this.initSearchProcess();
+      if (!model) { return }
       this.subCategoryID = model.subCategoryID; // not implemented.
       this.departmentID = model.departmentID
       this.categoryID   = model.categoryID
@@ -181,7 +182,6 @@ initSearchFromModel() {
       this.currentPage = model.pageNumber
 
       let  categoryResults = ''
-
 
       if (model.categoryName && model.categoryName != undefined ) {
         categoryResults = model.categoryName;
@@ -209,7 +209,6 @@ initSearchFromModel() {
 
 async addToList(pageSize: number, pageNumber: number)  {
     let model   = this.productSearchModelData;
-
     if (!model) { model = {} as ProductSearchModel }
     const value = this.route.snapshot.paramMap.get('value');
     if (model && !value)  {

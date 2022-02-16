@@ -7,14 +7,12 @@
                      multiple
                      (change)="fileBrowseHandler($event.target.files)" />
 
-  <mat-icon>upload</mat-icon>
-
   <div class="file-drop"><ng-content></ng-content></div>
 
   <button mat-button
           color="primary"
           (click)="fileDropRef"><mat-icon>upload</mat-icon>
-    </button>
+  </button>
 
 </div>
 

@@ -24,8 +24,6 @@ mat-form-field {
   align-content: center;
 }
 
-
-
 .grid-list-container {
   display: grid;
   grid-template-columns: 1fr 200px;
@@ -99,6 +97,7 @@ mat-form-field {
   display: grid;
   grid-template-columns: 1fr 20vw;
   gap: 7px;
+  height: 65vh;
 
   @media (max-width: 599px)  {
     height: 65vh;
@@ -110,11 +109,11 @@ mat-form-field {
     height: 65vh;
   }
   @media (min-width: 1200px)  {
-    height: 70vh;
+    height: 65vh;
   }
 
   @media (min-width: 1800px)  {
-    height: 70vh;
+    height: 65vh;
   }
 
 }

@@ -9,7 +9,9 @@ import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
-import { IPCService } from './_services/system/ipc.service';
+import { UserSwitchingService } from './_services/system/user-switching.service';
+import { ElectronService } from 'ngx-electron';
+// import { IPCService } from './_services/system/ipc.service';
 
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
@@ -48,7 +50,10 @@ export class AppComponent {
       private statusBar:             StatusBar,
       private toastController:       ToastController,
       private awsService:            AWSBucketService,
-      private ipcService          :  IPCService,
+      private userSwitchingService : UserSwitchingService,
+      private AuthService :          AuthenticationService,
+      private electronService     :  ElectronService,
+      // private ipcService          :  IPCService,
 
   ) {
       this.initSubscription();
@@ -56,14 +61,16 @@ export class AppComponent {
       this.backButtonEvent();
       this.awsService.awsBucket();
       this.setTitle();
-
-      console.log('is Electron Service', ipcService.isElectronApp)
-      if (ipcService.isElectronApp) {
-        console.log(process.env);
-        console.log('Run in electron');
-        console.log('Electron ipcRenderer', this.ipcService.ipcRenderer);
-        console.log('NodeJS childProcess', this.ipcService.childProcess);
+      if (this.electronService.isElectronApp) {
+        this.AuthService.logout();
       }
+      // console.log('is Electron Service', ipcService.isElectronApp)
+      // if (ipcService.isElectronApp) {
+      //   console.log(process.env);
+      //   console.log('Run in electron');
+      //   console.log('Electron ipcRenderer', this.ipcService.ipcRenderer);
+      //   console.log('NodeJS childProcess', this.ipcService.childProcess);
+      // }
 
   }
 
@@ -75,7 +82,7 @@ export class AppComponent {
           const title = this.getTitle( this.router.routerState, this.router.routerState.root).join('-');
           // console.log('title', title)
           if (!title) {
-            this.titleService.setTitle('Pointless');
+            this.titleService.setTitle('Pointless POS');
             return
           }
           this.titleService.setTitle(title);
@@ -107,8 +114,6 @@ export class AppComponent {
   logout() {
     this.authenticationService.logout();
   }
-
-
 
   // active hardware back button
   backButtonEvent() {

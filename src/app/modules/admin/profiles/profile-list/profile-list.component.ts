@@ -138,8 +138,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
 
       this.buttonName        = 'Edit'
       this.buttoncheckInName = 'Check In'
-
-
       this.initClasses()
       this.initSubscriptions();
 
@@ -175,7 +173,6 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
           debounceTime(500),
           distinctUntilChanged(),
           tap((event:KeyboardEvent) => {
-
             const search  = this.input.nativeElement.value
             this.refreshSearch();
           })
@@ -344,24 +341,18 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
         {
-            console.log('onGridReady', data.results)
-            const resp         =  data.paging
+            const resp         = data.paging
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
             this.currentPage   = resp.currentPage
             this.numberOfPages = resp.pageCount
             this.recordCount   = resp.recordCount
-
             if (this.numberOfPages !=0 && this.numberOfPages) {
-              console.log(this.numberOfPages )
-              console.log(this.currentPage )
-              console.log(resp.recordCount)
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-              console.log('value', this.value)
             }
-
+            let unique = [...new Set(data.results)];
             let results  =  this.refreshImages(data.results)
-            params.successCallback(results)
+            params.successCallback(unique)
 
           }
         );

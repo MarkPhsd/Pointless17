@@ -1,7 +1,12 @@
-﻿<div class="container bg">
-  <div class="row-height">
-   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <div *ngIf="this.companyName != '' ; else loading">
+﻿<div class="bg row-height" [ngStyle]="backgroundImage">
+
+  <ng-template #loading >
+    <h2>Please wait...is loading.</h2>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+
+  <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+    <div *ngIf="this.companyName != '' ; else loading" class="login-window">
 
       <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
           <mat-card fxFlex="100%">
@@ -10,28 +15,22 @@
                 <div fxLayout="column"
                      fxLayoutAlign="center center"
                      class="row-height">
-                    <img *ngIf="logo"
-                         (click)="setAPIAlt()"
-                         [src]="logo"
-                         width="125px"
-                         [alt]="company"
-                         class="logo">
 
-                    <h2 (click)="setAPIAlt()"> {{compName}} </h2>
+                    <img *ngIf="logo"
+                        (click)="setAPIAlt()"
+                        [src]="logo"
+                        width="125px"
+                        [alt]="company"
+                        class="logo">
+
+                    <h2 (click)="setAPIAlt()"
+                        *ngIf="uiHomePageSetting">
+                        {{uiHomePageSetting.displayCompanyName}}
+                    </h2>
 
                 </div>
               </mat-card-title>
 
-              <mat-card-subtitle>
-                  <div class="center">
-                    <div>
-                      <h3>Use your email or phone. </h3>
-                    </div>
-                    <div>
-                      <h3>First time users request password.</h3>
-                    </div>
-                  </div>
-              </mat-card-subtitle>
 
               <mat-card-content>
                   <div class="center">
@@ -43,12 +42,12 @@
                           <mat-form-field appearance="fill">
                             <mat-label>User</mat-label>
                             <input matInput
-                                   type="text"
-                                   formControlName="username"
-                                   class="form-control"
-                                   [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                                  type="text"
+                                  formControlName="username"
+                                  class="form-control"
+                                  [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                             <div *ngIf="submitted && f.username.errors"
-                                 class="invalid-feedback">
+                                class="invalid-feedback">
                                 <div *ngIf="f.username.errors.required">Username is required</div>
                             </div>
                           </mat-form-field>
@@ -58,10 +57,10 @@
                           <mat-form-field appearance="fill">
                               <mat-label>Password</mat-label>
                               <input matInput
-                                     type="password"
-                                     formControlName="password"
-                                     class="form-control"
-                                     [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                                    type="password"
+                                    formControlName="password"
+                                    class="form-control"
+                                    [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
                               <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
                                   <div *ngIf="f.password.errors.required">Password is required</div>
                               </div>
@@ -90,22 +89,28 @@
                     </div>
 
                     <div *ngIf="(platformService && !platformService.webMode) &&
-                                 platformService.apiUrl.length != 0 ">
+                                platformService.apiUrl.length != 0 ">
                     </div>
 
                     <div>
                       {{ this.statusMessage }}
-
                     </div>
-
-                  </div>
-
-                  <div class="registration">
-                    <mat-divider></mat-divider>
                   </div>
 
                   <div class="center">
-                    <div>If you have forgotten your password or user name, press register or reset password below.</div>
+                    <mat-card-subtitle>
+                      <div class="registration center">
+                        <h5>Login with email or phone.
+                      </h5>
+                    </div>
+                    </mat-card-subtitle>
+                    <div class="registration">
+                      <mat-divider></mat-divider>
+                    </div>
+                    <div>
+                      First time users please register.
+                      If you have forgotten your password or user name,
+                      press register or reset password below.</div>
                     <div class="registration">
                       <button mat-raised-button  (click)='changePassword()'>Reset Password</button>
                       <button mat-raised-button  (click)='registerUser()'>Register</button>
@@ -116,20 +121,10 @@
 
           </mat-card>
 
-        </div>
+      </div>
 
     </div>
-
-    <br>
-
-
-    <ng-template #loading >
-      <h2>Please wait...is loading.</h2>
-      <mat-spinner></mat-spinner>
-    </ng-template>
-
-  </div>
-
   </div>
 
 </div>
+

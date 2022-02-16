@@ -11,6 +11,7 @@ export class ProfileLookupComponent implements OnInit {
   constructor( private router: Router,) { }
 
   ngOnInit(): void {
+    const i = 1
   }
 
   scanID() {

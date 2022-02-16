@@ -163,9 +163,9 @@ export class PrintingService {
 
   listPrinters(): any {
     try {
-      let printWindow : any //new this.electronService.remote.BrowserWindow({ show:false })
-      // printWindow.loadURL('http://github.com')
-      // return printWindow.webContents.getPrinters();
+      let printWindow = new this.electronService.remote.BrowserWindow({ show:false })
+      printWindow.loadURL('http://github.com')
+      return printWindow.webContents.getPrinters();
     } catch (error) {
       return ['Error Getting Printers']
     }
@@ -230,9 +230,7 @@ export class PrintingService {
 
   async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
 
-    // const printWindow         = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
-    let printWindow: any;
-    // console.log('print electron options', options)
+    const printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     printWindow.loadURL(contents)
       .then((e) => {
         if (options.silent) {
@@ -304,7 +302,6 @@ export class PrintingService {
     const prtContent  = document.getElementById('printsection');
     const html = this.getPrintHTML(prtContent)
     const contents = `data:text/html;charset=utf-8,  ${encodeURIComponent(html) }`
-
     const options = {
       silent: true,
       printBackground: false,
@@ -322,7 +319,6 @@ export class PrintingService {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
       return false
     }
-
     const file = `file:///c://pointless//print.txt`
     const options = {
       silent: true,
@@ -347,7 +343,6 @@ export class PrintingService {
     } catch (error) {
       this.snack.open(`File could not be written. Please make sure you have a writable folder ${fileName}`, 'Error')
     }
-    // console.log('printLabelElectron')
 
     const file = `file:///c://pointless//print.txt`
     const options = {

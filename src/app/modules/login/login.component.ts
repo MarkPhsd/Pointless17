@@ -1,4 +1,4 @@
-﻿import { CompanyService, AuthenticationService} from 'src/app/_services';
+﻿import { CompanyService, AuthenticationService, AWSBucketService} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
 import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
 import { Subscription } from 'rxjs';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
     selector   : 'login-dashboard',
@@ -21,7 +22,10 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit, OnDestroy {
 
   @Input() statusMessage: string;
+  initApp    = true
 
+  backgroundImage: any //'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
+  bucket         : string;
   spinnerLoading: boolean;
   compName   : string;
   company    = {} as ICompany;
@@ -42,6 +46,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   loggedInUser : IUser;
   _user     : Subscription;
 
+  _uISettings: Subscription;
+  uiHomePageSetting: UIHomePageSettings;
+
   _loginStatus    : Subscription;
   loginStatusvalue: number;
 
@@ -61,6 +68,23 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.updateLoginStatus(data);
       }
     })
+
+    this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
+        if (data) {
+          if (!this.bucket) { return }
+          if (!data.backgroundImage) { return }
+          console.log('bucket', this.bucket)
+          const image  = `${this.bucket}${data.backgroundImage}`
+          console.log('image', image)
+          this.assingBackGround(image)
+          this.uiHomePageSetting = data;
+          if (data.logoHomePage) {
+            this.logo = `${this.bucket}${data.logoHomePage}`;
+          }
+        }
+      }
+    )
+
   }
 
   // convenience getter for easy access to form fields
@@ -68,6 +92,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (!this.loginForm) { this.initForm() }
     return this.loginForm.controls;
   }
+
 
   constructor(
         private fb                   : FormBuilder,
@@ -81,13 +106,19 @@ export class LoginComponent implements OnInit, OnDestroy {
         private siteService          : SitesService,
         public platformService       : PlatformService,
         private appInitService       : AppInitService,
+        private uiSettingService     : UISettingsService,
+        private awsBucketService     : AWSBucketService,
     )
   {
     this.redirects();
   }
 
   async ngOnInit() {
+
     this.initForm();
+    this.initSubscriptions()
+    this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings')
+    this.bucket = await this.awsBucketService.awsBucketURL()
     if (!this.platformService.isApp()) { this.amI21 = true  }
     if (this.platformService.isApp())  { this.amI21 = false }
     await this.initCompanyInfo()
@@ -134,7 +165,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   initLogo() {
     this.logo        = this.appInitService.logo;
-    if (!this.logo)  { this.logo = 'http://cafecartel.com/temp/logo.png' }
+    if (!this.logo)  { this.logo = 'http://pointlesspos.com/download/logo.png' }
   }
 
   redirectUserLoggedIn() {
@@ -241,7 +272,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     if (option == 2) {
       this.statusMessage   = 'logging in...'
-      this.spinnerLoading = false;
+      this.spinnerLoading = true;
       this.initForm();
       return
     }
@@ -260,13 +291,20 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.initForm();
       return
     }
+
+    if (option == 6) {
+      this.statusMessage   = ''
+      this.spinnerLoading = false;
+      this.initForm();
+      return
+    }
   }
 
   async  onSubmit() {
     // this.userSwitchingService.updateLoginStatus(0)
     this.updateLoginStatus(0)
     if (!this.validateForm(this.loginForm)) { return }
-
+    // this.updateLoginStatus(2)
     this.userSwitchingService.login(this.f.username.value, this.f.password.value)
       .pipe()
       .subscribe(
@@ -286,19 +324,19 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)
-              this.updateLoginStatus(2)
+              this.updateLoginStatus(6) //clearn login settings
               return
             }
           }
         },
         error => {
-          // this.userSwitchingService.updateLoginStatus(0)
           this.updateLoginStatus(0)
           const message = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
           this.notifyEvent(message, 'error')
           return
         }
     );
+    this.updateLoginStatus(6) //clearn login settings
   }
 
   loginApp(user) {
@@ -325,6 +363,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     // this.router.navigate('payments')
     this.router.navigate(['/payments'])
   }
+
+  assingBackGround(image: string) {
+    if (!image) { return }
+    // const image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
+    console.log('asssign background', image)
+    const styles = { 'background-image': `url(${image})`  };
+
+    this.backgroundImage = styles
+    const i = 1
+  }
+
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

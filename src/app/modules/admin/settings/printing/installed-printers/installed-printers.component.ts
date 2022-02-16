@@ -80,7 +80,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   labelImage$               : Observable<any>;
   labelImage64              : string;
-  // printerList               : any;
+  printerList               : any;
   result                    : any;
   isElectronServiceInitiated = false;
 
@@ -414,8 +414,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         img.src = data;
         this.printingAndroidService.printAndroidImage( img , this.btPrinter)
       })
-
-
     return
     // img.src = '/assests/icons/icon-72x72.png'
 
@@ -596,7 +594,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     if (!this.electronSetting) { return }
     const site = this.siteService.getAssignedSite();
     this.settingService.getSetting(site,event.id).subscribe( data=> {
-
       this.electronReceipt             = event.name
       this.electronReceiptID           = event.id
       this.electronSetting.value       = this.electronReceipt
@@ -609,7 +606,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   setElectronPrinterName(event) {
     this.electronReceiptPrinter = event
     const site = this.siteService.getAssignedSite();
-
     this.settingService.getSettingByName(site, 'defaultElectronReceiptPrinter').subscribe( data=> {
         if (!this.electronSetting) {
           this.electronSetting = {} as ISetting;
@@ -633,7 +629,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   setElectronReceipt(electronSetting: ISetting) {
     if (!electronSetting) { return}
-
     const receipt$ = this.printingService.setElectronReceiptPrinter(this.electronSetting);
     receipt$.subscribe(data => {
       this.electronReceiptPrinter = data.text;
@@ -648,7 +643,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   setElectronLabel(setting: ISetting) {
     if (!setting) { return}
-
     const receipt$ = this.printingService.setElectronLabelPrinter(setting);
     receipt$.subscribe(data => {
       this.electronLabelPrinter = data.text;

@@ -7,8 +7,8 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-
-      <p>In order to connect to your service, you must know your API. Please input the URL to the API.</p>
+      <p>In order to connect to your service, you must know your API.
+          Please input the URL to the API.</p>
       <p>The API url should look something like: https://mycompanyName.com/api</p>
       <div *ngIf="currentAPIUrl">
         <h4>
@@ -25,20 +25,13 @@
           >
         </mat-form-field>
       </div>
-
-      <button mat-raised-button
-             (click)="checkForUpdate()">
-        Check Version</button>
-      <button mat-raised-button
-        (click)="checkNode()">
-           Check Node</button>
       <button mat-raised-button color="primary"
               (click)="setAPIUrl()">Set API</button>
 
       <button mat-raised-button color="primary"
               routerLinkActive="list-item-active"
               routerLink="/login">Exit</button>
-      isElectronApp {{isElectronApp}}
+
   </mat-card-content>
 
 </mat-card>

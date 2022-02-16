@@ -11,6 +11,8 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 })
 export class UIHomePageSettingsComponent implements OnInit {
 
+  urlImageMain: string;
+  logoImage   : string;
   inputForm  : FormGroup;
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
@@ -21,6 +23,8 @@ export class UIHomePageSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.uISettingsService.getSetting('UIHomePageSettings').subscribe(data => {
       if (data) {
+        this.uiHomePage = JSON.parse(data.text) as UIHomePageSettings
+        if (this.uiHomePage) { this.urlImageMain = this.uiHomePage.backgroundImage }
         this.initForm(data);
       }
     });
@@ -30,10 +34,24 @@ export class UIHomePageSettingsComponent implements OnInit {
     const form = this.inputForm
     this.inputForm = this.uISettingsService.initHomePageForm(form)
     this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text, 'UIHomePageSettings')
+
   }
 
   async updateSetting(){
     const result =  await this.uISettingsService.saveConfig(this.inputForm, 'UIHomePageSettings')
   }
+
+  //image data
+  received_Image(event) {
+    if (!event) { return }
+    this.urlImageMain = event
+    this.inputForm.patchValue({backgroundImage: event})
+  };
+
+  received_Logo(event) {
+    if (!event) { return }
+    this.logoImage = event
+    this.inputForm.patchValue({logoHomePage: event})
+  };
 
 }
