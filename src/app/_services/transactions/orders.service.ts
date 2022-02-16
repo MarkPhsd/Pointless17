@@ -79,7 +79,7 @@ export class OrdersService {
       order = this.getStateOrder();
       if (order) {
         this.toolbarServiceUI.updateOrderBar(false)
-        return
+        return;
       }
     }
 
@@ -88,21 +88,21 @@ export class OrdersService {
     this.setStateOrder(order);
 
     const site = this.siteService.getAssignedSite();
-    if (order) {
+    if (order && order.id) {
       this.claimOrder(site, order.id.toString(), order.history).subscribe(result => {
-        this.orderClaimed = true
-      })
+        this.orderClaimed = true;
+      });
     }
   }
 
   setStateOrder(order) {
-    const orderJson = JSON.stringify(order)
-    localStorage.setItem('orderSubscription', orderJson)
+    const orderJson = JSON.stringify(order);
+    localStorage.setItem('orderSubscription', orderJson);
   }
 
   getStateOrder(){
     const order = localStorage.getItem('orderSubscription');
-    return JSON.parse(order) as IPOSOrder
+    return JSON.parse(order) as IPOSOrder;
   }
 
 

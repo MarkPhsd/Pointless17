@@ -80,9 +80,9 @@ export class OrderMethodsService {
               private posOrderItemService     : POSOrderItemServiceService,
               private productEditButtonService: ProductEditButtonService,
               private promptGroupService      : PromptGroupService,
-              private printingService          :PrintingService,
-              private userAuthorization : UserAuthorizationService,
-              private menuService              : MenuService,
+              private printingService         : PrintingService,
+              private userAuthorization       : UserAuthorizationService,
+              private menuService             : MenuService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -92,15 +92,14 @@ export class OrderMethodsService {
 
   async doesOrderExist(site: ISite): Promise<boolean> {
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
-    if (!this.order || (this.order.id == undefined)) {
-      const result = await this.orderService.newDefaultOrder(site)
-
+    if (!this.order || (this.order.id === undefined)) {
+      const result = await this.orderService.newDefaultOrder(site);
       if (!result) {
-        this.notifyEvent(`No order assigned.`, 'Alert')
+        this.notifyEvent(`No order assigned.`, 'Alert');
       }
       return result;
     }
-    return true
+    return true;
   }
 
   appylySerial(id: number, serialCode: string) {
@@ -109,12 +108,12 @@ export class OrderMethodsService {
   }
 
   async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
-    const site          = this.siteService.getAssignedSite()
-    if (!order)         { order = this.order }
+    const site          = this.siteService.getAssignedSite();
+    if (!order)         { order = this.order };
     const result        = await this.doesOrderExist(site);
     if (!result) { return }
     if (order) {
-      const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price }
+      const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price };
 
       const itemResult$ = this.posOrderItemService.putItem(site, newItem)
       itemResult$.subscribe(data => {
@@ -263,50 +262,50 @@ export class OrderMethodsService {
                        quantity: number,
                        input: any) {
 
-    const valid = this.validateUser()
+    const valid = this.validateUser();
 
-    if (!valid) { return }
+    if (!valid) { return };
 
-    console.log('triggered')
+    console.log('triggered');
     this.initItemProcess();
 
-    if (quantity == 0 ) { quantity = 1}
+    if (quantity === 0 ) { quantity = 1};
 
-    if (!order)         { order = this.order }
-    const site          = this.siteService.getAssignedSite()
+    if (!order)         { order = this.order };
+    const site          = this.siteService.getAssignedSite();
     const result        = await this.doesOrderExist(site);
 
-    if (!result) { return false }
+    if (!result) { return false };
     let passAlongItem;
-    if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; }
-    if (!result) { return false }
+    if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
+    if (!result) { return false };
 
-    order = this.orderService.getCurrentOrder()
+    order = this.orderService.getCurrentOrder();
 
-    if (!order || order.id == undefined) {
-      this.order = null
-      this.orderService.updateOrderSubscription(null)
-      this.notifyEvent(`Order not started, please try adding item again.`, 'Alert')
-      return false
+    if (!order || order.id === undefined) {
+      this.order = null;
+      this.orderService.updateOrderSubscription(null);
+      this.notifyEvent(`Order not started, please try adding item again.`, 'Alert');
+      return false;
     }
 
     if (order && order.id) {
       if (!item && !barcode) {
         if (!item.itemType) {
-          this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert')
-          return false
+          this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert');
+          return false;
         }
       }
 
       if (barcode)  {
         const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
         this.processItemPostResults(addItem$)
-        return false
+        return false;
       }
 
-      let packaging = ''
-      let portionValue = ''
-      let itemNote = ''
+      let packaging     = '';
+      let portionValue  = '';
+      let itemNote      = '';
       if (input) {
         packaging        = input?.packaging;
         portionValue     = input?.portionValue;
@@ -323,25 +322,26 @@ export class OrderMethodsService {
     }
   }
 
+  // tslint:disable-next-line: typedef
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
     addItem$.subscribe(data => {
 
-      if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')}
+      if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
 
-        if (data && data.resultErrorDescription) {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert')
-          return
+      if (data && data.resultErrorDescription) {
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
+          return;
         }
 
-        if (data.order) {
-          this.orderService.updateOrderSubscription(data.order)
-          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem)
+      if (data.order) {
+          this.orderService.updateOrderSubscription(data.order);
+          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem);
         } else {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert')
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
         }
 
-        if (this.openDialogsExist) {
-          this.notification('Item added to cart.', 'Check Cart')
+      if (this.openDialogsExist) {
+          this.notification('Item added to cart.', 'Check Cart');
         }
 
       }

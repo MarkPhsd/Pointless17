@@ -1,8 +1,9 @@
 /***************************************************************************************************
  * Load `$localize` onto the global scope - used if i18n tags appear in Angular templates.
  */
+//  (window as any).global = window;
  (window as any).global = window;
-import '@angular/localize/init';
+// import '@angular/localize/init';
 /**
  * This file includes polyfills needed by Angular and is loaded before the app.
  * You can add your own extra polyfills to this file.
@@ -60,17 +61,17 @@ import 'zone.js';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
- declare global {
-  interface Window {
-      // fs       : any;
-      // os       : any;
-      // zlib     : any;
-      // http     : any;
-      // https    : any;
-      // constants: any;
-      // stream   : any;
-      // crypto   : any;
-  }
-}
+//  declare global {
+//   interface Window {
+//       fs       : any;
+//       os       : any;
+//       zlib     : any;
+//       http     : any;
+//       https    : any;
+//       constants: any;
+//       stream   : any;
+//       crypto   : any;
+//   }
+// }
 
 
