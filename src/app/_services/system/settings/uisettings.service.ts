@@ -82,6 +82,7 @@ export class UISettingsService {
       private settingsService: SettingsService) {
 
     const site = this.siteService.getAssignedSite();
+
     this.getSetting('UITransactionSetting').subscribe(data => {
       const ui = {} as TransactionUISettings
       if (data.text) {

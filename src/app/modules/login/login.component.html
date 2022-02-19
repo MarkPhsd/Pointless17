@@ -1,12 +1,12 @@
 ﻿<div class="bg row-height" [ngStyle]="backgroundImage">
 
-  <ng-template #loading >
-    <h2>Please wait...is loading.</h2>
+  <!-- <ng-template #loading >
+    <h2>Please wait, the store is loading.</h2>
     <mat-spinner></mat-spinner>
-  </ng-template>
+  </ng-template> -->
 
   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <div *ngIf="this.companyName != '' ; else loading" class="login-window">
+    <div  class="login-window">
 
       <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
           <mat-card fxFlex="100%">
@@ -16,7 +16,7 @@
                      fxLayoutAlign="center center"
                      class="row-height">
 
-                    <img *ngIf="logo"
+                    <img *ngIf="logo || uiHomePageSetting"
                         (click)="setAPIAlt()"
                         [src]="logo"
                         width="125px"
@@ -27,12 +27,10 @@
                         *ngIf="uiHomePageSetting">
                         {{uiHomePageSetting.displayCompanyName}}
                     </h2>
-
                 </div>
               </mat-card-title>
-
-
               <mat-card-content>
+
                   <div class="center">
 
                     <div class="center"

@@ -1,7 +1,8 @@
 <mat-card >
   <mat-card-content>
     <div class="button-grid">
-      <div>
+
+      <div >
         <button class="button"
                 mat-button
                 (click)="resetSearch()">
@@ -9,14 +10,24 @@
           <span>Reset</span>
         </button>
       </div>
-      <div>
+      <div >
+        <button class="button"
+                mat-button
+                (click)="refreshSearch()">
+                <mat-icon>refresh</mat-icon>
+          <span>Refresh</span>
+        </button>
+      </div>
+
+      <div *ngIf="isStaff">
         <button class="button"
                 mat-button
                 (click)="newOrder()">
           <mat-icon>receipt</mat-icon><span>New Order</span>
         </button>
       </div>
-      <div>
+
+      <div *ngIf="isStaff">
         <button class="button"
                 mat-button
                 (click)="gotoPayments()">
@@ -24,7 +35,7 @@
           <span>Payments</span>
         </button>
       </div>
-      <div>
+      <div *ngIf="isStaff">
         <button class="button"
                   mat-button
                   (click)="newOrderOptions()">
@@ -50,9 +61,20 @@
     </div>
 
     <div *ngIf="isAuthorized" class="fields">
-      <button mat-raised-button (click)="toggleDateRangeFilter()">Dates<mat-icon>date_range</mat-icon></button>
+      <button mat-raised-button class="button"
+              (click)="toggleDateRangeFilter()">Dates<mat-icon>date_range</mat-icon></button>
       <mat-date-range
         [inputForm]      ="dateRangeForm"
+        (outputDateRange)="emitDatePickerData($event)">
+      </mat-date-range>
+    </div>
+
+    <div *ngIf="(isAuthorized || isUser)" class="fields">
+      <button mat-raised-button class="button"
+              (click)="toggleScheduleDateRangeFilter()">Schedule Dates<mat-icon>date_range</mat-icon></button>
+      <mat-date-range
+        *ngIf="showScheduleFilter"
+        [inputForm]      ="scheduleDateForm"
         (outputDateRange)="emitDatePickerData($event)">
       </mat-date-range>
     </div>
@@ -70,6 +92,7 @@
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
+          *ngIf="isStaff"
           name        ="toggleSuspendedOrders"
           class       ="toggle-view"
           [(ngModel)] ="toggleSuspendedOrders"
@@ -83,6 +106,7 @@
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
+          *ngIf="isStaff"
           name        ="toggleOrdersGreaterThanZero"
           class       ="toggle-view"
           [(ngModel)] ="toggleOrdersGreaterThanZero"
@@ -93,6 +117,7 @@
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
+          *ngIf="isStaff"
           name        = "toggleTypeEmployee"
           class       ="toggle-view"
           [(ngModel)] ="toggleTypeEmployee"
@@ -109,7 +134,7 @@
           <mat-icon>receipt</mat-icon> </mat-button-toggle>
     </mat-button-toggle-group>
 
-    <div [hidden]="toggleTypeEmployee  === '0' && searchModel"
+    <div *ngIf="isStaff" [hidden]="toggleTypeEmployee  === '0' && searchModel"
          class="toggle-selector">
       <app-mat-toggle-selector
               [id]      ="searchModel.employeeID"
@@ -119,7 +144,8 @@
       </app-mat-toggle-selector>
     </div>
 
-    <div [hidden]="toggleTypeEmployee === '1' && searchModel"
+    <div *ngIf="isStaff"
+         [hidden]="toggleTypeEmployee === '1' && searchModel"
          class="toggle-selector">
       <app-mat-toggle-selector
             *ngIf="searchModel"
@@ -130,7 +156,7 @@
       </app-mat-toggle-selector>
     </div>
 
-    <div *ngIf="electronEnabled || printingEnabled">
+    <!-- <div *ngIf="electronEnabled || printingEnabled">
       <div [formGroup]="printForm">
         <mat-form-field appearance="outline">
           <mat-label >Print Quantity</mat-label>
@@ -151,7 +177,7 @@
 
       </div>
     </div>
-
+ -->
 
   </mat-card-content>
 </mat-card>

@@ -103,6 +103,7 @@ export class ReportingService {
     this.dateSeries =  [];
     const dateStart =  new Date(start)
     this.dateSeries =  this.push24HoursToDateArray(dateStart, this.dateSeries);
+
     this.dateSeries =  this.push24HoursToDateArray(this.addDays(dateStart, 1), this.dateSeries);
     return this.dateSeries
   }
@@ -114,13 +115,11 @@ export class ReportingService {
 
   push24HoursToDateArray(date, dateSeries) {
     let i = 0
-    // console.log(date)
     const dateString = this.getDateString(date.toDateString())
     for (let i = 0; i < 24; i++) {
       dateSeries.push(
         {date:  `${dateString} ${i}`, value: 0}
       )
-      // console.log(`${dateString} ${i}`)
       if (i>23) { i = 24}
     }
     return dateSeries;
@@ -138,13 +137,11 @@ export class ReportingService {
   getDateSeriesWithValue(start: string, end: string) : rowValue[] {
 
     this.dateSeries = [];
-
     let dateStart: Date;
     let dateEnd: Date;
-
     dateStart = new Date(start);
     dateEnd = new Date(end);
-    this.dateSeries.push({date: '', value: 0})
+    // this.dateSeries.push({date: '', value: 0})
 
     for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
         var loopDay = new Date(d);

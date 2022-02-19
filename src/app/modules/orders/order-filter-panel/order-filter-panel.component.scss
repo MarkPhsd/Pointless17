@@ -4,43 +4,9 @@
   margin-left: 0px;
   top: -10px;
 }
+
 mat-form-field {
   width: 200px;
-}
-
-.dates-field {
-  width: 300px;
-  max-width: 300px;
-  margin-left: 0px;
-}
-
-.fields {
-  margin-top: 5px;
-  margin-left: 5px;
-}
-
-.button-grid {
-  --gap       : 5px;
-  display     : grid;
-  gap         : var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
-  // overflow-y  : hidden;
-  // overflow-x  : hidden;
-  // font-size   : larger;
-}
-
-.toggle-selector {
-  margin-top: 10px;
-  margin-left: 5px;
-  // height: 300px;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.package-title {
-  font-weight: 400;
-  font-size: 1.1em;
-  margin: 3px 5px 3px 3px;
 }
 
 mat-form-field {
@@ -68,6 +34,61 @@ mat-card-title {
 app-inventory-history-item {
   overflow: hidden;
 }
+
+mat-card-content {
+  margin-left:  -10px;
+  padding-left: -10px;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  font-size: .8em;
+}
+
+mat-card {
+  font-size :  1em;
+  width     :  100%;
+  min-width :  350px;
+  height    :  100%;
+  overflow-y:  auto;
+  overflow-x:  hidden;
+  margin    :  5px;
+}
+
+.dates-field {
+  width: 300px;
+  max-width: 300px;
+  margin-left: 0px;
+}
+
+.fields {
+  margin-top: 5px;
+  margin-left: 5px;
+}
+
+.button-grid {
+  --gap       : 5px;
+  display     : grid;
+  gap         : var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.toggle-selector {
+  margin-top: 10px;
+  margin-left: 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.toggle-view {
+  width: 275px;
+}
+
+.package-title {
+  font-weight: 400;
+  font-size: 1.1em;
+  margin: 3px 5px 3px 3px;
+}
+
 
 .headers {
   font-size: 1em;
@@ -113,31 +134,9 @@ app-inventory-history-item {
 
 .button {
   // padding: 3px 3px 3px 3px;
-  margin-top: 5px;
-  margin-left: 3px;
-  // margin-right: 3px;
-  // height: 2.5em;
+margin: 10px;
 }
 
-mat-card-content {
-  margin-left:  -10px;
-  padding-left: -10px;
-  width: 100%;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  font-size: .8em;
-
-}
-
-mat-card {
-  font-size :  1em;
-  width     :  100%;
-  min-width :  185px;
-  height    :  100%;
-  overflow-y:  auto;
-  overflow-x:  hidden;
-  margin    :       5px;
-}
 
 .center-keypad {
   display        : flex;

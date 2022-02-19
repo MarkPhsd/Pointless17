@@ -31,14 +31,14 @@
     </button>
   </div>
 
-  <div *ngIf="isAuthorized">
+  <div *ngIf="isStaff">
     <button mat-raised-button class="button" color="primary"  (click)="printLabels()">
       <mat-icon>print</mat-icon>
        Labels
     </button>
   </div>
 
-  <div *ngIf="isAuthorized">
+  <div *ngIf="isStaff">
     <button mat-raised-button
             class="button"
             color="primary"

@@ -38,11 +38,11 @@
 
     <div *ngFor="let tier of tvPriceMenuTiers$ | async">
       <div class="grid" >
-        <div class="grid-item  prices">
+        <div class="grid-title tiername">
           {{tier.name}}
         </div>
         <div *ngFor="let item of tier.tvMenuPriceTierItems">
-          <div class="grid-itemprices prices">
+          <div class="prices">
               {{ item?.currentPrice | currency }}
           </div>
         </div>

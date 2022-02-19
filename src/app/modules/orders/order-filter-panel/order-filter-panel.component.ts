@@ -50,6 +50,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   dateFrom          : any;
   dateTo            : any;
 
+  scheduleDateForm  : FormGroup;
+  scheduleDateFrom  : any;
+  scheduleDateTo    : any;
+
   // searchModel   = {} as IPOSOrderSearchModel;
   employees$       :   Observable<IItemBasic[]>;
   serviceTypes$    :   Observable<IServiceType[]>;
@@ -61,8 +65,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   searchPhrase     : Subject<any> = new Subject();
   value            : string;
   smallDevice      = false;
+
   isAuthorized     : any;
+  isStaff     : boolean;
+  isUser      : boolean;
+
   showDateFilter   : boolean;
+  showScheduleFilter  = false ;
 
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -99,12 +108,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   )
   {
     this.initSubscriptions();
-    const site           = this.siteService.getAssignedSite()
-    this.employees$      = this.orderService.getActiveEmployees(site)
-    this.serviceTypes$   = this.serviceTypes.getSaleTypes(site)
+    const site           = this.siteService.getAssignedSite();
+    this.employees$      = this.orderService.getActiveEmployees(site);
+    this.serviceTypes$   = this.serviceTypes.getSaleTypes(site);
+    this.initAuthorization();
     this.initDateForm();
     this.initForm();
-    this.initAuthorization();
     this.refreshSearch();
   }
 
@@ -113,8 +122,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     return
   }
 
+
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+      // this.showScheduleFilter = true;
+      this.showDateFilter = true;
+    }
   }
 
   initForm() {
@@ -160,7 +176,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   gotoPayments() {
-    this.router.navigateByUrl('/pos-payments')
+    this.router.navigateByUrl('/pos-payments');
   }
 
   resetSearch() {
@@ -171,6 +187,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.toggleOpenClosedAll         = "1"
     this.toggleTypeEmployee          = "0"
     this.value = ''
+    if (this.user.roles==='user'){
+      this.value = '1';
+    }
     if (this.searchModel) {  this.searchModel.orderID = 0}
     this.initForm();
     this.initDateForm();
@@ -296,11 +315,18 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   toggleDateRangeFilter() {
-    this.showDateFilter=!this.showDateFilter
+    this.showDateFilter = !this.showDateFilter;
     this.initDateForm()
   }
 
-  async initDateForm() {
+  toggleScheduleDateRangeFilter() {
+    console.log('showScheduleFilter', this.showScheduleFilter);
+    this.showScheduleFilter  = !this.showScheduleFilter;
+    console.log('showScheduleFilter', this.showScheduleFilter);
+    this.initScheduledDateForm();
+  }
+
+   initDateForm() {
 
     if (!this.showDateFilter) {
       if (this.searchModel) {
@@ -326,9 +352,42 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     })
 
     this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
-    this.searchModel.completionDate_To   = this.dateRangeForm.get("start").value;
+    this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
     this.subscribeToDatePicker();
   }
+
+   initScheduledDateForm() {
+
+    if (!this.showDateFilter) {
+      if (this.searchModel) {
+        this.searchModel.scheduleDate_From = null;
+        this.searchModel.scheduleDate_To = null;
+      }
+      this.scheduleDateForm = null;
+      return
+    }
+
+    this.scheduleDateForm = new FormGroup({
+      start: new FormControl(),
+      end: new FormControl()
+    });
+
+    const today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+
+    this.dateRangeForm =  this.fb.group({
+      start: new Date(year, month, 1),
+      end: new Date()
+    })
+
+    this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
+    this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
+    this.subscribeToDatePicker();
+  }
+
+
+
 
   subscribeToDatePicker()
     {
@@ -354,15 +413,50 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     }
   }
 
+  subscribeToScheduledDatePicker()
+  {
+  if (this.scheduleDateForm) {
+    this.scheduleDateForm.get('start').valueChanges.subscribe(res=>{
+      if (!res) {return}
+      this.dateFrom = res //this.dateRangeForm.get("start").value
+    }
+  )
+
+  this.scheduleDateForm.get('end').valueChanges.subscribe(res=>{
+    if (!res) {return}
+    this.dateTo = res
+    }
+  )
+
+  this.scheduleDateForm.valueChanges.subscribe(res=>{
+      if (this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("start").value) {
+        this.refreshDateSearch()
+      }
+      }
+    )
+  }
+}
+
   emitDatePickerData(event) {
     if (this.dateRangeForm) {
-      if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("start").value) {
+      if (!this.dateRangeForm.get("start").value || !this.dateRangeForm.get("end").value) {
         this.dateFrom = this.dateRangeForm.get("start").value
         this.dateTo = (  this.dateRangeForm.get("end").value )
         this.refreshDateSearch()
       }
     }
   }
+
+  emitScheduledDatePickerData(event) {
+    if (this.dateRangeForm) {
+      if (!this.scheduleDateForm.get("start").value || !this.dateRangeForm.get("end").value) {
+        this.scheduleDateFrom = this.scheduleDateForm.get("start").value
+        this.scheduleDateTo = (  this.scheduleDateForm.get("end").value )
+        this.refreshDateSearch()
+      }
+    }
+  }
+
 
   refreshDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
@@ -379,6 +473,25 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
       this.searchModel.completionDate_From = this.dateFrom.toISOString()
       this.searchModel.completionDate_To   = this.dateTo.toISOString()
+      this.refreshSearch()
+  }
+
+
+  refreshScheduledDateSearch() {
+    if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }
+
+      this.scheduleDateTo = this.scheduleDateForm.get("start").value
+      this.scheduleDateFrom  = this.scheduleDateForm.get("end").value
+
+      if (!this.scheduleDateForm || !this.scheduleDateFrom  || !this.scheduleDateTo) {
+        this.searchModel.scheduleDate_From = '';
+        this.searchModel.scheduleDate_To   = '';
+        this.refreshSearch()
+        return
+      }
+
+      this.searchModel.scheduleDate_From = this.scheduleDateFrom.toISOString()
+      this.searchModel.scheduleDate_To   = this.scheduleDateTo.toISOString()
       this.refreshSearch()
   }
 

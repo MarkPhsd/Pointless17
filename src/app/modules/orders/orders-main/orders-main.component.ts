@@ -19,7 +19,10 @@ export class OrdersMainComponent  {
   smallDevice  : boolean;
   viewType     = 1;
   isAuthorized : boolean;
+  isStaff     : boolean;
+  isUser      : boolean;
   listHeight = '84vh'
+
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
@@ -32,6 +35,11 @@ export class OrdersMainComponent  {
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+      this.viewType = 2;
+    }
   }
 
   @HostListener("window:resize", [])

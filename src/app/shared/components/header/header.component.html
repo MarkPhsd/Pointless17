@@ -237,6 +237,21 @@
                     <mat-icon>location_on</mat-icon>
                   </button>
                 </div>
+
+
+                <div  mat-menu-item
+                      class="mat-item"
+                      *ngIf="user && user.roles === 'user'">
+                  <button
+                        mat-button
+                        color="accent"
+                        aria-label="Order history"
+                        class="mat-button-item"
+                        (click)="navPOSOrders()">
+                     My Orders<mat-icon>list</mat-icon>
+                  </button>
+                </div>
+
               </mat-card>
 
             </mat-menu>

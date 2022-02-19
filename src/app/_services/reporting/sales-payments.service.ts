@@ -39,9 +39,10 @@ export interface PaymentSummary {
   totalPayments: number;
   hour:          number;
   month:         number;
-  employeeName:    string;
+  employeeName:  string;
   dateHour:      string;
   resultMessage: string;
+  completionDate: string;
 }
 
 @Injectable({

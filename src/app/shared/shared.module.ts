@@ -123,6 +123,7 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
 import { UploaderComponent } from './widgets/AmazonServices';
+import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -205,6 +206,7 @@ import { UploaderComponent } from './widgets/AmazonServices';
     PageNotFoundComponent,
     PaymentBalanceComponent,
     PaymentReportComponent,
+    PaymentReportCardComponent,
     PieComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,

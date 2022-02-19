@@ -5,8 +5,6 @@ import { ReportingService} from 'src/app/_services/reporting/reporting.service';
 import { ISite,Item,IUser }  from 'src/app/_interfaces';
 import { MatPaginator } from '@angular/material/paginator';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { environment } from 'src/environments/environment';
-
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -14,6 +12,7 @@ import { environment } from 'src/environments/environment';
 })
 
 export class DashboardComponent implements OnChanges,OnInit  {
+  showValues = false;
 
   count                 = 0;
   value                  = false;
@@ -48,6 +47,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
   }
 
   notifyChild() {
+
+
     this.value = !this.value;
     this.childNotifier.next(this.value);
   }
@@ -56,6 +57,8 @@ export class DashboardComponent implements OnChanges,OnInit  {
     this.getUser()
     this.sites$ = this.sitesService.getSites()
     this.initDateRange()
+    this.dateFrom    = '2/01/2021';
+    this.dateTo      = '2/08/2021';
   };
 
   getUser() {

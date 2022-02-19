@@ -113,6 +113,50 @@
                   </mat-form-field>
                 </div>
 
+                <div class="grid-item-span">
+                  <app-key-pad
+                              [inputForm]     ="inputForm"
+                              [fieldName]     ="'packageQuantity'"
+                              [inputTypeValue]="'number'"
+                              (outPutValue)   ="applyQuantity($event)"
+                             >
+                      Quantity
+                  </app-key-pad>
+                  <span *ngIf="scaleInfo">
+                    {{scaleInfo.value}} {{scaleInfo.mode}}
+                    <span><button mat-raised-button (click)="applyWeightQuantity()">
+                      Apply Weight
+                    </button></span>
+                  </span>
+                </div>
+
+                <div>
+                  <app-value-fields
+                        type           ="text"
+                        [inputForm]="inputForm"
+                        [fieldName]="'price'">
+                    Price
+                  </app-value-fields>
+                </div>
+
+                <div>
+                  <app-value-fields
+                        type           ="text"
+                        [inputForm]="inputForm"
+                        [fieldName]="'cost'">
+                    Cost
+                  </app-value-fields>
+                </div>
+
+                <div>
+                  <app-value-fields
+                        type           ="text"
+                        [inputForm]="inputForm"
+                        [fieldName]="'unitOfMeasureName'">
+                    Unit of Measure
+                  </app-value-fields>
+                </div>
+
                 <div >
                   <mat-slide-toggle
                           name="notAvalibleForSale"
@@ -121,53 +165,6 @@
                     <mat-label class="mat-label">Disable</mat-label>
                   </mat-slide-toggle>
                 </div>
-
-                <div>
-                  <mat-form-field appearance="outline" class="price-values fields">
-                    <mat-label > Quantity</mat-label>
-                    <input matInput
-                        type="text"
-                        formControlName="packageQuantity"
-                      >
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-form-field  appearance="outline" class="price-values fields">
-                    <mat-label >Price</mat-label>
-                    <input  matInput
-                        type           ="text"
-                        formControlName="price"
-                        name           ="price"
-                        class          ="price-values"
-                        >
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-form-field  appearance="outline" class="price-values fields">
-                    <mat-label >Cost</mat-label>
-                    <input  matInput
-                        type           ="text"
-                        formControlName="cost"
-                        name           ="price"
-                        class          ="price-values"
-                        >
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-form-field  appearance="outline" class="price-values fields">
-                    <mat-label >Unit of Measure</mat-label>
-                    <input  matInput
-                        type           ="text"
-                        formControlName="unitOfMeasureName"
-                        name           ="unitOfMeasureName"
-                        class          ="price-values"
-                        >
-                  </mat-form-field>
-                </div>
-
               </div>
 
             </div>

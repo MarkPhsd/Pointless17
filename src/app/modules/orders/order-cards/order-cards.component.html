@@ -1,3 +1,4 @@
+<ng-content></ng-content>
 <div *ngIf="value" class="loader">
   <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
 </div>
@@ -12,7 +13,8 @@
           (scrolled)="onScrollDown()"
           (scrolledUp)="onScrollUp()"
           [scrollWindow]="false"   >
-        <div [class]="grid">
+
+        <div *ngIf="cardStyle === 'block'" [class]="grid">
           <div *ngFor="let order of orders; let i = index">
             <app-order-card
               *ngIf="order && order.id"
@@ -21,7 +23,19 @@
               [order]="order"
             ></app-order-card>
           </div>
-      </div>
+        </div>
+
+        <div *ngIf="cardStyle === 'panel'" [class]="grid">
+          <div *ngFor="let order of orders; let i = index">
+            <app-order-panel
+              *ngIf="order && order.id"
+              (click)="setActiveOrder(order)"
+              class="grid-item"
+              [order]="order"
+            ></app-order-panel>
+          </div>
+        </div>
+
     </div>
   </div>
 </div>

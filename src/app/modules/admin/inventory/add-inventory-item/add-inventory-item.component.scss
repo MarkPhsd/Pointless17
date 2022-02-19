@@ -31,6 +31,9 @@
   width: 50px;
 }
 
+.grid-item-span {
+  column-span: 2;
+}
 
 .grid-container {
   display: grid;

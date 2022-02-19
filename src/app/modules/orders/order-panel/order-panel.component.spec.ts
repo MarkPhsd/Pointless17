@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KeyPadComponent } from './key-pad.component';
+import { OrderPanelComponent } from './order-panel.component';
 
-describe('KeyPadComponent', () => {
-  let component: KeyPadComponent;
-  let fixture: ComponentFixture<KeyPadComponent>;
+describe('OrderPanelComponent', () => {
+  let component: OrderPanelComponent;
+  let fixture: ComponentFixture<OrderPanelComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ KeyPadComponent ]
+      declarations: [ OrderPanelComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(KeyPadComponent);
+    fixture = TestBed.createComponent(OrderPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

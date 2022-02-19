@@ -1,7 +1,5 @@
 <div class="container" >
-
   <div  fxLayout="column">
-
     <div class="section-gap"
          fxLayout="row"
          fxLayoutAlign="space-between center"
@@ -15,7 +13,7 @@
     <div *ngIf="dateFrom && dateTo">
 
       <div class="grid-flow"
-          *ngIf="dateFrom && dateTo">
+          *ngIf="showValues && dateFrom && dateTo">
         <div  *ngFor="let site of sites$ | async">
           <sales-tax-report
                   [site]="site"
@@ -33,40 +31,55 @@
                   [notifier]="childNotifier">
                   <mat-icon>credit_card</mat-icon> Payments - {{site.name}}
           </payment-report>
+
         </div>
-
       </div>
 
-      <div
-            class="section-gap"
-            fxLayout="row"
-            fxLayoutAlign="space-between center"
-            flLayoutGap="20px">
-          <mat-card fxFlex="100">
-              <app-widget-card [dateFrom] ="dateFrom"
-                               [dateTo]   ="dateTo"
-                               groupBy    ="date"
-                               chartName  ="ByDate"
-                               [counter]  ="count+1"
-                ></app-widget-card>
-          </mat-card>
-      </div>
+      <div class="grid-charts">
+          <div>
+              <mat-card  fxFlex="100">
+                  <app-widget-card [dateFrom] ="dateFrom"
+                                  [dateTo]   ="dateTo"
+                                  groupBy    ="date"
+                                  chartName  ="ByDate"
+                                  [counter]  ="count+1"
+                    ></app-widget-card>
+              </mat-card>
+          </div>
 
-      <div
-            class="section-gap"
-            fxLayout="row"
-            fxLayoutAlign="space-between center"
-            flLayoutGap="20px">
-          <mat-card fxFlex="100">
-              <app-widget-card [dateFrom] ="dateFrom"
-                               [dateTo]   ="dateFrom"
-                               groupBy    ="hour"
-                               chartName  ="Hourly"
-                               [counter]  ="count+1"
-                ></app-widget-card>
-          </mat-card>
-      </div>
+          <div>
+              <mat-card  fxFlex="100">
+                  <app-widget-card [dateFrom] ="dateFrom"
+                                  [dateTo]   ="dateFrom"
+                                  groupBy    ="hour"
+                                  chartName  ="Hourly"
+                                  [counter]  ="count+1"
+                    ></app-widget-card>
+              </mat-card>
+          </div>
 
+          <div>
+              <mat-card  fxFlex="100">
+                  <app-widget-card [dateFrom] ="dateFrom"
+                                  [dateTo]   ="dateTo"
+                                  groupBy    ="orderemployeecount"
+                                  chartName  ="Employee Order Count"
+                                  [counter]  ="count+1"
+                    ></app-widget-card>
+              </mat-card>
+          </div>
+          <div>
+            <mat-card fxFlex="100">
+                <app-widget-card [dateFrom] ="dateFrom"
+                                [dateTo]   ="dateTo"
+                                groupBy    ="orderemployeesales"
+                                chartName  ="Employee Order Sales"
+                                [counter]  ="count+1"
+                  ></app-widget-card>
+            </mat-card>
+          </div>
+
+        </div>
     </div>
   </div>
 

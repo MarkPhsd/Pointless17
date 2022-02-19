@@ -54,14 +54,16 @@
   overflow-y: auto;
   height: 84vh;
   max-height: 84vh;
-  max-width:  275px;
+  width: 350px;
+  max-width:  350px;
   margin: 5px;
 
   @include for-phone-only  {
     overflow-x: hidden;
     overflow-y: auto;
     height: 80vh;
-    max-width:  300px;
+    width: 350px;
+    max-width:  350px;
     margin: 5px;
   }
 }

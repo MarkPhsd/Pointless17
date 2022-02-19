@@ -44,6 +44,7 @@ export class PriceTierEditComponent implements OnInit {
 
   changesUnsubscribe = new Subject();
 
+  // tslint:disable-next-line: typedef
   priceTierPricesChanges() {
     // cleanup any prior subscriptions before re-establishing new ones
     this.changesUnsubscribe.next(null);
@@ -214,21 +215,17 @@ export class PriceTierEditComponent implements OnInit {
   async updatePriceTier(item): Promise<boolean> {
     if (!this.inputForm.valid) { return }
     const priceTier = this.getBasicTierFromForm();
-    console.log('price tier', priceTier);
-
     if (!priceTier) {
       this.notifyEvent('price tier is not valid', 'failed')
       return
     }
-
     this.saveAllItems();
-
     return new Promise(resolve => {
       const site = this.siteService.getAssignedSite()
       const priceTier$ = this.priceTierService.savePriceTier(site, priceTier)
       priceTier$.subscribe( data => {
         this.notifyEvent('Item Updated', 'Success')
-        // this.priceTier = data;
+        this.priceTier = data;
         this.refreshData()
         resolve(true)
         }, error => {

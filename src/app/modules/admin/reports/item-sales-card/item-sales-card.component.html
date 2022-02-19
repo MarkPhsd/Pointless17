@@ -33,7 +33,7 @@
              *ngFor="let sale of sales; let i = index;"> -->
         <div  class="grid-body"
               *ngFor="let sale of (showAll ? sales : sales.slice(0,10))" >
-            <div class="product-name">{{sale.productName }}      </div>
+            <div class="product-name">{{sale.productName | truncateText : 20   }}      </div>
             <div class="totals">{{sale.itemTotal | currency }}   </div>
             <div class="totals">{{sale.quantity }}               </div>
         </div>

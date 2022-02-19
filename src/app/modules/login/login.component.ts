@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   _loginStatus    : Subscription;
   loginStatusvalue: number;
 
-  initSubscriptions() {
+  async initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
       if (user)  { this.loggedInUser = user }
       if (!user) { this.loggedInUser = null; }
@@ -70,6 +70,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
 
     this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
+        console.log('init UIHomePageSetting')
+
+
         if (data) {
           if (!this.bucket) { return }
           if (!data.backgroundImage) { return }
@@ -117,7 +120,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.initForm();
     this.initSubscriptions()
-    this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings')
+    // this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings').subscribe(data =>  {
+    this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
+      this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
+    })
+
     this.bucket = await this.awsBucketService.awsBucketURL()
     if (!this.platformService.isApp()) { this.amI21 = true  }
     if (this.platformService.isApp())  { this.amI21 = false }
@@ -254,7 +261,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     return true
   }
 
-  updateLoginStatus(option: number) {
+ async updateLoginStatus(option: number) {
 
     if (option == 0) {
       this.submitted      = true;
@@ -273,7 +280,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (option == 2) {
       this.statusMessage   = 'logging in...'
       this.spinnerLoading = true;
-      this.initForm();
+      // this.initForm();
       return
     }
 
@@ -300,17 +307,23 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  async  onSubmit() {
+  onSubmit() {
     // this.userSwitchingService.updateLoginStatus(0)
-    this.updateLoginStatus(0)
+    // this.updateLoginStatus(0)
+    // await this.updateLoginStatus(0)
+
+    this.submitted      = true;
+    this.statusMessage  = "...loggining in"
+    this.spinnerLoading = true;
+
     if (!this.validateForm(this.loginForm)) { return }
-    // this.updateLoginStatus(2)
+
     this.userSwitchingService.login(this.f.username.value, this.f.password.value)
       .pipe()
       .subscribe(
         user =>
         {
-          this.initForm();
+
           if (user) {
             if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
               // this.userSwitchingService.updateLoginStatus(1)
@@ -330,12 +343,14 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         },
         error => {
-          this.updateLoginStatus(0)
+          this.updateLoginStatus(6)
           const message = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
+          this.statusMessage = message
           this.notifyEvent(message, 'error')
           return
         }
     );
+
     this.updateLoginStatus(6) //clearn login settings
   }
 

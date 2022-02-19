@@ -21,6 +21,7 @@ import { EMPTY, } from 'rxjs';
 
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -68,6 +69,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   openBar       : boolean;
 
   isAuthorized  : boolean;
+  isUser        : boolean;
+  isStaff       : boolean;
+
   itemsPrinted  : boolean;
   paymentsMade  : boolean;
 
@@ -118,6 +122,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private orderItemService  : POSOrderItemServiceService,
               private renderingService  : RenderingService,
               private settingService    : SettingsService,
+              private userAuthorization: UserAuthorizationService,
               private orderMethodService: OrderMethodsService,
               // private printingService : Printing
               private el                : ElementRef) {
@@ -174,9 +179,23 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.isNotInSidePanel = true
       this.sidePanelPercentAdjust = 60
     }
-    this.isAuthorized = true
+
+    this.initAuthorization();
     this.toolbarUIService.hidetoolBars();
   }
+
+
+  initAuthorization() {
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+      // this.showScheduleFilter = true;
+      // this.showDateFilter = true;
+    }
+  }
+
+
 
   openClient() {
     if (this.order && this.order.clients_POSOrders) {

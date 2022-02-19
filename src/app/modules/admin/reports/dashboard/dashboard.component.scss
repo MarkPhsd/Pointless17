@@ -1,4 +1,4 @@
-
+@import "/src/mixins.scss";
 
 :host {
   display: flex;
@@ -16,6 +16,22 @@ mat-drawer {
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(370px, 1fr) );
 }
+
+.grid-charts {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(800px, 1fr) );
+
+  @include for-tablet-landscape-up {
+     grid-template-columns: repeat( auto-fit, minmax(1000px, 1fr) );
+  }
+
+  @include for-phone-only {
+    grid-template-columns: repeat( auto-fit, minmax(400px, 1fr) );
+  }
+}
+
 
 mat-drawer-container {
   height: 100%;

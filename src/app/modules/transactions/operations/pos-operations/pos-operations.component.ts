@@ -52,7 +52,6 @@ export class PosOperationsComponent implements OnInit {
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
     }
-
   }
 
   ngOnInit(): void {
@@ -76,6 +75,18 @@ export class PosOperationsComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     this.site = site
     this.balanceSheetService.getZRUNBalanceSheet(site).subscribe( data => {
+
+      this.dateFrom = data.startTime
+
+      if (!data.endTime) {
+        this.dateTo = data.endTime
+      }
+
+      if (data.endTime) {
+        this.dateTo = new Date().toString()
+      }
+
+
       this.iBalanceSheet = data;
       this.zrunID = data.id;
     })
@@ -83,7 +94,6 @@ export class PosOperationsComponent implements OnInit {
 
   getUser() {
     this.localSite = this.siteService.getAssignedSite();
-
   }
 
   closeDay() {

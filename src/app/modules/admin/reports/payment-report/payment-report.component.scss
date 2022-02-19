@@ -11,17 +11,19 @@
   margin-bottom: 5px;
 }
 
-.totals_label{
-  font-size: .9em;
-  margin: 0px 5px 5px 5px;
-  padding: 0px 5px 5px 5px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.totals_label {
+  font-size     : .9em;
+  margin        : 0px 5px 5px 5px;
+  padding       : 0px 5px 5px 5px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
   text-transform: capitalize;
-  float: left;
-  align-items: baseline;
-  line-height: 1em;
+  align-items   : baseline;
+  line-height   : 1em;
+  float         : left;
+  align-items   : flex-end;
+  text-align    : left;
 }
 
 .center-container {
@@ -56,7 +58,6 @@
   text-overflow  : ellipsis;
   text-transform : capitalize;
   margin-bottom  : 2px;
-
 }
 
 .grid {
@@ -72,9 +73,6 @@
   gap: var(--gap);
   grid-template-columns: 55px 75px 85px 85px 85px;
   margin-left: 15px;
-
-
-
   white-space   : nowrap;
   overflow      : hidden;
   text-overflow : ellipsis;
@@ -82,6 +80,23 @@
 
   @include for-phone-only {
     grid-template-columns:  55px 75px 85px 85px 85px;
+  }
+
+}
+
+.grid-order-employeecount {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 100px 50px 50px 65px 65px;
+  margin-left: 15px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+
+  @include for-phone-only {
+    grid-template-columns: 100px 50px 50px 65px 65px;
   }
 
 }
@@ -136,8 +151,6 @@
   text-align: left;
 }
 
-
-
 .employeeName {
   text-align     : left;
   font-size      : .9em;
@@ -147,7 +160,6 @@
   text-transform : capitalize;
   overflow       : clip;
 }
-
 
 .product-name  {
   float         : left;

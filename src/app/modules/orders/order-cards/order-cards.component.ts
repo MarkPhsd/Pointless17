@@ -1,5 +1,5 @@
 import {Component, HostListener, OnInit, OnDestroy,
-  ViewChild, ElementRef, QueryList, ViewChildren}  from '@angular/core';
+  ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
@@ -20,7 +20,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
 
   scrollContainer     :   any;
   isNearBottom        :   any;
-
+  @Input() cardStyle = 'block';
   productSearchModel
   array               = [];
   sum                 = 15;

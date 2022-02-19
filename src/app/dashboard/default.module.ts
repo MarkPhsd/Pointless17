@@ -242,6 +242,7 @@ import { EmployeeMetrcKeyEntryComponent } from '../modules/admin/employees/emplo
 import { TierPriceLineComponent } from '../modules/menu/tierMenu/tiers-with-prices/tier-price-line/tier-price-line.component';
 import { ProfileRolesComponent } from '../modules/admin/profiles/profile-roles/profile-roles.component';
 import { MenuItemProductCountComponent } from '../modules/menu/menuitem/menu-item-product-count/menu-item-product-count.component';
+import { OrderPanelComponent } from '../modules/orders/order-panel/order-panel.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -345,12 +346,14 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrderFilterPanelComponent,
     OrdersListComponent,
     OrdersMainComponent,
+    OrderPanelComponent,
     PackageListComponent,
     PackageSearchSelectorComponent,
     PaymentMethodListComponent,
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
     PriceTierLineEditComponent,
+
     PriceTierEditComponent,
     PriceTiersComponent,
     TVPriceTiersComponent,

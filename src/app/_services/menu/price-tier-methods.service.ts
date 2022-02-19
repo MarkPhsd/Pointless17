@@ -103,15 +103,16 @@ export class PriceTierMethodsService {
 
   saveAllPrices(priceTier: PriceTiers): Observable<PriceTiers> {
     if (priceTier) {
-      const pricesCount = priceTier.priceTierPrices.length
+      const pricesCount = priceTier.priceTierPrices.length;
       for (let i = 0; i < pricesCount; i++) {
-        const price     = priceTier.priceTierPrices   //.at(i).value as PriceTierPrice;
-        this.updatePrice(price[i])
+        const price     = priceTier.priceTierPrices;   //.at(i).value as PriceTierPrice;
+        this.updatePrice(price[i]);
       }
     }
-    return of(priceTier)
+    return of(priceTier);
   }
 
+  // tslint:disable-next-line: typedef
   updatePrice(price: PriceTierPrice)  {
     if (!price) { return }
     try {
@@ -122,7 +123,7 @@ export class PriceTierMethodsService {
           // this.notifyEvent('Item Updated', 'Success')
           resolve(true)
         }, error => {
-          this.notifyEvent(`Error updating item. ${error}`, "Failure")
+          this.notifyEvent(`Error updating item. ${error}`, 'Failure');
           resolve(false)
         })
         }

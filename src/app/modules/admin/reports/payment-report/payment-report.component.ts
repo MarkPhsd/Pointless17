@@ -8,7 +8,7 @@ import { IPaymentSalesSearchModel, IPaymentSalesSummary, PaymentSummary, SalesPa
   templateUrl: './payment-report.component.html',
   styleUrls: ['./payment-report.component.scss']
 })
-export class PaymentReportComponent implements OnInit,OnChanges {
+export class PaymentReportComponent implements OnInit, OnChanges {
 
   @Input() site    : ISite;
   @Input() dateTo  : string;
@@ -18,14 +18,15 @@ export class PaymentReportComponent implements OnInit,OnChanges {
   @Input() zrunID  : string;
 
   sales$             : Observable<IPaymentSalesSummary>;
-  sales              : PaymentSummary[]
-  paymentSalesSummary: IPaymentSalesSummary
+  sales              : PaymentSummary[];
+  paymentSalesSummary: IPaymentSalesSummary;
   message            : string;
 
   constructor(private salesPaymentService: SalesPaymentsService) { }
 
   ngOnInit(): void {
-    console.log('')
+
+    console.log(this.groupBy);
   }
 
   ngOnChanges() {
@@ -33,12 +34,11 @@ export class PaymentReportComponent implements OnInit,OnChanges {
   }
 
   refreshSales() {
-    const searchModel = {} as IPaymentSalesSearchModel
+    const searchModel = {} as IPaymentSalesSearchModel;
     searchModel.startDate = this.dateFrom;
     searchModel.endDate   = this.dateTo;
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
-
-    this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel)
+    this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel);
   }
 }

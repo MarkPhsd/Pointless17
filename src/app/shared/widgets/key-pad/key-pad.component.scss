@@ -1,7 +1,23 @@
-mat-card {
+.mat-card-floater {
   // width : 285px;
   // margin-left: 35px;
-  margin: 10px;
+  // position:absolute;
+  // top:0px;
+  // right:0px;
+  // left: -50px;
+  // // width:100px;
+  // z-index:1001;
+  margin: 5px;
+}
+
+mat-button  {
+  border-radius: 5px;
+}
+
+mat-form-field {
+  margin-bottom: 5px;
+  height: 1em;
+  width   : 120px;
 }
 
 .header-info {
@@ -37,9 +53,6 @@ mat-card {
   grid-column-gap : 0px;
 }
 
-mat-button  {
-  border-radius: 5px;
-}
 
 .button-sized-1 {
   width       : 75px;
@@ -72,11 +85,7 @@ mat-button  {
   border-radius: 5px;
 }
 
-mat-form-field {
-  margin-bottom: 5px;
-  height: 1em;
-  width   : 120px;
-}
+
 
 button {
   width       : 100%;
@@ -94,9 +103,7 @@ button {
 }
 
 
-.mat-card {
-  margin: 5px;
-}
+
 
 .item-container {
   display: flex;

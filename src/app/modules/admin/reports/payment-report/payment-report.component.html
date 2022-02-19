@@ -1,5 +1,3 @@
-
-
 <div *ngIf=" (sales$ | async) as sales; else loading">
 
   <div *ngIf="sales.resultMessage != 'success'">
@@ -29,65 +27,50 @@
         </mat-card-title>
 
         <mat-card-content>
-          <div class="grid-headerfooter"
-               *ngIf="payments">
+          <div  class="grid-headerfooter"
+               *ngIf="payments && (groupBy === 'paymentMethod' || groupBy === 'Employee')">
 
-            <div *ngIf="groupBy === 'Employee'" class="grid-item">Staff </div>
-            <div *ngIf="groupBy !=  'Employee'" class="grid-item">Method</div>
+              <div *ngIf="groupBy === 'Employee'" class="grid-item">Staff </div>
+              <div *ngIf="groupBy === 'Employee'" class="totals">Amount</div>
+              <div *ngIf="groupBy === 'Employee'" class="totals">Avg</div>
+              <div *ngIf="groupBy === 'Employee'" class="totals">Count</div>
+              <div *ngIf="groupBy === 'Employee'" class="totals">Tip</div>
 
-            <div class="totals">Amount</div>
-            <div class="totals">Avg</div>
-            <div class="totals">Tip</div>
-
-            <div *ngIf="groupBy === 'Employee'" class="grid-item">    </div>
-            <div *ngIf="groupBy !=  'Employee'" class="grid-item">    </div>
+              <div *ngIf="groupBy === 'paymentMethod'" class="grid-item">Method</div>
+              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Amount</div>
+              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Avg</div>
+              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Count</div>
+              <div *ngIf="groupBy === 'paymentMethod'" class="totals">Tip</div>
           </div>
 
-          <div class="grid-headerfooter"
-               *ngFor="let payment of payments" >
+          <div  class="grid-order-employeecount"
+                *ngIf="payments && groupBy === 'OrderEmployeCount'">
+              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Staff</div>
+              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Hour</div>
+              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Count</div>
+              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Total</div>
+              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Avg</div>
+          </div>
 
-            <span *ngIf="groupBy === 'Employee'">
-              <div class="employeeName"
-                  *ngIf="payment.employeeName">
-                {{ payment.employeeName | truncateText: 10 }}
-              </div>
-              <div class="employeeName"
-                  *ngIf="!payment.employeeName">
-                Missing
-              </div>
-            </span>
-
-            <div class="grid-item" *ngIf="groupBy != 'Employee'" >
-              {{ payment.paymentMethod }}
-            </div>
-
-            <div  class="totals">
-              {{payment.amountPaid | currency }}
-            </div>
-
-            <div  class="totals" *ngIf=" payment.count != 0">
-              {{payment.amountPaid / payment.count | currency }}
-            </div>
-
-            <div class="totals calculation">
-              {{payment.tipAmount | currency }}
-            </div>
-
-            <div  class="grid-item calculation" *ngIf="payment?.count != 0">
-              {{ payment.count }}
-            </div>
+          <div class="mat-divider">
 
           </div>
+
+          <app-payment-report-card
+              [payments] ="payments"
+              [groupBy]="groupBy">
+          </app-payment-report-card>
+
           <mat-divider></mat-divider>
         </mat-card-content>
 
         <mat-card-footer>
 
           <div class="grid-footer">
-            <div class="totals">
+            <div class="grid-items">
               Credit Total
             </div>
-            <div class="totals ">
+            <div class="totals">
               {{sales.creditTotal | currency }}
             </div>
             <div class="totals" >
@@ -107,7 +90,7 @@
 
 
           <div class="grid-footer">
-            <div class="grid-item ">
+            <div class="grid-item">
               Total
             </div>
             <div class="totals">

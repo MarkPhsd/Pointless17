@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
@@ -11,6 +11,7 @@ import { FormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -27,6 +28,14 @@ export class AddInventoryItemComponent implements OnInit {
   quantityMoving:            number;
   inventoryLocation:         IInventoryLocation;
 
+  scaleName           :   any;
+  scaleValue          :   any;
+
+  scaleInfo           : ScaleInfo;
+  _scaleInfo          : Subscription;
+  scaleSetup          : ScaleSetup;
+  displayWeight       : string;
+
   inventoryAssignment$:      Observable<IInventoryAssignment>;
   inventoryAssignments  :    IInventoryAssignment[];
   inventoryLocations:        IInventoryLocation[];
@@ -39,6 +48,12 @@ export class AddInventoryItemComponent implements OnInit {
   facility:                  any;
   productName               = "";
 
+  initSubscriptions() {
+    this._scaleInfo = this.scaleService.scaleInfo$.subscribe( data => {
+      this.scaleInfo = data
+    })
+
+  }
   constructor(
     private _snackBar: MatSnackBar,
     private siteService: SitesService,
@@ -47,10 +62,10 @@ export class AddInventoryItemComponent implements OnInit {
     private fbInventory: FbInventoryService,
     private inventoryAssignmentService: InventoryAssignmentService,
     private inventoryLocationsService: InventoryLocationsService,
+    private scaleService        : ScaleService,
     private dialogRef: MatDialogRef<AddInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
-
     if (data) {
       this.id = data.id
     } else {
@@ -60,6 +75,7 @@ export class AddInventoryItemComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initSubscriptions()
     try {
       this.locations$ = this.inventoryLocationsService.getLocations();
       this.inventoryLocations$ = this.locations$;
@@ -84,18 +100,24 @@ export class AddInventoryItemComponent implements OnInit {
     }
   }
 
+  applyWeightQuantity() {
+    if (!this.scaleValue && this.inputForm) {  return }
+    const value = { packageQuantity: this.scaleValue};
+    this.inputForm.patchValue(value)
+  }
 
+  applyQuantity(event) {
+    if (!this.scaleValue && this.inputForm && event) {  return }
+    const value = { packageQuantity: event};
+    this.inputForm.patchValue(value)
+  }
 
   async updateItem(event) {
-
     if (this.inputForm) {
       if (this.inputForm.valid) {
-
         const packageQuantity = this.inputForm.controls['packageQuantity'].value
         const baseQuantity = { baseQuantity: packageQuantity}
-
         this.inputForm.patchValue(baseQuantity)
-
         if (this.id != 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)

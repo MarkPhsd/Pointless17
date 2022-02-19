@@ -20,7 +20,7 @@ export class IPCService {
 
   get isElectronApp(): boolean {
     try {
-      console.log('window.process.type', window.process.type)
+      // console.log('window.process.type', window.process.type)
     } catch (error) {
 
     }

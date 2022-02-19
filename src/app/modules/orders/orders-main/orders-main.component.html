@@ -24,9 +24,9 @@
   </div>
 
   <div class="grid-container">
-
     <span *ngIf="viewType == 1">
       <app-order-cards
+        [cardStyle]="'block'"
         ></app-order-cards>
     </span>
 
@@ -35,6 +35,17 @@
         [height]="listHeight">
       </app-orders-list>
     </span>
+
+    <span *ngIf="viewType == 2">
+      <app-order-cards
+        [cardStyle]="'panel'"
+          >
+        <h2>
+          Your order history
+        </h2>
+      </app-order-cards>
+    </span>
+
 
     <div *ngIf="!smallDevice" class="filter-container">
       <app-order-filter-panel>

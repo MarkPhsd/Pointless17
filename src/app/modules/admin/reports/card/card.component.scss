@@ -1,6 +1,7 @@
+@import "/src/mixins.scss";
 
 h4 {
-    margin-top: 0;    
+    margin-top: 0;
     margin-bottom: 5px;
 }
 
@@ -8,7 +9,7 @@ h4 {
     font-size: 3em;
 }
 
-.description { 
+.description {
     color: green;
     font-size: 2em;
 }
@@ -18,4 +19,18 @@ h4 {
     font-size: 2em;
     padding: 0 20px;
     top: 5px;
+}
+
+#widget {
+  max-width: 100%;
+  min-width: 600px;
+  width    : 100%;
+  height   : 400px;
+
+  @include for-phone-only {
+    max-width: 100%;
+    min-width: 320px;
+    width    : 100%;
+    height   : 400px;
+  }
 }

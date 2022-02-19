@@ -24,6 +24,8 @@ export class PosOrderFunctionButtonsComponent {
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
   @Input() paymentsMade: boolean;
+  @Input() isStaff     : boolean;
+  @Input() isUser      : boolean;
   @Input() isAuthorized: boolean;
   @Input() openBar     : boolean;
   @Input() mainPanel     : boolean;

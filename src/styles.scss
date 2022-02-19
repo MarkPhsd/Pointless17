@@ -1,9 +1,10 @@
 @import '../node_modules/material-icons/iconfont/material-icons.scss';
 @import '~css-star-rating/css/star-rating.min.css';
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-@import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+// @import 'https://fonts.googleapis.com/icon?family=Material+Icons';
+@import '~material-icons/iconfont/material-icons.css';
 @import "./app/_material/theme";
-@import url('https://fonts.googleapis.com/css?family=Muli:300,400,600&display=swap');
+// @import url('https://fonts.googleapis.com/css?family=Muli:300,400,600&display=swap');
 
 @import 'ag-grid-community/dist/styles/ag-grid.css';
 @import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -34,6 +35,9 @@
 // import '@ionic/react/css/flex-utils.css';
 // import '@ionic/react/css/display.css';
 // np
+@mixin for-small-phone-only {
+  @media (max-width: 500px) { @content; }
+}
 @mixin for-phone-only {
   @media (max-width: 599px) { @content; }
 }

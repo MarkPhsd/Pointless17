@@ -1,0 +1,62 @@
+<mat-card>
+
+  <mat-card-content class="center">
+    <div class="grid-order">
+      <div *ngIf="!smallDevice" class="grid-orderproperties">
+
+        <div class='date-header' *ngIf="order.orderDate">
+          Started {{order.orderDate |  date: 'shortTime'}}
+        </div>
+
+        <div *ngIf="order.completionDate">
+          Finished  {{order.completionDate |  date: 'shortDate'}}
+        </div>
+
+        <div *ngIf="order.preferredScheduleDate">
+          Scheduled  {{order.preferredScheduleDate |  date: 'shortDate'}}
+        </div>
+
+        <div class="orderType">
+          Type  {{order.serviceType | truncateText : 15}}
+        </div>
+
+        <div *ngIf="order.employeeName" class="employee-name">
+          Staff Member {{order.employeeName | truncateText : 12 }}
+        </div>
+
+        <div *ngIf="!order.completionDate"
+              class="time">
+              {{order.completionDate |  date: 'shortTime'}}
+        </div>
+
+      </div>
+
+      <div class="center">
+
+        <div class="grid-totals">
+
+          <div class="field-center">
+            <div class="orderID">
+              {{order.id}}
+            </div>
+          </div>
+
+          <div class="items">Items</div>
+          <div class="itemcount">{{order.itemCount}} </div>
+
+          <div class='total' >Total</div>
+          <div class="total">{{ order.total | currency}}</div>
+
+          <!-- //if safari then remove the time -->
+          <div *ngIf="!order.completionDate" class="field-center">
+            <div *ngIf="smallDevice">
+              Open {{minutesOpen}} min.
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+
+</mat-card>

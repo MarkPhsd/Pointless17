@@ -1,26 +1,18 @@
-<div class="text">
-  {{ chartName }}
-</div>
+  <div *ngIf="sitesErrorMessage">
+   <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+  </div>
 
-<span class="total">
-  {{ total }}
-</span>
+  <button mat-button
+          (click)="refresh()">
+          <mat-icon>refresh</mat-icon>
+  </button>
 
-<span>
-  <mat-icon color="primary">trending_up</mat-icon>
-</span>
-
-<div class="widget" *ngIf="chartOptions">
-  <highcharts-chart
-    [Highcharts]="Highcharts"
-    [options]="chartOptions"
-    [oneToOne]="true"
-    style="width: 100%; height: 100%; display: block;"
-  >
-  </highcharts-chart>
-</div>
-<!-- {{dateFrom}}
-<br>
-{{dateTo}}
-<br>
-{{chartOptions | json}} -->
+  <div id="widget"
+      *ngIf="chartOptions">
+    <highcharts-chart
+      [Highcharts]="Highcharts"
+      [options]="chartOptions"
+      [oneToOne]="true"
+      >
+    </highcharts-chart>
+  </div>
