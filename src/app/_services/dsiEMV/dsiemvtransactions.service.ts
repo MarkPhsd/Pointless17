@@ -169,8 +169,13 @@ export class DSIEMVTransactionsService {
         const builder = new XMLBuilder(null)
         const xml = builder.build(tstream);
         console.log(xml)
-        const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-        const response = await emvTransactions.PINPadReset(xml)
+        let response: any;
+        try {
+          const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+          response = await emvTransactions.PINPadReset(xml)
+        } catch (error) {
+          console.log('error', error)
+        }
         if (response === 'reset failed') {
           this.dsiResponse = 'Pin Pad Reset Failed'
           return;
@@ -185,7 +190,9 @@ export class DSIEMVTransactionsService {
     }
 
     const dsiResponse = {} as CmdResponse;
-    dsiResponse.CmdResponse.TextResponse = 'Transaction did not go through.'
+    const cmdResponse = {} as CmdResponseClass
+    dsiResponse.CmdResponse = cmdResponse;
+    dsiResponse.CmdResponse.TextResponse
     return dsiResponse;
 
   }
@@ -205,6 +212,16 @@ export class DSIEMVTransactionsService {
       console.log('response', response)
       return response
     }
+
+  }
+
+
+  runOpenWord() {
+
+    const xml = this.getResetXML()
+    const PadReset = this.electronService.remote.require('./datacap/transactions.js');
+    const response = PadReset.openWord();
+    return response
 
   }
 

@@ -64,8 +64,12 @@ export class DSIEMVElectronComponent implements OnInit {
 
    }
 
-  dollarSaleTest(){
-
+  async  dollarSaleTest(){
+    const response = await this.dsiEMVService.runOpenWord();
+    this.responseMessage = 'failed'
+    if (response) {
+     this.responseMessage =  response
+    }
    }
 
   preAuthTest(){
