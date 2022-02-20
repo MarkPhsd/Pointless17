@@ -316,7 +316,11 @@ export class LoginComponent implements OnInit, OnDestroy {
  async onSubmit() {
     await this.startProcessing()
     if (!this.validateForm(this.loginForm)) { return }
-    this.userSwitchingService.login(this.f.username.value, this.f.password.value)
+    const userName = this.f.username.value;
+    const password = this.f.password.value;
+    await this.startProcessing()
+
+    this.userSwitchingService.login(userName, password)
       .pipe()
       .subscribe(
         user =>
