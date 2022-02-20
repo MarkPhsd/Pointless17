@@ -1,15 +1,17 @@
 <div class="container" >
-  <div  fxLayout="column">
-    <div class="section-gap"
-         fxLayout="row"
-         fxLayoutAlign="space-between center"
-         flLayoutGap="20px">
+    <div  class="grid-charts">
+      <div>
         <app-widget-filter
           (messageOut)="receiveData($event)">
         </app-widget-filter>
+      </div>
+      <div>
+        <button mat-raised-button (click)="showValues=!showValues"><mat-icon>analytics</mat-icon>Toggle Reports</button>
+      </div>
     </div>
 
     <br> <mat-divider  class="section-gap"></mat-divider> <br>
+
     <div *ngIf="dateFrom && dateTo">
 
       <div class="grid-flow"
@@ -49,11 +51,12 @@
 
           <div>
               <mat-card  fxFlex="100">
-                  <app-widget-card [dateFrom] ="dateFrom"
+                  <app-widget-card [dateFrom]="dateFrom"
                                   [dateTo]   ="dateFrom"
                                   groupBy    ="hour"
                                   chartName  ="Hourly"
                                   [counter]  ="count+1"
+                                  [notifier]="childNotifier"
                     ></app-widget-card>
               </mat-card>
           </div>
@@ -65,6 +68,7 @@
                                   groupBy    ="orderemployeecount"
                                   chartName  ="Employee Order Count"
                                   [counter]  ="count+1"
+                                  [notifier]="childNotifier"
                     ></app-widget-card>
               </mat-card>
           </div>
@@ -75,14 +79,13 @@
                                 groupBy    ="orderemployeesales"
                                 chartName  ="Employee Order Sales"
                                 [counter]  ="count+1"
+                                [notifier]="childNotifier"
                   ></app-widget-card>
             </mat-card>
           </div>
 
         </div>
     </div>
-  </div>
-
 </div>
 
 

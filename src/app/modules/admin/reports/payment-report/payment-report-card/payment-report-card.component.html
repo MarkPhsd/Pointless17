@@ -4,7 +4,8 @@
     <div *ngIf="payment.employeeName" class="employeeName" > {{ payment?.employeeName | truncateText: 10 }}  </div>
     <div *ngIf="!payment.employeeName" class="employeeName">Missing</div>
     <div  class="grid-item">{{ payment?.hour }}</div>
-    <div *ngIf="payment.count != 0" class="totals" >{{payment?.amountPaid / payment?.count | currency }}    </div>
+
+    <div class="totals"  *ngIf="payment.count != 0" >{{payment?.amountPaid / payment?.count | currency }}    </div>
     <div  class="totals calculation"> {{payment?.tipAmount | currency }}</div>
     <div *ngIf="payment?.count != 0" class="grid-item calculation" >  {{ payment?.count }} </div>
     <div class="totals calculation"> {{payment?.tipAmount | currency }}</div>
@@ -14,11 +15,11 @@
 <div *ngFor="let payment of payments" >
   <div *ngIf="groupBy === 'paymentMethod'"
       class="grid-headerfooter">
-    <div *ngIf="payment.paymentMethod" class="grid-item" >{{ payment?.paymentMethod }} </div>
-    <div *ngIf="!payment.paymentMethod" class="grid-item"> Missing </div>
+
+    <div class="grid-item" *ngIf="payment.paymentMethod" >{{ payment?.paymentMethod }} </div>
+    <div class="grid-item" *ngIf="!payment.paymentMethod" > Missing </div>
 
     <div  class="totals">    {{payment?.amountPaid | currency }}   </div>
-
     <div  class="totals"  *ngIf="payment?.count != 0"  >{{payment.amountPaid / payment.count | currency }}    </div>
     <div  class="totals"  *ngIf="payment?.count != 0" >  {{ payment.count }} </div>
   </div>

@@ -167,12 +167,9 @@ export class SettingsService {
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
 
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
-    // console.log('user', user)
     if (!user || !user.roles ||  !user.username ) {
       return this.getSettingByNameNoRoles(site, name)
     }
-
-    // console.log(`getSettingByName user name: ${name}`, user)
 
     const controller = "/settings/"
 
@@ -197,7 +194,8 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<ISetting>(url);
+    const options = { url: url, cacheMins: 0}
+    return this.httpCache.get<ISetting>(options);
 
   }
 

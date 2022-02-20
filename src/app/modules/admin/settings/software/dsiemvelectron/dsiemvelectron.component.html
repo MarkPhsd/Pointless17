@@ -1,0 +1,133 @@
+<mat-card>
+  <mat-card-subtitle>
+    <ng-content></ng-content>
+  </mat-card-subtitle>
+
+  <ng-template #loading>... loading
+    <mat-spinner [diameter]="25"></mat-spinner>
+  </ng-template>
+
+  <mat-card-content>
+
+    <div  *ngIf="inputForm; else loading"
+          [formGroup]="inputForm"
+          class="grid-views">
+
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'MerchantID'">
+              MerchantID
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'TerminalID'">
+              TerminalID
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'OperatorID'">
+              OperatorID
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'IpPort'">
+              IpPort
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'UserTrace'">
+              UserTrace
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'TranCode'">
+              TranCode
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'SecureDevice'">
+              SecureDevice
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'ComPort'">
+              ComPort
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'number'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'PinPadIpPort'">
+              PinPadIpPort
+          </app-value-fields>
+        </div>
+    </div>
+    <div  class="grid-views">
+      <div class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="updateSetting()"><mat-icon>save</mat-icon>Save
+        </button>
+      </div>
+
+      <div *ngIf="isElectron" class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="pinPadReset()">Pin Pad Reset
+        </button>
+      </div>
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="downloadParams()">Download Params
+        </button>
+      </div>
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+              color="primary"
+              (click)="dollarSaleTest()">Dollar Sale Test
+        </button>
+      </div>
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="preAuthTest()">Pre Auth Test
+        </button>
+      </div>
+
+      <div class='item-span'
+           *ngIf="responseMessage">
+        <h4> {{responseMessage}} </h4>
+      </div>
+
+    </div>
+  </mat-card-content>
+
+</mat-card>

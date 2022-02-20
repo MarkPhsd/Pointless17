@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DevService } from 'src/app/_services';
-
 
 @Component({
   selector: 'app-wishlist',
@@ -8,15 +6,15 @@ import { DevService } from 'src/app/_services';
   styleUrls: ['./wishlist.component.scss']
 })
 
-export class WishlistComponent implements OnInit {
+export class WishlistComponent  {
 
   devModeOn: boolean;
 
-  constructor(private devService: DevService) { }
+  constructor() { }
 
-  ngOnInit(): void {
-    this.devModeOn = this.devService.getdevMode();
-  }
+  // ngOnInit(): void {
+  //   // this.devModeOn = this.devService.devMode;
+  // }
 
 
 }

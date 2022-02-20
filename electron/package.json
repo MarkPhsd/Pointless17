@@ -1,11 +1,11 @@
 {
-  "name"        : "pointless",
-  "version"     : "1.0.90",
-  "description" : "Point of Sale Ecommerce Kiosk",
-  "main"        : "index.js",
-  "CompanyName" : "Pointless",
-  "author"      : "Coast to Coast Business Solutions",
-  "license"     : "ISC",
+  "name": "pointless",
+  "version": "1.0.91",
+  "description": "Point of Sale Ecommerce Kiosk",
+  "main": "index.js",
+  "CompanyName": "Pointless",
+  "author": "Coast to Coast Business Solutions",
+  "license": "ISC",
   "scripts": {
     "electron:start": "electron ./",
     "postinstall": "electron-builder install-app-deps",
@@ -17,6 +17,8 @@
     "electron-is-dev": "^1.1.0",
     "electron-log": "^4.4.0",
     "electron-updater": "^4.0.6",
+    "fast-xml-parser": "^4.0.3",
+    "winax": "^3.1.5",
     "winreg": "^1.2.4"
   },
   "devDependencies": {
@@ -25,12 +27,12 @@
     "electron-reloader": "^1.2.1"
   },
   "keywords": [
-    "capacitor",
-    "electron",
     "Point of Sale",
     "POS",
     "Ecommerce",
-    "WebStore"
+    "WebStore",
+    "capacitor",
+    "electron"
   ],
   "build": {
     "publish": [

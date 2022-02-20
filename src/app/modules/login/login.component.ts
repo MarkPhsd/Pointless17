@@ -307,23 +307,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSubmit() {
-    // this.userSwitchingService.updateLoginStatus(0)
-    // this.updateLoginStatus(0)
-    // await this.updateLoginStatus(0)
-
+ async startProcessing() {
     this.submitted      = true;
     this.statusMessage  = "...loggining in"
     this.spinnerLoading = true;
+  }
 
+ async onSubmit() {
+    await this.startProcessing()
     if (!this.validateForm(this.loginForm)) { return }
-
     this.userSwitchingService.login(this.f.username.value, this.f.password.value)
       .pipe()
       .subscribe(
         user =>
         {
-
           if (user) {
             if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
               // this.userSwitchingService.updateLoginStatus(1)
@@ -331,9 +328,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.authenticationService.updateUser(null);
               return
             }
-
             if (this.platformService.isApp()) {  if (this.loginApp(user)) { return } }
-
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)

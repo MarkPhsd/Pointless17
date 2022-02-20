@@ -1,6 +1,6 @@
 import { Component, QueryList,  ViewChildren } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { AuthenticationService, AWSBucketService } from './_services';
+import { AuthenticationService, AWSBucketService, DevService } from './_services';
 import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
 import { FormControl } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Title } from '@angular/platform-browser';
 import { UserSwitchingService } from './_services/system/user-switching.service';
 import { ElectronService } from 'ngx-electron';
 // import { IPCService } from './_services/system/ipc.service';
-
+import { isDevMode } from '@angular/core';
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
 @Component({
@@ -31,6 +31,7 @@ export class AppComponent {
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
 
+  devMode = false;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   initSubscription() {
@@ -52,7 +53,7 @@ export class AppComponent {
       private awsService:            AWSBucketService,
       private userSwitchingService : UserSwitchingService,
       private AuthService :          AuthenticationService,
-      private electronService     :  ElectronService,
+      private electronService      :  ElectronService,
       // private ipcService          :  IPCService,
 
   ) {
@@ -61,9 +62,11 @@ export class AppComponent {
       this.backButtonEvent();
       this.awsService.awsBucket();
       this.setTitle();
-      if (this.electronService.isElectronApp) {
-        this.AuthService.logout();
-      }
+
+      this.devMode = isDevMode();
+      // if (this.electronService.isElectronApp) {
+      //   this.AuthService.logout();
+      // }
       // console.log('is Electron Service', ipcService.isElectronApp)
       // if (ipcService.isElectronApp) {
       //   console.log(process.env);

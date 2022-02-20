@@ -12,9 +12,29 @@ export interface TransactionUISettings {
   displayQuantity: boolean;
   id:             number;
   lockOrders    : boolean;
-
   deleteUnClosedPrintedOrders: boolean;
   closeOrderTimeCutOff       : string;
+}
+
+export interface DSIEMVSettings {
+  id        : number;
+  HostOrIP  : string;
+  IpPort    : string;
+  MerchantID: string;
+  TerminalID: string;
+  OperatorID: string;
+  UserTrace : string;
+  TranCode  : string;
+  SecureDevice: string;
+  ComPort   : string;
+  PinPadIpAddress: string;
+  PinPadIpPort: string;
+  SequenceNo: string;
+  DisplayTextHandle: string;
+}
+
+export interface DSIEMVAndroidSettings {
+
 }
 
 export interface WebAppSettings {
@@ -32,6 +52,19 @@ export interface MetrcSettings {
 
 export interface EndOfDayProcedures {
 
+}
+
+export interface RStream {
+  CmdResponse: CmdResponse;
+}
+
+export interface CmdResponse{
+  ResponseOrigin: string;
+  DSIXReturnCode: string;
+  CmdStatus: string;
+  TextResponse: string;
+  SequenceNo: string;
+  UserTrace: string;
 }
 
 export interface UIHomePageSettings {
@@ -68,12 +101,27 @@ export class UISettingsService {
   private _homePageSetting         = new BehaviorSubject<UIHomePageSettings>(null);
   public  homePageSetting$        = this._homePageSetting.asObservable();
 
+  private _DSIEMVSettings         = new BehaviorSubject<DSIEMVSettings>(null);
+  public  dsiEMVSettings$        = this._DSIEMVSettings.asObservable();
+
+  private _DSIEMVAndroidSettings         = new BehaviorSubject<DSIEMVAndroidSettings>(null);
+  public  dsiEMVAndroidSettings$        = this._DSIEMVAndroidSettings.asObservable();
+
+
   updateHomePageSetting(ui: UIHomePageSettings) {
     this._homePageSetting.next(ui);
   }
 
   updateUISubscription(ui: TransactionUISettings) {
     this._transactionUISettings.next(ui);
+  }
+
+  updateDSIEMVSettings(ui: DSIEMVSettings) {
+    this._DSIEMVSettings.next(ui)
+  }
+
+  updateDSIEMVAndroidSettings(ui: DSIEMVAndroidSettings) {
+    this._DSIEMVAndroidSettings.next(ui)
   }
 
   constructor(
@@ -99,6 +147,34 @@ export class UISettingsService {
       if (data.text) {
         const ui = JSON.parse(data.text)
         this.updateUISubscription(ui)
+        return
+      }
+      if (!data.text) {
+      }
+    })
+
+    this.getDSIEMVSettings()
+
+  }
+
+  getDSIEMVSettings() {
+
+    this.getSetting('DSIEMVSettings').subscribe(data => {
+      const ui = {} as DSIEMVSettings
+      if (data.text) {
+        const ui = JSON.parse(data.text)
+        this.updateDSIEMVSettings(ui)
+        return
+      }
+      if (!data.text) {
+      }
+    })
+
+    this.getSetting('DSIEMVAndroidSettings').subscribe(data => {
+      const ui = {} as DSIEMVAndroidSettings
+      if (data.text) {
+        const ui = JSON.parse(data.text)
+        this.updateDSIEMVAndroidSettings(ui)
         return
       }
       if (!data.text) {
@@ -144,8 +220,10 @@ export class UISettingsService {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
 
+    console.log(name)
+    console.log(uiSetting.id)
+    console.log(uiSetting)
     if (!uiSetting || !uiSetting.id) { return setting }
-
     setting.id    = uiSetting.id
     setting.name  = name
     setting.text  = JSON.stringify(uiSetting);
@@ -156,6 +234,9 @@ export class UISettingsService {
     if ( name == 'UIHomePageSettings' ) {
       this.updateUISubscription(uiSetting)
     }
+    if ( name == 'DSIEMVSetting' ) {
+      this.updateUISubscription(uiSetting)
+    }
 
     return await this.settingsService.putSetting(site, setting.id, setting).toPromise()
 
@@ -164,15 +245,14 @@ export class UISettingsService {
 
   initHomePageForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      id                : [],
-      brandsEnabled     : [],
-      typesEnabled      : [],
-      categoriesEnabled : [],
-      departmentsEnabled: [],
-      tierMenuEnabled   : [],
-      itemsPerPage      : [''],
-      menuItemSize      : [''],
-
+      id                    : [],
+      brandsEnabled         : [],
+      typesEnabled          : [],
+      categoriesEnabled     : [],
+      departmentsEnabled    : [],
+      tierMenuEnabled       : [],
+      itemsPerPage          : [''],
+      menuItemSize          : [''],
       staffBrandsEnabled    : [''],
       staffCategoriesEnabled: [''],
       staffDeparmentsEnabled: [''],
@@ -186,18 +266,60 @@ export class UISettingsService {
     return fb
   }
 
+  initDSIEMVForm(fb: FormGroup): FormGroup {
+    fb = this._fb.group({
+      HostOrIP         : [],
+      IpPort           : [],
+      id               : [],
+      MerchantID       : [],
+      TerminalID       : [],
+      OperatorID       : [],
+      UserTrace        : [],
+      TranCode         : [],
+      SecureDevice     : [],
+      ComPort          : [],
+      PinPadIpAddress  : [],
+      PinPadIpPort     : [],
+      SequenceNo       : [],
+      DisplayTextHandle: [],
+    })
+    return fb
+  }
+
+  initDSIEMVSettingsForm(config: any, fb: FormGroup): FormGroup {
+
+    if (!config) { return this.initDSIEMVForm(fb)};
+
+    fb = this._fb.group({
+      id               : [config.id],
+      HostOrIP         : [config.DisplayTextHandle],
+      IpPort           : [config.IpPort],
+      MerchantID       : [config.MerchantID],
+      TerminalID       : [config.TerminalID],
+      OperatorID       : [config.OperatorID],
+      UserTrace        : [config.UserTrace],
+      TranCode         : [config.TranCode],
+      SecureDevice     : [config.SecureDevice],
+      ComPort          : [config.ComPort],
+      PinPadIpAddress  : [config.PinPadIpAddress],
+      PinPadIpPort     : [config.PinPadIpPort],
+      SequenceNo       : [config.SequenceNo],
+      DisplayTextHandle: [config.DisplayTextHandle]
+    })
+    return fb
+  }
+
   initHomePageSettingsForm(config: any, fb: FormGroup): FormGroup {
     if (!config) { return this.initHomePageForm(fb) }
     fb = this._fb.group({
-      id                : [config.id],
-      brandsEnabled     : [config.brandsEnabled],
-      typesEnabled      : [config.typesEnabled],
-      categoriesEnabled : [config.categoriesEnabled],
-      departmentsEnabled: [config.departmentsEnabled],
-      tierMenuEnabled   : [config.tierMenuEnabled],
-      itemsPerPage      : [config.itermsPerPage],
-      menuItemSize      : [config.menuItemSize],
-
+      id                      : [config.id],
+      brandsEnabled           : [config.brandsEnabled],
+      typesEnabled            : [config.typesEnabled],
+      categoriesEnabled       : [config.categoriesEnabled],
+      departmentsEnabled      : [config.departmentsEnabled],
+      tierMenuEnabled         : [config.tierMenuEnabled],
+      itemsPerPage            : [config.itermsPerPage],
+      menuItemSize            : [config.menuItemSize],
       staffBrandsEnabled      : [config.staffBrandsEnabled],
       staffCategoriesEnabled  : [config.staffCategoriesEnabled],
       staffDepartmentsEnabled : [config.staffDepartmentsEnabled],
@@ -257,6 +379,12 @@ export class UISettingsService {
       if (name == 'UIHomePageSettings') {
         inputForm = this.initHomePageSettingsForm(config, inputForm);
       }
+
+      if (name == 'DSIEMVSettings') {
+        inputForm = this.initDSIEMVSettingsForm(config, inputForm);
+      }
+
+
     }
     return inputForm
   }
@@ -285,6 +413,11 @@ export class UISettingsService {
     if (name == 'UIHomePageSettings') {
       this.updateHomePageSetting(config)
     }
+    if (name == 'DSIEMVSettings') {
+      this.updateDSIEMVSettings(config)
+    }
+    //DSIEMVSettings
+
     return setting
   }
 

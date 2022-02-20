@@ -1,3 +1,4 @@
+import { ReturnStatement } from '@angular/compiler';
 import { Component, OnInit, Input, OnChanges,  SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
@@ -16,7 +17,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 //reference for code example of charts
 //https://stackblitz.com/edit/angular-highchart-add-series?file=src%2Fapp%2Fapp.component.ts
-export class CardComponent  implements OnInit{
+export class CardComponent  implements OnInit , OnChanges{
   // export class CardComponent  implements OnInit  {
   @Input() notifier   : Subject<boolean>
   value               : boolean;
@@ -89,8 +90,11 @@ export class CardComponent  implements OnInit{
     }
   };
 
+  ngOnChanges() {
+    this.refresh();
+  }
+
   initDates(){
-    //192.168.0.16:4200/app-widget-card;groupBy=date;dateFrom=09012019;dateTo=09302019
     let dateFrom = this.route.snapshot.paramMap.get('dateFrom');
     let dateTo   = this.route.snapshot.paramMap.get('dateTo');
     let groupBy  = this.route.snapshot.paramMap.get('groupBy');
@@ -127,7 +131,7 @@ export class CardComponent  implements OnInit{
     this.reportingService.dateSeries  = [];
     this.chartCategories              = [];
     this.chartData                    = [];
-    let valuesName   = 'values'
+    let valuesName   = 'Values'
     const subTitle   =  {text: "Range: " + this.dateFrom + " to " + this.dateTo}
     this.subTitle    = subTitle;
 
@@ -141,9 +145,7 @@ export class CardComponent  implements OnInit{
           categories.push(date)
         }
       })
-      if (categories) {
-        this.chartCategories = categories;
-      }
+      if (categories) { this.chartCategories = categories; }
       const xAxis = {
         labels    : { enabled: true },
         categories: categories,
@@ -151,15 +153,12 @@ export class CardComponent  implements OnInit{
       }
       this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
-      valuesName = '$ Values'
     }
 
     if (this.groupBy.toLowerCase() === 'hour') {
       const  categories = [] as any[];
       let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
-      dataSeriesValues.forEach(data => {
-        if (data) { categories.push(data.date) }
-      })
+      dataSeriesValues.forEach(data => { if (data) { categories.push(data.date) } })
       if (categories) { this.chartCategories = categories; }
       const xAxis = {
         labels    : { enabled: true },
@@ -168,7 +167,6 @@ export class CardComponent  implements OnInit{
       }
       this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
-      valuesName = 'Values'
     }
 
     if (this.groupBy.toLowerCase() === 'orderemployeecount' || this.groupBy.toLowerCase() === 'orderemployeesales') {
@@ -183,13 +181,7 @@ export class CardComponent  implements OnInit{
         min       : 0,
         max       : dataSeriesValues.length
       }
-      // this.scrollablePlotHeight = {
-      //   minWidth: 600,
-      //   opacity:25,
-      //   scrollPositionX: 0
-      // }
       this.xAxis = xAxis;
-      valuesName = 'Values'
     }
     this.initChart(valuesName);
   }
@@ -222,17 +214,19 @@ export class CardComponent  implements OnInit{
     return index
   }
 
-  updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
-
-    let runfunction = false;
-
+  isMultiSiteReport() {
     if (this.groupBy.toLowerCase()  === 'date' || this.groupBy.toLowerCase() === 'hour' ||
          this.groupBy.toLowerCase() === 'month' || this.groupBy.toLowerCase() === 'year')
-    {  runfunction = true; }
+    {  return  true; }
+    return false
+  }
 
-    if (!runfunction) { return }
+  updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
+
+    if (!this.isMultiSiteReport()) { return }
 
     this.initArrays();
+
     for (let site of sites) {
       let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo, this.groupBy)
       sales$.subscribe( sales => {
@@ -246,6 +240,12 @@ export class CardComponent  implements OnInit{
               //the dates have to be convered to strings to compare
               dataSeriesValues.forEach( (data, index) => {
                   const  dt1 = new Date(data.date);
+                  try {
+                    const item = sales.filter( item => {})
+                  } catch (error) {
+                    console.log(sales)
+                  }
+
                   const item = sales.filter( item =>
                     {
                       const  dt2 = new Date(item.dateCompleted);
@@ -272,6 +272,14 @@ export class CardComponent  implements OnInit{
           if ( this.groupBy === 'hour' ) {
             let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
             dataSeriesValues.forEach( (data, index) => {
+
+                try {
+                  const item = sales.filter( item => {})
+                } catch (error) {
+                  console.log(sales)
+                  return
+                }
+
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
                 if (item && item.length>0) {
                   let value = 0;
@@ -340,7 +348,7 @@ export class CardComponent  implements OnInit{
         if (item && item.length>0) {
           let value : any;
           if (groupBy === 'orderemployeecount') { value = item[0].count;     }
-          if (groupBy === 'orderemployeesales') { value =item[0].amountPaid; }
+          if (groupBy === 'orderemployeesales') { value = item[0].amountPaid; }
           const row = { date: item[0].dateHour, value:  value }
           dataSeriesValues[index] = row
         }
@@ -353,22 +361,25 @@ export class CardComponent  implements OnInit{
 
     this.chartOptions =  {
       chart: {
-            type: 'line',
-            backgroundColor: null,
-            scrollablePlotArea: this.scrollablePlotHeight,
-            borderWidth: 0,
-            height: 300,
-        },
-        title: {text: this.chartName },
-        subtitle : this.chartName,
-        xAxis: this.xAxis,
-        yAxis: {
-          title:{ text: chartValuesName},
-          labels: { enabled: true
-        },
+          type: 'line',
+          backgroundColor: null,
+          scrollablePlotArea: this.scrollablePlotHeight,
+          borderWidth: 0,
+          height: 300,
+      },
+      title: {text: this.chartName },
+      subtitle : this.chartName,
+      xAxis: this.xAxis,
+      yAxis: {
+        title:{ text: chartValuesName},
+        labels: { enabled: true },
         tickWidth: 1,
         lineWidth: 1,
         opposite: false
+      },
+      plotOptions: {
+        column: { cropThreshold: 500 },
+        series: { borderWidth: 0 }
       }
     };
 

@@ -18,6 +18,7 @@
 .grid-item {
   align-items    : flex-start;
   text-align     : left;
+  overflow      : hidden;
   text-overflow  : ellipsis;
   text-transform : capitalize;
   margin-bottom  : 2px;
@@ -37,19 +38,13 @@
 
 .totals {
   font-size      : .9em;
-  margin         : 0px 5px 5px 5px;
-  padding        : 0px 5px 5px 5px;
   white-space    : nowrap;
-
   text-overflow  : ellipsis;
   text-transform : capitalize;
-  // float          : right;
-  // align-items    : flex-end;
   text-align     : right;
 }
 
 .calculation {
-  // grid-column: 2/3;
   text-align: left;
 }
 

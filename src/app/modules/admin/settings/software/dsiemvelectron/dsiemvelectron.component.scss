@@ -1,0 +1,31 @@
+button {
+  margin-top: 4px;
+}
+
+mat-divider {
+  margin-bottom: 4px;
+}
+
+.grid-views {
+
+    --gap : 5px;
+    margin:5px;
+
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+
+  }
+
+  .grid-item {
+    width: 75px;
+    max-width: 95px;
+  }
+
+  button {
+    min-width: 180px;
+  }
+
+  .item-span {
+    column-span:  2;
+  }

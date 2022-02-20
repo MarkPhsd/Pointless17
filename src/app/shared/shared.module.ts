@@ -124,6 +124,7 @@ import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-sel
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
 import { UploaderComponent } from './widgets/AmazonServices';
 import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
+import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -163,6 +164,7 @@ import { PaymentReportCardComponent } from '../modules/admin/reports/payment-rep
     ClientSearchSelectorComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,
+    DSIEMVElectronComponent,
     ExitLabelSelectionComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
@@ -299,6 +301,7 @@ import { PaymentReportCardComponent } from '../modules/admin/reports/payment-rep
     DepartmentSelectComponent,
     DeviceInfoComponent,
     DisableControlDirective,
+    DSIEMVElectronComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
