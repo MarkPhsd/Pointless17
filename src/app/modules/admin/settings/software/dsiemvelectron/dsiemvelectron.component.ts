@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -19,8 +19,13 @@ export class DSIEMVElectronComponent implements OnInit {
   uiISettingJSON = {} as DSIEMVSettings;
   responseMessage: string;
   isElectron: boolean
+  pathForm  : FormGroup;
+
+  pathName = 'default'
+  get f() {return this.pathForm.controls}
   constructor(private uISettingsService: UISettingsService,
               private dsiEMVService: DSIEMVTransactionsService,
+              private fb: FormBuilder,
               private electronService : ElectronService) { }
 
   ngOnInit(): void {
@@ -34,6 +39,10 @@ export class DSIEMVElectronComponent implements OnInit {
         this.initForm(data);
       }
     });
+
+    this.pathForm = this.fb.group({
+      pathName: ['']
+    })
   }
 
   async initForm(setting: ISetting) {
@@ -72,9 +81,20 @@ export class DSIEMVElectronComponent implements OnInit {
     }
    }
 
-  preAuthTest(){
+   async  preAuthTest(){
+    const response = await this.dsiEMVService.testADODBConnection();
+    this.responseMessage = 'failed'
+    if (response) {
+     this.responseMessage =  response
+    }
+   }
 
+  async testActiveX() {
+    const response = await this.dsiEMVService.textActiveX(this.f.pathName.value);
+    this.responseMessage = 'failed'
+    if (response) {
+    this.responseMessage =  response
+    }
   }
-
 
 }

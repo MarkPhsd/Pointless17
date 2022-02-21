@@ -85,6 +85,7 @@
               PinPadIpPort
           </app-value-fields>
         </div>
+
     </div>
     <div  class="grid-views">
       <div class="grid-item">
@@ -126,6 +127,25 @@
            *ngIf="responseMessage">
         <h4> {{responseMessage}} </h4>
       </div>
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="testActiveX()">test activex
+        </button>
+      </div>
+
+      <div *ngIf="pathForm" [formGroup]="pathForm">
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="pathForm"
+              [fieldName]     ="'pathName'">
+              Path Name
+          </app-value-fields>
+        </div>
+      </div>
+
 
     </div>
   </mat-card-content>

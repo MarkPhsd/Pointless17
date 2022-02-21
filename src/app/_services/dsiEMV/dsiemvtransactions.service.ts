@@ -215,6 +215,19 @@ export class DSIEMVTransactionsService {
 
   }
 
+  async testADODBConnection() {
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response = await emvTransactions.testADODBConnection()
+    console.log('response', response)
+    return response
+  }
+
+  async textActiveX(pathName: string) {
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response = await emvTransactions.textActiveX(pathName)
+    console.log('response', response)
+    return response
+  }
 
   runOpenWord() {
 
