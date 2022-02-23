@@ -1,154 +1,148 @@
 <mat-sidenav-container>
 
-<div class="grid-container">
-  <div  [formGroup]="searchForm"
-      class="grid-item form-width" >
-      <mat-form-field appearance="outline" class="form-fields">
-        <mat-label><mat-icon>search</mat-icon>Search / Scan </mat-label>
-        <input
-              class="input-value"
-              #input
-              matInput
-              appAutoFocusInput
-              type           ="text"
-              id             ="name"
-              [(ngModel)]    ="itemNameInput"
-              formControlName="itemName">
-        <button *ngIf="itemNameInput" matSuffix
-                mat-icon-button aria-label="Clear"
-                (click)="itemNameInput=''">
-          <mat-icon>close</mat-icon>
+  <div class="grid-container">
+    <div *ngIf="!smallDevice && !tinyDepartmentFilter"
+         [formGroup]="searchForm"
+        class="grid-item form-width" >
+        <mat-form-field appearance="outline" class="form-fields">
+          <mat-label><mat-icon>search</mat-icon>Search / Scan </mat-label>
+          <input
+                class="input-value"
+                #input
+                matInput
+                appAutoFocusInput
+                type           ="text"
+                id             ="name"
+                [(ngModel)]    ="itemNameInput"
+                formControlName="itemName">
+            <button *ngIf="itemNameInput" matSuffix
+                  mat-icon-button aria-label="Clear"
+                  (click)="itemNameInput=''">
+            <mat-icon>close</mat-icon>
+          </button>
+        </mat-form-field>
+    </div>
+
+    <div *ngIf="!smallDevice && !tinyDepartmentFilter" class="search-buttons">
+      <div *ngIf="keyboardDisplayOn">
+        <button mat-button
+                (click)="toggleKeyboard()">
+                <mat-icon>keyboard</mat-icon></button>
+      </div>
+      <div>
+        <button mat-button
+                (click)="clearAll()">
+                Reset<mat-icon>reset</mat-icon></button>
+      </div>
+      <div>
+        <button  mat-button
+                (click)="multifilter = !multifilter">
+          <span [class]="'mdi mdi-filter'"></span>
         </button>
-      </mat-form-field>
-  </div>
-
-  <div class="search-buttons">
-    <div *ngIf="keyboardDisplayOn">
-      <button mat-button
-              (click)="toggleKeyboard()">
-              <mat-icon>keyboard</mat-icon></button>
+      </div>
     </div>
 
-    <div >
-      <button mat-button
-              (click)="clearAll()">
-              Reset<mat-icon>reset</mat-icon></button>
+    <div *ngIf="tinyDepartmentFilter" class="search-buttons">
+
     </div>
 
+    <div *ngIf="multifilter">
+      <mat-accordion multi>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Categories
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-icon>category</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+            <div  class="grid-item"
+                  *ngIf="(categories$ | async) as list">
+              <app-mat-toggle-selector
+                  (outPutItem)     = "refreshCategorySearch($event)"
+                  [textLength]     = "21"
+                  [list]           = "list">
+              </app-mat-toggle-selector>
+            </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel >
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Brands
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-icon>branding_watermark</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div  class="grid-item"
+                *ngIf="(clientSearchResults$ | async) as list">
+            <div *ngIf=" list.results as brands">
+              <mat-button-toggle-group
+                                      name="type"
+                                      aria-label="Font Style"
+                                      vertical
+                  >
+                <mat-button-toggle class="toggle-buttons"
+                                    [value]="0">
+                  Any Brand
+                </mat-button-toggle>
+                <mat-button-toggle
+                                    class="toggle-buttons"
+                                    type="button"
+                                    [value]="item"
+                                    (change)     = "refreshBrandSearch(item)"
+                                    *ngFor="let item of brands" >
+                  {{item.company | truncateText : 21}}
+                </mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+        </mat-expansion-panel>
+
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              Types
+            </mat-panel-title>
+            <mat-panel-description>
+              <mat-icon>table_view</mat-icon>
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div  class="grid-item"
+              *ngIf="(productTypes$ | async) as list">
+
+            <app-mat-toggle-selector
+                (setItem)        = "refreshTypeSearch($event)"
+                [textLength]     = "21"
+                [list]           = "list">
+            </app-mat-toggle-selector>
+
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+
+    <div class="grid-item-departments"
+         *ngIf="!multifilter">
+      <div  *ngIf="(departments$ | async) as list">
+        <app-mat-toggle-selector
+            [hideAllOption]  ="'true'"
+            (outPutItem)     = "refreshDepartmentSearch($event)"
+            [showIcon]       ="'true'"
+            [tinyMenu]       = "tinyDepartmentFilter"
+            [textLength]     = "21"
+            [toggleDimensions]="'toggle-group-tall'"
+            [toggleHeight]   ="'toggle-buttons-height-size-tall'"
+            [list]           = "list">
+        </app-mat-toggle-selector>
+      </div>
+    </div>
 
   </div>
-
-  <mat-accordion multi>
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Categories
-        </mat-panel-title>
-        <mat-panel-description>
-          <mat-icon>category</mat-icon>
-        </mat-panel-description>
-
-      </mat-expansion-panel-header>
-
-        <div  class="grid-item"
-              *ngIf="(categories$ | async) as list">
-          <mat-button-toggle-group
-                                  name         = "type"
-                                  aria-label   = "Font Style"
-                                  vertical
-              >
-            <mat-button-toggle class="toggle-buttons"
-                               [value]="0"
-                                >
-              Any
-            </mat-button-toggle>
-            <mat-button-toggle
-                                class="toggle-buttons"
-                                type="button"
-                                [value]="item"
-                                (change)     = "refreshCategorySearch(item)"
-                                *ngFor="let item of list" >
-              {{item.name | truncateText : 21}}
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-
-    </mat-expansion-panel>
-    <mat-expansion-panel >
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Brands
-        </mat-panel-title>
-        <mat-panel-description>
-          <mat-icon>branding_watermark</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-
-      <div  class="grid-item"
-            *ngIf="(clientSearchResults$ | async) as list">
-        <div *ngIf=" list.results as brands">
-          <mat-button-toggle-group
-                                  name="type"
-                                  aria-label="Font Style"
-                                  vertical
-              >
-            <mat-button-toggle class="toggle-buttons"
-                                [value]="0"
-                                >
-              Any Brand
-            </mat-button-toggle>
-            <mat-button-toggle
-                                class="toggle-buttons"
-                                type="button"
-                                [value]="item"
-                                (change)     = "refreshBrandSearch(item)"
-                                *ngFor="let item of brands" >
-              {{item.company | truncateText : 21}}
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-      </div>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Types
-        </mat-panel-title>
-        <mat-panel-description>
-          <mat-icon>table_view</mat-icon>
-        </mat-panel-description>
-      </mat-expansion-panel-header>
-
-      <div  class="grid-item"  *ngIf="(productTypes$ | async) as list">
-        <mat-button-toggle-group
-                          name          ="type"
-                          aria-label    ="Font Style"
-                          [(ngModel)]   = "productTypeSearch"
-                          vertical
-          >
-
-          <mat-button-toggle class="toggle-buttons"
-                              [value]="0"
-                              type="button"
-                              >
-            Any Type
-          </mat-button-toggle>
-          <mat-button-toggle
-                              class="toggle-buttons"
-                              type="button"
-                              [value]="item"
-                              (change)     = "refreshTypeSearch(item)"
-                              *ngFor="let item of list" >
-            {{item.name | truncateText : 21}}
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
-
-
-    </mat-expansion-panel>
-  </mat-accordion>
-
-</div>
 
 </mat-sidenav-container>

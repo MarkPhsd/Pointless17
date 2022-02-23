@@ -60,7 +60,7 @@
       </app-key-pad>
     </div>
 
-    <div *ngIf="isAuthorized" class="fields">
+    <div *ngIf="(isAuthorized || isUser) && toggleOpenClosedAll == '2'" class="fields">
       <button mat-raised-button class="button"
               (click)="toggleDateRangeFilter()">Dates<mat-icon>date_range</mat-icon></button>
       <mat-date-range

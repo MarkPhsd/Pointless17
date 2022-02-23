@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, HostListener } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
 import { EMPTY, Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService } from 'src/app/_services';
 import { switchMap } from 'rxjs/operators';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-menu-minimal',
@@ -39,6 +41,8 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   user              : IUser;
   _user             : Subscription;
   site              : ISite;
+  isStaff: boolean;
+  tinyMenu : boolean;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
@@ -84,15 +88,29 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
                 private router                  : Router,
                 private siteService             : SitesService,
                 private authenticationService   : AuthenticationService,
+                private userSwichingService:    UserSwitchingService,
+                private userAuthorizationService: UserAuthorizationService,
               ) {
     this.site  =  this.siteService.getAssignedSite();
   }
 
-  ngOnInit() {
-    this.initMenu()
-    this.initSubscription()
+  // sort(users, 'name', '-age', 'id')
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    if (window.innerWidth < 768) {
+      this.tinyMenu = true
+    }
   }
 
+
+  ngOnInit() {
+    this.isStaff = this.userAuthorizationService.isUserAuthorized('employee,manager,admin')
+    console.log(this.isStaff)
+    if (this.isStaff) {
+      this.initMenu()
+      this.initSubscription()
+    }
+  }
 
   ngOnDestroy() {
     if (this._user) { this._user.unsubscribe() }
@@ -100,13 +118,13 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   }
 
   initMenus() {
-    this.menus = [] as AccordionMenu[];
+    this.menus   = [] as AccordionMenu[];
     this.submenu = [] as SubMenu[];
   }
 
   initMenu() {
     this.initMenus()
-    const site  = this.siteService.getAssignedSite();
+    const site       = this.siteService.getAssignedSite();
     if (!this.user || !this.user.token) {return}
     const menuCheck$ = this.menusService.mainMenuExists(site);
 

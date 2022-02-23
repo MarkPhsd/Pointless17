@@ -1,5 +1,5 @@
-import { Component,  Inject,  Input, Output, OnInit,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, } from '@angular/core';
+import { Component,  Output, OnInit,
+  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, HostListener, } from '@angular/core';
 import { Router } from '@angular/router';
 import { AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -13,6 +13,8 @@ import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, IPOSOrder, IProduct, IUserProfile } from 'src/app/_interfaces';
 import { Capacitor, Plugins,  } from '@capacitor/core';
 import { IPagedList } from 'src/app/_services/system/paging.service';
+import { isDevMode } from '@angular/core';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 // import { Keyboard } from '@capafcitor/keyboard';
 
@@ -51,6 +53,8 @@ categories$      : Observable<IMenuItem[]>;
 departments$     : Observable<IMenuItem[]>;
 productTypes$    : Observable<any[]>;
 
+multifilter      = false;
+tinyMode         = false;
 //search form filters
 searchForm       : FormGroup;
 categoryID       : number;
@@ -59,10 +63,12 @@ productTypeID    : number;
 typeID           : number;
 brandID          : number;
 name             : any;
-
+isDevMode  = false
 type    : any;
 category: any;
 brand   : any;
+department: any;
+tinyDepartmentFilter= false//for dispaly of icon with text or just icon.
 
 urlPath          :string;
 id               : number;
@@ -103,6 +109,8 @@ totalRecords        : number;
 pagingInfo          : IPagedList;
 
 itemNameInput: string;
+smallDevice : boolean;
+
 
 initSubscriptions() {
   this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -119,26 +127,26 @@ constructor(
     private awsService     :        AWSBucketService,
     private router         :        Router,
     private orderService   :        OrdersService,
+    private toolBarUIService :        ToolBarUIService,
+
   )
   {
     this.initForm();
-    if (this.platForm != 'web') {  this.keyboardDisplayOn = true }
+    if (this.platForm.toLowerCase() === 'android') {  this.keyboardDisplayOn = true }
   }
 
   async ngOnInit() {
     const site          = this.siteService.getAssignedSite()
-
     const clientSearchModel          = {} as ClientSearchModel;
     clientSearchModel.pageNumber     = 1
     clientSearchModel.pageSize       = 25;
     this.clientSearchModel           = clientSearchModel;
     this.clientSearchResults$        = this.contactsService.getLiveBrands(site, clientSearchModel)
-
     this.urlPath        = await this.awsService.awsBucketURL();
     this.categories$    = this.menuService.getListOfCategories(site)
     this.departments$   = this.menuService.getListOfDepartments(site)
     this.productTypes$  = this.itemTypeService.getBasicTypesByUseType(site, 'product')
-
+    this.isDevMode      = isDevMode()
   };
 
   ngOnDestroy() {
@@ -147,6 +155,13 @@ constructor(
     }
   }
 
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    this.smallDevice = false
+    if (window.innerWidth < 768) {
+      this.smallDevice = true
+    }
+  }
   initForm() {
 
     let categoryID = 0
@@ -186,7 +201,7 @@ constructor(
       )
       .subscribe();
     }
-    if (this.platForm != 'web') {
+    if (this.platForm.toLowerCase() === 'android') {
       setTimeout(()=> {
         this.input.nativeElement.focus();
         Keyboard.hide();
@@ -195,7 +210,7 @@ constructor(
   }
 
   toggleKeyboard() {
-    if (this.platForm != 'web') {
+    if (this.platForm.toLowerCase() === 'android') {
       this.keyboardOption = !this.keyboardOption
       if (this.keyboardOption) {
         Keyboard.show()
@@ -221,8 +236,9 @@ constructor(
     this.typeID            = null;
     this.brandID           = null;
     this.name              = null;
-
-    Keyboard.hide();
+    if (this.platForm.toLowerCase() === 'android') {
+      Keyboard.hide();
+    }
   }
 
   //initialize filter each time before getting data.
@@ -273,6 +289,11 @@ constructor(
       productSearchModel.categoryName     = this.category.name.toString();
     }
 
+    if (this.department )               {
+      productSearchModel.departmentID       = this.department.id.toString();
+      productSearchModel.departmentName     = this.department.name.toString();
+    }
+
     if (this.productTypeSearch)         {
       productSearchModel.itemTypeID       = this.productTypeSearch.id.toString();
       productSearchModel.type             = this.productTypeSearch.id.toString();
@@ -309,6 +330,7 @@ constructor(
   }
 
   refreshCategorySearch(item: any) {
+    console.log('item', item)
     this.category = item
     this.refreshSearch()
   }
@@ -319,6 +341,25 @@ constructor(
   refreshTypeSearch(item: any) {
     this.type = item
     this.refreshSearch()
+  }
+
+  refreshDepartmentSearch(item: any) {
+    if (this.smallDevice) {
+      this.tinyDepartmentFilter = true;
+    }
+    if (window.innerWidth < 368) {
+      this.toolBarUIService.updateSearchBarWidth(55)
+      this.smallDevice = true
+      this.tinyDepartmentFilter = true;
+    }
+
+    this.department = item
+    this.router.navigate(
+      [
+        "/department-list", { value: this.searchIncrementer, id: item.id}
+      ]
+    )
+
   }
 
   listItems(model: ProductSearchModel) {

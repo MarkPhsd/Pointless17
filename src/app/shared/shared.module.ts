@@ -125,6 +125,7 @@ import { BackgroundCoverComponent } from './widgets/background-cover/background-
 import { UploaderComponent } from './widgets/AmazonServices';
 import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
+import { SearchMenuProductsComponent } from './widgets/search-menu-products/search-menu-products.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -253,6 +254,7 @@ import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsie
     SearchDebounceInputComponent,
     UIHomePageSettingsComponent,
     UploaderComponent,
+    SearchMenuProductsComponent,
   ],
 
   imports: [

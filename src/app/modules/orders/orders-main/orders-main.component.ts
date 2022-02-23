@@ -37,7 +37,7 @@ export class OrdersMainComponent  {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
-    if (this.isUser) {
+    if (!this.isStaff) {
       this.viewType = 2;
     }
   }

@@ -115,6 +115,7 @@ export class FbProductsService {
         menuButtonPic:                [''],
         menuButtonColor:              [''],
         itemCommission1:              [''],
+        icon            :             [''],
         modifierButton:               [''],
         modifierButtonAltPrice:       [''],
         modifierButtonMultiplier:     [''],

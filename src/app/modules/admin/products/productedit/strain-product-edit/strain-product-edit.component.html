@@ -99,8 +99,18 @@
                </div>
              </div>
 
-             <div>
-              <div class="header">
+            <div>
+                <div class="grid-item">
+                    <div>
+                      <app-value-fields
+                        [inputForm]="productForm"
+                        [fieldName]="'icon'">
+                        Material Icon
+                      </app-value-fields>
+                  </div>
+                </div>
+
+                <div class="header">
                   <h4><mat-icon>image</mat-icon>Images</h4>
                 </div>
                 <app-widget-uploader

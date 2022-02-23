@@ -1,0 +1,52 @@
+@import "/src/mixins.scss";
+
+.grid-toggle-tiny {
+  display: grid;
+  grid-template-columns: minmax(50px, 1fr) 1fr
+}
+
+mat-card {
+  height:  85vh !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.item-text {
+  font-size: 1.25rem;
+}
+.item-font {
+  font-size: 1.5rem;
+  margin-left: 10px;
+}
+.heading {
+  font-size: 1.1em;
+  align-items: center;
+  text-align: center;
+}
+.content-position{
+  margin: 5px;
+  position:absolute;
+  bottom:0;
+  right:0;
+
+  @include for-phone-only  {
+    margin: 5px;
+    position:relative;
+    bottom:0;
+    right:0;
+  }
+}
+
+.image-layout {
+  opacity: 65%;
+  border-radius: 5%;
+}
+
+.description{
+  margin: 5px;
+}
+
+.grid-toggle-tiny {
+  display: grid;
+  grid-template-columns: minmax(45px, 50px) 300px
+}

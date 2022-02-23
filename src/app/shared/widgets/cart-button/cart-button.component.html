@@ -13,31 +13,29 @@
       </button>
     </div>
 
-    <!-- [matMenuTriggerFor]="menu" -->
-
     <div *ngIf="isUserStaff">
       <button mat-button
               (click)="toggleOpenOrderBar()" >
           <mat-icon  matBadge="{{ order.itemCount > 0 }}"
             matBadge="{{ order.itemCount }}"
             matBadgeColor="accent"
-            matBadgePosition="before"
-            >
+            matBadgePosition="before">
             shopping_cart
           </mat-icon>
       </button>
     </div>
 
-    <button *ngIf="order.history == true
-                   || (order.completionDate)"
-            mat-button
-            (click)="addNewOrder()" >
-      <mat-icon>
-        add
-      </mat-icon>
-      New Order
-    </button>
-
+    <div *ngIf="isUserStaff">
+      <button *ngIf="order.history == true
+                    || (order.completionDate)"
+              mat-button
+              (click)="addNewOrder()" >
+        <mat-icon>
+          add
+        </mat-icon>
+        New Order
+      </button>
+    </div>
 
   </div>
 

@@ -1,28 +1,23 @@
-<div>
-  <div fxLayout="row"
-       fxLayoutAlign="space-around center">
-  <div fxLayout="column"
-       fxLayoutAlign="start center">
+<div class="container">
 
-        <img *ngIf="isApp && !isCategory"
-              [src]="imageUrl"
-              onerror   = "this.src='../assets/images/placeholderimage.png'"
-              class="product-image"
-              (click)="menuItemAction(true)"/>
+  <div class="image" >
+      <img *ngIf="isApp && !isCategory"
+            [src]="imageUrl"
+            onerror   = "this.src='../assets/images/placeholderimage.png'"
+            class="product-image"
+            (click)="menuItemAction(true)"/>
 
-        <img  *ngIf="!isApp && !isCategory"
-              [src]="imageUrl"
-              onerror   = "this.src='../assets/images/placeholderimage.png'"
-              class="product-image"
-              (click)="menuItemAction(false)"/>
+      <img  *ngIf="!isApp && !isCategory"
+            [src]="imageUrl"
+            onerror   = "this.src='../assets/images/placeholderimage.png'"
+            class="product-image"
+            (click)="menuItemAction(false)"/>
 
-        <img  *ngIf="isCategory"
-              [src]="imageUrl"
-              onerror   = "this.src='../assets/images/placeholderimage.png'"
-              class="category-img"
-              (click)="menuItemAction(true)"/>
-
-    </div>
+      <img  *ngIf="isCategory"
+            [src]="imageUrl"
+            onerror   = "this.src='../assets/images/placeholderimage.png'"
+            class="category-img"
+            (click)="menuItemAction(true)"/>
   </div>
 
   <div class="product-name">
@@ -39,8 +34,7 @@
     </div>
   </div>
 
-  <div fxLayout="row"
-       fxLayoutAlign="center">
+  <div class="btn" >
 
       <div *ngIf="menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts'">
         <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
@@ -53,6 +47,9 @@
         </div>
       </div>
 
+      <div>
+
+      </div>
       <div *ngIf="isProduct && !isCategory"
             id="price">
         {{menuItem.retail | currency}}

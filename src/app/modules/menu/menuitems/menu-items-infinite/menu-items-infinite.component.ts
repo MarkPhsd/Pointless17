@@ -152,7 +152,6 @@ setTitle() {
 }
 
 initSearchProcess() {
-  console.log('initSearchProcess update')
   try {
       this.departmentID = this.route.snapshot.paramMap.get('departmentID');
       this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');  // not implemented.

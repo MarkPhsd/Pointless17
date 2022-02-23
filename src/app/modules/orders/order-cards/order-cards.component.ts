@@ -88,6 +88,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     )
   {
 
+//cardStyle
+
+
   }
 
   async ngOnInit()  {
@@ -158,6 +161,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   refreshGridClass() {
+
+
     this.grid = "grid-flow";
     return;
   }

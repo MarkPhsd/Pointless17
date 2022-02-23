@@ -194,5 +194,6 @@ export interface IProduct {
   promptGroupID               : number;
   active                      : boolean;
   glutenFree                  : boolean;
+  icon                        : string;
 }
 

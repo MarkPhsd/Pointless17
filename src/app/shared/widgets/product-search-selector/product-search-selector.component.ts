@@ -40,6 +40,7 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   )
 
   ngAfterViewInit() {
+    if (!this.input) { return }
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(
           filter(Boolean),
@@ -69,6 +70,9 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   ngOnInit() {
     if (this.doNotPassName) { return }
+    this.searchForm = this.fb.group({
+      productName : ['']
+    })
     // if (this.searchForm){
     //   this.searchForm = this.fb.group({
     //     productName: this.productName,

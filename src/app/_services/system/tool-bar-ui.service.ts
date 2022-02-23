@@ -12,8 +12,12 @@ export class ToolBarUIService {
   private _searchSideBar    = new BehaviorSubject<any>(null);
   public searchSideBar$     = this._searchSideBar.asObservable();
 
-  private _orderBar    = new BehaviorSubject<any>(null);
-  public  orderBar$     = this._orderBar.asObservable();
+  private _orderBar          = new BehaviorSubject<any>(null);
+  public  orderBar$          = this._orderBar.asObservable();
+
+  private  searchBarWidth     = 195;
+  private _searchBarWidth    = new BehaviorSubject<number>(null);
+  public  _searchBarWidth$   = this._searchBarWidth.asObservable();
 
   private toolBar   : boolean;
   private searchBar : boolean;
@@ -32,7 +36,13 @@ export class ToolBarUIService {
         new Event('resize')
       );
     }, 300);
+  }
 
+  updateSearchBarWidth(value: number) {
+    // this.searchBarWidth = value;
+    // this._searchBarWidth.next(value)
+    // console.log(this.searchBarWidth)
+    // console.log('value', value)
   }
 
   updateOrderBar(value: boolean) {

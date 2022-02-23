@@ -169,7 +169,8 @@ export class CardComponent  implements OnInit , OnChanges{
       this.xAxis = xAxis;
     }
 
-    if (this.groupBy.toLowerCase() === 'orderemployeecount' || this.groupBy.toLowerCase() === 'orderemployeesales') {
+    if (this.groupBy.toLowerCase() === 'orderemployeecount'
+        || this.groupBy.toLowerCase() === 'orderemployeesales') {
       const  categories = [] as any[];
       let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
       dataSeriesValues.forEach(data => { if (data) { categories.push(data.date) }  })
@@ -195,7 +196,7 @@ export class CardComponent  implements OnInit , OnChanges{
     const newSeries = [] as any[];
     dataSeriesValues.forEach(data => { newSeries.push( [ data.date, data.value ] ) })
     this.chartData.push ( { name: name, data: newSeries } )
-    this.chartOptions = {  series:  this.chartData }
+    this.chartOptions = { series:  this.chartData }
   }
 
   refreshSales(site: ISite) {
@@ -224,7 +225,6 @@ export class CardComponent  implements OnInit , OnChanges{
   updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
 
     if (!this.isMultiSiteReport()) { return }
-
     this.initArrays();
 
     for (let site of sites) {
@@ -245,7 +245,6 @@ export class CardComponent  implements OnInit , OnChanges{
                   } catch (error) {
                     console.log(sales)
                   }
-
                   const item = sales.filter( item =>
                     {
                       const  dt2 = new Date(item.dateCompleted);
@@ -272,14 +271,12 @@ export class CardComponent  implements OnInit , OnChanges{
           if ( this.groupBy === 'hour' ) {
             let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
             dataSeriesValues.forEach( (data, index) => {
-
                 try {
                   const item = sales.filter( item => {})
                 } catch (error) {
                   console.log(sales)
                   return
                 }
-
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
                 if (item && item.length>0) {
                   let value = 0;

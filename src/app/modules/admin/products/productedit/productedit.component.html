@@ -103,7 +103,9 @@
 
               </div>
 
-              <div class="grid-item">
+                <div class="grid-item">
+
+
                 <div class="meta-tags"
                      *ngIf="product && product.metaTags">
                   <app-meta-tag-chips
@@ -123,14 +125,24 @@
               </div>
 
               <div class="grid-item">
-                <mat-card class="image-container">
-                  <app-widget-uploader
-                      [(fileNames)]="urlImageMain"
-                      (messageOut) ="received_URLMainImage($event)"
-                      (imageUrl)   ="updateUrlImageMain($event)">
-                  </app-widget-uploader>
-                </mat-card>
-              </div>
+                <div>
+                  <app-value-fields
+                    [inputForm]="productForm"
+                    [fieldName]="'icon'">
+                    Material Icon
+                  </app-value-fields>
+                </div>
+
+                <div>
+                  <mat-card class="image-container">
+                    <app-widget-uploader
+                        [(fileNames)]="urlImageMain"
+                        (messageOut) ="received_URLMainImage($event)"
+                        (imageUrl)   ="updateUrlImageMain($event)">
+                    </app-widget-uploader>
+                  </mat-card>
+                </div>
+            </div>
             </div>
           </mat-tab>
 

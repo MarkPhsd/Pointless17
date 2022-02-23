@@ -1,3 +1,5 @@
+@import "/src/mixins.scss";
+
 :host {
   display: block;
   flex-direction: column;
@@ -6,30 +8,16 @@
 
 app-header {
   width:  100%;
-  // position: fixed;
-  // height: 100%;
 }
 
 app-sticky-header {
   z-index: 1000;
   height: 75px;
   display: flex;
-  // justify-content: center;
-  // align-items: center;
 }
 
 .mat-content {
   overflow: hidden;
-}
-
-.mat-drawer-toolbar {
-  width: 190px;
-  box-shadow: 3px 0 6px rgba(0,0,0,.24);
-}
-
-.mat-drawer-searchbar {
-  width: 190px;
-  box-shadow: 3px 0 6px rgba(0,0,0,.24);
 }
 
 mat-drawer-container {
@@ -49,7 +37,7 @@ mat-drawer-content {
 }
 
 mat-sidebar {
-  min-width: 125px !important;
+  // min-width: 125px !important;
   border-right: 1px solid #eee;
   box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   background-color:rgb(55, 55, 59);
@@ -61,7 +49,37 @@ mat-sidebar {
   border-right: 1px solid #eee;
   box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   overflow: hidden;
+
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 3px rgba(0,0,0,.24);
+  }
+
 }
 
+.mat-drawer-toolbar {
+  width: 190px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  }
+}
+
+.mat-drawer-searchbar {
+  width: 190px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  }
+}
+
+.mat-drawer-searchbar-tiny {
+  width: 55px;
+  box-shadow: 3px 0 3px rgba(0,0,0,.24);
+}
 
 

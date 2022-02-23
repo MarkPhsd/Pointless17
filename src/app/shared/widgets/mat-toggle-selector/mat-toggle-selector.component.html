@@ -4,7 +4,8 @@
   </h4>
 </div>
 
-<div [class]="toggleDimensions" *ngIf="list; else loading">
+<div [class]="toggleDimensions"
+     *ngIf="list; else loading">
     <mat-button-toggle-group
           name         = "type"
           [(ngModel)]  = "id"
@@ -13,20 +14,28 @@
       <mat-button-toggle
             *ngIf="!hideAllOption"
             [value]="emptyItem"
-            [class]="buttonDimensions"
-            >
+            [class]="buttonDimensions">
           All
       </mat-button-toggle>
 
       <div class="toggle-buttons-height" >
-        <mat-button-toggle
-              type="button"
-              [value]="item"
-              [class]="buttonDimensions"
-              (change)="setItem(item)"
-              *ngFor="let item of list" >
-            {{item.name}}
-        </mat-button-toggle>
+        <div [class]="toggleHeight">
+          <mat-button-toggle
+                type="button"
+                [value]="item"
+                (click)="setItem(item)"
+                *ngFor="let item of list" >
+
+              <div class="grid-toggle-tiny">
+                <div class="item-font" *ngIf="showIcon && item.icon">
+                  <span [class]="'mdi ' + item.icon"></span>
+                </div>
+                <div class="item-text" *ngIf="!tinyMenu">
+                  {{item.name | truncateText : textLength}}
+                </div>
+              </div>
+          </mat-button-toggle>
+        </div>
       </div>
 
     </mat-button-toggle-group>

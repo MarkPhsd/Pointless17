@@ -39,8 +39,15 @@
           <a mat-list-item
               routerLinkActive={{item.routerLinkActive}}
               routerLink=      {{item.routerLink}}>
-            <mat-icon>{{ item.icon }}</mat-icon>
-            {{ item.name }}
+              <div class="grid-toggle-tiny">
+                <div class="item-font" *ngIf="item?.icon">
+                  <!-- <span [class]="'mdi ' + item.icon"></span> -->
+                  <mat-icon>{{  item.name }}</mat-icon>
+                </div>
+                <div class="item-text" *ngIf="!tinyMenu">
+                  {{item.name | truncateText : 20}}
+                </div>
+              </div>
           </a>
         </div>
       </li>
@@ -61,8 +68,15 @@
 <mat-menu #menu="matMenu"  @fade  *ngFor="let item of submenu" >
   <div  *ngIf="isAuthorized(item)" >
     <button mat-menu-item >
-      <mat-icon>{{ item.icon }}</mat-icon>
-      <span> {{ item.name }}</span>
+      <div class="grid-toggle-tiny">
+        <div class="item-font" *ngIf="item?.icon">
+          <!-- <span [class]="'mdi ' + item.icon"></span> -->
+          <mat-icon>{{  item.name }}</mat-icon>
+        </div>
+        <div class="item-text" *ngIf="!tinyMenu">
+          {{item.name | truncateText : 20}}
+        </div>
+      </div>
     </button>
   </div>
 </mat-menu>

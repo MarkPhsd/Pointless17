@@ -19,6 +19,7 @@
                     <img *ngIf="logo || uiHomePageSetting"
                         (click)="setAPIAlt()"
                         [src]="logo"
+                        onerror   = "this.src='../assets/images/logo.png'"
                         width="125px"
                         [alt]="company"
                         class="logo">
@@ -30,10 +31,8 @@
                 </div>
               </mat-card-title>
               <mat-card-content>
-
                   <div class="center">
-
-                    <div class="center"
+                    <div  class="center"
                           [formGroup]="loginForm"
                           (ngSubmit)="onSubmit()" >
                         <div>

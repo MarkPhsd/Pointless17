@@ -1,5 +1,7 @@
-<ng-content></ng-content>
+
+
 <div *ngIf="value" class="loader">
+  <ng-content></ng-content>
   <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
 </div>
 
@@ -25,7 +27,7 @@
           </div>
         </div>
 
-        <div *ngIf="cardStyle === 'panel'" [class]="grid">
+        <div *ngIf="cardStyle === 'panel'" class='grid-flow-panel'>
           <div *ngFor="let order of orders; let i = index">
             <app-order-panel
               *ngIf="order && order.id"

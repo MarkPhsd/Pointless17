@@ -47,13 +47,19 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _orderBar       : Subscription;
   orderBar        : boolean;
 
+  searchBarWidthSubscription: Subscription;
+  searchBarWidth  : number;
+
   barType         = "mat-drawer-toolbar"
   apiUrl: any;
 
   _user: Subscription;
   user : IUser;
 
+  style = "width:195px"
+
   initSubscriptions() {
+    this.style = ""
     this._user =     this.authorizationService.user$.subscribe(data => {
       this.user = data
     })
@@ -63,11 +69,30 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toolbarSideBar = this.toolBarUIService.toolbarSideBar$.subscribe( data => {
       this.sideBarOpen = data
       this.barType =  "mat-drawer-searchbar"
+
     })
     this.searchbarSidebar = this.toolBarUIService.searchSideBar$.subscribe( data => {
       this.searchBarOpen = data
       this.barType = "mat-drawer-toolbar"
+      this.style = ""
     })
+
+    this.searchBarWidthSubscription = this.toolBarUIService._searchBarWidth$.subscribe(data => {
+      console.log('search width update', data)
+      console.log(' this.barType',  this.barType)
+      if (data) {
+        if (data == 55) {
+          this.barType =  "mat-drawer-searchbar-tiny"
+        }
+      }
+      if (!data && data != 0) {
+        this.barType =  "mat-drawer-searchbar-tiny"
+        this.style = `width:${this.style}`
+        this.searchBarWidth = data
+      }
+      console.log('this.barType',  this.barType)
+    })
+
   }
 
   constructor(
@@ -77,6 +102,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private cd              : ChangeDetectorRef,
                private appInitService  : AppInitService,
                private authorizationService: AuthenticationService,
+
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (this.platForm == 'web') {

@@ -16,8 +16,14 @@
         <div *userAuthorized="menu.userType">
           <div class="menu"
             (click)="toggle(menu, i)">
-            <mat-icon>{{ menu.icon }}</mat-icon>
-            {{ menu.name }}
+            <div class="grid-toggle-tiny">
+              <div class="item-font" *ngIf="menu.icon">
+                <mat-icon>{{ menu.icon }}</mat-icon>
+              </div>
+              <div class="item-text" *ngIf="!tinyMenu">
+                {{menu.name | truncateText : 20}}
+              </div>
+            </div>
           </div>
         </div>
     </li>
@@ -44,7 +50,9 @@
                     routerLinkActive={{item.routerLinkActive}}
                     routerLink=      {{item.routerLink}}>
                   <mat-icon>{{ item.icon }}</mat-icon>
+
                   {{ item.name }}
+
                 </a>
               </div>
             </div>

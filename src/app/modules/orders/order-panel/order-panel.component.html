@@ -3,9 +3,19 @@
   <mat-card-content class="center">
     <div class="grid-order">
       <div *ngIf="!smallDevice" class="grid-orderproperties">
+        <div class="field-center">
+          <div class="orderID">
+            {{order.id}}
+          </div>
+        </div>
 
         <div class='date-header' *ngIf="order.orderDate">
-          Started {{order.orderDate |  date: 'shortTime'}}
+          <div>
+            Started {{order.orderDate |  date: 'shortDate'}}
+          </div>
+          <div>
+            Time {{order.orderDate |  date: 'shortTime'}}
+          </div>
         </div>
 
         <div *ngIf="order.completionDate">
@@ -13,11 +23,16 @@
         </div>
 
         <div *ngIf="order.preferredScheduleDate">
-          Scheduled  {{order.preferredScheduleDate |  date: 'shortDate'}}
+          <div>
+            Scheduled  {{order.preferredScheduleDate |  date: 'shortDate'}}
+          </div>
+          <div>
+            Time {{order.orderDate |  date: 'shortTime'}}
+          </div>
         </div>
 
         <div class="orderType">
-          Type  {{order.serviceType | truncateText : 15}}
+           {{order.serviceType | truncateText : 15}}
         </div>
 
         <div *ngIf="order.employeeName" class="employee-name">
@@ -26,7 +41,7 @@
 
         <div *ngIf="!order.completionDate"
               class="time">
-              {{order.completionDate |  date: 'shortTime'}}
+          {{order.completionDate |  date: 'shortTime'}}
         </div>
 
       </div>
@@ -35,22 +50,22 @@
 
         <div class="grid-totals">
 
-          <div class="field-center">
-            <div class="orderID">
-              {{order.id}}
-            </div>
+
+          <div>
+            <div class="items">Items</div>
+            <div class="itemcount">{{order.itemCount}} </div>
           </div>
 
-          <div class="items">Items</div>
-          <div class="itemcount">{{order.itemCount}} </div>
+          <div>
+            <div class='total' >Total</div>
+            <div class="total">{{ order.total | currency}}</div>
+          </div>
 
-          <div class='total' >Total</div>
-          <div class="total">{{ order.total | currency}}</div>
-
-          <!-- //if safari then remove the time -->
-          <div *ngIf="!order.completionDate" class="field-center">
-            <div *ngIf="smallDevice">
-              Open {{minutesOpen}} min.
+          <div>
+              <div *ngIf="!order.completionDate" class="field-center">
+              <div *ngIf="smallDevice">
+                Open {{minutesOpen}} min.
+              </div>
             </div>
           </div>
 

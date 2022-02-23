@@ -1,0 +1,47 @@
+<div    *ngIf="(departments$ | async) as list; else loading">
+  <div *ngFor="let item of list">
+    <mat-card>
+      <mat-card-subtitle>
+
+        <span class="item-font">
+          <!-- <mat-icon>{{item.icon}}</mat-icon> -->
+          <span [class]="'mdi ' + item.icon"></span>
+        </span>
+        <span class="item-text">
+          {{item.name}}
+        </span>
+
+      </mat-card-subtitle>
+      <mat-card-content>
+        <div *ngFor="let cat of item.categories">
+          <h4>
+            <a (click)="categoryList(cat)">
+              <div class="grid-toggle-tiny">
+                <div class="item-font">
+                  <span [class]="'mdi ' + cat.icon"></span>
+                </div>
+                <div class="item-text">
+                  {{cat.name}}
+                </div>
+              </div>
+            </a>
+          </h4>
+        </div>
+
+        <div class="content-position">
+          <div  class="description">
+            <div [innerHtml]="item.onlineShortDescription"></div>
+          </div>
+          <div class="image-layout">
+            <img [src]="getItemSrc(item.urlImageMain)">
+          </div>
+        </div>
+
+        </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<ng-template #loading>
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

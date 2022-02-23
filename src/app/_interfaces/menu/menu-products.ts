@@ -91,6 +91,7 @@ export interface IMenuItem {
   defaultLabTestingState:   string;
   approvalStatus:           string;
   approvalStatusDateTime:   string;
+  icon                    : string;
   strainID:                 boolean;
   strainName:               boolean;
   isUsed:                   boolean;

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, HostListener } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
 import { EMPTY, Observable, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
@@ -31,6 +31,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   user              : IUser;
   _user             : Subscription;
   site              : ISite;
+  tinyMenu          : boolean;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
@@ -82,6 +83,15 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
                 private authenticationService   : AuthenticationService,
     ) {
     this.site  =  this.siteService.getAssignedSite();
+  }
+
+
+  // sort(users, 'name', '-age', 'id')
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    if (window.innerWidth < 768) {
+      this.tinyMenu = true
+    }
   }
 
   ngOnInit() {

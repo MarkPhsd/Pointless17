@@ -5,6 +5,7 @@
 @import '~material-icons/iconfont/material-icons.css';
 @import "./app/_material/theme";
 // @import url('https://fonts.googleapis.com/css?family=Muli:300,400,600&display=swap');
+@import '~@mdi/font/css/materialdesignicons.css';
 
 @import 'ag-grid-community/dist/styles/ag-grid.css';
 @import 'ag-grid-community/dist/styles/ag-theme-balham.css';
@@ -79,6 +80,11 @@
 
   .spacer {
     flex: 1;
+  }
+
+  .grid-toggle-tiny {
+    display: grid;
+    grid-template-columns: minmax(45px, 50px) 1fr
   }
 
   .toolbar {

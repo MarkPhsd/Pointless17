@@ -1,7 +1,7 @@
 
 <div fxLayout="column"
      class="row-class"
-     *ngIf="!displayCategories && menus">
+     *ngIf="isStaff && !displayCategories && menus">
 
   <ul id="accordion"
       class="accordion">
@@ -13,8 +13,14 @@
         <div *userAuthorized="menu.userType">
           <div class="menu"
                 (click)="toggle(menu, i)">
-              <mat-icon *ngIf="menu.icon">{{ menu.icon }}</mat-icon>
-              {{ menu.name }}
+            <div class="grid-toggle-tiny">
+              <div class="item-font" *ngIf="menu.icon">
+                <mat-icon>{{ menu.icon }}</mat-icon>
+              </div>
+              <div class="item-text" *ngIf="!tinyMenu">
+                {{menu.name | truncateText : 20}}
+              </div>
+            </div>
           </div>
       </div>
     </li>
@@ -36,13 +42,20 @@
       <li class="menu-item"
           @fade
           *ngFor="let item of submenu" >
-        <div *ngIf="!item.minimized">
+        <div *ngIf="!item?.minimized">
           <div class="menu" *userAuthorized="item.userType">
               <a mat-list-item
                 routerLinkActive={{item.routerLinkActive}}
                 routerLink=      {{item.routerLink}}>
-              <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
-              {{ item.name }}
+
+              <div class="grid-toggle-tiny">
+                <div class="item-font" *ngIf="item?.icon">
+                  <mat-icon>{{  item.name }}</mat-icon>
+                </div>
+                <div class="item-text" *ngIf="!tinyMenu">
+                  {{item.name | truncateText : 20}}
+                </div>
+              </div>
             </a>
           </div>
         </div>
@@ -60,13 +73,20 @@
         <li>
           <mat-menu #menu="matMenu">
             <div  *ngFor="let item of submenu">
-              <div  *userAuthorized="item.userType">
-                <div *ngIf="item.minimized">
+              <div  *userAuthorized="item?.userType">
+                <div *ngIf="item && item?.minimized">
                   <button mat-menu-item
                           routerLinkActive={{item.routerLinkActive}}
                           routerLink=      {{item.routerLink}}>
-                    <mat-icon *ngIf="item.icon">{{ item.icon }}</mat-icon>
-                    <span> {{ item.name }}</span>
+                    <div class="grid-toggle-tiny">
+                      <div class="item-font" *ngIf="item?.icon">
+                        <!-- <span [class]="'mdi ' + item.icon"></span> -->
+                        <mat-icon>{{  item.name }}</mat-icon>
+                      </div>
+                      <div class="item-text" *ngIf="!tinyMenu">
+                        {{item.name | truncateText : 20}}
+                      </div>
+                    </div>
                   </button>
                 </div>
               </div>

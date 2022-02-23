@@ -1,29 +1,44 @@
 @import "/src/mixins.scss";
 
 
-.toggle-buttons-wide {
-  // width    : 300px;
-  // max-width: 300px;
-  // min-width: 300px;
-
-  width: 95%;
-  margin-left: 5px;
-
+:host ::ng-deep .mat-button-toggle-button {
+  text-align: left !important;
+  // font-size: .9em;
   @include for-phone-only  {
-   //changed 2/1/2020
-   width: 95%;
-    // max-width: 350px;
-    width:  325px;
+    font-size: .9em;
   }
 }
 
-.button-dimensions {
+.item-text {
+  font-size: 1rem;
+}
+.item-font {
+  font-size: 1.5rem;
+}
+.toggle-buttons-wide {
+  width: 95%;
+  margin-left: 5px;
+  text-align: left !important;
+  // @include for-phone-only  {
+  //   width: 100%;
+  // }
+}
 
+.button-dimensions {
+  vertical-align: middle;
+  text-align: left;
+}
+
+.button-dimensions-short {
+  vertical-align: middle;
+  text-align: left;
 }
 
 .button-dimensions-tall {
   height: 75px;
   margin-bottom: 5px;
+  vertical-align: middle;
+  text-align: left;
 }
 
 .mat-button-toggle  {
@@ -31,13 +46,27 @@
 }
 
 .toggle-buttons-height {
-  max-height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
   @include for-phone-only  {
     max-width: 350px;
-    width:  325px;
+    width: 100%;
   }
+}
+
+.toggle-buttons-height-size-tall {
+  max-height: 550px;
+  @include for-phone-only  {
+    max-height: 75vh;
+  }
+}
+
+.toggle-buttons-height-medium {
+  max-height: 350px;
+}
+
+.toggle-buttons-height-short {
+  max-height: 250px;
 }
 
 .toggle-buttons {
@@ -46,8 +75,7 @@
   width: 95%;
   margin-left: 5px;
   @include for-phone-only  {
-    max-width: 350px;
-    width:  325px;
+    width: 100%;
   }
 }
 
@@ -70,7 +98,6 @@
   @include for-phone-only  {
     max-width: 275px;
     width:  275px;
-
   }
 }
 
@@ -79,35 +106,25 @@
   height: 450h;
   overflow-y: auto;
   overflow-x: hidden;
-
   @include for-phone-only  {
-    max-width: 275px;
-    width:  275px;
-
+    width: 100%;
   }
 }
 
-
 .toggle-group-tall {
-  width: 385px;
-  height: 85vh;
+  width: 100%;
+  // height: 95vh;
   overflow-y: auto;
   overflow-x: hidden;
-
   @include for-phone-only  {
-    max-width: 275px;
-    width:  275px;
-
+    width: 100%;
   }
 }
 
 mat-button-toggle-group {
   width: 100%;
-
   @include for-phone-only  {
-    max-width: 275px;
-    width:  275px;
-
+    width: 100%;
   }
 }
 
@@ -117,5 +134,4 @@ mat-button-toggle {
   align-items: center;
   flex-direction: row;
   display: flex;
-
 }

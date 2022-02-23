@@ -6,44 +6,52 @@
 }
 
 .grid-container {
-
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: 1fr 300px;
-
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
     grid-template-columns: 1fr;
   }
-
 }
 
 .grid-flow {
   --gap: 20px;
   display: grid;
   gap: var(--gap);
-
   grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
-
   @include for-phone-only  {
     --gap: 10px;
     display: grid;
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(140px, 1fr) );
   }
-
 }
 
+.grid-flow-panel {
+  --gap: 20px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(595px, 1fr) );
+  @include for-phone-only  {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(140px, 1fr) );
+  }
+}
 
+mat-progress-bar {
+  margin: 5px;
+}
 .item {
   padding: 1.35rem;
   background: #90bcbc;
   border-radius: 4px;
 }
-
 
 .card-container {
   overflow: hidden;

@@ -103,6 +103,7 @@ import { TierPricesComponent } from './modules/menu/tierMenu/tier-prices/tier-pr
 import { PSMenuGroupListComponent } from './modules/admin/products/price-schedule-menu-groups/psmenu-group-list/psmenu-group-list.component';
 import { POSOrderScheduleComponent } from './modules/posorders/posorder-schedule/posorder-schedule.component';
 import { BackgroundCoverComponent } from './shared/widgets/background-cover/background-cover.component';
+import { DepartmentMenuComponent } from './modules/menu/department-menu/department-menu.component';
 
 
 const routes: Routes = [
@@ -117,6 +118,7 @@ const routes: Routes = [
 
         { path: 'app-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
+        { path: 'department-list', component: DepartmentMenuComponent,   data: {  title: 'Department Menu', animation: 'isLeft'}},
         { path: 'categories', component: CategoriesComponent,canActivate: [AgeVerificationGuardService],   data: { title: 'Categories',  animation: 'isLeft'} },
         { path: 'brandslist', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { title: 'Brands',  animation: 'isLeft'} },
         { path: 'menuitems-infinite', component: MenuItemsInfiniteComponent ,canActivate: [AgeVerificationGuardService],   data: {  title: 'Menu Items',  animation:  'isLeft'} },
@@ -171,6 +173,7 @@ const routes: Routes = [
         ///price schedule layout menu
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
+        //app-department-menu
         { path: 'categorylist', component: CategorieslistviewComponent,  canActivate: [AuthGuard], data: {  title: 'Category List', animation: 'isLeft'}},
         { path: 'categorieslistview', component: CategorieslistviewComponent, canActivate: [AuthGuard], data: { title: 'Category List', animation: 'isLeft'}},
         { path: 'adminbrandslist', component: AdminbrandslistComponent, canActivate: [AuthGuard], data: { title: 'Brand List', animation: 'isLeft'}},

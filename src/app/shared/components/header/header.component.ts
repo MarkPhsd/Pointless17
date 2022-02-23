@@ -69,7 +69,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   smallDevice         : boolean;
   isUserStaff         = false;
   isAdmin             = false;
-
+  isUser              = false;
   _order              :   Subscription;
   order               :   IPOSOrder;
 
@@ -90,6 +90,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   _user               : Subscription;
 
   message: string;
+
+  //themes
+  matToolbarColor = 'primary';
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -243,7 +246,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!user) {  return null }
 
     this.isAdmin      = false;
-    this.userName     =  user.username
+    this.userName     = user.username
     this.userRoles    = user.roles.toLowerCase();
     this.employeeName = user.username;
 
@@ -252,6 +255,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isAdmin          = true
     }
 
+    this.isUser = false;
+    if (user.roles === 'user') {
+      this.isUser = true;
+    }
     if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
       this.isUserStaff      = true
       this.showPOSFunctions = true;
