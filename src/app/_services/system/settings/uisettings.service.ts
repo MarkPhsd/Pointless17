@@ -84,7 +84,7 @@ export interface UIHomePageSettings {
   itemsPerPage        : number;
 
   backgroundImage     : string;
-
+  tinyLogo            : string;
   logoHomePage        : string;  //  : [config.logoHomePage],
   displayCompanyName  : string;  //     : [config.displayCompanyName],
 }
@@ -261,7 +261,7 @@ export class UISettingsService {
       backgroundImage       : [],
       logoHomePage          : [],
       displayCompanyName    : [],
-
+      tinyLogo              : [''],
      })
     return fb
   }
@@ -328,7 +328,7 @@ export class UISettingsService {
       backgroundImage         : [config.backgroundImage],
       logoHomePage            : [config.logoHomePage],
       displayCompanyName      : [config.displayCompanyName],
-
+      tinyLogo              : [config.tinyLogo],
      })
     return fb
   }

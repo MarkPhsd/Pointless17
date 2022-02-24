@@ -8,12 +8,19 @@
         class="accordion">
       <li class="menu-item" @fade *ngFor="let menu of menus; let i = index"
           [class.active]="menu.active">
-          <!-- *ngIf="isUserAuthorized(menu.userType)" -->
+
         <div *ngIf="isAuthorized(menu)" >
             <div class="menu"
               (click)="toggle(menu, i)">
-              <mat-icon>{{ menu.icon }}</mat-icon>
-              {{ menu.name }}
+
+              <div class="grid-toggle-tiny">
+                <div class="item-font" *ngIf="menu.icon">
+                  <mat-icon>{{menu.icon}}</mat-icon>
+                </div>
+                <div class="item-text" *ngIf="!tinyMenu">
+                  {{menu.name | truncateText : 20}}
+                </div>
+              </div>
           </div>
         </div>
       </li>
@@ -25,8 +32,14 @@
        *ngIf="displayCategories">
 
     <div class=" accordion  menu-header">
-      <mat-icon>{{menus[index].icon}}</mat-icon>
-      {{ menus[index].name }}
+      <div class="grid-toggle-tiny">
+        <div class="item-font" *ngIf="menus[index].icon">
+          <mat-icon>{{menus[index].icon}}</mat-icon>
+        </div>
+        <div class="item-text" *ngIf="!tinyMenu">
+          {{menus[index].name  | truncateText : 20}}
+        </div>
+      </div>
       <mat-divider></mat-divider>
       <div class="menu-header-footer"></div>
     </div>
@@ -40,9 +53,8 @@
               routerLinkActive={{item.routerLinkActive}}
               routerLink=      {{item.routerLink}}>
               <div class="grid-toggle-tiny">
-                <div class="item-font" *ngIf="item?.icon">
-                  <!-- <span [class]="'mdi ' + item.icon"></span> -->
-                  <mat-icon>{{  item.name }}</mat-icon>
+                <div class="item-font" *ngIf="item.icon">
+                  <mat-icon>{{item.icon}}</mat-icon>
                 </div>
                 <div class="item-text" *ngIf="!tinyMenu">
                   {{item.name | truncateText : 20}}
@@ -70,8 +82,7 @@
     <button mat-menu-item >
       <div class="grid-toggle-tiny">
         <div class="item-font" *ngIf="item?.icon">
-          <!-- <span [class]="'mdi ' + item.icon"></span> -->
-          <mat-icon>{{  item.name }}</mat-icon>
+          <mat-icon>{{item.icon}}</mat-icon>
         </div>
         <div class="item-text" *ngIf="!tinyMenu">
           {{item.name | truncateText : 20}}

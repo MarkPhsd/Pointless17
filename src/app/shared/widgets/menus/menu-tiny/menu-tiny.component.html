@@ -16,6 +16,7 @@
         <div *userAuthorized="menu.userType">
           <div class="menu"
             (click)="toggle(menu, i)">
+
             <div class="grid-toggle-tiny">
               <div class="item-font" *ngIf="menu.icon">
                 <mat-icon>{{ menu.icon }}</mat-icon>
@@ -24,6 +25,7 @@
                 {{menu.name | truncateText : 20}}
               </div>
             </div>
+
           </div>
         </div>
     </li>
@@ -49,9 +51,15 @@
                     color=""
                     routerLinkActive={{item.routerLinkActive}}
                     routerLink=      {{item.routerLink}}>
-                  <mat-icon>{{ item.icon }}</mat-icon>
 
-                  {{ item.name }}
+                    <div class="grid-toggle-tiny">
+                      <div class="item-font" *ngIf="item.icon">
+                        <mat-icon>{{item.icon}}</mat-icon>
+                      </div>
+                      <div class="item-text" *ngIf="!tinyMenu">
+                        {{item.name | truncateText : 20}}
+                      </div>
+                    </div>
 
                 </a>
               </div>
@@ -63,7 +71,7 @@
 
       <button mat-icon-button
               [matMenuTriggerFor]="menu"
-              aria-label="Example icon-button with a menu">
+              aria-label=" icon button with a menu">
         <mat-icon>more_vert</mat-icon>
       </button>
 
@@ -79,8 +87,16 @@
                                 color=""
                                 routerLinkActive={{item.routerLinkActive}}
                                 routerLink=      {{item.routerLink}}>
-                          <mat-icon>{{ item.icon }}</mat-icon>
-                          <span> {{ item.name }}</span>
+
+                          <div class="grid-toggle-tiny">
+                            <div class="item-font" *ngIf="item.icon">
+                              <mat-icon>{{item.icon}}</mat-icon>
+                            </div>
+                            <div class="item-text" *ngIf="!tinyMenu">
+                              {{item.name | truncateText : 20}}
+                            </div>
+                          </div>
+
                         </button>
                       </div>
                     </div>

@@ -13,6 +13,7 @@
         <div *userAuthorized="menu.userType">
           <div class="menu"
                 (click)="toggle(menu, i)">
+
             <div class="grid-toggle-tiny">
               <div class="item-font" *ngIf="menu.icon">
                 <mat-icon>{{ menu.icon }}</mat-icon>
@@ -21,6 +22,7 @@
                 {{menu.name | truncateText : 20}}
               </div>
             </div>
+
           </div>
       </div>
     </li>
@@ -30,8 +32,16 @@
       *ngIf="displayCategories">
 
   <div class=" accordion  menu-header">
-    <mat-icon *ngIf="menus[index].icon">{{menus[index].icon}}</mat-icon>
-      {{ menus[index].name }}
+
+    <div class="grid-toggle-tiny">
+      <div class="item-font" *ngIf="menus[index].icon">
+        <mat-icon>{{menus[index].icon}}</mat-icon>
+      </div>
+      <div class="item-text" *ngIf="!tinyMenu">
+        {{menus[index].name  | truncateText : 20}}
+      </div>
+    </div>
+
     <mat-divider></mat-divider>
     <div class="menu-header-footer"></div>
   </div>
@@ -49,8 +59,8 @@
                 routerLink=      {{item.routerLink}}>
 
               <div class="grid-toggle-tiny">
-                <div class="item-font" *ngIf="item?.icon">
-                  <mat-icon>{{  item.name }}</mat-icon>
+                <div class="item-font" *ngIf="item.icon">
+                  <mat-icon>{{item.icon}}</mat-icon>
                 </div>
                 <div class="item-text" *ngIf="!tinyMenu">
                   {{item.name | truncateText : 20}}
@@ -78,15 +88,16 @@
                   <button mat-menu-item
                           routerLinkActive={{item.routerLinkActive}}
                           routerLink=      {{item.routerLink}}>
+
                     <div class="grid-toggle-tiny">
-                      <div class="item-font" *ngIf="item?.icon">
-                        <!-- <span [class]="'mdi ' + item.icon"></span> -->
-                        <mat-icon>{{  item.name }}</mat-icon>
+                      <div class="item-font" *ngIf="item.icon">
+                        <mat-icon>{{item.icon}}</mat-icon>
                       </div>
                       <div class="item-text" *ngIf="!tinyMenu">
                         {{item.name | truncateText : 20}}
                       </div>
                     </div>
+
                   </button>
                 </div>
               </div>
@@ -103,7 +114,6 @@
               <a  mat-list-item
                       (click)="resetMenu()">
                 <mat-icon>navigate_before</mat-icon>
-                  Back
               </a>
             </div>
           </li>

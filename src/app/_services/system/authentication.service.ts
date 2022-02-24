@@ -121,6 +121,7 @@ export class AuthenticationService {
       localStorage.removeItem('orderSubscription')
       this.updateUser(null);
       this.updateUserX(null);
+
     }
 
     requestUserSetupToken(userName: string): Observable<IUserExists> {

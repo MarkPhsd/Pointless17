@@ -12,7 +12,8 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 export class UIHomePageSettingsComponent implements OnInit {
 
   urlImageMain: string;
-  logoImage   : string;
+  logoHomePage   : string;
+  tinyLogo:     string;
   inputForm  : FormGroup;
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
@@ -25,6 +26,8 @@ export class UIHomePageSettingsComponent implements OnInit {
       if (data) {
         this.uiHomePage = JSON.parse(data.text) as UIHomePageSettings
         if (this.uiHomePage) { this.urlImageMain = this.uiHomePage.backgroundImage }
+        if (this.tinyLogo) { this.tinyLogo       = this.uiHomePage.tinyLogo }
+        if (this.logoHomePage) { this.logoHomePage     = this.uiHomePage.logoHomePage }
         this.initForm(data);
       }
     });
@@ -34,7 +37,6 @@ export class UIHomePageSettingsComponent implements OnInit {
     const form = this.inputForm
     this.inputForm = this.uISettingsService.initHomePageForm(form)
     this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text, 'UIHomePageSettings')
-
   }
 
   async updateSetting(){
@@ -50,8 +52,15 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   received_Logo(event) {
     if (!event) { return }
-    this.logoImage = event
+    this.logoHomePage = event
     this.inputForm.patchValue({logoHomePage: event})
+  };
+
+
+  received_TinyLogo(event) {
+    if (!event) { return }
+    this.tinyLogo = event
+    this.inputForm.patchValue({tinyLogo: event})
   };
 
 }

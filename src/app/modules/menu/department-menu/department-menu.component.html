@@ -1,4 +1,4 @@
-<div    *ngIf="(departments$ | async) as list; else loading">
+<div   *ngIf="(departments$ | async) as list; else loading">
   <div *ngFor="let item of list">
     <mat-card>
       <mat-card-subtitle>
@@ -15,7 +15,7 @@
       <mat-card-content>
         <div *ngFor="let cat of item.categories">
           <h4>
-            <a (click)="categoryList(cat)">
+            <button mat-button (click)="categoryList(cat)">
               <div class="grid-toggle-tiny">
                 <div class="item-font">
                   <span [class]="'mdi ' + cat.icon"></span>
@@ -24,7 +24,7 @@
                   {{cat.name}}
                 </div>
               </div>
-            </a>
+            </button>
           </h4>
         </div>
 

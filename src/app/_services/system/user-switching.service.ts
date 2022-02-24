@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { BehaviorSubject, EMPTY, Observable, of, Subscription } from 'rxjs';
-import { map, switchMap,   } from 'rxjs/operators';
+import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
+import { switchMap,   } from 'rxjs/operators';
 import { IUser, IUserProfile } from 'src/app/_interfaces';
 import { EmployeeService } from '../people/employee-service.service';
 import { FastUserSwitchComponent } from 'src/app/modules/profile/fast-user-switch/fast-user-switch.component';
@@ -67,6 +67,7 @@ export class UserSwitchingService {
     private route           : ActivatedRoute,
     private platformService : PlatformService,
     private encryptionService: EncryptionService,
+
     private electronService: ElectronService
   ) {
     this.initSubscriptions();
@@ -109,6 +110,11 @@ export class UserSwitchingService {
     appUser.width  = this.encryptionService.encrypt(appUser.width, appUser.depth)
     const user = JSON.stringify(appUser);
     localStorage.setItem('electronFeature', user);
+  }
+
+  clearLoggedInUser() {
+    this.authenticationService.logout();
+    this.orderService.updateOrderSubscriptionClearOrder(0)
   }
 
   pinEntryResults(pin: any) {

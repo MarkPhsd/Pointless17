@@ -26,7 +26,8 @@
                 (click)="setItem(item)"
                 *ngFor="let item of list" >
 
-              <div class="grid-toggle-tiny">
+              <div class="grid-toggle-tiny"
+                  (mouseover) ="setItemMouseOver(item)">
                 <div class="item-font" *ngIf="showIcon && item.icon">
                   <span [class]="'mdi ' + item.icon"></span>
                 </div>

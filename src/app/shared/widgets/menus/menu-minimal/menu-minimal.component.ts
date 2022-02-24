@@ -94,7 +94,6 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     this.site  =  this.siteService.getAssignedSite();
   }
 
-  // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
     if (window.innerWidth < 768) {

@@ -5,6 +5,14 @@
   grid-template-columns: minmax(50px, 1fr) 1fr
 }
 
+
+:host {
+  .mat-button {
+    text-align: left;
+    }
+}
+
+
 mat-card {
   height:  85vh !important;
   overflow-y: auto;
@@ -50,3 +58,4 @@ mat-card {
   display: grid;
   grid-template-columns: minmax(45px, 50px) 300px
 }
+

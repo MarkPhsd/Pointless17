@@ -70,19 +70,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
 
     this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
-        console.log('init UIHomePageSetting')
-
-
         if (data) {
+          console.log('ui home page settings', data)
           if (!this.bucket) { return }
           if (!data.backgroundImage) { return }
-          console.log('bucket', this.bucket)
           const image  = `${this.bucket}${data.backgroundImage}`
-          console.log('image', image)
           this.assingBackGround(image)
           this.uiHomePageSetting = data;
+          console.log('logo', data.logoHomePage)
           if (data.logoHomePage) {
             this.logo = `${this.bucket}${data.logoHomePage}`;
+            console.log(this.logo)
           }
         }
       }
@@ -118,20 +116,31 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
+    this.bucket = await this.awsBucketService.awsBucketURL()
+
     this.initForm();
     this.initSubscriptions()
     // this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings').subscribe(data =>  {
-    this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
-      this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
-    })
 
-    this.bucket = await this.awsBucketService.awsBucketURL()
+
     if (!this.platformService.isApp()) { this.amI21 = true  }
     if (this.platformService.isApp())  { this.amI21 = false }
-    await this.initCompanyInfo()
+
     this.refreshTheme()
     this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    this.refreshUIHomePageSettings();
+  }
+
+  async refreshUIHomePageSettings() {
+    if (!this.bucket) {
+      this.bucket = await this.awsBucketService.awsBucketURL()
+    }
+    this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
+      this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
+      this.initCompanyInfo();
+      this.initLogo();
+    })
   }
 
   ngOnDestroy(): void {
@@ -167,13 +176,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async initCompanyInfo() {
     this.compName    = this.appInitService.company;
-    this.initLogo();
   }
 
   initLogo() {
-    this.logo        = this.appInitService.logo;
-    if (!this.logo)  { this.logo = 'http://pointlesspos.com/download/logo.png' }
-  }
+    if (this.bucket) {
+      if (this.uiHomePageSetting && this.uiHomePageSetting.logoHomePage) {
+        this.logo = `${this.bucket}${this.uiHomePageSetting.logoHomePage}`
+      }
+    }
+   }
 
   redirectUserLoggedIn() {
     const user = this.authenticationService.userValue;

@@ -58,9 +58,13 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-            <div  class="grid-item"
+            <div  class="grid-item-departments"
                   *ngIf="(categories$ | async) as list">
               <app-mat-toggle-selector
+                  [showIcon]       ="'true'"
+                  [textLength]     = "21"
+                  [toggleDimensions]="'toggle-group-tall'"
+                  [toggleHeight]   ="'toggle-buttons-height-size-tall'"
                   (outPutItem)     = "refreshCategorySearch($event)"
                   [textLength]     = "21"
                   [list]           = "list">
@@ -117,6 +121,10 @@
               *ngIf="(productTypes$ | async) as list">
 
             <app-mat-toggle-selector
+                [showIcon]       ="'true'"
+                [textLength]     = "21"
+                [toggleDimensions]="'toggle-group-tall'"
+                [toggleHeight]   ="'toggle-buttons-height-size-tall'"
                 (setItem)        = "refreshTypeSearch($event)"
                 [textLength]     = "21"
                 [list]           = "list">
@@ -131,10 +139,11 @@
          *ngIf="!multifilter">
       <div  *ngIf="(departments$ | async) as list">
         <app-mat-toggle-selector
-            [hideAllOption]  ="'true'"
+            cdk-overlay-origin
+            #trigger="cdkOverlayOrigin"
             (outPutItem)     = "refreshDepartmentSearch($event)"
+            [mouseOver]      = "'true'"
             [showIcon]       ="'true'"
-            [tinyMenu]       = "tinyDepartmentFilter"
             [textLength]     = "21"
             [toggleDimensions]="'toggle-group-tall'"
             [toggleHeight]   ="'toggle-buttons-height-size-tall'"
@@ -142,7 +151,36 @@
         </app-mat-toggle-selector>
       </div>
     </div>
-
   </div>
 
+  <button cdk-overlay-origin
+          #trigger="cdkOverlayOrigin"
+          (click)="isMenuOpen = !isMenuOpen">Open Overlay</button>
+
+  <ng-template
+    cdk-connected-overlay
+    [origin]="trigger"
+    hasBackdrop
+    [open]="isMenuOpen"
+    (backdropClick)="isMenuOpen=false">
+    <app-department-menu></app-department-menu>
+  </ng-template>
+
 </mat-sidenav-container>
+
+
+
+
+<!-- <ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="trigger"
+  [cdkConnectedOverlayOpen]="isDepartmentOpen"
+>
+  <ul class="example-list">
+    <li>Item 1</li>
+    <li>Item 2</li>
+    <li>Item 3</li>
+  </ul>
+</ng-template> -->
+
+

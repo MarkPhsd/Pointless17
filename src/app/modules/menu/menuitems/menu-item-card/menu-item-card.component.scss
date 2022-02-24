@@ -1,79 +1,49 @@
 @import "/src/mixins.scss";
-
-.container:before {
-  /* empty pseudo */
-  content: '';
-
-  /* start transparent, include a transition bcuz */
-  opacity: 0;
-  transition: opacity 0.5s ease;
-
-  /* covers the whole div */
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 2;
+mat-card {
+  height: 100%;
+  border: 1px ;
 }
 
-.container:hover:before {
-  opacity: 1;
+mat-card:hover {
+  border-color: brown !important;
+  border: 1px solid #000;
+
 }
 
-.container .image {
-  position: absolute;
-  display: block;
-  max-width: 100%;
-  height: auto;
-  z-index: 1;
+.border :hover {
+  border-width  : 5px;
+  border-radius : 5px;
+  outline       : 1px solid antiquewhite;
 }
-
-.btn {
-  opacity: 0;
-  transition: opacity 0.5s ease;
-  position: relative;
-  padding: 0 40px;
-  height: 40px;
-  line-height: 40px;
-  max-width: 260px;
-  cursor: pointer;
-  z-index: 3;
-}
-.container:hover .btn {
-  opacity: 1;
-}
-
 
 .text-max-width {
   max-width: 200px;
 }
 
 .category-img {
-  width: 15vh;
-  height: 15vh;
+  // width: 15vh;
+  // height: 15vh;
   border-radius: 50%;
   margin-top: 3px;
   transition: box-shadow 400ms;
 
-  @include for-phone-only {          width: 13vh; height: 13vh;  }
-  @include for-tablet-landscape-up { width: 16vh; height: 16vh;}
-  @include for-tablet-portrait-up  { width: 15vh; height: 15vh;}
-  @include for-tablet-portrait-up  { width: 14vh;  height: 14vh;}
+  @include for-phone-only {          width: 150px;}
+  @include for-tablet-landscape-up { width: 150px;}
+  @include for-tablet-portrait-up  { width: 150px;}
+  @include for-tablet-portrait-up  { width: 150px;}
 }
 
 .product-image {
   object-fit: cover;
-  max-width: 100%;
+  // max-width: 100%;
   max-height: 100%;
   transition: box-shadow 400ms;
   border-radius: 5px;
 
-  @include for-phone-only {height: 13vh;  }
+  @include for-phone-only          {height: 13vh;  }
   @include for-tablet-landscape-up {height: 16vh;}
   @include for-tablet-portrait-up  {height: 15vh;}
-  @include for-tablet-portrait-up  { height: 14vh;}
+  @include for-tablet-portrait-up  {height: 15vh;}
 }
 
 .category-img:hover {
@@ -123,7 +93,6 @@
   text-transform: capitalize;
 }
 
-
 .product-name {
 
   grid-gap: 5px;
@@ -157,11 +126,6 @@
     text-transform: capitalize;
   }
 
-  // @include for-phone-only {
-
-
-  // }
-  // @include for-tablet-landscape-up {}
   @include for-tablet-portrait-up  { }
   @include for-tablet-portrait-up  { }
 }
@@ -225,12 +189,11 @@
 #price {
   align-items:   baseline;
   margin-top:    .8em;
-  line-height:   1em;
+  // line-height:   1em;
   text-align:    left;
   font-weight:   500;
-  font-size:     1em;
+  font-size:     .9em;
   float:         left;
-  padding-right: 4px;
 }
 
 .grid-flow {
@@ -238,6 +201,13 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.price-grid {
+  --gap: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 50px 40px;
 }
 
 .grid-item {
@@ -248,23 +218,8 @@
   overflow-x: scroll;
 }
 
-
-
-// .product-image-transition {
-//   transition-timing-function: ease-in;
-// }
-// @mixin for-phone-only {
-//   @media (max-width: 599px) { @content; }
-// }
-// @mixin for-tablet-portrait-up {
-//   @media (min-width: 600px) { @content; }
-// }
-// @mixin for-tablet-landscape-up {
-//   @media (min-width: 900px) { @content; }
-// }
-// @mixin for-desktop-up {
-//   @media (min-width: 1200px) { @content; }
-// }
-// @mixin for-big-desktop-up {
-//   @media (min-width: 1800px) { @content; }
-// }
+button  {
+  margin-right: 1px;
+  margin-left: 1px;
+  padding: 1px;
+}

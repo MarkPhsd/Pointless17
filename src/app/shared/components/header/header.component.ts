@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter,
         HostBinding, Renderer2, HostListener, OnDestroy, OnChanges } from '@angular/core';
 import { FormBuilder,FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
+import { CompanyService,AuthenticationService, OrdersService, MessageService, AWSBucketService, } from 'src/app/_services';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Observable, of, Subject, Subscription,   } from 'rxjs';
@@ -17,6 +17,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { Router } from '@angular/router';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 interface IIsOnline {
   result: string;
@@ -94,6 +95,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   //themes
   matToolbarColor = 'primary';
 
+  _uISettings: Subscription;
+  uiHomePageSetting: UIHomePageSettings;
+  bucket = '';
+  logo   = '';
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
@@ -111,7 +117,18 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.user  = data
       this.getUserInfo()
     })
+
+    this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
+        if (data) {
+          if (!this.bucket) { return }
+          this.uiHomePageSetting = data;
+        }
+      }
+    )
+
   }
+
+
 
   constructor(private authenticationService:  AuthenticationService,
               private pollingService        : PollingService,
@@ -128,7 +145,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService   : NavigationService,
               private userSwitchingService: UserSwitchingService,
               public  platFormService     : PlatformService,
+              private uiSettingService    : UISettingsService,
               private router              : Router,
+              private awsBucketService     : AWSBucketService,
               private fb                  : FormBuilder ) {
 
 
@@ -157,7 +176,29 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.updateItemsPerPage();
     this.pollingService.poll();
     this.initUserOrder();
+    this.updateScreenSize();
+    this.refreshUIHomePageSettings();
   }
+
+  async refreshUIHomePageSettings() {
+    if (!this.bucket) {
+      this.bucket = await this.awsBucketService.awsBucketURL()
+    }
+    this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
+      this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
+      this.initCompanyInfo();
+    })
+  }
+
+  async initCompanyInfo() {
+    if (this.bucket) {
+      if (this.uiHomePageSetting && this.uiHomePageSetting.tinyLogo) {
+        const logo = `${this.bucket}${this.uiHomePageSetting.tinyLogo}`
+        this.logo = logo
+      }
+    }
+  }
+
 
   //if there is a current order for this user, then we can assign it here.
   initUserOrder(){
@@ -168,6 +209,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.userSwitchingService.assignCurrentOrder(userProfile)
     }
   }
+
 
   ngOnDestroy(): void {
 
@@ -230,6 +272,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     } else if (window.innerWidth < 768) {
       this.showSearchForm = false
       this.sitePickerWidth = 75
+      this.smallDevice = true
+    }
+  }
+
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    this.smallDevice = false
+    if (window.innerWidth < 768) {
       this.smallDevice = true
     }
   }
@@ -341,8 +391,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   logout() {
+    this.userSwitchingService.clearLoggedInUser();
     this.smallDeviceLimiter();
-    this.authenticationService.logout();
   }
 
   renderTheme() {
@@ -373,6 +423,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   switchUser() {
     this.userSwitchingService.openPIN({request: 'switchUser'})
+  }
+
+  assingBackGround(image: string) {
+    if (!image) { return }
+    // // const image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
+    // console.log('asssign background', image)
+    // const styles = { 'background-image': `url(${image})`  };
+
+    // this.backgroundImage = styles
+    // const i = 1
   }
 
 }

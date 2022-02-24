@@ -22,7 +22,9 @@ mat-form-field {
   flex-direction: row;
   justify-content: baseline;
   align-content: center;
+  flex-wrap: wrap;
 }
+
 
 .grid-list-container {
   display: grid;

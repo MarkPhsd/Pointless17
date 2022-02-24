@@ -36,6 +36,8 @@ import {MatTreeModule} from '@angular/material/tree';
 import {MatFormFieldModule } from '@angular/material/form-field';
 import {DragDropModule } from '@angular/cdk/drag-drop';
 import {ScrollingModule } from '@angular/cdk/scrolling';
+import { OverlayModule } from '@angular/cdk/overlay';
+
 
 @NgModule({
   exports: [
@@ -78,6 +80,7 @@ import {ScrollingModule } from '@angular/cdk/scrolling';
     MatToolbarModule,
     MatTooltipModule,
     MatTreeModule,
+    OverlayModule,
   ]
 })
 export class AppMaterialModule  {}

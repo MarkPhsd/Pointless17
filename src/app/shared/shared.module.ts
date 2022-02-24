@@ -126,6 +126,8 @@ import { UploaderComponent } from './widgets/AmazonServices';
 import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 import { SearchMenuProductsComponent } from './widgets/search-menu-products/search-menu-products.component';
+import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
+
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -166,6 +168,7 @@ import { SearchMenuProductsComponent } from './widgets/search-menu-products/sear
     DepartmentSelectComponent,
     DeviceInfoComponent,
     DSIEMVElectronComponent,
+    DepartmentMenuComponent,
     ExitLabelSelectionComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
@@ -304,6 +307,7 @@ import { SearchMenuProductsComponent } from './widgets/search-menu-products/sear
     DeviceInfoComponent,
     DisableControlDirective,
     DSIEMVElectronComponent,
+    DepartmentMenuComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,

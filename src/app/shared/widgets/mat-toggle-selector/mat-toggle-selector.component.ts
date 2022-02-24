@@ -21,6 +21,7 @@ export class MatToggleSelectorComponent implements OnInit {
   @Input()  list                        : any[]
   @Input()  tinyMenu: boolean;
   @Input()  showIcon: boolean;
+  @Input()  mouseOver: boolean;
   @Input()  toggleHeight ='toggle-buttons-height-size-medium'
   constructor() {
   }
@@ -64,6 +65,12 @@ export class MatToggleSelectorComponent implements OnInit {
     this.outPutItem.emit(item)
   }
 
+  setItemMouseOver(item) {
+    console.log('item', item)
+    if (!this.mouseOver) { return }
+
+    this.outPutItem.emit(item)
+  }
 
 }
 

@@ -28,6 +28,8 @@ const { Keyboard } = Plugins;
 })
 export class MenuSearchBarComponent implements OnInit, AfterViewInit, OnDestroy {
 
+isMenuOpen = false;
+
 get platForm() {  return Capacitor.getPlatform(); }
 
 @ViewChild('input', {static: true}) input: ElementRef;
@@ -111,6 +113,7 @@ pagingInfo          : IPagedList;
 itemNameInput: string;
 smallDevice : boolean;
 
+isDepartmentOpen = false;
 
 initSubscriptions() {
   this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -353,12 +356,13 @@ constructor(
       this.tinyDepartmentFilter = true;
     }
 
+    this.isMenuOpen = !this.isMenuOpen
     this.department = item
-    this.router.navigate(
-      [
-        "/department-list", { value: this.searchIncrementer, id: item.id}
-      ]
-    )
+    // this.router.navigate(
+    //   [
+    //     "/department-list", { value: this.searchIncrementer, id: item.id}
+    //   ]
+    // )
 
   }
 

@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, Input,
-         AfterViewInit,ElementRef } from '@angular/core';
+         AfterViewInit,ElementRef, HostListener } from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 'src/app/_interfaces';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -102,6 +102,7 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
 
     _searchModel  : Subscription;
     searchModel   : ClientSearchModel;
+    smallDevice: boolean;
 
     buttoncheckInName = 'Check In'
     buttonName        = 'Edit' //if edit off then it's 'Assign'
@@ -148,8 +149,15 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
       if (this.itemName && this.searchModel && this.searchForm) {
         this.itemName.setValue(this.searchModel.name)
       }
-
     };
+
+        // sort(users, 'name', '-age', 'id')
+    @HostListener("window:resize", [])
+    updateScreenSize() {
+      if (window.innerWidth < 768) {
+        this.smallDevice = true
+      }
+    }
 
     initClasses()  {
       const platForm      = this.platForm;
@@ -157,6 +165,10 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
       this.agtheme  = 'ag-theme-material';
       if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
       if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+
+      if (this.smallDevice) {
+        this.gridDimensions =  'width: 100%; height: 80%%;'
+      }
     }
 
     initForm() {

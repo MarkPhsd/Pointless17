@@ -1,22 +1,23 @@
 <div class="header-flex">
 
-    <div  *ngIf="searchForm"
-          [formGroup]="searchForm"
-          class="grid-item">
-      <search-debounce-input
-                [itemNameControl] = "'itemName'"
-                [searchForm]      = "searchForm"
-                (outPutMethod)    = "refreshSearchPhrase($event)">
-        <div fieldDescription>
-            <mat-icon>search</mat-icon>
-            Search
-        </div>
-      </search-debounce-input>
-    </div>
+  <div  *ngIf="searchForm"
+        [formGroup]="searchForm"
+        class="grid-item">
+    <search-debounce-input
+              [itemNameControl] = "'itemName'"
+              [searchForm]      = "searchForm"
+              (outPutMethod)    = "refreshSearchPhrase($event)">
+      <div fieldDescription>
+          <mat-icon>search</mat-icon>
+          Search
+      </div>
+    </search-debounce-input>
+  </div>
 
   <div>
     <span>
-      <button mat-button (click)="gotoAddClient()"><mat-icon>add</mat-icon>New Profile</button>
+      <button mat-button (click)="gotoAddClient()">
+          <mat-icon>add</mat-icon>New Profile</button>
     </span>
   </div>
 
@@ -28,7 +29,6 @@
       List All
     </button>
   </div>
-
 
 </div>
 
@@ -52,7 +52,6 @@
           [frameworkComponents]="frameworkComponents"
           (selectionChanged)   ="onSelectionChanged($event)"
           (gridReady)          ="onGridReady($event)">
-
     </ag-grid-angular>
   </div>
 

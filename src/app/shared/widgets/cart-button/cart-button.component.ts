@@ -1,8 +1,8 @@
-import { Component, OnInit, Output,OnDestroy, EventEmitter, HostBinding, Renderer2, HostListener } from '@angular/core';
+import { Component, OnInit, Output,OnDestroy, EventEmitter  } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import { CompanyService,AuthenticationService, OrdersService, MenuService, MessageService} from 'src/app/_services';
-import { catchError, delay, delayWhen, finalize, first, map, repeatWhen, retryWhen, tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription, throwError, timer } from 'rxjs';
+import { AuthenticationService, OrdersService} from 'src/app/_services';
+import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, tap } from 'rxjs/operators';
+import { Observable, Subject , Subscription, throwError, timer } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -64,12 +64,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
-    private userSwitchingService  : UserSwitchingService,
     private authenticationService : AuthenticationService,
     private toolbarServiceUI:       ToolBarUIService,
-    private snackBar      :         MatSnackBar,
-    private orderMethodService    : OrderMethodsService,
-    private router:                 Router,
     ) {
 
    }
@@ -85,9 +81,9 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.order                    = null;
     this.refreshCurrentOrderCheck = false
     this.openOrderBar             = false
+    this.order                    = null
 
     if (this._order){
-      this.order = null
       this._order.unsubscribe()
     }
     if (this._orderBar) {
@@ -145,7 +141,11 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   refreshAssignedPOSOrder() {
-    const site = this.siteService.getAssignedSite()
+
+    const user = this.authenticationService.userValue
+    if (!user) { return }
+
+    const site   = this.siteService.getAssignedSite()
     const posName = this.orderService.posName
     this._order$  =  this.orderService.getCurrentPOSOrder(site, posName )
       .pipe(
@@ -201,17 +201,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
   async toggleOpenOrderBar() {
-    // console.log('original this.openOrderBar', this.openOrderBar)
-    // this.toolbarServiceUI.orderBar$.subscribe(data => {
-    //     if (data) {
-    //       console.log(this.openOrderBar, data)
-    //     } else {
-    //       this.openOrderBar = data
-    //       console.log(this.openOrderBar, data)
-    //     }
-    //   }
-    // )
-
     this.openOrderBar = !this.openOrderBar
     this.toolbarServiceUI.updateOrderBar(this.openOrderBar)
   }
