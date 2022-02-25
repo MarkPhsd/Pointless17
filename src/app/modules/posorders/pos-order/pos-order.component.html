@@ -55,10 +55,12 @@
           ></pos-order-function-buttons>
 
         </div>
-        <div  *ngIf="!mainPanel" >
+
+        <div class="side-panel-buttons-container" *ngIf="!mainPanel" >
 
           <div>
             <button mat-raised-button
+              fxFill
               class="button"
               color="primary"
               (click)="toggleOpenOrderBar()">
@@ -75,9 +77,10 @@
 
           <div>
             <button  mat-raised-button
-                    class="button"
-                    color="primary"
-                    (click)="makePayment()">
+              fxFill
+              class="button"
+              color="primary"
+              (click)="makePayment()">
               <mat-icon>credit_card</mat-icon>
               Check Out
             </button>

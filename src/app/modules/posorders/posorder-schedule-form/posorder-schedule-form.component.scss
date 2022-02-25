@@ -1,0 +1,17 @@
+@import "/src/mixins.scss";
+
+.grid-container {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}

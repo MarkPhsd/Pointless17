@@ -101,29 +101,28 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
     if (!this.order) { this.errorMessage = 'The order appears to not be initialized. Please go back a page.'}
 
-    if (this.order) {
+      if (this.order) {
 
-      // const scheduledDate = this.datepipe.transform( this.scheduledDate, 'mm/dd/yyyy');
-      const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
-      this.order.suspendedOrder        = true;
-      this.order.preferredScheduleDate = this.scheduledDate;
-      this.order.productOrderMemo      = notes;
-      if (this.serviceType) {
-        this.order.serviceType   = this.serviceType.name;
-        this.order.serviceTypeID = this.serviceType.id
-      }
+        // const scheduledDate = this.datepipe.transform( this.scheduledDate, 'mm/dd/yyyy');
+        const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
+        this.order.suspendedOrder        = true;
+        this.order.preferredScheduleDate = this.scheduledDate;
+        this.order.productOrderMemo      = notes;
+        if (this.serviceType) {
+          this.order.serviceType   = this.serviceType.name;
+          this.order.serviceTypeID = this.serviceType.id
+        }
 
-      const site = this.siteService.getAssignedSite();
-
-      this.orderService.putOrder(site, this.order).subscribe(data => {
-        this.orderService.updateOrderSubscription(data)
-        this.router.navigate(['pos-payment'])
-      }, err =>{
-        // this.notify
-        this.processingUpdate = false;
-        this.errorMessage = "Error occured. Please check your address and save again." + err
-      }
-    )
+        const site = this.siteService.getAssignedSite();
+        this.orderService.putOrder(site, this.order).subscribe(data => {
+          this.orderService.updateOrderSubscription(data)
+          this.router.navigate(['pos-payment'])
+        }, err =>{
+          // this.notify
+          this.processingUpdate = false;
+          this.errorMessage = "Error occured. Please check your address and save again." + err
+        }
+      )
     }
   }
 
@@ -175,7 +174,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     )
   }
 
-  saveShippingTime() {
+  saveShippingTime(event) {
     this.updateSelectedIndex(3)
   }
 

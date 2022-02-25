@@ -6,21 +6,17 @@
            fxLayoutAlign="start start">
       <div class="grid-flow">
 
-        <!-- <div *ngIf="!isApp"> -->
-
-        <!-- </div> -->
-
         <div *ngIf="!smallDevice && isApp">
           <button aria-label="back" mat-button
                   (click)="goBack()">
             <mat-icon aria-hidden="true">keyboard_arrow_left</mat-icon>
           </button>
         </div>
-        <div *ngIf="logo.length>0">
-            <img
-              [src]="logo"
-              [alt]="company"
-              class="logo">
+
+        <div class="logo"
+            *ngIf="!isApp" >
+            <app-logo [logoSize]="'small'"
+                    ></app-logo>
         </div>
 
         <div *ngIf="isUserStaff || isAdmin">

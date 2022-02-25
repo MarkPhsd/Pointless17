@@ -3,8 +3,16 @@
 
 :host {
     .mat-icon {
-            vertical-align: middle;
-            margin-right: 20px;
+      vertical-align: middle;
+      // margin-right: 20px;
+    }
+    .mat-form-field{
+      width: 85%;
+      max-width: 125px !important;
+    }
+    .mat-form-field-infix{
+      width: 85%;
+      max-width: 125px !important;
     }
 }
 
@@ -18,7 +26,7 @@
 }
 
 .form-width {
-  width: 100px;
+  width: 95%;
 }
 
 // mat-sidenav-container {
@@ -72,6 +80,10 @@
 
 .grid-item-departments {
   width: 99%;
+}
+
+.form-width {
+  width: 95%;
 }
 
 .grid-department-selector {

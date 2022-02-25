@@ -1,27 +1,19 @@
 <mat-sidenav-container>
-
-  <div class="grid-container">
-    <div *ngIf="!smallDevice && !tinyDepartmentFilter"
-         [formGroup]="searchForm"
-        class="grid-item form-width" >
-        <mat-form-field appearance="outline" class="form-fields">
-          <mat-label><mat-icon>search</mat-icon>Search / Scan </mat-label>
-          <input
-                class="input-value"
-                #input
-                matInput
-                appAutoFocusInput
-                type           ="text"
-                id             ="name"
-                [(ngModel)]    ="itemNameInput"
-                formControlName="itemName">
-            <button *ngIf="itemNameInput" matSuffix
-                  mat-icon-button aria-label="Clear"
-                  (click)="itemNameInput=''">
-            <mat-icon>close</mat-icon>
-          </button>
-        </mat-form-field>
+  <div    class="grid-container">
+    <div  class="form-width"
+          *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
+      <search-debounce-input
+            [(itemNameInput)] = "itemNameInput"
+            [itemNameControl] = "'itemName'"
+            [searchForm]      = "searchForm"
+            (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
+        </div>
+      </search-debounce-input>
     </div>
+
 
     <div *ngIf="!smallDevice && !tinyDepartmentFilter" class="search-buttons">
       <div *ngIf="keyboardDisplayOn">
@@ -82,29 +74,21 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div  class="grid-item"
-                *ngIf="(clientSearchResults$ | async) as list">
-            <div *ngIf=" list.results as brands">
-              <mat-button-toggle-group
-                                      name="type"
-                                      aria-label="Font Style"
-                                      vertical
-                  >
-                <mat-button-toggle class="toggle-buttons"
-                                    [value]="0">
-                  Any Brand
-                </mat-button-toggle>
-                <mat-button-toggle
-                                    class="toggle-buttons"
-                                    type="button"
-                                    [value]="item"
-                                    (change)     = "refreshBrandSearch(item)"
-                                    *ngFor="let item of brands" >
-                  {{item.company | truncateText : 21}}
-                </mat-button-toggle>
-              </mat-button-toggle-group>
+          <div *ngIf="(clientSearchResults$ | async) as list">
+            <div  class="grid-item-departments" *ngIf=" list.results as brands">
+              <app-mat-toggle-selector
+                  [showIcon]       ="'true'"
+                  [textLength]     = "21"
+                  [toggleDimensions]="'toggle-group-tall'"
+                  [toggleHeight]   ="'toggle-buttons-height-medium'"
+                  (setItem)        = "refreshTypeSearch($event)"
+                  [textLength]     = "21"
+                  [fieldName]      = "'company'"
+                  [list]           = "brands">
+              </app-mat-toggle-selector>
             </div>
           </div>
+
         </mat-expansion-panel>
 
         <mat-expansion-panel>
@@ -117,16 +101,17 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div  class="grid-item"
+          <div   class="grid-item-departments"
               *ngIf="(productTypes$ | async) as list">
 
             <app-mat-toggle-selector
                 [showIcon]       ="'true'"
                 [textLength]     = "21"
                 [toggleDimensions]="'toggle-group-tall'"
-                [toggleHeight]   ="'toggle-buttons-height-size-tall'"
+                [toggleHeight]   ="'toggle-buttons-height-short'"
                 (setItem)        = "refreshTypeSearch($event)"
                 [textLength]     = "21"
+                [materialIcons]  ="'true'"
                 [list]           = "list">
             </app-mat-toggle-selector>
 
@@ -139,8 +124,6 @@
          *ngIf="!multifilter">
       <div  *ngIf="(departments$ | async) as list">
         <app-mat-toggle-selector
-            cdk-overlay-origin
-            #trigger="cdkOverlayOrigin"
             (outPutItem)     = "refreshDepartmentSearch($event)"
             [mouseOver]      = "'true'"
             [showIcon]       ="'true'"
@@ -153,34 +136,6 @@
     </div>
   </div>
 
-  <button cdk-overlay-origin
-          #trigger="cdkOverlayOrigin"
-          (click)="isMenuOpen = !isMenuOpen">Open Overlay</button>
-
-  <ng-template
-    cdk-connected-overlay
-    [origin]="trigger"
-    hasBackdrop
-    [open]="isMenuOpen"
-    (backdropClick)="isMenuOpen=false">
-    <app-department-menu></app-department-menu>
-  </ng-template>
 
 </mat-sidenav-container>
-
-
-
-
-<!-- <ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="isDepartmentOpen"
->
-  <ul class="example-list">
-    <li>Item 1</li>
-    <li>Item 2</li>
-    <li>Item 3</li>
-  </ul>
-</ng-template> -->
-
 

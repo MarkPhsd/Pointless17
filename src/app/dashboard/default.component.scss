@@ -4,6 +4,11 @@
   display: block;
   flex-direction: column;
   height: 100%;
+
+}
+
+router-outlet {
+  z-index: 1;
 }
 
 app-header {
@@ -15,7 +20,12 @@ app-sticky-header {
   height: 75px;
   display: flex;
 }
+.department-menu {
+  z-index: 1001;
+}
+.animations {
 
+}
 .mat-content {
   overflow: hidden;
 }

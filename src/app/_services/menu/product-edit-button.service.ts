@@ -381,8 +381,8 @@ export class ProductEditButtonService {
     dialogRef = this.dialog.open(ServiceTypeEditComponent,
       { width:        '60vw',
         minWidth:     '800px',
-        height:       '60vh',
-        minHeight:    '600px',
+        height:       '720px',
+        minHeight:    '720px',
         data : id
       },
     )

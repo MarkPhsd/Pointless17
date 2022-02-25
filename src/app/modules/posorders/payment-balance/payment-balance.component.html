@@ -1,8 +1,6 @@
-<mat-card *ngIf="order" >
-
+<mat-card *ngIf="order">
   <mat-card-subtitle>
     <ng-content></ng-content>
-
     <div class="grid-header">
 
       <div>
@@ -45,9 +43,9 @@
 
   <mat-card-content *ngIf="order.posPayments">
 
-    <div class="payment-grid"
+    <div  class="payment-grid"
         *ngFor="let item of order.posPayments">
-        <div *ngIf="item.paymentMethod" >
+        <div *ngIf="item.paymentMethod" class="grid-item">
           {{item.paymentMethod.name}}
           <span  *ngIf="item.paymentMethod.isCreditCard">
             <button  mat-button (click)="editPayment(item)"><mat-icon>edit</mat-icon></button>

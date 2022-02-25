@@ -3,6 +3,9 @@ import { FormGroup,FormBuilder } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
   selector: 'posorder-shipping-address',
@@ -11,9 +14,11 @@ import { OrdersService } from 'src/app/_services';
 })
 export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
 
-  inputForm            : FormGroup;
-  serviceTypes$        : Observable<IServiceType[]>;
-  order                : IPOSOrder;
+  @Input() inputForm            : FormGroup;
+  @Input() serviceType          : IServiceType;
+  @Input() serviceTypes$        : Observable<IServiceType[]>;
+  @Input() serviceType$         : Observable<IServiceType>;
+  @Input() order                : IPOSOrder;
   _order               : Subscription;
   errorMessage         : string;
   @Output() outPutSaveAddress = new EventEmitter();
@@ -26,11 +31,21 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
 
   constructor(
     private orderService      : OrdersService,
+    private serviceTypeService: ServiceTypeService,
+    private sitesService      : SitesService,
+    public  platFormService   : PlatformService,
     private fb :                FormBuilder ) { }
 
   ngOnInit(): void {
     this.initSubscriptions();
     this.initForm();
+    this.initServiceTypeInfo();
+   }
+
+  initServiceTypeInfo() {
+    const site = this.sitesService.getAssignedSite();
+    if (!this.order) {return}
+    this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID)
   }
 
   ngOnDestroy(): void {
@@ -76,7 +91,6 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
   delete() {
 
     this.initEmptyForm()
-
     this.order.shipAddress     = '';
     this.order.shipAddress2    = '';
     this.order.shipCity        = '';

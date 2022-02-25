@@ -1,3 +1,4 @@
+<!-- mainPanel  {{mainPanel}} -->
 <div  #scrollMe
       [class]="orderItemsPanel" >
 
@@ -5,8 +6,7 @@
             class="nopadd"
             *ngFor="let item of order.posOrderItems; let i = index" >
 
-    <div class="nopadd"
-        *ngIf="uiConfig &&
+    <div *ngIf="uiConfig &&
                (
                 (mainPanel || bottomSheetOpen)
                 || order.history ||
@@ -59,42 +59,6 @@
 
 </div>
 
-<!--
-<div  #scrollMe
-      [class]="orderItemsPanel"
-      *ngIf="(mainPanel && order && order.posOrderItems && order.posOrderItems.length >0) || bottomSheetOpen">
-
-  <div  cdkDrag
-        [cdkDragStartDelay]="200"
-        cdkDragLockAxis="x"
-        *ngFor="let item of order.posOrderItems; let i = index"
-      >
-      <pos-order-item
-                class="gridScroller "
-                [index]="i"
-                [quantity]="item?.quantity"
-                [unitPrice]="item?.unitPrice"
-                [total]="item?.total"
-                [subTotal]="item?.subTotal"
-                [id]="item?.id"
-                [orderItem]="item"
-                [printed]="item.printed"
-                [onlineShortDescription]="item?.posOrderMenuItem?.onlineShortDescription"
-                [placeHolderImage]="'placeholderproduct.jpg'"
-                [mainImage]="item?.posOrderMenuItem?.urlImageMain"
-                [productName] = "item?.productName"
-                [cbd]="item?.posOrderMenuItem?.cbd"
-                [thc]="item?.posOrderMenuItem?.thc"
-                [menuItem]="item?.posOrderMenuItem"
-                [productID]="item?.productID"
-                [order]="order"
-                [mainPanel]="mainPanel"
-                (outputDelete)="removeItemFromList($event)"
-      ></pos-order-item>
-
-  </div>
-
-</div> -->
 
 
 

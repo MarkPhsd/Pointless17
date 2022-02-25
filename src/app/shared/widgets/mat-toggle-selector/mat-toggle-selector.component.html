@@ -14,25 +14,31 @@
       <mat-button-toggle
             *ngIf="!hideAllOption"
             [value]="emptyItem"
+            (click)="setItemNull()"
+            (mouseover) ="setItemNull()"
             [class]="buttonDimensions">
           All
       </mat-button-toggle>
 
       <div class="toggle-buttons-height" >
-        <div [class]="toggleHeight">
+        <div [class]="toggleHeight"
+             >
           <mat-button-toggle
+                *ngFor="let item of list"
                 type="button"
                 [value]="item"
                 (click)="setItem(item)"
-                *ngFor="let item of list" >
-
+                >
               <div class="grid-toggle-tiny"
                   (mouseover) ="setItemMouseOver(item)">
-                <div class="item-font" *ngIf="showIcon && item.icon">
-                  <span [class]="'mdi ' + item.icon"></span>
+                <div class="item-font" *ngIf="showIcon && item.icon && item.icon != ''">
+                  <span *ngIf="materialIcons">
+                    <mat-icon>{{item.icon}}</mat-icon>
+                  </span>
+                  <span *ngIf="!materialIcons" [class]="'mdi ' + item.icon"></span>
                 </div>
                 <div class="item-text" *ngIf="!tinyMenu">
-                  {{item.name | truncateText : textLength}}
+                  {{item[fieldName] | truncateText : textLength}}
                 </div>
               </div>
           </mat-button-toggle>

@@ -104,7 +104,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isStaff = this.userAuthorizationService.isUserAuthorized('employee,manager,admin')
-    console.log(this.isStaff)
+    // console.log(this.isStaff)
     if (this.isStaff) {
       this.initMenu()
       this.initSubscription()

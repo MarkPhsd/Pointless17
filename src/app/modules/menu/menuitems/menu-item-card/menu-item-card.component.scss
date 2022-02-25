@@ -1,13 +1,20 @@
 @import "/src/mixins.scss";
-mat-card {
+:host mat-card {
   height: 100%;
-  border: 1px ;
+  padding: 3px;
+
+  object-fit: cover;
+  max-height: 100%;
+  @include for-phone-only          {min-height: 12vh;  }
+  @include for-tablet-landscape-up {min-height: 12vh;}
+  @include for-tablet-portrait-up  {min-height: 12vh;}
+  @include for-tablet-portrait-up  {min-height: 12vh;}
+
 }
 
 mat-card:hover {
-  border-color: brown !important;
-  border: 1px solid #000;
-
+  // border-color: brown !important;
+  // border: 1px solid #000;
 }
 
 .border :hover {
@@ -23,14 +30,15 @@ mat-card:hover {
 .category-img {
   // width: 15vh;
   // height: 15vh;
+  // width: 90%;
   border-radius: 50%;
   margin-top: 3px;
   transition: box-shadow 400ms;
 
-  @include for-phone-only {          width: 150px;}
-  @include for-tablet-landscape-up { width: 150px;}
-  @include for-tablet-portrait-up  { width: 150px;}
-  @include for-tablet-portrait-up  { width: 150px;}
+  // @include for-phone-only {          width: 150px;}
+  // @include for-tablet-landscape-up { width: 150px;}
+  // @include for-tablet-portrait-up  { width: 150px;}
+  // @include for-tablet-portrait-up  { width: 150px;}
 }
 
 .product-image {
@@ -40,47 +48,30 @@ mat-card:hover {
   transition: box-shadow 400ms;
   border-radius: 5px;
 
-  @include for-phone-only          {height: 13vh;  }
-  @include for-tablet-landscape-up {height: 16vh;}
-  @include for-tablet-portrait-up  {height: 15vh;}
-  @include for-tablet-portrait-up  {height: 15vh;}
+  @include for-phone-only          {min-height: 12vh;  }
+  @include for-tablet-landscape-up {min-height: 12vh;}
+  @include for-tablet-portrait-up  {min-height: 12vh;}
+  @include for-tablet-portrait-up  {min-height: 12vh;}
 }
 
 .category-img:hover {
   box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
-  // transition-timing-function: ease-in;
-  // -moz-box-shadow: 0 0 10px #ccc;
-  // -webkit-box-shadow: 0 0 10px #ccc;
-  // box-shadow: 0 0 10px rgb(95, 97, 94);
-  transform: scale(1.07);
+  transform: scale(1.03);
 }
 
 .category-img:active:hover {
   box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
-  // box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
-  // -moz-box-shadow: 0 0 10px #ccc;
-  // -webkit-box-shadow: 0 0 10px #ccc;
-  // box-shadow: 0 0 10px rgb(95, 97, 94);
-  // transition-timing-function: ease-in;
-  transform: scale(1.07);
+  transform: scale(1.03);
 }
 
 .product-image:hover {
   box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
-  // transition-timing-function: ease-in;
-  // -moz-box-shadow: 0 0 10px rgb(195, 230, 180);
-  // -webkit-box-shadow: 0 0 10px rgb(195, 230, 180);
-  // box-shadow: 0 0 10px rgb(195, 230, 180);
-  transform: scale(1.07);
+  transform: scale(1.03);
 }
 
 .product-image:active:hover {
   box-shadow: 1px 1px 2px rgb(158, 82, 82), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
-  // transition-timing-function: ease-in;
-  // -moz-box-shadow: 0 0 10px #ccc;
-  // -webkit-box-shadow: 0 0 10px #ccc;
-  // box-shadow: 0 0 10px rgb(95, 97, 94);
-  transform: scale(1.07);
+  transform: scale(1.03);
 }
 
 #advertisement {
@@ -93,35 +84,60 @@ mat-card:hover {
   text-transform: capitalize;
 }
 
+.product-name-only {
+  grid-gap    : 5px;
+  font-weight : 475;
+  font-size   : 1em;
+  text-align  : left;
+  width       : 100%;
+  white-space : normal;
+  overflow    : hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+
+  object-fit: cover;
+  // max-width: 100%;
+  max-height: 100%;
+  height: 100px;
+  transition: box-shadow 400ms;
+  border-radius: 5px;
+
+  @include for-phone-only          {min-height: 14vh;  }
+  @include for-tablet-landscape-up {min-height: 14vh;}
+  @include for-tablet-portrait-up  {min-height: 14vh;}
+  @include for-tablet-portrait-up  {min-height: 14vh;}
+
+}
+
 .product-name {
 
-  grid-gap: 5px;
-  font-weight: 500;
-  font-size: 1em;
-  text-align: center;
-  width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
+  grid-gap    : 5px;
+  font-weight : 425;
+  font-size   : .9em;
+  text-align  : center;
+  width       : 100%;
+  white-space : nowrap;
+  overflow    : hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;
 
   @media (max-width: 375px )  {
-    font-weight: 400;
-    font-size: .9;
-    text-align: center;
-    white-space: nowrap;
+    font-weight : 400;
+    font-size   : .9em;
+    text-align  : center;
+    white-space : nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
   }
 
   @media (min-width: 400px)   {
-    font-weight: 500;
-    font-size: 1em;
-    text-align: center;
-    width: 100%;
-    white-space: nowrap;
-    overflow: hidden;
+    font-weight : 400;
+    font-size   : .9em;
+    text-align  : center;
+    width       : 100%;
+    white-space : nowrap;
+    overflow    : hidden;
     text-overflow: ellipsis;
     text-transform: capitalize;
   }
@@ -191,7 +207,7 @@ mat-card:hover {
   margin-top:    .8em;
   // line-height:   1em;
   text-align:    left;
-  font-weight:   500;
+  font-weight:   425;
   font-size:     .9em;
   float:         left;
 }

@@ -19,6 +19,11 @@ export class ToolBarUIService {
   private _searchBarWidth    = new BehaviorSubject<number>(null);
   public  _searchBarWidth$   = this._searchBarWidth.asObservable();
 
+  private _departmentMenu     = new BehaviorSubject<any>(null);
+  public  departmentMenu$     = this._departmentMenu.asObservable();
+
+
+
   private toolBar   : boolean;
   private searchBar : boolean;
   private orderBar  : boolean;
@@ -36,6 +41,10 @@ export class ToolBarUIService {
         new Event('resize')
       );
     }, 300);
+  }
+
+  updateDepartmentMenu(item) {
+    this._departmentMenu.next(item)
   }
 
   updateSearchBarWidth(value: number) {

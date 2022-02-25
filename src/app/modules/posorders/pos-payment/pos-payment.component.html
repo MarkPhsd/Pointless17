@@ -74,7 +74,7 @@
                       [buttonDimensions] = "'button-dimensions-tall'"
                       (outPutItem)       = "getPaymentMethod($event)"
                     >
-                    Payment Method
+                    Select Payment Method
                   </app-mat-toggle-selector>
                 </mat-card-content>
               </mat-card>
@@ -214,7 +214,7 @@
               </mat-card>
             </div>
 
-            <div *ngIf="!platFormService.isApp()">
+            <div *ngIf="paymentMethod && !platFormService.isApp()">
               <div *ngFor="let item of (paymentMethods$ | async)">
                 <div *ngIf="item.id  == paymentMethod.id &&  item.instructions">
                   <h3>{{item.name}}</h3>

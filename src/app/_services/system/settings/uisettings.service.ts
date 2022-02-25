@@ -328,7 +328,7 @@ export class UISettingsService {
       backgroundImage         : [config.backgroundImage],
       logoHomePage            : [config.logoHomePage],
       displayCompanyName      : [config.displayCompanyName],
-      tinyLogo              : [config.tinyLogo],
+      tinyLogo                : [config.tinyLogo],
      })
     return fb
   }
@@ -383,7 +383,6 @@ export class UISettingsService {
       if (name == 'DSIEMVSettings') {
         inputForm = this.initDSIEMVSettingsForm(config, inputForm);
       }
-
 
     }
     return inputForm

@@ -38,8 +38,8 @@ import {DragDropModule } from '@angular/cdk/drag-drop';
 import {ScrollingModule } from '@angular/cdk/scrolling';
 import { OverlayModule } from '@angular/cdk/overlay';
 
-
 @NgModule({
+  imports        : [ OverlayModule ],
   exports: [
     DragDropModule,
     ScrollingModule,

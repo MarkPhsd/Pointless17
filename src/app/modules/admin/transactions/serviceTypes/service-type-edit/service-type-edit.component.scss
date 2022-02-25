@@ -3,6 +3,11 @@ mat-card{
   height: 100%;
 }
 
+.buttons {
+  display:flex;
+  flex-direction: row;
+  justify-content: start;
+}
 .grid-headers {
   display: grid;
   grid-template-columns: 200px 200px;
@@ -28,3 +33,10 @@ mat-card{
 mat-form-field {
   margin-top: 5px;
 }
+
+.form {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 500px;
+}
+

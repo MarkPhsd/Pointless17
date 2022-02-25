@@ -1,3 +1,20 @@
+@import "/src/mixins.scss";
 mat-card {
-  width: 275px;
+  width: 100%;
+}
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
 }

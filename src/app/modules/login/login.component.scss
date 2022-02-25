@@ -16,7 +16,6 @@ html {
   // background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
   /* Full height */
   height: 100vh;
-  /* Center and scale the image nicely */
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
@@ -24,6 +23,10 @@ html {
 
 .login {
   width: 95px;
+}
+
+.logo {
+  width: 125px;
 }
 
 .center {

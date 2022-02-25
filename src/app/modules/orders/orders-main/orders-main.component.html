@@ -38,14 +38,12 @@
 
     <span *ngIf="viewType == 2">
       <app-order-cards
-        [cardStyle]="'panel'"
-      >
+        [cardStyle]="'panel'">
         <h2>
           Your order history
         </h2>
       </app-order-cards>
     </span>
-
 
     <div *ngIf="!smallDevice" class="filter-container">
       <app-order-filter-panel>

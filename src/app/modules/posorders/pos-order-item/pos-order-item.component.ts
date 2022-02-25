@@ -60,6 +60,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   @Input() hideAddAnotherOne: number;
   @Input() mainPanel      : boolean;
 
+  customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
   isNotInSidePanel        : boolean
@@ -76,7 +77,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   imagePath   :           string;
 
   smallDevice           : boolean;
-  customcard            = '';
+
   showEdit              : boolean;
   showView              : boolean;
   promptOption          : boolean;
@@ -104,6 +105,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       if (data) {
         this.mainPanel = data;
         this.isNotInSidePanel = data;
+        this.updateCardStyle(data)
       }
     })
 
@@ -153,17 +155,21 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       this.imagePath  =  this.getItemSrc(this.menuItem)
     }
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
-      this.customcard = 'margin-left: 15px;'
+      // this.customcard = 'margin-left: 15px;'
     }
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
+
+    this.updateCardStyle(this.mainPanel)
   }
 
   ngAfterViewInit() {
     this.resizeCheck();
   }
+
+
 
   assignItem() {
     if (this.orderItem && this.assignedPOSItem) {
@@ -219,10 +225,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
                   instructions: instructions}
 
     //a little formating
-    let height  = '400px';
+    let height  = '455px';
     let width   = '300px'
     if (editField == 'quantity') {
-      height = '465px'
+      height  = '555px';
       width  = '425px'
     }
 
@@ -263,6 +269,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       } else {
         this.isNotInSidePanel = true
         this.sidePanelPercentAdjust = 80
+        this.customcard ='custom-card-side'
       }
       if (this.onlineShortDescription) {
         this.onlineShortDescription =  this.truncateTextPipe.transform(this.onlineShortDescription.replace(/<[^>]+>/g, ''), 200)
@@ -332,6 +339,12 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     }
   }
 
+  updateCardStyle(option: boolean)  {
+    this.customcard ='custom-card';
+    if (!option) {
+      this.customcard ='custom-card-side';
+    }
+  }
   openDialog() {
     const item = this.orderItem
     const data = { id: item.productID }

@@ -1,6 +1,8 @@
+<div class="container">
+
 <mat-card>
   <mat-card-subtitle *ngIf="instructions && editField">
-    {{instructions}} - {{editField}}
+    {{instructions}}
   </mat-card-subtitle>
   <mat-card-content *ngIf="posOrderItem">
 
@@ -21,7 +23,7 @@
       <div *ngIf="editField == 'quantity'">
         <app-key-pad
                 [inputForm]           = "inputForm"
-                [inputTypeValue]      = "'text'"
+                [inputTypeValue]      = "'decimal'"
                 [showInput]           = "true"
                 (outPutReturnEnter)   = "saveChange($event)">
                 Enter Quantity
@@ -31,9 +33,17 @@
     </div>
   </mat-card-content>
   <mat-card-actions >
-    <button *ngIf="editField != 'quantity'" mat-button color='primary' (click)="save()"><mat-icon>save</mat-icon>Save</button>
-    <button mat-raised-button
-            color="primary"
-            (click)="onCancel()"><mat-icon>exit</mat-icon>Cancel</button>
+    <div class="button-container" fxFlexFill flex>
+      <button *ngIf="editField != 'quantity'"
+              mat-raised-button color='primary' (click)="save()">
+              <mat-icon>save</mat-icon>Save
+      </button>
+      <button mat-raised-button
+              color="primary"
+              (click)="onCancel()"><mat-icon>close</mat-icon>Cancel
+      </button>
+    </div>
   </mat-card-actions>
 </mat-card>
+
+</div>

@@ -40,7 +40,7 @@ export class PosOrderFunctionButtonsComponent {
      if (window.innerWidth < 768) {
        this.smallDevice = true
      }
-
+     this.order.balanceRemaining
    }
 
   showItems() {

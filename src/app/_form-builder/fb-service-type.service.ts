@@ -45,7 +45,9 @@ export class FbServiceTypeService {
             instructions         : [''],
             deliveryService      : [''],
             promptScheduleTime   : [''],
-            orderMinimumTotal    : ['']
+            orderMinimumTotal    : [''],
+            scheduleInstructions: [''],
+            shippingInstructions: [''],
           }
         )
         return fb

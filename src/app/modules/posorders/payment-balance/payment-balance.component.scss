@@ -87,9 +87,10 @@ body {
   gap: var(--gap);
   margin-bottom: 15px;
   grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
-  overflow-y: hidden;
+  overflow-y: auto;
   overflow-x: hidden;
   font-size: larger;
+
 
   @include for-phone-only  {
     --gap: 5px;
@@ -100,6 +101,12 @@ body {
     overflow-y: auto;
     overflow-x: auto;
   }
+
+}
+
+mat-card-content {
+  max-height: 200px;
+  overflow-y: auto;
 
 }
 

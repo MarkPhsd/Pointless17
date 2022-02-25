@@ -1,0 +1,31 @@
+
+<div class="grid-container">
+
+  <div class="order-notes"
+      *ngIf      ="order && inputForm"
+      [formGroup]="inputForm">
+      <div>
+      <mat-form-field
+          appearance="outline"
+          id="customer-notes">
+        <mat-label>Notes</mat-label>
+          <textarea matInput
+                    rows="10"
+                    columns="40"
+                    formControlName="productOrderMemo"
+          ></textarea>
+      </mat-form-field>
+      </div>
+  </div>
+
+  <div *ngIf="!platFormService.isApp()">
+    <div *ngIf="serviceType && serviceType.instructions" class="instructions">
+      <h3>{{serviceType.name}}</h3>
+      <mat-hint>
+        <div [innerHTML]="serviceType.instructions" ></div>
+      </mat-hint>
+      <mat-divider></mat-divider>
+    </div>
+  </div>
+
+</div>

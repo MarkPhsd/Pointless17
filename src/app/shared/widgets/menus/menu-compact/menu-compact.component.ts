@@ -71,7 +71,6 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
     if (result) {
       this.initSubscription()
     }
-
   }
 
   // sort(users, 'name', '-age', 'id')

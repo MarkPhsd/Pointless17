@@ -16,19 +16,16 @@ import { IPagedList } from 'src/app/_services/system/paging.service';
 import { isDevMode } from '@angular/core';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
-// import { Keyboard } from '@capafcitor/keyboard';
-
 const { Keyboard } = Plugins;
 
 @Component({
   selector:    'app-menu-search-bar',
-  templateUrl: './menu-search-bar.component.html',
+  templateUrl: `./menu-search-bar.component.html`,
   styleUrls: ['./menu-search-bar.component.scss'],
-
 })
 export class MenuSearchBarComponent implements OnInit, AfterViewInit, OnDestroy {
 
-isMenuOpen = false;
+  isOpen = false;
 
 get platForm() {  return Capacitor.getPlatform(); }
 
@@ -36,10 +33,10 @@ get platForm() {  return Capacitor.getPlatform(); }
 @Output() itemSelect  = new EventEmitter();
 
 searchPhrase:         Subject<any> = new Subject();
-get itemName() { return this.searchForm.get("itemName") as FormControl;}
+itemName: string //() { return this.searchForm.get("itemName") as FormControl;}
 private readonly onDestroy = new Subject<void>();
 
-//search with debounce
+// //search with debounce
 searchItems$              : Subject<IProductSearchResults[]> = new Subject();
 _searchItems$ = this.searchPhrase.pipe(
   debounceTime(250),
@@ -190,26 +187,32 @@ constructor(
   }
 
   ngAfterViewInit() {
-    if (this.input) {
-      fromEvent(this.input.nativeElement,'keyup')
-      .pipe(
-        filter(Boolean),
-        debounceTime(250),
-        distinctUntilChanged(),
-        tap((event:KeyboardEvent) => {
-          const search  = this.input.nativeElement.value
-          this.input.nativeElement.focus();
-          this.refreshSearch();
-        })
-      )
-      .subscribe();
-    }
+    // if (this.input) {
+    //   fromEvent(this.input.nativeElement,'keyup')
+    //   .pipe(
+    //     filter(Boolean),
+    //     debounceTime(250),
+    //     distinctUntilChanged(),
+    //     tap((event:KeyboardEvent) => {
+    //       const search  = this.input.nativeElement.value
+    //       this.input.nativeElement.focus();
+    //       this.refreshSearch();
+    //     })
+    //   )
+    //   .subscribe();
+    // }
     if (this.platForm.toLowerCase() === 'android') {
       setTimeout(()=> {
         this.input.nativeElement.focus();
         Keyboard.hide();
       }, 200 )
     }
+  }
+
+  refreshSearchPhrase(event) {
+    this.itemName = event;
+    this.initProductSearchModel()
+    this.refreshSearch();
   }
 
   toggleKeyboard() {
@@ -281,9 +284,10 @@ constructor(
     productSearchModel.departmentID = null;
     productSearchModel.name         = null;
     productSearchModel.barcode      = null;
+    productSearchModel.departmentName = null;
 
-    if (this.itemName.value) {
-      productSearchModel.name               =  this.input.nativeElement.value
+    if (this.itemName) {
+      productSearchModel.name               =  this.itemName;
       productSearchModel.useNameInAllFields = true
     }
 
@@ -312,7 +316,6 @@ constructor(
     productSearchModel.pageSize   = this.pageSize
     productSearchModel.pageNumber = this.currentPage
     this.menuService.updateMeunuItemData(productSearchModel)
-    console.log('productSearchModel', productSearchModel)
     return productSearchModel
 
   }
@@ -333,20 +336,31 @@ constructor(
   }
 
   refreshCategorySearch(item: any) {
-    console.log('item', item)
+    // console.log('item', item)
     this.category = item
+    this.clearDeparment()
     this.refreshSearch()
   }
   refreshBrandSearch(item: any) {
     this.brand = item
+    this.clearDeparment()
+    this.toolBarUIService.updateDepartmentMenu(null)
     this.refreshSearch()
   }
   refreshTypeSearch(item: any) {
     this.type = item
+    this.clearDeparment()
     this.refreshSearch()
   }
 
+  clearDeparment() {
+    this.department= null;
+    this.toolBarUIService.updateDepartmentMenu(null)
+    this.toolBarUIService.updateDepartmentMenu(null)
+  }
+
   refreshDepartmentSearch(item: any) {
+
     if (this.smallDevice) {
       this.tinyDepartmentFilter = true;
     }
@@ -356,13 +370,14 @@ constructor(
       this.tinyDepartmentFilter = true;
     }
 
-    this.isMenuOpen = !this.isMenuOpen
-    this.department = item
-    // this.router.navigate(
-    //   [
-    //     "/department-list", { value: this.searchIncrementer, id: item.id}
-    //   ]
-    // )
+    this.department = item;
+
+    if (!item)  { return }
+    this.router.navigate(
+      [
+        "/department-list", { value: this.searchIncrementer, id: item.id}
+      ]
+    )
 
   }
 

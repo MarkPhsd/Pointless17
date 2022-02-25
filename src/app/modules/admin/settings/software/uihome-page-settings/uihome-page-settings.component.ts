@@ -12,7 +12,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 export class UIHomePageSettingsComponent implements OnInit {
 
   urlImageMain: string;
-  logoHomePage   : string;
+  logoHomePage: string;
   tinyLogo:     string;
   inputForm  : FormGroup;
   uiSettings : ISetting;
@@ -24,10 +24,10 @@ export class UIHomePageSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.uISettingsService.getSetting('UIHomePageSettings').subscribe(data => {
       if (data) {
-        this.uiHomePage = JSON.parse(data.text) as UIHomePageSettings
-        if (this.uiHomePage) { this.urlImageMain = this.uiHomePage.backgroundImage }
-        if (this.tinyLogo) { this.tinyLogo       = this.uiHomePage.tinyLogo }
-        if (this.logoHomePage) { this.logoHomePage     = this.uiHomePage.logoHomePage }
+        this.uiHomePage   = JSON.parse(data.text) as UIHomePageSettings
+        this.urlImageMain = this.uiHomePage.backgroundImage
+        this.tinyLogo     = this.uiHomePage.tinyLogo
+        this.logoHomePage = this.uiHomePage.logoHomePage
         this.initForm(data);
       }
     });

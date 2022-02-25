@@ -1,9 +1,5 @@
 ﻿<div class="bg row-height" [ngStyle]="backgroundImage">
 
-  <!-- <ng-template #loading >
-    <h2>Please wait, the store is loading.</h2>
-    <mat-spinner></mat-spinner>
-  </ng-template> -->
 
   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
     <div  class="login-window">
@@ -16,15 +12,16 @@
                      fxLayoutAlign="center center"
                      class="row-height">
 
-                     <div *ngIf="bucket &&  logo">
-                        <img
-                          (click)="setAPIAlt()"
-                          [src]="logo"
-                          onerror   = "this.src='../assets/images/logo.png'"
-                          width="125px"
-                          [alt]="company"
-                          class="logo">
+                    <div *ngIf="uiHomePageSetting"
+                         class="logo"
+                         (click)="setAPIAlt()">
+                      <app-logo
+                            [uiHomePageSetting] ="uiHomePageSetting"
+                            [logoSize]          ="'large'"
+                            [logo] ="uiHomePageSetting.logoHomePage"
+                      ></app-logo>
                     </div>
+
 
                     <h2 (click)="setAPIAlt()"
                         *ngIf="uiHomePageSetting">

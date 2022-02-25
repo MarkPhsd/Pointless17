@@ -66,12 +66,12 @@ export class PosPaymentComponent implements OnInit {
       switchMap( data => {
       if (data) {
         this.order = data
+        console.log('refresh order is paid')
         this.refreshIsOrderPaid();
       }
       if (data && data.serviceTypeID) {
         this.updateOrderSchedule(data.serviceTypeID);
         const site = this.sitesService.getAssignedSite();
-        // console.log('serviceTypeID data', data.serviceTypeID)
         return this.serviceTypeService.getTypeCached(site, data.serviceTypeID)
       }
       return EMPTY
@@ -227,7 +227,7 @@ export class PosPaymentComponent implements OnInit {
         this.notify(`Check amount entered.`, 'Try Again',3000)
         return
       }
-      const amountEntered = event/100;
+      const amountEntered = event;
       return amountEntered
     }
     return 0
@@ -256,12 +256,13 @@ export class PosPaymentComponent implements OnInit {
       } else {
       }
     }
+    console.log(paymentResponse.order)
     this.orderService.updateOrderSubscription(paymentResponse.order)
     this.resetPaymentMethod();
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
-      this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, '.', 1000)
+      this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
-      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something happened.',3000)
+      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something bad happened.',3000)
     }
   }
 
@@ -387,6 +388,7 @@ export class PosPaymentComponent implements OnInit {
   }
 
   async enterPointCashValue(event) {
+
     const site = this.sitesService.getAssignedSite();
     //apply payment as cash value
     // if (this.posPayment && event && this.paymentMethod && this.order) {
@@ -471,7 +473,6 @@ export class PosPaymentComponent implements OnInit {
   }
 
   applyEBTPayment() {
-
   }
 
  async applyWICPayment() {

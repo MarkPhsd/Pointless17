@@ -104,6 +104,8 @@ import { PSMenuGroupListComponent } from './modules/admin/products/price-schedul
 import { POSOrderScheduleComponent } from './modules/posorders/posorder-schedule/posorder-schedule.component';
 import { BackgroundCoverComponent } from './shared/widgets/background-cover/background-cover.component';
 import { DepartmentMenuComponent } from './modules/menu/department-menu/department-menu.component';
+import { OverLayComponent } from './shared/widgets/over-lay/over-lay.component';
+import { LogoComponent } from './shared/widgets/logo/logo.component';
 
 
 const routes: Routes = [
@@ -291,6 +293,9 @@ const routes: Routes = [
 
     { path: 'app-widget-card', component: CardComponent, data: { animation: 'isLeft'}},
 
+    { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
+
+    { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
     { path: '**', component: PageNotFoundComponent},
   ];

@@ -1,0 +1,8 @@
+<div *ngIf="logo">
+  <img
+    onerror   = "this.src='../assets/images/logo.png'"
+    [src]="logo"
+    [alt]="company"
+    [class]="logoSize">
+</div>
+

@@ -95,10 +95,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   //themes
   matToolbarColor = 'primary';
 
-  _uISettings: Subscription;
-  uiHomePageSetting: UIHomePageSettings;
+
   bucket = '';
-  logo   = '';
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -117,14 +115,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.user  = data
       this.getUserInfo()
     })
-
-    this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
-        if (data) {
-          if (!this.bucket) { return }
-          this.uiHomePageSetting = data;
-        }
-      }
-    )
 
   }
 
@@ -145,12 +135,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService   : NavigationService,
               private userSwitchingService: UserSwitchingService,
               public  platFormService     : PlatformService,
-              private uiSettingService    : UISettingsService,
               private router              : Router,
               private awsBucketService     : AWSBucketService,
               private fb                  : FormBuilder ) {
-
-
   }
 
   ngOnChanges() {
@@ -177,26 +164,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.pollingService.poll();
     this.initUserOrder();
     this.updateScreenSize();
-    this.refreshUIHomePageSettings();
-  }
-
-  async refreshUIHomePageSettings() {
-    if (!this.bucket) {
-      this.bucket = await this.awsBucketService.awsBucketURL()
-    }
-    this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
-      this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
-      this.initCompanyInfo();
-    })
-  }
-
-  async initCompanyInfo() {
-    if (this.bucket) {
-      if (this.uiHomePageSetting && this.uiHomePageSetting.tinyLogo) {
-        const logo = `${this.bucket}${this.uiHomePageSetting.tinyLogo}`
-        this.logo = logo
-      }
-    }
   }
 
 

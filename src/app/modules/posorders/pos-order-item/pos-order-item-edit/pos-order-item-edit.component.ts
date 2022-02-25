@@ -33,7 +33,6 @@ export class PosOrderItemEditComponent  {
       this.instructions = data.instructions
       this.editField    = data.editField
       this.posOrderItem = data.orderItem;
-      // this.menuItem     = data.menuItem;
     }
     this.initForm();
 
@@ -59,9 +58,9 @@ export class PosOrderItemEditComponent  {
   }
 
   saveChange(event) {
+    console.log('event', event)
     const item = this.getItemValue();
     item.quantity = event;
-    console.log('save changes update quantity',event)
     this.updateQuantity(item)
   }
 

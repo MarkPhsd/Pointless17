@@ -2,22 +2,33 @@
 
   <mat-card class="mat-card">
     <mat-card-title>
-       Type Edit: {{ serviceType.name }}
-    </mat-card-title>
-
-    <mat-card-subtitle>
-      <app-edit-buttons-standard
+      <div class="buttons">
+        <div>
+          Type Edit: {{ serviceType.name }}
+        </div>
+        <div>
+          <app-edit-buttons-standard
           (outputeupdateItem)     ="updateItem($event)"
           (outputupdateItemExit)  ="updateItemExit($event)"
           (outputupdatedeleteItem)="deleteItem($event)"
           (outputupdateonCancel)  ="onCancel($event)"
           (outputCopy)            ="copyItem($event)"
-      ></app-edit-buttons-standard>
-      <mat-divider></mat-divider>
+          ></app-edit-buttons-standard>
+        </div>
+
+      </div>
+
+
+    </mat-card-title>
+
+    <mat-card-subtitle>
+
     </mat-card-subtitle>
 
     <mat-card-content>
-      <div [formGroup]="inputForm" >
+      <mat-divider></mat-divider>
+      <div class="form"
+          [formGroup]="inputForm" >
 
         <div  class="grid-fields ">
             <div>
@@ -166,7 +177,33 @@
             </simple-tinymce>
           </div>
         </div>
+        <div  class="grid-fields">
+          <div class="instructions">
+            <mat-label><h4>Shipping Instructions.</h4></mat-label><br>
+            <mat-hint>Express gratitude, provide refund policy, etc...</mat-hint>
+            <simple-tinymce cols="50"
+                            rows="20"
+                            style="height: 200px;"
+                            name="shippingInstructions"
+                            formControlName="shippingInstructions"
+                            [ngModel]="description">
+            </simple-tinymce>
+          </div>
+        </div>
 
+        <div  class="grid-fields">
+          <div class="instructions">
+            <mat-label><h4>Schedule Instructions.</h4></mat-label><br>
+            <mat-hint>These are displayed on the browser to help customers.</mat-hint>
+            <simple-tinymce cols="50"
+                            rows="20"
+                            style="height: 200px;"
+                            name="scheduleInstructions"
+                            formControlName="scheduleInstructions"
+                          >
+            </simple-tinymce>
+          </div>
+        </div>
       </div>
     </mat-card-content>
   </mat-card>

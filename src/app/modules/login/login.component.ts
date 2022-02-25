@@ -71,9 +71,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
         if (data) {
-          console.log('ui home page settings', data)
-          if (!this.bucket) { return }
-          if (!data.backgroundImage) { return }
           const image  = `${this.bucket}${data.backgroundImage}`
           this.assingBackGround(image)
           this.uiHomePageSetting = data;
@@ -390,11 +387,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   assingBackGround(image: string) {
-    if (!image) { return }
-    // const image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
-    console.log('asssign background', image)
+    if (!image) {
+      image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
+     }
     const styles = { 'background-image': `url(${image})`  };
-
     this.backgroundImage = styles
     const i = 1
   }

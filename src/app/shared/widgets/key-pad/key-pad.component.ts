@@ -121,17 +121,16 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   returnEnterPress(){
-    // this.returnEnter(this.value)
-
     this.refreshDisplay()
-    this.outPutReturnEnter.emit(this.value)
+
+    this.outPutReturnEnter.emit(this.formatted)
   }
 
   returnEnter(value) {
     if (value){
       this.value = value
       this.refreshDisplay()
-      this.outPutValue.emit(value)
+      this.outPutValue.emit(this.formatted)
     }
   }
 
@@ -212,6 +211,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   updateDisplayOutput() {
+    //user choice on what they want to update
     this.refreshDisplay();
     if (this.formatted && this.formatted.length > 1) {
       this.outPutValue.emit(this.formatted)

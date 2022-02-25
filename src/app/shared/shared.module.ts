@@ -127,6 +127,9 @@ import { PaymentReportCardComponent } from '../modules/admin/reports/payment-rep
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
 import { SearchMenuProductsComponent } from './widgets/search-menu-products/search-menu-products.component';
 import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
+import { OverLayComponent } from './widgets/over-lay/over-lay.component';
+import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component';
+import { LogoComponent } from './widgets/logo/logo.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
@@ -258,6 +261,9 @@ import { DepartmentMenuComponent } from '../modules/menu/department-menu/departm
     UIHomePageSettingsComponent,
     UploaderComponent,
     SearchMenuProductsComponent,
+    OverLayComponent,
+    MyThingComponent,
+    LogoComponent,
   ],
 
   imports: [
@@ -322,6 +328,7 @@ import { DepartmentMenuComponent } from '../modules/menu/department-menu/departm
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     KeyPadComponent,
+    LogoComponent,
     Label1by8Component,
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,

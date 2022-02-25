@@ -70,6 +70,8 @@ export class OrdersService {
     }
     localStorage.removeItem('orderSubscription')
     this.toolbarServiceUI.updateOrderBar(false)
+    this.updateOrderSubscription(null);
+    console.log('update order')
   }
 
   updateOrderSubscription(order: IPOSOrder) {
@@ -121,7 +123,7 @@ export class OrdersService {
   {
     this.isApp = this.platFormService.isApp()
     const order = this.getStateOrder();
-    console.log('current order from state', this.getStateOrder())
+    // console.log('current order from state', this.getStateOrder())
     if (order) {
       this.updateOrderSubscription(order)
     }

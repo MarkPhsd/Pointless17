@@ -18,11 +18,13 @@ export class MatToggleSelectorComponent implements OnInit {
   @Input()  toggleDimensions  = 'toggle-group'
   @Input()  toggleButtonClass = 'toggle-button'
   @Input()  buttonDimensions  = 'button-dimensions-short'
-  @Input()  list                        : any[]
-  @Input()  tinyMenu: boolean;
-  @Input()  showIcon: boolean;
-  @Input()  mouseOver: boolean;
-  @Input()  toggleHeight ='toggle-buttons-height-size-medium'
+  @Input()  list              : any[]
+  @Input()  tinyMenu          : boolean;
+  @Input()  showIcon          : boolean;
+  @Input()  mouseOver         : boolean;
+  @Input()  fieldName         = 'name'
+  @Input() materialIcons      = false;
+  @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   constructor() {
   }
 
@@ -39,39 +41,44 @@ export class MatToggleSelectorComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (this.toggleButtonClass) { this.toggleButtonClass = 'toggle-button'}
-
-    if (this.list) {
-      this.list =  this.list.sort((a, b) => a.name.localeCompare(b.name));
+    if (this.list && this.list.length>0) {
+      this.list = this.sortList(this.list)
       return
     }
 
     if (this.list$) {
       this.list$.subscribe(data => {
-        this.list = data;
-        this.list =  this.list.sort((a, b) => a.name.localeCompare(b.name));
-        console.log('list sorted', this.list)
+        this.list = this.sortList(data)
       })
     }
     this.updateScreenSize();
   }
 
+  sortList(list) {
+    try {
+      return list.sort((a, b) => a.name.localeCompare(b.name));
+    } catch (error) {
+    }
+  }
   changeSelection() {
     this.outPutID.emit(this.id)
   }
 
   setItem(item) {
+    console.log('toggle item', item)
     this.outPutItem.emit(item)
   }
 
   setItemMouseOver(item) {
-    console.log('item', item)
+    // console.log('item', item)
     if (!this.mouseOver) { return }
-
     this.outPutItem.emit(item)
   }
 
+  setItemNull() {
+    this.outPutItem.emit(null)
+  }
 }
 
 

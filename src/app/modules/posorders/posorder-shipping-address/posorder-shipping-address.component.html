@@ -1,51 +1,65 @@
-<div *ngIf="inputForm"
-     [formGroup]="inputForm">
-  <mat-card>
-    <mat-card-subtitle>
-      Delivery Address
-    </mat-card-subtitle>
-    <mat-card-content>
 
-      <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'address'">
-        Address
-      </app-value-fields>
+    <mat-card>
+      <mat-card-subtitle>
+        Delivery Address
+      </mat-card-subtitle>
+      <mat-card-content>
+        <div class="grid-container">
+          <div *ngIf="inputForm"
+              [formGroup]="inputForm">
 
-      <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'address2'">
-        Unit/Apt/Suite
-      </app-value-fields>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'address'">
+              Address
+            </app-value-fields>
 
-      <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'city'">
-       City
-      </app-value-fields>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'address2'">
+              Unit/Apt/Suite
+            </app-value-fields>
 
-      <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'state'">
-        State
-      </app-value-fields>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'city'">
+            City
+            </app-value-fields>
 
-      <app-value-fields
-        [inputForm]="inputForm"
-        [fieldName]="'zip'">
-        Zip
-      </app-value-fields>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'state'">
+              State
+            </app-value-fields>
 
-      <mat-card-actions>
-        <button mat-raised-button
-                color='primary'
-                aria-label="save"
-                (click)="save()">
-          <mat-icon aria-label="save">save</mat-icon> Next
-      </button>
-      </mat-card-actions>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'zip'">
+              Zip
+            </app-value-fields>
 
-    </mat-card-content>
-  </mat-card>
+          </div>
 
-</div>
+          <div *ngIf="!platFormService.isApp()">
+            <div  *ngIf="serviceType && serviceType.shippingInstructions"
+                  class="instructions">
+              <h3>{{serviceType.name}}</h3>
+              <mat-hint>
+                <div [innerHTML]="serviceType.shippingInstructions" ></div>
+              </mat-hint>
+            </div>
+          </div>
+
+        </div>
+        <mat-card-actions>
+          <button mat-raised-button
+                  color='primary'
+                  aria-label="save"
+                  (click)="save()">
+            <mat-icon aria-label="save">save</mat-icon> Next
+          </button>
+        </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+
+

@@ -1,9 +1,9 @@
 <mat-card *ngIf="order">
-
+  <mat-card-title>
+    Plan Order
+  </mat-card-title>
   <mat-card-subtitle>
-    <div>
-      Schedule Order
-    </div>
+
 
     <div *ngIf="errorMessage">
       <mat-icon>alert</mat-icon>  {{errorMessage}}
@@ -38,6 +38,9 @@
                  label="Delivery Information">
           <div>
             <posorder-shipping-address
+                [serviceType]="serviceType"
+                [order]="order"
+                [inputForm]="inputForm"
                 (outPutSaveAddress)= "saveShippingAddress($event)">
             </posorder-shipping-address>
           </div>
@@ -47,46 +50,21 @@
                 *ngIf="serviceType && serviceType.promptScheduleTime"
                  label="Schedule Information">
 
-          <div  *ngIf="serviceType && serviceType.instructions"
-                [innerHTML]="serviceType.instructions"></div>
-
-          <div class="item">
-            <mat-form-field appearance="outline">
-              <mat-label>Choose a date</mat-label>
-              <input matInput
-                     [matDatepicker]="picker"
-                     [(ngModel)]= "scheduledDate"
-                     >
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
-          </div>
-
-          <div>
-            <button mat-raised-button color="primary" (click)="saveShippingTime()">
-              <mat-icon aria-label="save">save</mat-icon> Next
-            </button>
-          </div>
+          <app-posorder-schedule-form
+              [serviceType]="serviceType"
+              [order]="order"
+              (OutPutSaveShippingTime)="saveShippingTime($event)">
+            </app-posorder-schedule-form>
 
         </mat-tab>
 
         <mat-tab (click)="selectedIndex == 3" label="Special Requests">
-          <div class="order-notes"
-              *ngIf      ="order && inputFormNotes"
-              [formGroup]="inputFormNotes">
-            <div>
-              <mat-form-field
-                  appearance="outline"
-                  id="customer-notes">
-                <mat-label>Notes</mat-label>
-                  <textarea matInput
-                            rows="10"
-                            columns="40"
-                            formControlName="productOrderMemo"
-                  ></textarea>
-              </mat-form-field>
-            </div>
-          </div>
+          <pos-order-notes
+            [serviceType]="serviceType"
+            [order]="order"
+            [inputForm]="inputFormNotes"
+           >
+          </pos-order-notes>
         </mat-tab>
 
     </mat-tab-group>

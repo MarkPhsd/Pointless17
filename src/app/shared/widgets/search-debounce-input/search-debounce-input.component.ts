@@ -11,7 +11,7 @@ import { IProductSearchResults } from 'src/app/_services';
 })
 export class SearchDebounceInputComponent implements AfterViewInit {
 
-  itemNameInput: string;
+  @Input()  itemNameInput: string;
   @Output() outPutMethod   = new EventEmitter();
   @Output() itemSelect     = new EventEmitter();
   @Input()  searchForm:    FormGroup;
@@ -60,8 +60,10 @@ export class SearchDebounceInputComponent implements AfterViewInit {
   }
 
   clearInput() {
+    this.outPutMethod.emit('')
     const item =  this.itemName
     if (!item) {return}
     item.setValue('')
   }
+
 }

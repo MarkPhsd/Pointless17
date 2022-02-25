@@ -23,6 +23,8 @@ export class OrdersMainComponent  {
   isUser      : boolean;
   listHeight = '84vh'
 
+  isMenuOpen = false;
+
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,

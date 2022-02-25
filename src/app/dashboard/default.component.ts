@@ -8,7 +8,7 @@ import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
-import { AuthenticationService } from '../_services';
+import { AuthenticationService, IDepartmentList } from '../_services';
 import { IUser } from '../_interfaces';
 
 @Component({
@@ -50,6 +50,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   searchBarWidthSubscription: Subscription;
   searchBarWidth  : number;
 
+  _department: Subscription;
+  department : IDepartmentList;
+
   barType         = "mat-drawer-toolbar"
   apiUrl: any;
 
@@ -69,7 +72,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.toolbarSideBar = this.toolBarUIService.toolbarSideBar$.subscribe( data => {
       this.sideBarOpen = data
       this.barType =  "mat-drawer-searchbar"
-
     })
     this.searchbarSidebar = this.toolBarUIService.searchSideBar$.subscribe( data => {
       this.searchBarOpen = data
@@ -77,9 +79,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this.style = ""
     })
 
+    this._department  = this.toolBarUIService.departmentMenu$.subscribe( data => {
+      // console.log('initSubscriptions component update', data)
+      if (!data) {
+        this.department = null
+        return
+      }
+      this.department = data;
+    })
+
     this.searchBarWidthSubscription = this.toolBarUIService._searchBarWidth$.subscribe(data => {
-      console.log('search width update', data)
-      console.log(' this.barType',  this.barType)
       if (data) {
         if (data == 55) {
           this.barType =  "mat-drawer-searchbar-tiny"
@@ -90,7 +99,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
         this.style = `width:${this.style}`
         this.searchBarWidth = data
       }
-      console.log('this.barType',  this.barType)
+      // console.log('this.barType',  this.barType)
     })
 
   }
@@ -197,14 +206,20 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   public sideBarToggler() {
     this.sideBarOpen   = !this.sideBarOpen;
     if (this.sideBarOpen && !this.searchBarOpen) {
-      // this.barType = "mat-drawer-toolbar"
-      // this.barType =  "mat-drawer-searchbar"
     }
     this.toolBarUIService.updateToolBarSideBar(this.sideBarOpen)
   }
 
   prepareRoute(outlet: RouterOutlet) {
+    this.department = null;
     return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation']
   }
 
+  prepareAdvertisingRoute(outletAdvertising: RouterOutlet) {
+    return outletAdvertising && outletAdvertising.activatedRouteData && outletAdvertising.activatedRouteData['animation']
+  }
+
+  prepareMessageRoute(outletMessage: RouterOutlet) {
+    return outletMessage && outletMessage.activatedRouteData && outletMessage.activatedRouteData['animation']
+  }
 }

@@ -1,12 +1,13 @@
 
-<div  *ngIf="mainPanel"
+<div  *ngIf="order && mainPanel"
       class="buttons-container">
 
   <div *ngIf="order.history">
     <h5>Transaction can not be modified.</h5>
   </div>
 
-  <div>
+  <div *ngIf="(!order.history || !order.completionDate)
+              || order.balanceRemaining < order.total">
     <button   mat-raised-button class="button"
               color="warn"
               aria-label="delete"
@@ -32,7 +33,10 @@
   </div>
 
   <div *ngIf="isStaff">
-    <button mat-raised-button class="button" color="primary"  (click)="printLabels()">
+    <button mat-raised-button
+            class="button"
+            color="primary"
+            (click)="printLabels()">
       <mat-icon>print</mat-icon>
        Labels
     </button>
@@ -42,8 +46,7 @@
     <button mat-raised-button
             class="button"
             color="primary"
-            (click)="rePrintLabels()"
-                      >
+            (click)="rePrintLabels()">
       <mat-icon>print</mat-icon>
         Re-Print Labels
     </button>
@@ -82,8 +85,10 @@
     </span>
   </div>
 
-  <div>
-    <button mat-raised-button class="button" color="primary" (click)="printReceipt()">
+  <div *ngIf="isStaff || (order.history || order.balanceRemaining < order.total)">
+    <button mat-raised-button
+            class="button" color="primary"
+            (click)="printReceipt()">
       <mat-icon>print</mat-icon>
       <span *ngIf="!smallDevice">
          Receipt
@@ -91,7 +96,7 @@
     </button>
   </div>
 
-  <div>
+  <div *ngIf="(!order.history || !order.completionDate) && !isStaff">
     <button mat-raised-button class="button" color="primary" (click)="makePayment()">
       <mat-icon>credit_card</mat-icon>
       <span *ngIf="!smallDevice">

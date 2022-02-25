@@ -3,20 +3,12 @@
 :host ::ng-deep .mat-button-toggle-button {
   text-align: left !important;
   padding: 0 !important;
+  z-index: 10 !important;
   // font-size: .9em;
   @include for-phone-only  {
     font-size: .9em;
   }
 }
-:host ::ng-deep .mat-expansion-panel-body  {
-  padding: 0 !important;
-}
-// mat-expansion-panel {
-//   padding: 0;
-// }
-
-
-
 
 .item-text {
   font-size: 1rem;
@@ -28,9 +20,6 @@
   width: 95%;
   margin-left: 5px;
   text-align: left !important;
-  // @include for-phone-only  {
-  //   width: 100%;
-  // }
 }
 
 .button-dimensions {

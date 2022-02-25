@@ -1,17 +1,44 @@
 @import "/src/mixins.scss";
 
+// .panel {
+//   color: #FFF;
+//   height: 80vh;
+//   width: 100%;
+//   min-width: 320px;
+//   position: relative;
+//   top: 0;
+//   z-index: 1100;
+//   padding: 3px;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   background-color: #555;
+//   box-shadow: -5px 0 40px 0px rgba(87,73,86,0.69);
+
+//   left: 245px;
+//   @include for-phone-only  {
+//     left: 65px;
+//   }
+// }
+
+.panel {
+  z-index: 1003;
+}
+.categories {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .grid-toggle-tiny {
   display: grid;
   grid-template-columns: minmax(50px, 1fr) 1fr
 }
-
 
 :host {
   .mat-button {
     text-align: left;
     }
 }
-
 
 mat-card {
   height:  85vh !important;
@@ -22,15 +49,18 @@ mat-card {
 .item-text {
   font-size: 1.25rem;
 }
+
 .item-font {
   font-size: 1.5rem;
   margin-left: 10px;
 }
+
 .heading {
   font-size: 1.1em;
   align-items: center;
   text-align: center;
 }
+
 .content-position{
   margin: 5px;
   position:absolute;

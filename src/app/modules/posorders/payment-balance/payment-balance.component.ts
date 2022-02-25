@@ -32,8 +32,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   async initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-
     })
+
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
     })
@@ -55,17 +55,16 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
    ngOnInit() {
     this.site = this.siteService.getAssignedSite();
+    this.initSubscriptions();
     this.paymentsEqualTotal = false;
     if (this.order) {
       if ( this.order.balanceRemaining == 0)  {
         this.paymentsEqualTotal = true;
       }
-
       if ( this.order.balanceRemaining > 0)  {
         this.paymentsEqualTotal = false;
       }
     }
-    this.initSubscriptions();
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
    }
 
