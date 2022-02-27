@@ -1,0 +1,38 @@
+<div class="container">
+  <mat-card>
+    <mat-card-title>
+      <div class="header-icons">
+        <mat-icon>menu</mat-icon>
+      </div>
+      <h3>Menu Manager</h3>
+
+    </mat-card-title>
+
+    <mat-card-subtitle>
+      Sort and edit menus.
+      <h2>Drag menus to sort. Click on to edit.</h2>
+      <button mat-button (click)="initMenu()">Initialize Menu</button>
+    </mat-card-subtitle>
+    <mat-divider></mat-divider>
+
+    <div class="grid-container">
+      <div *ngIf="menuButtonGroup">
+        <div
+              cdkDropList
+              #accordionList="cdkDropList"
+              (cdkDropListDropped)="dropAccordion($event)"
+              >
+
+          <div *ngFor="let item of menuButtonGroup"
+              class="pop button"
+              cdkDrag
+              (click)="assignSubMenu(item, item.submenus)"
+              >
+              <mat-icon>{{item.icon}}</mat-icon>
+              {{item.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+</div>

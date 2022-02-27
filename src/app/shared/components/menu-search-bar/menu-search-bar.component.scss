@@ -104,10 +104,13 @@
 }
 
 .search-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-auto-flow: row;
-  margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  // display: grid;
+  // grid-template-columns: 1fr 1fr;
+  // grid-auto-flow: row;
+  // margin-bottom: 5px;
 }
 
 mat-label {

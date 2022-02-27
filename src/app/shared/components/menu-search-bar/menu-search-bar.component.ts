@@ -15,6 +15,7 @@ import { Capacitor, Plugins,  } from '@capacitor/core';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { isDevMode } from '@angular/core';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 const { Keyboard } = Plugins;
 
@@ -68,6 +69,10 @@ category: any;
 brand   : any;
 department: any;
 tinyDepartmentFilter= false//for dispaly of icon with text or just icon.
+toggleCatHeight         = 'toggle-buttons-height-size-tall'
+toggleDepartmentHeight  = 'toggle-buttons-height-medium'
+toggleTypeHeight        = 'toggle-buttons-height-short'
+showIcon                = false;
 
 urlPath          :string;
 id               : number;
@@ -128,11 +133,13 @@ constructor(
     private router         :        Router,
     private orderService   :        OrdersService,
     private toolBarUIService :        ToolBarUIService,
+    public  platFormService     : PlatformService,
 
   )
   {
     this.initForm();
     if (this.platForm.toLowerCase() === 'android') {  this.keyboardDisplayOn = true }
+    this.isApp = this.platFormService.isApp()
   }
 
   async ngOnInit() {
@@ -160,8 +167,18 @@ constructor(
     this.smallDevice = false
     if (window.innerWidth < 768) {
       this.smallDevice = true
+      this.toggleCatHeight         = 'toggle-buttons-height-short'
+      this.toggleDepartmentHeight  = 'toggle-buttons-height-short'
+      this.toggleTypeHeight        = 'toggle-buttons-height-short'
+      this.showIcon = false;
+      return
     }
+    this.showIcon = true;
+    this.toggleCatHeight         = 'toggle-buttons-height-size-tall'
+    this.toggleDepartmentHeight  = 'toggle-buttons-height-medium'
+    this.toggleTypeHeight        = 'toggle-buttons-height-short'
   }
+
   initForm() {
 
     let categoryID = 0

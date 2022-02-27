@@ -245,6 +245,9 @@ import { MenuItemProductCountComponent } from '../modules/menu/menuitem/menu-ite
 import { OrderPanelComponent } from '../modules/orders/order-panel/order-panel.component';
 import { PosOrderNotesComponent } from '../modules/posorders/pos-order-notes/pos-order-notes.component';
 import { POSOrderScheduleFormComponent } from '../modules/posorders/posorder-schedule-form/posorder-schedule-form.component';
+import { FunctionGroupButtonEditComponent } from '../modules/admin/settings/function-groups/function-group-edit/function-group-button-edit/function-group-button-edit.component';
+import { FunctionGroupEditComponent } from '../modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
+import { FunctionGroupListComponent } from '../modules/admin/settings/function-groups/function-group-list/function-group-list.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -303,6 +306,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     FlatRateEditComponent,
     FlatRateListComponent,
     FlatTaxRateListComponent,
+    FunctionGroupListComponent,
+    FunctionGroupEditComponent,
+    FunctionGroupButtonEditComponent,
     HTMLEditPrintingComponent,
     ItemTypeCategoryAssignmentComponent,
     ItemTypeDisplayAssignmentComponent,

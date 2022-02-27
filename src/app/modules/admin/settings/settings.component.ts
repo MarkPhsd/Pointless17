@@ -115,4 +115,8 @@ export class SettingsComponent implements OnInit {
       this.router.navigate(['/edit-payment-method-list'])
     }
 
+    functionGroups() {
+      this.router.navigate(['/function-group-list'])
+    }
 }
+// this.router.navigate(['function-group-edit', {id:id}])

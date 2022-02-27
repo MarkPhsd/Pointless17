@@ -106,6 +106,8 @@ import { BackgroundCoverComponent } from './shared/widgets/background-cover/back
 import { DepartmentMenuComponent } from './modules/menu/department-menu/department-menu.component';
 import { OverLayComponent } from './shared/widgets/over-lay/over-lay.component';
 import { LogoComponent } from './shared/widgets/logo/logo.component';
+import { FunctionGroupListComponent } from './modules/admin/settings/function-groups/function-group-list/function-group-list.component';
+import { FunctionGroupEditComponent } from './modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
 
 
 const routes: Routes = [
@@ -174,6 +176,10 @@ const routes: Routes = [
 
         ///price schedule layout menu
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+
+        // function-group-list
+        { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Category List', animation: 'isLeft'}},
+        { path: 'function-group-edit', component: FunctionGroupEditComponent, canActivate: [AuthGuard], data: { title: 'Category List', animation: 'isLeft'}},
 
         //app-department-menu
         { path: 'categorylist', component: CategorieslistviewComponent,  canActivate: [AuthGuard], data: {  title: 'Category List', animation: 'isLeft'}},

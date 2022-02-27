@@ -28,8 +28,8 @@ export class PosOrderFunctionButtonsComponent {
   @Input() isUser      : boolean;
   @Input() isAuthorized: boolean;
   @Input() openBar     : boolean;
-  @Input() mainPanel     : boolean;
-  @Input() order        :IPOSOrder;
+  @Input() mainPanel   : boolean;
+  @Input() order       : IPOSOrder;
 
   smallDevice    : boolean;
   constructor() { }

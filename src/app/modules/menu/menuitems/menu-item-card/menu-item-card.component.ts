@@ -1,16 +1,13 @@
 import { Component, Input, OnInit, OnDestroy} from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, OrdersService } from 'src/app/_services';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatDialog } from '@angular/material/dialog';
-import { MenuItemModalComponent } from './menu-item-modal/menu-item-modal.component';
+import { ActivatedRoute,  } from '@angular/router';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
-import { ElectronService } from 'ngx-electron';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
@@ -32,7 +29,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() name      : string;
   @Input() imageUrl  : string;
   @Input() menuItem  : IMenuItem;
-  bucketName         : string;
+  @Input() bucketName: string;
   placeHolderImage   : String = "../assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
@@ -55,10 +52,20 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.bucketName =   await this.awsBucket.awsBucket();
+
     this.initSubscriptions();
+    if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
+    this.imageUrl  = this.getItemSrc(this.menuItem)
   };
+
+  get isDiscountItem() {
+    const menuItem = this.menuItem;
+    if (menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts') {
+      return true
+    }
+    return false;
+  }
 
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
@@ -94,9 +101,14 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   getItemSrc(item:IMenuItem) {
     if (!item.urlImageMain) {
+      if (this.isApp) {
+        //do text only.
+        return
+      }
       return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
     } else {
-      return this.awsBucket.getImageURLPath(this.bucketName, item.urlImageMain)
+      return this.awsBucket.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
+      // return this.awsBucketService.getImageURLPath(this.bucketName, item.urlImageMain)
     }
   }
 

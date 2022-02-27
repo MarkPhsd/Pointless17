@@ -14,17 +14,21 @@
       </search-debounce-input>
     </div>
 
-
-    <div *ngIf="!smallDevice && !tinyDepartmentFilter" class="search-buttons">
+    <div  *ngIf="!isApp && (!smallDevice && !tinyDepartmentFilter)"
+          class="search-buttons">
       <div *ngIf="keyboardDisplayOn">
         <button mat-button
                 (click)="toggleKeyboard()">
                 <mat-icon>keyboard</mat-icon></button>
       </div>
-      <div>
+      <div *ngIf="multifilter">
         <button mat-button
                 (click)="clearAll()">
-                Reset<mat-icon>reset</mat-icon></button>
+          <span *ngIf="!smallDevice">
+            Reset
+          </span>
+          <mat-icon>reset</mat-icon>
+        </button>
       </div>
       <div>
         <button  mat-button
@@ -33,9 +37,27 @@
         </button>
       </div>
     </div>
-
-    <div *ngIf="tinyDepartmentFilter" class="search-buttons">
-
+    <div *ngIf="isApp"
+         class="search-buttons">
+      <div>
+        <button mat-button
+                (click)="clearAll()">
+            <span *ngIf="!smallDevice">
+              <!-- Reset -->
+            </span>
+             Reset
+            <!-- <mat-icon>reset</mat-icon> -->
+        </button>
+      </div>
+      <div >
+        <button  mat-button
+                (click)="multifilter = !multifilter">
+          <span *ngIf="!smallDevice">
+            Filter
+          </span>
+          <span [class]="'mdi mdi-filter'"></span>
+        </button>
+      </div>
     </div>
 
     <div *ngIf="multifilter">
@@ -53,10 +75,10 @@
             <div  class="grid-item-departments"
                   *ngIf="(categories$ | async) as list">
               <app-mat-toggle-selector
-                  [showIcon]       ="'true'"
+                  [showIcon]       ="showIcon"
                   [textLength]     = "21"
                   [toggleDimensions]="'toggle-group-tall'"
-                  [toggleHeight]   ="'toggle-buttons-height-size-tall'"
+                  [toggleHeight]   = "toggleCatHeight"
                   (outPutItem)     = "refreshCategorySearch($event)"
                   [textLength]     = "21"
                   [list]           = "list">
@@ -77,10 +99,10 @@
           <div *ngIf="(clientSearchResults$ | async) as list">
             <div  class="grid-item-departments" *ngIf=" list.results as brands">
               <app-mat-toggle-selector
-                  [showIcon]       ="'true'"
+                  [showIcon]       ="showIcon"
                   [textLength]     = "21"
                   [toggleDimensions]="'toggle-group-tall'"
-                  [toggleHeight]   ="'toggle-buttons-height-medium'"
+                  [toggleHeight]   = "toggleDepartmentHeight"
                   (setItem)        = "refreshTypeSearch($event)"
                   [textLength]     = "21"
                   [fieldName]      = "'company'"
@@ -105,14 +127,14 @@
               *ngIf="(productTypes$ | async) as list">
 
             <app-mat-toggle-selector
-                [showIcon]       ="'true'"
-                [textLength]     = "21"
-                [toggleDimensions]="'toggle-group-tall'"
-                [toggleHeight]   ="'toggle-buttons-height-short'"
-                (setItem)        = "refreshTypeSearch($event)"
-                [textLength]     = "21"
-                [materialIcons]  ="'true'"
-                [list]           = "list">
+                [showIcon]        = "showIcon"
+                [textLength]      = "21"
+                [toggleDimensions]= "'toggle-group-tall'"
+                [toggleHeight]    = "toggleTypeHeight"
+                (setItem)         = "refreshTypeSearch($event)"
+                [textLength]      = "21"
+                [materialIcons]   = "'true'"
+                [list]            = "list">
             </app-mat-toggle-selector>
 
           </div>

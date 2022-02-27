@@ -5,15 +5,28 @@
     <div fxLayout="column"
       fxLayoutAlign="start center">
 
-      <div *ngIf="!imageUrl" class="product-name-only">
-        <button mat-raised-button
-                (click)="menuItemAction(true)">
-          {{ menuItem.name  | truncateText: 30  }}
-        </button>
-
+      <div *ngIf="isDiscountItem && !isApp">
+        <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
+                    menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
+            {{menuItem.itemType.name }} - {{ menuItem.cannabisType }}
+        </div>
+        <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
+                    menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
+            {{menuItem.itemType.name }} - {{menuItem.cannabisType | currency}}
+        </div>
       </div>
 
-      <div *ngIf="imageUrl">
+      <div *ngIf="isApp && !imageUrl"
+           class="product-name-only">
+        <button mat-raised-button
+                class="image-button"
+                (click)="menuItemAction(true)">
+          {{ menuItem.name  | truncateText: 30  }}
+          <mat-icon>{{menuItem?.itemType?.icon}}</mat-icon>
+        </button>
+      </div>
+
+      <div *ngIf="!isDiscountItem && imageUrl">
 
         <img *ngIf="isApp && !isCategory"
               [src]="imageUrl"
@@ -33,12 +46,13 @@
               class="category-img"
               (click)="menuItemAction(true)"/>
 
-        </div>
+      </div>
+
     </div>
   </div>
 
   <div *ngIf="!isApp && imageUrl" class="product-name">
-    {{ menuItem.name  | truncateText: 20   }}
+    {{ menuItem.name  | truncateText: 30   }}
   </div>
 
   <div *ngIf="!isApp">
@@ -53,19 +67,7 @@
       </div>
     </div>
 
-    <div *ngIf="menuItem && menuItem.itemType && menuItem.itemType.type == 'discounts'">
-      <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
-                  menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
-          {{menuItem.itemType.name }} - {{ menuItem.cannabisType }}
-      </div>
-      <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
-                  menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
-          {{menuItem.itemType.name }} - {{menuItem.cannabisType | currency}}
-      </div>
-    </div>
-
-    <div
-        class="price-grid">
+    <div fxFill class="price-grid">
       <div *ngIf="isProduct && !isCategory"
               id="price">
           {{menuItem.retail | currency}}

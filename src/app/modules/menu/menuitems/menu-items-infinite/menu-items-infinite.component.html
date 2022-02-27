@@ -18,13 +18,14 @@
           <div class="grid-flow">
             <div *ngFor="let menuItem of menuItems; let i = index">
               <app-menu-item-card
-                                [id]      ="menuItem.id"
-                                [retail]  ="menuItem.retail"
-                                [name]    ="menuItem.name"
-                                [imageUrl]="getItemSrc(menuItem)"
-                                [menuItem]="menuItem"
-                                class     ="grid-item"
+                                [id]        ="menuItem.id"
+                                [retail]    ="menuItem.retail"
+                                [name]      ="menuItem.name"
+                                [menuItem]  ="menuItem"
+                                [bucketName]="bucketName"
+                                class       ="grid-item"
               ></app-menu-item-card>
+              <!-- [imageUrl]="getItemSrc(menuItem)" -->
             </div>
           </div>
         </div>

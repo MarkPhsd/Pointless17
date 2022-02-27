@@ -2,9 +2,6 @@
 
 mat-card {
   width     : 100%;
-  // min-width : 275px;
-  // width     : 275px;
-  // max-width : 275px;
   min-height: 75px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -12,7 +9,7 @@ mat-card {
   @include for-phone-only  {
     width     : 100%;
     min-width : 335px;
-    max-width : 335px;
+    // max-width : 335px;
     min-height: 75px;
     overflow-y: auto;
     overflow-x: hidden;

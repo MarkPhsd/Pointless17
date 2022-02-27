@@ -39,10 +39,11 @@ ul li{
 }
 
 .grid-flow {
-    --gap: 10px;
+    // --gap: 10px;
     display: grid;
     margin-top: 0px;
     gap: var(--gap);
+    // padding-top: 15px;
     // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
     grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
     // margin-top: -5px;
