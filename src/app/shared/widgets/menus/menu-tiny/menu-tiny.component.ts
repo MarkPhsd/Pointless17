@@ -8,6 +8,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { fadeAnimation } from 'src/app/_animations';
 import { switchMap } from 'rxjs/operators';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
   selector: 'app-menu-tiny',
@@ -32,6 +33,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   _user             : Subscription;
   site              : ISite;
   tinyMenu          : boolean;
+  smallMenu        : boolean;
+  _barSize: Subscription
+  barSize: boolean;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
@@ -67,6 +71,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
         // console.log('error refresh menu', err)
       }
     )
+    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+      this.smallMenu = data;
+    })
 
   }
 
@@ -80,16 +87,24 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
                 private userAuthorizationService: UserAuthorizationService,
                 private router                  : Router,
                 private siteService             : SitesService,
+                private toolbarUIService        : ToolBarUIService,
                 private authenticationService   : AuthenticationService,
     ) {
     this.site  =  this.siteService.getAssignedSite();
   }
 
+  setSmallMenu() {
+    const result = !this.smallMenu
+    this.toolbarUIService.updateBarSize(result)
+    localStorage.setItem('barSize', String(result))
+    this.updateScreenSize();
+  }
 
   // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
-    if (window.innerWidth < 768) {
+    this.tinyMenu = false
+    if (window.innerWidth < 599 || this.smallMenu) {
       this.tinyMenu = true
     }
   }

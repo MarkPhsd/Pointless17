@@ -37,12 +37,11 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
     this.refreshForm();
-
   }
+
   refreshData() {
     const site = this.siteService.getAssignedSite();
     if (this.id) {
-      console.log('refresh data', this.id)
       const item$ = this.menusService.getSubMenuByID(site, this.id);
       item$.subscribe( data => {
         this.item = data
@@ -57,7 +56,6 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   refreshForm() {
     if (this.item) {
       this.inputForm = this.fbNavService.initSubMenuForm(this.inputForm);
-      console.log(this.item)
       this.inputForm.patchValue(this.item)
       this.minimized = this.item.minimized;
     }

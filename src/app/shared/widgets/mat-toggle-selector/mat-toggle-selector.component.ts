@@ -23,21 +23,19 @@ export class MatToggleSelectorComponent implements OnInit {
   @Input()  showIcon          : boolean;
   @Input()  mouseOver         : boolean;
   @Input()  fieldName         = 'name'
-  @Input() materialIcons      = false;
+  @Input()  materialIcons      = false;
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   constructor() {
   }
 
-  // using Array.sort directly
-  // users.sort(byPropertiesOf<User>(['name', '-age', 'id']))
-
-  // // using the convenience function for much more readable code
   // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
+    this.tinyMenu = false
     if (window.innerWidth < 768) {
       this.tinyMenu = true
     }
+
   }
 
   ngOnInit(): void {
@@ -66,17 +64,19 @@ export class MatToggleSelectorComponent implements OnInit {
   }
 
   setItem(item) {
-    console.log('toggle item', item)
+    console.log('setItem', item)
     this.outPutItem.emit(item)
   }
 
   setItemMouseOver(item) {
-    // console.log('item', item)
-    if (!this.mouseOver) { return }
+    if (this.mouseOver != true) { return }
+    console.log('1', this.mouseOver)
     this.outPutItem.emit(item)
   }
 
   setItemNull() {
+    if (this.mouseOver != true) { return }
+    console.log(this.mouseOver)
     this.outPutItem.emit(null)
   }
 }

@@ -1,1 +1,159 @@
-<p>function-group-button-edit works!</p>
+<div *ngIf="menuButton">
+  <div *ngIf="inputForm && propForm">
+    <mat-card>
+      <mat-card-title>
+        Edit :    {{menuButton.name}} <br>
+      </mat-card-title>
+      <mat-card-actions>
+        <button mat-button (click)="save()">
+          <mat-icon>save</mat-icon>
+        </button>
+        <button mat-button (click)="deleteItem(null)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+      <mat-card-content >
+        <div class="grid-container"
+              [formGroup]="inputForm">
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Name</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="name"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Icon</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="icon"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div [formGroup]="propForm">
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Function</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="method"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
+
+          <div  class="container">
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="orderHistory"
+                  class="mat-label"
+                  formControlName="orderHistory">
+                <mat-label class="mat-label">Allow when is in order historical</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="balanceRemainingGreaterThanZero"
+                  class="mat-label"
+                  formControlName="balanceRemainingGreaterThanZero">
+                <mat-label class="mat-label">Allow only when balance is greater Than 0</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="allowStaff"
+                  class="mat-label"
+                  formControlName="allowStaff">
+                <mat-label class="mat-label">Allow for Staff User</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="allowUser"
+                  class="mat-label"
+                  formControlName="allowUser">
+                <mat-label class="mat-label">Allow for customers.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="paymentsMade"
+                  class="mat-label"
+                  formControlName="paymentsMade">
+                <mat-label class="mat-label">Allow when payments are made.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="suspendedOrders"
+                  class="mat-label"
+                  formControlName="suspendedOrders">
+                <mat-label class="mat-label">Allow suspended Orders.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="completedOrder"
+                  class="mat-label"
+                  formControlName="completedOrder">
+                <mat-label class="mat-label">Allow when order is completed.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="completedOrderAndUser"
+                  class="mat-label"
+                  formControlName="completedOrderAndUser">
+                <mat-label class="mat-label">Allow if order is completed and user is customer.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div>
+              <mat-slide-toggle
+                name="itemsPrinted"
+                class="mat-label"
+                formControlName="itemsPrinted">
+                <mat-label class="mat-label">Prevent use if order is provided but not paid.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="mainPanelOnly"
+                  class="mat-label"
+                  formControlName="mainPanelOnly">
+                <mat-label class="mat-label"> Main Panel Only.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="sidePanelOnly"
+                  class="mat-label"
+                  formControlName="sidePanelOnly">
+                <mat-label class="mat-label"> Side Panel Only.</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div  class="mat-label">
+              <mat-slide-toggle
+                  name="smallDeviceOnly"
+                  class="mat-label"
+                  formControlName="smallDeviceOnly">
+                <mat-label class="mat-label">Small Device Only.</mat-label>
+              </mat-slide-toggle>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+
+
+
+    </mat-card>
+
+  </div>
+</div>
+
+

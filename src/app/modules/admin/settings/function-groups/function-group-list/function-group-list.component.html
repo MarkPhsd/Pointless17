@@ -1,4 +1,4 @@
-<div fxLayout="column" fx-flex fx-layout-align="space-between"
+<div fxLayout="row" fx-flex fx-layout-align="space-between"
      class="grid-container"
      *ngIf="searchForm" >
 
@@ -36,6 +36,12 @@
       <button mat-button
               (click)="addItem()">
         <mat-icon>add_box</mat-icon>Add</button>
+    </div>
+
+    <div  class="header-items">
+      <button mat-button
+              (click)="resetOrderButtons()">
+        <mat-icon>reset</mat-icon>Reset Order Buttons</button>
     </div>
 
 </div>

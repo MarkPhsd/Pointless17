@@ -10,7 +10,7 @@ export interface IMenuButtonGroups {
   id: number
   name: string
   description: string;
-  mb_MenuButton: mb_MenuButton[];
+  mb_MenuButtons: mb_MenuButton[];
 }
 
 export interface mb_MenuButton {
@@ -26,16 +26,18 @@ export interface IMenuButtonProperties {
   orderHistory: boolean;
   balanceRemainingGreaterThanZero: boolean;
   method: string;
-  requiresStaff: boolean;
-  requiresUser: boolean;
+  allowStaff: boolean;
+  allowUser: boolean;
   itemsPrinted: boolean;
   paymentsMade: boolean;
   isAuthorized: boolean;
   suspendedOrders: boolean;
   completedOrder: boolean;
   completedOrderAndUser: boolean;
-  smallDeviceOnly: boolean;
   sidePanelOnly: boolean;
+  mainPanelOnly: boolean;
+  smallDeviceOnly: boolean;
+  color: string;
 }
 
 @Injectable({
@@ -53,7 +55,7 @@ export class MBMenuButtonsService {
 
   getGroups(site: ISite): Observable<IMenuButtonGroups[]> {
 
-    const controller = "/MB_MenuButtonGroups/"
+    const controller = "/mb_MenuButtonGroups/"
 
     const endPoint = "GetGroups"
 
@@ -99,7 +101,7 @@ export class MBMenuButtonsService {
 
   };
 
-  putGroupB(site: ISite, menuButtonGroup: IMenuButtonGroups): Observable<IMenuButtonGroups> {
+  putGroup(site: ISite, menuButtonGroup: IMenuButtonGroups): Observable<IMenuButtonGroups> {
 
     const controller = "/MB_MenuButtonGroups/"
 
@@ -119,7 +121,7 @@ export class MBMenuButtonsService {
 
     const controller = "/MB_MenuButtonGroups/"
 
-    const endPoint = "PutGroup"
+    const endPoint = "PostGroup"
 
     const parameters = ``
 
@@ -148,11 +150,12 @@ export class MBMenuButtonsService {
 
   /////////////////////////////
 
-  getButtonByName(site: ISite, name: string): Observable<IMenuButtonGroups> {
 
-    const controller = "/MB_MenuButtonGroups/"
+  getButtonByName(site: ISite, name: string): Observable<mb_MenuButton> {
 
-    const endPoint = "GetMenuItems"
+    const controller = "/MB_MenuButtons/"
+
+    const endPoint = "GetMB_MenuButton"
 
     const parameters = `?name=${name}`
 
@@ -160,15 +163,15 @@ export class MBMenuButtonsService {
 
     const options = { url: uri, cacheMins: 0}
 
-    return  this.httpCache.get<IMenuButtonGroups>(options)
+    return  this.httpCache.get<mb_MenuButton>(options)
 
   };
 
-  getButtonsByID(site: ISite, id: number): Observable<IMenuButtonGroups> {
+  getButtonsByID(site: ISite, id: number): Observable<mb_MenuButton> {
 
-    const controller = "/MB_MenuButtonGroups/"
+    const controller = "/MB_MenuButtons/"
 
-    const endPoint = "GetGroup"
+    const endPoint = "GetMB_MenuButton"
 
     const parameters = `?id=${id}`
 
@@ -176,63 +179,74 @@ export class MBMenuButtonsService {
 
     const options = { url: uri, cacheMins: 0}
 
-    return  this.httpCache.get<IMenuButtonGroups>(options)
+    return  this.httpCache.get<mb_MenuButton>(options)
 
   };
 
-  putButton(site: ISite, menuButtonGroup: IMenuButtonGroups): Observable<IMenuButtonGroups> {
+  putButton(site: ISite, menuButton: mb_MenuButton): Observable<mb_MenuButton> {
 
-    const controller = "/MB_MenuButtonGroups/"
+    if (!menuButton || !menuButton.id) { return null}
 
-    const endPoint = "PutGroup"
+    const controller = "/MB_MenuButtons/"
 
-    const parameters = `?id=${menuButtonGroup.id}`
+    const endPoint = "PutMB_MenuButton"
+
+    const parameters = `?id=${menuButton.id}`
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    const url = { url: uri, cacheMins: 0}
-
-    return  this.http.put<IMenuButtonGroups>(uri , menuButtonGroup)
+    return  this.http.put<mb_MenuButton>(uri , menuButton)
 
   };
 
-  postButton(site: ISite, menuButtonGroup: IMenuButtonGroups): Observable<IMenuButtonGroups> {
+  postButton(site: ISite, menuButton: mb_MenuButton): Observable<mb_MenuButton> {
+    if (!menuButton ) { return null}
+    const controller = "/mB_MenuButtons/"
 
-    const controller = "/MB_MenuButtonGroups/"
-
-    const endPoint = "PutGroup"
+    const endPoint = "PostMB_MenuButton"
 
     const parameters = ``
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    const url = { url: uri, cacheMins: 0}
-
-    return  this.http.post<IMenuButtonGroups>(uri , menuButtonGroup)
+    return  this.http.post<mb_MenuButton>(uri , menuButton)
 
   };
 
-  deleteButton(site: ISite, id: number): Observable<IMenuButtonGroups> {
+  postButtonList(site: ISite, menuButton: mb_MenuButton[], groupName: string, reset: boolean): Observable<mb_MenuButton[]> {
 
-    const controller ="/MB_MenuButtonGroups/"
+    const controller = "/mB_MenuButtons/"
 
-    const endPoint = `deleteGroup`
+    const endPoint = "PostmB_MenuButtons"
+
+    const parameters = `?groupName=${groupName}&reset=${reset}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<mb_MenuButton[]>(uri , menuButton)
+
+  };
+
+  deleteButton(site: ISite, id: number): Observable<mb_MenuButton> {
+
+    const controller ="/mB_MenuButtons/"
+
+    const endPoint = `DeletemB_MenuButtons`
 
     const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.delete<any>(url)
+    return this.http.delete<mb_MenuButton>(url)
 
   }
 
-
-  generateDefaultOrderButtons(): mb_MenuButton[] {
+  generateDefaultOrderButtons(id: number): mb_MenuButton[] {
     //post up to API order buttons.
-
     const items = [] as mb_MenuButton[];
 
     let item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Items"
     item.icon = "list"
     item.sort  = 1
@@ -243,24 +257,29 @@ export class MBMenuButtonsService {
     items.push(item)
 
     item = {} as mb_MenuButton;
-    item.name = "Suspsend"
+    item.mb_MenuButtonGroupID =id
+    item.name = "Suspend"
     item.icon = ""
     item.sort  = 2
+    prop.color      = "warn"
     prop = this.getOrderDefaultButtonProperties();
     prop.method = 'removeSuspension()'
     item.properties  = JSON.stringify(prop)
     items.push(item)
 
     item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Delete"
     item.icon = "delete"
     item.sort  = 3
+    prop.color      = "warn"
     prop = this.getOrderDefaultButtonProperties();
     prop.method = 'deleteOrder()'
     item.properties  = JSON.stringify(prop)
     items.push(item)
 
     item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Check Out / Pay"
     item.icon = "credit_card"
     item.sort  = 4
@@ -271,15 +290,17 @@ export class MBMenuButtonsService {
     items.push(item)
 
     item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Labels"
     item.icon = "print"
     item.sort  = 5
     prop.method = 'printLabels()'
-     prop = this.getOrderDefaultButtonProperties();
+    prop = this.getOrderDefaultButtonProperties();
     item.properties  = JSON.stringify(prop)
     items.push(item)
 
     item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Re-Print Labels"
     item.icon = "print"
     item.sort  = 6
@@ -289,22 +310,27 @@ export class MBMenuButtonsService {
     items.push(item)
 
     item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Void"
     item.icon = "delete"
     item.sort  = 7
     prop.method = 'voidOrder()'
+    prop.color      = "warn"
     prop = this.getOrderDefaultButtonProperties();
     item.properties  = JSON.stringify(prop)
     items.push(item)
 
     item = {} as mb_MenuButton;
+    item.mb_MenuButtonGroupID =id
     item.name = "Leave"
     item.icon = ""
     item.sort  = 7
     prop.method = 'clearOrder()'
     prop = this.getOrderDefaultButtonProperties();
+    prop.color      = "warn"
     item.properties  = JSON.stringify(prop)
     items.push(item)
+
 
     return items
   }
@@ -312,17 +338,26 @@ export class MBMenuButtonsService {
   private getOrderDefaultButtonProperties() : IMenuButtonProperties {
     const item           = {} as IMenuButtonProperties;
     item.completedOrder  = false;
+    item.completedOrderAndUser = false;
     item.balanceRemainingGreaterThanZero = true;
-    item.requiresStaff   = true;
-    item.requiresUser    = true;
+    item.allowUser       = true;
+    item.allowStaff      = true;
     item.itemsPrinted    = true;
     item.isAuthorized    = true;
     item.suspendedOrders = true;
+    item.sidePanelOnly   = false;
+    item.mainPanelOnly   = false
+    item.orderHistory    = false;
     item.smallDeviceOnly = false;
-    item.completedOrderAndUser = false;
+    item.color           = "primary"
     return item
   }
 
+  resetOrderButtons(site: ISite, id: number): Observable<mb_MenuButton[]> {
+    const list = this.generateDefaultOrderButtons(id);
+    return this.postButtonList(site, list, 'Order Buttons', true)
+    return null;
+  }
 }
 
 

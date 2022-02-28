@@ -9,6 +9,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { switchMap } from 'rxjs/operators';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
   selector: 'app-menu-minimal',
@@ -43,6 +44,9 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   site              : ISite;
   isStaff: boolean;
   tinyMenu : boolean;
+  smallMenu : boolean;
+  _barSize: Subscription
+  barSize: boolean;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
@@ -57,6 +61,16 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         this.refreshMenu(user)
       }
     )
+    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+      this.smallMenu = data;
+    })
+  }
+
+  setSmallMenu() {
+    const result = !this.smallMenu
+    this.toolbarUIService.updateBarSize(result)
+    localStorage.setItem('barSize', String(result))
+    this.updateScreenSize();
   }
 
   refreshMenu(user: IUser) {
@@ -81,7 +95,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
     if (!mainMenu && item) { return }
     if (item.active) {mainMenu.push(item) }
-    this.menus =  [...new Set(this.menus)]
+    this.menus =  [...new Set(mainMenu)]
   }
 
   constructor ( private menusService            : MenusService,
@@ -89,6 +103,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
                 private siteService             : SitesService,
                 private authenticationService   : AuthenticationService,
                 private userSwichingService:    UserSwitchingService,
+                private toolbarUIService        : ToolBarUIService,
                 private userAuthorizationService: UserAuthorizationService,
               ) {
     this.site  =  this.siteService.getAssignedSite();
@@ -96,7 +111,8 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   @HostListener("window:resize", [])
   updateScreenSize() {
-    if (window.innerWidth < 768) {
+    this.tinyMenu = false
+    if (window.innerWidth < 599 || this.smallMenu) {
       this.tinyMenu = true
     }
   }

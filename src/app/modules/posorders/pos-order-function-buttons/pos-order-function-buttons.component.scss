@@ -17,6 +17,12 @@
   }
 }
 
+button{
+  text-overflow: ellipsis;
+  text-size-adjust: auto  ;
+  overflow: hidden;
+}
+
 .buttons-container {
   --gap: 5px;
   display: grid;

@@ -15,7 +15,7 @@
             *ngIf="!hideAllOption"
             [value]="emptyItem"
             (click)="setItemNull()"
-            (mouseover) ="setItemNull()"
+            (mouseover) ="setItemMouseOver(null)"
             [class]="buttonDimensions">
           All
       </mat-button-toggle>
@@ -28,9 +28,9 @@
                 type="button"
                 [value]="item"
                 (click)="setItem(item)"
+                (mouseover) ="setItemMouseOver(item)"
                 >
-              <div class="grid-toggle-tiny"
-                  (mouseover) ="setItemMouseOver(item)">
+              <div class="grid-toggle-tiny">
                 <div class="item-font" *ngIf="showIcon && item.icon && item.icon != ''">
                   <span *ngIf="materialIcons">
                     <mat-icon>{{item.icon}}</mat-icon>

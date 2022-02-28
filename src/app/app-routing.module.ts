@@ -178,8 +178,8 @@ const routes: Routes = [
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         // function-group-list
-        { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Category List', animation: 'isLeft'}},
-        { path: 'function-group-edit', component: FunctionGroupEditComponent, canActivate: [AuthGuard], data: { title: 'Category List', animation: 'isLeft'}},
+        { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Function List', animation: 'isLeft'}},
+        { path: 'function-group-edit', component: FunctionGroupEditComponent, canActivate: [AuthGuard], data: { title: 'Function Edit', animation: 'isLeft'}},
 
         //app-department-menu
         { path: 'categorylist', component: CategorieslistviewComponent,  canActivate: [AuthGuard], data: {  title: 'Category List', animation: 'isLeft'}},

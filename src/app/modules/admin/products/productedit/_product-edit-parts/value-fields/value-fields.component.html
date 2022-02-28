@@ -4,18 +4,30 @@
           [class]="fieldsClass"
           appearance="outline">
       <mat-label><ng-content></ng-content></mat-label>
-        <div *ngIf="passwordMask">
+        <div *ngIf="type === 'input' && passwordMask">
           <input matInput
                 [class]="fieldsClass"
                 appAppPasswordMask
                 [type]="fieldType"
                 [formControlName]="fieldName">
         </div>
-        <div *ngIf="!passwordMask">
+        <div *ngIf="type === 'input' && !passwordMask">
           <input matInput
                 [type]="fieldType"
                 [formControlName]="fieldName">
         </div>
+
     </mat-form-field>
   </div>
+
+  <div [formGroup]="inputForm"
+       *ngIf="type === 'toggle'">
+    <mat-slide-toggle
+        [name]="fieldName"
+        class="mat-label"
+        [formControlName]="fieldName">
+        <mat-label><ng-content></ng-content></mat-label>
+    </mat-slide-toggle>
+  </div>
+
 </div>

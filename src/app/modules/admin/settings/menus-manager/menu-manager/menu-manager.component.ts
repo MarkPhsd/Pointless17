@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -17,7 +17,7 @@ import { MenusService } from 'src/app/_services/system/menus.service';
   templateUrl: './menu-manager.component.html',
   styleUrls: ['./menu-manager.component.scss']
 })
-export class MenuManagerComponent implements OnInit  {
+export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   menu$:           Observable<MenuGroup[]>;
 
@@ -47,6 +47,13 @@ export class MenuManagerComponent implements OnInit  {
   ngOnInit() {
     this.initSubscription();
     this.getMainMenu()
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._user) {
+      this._user.unsubscribe()
+    }
   }
 
   getMainMenu(){

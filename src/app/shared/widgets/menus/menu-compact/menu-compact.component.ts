@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService } from 'src/app/_services';
 import { switchMap } from 'rxjs/operators';
+import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
   selector: 'app-menu-compact',
@@ -27,7 +28,12 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
   user              : IUser;
   _user             : Subscription;
   site: ISite;
-  tinyMenu: boolean;
+
+  tinyMenu  : boolean;
+  smallMenu : boolean;
+
+  _barSize: Subscription
+  barSize: boolean;
 
   initSubscription() {
     this._user = this.authenticationService.user$.pipe(
@@ -54,6 +60,10 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
           this.menus = [] as AccordionMenu[];
       }
     )
+
+    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+      this.smallMenu = data;
+    })
   }
 
 
@@ -62,6 +72,7 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
                 private router                  : Router,
                 private siteService             : SitesService,
                 private authenticationService   : AuthenticationService,
+                private toolbarUIService        : ToolBarUIService,
               ) {this.site  =  this.siteService.getAssignedSite();}
 
   async ngOnInit() {
@@ -76,7 +87,8 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
   // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
-    if (window.innerWidth < 768) {
+    this.tinyMenu = false
+    if (window.innerWidth < 599 || this.smallMenu) {
       this.tinyMenu = true
     }
   }

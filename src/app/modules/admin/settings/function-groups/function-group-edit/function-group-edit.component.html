@@ -1,38 +1,84 @@
-<div class="container">
+<ng-template #loading>...loading
+  <mat-spinner [diameter]="80"></mat-spinner>
+</ng-template>
+
+<div class="container" *ngIf="menuButtonGroup; else loading">
+
   <mat-card>
     <mat-card-title>
       <div class="header-icons">
         <mat-icon>menu</mat-icon>
       </div>
-      <h3>Menu Manager</h3>
+      <h3>Function Buttons for Group {{ menuButtonGroup.name }}</h3>
 
     </mat-card-title>
 
     <mat-card-subtitle>
-      Sort and edit menus.
-      <h2>Drag menus to sort. Click on to edit.</h2>
-      <button mat-button (click)="initMenu()">Initialize Menu</button>
+
+      <span *ngIf="inputForm">
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'name'">
+            Name
+        </app-value-fields>
+      </span>
+
+      <div>
+        <button mat-button color="warn" (click)="saveGroup()">
+            <mat-icon>save</mat-icon>Save
+          </button>
+
+          <button mat-button color="warn" (click)="deleteGroup()">
+            <mat-icon>delete</mat-icon>Delete Group
+          </button>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="directions">
+        Sort and edit menus.
+        Drag menus to sort. Click on to edit.
+      </div>
+
+      <!-- <button mat-button (click)="initMenu()">Initialize Menu</button> -->
+      <button mat-button color="primary" (click)="addButton()">
+         <mat-icon>add</mat-icon>Add Button
+      </button>
+
+
+
+
     </mat-card-subtitle>
     <mat-divider></mat-divider>
 
     <div class="grid-container">
-      <div *ngIf="menuButtonGroup">
-        <div
-              cdkDropList
-              #accordionList="cdkDropList"
-              (cdkDropListDropped)="dropAccordion($event)"
-              >
 
-          <div *ngFor="let item of menuButtonGroup"
+      <div  cdkDropList
+            #accordionList="cdkDropList"
+            (cdkDropListDropped)="dropAccordion($event)">
+
+        <div *ngFor="let item of menuButtonGroup.mb_MenuButtons"
               class="pop button"
               cdkDrag
-              (click)="assignSubMenu(item, item.submenus)"
-              >
-              <mat-icon>{{item.icon}}</mat-icon>
-              {{item.name}}
-          </div>
+              (click)="assignButton(item)">
+
+            <mat-icon>{{item?.icon}}</mat-icon>
+            {{item?.name}}
         </div>
+
       </div>
+
+
+      <div *ngIf="menuButton">
+        <function-group-button-edit
+          (outSaveButton)="saveItem($event)"
+          (outPutUpdateButtons)="refreshButtons($event)"
+          [menuButton]="menuButton">
+        </function-group-button-edit>
+      </div>
+
     </div>
+
+
   </mat-card>
 </div>

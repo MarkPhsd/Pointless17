@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { IMenuButtonGroups, MBMenuButtonsService, mb_MenuButton } from 'src/app/_services/system/mb-menu-buttons.service';
+import { IMenuButtonGroups, MBMenuButtonsService } from 'src/app/_services/system/mb-menu-buttons.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
@@ -12,11 +12,8 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
-import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { AWSBucketService } from 'src/app/_services';
 import { Capacitor,  } from '@capacitor/core';
 import { Router } from '@angular/router';
 @Component({
@@ -24,14 +21,12 @@ import { Router } from '@angular/router';
   templateUrl: './function-group-list.component.html',
   styleUrls: ['./function-group-list.component.scss']
 })
+
 export class FunctionGroupListComponent implements OnInit {
-  gridDimensions: any;
+  gridDimensions  : any;
   menuButtonGroups: IMenuButtonGroups[];
   menuButtonGroup : IMenuButtonGroups;
-  mb_MenuButtons  : mb_MenuButton[];
-  mb_MenuButton   : mb_MenuButton;
-
-  searchForm:    FormGroup;
+  searchForm      : FormGroup;
   get itemName() {
     if (this.searchForm) {
       return this.searchForm.get("itemName") as FormControl;
@@ -68,7 +63,7 @@ export class FunctionGroupListComponent implements OnInit {
   selected      : any[];
   value         : number;
   gridlist      : string;
-
+  datasource: any;
   constructor(
               private _snackBar              : MatSnackBar,
               private agGridService          : AgGridService,
@@ -82,7 +77,7 @@ export class FunctionGroupListComponent implements OnInit {
 
       this.initForm();
       this.initAgGrid(this.pageSize);
-
+      this.initClasses();
     }
 
   ngOnInit(): void {
@@ -95,11 +90,12 @@ export class FunctionGroupListComponent implements OnInit {
 
   initClasses()  {
     const platForm      = this.platForm;
-    this.gridDimensions =  'width: 100%; height: 90%;'
+    this.gridDimensions =  'width: 100%; height: 600px;'
     this.agtheme  = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
   }
+
 
   initForm() {
     this.searchForm   = this.fb.group( {
@@ -129,7 +125,7 @@ export class FunctionGroupListComponent implements OnInit {
       field: 'id',
       cellRenderer: "btnCellRenderer",
                     cellRendererParams: {
-                        onClick: this.editProductFromGrid.bind(this),
+                        onClick: this.editItemFromGrid.bind(this),
                         label: this.buttonName,
                         getLabelFunction: this.getLabel.bind(this),
                         btnClass: 'btn btn-primary btn-sm'
@@ -184,7 +180,8 @@ export class FunctionGroupListComponent implements OnInit {
   getRowData(params, startRow: number, endRow: number):  Observable<IMenuButtonGroups[]>  {
     const site                = this.siteService.getAssignedSite()
     const name =  this.initSearchModel()
-    return this.mbMenuGroupService.getGroupsByName(site,name )
+    // return this.mbMenuGroupService.getGroupsByName(site,name )
+    return this.mbMenuGroupService.getGroups(site)
   }
 
   //ag-grid standard method
@@ -215,7 +212,8 @@ export class FunctionGroupListComponent implements OnInit {
         );
       }
     };
-
+    this.datasource = datasource;
+    console.log(datasource)
     if (!datasource)   { return }
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
@@ -299,22 +297,16 @@ export class FunctionGroupListComponent implements OnInit {
     this.rowDataClicked2 = e.rowData;
   }
 
-  editProductFromGrid(e) {
+  editItemFromGrid(e) {
     if (!e) {return}
     if (e.rowData.id)  {
-      if (this.buttonName === 'Edit') {
-        this.editItemWithId(e.rowData.id);
-      } else {
-          this.assignItem(e)
-      }
+      this.editItemWithId(e.rowData.id);
     }
   }
 
   editItemWithId(id:any) {
-    if(!id) {
-      return
-    }
-    // this.productEditButtonService.openProductDialog(id);
+    if(!id) { return }
+    this.router.navigate(['function-group-edit', {id:id}])
   }
 
   editProduct(e){
@@ -323,22 +315,29 @@ export class FunctionGroupListComponent implements OnInit {
     this.router.navigate(['function-group-edit', {id:id}])
   }
 
-  assignItem(e){
-    // if (this.promptSubGroup) {
-    //   this.outputPromptItem.emit(e.rowData.id)
-    // }
-  }
-
-
   addItem() {
     const group = {} as IMenuButtonGroups;
     group.name = 'Input Name';
     const site = this.siteService.getAssignedSite();
     this.mbMenuGroupService.postGroup(site, group).subscribe(data => {
-      this.router.navigate(['function-group-edit', {id:data.id}])
+      this.editItemWithId(data.id)
     })
   }
 
+  resetOrderButtons() {
+    const site        = this.siteService.getAssignedSite();
+    const group       = {} as IMenuButtonGroups;
+    group.name        ="Order Buttons";
+    group.description ="Order Buttons";
+    const group$ = this.mbMenuGroupService.postGroup(site, group).pipe(
+      switchMap(data => {
+        return  this.mbMenuGroupService.resetOrderButtons(site, data.id)
+      })).subscribe(data => {
+        this.refreshGrid();
+        if (data[0])
+        this.editItemWithId(data[0].mb_MenuButtonGroupID)
+    })
+  }
 
   onSortByNameAndPrice(sort: string) { }
 

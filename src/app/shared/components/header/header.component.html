@@ -57,7 +57,7 @@
           </button>
         </div>
 
-        <div class="search">
+        <div class="margin-info" class="search">
           <api-status-display></api-status-display>
         </div>
 
@@ -70,9 +70,7 @@
           </button>
         </div>
       </div>
-      <!-- <div *ngIf="isUser">
-        <app-product-search-selector></app-product-search-selector>
-      </div> -->
+
     </div>
 
     <div class="pos-panel">
@@ -161,7 +159,6 @@
     <div  fxFlex
         fxLayout="row"
         fxLayoutAlign="start end">
-<!-- <div class="grid-flow"> -->
 
       <div *ngIf="!smallDevice && !isUserStaff">
         <app-toggle-theme></app-toggle-theme>

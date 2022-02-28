@@ -20,6 +20,7 @@ export class PosOrderFunctionButtonsComponent {
   @Output() outPutSuspendOrder  = new EventEmitter();
   @Output() outPutRemoveSuspension  = new EventEmitter();
   @Output() outPutClearOrder    = new EventEmitter();
+  @Output() outPutToggleSuspension = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -68,8 +69,10 @@ export class PosOrderFunctionButtonsComponent {
   removeSuspension() {
     this.outPutRemoveSuspension.emit(true)
   }
+  toggleSuspension() {
+    this.outPutToggleSuspension.emit(true)
+  }
   deleteOrder() {
-
     this.outPutDeleteOrder.emit(true)
   }
   clearOrder() {

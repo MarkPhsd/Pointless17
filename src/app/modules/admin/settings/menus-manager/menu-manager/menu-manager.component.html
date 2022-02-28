@@ -1,3 +1,7 @@
+<ng-template #loading>...loading
+  <mat-spinner [diameter]="80"></mat-spinner>
+</ng-template>
+
 <div class="container">
   <mat-card>
     <mat-card-title>
@@ -16,18 +20,17 @@
     <mat-divider></mat-divider>
 
     <div class="grid-container">
-      <div *ngIf="accordionMenus">
+      <div *ngIf="accordionMenus; else loading">
         <div
               cdkDropList
               #accordionList="cdkDropList"
-              (cdkDropListDropped)="dropAccordion($event)"
-              >
+              (cdkDropListDropped)="dropAccordion($event)">
 
           <div *ngFor="let item of accordionMenus"
               class="pop button"
               cdkDrag
-              (click)="assignSubMenu(item, item.submenus)"
-              >
+              (click)="assignSubMenu(item, item.submenus)" >
+
               <mat-icon>{{item.icon}}</mat-icon>
               {{item.name}}
           </div>
@@ -38,13 +41,13 @@
         <div
             cdkDropList
             #secondList="cdkDropList"
-            (cdkDropListDropped)="drop($event)"
-            >
+            (cdkDropListDropped)="drop($event)" >
+
           <div  *ngFor="let item of submenu"
                 class="pop button"
                 cdkDrag
-                (click)="assignSubMenuItem(item)"
-                >
+                (click)="assignSubMenuItem(item)">x
+
             <mat-icon>{{item.icon}}</mat-icon>
             {{item.name}}
           </div>

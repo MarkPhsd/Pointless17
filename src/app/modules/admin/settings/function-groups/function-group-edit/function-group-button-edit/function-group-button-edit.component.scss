@@ -1,0 +1,18 @@
+.grid-container {
+  display              : grid;
+  grid-template-columns: 200px 200px;
+  grid-auto-flow       : row;
+  width                : 500px;
+}
+
+.fields {
+  margin: 3px;
+  font-size: .9em;
+  width:     75px;
+}
+
+.container {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

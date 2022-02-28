@@ -61,6 +61,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   style = "width:195px"
 
+  _barSize: Subscription;
+  barSize : boolean;
+  smallMenu = false;
+
   initSubscriptions() {
     this.style = ""
     this._user =     this.authorizationService.user$.subscribe(data => {
@@ -90,16 +94,25 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.searchBarWidthSubscription = this.toolBarUIService._searchBarWidth$.subscribe(data => {
       if (data) {
-        if (data == 55) {
+        if (data == 55 || this.smallMenu) {
           this.barType =  "mat-drawer-searchbar-tiny"
         }
       }
-      if (!data && data != 0) {
+      if (!data && data != 0 || this.smallMenu) {
         this.barType =  "mat-drawer-searchbar-tiny"
         this.style = `width:${this.style}`
         this.searchBarWidth = data
       }
-      // console.log('this.barType',  this.barType)
+    })
+    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+      if (data) {
+        this.barType =  "mat-drawer-searchbar-tiny"
+        this.style = `width:${this.style}`
+        return
+      }
+      this.barType = "mat-drawer-toolbar"
+      this.style = ""
+      this.smallMenu = data;
     })
 
   }
@@ -111,7 +124,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private cd              : ChangeDetectorRef,
                private appInitService  : AppInitService,
                private authorizationService: AuthenticationService,
-
+               private toolbarUIService        : ToolBarUIService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (this.platForm == 'web') {
@@ -124,7 +137,24 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.renderTheme();
     this.initSubscriptions();
     this.refreshToolBarType();
+    const bar = this.getBoolean(localStorage.getItem('barSize'))
+    this.toolbarUIService.updateBarSize(bar)
   }
+
+  getBoolean(value){
+    switch(value){
+         case true:
+         case "true":
+         case 1:
+         case "1":
+         case "on":
+         case "yes":
+             return true;
+         default:
+             return false;
+     }
+     return false;
+ }
 
   ngAfterViewInit() {
     this.cd.detectChanges();
@@ -159,6 +189,9 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this._user.unsubscribe();
     }
 
+    if (this._barSize) {
+      this._barSize.unsubscribe();
+    }
   }
 
   @HostListener("window:resize", [])
