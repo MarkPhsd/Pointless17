@@ -31,15 +31,27 @@
                 (mouseover) ="setItemMouseOver(item)"
                 >
               <div class="grid-toggle-tiny">
+
+                <!-- icon {{item.icon}}
+                <br>
+                {{item[fieldName]}} -->
+                <!-- <div *ngIf="(item.icon === '' || !item.icon)">
+                  <div *ngIf="tinyMenu">
+                    {{item[fieldName] | truncateText : textLength}}
+                  </div>
+                </div> -->
+
                 <div class="item-font" *ngIf="showIcon && item.icon && item.icon != ''">
                   <span *ngIf="materialIcons">
                     <mat-icon>{{item.icon}}</mat-icon>
                   </span>
                   <span *ngIf="!materialIcons" [class]="'mdi ' + item.icon"></span>
                 </div>
-                <div class="item-text" *ngIf="!tinyMenu">
+
+                <div class="item-text" *ngIf="((item.icon === '' || !item.icon) && tinyMenu ) || !tinyMenu">
                   {{item[fieldName] | truncateText : textLength}}
                 </div>
+
               </div>
           </mat-button-toggle>
         </div>

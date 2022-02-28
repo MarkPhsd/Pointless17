@@ -64,9 +64,9 @@ export class AppComponent {
       this.setTitle();
 
       this.devMode = isDevMode();
-      // if (this.electronService.isElectronApp) {
-      //   this.AuthService.logout();
-      // }
+      if (this.electronService.isElectronApp) {
+        this.AuthService.logout();
+      }
       // console.log('is Electron Service', ipcService.isElectronApp)
       // if (ipcService.isElectronApp) {
       //   console.log(process.env);

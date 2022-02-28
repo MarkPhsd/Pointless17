@@ -5,15 +5,34 @@
     vertical-align: middle;
     margin-right: 5px;
   }
+
 }
+
+// .mat-menu-panel  {
+//   width     : 300px !important;
+//   min-width : 300px !important;
+//   overflow-x: hidden;
+// }
+
+::ng-deep .mat-menu-panel {
+  padding: 0 10px!important;
+  width: 100%!important;
+  min-width: 300px;
+  overflow-x: hidden;
+
+}
+
 
 mat-toolbar {
   padding: 0px;
 }
 
+.mat-divider {
+  margin-bottom: 3px;
+}
+
 mat-menu {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 mat-card  {
@@ -107,6 +126,7 @@ button {
   padding     : 5px;
 }
 
+
 .profile-card {
     text-align: center;
     padding: 0 20px  20px  20px;
@@ -120,17 +140,19 @@ button {
 
 .mat-item {
   justify-content: center;
-  align-items: center;
-  display: flex;
-  text-align: center;
+  align-items : center;
+  display     : flex;
+  text-align  : center;
+  height      : 75px;
+  min-height  : 75px;
+  margin-top  : 5px;
+  margin-bottom: 5px;
 }
 
-// mat-sidenav {
-//   min-width: 125px !important;
-//   border-right: 1px solid #eee;
-//   box-shadow: 6px 0 6px rgba(0, 0, 0, .1);
-//   background-color:rgb(63, 81, 181);
-// }
+.menu-button {
+  height: 100%;
+  width: 100%;
+}
 
 @media (min-width: 10em) and (max-width: 100em) {
   h1, h3, h2, h4 {
@@ -143,6 +165,13 @@ button {
 
 .cart-button {
   margin-left: 5px;
+  width: 200px;
+  // min-width: 200px;
 }
 
-
+.grid-section-flow {
+  display: grid;
+  gap:5px;
+  grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
+  grid-auto-flow: row;
+}

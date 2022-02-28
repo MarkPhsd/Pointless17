@@ -1,15 +1,21 @@
-<div id="theme-mode">
+
   <div *ngIf="toggleTheme === 'light-theme'">
-    <button aria-label="theme"  mat-button (click)="switchTheme()">
+    <button aria-label="theme"
+            mat-button
+            class="menu-button"
+            (click)="switchTheme()">
       <mat-icon>light_mode</mat-icon>
     </button>
   </div>
 
   <div *ngIf="toggleTheme === 'dark-theme'">
-    <button    aria-label="theme" mat-button  (click)="switchTheme()">
+    <button aria-label="theme"
+            mat-button
+            class="menu-button"
+            (click)="switchTheme()">
       <mat-icon >
         dark_mode
       </mat-icon>
     </button>
   </div>
-</div>
+

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output,OnDestroy, EventEmitter  } from '@angular/core';
+import { Component, OnInit, Output,OnDestroy, EventEmitter, HostListener  } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService} from 'src/app/_services';
 import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, tap } from 'rxjs/operators';
@@ -35,11 +35,13 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   _order$             : Observable<IPOSOrder>;
   order$              : Subject<Observable<IPOSOrder>> = new Subject();
 
-  isUserStaff             : boolean;
+  isUserStaff          : boolean;
 
   user$               : Observable<IUser>;
   _user               : Subscription;
   user                : IUser;
+
+  smallDevice: boolean;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -75,6 +77,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.initOrderBarSubscription();
     this.assignCurrentOrder();
     this.refreshOrderCheck();
+    this.updateItemsPerPage();
   }
 
   ngOnDestroy() {
@@ -93,6 +96,21 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       clearInterval(this.id);
     }
 
+  }
+
+  @HostListener("window:resize", [])
+  updateItemsPerPage() {
+
+    this.smallDevice = false
+    if (window.innerWidth >= 1200) {
+
+    } else if (window.innerWidth >= 992) {
+
+    } else if (window.innerWidth  >= 768) {
+
+    } else if (window.innerWidth < 768) {
+      this.smallDevice = true
+    }
   }
 
  async addNewOrder() {

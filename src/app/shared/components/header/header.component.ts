@@ -18,6 +18,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { Router } from '@angular/router';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { Pipe, PipeTransform } from '@angular/core';
 
 interface IIsOnline {
   result: string;
@@ -95,7 +96,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   //themes
   matToolbarColor = 'primary';
 
-
+  siteName: string;
   bucket = '';
 
   initSubscriptions() {
@@ -117,8 +118,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     })
 
   }
-
-
 
   constructor(private authenticationService:  AuthenticationService,
               private pollingService        : PollingService,
@@ -293,6 +292,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   initSite() {
     this.site = this.siteService.getAssignedSite();
+    this.site.name = this.site.name.trim()
+    this.siteName = this.site.name.trim()
   }
 
   mediaWatcher(){
@@ -314,8 +315,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   initCompany() {
-    const site     = this.siteService.getAssignedSite();
-    this.company$  = this.companyService.getCompany(site)
+    const site     =   this.siteService.getAssignedSite();
+    this.company$  =   this.companyService.getCompany(site)
+    this.siteName  =   site.name.trim()
   }
 
   initSearchObservable() {

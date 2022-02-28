@@ -1,0 +1,14 @@
+.grid-flow {
+  display: grid;
+  gap    :5px;
+  grid-template-columns: repeat( auto-fit, minmax(55px, 1fr) );
+  grid-auto-flow: row;
+  margin-right: 30px;
+}
+
+.grid-section-flow {
+  display: grid;
+  gap:5px;
+  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
+  grid-auto-flow: row;
+}

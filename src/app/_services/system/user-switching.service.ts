@@ -167,7 +167,6 @@ export class UserSwitchingService {
     const timeOut    = 3 * 1000;
     return  this.http.post<any>(url, userLogin)
       .pipe(
-        // timeout(timeOut),
         switchMap( user => {
         if (user) {
           if (user.message.toLowerCase() === 'failed') {

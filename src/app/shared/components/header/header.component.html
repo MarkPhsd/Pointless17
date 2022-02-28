@@ -157,14 +157,15 @@
     </div>
 
     <div  fxFlex
-        fxLayout="row"
-        fxLayoutAlign="start end">
+          fxLayout="row"
+          fxLayoutAlign="start end"
+         >
 
       <div *ngIf="!smallDevice && !isUserStaff">
         <app-toggle-theme></app-toggle-theme>
       </div>
 
-      <div class="cart-button" >
+      <div *ngIf="!smallDevice" class="cart-button" >
         <app-cart-button> </app-cart-button>
       </div>
 
@@ -182,83 +183,78 @@
       <div *ngIf="user">
         <button   aria-label="user"
                   mat-button
-                [matMenuTriggerFor]="menu">
+                  [matMenuTriggerFor]="menu">
           <mat-icon>person_outline</mat-icon>
         </button>
 
-        <mat-menu #menu="matMenu">
+        <mat-menu class="mat-menu-panel"  #menu="matMenu">
 
-          <button aria-label="logout" color="warn" mat-menu-item>
-            <button
+            <div  class="mat-item">
+              <button
+                      mat-button
+                      class="menu-button"
+                      aria-label="logout"
+                      (click)="logout()">
+                  Log Out
+                  <mat-icon>exit_to_app</mat-icon>
+              </button>
+              <mat-divider class="mat-divider"></mat-divider>
+            </div>
+
+            <div *ngIf="smallDevice">
+                <app-cart-button> </app-cart-button>
+                <mat-divider class="mat-divider"></mat-divider>
+            </div>
+
+            <div  class="mat-item">
+              <button
                     mat-button
-                    class="nav-item nav-link"
-                    aria-label="logout"
-                    (click)="logout()">
-                Log Out
-                <mat-icon>exit_to_app</mat-icon>
-            </button>
-          </button>
-
-          <mat-divider class="mat-divider"></mat-divider>
-
-          <button mat-menu-item>
-            <button
-                  mat-button
-                  class="nav-item nav-link"
-                  aria-label="face"
-                  routerLink="/app-profile">
-                  {{ userName }} - {{userRoles}}
-                <mat-icon>face</mat-icon>
-            </button>
-          </button>
-
-          <mat-divider class="mat-divider"></mat-divider>
-
-          <mat-card>
-            <div  mat-menu-item
-                  *ngIf="smallDevice || isUserStaff">
-                <div class="site-name" >
-                  <app-toggle-theme></app-toggle-theme>
-                </div>
+                    class="menu-button"
+                    aria-label="face"
+                    routerLink="/app-profile">
+                    {{ userName }} - {{userRoles}}
+                  <mat-icon>face</mat-icon>
+              </button>
+               <mat-divider class="mat-divider"></mat-divider>
             </div>
-          </mat-card>
 
-          <mat-divider class="mat-divider"></mat-divider>
 
-          <mat-card>
+            <div class="mat-item"
+                  *ngIf="smallDevice">
+                <app-toggle-theme></app-toggle-theme>
+                <mat-divider class="mat-divider"></mat-divider>
+            </div>
+
             <div  mat-menu-item
-                  *ngIf="smallDevice"
+                  *ngIf="smallDevice && siteName"
                   class="mat-item" >
-              <div class="site-name" *ngIf="site">
-                <h2 > {{ site.name  }} </h2>
-              </div>
+                <h2 > {{ siteName  }} </h2>
+                <mat-divider class="mat-divider"></mat-divider>
             </div>
 
-            <div  mat-menu-item
-                  class="mat-item"
+            <div  class="mat-item"
                   *ngIf="smallDevice">
               <button
                     mat-button
                     aria-label="location"
-                    class="mat-button-item"
+                    class="menu-button"
                     (click)="siteSelector()">
                 <mat-icon>location_on</mat-icon>
               </button>
-            </div>
-            <div  mat-menu-item
-                  class="mat-item"
-                  *ngIf="user && user.roles === 'user'">
-              <button
-                    mat-button
-                    color="accent"
-                    aria-label="Order history"
-                    class="mat-button-item"
-                    (click)="navPOSOrders()">
-                My Orders<mat-icon>list</mat-icon>
-              </button>
+              <mat-divider class="mat-divider"></mat-divider>
             </div>
 
-          </mat-card>
+            <div  class="mat-item"
+                  *ngIf="user && user.roles === 'user'  && user.username != 'user'">
+                <button
+                      color="accent"
+                      class="menu-button"
+                      aria-label="Order history"
+                      class="mat-item"
+                      (click)="navPOSOrders()">
+                  My Orders<mat-icon>list</mat-icon>
+                </button>
+            </div>
 
         </mat-menu>
       </div>
