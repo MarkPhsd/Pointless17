@@ -40,6 +40,8 @@ export class AuthenticationService {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
       }
+      // console.log('update user' ,  localStorage.getItem('user'))
+
     }
 
     updateUserX(user: IUser) {
@@ -52,7 +54,6 @@ export class AuthenticationService {
         private http            : HttpClient,
         private appInitService  : AppInitService,
         private platFormservice : PlatformService,
-        // private orderService    : OrdersService,
         private toolbarUIService : ToolBarUIService,
     ) {
       this.apiUrl = this.appInitService.apiBaseUrl()
@@ -63,7 +64,7 @@ export class AuthenticationService {
     }
 
     public get userValue(): IUser {
-      if (!this._user.value) {
+      if (!this._user || !this._user.value) {
         const item = localStorage.getItem('user');
         if (!item) {
           //will return undefined or null;

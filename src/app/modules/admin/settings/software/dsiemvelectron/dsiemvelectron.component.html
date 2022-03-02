@@ -131,10 +131,23 @@
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
-                (click)="testActiveX()">test activex
+                (click)="testActiveX()">test Activex
         </button>
       </div>
 
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="initPinPadResetForm()">Set Pin Pad Reset Values
+        </button>
+      </div>
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="pinPadReset()">Test Reset
+        </button>
+      </div>
       <div *ngIf="pathForm" [formGroup]="pathForm">
         <div class="grid-item">
           <app-value-fields
@@ -146,6 +159,9 @@
         </div>
       </div>
 
+      <div *ngIf="responseMessage">
+        Respsonse:  {{responseMessage}}
+      </div>
 
     </div>
   </mat-card-content>

@@ -9,16 +9,6 @@
   font-size: larger;
 }
 
-// .transaction-data {
-//   display: grid;
-//   grid-template-columns: 1fr 1fr;
-//   // width: 300px;
-//   border-radius: 3px;
-//   margin: 5px 5px ;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-//   font-size: larger;
-// }
 .transaction-data {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -31,11 +21,7 @@
 }
 
 .totals {
-  font-size     : 1em;
-  // white-space   : nowrap;
-  // overflow      : hidden;
-  // text-overflow : ellipsis;
-  // text-transform: capitalize;
+  font-size     : small;
   float         : right;
   align-items   : flex-end;
   text-align    : right;

@@ -75,7 +75,7 @@
             <div  class="grid-item-departments"
                   *ngIf="(categories$ | async) as list">
               <app-mat-toggle-selector
-                  [mouseOver]      = "'false'"
+                  [mouseOver]      = "false"
                   [showIcon]       ="showIcon"
                   [textLength]     = "21"
                   [toggleDimensions]="'toggle-group-tall'"
@@ -100,7 +100,7 @@
           <div *ngIf="(clientSearchResults$ | async) as list">
             <div  class="grid-item-departments" *ngIf=" list.results as brands">
               <app-mat-toggle-selector
-                  [mouseOver]      = "'true'"
+                  [mouseOver]      = "false"
                   [showIcon]       ="showIcon"
                   [textLength]     = "21"
                   [toggleDimensions]="'toggle-group-tall'"
@@ -129,7 +129,7 @@
               *ngIf="(productTypes$ | async) as list">
 
             <app-mat-toggle-selector
-                [mouseOver]      = "'false'"
+                [mouseOver]      = "false"
                 [showIcon]        = "showIcon"
                 [textLength]      = "21"
                 [toggleDimensions]= "'toggle-group-tall'"
@@ -150,7 +150,7 @@
       <div  *ngIf="(departments$ | async) as list">
         <app-mat-toggle-selector
             (outPutItem)     = "refreshDepartmentSearch($event)"
-            [mouseOver]      = "'true'"
+            [mouseOver]      = "true"
             [showIcon]       ="'true'"
             [textLength]     = "21"
             [toggleDimensions]="'toggle-group-tall'"

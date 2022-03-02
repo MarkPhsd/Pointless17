@@ -292,8 +292,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   initSite() {
     this.site = this.siteService.getAssignedSite();
-    this.site.name = this.site.name.trim()
-    this.siteName = this.site.name.trim()
+    if (this.site.name) {
+      this.site.name = this.site.name.trim()
+      this.siteName = this.site.name.trim()
+    }
   }
 
   mediaWatcher(){
@@ -317,7 +319,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   initCompany() {
     const site     =   this.siteService.getAssignedSite();
     this.company$  =   this.companyService.getCompany(site)
-    this.siteName  =   site.name.trim()
+    this.initSite();
   }
 
   initSearchObservable() {

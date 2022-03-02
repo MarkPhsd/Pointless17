@@ -120,7 +120,6 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isStaff = this.userAuthorizationService.isUserAuthorized('employee,manager,admin')
-    // console.log(this.isStaff)
     if (this.isStaff) {
       this.initMenu()
       this.initSubscription()
@@ -140,11 +139,14 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   initMenu() {
     this.initMenus()
     const site       = this.siteService.getAssignedSite();
-    if (!this.user || !this.user.token) {return}
-    const menuCheck$ = this.menusService.mainMenuExists(site);
 
+    if (!this.user || !this.user.token) {return}
+
+    const menuCheck$ = this.menusService.mainMenuExists(site);
+    console.log('menu minimal init')
     menuCheck$.pipe(
       switchMap( data => {
+        console.log('menu minimal data', data)
         if (!data || !data.result) {
            if (this.user) {
             return  this.menusService.createMainMenu(this.user , site)
@@ -153,7 +155,10 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         }
       })
     ).subscribe(data => {
+      console.log('menu minimal menu group', data)
       this.refreshMenu(this.user)
+    }, err => {
+      console.log('error init menu minimal compact', err)
     })
   }
 

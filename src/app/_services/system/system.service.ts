@@ -16,6 +16,15 @@ export interface SchemaUpdateResults {
 })
 export class SystemService {
 
+  // GetSyncDatabaseSchema
+  // CreateAPIViews
+  // CreateViews
+  // CreateTablesA
+  // CreateTablesB
+  // createAPIReportviews
+
+  updateSections = ['GetSyncDatabaseSchema', 'CreateAPIViews', 'CreateViews', 'CreateTablesA', 'CreateTablesB', 'createAPIReportviews']
+
   private _webApiStatus          = new BehaviorSubject<ICompany>(null);
   public webApiStatus$           = this._webApiStatus.asObservable();
 
@@ -24,18 +33,19 @@ export class SystemService {
   { }
 
    getSyncDatabaseSchema(site:ISite):  Observable<SchemaUpdateResults[]> {
-
     const controller = "/System/"
-
     const endPoint = 'getSyncDatabaseSchema'
-
     const parameters = ''
-
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
     return this.http.get<SchemaUpdateResults[]>(url);
+   }
 
-
+   updateDatabase(site:ISite, section: string):  Observable<SchemaUpdateResults[]> {
+    const controller = "/System/"
+    const endPoint   = section
+    const parameters = ''
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+    return this.http.get<SchemaUpdateResults[]>(url);
    }
 
 

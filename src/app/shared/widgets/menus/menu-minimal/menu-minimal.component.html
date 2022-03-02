@@ -53,7 +53,8 @@
           @fade
           *ngFor="let item of submenu" >
         <div *ngIf="!item?.minimized">
-          <div class="menu" *userAuthorized="item.userType">
+          <div class="menu"
+               *userAuthorized="item.userType">
               <a mat-list-item
                 routerLinkActive={{item.routerLinkActive}}
                 routerLink=      {{item.routerLink}}>
@@ -126,5 +127,6 @@
       aria-label=" toggle">
     <mat-icon>view_compact</mat-icon>
   </button>
+
 </div>
 

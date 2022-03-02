@@ -334,13 +334,15 @@ export class LoginComponent implements OnInit, OnDestroy {
         user =>
         {
           if (user) {
+            console.log ('login user', user)
             if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
-              // this.userSwitchingService.updateLoginStatus(1)
               this.updateLoginStatus(1)
               this.authenticationService.updateUser(null);
               return
             }
+
             if (this.platformService.isApp()) {  if (this.loginApp(user)) { return } }
+
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)

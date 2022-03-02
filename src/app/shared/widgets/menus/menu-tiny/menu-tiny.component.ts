@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, OnDestroy, HostListener } from '@angular/core';
 import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
-import { EMPTY, Observable, Subscription, } from 'rxjs';
+import { EMPTY, Observable, of, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Router } from '@angular/router';
@@ -128,6 +128,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
     this.initMenus()
     const user = JSON.parse(localStorage.getItem('user')) as IUser;
+    console.log('user', this.user)
     if (!user || !user.token) {return}
 
     const site       = this.siteService.getAssignedSite();
@@ -136,22 +137,26 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     try {
       menuCheck$.pipe(
         switchMap( data => {
-          if (!data) {return EMPTY}
-          if (!data.result) {
-              if (user) {
-                // console.log('create menu')
-              return  this.menusService.createMainMenu(user , site)
-            }
-            return EMPTY;
+
+          console.log('menu tiny data', data, user)
+          if (!data || !data.result) {return of('empty');}
+
+            // if (user.roles === 'admin') {
+            return  this.menusService.createMainMenu(user , site)
+            // }
+            // if (user) {
+              // return  this.menusService.getMenu(site, 'main')
+            // }
           }
-        })
+        )
 
       ).subscribe( data => {
-
+        if (data === 'empty') {
+          console.log('empty')
+          return }
         this.refreshMenu(this.user)
-
       }, error=> {
-        // console.log('error', error)
+        console.log('error', error)
       })
     } catch (error) {
       console.log('error', error)

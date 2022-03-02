@@ -69,13 +69,18 @@ export class MatToggleSelectorComponent implements OnInit {
   }
 
   setItemMouseOver(item) {
-    if (this.mouseOver != true) { return }
+    if (this.mouseOver != true) {
+      console.log(this.mouseOver)
+      return
+    }
     console.log('1', this.mouseOver)
     this.outPutItem.emit(item)
   }
 
   setItemNull() {
-    if (this.mouseOver != true) { return }
+    if (this.mouseOver != true) {
+      console.log(this.mouseOver   )
+      return }
     console.log(this.mouseOver)
     this.outPutItem.emit(null)
   }

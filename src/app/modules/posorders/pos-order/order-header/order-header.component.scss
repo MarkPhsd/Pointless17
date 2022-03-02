@@ -1,21 +1,5 @@
-// .transaction-data {
-//   display: grid;
-//   grid-template-columns: 60px 1fr;
-//   // width: 300px;
-//   border-radius: 3px;
-//   margin: 5px 5px ;
-//   overflow-y: auto;
-//   overflow-x: hidden;
-//   font-size: larger;
-// }
 
-.transaction-data {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 300px;
-  border-radius: 3px;
-  margin: 5px 5px ;
-  overflow-y: auto;
-  overflow-x: hidden;
-  font-size: larger;
+
+h4 {
+  font-size: small !important;
 }

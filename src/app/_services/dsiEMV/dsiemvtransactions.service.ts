@@ -135,7 +135,7 @@ export interface PrintData {
 })
 export class DSIEMVTransactionsService {
 
-  private dsiResponse : any;
+  private dsiResponse         : any;
   private dsiEMVSettings      : DSIEMVSettings;
   private dsiEMVSubscriptions$: Subscription;
 
@@ -158,35 +158,33 @@ export class DSIEMVTransactionsService {
   //   wordApi.openWord();
   // }
 
- async testEMVReset(): Promise<CmdResponse> {
+ async pinPadReset(transaction: Transaction): Promise<CmdResponse> {
 
-     if  (this.dsiEMVSettings) {
-      let transaction = {} as Transaction;
-      transaction  = this.getPadSettings(transaction)
-      if (transaction) {
-        const tstream = {} as TStream;
-        tstream.Transaction = transaction
-        const builder = new XMLBuilder(null)
-        const xml = builder.build(tstream);
-        console.log(xml)
-        let response: any;
-        try {
-          const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-          response = await emvTransactions.PINPadReset(xml)
-        } catch (error) {
-          console.log('error', error)
-        }
-        if (response === 'reset failed') {
-          this.dsiResponse = 'Pin Pad Reset Failed'
-          return;
-        }
+    if (!transaction) { return }
 
-        if (response) {
-          const parser  = new XMLParser(null);
-          this.dsiResponse =  parser.parse(response)
-          return this.dsiResponse;
-        }
-      }
+    const tstream       = {} as TStream;
+    tstream.Transaction = transaction
+    const builder       = new XMLBuilder(null)
+    const xml           = builder.build(tstream);
+    console.log(xml)
+    let response        : any;
+
+    try {
+      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      response = await emvTransactions.PINPadReset(xml)
+    } catch (error) {
+      console.log('error', error)
+    }
+
+    if (response === 'reset failed') {
+      this.dsiResponse = 'Pin Pad Reset Failed'
+      return;
+    }
+
+    if (response) {
+      const parser  = new XMLParser(null);
+      this.dsiResponse =  parser.parse(response)
+      return this.dsiResponse;
     }
 
     const dsiResponse = {} as CmdResponse;
@@ -194,7 +192,6 @@ export class DSIEMVTransactionsService {
     dsiResponse.CmdResponse = cmdResponse;
     dsiResponse.CmdResponse.TextResponse
     return dsiResponse;
-
   }
 
   async mercuryPinPadTest(): Promise<any> {

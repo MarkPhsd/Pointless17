@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SchemaUpdateResults, SystemService } from 'src/app/_services/system/system.service';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormBuilder } from '@angular/forms';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
@@ -14,6 +14,8 @@ import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 })
 export class DatabaseSchemaComponent implements AfterViewInit {
 
+  updateSections = ['GetSyncDatabaseSchema', 'CreateAPIViews', 'CreateViews', 'CreateTablesA', 'CreateTablesB', 'createAPIReportviews']
+  schemaResults : any[] ;
   schema$:              Observable<SchemaUpdateResults[]>;
   schema:               SchemaUpdateResults[];
   completed:            string;
@@ -51,6 +53,7 @@ export class DatabaseSchemaComponent implements AfterViewInit {
       this.schema$ = this.systemService.getSyncDatabaseSchema(site)
       this.schema$.subscribe(data=> {
         this.schema = data
+        this.processingVisible   =  false
       })
     } catch (error) {
       console.log(error)
@@ -58,6 +61,27 @@ export class DatabaseSchemaComponent implements AfterViewInit {
 
   }
 
+  updateSchemArray() {
+    this.processingVisible = true
+    const site = this.sitesService.getAssignedSite();
+    let observables  = this.updateSections.map( section =>  this.systemService.updateDatabase(site, section) )
 
+    let source = forkJoin(observables);
+
+    source.subscribe(data => {
+      console.log(data)
+      this.schemaResults.push(data)
+    });
+
+  }
+
+  //   let carNumbers = [1, 2, 3];
+  // let observables = carNumbers.map(carNumber => this.carService.getCarByNumerator(carNumber));
+
+  // // forkJoin the array/collection of observables
+  // let source = Rx.Observable.forkJoin(observables);
+
+  // // subscribe and sort combined array/collection prior to additional processing
+  // source.subscribe(x => console.log(x.sort((a, b) => a - b));
 
 }

@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
-import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, Subscription } from 'rxjs';
 import { delay,  repeatWhen, switchMap,  } from 'rxjs/operators';
@@ -86,6 +86,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   infobuttonpanel = 'info-button-panel';
   gridspan3       = 'grid-span-3'
   gridRight       = 'grid-order-header';
+  user          : any;
+  _user: Subscription;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -100,6 +102,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.checkIfPaymentsMade()
       this.checkIfItemsPrinted()
     })
+
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+
+
   }
 
   initBarSubscription() {
@@ -122,8 +130,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private orderItemService  : POSOrderItemServiceService,
               private renderingService  : RenderingService,
               private settingService    : SettingsService,
-              private userAuthorization: UserAuthorizationService,
+              private authenticationService: AuthenticationService,
               private orderMethodService: OrderMethodsService,
+              private userAuthorization : UserAuthorizationService,
               // private printingService : Printing
               private el                : ElementRef) {
 
@@ -189,10 +198,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    console.log('isStaff', this.isStaff)
     if (this.isUser) {
       // this.showScheduleFilter = true;
       // this.showDateFilter = true;
     }
+
   }
 
 
@@ -286,7 +297,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   public toggleOpenOrderBar() {
-    this.router.navigate(["/currentorder/",{mainPanel:true}]);
+
+    // http://localhost:4200/pos-order-schedule
+    let schedule = 'currentorder'
+
+    if (this.isStaff) { schedule = '/currentorder/' }
+
+    this.router.navigate([ schedule , {mainPanel:true}]);
+
     this.openOrderBar = false
     this.toolbarUIService.updateOrderBar(this.openOrderBar)
     this.toolbarUIService.resetOrderBar(true)
@@ -307,12 +325,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.id) {
-      clearInterval(this.id);
-    }
-    if(this._order) { this._order.unsubscribe()
-    }
+    if (this.id) { clearInterval(this.id); }
+    if(this._order) { this._order.unsubscribe() }
     this.orderService.updateBottomSheetOpen(false)
+    if (this._user) { this._user.unsubscribe()}
   }
 
   suspendOrder() {
@@ -378,7 +394,21 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.toolbarUIService.updateOrderBar(this.openOrderBar)
       this.toolbarUIService.resetOrderBar(false)
     }
-    this.router.navigateByUrl('/pos-payment')
+
+    // http://localhost:4200/pos-order-schedule
+    let url = 'pos-order-schedule'
+    if (this.isStaff) {
+      url = 'pos-order-schedule'
+      this.router.navigateByUrl(url)
+    }
+
+    if (this.isStaff) {
+       url = 'pos-payment'
+       this.router.navigateByUrl(url)
+    }
+
+
+    this.toolbarUIService.updateOrderBar(false)
   }
 
   //loop the items

@@ -34,13 +34,15 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
 
   _barSize: Subscription
   barSize: boolean;
-
+  err: any;
   initSubscription() {
     this._user = this.authenticationService.user$.pipe(
       switchMap(
         user => {
+            console.log('iniit menu subscription')
             if (!user) {
               this.menus = [] as AccordionMenu[];
+              console.log('empty results')
               return EMPTY
             }
             return  this.menusService.getMainMenu(this.site)
@@ -57,6 +59,7 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
             if (item.active) {this.menus.push(item) } //= data
           })
         }, err => {
+          console.log(err)
           this.menus = [] as AccordionMenu[];
       }
     )
@@ -77,14 +80,20 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
+    console.log('result from ngOninit menu Compact ')
     const site  = this.siteService.getAssignedSite();
-    const result = await this.menusService.mainMenuExists(site).toPromise();
-    if (result) {
-      this.initSubscription()
-    }
+    this.menusService.mainMenuExists(site).subscribe( result => {
+      console.log(result)
+      if (result) {
+        this.initSubscription()
+      }
+    }, err => {
+      console.log('error getting main menu', err)
+      this.err = err
+    });
+
   }
 
-  // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.tinyMenu = false
@@ -92,7 +101,6 @@ export class MenuCompactComponent implements OnInit, OnDestroy {
       this.tinyMenu = true
     }
   }
-
 
   ngOnDestroy() {
     if (this._user) { this._user.unsubscribe() }

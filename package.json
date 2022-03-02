@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.0.92",
+  "version": "1.0.93",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -15,6 +15,7 @@
     "ng": "ng",
     "start with IP": "ng serve --configuration dev  --public-host --host=192.168.0.16 --port=4200",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
+    "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4200",
     "build": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all ",
     "buildNoSourceMap": "ng build   --configuration production --buildOptimizer=true --outputHashing=all",
     "buildHighMem": "node  --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build ",
@@ -124,6 +125,7 @@
     "ngx-pagination": "^5.1.1",
     "ngx-pipes": "^3.0.0",
     "ngx-quicklink": "^0.2.7",
+    "node-prune": "^1.0.2",
     "npm": "^7.24.2",
     "nth-check": "^2.0.1",
     "numeral": "^2.0.6",
@@ -141,6 +143,7 @@
     "tslib": "^2.1.0",
     "uninstall": "0.0.0",
     "webcam-easy": "^1.0.5",
+    "webpack-bundle-analyzer": "^4.5.0",
     "winreg": "^1.2.4",
     "zone.js": "~0.11.4"
   },

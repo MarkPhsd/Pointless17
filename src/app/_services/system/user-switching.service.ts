@@ -204,9 +204,7 @@ export class UserSwitchingService {
     user.authdata = window.btoa(user.username + ':' + user.token);
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
-
     this.authenticationService.updateUser(currentUser)
-    // console.log('update authentication service user', currentUser)
     return currentUser
   }
 

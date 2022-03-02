@@ -14,52 +14,50 @@ export class UserAuthorizationService {
     return JSON.parse(localStorage.getItem('user')) as IUser;
   }
 
-
   validateUser() {
     const user = this.currentUser()
-    if (user && user.username && user.roles)  {
-      return true
-    }
+    if (user && user.username && user.roles)  {  return true }
     return false
   }
 
   isUserAuthorized(requiredArray: string): boolean {
-    const user = JSON.parse(localStorage.getItem('user')) as IUser;
+    const user = this.currentUser();
 
-    if (!user) { return false }
+    if (!user.roles)  { return false}
 
-    try {
-      if (!user.id) {return false}
-    } catch (error) {
-      return false;
-    }
+    if (!this.validateUser) { return false }
+    if (!requiredArray)     { return false }
+    if (!user) { return false}
 
     const currentRole = user.roles;
-    if (!requiredArray) {return false;}
-
-    if (!JSON.stringify(currentRole == '') || currentRole == null) {return false}
-
-    if (currentRole && requiredArray) {
-      requiredArray = requiredArray.toLowerCase();
-      let result: boolean;
-      const rolesArray = requiredArray.split(',')
-      rolesArray.forEach( data => {
-          if (data === currentRole){
-            result = true
-          }
-          if (data === 'anonymous') {
-            result = true
-          }
+    let result = false;
+    requiredArray    = requiredArray.toLowerCase();
+    const rolesArray = requiredArray.split(',')
+    rolesArray.forEach( data => {
+      if (data === currentRole) {
+          console.log('isAuthorized', true, data)
+          result = true;
         }
-      )
-      return result
-    }
-    return false;
+      }
+    )
 
+    return result
   }
 
   isCurrentUserStaff(): boolean {
     return  this.isUserAuthorized('admin, manager, employee')
   }
 
+  get isStaff(): boolean {
+    return  this.isUserAuthorized('admin, manager, employee')
+  }
+  get isUser(): boolean {
+    return  this.isUserAuthorized('user')
+  }
+  get isManagement(): boolean {
+    return  this.isUserAuthorized('admin, manager')
+  }
+  get isAdmin(): boolean {
+    return  this.isUserAuthorized('admin')
+  }
 }

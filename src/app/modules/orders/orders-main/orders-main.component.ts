@@ -5,8 +5,10 @@ import { OrderFilterPanelComponent } from '../order-filter-panel/order-filter-pa
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { OrdersService } from 'src/app/_services';
+import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { Subscription } from 'rxjs';
+import { IUser } from 'src/app/_interfaces';
 
 @Component({
   selector: 'app-orders-main',
@@ -14,7 +16,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   styleUrls: ['./orders-main.component.scss'],
 })
 
-export class OrdersMainComponent  {
+export class OrdersMainComponent implements OnInit, OnDestroy {
 
   smallDevice  : boolean;
   viewType     = 1;
@@ -24,24 +26,42 @@ export class OrdersMainComponent  {
   listHeight = '84vh'
 
   isMenuOpen = false;
+  _user: Subscription;
+  user: IUser;
 
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
     private siteService      : SitesService,
-    private userAuthorization: UserAuthorizationService,
+    public userAuthorization: UserAuthorizationService,
+    private authenticationService: AuthenticationService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
   }
 
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    this._user = this.authenticationService.user$.subscribe(data => {
+      this.user = data;
+    })
+
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._user) {this._user.unsubscribe()}
+
+  }
+
   initAuthorization() {
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
-    this.isUser  = this.userAuthorization.isUserAuthorized('user');
-    if (!this.isStaff) {
-      this.viewType = 2;
-    }
+    this.isAuthorized = this.userAuthorization.isManagement;
+    this.isStaff      = this.userAuthorization.isStaff;
+    this.isUser       = this.userAuthorization.isUser;
+    if (!this.isStaff) { this.viewType = 2; }
   }
 
   @HostListener("window:resize", [])

@@ -165,23 +165,25 @@
         </payment-report>
       </div>
 
-      <div
-            class="section-gap"
-            fxLayout="row"
-            fxLayoutAlign="space-between center"
-            flLayoutGap="20px">
-          <mat-card fxFlex="100">
-              <app-widget-card [dateFrom] ="iBalanceSheet.startTime"
-                               [dateTo]   ="iBalanceSheet.startTime"
-                               [zrunID]   ="zrunID"
-                               [site]     ='localSite'
-                               groupBy    ="orderemployeecount"
-                               chartName  ="Employee Order Count"
-                ></app-widget-card>
-          </mat-card>
-      </div>
 
   </div>
+
+  <div
+      class="section-gap"
+      fxLayout="row"
+      fxLayoutAlign="space-between center"
+      flLayoutGap="20px">
+    <mat-card class="mat-card" fxFlex="100">
+        <app-widget-card [dateFrom] ="iBalanceSheet.startTime"
+                        [dateTo]   ="iBalanceSheet.startTime"
+                        [zrunID]   ="zrunID"
+                        [site]     ='localSite'
+                        groupBy    ="orderemployeecount"
+                        chartName  ="Employee Order Count"
+          ></app-widget-card>
+    </mat-card>
+  </div>
+
 </div>
   <!-- <div class ="container">
 

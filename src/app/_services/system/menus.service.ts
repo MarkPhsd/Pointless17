@@ -243,8 +243,6 @@ export class MenusService {
         return of(null)
       }
 
-      // console.log(`getMenu user menuName: ${menuName}`, user)
-
       const controller = "/MenuGroups/"
 
       const endPoint = 'GetMenuGroupByName';
@@ -303,7 +301,6 @@ export class MenusService {
 
     const url = { url: uri, cacheMins: 0}
 
-    // return this.http.get<any>(url)
     return this.http.get<ResultCheck>(uri);
 
   }

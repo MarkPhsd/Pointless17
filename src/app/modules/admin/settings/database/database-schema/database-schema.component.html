@@ -1,7 +1,8 @@
 <div *ngIf="processingVisible">
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </div>
-<div class="spinner">
+
+<div>
   <button mat-raised-button
           color="primary"
           (click)="updateSchema()">
@@ -9,9 +10,6 @@
   </button>
 </div>
 
-<br>
-<br>
-<br>
 <div class="results">
 
   <div *ngIf="schema$">
@@ -27,6 +25,7 @@
       <div>
       <br>
     {{databaseMessage}}
+    {{schemaResults  | json }}
     </div>
   </div>
 

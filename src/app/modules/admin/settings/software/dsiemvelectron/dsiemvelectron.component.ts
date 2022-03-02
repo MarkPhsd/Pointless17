@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { DSIEMVTransactionsService } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { DSIEMVTransactionsService, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -20,6 +20,23 @@ export class DSIEMVElectronComponent implements OnInit {
   responseMessage: string;
   isElectron: boolean
   pathForm  : FormGroup;
+
+  // "<TStream>" & vbCrLf &
+  // "    <Admin>" & vbCrLf &
+  // "        <HostOrIP>dsl1.dsipscs.com</HostOrIP>" & vbCrLf &
+  // "        <IpPort>9000</IpPort>" & vbCrLf &
+  // "        <MerchantID>700000012262</MerchantID>" & vbCrLf &
+  // "        <TerminalID>001</TerminalID>" & vbCrLf &
+  // "        <OperatorID>TEST</OperatorID>" & vbCrLf &
+  // "        <UserTrace>Dev1</UserTrace>" & vbCrLf &
+  // "        <TranCode>EMVParamDownload</TranCode>" & vbCrLf &
+  // "        <SecureDevice>EMV_VX805_PAYMENTECH</SecureDevice>" & vbCrLf &
+  // "        <ComPort>1</ComPort>" & vbCrLf &
+  // "        <SequenceNo>0010010010</SequenceNo>" & vbCrLf &
+  // "    </Admin>" & vbCrLf &
+  // "</TStream>"
+
+
 
   pathName = 'default'
   get f() {return this.pathForm.controls}
@@ -39,10 +56,48 @@ export class DSIEMVElectronComponent implements OnInit {
         this.initForm(data);
       }
     });
-
     this.pathForm = this.fb.group({
       pathName: ['']
     })
+  }
+
+
+
+  initParamDownload_Transaction() {
+    const transaction = {} as Transaction
+    transaction.MerchantID    ='700000012262';
+    transaction.TerminalID    ='001';
+    transaction.OperatorID    ='TEST';
+    transaction.IpPort        ='9000';
+    transaction.UserTrace     ='Dev1';
+    transaction.TranCode      ='EMVParamDownload';
+    transaction.SecureDevice  ='EMV_VX805_PAYMENTECH';
+    transaction.ComPort       ='6';
+    return transaction;
+  }
+
+  initPinPadReset_Transaction() {
+    const transaction = {} as Transaction
+    transaction.MerchantID    ='700000012262';
+    transaction.TerminalID    ='001';
+    transaction.OperatorID    ='TEST';
+    transaction.IpPort        ='9000';
+    transaction.UserTrace     ='Dev1';
+    transaction.TranCode      ='EMVPadReset';
+    transaction.SecureDevice  ='EMV_VX805_PAYMENTECH';
+    transaction.ComPort       ='6';
+    transaction.SequenceNo    ='0010010010'
+    return transaction;
+  }
+
+  initPinPadResetForm() {
+    const transaction = this.initPinPadReset_Transaction();
+    this.inputForm.patchValue(transaction);
+  }
+
+  initParamDownloadResetForm() {
+    const transaction = this.initParamDownload_Transaction();
+    this.inputForm.patchValue(transaction);
   }
 
   async initForm(setting: ISetting) {
@@ -56,10 +111,11 @@ export class DSIEMVElectronComponent implements OnInit {
   }
 
   async pinPadReset(){
-   const response = await this.dsiEMVService.testEMVReset();
-   this.responseMessage = 'failed'
-   if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
-    this.responseMessage = response.CmdResponse.TextResponse
+    const transaction = this.inputForm.value as Transaction;
+    const response    = await this.dsiEMVService.pinPadReset(transaction);
+    this.responseMessage = 'failed'
+    if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
+      this.responseMessage = response.CmdResponse.TextResponse
    }
   }
 
@@ -69,8 +125,6 @@ export class DSIEMVElectronComponent implements OnInit {
     if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
      this.responseMessage = response.CmdResponse.TextResponse
     }
-
-
    }
 
   async  dollarSaleTest(){
