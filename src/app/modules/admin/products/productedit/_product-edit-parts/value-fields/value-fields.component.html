@@ -1,8 +1,10 @@
 <div *ngIf="inputForm">
   <div [formGroup]="inputForm">
+
     <mat-form-field
           [class]="fieldsClass"
           appearance="outline">
+
       <mat-label><ng-content></ng-content></mat-label>
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput
@@ -18,6 +20,7 @@
         </div>
 
     </mat-form-field>
+
   </div>
 
   <div [formGroup]="inputForm"
@@ -26,7 +29,7 @@
         [name]="fieldName"
         class="mat-label"
         [formControlName]="fieldName">
-        <mat-label><ng-content></ng-content></mat-label>
+        <!-- <mat-label><ng-content></ng-content></mat-label> -->
     </mat-slide-toggle>
   </div>
 
