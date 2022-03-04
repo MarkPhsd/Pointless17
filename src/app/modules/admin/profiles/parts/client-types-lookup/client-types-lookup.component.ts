@@ -11,7 +11,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   templateUrl: './client-types-lookup.component.html',
   styleUrls: ['./client-types-lookup.component.scss']
 })
-export class ClientTypesLookupComponent {
+export class ClientTypesLookupComponent implements OnInit {
 
   @Input() clientTypeID: number;
   @Input() clientTypes$: Observable<clientType[]>;
@@ -23,7 +23,11 @@ export class ClientTypesLookupComponent {
   constructor(   private siteService: SitesService,
                  private clientTypeService: ClientTypeService,
                  private userAuthorization: UserAuthorizationService) {
+  }
 
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
     const user =  this.userAuthorization.currentUser()
     const site = this.siteService.getAssignedSite();
     this.clientTypes$ = this.clientTypeService.getClientTypes(site);
@@ -31,12 +35,12 @@ export class ClientTypesLookupComponent {
       if (data) {
         if (user?.roles === 'admin' || user?.roles === 'manager') {
           this.clientTypes = data
+          console.log( 'ClientTypesLookupComponent', this.clientTypes)
           return
         }
         this.clientTypes = data.filter(  data => data.allowStaffUse ==  true)
       }
     })
-
   }
 
 }

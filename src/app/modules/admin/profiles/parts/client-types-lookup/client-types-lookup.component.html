@@ -8,19 +8,11 @@
                   formControlName = "clientTypeID"
                 >
 
-          <div *ngIf="user?.roles === 'admin' || user?.roles === 'manager'">
-            <mat-option *ngFor="let item of clientTypes"
-                        [value]="item.id">
-                {{item.name}}
-            </mat-option>
-          </div>
+        <mat-option *ngFor="let item of clientTypes"
+                    [value]="item.id">
+            {{item.name}}
+        </mat-option>
 
-          <div *ngIf="user && user.roles === 'employee'">
-            <mat-option *ngFor="let item of clientTypes"
-                        [value]="item.id">
-                {{item.name}}
-            </mat-option>
-          </div>
       </mat-select>
     </mat-form-field>
   </div>

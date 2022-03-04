@@ -90,7 +90,8 @@
       </div>
     </div>
 
-    <div class="order-items" *ngIf="(!smallDevice && mainPanel)
+    <div     class="order-items"
+              *ngIf="(!smallDevice && mainPanel)
                   || (!mainPanel && smallDevice)
                   || (!mainPanel && !smallDevice)">
       <pos-order-items
