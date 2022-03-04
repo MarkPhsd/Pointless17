@@ -19,10 +19,10 @@ export class SummarycardComponent implements OnInit {
   @Input() site: ISite;
 
   //for html component
-  orderTotal: number = 0;
-  count: number =0
-  average: number = 0;
-  averageDollar: number  = 0;;
+  orderTotal     = 0;
+  count          = 0
+  average        = 0;
+  averageDollar  = 0;;
 
   sales$: Observable<ISalesReportingOrdersSummary[]>;
 

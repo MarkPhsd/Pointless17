@@ -162,6 +162,7 @@ export interface ClientType {
   limitConcentrate:  number;
   limitExtract:      number;
   limitConcentrates: number;
+  allowStaffUse    : boolean;
 }
 
 

@@ -1,5 +1,5 @@
 <div *ngIf="inputForm" [formGroup]="inputForm">
-  <div *ngIf="(clientTypes$ | async) as list" >
+  <div *ngIf="clientTypes" >
     <mat-form-field class="fields" appearance="outline">
       <mat-label>Client Type</mat-label>
       <mat-select
@@ -7,12 +7,20 @@
                   name            = "clientTypeID"
                   formControlName = "clientTypeID"
                 >
-          <mat-option *ngFor="let item of list | myfilter:filter;"
-                      [value]="item.id">
 
-              {{item.name}}
+          <div *ngIf="user?.roles === 'admin' || user?.roles === 'manager'">
+            <mat-option *ngFor="let item of clientTypes"
+                        [value]="item.id">
+                {{item.name}}
+            </mat-option>
+          </div>
 
-          </mat-option>
+          <div *ngIf="user && user.roles === 'employee'">
+            <mat-option *ngFor="let item of clientTypes"
+                        [value]="item.id">
+                {{item.name}}
+            </mat-option>
+          </div>
       </mat-select>
     </mat-form-field>
   </div>

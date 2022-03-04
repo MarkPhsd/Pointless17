@@ -5,7 +5,6 @@ import { clientType } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { Pipe, PipeTransform } from '@angular/core';
 
 @Component({
   selector: 'app-client-types-lookup',
@@ -18,22 +17,26 @@ export class ClientTypesLookupComponent {
   @Input() clientTypes$: Observable<clientType[]>;
   @Input() inputForm:    FormGroup;
 
-  filter : any;
+  myFilter   : any;
+  user       : any;
+  clientTypes: clientType[];
   constructor(   private siteService: SitesService,
                  private clientTypeService: ClientTypeService,
                  private userAuthorization: UserAuthorizationService) {
 
+    const user =  this.userAuthorization.currentUser()
     const site = this.siteService.getAssignedSite();
     this.clientTypes$ = this.clientTypeService.getClientTypes(site);
-
-    const user =  this.userAuthorization.currentUser()
-
-    if (user && user.roles) {
-      if (user.roles === 'employee') {
-        this.filter = {AllowStaffUse: true}
+    this.clientTypes$.subscribe(data => {
+      if (data) {
+        if (user?.roles === 'admin' || user?.roles === 'manager') {
+          this.clientTypes = data
+          return
+        }
+        this.clientTypes = data.filter(  data => data.allowStaffUse ==  true)
       }
+    })
 
-    }
   }
 
 }
