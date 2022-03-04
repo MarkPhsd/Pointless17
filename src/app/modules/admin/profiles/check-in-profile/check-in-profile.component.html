@@ -118,16 +118,10 @@
                      (swiperight)="swipe(1, $event.type)">
               <div  class="grid-flow">
                 <div>
-
-
-                  <!-- <div> -->
-
                     <app-profile-roles
                       [isAuthorized]="isAuthorized"
                       [inputForm] ="inputForm">
                     </app-profile-roles>
-
-                  <!-- </div> -->
                   <div class="form-field"
                        *ngIf="isAuthorized && inputForm">
                     <employee-lookup

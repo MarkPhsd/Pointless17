@@ -7,8 +7,11 @@
                   name            = "clientTypeID"
                   formControlName = "clientTypeID"
                 >
-          <mat-option *ngFor="let item of list" [value]="item.id">
-            {{item.name}}
+          <mat-option *ngFor="let item of list | myfilter:filter;"
+                      [value]="item.id">
+
+              {{item.name}}
+
           </mat-option>
       </mat-select>
     </mat-form-field>
