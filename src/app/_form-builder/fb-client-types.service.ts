@@ -31,6 +31,7 @@ export class FbClientTypesService {
             limitConcentrate:  [''], //
             limitExtract:      [''], //
             limitConcentrates: [''], //
+            allowStaffUse: [''], //
           }
         )
         return fb

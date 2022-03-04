@@ -91,6 +91,7 @@ export interface clientType {
   limitConcentrate:  number;
   limitExtract:      number;
   limitConcentrates: number;
+  allowStaffUse:    boolean;
 }
 
 export interface employee {
