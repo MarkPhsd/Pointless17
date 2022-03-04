@@ -1,17 +1,27 @@
 @import "/src/mixins.scss";
 
-mat-card {
-  width     : 100%;
-  min-height: 75px;
-  overflow-y: auto;
-  overflow-x: hidden;
+// mat-card {
+//   width     : 100%;
+//   overflow-y: auto;
+//   overflow-x: hidden;
+//   padding-top   : 1px !important;
+//   padding-bottom: 1px !important;
 
-  @include for-phone-only  {
-    width     : 100%;
-    min-width : 335px;
-    // max-width : 335px;
-    min-height: 75px;
-    overflow-y: auto;
-    overflow-x: hidden;
-  }
+//   @include for-phone-only  {
+//     width     : 100%;
+//     min-width : 335px;
+//     min-height: 75px;
+//     overflow-y: auto;
+//     overflow-x: hidden;
+//   }
+// }
+
+// mat-card-content {
+//   padding-top   : 0px !important;
+//   padding-bottom: 0px !important;
+// }
+
+.bars {
+  margin-left: 3px;
+  margin-right: 3px;
 }

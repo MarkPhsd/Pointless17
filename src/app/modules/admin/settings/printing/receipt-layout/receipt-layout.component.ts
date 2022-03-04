@@ -69,7 +69,7 @@ export class ReceiptLayoutComponent implements OnInit {
           this.payments   = this.order.posPayments
           this.orders=[]
           if (this.order) { this.orders.push(this.order)}
-
+          console.log('order', this.order)
           const datepipe: DatePipe = new DatePipe('en-US')
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
           if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
@@ -198,13 +198,14 @@ export class ReceiptLayoutComponent implements OnInit {
   async applyStyles() {
     const site                = this.siteService.getAssignedSite();
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-    const receiptStyles       = await receiptStyle$.pipe().toPromise()
-    if (receiptStyles) {
-      const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
-      const style = document.createElement('style');
-      style.innerHTML = styles;
-      document.head.appendChild(style);
-    }
+    receiptStyle$.subscribe( receiptStyles => {
+      if (receiptStyles) {
+        const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
+        const style = document.createElement('style');
+        style.innerHTML = styles;
+        document.head.appendChild(style);
+      }}
+    )
   }
 }
 

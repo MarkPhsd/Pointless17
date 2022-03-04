@@ -7,7 +7,8 @@
 
   <mat-card-content>
     <div class="grid-items">
-      <div class="grid-item-span-row" *ngIf="orderItem">
+      <div class="grid-item-span-row"
+           *ngIf="orderItem">
         <span >
           {{index+1}}:
         </span>
@@ -20,10 +21,10 @@
         <span  *ngIf="quantity">
           {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
         </span>
-        <span  *ngIf="mainPanel && orderItem.serialCode">
+        <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode">
           {{ orderItem.serialCode }}
         </span>
-        <span  *ngIf="mainPanel
+        <span  *ngIf="( mainPanel || wideBar )
                       && orderItem
                       && orderItem.modifierNote
                       && (orderItem.modifierNote != orderItem.serialCode)
@@ -35,7 +36,7 @@
         </span>
       </div>
 
-      <span  *ngIf="mainPanel"
+      <span  *ngIf="( mainPanel || wideBar)"
             >
 
         <span *ngIf="(quantity && !orderItem.voidReason)">
@@ -95,7 +96,7 @@
       <div>
         <span *ngIf="orderItem.printed">
           <mat-icon  color="warn" >print</mat-icon>
-          <span  *ngIf="mainPanel || bottomSheetOpen">
+          <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
             {{orderItem.printed | date: 'shortTime'}}
           </span>
         </span>
@@ -104,7 +105,7 @@
           <span  class="">
             <mat-icon   color="warn"  >lock</mat-icon>
           </span>
-          <span  *ngIf="mainPanel || bottomSheetOpen">
+          <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
             Item voided:  {{ orderItem.voidReason }}
           </span>
         </div>

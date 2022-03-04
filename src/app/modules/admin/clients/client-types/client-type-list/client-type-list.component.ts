@@ -83,11 +83,11 @@ islastpage              = 0;
 
 //AgGrid
 //This is for the filter Section/
-searchForm:        FormGroup;
-inputForm        : FormGroup;
+searchForm      : FormGroup;
+inputForm       : FormGroup;
 selected        : any[];
 selectedRows    : any;
-agtheme = 'ag-theme-material';
+agtheme         = 'ag-theme-material';
 urlPath:        string;
 
 constructor(
@@ -105,11 +105,10 @@ constructor(
 async ngOnInit() {
   const site          = this.siteService.getAssignedSite();
   this.rowSelection   = 'multiple'
+  this.initAgGrid(this.pageSize);
   this.urlPath        = await this.awsService.awsBucketURL();
   this.clientTypes$   = this.clientTypeService.getClientTypes(site);
-
   this.initForm();
-  this.initAgGrid(this.pageSize);
 }
 
 
@@ -140,6 +139,8 @@ ngAfterViewInit() {
   //standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
   initAgGrid(pageSize: number) {
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+
     this.frameworkComponents = {
       btnCellRenderer: ButtonRendererComponent
     };
@@ -232,7 +233,6 @@ ngAfterViewInit() {
                   },
     ]
 
-    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
 
   }
 
@@ -281,13 +281,6 @@ ngAfterViewInit() {
       console.log(params.startRow, params.endRow)
       items$.subscribe(data =>
         {
-          console.log('data', data)
-            // const resp =  data.paging
-            // this.isfirstpage   = resp.isFirstPage
-            // this.islastpage    = resp.isFirstPage
-            // this.currentPage   = resp.currentPage
-            // this.numberOfPages = resp.pageCount
-            // this.recordCount   = resp.recordCount
             this.isfirstpage = 1
             this.islastpage = 1
             this.currentPage = 1
@@ -295,7 +288,6 @@ ngAfterViewInit() {
             this.recordCount = 100;
             params.successCallback(data)
             this.rowData = data
-
           }, err => {
             console.log(err)
           }

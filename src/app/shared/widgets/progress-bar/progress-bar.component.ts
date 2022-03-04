@@ -10,7 +10,8 @@ export class ProgressBarComponent implements OnInit  {
   @Input() value: number;
   @Input() percentage: number;
   @Input() ratio = 100;
-  percentageValue: number;
+  @Input() uom  = 'grams'
+  percentageValue = 0;
 
   constructor () {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -18,7 +19,10 @@ export class ProgressBarComponent implements OnInit  {
     if (this.ratio = 0) {
       this.ratio = 28;
     }
-    this.percentageValue = parseInt((this.value / this.ratio).toFixed(0))
+
+    if (!this.value) { this.value = 0 }
+    this.percentageValue = parseInt((this.value / this.ratio).toFixed(1))
+
   }
 
   ngOnInit(): void {

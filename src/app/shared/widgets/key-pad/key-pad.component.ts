@@ -32,9 +32,10 @@ export class KeyPadComponent implements OnInit, OnChanges {
   inputType               = 'text';
   showPassword            : boolean;
   showDoubleZero          = false // for faster entry.
-
+  cashValue: any;
   @Input() numberbuttons  = 'number-buttons button-sized-1';
   @Input() alternateClass = 'grid-keypad'
+
 
   constructor(  private fb: FormBuilder) {
     // this.initForm();
@@ -121,9 +122,16 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   returnEnterPress(){
-    this.refreshDisplay()
 
+    if (!this.value && this.cashValue) {
+      console.log('emit', this.cashValue)
+      this.outPutReturnEnter.emit(this.cashValue)
+      return;
+    }
+
+    this.refreshDisplay()
     this.outPutReturnEnter.emit(this.formatted)
+
   }
 
   returnEnter(value) {
@@ -146,10 +154,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   refreshDisplay() {
-    if (!this.value) {
-      this.inputForm.controls[this.fieldName].setValue('')
-      return
-    }
 
     if (this.value)
     {
@@ -219,8 +223,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
 }
-
-
 
 // import { Component, OnInit,OnChanges, EventEmitter, Output, Input, ElementRef, ViewChild, ChangeDetectionStrategy, SimpleChange } from '@angular/core';
 // import { FormBuilder, FormGroup } from '@angular/forms';

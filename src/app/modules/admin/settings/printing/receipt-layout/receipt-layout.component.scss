@@ -61,3 +61,19 @@ mat-raised-button, button {
 	grid-template-rows:  auto;
 	gap: 5px;
 }
+
+.receipt-sections {
+  display: grid;
+	grid-template-columns: auto;
+	grid-template-rows:  auto;
+	gap: 25px;
+}
+
+.section-item {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.footer-text {
+  text-align: center;
+}

@@ -66,7 +66,6 @@ export class PosPaymentComponent implements OnInit {
       switchMap( data => {
       if (data) {
         this.order = data
-        console.log('refresh order is paid')
         this.refreshIsOrderPaid();
       }
       if (data && data.serviceTypeID) {
@@ -167,24 +166,39 @@ export class PosPaymentComponent implements OnInit {
   }
 
   updateOrderSchedule(serviceTypeID: number){
-
+    //if app is in place, then there is a default order.
+    //if there is no service type or the plateform is an app then it will go to schedule.
+    //otherwise it will accept the service type assigned.
     const site = this.sitesService.getAssignedSite();
-    this.settingService.getSettingByNameCached(site,'DefaultOrderType').pipe(
-      switchMap(data => {
-      if (data) {
-        if (+data.value != this.order.serviceTypeID) {
-          return this.serviceTypeService.getType(site, +data.value)
-        }
-        if (this.platFormService.isApp() ) {
-          return this.serviceTypeService.getType(site, +data.value)
+    if (!serviceTypeID || this.platFormService.isApp()) {
+
+      this.settingService.getSettingByNameCached(site, 'DefaultOrderType').pipe(
+        switchMap(data => {
+          console.log('update order scheduleddata', data)
+        if (data) {
+          if (+data.value != this.order.serviceTypeID) {
+            return this.serviceTypeService.getType(site, +data.value)
+          }
+          if (this.platFormService.isApp() ) {
+            return this.serviceTypeService.getType(site, +data.value)
+          }
+          return of(null)
         }
         return of(null)
-      }
-      return of(null)
-    })).subscribe(result => {
-        if (!result) { return }
-        this.serviceType = result;
-        this.processPaymentReady(result)
+      })).subscribe(result => {
+          console.log('result', result)
+          if (!result) { return }
+          this.serviceType = result;
+          this.processPaymentReady(result)
+        }
+      )
+    }
+
+    this.serviceTypeService.getType(site, serviceTypeID).subscribe(data => {
+        console.log('result', data)
+        if (!data) { return }
+        this.serviceType = data;
+        this.processPaymentReady(data)
       }
     )
 
@@ -224,6 +238,17 @@ export class PosPaymentComponent implements OnInit {
   formatValueEntered(event) {
     if (event) {
       if (event == 0) {
+        //then check the form, it could be manually entered.
+        if (this.paymentAmountForm) {
+          console.log('payment form initiated')
+          console.log(this.paymentAmountForm.value)
+          const value =  this.paymentAmountForm.controls['itemName'].value
+          console.log(value)
+          if (value && +value != 0) { event = +value}
+        }
+      }
+
+      if (event == 0) {
         this.notify(`Check amount entered.`, 'Try Again',3000)
         return
       }
@@ -236,11 +261,16 @@ export class PosPaymentComponent implements OnInit {
   async applyPaymentAmount(event) {
     if (!event) {  this.initPaymentForm(); return }
     if (this.order &&  this.paymentMethod) {
+
       const amount = this.formatValueEntered(event)
+
       const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
                                  this.paymentMethod.isCash,
                                  this.order.balanceRemaining)
+
+
       if (!isValidAmount) { return }
+
       await this.processGetResults(amount, this.posPayment)
     }
     //if order or payment method don't exist, we have a bigger problem, but we can ignore for now.
@@ -409,7 +439,7 @@ export class PosPaymentComponent implements OnInit {
   }
 
   applyBalance() {
-    this.applyPaymentAmount(this.order.balanceRemaining *100)
+    this.applyPaymentAmount(this.order.balanceRemaining)
   }
 
   async processCheckPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPOSPayment> {

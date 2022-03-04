@@ -1,4 +1,4 @@
-
+<!--
   <div class="grid-container">
     <div class="grid-item headingstext">
       Tier
@@ -36,3 +36,55 @@
     <mat-divider></mat-divider>
 
   </span>
+  <mat-card> -->
+
+   <mat-card>
+     <mat-card-content>
+
+      <div class="grid">
+        <div class="grid-title">
+          Tier
+        </div >
+
+        <div class="grid-title">
+          Gram
+        </div>
+
+        <div  class="grid-title">
+          8th
+        </div>
+
+        <div  class="grid-title">
+          Quarter
+        </div>
+
+        <div  class="grid-title">
+          Half
+        </div>
+
+        <div  class="grid-title">
+          Ounce
+        </div>
+      </div>
+
+      <div *ngFor="let tier of tvPriceMenuTiers$ | async">
+        <div class="grid" >
+          <div class="grid-title tiername">
+            {{tier.name}}
+          </div>
+          <div *ngFor="let item of tier.tvMenuPriceTierItems">
+            <div class="prices">
+                {{ item?.currentPrice | currency }}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #loading >
+    <h2>...loading.</h2>
+    <mat-spinner></mat-spinner>
+  </ng-template>
+

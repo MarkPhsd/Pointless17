@@ -28,12 +28,12 @@
 
   <mat-drawer-content>
 
-      <div class="animations"
+      <div class="animations"   *ngIf="advertisingOutlet"
             [@routeAnimations]="prepareAdvertisingRoute(outlet)" >
           <router-outlet #outlet="outlet"></router-outlet>
       </div>
 
-      <div class="animations"
+      <div class="animations"  *ngIf="messageOutlet"
           [@routeAnimations]="prepareMessageRoute(outlet)" >
           <router-outlet #outlet="outlet"></router-outlet>
       </div>
@@ -50,10 +50,10 @@
   </mat-drawer-content>
 
   <mat-drawer
-              position="end"
-              [mode]="sidebarMode"
-              [opened]="orderBarOpen"
-              class="mat-orderBar" >
+              position  ="end"
+              [mode]    ="sidebarMode"
+              [opened]  ="orderBarOpen"
+              [class]   ="'mat-orderBar-wide'" >
     <app-order-bar>
     </app-order-bar>
   </mat-drawer>

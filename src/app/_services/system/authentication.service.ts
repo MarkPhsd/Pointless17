@@ -67,7 +67,6 @@ export class AuthenticationService {
       if (!this._user || !this._user.value) {
         const item = localStorage.getItem('user');
         if (!item) {
-          //will return undefined or null;
           return this._user.value;
         }
         if (item) {
@@ -100,12 +99,21 @@ export class AuthenticationService {
       this.toolbarUIService.updateToolBarSideBar(false)
       if (!this.platFormservice.isApp()) {
         if (this.appInitService.useAppGate) {
-          this.router.navigate(['/appgate']);
+          try {
+            this.router.navigate(['/appgate']);
+          } catch (error) {
+            console.log('log out error', error)
+          }
           return
         }
       }
 
-      this.router.navigate(['/login']);
+      try {
+        this.router.navigate(['/login']);
+      } catch (error) {
+        console.log('log out error', error)
+      }
+
       this.clearSubscriptions()
     }
 

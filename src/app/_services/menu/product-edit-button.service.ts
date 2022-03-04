@@ -412,6 +412,29 @@ export class ProductEditButtonService {
     )
   }
 
+  openVoidOrderDialog(order: IPOSOrder ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+      if (order) {
+
+        let itemWithAction      = {}  as ItemWithAction;
+        itemWithAction.action   = 1;
+        itemWithAction.id       = order.id
+        const id = order.id;
+        dialogRef = this.dialog.open(AdjustItemComponent,
+          { width:        '450px',
+            minWidth:     '450px',
+            height:       '600px',
+            minHeight:    '600px',
+            data : itemWithAction
+        })
+
+      }
+
+  }
 
   openVoidItemDialog(posOrderItem: PosOrderItem ) {
     let dialogRef: any;
@@ -425,6 +448,7 @@ export class ProductEditButtonService {
         itemWithAction.action   = 1;
         itemWithAction.posItem  = posOrderItem;
         itemWithAction.id       = posOrderItem.id
+        itemWithAction.typeOfAction = 'VoidOrder'
         const id = posOrderItem.id;
         dialogRef = this.dialog.open(AdjustItemComponent,
           { width:        '450px',

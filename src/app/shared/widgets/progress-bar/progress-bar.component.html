@@ -1,23 +1,9 @@
-
-  <div class="grid">
-    <div class="item">
-        <ng-content></ng-content>
-    </div>
-    <div class="item float">
-      {{value}}
-      <div *ngIf="percentage == 100"></div>
-    </div>
-    <div class="item">
-      <div class="bar">
-        <mat-progress-bar aria-label="progress for current page"
-                          mode="determinate"
-                          color="warn"
-                          [value]="percentage">
-        </mat-progress-bar>
-      </div>
-    </div>
-
+  <mat-progress-bar color="'warn"
+                      mode="determinate"
+                      [value]="percentage"
+                      aria-label="Rating"
+                    >
+  </mat-progress-bar>
+  <div class="info">
+     {{ value }} of {{uom}} {{ratio}} reached : {{percentage }}%
   </div>
-
-
-

@@ -32,6 +32,7 @@ export class CompanyEditComponent implements OnInit {
   public selectedIndex: number;
   isAuthorized  : boolean ;
   isStaff       : boolean ;
+  receiptHeader : string;
 
   minumumAllowedDateForPurchases: Date
   constructor(

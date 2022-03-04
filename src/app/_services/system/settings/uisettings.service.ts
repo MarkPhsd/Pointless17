@@ -87,6 +87,8 @@ export interface UIHomePageSettings {
   tinyLogo            : string;
   logoHomePage        : string;  //  : [config.logoHomePage],
   displayCompanyName  : string;  //     : [config.displayCompanyName],
+
+  wideOrderBar        : boolean;
 }
 
 @Injectable({
@@ -100,6 +102,7 @@ export class UISettingsService {
 
   private _homePageSetting         = new BehaviorSubject<UIHomePageSettings>(null);
   public  homePageSetting$        = this._homePageSetting.asObservable();
+  private uihomePageSetting         : UIHomePageSettings
 
   private _DSIEMVSettings         = new BehaviorSubject<DSIEMVSettings>(null);
   public  dsiEMVSettings$        = this._DSIEMVSettings.asObservable();
@@ -110,6 +113,7 @@ export class UISettingsService {
 
   updateHomePageSetting(ui: UIHomePageSettings) {
     this._homePageSetting.next(ui);
+    this.uihomePageSetting = ui;
   }
 
   updateUISubscription(ui: TransactionUISettings) {
@@ -191,8 +195,12 @@ export class UISettingsService {
     return config
   }
 
+  get homePageSetting(): UIHomePageSettings {
+    if (this.uihomePageSetting) { return  this.uihomePageSetting }
+  }
   // UITransactionSetting
  async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
+
     const setting = await this.getSetting(name).toPromise();
     const config = JSON.parse(setting.text) as UIHomePageSettings
     this.updateHomePageSetting(config);
@@ -262,6 +270,7 @@ export class UISettingsService {
       logoHomePage          : [],
       displayCompanyName    : [],
       tinyLogo              : [''],
+      wideOrderBar        : [''],
      })
     return fb
   }
@@ -329,6 +338,7 @@ export class UISettingsService {
       logoHomePage            : [config.logoHomePage],
       displayCompanyName      : [config.displayCompanyName],
       tinyLogo                : [config.tinyLogo],
+      wideOrderBar            : [config.wideOrderBar],
      })
     return fb
   }

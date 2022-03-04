@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnChanges} from '@angular/core';
 import { IPOSOrder, }  from 'src/app/_interfaces/transactions/posorder';
 import { ActivatedRoute, } from '@angular/router';
 import { clientType } from 'src/app/_interfaces';
@@ -8,7 +8,7 @@ import { clientType } from 'src/app/_interfaces';
   templateUrl: './limit-values-progress-bars.component.html',
   styleUrls: ['./limit-values-progress-bars.component.scss']
 })
-export class LimitValuesProgressBarsComponent implements OnInit {
+export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
 
   @Input() order           : IPOSOrder;
   mainPanel                : boolean;
@@ -28,9 +28,14 @@ export class LimitValuesProgressBarsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.refreshLimitProgress(this.order)
+    const i  =0
   }
 
+  ngOnChanges() {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    this.refreshLimitProgress(this.order)
+  }
   validateType(order:IPOSOrder): clientType {
     if (this.order) {
       if (this.order.clients_POSOrders) {
@@ -43,8 +48,6 @@ export class LimitValuesProgressBarsComponent implements OnInit {
     return null
   }
 
-  // getClientType()
-
 
   refreshLimitProgress(order: IPOSOrder) {
     if (order) {
@@ -54,19 +57,19 @@ export class LimitValuesProgressBarsComponent implements OnInit {
       if (!type) {
         const order = this.order
         const gramRatio = 28
-        if (order.gramCount != 0) {
+        if (order?.gramCount != 0) {
           this.gramCountProgress         = ((order.gramCount / gramRatio ) * 100).toFixed(0)
         }
-        if (order.seedCount != 0){
+        if (order?.seedCount != 0){
           this.seedCountProgress         = ((order.seedCount / gramRatio ) * 100).toFixed(0)
         }
-        if (order.concentrateCount != 0) {
+        if (order?.concentrateCount != 0) {
           this.concentrateCountProgress  = ((order.concentrateCount / gramRatio ) * 100).toFixed(0)
         }
-        if (order.extractCount != 0) {
+        if (order?.extractCount != 0) {
           this.extractCountProgress      = ((order.extractCount / gramRatio ) * 100).toFixed(0)
         }
-        if (order.liquidCount  != 0) {
+        if (order?.liquidCount  != 0) {
           this.liquidCountProgress       = ((order.liquidCount / gramRatio ) * 100).toFixed(0)
         }
       }

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ITVMenuPriceTiers, TVMenuPriceTierItem, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
+import { ITVMenuPriceTiers,  TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Observable, of, Subscription, throwError } from 'rxjs';
-import { catchError, delay, first, map, repeatWhen } from 'rxjs/operators';
+import { Observable,  throwError } from 'rxjs';
+import { catchError, delay,  repeatWhen } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { ICompany } from 'src/app/_interfaces';
 

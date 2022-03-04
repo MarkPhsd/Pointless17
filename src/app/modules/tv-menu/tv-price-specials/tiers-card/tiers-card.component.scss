@@ -1,32 +1,35 @@
 @import "/src/mixins.scss";
 
 mat-card {
-  min-width: 450px;
-  width: 600px;
+  min-width: 375px;
+  // width: 95%;
+  width: 95% !important;
 }
 
 .headings {
-  font-size: 3em;
+  font-size: 10vw;
   font-weight: 600;
 }
 
 .prices {
-  font-size: 3em;
+  font-size: 2vw;
+  // font-size: 25.5vw;
   font-weight: 500;
   line-height: 1.2em;
   margin: .2em .2em .2em;
 }
 
 .tiername {
-  margin        : 0px 5px 5px 5px;
-  padding       : 0px 5px 5px 5px;
+  // margin        : 0px 5px 5px 5px;
+  // padding       : 0px 5px 5px 5px;
   white-space   : nowrap;
   overflow      : hidden;
   text-overflow : ellipsis;
   text-transform: capitalize;
   float         : left;
-  align-items   : baseline;
-  line-height   : 1em;
+  // align-items   : baseline;
+  // line-height   : 1em;
+  font-size: 2vw;
 }
 
 .logo {
@@ -42,17 +45,16 @@ mat-card {
 }
 
 .grid {
-  --gap: 15px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat(5, 1fr); // repeat( auto-fit, minmax(150px, 1fr) );
-  width: 600px;
 
-  @include for-phone-only  {
-    --gap: 10px;
-    display: grid;
-    gap: var(--gap);
-    width: 375px;
-    grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
-  }
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat(6, 1fr); // repeat( auto-fit, minmax(150px, 1fr) ) ;// repeat(6, 1fr); // repeat( auto-fit, minmax(150px, 1fr) );
+  width: 100%;
+
+  // @include for-phone-only  {
+  //   display: grid;
+  //   gap: 10px;
+  //   width: 100%;
+  //   grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+  // }
 }

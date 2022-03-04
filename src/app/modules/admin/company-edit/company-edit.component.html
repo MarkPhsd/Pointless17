@@ -22,68 +22,85 @@
     </mat-card-title>
 
     <mat-card-content >
-      <div >
-        <div class="grid-forms"
-             [formGroup]="inputForm"
-             *ngIf="inputForm && company$; else loading;">
+      <div [formGroup]="inputForm"
+            *ngIf="inputForm && company$; else loading;" >
+        <div class="grid-forms">
           <div class="grid-forms">
-          <div>
-            <mat-form-field appearance="outline">
-            <mat-label >Name</mat-label>
-            <input matInput
-                  type="text"
-                  formControlName="compName"
-                  class="form-control" >
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field appearance="outline">
-            <mat-label >Corp</mat-label>
-            <input matInput
-                  type="text"
-                  formControlName="compCorpName"
-                  class="form-control" >
-            </mat-form-field>
-          </div>
-          <div>
+            <div>
               <mat-form-field appearance="outline">
-              <mat-label >Phone</mat-label>
+              <mat-label >Name</mat-label>
               <input matInput
                     type="text"
-                    formControlName="phone"
+                    formControlName="compName"
                     class="form-control" >
               </mat-form-field>
-          </div>
-          <div>
+            </div>
+            <div>
               <mat-form-field appearance="outline">
-              <mat-label >Phone2</mat-label>
+              <mat-label >Corp</mat-label>
               <input matInput
                     type="text"
-                    formControlName="phone2"
+                    formControlName="compCorpName"
                     class="form-control" >
               </mat-form-field>
-          </div>
-          <div>
+            </div>
+            <div>
+                <mat-form-field appearance="outline">
+                <mat-label >Phone</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="phone"
+                      class="form-control" >
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="outline">
+                <mat-label >Phone2</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="phone2"
+                      class="form-control" >
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field appearance="outline">
+                <mat-label >Fax</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="fax"
+                      class="form-control" >
+                </mat-form-field>
+            </div>
+
+            <div>
               <mat-form-field appearance="outline">
-              <mat-label >Fax</mat-label>
+              <mat-label >Web</mat-label>
               <input matInput
-                    type="text"
-                    formControlName="fax"
-                    class="form-control" >
+                      type="text"
+                      formControlName="url"
+                      class="form-control" >
               </mat-form-field>
-          </div>
+            </div>
 
-          <div>
-            <mat-form-field appearance="outline">
-            <mat-label >Web</mat-label>
-            <input matInput
-                    type="text"
-                    formControlName="url"
-                    class="form-control" >
-            </mat-form-field>
-          </div>
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >Contact Email</mat-label>
+              <input matInput
+                      type="text"
+                      formControlName="contactEmail"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
 
-
+            <div>
+              <mat-form-field appearance="outline">
+              <mat-label >MED License</mat-label>
+              <input matInput
+                      type="text"
+                      formControlName="medLicense"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
           </div>
           <div>
             <div>
@@ -136,10 +153,24 @@
             </div>
           </div>
         </div>
-        <ng-template #loading >
-          <mat-spinner  diameter="100"></mat-spinner>
-        </ng-template>
+        <mat-divider [vertical]="true"></mat-divider>
+        <div  class="grid-fields">
+          <div class="instructions">
+            <mat-label><h4>Header for receipts.</h4></mat-label><br>
+            <mat-hint>Express gratitude, provide refund policy, etc...</mat-hint>
+            <simple-tinymce cols="50"
+                            rows="20"
+                            style="height: 200px;"
+                            name="description"
+                            formControlName="receiptHeader"
+                            [ngModel]="receiptHeader">
+            </simple-tinymce>
+          </div>
+        </div>
       </div>
+      <ng-template #loading >
+        <mat-spinner  diameter="100"></mat-spinner>
+      </ng-template>
     </mat-card-content>
   </mat-card>
 

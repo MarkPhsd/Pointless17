@@ -9,9 +9,7 @@ import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
-import { UserSwitchingService } from './_services/system/user-switching.service';
 import { ElectronService } from 'ngx-electron';
-// import { IPCService } from './_services/system/ipc.service';
 import { isDevMode } from '@angular/core';
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 
@@ -51,8 +49,6 @@ export class AppComponent {
       private statusBar:             StatusBar,
       private toastController:       ToastController,
       private awsService:            AWSBucketService,
-      private userSwitchingService : UserSwitchingService,
-      private AuthService :          AuthenticationService,
       private electronService      :  ElectronService,
       // private ipcService          :  IPCService,
 

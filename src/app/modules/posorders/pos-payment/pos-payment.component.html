@@ -64,10 +64,11 @@
                 </mat-card-content>
               </mat-card>
 
+              <!-- Payment Method Selection -->
               <mat-card class="card-dimensions">
                 <mat-card-content class="payment-dimensions">
                   <app-mat-toggle-selector
-                      class="card-height"
+                      class              = "card-height"
                       [list$]            = "paymentMethods$"
                       [hideAllOption]    = "'true'"
                       [toggleDimensions] = "'toggle-group-tall'"
@@ -162,6 +163,7 @@
                       (outPutReturnEnter)="enterPointCashValue($event)">
                       Point Amount
                   </app-key-pad>
+
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -209,6 +211,7 @@
                         (outPutReturnEnter)="applyPaymentAmount($event)">
                         Enter Payment
                     </app-key-pad>
+
                   </div>
                 </mat-card-content>
               </mat-card>
@@ -227,6 +230,7 @@
             </div>
 
       </div>
+
 
       <div *ngIf="!paymentsEqualTotal && !platFormService.isApp() && !paymentIsReady">
         <div *ngIf="message">

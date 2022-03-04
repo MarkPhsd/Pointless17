@@ -98,6 +98,8 @@ export class SettingsService {
 
   }
 
+
+
   getSetting(site: ISite, id: number):  Observable<ISetting> {
 
     const controller = "/settings/"

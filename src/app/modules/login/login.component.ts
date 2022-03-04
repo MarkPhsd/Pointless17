@@ -91,7 +91,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.controls;
   }
 
-
   constructor(
         private fb                   : FormBuilder,
         private route                : ActivatedRoute,
@@ -118,7 +117,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initSubscriptions()
     // this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings').subscribe(data =>  {
-
 
     if (!this.platformService.isApp()) { this.amI21 = true  }
     if (this.platformService.isApp())  { this.amI21 = false }

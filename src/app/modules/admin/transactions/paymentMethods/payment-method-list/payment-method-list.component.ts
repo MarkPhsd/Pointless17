@@ -23,7 +23,7 @@ import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transac
   templateUrl: './payment-method-list.component.html',
   styleUrls: ['./payment-method-list.component.scss']
 })
-export class PaymentMethodListComponent implements OnInit {
+export class PaymentMethodListComponent implements OnInit, AfterViewInit {
 
   paymentMethod$        : Observable<IPaymentMethod[]>;
   paymentMethod         : IPaymentMethod;
@@ -99,12 +99,12 @@ export class PaymentMethodListComponent implements OnInit {
   ) { }
 
   async ngOnInit() {
-    const site          = this.siteService.getAssignedSite();
-    this.rowSelection   = 'multiple'
+    const site            = this.siteService.getAssignedSite();
+    this.rowSelection     = 'multiple'
+    this.initAgGrid(this.pageSize);
     this.urlPath          = await this.awsService.awsBucketURL();
     this.paymentMethod$   = this.paymentMethodService.getList(site);
     this.initForm();
-    this.initAgGrid(this.pageSize);
   }
 
   initForm() {

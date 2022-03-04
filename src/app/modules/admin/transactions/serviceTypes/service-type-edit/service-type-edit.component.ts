@@ -89,7 +89,7 @@ export class ServiceTypeEditComponent implements OnInit {
             resolve(true)
 
           }, error => {
-            this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+            this.snack.open(`Update failed. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
             resolve(false)
           })
          }

@@ -22,6 +22,8 @@ import { EMPTY, } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -89,7 +91,21 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   user          : any;
   _user: Subscription;
 
+  _uiSettings: Subscription;
+  uiSettings : UIHomePageSettings;
+  wideBar    =  false;
+
   initSubscriptions() {
+
+    this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+      this.uiSettings = data;
+      if (data) {
+        if (data.wideOrderBar) {
+          this.wideBar = true;
+        }
+      }
+    })
+
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
       this.canRemoveClient = true
@@ -106,8 +122,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
     })
-
-
   }
 
   initBarSubscription() {
@@ -133,6 +147,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private authenticationService: AuthenticationService,
               private orderMethodService: OrderMethodsService,
               private userAuthorization : UserAuthorizationService,
+              private uiSettingsService : UISettingsService,
+              private productEditButtonService: ProductEditButtonService,
+
               // private printingService : Printing
               private el                : ElementRef) {
 
@@ -175,6 +192,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   async ngOnInit() {
+    this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
@@ -310,14 +328,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.toolbarUIService.resetOrderBar(true)
   }
 
-  async voidOrder() {
-    const site = this.siteService.getAssignedSite();
-    const order = await this.orderService.voidOrder(site, this.order.id).pipe().toPromise();
-    if (order === 'Order Voided') {
-      this.notifyEvent('Order Voided', 'Success')
-      this.orderService.updateOrderSubscription(null)
-      this.router.navigateByUrl('pos-orders')
-    }
+   voidOrder() {
+   this.productEditButtonService.openVoidOrderDialog(this.order)
   }
 
   async deleteOrder(event) {
@@ -329,6 +341,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if(this._order) { this._order.unsubscribe() }
     this.orderService.updateBottomSheetOpen(false)
     if (this._user) { this._user.unsubscribe()}
+    if (this._uiSettings) { this._uiSettings.unsubscribe()}
   }
 
   suspendOrder() {

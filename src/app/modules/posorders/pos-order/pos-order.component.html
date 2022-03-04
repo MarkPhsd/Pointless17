@@ -1,7 +1,7 @@
 <div  *ngIf="order" class="container">
   <div [class]="orderlayout">
     <div>
-      <div  class="transaction-data">
+      <div>
 
         <div class="grid-header-item">
           <pos-order-transaction-data
@@ -10,8 +10,15 @@
           </pos-order-transaction-data>
         </div>
 
+        <div class="grid-header-item"
+              *ngIf="wideBar || mainPanel">
+          <limit-values-progress-bars
+              [order]="order">
+          </limit-values-progress-bars>
+        </div>
+
         <div  class="grid-header-item"
-              *ngIf="mainPanel">
+              *ngIf="wideBar || mainPanel">
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
             [order]               ="order"
@@ -20,13 +27,6 @@
             (outPutAssignCustomer)="assignCustomer($event)"
             >
           </app-order-header-demo-graphics>
-        </div>
-
-        <div class="grid-header-item"
-             *ngIf="mainPanel">
-          <limit-values-progress-bars
-              [order]="order">
-          </limit-values-progress-bars>
         </div>
 
       </div>
@@ -53,10 +53,10 @@
                 [mainPanel]         ="mainPanel"
                 [order]             ="order"
           ></pos-order-function-buttons>
-
         </div>
 
-        <div class="side-panel-buttons-container" *ngIf="!mainPanel" >
+        <div class="side-panel-buttons-container"
+             *ngIf="!mainPanel" >
 
           <div>
             <button mat-raised-button
@@ -90,7 +90,7 @@
       </div>
     </div>
 
-     <div *ngIf="(!smallDevice && mainPanel)
+    <div class="order-items" *ngIf="(!smallDevice && mainPanel)
                   || (!mainPanel && smallDevice)
                   || (!mainPanel && !smallDevice)">
       <pos-order-items

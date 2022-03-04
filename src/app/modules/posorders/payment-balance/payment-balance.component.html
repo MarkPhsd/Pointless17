@@ -81,7 +81,7 @@
                   (click)="printPaymentReceipt(item)"
                   ><mat-icon>print</mat-icon></button>
         </div>
-        {{isAuthorized}}
+
         <div *ngIf="isAuthorized && !item.voidReason">
           <button mat-button
                   class="grid-item-button"

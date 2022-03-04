@@ -10,7 +10,7 @@
         @fade
         *ngFor="let menu of menus; let i = index"
         [class.active]="menu.active">
-        <div *userAuthorized="menu.userType">
+        <div  *ngIf="isAuthorized(menu?.userType)">
           <div class="menu"
                 (click)="toggle(menu, i)">
 
@@ -54,7 +54,7 @@
           *ngFor="let item of submenu" >
         <div *ngIf="!item?.minimized">
           <div class="menu"
-               *userAuthorized="item.userType">
+               *ngIf="isAuthorized(item?.userType)">
               <a mat-list-item
                 routerLinkActive={{item.routerLinkActive}}
                 routerLink=      {{item.routerLink}}>
@@ -84,7 +84,7 @@
         <li>
           <mat-menu #menu="matMenu">
             <div  *ngFor="let item of submenu">
-              <div  *userAuthorized="item?.userType">
+              <div  *ngIf="isAuthorized(item?.userType)">
                 <div *ngIf="item && item?.minimized">
                   <button mat-menu-item
                           routerLinkActive={{item.routerLinkActive}}

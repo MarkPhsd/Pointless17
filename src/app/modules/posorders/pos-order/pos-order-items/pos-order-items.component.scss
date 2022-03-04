@@ -7,23 +7,19 @@ ion-item-sliding {
 }
 
 ion-item {
-  // width: 99%;
-  // padding: 0;
-  // // margin: 2px;
   width: 110%;
   padding: 0;
   left: -15px;
 }
 
-
 .nopadd  {
   padding: 0;
   margin: -3px;
-  width: 98%;
+  width: 99%;
 }
 
 pos-order-item {
-  width: 99%;
+  width: 100%;
   padding: 0;
   margin: 0px;
 }
@@ -40,6 +36,7 @@ pos-order-item {
     overflow-y: auto;
     overflow-x: hidden;
     // height: 65vh;
+    width: 100%;
   }
 
 }
@@ -56,6 +53,7 @@ pos-order-item {
     overflow-y: auto;
     overflow-x: hidden;
     height: 65vh;
+    width: 100%;
   }
 
 }

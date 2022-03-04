@@ -28,12 +28,6 @@ export class TierItemsComponent implements OnInit {
               ) {
       }
 
-  // ngOnChanges(changes: { [propKey: string]: SimpleChange }) {
-  //   if (this.flowers$) {
-  //      this.refreshFlowers();
-  //   }
-  // }
-
   ngOnInit(): void {
     const site = this.siteService.getAssignedSite();
     this.flowers$  = this.tvMenuPriceTierService.getFlowers(site)

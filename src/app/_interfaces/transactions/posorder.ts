@@ -69,6 +69,9 @@ export interface IPOSOrder {
   tax1:                  number;
   tax2:                  number;
   tax3:                  number;
+  taxColumn1Description : string;
+  caxColumn2Description : string;
+  taxColumn3Description : string;
   barTax:                number;
   crv:                   number;
   orderPercentDiscount:  number;

@@ -17,8 +17,6 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { Router } from '@angular/router';
-import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { Pipe, PipeTransform } from '@angular/core';
 
 interface IIsOnline {
   result: string;
@@ -119,24 +117,24 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
-  constructor(private authenticationService:  AuthenticationService,
+  constructor(private authenticationService : AuthenticationService,
+              private userSwitchingService  : UserSwitchingService,
               private pollingService        : PollingService,
               private dialog:                 MatDialog,
               private companyService:         CompanyService,
               private _renderer:              Renderer2,
-              public  orderService:            OrdersService,
+              public  orderService:           OrdersService,
               private messageService:         MessageService,
-              public  breakpointObserver:      BreakpointObserver,
+              public  breakpointObserver:     BreakpointObserver,
               private siteService:            SitesService,
               private toolbarUIService:       ToolBarUIService,
               private location:               Location,
-              private scaleService        : ScaleService,
-              private navigationService   : NavigationService,
-              private userSwitchingService: UserSwitchingService,
-              public  platFormService     : PlatformService,
-              private router              : Router,
-              private awsBucketService     : AWSBucketService,
-              private fb                  : FormBuilder ) {
+              private scaleService          : ScaleService,
+              private navigationService     : NavigationService,
+              public  platFormService       : PlatformService,
+              private router                : Router,
+              private awsBucketService      : AWSBucketService,
+              private fb                    : FormBuilder ) {
   }
 
   ngOnChanges() {
@@ -170,8 +168,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   initUserOrder(){
     if (this.user && (!this.order || (!this.order.id || this.order.id == 0)) ) {
       const userProfile = {} as IUserProfile;
-      userProfile.id = this.user.id;
-      userProfile.roles = this.user.roles;
+      userProfile.id = this.user?.id;
+      userProfile.roles = this.user?.roles;
       this.userSwitchingService.assignCurrentOrder(userProfile)
     }
   }
@@ -263,6 +261,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.isAdmin      = false;
     this.userName     = user.username
+
+    if (!user.roles) { return }
+
     this.userRoles    = user.roles.toLowerCase();
     this.employeeName = user.username;
 

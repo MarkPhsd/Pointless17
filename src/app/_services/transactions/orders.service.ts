@@ -13,6 +13,7 @@ import { IBalanceSheet } from './balance-sheet.service';
 import { PlatformService } from '../system/platform.service';
 import { Router } from '@angular/router';
 import { SitesService } from '../reporting/sites.service';
+import { ItemWithAction } from './posorder-item-service.service';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -26,6 +27,14 @@ export interface OrderPayload {
   client      : IUserProfile;
   orderName   : StringDecoder
   order       : IPOSOrder;
+}
+
+export interface IVoidOrder {
+  id: number;
+  action: number;
+  voidReasonID: number;
+  voidReason  : string;
+  returnToInventory: boolean;
 }
 
 @Injectable({
@@ -316,7 +325,6 @@ export class OrdersService {
 
   }
 
-
     ///takes the clientID and submits a new POS order of Default Transaction Type.
   //posts a check in in store.
   getNewDefaultCheckIn(site: ISite, clientID: any): Observable<IPOSOrder> {
@@ -475,16 +483,17 @@ export class OrdersService {
 
   }
 
-  voidOrder(site: ISite, id: number) {
+  voidOrder(site: ISite,item: ItemWithAction) : Observable<any>  {
+
     const controller = "/POSOrders/";
 
     const endPoint = "VoidOrder";
 
-    const parameters = `?id=${id}`
+    const parameters = ``
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.get<any>( url )
+    return  this.http.post<any>( url, item )
   }
 
 

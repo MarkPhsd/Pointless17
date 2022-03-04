@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy, HostListener } from '@angular/core';
-import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite } from 'src/app/_interfaces/index';
+import { AccordionMenu, accordionConfig, SubMenu, IUser, ISite, MenuGroup } from 'src/app/_interfaces/index';
 import { EMPTY, Observable, of, Subscription, } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -53,34 +53,11 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     )
   }
 
-  refreshMenu(user: IUser) {
-    this.initMenus()
-    if (!user || !user.token) {return}
-    const site  = this.siteService.getAssignedSite();
-    const menu$ = this.menusService.getMainMenu(site)
-
-    menu$.subscribe( data => {
-      if (!data) { return }
-      this.config = this.mergeConfig(this.options);
-      if (data)
-        data.filter( item => {
-          this.addItemToMenu(item, this.menus)
-        })
-        this.menus =  [...new Set(this.menus)]
-      }, err => {
-        // console.log('error refresh menu', err)
-      }
-    )
-    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
-      this.smallMenu = data;
-    })
-
-  }
-
   addItemToMenu(item: AccordionMenu, mainMenu: AccordionMenu[]) {
     if (!mainMenu && item) { return }
     if (item.active) {mainMenu.push(item) }
     this.menus =  [...new Set(this.menus)]
+    // console.log('this.menus', this.menus)
   }
 
   constructor ( private menusService            : MenusService,
@@ -127,8 +104,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   initMenu() {
 
     this.initMenus()
-    const user = JSON.parse(localStorage.getItem('user')) as IUser;
-    console.log('user', this.user)
+    const user = this.authenticationService.userValue;
+    this.user  = user;
+
     if (!user || !user.token) {return}
 
     const site       = this.siteService.getAssignedSite();
@@ -138,30 +116,65 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
       menuCheck$.pipe(
         switchMap( data => {
 
-          console.log('menu tiny data', data, user)
-          if (!data || !data.result) {return of('empty');}
+            if (user.roles === 'admin' || (!data ||  !data.result)) {
+              return  this.menusService.createMainMenu(user , site)
+            }
 
-            // if (user.roles === 'admin') {
-            return  this.menusService.createMainMenu(user , site)
-            // }
-            // if (user) {
-              // return  this.menusService.getMenu(site, 'main')
-            // }
+            if (user) {
+              return  this.menusService.getMainMenu(site)
+            }
+
           }
         )
 
       ).subscribe( data => {
-        if (data === 'empty') {
-          console.log('empty')
-          return }
-        this.refreshMenu(this.user)
+
+        if (user.roles === 'admin' ) {
+          if (!data) {  return }
+          const menuGroup = data as MenuGroup;
+          this.refreshMenuFromAccordion(menuGroup.accordionMenus)
+          return
+        }
+        if (user.roles && user.roles != 'admin' ) {
+          if (!data) {  return }
+          this.refreshMenuFromAccordion(data)
+          return
+        }
+
       }, error=> {
         console.log('error', error)
       })
     } catch (error) {
       console.log('error', error)
     }
+  }
 
+  refreshMenu(user: IUser) {
+
+    this.initMenus()
+    if (!user || !user.token) {return}
+    const site  = this.siteService.getAssignedSite();
+    const menu$ = this.menusService.getMainMenu(site)
+
+    menu$.subscribe( data => {
+      if (!data) { return }
+      this.config = this.mergeConfig(this.options);
+      if (data)
+        data.filter( item => {
+          this.addItemToMenu(item, this.menus)
+        })
+        this.menus =  [...new Set(this.menus)]
+      }, err => {
+
+      }
+    )
+    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+      this.smallMenu = data;
+    })
+
+  }
+
+  refreshMenuFromAccordion(accordionMenu: any) {
 
   }
 
@@ -197,8 +210,9 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     }
   }
 
-  isAuthorized(menu: any): boolean {
-    return this.userAuthorizationService.isUserAuthorized(menu.userType)
+  isAuthorized(userType: string): boolean {
+    const result = this.userAuthorizationService.isUserAuthorized(userType);
+    return result
   }
 
 }

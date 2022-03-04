@@ -71,11 +71,12 @@ export interface ItemWithAction {
   posItem           : PosOrderItem;
   action            : actions;
   voidReasonID      : number;
-returnToInventory : boolean;
+  returnToInventory : boolean;
   voidReason        : string;
   id                : number;
   resultMessage     : string;
   result            : boolean;
+  typeOfAction      : string;
 }
 
 // firstPOSTCallToAPI('url', data).pipe(
@@ -359,6 +360,7 @@ export class POSOrderItemServiceService {
   }
 
   voidPOSOrderItem(site: ISite, item: ItemWithAction ): Observable<string> {
+
 
     if (item.posItem.voidReason)  {
       this.notificationEvent(`Item already voided: ${item.voidReason}`, 'Item Voided')

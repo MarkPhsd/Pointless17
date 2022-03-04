@@ -1,13 +1,22 @@
 <mat-card>
 
-  <mat-card-title>
+  <!-- <mat-card-title>
     <div fxLayout="column" fxLayoutAlign="center center" >
       <img [src]="logo" [alt]="company"  class="logo">
       <h2> </h2>
     </div>
+  </mat-card-title> -->
+  <mat-card-title>
+
+    <div fxLayout="column"
+    fxLayoutAlign="center center">
+        <app-logo
+          [logoSize]="'large'" >
+        </app-logo>
+    </div>
+
   </mat-card-title>
 
-  <!-- class="grid-item headings" -->
   <mat-card-content>
 
     <div class="grid">

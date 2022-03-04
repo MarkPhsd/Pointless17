@@ -45,12 +45,27 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           )
   {
     if (data) {
-      const site = this.siteService.getAssignedSite();
+
       this.inventoryReturnDiscard = true;
       this.itemWithAction = data
       this.itemService.updateItemWithAction(data);
-      this.list$  = this.settingsService.getVoidReasons(site, 1);
+
+
     }
+  }
+
+  getVoidReasons() {
+    const site = this.siteService.getAssignedSite();
+    if (this.itemWithAction.typeOfAction === 'VoidOrder') {
+      this.list$  = this.settingsService.getVoidReasons(site, 1);
+      return
+    }
+    if (this.itemWithAction.typeOfAction === 'VoidPayments') {
+      this.list$  = this.settingsService.getVoidReasons(site, 2);
+      return
+    }
+
+    this.list$  = this.settingsService.getVoidReasons(site, 1);
   }
 
   closeDialog() {
@@ -59,7 +74,45 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   // void = 1,
   // priceAdjust = 2,
   // note = 3
+
+  voidOrder(setting) {
+    if (setting) {
+      const site = this.siteService.getAssignedSite();
+
+      this.itemWithAction.returnToInventory  = this.inventoryReturnDiscard
+      this.itemWithAction.voidReason = setting.name
+      this.itemWithAction.voidReasonID = setting.id
+      let response$
+
+      if (this.itemWithAction) {
+        switch (this.itemWithAction.action) {
+          case 1: //void
+              response$ = this.orderService.voidOrder(site, this.itemWithAction)
+              break;
+          case 2: //priceAdjust
+
+              break;
+          case 2: //note
+
+              break;
+        }
+        response$.subscribe(data => {
+          if (data === 'Item voided') {
+            this.updateSubscription()
+            this.notifyEvent('Item voided', 'Result')
+            this.closeDialog();
+          }
+        })
+      }
+    }
+  }
+
   async selectItem(setting) {
+
+    if (this.itemWithAction.typeOfAction === 'VoidOrder') {
+      this.voidOrder(setting)
+      return
+    }
 
     if (setting) {
       const site = this.siteService.getAssignedSite();
@@ -97,8 +150,10 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     //update the order service.
     const site = this.siteService.getAssignedSite();
     const orderID = this.itemWithAction.posItem.orderID;
-    const order = await this.orderService.getOrder(site, orderID.toString(), false).pipe().toPromise();
-    this.orderService.updateOrderSubscription(order)
+    this.orderService.getOrder(site, orderID.toString(), false).subscribe(data => {
+        this.orderService.updateOrderSubscription(data)
+      }
+    )
   }
 
   ngOnInit(): void {

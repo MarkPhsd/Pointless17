@@ -1,42 +1,27 @@
 @import "/src/mixins.scss";
 
 mat-card {
-  // width     : 100%;
-  // min-width : 325px;
-  // min-height: 155px;
-  // overflow-y: auto;
-  // overflow-x: hidden;
-  width     : 100%;
-  // min-width : 275px;
-  // width     : 275px;
-  // max-width : 275px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  width           : 100%;
+  padding-top     : 2px  !important;
+  padding-bottom  : 2px  !important;
+  overflow-y      : auto;
+  overflow-x      : hidden;
 
   @include for-phone-only  {
     width     : 100%;
-    // min-width : 335px;
-    // max-width : 335px;
-    // min-height: 155px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 }
 
-
 .transaction-data {
   display: grid;
-  grid-template-columns: 60px 1fr;
-  // width: 300px;
-  border-radius: 3px;
-  margin: 5px 5px ;
+  grid-template-columns: repeat( auto-fit, minmax(265px, 1fr) );
   overflow-y: auto;
   overflow-x: hidden;
-  font-size: larger;
 }
 
-
 body {
-  font-size: larger;
+  font-size: small;
 }
 

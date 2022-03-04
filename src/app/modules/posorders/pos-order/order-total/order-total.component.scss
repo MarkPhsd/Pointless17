@@ -1,23 +1,21 @@
 .transaction-data-side-panel {
-  display: grid;
-  grid-template-columns: 60px 1fr;
-  // width: 300px;
-  border-radius: 3px;
-  margin: 5px 5px ;
-  overflow-y: auto;
-  overflow-x: hidden;
-  font-size: larger;
+  display      : grid;
+  grid-template-columns: 35px 100px;
+  width        : 100%;
+  overflow-y   : auto;
+  overflow-x   : hidden;
+  font-size    : medium;
+  margin-bottom: 5px;
 }
 
 .transaction-data {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  width: 300px;
-  border-radius: 3px;
-  margin: 5px 5px ;
-  overflow-y: auto;
-  overflow-x: hidden;
-  font-size: larger;
+  grid-template-columns: 35px 100px;
+  width         : 100%;
+  overflow-y    : auto;
+  overflow-x    : hidden;
+  font-size     : medium;
+  margin-bottom : 5px;
 }
 
 .totals {

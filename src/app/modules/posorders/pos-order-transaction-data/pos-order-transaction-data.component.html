@@ -6,10 +6,17 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    <app-order-total
-      [mainPanel]="mainPanel"
-      [order]="order">
-    </app-order-total>
+    <div class="transaction-data">
+      <div>
+        <app-order-total
+          [mainPanel]="mainPanel"
+          [order]="order">
+        </app-order-total>
+      </div>
+      <div>
+
+      </div>
+    </div>
   </mat-card-content>
 
 </mat-card>

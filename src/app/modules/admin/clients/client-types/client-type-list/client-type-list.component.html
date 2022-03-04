@@ -1,8 +1,7 @@
 <div class="grid-container">
 
   <div class="grid-item">
-    <!-- <div *ngIf="searchForm"> -->
-      <div  [formGroup]="searchForm" >
+      <div *ngIf="searchForm" [formGroup]="searchForm" >
         <mat-form-field appearance="outline" class="form-fields">
           <mat-label >Search Items</mat-label>
             <input
@@ -30,7 +29,7 @@
 </div>
 
 <div class="grid-list">
-  <div>
+  <div *ngIf="gridOptions">
     <ag-grid-angular
           #agGrid
           style                ="width: 100%; height: 100%;"
@@ -43,11 +42,8 @@
           [frameworkComponents]="frameworkComponents"
           (selectionChanged)   ="onSelectionChanged($event)"
           (gridReady)          ="onGridReady($event)">
-
     </ag-grid-angular>
   </div>
-
-
 </div>
 
 <div style="flex-grow:0">

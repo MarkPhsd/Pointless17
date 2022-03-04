@@ -11,6 +11,7 @@ export class UserAuthorizedDirective implements OnInit {
 
   @Input() set userAuthorized(val) {
     this.permissions = val;
+    console.log('userAuthorized', val)
     this.updateView();
   }
 
@@ -20,9 +21,11 @@ export class UserAuthorizedDirective implements OnInit {
   _user             : Subscription;
 
   initSubscription() {
-    this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
-    })
+    // this.user = this.userService.currentUser();
+    this.user = this.authenticationService.userValue;
+    // this._user = this.authenticationService.user$.subscribe( data => {
+    //   this.user  = data
+    // })
   }
 
   constructor(
@@ -48,11 +51,16 @@ export class UserAuthorizedDirective implements OnInit {
 
   private checkPermission() {
     let hasPermission = false;
-    if (!this.user) { return }
+    console.log('has permissions', hasPermission)
+    if (!this.user) { return false }
+    console.log('has permissions', this.user)
     if (this.user && this.user.roles) {
       const permissions = this.permissions
-      if (this.userService.isUserAuthorized(permissions))  { return true;}
+      if (this.userService.isUserAuthorized(permissions))  {
+         hasPermission = true
+      }
     }
+    console.log('has permissions', hasPermission)
     return hasPermission;
   }
 }

@@ -1,70 +1,49 @@
 
-<mat-card *ngIf="(order?.gramCount != 0
+<div class="bars" *ngIf="order&&  (order?.gramCount != 0
           || order?.concentrateCount != 0
           || order?.extractCount != 0
           || order?.liquidCount != 0
-          || order?.seedCount != 0 ) && mainPanel" >
-  <mat-card-subtitle>
-    Limits
-  </mat-card-subtitle>
-  <mat-card-content>
-    <div *ngIf="order">
-      <div  class="grid-header-item transaction-data checmicals"
-            >
-            <app-progress-bar
-                *ngIf="order?.gramCount != 0"
-                [value]="order.gramCount"
-                [ratio]="28"
-                [percentage]="gramCountProgress">
-                Gram
-            </app-progress-bar>
+          || order?.seedCount != 0 )" >
 
-            <app-progress-bar
-                *ngIf="order?.concentrateCount != 0"
-                [value]="order.concentrateCount"
-                [ratio]="28"
-                [percentage]="concentrateCountProgress">
-                Concentrate
-            </app-progress-bar>
+    <app-progress-bar
+        *ngIf="order.gramCount != 0"
+        [value]="order.gramCount"
+        [ratio]="28"
+        [percentage]="gramCountProgress">
+        Gram
+    </app-progress-bar>
 
-            <app-progress-bar
-                *ngIf="order?.extractCount != 0"
-                [value]="order.extractCount"
-                [ratio]="28"
-                [percentage]="extractCountProgress">
-                Extract
-            </app-progress-bar>
+    <app-progress-bar
+        *ngIf="order.concentrateCount != 0"
+        [value]="order.concentrateCount"
+        [ratio]="28"
+        [percentage]="concentrateCountProgress">
+        Concentrate
+    </app-progress-bar>
 
-            <app-progress-bar
-                *ngIf="order?.liquidCount != 0"
-                [value]="order.liquidCount"
-                [ratio]="28"
-                [percentage]="liquidCountProgress">
-                Liquid
-            </app-progress-bar>
+    <app-progress-bar
+        *ngIf="order.extractCount != 0"
+        [value]="order.extractCount"
+        [ratio]="28"
+        [percentage]="extractCountProgress">
+        Extract
+    </app-progress-bar>
 
-            <app-progress-bar
-                *ngIf="order?.seedCount != 0"
-                [value]="order.seedCount"
-                [ratio]="28"
-                [percentage]="seedCountProgress">
-                Seed
-            </app-progress-bar>
+    <app-progress-bar
+        *ngIf="order.liquidCount != 0"
+        [value]="order.liquidCount"
+        [ratio]="28"
+        [percentage]="liquidCountProgress">
+        Liquid
+    </app-progress-bar>
 
-      </div>
+    <app-progress-bar
+        *ngIf="order.seedCount != 0"
+        [value]="order.seedCount"
+        [ratio]="28"
+        [percentage]="seedCountProgress">
+        Seed
+    </app-progress-bar>
 
-    </div>
-  </mat-card-content>
-</mat-card>
+</div>
 
-
-<!--
-        this.gramCountProgress         = ((this.order.gramCount / type.limitGram ) * 100).toFixed(0)
-        // this.solidCountProgress        = ((this.order.gramCount / type.limitSolid ) * 100).toFixed(0)
-        // this.plantCountProgress        = ((this.order.plantCount / type.limitPlants ) * 100).toFixed(0)
-        this.concentrateCountProgress  = ((this.order.concentrateCount / type.limitConcentrate ) * 100).toFixed(0)
-        this.extractCountProgress      = ((this.order.extractCount / type.limitExtract ) * 100).toFixed(0)
-        this.liquidCountProgress       = ((this.order.liquidCount / type.limitLiquid ) * 100).toFixed(0)
-        this.seedCountProgress         = ((this.order.seedCount / type.limitSeeds ) * 100).toFixed(0)
-
--->

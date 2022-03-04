@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -460,6 +460,25 @@ export class OrderMethodsService {
     } else {
       this.initItemProcess();
     }
+  }
+
+  voidOrder(id: number) {
+    // if (!id) {
+    //   this.notifyEvent('Order not voided', 'Failed')
+    //   return
+    // }
+    // const site = this.siteService.getAssignedSite();
+    // this.orderService.voidOrder(site, id).subscribe(
+    //   order => {
+    //   if (order === 'Order Voided') {
+    //     this.notifyEvent('Order Voided', 'Success')
+    //     this.orderService.updateOrderSubscription(null)
+    //     this.router.navigateByUrl('pos-orders')
+    //   }
+    //   if (order != 'Order Voided') {
+    //     this.notifyEvent('Order Voided', 'Success')
+    //   }
+    // })
   }
 
   deleteOrder(id: number, confirmed: boolean) {

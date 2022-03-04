@@ -48,10 +48,13 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
   _barSize: Subscription
   barSize: boolean;
 
+  isAuthorized(userType: string): boolean {
+    // console.log('userType', userType)
+    return this.userAuthorizationService.isUserAuthorized(userType)
+  }
+
   initSubscription() {
-    this._user = this.authenticationService.user$.subscribe(
-        user => {
-        user = JSON.parse(localStorage.getItem('user')) as IUser;
+    this._user = this.authenticationService.user$.subscribe(user => {
         this.user = user
         if (!user || !user.token) {
           this.menus = [] as AccordionMenu[];
@@ -143,7 +146,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     if (!this.user || !this.user.token) {return}
 
     const menuCheck$ = this.menusService.mainMenuExists(site);
-    console.log('menu minimal init')
+    // console.log('menu minimal init')
     menuCheck$.pipe(
       switchMap( data => {
         console.log('menu minimal data', data)
@@ -155,7 +158,7 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
         }
       })
     ).subscribe(data => {
-      console.log('menu minimal menu group', data)
+      // console.log('menu minimal menu group', data)
       this.refreshMenu(this.user)
     }, err => {
       console.log('error init menu minimal compact', err)

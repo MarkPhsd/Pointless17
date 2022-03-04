@@ -49,17 +49,15 @@ export class LogoComponent implements OnInit {
   }
 
   async initCompanyInfo() {
-    console.log('initialized logo', this.bucket, this.logo)
+
     if (this.bucket) {
       if (!this.logoSize ) { this.logoSize  = 'large'}
-
         if (this.logoSize === 'large') {
           this.logo = this.uiHomePageSetting?.logoHomePage
         }
         if (this.logoSize === 'small') {
           this.logo = this.uiHomePageSetting?.tinyLogo
         }
-        console.log('initialized logo')
         const logo = `${this.bucket}${this.logo}`
         this.logo = logo
 

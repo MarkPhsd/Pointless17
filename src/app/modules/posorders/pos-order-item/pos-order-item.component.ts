@@ -14,7 +14,7 @@ import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
@@ -59,7 +59,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   @Input() cbd            =  50;
   @Input() hideAddAnotherOne: number;
   @Input() mainPanel      : boolean;
-
+  @Input() wideBar        = false;
   customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
@@ -91,6 +91,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass       = 'product-name'
 
+
   @HostListener("window:resize", [])
    updateItemsPerPage() {
      this.smallDevice = false
@@ -100,6 +101,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   initSubscriptions() {
+
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
       if (data) {
@@ -143,6 +145,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+
     this.initSubscriptions();
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();

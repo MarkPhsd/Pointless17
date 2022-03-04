@@ -10,6 +10,7 @@ import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
 import { AuthenticationService, IDepartmentList } from '../_services';
 import { IUser } from '../_interfaces';
+import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-default',
@@ -29,6 +30,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   orderBarOpen:    boolean;
   sidebarMode   =  'side'
   id:              any;
+  smallDevice    : boolean;
+
+  advertisingOutlet : string;
+  messageOutlet     : string;
 
   drawer: any;
   @HostBinding('class') className = '';
@@ -53,6 +58,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _department: Subscription;
   department : IDepartmentList;
 
+  matorderBar     = 'mat-orderBar-wide'
   barType         = "mat-drawer-toolbar"
   apiUrl: any;
 
@@ -65,7 +71,21 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   barSize : boolean;
   smallMenu = false;
 
+  _uiSettings: Subscription;
+  uiSettings : UIHomePageSettings;
+
   initSubscriptions() {
+    this.matorderBar = 'mat-orderBar-wide'
+    this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+      this.uiSettings = data;
+      if (data) {
+        if (data.wideOrderBar) {
+          if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
+          if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
+         }
+      }
+    })
+
     this.style = ""
     this._user =     this.authorizationService.user$.subscribe(data => {
       this.user = data
@@ -84,7 +104,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     })
 
     this._department  = this.toolBarUIService.departmentMenu$.subscribe( data => {
-      // console.log('initSubscriptions component update', data)
       if (!data) {
         this.department = null
         return
@@ -122,9 +141,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private _renderer       : Renderer2,
                private router          : Router,
                private cd              : ChangeDetectorRef,
-               private appInitService  : AppInitService,
-               private authorizationService: AuthenticationService,
+               private appInitService          : AppInitService,
+               private authorizationService    : AuthenticationService,
                private toolbarUIService        : ToolBarUIService,
+               private uiSettingsService       : UISettingsService
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (this.platForm == 'web') {
@@ -132,9 +152,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  ngOnInit() {
+ async  ngOnInit() {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.renderTheme();
+    this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
     this.initSubscriptions();
     this.refreshToolBarType();
     const bar = this.getBoolean(localStorage.getItem('barSize'))
@@ -192,6 +213,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this._barSize) {
       this._barSize.unsubscribe();
     }
+
+    if(this._uiSettings) { this._uiSettings.unsubscribe()};
   }
 
   @HostListener("window:resize", [])
@@ -211,8 +234,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     if (window.innerWidth > 599) {
       this.sidebarMode = 'side'
+      this.smallDevice = false;
     } else {
       this.sidebarMode = 'side'
+      this.smallDevice = true;
     }
   }
 

@@ -14,7 +14,7 @@
         *ngFor="let menu of menus; let i = index"
         [class.active]="menu.active">
 
-        <div  *userAuthorized="menu.userType"
+        <div  *ngIf="isAuthorized(menu?.userType)"
               class="menu"
               (click)="toggle(menu, i)">
           <div class="grid-toggle-tiny">
@@ -43,7 +43,7 @@
             @fade
             *ngFor="let item of submenu" >
 
-          <div *userAuthorized="item.userType" >
+          <div *ngIf="isAuthorized(item?.userType)" >
             <div *ngIf="!item.minimized">
               <div class="menu" >
                 <a mat-list-item
@@ -81,7 +81,7 @@
               <mat-menu #menu="matMenu">
                 <div  *ngFor="let item of submenu">
                     <div *ngIf="item.minimized">
-                      <div *userAuthorized="item.userType">
+                      <div *ngIf="isAuthorized(item?.userType)">
                         <button mat-menu-item
                                 color=""
                                 routerLinkActive={{item.routerLinkActive}}
@@ -110,6 +110,10 @@
       aria-label=" toggle">
     <mat-icon>view_compact</mat-icon>
   </button>
-
+  <!-- <button *ngIf="user && user?.roles === 'admin'" mat-icon-button
+      (click)="initMenu()"
+      aria-label=" toggle">
+    <mat-icon>refresh</mat-icon>
+  </button> -->
 </div>
 

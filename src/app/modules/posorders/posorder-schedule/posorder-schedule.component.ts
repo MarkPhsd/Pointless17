@@ -6,6 +6,7 @@ import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DatePipe } from '@angular/common'
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector   : 'pos-order-schedule',
   templateUrl: './posorder-schedule.component.html',
@@ -43,6 +44,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     private router            : Router,
     private fb :                FormBuilder,
     private siteService :      SitesService,
+    private matSnack          : MatSnackBar,
     public datepipe: DatePipe)
   { }
 
@@ -99,7 +101,11 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
   save() {
 
-    if (!this.order) { this.errorMessage = 'The order appears to not be initialized. Please go back a page.'}
+    if (!this.order) {
+      this.errorMessage = 'The order appears to not be initialized. Please go back a page.'
+      this.matSnack.open(this.errorMessage, 'Alert')
+      return
+    }
 
       if (this.order) {
 
@@ -117,10 +123,9 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
         this.orderService.putOrder(site, this.order).subscribe(data => {
           this.orderService.updateOrderSubscription(data)
           this.router.navigate(['pos-payment'])
-        }, err =>{
-          // this.notify
-          this.processingUpdate = false;
-          this.errorMessage = "Error occured. Please check your address and save again." + err
+        // }, err =>{
+        //   this.processingUpdate = false;
+        //   this.errorMessage = "Error occured. Please check your address and save again." + err
         }
       )
     }
@@ -130,7 +135,7 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     const site = this.siteService.getAssignedSite();
     this.orderService.putOrder(site, this.order).subscribe(data => {
       this.orderService.updateOrderSubscription(data)
-
+      this.router.navigate(['pos-payment'])
     })
   }
 

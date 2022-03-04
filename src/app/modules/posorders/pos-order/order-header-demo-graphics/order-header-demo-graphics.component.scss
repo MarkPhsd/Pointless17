@@ -4,7 +4,7 @@ mat-card {
   width     : 100%;
   overflow-y: auto;
   overflow-x: hidden;
-
+  padding: 2px !important;
   @include for-phone-only  {
     width     : 100%;
     overflow-y: auto;
@@ -12,12 +12,19 @@ mat-card {
   }
 }
 
+mat-card-content {
+  padding: 2px !important;
+}
+mat-card-subtitle {
+  padding: 2px !important;
+}
 .grid-contact {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
   width: 100%;
   gap: 5px;
+  margin-top: 3px
 }
 
 .grid-item-button {
@@ -30,8 +37,8 @@ mat-card {
   display: grid;
   grid-template-columns: 60px 1fr;
   // width: 300px;
-  border-radius: 3px;
-  margin: 5px 5px ;
+  // border-radius: 3px;
+  // margin: 5px 5px ;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -41,5 +48,5 @@ mat-card {
 }
 
 .new-button {
-  padding-top: 4px;
+  margin-top: 4px;
 }

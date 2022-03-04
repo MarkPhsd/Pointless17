@@ -33,6 +33,8 @@ export class PosOrderItemsComponent implements OnInit {
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
 
+  wideBar         : boolean;
+
   initSubscriptions() {
 
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
@@ -61,16 +63,26 @@ export class PosOrderItemsComponent implements OnInit {
                 private siteService:  SitesService,
                 private uiSettingsService: UISettingsService,
                 private orderMethodService: OrderMethodsService,
+                private uiSettingService   : UISettingsService,
               )
  {
     this.orderItemsPanel = 'item-list';
  }
 
   async ngOnInit() {
+
+    let uiHomePage =  this.uiSettingService.homePageSetting
+
+    if (!uiHomePage) {
+      uiHomePage = await this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings');
+    }
+
+    if (uiHomePage) {
+      this.wideBar = uiHomePage.wideOrderBar
+    }
     await this.uiSettingsService.subscribeToCachedConfig()
     this.initSubscriptions();
     this.orderItemsPanel = 'item-list';
-    // this.getUIConfig()
   }
 
 
@@ -127,8 +139,6 @@ export class PosOrderItemsComponent implements OnInit {
       verticalPosition: 'bottom'
     });
   }
-
-
 
   scrollToBottom(): void {
     setTimeout(() => {

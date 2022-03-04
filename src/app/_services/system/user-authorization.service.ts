@@ -11,7 +11,8 @@ export class UserAuthorizationService {
   { }
 
   currentUser() {
-    return JSON.parse(localStorage.getItem('user')) as IUser;
+    const item = localStorage.getItem('user');
+    return JSON.parse(item) as IUser;
   }
 
   validateUser() {
@@ -21,21 +22,26 @@ export class UserAuthorizationService {
   }
 
   isUserAuthorized(requiredArray: string): boolean {
+
     const user = this.currentUser();
 
-    if (!user.roles)  { return false}
+    let currentRole
+    try {
+      currentRole = user.roles;
+    } catch (error) {
+      return false
+    }
 
-    if (!this.validateUser) { return false }
-    if (!requiredArray)     { return false }
-    if (!user) { return false}
+    if (!currentRole) { return }
+    if (!user || !user.roles) { return false}
+    if (!this.validateUser)   { return false }
+    if (!requiredArray)       { return false }
 
-    const currentRole = user.roles;
     let result = false;
     requiredArray    = requiredArray.toLowerCase();
     const rolesArray = requiredArray.split(',')
     rolesArray.forEach( data => {
       if (data === currentRole) {
-          console.log('isAuthorized', true, data)
           result = true;
         }
       }
