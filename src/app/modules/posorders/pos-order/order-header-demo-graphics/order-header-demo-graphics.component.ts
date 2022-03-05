@@ -40,12 +40,14 @@ export class OrderHeaderDemoGraphicsComponent  {
     const site = this.siteService.getAssignedSite();
     const user = {} as IUserProfile;
     const client$ = this.contactService.addClient(site,user)
-    client$.subscribe( data => {
-      this.editItem(data.id)
-    }, err =>
-    {
-      console.log('err', err)
-    }
+    client$.subscribe( {
+        next: (data) => {
+          this.editItem(data.id)
+        },
+        error: (err) =>  {
+          console.log('err', err)
+        }
+      }
     )
   }
 
@@ -53,20 +55,21 @@ export class OrderHeaderDemoGraphicsComponent  {
     this.router.navigate(["/profileEditor/", {id:clientID}]);
   }
 
-  async assignCustomer(event) {
-    if (event) {
-      await this.assignClientID(event.id)
+  async assignCustomer(client) {
+    if (client) {
+      await this.assignClientID(client)
     }
   }
 
-  async assignClientID(id: number) {
+  async assignClientID(client) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
-      this.order.clientID = id
+      this.order.clientID = client.id;
+      this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
+      console.log(this.order)
       const order = await this.orderService.putOrder(site, this.order).pipe().toPromise()
       this.orderService.updateOrderSubscription(order)
     }
   }
-
 
 }
