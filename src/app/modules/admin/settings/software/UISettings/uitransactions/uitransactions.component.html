@@ -8,58 +8,71 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayNotes"
-                  >
-          <mat-label>Display Notes</mat-label>
-        </mat-slide-toggle>
-      </div>
+       <div class="grid-views">
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayQuantity"
-                  >
-          <mat-label>Display Quantity</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayNotes"
+                      >
+              <mat-label>Display Notes</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayAdd"
-                >
-          <mat-label>Display Add Button</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayQuantity"
+                      >
+              <mat-label>Display Quantity</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="displayView"
-                  >
-          <mat-label>Display View</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayAdd"
+                    >
+              <mat-label>Display Add Button</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="validateCustomerLicenseID"
-                  >
-          <mat-label>Validate Customer License/ID</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="displayView"
+                      >
+              <mat-label>Display View</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="ordersRequireCustomer"
-                  >
-          <mat-label>Orders Require Customer</mat-label>
-        </mat-slide-toggle>
-      </div>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="enablMEDClients"
+                      >
+              <mat-label>Enable MED Patients</mat-label>
+            </mat-slide-toggle>
+          </div>
 
-      <app-client-types-lookup
-            [formControlName]="'defaultClientTypeID'"
-            [inputForm]="inputForm">
-      </app-client-types-lookup>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="validateCustomerLicenseID"
+                      >
+              <mat-label>Validate Customer License/ID</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="ordersRequireCustomer"
+                      >
+              <mat-label>Orders Require Customer</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div>
+            <app-client-types-lookup
+                  [formControlName]="'defaultClientTypeID'"
+                  [inputForm]="inputForm">
+            </app-client-types-lookup>
+          </div>
+      </div>
 
       <mat-divider></mat-divider>
       <h3>End of Day</h3>
@@ -71,22 +84,20 @@
         </mat-slide-toggle>
       </div>
 
-      <div>
-        <app-value-fields
-          [fieldType]     ="'number'"
-          [inputForm]     ="inputForm"
-          [fieldName]     ="'closeOrderTimeCutOff'">
-          Last time to close order
-          </app-value-fields>
-      </div>
+    <div>
+      <app-value-fields
+        [fieldType]     ="'number'"
+        [inputForm]     ="inputForm"
+        [fieldName]     ="'closeOrderTimeCutOff'">
+        Last time to close order
+        </app-value-fields>
+    </div>
 
-
-      <div>
-        <button mat-raised-button
-                color="primary"
-                (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
-      </div>
-
+    <div>
+      <button mat-raised-button
+              color="primary"
+              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
+    </div>
 
   </mat-card-content>
 </mat-card>

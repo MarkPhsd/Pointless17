@@ -17,6 +17,7 @@ export interface TransactionUISettings {
   ordersRequireCustomer: boolean;
   validateCustomerLicenseID: boolean;
   defaultClientTypeID: number;
+  enablMEDClients: boolean;
 
 }
 
@@ -339,7 +340,8 @@ export class UISettingsService {
       closeOrderTimeCutOff        : [],
       ordersRequireCustomer       : [],
       validateCustomerLicenseID   : [],
-      defaultClientTypeID         :['',]
+      defaultClientTypeID         :[''],
+      enablMEDClients         :[]
      })
     return fb
   }

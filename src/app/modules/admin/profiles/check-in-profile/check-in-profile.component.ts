@@ -55,7 +55,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   isUser            : boolean;
   accountDisabled  : boolean;
   transactionUISettings  : TransactionUISettings
-
+  enableMEDClients: boolean;
   validationMessage = ''
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
@@ -96,6 +96,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
       if (!data) {return}
       this.transactionUISettings = JSON.parse(data.text)
+      this.enableMEDClients = this.transactionUISettings.enablMEDClients;
     })
 
     const site         = this.siteService.getAssignedSite();

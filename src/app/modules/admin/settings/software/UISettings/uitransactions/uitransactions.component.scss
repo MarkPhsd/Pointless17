@@ -11,8 +11,22 @@
 h4 {
   margin-bottom: 3px;
 }
+
 mat-card {
   margin: 4px;
   padding:4px;
 }
 
+
+.grid-views {
+
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+  overflow-y: visible;
+
+}

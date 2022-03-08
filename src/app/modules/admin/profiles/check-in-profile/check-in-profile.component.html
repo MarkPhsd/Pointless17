@@ -84,13 +84,15 @@
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
 
-              <app-profile-demographics
-                [client]="clientTable"
-                [inputForm]="inputForm"
-                [isAuthorized]="isAuthorized"
-                [isStaff]="isStaff">
-              </app-profile-demographics>
-
+              <span *ngIf="transactionUISettings">
+                <app-profile-demographics
+                  [client]="clientTable"
+                  [inputForm]="inputForm"
+                  [isAuthorized]="isAuthorized"
+                  [enableMEDClients]="enableMEDClients"
+                  [isStaff]="isStaff">
+                </app-profile-demographics>
+              </span>
             </mat-tab>
 
             <mat-tab label="Addresses"

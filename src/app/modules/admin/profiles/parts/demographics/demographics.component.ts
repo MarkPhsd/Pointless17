@@ -13,6 +13,7 @@ export class ProfileDemographicsComponent implements OnInit {
   @Input() isAuthorized : boolean;
   @Input() isStaff      : boolean;
   @Input() client       : IClientTable;
+  @Input() enableMEDClients: boolean;
 
   constructor() { }
 
