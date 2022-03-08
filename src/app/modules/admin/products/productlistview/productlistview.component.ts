@@ -146,13 +146,13 @@ constructor(  private _snackBar              : MatSnackBar,
     this.initClasses()
 
     const clientSearchModel       = {} as ClientSearchModel;
-    clientSearchModel.pageNumber  = 1
+  clientSearchModel.pageNumber  = 1
     clientSearchModel.pageSize    = 1000;
 
     this.urlPath        = await this.awsService.awsBucketURL();
     const site          = this.siteService.getAssignedSite()
-    this.categories$    = this.menuService.getListOfCategories(site)
-    this.departments$   = this.menuService.getListOfDepartments(site)
+    this.categories$    = this.menuService.getListOfCategoriesAll(site)
+    this.departments$   = this.menuService.getListOfDepartmentsAll(site)
     this.productTypes$  = this.itemTypeService.getBasicTypes(site)
 
     const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)

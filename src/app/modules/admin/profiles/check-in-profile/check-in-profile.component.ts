@@ -137,7 +137,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
         this.accountDisabled = false;
 
         if (data && this.transactionUISettings &&   this.transactionUISettings.validateCustomerLicenseID) {
-
           const result = this.orderMethodsService.validateCustomerForOrder(this.inputForm.value, this.transactionUISettings.ordersRequireCustomer )
           console.log('result of validation', result)
           this.validationMessage = result.resultMessage;

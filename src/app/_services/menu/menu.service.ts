@@ -326,14 +326,9 @@ export class MenuService {
 
     return  this.httpCache.get<any[]>(uri )
 
-    // return  this.httpClient.get<IProductCategory[]>(url)
-
-    // const uri = {url: url, cacheMins: 1 }
-
-    // return  this.httpCache.get<IProductCategory[]>(uri)
-
   };
 
+  //active only
   getGetCategoriesList(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
@@ -348,11 +343,21 @@ export class MenuService {
 
     return  this.httpCache.get<any[]>(uri)
 
-    // return  this.httpClient.get<IMenuItem[]>(uri)
+  }
 
-    // const url = { url: uri, cacheMins: 1 }
+  getGetCategoriesListAll(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
-    // return  this.httpCache.get<IMenuItem[]>(url)
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'GetGetCategoriesListAll'
+
+    const parameters = `?TypeofCategoryasName=${type}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    // const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpClient.get<any[]>(url)
 
   }
 
@@ -398,6 +403,18 @@ export class MenuService {
 
   getListOfSubCategories(site: ISite):  Observable<IMenuItem[]>  {
     return this.getGetCategoriesList(site, `subcategory`);
+  }
+
+  getListOfCategoriesAll(site: ISite):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListAll(site, `category`);
+  }
+
+  getListOfDepartmentsAll(site: ISite):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListAll(site, `department`);
+  }
+
+  getListOfSubCategoriesAll(site: ISite):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListAll(site, `subcategory`);
   }
 
   getCategoryAsyncList(site: ISite): Observable<IProductCategory[]> {

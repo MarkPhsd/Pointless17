@@ -56,8 +56,10 @@
         </mat-slide-toggle>
       </div>
 
-
-      <!-- validateCustomerLicenseID -->
+      <app-client-types-lookup
+            [formControlName]="'defaultClientTypeID'"
+            [inputForm]="inputForm">
+      </app-client-types-lookup>
 
       <mat-divider></mat-divider>
       <h3>End of Day</h3>

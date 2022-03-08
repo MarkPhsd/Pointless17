@@ -204,7 +204,6 @@ export class UISettingsService {
   }
   // UITransactionSetting
  async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
-
     const setting = await this.getSetting(name).toPromise();
     const config = JSON.parse(setting.text) as UIHomePageSettings
     this.updateHomePageSetting(config);
@@ -340,6 +339,7 @@ export class UISettingsService {
       closeOrderTimeCutOff        : [],
       ordersRequireCustomer       : [],
       validateCustomerLicenseID   : [],
+      defaultClientTypeID         :['',]
      })
     return fb
   }

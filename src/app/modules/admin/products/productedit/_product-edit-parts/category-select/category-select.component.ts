@@ -21,7 +21,7 @@ export class CategorySelectComponent implements OnInit {
 
   ngOnInit(): void {
     const site =            this.sitesService.getAssignedSite();
-    this.categories$ =      this.menuService.getListOfCategories(site);
+    this.categories$ =      this.menuService.getListOfCategoriesAll(site);
   }
 
   getCategory(event) {

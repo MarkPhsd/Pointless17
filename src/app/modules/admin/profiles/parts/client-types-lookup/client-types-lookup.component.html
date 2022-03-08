@@ -5,7 +5,7 @@
       <mat-select
                   type            = "number"
                   name            = "clientTypeID"
-                  formControlName = "clientTypeID"
+                  [formControlName] = "formControlName"
                 >
 
         <mat-option *ngFor="let item of clientTypes"

@@ -26,7 +26,7 @@ mat-divider {
     margin-bottom: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(450px, 1fr) );
     overflow-y: visible;
 
   }

@@ -16,10 +16,11 @@ export class ClientTypesLookupComponent implements OnInit {
   @Input() clientTypeID: number;
   @Input() clientTypes$: Observable<clientType[]>;
   @Input() inputForm:    FormGroup;
-
+  @Input() formControlName = 'clientTypeID'
   myFilter   : any;
   user       : any;
   clientTypes: clientType[];
+
   constructor(   private siteService: SitesService,
                  private clientTypeService: ClientTypeService,
                  private userAuthorization: UserAuthorizationService) {
