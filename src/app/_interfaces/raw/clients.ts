@@ -116,4 +116,12 @@ export interface IClientTable {
   accountDisabled         : boolean;
   accountLocked          : boolean;
   accountDelay           :  string;
+  medTempLicense:            string;
+  medPhysicianApproved :     boolean;
+  medLicenseNumber:          string;
+  medPlantLimit:             number;
+  medGramLimit:              number;
+  medPrescriptionExpiration :string;
+  medConcentrateLimit     :  string;
+  patientRecOption: boolean;
 }

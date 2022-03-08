@@ -10,7 +10,7 @@ import { IClientTable, IUserProfile } from 'src/app/_interfaces';
 export class ProfileDemographicsComponent implements OnInit {
 
   @Input() inputForm    : FormGroup;
-  @Input() isAuthorized :  boolean;
+  @Input() isAuthorized : boolean;
   @Input() isStaff      : boolean;
   @Input() client       : IClientTable;
 

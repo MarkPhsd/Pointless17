@@ -1,4 +1,4 @@
-<div *ngIf="clientTable && inputForm; else loading" >
+<div *ngIf="clientTable && inputForm && transactionUISettings; else loading" >
 
   <div *ngIf="inputForm.controls.firstName.errors?.required && inputForm.controls.firstName.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.
@@ -15,8 +15,11 @@
               <h3>Profile Editor</h3>
             </div>
             <div>
-              <div *ngIf="clientTable.accountDisabled">
-                <h1>Alert - Account is Disabled - Orders can't be processed.</h1>
+              <div *ngIf="accountDisabled" >
+                <h3 >Alert - Account is Disabled - Orders can't be processed.</h3>
+                <mat-label  class="error" color="warn" >
+                  {{validationMessage}}
+                </mat-label>
               </div>
               <h4>
                 {{ clientTable?.firstName  }}  {{ clientTable?.lastName }}
@@ -25,17 +28,41 @@
             </div>
           </div>
 
-          <div>
-            <app-edit-buttons-standard
-              (outputeupdateItem)     ="updateUser($event)"
-              (outputupdateItemExit)  ="updateUserExit($event)"
-              (outputupdatedeleteItem)="deleteUser($event)"
-              (outputupdateonCancel)  ="navUserList($event)"
-              (outPutStartOrder)      ="startOrder($event)"
-              [enableDelete]= "false"
-            ></app-edit-buttons-standard>
-          </div>
+          <div class="grid-buttons-flow">
+            <div>
+              <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateUser($event)"
+                (outputupdateItemExit)  ="updateUserExit($event)"
+                (outputupdatedeleteItem)="deleteUser($event)"
+                (outputupdateonCancel)  ="navUserList($event)"
+                (outPutStartOrder)      ="startOrder($event)"
+                [enableDelete]= "true"
+              ></app-edit-buttons-standard>
+            </div>
 
+            <div [formGroup]="inputForm"
+                 *ngIf="isAuthorized"
+                 class="grid-buttons toggle-container" >
+
+              <div>
+                <mat-slide-toggle
+                        name="accountDisabled"
+                        formControlName="accountDisabled">
+                  <mat-label>Disabled</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div>
+                <mat-slide-toggle
+                        name="accountLocked"
+                        formControlName="accountLocked">
+                  <mat-label>Locked</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+            </div>
+
+          </div>
       </div>
       <mat-divider></mat-divider>
     </mat-card-title>
@@ -44,7 +71,7 @@
       <form  [formGroup]="inputForm"
              id="userForm"  >
         <div class="md-content"
-              flex md-scroll-y
+              flex
               (swipeleft)="swipe(id, $event.type)"
               (swiperight)="swipe(id, $event.type)">
 
@@ -56,12 +83,14 @@
             <mat-tab label="Demographics"
                       (swipeleft)="swipe(1, $event.type)"
                       (swiperight)="swipe(1, $event.type)">
+
               <app-profile-demographics
                 [client]="clientTable"
                 [inputForm]="inputForm"
                 [isAuthorized]="isAuthorized"
                 [isStaff]="isStaff">
               </app-profile-demographics>
+
             </mat-tab>
 
             <mat-tab label="Addresses"
@@ -95,20 +124,17 @@
                     (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
               <div class="order-panel">
-
                 <div>
                    <mat-date-range
                     [inputForm]      ="dateRangeForm"
                     (outputDateRange)="emitDatePickerData($event)">
                   </mat-date-range>
                 </div>
-
                 <div>
                    <app-orders-list
                       [height]="'47vh'"
                   ></app-orders-list>
                 </div>
-
               </div>
             </mat-tab>
 
@@ -117,6 +143,18 @@
                      (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
               <div  class="grid-flow">
+
+                <div *ngIf="isAuthorized" >
+                  <mat-form-field appearance="outline">
+                  <mat-label >User Login</mat-label>
+                  <input  matInput
+                          type="text"
+                          id="title"
+                          formControlName="apiUserName"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
                 <div>
                     <app-profile-roles
                       [isAuthorized]="isAuthorized"
@@ -141,35 +179,6 @@
 
 
 
-    <mat-card-actions>
-      <div *ngIf="isAuthorized">
-        <div  [formGroup]="inputForm">
-          <div>
-            <mat-slide-toggle
-                    name="accountDisabled"
-                    class="mat-label"
-                    formControlName="accountDisabled">
-              <mat-label class="mat-label">Disabled</mat-label>
-            </mat-slide-toggle>
-          </div>
-          <div>
-            <mat-slide-toggle
-                    name="accountLocked"
-                    class="mat-label"
-                    formControlName="accountLocked">
-              <mat-label class="mat-label">Locked</mat-label>
-            </mat-slide-toggle>
-          </div>
-        </div>
-
-        <button mat-raised-button
-              class="button-margin"
-              color="warn"
-              (click)="deleteUser('demo')">
-              <mat-icon>delete</mat-icon>Delete</button>
-
-    </div>
-  </mat-card-actions>
 
   </mat-card>
 </div>

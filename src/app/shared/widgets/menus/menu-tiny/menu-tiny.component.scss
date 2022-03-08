@@ -19,7 +19,6 @@
 .submenu-sections {
   margin-top: 50px;
   width: 100%;
-
 }
 
 .spinner-container {
@@ -28,7 +27,6 @@
 
 .accordion {
   width: 100%;
-  // max-width: 225px;
   margin: auto;
   line-height: 1.6em;
   border-radius: 4px;
@@ -73,7 +71,8 @@ ul {
 
 li {
   line-height: 2.6em;
-  left: .5rem;
+  left       : .5rem;
+  height: 100%;
 }
 
 .accordion li.active i.fa-chevron-down {

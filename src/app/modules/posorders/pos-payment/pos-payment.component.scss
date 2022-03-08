@@ -3,7 +3,7 @@
 mat-card {
   width     : 100%;
   min-width : 435px;
-  max-width : 435px;
+  // max-width : 435px;
   // min-height: 155px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -11,7 +11,7 @@ mat-card {
   @include for-phone-only  {
     width     : 335px;
     min-width : 335px;
-    max-width : 335px;
+    // max-width : 335px;
     overflow-y: auto;
     overflow-x: hidden;
   }
@@ -83,11 +83,11 @@ mat-card {
 
 .grid-header-item {
 
-  margin    : 10px;
+  margin    : 2px;
   width     : 100%;
   // min-width : 435px;
   // max-width : 455px;
-
+  overflow-x: hidden  ;
   @include for-phone-only  {
     margin: 5px;
     // display: flex;
@@ -158,7 +158,8 @@ mat-card {
 }
 
 .card-dimensions {
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   display: flex;
   align-items: center;
   justify-content: center;

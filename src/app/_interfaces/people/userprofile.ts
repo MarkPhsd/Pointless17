@@ -76,6 +76,20 @@ export interface IUserProfile {
   openOrderCount:            number;
   itemCount     :            number;
   age           :            number;
+  metrcKey      :            string;
+  metrcUser     :            string;
+  dlNumber      :            string;
+  accountDisabled       :    boolean;
+  accountLocked :            boolean;
+  medTempLicense:            string;
+  medPhysicianApproved :     boolean;
+  medLicenseNumber:          string;
+  medPlantLimit:             number;
+  medGramLimit:              number;
+  medPrescriptionExpiration :string;
+  medConcentrateLimit     :  string;
+  patientRecOption        : boolean;
+
 }
 
 export interface clientType {

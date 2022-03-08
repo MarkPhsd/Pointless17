@@ -28,7 +28,7 @@
 
   <mat-drawer-content>
 
-      <div class="animations"   *ngIf="advertisingOutlet"
+      <!-- <div class="animations"   *ngIf="advertisingOutlet"
             [@routeAnimations]="prepareAdvertisingRoute(outlet)" >
           <router-outlet #outlet="outlet"></router-outlet>
       </div>
@@ -36,17 +36,17 @@
       <div class="animations"  *ngIf="messageOutlet"
           [@routeAnimations]="prepareMessageRoute(outlet)" >
           <router-outlet #outlet="outlet"></router-outlet>
-      </div>
+      </div> -->
 
-      <div *ngIf="!department" class="animations"
+      <div  class="animations"
            [@routeAnimations]="prepareRoute(outlet)" >
           <router-outlet #outlet="outlet"></router-outlet>
       </div>
 
-      <div *ngIf="department"  class="animations department-menu">
+      <!-- <div *ngIf="department"  class="animations department-menu">
         <app-department-menu>
         </app-department-menu>
-      </div>
+      </div> -->
   </mat-drawer-content>
 
   <mat-drawer

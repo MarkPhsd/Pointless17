@@ -1,0 +1,108 @@
+<div class="container">
+
+  <div class="name-fields">
+
+    <div *ngIf="inputForm" [formGroup]="inputForm">
+      <mat-slide-toggle
+              name="medTempLicense"
+              formControlName="patientRecOption">
+        <mat-label >Med Patient</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+  </div>
+
+  <div *ngIf="medPatient" >
+    <h5>  MED Info and Limits </h5>
+
+    <div *ngIf="medPatient"
+         class="counts-container">
+      <div>
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'medGramLimit'">
+            Gram Count
+        </app-value-fields>
+      </div>
+
+      <div>
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'medPlantLimit'">
+          Plant Count
+        </app-value-fields>
+      </div>
+
+      <div>
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'medConcentrateLimit'">
+            Concentrate Count
+        </app-value-fields>
+      </div>
+
+    </div>
+
+  </div>
+
+  <mat-card *ngIf="medPatient">
+    <mat-card-subtitle>MED Info</mat-card-subtitle>
+    <div  *ngIf="isStaff">
+      <div *ngIf="inputForm"
+           [formGroup]="inputForm">
+
+        <div class="name-fields">
+
+          <div>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'medLicenseNumber'">
+              MED License Number
+            </app-value-fields>
+          </div>
+
+          <div>
+            <mat-form-field  appearance="outline">
+              <mat-label>Expiration</mat-label>
+              <input matInput
+                    [matDatepicker]="picker"
+                    formControlName="medPrescriptionExpiration"
+                  >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker  #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </div>
+
+        <div>
+          <mat-slide-toggle
+                  name="medPhysicianApproved"
+                  formControlName="medPhysicianApproved">
+            <mat-label >Physician Approval</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div>
+          <mat-slide-toggle
+                  name="medTempLicense"
+                  formControlName="medTempLicense">
+            <mat-label >Temp License</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div>
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="fileList"
+                (imageUrl)   ="updateFileList($event)">
+              File Uploads
+            </app-widget-uploader>
+          </mat-card>
+        </div>
+
+      </div>
+    </div>
+  </mat-card>
+
+</div>

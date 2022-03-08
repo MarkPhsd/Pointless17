@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValueFieldsComponent } from './value-fields.component';
+import { ProfileMedInfoComponent } from './profile-med-info.component';
 
-describe('ValueFieldsComponent', () => {
-  let component: ValueFieldsComponent;
-  let fixture: ComponentFixture<ValueFieldsComponent>;
+describe('ProfileMedInfoComponent', () => {
+  let component: ProfileMedInfoComponent;
+  let fixture: ComponentFixture<ProfileMedInfoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ValueFieldsComponent ]
+      declarations: [ ProfileMedInfoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ValueFieldsComponent);
+    fixture = TestBed.createComponent(ProfileMedInfoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

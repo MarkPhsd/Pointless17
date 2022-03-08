@@ -123,7 +123,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           searchModel.pageSize    = 25;
           this.searchModel        = searchModel
         }
-        console.log('search model', this.searchModel)
         this.refreshSearch()
         return
       }
@@ -295,8 +294,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     if (this.searchModel) { searchModel = this.searchModel }
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
-    // console.log('init Search Model from orders-list', searchModel)
-    // this.orderService.updateOrderSearchModel(searchModel)
     return searchModel
   }
 

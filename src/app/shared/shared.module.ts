@@ -131,6 +131,7 @@ import { OverLayComponent } from './widgets/over-lay/over-lay.component';
 import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component';
 import { LogoComponent } from './widgets/logo/logo.component';
 import { FilterPipe } from '../_pipes/filter.pipe';
+import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile-med-info/profile-med-info.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
@@ -234,6 +235,7 @@ import { FilterPipe } from '../_pipes/filter.pipe';
     ProductTypeSelectComponent,
     ProfileShippingAddressComponent,
     ProfileBillingAddressComponent,
+    ProfileMedInfoComponent,
     ProgressBarComponent,
     PriceCategorySearchComponent,
     RetailProductEditComponent,
@@ -328,13 +330,14 @@ import { FilterPipe } from '../_pipes/filter.pipe';
     GenericNameSelectComponent,
     HeaderComponent,
     IonicGeoLocationComponent,
+    IonicSwipeToDeleteComponent,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
     KeyPadComponent,
-    LogoComponent,
-    Label1by8Component,
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,
+    LogoComponent,
+    Label1by8Component,
     MatDateRangeComponent,
     MatToggleSelectorComponent,
     MatSelectComponent,
@@ -361,7 +364,7 @@ import { FilterPipe } from '../_pipes/filter.pipe';
     PriceTierScheduleComponent,
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
-    IonicSwipeToDeleteComponent,
+    ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,

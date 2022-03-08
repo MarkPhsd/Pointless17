@@ -1,41 +1,43 @@
 <div *ngIf="inputForm"
     [formGroup]="inputForm"
     class="grid-flow">
+
   <div>
-      <div>
-          <mat-form-field  appearance="outline">
-          <mat-label >Title</mat-label>
-          <input matInput
-                type="text"
-                id="title"
-                formControlName="title"
-                class="form-control" >
-          </mat-form-field>
+      <div class="customer-fullname-fields">
+        <div >
+            <mat-form-field  appearance="outline">
+            <mat-label >Title</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="title"
+                   >
+            </mat-form-field>
+        </div>
+
+        <div class="customer-name-fields">
+          <div>
+            <mat-form-field appearance="outline">
+            <mat-label >First Name</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="firstName"
+                   >
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field appearance="outline">
+            <mat-label >Last Name</mat-label>
+              <input  matInput
+                      type="text"
+                      formControlName="lastName"
+                     >
+            </mat-form-field>
+          </div>
+        </div>
       </div>
 
-      <div>
-          <mat-form-field appearance="outline">
-          <mat-label >First Name</mat-label>
-          <input matInput
-                 type="text"
-                 id="title"
-                 formControlName="firstName"
-                 class="form-control" >
-          </mat-form-field>
-      </div>
-
-      <div>
-          <mat-form-field appearance="outline">
-          <mat-label >Last Name</mat-label>
-            <input  matInput
-                    type="text"
-                    id="title"
-                    formControlName="lastName"
-                    class="form-control" >
-          </mat-form-field>
-      </div>
-
-      <div>
+      <div class="name-fields">
+        <div>
           <mat-form-field appearance="outline">
           <mat-label >Phone</mat-label>
           <input  matInput
@@ -44,9 +46,9 @@
                   formControlName="phone"
                   class="form-control" >
           </mat-form-field>
-      </div>
+        </div>
 
-      <div>
+        <div>
           <mat-form-field appearance="outline">
           <mat-label >Email</mat-label>
           <input  matInput
@@ -55,124 +57,76 @@
                   formControlName="email"
                   class="form-control" >
           </mat-form-field>
+        </div>
       </div>
 
-      <div *ngIf="isAuthorized" >
-        <mat-form-field appearance="outline">
-        <mat-label >User Login</mat-label>
-        <input  matInput
-                type="text"
-                id="title"
-                formControlName="apiUserName"
-                class="form-control" >
+      <div class="name-fields">
+        <div *ngIf="isAuthorized" >
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>DOB</mat-label>
+            <input matInput
+                  [matDatepicker]="picker"
+                  formControlName="dob">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker  #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="isAuthorized" >
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>DL EXP</mat-label>
+            <input  matInput
+                    [matDatepicker]="picker2"
+                    formControlName="dlExp">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker  #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div>
+        <mat-form-field appearance="outline"
+            >
+          <mat-label>Notes</mat-label>
+            <textarea matInput
+                      rows="10"
+                      columns="40"
+                      formControlName="notes"
+            ></textarea>
         </mat-form-field>
       </div>
-
   </div>
 
   <div>
-    <div *ngIf="isAuthorized" >
-      <mat-form-field class="example-full-width" appearance="outline">
-        <mat-label>DOB</mat-label>
-        <input matInput
-               [matDatepicker]="picker"
-               formControlName="dob">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #picker></mat-datepicker>
-      </mat-form-field>
-
-    </div>
-
-    <div *ngIf="isAuthorized" >
-      <mat-form-field class="example-full-width" appearance="outline">
-        <mat-label>Expiration</mat-label>
-        <input  matInput
-                [matDatepicker]="picker2"
-                formControlName="followUp">
-        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-        <mat-datepicker touchUi #picker2></mat-datepicker>
-      </mat-form-field>
-    </div>
-
-    <div>
-      <mat-card>
-        <mat-card-subtitle>
-          Account Info
-        </mat-card-subtitle>
-
-        <div class="grid-info">
-
-          <div class='text'>
-            Username:
-          </div>
-          <div>
-            {{inputForm.controls['apiUserName']?.value}}
-          </div>
-
-          <div  class='text'>
-            DOB:
-          </div>
-          <div  class='text'>
-            {{inputForm.controls['dob']?.value  | date: 'shortDate'}}
-          </div>
-
-          <div *ngIf="inputForm.controls['dob']?.value" class='text'>
-            Age:
-          </div>
-          <div *ngIf="inputForm.controls['dob']?.value"  class='text'>
-            {{client.age}}
-          </div>
-
-
-          <span *ngIf="inputForm.controls['dlNumber']?.value"  class='text'>
-              <div>
-                DL Number:
-              </div>
-              <div>
-                {{inputForm.controls['dlNumber']?.value}}
-            </div>
-
-              <div>
-                DL EXP:
-              </div>
-              <div>
-                {{inputForm.controls['dlExp']?.value  | date: 'shortDate' }}
-              </div>
-          </span>
-
-            <div class='text'>
-              Expiration:
-            </div>
-            <div class='text'>
-              {{inputForm.controls['followUp']?.value | date: 'shortDate' }}
-            </div>
-
-            <div class='text'>
-              Rewards Points:
-            </div>
-            <div class='text'>
-              {{inputForm.controls['loyaltyPoints']?.value}}
-            </div>
-
-            <div *ngIf="inputForm.controls['med']?.value" class='text'>
-              Med:
-            </div>
-            <div *ngIf="inputForm.controls['med']?.value" class='text'>
-              {{inputForm.controls['med']?.value}}
-            </div>
-
-          </div>
-      </mat-card>
-    </div>
-
+    <profile-med-info
+        [isAuthorized]="isAuthorized"
+        [inputForm]="inputForm"
+        [isStaff]="isStaff">
+        METRC Info
+    </profile-med-info>
   </div>
 
   <div>
+    <div  class="name-fields">
+      <div *ngIf="isStaff || isAuthorized">
+        <app-status-lookup
+            [inputForm]="inputForm">
+        </app-status-lookup>
+      </div>
 
-    <div  *ngIf="isAuthorized" >
+      <div *ngIf="isStaff" >
+        <app-client-types-lookup
+            [inputForm]="inputForm">
+        </app-client-types-lookup>
+      </div>
+    </div>
+
+    <div class="points">
       <mat-form-field appearance="outline">
       <mat-label >Reward Points</mat-label>
-      <input  matInput
+      <input  [disabled]="!isAuthorized" matInput
               type="text"
               id="title"
               formControlName="loyaltyPoints"
@@ -180,69 +134,28 @@
       </mat-form-field>
     </div>
 
-    <div *ngIf="isAuthorized" >
-      <app-client-types-lookup
-          [inputForm]="inputForm">
-      </app-client-types-lookup>
+    <div>
+      <mat-button-toggle-group  name="type"
+                                aria-label="Font Style"
+                                formControlName="taxSales">
+        <mat-button-toggle [value]="1">Non Taxable Client</mat-button-toggle>
+        <mat-button-toggle [value]="0">Taxable Client</mat-button-toggle>
+      </mat-button-toggle-group>
     </div>
 
-    <div *ngIf="isAuthorized">
-      <mat-form-field appearance="outline">
-        <mat-label>Tax Option</mat-label>
-        <mat-select
-                    type="number"
-                    formControlName ="taxSales"
-                    >
-          <mat-option [value]="1">Non Taxable Client</mat-option>
-          <mat-option [value]="0">Taxable Client</mat-option>
-        </mat-select>
-      </mat-form-field>
+    <div class="toggle-format">
+      <div> <mat-label>Price Level</mat-label></div>
+      <div>
+        <mat-button-toggle-group  [disabled] ='!isAuthorized'
+                                  name="type"
+                                  aria-label="Font Style"
+                                  formControlName="priceTier">
+          <mat-button-toggle [value]="0">Standard</mat-button-toggle>
+          <mat-button-toggle [value]="1">Level 1</mat-button-toggle>
+          <mat-button-toggle [value]="2">Level 2</mat-button-toggle>
+          <mat-button-toggle [value]="3">Level 3</mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
     </div>
-
-    <div *ngIf="isAuthorized" >
-      <mat-form-field appearance="outline">
-        <mat-label>Price Level Option</mat-label>
-        <mat-select
-                      type="number"
-                      formControlName ="priceTier"
-                    >
-          <mat-option [value]="0">Standard</mat-option>
-          <mat-option [value]="1">Level 1</mat-option>
-          <mat-option [value]="2">Level 2</mat-option>
-          <mat-option [value]="3">Level 3</mat-option>
-          <mat-option [value]="4">Level 4</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-
-    <div *ngIf="isStaff || isAuthorized">
-      <app-status-lookup
-          [inputForm]="inputForm"
-      ></app-status-lookup>
-    </div>
-
-    <div *ngIf="isStaff || isAuthorized">
-      <mat-form-field appearance="outline">
-      <mat-label >MED</mat-label>
-      <input matInput type="text"
-            id="title"
-            formControlName="med"
-            class="form-control" >
-      </mat-form-field>
-    </div>
-
   </div>
-
-  <div>
-    <mat-form-field appearance="outline"
-        id="customer-notes">
-      <mat-label>Notes</mat-label>
-        <textarea matInput
-                  rows="10"
-                  columns="40"
-                  formControlName="notes"
-        ></textarea>
-    </mat-form-field>
-  </div>
-
 </div>

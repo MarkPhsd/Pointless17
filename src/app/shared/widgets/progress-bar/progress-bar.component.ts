@@ -1,31 +1,29 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input , OnChanges} from '@angular/core';
 
 @Component({
   selector: 'app-progress-bar',
   templateUrl: './progress-bar.component.html',
   styleUrls: ['./progress-bar.component.scss']
 })
-export class ProgressBarComponent implements OnInit  {
+export class ProgressBarComponent implements  OnChanges {
 
-  @Input() value: number;
+  @Input() value = 0;
   @Input() percentage: number;
   @Input() ratio = 100;
   @Input() uom  = 'grams'
   percentageValue = 0;
 
   constructor () {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
-    if (this.ratio = 0) {
-      this.ratio = 28;
-    }
-
-    if (!this.value) { this.value = 0 }
-    this.percentageValue = parseInt((this.value / this.ratio).toFixed(1))
-
   }
 
-  ngOnInit(): void {
-    console.log('')
+
+  ngOnChanges(): void {
+    this.refreshPercentage();
+  }
+
+  refreshPercentage() {
+    if (this.ratio == 0) { this.ratio = 28; }
+    this.percentageValue =   +(+(this.value / this.ratio) * 100).toFixed(0)
+
   }
 }

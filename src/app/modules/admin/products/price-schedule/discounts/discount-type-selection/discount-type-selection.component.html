@@ -5,18 +5,17 @@
       <div *ngIf="priceAdjustScheduleTypes">
         <div *ngIf="priceAdjustScheduleTypes as list" >
           <mat-button-toggle-group name="type"
-                                  aria-label="Font Style"
-                                  formControlName="type"
-                                  >
+                                  aria-label="iTem Type"
+                                  formControlName="type">
             <mat-button-toggle class="discount-type-button"
                                [value]="item.name"
                                (tapClick)="selectAdjustScheduleTypes(item)"
                                *ngFor="let item of list" >
 
-              <div >
-                <mat-icon>{{item.icon}}</mat-icon>
-              </div>
-              {{item.name}}
+                <div>
+                  <mat-icon>{{item.icon}}</mat-icon>
+                </div>
+                {{item.name}}
             </mat-button-toggle>
           </mat-button-toggle-group>
 

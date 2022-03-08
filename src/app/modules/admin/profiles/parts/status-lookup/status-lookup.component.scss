@@ -9,7 +9,8 @@ meta-tags {
   height: 100px;
 }
 
-mat-form-field, .fields {
-  // margin: 3px 3px 3px 3px;
-  // font-size: .9em;
+mat-form-field  {
+  font-size: .9em;
+  margin: 3px ;
+  width: 95%;
 }

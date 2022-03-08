@@ -1,12 +1,4 @@
 .mat-card-floater {
-  // width : 285px;
-  // margin-left: 35px;
-  // position:absolute;
-  // top:0px;
-  // right:0px;
-  // left: -50px;
-  // // width:100px;
-  // z-index:1001;
   margin: 5px;
 }
 
@@ -37,7 +29,6 @@ mat-form-field {
   display         : grid;
   grid-template-columns: repeat(3, 1fr);
   gap             : 0px;
-  // column-gap      : 1px;
   margin-left     : 10px;
   grid-gap        : 0px;
   grid-column-gap : 0px;
@@ -47,7 +38,6 @@ mat-form-field {
   display         : grid;
   grid-template-columns: repeat(3, 1fr);
   gap             : 0px;
-  // column-gap      : 1px;
   margin-left     : 15px;
   grid-gap        : 0px;
   grid-column-gap : 0px;
@@ -60,20 +50,28 @@ mat-form-field {
 }
 
 .button-sized-2 {
-  width       : 130px;
-  height      : 85px;
+  width        : 130px;
+  height       : 85px;
+  border-radius: 5px;
+}
+
+.button-sized-scaled {
+  // width        : 1.4vw;
+  // height       : 1.4vw;
+  font-size    : large;
+  height       : 8vw;
+  width        : 10vw;
   border-radius: 5px;
 }
 
 .keyboard-button {
-  border-color: rgb(92, 99, 96);
-  border-width: 1px;
-  border-style: solid;
-  margin-left : 5px;
-  margin-top  : 8px;
+  border-color : rgb(92, 99, 96);
+  border-width : 1px;
+  border-style : solid;
+  margin-left  : 5px;
+  margin-top   : 8px;
   border-radius: 5px;
 }
-// number-buttons button-sized-1
 
 .number-buttons {
   border-color: rgb(92, 99, 96);
@@ -84,8 +82,6 @@ mat-form-field {
   padding     : 0px;
   border-radius: 5px;
 }
-
-
 
 button {
   width       : 100%;
@@ -101,8 +97,6 @@ button {
   margin-top: 10px;
   margin-right: 5px;
 }
-
-
 
 
 .item-container {

@@ -182,84 +182,89 @@
       </div>
 
       <div *ngIf="user">
-        <button   aria-label="user"
+        <button   aria-label="user menu"
                   mat-button
-                  [matMenuTriggerFor]="menu">
+                  [matMenuTriggerFor]="menu"
+                  #menuTrigger="matMenuTrigger"
+                  (mouseenter)="menuTrigger.openMenu()">
           <mat-icon>person_outline</mat-icon>
         </button>
 
-        <mat-menu class="mat-menu-panel"  #menu="matMenu">
 
-            <div  class="mat-item">
-              <button
+        <mat-menu class="mat-menu-panel" [overlapTrigger]="false" #menu="matMenu">
+            <span (mouseleave)="menuTrigger.closeMenu()">
+
+              <div  class="mat-item">
+                <button
+                        mat-button
+                        color="accent"
+                        class="menu-button"
+                        aria-label="logout"
+                        (click)="logout()">
+                    Log Out
+                    <mat-icon>exit_to_app</mat-icon>
+                </button>
+                <mat-divider class="mat-divider"></mat-divider>
+              </div>
+
+              <div *ngIf="smallDevice">
+                  <app-cart-button> </app-cart-button>
+                  <mat-divider class="mat-divider"></mat-divider>
+              </div>
+
+              <div  class="mat-item">
+                <button
                       mat-button
                       color="accent"
                       class="menu-button"
-                      aria-label="logout"
-                      (click)="logout()">
-                  Log Out
-                  <mat-icon>exit_to_app</mat-icon>
-              </button>
-              <mat-divider class="mat-divider"></mat-divider>
-            </div>
-
-            <div *ngIf="smallDevice">
-                <app-cart-button> </app-cart-button>
-                <mat-divider class="mat-divider"></mat-divider>
-            </div>
-
-            <div  class="mat-item">
-              <button
-                    mat-button
-                    color="accent"
-                    class="menu-button"
-                    aria-label="face"
-                    routerLink="/app-profile">
-                    {{ userName }} - {{userRoles}}
-                  <mat-icon>face</mat-icon>
-              </button>
-               <mat-divider class="mat-divider"></mat-divider>
-            </div>
-
-
-            <div class="mat-item"
-                  *ngIf="smallDevice">
-                <app-toggle-theme></app-toggle-theme>
-                <mat-divider class="mat-divider"></mat-divider>
-            </div>
-
-            <div  mat-menu-item
-                  *ngIf="smallDevice && siteName"
-                  class="mat-item" >
-                <h2 > {{ siteName  }} </h2>
-                <mat-divider class="mat-divider"></mat-divider>
-            </div>
-
-            <div  class="mat-item"
-                  *ngIf="smallDevice">
-              <button
-                    mat-button
-                    color="primary"
-                    aria-label="location"
-                    class="menu-button"
-                    (click)="siteSelector()">
-                <mat-icon>location_on</mat-icon>
-              </button>
-              <mat-divider class="mat-divider"></mat-divider>
-            </div>
-
-            <div  class="mat-item"
-                  *ngIf="user && user.roles === 'user'  && user.username != 'user'">
-                <button
-                      color="accent"
-
-                      class="menu-button"
-                      aria-label="Order history"
-                      class="mat-item"
-                      (click)="navPOSOrders()">
-                  My Orders<mat-icon>list</mat-icon>
+                      aria-label="face"
+                      routerLink="/app-profile">
+                      {{ userName }} - {{userRoles}}
+                    <mat-icon>face</mat-icon>
                 </button>
-            </div>
+                <mat-divider class="mat-divider"></mat-divider>
+              </div>
+
+
+              <div class="mat-item"
+                    *ngIf="smallDevice">
+                  <app-toggle-theme></app-toggle-theme>
+                  <mat-divider class="mat-divider"></mat-divider>
+              </div>
+
+              <div  mat-menu-item
+                    *ngIf="smallDevice && siteName"
+                    class="mat-item" >
+                  <h2 > {{ siteName  }} </h2>
+                  <mat-divider class="mat-divider"></mat-divider>
+              </div>
+
+              <div  class="mat-item"
+                    *ngIf="smallDevice">
+                <button
+                      mat-button
+                      color="primary"
+                      aria-label="location"
+                      class="menu-button"
+                      (click)="siteSelector()">
+                  <mat-icon>location_on</mat-icon>
+                </button>
+                <mat-divider class="mat-divider"></mat-divider>
+              </div>
+
+              <div  class="mat-item"
+                    *ngIf="user && user.roles === 'user'  && user.username != 'user'">
+                  <button
+                        color="accent"
+                        class="menu-button"
+                        aria-label="Order history"
+                        class="mat-item"
+                        (click)="navPOSOrders()">
+                    My Orders<mat-icon>list</mat-icon>
+                  </button>
+              </div>
+
+          </span>
 
         </mat-menu>
       </div>

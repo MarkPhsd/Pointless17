@@ -1,7 +1,7 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Renderer2 } from "@angular/core";
 import { Observable, throwError } from 'rxjs';
 import { ITheme }  from 'src/app/_interfaces';
-//import  * as  ThemesJSON from 'src/assets/ThemesJSON';
+// import  * as  ThemesJSON from 'src/assets/ThemesJSON';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +10,7 @@ import { ITheme }  from 'src/app/_interfaces';
 export class ThemesService {
   theme: Observable<ITheme[]>;
 
-  constructor() {}
+  constructor(private _renderer : Renderer2,) {}
 
   getThemeOptions()
   {
@@ -21,5 +21,10 @@ export class ThemesService {
     // TODO(@SiddAjmera): Implement this later
   }
 
-
+  renderTheme(){
+    const theme = localStorage.getItem('angularTheme')
+    this._renderer.removeClass(document.body, 'dark-theme');
+    this._renderer.removeClass(document.body, 'light-theme');
+    this._renderer.addClass(document.body, theme);
+  }
 }

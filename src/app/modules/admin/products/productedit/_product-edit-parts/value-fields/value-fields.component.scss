@@ -1,11 +1,15 @@
 mat-form-field {
-  font-size: .8em;
+  font-size: .9rem;
   margin: 3px ;
+  width: 95%;
+  padding: 0 !important;
 }
+
 .fields {
   margin: 4px ;
   font-size: .8em;
 }
+
 .fields-small {
   font-size: .8em;
   width: 70px;

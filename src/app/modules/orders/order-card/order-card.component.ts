@@ -26,6 +26,7 @@ export class OrderCardComponent implements OnInit {
      }
    }
 
+
   ngOnInit() {
     if (this.order) {
       if(!this.order.total) {
@@ -36,6 +37,8 @@ export class OrderCardComponent implements OnInit {
       }
       this.minutesOpen = this.getMinutesOpen(this.order)
     }
+    console.log('order?.clients_POSOrders?', this.order?.clients_POSOrders  )
+
   }
 
   getMinutesOpen(order) : number {

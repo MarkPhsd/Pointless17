@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { BehaviorSubject, Observable, } from 'rxjs';
 import { ClientSearchModel, ClientSearchResults, ISite, IUserProfile }   from  'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { HttpClient } from '@angular/common/http';
 

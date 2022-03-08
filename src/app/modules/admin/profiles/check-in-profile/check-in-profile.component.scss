@@ -1,4 +1,5 @@
 @import "/src/mixins.scss";
+
 .grid-header {
   --gap: 10px;
   display: grid;
@@ -21,6 +22,15 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(325px, 1fr) );
+  margin-right: 1px;
+}
+
+.grid-buttons-flow {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(325px, 1fr) );
+  margin-right: 1px;
 }
 
 .grid-buttons {
@@ -28,6 +38,14 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(95px, 1fr) );
+}
+
+.toggle-container {
+  max-width: 250px;
+}
+
+.error {
+  color: crimson;
 }
 
 .button {
@@ -46,13 +64,17 @@
   overflow-x: scroll;
 }
 
+mat-slide-toggle {
+  font-size: .9rem !important;
+}
+
 app-widget-uploader {
   margin: 5rem 5rem 5rem 5rem;
 }
 
-mat-label {
+mat-label .mat-label {
   margin: 5px;
-  font-size: 1em;
+  font-size: .9rem !important;
 }
 
 button {
@@ -63,10 +85,9 @@ button {
   margin: 5px;
 }
 
-
 mat-form-field {
   margin: 5px;
-  font-size: 1em;
+  font-size: 1vw  !important;
 }
 
 mat-card{

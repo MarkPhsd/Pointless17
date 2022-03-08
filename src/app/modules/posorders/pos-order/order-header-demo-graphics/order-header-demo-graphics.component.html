@@ -26,7 +26,6 @@
       <div > Account   </div>
       <div> {{order?.clients_POSOrders?.accountNumber}}</div>
       <div > Type  </div>
-
       <div *ngIf="order.clients_POSOrders && order.clients_POSOrders.client_Type">  {{order?.clients_POSOrders?.client_Type.name}}</div>
       <div > Points </div>
       <div> {{order?.clients_POSOrders?.loyaltyPoints}} | {{ order?.clients_POSOrders?.loyaltyPointValue | currency }} </div>

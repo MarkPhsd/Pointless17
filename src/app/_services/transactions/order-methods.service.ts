@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
-import { IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { IClientTable, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -90,14 +90,10 @@ export class OrderMethodsService {
 
   }
 
-  async doesOrderExist(site: ISite): Promise<boolean> {
+  doesOrderExist(site: ISite) {
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
     if (!this.order || (this.order.id === undefined)) {
-      const result = await this.orderService.newDefaultOrder(site);
-      if (!result) {
-        this.notifyEvent(`No order assigned.`, 'Alert');
-      }
-      return result;
+      this.orderService.newDefaultOrder(site);
     }
     return true;
   }
@@ -682,6 +678,71 @@ export class OrderMethodsService {
       }
     }
   }
+
+  validateCustomerForOrder(client: IClientTable, ordersRequireCustomer: boolean) {
+
+    const accountLocked   = client.accountDisabled;
+    const accountDisabled = client.accountLocked;
+    let resultMessage = ''
+
+    if (accountLocked || accountDisabled) {
+      resultMessage = 'Problem account is locked or disabled.'
+      this.notifyEvent('Problem account is locked or disabled.', 'Failure')
+      return {valid: false, resultMessage: resultMessage}
+    }
+
+    if (ordersRequireCustomer) {
+      if (client.dlExp || !client?.dlExp) {
+        if (client.dlExp  && this.isDateExpired(client.dlExp)) {
+           resultMessage =' Problem with state ID or state driver license expiration date.'
+           return {valid: false, resultMessage: resultMessage}
+        }
+        if (!client.dlExp ) {
+          resultMessage ='Driver license or ID expiration date does not exist for this customer'
+          return {valid: false, resultMessage: resultMessage}
+        }
+        if (!client.dlNumber ) {
+          resultMessage = 'Driver or ID number does not exist for this customer'
+          return {valid: false, resultMessage: resultMessage}
+        }
+      }
+    }
+
+    if (client.patientRecOption) {
+      if (!client.medLicenseNumber) {
+        resultMessage = 'Problem with MED license.'
+        return {valid: false, resultMessage: resultMessage}
+      }
+      if (!client.medPrescriptionExpiration) {
+        resultMessage = 'Problem with MED expiration.'
+        return {valid: false, resultMessage: resultMessage}
+      }
+      if (client.medPrescriptionExpiration) {
+        if (this.isDateExpired(client.medPrescriptionExpiration)) {
+          resultMessage = 'Problem with MED expiration.'
+          return {valid: false, resultMessage: resultMessage}
+        }
+      }
+    }
+
+    return {valid: true, resultMessage: resultMessage}
+  }
+
+
+  isDateExpired(expiryDate: string) {
+    const expiry = new Date(expiryDate)
+    const now = new Date();
+    now.setHours(0,0,0,0);
+    console.log('expiry', expiry)
+    console.log('now', now )
+    if (expiry < now) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+
 
   notifyWithOption(message: string, title: string, notifyEnabled: boolean) {
     if (notifyEnabled) {

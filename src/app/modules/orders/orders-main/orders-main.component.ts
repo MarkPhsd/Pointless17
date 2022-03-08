@@ -33,7 +33,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
     private siteService      : SitesService,
-    public userAuthorization: UserAuthorizationService,
+    public userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
     private orderService     : OrdersService)
   {

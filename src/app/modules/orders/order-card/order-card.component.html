@@ -40,10 +40,10 @@
         <div class="field-center">
           <div class="order-name" >
             <div *ngIf="smallDevice">
-              {{ order.customerName | truncateText : 12}}
+              {{ order.customerName | truncateText : 15}}
             </div>
             <div *ngIf="!smallDevice">
-              {{ order.customerName | truncateText : 15}}
+              {{ order.customerName | truncateText : 12}}
             </div>
           </div>
         </div>

@@ -1,19 +1,19 @@
 <div [class]="transactionDataClass" *ngIf="order" >
 
-  <div class="totals">Sub   </div>
+  <div class="total-headers">Sub   </div>
   <div class="totals"> {{ order.subTotal | currency }}</div>
-  <div class="totals">Tax  </div>
+  <div class="total-headers">Tax  </div>
   <div class="totals"> {{ order.taxTotal | currency }}</div>
-  <div class="totals">Total </div>
+  <div class="total-headers">Total </div>
   <div class="totals"> {{ order.total | currency }}</div>
 
-  <div class="totals" *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
+  <div class="total-headers" *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
   <div class="totals" *ngIf="order.wicTotal && order.wicTotal != 0"> {{ order?.wicTotal | currency }}</div>
 
-  <div class="totals" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
+  <div class="total-headers" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
   <div class="totals" *ngIf="order.wicTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
 
-  <div class="totals">Items </div>
+  <div class="total-headers">Items </div>
   <div class="totals">{{ order.itemCount }}</div>
 
 </div>

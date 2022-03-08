@@ -512,32 +512,28 @@ export class OrdersService {
   }
 
   //////////////////async await functions.
-  async newDefaultOrder(site: ISite): Promise<boolean>  {
+  newDefaultOrder(site: ISite)  {
     if (!site)        {  return }
-    const result = await this.newOrderWithPayload(site, null);
-    this.navToMenu();
-    return result
+    this.newOrderWithPayload(site, null);
   }
 
-  async newOrderWithPayload(site: ISite, serviceType: IServiceType): Promise<boolean> {
+  newOrderWithPayload(site: ISite, serviceType: IServiceType) {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
-    const order$       = this.postOrderWithPayload(site, orderPayload)
-    const result       = await order$.pipe().toPromise()
-      .then(
-        order => {
 
+    const order$       = this.postOrderWithPayload(site, orderPayload)
+    order$.subscribe( {
+        next:  order => {
           this.setActiveOrder(site, order)
           this.navToMenu();
-          return true
-        }, catchError => {
+        },
+        error:  catchError => {
           this.notificationEvent(`Error submitting Order # ${catchError}`, "Posted")
-          return false
         }
+      }
     )
-
-    return result
   }
+
 
   navToMenu() {
     if (this.router.url != '/app-main-menu'){

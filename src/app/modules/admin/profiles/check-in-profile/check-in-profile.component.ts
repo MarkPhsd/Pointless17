@@ -1,4 +1,4 @@
-import {Component, Input, OnInit } from '@angular/core';
+import {Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -12,7 +12,9 @@ import { AWSBucketService, ContactsService, OrdersService } from 'src/app/_servi
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { IStatuses} from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-check-in-profile',
@@ -21,7 +23,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
-export class CheckInProfileComponent implements OnInit {
+export class CheckInProfileComponent implements OnInit, OnDestroy {
 
   inputForm   : FormGroup;
   bucketName  :  string;
@@ -51,7 +53,10 @@ export class CheckInProfileComponent implements OnInit {
   dateFrom          : any;
   dateTo            : any;
   isUser            : boolean;
+  accountDisabled  : boolean;
+  transactionUISettings  : TransactionUISettings
 
+  validationMessage = ''
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
       this.currentOrder = data;
@@ -75,6 +80,8 @@ export class CheckInProfileComponent implements OnInit {
               private fbContactsService   : FbContactsService,
               private fb                  : FormBuilder,
               private userAuthorization   : UserAuthorizationService,
+              private uiSettingsService   : UISettingsService,
+              private orderMethodsService : OrderMethodsService,
             ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
@@ -85,14 +92,31 @@ export class CheckInProfileComponent implements OnInit {
   }
 
   async ngOnInit() {
+
+    this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
+      if (!data) {return}
+      this.transactionUISettings = JSON.parse(data.text)
+    })
+
     const site         = this.siteService.getAssignedSite();
     this.bucketName    = await this.awsBucket.awsBucket();
     this.awsBucketURL  = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
     this.fillForm( this.id );
-    const currentYear  = new Date().getFullYear();
+    const currentYear                   = new Date().getFullYear();
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
     this.initDateRangeForm();
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this.searchModel) {
+      this.searchModel.clientID = 0
+      this.searchModel.completionDate_From = ''
+      this.searchModel.completionDate_To = ''
+      this.orderService.updateOrderSearchModel(this.searchModel)
+    }
   }
 
   emitDatePickerData(event) {
@@ -108,6 +132,20 @@ export class CheckInProfileComponent implements OnInit {
 
   initForm() {
     this.inputForm = this.fbContactsService.initForm(this.inputForm)
+    if (this.inputForm) {
+      this.inputForm.valueChanges.subscribe( data => {
+        this.accountDisabled = false;
+
+        if (data && this.transactionUISettings &&   this.transactionUISettings.validateCustomerLicenseID) {
+
+          const result = this.orderMethodsService.validateCustomerForOrder(this.inputForm.value, this.transactionUISettings.ordersRequireCustomer )
+          console.log('result of validation', result)
+          this.validationMessage = result.resultMessage;
+          this.accountDisabled = !result.valid;
+
+        }
+      })
+    }
     return this.inputForm
   };
 
@@ -326,7 +364,28 @@ export class CheckInProfileComponent implements OnInit {
   }
 
   startOrder(event) {
+
+    let ordersRequireCustomer = false
+    if (this.transactionUISettings && this.transactionUISettings?.ordersRequireCustomer) {
+      ordersRequireCustomer = this.transactionUISettings.ordersRequireCustomer;
+    }
+
+
+    const resultSaved = this.orderMethodsService.validateCustomerForOrder(this.clientTable, ordersRequireCustomer)
+    const resultForm  = this.orderMethodsService.validateCustomerForOrder(this.inputForm.value, ordersRequireCustomer)
+
+    if (!resultSaved.valid) {
+      this.notifyEvent(resultSaved.resultMessage, 'Failed');
+      return
+    }
+    if (!resultForm.valid) {
+      this.notifyEvent(resultForm.resultMessage, 'Failed');
+      return
+    }
+
     this.postNewCheckIn()
+
   }
+
 
 }

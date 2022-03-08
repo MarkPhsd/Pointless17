@@ -8,7 +8,7 @@ import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
 import { AppInitService } from '../_services/system/app-init.service';
-import { AuthenticationService, IDepartmentList } from '../_services';
+import { AuthenticationService, IDepartmentList, ThemesService } from '../_services';
 import { IUser } from '../_interfaces';
 import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 
@@ -144,7 +144,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
                private toolbarUIService        : ToolBarUIService,
-               private uiSettingsService       : UISettingsService
+               private uiSettingsService       : UISettingsService,
+              //  private themesService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
     if (this.platForm == 'web') {
@@ -246,6 +247,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this._renderer.removeClass(document.body, 'dark-theme');
     this._renderer.removeClass(document.body, 'light-theme');
     this._renderer.addClass(document.body, theme);
+    // this.themesService.renderTheme();
   }
 
   public searchBarToggler() {

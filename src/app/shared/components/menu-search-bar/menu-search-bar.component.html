@@ -126,7 +126,7 @@
           </mat-expansion-panel-header>
 
           <div   class="grid-item-departments"
-              *ngIf="(productTypes$ | async) as list">
+                *ngIf="(productTypes$ | async) as list">
 
             <app-mat-toggle-selector
                 [mouseOver]      = "false"
@@ -139,6 +139,22 @@
                 [materialIcons]   = "'true'"
                 [list]            = "list">
             </app-mat-toggle-selector>
+
+
+            <!-- <div  class="grid-item-departments"
+                  *ngIf="(categories$ | async) as list">
+              <app-mat-toggle-selector
+                  [mouseOver]      = "false"
+                  [showIcon]       ="showIcon"
+                  [textLength]     = "21"
+                  [toggleDimensions]="'toggle-group-tall'"
+                  [toggleHeight]   = "toggleCatHeight"
+                  (outPutItem)     = "refreshCategorySearch($event)"
+                  [textLength]     = "21"
+                  [list]           = "list">
+              </app-mat-toggle-selector>
+            </div> -->
+
 
           </div>
         </mat-expansion-panel>

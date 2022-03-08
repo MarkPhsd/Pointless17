@@ -14,6 +14,10 @@ export interface TransactionUISettings {
   lockOrders    : boolean;
   deleteUnClosedPrintedOrders: boolean;
   closeOrderTimeCutOff       : string;
+  ordersRequireCustomer: boolean;
+  validateCustomerLicenseID: boolean;
+  defaultClientTypeID: number;
+
 }
 
 export interface DSIEMVSettings {
@@ -320,53 +324,29 @@ export class UISettingsService {
 
   initHomePageSettingsForm(config: any, fb: FormGroup): FormGroup {
     if (!config) { return this.initHomePageForm(fb) }
-    fb = this._fb.group({
-      id                      : [config.id],
-      brandsEnabled           : [config.brandsEnabled],
-      typesEnabled            : [config.typesEnabled],
-      categoriesEnabled       : [config.categoriesEnabled],
-      departmentsEnabled      : [config.departmentsEnabled],
-      tierMenuEnabled         : [config.tierMenuEnabled],
-      itemsPerPage            : [config.itermsPerPage],
-      menuItemSize            : [config.menuItemSize],
-      staffBrandsEnabled      : [config.staffBrandsEnabled],
-      staffCategoriesEnabled  : [config.staffCategoriesEnabled],
-      staffDepartmentsEnabled : [config.staffDepartmentsEnabled],
-      staffTierMenuEnabled    : [config.staffTierMenuEnabled],
-      staffTypesEnabled       : [config.staffTypesEnabled],
-      backgroundImage         : [config.backgroundImage],
-      logoHomePage            : [config.logoHomePage],
-      displayCompanyName      : [config.displayCompanyName],
-      tinyLogo                : [config.tinyLogo],
-      wideOrderBar            : [config.wideOrderBar],
-     })
+    fb = this.initHomePageForm(fb);
+    fb.patchValue(config);
     return fb
   }
 
   initForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      id             : [],
-      displayNotes   : [],
-      displayView    : [],
-      displayAdd     : [],
-      displayQuantity: [],
+      id                          : [],
+      displayNotes                : [],
+      displayView                 : [],
+      displayAdd                  : [],
+      displayQuantity             : [],
       deleteUnClosedPrintedOrders : [],
       closeOrderTimeCutOff        : [],
+      ordersRequireCustomer       : [],
+      validateCustomerLicenseID   : [],
      })
     return fb
   }
 
   initUITransactionsForm(config: TransactionUISettings, fb: FormGroup): FormGroup {
-
-    fb = this._fb.group({
-      id             : [config.id],
-      displayNotes   : [config.displayNotes],
-      displayView    : [config.displayView],
-      displayAdd     : [config.displayAdd],
-      displayQuantity: [config.displayQuantity],
-      deleteUnClosedPrintedOrders : [config.deleteUnClosedPrintedOrders],
-      closeOrderTimeCutOff        : [config.closeOrderTimeCutOff],
-    })
+    fb = this.initForm(fb);
+    fb.patchValue(config)
     return fb
   }
 

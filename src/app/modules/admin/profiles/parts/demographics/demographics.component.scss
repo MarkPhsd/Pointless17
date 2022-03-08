@@ -1,20 +1,39 @@
 .grid-flow {
-  --gap: 10px;
+
   display: grid;
-  gap: var(--gap);
+  gap:  10px;
   grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
 }
 
-#customer-notes {
-  margin:  5;
-  object-fit: cover;
-  width: 300px;
+.name-fields {
+  display: grid;
+  gap:  5px;
+  grid-template-columns:  repeat( auto-fit, minmax(95px, 1fr) );
+
 }
 
-.text {
-  // font-size: 1.1em;
-  // margin: 5px;
+.customer-name-fields {
+  display: grid;
+  gap:  10px;
+  grid-template-columns: repeat( auto-fit, minmax(95px, 1fr) )  ;
 }
+
+.customer-fullname-fields {
+  display: grid;
+  gap:  5px;
+  grid-template-columns: 20% 80%;
+}
+
+#customer-notes {
+  margin:  5px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.points  {
+  width: 75px;
+}
+
 
 .grid-info {
   --gap: 10px;
@@ -22,4 +41,38 @@
   gap: var(--gap);
   grid-template-columns: 140px 140px;
   width: 300px;
+}
+
+mat-button-toggle-group {
+  font-size: .9em;
+  margin:  3px;
+}
+
+.toggle-format {
+  margin:  3px;
+}
+
+:host .mat-form-field-appearance-outline .mat-form-field-infix {
+  padding: 0 !important;
+}
+
+mat-form-field-appearance-outline  {
+  padding: 0 !important;
+}
+mat-form-field-infix {
+  padding: 0 !important;
+}
+
+mat-form-field  {
+  font-size: .8em;
+  margin: 3px ;
+  width: 100%;
+  padding: 0 !important;
+}
+
+.title-field {
+  font-size: .8em;
+  margin: 3px ;
+  width: 100px;
+  padding: 0 !important;
 }

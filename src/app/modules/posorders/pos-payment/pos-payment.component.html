@@ -23,9 +23,10 @@
 
     </div>
 
-    <div class="results-panel">
+    <div>
 
-      <div class="order-completed" *ngIf="paymentsEqualTotal">
+      <div class="order-completed"
+          *ngIf="paymentsEqualTotal">
         <mat-card class="card-dimensions">
           <mat-card-content>
             <div *ngIf="order.itemCount == 0 || !order.itemCount">
@@ -207,6 +208,7 @@
                         [inputForm]        ="paymentAmountForm"
                         [inputTypeValue]   ="'decimal'"
                         [showInput]        ="showInput"
+                        [numberbuttons]    ="'number-buttons button-sized-scaled'"
                         [alternateClass]   ="'grid-keypad-alternate'"
                         (outPutReturnEnter)="applyPaymentAmount($event)">
                         Enter Payment

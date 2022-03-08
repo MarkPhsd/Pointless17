@@ -1,6 +1,6 @@
 
 <div  *ngIf="inputForm"
-    [formGroup]="inputForm">
+      [formGroup]="inputForm">
 
 <mat-card>
   <mat-card-subtitle>
@@ -40,6 +40,25 @@
         </mat-slide-toggle>
       </div>
 
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="validateCustomerLicenseID"
+                  >
+          <mat-label>Validate Customer License/ID</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <div class="toggle-fields">
+        <mat-slide-toggle
+                  formControlName="ordersRequireCustomer"
+                  >
+          <mat-label>Orders Require Customer</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+
+      <!-- validateCustomerLicenseID -->
+
       <mat-divider></mat-divider>
       <h3>End of Day</h3>
       <div class="toggle-fields">
@@ -58,6 +77,7 @@
           Last time to close order
           </app-value-fields>
       </div>
+
 
       <div>
         <button mat-raised-button

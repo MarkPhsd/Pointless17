@@ -53,7 +53,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
     if (order) {
 
       const type = this.validateType(order)
-
+      console.log('type', type)
       if (!type) {
         const order = this.order
         const gramRatio = 28
@@ -74,8 +74,10 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
         }
       }
 
+      console.log('refreshLimitProgress 1', this.gramCountProgress)
       if (type) {
         const order = this.order
+        // const gramRatio = 28
         if (order?.gramCount != 0) {
           this.gramCountProgress         = ((order.gramCount / type.limitGram ) * 100).toFixed(0)
         }
@@ -92,6 +94,8 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
           this.liquidCountProgress       = ((order.liquidCount / type.limitLiquid ) * 100).toFixed(0)
         }
       }
+
+      console.log('refreshLimitProgress 2', this.gramCountProgress)
     }
   }
 

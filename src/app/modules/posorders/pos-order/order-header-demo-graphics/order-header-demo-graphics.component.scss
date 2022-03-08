@@ -18,13 +18,14 @@ mat-card-content {
 mat-card-subtitle {
   padding: 2px !important;
 }
+
 .grid-contact {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: space-between;
   width: 100%;
   gap: 5px;
-  margin-top: 3px
+  margin-top: 6px;
 }
 
 .grid-item-button {

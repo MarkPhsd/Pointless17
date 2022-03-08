@@ -1,0 +1,46 @@
+mat-form-field  {
+  font-size: .9em;
+  margin: 3px ;
+  width: 99%;
+}
+mat-datepicker-toggle {
+  font-size: .9em;
+  margin: 3px ;
+  width: 99%;
+}
+
+.counts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,  minmax(75px, 1fr));
+  gap: 5px;
+}
+
+.name-fields {
+  display: grid;
+  gap:  5px;
+  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
+}
+
+.container  {
+  margin-top: 5px;
+  margin: 5px;
+}
+
+h5 {
+  font-size: 1.1rem;
+}
+
+.panel-divider {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  width: 100%;
+  max-width: 250px;
+}
+
+mat-divider  {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  width: 100%;
+  max-width: 250px;
+  position: relative;
+}

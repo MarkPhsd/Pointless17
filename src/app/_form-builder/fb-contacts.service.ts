@@ -116,9 +116,9 @@ export class FbContactsService {
         uid: [''], //                      string;
         apiPassword: [''], //              string;
         apiUserName: [''], //              string;
-        roles: [''], //                    string;
-        onlineDescriptionImage: [''], //   string;
-        onlineDescription: [''], //        string;
+        roles:                      [''], //                    string;
+        onlineDescriptionImage:     [''], //   string;
+        onlineDescription:          [''], //        string;
         onlineDescriptionTag      : [''], //     string;
         employeeID                : [''], //               number;
         med                       : [''],
@@ -126,6 +126,14 @@ export class FbContactsService {
         accountDisabled           : [''],
         accountLocked             : [''],
         accountDelay              : [''],
+        medTempLicense            : [''],
+        medPhysicianApproved:       [''], //
+        medLicenseNumber:           [''], //
+        medPlantLimit:              [''], //
+        medGramLimit:               [''], //
+        medPrescriptionExpiration:  [''], //
+        medConcentrateLimit :       [''], //
+        patientRecOption:           [''], //
       })
     return fb
   }
