@@ -1,3 +1,5 @@
+@import "/src/mixins.scss";
+
 .mat-card-floater {
   margin: 5px;
 }
@@ -61,6 +63,16 @@ mat-form-field {
   font-size    : large;
   height       : 8vw;
   width        : 10vw;
+
+  @include for-big-desktop-up {
+    height       : 5vw;
+    width        : 7vw;
+  }
+  @include for-desktop-up {
+    height       : 5vw;
+    width        : 7vw;
+  }
+
   border-radius: 5px;
 }
 

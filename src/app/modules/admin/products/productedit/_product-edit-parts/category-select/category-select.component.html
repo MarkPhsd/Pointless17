@@ -10,8 +10,8 @@
       <div *ngIf="(categories$ | async) as list" >
         <mat-option *ngFor="let item of list" [value]="item.id">
             {{item.name}}
-            <span  *ngIf="item.active"><mat-icon>toggle_on</mat-icon></span>
-            <span *ngIf="!item.active"><mat-icon>toggle_off</mat-icon></span>
+            <!-- <span  *ngIf="item.active"><mat-icon>toggle_on</mat-icon></span>
+            <span *ngIf="!item.active"><mat-icon>toggle_off</mat-icon></span> -->
         </mat-option>
       </div>
     </mat-select>

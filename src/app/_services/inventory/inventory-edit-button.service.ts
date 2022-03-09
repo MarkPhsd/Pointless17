@@ -128,8 +128,8 @@ export class InventoryEditButtonService {
         {
 
           dialogRef = this.dialog.open(NewInventoryItemComponent,
-            { width:        '800px',
-              minWidth:     '800px',
+            { width:        '850px',
+              minWidth:     '850px',
               height:       '725px',
               minHeight:    '725px',
               data : {id: id}
@@ -141,8 +141,8 @@ export class InventoryEditButtonService {
       case 15:
         {
           dialogRef = this.dialog.open(NewInventoryItemComponent,
-            { width:        '800px',
-              minWidth:     '800px',
+            { width:        '850px',
+              minWidth:     '850px',
               height:       '725px',
               minHeight:    '725px',
               data : {id: id}
@@ -159,8 +159,8 @@ export class InventoryEditButtonService {
       case 45:
         {
           dialogRef = this.dialog.open(NewInventoryItemComponent,
-            { width:       '800px',
-              minWidth:    '800px',
+            { width:       '850px',
+              minWidth:    '850px',
               height:      '650px',
               minHeight:   '650px',
               data : {id: id}
@@ -173,8 +173,8 @@ export class InventoryEditButtonService {
       default:
         {
           dialogRef = this.dialog.open(NewInventoryItemComponent,
-            { width:        '800px',
-              minWidth:     '800px',
+            { width:        '850px',
+              minWidth:     '850px',
               height:       '750px',
               minHeight:    '750px',
               data : {id: id}

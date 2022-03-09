@@ -17,15 +17,56 @@
                   (selectionChange)   = "updateResults($event)"
         >
 
+        <mat-select-trigger *ngIf="inputField && inputField.value && showActiveInactive">
+          <div class="item-results">
+            <div>
+              {{inputField.value.name ? inputField.value.name : ''}}
+            </div>
+
+            <div *ngIf="showActiveInactive" class="mat-icon">
+              <span *ngIf="inputField.value.active"><mat-icon color="primary">toggle_on</mat-icon></span>
+              <span *ngIf="!inputField.value.active"><mat-icon color="warn"> toggle_off</mat-icon></span>
+            </div>
+          </div>
+
+        </mat-select-trigger>
+
         <div *ngIf="(list$ | async) as list">
+
           <mat-option [value]="0">
             Clear
           </mat-option>
-          <mat-option *ngFor="let item of list" [value]="item.id">
+          <mat-option  *ngFor="let item of list"
+                       [value]="item">
+
             {{ item.name }}
+
+            <span *ngIf="showActiveInactive">
+              <span *ngIf="item.active"><mat-icon color="primary">toggle_on</mat-icon></span>
+              <span *ngIf="!item.active"><mat-icon color="warn"> toggle_off</mat-icon></span>
+            </span>
+
           </mat-option>
+
         </div>
       </mat-select>
     </mat-form-field>
 
 </div>
+<!--
+<mat-form-field appearance="fill">
+  <mat-label>Toppings</mat-label>
+  <mat-select [formControl]="toppings" multiple>
+
+    <mat-select-trigger>
+      {{toppings.value ? toppings.value[0] : ''}}
+      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+      </span>
+    </mat-select-trigger>
+
+    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+
+  </mat-select>
+</mat-form-field> -->
+

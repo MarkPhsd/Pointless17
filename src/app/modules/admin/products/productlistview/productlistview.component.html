@@ -21,6 +21,7 @@
       <form-select-list [searchForm]      = "searchForm"
                         [formFieldName]   ="'categoryID'"
                         [list$]           = "categories$"
+                        [showActiveInactive]="true"
                         (selectionChange) = "refreshCategoryChange($event)">
       <div fieldSearchDescription>Category</div>
       </form-select-list>
@@ -31,6 +32,7 @@
         <form-select-list [searchForm]      = "searchForm"
                           [formFieldName]   ="'departmentID'"
                           [list$]           = "departments$"
+                          [showActiveInactive]="true"
                           (selectionChange) = "refreshDepartmentChange($event)">
         <div fieldSearchDescription>Department</div>
         </form-select-list>

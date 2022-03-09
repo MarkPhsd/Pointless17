@@ -1,11 +1,25 @@
 
   mat-form-field {
-    font-size: .8em;
-    // margin: 4px;
+    font-size: smaller;
   }
-
 
   .form-fields {
     margin: 0;
     padding: 0;
+  }
+
+  .item-results {
+    display: grid;
+    grid-template-columns: 100px 50px;
+    gap: 5px;
+    width: 200px;
+    line-height: 1.4rem;
+  }
+
+  :host .mat-form-field-appearance-outline .mat-form-field-infix {
+    padding: 0 !important;
+  }
+
+  :host  .mat-select-trigger {
+    padding: 0 !important;
   }

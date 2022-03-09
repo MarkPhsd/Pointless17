@@ -76,24 +76,27 @@
                 </div>
 
                 <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
-                  <mat-form-field appearance="outline"  class="fields" >
-                    <mat-label > Category Type</mat-label>
-                    <input matInput
-                            type="text"
-                            formControlName="productCategoryName"
-                    >
-                  </mat-form-field>
+
+                  <div>
+                    <app-value-fields
+                          type       ="text"
+                          [inputForm]="inputForm"
+                          [fieldName]="'productCategoryName'">
+                          Category Type
+                    </app-value-fields>
+                  </div>
+
                 </div>
 
                 <div>
-                  <mat-form-field appearance="outline"  class="fields" >
-                    <mat-label > Vendor Invoice #</mat-label>
-                    <input matInput
-                            type="text"
-                            formControlName="invoiceCode"
-                      >
-                  </mat-form-field>
+                  <app-value-fields
+                        type       ="text"
+                        [inputForm]="inputForm"
+                        [fieldName]="'invoiceCode'">
+                        Vendor Invoice #
+                  </app-value-fields>
                 </div>
+
 
                 <div>
                   <mat-form-field appearance="outline" class="location-assignment fields">
