@@ -40,11 +40,20 @@
               class="product-image"
               (click)="menuItemAction(false)"/>
 
-        <img  *ngIf="isCategory"
-              [src]="imageUrl"
-              onerror   = "this.src='../assets/images/placeholderimage.png'"
-              class="category-img"
-              (click)="menuItemAction(true)"/>
+
+          <!-- <img  *ngIf="isCategory"
+                [src]="imageUrl"
+                onerror   = "this.src='../assets/images/placeholderimage.png'"
+                class="category-img"
+                (click)="menuItemAction(true)"/> -->
+
+        <div class="round-container">
+          <img  *ngIf="isCategory"
+            [src]="imageUrl"
+            onerror   = "this.src='../assets/images/placeholderimage.png'"
+            class="category-img"
+            (click)="menuItemAction(true)"/>
+        </div>
 
       </div>
 

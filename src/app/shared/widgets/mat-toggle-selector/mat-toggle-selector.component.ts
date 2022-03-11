@@ -1,4 +1,4 @@
-import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild} from '@angular/core';
+import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild, OnChanges} from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
@@ -6,7 +6,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
   templateUrl: './mat-toggle-selector.component.html',
   styleUrls: ['./mat-toggle-selector.component.scss']
 })
-export class MatToggleSelectorComponent implements OnInit {
+export class MatToggleSelectorComponent implements OnChanges {
 
   @ViewChild('departmentMenuTrigger') departmentMenuTrigger: MatMenuTrigger;
 
@@ -31,6 +31,7 @@ export class MatToggleSelectorComponent implements OnInit {
   @Input()  useMatMenu        : boolean;
 
   departmentID: number;
+  subscribed : boolean;
 
   constructor() {
   }
@@ -45,27 +46,39 @@ export class MatToggleSelectorComponent implements OnInit {
 
   }
 
-  ngOnInit(): void {
+  ngOnChanges(): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    this.refresh();
+  }
+
+  refresh() {
+
     if (this.toggleButtonClass) { this.toggleButtonClass = 'toggle-button'}
+
+    if (this.list$) {
+      this.list$.subscribe(data => {
+        this.subscribed = true
+        this.list = this.sortList(data)
+      })
+      return
+    }
+
     if (this.list && this.list.length>0) {
       this.list = this.sortList(this.list)
       return
     }
 
-    if (this.list$) {
-      this.list$.subscribe(data => {
-        this.list = this.sortList(data)
-      })
-    }
     this.updateScreenSize();
   }
-
   sortList(list) {
     try {
       return list.sort((a, b) => a.name.localeCompare(b.name));
     } catch (error) {
+      return list
     }
   }
+
   changeSelection() {
     this.outPutID.emit(this.id)
   }

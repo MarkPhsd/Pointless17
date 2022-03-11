@@ -304,7 +304,7 @@ const routes: Routes = [
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
     { path: '**', component: PageNotFoundComponent},
-  ];
+];
 
 @NgModule({
   imports:[
