@@ -1,7 +1,7 @@
   <div class="grid-flow"
        *ngIf="order" >
 
-    <span *ngIf="!isUserStaff">
+    <div *ngIf="!isUserStaff">
       <button mat-button
             (click)="toggleOpenOrderBar()" >
         <mat-icon  matBadge="{{ order.itemCount > 0 }}"
@@ -11,9 +11,9 @@
           shopping_cart
         </mat-icon>
       </button>
-    </span>
+    </div>
 
-    <span *ngIf="isUserStaff">
+    <div *ngIf="isUserStaff">
       <button mat-button
               (click)="toggleOpenOrderBar()" >
           <mat-icon  matBadge="{{ order.itemCount > 0 }}"
@@ -23,9 +23,9 @@
             shopping_cart
           </mat-icon>
       </button>
-    </span>
+    </div>
 
-    <span  *ngIf="(order && order.history == true
+    <div  *ngIf="(order && order.history == true
                 || (order.completionDate)) || isUserStaff">
       <button
               mat-button
@@ -35,6 +35,6 @@
         </mat-icon>
         New Order
       </button>
-    </span>
+    </div>
 
 </div>

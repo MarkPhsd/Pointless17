@@ -11,6 +11,7 @@
 
     <div  *ngIf="inputForm; else loading"
           [formGroup]="inputForm">
+
       <div class="grid-view-sections">
 
         <div>
@@ -21,6 +22,7 @@
               Company Name Display
           </app-value-fields>
         </div>
+
         <div class="grid-views">
           <div>
 
@@ -114,21 +116,12 @@
 
 
           </div>
-
         </div>
 
         <div>
           <div>Paging and Search results </div>
           <mat-divider></mat-divider>
-
           <div class="grid-views">
-            <!-- <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'menuItemSize'">
-                View Width of Menu Item
-            </app-value-fields> -->
-
             <app-value-fields
                 [fieldType]     ="'number'"
                 [inputForm]     ="inputForm"
@@ -139,6 +132,7 @@
         </div>
 
         <div>
+          <div>Images</div>
           <mat-divider></mat-divider>
           <div class="grid-views">
             <div class="grid-item">

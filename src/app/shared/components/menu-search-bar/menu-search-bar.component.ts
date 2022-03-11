@@ -16,7 +16,7 @@ import { IPagedList } from 'src/app/_services/system/paging.service';
 import { isDevMode } from '@angular/core';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-
+import { MatMenuTrigger } from '@angular/material/menu';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -25,8 +25,9 @@ const { Keyboard } = Plugins;
   styleUrls: ['./menu-search-bar.component.scss'],
 })
 export class MenuSearchBarComponent implements OnInit, AfterViewInit, OnDestroy {
+@ViewChild('departmentMenuTrigger') departmentMenuTrigger: MatMenuTrigger;
 
-  isOpen = false;
+isOpen = false;
 
 get platForm() {  return Capacitor.getPlatform(); }
 
@@ -67,7 +68,8 @@ isDevMode  = false
 type    : any;
 category: any;
 brand   : any;
-department: any;
+department  : any;
+departmentID: number;
 tinyDepartmentFilter= false//for dispaly of icon with text or just icon.
 toggleCatHeight         = 'toggle-buttons-height-size-tall'
 toggleDepartmentHeight  = 'toggle-buttons-height-medium'
@@ -378,6 +380,8 @@ constructor(
 
   refreshDepartmentSearch(item: any) {
 
+    if (!item) { return }
+    // console.log(item)
     if (this.smallDevice) {
       this.tinyDepartmentFilter = true;
     }
@@ -387,15 +391,24 @@ constructor(
       this.tinyDepartmentFilter = true;
     }
 
-    this.department = item;
-
+    this.department    = item;
+    this.departmentID  = item.id;
     if (!item)  { return }
     this.router.navigate(
       [
         "/department-list", { value: this.searchIncrementer, id: item.id}
       ]
     )
+    // this.openMenu()
 
+  }
+
+  openMenu() {
+    this.departmentMenuTrigger.openMenu();
+  }
+
+  closeMenu() {
+    this.departmentMenuTrigger.closeMenu();
   }
 
   listItems(model: ProductSearchModel) {

@@ -1,5 +1,6 @@
 <div   class="panel"
        *ngIf="(departments$ | async) as list; else loading">
+
   <div *ngFor="let item of list">
     <mat-card>
       <mat-card-subtitle>
@@ -26,7 +27,6 @@
               </div>
             </div>
           </button>
-
         </div>
 
         <div class="content-position">
@@ -38,7 +38,7 @@
           </div>
         </div>
 
-        </mat-card-content>
+      </mat-card-content>
     </mat-card>
   </div>
 </div>

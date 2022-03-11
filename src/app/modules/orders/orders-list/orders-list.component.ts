@@ -111,7 +111,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   itemsPerPage      = 20
   smallDevice : boolean;
   //list height
-  @Input() height = "78vh"
+  @Input() height = "84vh"
 
   initSubscriptions() {
     this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
@@ -158,14 +158,14 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   initClasses()  {
     const platForm      = this.platForm;
-    if (!this.height) { this.height = "82vh" }
+    if (!this.height) { this.height = "84vh" }
     let height = this.height
     this.gridDimensions = `width: 100%; height: ${height}`
     this.agtheme        = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions = `width: 100%; height: ${height}` }
     if (platForm === 'electron')  { this.gridDimensions = `width: 100%; height: ${height}` }
     if (this.smallDevice) {
-      this.gridDimensions = 'width: 100%; height: 68vh;'
+      this.gridDimensions = 'width: 100%; height: 84vh;'
     }
   }
 

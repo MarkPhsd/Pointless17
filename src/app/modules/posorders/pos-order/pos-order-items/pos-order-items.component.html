@@ -5,7 +5,8 @@
 
   <ion-item-sliding
             class="nopadd"
-            *ngFor="let item of order.posOrderItems; let i = index" >
+            *ngFor="let item of order.posOrderItems; let i = index"
+            (ionSwipe)="swipeItemFromList(i)" >
 
     <div *ngIf="uiConfig &&
                (
@@ -42,14 +43,14 @@
       </ion-item>
     </div>
     <ion-item-options *ngIf="item.printed">
-      <ion-item-option color="primary">
+      <ion-item-option color="accent">
         <mat-icon>remove_shopping_cart</mat-icon>
         Void
       </ion-item-option>
     </ion-item-options>
 
     <ion-item-options *ngIf="!item.printed">
-      <ion-item-option color="primary">
+      <ion-item-option color="warn">
         <button mat-button color="primary" (click)="removeItemFromList(i)" >
           <mat-icon>delete</mat-icon>
           Delete

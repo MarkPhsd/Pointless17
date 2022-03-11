@@ -6,7 +6,7 @@ import { ISetting, ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
-import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
+import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import  html2canvas from 'html2canvas';
 import  domtoimage from 'dom-to-image';
 import { jsPDF } from "jspdf";
@@ -14,11 +14,13 @@ import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
-import { OrdersService } from '..';
 import { UserAuthorizationService } from './user-authorization.service';
+import { AuthenticationService, AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
+import { OrderMethodsService } from '../transactions/order-methods.service';
 
 export interface printOptions {
   silent: true;
@@ -50,8 +52,11 @@ export class PrintingService {
                 private labelaryService   : LabelaryService,
                 private orderService      : OrdersService,
                 private router            : Router,
-                private userAuthService         : UserAuthorizationService,
+                private userAuthService   : UserAuthorizationService,
+                private orderItemService  : POSOrderItemServiceService,
                 private platFormService   : PlatformService,
+                private menuItemService   : MenuService,
+                private orderMethodsService: OrderMethodsService,
                 private dialog            : MatDialog,) {
 
     // if (this.electronService.remote != null) {
@@ -335,6 +340,55 @@ export class PrintingService {
 
     return false
   }
+
+
+  async printLabel(item: PosOrderItem) {
+
+    if (!item) {return}
+    const site = this.siteService.getAssignedSite();
+
+      //get cached label printer name
+      const printer = await this.getElectronLabelPrinterCached().pipe().toPromise();
+      if (!printer || !printer.text) {
+        // console.log('printer', printer)
+        return;
+      }
+      const printerName = printer.text
+
+      this.menuItemService.getMenuItemByID(site, item.productID).pipe(
+        switchMap(data => {
+          if ( !data  || data == "No Records" || !data.itemType) {
+            // console.log('no data')
+            return EMPTY
+          }
+
+          // console.log('data.itemType', data.itemType)
+          if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printerName ) ) {
+              if (data.itemType.labelTypeID !=0 ) {
+                return   this.settingService.getSetting(site, data.itemType.labelTypeID)
+              }
+          } else {
+            // console.log('No print option')
+            return this.orderItemService.setItemAsPrinted(site, item )
+          }
+
+      })).pipe(
+        switchMap( data => {
+          // //get the PrintString Format
+          // console.log('getting Text From label setting',  data)
+          const content = this.renderingService.interpolateText(item, data.text)
+          const result  = this.printLabelElectron(content, printerName)
+
+          if (!item.printed || (data && !data.printed)) {
+            return this.orderItemService.setItemAsPrinted(site, item )
+          }
+
+          return EMPTY
+      })).subscribe( data => {
+        this.orderMethodsService.refreshOrder(item.orderID);
+      })
+  }
+
 
   printLabelElectron(printString: string, printerName: string): boolean {
     const fileName = `c:\\pointless\\print.txt`;

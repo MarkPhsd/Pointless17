@@ -7,108 +7,104 @@
 
   <mat-card-content>
     <div class="grid-items">
-      <div class="grid-item-span-row"
-           *ngIf="orderItem">
-        <span >
-          {{index+1}}:
-        </span>
-        <span [class]="productnameClass" >
-          {{ orderItem?.productName }}
-        </span>
-        <span class="product-name" *ngIf="orderItem.itemType">
-          ( {{orderItem?.itemType?.name}} )
-        </span>
-        <span  *ngIf="quantity">
-          {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
-        </span>
-        <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode">
-          {{ orderItem.serialCode }}
-        </span>
-        <span  *ngIf="( mainPanel || wideBar )
-                      && orderItem
-                      && orderItem.modifierNote
-                      && (orderItem.modifierNote != orderItem.serialCode)
-                      && orderItem.modifierNote != ''">
-          {{ orderItem.modifierNote }}
-        </span>
-        <span  *ngIf="mainPanel || bottomSheetOpen">
-          <img *ngIf="imagePath" [src]="imagePath" />
-        </span>
+      <div *ngIf="orderItem">
+        <div>
+          <span >
+            {{index+1}}:
+          </span>
+          <span [class]="productnameClass" >
+            {{ orderItem?.productName }}
+          </span>
+          <span class="product-name" *ngIf="orderItem.itemType">
+            ( {{orderItem?.itemType?.name}} )
+          </span>
+          <span  *ngIf="quantity">
+            {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+          </span>
+          <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode">
+            {{ orderItem.serialCode }}
+          </span>
+          <span  *ngIf="( mainPanel || wideBar )
+                        && orderItem
+                        && orderItem.modifierNote
+                        && (orderItem.modifierNote != orderItem.serialCode)
+                        && orderItem.modifierNote != ''">
+            {{ orderItem.modifierNote }}
+          </span>
+          <span  *ngIf="mainPanel || bottomSheetOpen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
+        </div>
+
+        <div class="grid-item-span">
+          <span *ngIf="orderItem.printed">
+            <mat-icon color="warn" >print</mat-icon> <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
+          </span>
+
+          <div class="void-info" *ngIf="orderItem.voidReason">
+            <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
+              Item voided:  {{ orderItem.voidReason }}
+            </span>
+          </div>
+        </div>
+
       </div>
 
-      <span  *ngIf="( mainPanel || wideBar)"
-            >
+      <div >
+        <button aria-label="user menu"
+                  mat-button
+                  class="more-button"
+                  [matMenuTriggerFor]="menu"
+                  #menuTrigger="matMenuTrigger"
+                  (click)="menuTrigger.openMenu()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu class="mat-menu-panel" [overlapTrigger]="false" #menu="matMenu">
+          <span (mouseleave)="menuTrigger.closeMenu()">
 
-        <span *ngIf="(quantity && !orderItem.voidReason)">
-          <button mat-raised-button
-                  class="button"
-                  color="accent"
-                  (click)="swipeOutItem()" >
-            <mat-icon>delete</mat-icon>
-            <span *ngIf="!smallDevice">
-              Remove
-            </span>
-          </button>
-        </span>
+            <div class="button-list">
+              <div>
+                <button mat-button (click)="printLabel(orderItem)"><mat-icon>print</mat-icon>Label</button>
+              </div>
 
-        <span *ngIf="!showEdit && (uiConfig.displayAdd)">
-          <button mat-raised-button
-                  class="button"
-                  color="accent"
-                  (click)="addItemToOrder()">
-              <mat-icon>add</mat-icon>
-              <span *ngIf="!smallDevice">
-                Add
-              </span>
-          </button>
-        </span>
+              <div *ngIf="!showEdit && (uiConfig.displayAdd)">
+                <button mat-raised-button     class="button"  color="accent" (click)="addItemToOrder()">
+                  <mat-icon>add</mat-icon>  <span *ngIf="!smallDevice">Add </span>
+                </button>
+              </div>
 
-        <span *ngIf="!showView && (uiConfig.displayView) ">
-          <button mat-button
-                  class="button"
-                  color="accent"
-                  (click)="openDialog()" >
-            <mat-icon>open_in_new</mat-icon>
-            <span *ngIf="!smallDevice">
-              View
-            </span>
-          </button>
-        </span>
+              <div *ngIf="!showView && (uiConfig.displayView) ">
+                <button mat-button class="button" color="accent" (click)="openDialog()" >
+                  <mat-icon>open_in_new</mat-icon> <span *ngIf="!smallDevice">View </span>
+                </button>
+              </div>
 
-        <span *ngIf="orderItem && orderItem.serialCode">
-          <button mat-button (click)="editSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
-        </span>
+              <div *ngIf="orderItem && orderItem.serialCode">
+                <button mat-button (click)="editSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
+              </div>
 
-        <span *ngIf="!showEdit && promptOption">
-          <button mat-button (click)="editPrompt()"><mat-icon>edit</mat-icon>Edit</button>
-        </span>
+              <div *ngIf="!showEdit && promptOption">
+                <button mat-button (click)="editPrompt()"><mat-icon>edit</mat-icon>Edit</button>
+              </div>
 
-        <span *ngIf="!showEdit  && (uiConfig.displayNotes)">
-          <button mat-button (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
-        </span>
+              <div *ngIf="!showEdit  && (uiConfig.displayNotes)">
+                <button mat-button (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
+              </div>
 
-        <span *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode">
-          <button mat-button (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
-        </span>
+              <div *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode">
+                <button mat-button (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
+              </div>
 
-      </span>
 
-      <div>
-        <span *ngIf="orderItem.printed">
-          <mat-icon  color="warn" >print</mat-icon>
-          <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-            {{orderItem.printed | date: 'shortTime'}}
+
+              <div *ngIf="(quantity && !orderItem.voidReason)">
+                <button mat-raised-button  class="button"color="accent" (click)="swipeOutItem()" >
+                  <mat-icon>delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
+                </button>
+              </div>
+
+            </div>
           </span>
-        </span>
-
-        <div class="void-info" *ngIf="orderItem.voidReason">
-          <span  class="">
-            <mat-icon   color="warn"  >lock</mat-icon>
-          </span>
-          <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-            Item voided:  {{ orderItem.voidReason }}
-          </span>
-        </div>
+        </mat-menu>
       </div>
 
     </div>

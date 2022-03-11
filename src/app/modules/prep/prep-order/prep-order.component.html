@@ -1,0 +1,3 @@
+<div class="order-header">{{order.id}}</div>
+<div [class]="ordertime">{{order.orderTime}}</div>
+<div *ngIf="order.completionDate" [class]="ordertime">{{order.completionDate | date : 'short'}}</div>

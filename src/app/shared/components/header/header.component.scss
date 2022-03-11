@@ -5,7 +5,6 @@
     vertical-align: middle;
     margin-right: 5px;
   }
-
 }
 
 // .mat-menu-panel  {
@@ -14,17 +13,26 @@
 //   overflow-x: hidden;
 // }
 
-::ng-deep .mat-menu-panel {
-  padding: 0 10px!important;
-  width: 100%!important;
-  min-width: 300px;
+:host .mat-menu-panel {
+  padding   : 10px   !important;
+  margin-top: 15px  !important;
+  width     : 100%!important;
+  min-width : 300px;
   overflow-x: hidden;
-
 }
 
-
 mat-toolbar {
-  padding: 0px;
+  padding-top   : 10px  !important;
+  padding-left  : 5px !important;
+  // margin-top: 15px  !important;
+  width     : 100%  !important;
+  min-width : 300px;
+  height    : 65px !important;
+  overflow: hidden;
+}
+
+.more-button {
+  width: 50px;
 }
 
 .mat-divider {
@@ -58,23 +66,18 @@ ul li{
 }
 
 .grid-flow {
-    // --gap: 10px;
     display: grid;
     margin-top: 0px;
     gap: var(--gap);
-    // padding-top: 15px;
-    // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
-    grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
-    // margin-top: -5px;
+     grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
     margin-left: -5px;
 
   @include for-phone-only  {
     --gap: 0px;
     display: grid;
     gap: var(--gap);
-    // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+    margin-top: 5px;
     grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
-    // margin-top: -5px;
     margin-left: -15px;
     left: -10px;
   }
@@ -86,7 +89,7 @@ ul li{
 }
 
 .pos-panel {
-  margin-top: 15px;
+  margin-top: 5px;
 }
 
 .margin-info {
@@ -98,6 +101,7 @@ button {
 }
 
 .logo {
+  margin-top: 3px;
   width: 50px;
 }
 
@@ -166,6 +170,7 @@ button {
 .cart-button {
   margin-left: 5px;
   width: 200px;
+  // min-width: 200px;
 }
 
 .grid-section-flow {
@@ -174,3 +179,171 @@ button {
   grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
   grid-auto-flow: row;
 }
+
+
+
+// @import "/src/mixins.scss";
+// :host {
+//   .mat-icon {
+//     vertical-align: middle;
+//     margin-right: 5px;
+//   }
+//   .mat-toolbar-row {
+//     padding-left: 5px  !important;
+//     padding-top:  23px  !important;
+//   }
+//   .mat-menu-panel {
+//     padding: 15px    !important;
+//     width:   100%   !important;
+//     min-width:      300px;
+//     overflow-x:     hidden;
+//   }
+// }
+
+
+// .mat-divider {
+//   margin-bottom: 3px;
+// }
+
+// mat-menu {
+//   overflow-y: hidden;
+// }
+
+// mat-card  {
+//   padding:0px;
+// }
+
+// form {
+//   margin-top: 1em;
+//   font-size: .8em;
+// }
+
+// ul li{
+//   list-style: none;
+//   display: inline;
+//   margin-left: 5px;
+// }
+
+// .small-screen {
+//   visibility: visible;
+//   @include for-phone-only  {
+//     visibility: hidden;
+//   }
+// }
+
+// .grid-flow {
+//     // --gap: 10px;
+//     display: grid;
+//     margin-top: 0px;
+//     gap: var(--gap);
+//     // padding-top: 15px;
+//     // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+//     grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+//     // margin-top: -5px;
+//     margin-left: -5px;
+
+//   @include for-phone-only  {
+//     --gap: 0px;
+//     display: grid;
+//     gap: var(--gap);
+//     // grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+//     grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+//     // margin-top: -5px;
+//     margin-left: -15px;
+//     left: -10px;
+//   }
+// }
+
+
+// .second-list {
+//   position: relative;
+// }
+
+// .pos-panel {
+//   margin-top: 15px;
+// }
+
+// .margin-info {
+//   margin-left: 3px;;
+// }
+
+// button {
+//   margin-left: 3px;
+// }
+
+// .logo {
+//   width: 50px;
+// }
+
+// //disable text
+// .site-name {
+//   -webkit-user-select:none;
+//   -webkit-touch-callout:none;
+//        -moz-user-select:none;
+//        -ms-user-select:none;
+//        user-select:none;
+// }
+
+// .pos-name {
+//   -webkit-user-select:none;
+//   -webkit-touch-callout:none;
+//        -moz-user-select:none;
+//        -ms-user-select:none;
+//        user-select:none;
+//   // margin-left: .5em;
+//   font-style: italic;
+// }
+
+// .search {
+//   margin-left : 5px;
+//   margin-right: 5px;
+//   padding     : 5px;
+// }
+
+// .profile-card {
+//     text-align: center;
+//     padding: 0 20px  20px  20px;
+//     img {
+//         width: 100px;
+//         height: 100px;
+//         object-fit: cover;
+//         border-radius: 50%;
+//     }
+// }
+
+// .mat-item {
+//   justify-content: center;
+//   align-items : center;
+//   display     : flex;
+//   text-align  : center;
+//   height      : 75px;
+//   min-height  : 75px;
+//   margin-top  : 5px;
+//   margin-bottom: 5px;
+// }
+
+// .menu-button {
+//   height: 100%;
+//   width: 100%;
+// }
+
+// @media (min-width: 10em) and (max-width: 100em) {
+//   h1, h3, h2, h4 {
+//     font-size: .9rem;
+//   }
+//   size-format {
+//     display: none;
+//   }
+// }
+
+// .cart-button {
+//   margin-left: 5px;
+//   width: 200px;
+// }
+
+// .grid-section-flow {
+//   display: grid;
+//   gap:5px;
+//   grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
+//   grid-auto-flow: row;
+// }

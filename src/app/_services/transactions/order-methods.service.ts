@@ -658,7 +658,20 @@ export class OrderMethodsService {
     return;
   }
 
+  refreshOrder(id: number) {
+    if (this.order) {
+      const site = this.siteService.getAssignedSite();
+      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
+      // const source = timer(5000, 3000);
+      order$.subscribe( data => {
+          this.orderService.updateOrderSubscription(data)
+      })
+    }
+  }
+
+
   removeItemFromList(index: number, orderItem: PosOrderItem) {
+    console.log(orderItem)
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {

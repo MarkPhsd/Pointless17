@@ -154,20 +154,22 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
         // sort(users, 'name', '-age', 'id')
     @HostListener("window:resize", [])
     updateScreenSize() {
+      this.smallDevice = false
       if (window.innerWidth < 768) {
         this.smallDevice = true
       }
+      this.initClasses()
     }
 
     initClasses()  {
       const platForm      = this.platForm;
-      this.gridDimensions =  'width: 100%; height: 100%;'
+      this.gridDimensions =  'width: 100%; height: 76vh;'
       this.agtheme  = 'ag-theme-material';
-      if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
-      if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+      if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 76vh;' }
+      if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 76vh;' }
 
       if (this.smallDevice) {
-        this.gridDimensions =  'width: 100%; height: 80%%;'
+        this.gridDimensions =  'width: 100%; height: 70vh;'
       }
     }
 

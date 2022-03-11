@@ -1,12 +1,15 @@
-import { Component, OnInit,Output, Input, EventEmitter, HostListener} from '@angular/core';
+import { Component, OnInit,Output, Input, EventEmitter, HostListener, ViewChild} from '@angular/core';
 import { Observable } from 'rxjs';
-
+import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
   selector: 'app-mat-toggle-selector',
   templateUrl: './mat-toggle-selector.component.html',
   styleUrls: ['./mat-toggle-selector.component.scss']
 })
 export class MatToggleSelectorComponent implements OnInit {
+
+  @ViewChild('departmentMenuTrigger') departmentMenuTrigger: MatMenuTrigger;
+
 
   emptyItem = {id: 0, name: ''}
   @Input()  id                : number;
@@ -25,6 +28,10 @@ export class MatToggleSelectorComponent implements OnInit {
   @Input()  fieldName         = 'name'
   @Input()  materialIcons      = false;
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
+  @Input()  useMatMenu        : boolean;
+
+  departmentID: number;
+
   constructor() {
   }
 
@@ -64,7 +71,15 @@ export class MatToggleSelectorComponent implements OnInit {
   }
 
   setItem(item) {
-    console.log('setItem', item)
+
+    if (!item) { return }
+
+    if (this.useMatMenu) {
+      this.departmentID = item.id;
+      this.openMenu()
+      return
+    }
+
     this.outPutItem.emit(item)
   }
 
@@ -73,8 +88,24 @@ export class MatToggleSelectorComponent implements OnInit {
       console.log(this.mouseOver)
       return
     }
-    console.log('1', this.mouseOver)
+
+    console.log(item)
+    if (!item) { return }
+    if (this.useMatMenu) {
+      this.departmentID = item.id;
+      this.openMenu()
+      return
+    }
+
     this.outPutItem.emit(item)
+  }
+
+  openMenu() {
+    this.departmentMenuTrigger.openMenu();
+  }
+
+  closeMenu() {
+    // this.departmentMenuTrigger.closeMenu();
   }
 
   setItemNull() {
@@ -84,6 +115,7 @@ export class MatToggleSelectorComponent implements OnInit {
     console.log(this.mouseOver)
     this.outPutItem.emit(null)
   }
+
 }
 
 

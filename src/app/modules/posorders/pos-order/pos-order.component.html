@@ -10,7 +10,7 @@
         </div>
 
         <div class="grid-header-item"
-              *ngIf="wideBar || mainPanel">
+              *ngIf="enableLimitsView  && (wideBar || mainPanel)">
           <limit-values-progress-bars
               [order]="order">
           </limit-values-progress-bars>

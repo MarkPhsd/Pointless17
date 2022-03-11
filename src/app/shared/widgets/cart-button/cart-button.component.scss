@@ -1,9 +1,17 @@
+@import "/src/mixins.scss";
+
+
 .grid-flow {
   display: grid;
   gap    :5px;
   grid-template-columns: repeat( auto-fit, minmax(55px, 1fr) );
   grid-auto-flow: row;
   margin-right: 30px;
+
+  @include for-phone-only {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .grid-section-flow {
@@ -11,4 +19,5 @@
   gap:5px;
   grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
   grid-auto-flow: row;
+
 }

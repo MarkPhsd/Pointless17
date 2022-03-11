@@ -12,39 +12,6 @@
 
   </div>
 
-  <div *ngIf="medPatient" >
-    <h5>  MED Info and Limits </h5>
-
-    <div *ngIf="medPatient"
-         class="counts-container">
-      <div>
-        <app-value-fields
-            [inputForm]="inputForm"
-            [fieldName]="'medGramLimit'">
-            Gram Count
-        </app-value-fields>
-      </div>
-
-      <div>
-        <app-value-fields
-            [inputForm]="inputForm"
-            [fieldName]="'medPlantLimit'">
-          Plant Count
-        </app-value-fields>
-      </div>
-
-      <div>
-        <app-value-fields
-            [inputForm]="inputForm"
-            [fieldName]="'medConcentrateLimit'">
-            Concentrate Count
-        </app-value-fields>
-      </div>
-
-    </div>
-
-  </div>
-
   <mat-card *ngIf="medPatient">
     <mat-card-subtitle>MED Info</mat-card-subtitle>
     <div  *ngIf="isStaff">

@@ -248,6 +248,10 @@ import { POSOrderScheduleFormComponent } from '../modules/posorders/posorder-sch
 import { FunctionGroupButtonEditComponent } from '../modules/admin/settings/function-groups/function-group-edit/function-group-button-edit/function-group-button-edit.component';
 import { FunctionGroupEditComponent } from '../modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
 import { FunctionGroupListComponent } from '../modules/admin/settings/function-groups/function-group-list/function-group-list.component';
+import { PrepContainerComponent } from '../modules/prep/prep-container/prep-container.component';
+import { PrepOrderComponent } from '../modules/prep/prep-order/prep-order.component';
+import { PrepOrderFilterComponent } from '../modules/prep/prep-order-filter/prep-order-filter.component';
+import { PrepOrderItemComponent } from '../modules/prep/prep-order-item/prep-order-item.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -360,6 +364,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodListComponent,
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
+    PrepOrderComponent,
+    PrepContainerComponent,
+    PrepOrderFilterComponent,
+    PrepOrderItemComponent,
     PriceTierLineEditComponent,
     PriceTierEditComponent,
     PriceTiersComponent,

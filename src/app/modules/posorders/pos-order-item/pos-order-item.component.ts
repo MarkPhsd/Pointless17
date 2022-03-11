@@ -14,6 +14,7 @@ import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -111,15 +112,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       }
     })
 
+    //disabled  class style when added button for item functions
     this._assignedPOSItem = this.orderMethodsService.assignedPOSItem$.subscribe( data => {
       this.assignedPOSItem = data;
-      this.productnameClass = 'product-name'
+      // this.productnameClass = 'product-name'
       if (data) {
         if (data.id == this.orderItem.id) {
-          this.productnameClass = 'product-name-alt'
+          // this.productnameClass = 'product-name-alt'
         }
         if (data.id != this.orderItem.id) {
-          this.productnameClass = 'product-name'
+          // this.productnameClass = 'product-name'
         }
       }
     })
@@ -140,6 +142,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
                 private posOrderItemService: POSOrderItemServiceService,
                 private promptGroupservice : PromptGroupService,
                 private uiSettingService   : UISettingsService,
+                private printingService    : PrintingService,
               )
   {
   }
@@ -171,8 +174,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.resizeCheck();
   }
-
-
 
   assignItem() {
     if (this.orderItem && this.assignedPOSItem) {
@@ -299,6 +300,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
+    console.log(payload)
     this.outputDelete.emit(payload)
   }
 
@@ -404,7 +406,12 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     });
   }
 
+  printLabel(item) {
+    this.printingService.printLabel(item)
+  }
+
   swipeOutItem(){
+    console.log(this.index, this.orderItem)
     this.cancelItem(this.index,  this.orderItem)
   }
 

@@ -18,7 +18,7 @@ export interface TransactionUISettings {
   validateCustomerLicenseID: boolean;
   defaultClientTypeID: number;
   enablMEDClients: boolean;
-
+  enableLimitsView: boolean;
 }
 
 export interface DSIEMVSettings {
@@ -341,7 +341,8 @@ export class UISettingsService {
       ordersRequireCustomer       : [],
       validateCustomerLicenseID   : [],
       defaultClientTypeID         :[''],
-      enablMEDClients         :[]
+      enablMEDClients             :[],
+      enableLimitsView            :[],
      })
     return fb
   }

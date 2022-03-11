@@ -89,7 +89,32 @@
         </app-value-fields>
       </div>
 
+      <div *ngIf="enableLimitsView" class="counts-container">
+        <div>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'medGramLimit'">
+              Gram Count
+          </app-value-fields>
+        </div>
 
+        <div>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'medPlantLimit'">
+            Plant Count
+          </app-value-fields>
+        </div>
+
+        <div>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'medConcentrateLimit'">
+              Concentrate Count
+          </app-value-fields>
+        </div>
+
+      </div>
 
       <div>
         <mat-form-field appearance="outline"
@@ -102,6 +127,7 @@
             ></textarea>
         </mat-form-field>
       </div>
+
   </div>
 
   <div *ngIf="enableMEDClients">

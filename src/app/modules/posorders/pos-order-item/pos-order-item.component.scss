@@ -57,6 +57,10 @@ mat-icon {
   }
 }
 
+.more-button {
+  width: 40px;
+}
+
 .custom-card-side {
   padding       : 10px;
   margin-left   : 4px;
@@ -87,6 +91,16 @@ mat-icon {
   grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
 }
 
+.grid-items {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: auto 50px;
+}
+
+.grid-item-span {
+  grid-column: span 2;
+}
+
 .grid-item-button {
   margin-right: 10px;
   vertical-align: middle;
@@ -110,11 +124,6 @@ mat-icon {
   margin-right: 10px;
 }
 
-.grid-item-span-row  {
-  // grid-column-end: span 2;
-  grid-row: 1 / 2;
-}
-
 .buttons-items {
   --gap: 5px;
   display: grid;
@@ -127,7 +136,6 @@ mat-icon {
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
   }
-
 }
 
 .buttons-container {
@@ -142,7 +150,6 @@ mat-icon {
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
   }
-
 }
 
 img {
@@ -233,10 +240,7 @@ button {
 }
 
 .onlineShortDescription {
-  // font-weight: 600;
-  // font-size: 1em;
   width: 100%;
-  // white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   text-transform: capitalize;

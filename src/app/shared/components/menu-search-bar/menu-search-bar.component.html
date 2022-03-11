@@ -1,4 +1,35 @@
 <mat-sidenav-container>
+
+  <!-- <button
+      mat-button
+      [matMenuTriggerFor]="departmentMenu"
+      #departmentMenuTrigger="matMenuTrigger"
+      (mouseover)="openMenu()" >
+      Department View
+    <mat-icon>expand_more</mat-icon>
+  </button>
+
+  <mat-menu class="mat-menu-panel"
+            [overlapTrigger]="false"
+            #departmentMenu="matMenu">
+      <span >
+        <div  *ngIf="(departments$ | async) as list">
+
+          <app-mat-toggle-selector
+            (outPutItem)     = "refreshDepartmentSearch($event)"
+            [mouseOver]      = "true"
+            [showIcon]       ="'true'"
+            [textLength]     = "21"
+            [toggleDimensions]="'toggle-group-tall'"
+            [toggleHeight]   ="'toggle-buttons-height-size-tall'"
+            [useMatMenu]     ='true'
+            [list]           = "list">
+          </app-mat-toggle-selector>
+
+        </div>
+      </span>
+  </mat-menu> -->
+
   <div    class="grid-container">
     <div  class="form-width"
           *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
@@ -125,7 +156,7 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div   class="grid-item-departments"
+          <!-- <div   class="grid-item-departments"
                 *ngIf="(productTypes$ | async) as list">
 
             <app-mat-toggle-selector
@@ -138,10 +169,10 @@
                 [textLength]      = "21"
                 [materialIcons]   = "'true'"
                 [list]            = "list">
-            </app-mat-toggle-selector>
+            </app-mat-toggle-selector> --> -->
 
 
-            <!-- <div  class="grid-item-departments"
+            <div  class="grid-item-departments"
                   *ngIf="(categories$ | async) as list">
               <app-mat-toggle-selector
                   [mouseOver]      = "false"
@@ -153,15 +184,15 @@
                   [textLength]     = "21"
                   [list]           = "list">
               </app-mat-toggle-selector>
-            </div> -->
+            </div>
 
 
-          </div>
+          <!-- </div> -->
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
-    <div class="grid-item-departments"
+   <div class="grid-item-departments"
          *ngIf="!multifilter">
       <div  *ngIf="(departments$ | async) as list">
         <app-mat-toggle-selector
@@ -177,6 +208,11 @@
     </div>
   </div>
 
-
 </mat-sidenav-container>
 
+
+
+<!--
+[matMenuTriggerFor]="menu"
+#menuTrigger="matMenuTrigger"
+(mouseenter)="menuTrigger.openMenu()" -->

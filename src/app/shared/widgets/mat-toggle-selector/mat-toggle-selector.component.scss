@@ -133,3 +133,40 @@ mat-button-toggle {
   flex-direction: row;
   display: flex;
 }
+
+// :host .mat-menu {
+//   position  : relative !important;
+//   left      : 175px    !important;
+//   width     : 100%     !important;
+//   min-width : 650px    !important;
+//   overflow-x: hidden   !important;
+// }
+
+// .mat-menu-panel {
+//   position  : relative !important;
+//   left      : 175px    !important;
+//   width     : 100%     !important;
+//   min-width : 650px    !important;
+//   overflow-x: hidden   !important;
+// }
+
+mat-menu .mat-menu-panel{
+  position  : relative !important;
+  left      : 175px    !important;
+  width     : 100%     !important;
+  min-width : 650px    !important;
+  overflow-x: hidden   !important;
+  padding:  10px;
+  margin-left: 100px;
+}
+
+
+.mat-menu-panel.matpanel {
+  position  : relative !important;
+  left      : 175px    !important;
+  width     : 100%     !important;
+  min-width : 650px    !important;
+  overflow-x: hidden   !important;
+  padding:  10px;
+  margin-left: 100px;
+}

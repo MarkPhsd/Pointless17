@@ -6,22 +6,22 @@
 }
 
 .grid-container {
-  --gap: 5px;
+  --gap: 10px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 1fr 300px;
+  grid-template-columns: auto 300px;
   overflow: hidden;
 
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: 1fr;
+    grid-template-columns: auto;
   }
 }
 
 .grid-flow {
-  --gap: 20px;
+  --gap: 10px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
@@ -78,7 +78,7 @@
 .orders-list {
   overflow-x: hidden;
   overflow-y: auto;
-  height: 85vh;
+  height: 84vh;
 }
 
 .grid-item {

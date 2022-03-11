@@ -74,7 +74,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
         }
       }
 
-      console.log('refreshLimitProgress 1', this.gramCountProgress)
+      // console.log('refreshLimitProgress 1', this.gramCountProgress)
       if (type) {
         const order = this.order
         // const gramRatio = 28

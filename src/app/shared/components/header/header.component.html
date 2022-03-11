@@ -156,6 +156,7 @@
 
     </div>
 
+
     <div  fxFlex
           fxLayout="row"
           fxLayoutAlign="start end"
@@ -164,6 +165,10 @@
       <div *ngIf="!smallDevice">
         <app-toggle-theme></app-toggle-theme>
     </div>
+
+      <div *ngIf="!smallDevice">
+        <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
+      </div>
 
       <div *ngIf="!smallDevice"
             class="cart-button" >
@@ -182,14 +187,13 @@
       </div>
 
       <div *ngIf="user">
-        <button   aria-label="user menu"
+          <button aria-label="user menu"
                   mat-button
                   [matMenuTriggerFor]="menu"
                   #menuTrigger="matMenuTrigger"
                   (mouseenter)="menuTrigger.openMenu()">
-          <mat-icon>person_outline</mat-icon>
-        </button>
-
+            <mat-icon>person</mat-icon>
+          </button>
 
         <mat-menu class="mat-menu-panel" [overlapTrigger]="false" #menu="matMenu">
             <span (mouseleave)="menuTrigger.closeMenu()">
@@ -224,7 +228,6 @@
                 </button>
                 <mat-divider class="mat-divider"></mat-divider>
               </div>
-
 
               <div class="mat-item"
                     *ngIf="smallDevice">
@@ -270,7 +273,5 @@
       </div>
     </div>
 
-
   </mat-toolbar-row>
-
 </mat-toolbar>

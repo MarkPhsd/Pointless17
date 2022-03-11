@@ -1,5 +1,6 @@
 import { Component,   Input, Output, OnInit,
-  EventEmitter } from '@angular/core';
+  EventEmitter,
+  HostListener} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -113,6 +114,8 @@ urlPath:        string;
 value           : any;
 id              : number;
 product         : IProduct;
+smallDevice: boolean;
+listHeight : string;
 
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
@@ -143,10 +146,11 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   async ngOnInit() {
-    this.initClasses()
+    this.updateScreenSize();
+
 
     const clientSearchModel       = {} as ClientSearchModel;
-  clientSearchModel.pageNumber  = 1
+    clientSearchModel.pageNumber  = 1
     clientSearchModel.pageSize    = 1000;
 
     this.urlPath        = await this.awsService.awsBucketURL();
@@ -177,12 +181,60 @@ constructor(  private _snackBar              : MatSnackBar,
     }
   }
 
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    this.smallDevice = false
+    if (window.innerWidth < 390) {
+      this.smallDevice = true
+      this.listHeight = '35vh';
+      this.initClasses()
+      return
+    }
+
+    if (window.innerWidth < 420) {
+      this.smallDevice = true
+      this.listHeight = '42vh';
+      this.initClasses()
+      return
+    }
+    if (window.innerWidth < 768) {
+      this.smallDevice = true
+      this.listHeight = '67vh';
+      this.initClasses()
+      return
+    }
+
+    if (window.innerWidth < 1200) {
+      this.smallDevice = true
+      this.listHeight = '67vh';
+      this.initClasses()
+      return
+    }
+    if (window.innerWidth > 1200) {
+      this.smallDevice = true
+      this.listHeight = '78vh';
+
+      this.initClasses()
+      return
+    }
+  }
+
+
   initClasses()  {
     const platForm      = this.platForm;
     this.gridDimensions =  'width: 100%; height: 90%;'
     this.agtheme  = 'ag-theme-material';
     if (platForm === 'capacitor') { this.gridDimensions =  'width: 100%; height: 90%;' }
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
+
+    //height: 72vh; 1180
+
+    //greater than 900 and less than  should be 73vh
+
+    //less than 900 should be 67vh
+
+    //393  < 42vh
+
   }
 
   initForm() {

@@ -18,12 +18,12 @@ import { POSOrderItemServiceService } from 'src/app/_services/transactions/posor
 import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { EMPTY, } from 'rxjs';
-
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { UITransactionsComponent } from '../../admin/settings/software/UISettings/uitransactions/uitransactions.component';
 
 @Component({
 selector: 'app-pos-order',
@@ -94,8 +94,20 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   _uiSettings: Subscription;
   uiSettings : UIHomePageSettings;
   wideBar    =  false;
+  enableLimitsView : boolean;
+  _uiTransactionSettings: Subscription;
+  uiTransactionSettings : TransactionUISettings;
+
 
   initSubscriptions() {
+
+    this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
+      this.enableLimitsView  =false;
+      if (data) {
+        this.uiTransactionSettings = data;
+        this.enableLimitsView = data.enableLimitsView
+      }
+    });
 
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
@@ -140,10 +152,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private siteService       : SitesService,
               private toolbarUIService  : ToolBarUIService,
               private bottomSheet       : MatBottomSheet,
-              private menuItemService   : MenuService,
-              private orderItemService  : POSOrderItemServiceService,
-              private renderingService  : RenderingService,
-              private settingService    : SettingsService,
               private authenticationService: AuthenticationService,
               private orderMethodService: OrderMethodsService,
               private userAuthorization : UserAuthorizationService,
@@ -193,6 +201,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   async ngOnInit() {
     this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
+    this.uiTransactionSettings =  await this.uiSettingsService.subscribeToCachedConfig()
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
@@ -235,12 +244,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //check order status:
   refreshOrder() {
     if (this.order) {
-      const site = this.siteService.getAssignedSite();
-      const order$ = this.orderService.getOrder(site, this.order.id.toString() , this.order.history)
-      // const source = timer(5000, 3000);
-      order$.subscribe( data => {
-          this.orderService.updateOrderSubscription(data)
-      })
+      this.orderMethodService.refreshOrder(this.order.id)
     }
   }
 
@@ -342,6 +346,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.orderService.updateBottomSheetOpen(false)
     if (this._user) { this._user.unsubscribe()}
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
+     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
   }
 
   suspendOrder() {
@@ -453,50 +458,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   //update inventory
   async  printLabel(item: PosOrderItem) {
 
-    const site = this.siteService.getAssignedSite();
 
-    //get cached label printer name
-    const printer = await this.printingService.getElectronLabelPrinterCached().pipe().toPromise();
-    if (!printer || !printer.text) {
-      // console.log('printer', printer)
-      return;
-    }
-    const printerName = printer.text
-
-    this.menuItemService.getMenuItemByID(site, item.productID).pipe(
-      switchMap(data => {
-        if ( !data  || data == "No Records" || !data.itemType) {
-          // console.log('no data')
-          return EMPTY
-        }
-
-        // console.log('data.itemType', data.itemType)
-        if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printerName ) ) {
-            if (data.itemType.labelTypeID !=0 ) {
-              return   this.settingService.getSetting(site, data.itemType.labelTypeID)
-            }
-        } else {
-          // console.log('No print option')
-          return this.orderItemService.setItemAsPrinted(site, item )
-        }
-
-    })).pipe(
-      switchMap( data => {
-        // //get the PrintString Format
-        // console.log('getting Text From label setting',  data)
-        const content = this.renderingService.interpolateText(item, data.text)
-        const result  = this.printingService.printLabelElectron(content, printerName)
-
-        if (!item.printed || (data && !data.printed)) {
-          return this.orderItemService.setItemAsPrinted(site, item )
-        }
-
-        return EMPTY
-    })).subscribe( data => {
-      this.refreshOrder();
-      // do something aboutt the inventory notification or don't
-      // console.log('item printed')
-    })
   }
 
   // //get item

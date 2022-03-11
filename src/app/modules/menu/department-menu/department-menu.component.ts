@@ -46,11 +46,12 @@ import { ISite } from 'src/app/_interfaces';
   ]
 })
 export class DepartmentMenuComponent implements OnInit, OnDestroy {
+
+  @Input() departmentID: number;
   id: any;
   departments$: any;
   textLength: 20;
   bucketName: string;
-  @Input() departmentID: number;
   department : IDepartmentList;
   _department: Subscription;
   site: ISite;
@@ -76,25 +77,29 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
   ) { }
 
   async  ngOnInit() {
-    const i         =1
+    const i         = 1
     this.site       = this.siteService.getAssignedSite();
-    this.bucketName =   await this.awsBucketService.awsBucket();
+    this.bucketName = await this.awsBucketService.awsBucket();
     this.initDepartment();
     this.initSubscriptions();
   }
 
   ngOnDestroy(): void {
-    if (!this._department) {return}
+    if (!this._department)  {return}
     this._department.unsubscribe();
   }
 
   initDepartment() {
+    console.log(this.departmentID)
     if ( this.route.snapshot.paramMap.get('id') ) {
       const id = this.route.snapshot.paramMap.get('id');
       this.id = id;
       this.refreshDepartment(+id);
       return
     }
+
+    console.log(this.departmentID)
+    if (this.departmentID) { this.refreshDepartment(+this.departmentID) }
   }
 
   refreshDepartment(id: number) {

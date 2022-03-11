@@ -45,7 +45,6 @@ export class CompanyEditComponent implements OnInit {
     private siteService: SitesService,
     private fbCompanyService: FbCompanyService,
     private companyService  : CompanyService,
-    private userAuthorization       : UserAuthorizationService,
 
   ) { }
 
@@ -58,12 +57,13 @@ export class CompanyEditComponent implements OnInit {
       this.fillForm();
     }
 
-    async fillForm() {
+    fillForm() {
       this.initForm();
       const site     = this.siteService.getAssignedSite();
-      const company = await this.companyService.getCompany(site).pipe().toPromise();
-      if (!company) {return}
-      this.inputForm.patchValue(company)
+      this.companyService.getCompany(site).subscribe( company => {
+        if (!company) {return}
+        this.inputForm.patchValue(company)
+      })
     }
 
     initForm() {

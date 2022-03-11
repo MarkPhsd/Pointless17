@@ -64,6 +64,11 @@ mat-form-field {
   height       : 8vw;
   width        : 10vw;
 
+  @include for-phone-only {
+    height       : 17vw;
+    width        : 17vw;
+  }
+
   @include for-big-desktop-up {
     height       : 5vw;
     width        : 7vw;

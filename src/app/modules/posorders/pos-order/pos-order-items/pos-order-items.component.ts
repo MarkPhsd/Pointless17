@@ -111,9 +111,14 @@ export class PosOrderItemsComponent implements OnInit {
   async removeItemFromList(payload: any) {
     const index = payload.index;
     const orderItem = payload.item
-    // this.orderMethodService.addItemToOrder
     this.orderMethodService.removeItemFromList(index, orderItem)
+  }
 
+  async swipeItemFromList(index) {
+    console.log(index)
+    if (!index || !this.order) { return}
+    const item =  this.order.posOrderItems[index]
+    this.orderMethodService.removeItemFromList(index, item)
   }
 
   async updateSubscription(orderID: number) {
@@ -127,6 +132,10 @@ export class PosOrderItemsComponent implements OnInit {
     if (!this.animationState) {
       this.animationState = state
     }
+  }
+
+  logItem(item) {
+    console.log(item)
   }
 
   resetAnimationState() {

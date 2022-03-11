@@ -132,7 +132,9 @@ import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component
 import { LogoComponent } from './widgets/logo/logo.component';
 import { FilterPipe } from '../_pipes/filter.pipe';
 import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile-med-info/profile-med-info.component';
-
+import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.component';
+import { SwiperModule } from 'swiper/angular';
+import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -160,6 +162,7 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
     DisableControlDirective,
     CashValueCalcComponent,
     CardComponent,
+    CompanyInfoHeaderComponent,
     ClientSearchSelectorComponent,
     CannabisItemEditComponent,
     CategorySelectComponent,
@@ -191,6 +194,7 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
     IonicGeoLocationComponent,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
+    ImageSwiperComponent,
     KeyPadComponent,
     Label1by8Component,
     LimitValuesProgressBarsComponent,
@@ -248,6 +252,7 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
     SpeciesListComponent,
     StatusLookupComponent,
     SummarycardComponent,
+
     TaxFieldsComponent,
     TiersCardComponent,
     QuantiySelectorComponent,
@@ -286,6 +291,7 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
     RouterModule,
     ReactiveFormsModule,
     ReactiveFormsModule,
+    SwiperModule,
   ],
 
   exports: [
@@ -312,6 +318,7 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
     ChemicalValuesComponent,
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
+    CompanyInfoHeaderComponent,
     DashboardComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,
@@ -333,6 +340,7 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
     IonicSwipeToDeleteComponent,
     ItemTypeSortComponent,
     ItemSalesCardComponent,
+    ImageSwiperComponent,
     KeyPadComponent,
     LimitValuesProgressBarsComponent,
     LiquorProductEditComponent,

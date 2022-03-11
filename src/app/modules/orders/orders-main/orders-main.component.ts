@@ -67,10 +67,10 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   @HostListener("window:resize", [])
   adjustWindow(){
     this.smallDevice = false
-    this.listHeight = '70vh'
+    this.listHeight = '84vh'
     if (window.innerWidth < 768) {
       this.smallDevice = true
-      this.listHeight = '68vh'
+      this.listHeight = '79vh'
     }
   }
 

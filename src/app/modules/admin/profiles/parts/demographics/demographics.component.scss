@@ -34,6 +34,11 @@
   width: 75px;
 }
 
+.counts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,  minmax(75px, 1fr));
+  gap: 5px;
+}
 
 .grid-info {
   --gap: 10px;

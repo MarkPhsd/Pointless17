@@ -5,7 +5,9 @@
   display: grid;
   grid-template-columns: 1fr 1fr ;
   gap: 2px;
+
 }
+
 .header-container {
   --gap: 10px;
   display: grid;
@@ -21,6 +23,40 @@
     justify-content: space-between;
   }
 }
+
+.grid-container {
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(275px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+.sub-container {
+
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+
 
 .grid-spanner {
   grid-column-end: span 2;
@@ -60,9 +96,11 @@ mat-form-field {
 }
 
 .button-margins {
-  margin: -5px 3px 3px 3px;
+  margin: 5px;
 }
-
+.toggle-items {
+  width: 300px;
+}
 .location-assignment {
   float: left;
   width: 100px !important;

@@ -19,7 +19,7 @@
 }
 
 .grid-flow {
-  --gap: 20px;
+  --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
@@ -32,7 +32,7 @@
 }
 
 .grid-flow-panel {
-  --gap: 20px;
+  --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(595px, 1fr) );
@@ -124,11 +124,9 @@ mat-progress-bar {
 }
 
 .filter-panel {
-
-    @include for-phone-only  {
-      visibility: hidden;
-    }
-
+  @include for-phone-only  {
+    visibility: hidden;
+  }
 }
 
 .order-panel {

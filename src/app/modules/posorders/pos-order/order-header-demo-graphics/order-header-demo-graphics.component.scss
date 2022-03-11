@@ -19,11 +19,18 @@ mat-card-subtitle {
   padding: 2px !important;
 }
 
+.grid-demo {
+  display: grid;
+  grid-template-columns: auto 75px;
+  gap: 5px;
+  margin: 5px;
+}
+
 .grid-contact {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 70px 150px;
   justify-content: space-between;
-  width: 100%;
+  width: 80%;
   gap: 5px;
   margin-top: 6px;
 }
@@ -37,9 +44,6 @@ mat-card-subtitle {
 .transaction-data {
   display: grid;
   grid-template-columns: 60px 1fr;
-  // width: 300px;
-  // border-radius: 3px;
-  // margin: 5px 5px ;
   overflow-y: auto;
   overflow-x: hidden;
 }
