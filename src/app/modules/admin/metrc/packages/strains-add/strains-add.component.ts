@@ -226,7 +226,6 @@ export class StrainsAddComponent implements OnInit {
             price:                            [0],
             jointWeight:                      [1],
             facilityLicenseNumber:            [facility],
-
             active                      :     [active],
         })
       } catch (error) {
