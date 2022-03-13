@@ -23,24 +23,26 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   @Input()  metrcCategoryName : string;
   @Input()  searchField:      FormControl;
   @Input()  productName:      string;
-  @Input() doNotPassName      :string;
+  @Input()  doNotPassName     :string;
+  @Input()  formControlName = 'productName';
+
   searchPhrase:               Subject<any> = new Subject();
   searchModel                 =  {} as ProductSearchModel;
   item:                       IItemBasic;
   site:                       ISite;
 
   results$ = this.searchPhrase.pipe(
-    debounceTime(150),
+    debounceTime(250),
     distinctUntilChanged(),
     switchMap(searchPhrase => {
       this.searchModel.name = searchPhrase;
+      console.log(searchPhrase)
       return this.menuService.getItemBasicBySearch(this.site,  this.searchModel)
      }
     )
   )
 
   ngAfterViewInit() {
-    if (!this.input) { return }
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(
           filter(Boolean),
@@ -55,29 +57,23 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   }
 
   constructor(
-    private router: Router,
     public route: ActivatedRoute,
     private menuService: MenuService,
     private fb: FormBuilder,
     private siteService: SitesService,
     )
   {
-    if (this.searchModel &&  this.metrcCategoryName) {
-      this.searchModel.metrcCategory = this.metrcCategoryName
-    }
+    // if (this.searchModel &&  this.metrcCategoryName) {
+    //   this.searchModel.metrcCategory = this.metrcCategoryName
+    // }
     this.site = this.siteService.getAssignedSite();
   }
 
   ngOnInit() {
     if (this.doNotPassName) { return }
     this.searchForm = this.fb.group({
-      productName : ['']
+        productName : ['']
     })
-    // if (this.searchForm){
-    //   this.searchForm = this.fb.group({
-    //     productName: this.productName,
-    //   })
-    // }
   }
 
   refreshSearch(search: any){

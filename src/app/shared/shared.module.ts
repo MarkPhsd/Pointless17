@@ -125,7 +125,6 @@ import { BackgroundCoverComponent } from './widgets/background-cover/background-
 import { UploaderComponent } from './widgets/AmazonServices';
 import { PaymentReportCardComponent } from '../modules/admin/reports/payment-report/payment-report-card/payment-report-card.component';
 import { DSIEMVElectronComponent } from '../modules/admin/settings/software/dsiemvelectron/dsiemvelectron.component';
-import { SearchMenuProductsComponent } from './widgets/search-menu-products/search-menu-products.component';
 import { DepartmentMenuComponent } from '../modules/menu/department-menu/department-menu.component';
 import { OverLayComponent } from './widgets/over-lay/over-lay.component';
 import { MyThingComponent } from './widgets/over-lay/my-thing/my-thing.component';
@@ -252,7 +251,6 @@ import { CompanyInfoHeaderComponent } from './widgets/company-info-header/compan
     SpeciesListComponent,
     StatusLookupComponent,
     SummarycardComponent,
-
     TaxFieldsComponent,
     TiersCardComponent,
     QuantiySelectorComponent,
@@ -269,7 +267,6 @@ import { CompanyInfoHeaderComponent } from './widgets/company-info-header/compan
     SearchDebounceInputComponent,
     UIHomePageSettingsComponent,
     UploaderComponent,
-    SearchMenuProductsComponent,
     OverLayComponent,
     MyThingComponent,
     LogoComponent,

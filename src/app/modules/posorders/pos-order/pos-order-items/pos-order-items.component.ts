@@ -116,8 +116,8 @@ export class PosOrderItemsComponent implements OnInit {
 
   async swipeItemFromList(index) {
     console.log(index)
-    if (!index || !this.order) { return}
     const item =  this.order.posOrderItems[index]
+    if (!item)  { return }
     this.orderMethodService.removeItemFromList(index, item)
   }
 

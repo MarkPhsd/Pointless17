@@ -25,10 +25,10 @@
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  // margin-top: 5px;
   grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
   overflow-y: auto;
   overflow-x: hidden;
+  max-height: 500px;
 }
 
 :host {

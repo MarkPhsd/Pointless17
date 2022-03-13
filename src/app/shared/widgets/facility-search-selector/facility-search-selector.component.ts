@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angu
 import { ISite } from 'src/app/_interfaces/site';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject, fromEvent } from 'rxjs';
+import { Subject, fromEvent } from 'rxjs';
 import { MetrcFacilitiesService, IItemFacilitiyBasic } from 'src/app/_services/metrc/metrc-facilities.service';
 
 @Component({
@@ -16,9 +16,11 @@ export class FacilitySearchSelectorComponent implements OnInit, AfterViewInit  {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new               EventEmitter();
+
   @Input()  searchForm:                     FormGroup;
   @Input()  searchField:                    FormControl;
   @Input()  item:                           IItemFacilitiyBasic;
+
   searchPhrase:         Subject<any> = new Subject();
   site:                 ISite;
 

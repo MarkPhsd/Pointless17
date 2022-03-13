@@ -47,7 +47,11 @@ export class PackageListComponent implements OnInit {
 
   //needed for search component
   searchForm:    FormGroup;
-  get itemName() { return this.searchForm.get("itemName") as FormControl;}
+  get itemName() {
+    if (this.searchForm) {
+      return this.searchForm.get("itemName") as FormControl;
+    }
+  }
   get hasImportedControl() { return this.searchForm.get("hasImported") as FormControl;}
   get activeControl() { return this.searchForm.get("active") as FormControl;}
 
@@ -96,7 +100,6 @@ export class PackageListComponent implements OnInit {
   // hasImported = false;
   downloadVisible:  boolean;
   selectedSiteID:   number;
-  searchProducts:   string;
   loadingFacilities: boolean;
 
   metrcPackage : METRCPackage;
@@ -125,8 +128,8 @@ export class PackageListComponent implements OnInit {
   //   )
   // )
 
-  //This is for the search Section//
-  get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
+  // //This is for the search Section//
+  // get searchProductsValue() { return this.searchForm.get("itemname") as FormControl;}
   private readonly onDestroy = new Subject<void>();
   search: string;
   // mETRCPackagesGet$: Observable<METRCPackage[]>;
@@ -172,7 +175,7 @@ export class PackageListComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     const metrcLicenseNumber = site.metrcLicenseNumber
     this.searchForm = this.fb.group( {
-      searchProducts: [''],
+      itemName: [''],
       metrcCategory : [''],
       selectedSiteID: ['Select Site'],
       facilityID    : [metrcLicenseNumber],
@@ -304,7 +307,12 @@ export class PackageListComponent implements OnInit {
   }
 
   refreshSearchPhrase(event) {
-    this.itemName.setValue(event)
+    // if ( !this.itemName) { return }
+    // this.itemName.setValue(event)
+    // this.refreshSearch();
+
+    const item = { itemName: event }
+    this.searchForm.patchValue(item)
     this.refreshSearch();
   }
 
@@ -382,9 +390,9 @@ export class PackageListComponent implements OnInit {
       searchModel.hasImported = this.hasImportedControl.value
     }
 
-    if (this.searchProducts != '') {
-      searchModel.productName = this.searchProducts
-      searchModel.label = this.searchProducts
+    if (this.itemName) {
+      searchModel.productName = this.itemName.value
+      searchModel.label       = this.itemName.value
     }
 
     if (this.metrcCategory) {  searchModel.productCategoryName =   this.metrcCategory.name }

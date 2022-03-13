@@ -9,7 +9,7 @@ import { IProductSearchResults } from 'src/app/_services';
   templateUrl: './search-debounce-input.component.html',
   styleUrls: ['./search-debounce-input.component.scss']
 })
-export class SearchDebounceInputComponent implements AfterViewInit {
+export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
 
   @Input()  itemNameInput: string;
   @Output() outPutMethod   = new EventEmitter();
@@ -29,6 +29,7 @@ export class SearchDebounceInputComponent implements AfterViewInit {
       distinctUntilChanged(),
       switchMap(searchPhrase =>
       {  // this.refreshSearch()/
+        console.log(searchPhrase)
         this.outPutMethod.emit(searchPhrase)
         return searchPhrase
       }
@@ -36,9 +37,18 @@ export class SearchDebounceInputComponent implements AfterViewInit {
   )
 
   constructor() { }
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+
+    if (!this.itemNameControl) { this.itemNameControl = 'itemName'}
+  }
 
   ngAfterViewInit() {
-    if (this.input) {
+
+    if (!this.searchForm) { console.log('something') }
+
+    if (this.searchForm) {
       fromEvent(this.input.nativeElement,'keyup')
       .pipe(
         filter(Boolean),

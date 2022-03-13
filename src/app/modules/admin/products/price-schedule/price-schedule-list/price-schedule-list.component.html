@@ -144,10 +144,11 @@
 
 <div class="floating-info">
   <div *ngIf="inputForm && priceScheduleTracking">
+
+    <!-- hideDelete need to determine when to hide the deleting-->
     <app-price-schedule-info
             [inputForm]="inputForm"
-            [hideDelete]="'true'"
-              >
+            [hideDelete]="true" >
     </app-price-schedule-info>
   </div>
 </div>

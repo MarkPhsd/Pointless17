@@ -1,43 +1,54 @@
 <div *ngIf="inputForm && package"
      [formGroup]="inputForm">
 
-    <div>
+    <!-- <div>
       <app-product-search-selector
         [doNotPassName]     = 'true'
         [metrcCategoryName] = "package.productCategoryName"
         [searchForm]        = "inputForm"
         (itemSelect)        = "getCatalogItem($event)">
-        >
       </app-product-search-selector>
-      <!-- <app-addMenuItem [productName]="productName"></app-addMenuItem> -->
+    </div> -->
+
+    <!-- [metrcCategoryName] = "package.productCategoryName" -->
+    <div class="grid-item">
+      <app-product-search-selector
+                [formControlName]   ="'productName'"
+                [searchForm]        ="inputForm"
+                [doNotPassName]     = 'true'
+                (itemSelect)        ="getCatalogItem($event)">
+        <div fieldDescription>
+        <mat-icon>search</mat-icon>
+          Search
+        </div>
+      </app-product-search-selector>
     </div>
 
     <div>
       <app-facility-search-selector
           [searchForm]="inputForm"
           (itemSelect)="getVendor($event)">
-          >
       </app-facility-search-selector>
     </div>
 
-    <div >
+    <div *ngIf="package && package.sourceHarvestName">
       <mat-label>Source harvest:</mat-label>
       {{package?.sourceHarvestName}}
     </div>
 
     <div>
-      <mat-form-field appearance="outline">
+      <mat-form-field appearance="outline" fxFill>
       <mat-label >Batch Number</mat-label>
       <input matInput
             [(ngModel)] ="productionBatchNumber"
             type="text"
             formControlName="productionBatchNumber"
-            class="max-width" >
+             >
       </mat-form-field>
     </div>
 
     <div>
-      <mat-form-field appearance="outline" >
+      <mat-form-field appearance="outline" fxFill >
       <mat-label>Expiration</mat-label>
       <input matInput
             type="text"
@@ -50,9 +61,9 @@
     </div>
 
     <div>
-      <mat-form-field appearance="outline" >
+      <mat-form-field appearance="outline" fxFill>
       <mat-label>Batch Date</mat-label>
-      <input matInput
+        <input matInput
               type="text"
               formControlName="batchDate"
               [matDatepicker]="picker2">
@@ -62,32 +73,30 @@
     </div>
 
     <div>
-      <mat-form-field appearance="outline" >
-      <mat-label >METRC Category</mat-label>
-      <input matInput
-              type="text"
-              formControlName="productCategoryName"
-            >
-      </mat-form-field>
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldsClass] ="'fields-small'"
+          [fieldName]="'productCategoryName'">
+          METRC Category
+      </app-value-fields>
     </div>
 
     <div>
-      <mat-form-field appearance="outline"  >
-      <mat-label >METRC Category Type</mat-label>
-      <input matInput
-              type="text"
-              formControlName="productCategoryType"
-            >
-      </mat-form-field>
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldsClass] ="'fields-small'"
+          [fieldName]="'productCategoryType'">
+          METRC Category Type
+      </app-value-fields>
     </div>
 
     <div>
-      <mat-form-field appearance="outline"  >
-      <mat-label >METRC Quantity Type</mat-label>
-      <input matInput
-              type="text"
-              formControlName="quantityType"
-            >
-      </mat-form-field>
+      <app-value-fields
+          [inputForm]="inputForm"
+          [fieldsClass] ="'fields-small'"
+          [fieldName]="'quantityType'">
+          METRC Quantity Type
+      </app-value-fields>
     </div>
+
 </div>

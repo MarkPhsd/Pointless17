@@ -35,15 +35,13 @@
 
     <mat-card-content>
       <div  [formGroup]="packageForm"
-            class      ="grid-container"
-          >
-        <div >
+            class      ="grid-container" >
+        <div>
           <metrc-inventory-properties
                 [inputForm]     ="packageForm"
                 [package]       ="package"
                 (outputMenuItem)="getCatalogItem($event)"
-                (outputVendor)  ="getVendor($event)"
-                >
+                (outputVendor)  ="getVendor($event)">
           </metrc-inventory-properties>
         </div>
 

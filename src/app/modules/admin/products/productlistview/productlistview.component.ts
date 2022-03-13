@@ -355,9 +355,7 @@ constructor(  private _snackBar              : MatSnackBar,
 
     const control = this.itemName
 
-    if (control) {
-      control.setValue('')
-    }
+    if (control) { control.setValue('') }
     this.categoryID        = 0;
     this.productTypeSearch = 0;
     this.brandID           = 0

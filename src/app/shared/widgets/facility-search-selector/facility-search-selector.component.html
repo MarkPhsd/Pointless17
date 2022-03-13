@@ -1,13 +1,14 @@
-<div [formGroup]="searchForm" class="form-background">
-  <mat-form-field class="form-background"
+<div [formGroup]="searchForm"  >
+
+  <mat-form-field
                   appearance="outline"
                   fxFlexFill >
-    <mat-label class="form-background">Search Facility</mat-label>
+
+    <mat-label >Search Facility</mat-label>
 
     <input
            #input
            type="text"
-           class="form-background"
            placeholder="Search Items"
            matInput
            name="facilityLicenseNumber"
@@ -16,8 +17,8 @@
 
       <mat-autocomplete panelWidth="auto"
                         #auto="matAutocomplete"
-                        (optionSelected)="onChange($event)"
-                        >
+                        (optionSelected)="onChange($event)" >
+
         <mat-option *ngFor="let item of results$ | async"
                     [value]="item">
           {{item.metrcLicense}}-{{item.displayName}}
