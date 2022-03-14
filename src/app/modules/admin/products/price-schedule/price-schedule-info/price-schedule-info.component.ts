@@ -58,7 +58,7 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
       this.priceSchedule = data
 
       if (data) {
-        console.log('data.type', data.type)
+        // console.log('data.type', data.type)
         this.isMenuList = false
         if ( data.type === 'Menu List') {
           this.isMenuList = true

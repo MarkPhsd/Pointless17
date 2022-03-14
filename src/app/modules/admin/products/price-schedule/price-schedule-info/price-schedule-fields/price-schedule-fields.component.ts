@@ -17,7 +17,7 @@ export class PriceScheduleFieldsComponent implements OnInit {
   @Input() andOrOption      = true;
   @Input() data             : any;
   @Input() formArray        : FormArray;
-  @Input() hideDelete       : boolean;
+  @Input() hideDelete       = false;
 
   _priceSchedule            : Subscription;
   priceScheduleTracking     : IPriceSchedule;

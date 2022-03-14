@@ -1,7 +1,17 @@
-<div class="grid-flow">
-  <!--
-    <div>{{schedule.name}}</div>
-    <div>{{purchasedQuantity}}</div>
-  -->
 
-</div>
+<mat-card>
+  <div *ngIf="schedules && schedules.length>0">
+    <h5>
+      Price Specials
+    </h5>
+  </div>
+
+  <div class="grid-schedule" *ngIf="schedules">
+    <div>Schedule</div>
+    <div>Amount</div>
+  </div>
+
+  <div *ngFor="let item of schedules" class="grid-flow">
+    <pos-order-schedule-description [scheduleID]="item"></pos-order-schedule-description>
+  </div>
+</mat-card>

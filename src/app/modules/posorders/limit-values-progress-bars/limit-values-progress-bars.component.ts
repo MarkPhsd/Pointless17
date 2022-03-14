@@ -53,7 +53,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
     if (order) {
 
       const type = this.validateType(order)
-      console.log('type', type)
+      // console.log('type', type)
       if (!type) {
         const order = this.order
         const gramRatio = 28
@@ -95,7 +95,7 @@ export class LimitValuesProgressBarsComponent implements OnInit,OnChanges {
         }
       }
 
-      console.log('refreshLimitProgress 2', this.gramCountProgress)
+      // console.log('refreshLimitProgress 2', this.gramCountProgress)
     }
   }
 

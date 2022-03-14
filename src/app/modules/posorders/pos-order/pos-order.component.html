@@ -16,6 +16,7 @@
           </limit-values-progress-bars>
         </div>
 
+
         <div  class="grid-header-item"
               *ngIf="wideBar || mainPanel">
           <app-order-header-demo-graphics
@@ -23,10 +24,11 @@
             [order]               ="order"
             (outPutOpenClient)    ="openClient()"
             (outPutRemoveClient)  ="removeClient()"
-            (outPutAssignCustomer)="assignCustomer($event)"
-            >
+            (outPutAssignCustomer)="assignCustomer($event)" >
           </app-order-header-demo-graphics>
         </div>
+
+        <pos-order-price-schedule-info></pos-order-price-schedule-info>
 
       </div>
 

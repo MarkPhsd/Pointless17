@@ -115,7 +115,7 @@ export class PosOrderItemsComponent implements OnInit {
   }
 
   async swipeItemFromList(index) {
-    console.log(index)
+    // console.log(index)
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
     this.orderMethodService.removeItemFromList(index, item)
@@ -151,7 +151,7 @@ export class PosOrderItemsComponent implements OnInit {
 
   scrollToBottom(): void {
     setTimeout(() => {
-      console.log('scrolling')
+      // console.log('scrolling')
       try {
         if (this.myScrollContainer) {
           this.myScrollContainer.nativeElement.scrollTop =

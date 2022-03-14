@@ -66,8 +66,8 @@ mat-radio-button  {
 }
 
 mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
+  padding: 5px;
+  margin:  3px;
 }
 
 .example-tab-icon {
@@ -121,23 +121,6 @@ h1 {
   background: lightblue;
 }
 
-.alert {
-  // color: darkred;
-}
-
-.ng-invalid:not(form)  {
-  // border-left: 3px solid darkred;
-}
-
-// .ng-valid:not(form) {
-//   border-left: 3px solid greenyellow;
-// }
-
-img {
-  width: 150px;
-  height: 150px;
-  align-content: center;
-}
 
 .custom-card {
   background-color: gray;
@@ -167,7 +150,7 @@ body{ overflow-x: hidden;}
 
 .grid-container {
   display: grid;
-  grid-template-columns: 155px  55px  75px 55px;
+  grid-template-columns: 100px  55px  75px 55px;
   gap: 5px;
   width: 100%;
   margin-left: 10px;
@@ -207,8 +190,6 @@ body{ overflow-x: hidden;}
   font-size: 1.2em;
 }
 
-
-
 .trash-button {
   // margin-top: -10px;
   position: relative;
@@ -216,7 +197,6 @@ body{ overflow-x: hidden;}
   width     : 35px;
   height    : 1em;
 }
-
 
 .item-name {
   width: 135px;
@@ -232,7 +212,6 @@ body{ overflow-x: hidden;}
   width: 65px;
   font-size:   1.1em;
 }
-
 
 .slidein {
   display: grid;

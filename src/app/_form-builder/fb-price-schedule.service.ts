@@ -143,7 +143,7 @@ export class FbPriceScheduleService {
 
             if (itemName === 'orderTypeID') {
               control.push(this.fb.control({
-                orderTypeID: data.id,
+                orderTypeID: data,
                 name:        data.name
                }))
             }
@@ -185,13 +185,6 @@ export class FbPriceScheduleService {
     this.addDiscountCategories(inputForm, priceSchedule.categoryDiscounts)
   }
 
-  addClientType(inputForm: FormGroup, clientType: ClientTypes) {
-    if (!inputForm) { return }
-    const control = inputForm.get('clientTypes') as FormArray;
-    if (!control)   { return }
-    control.push(this.fb.control(clientType))
-    this.priceScheduledataService.updatePriceSchedule(inputForm.value)
-  }
 
   addDiscountCategories(inputForm: FormGroup, info: DiscountInfo[]) {
     this.setDiscountInfoValues( inputForm, info, 'categoryDiscounts' )
@@ -312,6 +305,15 @@ export class FbPriceScheduleService {
 
   }
 
+  // addClientType(inputForm: FormGroup, clientType: ClientTypes) {
+  //   if (!inputForm) { return }
+  //   const control = inputForm.get('clientTypes') as FormArray;
+  //   if (!control)   { return }
+  //   control.push(this.fb.control(clientType))
+  //   this.priceScheduledataService.updatePriceSchedule(inputForm.value)
+  // }
+
+
   addClientTypes(inputForm: FormGroup, items: ClientType[]) {
     // this.addArray(inputForm, 'clientTypes', clientTypes)
 
@@ -343,7 +345,7 @@ export class FbPriceScheduleService {
     if (items) {
       items.forEach( info =>  {
           control.push(this.fb.group({
-            orderTypeID:   [info], //    number;
+            orderTypeID:   [info.orderTypeID], //    number;
             name:          [info.name]
           }))
         }

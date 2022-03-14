@@ -1,7 +1,7 @@
 <div *ngIf="priceSchedule && !saveNotification; else loading">
   <div class="container"
       *ngIf="priceSchedule; loading">
-    <div>
+    <div class="schedule-info">
       <mat-card>
         <div class="header-grid">
           <div>
@@ -23,57 +23,55 @@
           </div>
         </div>
       </mat-card>
-
           <div *ngIf="inputForm">
             <div [formGroup]="inputForm">
               <mat-tab-group>
                   <div class="tab-group-grid">
+                    <div>
+                        <mat-tab label="Name & Type">
+                        <mat-card>
+                          <app-discount-options
+                              [inputForm]="inputForm">
+                          </app-discount-options>
+                        </mat-card>
+                      </mat-tab>
+                    </div>
 
-                  <div>
-                      <mat-tab label="Name & Type">
-                      <mat-card>
-                        <app-discount-options
-                            [inputForm]="inputForm">
-                        </app-discount-options>
-                      </mat-card>
-                    </mat-tab>
-                  </div>
+                    <div>
+                        <mat-tab label="Constraints">
+                          <app-price-schedule-constraints
+                          [inputForm]="inputForm"
+                          [item]="priceSchedule">
+                        </app-price-schedule-constraints>
+                      </mat-tab>
+                    </div>
 
-                  <div>
-                      <mat-tab label="Constraints">
-                        <app-price-schedule-constraints
-                        [inputForm]="inputForm"
-                        [item]="priceSchedule">
-                      </app-price-schedule-constraints>
-                    </mat-tab>
-                  </div>
+                    <div>
+                      <mat-tab label="Category & Items">
+                        <app-type-filter
+                          [inputForm]="inputForm"
+                          [item]     ="priceSchedule">
+                        </app-type-filter>
+                      </mat-tab>
+                    </div>
 
-                  <div>
-                    <mat-tab label="Category & Items">
-                      <app-type-filter
-                        [inputForm]="inputForm"
-                        [item]     ="priceSchedule">
-                      </app-type-filter>
-                    </mat-tab>
-                  </div>
+                    <div *ngIf="isMenuList">
+                      <mat-tab label="Selected Menu Items">
+                        <app-reward-type-filter
+                          [inputForm]="inputForm"
+                          [item]     ="priceSchedule">
+                        </app-reward-type-filter>
+                      </mat-tab>
+                    </div>
 
-                  <div *ngIf="isMenuList">
-                    <mat-tab label="Selected Menu Items">
-                      <app-reward-type-filter
-                        [inputForm]="inputForm"
-                        [item]     ="priceSchedule">
-                      </app-reward-type-filter>
-                    </mat-tab>
-                  </div>
-
-                  <div *ngIf="!isMenuList">
-                    <mat-tab label="Offers and Rewards">
-                      <app-reward-type-filter
-                        [inputForm]="inputForm"
-                        [item]     ="priceSchedule">
-                      </app-reward-type-filter>
-                    </mat-tab>
-                  </div>
+                    <div *ngIf="!isMenuList">
+                      <mat-tab label="Offers and Rewards">
+                        <app-reward-type-filter
+                          [inputForm]="inputForm"
+                          [item]     ="priceSchedule">
+                        </app-reward-type-filter>
+                      </mat-tab>
+                    </div>
 
                   <div *ngIf="isMenuList">
                     <mat-tab label="Description">
@@ -113,19 +111,16 @@
       </div>
     </div>
 
-    <!-- class="floating-info" -->
     <div class="floating-info" >
       <div *ngIf="inputForm">
         <app-price-schedule-info
                 [inputForm]="inputForm"
-                [hideDelete]="false"
-                  >
+                [hideDelete]="false">
         </app-price-schedule-info>
       </div>
     </div>
   </div>
 </div>
-
 
 <ng-template #loading>
   <h3>processing....</h3>

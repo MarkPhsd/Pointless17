@@ -222,6 +222,11 @@ export interface PosOrderItem {
   serialCode:                    string;
   history                     :  boolean;
   inventoryCountUsage:           number;
+  scheduleID:                    number;
+  scheduleDiscount_GroupValue :  number;
+  isSchedule_DiscountMember   :  number;
+  isSchedule_DiscountedItem   :  number;
+  discountScheduleID          :  number;
 }
 
 export interface PosPayment {

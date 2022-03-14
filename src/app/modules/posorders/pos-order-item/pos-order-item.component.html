@@ -63,11 +63,11 @@
 
             <div class="button-list">
               <div>
-                <button mat-button (click)="printLabel(orderItem)"><mat-icon>print</mat-icon>Label</button>
+                <button mat-button  color="accent"  (click)="printLabel(orderItem)"><mat-icon>print</mat-icon>Label</button>
               </div>
 
               <div *ngIf="!showEdit && (uiConfig.displayAdd)">
-                <button mat-raised-button     class="button"  color="accent" (click)="addItemToOrder()">
+                <button mat-raised-button    class="button"  color="accent" (click)="addItemToOrder()">
                   <mat-icon>add</mat-icon>  <span *ngIf="!smallDevice">Add </span>
                 </button>
               </div>
@@ -79,25 +79,23 @@
               </div>
 
               <div *ngIf="orderItem && orderItem.serialCode">
-                <button mat-button (click)="editSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
+                <button mat-button  color="accent"  (click)="editSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
               </div>
 
               <div *ngIf="!showEdit && promptOption">
-                <button mat-button (click)="editPrompt()"><mat-icon>edit</mat-icon>Edit</button>
+                <button mat-button  color="accent"  (click)="editPrompt()"><mat-icon>edit</mat-icon>Edit</button>
               </div>
 
               <div *ngIf="!showEdit  && (uiConfig.displayNotes)">
-                <button mat-button (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
+                <button mat-button color="accent" (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
               </div>
 
               <div *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode">
-                <button mat-button (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
+                <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
               </div>
 
-
-
               <div *ngIf="(quantity && !orderItem.voidReason)">
-                <button mat-raised-button  class="button"color="accent" (click)="swipeOutItem()" >
+                <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
                   <mat-icon>delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
                 </button>
               </div>

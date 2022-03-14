@@ -397,7 +397,6 @@ export class PackageListComponent implements OnInit {
 
     if (this.metrcCategory) {  searchModel.productCategoryName =   this.metrcCategory.name }
     return searchModel;
-
   }
 
   //this doesn't change the page, but updates the properties for getting data from the server.

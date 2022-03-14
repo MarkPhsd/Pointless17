@@ -81,6 +81,7 @@ export interface IPriceSchedule {
   lastEdited:         string;
   type:               string;
   value:              number;
+  jsonObject        : string;
   dateFrames:         DateFrame[];
   weekDays:           WeekDay[];
   clientTypes:        ClientType[];

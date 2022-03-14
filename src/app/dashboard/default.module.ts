@@ -252,6 +252,8 @@ import { PrepContainerComponent } from '../modules/prep/prep-container/prep-cont
 import { PrepOrderComponent } from '../modules/prep/prep-order/prep-order.component';
 import { PrepOrderFilterComponent } from '../modules/prep/prep-order-filter/prep-order-filter.component';
 import { PrepOrderItemComponent } from '../modules/prep/prep-order-item/prep-order-item.component';
+import { PosOrderPriceScheduleInfoComponent } from '../modules/posorders/pos-order-price-schedule-info/pos-order-price-schedule-info.component';
+import { PosOrderScheduleDescriptionComponent } from '../modules/posorders/pos-order-price-schedule-info/pos-order-schedule-description/pos-order-schedule-description.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -387,6 +389,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     POSOrderScheduleCardComponent,
     PosOrderNotesComponent,
     POSOrderScheduleFormComponent,
+    PosOrderPriceScheduleInfoComponent,
+    PosOrderScheduleDescriptionComponent,
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,

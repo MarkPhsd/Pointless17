@@ -300,7 +300,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
-    console.log(payload)
+    // console.log(payload)
     this.outputDelete.emit(payload)
   }
 
@@ -411,7 +411,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   swipeOutItem(){
-    console.log(this.index, this.orderItem)
+    // console.log(this.index, this.orderItem)
     this.cancelItem(this.index,  this.orderItem)
   }
 

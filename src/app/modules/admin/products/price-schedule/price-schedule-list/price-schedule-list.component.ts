@@ -19,7 +19,6 @@ import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.
 import { AgGridToggleComponent } from 'src/app/_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { PriceScheduleMenuGroupService } from 'src/app/_services/menu/price-schedule-menu-group.service';
 
 @Component({
   selector: 'app-price-schedule-list',
@@ -106,7 +105,8 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     })
   }
 
-  constructor(  private _snackBar         : MatSnackBar,
+  constructor(
+          private _snackBar               : MatSnackBar,
           private priceScheduleService    : PriceScheduleService,
           private priceScheduleDataService:PriceScheduleDataService,
           private router                  : Router,

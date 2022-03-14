@@ -117,7 +117,7 @@ export class PriceScheduleService {
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
-    const url = { url: uri, cacheMins: 0}
+    // const url = { url: uri, cacheMins: 0}
 
     return  this.httpClient.get<IPriceSchedule>(uri)
 

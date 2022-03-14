@@ -202,20 +202,24 @@ export class PriceScheduleComponent {
   save() {
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
-      // const priceSchedule = this.getPriceSchedule(this.inputForm)
+
       const item = this.inputForm.value as IPriceSchedule
       this.priceScheduleDataService.updatePriceSchedule(item)
 
-      const item$ = this.priceScheduleService.save(site, this.priceSchedule)
+      const item$ = this.priceScheduleService.save(site, item)
       this.saveNotification = true
-      item$.subscribe( data => {
-        this.saveNotification = false
-        this.snack.open('Item Saved', 'Success', {duration: 2000, verticalPosition: 'top'})
-      }, err => {
-        this.snack.open(err, 'Error', {duration: 4000, verticalPosition: 'top'})
-      })
 
+      item$.subscribe( {
+        next:  data => {
+          this.saveNotification = false
+            this.snack.open('Item Saved', 'Success', {duration: 2000, verticalPosition: 'top'})
+          },
+        error:  err => {
+            this.snack.open(err, 'Error', {duration: 4000, verticalPosition: 'top'})
+          }
+        })
     }
+
     if (!this.inputForm.valid) {
       this.snack.open('Missing values', 'Alert', {duration: 2000, verticalPosition: 'top'})
     }
