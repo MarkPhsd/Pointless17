@@ -7,6 +7,7 @@ import { IPriceSchedule, ClientType, DateFrame,DiscountInfo,
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
+
 @Component({
   selector: 'app-time-schedule',
   templateUrl: './time-schedule.component.html',
@@ -15,8 +16,8 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
 export class TimeScheduleComponent implements OnInit {
 
   // priceSchedule$              :      Observable<IPriceSchedule>
-  @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
-  @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
+  // @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
+  // @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
   @Input()  inputForm         :      FormGroup;
   @Input()  weekDay           :      WeekDay;
   @Input()  item              :      IPriceSchedule;
@@ -36,6 +37,7 @@ export class TimeScheduleComponent implements OnInit {
 
     })
   }
+
   constructor(
         private fbPriceScheduleService  : FbPriceScheduleService,
         private priceScheduleDataService: PriceScheduleDataService,
@@ -53,10 +55,11 @@ export class TimeScheduleComponent implements OnInit {
 
   addItem() {
     try {
+      console.log('add Item')
         this.fbPriceScheduleService.addTimeRange(this.inputForm, null)
         const timeFrame = {} as TimeFrame;
-        timeFrame.startTime =''
-        timeFrame.endTime = ''
+        timeFrame.startTime = ''
+        timeFrame.endTime   = ''
         this.item.timeFrames = [] as TimeFrame[]
         this.item.timeFrames.push(timeFrame)
         this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
@@ -69,7 +72,6 @@ export class TimeScheduleComponent implements OnInit {
   deleteItem(i: any) {
     this.fbPriceScheduleService.deleteFrame(i, this.inputForm)
     this.item.timeFrames.splice(i, 1)
-
   }
 
 }

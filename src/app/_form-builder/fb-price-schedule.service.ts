@@ -27,6 +27,7 @@ export class FbPriceScheduleService {
 
 
   constructor(private fb: FormBuilder,
+             private datePipe: DatePipe,
               private priceScheduledataService: PriceScheduleDataService,
       ) { }
 
@@ -361,11 +362,17 @@ export class FbPriceScheduleService {
       if (!inputForm) { return }
       const control = inputForm.get('timeFrames') as FormArray;
       control.clear()
+      console.log('addTimeRanges', items)
+
       if (!control)   { return }
       items.forEach( info =>  {
+        // const startTime = DatePipe(info.startTime, 'shortTime');
+        console.log('short time', this.datePipe.transform(info.startTime, 'HH:mm'))
+        const startTime =  this.datePipe.transform(info.startTime, 'HH:mm');
+        const endTime   =  this.datePipe.transform(info.endTime, 'HH:mm');
         control.push(this.fb.group({
-          startTime: [info.startTime],
-          endTime:   [info.endTime]
+          startTime: [startTime], //this.datePipe.transform(info.startTime, 'shortTime') ],
+          endTime:   [endTime] ,// this.datePipe.transform(info.endTime, 'shortTime') ]
         }))
       })
     } catch (error) {

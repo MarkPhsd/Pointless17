@@ -4,7 +4,9 @@ import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { Subscription } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 import { trigger, transition, query, style, animate, group } from '@angular/animations';
+import { DatePipe } from '@angular/common';
 
+// | date: 'shortDate'
 const left = [
   query(':enter, :leave', style({ position: 'fixed', width: '100%' }), { optional: true }),
   group([

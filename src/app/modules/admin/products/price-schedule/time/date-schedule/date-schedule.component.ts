@@ -5,7 +5,7 @@ import { IPriceSchedule, ClientType, DateFrame, DiscountInfo ,
   TimeFrame, WeekDay
 } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { END } from '@angular/cdk/keycodes';
 import { DatePipe } from '@angular/common';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
@@ -23,8 +23,8 @@ export class DateScheduleComponent implements OnInit {
   });
 
   // priceSchedule$              :      Observable<IPriceSchedule>
-  @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
-  @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
+  // @Output() outputWeekdays    :      EventEmitter<any> = new EventEmitter();
+  // @Output() outputAllWeekdays :      EventEmitter<any> = new EventEmitter();
   @Input()  inputForm         :      FormGroup;
   @Input()  item              :      IPriceSchedule;
 
@@ -37,6 +37,15 @@ export class DateScheduleComponent implements OnInit {
     return this.inputForm.get('dateFrames') as FormArray;
   }
 
+  _priceSchedule              : Subscription;
+  priceScheduleTracking       : IPriceSchedule;
+
+  initSubscriptions() {
+    this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
+      this.priceScheduleTracking = data
+
+    })
+  }
   constructor(
         private fbPriceScheduleService  : FbPriceScheduleService,
         private priceScheduleDataService: PriceScheduleDataService,
@@ -44,19 +53,19 @@ export class DateScheduleComponent implements OnInit {
   { }
 
   ngOnInit(): void {
-    console.log('init time schedule')
+    this.initSubscriptions();
     if (this.inputForm) {
       this.allDates = this.inputForm.get('allDates').value
-
     }
   }
 
   inputDateRange() {
   }
 
-  toggle(event)  {
-    console.log('event')
+  toggle()  {
+    this.priceScheduleTracking.allDates = !this.priceScheduleTracking.allDates
   }
+
 
   addItemFromPicker() {
 
@@ -66,14 +75,13 @@ export class DateScheduleComponent implements OnInit {
     const datepipe: DatePipe = new DatePipe('en-US')
     startDate = datepipe.transform(startDate, 'shortDate')
     endDate   = datepipe.transform(endDate, 'shortDate')
-
+    console.log(startDate,endDate)
     try {
       const dateFrame = {} as DateFrame;
       dateFrame.startDate = startDate
       dateFrame.endDate = endDate
       this.fbPriceScheduleService.addDateRange(this.inputForm, dateFrame)
-      // this.item.dateFrames = [] as DateFrame[]
-      // this.item.dateFrames.push(dateFrame)
+
       this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
         console.log('item added')
     } catch (error) {
@@ -81,12 +89,34 @@ export class DateScheduleComponent implements OnInit {
     }
   }
 
+  addItem() {
+    try {
+        this.fbPriceScheduleService.addTimeRange(this.inputForm, null)
+        const dateFrame = {} as DateFrame;
+        dateFrame.startDate  = ''
+        dateFrame.endDate    = ''
+        this.item.dateFrames = [] as DateFrame[]
+        this.item.dateFrames.push(dateFrame)
+        this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
+
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
+
+  // deleteItem(i: any) {
+  //   this.fbPriceScheduleService.deleteDateFrame(i, this.inputForm)
+  //   this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
+  //   if (this.item) {
+  //     this.item.timeFrames.splice(i, 1)
+  //   }
+  // }
+
   deleteItem(i: any) {
     this.fbPriceScheduleService.deleteDateFrame(i, this.inputForm)
-    this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
-    if (this.item) {
-      this.item.timeFrames.splice(i, 1)
-    }
+    this.item.timeFrames.splice(i, 1)
   }
 
   toApiDate(bDate) {

@@ -29,7 +29,19 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
+      this.processItemsInSchedule(this.scheduleID, order);
+
     })
+
+    const site = this.siteService.getAssignedSite();
+    this.priceScheduleService.getPriceSchedule(site, this.scheduleID).subscribe( data => {
+      this.schedule = data
+      if (this.order) {
+
+      }
+    })
+    const i = 0;
+
   }
 
   constructor( private priceScheduleService: PriceScheduleService,
@@ -45,24 +57,18 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
   }
 
   ngOnChanges() {
-    const site = this.siteService.getAssignedSite();
-    this.priceScheduleService.getPriceSchedule(site, this.scheduleID).subscribe( data => {
-      this.schedule = data
-      if (this.order) {
-        this.processItemsInSchedule(data.id)
-      }
-    })
+    const i = 0;
   }
 
   ngOnDestroy(): void {
     if (this._order) { this._order.unsubscribe()}
   }
 
-  processItemsInSchedule(id: number) {
+  processItemsInSchedule(id: number, order: IPOSOrder) {
 
-    if (!this.order) { return }
+    if (!order) { return }
 
-    let items = this.order.posOrderItems.filter(
+    let items = order.posOrderItems.filter(
       data =>
        data.scheduleID                == id
     )
@@ -82,6 +88,7 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
     items.forEach(item => { i += item.quantity })
 
     this.purchasedCount = i
+    console.log('item count',   i)
   }
 
 }
