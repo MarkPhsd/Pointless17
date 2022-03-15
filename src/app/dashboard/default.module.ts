@@ -254,6 +254,7 @@ import { PrepOrderFilterComponent } from '../modules/prep/prep-order-filter/prep
 import { PrepOrderItemComponent } from '../modules/prep/prep-order-item/prep-order-item.component';
 import { PosOrderPriceScheduleInfoComponent } from '../modules/posorders/pos-order-price-schedule-info/pos-order-price-schedule-info.component';
 import { PosOrderScheduleDescriptionComponent } from '../modules/posorders/pos-order-price-schedule-info/pos-order-schedule-description/pos-order-schedule-description.component';
+import { ScheduledMenuImageComponent } from '../modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-image/scheduled-menu-image.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -446,6 +447,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ScheduledMenuHeaderComponent,
     ScheduledMenuListComponent,
     ScheduledMenuItemComponent,
+    ScheduledMenuImageComponent,
     SearchResultsComponent,
     ServiceTypeListComponent,
     ServiceTypeEditComponent,

@@ -73,22 +73,19 @@
                       </mat-tab>
                     </div>
 
-                  <div *ngIf="isMenuList">
-                    <mat-tab label="Description">
-                        <div class="grid-item">
-                          <mat-card >
-                            <app-widget-uploader
-                                  [(fileNames)]="priceSchedule.image"
-                                  (messageOut) ="saveImageToSchedule($event)">
-                                  Uses one image.
-                              </app-widget-uploader>
-                          </mat-card>
-                        </div>
-
-
-                    </mat-tab>
-
-                  </div>
+                    <div>
+                      <mat-tab label="Description">
+                          <div class="grid-item">
+                            <mat-card >
+                              <app-widget-uploader
+                                    [(fileNames)]="priceSchedule.image"
+                                    (messageOut) ="saveImageToSchedule($event)">
+                                    Uses one image.
+                                </app-widget-uploader>
+                            </mat-card>
+                          </div>
+                      </mat-tab>
+                    </div>
 
 
                 </div>

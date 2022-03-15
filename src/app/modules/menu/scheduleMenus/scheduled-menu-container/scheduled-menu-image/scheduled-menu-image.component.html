@@ -1,0 +1,35 @@
+
+<img *ngIf="url && !isApp"
+      loading="lazy"
+      draggable="false"
+      [src]="url"
+      [class]="gridItemImage"
+  />
+
+  <div class="grid-container">
+  <div  [class]="gridHeaderApp">
+
+  <div *ngIf="url && isApp">
+    <img
+          loading="lazy"
+          draggable="false"
+          [src]="url"
+          [class]="gridItemImage"
+    />
+  </div>
+
+  <div *ngIf="!isApp && !hideButton">
+    <button
+              mat-button color='warn'
+              (click)="toggleMenuItems(true)">
+    <mat-icon>{{iconName}}</mat-icon>{{textShow}}</button>
+  </div>
+
+  <div>
+    <h4>
+      {{name  | truncateText: 25  }}
+    </h4>
+  </div>
+
+  </div>
+</div>

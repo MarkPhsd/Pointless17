@@ -1,5 +1,5 @@
 .subtitle {
-  font-size: 1.1em;
+  font-size: medium;
   font-weight: 350em;
 }
 
@@ -14,11 +14,6 @@
 .wrapper:hover #slide {
   transition: 1s;
   left: 0;
-}
-
-mat-raised-button {
-  margin: 5rem 5rem 2rem 2rem;
-  padding: 1rem 1rem 1rem 1rem;
 }
 
 button {
@@ -39,17 +34,17 @@ button {
 .label {
   float: left;
   margin:  3px 3px 3px 3px;
-  font-size: .8em;
+  font-size: small;
 }
 
 .fields {
   // float: left;
   margin:  3px 3px 3px 3px;
-  font-size: .8em;
+  font-size: small;
 }
 mat-label {
   padding:5px;
-  font-size: 1.0em;
+  font-size: medium;
 }
 
 meta-tags {
@@ -58,7 +53,7 @@ meta-tags {
 
 mat-form-field {
   margin: 3px 3px 3px 3px;
-  font-size: .9em;
+  font-size: small;
 }
 
 mat-radio-button  {
@@ -95,7 +90,7 @@ simple-tinymce {
 }
 
 mat-form-field {
-  font-size: .8em;
+  font-size: .9em;
 }
 
 label {
@@ -120,7 +115,6 @@ h1 {
 #register_button {
   background: lightblue;
 }
-
 
 .custom-card {
   background-color: gray;
@@ -160,15 +154,12 @@ body{ overflow-x: hidden;}
   padding-bottom: 0px;
 }
 
-
 .grid-items {
   width: 50px;
-  // overflow: hidden;
 }
 
 .grid-item   {
   width: 50px;
-  // overflow: hidden;
 }
 
 ::ng-deep mat-select-panel {
@@ -177,7 +168,7 @@ body{ overflow-x: hidden;}
 
 ::ng-deep mat-select{
   width           : 65px;
-  font-size       : 1em;
+  font-size       : medium;
 }
 
 .grid-item {
@@ -187,7 +178,7 @@ body{ overflow-x: hidden;}
 .grid-item-and-or {
   align-items: baseline;
   width: 65px;
-  font-size: 1.2em;
+  font-size: medium;
 }
 
 .trash-button {
@@ -195,28 +186,28 @@ body{ overflow-x: hidden;}
   position: relative;
   top:      -5px;
   width     : 35px;
-  height    : 1em;
+  height    : medium;
 }
 
 .item-name {
-  width: 135px;
-  font-size:   1.1em;
+  text-overflow: clip;
+  max-width: 100px;
+  font-size:  small;
 }
 
 .quantity {
   width: 50px;
-  font-size:   1.1em;
+  font-size:  medium;
 }
 
 .andOr {
   width: 65px;
-  font-size:   1.1em;
+  font-size:  medium;
 }
 
 .slidein {
   display: grid;
   grid-template-columns: 1fr;
-  // float                 : left;
   animation-duration    : 500ms;
   animation-name        : slidein;
 }

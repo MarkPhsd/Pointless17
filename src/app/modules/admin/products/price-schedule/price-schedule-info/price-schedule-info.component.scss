@@ -47,10 +47,6 @@ mat-icon{
   margin-bottom: 5px;
 }
 
-// :host ::ng-deep mat-select .mat-select {
-//   width: 25px;
-//   padding: 0px;
-// }
 
 .title {
   font-size: 1.1em;
@@ -78,8 +74,8 @@ meta-tags {
 }
 
 mat-form-field {
-  margin: 3px 3px 3px 3px;
-  font-size: .9em;
+  padding: 5px ;
+  margin:  3px ;
 }
 
 mat-radio-button  {
@@ -87,8 +83,8 @@ mat-radio-button  {
 }
 
 mat-card{
-  padding: 5px 5px 5px 5px;
-  margin:  3px 3px 3px 3px;
+  padding: 5px ;
+  margin:  3px ;
 }
 
 .example-tab-icon {
@@ -108,7 +104,7 @@ mat-drawer-container {
 }
 
 .card-container {
-  height: 83vh;
+  // height: 83vh;
 }
 
 mat-drawer-content {
@@ -154,28 +150,6 @@ h1 {
  // border-left: 3px solid darkred;
 }
 
-img {
-  width: 150px;
-  height: 150px;
-  align-content: center;
-}
-
-.custom-card {
-  background-color: gray;
-  padding: 25px;
-  margin-bottom: 25px;
-}
-
-.container {
-  padding: 5px;
-}
-
-:host {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
 body{ overflow-x: hidden;}
 
 .weekday-margin {
@@ -189,23 +163,9 @@ body{ overflow-x: hidden;}
 .grid-container {
   display: grid;
   grid-template-columns:  105px  55px  75px 55px;
-  gap: 10px;
-  grid-column-gap: 5px;
+  gap: 5px;
   width: 300px;
-  margin-left: 10px;
-}
-
-// .constraint-panels {
-//   overflow-y: scroll;
-//   overflow-x: hidden;
-// }
-
-.grid-items {
-  width: 50px;
-}
-
-.grid-item   {
-  width: 50px;
+  margin-left: 5px;
 }
 
 ::ng-deep mat-select-panel {
@@ -223,7 +183,6 @@ body{ overflow-x: hidden;}
   max-height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
-  // width: 250px;
   margin-top: 10px;
 }
 
@@ -251,13 +210,6 @@ body{ overflow-x: hidden;}
   width: 100%;
 }
 
-.section-container {
-  // overflow-x: scroll;
-  // overflow-x: hidden;
-  // overflow-y: auto;
-
-}
-
 .grid-form {
   display: grid;
   grid-template-columns:  .75fr .25fr .25fr;
@@ -280,15 +232,11 @@ body{ overflow-x: hidden;}
   grid-template-columns: 1fr 1fr;
   flex-wrap: wrap;
   width: 275px;
-  // height: 200px;
   margin-left: 5px;
   vertical-align: top;
-  // flex-wrap: wrap;
 }
 
-
 .trash-button {
-  // margin-top: -10px;
   position: relative;
   top:      -5px;
   width     : 35px;
@@ -299,18 +247,13 @@ body{ overflow-x: hidden;}
   font-size: .8em;
   font-weight: 400;
   margin-top: 5px;
-  // float: right;
-  // float: left;
 }
 
 .grid-interior-container {
   display: grid;
-  grid-template-columns:  .25fr 1.75fr ;
-  // flex-wrap: wrap;
+  grid-template-columns:  .25fr 250px ;
   gap: 10px;
-  // width: 300px;
 }
-
 
 .icons-headers {
   margin-top: 5px;
@@ -334,7 +277,7 @@ body{ overflow-x: hidden;}
 
 .selected-categories {
   font-weight: 400px;
-  font-size  : .8em;
+  font-size  : .9em;
   margin-left: 15px;
   list-style : none;
   vertical-align: middle;
@@ -352,7 +295,7 @@ body{ overflow-x: hidden;}
 
 .selected-types {
   font-weight  : 400px;
-  font-size    : .8em;
+  font-size    : .9em;
   margin-left  : 15px;
   list-style   : none;
   vertical-align: middle;
@@ -363,15 +306,6 @@ body{ overflow-x: hidden;}
   vertical-align:middle;
 }
 
-// .quantity {
-//   width: 45px Im !important;
-//   font-size:   1.1em;
-// }
-
-.item-name {
-  width: 105px;
-  font-size:   1.1em;
-}
 
 .quantity {
   width: 50px;
@@ -383,12 +317,17 @@ body{ overflow-x: hidden;}
   font-size:   1.1em;
 }
 
+.item-name {
+  text-overflow: clip;
+  font-size:  medium;
+}
 
 .slidein {
   display: grid;
   grid-template-columns: 1fr;
   animation-duration    : 500ms;
   animation-name        : slidein;
+  width: 200px;
 }
 
 @keyframes slidein {

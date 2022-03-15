@@ -1,58 +1,71 @@
 <div *ngIf="priceSchedule" class="type-list">
+  <mat-card>
+    <mat-card-content>
+    <div *ngIf="priceSchedule" fxFill fxLayout="space-between">
+      <app-scheduled-menu-image
+          [hideButton]="true"
+          [item]="priceSchedule">
+      </app-scheduled-menu-image>
+    </div>
+
+    <scheduled-menu-header
+        [priceSchedule]="priceSchedule"
+        [showText]="true" >
+    </scheduled-menu-header>
+
+    </mat-card-content>
+  </mat-card>
+
   <mat-card class="card-container">
     <mat-card-subtitle>
       <div *ngIf="inputForm">
         <div>
-            hideDelete {{hideDelete}}
           Name: {{priceSchedule.name}}
         </div>
       </div>
     </mat-card-subtitle>
 
     <mat-card-content class="type-card">
-      <mat-card  class="type-card">
-         <div class="grid-info">
 
-            <div class="grid-box">
-              <div>
-                <mat-icon  class="icon">shopping_cart</mat-icon>
-              </div>
+      <div class="grid-info">
+        <div class="grid-box">
+          <div>
+            <mat-icon  class="icon">shopping_cart</mat-icon>
+          </div>
 
-              <div *ngIf="!priceSchedule.allOrderTypes" >
-                <div *ngFor="let item of priceSchedule.orderTypes" class="slidein">
-                  {{item.name }}
-                </div>
-              </div>
-
-              <div *ngIf="priceSchedule.allOrderTypes"  class="slidein">
-                <div>
-                  All Orders
-                </div>
-              </div>
-
+          <div *ngIf="!priceSchedule.allOrderTypes" >
+            <div *ngFor="let item of priceSchedule.orderTypes" class="slidein">
+              {{item.name }}
             </div>
+          </div>
 
-            <div class="grid-box">
-              <div class="icons-headers" >
-                <mat-icon  class="icon">people</mat-icon>
-              </div>
-              <div *ngIf="!priceSchedule.allEligible" >
-                <div *ngFor="let item of priceSchedule.clientTypes"  class="slidein">
-                  <div>
-                    <div *ngIf="item">
-                      {{ item.name }}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div *ngIf="priceSchedule.allEligible" class="slidein">
-                All Clients
-              </div>
+          <div *ngIf="priceSchedule.allOrderTypes"  class="slidein">
+            <div>
+              All Orders
             </div>
+          </div>
 
         </div>
-      </mat-card>
+
+        <div class="grid-box">
+          <div class="icons-headers" >
+            <mat-icon  class="icon">people</mat-icon>
+          </div>
+          <div *ngIf="!priceSchedule.allEligible" >
+            <div *ngFor="let item of priceSchedule.clientTypes"  class="slidein">
+              <div>
+                <div *ngIf="item">
+                  {{ item.name }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="priceSchedule.allEligible" class="slidein">
+            All Clients
+          </div>
+        </div>
+      </div>
 
       <div class="headers grid-constraints">
 
@@ -68,11 +81,13 @@
 
           <div *ngIf="!priceSchedule.allWeekdaysDays" >
             <div *ngFor="let item of priceSchedule.weekDays"  class="slidein">
+              <div class="item-name">
                 {{ item.name }}
+              </div>
             </div>
           </div>
 
-          <div *ngIf="priceSchedule.allWeekdaysDays">
+          <div  class="item-name" *ngIf="priceSchedule.allWeekdaysDays">
             All days of week.
           </div>
 
@@ -81,14 +96,12 @@
           </div>
 
           <div *ngIf="!priceSchedule.allDates">
-            <div *ngFor="let item of priceSchedule.dateFrames" class="slidein">
-              <div>
-                {{item.startDate  }} - {{item.endDate  }}
-              </div>
+            <div *ngFor="let item of priceSchedule.dateFrames" class="slidein item-name">
+                {{item.startDate | date: 'shortDate' }} - {{item.endDate |  date: 'shortDate'  }}
             </div>
           </div>
 
-          <div *ngIf="priceSchedule.allDates"  class="slidein">
+          <div *ngIf="priceSchedule.allDates"  class="slidein item-name">
             All Dates
           </div>
 
@@ -97,189 +110,180 @@
           </div>
 
           <div *ngIf="!priceSchedule.timeFrameAlways">
-            <div *ngFor="let item of priceSchedule.timeFrames" class="slidein">
-              {{ item.startTime  }} - {{ item.endTime  }}
-              <!-- | date: 'shortTime' -->
+            <div *ngFor="let item of priceSchedule.timeFrames" class="slidein item-name">
+                {{ item.startTime   }} - {{ item.endTime    }}
             </div>
           </div>
 
-          <div *ngIf="priceSchedule.timeFrameAlways" class="slidein">
+          <div *ngIf="priceSchedule.timeFrameAlways" class="slidein  item-name">
             All Time
           </div>
 
         </div>
       </div>
 
-      <div>
-        <mat-divider></mat-divider>
-      </div>
-
-      <div class ="sort-container" *ngIf="isMenuList">
-        <app-item-sort
-          [inputForm]="inputForm"
-          >
-        </app-item-sort>
-      </div>
-
-      <!-- <div [hidden]="!isMenuList"> -->
-        <div [hidden]="isMenuList" class="constraint-panels"  *ngIf="inputForm">
-
-          <div [formGroup]="inputForm">
-            <mat-card>
-              <mat-card-subtitle>
-                <div class="rewards-header">
-                  <mat-icon>settings</mat-icon>
-                </div>
-                <div class="rewards-icon">Required Groups & Items</div>
-              </mat-card-subtitle>
-
-              <mat-card-content>
-                  <mat-divider></mat-divider>
-
-                  <div *ngIf="priceSchedule.requiredItemTypes.length>0">
-                    <div class="itemtype-header">
-                      <mat-icon>table_view</mat-icon>Types
-                    </div>
-                    <app-price-schedule-fields
-                          [inputForm]     = "inputForm"
-                          [data]          = "priceSchedule.requiredItemTypes"
-                          [formArray]     = "requiredItemTypes"
-                          [arrayTypeName] = "'requiredItemTypes'"
-                          [hideDelete]    = "hideDelete"
-                        >
-                    </app-price-schedule-fields>
-                  </div>
-
-                  <div *ngIf="requiredCategories.length>0">
-                    <div class="icon-header">
-                      <mat-icon>category</mat-icon>Categories
-                    </div>
-                    <app-price-schedule-fields
-                        [inputForm]     ="inputForm"
-                        [data]          ="priceSchedule.requiredCategories"
-                        [formArray]     ="requiredCategories"
-                        [arrayTypeName] ="'requiredCategories'"
-                        [hideDelete]    ="hideDelete"
-                        >
-                    </app-price-schedule-fields>
-                  </div>
-
-
-                  <div *ngIf="requiredItems.length>0 && inputForm">
-                    <div class="icon-header">
-                      <mat-icon>inventory_2</mat-icon>Items
-                    </div>
-                    <app-price-schedule-fields
-                        [inputForm]     = "inputForm"
-                        [data]          = "priceSchedule.requiredItems"
-                        [formArray]     = "requiredItems"
-                        [arrayTypeName] = "'requiredItems'"
-                        [hideDelete]    = "hideDelete"
-                        >
-                    </app-price-schedule-fields>
-                  </div>
-
-                  <div *ngIf="requiredBrands.length>0">
-                    <div class="icon-header">
-                      <mat-icon>branding_watermark</mat-icon>Brands
-                    </div>
-                    <app-price-schedule-fields
-                      [inputForm]     ="inputForm"
-                      [data]          ="priceSchedule.requiredBrands"
-                      [formArray]     ="requiredBrands"
-                      [arrayTypeName] ="'requiredBrands'"
-                      [hideDelete]    ="hideDelete"
-                      >
-                    </app-price-schedule-fields>
-                  </div>
-
-                </mat-card-content>
-              </mat-card>
-            </div>
-        </div>
-
-        <div [hidden]="isMenuList" class="constraint-panels" *ngIf="inputForm">
-          <div [formGroup]="inputForm"  >
-            <mat-card>
-              <mat-card-subtitle>
-                <div class="rewards-header">
-                    <mat-icon>loyalty</mat-icon>
-                </div>
-                <div class="rewards-icon">Rewards</div>
-                <div>
-                  Type: {{priceSchedule.type}}
-                </div>
-              </mat-card-subtitle>
-
-              <mat-card-content>
-
-                  <div *ngIf="itemTypeDiscounts.length>0">
-                    <mat-divider></mat-divider>
-                    <div class="icon-header">
-                      <mat-icon>table_view</mat-icon>Item Types
-                    </div>
-                    <app-price-schedule-fields
-                        [inputForm]     ="inputForm"
-                        [data]          ="priceSchedule.itemTypeDiscounts"
-                        [formArray]     ="itemTypeDiscounts"
-                        [arrayTypeName] ="'itemTypeDiscounts'"
-                        [hideDelete]    ="hideDelete"
-                        >
-                    </app-price-schedule-fields>
-                  </div>
-
-                  <div *ngIf="priceSchedule.categoryDiscounts.length>0">
-                    <div class="itemtype-header">
-                      <mat-icon>category</mat-icon>Categories
-                    </div>
-
-                    <app-price-schedule-fields
-                          [inputForm]      ="inputForm"
-                          [data]           ="priceSchedule.categoryDiscounts"
-                          [formArray]      ="categoryDiscounts"
-                          [arrayTypeName]  ="'categoryDiscounts'"
-                          [hideDelete]     ="hideDelete"
-                          >
-                    </app-price-schedule-fields>
-                  </div>
-
-                  <div *ngIf="priceSchedule.itemDiscounts.length>0">
-                    <div class="icon-header">
-                      <mat-icon>inventory_2</mat-icon>Item Discounts
-                    </div>
-                    <app-price-schedule-fields
-                          [inputForm]     ="inputForm"
-                          [data]          ="priceSchedule.itemDiscounts"
-                          [formArray]     ="itemDiscounts"
-                          [arrayTypeName] ="'itemDiscounts'"
-                          [hideDelete]    ="hideDelete"
-                          >
-                    </app-price-schedule-fields>
-                  </div>
-
-                  <div *ngIf="priceSchedule.brandDiscounts.length>0">
-                    <div class="icon-header">
-                      <mat-icon>branding_watermark</mat-icon>Brand Discounts
-                    </div>
-
-                    <app-price-schedule-fields
-                          [inputForm]    ="inputForm"
-                          [data]         ="priceSchedule.brandDiscounts"
-                          [formArray]    ="brandDiscounts"
-                          [arrayTypeName]="'brandDiscounts'"
-                          [hideDelete]   ="hideDelete"
-                          >
-                    </app-price-schedule-fields>
-                  </div>
-
-              </mat-card-content>
-              <!-- {{inputForm.value | json}} -->
-            </mat-card>
-          </div>
-        </div>
-      <!-- </div> -->
-
     </mat-card-content>
   </mat-card>
+
+  <div><mat-divider></mat-divider></div>
+
+  <div class ="sort-container" *ngIf="isMenuList">
+    <app-item-sort
+      [inputForm]="inputForm">
+    </app-item-sort>
+  </div>
+
+  <div [hidden]="isMenuList" class="constraint-panels"  *ngIf="inputForm">
+    <div [formGroup]="inputForm">
+      <mat-card>
+        <mat-card-subtitle>
+          <div class="rewards-header">
+            <mat-icon>settings</mat-icon>
+          </div>
+          <div class="rewards-icon">Required Groups & Items</div>
+        </mat-card-subtitle>
+
+        <mat-card-content>
+            <mat-divider></mat-divider>
+
+            <div *ngIf="priceSchedule.requiredItemTypes.length>0">
+              <div class="itemtype-header">
+                <mat-icon>table_view</mat-icon>Types
+              </div>
+              <app-price-schedule-fields
+                    [inputForm]     = "inputForm"
+                    [data]          = "priceSchedule.requiredItemTypes"
+                    [formArray]     = "requiredItemTypes"
+                    [arrayTypeName] = "'requiredItemTypes'"
+                    [hideDelete]    = "hideDelete"
+                  >
+              </app-price-schedule-fields>
+            </div>
+
+            <div *ngIf="requiredCategories.length>0">
+              <div class="icon-header">
+                <mat-icon>category</mat-icon>Categories
+              </div>
+              <app-price-schedule-fields
+                  [inputForm]     ="inputForm"
+                  [data]          ="priceSchedule.requiredCategories"
+                  [formArray]     ="requiredCategories"
+                  [arrayTypeName] ="'requiredCategories'"
+                  [hideDelete]    ="hideDelete"
+                  >
+              </app-price-schedule-fields>
+            </div>
+
+
+            <div *ngIf="requiredItems.length>0 && inputForm">
+              <div class="icon-header">
+                <mat-icon>inventory_2</mat-icon>Items
+              </div>
+              <app-price-schedule-fields
+                  [inputForm]     = "inputForm"
+                  [data]          = "priceSchedule.requiredItems"
+                  [formArray]     = "requiredItems"
+                  [arrayTypeName] = "'requiredItems'"
+                  [hideDelete]    = "hideDelete"
+                  >
+              </app-price-schedule-fields>
+            </div>
+
+            <div *ngIf="requiredBrands.length>0">
+              <div class="icon-header">
+                <mat-icon>branding_watermark</mat-icon>Brands
+              </div>
+              <app-price-schedule-fields
+                [inputForm]     ="inputForm"
+                [data]          ="priceSchedule.requiredBrands"
+                [formArray]     ="requiredBrands"
+                [arrayTypeName] ="'requiredBrands'"
+                [hideDelete]    ="hideDelete"
+                >
+              </app-price-schedule-fields>
+            </div>
+
+          </mat-card-content>
+        </mat-card>
+    </div>
+  </div>
+
+  <div [hidden]="isMenuList" class="constraint-panels" *ngIf="inputForm">
+    <div [formGroup]="inputForm"  >
+      <mat-card>
+
+        <mat-card-subtitle>
+          <div class="rewards-header">
+              <mat-icon>loyalty</mat-icon>
+          </div>
+          <div class="rewards-icon">Rewards</div>
+          <div>
+            Type: {{priceSchedule.type}}
+          </div>
+        </mat-card-subtitle>
+
+        <mat-card-content>
+
+            <div *ngIf="itemTypeDiscounts.length>0">
+
+              <div class="icon-header">
+                <mat-icon>table_view</mat-icon>Item Types
+              </div>
+              <app-price-schedule-fields
+                  [inputForm]     ="inputForm"
+                  [data]          ="priceSchedule.itemTypeDiscounts"
+                  [formArray]     ="itemTypeDiscounts"
+                  [arrayTypeName] ="'itemTypeDiscounts'"
+                  [hideDelete]    ="hideDelete">
+              </app-price-schedule-fields>
+            </div>
+
+            <div *ngIf="priceSchedule.categoryDiscounts.length>0">
+              <div class="itemtype-header">
+                <mat-icon>category</mat-icon>Categories
+              </div>
+
+              <app-price-schedule-fields
+                    [inputForm]      ="inputForm"
+                    [data]           ="priceSchedule.categoryDiscounts"
+                    [formArray]      ="categoryDiscounts"
+                    [arrayTypeName]  ="'categoryDiscounts'"
+                    [hideDelete]     ="hideDelete">
+              </app-price-schedule-fields>
+            </div>
+
+            <div *ngIf="priceSchedule.itemDiscounts.length>0">
+              <div class="icon-header">
+                <mat-icon>inventory_2</mat-icon>Item Discounts
+              </div>
+              <app-price-schedule-fields
+                    [inputForm]     ="inputForm"
+                    [data]          ="priceSchedule.itemDiscounts"
+                    [formArray]     ="itemDiscounts"
+                    [arrayTypeName] ="'itemDiscounts'"
+                    [hideDelete]    ="hideDelete">
+              </app-price-schedule-fields>
+            </div>
+
+            <div *ngIf="priceSchedule.brandDiscounts.length>0">
+              <div class="icon-header">
+                <mat-icon>branding_watermark</mat-icon>Brand Discounts
+              </div>
+
+              <app-price-schedule-fields
+                    [inputForm]    ="inputForm"
+                    [data]         ="priceSchedule.brandDiscounts"
+                    [formArray]    ="brandDiscounts"
+                    [arrayTypeName]="'brandDiscounts'"
+                    [hideDelete]   ="hideDelete">
+              </app-price-schedule-fields>
+            </div>
+
+        </mat-card-content>
+
+      </mat-card>
+    </div>
+  </div>
+
 </div>
 

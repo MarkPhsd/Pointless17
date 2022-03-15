@@ -109,7 +109,7 @@ export class ScheduledMenuListComponent implements OnInit {
       search.pageNumber   = 1
       search.pageSize     = 30;
       search.active       = true;
-      search.type         = 'menu list'
+      // search.type         = 'menu list'
       this.scheduleMenus$ = this.priceScheduleService.getListBySearch(site, search)
     }
 

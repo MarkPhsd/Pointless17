@@ -130,6 +130,7 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
 
   ngAfterViewInit() {
     this.initSubscriptions();
+    // const item = "hello"()
   }
 
   getCounter() {

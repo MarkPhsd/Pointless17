@@ -2,53 +2,58 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
+import { AWSBucketService } from 'src/app/_services';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
-  selector: 'scheduled-menu-header',
-  templateUrl: './scheduled-menu-header.component.html',
-  styleUrls: ['./scheduled-menu-header.component.scss']
+  selector: 'app-scheduled-menu-image',
+  templateUrl: './scheduled-menu-image.component.html',
+  styleUrls: ['./scheduled-menu-image.component.scss']
 })
-export class ScheduledMenuHeaderComponent implements OnInit {
+export class ScheduledMenuImageComponent implements OnInit {
 
   @Input() url: string;
   @Input() description: string;
   @Input() name: string;
   @Input() isApp: boolean;
+  @Input()  item:                IPriceSchedule;
+  @Input() hideButton : boolean;
   href : string;
-  @Input() priceSchedule: IPriceSchedule;
-  @Input() showText: boolean;
-
+  // @OutPut() outPutToggleView = new EventEmitter()<any>;
   showAllFlag: boolean;
   iconName   = 'expand';
   textShow = 'Show More..'
   @Output() outPutToggleView = new EventEmitter<boolean>();
   gridItemImage= 'grid-item-image'
   gridHeaderApp = 'header-grid';
+  bucket: string;
 
   constructor(
+    private awsBucketService:       AWSBucketService,
+    private platFormService:        PlatformService,
     private router:          Router,
-    private priceScheduleService: PriceScheduleService,
-    private siteService: SitesService,
     private titleService: Title) {
     this.href = this.router.url;
   }
 
-  ngOnInit(): void {
-
-    if (this.priceSchedule.type && this.priceSchedule.type != 'menu list') {
-      const site = this.siteService.getAssignedSite();
-      this.priceScheduleService.getPriceSchedule( site, this.priceSchedule.id).subscribe( data => {
-        this.priceSchedule = data;
-      })
-    }
-
+  async ngOnInit() {
     if (this.isApp) {
       this.gridItemImage= 'grid-item-image-app'
       this.gridHeaderApp = 'header-grid-app';
     }
     this.setTitle()
+    await this.getImageUrl();
+  }
+
+  async getImageUrl() {
+    if (this.url) { return }
+    this.isApp = this.platFormService.isApp();
+    this.bucket = await this.awsBucketService.awsBucketURL()
+    if (this.item && this.item.image && this.bucket) {
+      this.url = `${this.bucket}${this.item.image}`
+    }
   }
 
   setTitle() {
@@ -71,5 +76,3 @@ export class ScheduledMenuHeaderComponent implements OnInit {
   }
 
 }
-
-

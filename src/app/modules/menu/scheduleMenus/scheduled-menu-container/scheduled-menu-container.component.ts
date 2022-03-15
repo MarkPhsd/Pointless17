@@ -120,15 +120,10 @@ export class ScheduledMenuContainerComponent implements OnInit {
     ) {
 
     }
-    async ngOnInit() {
-      this.isApp = this.platFormService.isApp();
-      this.bucket = await this.awsBucketService.awsBucketURL()
-      if (this.item && this.item.image && this.bucket) {
-        this.url = `${this.bucket}${this.item.image}`
-      }
-      // this.initScheduleMenus()
-    }
 
+    ngOnInit(): void {
+      const i = 0;
+    }
     initScheduleMenus() {
       const site = this.siteService.getAssignedSite();
       const search =  {} as IPriceSearchModel

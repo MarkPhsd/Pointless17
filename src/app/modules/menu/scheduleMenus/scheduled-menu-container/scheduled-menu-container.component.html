@@ -1,12 +1,30 @@
 <div *ngIf="item">
-
-  <scheduled-menu-header
-    [name]="item.name"
-    [description]="item.description"
-    [url]="url"
-    [isApp]="isApp"
-    (outPutToggleView)="toggleItems()">
-  </scheduled-menu-header>
+  <mat-card>
+    <div *ngIf="item"
+          fxFill
+          fxLayout="space-between">
+      <app-scheduled-menu-image
+          [hideButton]="true"
+          [item]="item">
+      </app-scheduled-menu-image>
+    </div>
+    <div *ngIf="item.type.toLowerCase() != 'menu list'">
+      <scheduled-menu-header
+          [priceSchedule]="item"
+          [showText]="true" >
+      </scheduled-menu-header>
+    </div>
+    <div *ngIf="item.type.toLowerCase() === 'menu list'">
+      <scheduled-menu-header
+          [name]="item.name"
+          [description]="item.description"
+          [priceSchedule]="item"
+          [url]="url"
+          [isApp]="isApp"
+          (outPutToggleView)="toggleItems()">
+      </scheduled-menu-header>
+    </div>
+  </mat-card>
 
   <div>
     <mat-card class="items-container">
