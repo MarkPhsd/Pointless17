@@ -366,22 +366,41 @@ export class FbPriceScheduleService {
 
       if (!control)   { return }
       items.forEach( info =>  {
-        // const startTime = DatePipe(info.startTime, 'shortTime');
-        console.log('short time', this.datePipe.transform(info.startTime, 'HH:mm'))
-        const startTime =  this.datePipe.transform(info.startTime, 'HH:mm');
-        const endTime   =  this.datePipe.transform(info.endTime, 'HH:mm');
+        const pipe = new DatePipe('en-US');
+        // const startTime =  this.datePipe.transform(info.startTime, 'HH:mm');
+        // const endTime   =  this.datePipe.transform(info.endTime, 'HH:mm');
         control.push(this.fb.group({
-          startTime: [startTime], //this.datePipe.transform(info.startTime, 'shortTime') ],
-          endTime:   [endTime] ,// this.datePipe.transform(info.endTime, 'shortTime') ]
+          startTime: [this.datePipe.transform(info.startTime, 'HH:mm')],  //this.datePipe.transform(info.startTime, 'shortTime') ],
+          endTime:   [pipe.transform(info.endTime, 'HH:mm') ]//  [endTime] ,// this.datePipe.transform(info.endTime, 'shortTime') ]
         }))
       })
+    } catch (error) {
+      console.log(error)
+    }
+    this.priceScheduledataService.updatePriceSchedule(inputForm.value)
+  }
+
+
+  addDateRanges(inputForm: FormGroup, items: DateFrame[]) {
+    try {
+      if (!inputForm) { return }
+      const control = inputForm.get('dateFrames') as FormArray;
+      control.clear()
+      if (!control)   { return }
+      const pipe = new DatePipe('en-US');
+      items.forEach( info =>  {
+        control.push(this.fb.group({
+          startDate:  [pipe.transform(info.startDate, 'MM/dd/yyyy')],
+          endDate:    [pipe.transform(info.endDate, 'MM/dd/yyyy') ]
+        }))
+      })
+
     } catch (error) {
       console.log(error)
     }
 
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
-
 
   // WeekDay[]
   setWeekDayArray(inputForm: FormGroup, items: any[]) {
@@ -398,27 +417,6 @@ export class FbPriceScheduleService {
           }
         ))
       })
-    } catch (error) {
-      console.log(error)
-    }
-
-    this.priceScheduledataService.updatePriceSchedule(inputForm.value)
-  }
-
-  addDateRanges(inputForm: FormGroup, items: DateFrame[]) {
-    try {
-      if (!inputForm) { return }
-      const control = inputForm.get('dateFrames') as FormArray;
-      control.clear()
-      if (!control)   { return }
-      const pipe = new DatePipe('en-US');
-      items.forEach( info =>  {
-        control.push(this.fb.group({
-          startDate:  [pipe.transform(info.startDate, 'MM/dd/yyyy')],
-          endDate:    [pipe.transform(info.endDate, 'MM/dd/yyyy') ]
-        }))
-      })
-
     } catch (error) {
       console.log(error)
     }

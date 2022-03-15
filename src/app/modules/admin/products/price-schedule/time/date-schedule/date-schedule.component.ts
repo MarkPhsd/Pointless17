@@ -91,12 +91,20 @@ export class DateScheduleComponent implements OnInit {
 
   addItem() {
     try {
-        this.fbPriceScheduleService.addTimeRange(this.inputForm, null)
+
+        let startDate = this.range.controls.start.value.toString() ;
+        let endDate   = this.range.controls.end.value.toString()  ;
+
+        const datepipe: DatePipe = new DatePipe('en-US')
+        startDate = datepipe.transform(startDate, 'shortDate')
+        endDate   = datepipe.transform(endDate, 'shortDate')
         const dateFrame = {} as DateFrame;
-        dateFrame.startDate  = ''
-        dateFrame.endDate    = ''
-        this.item.dateFrames = [] as DateFrame[]
-        this.item.dateFrames.push(dateFrame)
+        dateFrame.startDate  = startDate
+        dateFrame.endDate    = endDate
+        this.fbPriceScheduleService.addDateRange(this.inputForm, dateFrame)
+
+        // this.item.dateFrames = [] as DateFrame[]
+        // this.item.dateFrames.push(dateFrame)
         this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
 
     } catch (error) {
