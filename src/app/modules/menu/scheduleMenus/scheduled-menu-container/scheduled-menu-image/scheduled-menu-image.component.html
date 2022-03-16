@@ -1,5 +1,4 @@
-
-<img *ngIf="url && !isApp"
+    <img *ngIf="url && !isApp"
       loading="lazy"
       draggable="false"
       [src]="url"
@@ -9,14 +8,12 @@
   <div class="grid-container">
   <div  [class]="gridHeaderApp">
 
-  <div *ngIf="url && isApp">
-    <img
-          loading="lazy"
-          draggable="false"
-          [src]="url"
-          [class]="gridItemImage"
-    />
-  </div>
+  <img *ngIf="url && isApp"
+        loading="lazy"
+        draggable="false"
+        [src]="url"
+        [class]="gridItemImage"
+  />
 
   <div *ngIf="!isApp && !hideButton">
     <button

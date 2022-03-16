@@ -41,6 +41,8 @@ export class ScheduledMenuHeaderComponent implements OnInit {
       const site = this.siteService.getAssignedSite();
       this.priceScheduleService.getPriceSchedule( site, this.priceSchedule.id).subscribe( data => {
         this.priceSchedule = data;
+        this.priceScheduleService.updateItemPriceSchedule(data)
+        // data.timeFrameAlways
       })
     }
 

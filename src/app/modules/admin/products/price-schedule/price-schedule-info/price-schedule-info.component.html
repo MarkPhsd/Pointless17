@@ -1,19 +1,22 @@
-<div *ngIf="priceSchedule" class="type-list">
+<div *ngIf="priceSchedule"
+     class="type-list">
   <mat-card>
-    <mat-card-content>
-    <div *ngIf="priceSchedule" fxFill fxLayout="space-between">
-      <app-scheduled-menu-image
-          [hideButton]="true"
-          [item]="priceSchedule">
-      </app-scheduled-menu-image>
-    </div>
 
-    <scheduled-menu-header
-        [priceSchedule]="priceSchedule"
-        [showText]="true" >
-    </scheduled-menu-header>
+    <mat-card-content>
+      <div *ngIf="priceSchedule">
+        <app-scheduled-menu-image
+            [hideButton]="true"
+            [item]="priceSchedule">
+        </app-scheduled-menu-image>
+      </div>
+
+      <scheduled-menu-header
+          [priceSchedule]="priceSchedule"
+          [showText]="true" >
+      </scheduled-menu-header>
 
     </mat-card-content>
+
   </mat-card>
 
   <mat-card class="card-container">

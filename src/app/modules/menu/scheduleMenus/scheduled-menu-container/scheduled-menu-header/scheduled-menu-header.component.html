@@ -1,6 +1,4 @@
-
 <div *ngIf="priceSchedule  && (!isApp || showText)">
-
     <div
         class="text"
         [innerHTML]="priceSchedule?.description" >
@@ -96,19 +94,14 @@
     <p>
       <!-- <span *ngIf="priceSchedule.clientTypes">This can be used any day of the week.</span> -->
 
-      <span *ngIf="!priceSchedule.allEligible && priceSchedule.weekDays">
-        Only
+      <span *ngIf="!priceSchedule.allWeekdaysDays && priceSchedule.weekDays.length>0">
+        It can be only used on the following day(s)
       <span *ngFor="let item of priceSchedule.weekDays
                   ;let last = last
                   ;let nextLast = count; let i = index">
           <span *ngIf="!last"> {{item.name}}    </span>
           <span *ngIf="!last && (i != nextLast-1)"> ,    </span>
           <span *ngIf="last"> and  {{item.name}}</span>
-
-        </span>
-        <span *ngFor="let item of priceSchedule.weekDays;let count = count">
-          <span *ngIf="count>1">are the weekdays allowed.</span>
-          <span *ngIf="count==1">is the weekday allowed.</span>
         </span>
       </span>
     </p>
@@ -116,38 +109,31 @@
     <p>
       <!-- <span *ngIf="priceSchedule.dateFrames">This reward is usable until further notice.</span> -->
 
-      <span *ngIf="!priceSchedule.allEligible && priceSchedule.dateFrames">
-        This reward has a limited time offering. From
+      <span *ngIf="!priceSchedule.allDates && priceSchedule.dateFrames.length>0">
+        This reward has a limited time offering. It can be used from
       <span *ngFor="let item of priceSchedule.dateFrames
                   ;let last = last
                   ;let nextLast = count; let i = index">
-          <span *ngIf="!last"> {{item.startDate}} to {{item.endDate}}     </span>
+          <span *ngIf="!last"> {{item.startDate | date : 'shortDate'}} to {{item.endDate | date : 'shortDate'}}     </span>
           <span *ngIf="!last && (i != nextLast-1)"> ,    </span>
-          <span *ngIf="last"> and  {{item.startDate}} to {{item.endDate}} </span>
+          <span *ngIf="last"> and  {{item.startDate | date : 'shortDate' }} to {{item.endDate  | date : 'shortDate'}} </span>
         </span>
-
-        <span *ngFor="let item of priceSchedule.weekDays;let count = count">
-          <span *ngIf="count>1"> are when it can be used.</span>
-          <span *ngIf="count==1">is when it can be used.</span>
-        </span>
+        .
       </span>
     </p>
 
     <p>
-      <span *ngIf="priceSchedule.timeFrames">This reward is available all day.</span>
-      <span *ngIf="!priceSchedule.allEligible && priceSchedule.timeFrames">
+      <span *ngIf="priceSchedule.timeFrameAlways">This reward is available all day.</span>
+      <span *ngIf="!priceSchedule.timeFrameAlways && priceSchedule.timeFrames">
         This reward is only avalible during specific hours:
       <span *ngFor="let item of priceSchedule.timeFrames
                   ;let last = last
                   ;let nextLast = count; let i = index">
-          <span *ngIf="!last"> From {{item.startTime}} to {{item.endTime}}     </span>
+          <span *ngIf="!last"> From {{item.startTime  | date : 'shortTime'}} to {{item.endTime  | date : 'shortTime'}}     </span>
           <span *ngIf="!last && (i != nextLast-1)"> ,    </span>
-          <span *ngIf="last"> and {{item.startTime}} to {{item.endTime}} </span>
+          <span *ngIf="last"> and {{item.startTime | date : 'shortTime'}} to {{item.endTime  | date : 'shortTime'}} </span>
         </span>
-        <span *ngFor="let item of priceSchedule.weekDays;let count = count">
-          <span *ngIf="count>1"> are when it can be used.</span>
-          <span *ngIf="count==1">is when it can be used.</span>
-        </span>
+        .
       </span>
     </p>
 

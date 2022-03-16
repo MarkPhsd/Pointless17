@@ -58,9 +58,7 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
   initSubscriptions() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       this.priceSchedule = data
-
       if (data) {
-        // console.log('data.type', data.type)
         this.isMenuList = false
         if ( data.type === 'Menu List') {
           this.isMenuList = true
@@ -119,6 +117,7 @@ export class PriceScheduleInfoComponent implements OnInit, OnChanges, AfterViewI
   { }
 
   ngOnInit(): void {
+    // this.priceScheduleDataService.updatePriceSchedule(this.priceSchedule);
     this.initSubscriptions();
   }
 
