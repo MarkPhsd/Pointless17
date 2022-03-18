@@ -103,11 +103,11 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-            <div  class="grid-item-departments"
-                  *ngIf="(categories$ | async) as list">
+            <div  class="grid-item-departments">
               <app-mat-toggle-selector
+                  *ngIf="(categories$ | async) as list"
                   [mouseOver]      = "false"
-                  [showIcon]       ="showIcon"
+                  [showIcon]       = "showIcon"
                   [textLength]     = "21"
                   [toggleDimensions]="'toggle-group-tall'"
                   [toggleHeight]   = "toggleCatHeight"
@@ -128,20 +128,19 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div *ngIf="(clientSearchResults$ | async) as list">
-            <div  class="grid-item-departments" *ngIf=" list.results as brands">
-              <app-mat-toggle-selector
-                  [mouseOver]      = "false"
-                  [showIcon]       ="showIcon"
-                  [textLength]     = "21"
-                  [toggleDimensions]="'toggle-group-tall'"
-                  [toggleHeight]   = "toggleDepartmentHeight"
-                  (setItem)        = "refreshTypeSearch($event)"
-                  [textLength]     = "21"
-                  [fieldName]      = "'company'"
-                  [list]           = "brands">
-              </app-mat-toggle-selector>
-            </div>
+          <div  class="grid-item-departments" >
+            <app-mat-toggle-selector
+                *ngIf="(clientSearchResults$ | async) as listbrands"
+                [mouseOver]      = "false"
+                [showIcon]       ="showIcon"
+                [textLength]     = "21"
+                [toggleDimensions]="'toggle-group-tall'"
+                [toggleHeight]   = "toggleDepartmentHeight"
+                (setItem)        = "refreshTypeSearch($event)"
+                [textLength]     = "21"
+                [fieldName]      = "'company'"
+                [list]           = "listbrands.results">
+            </app-mat-toggle-selector>
           </div>
 
         </mat-expansion-panel>
@@ -169,42 +168,38 @@
                 [textLength]      = "21"
                 [materialIcons]   = "'true'"
                 [list]            = "list">
-            </app-mat-toggle-selector> --> -->
+            </app-mat-toggle-selector> -->
 
-
-            <div  class="grid-item-departments"
-                  *ngIf="(categories$ | async) as list">
+            <div  class="grid-item-departments" >
               <app-mat-toggle-selector
-                  [mouseOver]      = "false"
-                  [showIcon]       ="showIcon"
-                  [textLength]     = "21"
-                  [toggleDimensions]="'toggle-group-tall'"
-                  [toggleHeight]   = "toggleCatHeight"
-                  (outPutItem)     = "refreshCategorySearch($event)"
-                  [textLength]     = "21"
-                  [list]           = "list">
+                  *ngIf             = "(categories$ | async) as list"
+                  [mouseOver]       = "false"
+                  [showIcon]        = "showIcon"
+                  [textLength]      = "21"
+                  [toggleDimensions]= "'toggle-group-tall'"
+                  [toggleHeight]    = "toggleCatHeight"
+                  (outPutItem)      = "refreshCategorySearch($event)"
+                  [textLength]      = "21"
+                  [list]            = "list">
               </app-mat-toggle-selector>
             </div>
 
-
-          <!-- </div> -->
         </mat-expansion-panel>
       </mat-accordion>
     </div>
 
    <div class="grid-item-departments"
          *ngIf="!multifilter">
-      <div  *ngIf="(departments$ | async) as list">
-        <app-mat-toggle-selector
-            (outPutItem)     = "refreshDepartmentSearch($event)"
-            [mouseOver]      = "true"
-            [showIcon]       ="'true'"
-            [textLength]     = "21"
-            [toggleDimensions]="'toggle-group-tall'"
-            [toggleHeight]   ="'toggle-buttons-height-size-tall'"
-            [list]           = "list">
-        </app-mat-toggle-selector>
-      </div>
+      <app-mat-toggle-selector
+          *ngIf            = "(departments$ | async) as list"
+          (outPutItem)     = "refreshDepartmentSearch($event)"
+          [mouseOver]      = "true"
+          [showIcon]       = "'true'"
+          [textLength]     = "21"
+          [toggleDimensions]="'toggle-group-tall'"
+          [toggleHeight]   = "'toggle-buttons-height-size-tall'"
+          [list]           = "list">
+      </app-mat-toggle-selector>
     </div>
   </div>
 

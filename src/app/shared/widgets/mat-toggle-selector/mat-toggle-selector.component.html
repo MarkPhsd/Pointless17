@@ -6,67 +6,65 @@
 
 <div [class]="toggleDimensions"
      *ngIf="list; else loading">
-    <mat-button-toggle-group
-          name         = "type"
-          [(ngModel)]  = "id"
-          (change)="changeSelection()"
-          vertical >
 
-      <mat-button-toggle
-            *ngIf="!hideAllOption"
-            [value]="emptyItem"
-            (click)="setItemNull()"
-            (mouseover) ="setItemMouseOver(null)"
-            [class]="buttonDimensions">
-          All
-      </mat-button-toggle>
+  <mat-button-toggle-group
+        name         = "type"
+        [(ngModel)]  = "id"
+        (change)     = "changeSelection()"
+        vertical >
 
-      <div class="toggle-buttons-height" >
-        <div [class]="toggleHeight"
-             >
-          <mat-button-toggle
-                *ngFor="let item of list"
-                type="button"
-                [value]="item"
-                (click)="setItem(item)"
-                id="item.id"
-                >
-                <!-- [matMenuTriggerFor]="departmentMenu"
-                #departmentMenuTrigger="matMenuTrigger" -->
-                <!-- (mouseover) ="setItemMouseOver(item)" -->
-              <div class="grid-toggle-tiny">
-                <div class="item-font"
-                     *ngIf="showIcon && item.icon && item.icon != ''">
-                  <span *ngIf="materialIcons">
-                     <mat-icon>{{item.icon}}</mat-icon>
-                  </span>
-                  <span *ngIf="!materialIcons"
-                      [class]="'mdi ' + item.icon">
-                  </span>
-                </div>
+    <mat-button-toggle
+          *ngIf="!hideAllOption"
+          [value]="emptyItem"
+          (click)="setItemNull()"
+          (mouseover) ="setItemMouseOver(null)"
+          [class]="buttonDimensions">
+        All
+    </mat-button-toggle>
 
-                <div class="item-text"
-                     *ngIf="((item.icon === '' || !item.icon) && tinyMenu )
-                            || !tinyMenu">
-                  {{item[fieldName] | truncateText : textLength}}
-                </div>
+    <div class="toggle-buttons-height" >
+      <div [class]="toggleHeight" >
+
+        <mat-button-toggle
+              *ngFor="let item of list"
+              type="button"
+              [value]="item"
+              (click)="setItem(item)"
+              id="item.id">
+
+            <div class="grid-toggle-tiny">
+              <div class="item-font"
+                    *ngIf="showIcon && item.icon && item.icon != ''">
+
+                <span *ngIf="materialIcons">
+                    <mat-icon>{{item.icon}}</mat-icon>
+                </span>
+                <span *ngIf="!materialIcons"
+                    [class]="'mdi ' + item.icon">
+                </span>
+
               </div>
-          </mat-button-toggle>
 
-          <mat-menu
-                    class="mat-menu-panel"
-                    [overlapTrigger]="true"
-                    #departmentMenu="matMenu">
-              <span>
-                <h4>{{departmentID}}</h4>
-                <h4> this is some text </h4>
-                <!-- <app-department-menu [departmentID]="departmentID">
-                </app-department-menu> -->
-              </span>
-          </mat-menu>
-        </div>
+              <div class="item-text"
+                    *ngIf="((item.icon === '' || !item.icon) && tinyMenu )
+                          || !tinyMenu">
+                {{item[fieldName] | truncateText : textLength}}
+              </div>
+            </div>
+
+        </mat-button-toggle>
+
+        <mat-menu
+                  class="mat-menu-panel"
+                  [overlapTrigger]="true"
+                  #departmentMenu="matMenu">
+            <span>
+              <h4>{{departmentID}}</h4>
+            </span>
+        </mat-menu>
       </div>
-    </mat-button-toggle-group>
+    </div>
+  </mat-button-toggle-group>
 </div>
 
 <ng-template #loading>

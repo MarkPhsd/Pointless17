@@ -100,14 +100,23 @@ export class DSIEMVElectronComponent implements OnInit {
     this.inputForm.patchValue(transaction);
   }
 
-  async initForm(setting: ISetting) {
+  initForm(setting: ISetting) {
     const form = this.inputForm
     this.inputForm = this.uISettingsService.initDSIEMVForm(form)
-    this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text, 'DSIEMVSettings')
+    this.uISettingsService.setFormValue(form, setting,  'DSIEMVSettings').subscribe(data => {
+      if (data) {
+        const config = JSON.parse(data.text) as DSIEMVSettings
+        // console.log('dsiemv data id', data.id)
+        this.uISettingsService.initForms_Sub(form, data.name, config)
+      }
+    })
   }
 
-  async updateSetting(){
-    const result =  await this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings')
+
+  updateSetting(){
+     this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
+       console.log('saved')
+     })
   }
 
   async pinPadReset(){

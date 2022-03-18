@@ -6,11 +6,11 @@ import { SitesService } from '../../reporting/sites.service';
 import { SettingsService } from '../settings.service';
 
 export interface TransactionUISettings {
+  id:             number;
   displayNotes   : boolean;
   displayView    : boolean;
   displayAdd     : boolean;
   displayQuantity: boolean;
-  id:             number;
   lockOrders    : boolean;
   deleteUnClosedPrintedOrders: boolean;
   closeOrderTimeCutOff       : string;
@@ -73,26 +73,23 @@ export interface CmdResponse{
 }
 
 export interface UIHomePageSettings {
+  id                : number;
   brandsEnabled     : boolean;
   categoriesEnabled : boolean;
   typesEnabled      : boolean;
   departmentsEnabled: boolean;
   tierMenuEnabled   : boolean;
-
   staffBrandsEnabled : boolean;
   staffCategoriesEnabled: boolean;
   staffDepartmentsEnabled: boolean;
   staffTierMenuEnabled  : boolean;
   staffTypesEnabled   : boolean;
-
   menuItemSize        : number; //pixels
   itemsPerPage        : number;
-
   backgroundImage     : string;
   tinyLogo            : string;
   logoHomePage        : string;  //  : [config.logoHomePage],
   displayCompanyName  : string;  //     : [config.displayCompanyName],
-
   wideOrderBar        : boolean;
 }
 
@@ -222,20 +219,17 @@ export class UISettingsService {
     return this.settingsService.getSettingByNameNoRoles(site, name)
   }
 
-  async  saveConfig(fb: FormGroup, name: string): Promise<ISetting>  {
+  saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
     const setting = fb.value
-    return await  this.setSetting(setting, name)
+    return this.setSetting(setting, name)
   }
 
   //save setting returns promise
-  private async setSetting(uiSetting: any, name: string): Promise<ISetting> {
+  private  setSetting(uiSetting: any, name: string): Observable<ISetting> {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
 
-    console.log(name)
-    console.log(uiSetting.id)
-    console.log(uiSetting)
-    if (!uiSetting || !uiSetting.id) { return setting }
+    if (!uiSetting || !uiSetting.id) { return null }
     setting.id    = uiSetting.id
     setting.name  = name
     setting.text  = JSON.stringify(uiSetting);
@@ -249,52 +243,51 @@ export class UISettingsService {
     if ( name == 'DSIEMVSetting' ) {
       this.updateUISubscription(uiSetting)
     }
-
-    return await this.settingsService.putSetting(site, setting.id, setting).toPromise()
-
+    console.log('will put this setting', setting)
+    return this.settingsService.putSetting(site, setting.id, setting)
   }
 
 
   initHomePageForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      id                    : [],
-      brandsEnabled         : [],
-      typesEnabled          : [],
-      categoriesEnabled     : [],
-      departmentsEnabled    : [],
-      tierMenuEnabled       : [],
+      id                    : [''],
+      brandsEnabled         : [''],
+      typesEnabled          : [''],
+      categoriesEnabled     : [''],
+      departmentsEnabled    : [''],
+      tierMenuEnabled       : [''],
       itemsPerPage          : [''],
       menuItemSize          : [''],
       staffBrandsEnabled    : [''],
       staffCategoriesEnabled: [''],
       staffDeparmentsEnabled: [''],
       staffTierMenuEnabled  : [''],
-      staffTypesEnabled     : [],
-      backgroundImage       : [],
-      logoHomePage          : [],
-      displayCompanyName    : [],
+      staffTypesEnabled     : [''],
+      backgroundImage       : [''],
+      logoHomePage          : [''],
+      displayCompanyName    : [''],
       tinyLogo              : [''],
-      wideOrderBar        : [''],
+      wideOrderBar          : [''],
      })
     return fb
   }
 
   initDSIEMVForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      HostOrIP         : [],
-      IpPort           : [],
-      id               : [],
-      MerchantID       : [],
-      TerminalID       : [],
-      OperatorID       : [],
-      UserTrace        : [],
-      TranCode         : [],
-      SecureDevice     : [],
-      ComPort          : [],
-      PinPadIpAddress  : [],
-      PinPadIpPort     : [],
-      SequenceNo       : [],
-      DisplayTextHandle: [],
+      HostOrIP         : [''],
+      IpPort           : [''],
+      id               : [''],
+      MerchantID       : [''],
+      TerminalID       : [''],
+      OperatorID       : [''],
+      UserTrace        : [''],
+      TranCode         : [''],
+      SecureDevice     : [''],
+      ComPort          : [''],
+      PinPadIpAddress  : [''],
+      PinPadIpPort     : [''],
+      SequenceNo       : [''],
+      DisplayTextHandle: [''],
     })
     return fb
   }
@@ -325,24 +318,25 @@ export class UISettingsService {
   initHomePageSettingsForm(config: any, fb: FormGroup): FormGroup {
     if (!config) { return this.initHomePageForm(fb) }
     fb = this.initHomePageForm(fb);
+    console.log('init Home Page', config)
     fb.patchValue(config);
     return fb
   }
 
   initForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      id                          : [],
-      displayNotes                : [],
-      displayView                 : [],
-      displayAdd                  : [],
-      displayQuantity             : [],
-      deleteUnClosedPrintedOrders : [],
-      closeOrderTimeCutOff        : [],
-      ordersRequireCustomer       : [],
-      validateCustomerLicenseID   : [],
-      defaultClientTypeID         :[''],
-      enablMEDClients             :[],
-      enableLimitsView            :[],
+      id                          : [''],
+      displayNotes                : [''],
+      displayView                 : [''],
+      displayAdd                  : [''],
+      displayQuantity             : [''],
+      deleteUnClosedPrintedOrders : [''],
+      closeOrderTimeCutOff        : [''],
+      ordersRequireCustomer       : [''],
+      validateCustomerLicenseID   : [''],
+      defaultClientTypeID         : [''],
+      enablMEDClients             : [''],
+      enableLimitsView            : [''],
      })
     return fb
   }
@@ -353,51 +347,45 @@ export class UISettingsService {
     return fb
   }
 
-  async setFormValue(inputForm: FormGroup,
+   setFormValue(inputForm: FormGroup,
                      setting: ISetting,
-                     text: any,
-                     name: string): Promise<FormGroup> {
+                     name: string): Observable<ISetting> {
 
     inputForm = this.initForm(inputForm);
-    if (!text) { setting = await this.initConfig(setting, name) }
+    return  this.initConfig(setting, name)
 
-    if (text) {
-      const config = JSON.parse(text)
-      config.id = setting.id;
+  }
 
-      if (name == 'UITransactionSetting') {
-        inputForm = this.initUITransactionsForm(config, inputForm);
-      }
+  initForms_Sub(inputForm: FormGroup, name: string, config: any): FormGroup {
+    if (name == 'UITransactionSetting') {
+      inputForm = this.initUITransactionsForm(config, inputForm);
+    }
 
-      if (name == 'UIHomePageSettings') {
-        inputForm = this.initHomePageSettingsForm(config, inputForm);
-      }
+    if (name == 'UIHomePageSettings') {
+      inputForm = this.initHomePageSettingsForm(config, inputForm);
+    }
 
-      if (name == 'DSIEMVSettings') {
-        inputForm = this.initDSIEMVSettingsForm(config, inputForm);
-      }
-
+    if (name == 'DSIEMVSettings') {
+      inputForm = this.initDSIEMVSettingsForm(config, inputForm);
     }
     return inputForm
   }
 
-
-  async initConfig(setting: ISetting, name: string): Promise<ISetting> {
+  initConfig(setting: ISetting, name: string): Observable<ISetting> {
     const ui = {} as TransactionUISettings
 
-    if (!setting) {
+    if (!setting || setting.id) {
       const site    = this.siteService.getAssignedSite();
-      setting = await this.settingsService.getSettingByNameCachedNoRoles(site, name).pipe().toPromise()
+      return this.settingsService.getSettingByNameCachedNoRoles(site, name).pipe()
     };
 
-    if (!setting) {
-      console.log(`Error UI ${name} setting not established`)
-      return
-    }
-
     ui.id = setting.id
-    setting = await this.setSetting(ui, name)
-    const config = JSON.parse(setting.text) // as TransactionUISettings
+    return this.setSetting(ui, name)
+
+  }
+
+  updateUIJSONSetting(name: string, settingText: string) {
+    const config = JSON.parse(settingText) // as TransactionUISettings
 
     if (name == 'UITransactionSetting') {
       this.updateUISubscription(config)
@@ -408,9 +396,6 @@ export class UISettingsService {
     if (name == 'DSIEMVSettings') {
       this.updateDSIEMVSettings(config)
     }
-    //DSIEMVSettings
-
-    return setting
   }
 
 

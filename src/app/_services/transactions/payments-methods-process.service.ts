@@ -26,13 +26,13 @@ export class PaymentsMethodsProcessService {
 
   }
 
-  async enterPointCashValue(event, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder, ) {
+  enterPointCashValue(event, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
     const site = this.sitesService.getAssignedSite();
     //apply payment as cash value
     if (posPayment && event && paymentMethod && order) {
       const amountPaid = event;
       if (order.balanceRemaining >= amountPaid)  {
-        return await this.processRewardPoints(site, posPayment, order, amountPaid, paymentMethod)
+        return  this.processRewardPoints(site, posPayment, order, amountPaid, paymentMethod)
       }
       if (amountPaid > order.balanceRemaining )  {
         this.notify('Amount entered is greater than the total. Please try again.', 'Oops!', 1500)
@@ -41,27 +41,30 @@ export class PaymentsMethodsProcessService {
     }
   }
 
-  async processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPaymentResponse> {
+  processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    const results =  await payment$.pipe().toPromise();
-    return results
+    // const results =  await payment$.pipe().toPromise();
+    // return results
+    return payment$
   }
 
-  async processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPaymentResponse> {
+   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    const results =  await payment$.pipe().toPromise();
-    return results
+    // const results =  await payment$.pipe().toPromise();
+    // return results
+    return payment$
   }
 
-  async processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPaymentResponse> {
+   processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     if (order.clients_POSOrders) {
       if (order.clients_POSOrders.loyaltyPointValue >= amount) {
         const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-        const results  = await payment$.pipe().toPromise();
-        return results
+        // const results  = await payment$.pipe().toPromise();
+        // return results
+        return payment$
       } else  {
         this.notify(`There are not enough points to pay this amount. The client has $${order.clients_POSOrders.loyaltyPointValue} in total.`, 'Try Again',3000)
-        return
+        return null
       }
     }
   }
@@ -80,8 +83,8 @@ export class PaymentsMethodsProcessService {
 
   }
 
-  async getResults(amount, paymentMethod: IPaymentMethod,
-                  posPayment: IPOSPayment, order: IPOSOrder): Promise<IPaymentResponse> {
+  getResults(amount, paymentMethod: IPaymentMethod,
+                  posPayment: IPOSPayment, order: IPOSOrder): Observable<IPaymentResponse> {
     //if credit card - prompt for credit card payment
     const site = this.sitesService.getAssignedSite();
 
@@ -93,28 +96,28 @@ export class PaymentsMethodsProcessService {
     if (paymentMethod && posPayment && order)
 
       if (paymentMethod.wic) {
-        return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
       if (paymentMethod.ebt) {
-        return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
       //cash
       if (paymentMethod.isCash) {
-        return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       //else
       if (paymentMethod.isCreditCard) {
-        return await this.processCreditPayment(site, posPayment, order, amount, paymentMethod)
+        return  this.processCreditPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       //else
       if (paymentMethod.name.toLowerCase()  == 'check') {
-        return await this.processCashPayment(site, posPayment, order, amount, paymentMethod)
+        return  this.processCashPayment(site, posPayment, order, amount, paymentMethod)
       }
 
       if (paymentMethod.name.toLowerCase() === 'rewards points' || paymentMethod.name.toLowerCase() === 'loyalty points') {
-        return await this.enterPointCashValue(amount, paymentMethod, posPayment, order)
+        return  this.enterPointCashValue(amount, paymentMethod, posPayment, order)
       }
 
       //else
@@ -126,9 +129,8 @@ export class PaymentsMethodsProcessService {
       if (paymentMethod.name.toLowerCase() === 'gift card') {
 
       }
+      return null;
   }
-  //   return
-  // }
 
 
   validatePaymentAmount(amount, isCash: boolean, balanceRemaining: number): boolean {
@@ -140,11 +142,11 @@ export class PaymentsMethodsProcessService {
     }
     return true
   }
+
   notify(message: string, title: string, duration: number) {
     if (duration == 0 ) {duration = 1000}
     this.matSnackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
   }
-
 
   isOrderBalanceZero(order: IPOSOrder) {
     if (order) {

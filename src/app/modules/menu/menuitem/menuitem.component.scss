@@ -1,30 +1,5 @@
 @import "/src/mixins.scss";
 
-// .button {
-//   width     : 160px;
-//   max-width : 160px;
-//   min-width : 160px;
-//   height    : 75px;
-//   min-height: 75px;
-//   font-size: 1em;
-// }
-
-// .grid-container {
-//   --gap: 5px;
-//   display: grid;
-//   gap: var(--gap);
-//   grid-template-columns: repeat( auto-fit, minmax(165px, 1fr) );
-
-//   @include for-phone-only {
-//     --gap                : 5px;
-//     display              : grid;
-//     gap                  : var(--gap);
-//     grid-template-columns: 1fr;
-//     margin-right         : 4px;
-//     max-width            : 375px;
-//   }
-
-// }
 
 
 .gallery-container {
@@ -365,20 +340,6 @@ mat-form-field {
 
 }
 
-// getPopUpWidth(defaultSize: string) {
-//   let deviceSize = '90vw'
-//   let smallDevice = false
-//   if (window.innerWidth >= 768) {
-//     smallDevice = false
-//     deviceSize = defaultSize
-//   }
-//   if (window.innerWidth < 768) {
-//     smallDevice = true
-//     deviceSize = '100vw'
-//   }
-//   return deviceSize
-// }
-
 .exit {
   display        : flex;
   flex-direction : row;
@@ -417,8 +378,6 @@ mat-form-field {
   gap: 10px;
 }
 
-
-
 .grid-prices {
   display: grid;
   grid-column: 1 / 3;
@@ -456,7 +415,6 @@ mat-form-field {
   padding: 5px;
 }
 
-
 .mat-packaging {
   margin: 5px;
 }
@@ -483,7 +441,6 @@ mat-form-field {
   grid-column: 1 / span 2;
   margin: 10px;
 }
-
 
 .grid-main {
 

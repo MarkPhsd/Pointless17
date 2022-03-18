@@ -451,7 +451,7 @@ export class SettingsService {
 
     const controller = "/settings/"
 
-    const endPoint = 'getSettingByNameCachedNoRoles';
+    const endPoint = 'GetSettingByNameNoRoles';
 
     const parameters = `?name=${name}`
 

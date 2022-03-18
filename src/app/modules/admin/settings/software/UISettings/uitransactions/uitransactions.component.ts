@@ -29,13 +29,21 @@ export class UITransactionsComponent implements OnInit {
     });
   }
 
-  async initForm(setting: ISetting) {
+  initForm(setting: ISetting) {
     const form = this.inputForm
-    this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text, 'UITransactionSetting' )
+    this.uISettingsService.setFormValue(form, setting, 'UITransactionSetting' ).subscribe(
+     data => {
+      if (data) {
+        const config = JSON.parse(data.text)
+        this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
+      }
+    })
   }
 
-  async updateSetting(){
-    const result =  await this.uISettingsService.saveConfig(this.inputForm, 'UITransactionSetting')
+  updateSetting(){
+    this.uISettingsService.saveConfig(this.inputForm, 'UITransactionSetting').subscribe(data => {
+      console.log('saved')
+    })
   }
 
 }

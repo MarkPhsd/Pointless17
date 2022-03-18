@@ -94,7 +94,7 @@
     <p>
       <!-- <span *ngIf="priceSchedule.clientTypes">This can be used any day of the week.</span> -->
 
-      <span *ngIf="!priceSchedule.allWeekdaysDays && priceSchedule.weekDays.length>0">
+      <span *ngIf="!priceSchedule.allWeekdaysDays && priceSchedule.weekDays && priceSchedule.weekDays.length>0">
         It can be only used on the following day(s)
       <span *ngFor="let item of priceSchedule.weekDays
                   ;let last = last
@@ -109,7 +109,7 @@
     <p>
       <!-- <span *ngIf="priceSchedule.dateFrames">This reward is usable until further notice.</span> -->
 
-      <span *ngIf="!priceSchedule.allDates && priceSchedule.dateFrames.length>0">
+      <span *ngIf="!priceSchedule.allDates && priceSchedule.dateFrames && priceSchedule.dateFrames.length>0">
         This reward has a limited time offering. It can be used from
       <span *ngFor="let item of priceSchedule.dateFrames
                   ;let last = last

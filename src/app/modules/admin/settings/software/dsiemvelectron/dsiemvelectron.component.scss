@@ -7,25 +7,22 @@ mat-divider {
 }
 
 .grid-views {
+  --gap : 5px;
+  margin:5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+}
 
-    --gap : 5px;
-    margin:5px;
+.grid-item {
+  width: 175px;
+  max-width: 175px;
+}
 
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+button {
+  min-width: 180px;
+}
 
-  }
-
-  .grid-item {
-    width: 75px;
-    max-width: 95px;
-  }
-
-  button {
-    min-width: 180px;
-  }
-
-  .item-span {
-    column-span:  2;
-  }
+.item-span {
+  column-span:  2;
+}

@@ -147,13 +147,6 @@ export class UploaderComponent implements OnInit {
       this.fileNames =   this.fileNames.replace('null', '')
       this.fileNames =   this.fileNames.replace(',,', ',')
 
-      // if (this.fileNames.substring(0, 1) === "," ) {
-      //   // console.log('this.fileNames.substring(0, 1)', this.fileNames.substring(0, 1))
-      //   // console.log('this.filenames', this.fileNames)
-      //   // this.fileNames = this.fileNames.substring(1, this.fileNames.length -1)
-      //   // console.log('this.filenames new', this.fileNames)
-      // }
-
     }
     this.messageOut.emit(this.fileNames)
   }
@@ -176,7 +169,10 @@ export class UploaderComponent implements OnInit {
         }
 
         this.messageOut.emit(this.fileNames)
+        return
     }
+
+    this.messageOut.emit('')
   }
 
 

@@ -137,10 +137,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    }
 
    printPaymentReceipt(item) {
-     console.log('print')
-    this.printingService.previewReceipt()
     if (item) {
-      // this.printPaymentReceipt(item)
       this.printingService.previewReceipt()
     }
    }

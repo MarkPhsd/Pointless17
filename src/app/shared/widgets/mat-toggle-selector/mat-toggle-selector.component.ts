@@ -10,7 +10,6 @@ export class MatToggleSelectorComponent implements OnChanges {
 
   @ViewChild('departmentMenuTrigger') departmentMenuTrigger: MatMenuTrigger;
 
-
   emptyItem = {id: 0, name: ''}
   @Input()  id                : number;
   @Input()  list$             : Observable<any>;
@@ -26,7 +25,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  showIcon          : boolean;
   @Input()  mouseOver         : boolean;
   @Input()  fieldName         = 'name'
-  @Input()  materialIcons      = false;
+  @Input()  materialIcons     = false;
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   @Input()  useMatMenu        : boolean;
 
@@ -36,14 +35,12 @@ export class MatToggleSelectorComponent implements OnChanges {
   constructor() {
   }
 
-  // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.tinyMenu = false
     if (window.innerWidth < 768) {
       this.tinyMenu = true
     }
-
   }
 
   ngOnChanges(): void {

@@ -11,7 +11,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 })
 export class UIHomePageSettingsComponent implements OnInit {
 
-  urlImageMain: string;
+  backgroundImage: string;
   logoHomePage: string;
   tinyLogo:     string;
   inputForm  : FormGroup;
@@ -25,42 +25,71 @@ export class UIHomePageSettingsComponent implements OnInit {
     this.uISettingsService.getSetting('UIHomePageSettings').subscribe(data => {
       if (data) {
         this.uiHomePage   = JSON.parse(data.text) as UIHomePageSettings
-        this.urlImageMain = this.uiHomePage.backgroundImage
-        this.tinyLogo     = this.uiHomePage.tinyLogo
+        console.log('UI Home Page ', data)
+        console.log('UI Home Page ', this.uiHomePage)
+
+        if (this.uiHomePage.backgroundImage == null) {
+          this.uiHomePage.backgroundImage = ''
+        }
+
+        if (this.uiHomePage.tinyLogo == null) {
+          this.uiHomePage.tinyLogo = ''
+        }
+
+        if (this.uiHomePage.logoHomePage  == null) {
+          this.uiHomePage.logoHomePage =''
+        }
+
+        this.backgroundImage = this.uiHomePage.backgroundImage;
+        this.tinyLogo =  this.uiHomePage.tinyLogo
         this.logoHomePage = this.uiHomePage.logoHomePage
         this.initForm(data);
       }
     });
   }
 
-  async initForm(setting: ISetting) {
+  initForm(setting: ISetting) {
     const form = this.inputForm
     this.inputForm = this.uISettingsService.initHomePageForm(form)
-    this.inputForm = await this.uISettingsService.setFormValue(form, setting, setting.text, 'UIHomePageSettings')
-  }
+    this.uISettingsService.setFormValue(form, setting, 'UIHomePageSettings').subscribe(
+      data => {
+        if (data) {
+          const config = JSON.parse(data.text)
+          this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
+        }
+      })
+   }
 
-  async updateSetting(){
-    const result =  await this.uISettingsService.saveConfig(this.inputForm, 'UIHomePageSettings')
+  updateSetting(){
+    console.log('inputForm', this.inputForm.value)
+    if (!this.inputForm) {
+      console.log('save didnt happen')
+      return
+    }
+    try {
+      this.uISettingsService.saveConfig(this.inputForm, 'UIHomePageSettings').subscribe(data => {
+        console.log('saved', data)
+      })
+    } catch (error) {
+      console.log('errror', error)
+    }
   }
 
   //image data
   received_Image(event) {
-    if (!event) { return }
-    this.urlImageMain = event
+    this.backgroundImage = event
     this.inputForm.patchValue({backgroundImage: event})
   };
 
   received_Logo(event) {
-    if (!event) { return }
     this.logoHomePage = event
     this.inputForm.patchValue({logoHomePage: event})
   };
 
-
   received_TinyLogo(event) {
-    if (!event) { return }
     this.tinyLogo = event
     this.inputForm.patchValue({tinyLogo: event})
+    console.log('this inputform', this.inputForm  )
   };
 
 }

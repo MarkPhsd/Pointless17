@@ -243,7 +243,7 @@ export class CardComponent  implements OnInit , OnChanges{
                   try {
                     const item = sales.filter( item => {})
                   } catch (error) {
-                    console.log(sales)
+                    // console.log(sales)
                   }
                   const item = sales.filter( item =>
                     {

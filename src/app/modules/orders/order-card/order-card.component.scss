@@ -1,14 +1,12 @@
 @import "/src/mixins.scss";
-// @import '~@angular/material/theming';
 @import '/src/theme/variables.scss';
 
 mat-card {
-  padding   : 1px;
+  padding: 1px;
   max-height: 165px;
   min-height: 165px;
   height:     165px;
-  width     : 200px;
-  min-width : 200px;
+  width     : 175px;
   overflow: hidden;
 
   @include for-phone-only  {
@@ -23,11 +21,12 @@ mat-card {
 }
 
 mat-card:hover {
-  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+  transform: scale(1.03);
 }
 
-mat-card:active:hover {
-  box-shadow: 1px 1px 2px rgb(138, 88, 88), 0 0 25px rgb(76, 175, 76), 0 0 5px rgb(84, 116, 90);
+mat-card:active {
+  box-shadow: 1px 1px 2px black, 0 0 25px rgb(33, 43, 33), 0 0 5px darkblue;
+  transform: scale(1.03);
 }
 
 mat-card-subtitle {
@@ -43,11 +42,6 @@ mat-card-subtitle {
   padding: 1px;
 
   @include for-phone-only  {
-    // display               : grid;
-    // grid-template-columns : auto auto;
-    // grid-template-rows    : auto;
-    // grid-gap              : 5px;
-    // row-gap               : 1px;
     visibility: hidden;
   }
 }
