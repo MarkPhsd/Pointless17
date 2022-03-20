@@ -1,0 +1,190 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  min-width: 375px;
+  width: 95% !important;
+}
+
+.name {
+  text-overflow: clip;
+  max-width: 100px;
+  white-space   : nowrap;
+  text-size-adjust:inherit;
+  overflow-y:hidden;
+  overflow-x: hidden;
+}
+
+.border  {
+  border-radius: 10px;
+  border-width : 3px;
+  padding      : 5px;
+  text-align   : center;
+}
+
+.thc  {
+  text-align: center;
+  vertical-align:middle;
+  display   : flex;
+}
+
+.grid-flow {
+
+  // @include for-tablet-portrait-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: 75px 100px 50px 50px 65px;
+  //   overflow-y: visible;
+  // }
+
+  // @include for-tablet-landscape-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: 75px 100px 50px 50px 65px;
+  //   overflow-y: visible;
+  // }
+
+  // @include for-desktop-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: 75px 100px 50px 50px 65px;
+  //   overflow-y: visible;
+  // }
+
+  @include for-phone-only {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+
+    grid-template-columns: 75px 100px 50px 50px 65px;
+    overflow-y: visible;
+  }
+
+  @include for-big-desktop-up {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 100px 175px 100px 100px 125px;
+    overflow-y: hidden;
+  }
+
+  margin-bottom: 10px;
+  display    : grid;
+  gap        : 10px;
+  margin-left: 5px;
+  grid-template-columns: 45px 100px 50px 50px 65px;
+  overflow-y : hidden;
+  overflow-x: hidden;
+}
+
+.indica {
+  background-color: rgb(89, 148, 30);
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.sativa {
+  background-color: rgb(189, 79, 79);
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.hybrid {
+  background-color: rgb(60, 137, 219);
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.prices {
+  // font-size  : 1vw;
+  // font-weight: 500;
+  // line-height: 1.2em;
+  // margin     : .2em  ;
+
+  @include for-phone-only {
+    font-size  : 2.5vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    background-color: rgb(54, 84, 124);
+  }
+
+  @include for-tablet-portrait-up {
+    font-size  : 1vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    background-color: rgb(51, 223, 151);
+  }
+
+  @include for-tablet-landscape-up {
+    font-size  : 1vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    background-color: rgb(54, 124, 95);
+  }
+  @include for-desktop-up {
+    font-size  : 1vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    background-color: rgb(124, 94, 54);
+  }
+
+  @include for-big-desktop-up {
+    font-size  : .9vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em;
+    background-color: antiquewhite;
+  }
+
+  font-size  : 1vw;
+  font-weight: 500;
+  line-height: 1.2em;
+  // margin     : .2em;
+  background-color: rgb(75, 31, 49);
+}
+
+.badge {
+  // margin-top : 3px;
+  // margin-left: 10px;
+
+  // @include for-desktop-up {
+  //   margin-top : 15px;
+  //   margin-left: 10px;
+  // }
+  // @include for-big-desktop-up {
+  //   margin-top : 12px;
+  //   margin-left: 10px;
+  // }
+}
+
+// @mixin for-phone-only {
+//   @media (max-width: 599px) { @content; }
+// }
+// @mixin for-tablet-portrait-up {
+//   @media (min-width: 600px) { @content; }
+// }
+// @mixin for-tablet-landscape-up {
+//   @media (min-width: 900px) { @content; }
+// }
+// @mixin for-desktop-up {
+//   @media (min-width: 1200px) { @content; }
+// }
+// @mixin for-big-desktop-up {
+//   @media (min-width: 1800px) { @content; }
+// }
