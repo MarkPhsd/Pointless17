@@ -8,6 +8,7 @@
       <mat-label><ng-content></ng-content></mat-label>
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput
+                [disabled] ='!enabled'
                 [class]="fieldsClass"
                 appAppPasswordMask
                 [type]="fieldType"
@@ -27,6 +28,7 @@
        *ngIf="type === 'toggle'">
     <mat-slide-toggle
         [name]="fieldName"
+        [disabled] ='!enabled'
         class="mat-label"
         [formControlName]="fieldName">
         <!-- <mat-label><ng-content></ng-content></mat-label> -->

@@ -16,6 +16,32 @@ export class FbClientTypesService {
     private clientTypeService: ClientTypeService,
   ) { }
 
+
+  initUserAuthForm(fb: FormGroup): FormGroup {
+    fb = this._fb.group({
+      voidOrder : [''],
+      voidItem : [''],
+      voidPayment : [''],
+      changeItemPrice : [''],
+      changeInventoryValue : [''],
+      blindBalanceSheet : [''],
+      blindClose : [''],
+      closeDay : [''],
+      sendTextBlast : [''],
+      sendEmailBlast : [''],
+      accessHistoryReports : [''],
+      accessDailyReport : [''],
+      importMETRCPackages : [''],
+      adjustInventory : [''],
+      adjustProductCount : [''],
+      addEmployee : [''],
+      changeClientType : [''],
+      changeAuths : [''],
+    })
+    return fb
+
+  }
+
   initForm(fb: FormGroup): FormGroup {
     // const serializedDate = new Date(user?.dob)
          fb = this._fb.group({

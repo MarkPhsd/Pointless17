@@ -1,0 +1,157 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  max-width  : 650px;
+  min-width  : 355px;
+  margin : 10px;
+  opacity: 50%;
+}
+
+.bg {
+  /* The image used */
+  // background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
+  /* Full height */
+  height: 80vh;
+  max-height: 1000px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.border  {
+  border-radius: 10px;
+  border-width : 3px;
+  padding      : 5px;
+  text-align   : center;
+}
+
+.parent-container {
+  overflow: hidden;
+  height: 100%;
+}
+
+.card-container {
+  overflow-x: hidden;
+}
+
+.eighth-menu {
+  max-height: 90vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.grid-flow {
+
+  // @include for-tablet-portrait-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: 75px 100px 50px 50px 65px;
+  //   overflow-y: visible;
+  // }
+
+  // @include for-tablet-landscape-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: 75px 100px 50px 50px 65px;
+  //   overflow-y: visible;
+  // }
+
+  // @include for-desktop-up {
+  //   --gap: 5px;
+  //   margin-top: 2px;
+  //   margin-right: 2px;
+  //   display: grid;
+  //   gap: var(--gap);
+  //   grid-template-columns: 75px 100px 50px 50px 65px;
+  //   overflow-y: visible;
+  // }
+  @include for-phone-only {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 75px 100px 50px 50px 65px;
+    overflow-y: visible;
+  }
+
+  @include for-big-desktop-up {
+    --gap: 5px;
+    margin-top: 2px;
+    margin-right: 2px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 100px 175px 100px 100px 125px;
+    overflow-y: hidden;
+  }
+
+  margin-bottom: 10px;
+  display    : grid;
+  gap        : 10px;
+  margin-left: 5px;
+  grid-template-columns: 45px 100px 50px 50px 65px;
+  overflow-y : hidden;
+  overflow-x: hidden;
+}
+
+.prices {
+  // font-size  : 1vw;
+  // font-weight: 500;
+  // line-height: 1.2em;
+  // margin     : .2em  ;
+
+  @include for-phone-only {
+    font-size  : 2.5vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    background-color: rgb(54, 84, 124);
+  }
+
+  @include for-tablet-portrait-up {
+    font-size  : 1vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    // background-color: rgb(51, 223, 151);
+  }
+
+  @include for-tablet-landscape-up {
+    font-size  : 1vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    // background-color: rgb(54, 124, 95);
+  }
+  @include for-desktop-up {
+    font-size  : .9vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em  ;
+    // background-color: rgb(124, 94, 54);
+  }
+
+  @include for-big-desktop-up {
+    font-size  : .9vw;
+    font-weight: 500;
+    line-height: 1.2em;
+    // margin     : .2em;
+    // background-color: antiquewhite;
+  }
+
+  font-size  : 1vw;
+  font-weight: 500;
+  line-height: 1.2em;
+  // margin     : .2em;
+  // background-color: rgb(75, 31, 49);
+
+}
+
+
+

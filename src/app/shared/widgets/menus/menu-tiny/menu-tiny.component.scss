@@ -1,4 +1,3 @@
-
 :host {
     .mat-icon {
         vertical-align: middle;
@@ -37,7 +36,7 @@
   padding: 15px 15px 15px 5px;
   font-weight: 400;
   border-bottom: 1px solid #ccc;
-  line-height: 1.6em;
+  line-height: 2em;
   cursor: pointer;
   transition: all 0.4s ease;
 }
@@ -75,10 +74,6 @@ li {
   height: 100%;
 }
 
-.accordion li.active i.fa-chevron-down {
-  transform: rotate(180deg);
-}
-
 .menu-item :hover {
   background-color: #d3c8ca;
   transition: all .5s ease-in-out;
@@ -94,6 +89,10 @@ li {
 
 .submenu li {
   color: #d3c8ca;
+}
+
+.accordion li.active i.fa-chevron-down {
+  transform: rotate(180deg);
 }
 
 .accordion li:last-child .submenu {
@@ -118,7 +117,7 @@ li {
 }
 
 .submenu a:hover {
-  background: #b63b4d;
+  background: #af9b9e;
   color: #fff;
 }
 

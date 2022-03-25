@@ -1,0 +1,84 @@
+<h3><ng-content></ng-content></h3>
+<h3>{{title}}</h3>
+
+<mat-divider></mat-divider>
+
+<div *ngIf="elementsOptions
+            && cardOptions
+            && paymentForm
+            && stripeAPISetting
+           && stripeInstance"
+     [formGroup]="paymentForm"
+     class="container">
+
+    <app-value-fields
+        [inputForm]="paymentForm"
+        [fieldName]="'name'"
+        [fieldsClass]="'fields-small'"
+        required>
+        Customer Name
+    </app-value-fields>
+
+    <app-value-fields
+        [enabled]  = "true"
+        [fieldType]="'number'"
+        [inputForm]="paymentForm"
+        [fieldName]="'amount'"
+        [fieldsClass]="'fields-small'"
+        required>
+        Amount
+    </app-value-fields>
+
+    <div *ngIf="elementsOptions?.clientSecret as clientSecret">
+      <div *ngIf="!clientSecret">
+        <button mat-raised-button (click)="setAmount()">Set Amount</button>
+      </div>
+    </div>
+
+  <div >
+
+    <ng-container *ngIf="elementsOptions?.clientSecret as clientSecret;else loading">
+      <ngx-stripe-payment [clientSecret]="clientSecret">
+      </ngx-stripe-payment>
+    </ng-container>
+    <button mat-raised-button
+            *ngIf="elementsOptions?.clientSecret as clientSecret"
+            (click)="pay()">PAY {{paymentForm?.value?.amount | currency }}
+    </button>
+
+    <ng-template #loading>
+      ...loading stripe.
+    </ng-template>
+
+  </div>
+
+  <div *ngIf="token && token.card"
+        class="card-results-grid">
+
+    <div>Name</div>
+    <div>
+        {{token?.card?.name}}
+    </div>
+
+    <div>Brand</div>
+    <div>
+        {{token?.card?.brand}}
+    </div>
+
+    <div>Exp</div>
+    <div>
+      {{token?.card?.exp_year}}
+    </div>
+
+    <div>Last 4</div>
+    <div>
+       {{token?.card?.lastr}}
+    </div>
+
+  </div>
+
+  <div *ngIf="result?.error">
+    Message {{result?.error?.message | json}}
+  </div>
+
+</div>

@@ -108,6 +108,9 @@ import { OverLayComponent } from './shared/widgets/over-lay/over-lay.component';
 import { LogoComponent } from './shared/widgets/logo/logo.component';
 import { FunctionGroupListComponent } from './modules/admin/settings/function-groups/function-group-list/function-group-list.component';
 import { FunctionGroupEditComponent } from './modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
+import { StrainBoardComponent } from './modules/tv-menu/strainBoard/strain-board/strain-board.component';
+import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
+import { GridMenuLayoutComponent } from './modules/tv-menu/grid-menu-layout/grid-menu-layout.component';
 
 
 const routes: Routes = [
@@ -264,6 +267,9 @@ const routes: Routes = [
         {path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}}
       ]
     },
+
+    { path:  'menu-board-designer',   component: GridMenuLayoutComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
 
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
 

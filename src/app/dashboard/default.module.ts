@@ -255,6 +255,16 @@ import { PrepOrderItemComponent } from '../modules/prep/prep-order-item/prep-ord
 import { PosOrderPriceScheduleInfoComponent } from '../modules/posorders/pos-order-price-schedule-info/pos-order-price-schedule-info.component';
 import { PosOrderScheduleDescriptionComponent } from '../modules/posorders/pos-order-price-schedule-info/pos-order-schedule-description/pos-order-schedule-description.component';
 import { ScheduledMenuImageComponent } from '../modules/menu/scheduleMenus/scheduled-menu-container/scheduled-menu-image/scheduled-menu-image.component';
+import { StrainBoardComponent } from '../modules/tv-menu/strainBoard/strain-board/strain-board.component';
+import { StrainCardComponent } from '../modules/tv-menu/strainBoard/strain-card/strain-card.component';
+import { TypeBoardComponent } from '../modules/tv-menu/type-board/type-board.component';
+import { TypeBoardItemsComponent } from '../modules/tv-menu/type-board-items/type-board-items.component';
+import { MenuBoardComponent } from '../modules/tv-menu/menu-board/menu-board.component';
+import { GridMenuLayoutComponent } from '../modules/tv-menu/grid-menu-layout/grid-menu-layout.component';
+import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settings/stripe-settings.component';
+import { NgxStripeModule } from 'ngx-stripe';
+import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
+// import { NgxStripeModule } from 'ngx-stri../modules/admin/settings/stripe-settings/stripe-settings.component
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -334,6 +344,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
+    GridMenuLayoutComponent,
     LabelViewSelectorComponent,
     ListPrintersElectronComponent,
     MenuGroupItemEditComponent,
@@ -350,6 +361,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuItemsInfiniteComponent,
     MetrcSalesListComponent,
     METRCProductsAddComponent,
+    MenuBoardComponent,
     MenuItemModalComponent,
     NewInventoryItemComponent,
     OrderItemsListComponent,
@@ -463,6 +475,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StrainPackagesComponent,
     StickyHeaderComponent,
     StrainProductEditComponent,
+    StrainBoardComponent,
+    StrainCardComponent,
+    StripeSettingsComponent,
+    StripeCheckOutComponent,
     UITransactionsComponent,
     TaxEditComponent,
     TaxListComponent,
@@ -475,6 +491,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     TimeScheduleComponent,
     TypeFilterComponent,
     TypeResultsSelectorComponent,
+    TypeBoardComponent,
+    TypeBoardItemsComponent,
     UnitTypeListComponent,
     UnitTypeEditComponent,
     UnitTypePromptComponent,
@@ -502,16 +520,17 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       ReactiveFormsModule,
       RouterModule,
       SharedModule,
+      NgxStripeModule.forRoot(),
       // QuicklinkStrategy,
     ],
 
   exports: [
     AgGridModule,
     AdjustItemComponent,
-    SimpleTinyComponent,
-    RouterModule,
     BrowserAnimationsModule,
+    RouterModule,
     HammerModule,
+    SimpleTinyComponent,
   ],
 
   providers: [

@@ -61,7 +61,6 @@ export class PriceTierEditComponent implements OnInit {
   onValueChanged(changes) {
     this.priceTierPrice = changes.data;
     this.refreshEndPrice(changes.data, changes.rowIndex, this.endPriceValue)
-    this.refreshEndPrice(changes.data, changes.rowIndex, this.endPriceHappyHour)
     this.updatePrice(changes.data)
   }
 
@@ -82,12 +81,23 @@ export class PriceTierEditComponent implements OnInit {
       this.priceTier.priceTierPrices = this.priceTierMethods.sortPriceTiers(this.priceTier.priceTierPrices)
     }
 
-    this.initWeightProfileObjservable();
-    this.initWeigthSelectform();
-    this.refreshData();
-    this.initInputFormSubscription();
-    this.priceTierPricesChanges();
   }
+
+  refreshEndPrice(priceTierPrice: PriceTierPrice, i: number, priceArray: number[]) : number[] {
+    if (!priceArray || !priceTierPrice) {return }
+    const price = this.getEndPrice(priceTierPrice,i, priceArray)
+    const specialPrice = this.getHHEndPrice(priceTierPrice,i, priceArray)
+    this.endPriceHappyHour[i] = specialPrice
+
+    this.initEndPriceValues()
+    if (priceArray.length>=i) {
+      priceArray[i] = price
+    } else {
+      priceArray.push(price)
+    }
+    return priceArray;
+  }
+
 
   initWeigthSelectform() {
     this.weightSelectForm = this.fb.group({
@@ -111,7 +121,12 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('')
+
+    this.initWeightProfileObjservable();
+    this.initWeigthSelectform();
+    this.refreshData();
+    this.initInputFormSubscription();
+    this.priceTierPricesChanges();
     this.initEndPriceValues()
   }
 
@@ -120,7 +135,7 @@ export class PriceTierEditComponent implements OnInit {
     let priceArray = [] as number[]
     this.priceTier.priceTierPrices.forEach(data => {
       this.endPriceValue.push(this.getEndPrice(data, i, priceArray ))
-      this.endPriceHappyHour.push(this.getEndPrice(data, i, priceArray ))
+      this.endPriceHappyHour.push(this.getHHEndPrice(data, i, priceArray ))
       i += 1
     })
   }
@@ -241,7 +256,6 @@ export class PriceTierEditComponent implements OnInit {
     this.priceTierMethods.saveAllPrices(this.inputForm.value)
   }
 
-
   deleteTier(item) {
     const result = window.confirm('Are you sure you want to delete this Price Tier?')
     if (!result) { return }
@@ -310,22 +324,19 @@ export class PriceTierEditComponent implements OnInit {
     }
   }
 
-  refreshEndPrice(priceTierPrice: PriceTierPrice, i: number, priceArray: number[]) : number[] {
-    if (!priceArray || !priceTierPrice) {return }
-    const price = this.getEndPrice(priceTierPrice,i, priceArray)
-    if (priceArray.length>=i) {
-      priceArray[i] = price
-    } else {
-      priceArray.push(price)
-    }
-    return priceArray;
-  }
 
   // const endPrice  = this.endPriceValue[i]
   getEndPrice(priceTierPrice: PriceTierPrice, i: number, priceArray: number[]): number {
     if (!priceArray || !priceTierPrice) {return }
     const quantity  = priceTierPrice.flatQuantity;
     const rate      = priceTierPrice.retail;
+    return          this.getEndPriceFromRateQuantity(quantity, rate);
+  }
+
+  getHHEndPrice(priceTierPrice: PriceTierPrice, i: number, priceArray: number[]): number {
+    if (!priceArray || !priceTierPrice) {return }
+    const quantity  = priceTierPrice.flatQuantity;
+    const rate      = priceTierPrice.specialPrice;
     return          this.getEndPriceFromRateQuantity(quantity, rate);
   }
 
@@ -339,17 +350,11 @@ export class PriceTierEditComponent implements OnInit {
     const quantity              = priceTierPrice.flatQuantity;
     const endPrice              = this.endPriceValue[i];
     const hhendPrice            = this.endPriceHappyHour[i];
+
+    //get the prices from their end price when the end price is changed.
     priceTierPrice.retail       = this.getRateFromEndPriceQuantity(quantity, endPrice)
     priceTierPrice.specialPrice = this.getRateFromEndPriceQuantity(quantity, hhendPrice)
     priceTierPriceControl.patchValue(priceTierPrice)
-  }
-
-  getEndPriceFromRateQuantity(quantity: number, rate: number) : number {
-    if ((quantity && quantity !=0)  && rate) {
-      const value =  quantity * rate
-      return  quantity * rate
-    }
-    return 0
   }
 
   getRateFromEndPriceQuantity(quantity: number, endPrice: number): number {
@@ -360,6 +365,15 @@ export class PriceTierEditComponent implements OnInit {
     }
     return rate
   }
+
+  getEndPriceFromRateQuantity(quantity: number, rate: number) : number {
+    if ((quantity && quantity !=0)  && rate) {
+      const value =  quantity * rate
+      return  quantity * rate
+    }
+    return 0
+  }
+
 
   removeItem(i) {
     const site  = this.siteService.getAssignedSite();

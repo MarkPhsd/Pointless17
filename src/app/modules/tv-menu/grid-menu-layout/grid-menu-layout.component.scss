@@ -1,0 +1,16 @@
+// :host {
+  .toolbar {
+    height: 100px;
+    display: flex;
+  }
+  .gridster {
+    top: 200px;
+    position: relative;
+    display: flex;
+    height: 500px;
+    flex-direction: column;
+  }
+// }
+button {
+  height: 30px;
+}

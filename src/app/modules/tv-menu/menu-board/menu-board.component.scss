@@ -1,0 +1,22 @@
+@import "/src/mixins.scss";
+
+.bg {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-image:  no-repeat center center fixed;
+}
+.grid-flow {
+  display: grid;
+  gap:  1px;
+  grid-template-columns: repeat( auto-fit, minmax(650px, 1fr) );
+
+
+  @include for-phone-only  {
+    display: grid;
+    gap:  1px;
+    grid-template-columns: repeat( auto-fit, minmax(350px, 1fr) );
+  }
+
+}

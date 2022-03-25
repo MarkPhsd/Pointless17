@@ -134,6 +134,8 @@ import { ProfileMedInfoComponent } from '../modules/admin/profiles/parts/profile
 import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.component';
 import { SwiperModule } from 'swiper/angular';
 import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
+import { GridsterModule } from 'angular-gridster2';
+
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -284,6 +286,7 @@ import { CompanyInfoHeaderComponent } from './widgets/company-info-header/compan
     HammerModule,
     IonicModule.forRoot(),
     // NgtUniversalModule,
+    GridsterModule,
     QuicklinkModule,
     RouterModule,
     ReactiveFormsModule,
@@ -332,6 +335,7 @@ import { CompanyInfoHeaderComponent } from './widgets/company-info-header/compan
     FormSelectListComponent,
     GenericIdSelectComponent,
     GenericNameSelectComponent,
+    GridsterModule,
     HeaderComponent,
     IonicGeoLocationComponent,
     IonicSwipeToDeleteComponent,

@@ -51,12 +51,10 @@ export class TvPriceTierMenuItemsComponent implements OnInit {
   }
 
   refreshFlowers() {
-
     this.flowers$.subscribe( data=> {
       this.flowers = data
       this.headers =  [...new Set(this.flowers.map(item => item.priceTier))]
     })
-
   }
 
 }

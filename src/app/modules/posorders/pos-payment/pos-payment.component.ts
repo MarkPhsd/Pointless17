@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { EMPTY, Observable, of, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { map, switchMap } from 'rxjs/operators';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
@@ -13,12 +13,15 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
+import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 
 @Component({
   selector: 'app-pos-payment',
@@ -45,6 +48,7 @@ export class PosPaymentComponent implements OnInit {
   _order          :   Subscription;
   showInput       =   true // initialize keypad open
   stepSelection   =   1;
+  stripeEnabled    : boolean;
 
   paymentSummary$    : Observable<IPOSPaymentsOptimzed>;
   paymentSummary     : IPOSPaymentsOptimzed;
@@ -99,6 +103,8 @@ export class PosPaymentComponent implements OnInit {
               private paymentsMethodsService: PaymentsMethodsProcessService,
               private printingService :PrintingService,
               public  platFormService : PlatformService,
+              private uISettingsService: UISettingsService,
+              private dialog: MatDialog,
               private router          : Router,
               private fb              : FormBuilder) { }
 
@@ -115,8 +121,18 @@ export class PosPaymentComponent implements OnInit {
       searchModel.orderID = this.order.id
     }
 
-    this.refreshIsOrderPaid()
+    this.refreshIsOrderPaid();
     this.updateItemsPerPage();
+    this.initStripe();
+  }
+
+  initStripe() {
+    this.uISettingsService.getSetting('StripeAPISettings').subscribe(data => {
+      if (data) {
+        const stripeAPISettings   = JSON.parse(data.text) as StripeAPISettings;
+        this.stripeEnabled        = stripeAPISettings.enabled;
+      }
+    });
   }
 
   getPaymentMethods(site: ISite) {
@@ -258,7 +274,39 @@ export class PosPaymentComponent implements OnInit {
     return 0
   }
 
+  applyStripePayment() {
+    const order = this.order;
+    if (order) {
+      const data = {title: 'Payment', amount: order.balanceRemaining}
+      this.openStripePayment(data)
+    }
+    // <stripe-check-out
+    // (outPutPayment) ="processResults($event)"
+    // [maxAmount]="order.balanceRemaining"
+    // [amount]="order.balanceRemaining"><mat-icon>credit_card</mat-icon>Credit Card</stripe-check-out>
+  }
+
+  openStripePayment(data: any){
+    let dialogRef: any;
+    const site = this.sitesService.getAssignedSite();
+
+    dialogRef = this.dialog.open(StripeCheckOutComponent,
+      { width:        '450px',
+        minWidth:     '450px',
+        height:       '625px',
+        minHeight:    '625px',
+        data: data,
+      },
+    )
+    dialogRef.afterClosed().subscribe(result => {
+      if (!result) { return }
+      this.processResults(result)
+    });
+  }
+
+
   applyPaymentAmount(event) {
+
     if (!event) {  this.initPaymentForm(); return }
     if (this.order &&  this.paymentMethod) {
 
@@ -428,10 +476,10 @@ export class PosPaymentComponent implements OnInit {
     posPayment.amountReceived = amount;
     return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order)
 
-   }
+  }
 
   enterPointCashValue(event) {
-     //apply payment as cash value
+    //apply payment as cash value
     // if (this.posPayment && event && this.paymentMethod && this.order) {
     //   const amountPaid = event;
     //   if (this.order.balanceRemaining >= amountPaid)  {
@@ -487,25 +535,25 @@ export class PosPaymentComponent implements OnInit {
     }
   }
 
-    // Action triggered when user swipes
-    swipe(selectedIndex: any, action = this.SWIPE_ACTION.RIGHT) {
-      // Out of range
-      if ( selectedIndex < 0 || selectedIndex > 1 ) return;
+  // Action triggered when user swipes
+  swipe(selectedIndex: any, action = this.SWIPE_ACTION.RIGHT) {
+    // Out of range
+    if ( selectedIndex < 0 || selectedIndex > 1 ) return;
 
-      // Swipe left, next tab
-      if (action === this.SWIPE_ACTION.LEFT) {
-        const isLast = selectedIndex === 1;
-        selectedIndex = isLast ? 0 : selectedIndex + 1;
-        console.log("Swipe right - INDEX: " +  selectedIndex);
-      }
-
-      // Swipe right, previous tab
-      if (action === this.SWIPE_ACTION.RIGHT) {
-        const isFirst = selectedIndex === 0;
-        selectedIndex = isFirst ? 1 :  selectedIndex - 1;
-        console.log("Swipe left - INDEX: " + selectedIndex);
-      }
+    // Swipe left, next tab
+    if (action === this.SWIPE_ACTION.LEFT) {
+      const isLast = selectedIndex === 1;
+      selectedIndex = isLast ? 0 : selectedIndex + 1;
+      console.log("Swipe right - INDEX: " +  selectedIndex);
     }
+
+    // Swipe right, previous tab
+    if (action === this.SWIPE_ACTION.RIGHT) {
+      const isFirst = selectedIndex === 0;
+      selectedIndex = isFirst ? 1 :  selectedIndex - 1;
+      console.log("Swipe left - INDEX: " + selectedIndex);
+    }
+  }
 
   resetPaymentMethod() {
     this.initForms();

@@ -128,6 +128,15 @@ export class DSIEMVElectronComponent implements OnInit {
    }
   }
 
+  async MercuryPinPadReset(){
+    const transaction = this.inputForm.value as Transaction;
+    const response    = await this.dsiEMVService.mercuryPinPadReset(transaction);
+    this.responseMessage = 'failed'
+    if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
+      this.responseMessage = response.CmdResponse.TextResponse
+   }
+  }
+
   async downloadParams(){
     const response = await this.dsiEMVService.mercuryPinPadTest();
     this.responseMessage = 'failed'
@@ -160,4 +169,11 @@ export class DSIEMVElectronComponent implements OnInit {
     }
   }
 
+  async runCreateFile() {
+    const response = await this.dsiEMVService.runCreateFile();
+    this.responseMessage = 'failed'
+    if (response) {
+    this.responseMessage =  response
+    }
+  }
 }

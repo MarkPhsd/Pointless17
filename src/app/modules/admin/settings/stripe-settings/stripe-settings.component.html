@@ -1,0 +1,41 @@
+<mat-card >
+  <mat-card-subtitle>
+    <ng-content></ng-content>
+  </mat-card-subtitle>
+
+  <ng-template #loading>... loading
+    <mat-spinner [diameter]="25"></mat-spinner>
+  </ng-template>
+
+  <mat-card-content *ngIf="inputForm; else loading">
+
+    <div
+        [formGroup]="inputForm"
+        class="grid-views">
+
+        <div  class="mat-label">
+          <mat-slide-toggle
+              name="webMode"
+              class="mat-label"
+              [(ngModel)]="stripeEnabled"
+              formControlName="enabled">
+            <mat-label class="mat-label">Enabled</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+    </div>
+
+    <div class="grid-item">
+      <button mat-raised-button
+              color="primary"
+              (click)="updateSetting()"><mat-icon>save</mat-icon>Save
+      </button>
+    </div>
+
+    <div *ngIf="stripeEnabled">
+      <stripe-check-out [testMode]='true' [amount]="1">Test Transaction</stripe-check-out>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>

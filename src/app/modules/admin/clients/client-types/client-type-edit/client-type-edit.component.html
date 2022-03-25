@@ -1,140 +1,324 @@
-<div *ngIf="clientType">
+<div  class="container" *ngIf="clientType">
 
   <mat-card class="mat-card">
     <mat-card-title>
-      Client Type Edit: {{ clientType.name }}
+      <div class="header-container" >
+        <div>
+          <h4>
+           Client Type Edit: {{ clientType.name }}
+           </h4>
+        </div>
+
+        <div>
+          <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateItem($event)"
+              (outputupdateItemExit)  ="updateItemExit($event)"
+              (outputupdatedeleteItem)="deleteItem($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+              (outputCopy)            ="copyItem($event)"
+          ></app-edit-buttons-standard>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+
     </mat-card-title>
 
     <mat-card-subtitle>
-      <app-edit-buttons-standard
-          (outputeupdateItem)     ="updateItem($event)"
-          (outputupdateItemExit)  ="updateItemExit($event)"
-          (outputupdatedeleteItem)="deleteItem($event)"
-          (outputupdateonCancel)  ="onCancel($event)"
-          (outputCopy)            ="copyItem($event)"
-      ></app-edit-buttons-standard>
-      <mat-divider></mat-divider>
+
+
     </mat-card-subtitle>
+
     <mat-card-content>
 
       <div *ngIf="inputForm" [formGroup]="inputForm" >
 
-        <div class="grid-headers">
-          <div >
-            <h4>Description</h4>
-          </div >
-          <div>
-            <h4>Limits</h4>
-          </div>
-        </div>
+        <mat-tab-group mat-align-tabs="start"
+              md-stretch-tabs>
+        <mat-tab label="Features">
 
-        <div class="grid-headers">
-
-          <div  class="grid-fields name-height ">
-
+            <div class="grid-headers">
+              <div >
+                <h4>Description</h4>
+              </div >
               <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Display Name</mat-label>
-                  <input matInput
-                        type             ="text"
-                        formControlName  ="name"
-                        class="form-control" >
-                </mat-form-field>
+                <h4>Limits</h4>
+              </div>
+            </div>
+
+
+            <div class="grid-headers">
+
+              <div  class="grid-fields name-height ">
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label >Display Name</mat-label>
+                      <input matInput
+                            type             ="text"
+                            formControlName  ="name"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label >Point Value</mat-label>
+                      <input matInput
+                            type             ="text"
+                            formControlName  ="pointValue"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+
+                  <div>
+                    <mat-form-field appearance="outline">
+                      <mat-label >Daily Credit</mat-label>
+                      <input matInput
+                            type             ="text"
+                            formControlName  ="dailyCredit"
+                            class="form-control" >
+                    </mat-form-field>
+                  </div>
+
               </div>
 
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Point Value</mat-label>
-                  <input matInput
-                        type             ="text"
-                        formControlName  ="pointValue"
-                        class="form-control" >
-                </mat-form-field>
+              <!-- <mat-divider [vertical]="true"></mat-divider> -->
+              <div class="grid-fields">
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Daily Limit</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="dailyLimit"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Seeds</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="limitSeeds"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Plants</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="limitPlants"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Solids</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="limitSolid"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Concentrate</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="limitConcentrate"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+                <div>
+                  <mat-form-field appearance="outline">
+                    <mat-label >Extract</mat-label>
+                    <input matInput
+                          type             ="text"
+                          formControlName  ="limitExtract"
+                          class="form-control" >
+                  </mat-form-field>
+                </div>
+
+
+
+              </div>
+            </div>
+        </mat-tab>
+
+        <mat-tab label="Authorizations">
+          <h4>Auths</h4>
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="allowStaffUse" >
+              <mat-label>Allow Staff Use</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="grid-auths" *ngIf="jsonObjectForm" [formGroup]="jsonObjectForm">
+
+            <div>
+              <h3>Sales</h3>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="voidOrder" >
+                  <mat-label>Void Order</mat-label>
+                </mat-slide-toggle>
               </div>
 
-              <div>
-                <mat-form-field appearance="outline">
-                  <mat-label >Daily Credit</mat-label>
-                  <input matInput
-                        type             ="text"
-                        formControlName  ="dailyCredit"
-                        class="form-control" >
-                </mat-form-field>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="voidItem" >
+                  <mat-label>Void Item</mat-label>
+                </mat-slide-toggle>
               </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="voidPayment" >
+                  <mat-label>Void Payment</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="changeItemPrice" >
+                  <mat-label>Change Item Price</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="changeInventoryValue" >
+                  <mat-label>Change Inventory Value</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
+
+            <div>
+              <h3>Balance Sheets</h3>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="blindBalanceSheet" >
+                  <mat-label>Blind Balance Sheet</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+            </div>
+
+            <div>
+              <h3>End of Day</h3>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="blindClose" >
+                  <mat-label>Blind Close</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
+
+            <div>
+              <h4>Marketing</h4>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="sendTextBlast" >
+                  <mat-label>Send Text Blast</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="sendEmailBlast" >
+                  <mat-label>Send Email Blast</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
+
+
+            <div>
+              <h4>Reporting</h4>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="accessDailyReport" >
+                  <mat-label>Daily Report</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="accessHistoryReports" >
+                  <mat-label>History Reports</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
+
+            <div>
+              <h4>Inventory</h4>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="ImportMETRCPackages" >
+                  <mat-label>Import Metrc</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="adjustInventory" >
+                  <mat-label>Adjust Inventory</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="adjustInventoryCount" >
+                  <mat-label>Adjust Inventory Count</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="adjustProductCount" >
+                  <mat-label>Adjust Product Count</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
+
+            <div>
+              <h4>Admin</h4>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="addEmployee" >
+                  <mat-label>Add employees</mat-label>
+                </mat-slide-toggle>
+              </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="changeClientType" >
+                  <mat-label>Change User Type</mat-label>
+                </mat-slide-toggle>
+              </div>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="changeAuths" >
+                  <mat-label>Change Auths</mat-label>
+                </mat-slide-toggle>
+              </div>
+            </div>
 
           </div>
 
-          <!-- <mat-divider [vertical]="true"></mat-divider> -->
-          <div class="grid-fields">
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Daily Limit</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="dailyLimit"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
 
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Seeds</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="limitSeeds"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
+        </mat-tab>
 
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Plants</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="limitPlants"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
+      </mat-tab-group>
 
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Solids</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="limitSolid"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Concentrate</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="limitConcentrate"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
-
-            <div>
-              <mat-form-field appearance="outline">
-                <mat-label >Extract</mat-label>
-                <input matInput
-                      type             ="text"
-                      formControlName  ="limitExtract"
-                      class="form-control" >
-              </mat-form-field>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="allowStaffUse"
-                        >
-                <mat-label>Allow Staff Use</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-          </div>
-        </div>
       </div>
     </mat-card-content>
   </mat-card>

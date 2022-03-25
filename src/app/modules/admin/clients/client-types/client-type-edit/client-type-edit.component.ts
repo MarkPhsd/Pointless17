@@ -6,7 +6,7 @@ import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormGroup } from '@angular/forms';
 import { tap } from 'rxjs/operators';
-import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { clientType } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -24,6 +24,7 @@ export class ClientTypeEditComponent implements OnInit {
   bucketName             :string;
   awsBucketURL           :string;
   inputForm              :FormGroup;
+  jsonObjectForm         : FormGroup;
 
   constructor(
     private clientTypeService       : ClientTypeService,
@@ -56,6 +57,7 @@ export class ClientTypeEditComponent implements OnInit {
         {
             this.clientType = data
             this.id         = data.id
+            this.initJSONObjectForm(data.jsonObject)
             this.inputForm.patchValue(data)
           }
       )
@@ -65,6 +67,14 @@ export class ClientTypeEditComponent implements OnInit {
     }
 
   };
+
+  initJSONObjectForm(jsonObject: string) {
+    this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
+    if (jsonObject) {
+      const object = JSON.parse(jsonObject) as IUserAuth_Properties
+      this.jsonObjectForm.patchValue(object);
+    }
+  }
 
   initFormFields() {
     this.inputForm  = this.fbClientTypesService.initForm(this.inputForm)
@@ -76,14 +86,25 @@ export class ClientTypeEditComponent implements OnInit {
     return new Promise(resolve => {
         if (this.inputForm.valid) {
         const site = this.siteService.getAssignedSite()
-        const product$ = this.clientTypeService.saveClientType(site, this.inputForm.value)
-        product$.subscribe( data => {
-          this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
-          resolve(true)
-        }, error => {
-          this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-          resolve(false)
-        })
+        let jsonObject = {} as IUserAuth_Properties
+        if (this.jsonObjectForm) {
+          jsonObject = this.jsonObjectForm.value as IUserAuth_Properties;
+        }
+        let clientType = this.inputForm.value as clientType;
+        clientType.jsonObject = JSON.stringify(jsonObject);
+
+        const product$ = this.clientTypeService.saveClientType(site, clientType)
+        product$.subscribe( {
+            next: data => {
+                  this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
+                  resolve(true)
+                  },
+            error: error => {
+              this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+              resolve(false)
+              }
+            }
+          )
         }
       }
     )

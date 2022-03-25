@@ -1,4 +1,8 @@
+  @import "/src/mixins.scss";
 
+  .container {
+    overflow: hidden;
+  }
 .mat-input-element {
   font-size: 1em;
 }
@@ -9,10 +13,17 @@
 
 .mat-card {
    height: 99%;
+   overflow: hidden;
 }
 
 mat-card{
   margin:  5px ;
+}
+
+mat-tab  {
+  max-height: 300px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .name-height {
@@ -26,8 +37,35 @@ mat-card{
 
 }
 
+.grid-auths {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+  grid-gap: 10px;
+
+  max-height: 400px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+}
+
 .grid-fields {
   display: grid;
   grid-template-columns: 100px ;
   gap: 5px;
+}
+
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
 }

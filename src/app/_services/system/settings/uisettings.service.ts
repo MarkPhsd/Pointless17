@@ -21,6 +21,13 @@ export interface TransactionUISettings {
   enableLimitsView: boolean;
 }
 
+export interface StripeAPISettings {
+  id: number;
+  apiKey     : string;
+  apiSecret: string;
+  enabled: boolean;
+}
+
 export interface DSIEMVSettings {
   id        : number;
   HostOrIP  : string;
@@ -36,6 +43,7 @@ export interface DSIEMVSettings {
   PinPadIpPort: string;
   SequenceNo: string;
   DisplayTextHandle: string;
+  enabled: boolean;
 }
 
 export interface DSIEMVAndroidSettings {
@@ -113,6 +121,9 @@ export class UISettingsService {
   public  dsiEMVAndroidSettings$        = this._DSIEMVAndroidSettings.asObservable();
 
 
+  private _StripeAPISettings         = new BehaviorSubject<StripeAPISettings>(null);
+  public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
+
   updateHomePageSetting(ui: UIHomePageSettings) {
     this._homePageSetting.next(ui);
     this.uihomePageSetting = ui;
@@ -120,6 +131,10 @@ export class UISettingsService {
 
   updateUISubscription(ui: TransactionUISettings) {
     this._transactionUISettings.next(ui);
+  }
+
+  updateStripeAPISettings(ui: StripeAPISettings) {
+    this._StripeAPISettings.next(ui);
   }
 
   updateDSIEMVSettings(ui: DSIEMVSettings) {
@@ -148,6 +163,8 @@ export class UISettingsService {
       }
     })
 
+
+
     this.getSetting('UIHomePageSettings').subscribe(data => {
       const ui = {} as UIHomePageSettings
       if (data.text) {
@@ -155,16 +172,28 @@ export class UISettingsService {
         this.updateUISubscription(ui)
         return
       }
+
       if (!data.text) {
       }
     })
 
-    this.getDSIEMVSettings()
+    this.getStripeAPISettings();
 
+    this.getDSIEMVSettings()
+  }
+
+  getStripeAPISettings() {
+    this.getSetting('StripeAPISettings').subscribe(data => {
+      let ui = {} as StripeAPISettings
+      if (data.text) {
+       ui = JSON.parse(data.text) as StripeAPISettings
+      }
+      ui.id = data.id;
+      this.updateStripeAPISettings(ui)
+    })
   }
 
   getDSIEMVSettings() {
-
     this.getSetting('DSIEMVSettings').subscribe(data => {
       const ui = {} as DSIEMVSettings
       if (data.text) {
@@ -189,6 +218,14 @@ export class UISettingsService {
 
   }
 
+  ////////////// subscribeToStripedCachedConfig
+  async  subscribeToStripedCachedConfig(): Promise<StripeAPISettings> {
+    const setting = await this.getSetting('StripeAPISettings').toPromise();
+    const config = JSON.parse(setting.text) as StripeAPISettings
+    this.updateStripeAPISettings(config);
+    return config
+  }
+
   ////////////// TransactionUISettings
   async  subscribeToCachedConfig(): Promise<TransactionUISettings> {
     const setting = await this.getSetting('UITransactionSetting').toPromise();
@@ -200,8 +237,8 @@ export class UISettingsService {
   get homePageSetting(): UIHomePageSettings {
     if (this.uihomePageSetting) { return  this.uihomePageSetting }
   }
-  // UITransactionSetting
- async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
+    // UITransactionSetting
+  async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
     const setting = await this.getSetting(name).toPromise();
     const config = JSON.parse(setting.text) as UIHomePageSettings
     this.updateHomePageSetting(config);
@@ -224,8 +261,7 @@ export class UISettingsService {
     return this.setSetting(setting, name)
   }
 
-  //save setting returns promise
-  private  setSetting(uiSetting: any, name: string): Observable<ISetting> {
+  setSetting(uiSetting: any, name: string): Observable<ISetting> {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
 
@@ -238,15 +274,17 @@ export class UISettingsService {
       this.updateUISubscription(uiSetting)
     }
     if ( name == 'UIHomePageSettings' ) {
-      this.updateUISubscription(uiSetting)
+      this.updateHomePageSetting(uiSetting)
     }
     if ( name == 'DSIEMVSetting' ) {
-      this.updateUISubscription(uiSetting)
+      this.updateDSIEMVAndroidSettings(uiSetting)
     }
-    console.log('will put this setting', setting)
+    if ( name == 'StripeAPISettings' ) {
+      this.updateStripeAPISettings(uiSetting)
+    }
+
     return this.settingsService.putSetting(site, setting.id, setting)
   }
-
 
   initHomePageForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
@@ -288,7 +326,22 @@ export class UISettingsService {
       PinPadIpPort     : [''],
       SequenceNo       : [''],
       DisplayTextHandle: [''],
+      enabled: [''],
     })
+    return fb
+  }
+
+  initStripeAPISettingsForm(config: any, fb: FormGroup): FormGroup {
+
+    fb = this._fb.group({
+      id               : [''],
+      apiSecret        : [''],
+      apiKey           : [''],
+      enabled          : [''],
+    })
+
+    if (!config) { return fb}
+    fb.patchValue(config)
     return fb
   }
 
@@ -347,7 +400,7 @@ export class UISettingsService {
     return fb
   }
 
-   setFormValue(inputForm: FormGroup,
+  setFormValue(inputForm: FormGroup,
                      setting: ISetting,
                      name: string): Observable<ISetting> {
 
@@ -367,6 +420,10 @@ export class UISettingsService {
 
     if (name == 'DSIEMVSettings') {
       inputForm = this.initDSIEMVSettingsForm(config, inputForm);
+    }
+
+    if (name == 'StripeAPISettings') {
+      inputForm = this.initStripeAPISettingsForm(config, inputForm);
     }
     return inputForm
   }
@@ -395,6 +452,9 @@ export class UISettingsService {
     }
     if (name == 'DSIEMVSettings') {
       this.updateDSIEMVSettings(config)
+    }
+    if (name == 'StripeAPISettings') {
+      this.updateStripeAPISettings(config)
     }
   }
 

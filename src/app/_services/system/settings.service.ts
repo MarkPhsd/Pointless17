@@ -217,6 +217,8 @@ export class SettingsService {
 
   putSetting(site: ISite, id: number, setting : ISetting):  Observable<ISetting> {
 
+    if (!id) { return null}
+
     const controller = "/settings/"
 
     const endPoint = 'putSetting';

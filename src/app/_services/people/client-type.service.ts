@@ -3,7 +3,41 @@ import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { Observable, } from 'rxjs';
 import {clientType, ISite }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
+
+export interface IUserAuth_Properties {
+  // 'pos section
+   voidOrder : boolean;
+   voidItem : boolean;
+   voidPayment : boolean;
+   changeItemPrice : boolean;
+   changeInventoryValue : boolean;
+   blindBalanceSheet : boolean;
+   blindClose : boolean;
+
+  // 'admin section
+   closeDay : boolean;
+   sendTextBlast : boolean;
+   sendEmailBlast : boolean;
+
+   accessHistoryReports : boolean;
+   accessDailyReport : boolean;
+
+  // 'metrc work
+   importMETRCPackages : boolean;
+
+  // 'inventory work
+   adjustInventory : boolean;
+
+  // 'product work
+   adjustProductCount : boolean;
+
+  // 'add non customer types
+   addEmployee : boolean;
+   changeClientType : boolean;
+
+   changeAuths : boolean;
+
+}
 
 @Injectable({
   providedIn: 'root'

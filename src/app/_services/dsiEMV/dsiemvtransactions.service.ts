@@ -158,6 +158,41 @@ export class DSIEMVTransactionsService {
   //   wordApi.openWord();
   // }
 
+  async mercuryPinPadReset(transaction: Transaction): Promise<CmdResponse> {
+
+    if (!transaction) { return }
+
+    const tstream       = {} as TStream;
+    tstream.Transaction = transaction
+    const builder       = new XMLBuilder(null)
+    const xml           = builder.build(tstream);
+    console.log(xml)
+    let response        : any;
+
+    try {
+      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      response = await emvTransactions.PINPadReset(xml)
+    } catch (error) {
+      console.log('error', error)
+    }
+
+    if (response === 'reset failed') {
+      this.dsiResponse = 'Pin Pad Reset Failed'
+      return;
+    }
+
+    if (response) {
+      const parser  = new XMLParser(null);
+      this.dsiResponse =  parser.parse(response)
+      return this.dsiResponse;
+    }
+
+    const dsiResponse = {} as CmdResponse;
+    const cmdResponse = {} as CmdResponseClass
+    dsiResponse.CmdResponse = cmdResponse;
+    dsiResponse.CmdResponse.TextResponse
+    return dsiResponse;
+  }
  async pinPadReset(transaction: Transaction): Promise<CmdResponse> {
 
     if (!transaction) { return }
@@ -236,11 +271,17 @@ export class DSIEMVTransactionsService {
   }
 
   runEMVPadReset() {
-
     const xml = this.getResetXML()
-    const PadReset = this.electronService.remote.require('./transactions.ts');
-    const response = PadReset.EMVPadReset(xml);
+    const winax = this.electronService.remote.require('./datacap/transactions.js');
+    const response = winax.EMVPadReset(xml);
+    return response
+  }
 
+  runCreateFile() {
+    const xml = this.getResetXML()
+    const winax = this.electronService.remote.require('./datacap/transactions.js');
+    const response = winax.createFile();
+    return response
   }
 
   async getResetXML() {

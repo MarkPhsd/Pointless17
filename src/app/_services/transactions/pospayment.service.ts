@@ -63,6 +63,22 @@ export class POSPaymentService {
 
   }
 
+  makeStripePayment(site: ISite, payment: IPOSPayment, order: IPOSOrder): Observable<IPaymentResponse> {
+
+    const payLoad  = { amount: payment.amountPaid, order, payment }
+
+    const controller = '/POSPayments/'
+
+    const endPoint  = 'makeStripePayment'
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<IPaymentResponse>(url, payLoad);
+
+  }
+
   getPOSPayment(site: ISite, id: number, history: boolean): Observable<IPOSPayment> {
     const controller = '/POSPayments/'
 

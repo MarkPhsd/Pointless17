@@ -78,6 +78,15 @@
                     >
                     Select Payment Method
                   </app-mat-toggle-selector>
+
+                  <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
+                    <button class="payment-buttons"
+                        mat-raised-button
+                        (click)="applyStripePayment()">
+                      <mat-icon color="warn">credit_card</mat-icon>Credit Payment
+                    </button>
+                  </div>
+
                 </mat-card-content>
               </mat-card>
             </div>
@@ -173,6 +182,8 @@
             <div class="grid-header-item" *ngIf="stepSelection == 3">
               <mat-card class="card-dimensions">
                 <mat-card-content>
+
+
                   <div class="item-container"  *ngIf="paymentMethod">
                     <div>
                       <h4>
@@ -203,16 +214,18 @@
                       </button>
                     </span>
                   </div>
-                  <div class="item-container ">
-                    <app-key-pad
-                        [inputForm]        ="paymentAmountForm"
-                        [inputTypeValue]   ="'decimal'"
-                        [showInput]        ="showInput"
-                        [numberbuttons]    ="'number-buttons button-sized-scaled'"
-                        [alternateClass]   ="'grid-keypad-alternate'"
-                        (outPutReturnEnter)="applyPaymentAmount($event)">
-                        Enter Payment
-                    </app-key-pad>
+                  <div *ngIf="platFormService.isApp">
+                    <div class="item-container ">
+                      <app-key-pad
+                          [inputForm]        ="paymentAmountForm"
+                          [inputTypeValue]   ="'decimal'"
+                          [showInput]        ="showInput"
+                          [numberbuttons]    ="'number-buttons button-sized-scaled'"
+                          [alternateClass]   ="'grid-keypad-alternate'"
+                          (outPutReturnEnter)="applyPaymentAmount($event)">
+                          Enter Payment
+                      </app-key-pad>
+                    </div>
 
                   </div>
                 </mat-card-content>

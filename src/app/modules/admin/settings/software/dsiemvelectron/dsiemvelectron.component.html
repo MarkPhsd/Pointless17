@@ -9,12 +9,17 @@
 
   <mat-card-content>
 
+    <div *ngIf="responseMessage">
+      Respsonse:  {{responseMessage}}
+    </div>
+
     <div  *ngIf="inputForm; else loading"
           [formGroup]="inputForm"
           class="grid-views">
 
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'MerchantID'">
@@ -23,6 +28,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'TerminalID'">
@@ -31,6 +37,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'OperatorID'">
@@ -39,6 +46,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'IpPort'">
@@ -47,6 +55,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'UserTrace'">
@@ -55,6 +64,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'TranCode'">
@@ -63,6 +73,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'SecureDevice'">
@@ -71,6 +82,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'ComPort'">
@@ -79,6 +91,7 @@
         </div>
         <div class="grid-item">
           <app-value-fields
+              [fieldsClass]   ="'field-small'"
               [fieldType]     ="'number'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'PinPadIpPort'">
@@ -123,31 +136,24 @@
         </button>
       </div>
 
-      <div class='item-span'
-           *ngIf="responseMessage">
-        <h4> {{responseMessage}} </h4>
-      </div>
-
-      <div *ngIf="isElectron"  class="grid-item">
-        <button mat-raised-button
-                color="primary"
-                (click)="testActiveX()">test Activex
-        </button>
-      </div>
-
-
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
                 (click)="initPinPadResetForm()">Set Pin Pad Reset Values
         </button>
       </div>
+
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
                 (click)="pinPadReset()">Test Reset
         </button>
       </div>
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div  class="grid-views text-container">
       <div *ngIf="pathForm" [formGroup]="pathForm">
         <div class="grid-item">
           <app-value-fields
@@ -159,9 +165,20 @@
         </div>
       </div>
 
-      <div *ngIf="responseMessage">
-        Respsonse:  {{responseMessage}}
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="testActiveX()">Test Activex
+        </button>
       </div>
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="runCreateFile()">Test Create File
+        </button>
+      </div>
+
+
 
     </div>
   </mat-card-content>

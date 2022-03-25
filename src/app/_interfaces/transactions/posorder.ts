@@ -163,6 +163,7 @@ export interface ClientType {
   limitExtract:      number;
   limitConcentrates: number;
   allowStaffUse    : boolean;
+  jsonObject      : string;
 }
 
 
@@ -507,6 +508,7 @@ export interface IPOSPayment {
   beginDate:           string;
   endDate:             string;
   orderID:             number;
+  transactionData     : string;
   history           :  boolean;
 }
 

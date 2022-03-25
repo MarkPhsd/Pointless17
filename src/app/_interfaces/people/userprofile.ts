@@ -106,6 +106,7 @@ export interface clientType {
   limitExtract:      number;
   limitConcentrates: number;
   allowStaffUse:    boolean;
+  jsonObject       : string;
 }
 
 export interface employee {

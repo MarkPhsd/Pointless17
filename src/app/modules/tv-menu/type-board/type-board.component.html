@@ -1,0 +1,22 @@
+<div >
+  <mat-card>
+    <div class="grid-flow prices border">
+      <div>Species</div>
+      <div>Name</div>
+      <div>THC</div>
+      <div>Shelf</div>
+      <div>Price</div>
+    </div>
+
+   <mat-divider></mat-divider>
+
+    <div class="eighth-menu "
+         *ngIf="(eighthMenu$ | async) as list">
+      <app-strain-card
+          *ngFor="let item of list"
+          [item]="item">
+      </app-strain-card>
+    </div>
+
+  </mat-card>
+</div>

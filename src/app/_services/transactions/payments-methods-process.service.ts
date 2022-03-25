@@ -1,16 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
-import { IPaymentResponse, IPOSOrder, IPOSPayment, IPOSPaymentsOptimzed, ISite }   from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
-import { catchError, concatMap, exhaustMap, map, mergeMap, switchMap, tap } from 'rxjs/operators';
-import { IPagedList } from '../system/paging.service';
-import { IItemBasic } from '../menu/menu.service';
+import { IPaymentResponse, IPOSOrder, IPOSPayment,  ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Capacitor, Plugins } from '@capacitor/core';
-import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
 import { IPaymentMethod } from './payment-methods.service';
 import { POSPaymentService } from './pospayment.service';
 

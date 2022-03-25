@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { MatDialog } from '@angular/material/dialog';
+
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { StrainProductEditComponent } from 'src/app/modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
@@ -30,12 +30,13 @@ import { concatMap, map } from 'rxjs/operators';
 import { Observable,  } from 'rxjs';
 import { UnitTypePromptComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/unit-type-prompt/unit-type-prompt.component';
 import { EmployeeMetrcKeyEntryComponent } from 'src/app/modules/admin/employees/employee-metrc-key-entry/employee-metrc-key-entry.component';
+import { StripeCheckOutComponent } from 'src/app/modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 export interface IBalanceDuePayload {
   order: IPOSOrder;
   paymentMethod: IPaymentMethod;
   payment: IPOSPayment;
 }
-
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Injectable({
   providedIn: 'root'
@@ -77,6 +78,7 @@ export class ProductEditButtonService {
     return dialogRef;
 
   }
+
 
   openNewItemSelector() {
     let dialogRef: any;
@@ -369,8 +371,8 @@ export class ProductEditButtonService {
     dialogRef = this.dialog.open(ClientTypeEditComponent,
       { width:        '60vw',
         minWidth:     '800px',
-        height:       '60vh',
-        minHeight:    '600px',
+        height:       '725px',
+        minHeight:    '725px',
         data : id
       },
     )
