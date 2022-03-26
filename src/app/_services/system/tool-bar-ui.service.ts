@@ -24,6 +24,11 @@ export class ToolBarUIService {
 
   private _barSize    = new BehaviorSubject<boolean>(null);
   public  barSize$    = this._barSize.asObservable();
+
+  private _departmentID    = new BehaviorSubject<number>(null);
+  public  departmentID$    = this._barSize.asObservable();
+  departmentID: number;
+
   private barSize   : boolean;
 
   private toolBar   : boolean;
@@ -37,16 +42,21 @@ export class ToolBarUIService {
     this._orderBar.next(false)
   }
 
+  updateDepartSearch(id) {
+    this._departmentID.next(id)
+    this.departmentID = 0
+  }
+
+  updateDepartmentMenu(item) {
+    this._departmentMenu.next(item)
+  }
+
   resizeWindow() {
     setTimeout(() => {
       window.dispatchEvent(
         new Event('resize')
       );
     }, 300);
-  }
-
-  updateDepartmentMenu(item) {
-    this._departmentMenu.next(item)
   }
 
 

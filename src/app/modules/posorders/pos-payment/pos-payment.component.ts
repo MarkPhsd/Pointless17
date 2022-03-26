@@ -293,8 +293,8 @@ export class PosPaymentComponent implements OnInit {
     dialogRef = this.dialog.open(StripeCheckOutComponent,
       { width:        '450px',
         minWidth:     '450px',
-        height:       '625px',
-        minHeight:    '625px',
+        height:       '675px',
+        minHeight:    '675px',
         data: data,
       },
     )

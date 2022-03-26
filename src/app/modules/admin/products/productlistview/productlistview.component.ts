@@ -177,7 +177,7 @@ constructor(  private _snackBar              : MatSnackBar,
   setBrandID(event) {
     if (event && event.id) {
       this.brandID = event.id
-      this.refreshSearch();
+      this.refreshSearch(1);
     }
   }
 
@@ -251,7 +251,7 @@ constructor(  private _snackBar              : MatSnackBar,
   refreshSearchPhrase(event) {
     const item = { itemName: event }
     this.searchForm.patchValue(item)
-    this.refreshSearch();
+    this.refreshSearch(1);
   }
 
   //ag-grid
@@ -360,7 +360,7 @@ constructor(  private _snackBar              : MatSnackBar,
     this.productTypeSearch = 0;
     this.brandID           = 0
     this.initForm()
-    this.refreshSearch()
+    this.refreshSearch(1);
   }
 
 
@@ -383,31 +383,33 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.barcode    = searchModel.name
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
+
     return searchModel;
   }
 
   refreshCategoryChange(event) {
     this.categoryID = event;
-    this.refreshSearch();
+    this.refreshSearch(1);
   }
 
   refreshDepartmentChange(event) {
     this.departmentID = event;
-    this.refreshSearch();
+    this.refreshSearch(1);
   }
 
   refreshProductTypeChange(event) {
     this.productTypeSearch = event;
-    this.refreshSearch();
+    this.refreshSearch(1);
   }
 
   refreshActiveChange(event) {
     this.viewAll = event;
-    this.refreshSearch();
+    this.refreshSearch(1);
   }
 
-  refreshSearch() {
+  refreshSearch(page: number) {
     const site               = this.siteService.getAssignedSite()
+    if (page != 0) { this.currentPage         = page}
     const productSearchModel = this.initSearchModel();
     console.log(productSearchModel)
     this.onGridReady(this.params)

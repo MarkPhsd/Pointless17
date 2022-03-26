@@ -1,6 +1,14 @@
 // @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 @import "/src/mixins.scss";
 
+:host .mat-menu-panel {
+  padding   : 10px   !important;
+  margin-top: 15px  !important;
+  width     : 100%!important;
+  min-width : 300px;
+  overflow-x: hidden;
+}
+
 :host {
     .mat-icon {
       vertical-align: middle;
@@ -29,12 +37,7 @@
   width: 95%;
 }
 
-// mat-sidenav-container {
-//   // min-width: 125px !important;
-//   border-right: 1px solid #eee;
-//   box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
-//   background-color:rgb(55, 55, 59);
-// }
+
 
 .sidenav-container {
   height: 200vh;
@@ -193,3 +196,5 @@ mat-radio-button {
   right: 45px;
   font-size: 60px;
 }
+
+

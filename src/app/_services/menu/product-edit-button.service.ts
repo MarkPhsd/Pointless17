@@ -133,7 +133,7 @@ export class ProductEditButtonService {
     dialogRef = this.dialog.open(PromptGroupEditComponent,
       { width:        '500px',
         minWidth:     '500px',
-        height:       '65vh',
+        height:       '650px',
         minHeight:    '650px',
         data : id
       },
@@ -145,9 +145,9 @@ export class ProductEditButtonService {
     let dialogRef: any;
 
     dialogRef = this.dialog.open(PromptSubGroupEditComponent,
-      { width:        '50vh',
-        minWidth:     '500px',
-        height:       '65vh',
+      { width:        '555px',
+        minWidth:     '555px',
+        height:       '650px',
         minHeight:    '650px',
         data : id
       },
@@ -157,9 +157,9 @@ export class ProductEditButtonService {
   openPriceEditor(data: IPriceCategories) {
     let dialogRef: any;
     dialogRef = this.dialog.open(PriceCategoriesEditComponent,
-      { width:        '75vw',
+      { width:        '800px',
         minWidth:     '800px',
-        height:       '85vh',
+        height:       '750px',
         minHeight:    '600px',
         data : data
       },
@@ -169,9 +169,9 @@ export class ProductEditButtonService {
   openPriceTierEditor(data: PriceTiers) {
     let dialogRef: any;
     dialogRef = this.dialog.open(PriceTierEditComponent,
-      { width:        '75vw',
+      { width:        '800px',
         minWidth:     '800px',
-        height:       '85vh',
+        height:       '650px',
         minHeight:    '600px',
         data : data
       },
@@ -181,7 +181,7 @@ export class ProductEditButtonService {
   openUnitTypeEditor(data: UnitType) {
     let dialogRef: any;
     dialogRef = this.dialog.open(UnitTypeEditComponent,
-      { width:        '50vw',
+      { width:        '600px',
         minWidth:     '500px',
         height:       '420px',
         minHeight:    '420px',

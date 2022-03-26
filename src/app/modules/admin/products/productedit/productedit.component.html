@@ -4,9 +4,9 @@
 </ng-template>
 
 <div  [formGroup]="productForm"
-      id="fullProductName"
-      class="container"
-      *ngIf="product && productForm; else loading" >
+      id         ="fullProductName"
+      class      ="container"
+      *ngIf      ="product && productForm; else loading" >
 
   <mat-card class='mat-card-info'>
     <mat-card-title >
@@ -61,27 +61,27 @@
             <div class="grid-container">
 
               <div class="grid-item">
-                  <app-value-fields
+                <app-value-fields
+                    [inputForm]="productForm"
+                    [fieldName]="'fullProductName'">
+                    Long Name
+                </app-value-fields>
+
+                <app-value-fields
                       [inputForm]="productForm"
-                      [fieldName]="'fullProductName'">
-                      Long Name
-                  </app-value-fields>
+                      [fieldName]="'name'">
+                  Name
+                </app-value-fields>
 
-                  <app-value-fields
-                        [inputForm]="productForm"
-                        [fieldName]="'name'">
-                    Name
-                  </app-value-fields>
+                <app-category-select   [inputForm]="productForm"> </app-category-select>
+                <app-department-select [inputForm]="productForm"> </app-department-select>
+                <product-type-select   [inputForm]="productForm"> </product-type-select>
 
-                  <app-category-select   [inputForm]="productForm"> </app-category-select>
-                  <app-department-select [inputForm]="productForm"> </app-department-select>
-                  <product-type-select   [inputForm]="productForm"> </product-type-select>
-
-                  <app-brand-type-select
-                                    [formFieldClass]= "'formFieldClass-standard'"
-                                    [id]            = "brandID.value"
-                                    [inputForm]     = "productForm">
-                  </app-brand-type-select>
+                <app-brand-type-select
+                                  [formFieldClass]= "'formFieldClass-standard'"
+                                  [id]            = "brandID.value"
+                                  [inputForm]     = "productForm">
+                </app-brand-type-select>
               </div>
 
               <div class="grid-item">
@@ -105,45 +105,44 @@
 
                 <div class="grid-item">
 
-
-                <div class="meta-tags"
-                     *ngIf="product && product.metaTags">
-                  <app-meta-tag-chips
-                   (outPutItemTags) ="setItemTags($event)"
-                   [product]        ="product"
-                   [inputForm]      ="productForm"></app-meta-tag-chips>
-                </div>
-
-                <div class="meta-tags"
-                     *ngIf="product && !product.metaTags">
-                  <app-meta-tag-chips
+                  <div class="meta-tags"
+                      *ngIf="product && product.metaTags">
+                    <app-meta-tag-chips
                     (outPutItemTags) ="setItemTags($event)"
                     [product]        ="product"
-                    [inputForm]      ="productForm">
-                  </app-meta-tag-chips>
+                    [inputForm]      ="productForm"></app-meta-tag-chips>
+                  </div>
+
+                  <div class="meta-tags"
+                      *ngIf="product && !product.metaTags">
+                    <app-meta-tag-chips
+                      (outPutItemTags) ="setItemTags($event)"
+                      [product]        ="product"
+                      [inputForm]      ="productForm">
+                    </app-meta-tag-chips>
+                  </div>
                 </div>
+
+                <div class="grid-item">
+                  <div>
+                    <app-value-fields
+                      [inputForm]="productForm"
+                      [fieldName]="'icon'">
+                      Material Icon
+                    </app-value-fields>
+                  </div>
+
+                  <div>
+                    <mat-card class="image-container">
+                      <app-widget-uploader
+                          [(fileNames)]="urlImageMain"
+                          (messageOut) ="received_URLMainImage($event)"
+                          (imageUrl)   ="updateUrlImageMain($event)">
+                        Images
+                      </app-widget-uploader>
+                    </mat-card>
+                  </div>
               </div>
-
-              <div class="grid-item">
-                <div>
-                  <app-value-fields
-                    [inputForm]="productForm"
-                    [fieldName]="'icon'">
-                    Material Icon
-                  </app-value-fields>
-                </div>
-
-                <div>
-                  <mat-card class="image-container">
-                    <app-widget-uploader
-                        [(fileNames)]="urlImageMain"
-                        (messageOut) ="received_URLMainImage($event)"
-                        (imageUrl)   ="updateUrlImageMain($event)">
-                      Images
-                    </app-widget-uploader>
-                  </mat-card>
-                </div>
-            </div>
             </div>
           </mat-tab>
 
@@ -152,29 +151,29 @@
           </mat-tab>
         </mat-tab-group>
       </div>
-  </mat-card-content>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
 
-<mat-card >
+  <mat-card >
 
-  <div class="document-content">
-    <mat-divider></mat-divider>
-    <mat-label>Short Description </mat-label><br>
-    <simple-tinymce name="onlineShortDescription"
-                    cols="50" rows="15"
-                    formControlName="onlineShortDescription"
-                    [(ngModel)]="onlineShortDescription">
-    </simple-tinymce>
+    <div class="document-content">
+      <mat-divider></mat-divider>
+      <mat-label>Short Description </mat-label><br>
+      <simple-tinymce name="onlineShortDescription"
+                      cols="50" rows="15"
+                      formControlName="onlineShortDescription"
+                      [(ngModel)]="onlineShortDescription">
+      </simple-tinymce>
 
-    <mat-label>Description </mat-label><br>
-    <simple-tinymce cols="50"
-                    rows="25"
-                    style="height: 400px;"
-                    name="onlineDescription"
-                    formControlName="onlineDescription"
-                    [ngModel]="onlineDescription">
-    </simple-tinymce>
-  </div>
+      <mat-label>Description </mat-label><br>
+      <simple-tinymce cols="50"
+                      rows="25"
+                      style="height: 400px;"
+                      name="onlineDescription"
+                      formControlName="onlineDescription"
+                      [ngModel]="onlineDescription">
+      </simple-tinymce>
+    </div>
+  </mat-card>
 
-</mat-card>
 </div>

@@ -21,6 +21,8 @@ import { UIHomePageSettings, UISettingsService } from '../_services/system/setti
 
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  departmentID     =0
+
   pages = new      Array(10);
   itemChange$:     Observable<number>;
   next$:           Observable<number>;
@@ -106,9 +108,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this._department  = this.toolBarUIService.departmentMenu$.subscribe( data => {
       if (!data) {
         this.department = null
+        this.departmentID  = 0;
         return
       }
       this.department = data;
+      this.departmentID = data.id
     })
 
     this.searchBarWidthSubscription = this.toolBarUIService._searchBarWidth$.subscribe(data => {

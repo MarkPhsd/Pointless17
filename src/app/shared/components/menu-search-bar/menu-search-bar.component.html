@@ -190,24 +190,27 @@
 
    <div class="grid-item-departments"
          *ngIf="!multifilter">
-      <app-mat-toggle-selector
-          *ngIf            = "(departments$ | async) as list"
-          (outPutItem)     = "refreshDepartmentSearch($event)"
-          [mouseOver]      = "true"
-          [showIcon]       = "'true'"
-          [textLength]     = "21"
-          [toggleDimensions]="'toggle-group-tall'"
-          [toggleHeight]   = "'toggle-buttons-height-size-tall'"
-          [list]           = "list">
-      </app-mat-toggle-selector>
+      <ng-container>
+        <app-mat-toggle-selector
+            *ngIf            = "(departments$ | async) as list"
+            (outPutItem)     = "refreshDepartmentSearch($event)"
+            [mouseOver]      = "true"
+            [showIcon]       = "'true'"
+            [textLength]     = "21"
+            [toggleDimensions] ="'toggle-group-tall'"
+            [toggleHeight]     = "'toggle-buttons-height-size-tall'"
+            [list]             = "list"
+          >
+        </app-mat-toggle-selector>
+      </ng-container>
     </div>
   </div>
+
+
+
+
 
 </mat-sidenav-container>
 
 
 
-<!--
-[matMenuTriggerFor]="menu"
-#menuTrigger="matMenuTrigger"
-(mouseenter)="menuTrigger.openMenu()" -->

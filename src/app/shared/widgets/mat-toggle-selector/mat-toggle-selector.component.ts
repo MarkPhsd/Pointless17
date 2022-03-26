@@ -98,8 +98,8 @@ export class MatToggleSelectorComponent implements OnChanges {
       console.log(this.mouseOver)
       return
     }
+    this.outPutID.emit(item)
 
-    console.log(item)
     if (!item) { return }
     if (this.useMatMenu) {
       this.departmentID = item.id;

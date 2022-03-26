@@ -20,12 +20,9 @@ app-sticky-header {
   height: 75px;
   display: flex;
 }
-.department-menu {
-  z-index: 1001;
-}
-.animations {
 
-}
+
+
 .mat-content {
   overflow: hidden;
 }
@@ -34,6 +31,7 @@ mat-drawer-container {
   height: 96%;
   padding-top: -5px;
   overflow: hidden;
+
 }
 
 mat-drawer-content {
@@ -76,7 +74,6 @@ mat-sidebar {
   }
 }
 
-
 .mat-drawer-toolbar {
   width: 190px;
   box-shadow: 3px 0 6px rgba(0,0,0,.24);
@@ -102,4 +99,34 @@ mat-sidebar {
   box-shadow: 3px 0 3px rgba(0,0,0,.24);
 }
 
+.department-menu {
+  z-index: 1001;
+}
+/* The Overlay (background) */
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */
+  height: 98%;
+  width: 85%;
+  position: fixed; /* Stay in place */
+  z-index: 100; /* Sit on top */
+  margin: 5px;
+  padding: 5px;
+  opacity: 95%;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
 
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  left: 0; /* 25% from the top */
+  width: 100%; /* 100% width */
+  margin: 5px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}

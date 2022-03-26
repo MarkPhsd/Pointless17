@@ -1,42 +1,79 @@
+
 <div   class="panel"
        *ngIf="(departments$ | async) as list; else loading">
 
   <div *ngFor="let item of list">
+
+    <div class="fab-container">
+      <button mat-fab  class="mat-fab-close" (click)="close()"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div class="content-position">
+      <div  class="description">
+        <div [innerHtml]="item.onlineShortDescription"></div>
+      </div>
+      <div class="image-layout">
+        <img [src]="getItemSrc(item.urlImageMain)">
+      </div>
+    </div>
+
     <mat-card>
       <mat-card-subtitle>
 
-        <span class="item-font">
-          <span [class]="'mdi ' + item.icon"></span>
-        </span>
-        <span class="item-text">
-          {{item.name}}
-        </span>
+        <div class="title-container">
+          <div>
+            <span class="item-font">
+            <span [class]="'mdi ' + item.icon"></span>
+                  </span>
+                  <span class="item-text">
+                    {{item.name}}
+            </span>
+          </div>
+        </div>
+
 
       </mat-card-subtitle>
+
       <mat-card-content>
-        <div class="categories"
-             *ngFor="let cat of item.categories">
 
-          <button mat-button (click)="categoryList(cat)">
-            <div class="grid-toggle-tiny">
-              <div class="item-font">
-                <span [class]="'mdi ' + cat.icon"></span>
-              </div>
-              <div class="item-text">
-                {{cat.name}}
-              </div>
+        <div class="menu-container">
+
+          <div class="categories">
+            <div  *ngFor="let cat of item.categories">
+              <button class="menu-button" mat-raised-button color="primary" (mouseover)="categoryListDisplay(cat)" (click)="categoryList(cat)">
+                <div class="grid-toggle-tiny">
+                  <div class="item-font" *ngIf="cat.icon && cat.icon !=''">
+                    <span [class]="'mdi ' + cat.icon"></span>
+                  </div>
+                  <div class="item-text">
+                    {{cat.name}}
+                  </div>
+                </div>
+              </button>
             </div>
-          </button>
+          </div>
+
+          <div class="categories" *ngIf="item.categories && categoryID && categoryID != 0 &&  (subCategories$ | async) as list" >
+
+              <button  *ngFor="let item of list" class="menu-button" mat-raised-button  color="primary"
+                       (mouseover)="subCategoryList(item)" (click)="subCategoryListDisplay(item)">
+
+                <div class="grid-toggle-tiny">
+                  <div class="item-font-category" *ngIf="item.icon && item.icon !=''">
+                    <span [class]="'mdi ' + item.icon"></span>
+                  </div>
+                  <div class="item-text-category">
+                    {{item.name}}
+                  </div>
+                </div>
+
+              </button>
+
+          </div>
+
         </div>
 
-        <div class="content-position">
-          <div  class="description">
-            <div [innerHtml]="item.onlineShortDescription"></div>
-          </div>
-          <div class="image-layout">
-            <img [src]="getItemSrc(item.urlImageMain)">
-          </div>
-        </div>
+
 
       </mat-card-content>
     </mat-card>
@@ -44,5 +81,5 @@
 </div>
 
 <ng-template #loading>
-  <mat-spinner [diameter]="50"></mat-spinner>
+  <mat-spinner [diameter]="20"></mat-spinner>
 </ng-template>

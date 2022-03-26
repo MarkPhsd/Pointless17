@@ -1,71 +1,30 @@
 @import "/src/mixins.scss";
 
-// .panel {
-//   color: #FFF;
-//   height: 80vh;
-//   width: 100%;
-//   min-width: 320px;
-//   position: relative;
-//   top: 0;
-//   z-index: 1100;
-//   padding: 3px;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   background-color: #555;
-//   box-shadow: -5px 0 40px 0px rgba(87,73,86,0.69);
-
-//   left: 245px;
-//   @include for-phone-only  {
-//     left: 65px;
-//   }
-// }
-
 .panel {
-  z-index: 1003;
-}
-.categories {
   overflow-y: auto;
   overflow-x: hidden;
 }
 
-.grid-toggle-tiny {
-  display: grid;
-  grid-template-columns: minmax(50px, 1fr) 1fr
+.fab-container {
+  z-index: 1006;
+  top: 10px;
+  right:0;
+  margin-right: 65px;
+  margin-top: 10px;
+  position:absolute;
 }
 
-:host {
-  .mat-button {
-    text-align: left;
-    }
-}
-
-mat-card {
-  height:  85vh !important;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.item-text {
-  font-size: 1.25rem;
-}
-
-.item-font {
-  font-size: 1.5rem;
-  margin-left: 10px;
-}
-
-.heading {
-  font-size: 1.1em;
-  align-items: center;
-  text-align: center;
+.mat-fab-close {
+  opacity: 70%;
 }
 
 .content-position{
+  z-index: 999;
   margin: 5px;
   position:absolute;
-  bottom:0;
+  top: 10px;
   right:0;
+  border-radius: 5px;
 
   @include for-phone-only  {
     margin: 5px;
@@ -75,17 +34,126 @@ mat-card {
   }
 }
 
+
 .image-layout {
-  opacity: 65%;
+  opacity: 70%;
   border-radius: 5%;
+  max-height: 300px;
+  object-fit: cover;
+  width: 300px;
 }
+
+
+
+.menu-container {
+
+  display: grid;
+  grid-template-columns: 275px 275px;
+  gap: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @include for-phone-only {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+.grid-toggle-tiny {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+}
+
+// .grid-toggle-tiny {
+//   display: grid;
+//   grid-template-columns: minmax(50px, 0px) 120px;
+// }
+
+
+
+:host {
+  .mat-button {
+    text-align: left;
+
+  }
+}
+
+mat-card {
+  height:  85vh !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+mat-raised-button {
+  width: 175px;
+}
+
+.item-text {
+  font-size: 1.5rem;
+}
+
+.item-font {
+  font-size  : 1.5rem;
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  max-width: 175px;
+  min-width: 175px;
+}
+
+.item-text-category {
+  font-size: 1.5rem;
+}
+
+.item-font-category {
+  font-size  : 1.5rem;
+  margin-left: 10px;
+  text-overflow: ellipsis;
+  max-width: 175px;
+  min-width: 175px;
+}
+
+.sub-category {
+  position: relative;
+  left: 45px;
+  margin-left: 45px;
+}
+
+.heading {
+  font-size: 1.1em;
+  align-items: center;
+  text-align: center;
+}
+
+
 
 .description{
   margin: 5px;
 }
 
-.grid-toggle-tiny {
-  display: grid;
-  grid-template-columns: minmax(45px, 50px) 300px
+
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px;
 }
 
+.categories {
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  margin: 5px;
+  width: 440px;
+  z-index: 1005;
+}
+
+.menu-button {
+  margin: 15px;
+  // max-width: 220px;
+  height: 55px;
+  min-width: 265px
+}

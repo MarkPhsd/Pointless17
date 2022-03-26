@@ -2,7 +2,7 @@ import { Component, OnInit, Output, EventEmitter,
         HostBinding, Renderer2, HostListener, OnDestroy, OnChanges } from '@angular/core';
 import { FormBuilder,FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { CompanyService,AuthenticationService, OrdersService, MessageService, AWSBucketService, } from 'src/app/_services';
+import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Observable, of, Subject, Subscription,   } from 'rxjs';
@@ -66,10 +66,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   showTableLayout     =   false;
   scaleName           :   any;
   scaleValue          :   any;
-  smallDevice         : boolean;
-  isUserStaff         = false;
-  isAdmin             = false;
-  isUser              = false;
+  smallDevice         :   boolean;
+  isUserStaff         =   false;
+  isAdmin             =   false;
+  isUser              =   false;
   _order              :   Subscription;
   order               :   IPOSOrder;
 
@@ -133,7 +133,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
-              private awsBucketService      : AWSBucketService,
               private fb                    : FormBuilder ) {
   }
 
@@ -162,7 +161,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initUserOrder();
     this.updateScreenSize();
   }
-
 
   //if there is a current order for this user, then we can assign it here.
   initUserOrder(){

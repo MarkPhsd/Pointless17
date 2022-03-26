@@ -1,4 +1,5 @@
-    <img *ngIf="url && !isApp"
+
+ <img *ngIf="url && !isApp"
       loading="lazy"
       draggable="false"
       [src]="url"
@@ -8,7 +9,7 @@
   <div class="grid-container">
   <div  [class]="gridHeaderApp">
 
-  <img *ngIf="url && isApp"
+  <img *ngIf=" url && isApp"
         loading="lazy"
         draggable="false"
         [src]="url"

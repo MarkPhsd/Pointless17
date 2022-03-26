@@ -40,13 +40,6 @@
               class="product-image"
               (click)="menuItemAction(false)"/>
 
-
-          <!-- <img  *ngIf="isCategory"
-                [src]="imageUrl"
-                onerror   = "this.src='../assets/images/placeholderimage.png'"
-                class="category-img"
-                (click)="menuItemAction(true)"/> -->
-
         <div class="round-container">
           <img  *ngIf="isCategory"
             [src]="imageUrl"
@@ -62,6 +55,9 @@
 
   <div *ngIf="!isApp && imageUrl" class="product-name">
     {{ menuItem.name  | truncateText: 30   }}
+  </div>
+  <div  class="product-name" *ngIf="!menuItem.itemType" >
+    Type Required.
   </div>
 
   <div *ngIf="!isApp">
@@ -81,7 +77,8 @@
               id="price">
           {{menuItem.retail | currency}}
       </div>
-      <div>
+
+      <div *ngIf="menuItem.itemType">
           <button
                 *ngIf="isApp"
                 mat-mini-fab

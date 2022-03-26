@@ -1,5 +1,25 @@
-<h3><ng-content></ng-content></h3>
-<h3>{{title}}</h3>
+<div class="grid-header">
+
+  <div>
+    <h3><ng-content></ng-content></h3>
+    <h3>{{title}}</h3>
+  </div>
+
+  <div>
+    <button class="cancel-button"
+            mat-fab
+            color="warn"
+            *ngIf="!testMode && elementsOptions?.clientSecret as clientSecret"
+            (click)="cancel()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+</div>
+
+<ng-template #loading>....loading stripe</ng-template>
+
+<div *ngIf="errorMessage">{{errorMessage}}</div>
 
 <mat-divider></mat-divider>
 
@@ -7,24 +27,24 @@
             && cardOptions
             && paymentForm
             && stripeAPISetting
-           && stripeInstance"
+            && stripeInstance; else loading"
      [formGroup]="paymentForm"
-     class="container">
+     class      ="container">
 
     <app-value-fields
-        [inputForm]="paymentForm"
-        [fieldName]="'name'"
+        [inputForm]  ="paymentForm"
+        [fieldName]  ="'name'"
         [fieldsClass]="'fields-small'"
         required>
         Customer Name
     </app-value-fields>
 
     <app-value-fields
-        [enabled]  = "true"
-        [fieldType]="'number'"
-        [inputForm]="paymentForm"
-        [fieldName]="'amount'"
-        [fieldsClass]="'fields-small'"
+        [enabled]    = "true"
+        [fieldType]  = "'number'"
+        [inputForm]  = "paymentForm"
+        [fieldName]  = "'amount'"
+        [fieldsClass]= "'fields-small'"
         required>
         Amount
     </app-value-fields>
@@ -41,14 +61,14 @@
       <ngx-stripe-payment [clientSecret]="clientSecret">
       </ngx-stripe-payment>
     </ng-container>
-    <button mat-raised-button
+
+    <button class="pay-button"
+            mat-raised-button
+            color="primary"
             *ngIf="elementsOptions?.clientSecret as clientSecret"
             (click)="pay()">PAY {{paymentForm?.value?.amount | currency }}
     </button>
 
-    <ng-template #loading>
-      ...loading stripe.
-    </ng-template>
 
   </div>
 

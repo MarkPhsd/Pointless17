@@ -46,6 +46,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   _apiSetting      : Subscription;
   stripeAPISetting : StripeAPISettings;
   stripeInstance   : StripeInstance;
+  errorMessage     : string;
 
   elements:  Element;
   // card: StripeElement;
@@ -95,11 +96,16 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
       this.order = data;
     })
 
+
+
+
+
   }
 
   initStripeIntent() {
     this.uISettingsService.stripeAPISettings$.pipe(
       switchMap(data => {
+
         if (data) {
           if (!this.amount) { this.amount = 1 }
           this.stripeAPISetting  = data;
@@ -109,10 +115,16 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         return  this.createPaymentIntent(this.amount)
       }
     )).subscribe(data => {
+      console.log('initStripeIntent', data)
       this.elementsOptions.clientSecret =  data.clientSecret;
+      this.errorMessage = data.errorMessage;
     })
 
     this.stripeInstance.confirmPayment
+  }
+
+  cancel() {
+    this.dialogRef.close();
   }
 
   validateAmount() {
@@ -124,22 +136,22 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   }
 
   constructor(
-    private uISettingsService: UISettingsService,
-    private matSnack         : MatSnackBar,
-    private fb               : FormBuilder,
-    private stripeService    : StripeService,
-    private orderService     : OrdersService,
-    private posPaymentService   : POSPaymentService,
-    public dialogRef: MatDialogRef<StripeCheckOutComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    private sitesService     : SitesService,
-    private stripePaymentService: StripePaymentService) {
-      if (this.data) {
-        this.amount = data?.amount;
-        this.maxAmount = data?.amount;
-        this.title = data?.title;
-      }
+                private uISettingsService: UISettingsService,
+                private matSnack         : MatSnackBar,
+                private fb               : FormBuilder,
+                private stripeService    : StripeService,
+                private orderService     : OrdersService,
+                private posPaymentService   : POSPaymentService,
+                public dialogRef: MatDialogRef<StripeCheckOutComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: any,
+                private sitesService     : SitesService,
+                private stripePaymentService: StripePaymentService) {
+    if (this.data) {
+      this.amount = data?.amount;
+      this.maxAmount = data?.amount;
+      this.title = data?.title;
     }
+  }
 
   ngOnInit() {
     if (this.amount == 0) { this.amount = 1}
@@ -160,6 +172,12 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
       name  : ['', [Validators.required]],
       amount: [this.amount, [Validators.required, Validators.pattern(/\d+/)]],
     });
+
+    this.paymentForm.valueChanges.subscribe(data => {
+      console.log(data)
+      this.validateAmount();
+      this.initStripeIntent();
+    })
   }
 
   ngOnDestroy() {
@@ -184,7 +202,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
 
     this.createPaymentIntent(this.amount).subscribe(data => {
       this.elementsOptions.clientSecret =  data.clientSecret;
-      // console.log(this.elementsOptions)
+      this.errorMessage = data.errorMessage;
     })
   }
 

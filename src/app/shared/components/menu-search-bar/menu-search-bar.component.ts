@@ -381,7 +381,7 @@ constructor(
   refreshDepartmentSearch(item: any) {
 
     if (!item) { return }
-    // console.log(item)
+
     if (this.smallDevice) {
       this.tinyDepartmentFilter = true;
     }
@@ -393,14 +393,8 @@ constructor(
 
     this.department    = item;
     this.departmentID  = item.id;
+    this.toolBarUIService.updateDepartmentMenu(item)
     if (!item)  { return }
-    this.router.navigate(
-      [
-        "/department-list", { value: this.searchIncrementer, id: item.id}
-      ]
-    )
-    // this.openMenu()
-
   }
 
   openMenu() {

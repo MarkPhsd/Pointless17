@@ -154,7 +154,8 @@
     <mat-divider></mat-divider>
 
     <div  class="grid-views text-container">
-      <div *ngIf="pathForm" [formGroup]="pathForm">
+      <div *ngIf="pathForm"
+           [formGroup]="pathForm">
         <div class="grid-item">
           <app-value-fields
               [fieldType]     ="'text'"
@@ -164,7 +165,6 @@
           </app-value-fields>
         </div>
       </div>
-
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
@@ -177,9 +177,6 @@
                 (click)="runCreateFile()">Test Create File
         </button>
       </div>
-
-
-
     </div>
   </mat-card-content>
 

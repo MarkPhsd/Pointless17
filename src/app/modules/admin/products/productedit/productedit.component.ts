@@ -50,7 +50,7 @@ export class ProducteditComponent implements  OnInit  {
   // get urlImageOther_ctl() { return this.productForm.get("departmentID") as FormControl;}
   // get urlImageMain_ctl()  { return this.productForm.get("departmentID") as FormControl;}
   priceCategories: IPriceCategories;
-  displayContent         :boolean;
+  displayContent        : boolean;
   bucketName:             string;
   awsBucketURL:           string;
   dispatcherID          : number
@@ -62,10 +62,10 @@ export class ProducteditComponent implements  OnInit  {
   departments$ : Observable<IMenuItem[]>;
   departments  : IMenuItem[];
 
-  itemType                = {} as IItemType;
+  itemType     = {} as IItemType;
 
   product = {} as IProduct;
-  result: any;
+  result  : any;
   onlineDescription = '';
   onlineShortDescription = '';
   productTypeID: number;
@@ -114,14 +114,13 @@ export class ProducteditComponent implements  OnInit  {
 
   async initializeForm()  {
 
-    this.initFormFields()
+    this.initFormFields();
     const site = this.siteService.getAssignedSite();
 
     if (this.productForm && this.id) {
       this.product$ = this.menuService.getProduct(site, this.id).pipe(
           tap(data => {
-            // console.log(data)
-            this.product = data
+            this.product         = data
             this.priceCategoryID = this.product.priceCategory
             this.itemTags        = this.product.metaTags;
             this.productForm.patchValue(this.product)
@@ -142,6 +141,7 @@ export class ProducteditComponent implements  OnInit  {
         this.itemType = data
       })
     }
+
   };
 
   initFormFields() {
@@ -151,7 +151,6 @@ export class ProducteditComponent implements  OnInit  {
   setValues(): boolean {
     this.product  = this.fbProductsService.setProductValues(this.product, this.productForm)
     if (this.product) {
-      // // //not form values
       this.product.urlImageMain  = this.urlImageMain
       this.product.urlImageOther = this.urlImageOther
       return true
@@ -166,24 +165,25 @@ export class ProducteditComponent implements  OnInit  {
         this.setNonFormValues()
         const site = this.siteService.getAssignedSite()
         const product$ = this.menuService.saveProduct(site, this.product)
-        product$.subscribe( data => {
-          this.notifyEvent('Item Updated', 'Success')
-          resolve(true)
-        }, error => {
-          this.notifyEvent(`Update item. ${error}`, "Failure")
-          resolve(false)
-        })
+        product$.subscribe( {
+          next: data => {
+                this.notifyEvent('Item Updated', 'Success')
+                resolve(true)
+              },
+          error: error => {
+                this.notifyEvent(`Update item. ${error}`, "Failure")
+                resolve(false)
+              }
+          }
+        )
        }
       }
     )
-
   };
 
   async updateItemExit(event) {
     const result = await this.updateItem(event)
-    if (result) {
-      this.onCancel(event);
-    }
+    if (result) { this.onCancel(event);  }
   }
 
   onCancel(event) {
@@ -215,8 +215,7 @@ export class ProducteditComponent implements  OnInit  {
   setNonFormValues() {
     if (this.product && this.productForm) {
 
-      this.product = this.productForm.value;
-
+      this.product                          = this.productForm.value;
       this.product.fullProductName          = this.fullProductName.value
       if (this.name.value == '') { this.product.name  = this.product.fullProductName }
       this.product.metaTags                 = this.itemTags;
@@ -233,7 +232,7 @@ export class ProducteditComponent implements  OnInit  {
       if (this.onlineDescription)  {
         this.product.onlineDescription      = this.onlineDescription
       }
-      // // //not form values
+
       this.product.urlImageMain             = this.urlImageMain
       this.product.urlImageOther            = this.urlImageOther
     }
@@ -282,7 +281,6 @@ export class ProducteditComponent implements  OnInit  {
         }
       });
     }
-    // console.log('images',images)
     return images
   }
 
@@ -292,7 +290,6 @@ export class ProducteditComponent implements  OnInit  {
   }
 
   getProductTypeID(event) {
-    // console.log(event)
     if (event) {
       this.productTypeID = event
     }

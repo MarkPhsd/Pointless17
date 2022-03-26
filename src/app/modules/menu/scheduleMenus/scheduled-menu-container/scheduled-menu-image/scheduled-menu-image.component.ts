@@ -1,34 +1,34 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { AWSBucketService } from 'src/app/_services';
-import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
-  selector: 'app-scheduled-menu-image',
+  selector: 'scheduled-menu-image',
   templateUrl: './scheduled-menu-image.component.html',
   styleUrls: ['./scheduled-menu-image.component.scss']
 })
-export class ScheduledMenuImageComponent implements OnInit {
-
-  @Input() url: string;
-  @Input() description: string;
-  @Input() name: string;
-  @Input() isApp: boolean;
-  @Input()  item:                IPriceSchedule;
-  @Input() hideButton : boolean;
-  href : string;
+export class ScheduledMenuImageComponent implements OnInit, OnChanges {
   // @OutPut() outPutToggleView = new EventEmitter()<any>;
-  showAllFlag: boolean;
-  iconName   = 'expand';
-  textShow = 'Show More..'
+
+  @Input() url        : string;
+  @Input() description: string;
+  @Input() name       : string;
+  @Input() isApp      : boolean;
+  @Input() item:        IPriceSchedule;
+  @Input() hideButton : boolean;
+
+  href          : string;
+
+  showAllFlag   : boolean;
+  iconName      = 'expand';
+  textShow      = 'Show More..'
   @Output() outPutToggleView = new EventEmitter<boolean>();
-  gridItemImage= 'grid-item-image'
+  gridItemImage = 'grid-item-image'
   gridHeaderApp = 'header-grid';
-  bucket: string;
+  bucket        : string;
 
   constructor(
     private awsBucketService:       AWSBucketService,
@@ -43,11 +43,21 @@ export class ScheduledMenuImageComponent implements OnInit {
       this.gridItemImage= 'grid-item-image-app'
       this.gridHeaderApp = 'header-grid-app';
     }
+  }
+
+  async ngOnChanges() {
     this.setTitle()
     await this.getImageUrl();
   }
 
   async getImageUrl() {
+    this.url = ''
+    if (this.item && this.item.image) {
+      this.bucket = await this.awsBucketService.awsBucketURL()
+      this.url = `${this.bucket}${this.item.image}`
+      return
+    }
+
     if (this.url) { return }
     this.isApp = this.platFormService.isApp();
     this.bucket = await this.awsBucketService.awsBucketURL()

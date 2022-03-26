@@ -38,13 +38,14 @@
           </app-key-pad>
         </div>
 
-        <div class="tip-button-grid"  *ngIf="paymentMethod.isCreditCard">
+        <div class="tip-button-grid"
+             *ngIf="paymentMethod.isCreditCard">
 
           <div class="action-center">
               <button class="tip-button"
                       mat-button
                       (click)="specifiedTip(15)">Tip 15 % </button>
-              <br>
+
               <div class="action-center-column">
                 {{ payment.amountPaid * (15/100) | currency }}
               </div>
@@ -52,13 +53,11 @@
 
           <div class="action-center">
               <button  class="tip-button" mat-button (click)="specifiedTip(18)">Tip 18 %  </button>
-              <br>
               {{ payment.amountPaid * (18/100) | currency }}
           </div>
 
           <div class="action-center">
               <button  class="tip-button" mat-button (click)="specifiedTip(20)">Tip 20 %  </button>
-              <br>
               {{ payment.amountPaid * (20/100) | currency  }}
           </div>
         </div>

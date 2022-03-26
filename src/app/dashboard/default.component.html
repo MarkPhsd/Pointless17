@@ -38,7 +38,13 @@
           <router-outlet #outlet="outlet"></router-outlet>
       </div> -->
 
-      <div  class="animations"
+      <div *ngIf="departmentID && departmentID !=0" class="overlay">
+          <app-department-menu
+            [departmentID]="departmentID">
+          </app-department-menu>
+      </div>
+
+      <div class="animations"
            [@routeAnimations]="prepareRoute(outlet)" >
           <router-outlet #outlet="outlet"></router-outlet>
       </div>

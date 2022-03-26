@@ -1,42 +1,35 @@
 @import "/src/mixins.scss";
 
 .mat-card {
-  width: 100%;
-  margin: 5px;
+  // width : 100%;
+  // margin: 5px;
 }
 
 .tip-button-grid {
-  display: flex;
-  flex-wrap: wrap;
+  display       : flex;
+  flex-wrap     : wrap;
   flex-direction: row;
-  margin-top: 10px;
-  margin-bottom: 10px;
-
+  margin-top    : 5px;
+  margin-bottom : 5px;
 
   @include for-phone-only  {
-    display: flex;
-    flex-wrap: wrap;
+    display       : flex;
+    flex-wrap     : wrap;
     flex-direction: row;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    // width: 125px;
+    margin-top    : 5px;
+    margin-bottom : 5px;
   }
-
-}
-
-margin {
-  margin-bottom: 20px;
 }
 
 .mat-content {
   min-height: 300px;
-  height: 300px;
+  height    : 300px;
 }
 
 .tip-grid {
-  display:grid;
+  display              : grid;
   grid-template-columns: 1rf;
-  gap: 5px;
+  gap                  : 5px;
 }
 
 .action-center {
@@ -46,8 +39,7 @@ margin {
   justify-content : center ;
   align-items     : baseline;
   align-content   : center;
-  margin          : 10px;
-
+  margin          : 5px;
 }
 
 .action-center-column {
@@ -57,7 +49,7 @@ margin {
   justify-content :center ;
   align-items     : baseline;
   align-content   : center;
-  margin-left     : 10px;
+  margin-left     : 5px;
 
   @include for-phone-only  {
   display         : flex;
@@ -67,48 +59,31 @@ margin {
     align-items     : baseline;
     align-content   : center;
     margin-left     : 5px;
-
   }
 
 }
 
 mat-icon {
-  margin-left: 10px;
-  margin-right: 10px;
+  margin-left:  5px;
+  margin-right: 5px;
   font-size: x-large;
-
   @include for-phone-only  {
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-left:  5px;
+    margin-right: 5px;
     font-size: 1em;
   }
 }
 
 .tip-button {
-
-  // width: 150px;
-  // height: 75px;
-  // font-size: 2em;
-
-  width: 150px;
-
-  font-size: x-large;
-  margin: 10px;
-  padding: 0;
-  height: 100px;
-  // margin-bottom: -20px;
-  // margin-top: -20px;
-
+  width     : 150px;
+  font-size : x-large;
+  margin    : 10px;
+  padding   : 0;
+  height    : 75px;
   @include for-phone-only  {
     width: 125px;
-    // height: 45px;
     font-size: medium;
-    // overflow: hidden;
     margin: 10px;
     height: 45px;
   }
-
 }
-
-
-

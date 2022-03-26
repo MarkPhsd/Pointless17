@@ -94,8 +94,6 @@ export class MenuService {
 
   site: ISite;
 
-
-
   constructor(
               private httpCache: HttpClientCacheService,
               private httpClient: HttpClient,
@@ -345,6 +343,22 @@ export class MenuService {
 
   }
 
+  getGetCategoriesListByID(site: ISite, type: string, id: number):  Observable<IMenuItem[]>  {
+
+    const controller =  '/MenuItems/'
+
+    const endPoint = 'getGetCategoriesListByID'
+
+    const parameters = `?TypeofCategoryasName=${type}&id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const uri =  this.sitesService.getCacheURI(url)
+
+    return  this.httpCache.get<any[]>(uri)
+
+  }
+
   getGetCategoriesListAll(site: ISite, type: string):  Observable<IMenuItem[]>  {
 
     const controller =  '/MenuItems/'
@@ -403,6 +417,10 @@ export class MenuService {
 
   getListOfSubCategories(site: ISite):  Observable<IMenuItem[]>  {
     return this.getGetCategoriesList(site, `subcategory`);
+  }
+
+  getListOfSubCategoriesByCategory(site: ISite, id: number):  Observable<IMenuItem[]>  {
+    return this.getGetCategoriesListByID(site, `subcategory`, id);
   }
 
   getListOfCategoriesAll(site: ISite):  Observable<IMenuItem[]>  {

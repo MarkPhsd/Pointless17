@@ -29,3 +29,26 @@ button  {
 mat-input {
   font-size: small;
 }
+
+.pay-button {
+  margin-top: 15px;
+  float: right;
+  height: 60px;
+}
+.cancel-button {
+  margin-top: 15px;
+  height: 60px;
+}
+
+.grid-header {
+
+  --gap: 5px;
+  display: flex;
+  gap: var(--gap);
+  flex-direction: row;
+  justify-content: space-between;
+  // grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+  overflow-y: visible;
+  max-width: 420px;
+
+}

@@ -70,7 +70,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   getIsNonProduct(menuItem: IMenuItem): boolean {
     if (!menuItem) { return false}
     if (menuItem) {
-      if (!menuItem.itemType)   {return false}
+      if (!menuItem.itemType)   {
+        // this.orderMethodService.notifyEvent('This item has no type, please contact administrator.', 'Error')
+        return false
+      }
       if (menuItem.itemType.type === 'discounts') { return false}
       if (menuItem.itemType.type === 'grouping') {
         this.isCategory = true;
@@ -108,11 +111,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
     } else {
       return this.awsBucket.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
-      // return this.awsBucketService.getImageURLPath(this.bucketName, item.urlImageMain)
     }
   }
 
   menuItemAction(add: boolean) {
+  console.log('menu Item Action',this.menuItem)
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
   }
 

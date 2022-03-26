@@ -3,9 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AWSBucketService, IDepartmentList, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { trigger,state,style,animateChild,transition,animate,keyframes,query,stagger } from '@angular/animations';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
   selector: 'app-department-menu',
@@ -48,8 +49,13 @@ import { ISite } from 'src/app/_interfaces';
 export class DepartmentMenuComponent implements OnInit, OnDestroy {
 
   @Input() departmentID: number;
+  categoryID: number;
+  subCateogryID: number;
+
   id: any;
   departments$: any;
+  items: any[];
+  subCategories$ : Observable<IMenuItem[]>;
   textLength: 20;
   bucketName: string;
   department : IDepartmentList;
@@ -60,11 +66,14 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
     this._department    = this.toolBarUIService.departmentMenu$.subscribe( data => {
       if (!data) {
         this.department = null
+        this.departmentID = 0
         return
       }
       this.department   = data;
       this.departments$ = this.menuService.getGetDepartment(this.site, data.id)
     })
+
+
   }
 
   constructor(
@@ -105,15 +114,50 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
   refreshDepartment(id: number) {
     const site = this.siteService.getAssignedSite();
     this.departments$ = this.menuService.getGetDepartment(site, id)
+    this.categoryID = 0
   }
 
   categoryList(event) {
     if (!event) { return }
     this.router.navigate(["/menuitems-infinite/", {categoryID:event.id }]);
+    this.categoryID = event.id
+    this.close();
+  }
+  categoryListDisplay(event) {
+    console.log('categoryListDisplay event', event)
+    if (!event) { return }
+    this.router.navigate(["/menuitems-infinite/", {categoryID:event.id }]);
+    this.categoryID = event.id
+    this.getListOfSubCategories( this.categoryID )
+  }
+
+  subCategoryListDisplay(event) {
+    if (!event) { return }
+    this.router.navigate(["/menuitems-infinite/", {subCategoryID:event.id }]);
+    this.subCateogryID = event.id
+    this.getListOfSubCategories( this.categoryID );
+    this.close();
+  }
+
+  subCategoryList(event) {
+    console.log('subCategoryList event', event)
+    if (!event) { return }
+    this.subCateogryID = event.id
+    this.router.navigate(["/menuitems-infinite/", {subCategoryID:event.id }]);
+  }
+
+  getListOfSubCategories(id: number) {
+    const site = this.siteService.getAssignedSite();
+    this.subCategories$ = this.menuService.getListOfSubCategoriesByCategory(site, id)
   }
 
   getItem() {
 
+  }
+
+  close() {
+    this.toolBarUIService.updateDepartSearch(0)
+    this.toolBarUIService.updateDepartmentMenu(null)
   }
 
   getItemSrc(imageName) {

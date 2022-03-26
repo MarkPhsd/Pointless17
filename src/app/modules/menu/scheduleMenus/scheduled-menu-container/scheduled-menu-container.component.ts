@@ -121,9 +121,11 @@ export class ScheduledMenuContainerComponent implements OnInit {
 
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
       const i = 0;
+      this.bucket = await this.awsBucketService.awsBucketURL()
     }
+
     initScheduleMenus() {
       const site = this.siteService.getAssignedSite();
       const search =  {} as IPriceSearchModel

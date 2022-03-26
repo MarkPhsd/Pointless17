@@ -125,11 +125,14 @@ export class OrderMethodsService {
     }
   }
 
-  ///1. List item. 2. Add Item 3. View Sub Groups of Items.
-  //either move to s
+  ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const searchResults = this.updateMenuSearchModel(item)
     if (searchResults) { return }
+
+    console.log('item.itemType', item.itemType)
+    console.log('item.itemType.name', item.itemType.name)
+
     if (add) {
       if (item && item.itemType.requireInStock) {
         this.listItem(item.id);
@@ -139,35 +142,6 @@ export class OrderMethodsService {
       return
     }
     this.listItem(item.id);
-  }
-
-  updateMenuSearchModel(item: IMenuItem) : boolean {
-    if (!item) {   return false }
-
-    const model =  {} as ProductSearchModel;
-    if (item.itemType.name.toLowerCase() == 'category') {
-      console.log('updateMenuSearchModel categoryID', item, item.itemType.name)
-      model.categoryID   = item.categoryID.toString()
-      this.menuService.updateMeunuItemData(model)
-      this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
-      return true
-    }
-    if (item.prodModifierType == 5) {
-      console.log('updateMenuSearchModel subCategory', item, item.itemType.name)
-      model.subCategory  = item.id.toString()
-      this.menuService.updateMeunuItemData(model)
-      this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
-      return true
-    }
-    if (item.prodModifierType == 6) {
-      model.departmentID = item.id.toString()
-      this.menuService.updateMeunuItemData(model)
-      console.log('updateMenuSearchModel departmentID', item, item.itemType.name)
-      this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
-      return true
-    }
-
-    return false
 
   }
 
@@ -180,6 +154,34 @@ export class OrderMethodsService {
     if (!add) {
       this.openPopupItem()
     }
+  }
+
+  updateMenuSearchModel(item: IMenuItem) : boolean {
+    if (!item) {   return false }
+
+
+    const model =  {} as ProductSearchModel;
+    if (item.itemType.name.toLowerCase() == 'category') {
+      model.categoryID   = item.categoryID.toString()
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
+      return true
+    }
+    if (item.prodModifierType == 5) {
+      model.subCategory  = item.id.toString()
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
+      return true
+    }
+    if (item.prodModifierType == 6) {
+      model.departmentID = item.id.toString()
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
+      return true
+    }
+
+    return false
+
   }
 
   getPopUpWidth(defaultSize: string) {
@@ -214,8 +216,6 @@ export class OrderMethodsService {
       },
     )
 
-    //panelClass: 'custom-dialog-container'
-
     dialogRef.afterClosed().subscribe(result => {
       return result;
     });
@@ -232,7 +232,6 @@ export class OrderMethodsService {
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number, portionValue: string, packaging: string): Observable<ItemPostResults> {
     if (!order || !barcode) {return null;}
-
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue  } as NewItem
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }

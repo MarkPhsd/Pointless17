@@ -1,10 +1,13 @@
 <div *ngIf="item">
+
   <mat-card>
     <div *ngIf="item">
-      <app-scheduled-menu-image
+
+      <scheduled-menu-image
           [hideButton]="true"
+          [url]="bucket+item.image"
           [item]="item">
-      </app-scheduled-menu-image>
+      </scheduled-menu-image>
     </div>
     <div *ngIf="item.type.toLowerCase() != 'menu list'">
       <scheduled-menu-header
