@@ -53,19 +53,19 @@
     </div>
   </div>
 
-  <div *ngIf="!isApp && imageUrl" class="product-name">
+  <div class="product-name">
     {{ menuItem.name  | truncateText: 30   }}
   </div>
   <div  class="product-name" *ngIf="!menuItem.itemType" >
     Type Required.
   </div>
 
-  <div *ngIf="!isApp">
+  <div>
 
-    <div id="advertisement">
+    <div *ngIf="!isApp" id="advertisement">
     </div>
 
-    <div class="product-name" id="star-rating">
+    <div class="product-name" id="star-rating" *ngIf="!isApp">
       <div  *ngIf="isProduct && menuItem.ratingAverage && menuItem.ratingCount &&
               menuItem.ratingAverage != 0 && menuItem.ratingCount != 0">
         reviews:  {{menuItem.ratingAverage}} rating: {{menuItem.ratingCount}}
@@ -74,7 +74,7 @@
 
     <div fxFill class="price-grid">
       <div *ngIf="isProduct && !isCategory"
-              id="price">
+           id="price">
           {{menuItem.retail | currency}}
       </div>
 

@@ -346,7 +346,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleSideBar() {
-    this.outPutToggleSideBar.emit(!this.openOrderBar)
+    console.log(!this.openOrderBar)
+    this.openOrderBar = !this.openOrderBar
+    this.outPutToggleSideBar.emit(this.openOrderBar)
     this.toolbarUIService.switchToolBarSideBar()
   }
 
@@ -377,6 +379,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   siteSelector() {
+    this.toolbarUIService.updateDepartmentMenu(0);
     const dialogRef = this.dialog.open( SiteSelectorComponent,
       { width:     '350',
         height:    '90vh',

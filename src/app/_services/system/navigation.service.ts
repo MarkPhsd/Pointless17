@@ -13,13 +13,15 @@ export class NavigationService {
     ) { }
 
   navHome(){
+    this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
       this.router.navigate(['/app-main-menu']);
     });
   }
 
   navPOSOrders() {
-    this.toolbarUIService.hidetoolBars()
+    this.toolbarUIService.hidetoolBars();
+    this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/pos-orders']);
   }
 }

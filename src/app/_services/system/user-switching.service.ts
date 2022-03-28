@@ -16,6 +16,7 @@ import { PlatformService } from './platform.service';
 import { EncryptionService } from '../encryption/encryption.service';
 import { BalanceSheetMethodsService } from '../transactions/balance-sheet-methods.service';
 import { ElectronService } from 'ngx-electron';
+import { ToolBarUIService } from './tool-bar-ui.service';
 
 export interface ElectronDimensions {
   height: string;
@@ -52,23 +53,23 @@ export class UserSwitchingService {
   }
 
   constructor(
-    private router          : Router,
-    private http            : HttpClient,
-    private siteService     : SitesService,
-    private employeeService : EmployeeService,
-    private dialog          : MatDialog,
+    private router           : Router,
+    private http             : HttpClient,
+    private siteService      : SitesService,
+    private employeeService  : EmployeeService,
+    private dialog           : MatDialog,
     private authenticationService: AuthenticationService,
-    private orderService    : OrdersService,
-    private contactsService : ContactsService,
+    private orderService     : OrdersService,
+    private contactsService  : ContactsService,
     private sheetMethodsService: BalanceSheetMethodsService,
-    private paymentService  : POSPaymentService,
-    private snackBar        : MatSnackBar,
-    private appInitService  : AppInitService,
-    private route           : ActivatedRoute,
-    private platformService : PlatformService,
+    private paymentService   : POSPaymentService,
+    private snackBar         : MatSnackBar,
+    private appInitService   : AppInitService,
+    private route            : ActivatedRoute,
+    private platformService  : PlatformService,
     private encryptionService: EncryptionService,
-
-    private electronService: ElectronService
+    private toolbarUIService : ToolBarUIService,
+    private electronService  : ElectronService
   ) {
     this.initSubscriptions();
     this.initializeAppUser();
@@ -113,6 +114,7 @@ export class UserSwitchingService {
   }
 
   clearLoggedInUser() {
+    this.toolbarUIService.updateDepartmentMenu(0);
     this.authenticationService.logout();
     this.orderService.updateOrderSubscriptionClearOrder(0)
   }
@@ -218,6 +220,7 @@ export class UserSwitchingService {
   }
 
   navigateToOrders(){
+    this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigateByUrl('/pos-orders')
   }
 
@@ -234,10 +237,6 @@ export class UserSwitchingService {
       },
     )
   }
-
-
-
-
 
   processLogin(user: IUser) {
     //login the user based on the message response of the user.
@@ -274,6 +273,7 @@ export class UserSwitchingService {
   }
 
   async  browseMenu() {
+    this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/app-main-menu']);
   }
 
@@ -291,7 +291,7 @@ export class UserSwitchingService {
     }
 
     this.router.navigate([returnUrl]);
-    // this.browseMenu();
+
   }
 
 

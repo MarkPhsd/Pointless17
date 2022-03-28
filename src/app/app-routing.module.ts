@@ -110,7 +110,8 @@ import { FunctionGroupListComponent } from './modules/admin/settings/function-gr
 import { FunctionGroupEditComponent } from './modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
 import { StrainBoardComponent } from './modules/tv-menu/strainBoard/strain-board/strain-board.component';
 import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
-import { GridMenuLayoutComponent } from './modules/tv-menu/grid-menu-layout/grid-menu-layout.component';
+import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
+import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 
 
 const routes: Routes = [
@@ -268,7 +269,7 @@ const routes: Routes = [
       ]
     },
 
-    { path:  'menu-board-designer',   component: GridMenuLayoutComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    { path:  'menu-board-designer',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
     { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
 
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},

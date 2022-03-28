@@ -38,22 +38,37 @@
 
         <div class="menu-container">
 
-          <div class="categories">
-            <div  *ngFor="let cat of item.categories">
-              <button class="menu-button" mat-raised-button color="primary" (mouseover)="categoryListDisplay(cat)" (click)="categoryList(cat)">
-                <div class="grid-toggle-tiny">
-                  <div class="item-font" *ngIf="cat.icon && cat.icon !=''">
-                    <span [class]="'mdi ' + cat.icon"></span>
+          <div>
+            <div class="categories" *ngFor="let item of item.categories">
+
+              <div>
+                <button class="menu-button"
+                        mat-raised-button
+                        (mouseover)="categoryListDisplay(item)"
+                        (click)="categoryList(item)">
+                  <div class="grid-toggle-tiny">
+                    <div class="item-font" *ngIf="item.icon && item.icon !=''">
+                      <span [class]="'mdi ' + item.icon"></span>
+                    </div>
+                    <div class="item-text">
+                      {{item.name}}
+                    </div>
                   </div>
-                  <div class="item-text">
-                    {{cat.name}}
-                  </div>
-                </div>
-              </button>
+                </button>
+              </div>
+
+              <div class="mat-fab-expand">
+                <button *ngIf="item.id==categoryID"
+                        mat-fab color="primary"
+                        (click)="categoryListNavigate(item)">
+                  <mat-icon>expand</mat-icon>
+                </button>
+              </div>
+
             </div>
           </div>
 
-          <div class="categories" *ngIf="item.categories && categoryID && categoryID != 0 &&  (subCategories$ | async) as list" >
+          <div class="sub-categories" *ngIf="item.categories && categoryID && categoryID != 0 &&  (subCategories$ | async) as list" >
 
               <button  *ngFor="let item of list" class="menu-button" mat-raised-button  color="primary"
                        (mouseover)="subCategoryList(item)" (click)="subCategoryListDisplay(item)">

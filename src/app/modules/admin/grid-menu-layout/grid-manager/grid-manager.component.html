@@ -1,0 +1,42 @@
+
+<mat-toolbar [color]="matToolbarColor">
+  <mat-toolbar-row>
+		<a class="nav-link nav-icon" (click)="toggleMenu()">
+		  <mat-icon>menu</mat-icon>
+		</a>
+    <button mat-raised-button >
+      <a (click)="modal = !modal" clrDropdownItem>Preferences</a>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-drawer-container >
+  <mat-drawer>
+    <ul class="nav-list">
+      <section class="nav-group collapsible">
+				<label for="tabexample1">Widgets</label>
+			</section>
+      <li *ngFor="let widget of widgetCollection">
+        <!--
+          Draggable widget from store using vanilla javascript event (dragstart)
+          onDrag() is call, it take $event and a widget identifier as parameters
+        -->
+        <a draggable="true" class="nav-link" (dragstart)="onDrag($event, widget.identifier)">
+          <mat-icon>drag</mat-icon>
+          {{ widget.name }}
+        </a>
+      </li>
+    </ul>
+  </mat-drawer>
+
+  <mat-drawer-content>
+    <mat-tab *ngFor="let dashboard of dashboardCollection">
+			<button routerLink="dashboard/{{dashboard.id}}">{{ dashboard.username }}</button>
+		</mat-tab>
+
+		<grid-menu-layout [id]="layoutID"></grid-menu-layout>
+
+  </mat-drawer-content>
+
+</mat-drawer-container>
+

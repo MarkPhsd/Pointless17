@@ -5,6 +5,43 @@
   overflow-x: hidden;
 }
 
+.categories {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 225px 45px;
+  width     : 335px;
+  z-index   : 1005;
+}
+
+.sub-categories {
+  display   : flex;
+  flex-direction: column;
+  gap       : 5px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin    : 5px;
+  width     : 340px;
+
+  z-index   : 1005;
+}
+
+.menu-container {
+  display: grid;
+  grid-template-columns: 275px 275px;
+  gap: 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @include for-phone-only {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
 .fab-container {
   z-index: 1006;
   top: 10px;
@@ -16,6 +53,15 @@
 
 .mat-fab-close {
   opacity: 70%;
+}
+
+.mat-fab-expand {
+  position: relative;
+  // left: 225px;
+  // top: -71px;
+  top    : 10px;
+  margin : 0;
+  padding: 0;
 }
 
 .content-position{
@@ -34,32 +80,16 @@
   }
 }
 
-
 .image-layout {
   opacity: 70%;
-  border-radius: 5%;
+  border-radius: 10px;
   max-height: 300px;
   object-fit: cover;
   width: 300px;
 }
 
-
-
-.menu-container {
-
-  display: grid;
-  grid-template-columns: 275px 275px;
-  gap: 5px;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  @include for-phone-only {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
+img {
+  border-radius: 10px;
 }
 
 .grid-toggle-tiny {
@@ -68,17 +98,9 @@
   gap: 5px;
 }
 
-// .grid-toggle-tiny {
-//   display: grid;
-//   grid-template-columns: minmax(50px, 0px) 120px;
-// }
-
-
-
 :host {
   .mat-button {
     text-align: left;
-
   }
 }
 
@@ -109,11 +131,11 @@ mat-raised-button {
 }
 
 .item-font-category {
-  font-size  : 1.5rem;
-  margin-left: 10px;
+  font-size    : 1.5rem;
+  margin-left  : 10px;
   text-overflow: ellipsis;
-  max-width: 175px;
-  min-width: 175px;
+  max-width    : 175px;
+  min-width    : 175px;
 }
 
 .sub-category {
@@ -123,37 +145,28 @@ mat-raised-button {
 }
 
 .heading {
-  font-size: 1.1em;
-  align-items: center;
-  text-align: center;
+  font-size       : 1.1em;
+  align-items     : center;
+  text-align      : center;
 }
-
-
 
 .description{
-  margin: 5px;
+  margin          : 5px;
 }
-
 
 .title-container {
-  display: flex;
-  justify-content: space-between;
-  margin: 2px;
-}
-
-.categories {
-  display: flex;
-  flex-direction: column;
-  overflow-y: hidden;
-  overflow-x: hidden;
-  margin: 5px;
-  width: 440px;
-  z-index: 1005;
+  display         : flex;
+  justify-content : space-between;
+  margin          : 2px;
 }
 
 .menu-button {
-  margin: 15px;
-  // max-width: 220px;
-  height: 55px;
-  min-width: 265px
+  margin          : 15px;
+  background-color: cadetblue;
+  height          : 50px;
+  min-width       : 265px
+}
+
+.menu-button:hover {
+  background-color: rgb(98, 106, 85)
 }

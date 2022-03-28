@@ -15,15 +15,14 @@
         *ngFor="let menu of menus; let i = index"
         [class.active]="menu.active">
 
-        <div  *ngIf="isAuthorized(menu.userType)"
-              class="menu"
+        <div class="menu" *ngIf="isAuthorized(menu.userType)"
               (click)="toggle(menu, i)">
 
           <div   class="grid-toggle-tiny">
-            <div *ngIf="menu.icon">
+            <div  class="item-icon" *ngIf="menu.icon">
               <mat-icon>{{ menu.icon }}</mat-icon>
             </div>
-            <div *ngIf="!tinyMenu">
+            <div  class ="item-name" *ngIf="!tinyMenu">
               {{menu.name | truncateText : 20}}
             </div>
           </div>
@@ -77,37 +76,40 @@
         <mat-icon>more_vert</mat-icon>
       </button>
 
-      <div class="submenu-position"></div>
-        <ul id="accordion"
-            class="accordion">
-            <li>
-              <mat-menu #menu="matMenu">
-                <div  *ngFor="let item of submenu">
-                    <div *ngIf="item.minimized">
-                      <div *ngIf="isAuthorized(item.userType)">
-                        <button mat-menu-item
-                                color=""
-                                routerLinkActive={{item.routerLinkActive}}
-                                routerLink=      {{item.routerLink}}>
-
-                          <div class="grid-toggle-tiny">
-                            <div class="item-font" *ngIf="item.icon">
-                              <mat-icon>{{item.icon}}</mat-icon>
-                            </div>
-                            <div class="item-text" *ngIf="!tinyMenu">
-                              {{item.name | truncateText : 20}}
-                            </div>
-                          </div>
-
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-              </mat-menu>
-            </li>
-        </ul>
-      </div>
   </div>
+
+
+  <div class="submenu-position" *ngIf="submenu"></div>
+    <ul id="accordion"
+        class="accordion">
+        <li>
+          <mat-menu #menu="matMenu">
+            <div  *ngFor="let item of submenu">
+                <div *ngIf="item.minimized">
+                  <div *ngIf="isAuthorized(item.userType)">
+                    <button mat-menu-item
+                            color=""
+                            routerLinkActive={{item.routerLinkActive}}
+                            routerLink=      {{item.routerLink}}>
+
+                      <div class="grid-toggle-tiny">
+                        <div class="item-font" *ngIf="item.icon">
+                          <mat-icon>{{item.icon}}</mat-icon>
+                        </div>
+                        <div class="item-text" *ngIf="!tinyMenu">
+                          {{item.name | truncateText : 20}}
+                        </div>
+                      </div>
+
+                    </button>
+                  </div>
+                </div>
+              </div>
+          </mat-menu>
+        </li>
+    </ul>
+  </div>
+
   <button mat-icon-button
       (click)="setSmallMenu()"
       aria-label=" toggle">
@@ -119,4 +121,3 @@
     <mat-icon>refresh</mat-icon>
   </button> -->
 </div>
-

@@ -3,8 +3,10 @@ import { ElectronService } from 'ngx-electron';
 import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
 import { DSIEMVSettings, UISettingsService } from '../system/settings/uisettings.service';
 import { Subscription } from 'rxjs';
-import { parse } from 'path/posix';
 
+export interface topLevel {
+  TStream: TStream;
+}
 export interface TStream {
   Transaction: Transaction;
 }
@@ -135,6 +137,33 @@ export interface PrintData {
 })
 export class DSIEMVTransactionsService {
 
+  // xmlInput = `<any_name a="abc">
+  //     <ns:person>
+  //         <name1>Jack 1</name1 >
+  //         <name2>35</name2>
+  //     </ns:person>
+  // </any_name>`;
+
+  options = {
+      attributeNamePrefix : "@_",
+      //attrNodeName: false,
+      //textNodeName : "#text",
+      ignoreAttributes: true,
+      ignoreNameSpace: false,
+  };
+
+  jsonOptions = {
+      attributeNamePrefix : "@_",
+      //attrNodeName: false,
+      //textNodeName : "#text",
+      ignoreAttributes : false,
+      ignoreNameSpace: false,
+      //format: true,
+      //indentBy: "  ",
+      //supressEmptyNode: false,
+  };
+
+
   private dsiResponse         : any;
   private dsiEMVSettings      : DSIEMVSettings;
   private dsiEMVSubscriptions$: Subscription;
@@ -193,15 +222,20 @@ export class DSIEMVTransactionsService {
     dsiResponse.CmdResponse.TextResponse
     return dsiResponse;
   }
- async pinPadReset(transaction: Transaction): Promise<CmdResponse> {
+
+  async pinPadReset(transaction: Transaction): Promise<CmdResponse> {
 
     if (!transaction) { return }
 
     const tstream       = {} as TStream;
     tstream.Transaction = transaction
-    const builder       = new XMLBuilder(null)
-    const xml           = builder.build(tstream);
+    const topLevel = {} as topLevel;
+    topLevel.TStream = tstream;
+    const builder       = new XMLBuilder(this.options)
+    const xml           = builder.build(topLevel);
+
     console.log(xml)
+
     let response        : any;
 
     try {
@@ -209,11 +243,12 @@ export class DSIEMVTransactionsService {
       response = await emvTransactions.PINPadReset(xml)
     } catch (error) {
       console.log('error', error)
+      return  error
     }
 
     if (response === 'reset failed') {
       this.dsiResponse = 'Pin Pad Reset Failed'
-      return;
+      return  this.dsiResponse
     }
 
     if (response) {
@@ -233,12 +268,14 @@ export class DSIEMVTransactionsService {
 
     let transaction = {} as Transaction;
     transaction  = this.getPadSettings(transaction)
+
     if (transaction) {
       const tstream = {} as TStream;
       tstream.Transaction = transaction
-      const builder = new XMLBuilder(null)
+      const builder = new XMLBuilder(this.options)
       const xml = builder.build(tstream);
       console.log(xml)
+
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       const response = await emvTransactions.MercuryPinPadTest(xml)
       console.log('response', response)

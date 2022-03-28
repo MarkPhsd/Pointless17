@@ -1,0 +1,129 @@
+@import "/src/mixins.scss";
+
+:host {
+  display: block;
+  flex-direction: column;
+  height: 100%;
+
+}
+
+router-outlet {
+  z-index: 1;
+}
+
+app-header {
+  width:  100%;
+}
+
+app-sticky-header {
+  z-index: 1000;
+  height: 75px;
+  display: flex;
+}
+
+mat-drawer-container {
+  height: 96%;
+  padding-top: -5px;
+  overflow: hidden;
+}
+
+mat-drawer-content {
+  padding: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+  min-height: 94%;
+  max-height: 94%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+mat-sidebar {
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  background-color:rgb(55, 55, 59);
+}
+
+.mat-content {
+  overflow: hidden;
+}
+
+.mat-orderBar {
+  min-width: 200px !important;
+  max-width: 200px;
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  overflow: hidden;
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 3px rgba(0,0,0,.24);
+  }
+}
+
+.mat-orderBar-wide {
+  min-width: 350px !important;
+  max-width: 350px;
+  border-right: 1px solid #eee;
+  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  overflow: hidden;
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 3px rgba(0,0,0,.24);
+  }
+}
+
+.mat-drawer-toolbar {
+  width: 190px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  }
+}
+
+.mat-drawer-searchbar {
+  width: 190px;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);
+
+  @include for-phone-only  {
+    width: 55px;
+    box-shadow: 3px 0 6px rgba(0,0,0,.24);
+  }
+}
+
+.mat-drawer-searchbar-tiny {
+  width: 55px;
+  box-shadow: 3px 0 3px rgba(0,0,0,.24);
+}
+
+.department-menu {
+  z-index: 1001;
+}
+/* The Overlay (background) */
+.overlay {
+  /* Height & width depends on how you want to reveal the overlay (see JS below) */
+  height: 98%;
+  width: 85%;
+  position: fixed; /* Stay in place */
+  z-index: 100; /* Sit on top */
+  margin: 5px;
+  padding: 5px;
+  opacity: 95%;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  transition: 0.5s; /* 0.5 second transition effect to slide in or slide down the overlay (height or width, depending on reveal) */
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+  position: relative;
+  left: 0; /* 25% from the top */
+  width: 100%; /* 100% width */
+  margin: 5px; /* 30px top margin to avoid conflict with the close button on smaller screens */
+}
+
+.overlay .closebtn {
+  position: absolute;
+  top: 20px;
+  right: 45px;
+  font-size: 60px;
+}

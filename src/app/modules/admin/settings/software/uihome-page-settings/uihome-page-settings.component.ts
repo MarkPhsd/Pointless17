@@ -14,7 +14,9 @@ export class UIHomePageSettingsComponent implements OnInit {
   backgroundImage: string;
   logoHomePage: string;
   tinyLogo:     string;
+
   inputForm  : FormGroup;
+
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
   uiHomePage = {} as UIHomePageSettings;
@@ -25,27 +27,44 @@ export class UIHomePageSettingsComponent implements OnInit {
     this.uISettingsService.getSetting('UIHomePageSettings').subscribe(data => {
       if (data) {
         this.uiHomePage   = JSON.parse(data.text) as UIHomePageSettings
-        console.log('UI Home Page ', data)
-        console.log('UI Home Page ', this.uiHomePage)
 
-        if (this.uiHomePage.backgroundImage == null) {
-          this.uiHomePage.backgroundImage = ''
+        try {
+          if (this.uiHomePage?.backgroundImage == null) {
+            this.uiHomePage.backgroundImage = ''
+          }
+
+        } catch (error) {
+
+        }
+        try {
+          if (this.uiHomePage?.tinyLogo == null) {
+            this.uiHomePage.tinyLogo = ''
+          }
+        } catch (error) {
+
+        }
+        try {
+          if (this.uiHomePage?.logoHomePage  == null) {
+            this.uiHomePage.logoHomePage =''
+          }
+        } catch (error) {
+
         }
 
-        if (this.uiHomePage.tinyLogo == null) {
-          this.uiHomePage.tinyLogo = ''
-        }
 
-        if (this.uiHomePage.logoHomePage  == null) {
-          this.uiHomePage.logoHomePage =''
-        }
+
+
 
         this.backgroundImage = this.uiHomePage.backgroundImage;
-        this.tinyLogo =  this.uiHomePage.tinyLogo
-        this.logoHomePage = this.uiHomePage.logoHomePage
+        this.tinyLogo =  this.uiHomePage.tinyLogo;
+        this.logoHomePage = this.uiHomePage.logoHomePage;
+
         this.initForm(data);
+        return
       }
     });
+    const form = this.inputForm
+    this.inputForm = this.uISettingsService.initHomePageForm(form)
   }
 
   initForm(setting: ISetting) {
@@ -61,9 +80,7 @@ export class UIHomePageSettingsComponent implements OnInit {
    }
 
   updateSetting(){
-    console.log('inputForm', this.inputForm.value)
     if (!this.inputForm) {
-      console.log('save didnt happen')
       return
     }
     try {

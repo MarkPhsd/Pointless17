@@ -21,6 +21,14 @@
                       ></app-logo>
                     </div>
 
+                    <div *ngIf="!uiHomePageSetting">
+                      <img *ngIf="logo"
+                            (click)="setAPIAlt()"
+                            [src]="logo"
+                            width="125px"
+                            [alt]="company"
+                            class="logo">
+                    </div>
 
                     <h2 (click)="setAPIAlt()"
                         *ngIf="uiHomePageSetting">

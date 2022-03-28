@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   spinnerLoading: boolean;
   compName   : string;
   company    = {} as ICompany;
-  logo       : string;
+  logo       = `https://pointlesspos.com/download/logo.png`;
 
   loading    = false;
   submitted  = false;
@@ -74,7 +74,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           const image  = `${this.bucket}${data.backgroundImage}`
           this.assingBackGround(image)
           this.uiHomePageSetting = data;
-          console.log('logo', data.logoHomePage)
+
           if (data.logoHomePage) {
             this.logo = `${this.bucket}${data.logoHomePage}`;
             console.log(this.logo)

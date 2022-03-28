@@ -12,6 +12,7 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 export class UITransactionsComponent implements OnInit {
 
   inputForm  : FormGroup;
+
   uiSettings :  ISetting
   uiSettings$: Observable<ISetting>;
   uiTransactions = {} as TransactionUISettings;

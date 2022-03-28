@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { DSIEMVTransactionsService, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { DSIEMVTransactionsService, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -34,9 +34,7 @@ export class DSIEMVElectronComponent implements OnInit {
   // "        <ComPort>1</ComPort>" & vbCrLf &
   // "        <SequenceNo>0010010010</SequenceNo>" & vbCrLf &
   // "    </Admin>" & vbCrLf &
-  // "</TStream>"
-
-
+  // "</TStream
 
   pathName = 'default'
   get f() {return this.pathForm.controls}
@@ -61,7 +59,26 @@ export class DSIEMVElectronComponent implements OnInit {
     })
   }
 
+  saveSettings() {
+    console.log(this.inputForm.value)
+    if (!this.inputForm) { return }
+    const item = this.inputForm.value;
+    console.log(item)
+    const json = JSON.stringify(item);
+    console.log('json',json)
+    localStorage.setItem('DSIEMVSettings', json)
+    console.log('save settings',json)
+  }
 
+  loadSettings() {
+    console.log('load settings')
+    if (!this.inputForm) { return }
+    const item = localStorage.getItem('DSIEMVSettings');
+    console.log('load settings',item)
+    if (!item) { return }
+    const obj = JSON.parse(item)
+    this.inputForm.patchValue(obj)
+  }
 
   initParamDownload_Transaction() {
     const transaction = {} as Transaction
@@ -103,29 +120,45 @@ export class DSIEMVElectronComponent implements OnInit {
   initForm(setting: ISetting) {
     const form = this.inputForm
     this.inputForm = this.uISettingsService.initDSIEMVForm(form)
+    this.loadSettings()
     this.uISettingsService.setFormValue(form, setting,  'DSIEMVSettings').subscribe(data => {
       if (data) {
         const config = JSON.parse(data.text) as DSIEMVSettings
-        // console.log('dsiemv data id', data.id)
-        this.uISettingsService.initForms_Sub(form, data.name, config)
+        this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
       }
     })
   }
 
-
   updateSetting(){
-     this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
-       console.log('saved')
-     })
+    this.saveSettings(); //65000004171545
+    //  this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
+    //  })
   }
 
   async pinPadReset(){
-    const transaction = this.inputForm.value as Transaction;
-    const response    = await this.dsiEMVService.pinPadReset(transaction);
-    this.responseMessage = 'failed'
-    if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
+    const transactiontemp = this.inputForm.value as Transaction;
+    const transaction     = {} as Transaction // {...transactiontemp, id: undefined}
+    transaction.MerchantID    =transactiontemp.MerchantID;
+    transaction.TerminalID    =transactiontemp.TerminalID;;
+    transaction.OperatorID    =transactiontemp.OperatorID;
+    transaction.IpPort        =transactiontemp.IpPort;
+    transaction.UserTrace     = 'PointlessPOS';
+    transaction.TranCode      =transactiontemp.TranCode;
+    transaction.SecureDevice  =transactiontemp.SecureDevice;
+    transaction.ComPort       =transactiontemp.ComPort;
+    transaction.SequenceNo    ='0010010010'
+    transaction.HostOrIP      = transactiontemp.HostOrIP;
+
+    try {
+      const response    = await this.dsiEMVService.pinPadReset(transaction);
+      console.log('response', response)
+      this.responseMessage = 'failed'
+      if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
       this.responseMessage = response.CmdResponse.TextResponse
-   }
+    }
+    } catch (error) {
+      console.log('response error', error)
+    }
   }
 
   async MercuryPinPadReset(){

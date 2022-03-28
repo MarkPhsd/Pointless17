@@ -7,6 +7,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { DeviceDetectorService } from 'ngx-device-detector';
 
 @Component({
   selector: 'app-department-menu',
@@ -65,12 +66,16 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._department    = this.toolBarUIService.departmentMenu$.subscribe( data => {
       if (!data) {
-        this.department = null
-        this.departmentID = 0
+        this.department     = null
+        this.departmentID   = 0
+        this.categoryID     = 0
+        this.subCateogryID  = 0;
         return
       }
-      this.department   = data;
-      this.departments$ = this.menuService.getGetDepartment(this.site, data.id)
+      this.department     = data;
+      this.departments$   = this.menuService.getGetDepartment(this.site, data.id)
+      this.categoryID     = 0
+      this.subCateogryID  = 0;
     })
 
 
@@ -83,6 +88,7 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
     private siteService:        SitesService,
     private awsBucketService  : AWSBucketService,
     private toolBarUIService  : ToolBarUIService,
+    public  deviceService:   DeviceDetectorService,
   ) { }
 
   async  ngOnInit() {
@@ -118,13 +124,21 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
   }
 
   categoryList(event) {
+    if (this.deviceService.isTablet) {
+      this.categoryListDisplay(event);
+      return
+    }
+    this.categoryListNavigate(event)
+  }
+
+  categoryListNavigate(event) {
     if (!event) { return }
     this.router.navigate(["/menuitems-infinite/", {categoryID:event.id }]);
     this.categoryID = event.id
     this.close();
   }
+
   categoryListDisplay(event) {
-    console.log('categoryListDisplay event', event)
     if (!event) { return }
     this.router.navigate(["/menuitems-infinite/", {categoryID:event.id }]);
     this.categoryID = event.id
@@ -140,7 +154,6 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
   }
 
   subCategoryList(event) {
-    console.log('subCategoryList event', event)
     if (!event) { return }
     this.subCateogryID = event.id
     this.router.navigate(["/menuitems-infinite/", {subCategoryID:event.id }]);

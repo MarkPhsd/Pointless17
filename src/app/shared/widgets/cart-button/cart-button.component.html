@@ -2,7 +2,9 @@
        *ngIf="order" >
 
     <div *ngIf="!isUserStaff">
-      <button mat-button
+      <button
+            mat-raised-button
+            color="primary"
             (click)="toggleOpenOrderBar()" >
         <mat-icon  matBadge="{{ order.itemCount > 0 }}"
           matBadge="{{ order.itemCount }}"
@@ -14,7 +16,9 @@
     </div>
 
     <div *ngIf="isUserStaff">
-      <button mat-button
+      <button
+              mat-raised-button
+              color="primary"
               (click)="toggleOpenOrderBar()" >
           <mat-icon  matBadge="{{ order.itemCount > 0 }}"
             matBadge="{{ order.itemCount }}"
@@ -28,7 +32,8 @@
     <div  *ngIf="(order && order.history == true
                 || (order.completionDate)) || isUserStaff">
       <button
-              mat-button
+              mat-raised-button
+              color="primary"
               (click)="addNewOrder()" >
         <mat-icon>
           add

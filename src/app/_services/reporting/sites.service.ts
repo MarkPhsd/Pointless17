@@ -141,7 +141,7 @@ export class SitesService {
 
     if ( this.platformSevice.isApp() ) {
       site.url   = localStorage.getItem('storedApiUrl')
-      this.snackBar.open('Set Default Site site.url ' + site.url)
+      this.snackBar.open('Set Default Site site.url ' + site.url, 'Success', {duration: 3000})
       localStorage.setItem("site.url", site.url)
       // this.snackBar.open(site.url, 'Default Site', {duration: 3000})
       return site

@@ -159,11 +159,8 @@ export class UISettingsService {
         this.updateUISubscription(ui)
         return
       }
-      if (!data.text) {
-      }
+      if (!data.text) { }
     })
-
-
 
     this.getSetting('UIHomePageSettings').subscribe(data => {
       const ui = {} as UIHomePageSettings
@@ -172,9 +169,7 @@ export class UISettingsService {
         this.updateUISubscription(ui)
         return
       }
-
-      if (!data.text) {
-      }
+      if (!data.text) { }
     })
 
     this.getStripeAPISettings();
@@ -226,7 +221,6 @@ export class UISettingsService {
     return config
   }
 
-  ////////////// TransactionUISettings
   async  subscribeToCachedConfig(): Promise<TransactionUISettings> {
     const setting = await this.getSetting('UITransactionSetting').toPromise();
     const config = JSON.parse(setting.text) as TransactionUISettings
@@ -237,7 +231,7 @@ export class UISettingsService {
   get homePageSetting(): UIHomePageSettings {
     if (this.uihomePageSetting) { return  this.uihomePageSetting }
   }
-    // UITransactionSetting
+
   async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
     const setting = await this.getSetting(name).toPromise();
     const config = JSON.parse(setting.text) as UIHomePageSettings
@@ -314,7 +308,6 @@ export class UISettingsService {
     fb = this._fb.group({
       HostOrIP         : [''],
       IpPort           : [''],
-      id               : [''],
       MerchantID       : [''],
       TerminalID       : [''],
       OperatorID       : [''],
@@ -420,6 +413,7 @@ export class UISettingsService {
 
     if (name == 'DSIEMVSettings') {
       inputForm = this.initDSIEMVSettingsForm(config, inputForm);
+
     }
 
     if (name == 'StripeAPISettings') {

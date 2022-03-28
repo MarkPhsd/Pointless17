@@ -260,12 +260,13 @@ import { StrainCardComponent } from '../modules/tv-menu/strainBoard/strain-card/
 import { TypeBoardComponent } from '../modules/tv-menu/type-board/type-board.component';
 import { TypeBoardItemsComponent } from '../modules/tv-menu/type-board-items/type-board-items.component';
 import { MenuBoardComponent } from '../modules/tv-menu/menu-board/menu-board.component';
-import { GridMenuLayoutComponent } from '../modules/tv-menu/grid-menu-layout/grid-menu-layout.component';
 import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settings/stripe-settings.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 // import { NgxStripeModule } from 'ngx-stri../modules/admin/settings/stripe-settings/stripe-settings.component
-
+import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
+import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
+import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -344,6 +345,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
+    GridManagerComponent,
+    GridSettingsComponent,
     GridMenuLayoutComponent,
     LabelViewSelectorComponent,
     ListPrintersElectronComponent,

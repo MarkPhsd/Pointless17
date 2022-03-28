@@ -92,10 +92,19 @@
         <div class="grid-item">
           <app-value-fields
               [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'number'"
+              [fieldType]     ="'test'"
               [inputForm]     ="inputForm"
               [fieldName]     ="'PinPadIpPort'">
               PinPadIpPort
+          </app-value-fields>
+        </div>
+        <div class="grid-item">
+          <app-value-fields
+              [fieldsClass]   ="'field-small'"
+              [fieldType]     ="'test'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'HostOrIP'">
+              Host Or IP
           </app-value-fields>
         </div>
 
@@ -147,6 +156,19 @@
         <button mat-raised-button
                 color="primary"
                 (click)="pinPadReset()">Test Reset
+        </button>
+      </div>
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="saveSettings()">Save Settings
+        </button>
+      </div>
+           <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="loadSettings()">Load Settings
         </button>
       </div>
     </div>
