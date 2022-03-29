@@ -267,6 +267,7 @@ import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settin
 import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
 import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
+import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -311,6 +312,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DemographicsComponent,
     DiscountTypeSelectionComponent,
     DndDirective,
+    DSIEMVTransactionComponent,
     EditSelectedItemsComponent,
     EditCSSStylesComponent,
     EditSettingsComponent,

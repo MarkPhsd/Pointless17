@@ -3,12 +3,14 @@
   <div *ngIf="groupBy === 'Employee'" class="grid-headerfooter">
     <div *ngIf="payment.employeeName" class="employeeName" > {{ payment?.employeeName | truncateText: 10 }}  </div>
     <div *ngIf="!payment.employeeName" class="employeeName">Missing</div>
-    <div  class="grid-item">{{ payment?.hour }}</div>
+    <div *ngIf="payment?.hour != 0" class="grid-item">{{ payment?.hour }}</div>
 
-    <div class="totals"  *ngIf="payment.count != 0" >{{payment?.amountPaid / payment?.count | currency }}    </div>
-    <div  class="totals calculation"> {{payment?.tipAmount | currency }}</div>
-    <div *ngIf="payment?.count != 0" class="grid-item calculation" >  {{ payment?.count }} </div>
-    <div class="totals calculation"> {{payment?.tipAmount | currency }}</div>
+    <div class="totals"
+         *ngIf="payment.count != 0" >{{payment?.amountPaid / payment?.count | currency }}    </div>
+    <div class="totals" > {{payment?.tipAmount | currency }}</div>
+    <div class="totals"
+         *ngIf="payment?.count != 0"  >  {{ payment?.count }} </div>
+    <div class="totals" *ngIf="payment?.tipAmount  != 0"> {{payment?.tipAmount | currency }}</div>
   </div>
 </div>
 

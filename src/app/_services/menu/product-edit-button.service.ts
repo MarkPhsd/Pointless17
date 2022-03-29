@@ -37,6 +37,7 @@ export interface IBalanceDuePayload {
   payment: IPOSPayment;
 }
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 
 @Injectable({
   providedIn: 'root'
@@ -497,6 +498,23 @@ export class ProductEditButtonService {
 
   }
 
+  openDSIEMVTransaction(options: any ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (options) {
+      dialogRef = this.dialog.open(DSIEMVTransactionComponent,
+        { width:          '800px',
+          minWidth:       '399px',
+          height:         '800px',
+          minHeight:      '650px',
+          data : options
+      })
+      return dialogRef
+    }
+  }
 
   openMenuPricesSelection(menuItem: IMenuItem ) {
     let dialogRef: any;
@@ -513,7 +531,6 @@ export class ProductEditButtonService {
             data : menuItem
         })
       }
-
   }
 }
 

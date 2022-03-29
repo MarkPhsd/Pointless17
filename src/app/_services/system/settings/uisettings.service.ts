@@ -1,6 +1,6 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { ISetting, IUser, IUserProfile } from 'src/app/_interfaces';
 import { SitesService } from '../../reporting/sites.service';
 import { SettingsService } from '../settings.service';
@@ -252,12 +252,25 @@ export class UISettingsService {
 
   saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
     const setting = fb.value
+
+    if (!setting || (!setting.id || setting.id === '')) {
+      this.getSetting(name).pipe(
+        switchMap(data => {
+        setting.id = data.id;
+        return this.setSetting(setting, name)
+      })).subscribe(data => {
+        return this.setSetting(setting, name)
+      })
+    }
+
     return this.setSetting(setting, name)
+
   }
 
   setSetting(uiSetting: any, name: string): Observable<ISetting> {
     const site    = this.siteService.getAssignedSite();
     const setting = {} as ISetting;
+    console.log(uiSetting);
 
     if (!uiSetting || !uiSetting.id) { return null }
     setting.id    = uiSetting.id

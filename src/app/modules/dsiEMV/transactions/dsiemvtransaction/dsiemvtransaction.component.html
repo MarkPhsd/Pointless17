@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-card-title>
+    <div>Sale</div>
+  </mat-card-title>
+
+  <mat-card-content>
+    <div class="grid-items">
+      <div>Amount</div>
+      <div>{{amount | currency}}</div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions>
+    <div class="action-buttons">
+      <div><button mat-raised-button (click)="process()"><mat-icon>credit</mat-icon>Process</button></div>
+      <div><button mat-raised-button (click)="cancel()"><mat-icon>close</mat-icon>Cancel</button></div>
+    </div>
+  </mat-card-actions>
+</mat-card>

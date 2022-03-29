@@ -2,6 +2,7 @@
   <div [class]="orderlayout">
     <div>
       <div>
+
         <div class="grid-header-item">
           <pos-order-transaction-data
               [mainPanel]="mainPanel"
@@ -15,7 +16,6 @@
               [order]="order">
           </limit-values-progress-bars>
         </div>
-
 
         <div  class="grid-header-item"
               *ngIf="wideBar || mainPanel">
@@ -34,6 +34,7 @@
 
       <div class="buttons-container">
         <div *ngIf="mainPanel">
+
           <pos-order-function-buttons
                 (outPutPrintLabel)  ="printLabels()"
                 (outPutRePrintLabel)="rePrintLabels()"

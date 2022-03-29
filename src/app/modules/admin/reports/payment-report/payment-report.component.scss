@@ -71,7 +71,7 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 55px 75px 85px 85px 85px;
+  grid-template-columns: 55px 75px 85px 85px 85px  ;
   margin-left: 15px;
   white-space   : nowrap;
   overflow      : hidden;
@@ -79,7 +79,7 @@
   text-transform: capitalize;
 
   @include for-phone-only {
-    grid-template-columns:  55px 75px 85px 85px 85px;
+    grid-template-columns:  55px 75px 85px 85px 85px  ;
   }
 
 }
@@ -88,7 +88,7 @@
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 100px 50px 50px 65px 65px;
+  grid-template-columns: 55px 85px 55px 65px 55px;
   margin-left: 15px;
   white-space   : nowrap;
   overflow      : hidden;

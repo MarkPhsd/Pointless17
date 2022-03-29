@@ -14,6 +14,17 @@ mat-divider {
   grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
 }
 
+.results-grid {
+  --gap : 5px;
+  margin:5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 50px 150px;
+  max-width: 250px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .grid-item {
   width: 175px;
   max-width: 175px;
@@ -28,4 +39,10 @@ button {
 
 .item-span {
   column-span:  2;
+}
+
+.dsi-response {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

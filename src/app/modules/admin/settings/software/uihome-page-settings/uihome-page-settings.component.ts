@@ -31,6 +31,7 @@ export class UIHomePageSettingsComponent implements OnInit {
         try {
           if (this.uiHomePage?.backgroundImage == null) {
             this.uiHomePage.backgroundImage = ''
+            this.backgroundImage = this.uiHomePage.backgroundImage;
           }
 
         } catch (error) {
@@ -39,6 +40,7 @@ export class UIHomePageSettingsComponent implements OnInit {
         try {
           if (this.uiHomePage?.tinyLogo == null) {
             this.uiHomePage.tinyLogo = ''
+            this.tinyLogo =  this.uiHomePage.tinyLogo;
           }
         } catch (error) {
 
@@ -46,18 +48,11 @@ export class UIHomePageSettingsComponent implements OnInit {
         try {
           if (this.uiHomePage?.logoHomePage  == null) {
             this.uiHomePage.logoHomePage =''
+            this.logoHomePage = this.uiHomePage.logoHomePage;
           }
         } catch (error) {
 
         }
-
-
-
-
-
-        this.backgroundImage = this.uiHomePage.backgroundImage;
-        this.tinyLogo =  this.uiHomePage.tinyLogo;
-        this.logoHomePage = this.uiHomePage.logoHomePage;
 
         this.initForm(data);
         return
@@ -76,11 +71,13 @@ export class UIHomePageSettingsComponent implements OnInit {
           const config = JSON.parse(data.text)
           this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
         }
-      })
-   }
+      }
+    )
+  }
 
   updateSetting(){
     if (!this.inputForm) {
+      console.log('Error Input Form Null')
       return
     }
     try {

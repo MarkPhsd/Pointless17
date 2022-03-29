@@ -198,7 +198,6 @@ export class ItemTypeComponent implements OnInit {
     let selectedRowsString = '';
     let maxToShow = 5;
     let selected = []
-    console.log(selectedRows);
 
     selectedRows.forEach(function (selectedRow, index) {
       if (index >= maxToShow) {
@@ -227,7 +226,6 @@ export class ItemTypeComponent implements OnInit {
         ' and ' + othersCount + ' other' + (othersCount !== 1 ? 's' : '');
     }
     document.querySelector('#selectedRows').innerHTML = selectedRowsString;
-
     this.selected = selected
   }
 

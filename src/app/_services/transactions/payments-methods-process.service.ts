@@ -1,20 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscription, } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder, IPOSPayment,  ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
-import { IPaymentMethod } from './payment-methods.service';
+import { IPaymentMethod, PaymentMethodsService } from './payment-methods.service';
 import { POSPaymentService } from './pospayment.service';
+import { CmdResponse, CommandResponse, TranResponse } from '../dsiEMV/dsiemvtransactions.service';
+import { transcode } from 'buffer';
+import { DSIProcessService } from '../dsiEMV/dsiprocess.service';
+import { ProductEditButtonService } from '../menu/product-edit-button.service';
+import { OrderMethodsService } from './order-methods.service';
+import { OrdersService } from './orders.service';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class PaymentsMethodsProcessService {
 
+  dialogSubject: Subscription;
+  dialogRef: any;
+
+  private _dialog     = new BehaviorSubject<any>(null);
+  public  dialog$      = this._dialog.asObservable();
+
+  initSubscriptions() {
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+
+      }
+    });
+  }
   constructor(
     private sitesService     : SitesService,
     private paymentService : POSPaymentService,
+    private paymentMethodService: PaymentMethodsService,
+    private dsiProcess      : DSIProcessService,
+    private orderMethodsService: OrderMethodsService,
+    private orderService    : OrdersService,
+    private dialogOptions   : ProductEditButtonService,
     private matSnackBar     : MatSnackBar,) {
 
   }
@@ -41,14 +66,98 @@ export class PaymentsMethodsProcessService {
     return payment$
   }
 
-   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  processCreditPayment(site: ISite, posPayment: IPOSPayment,
+                       order: IPOSOrder, amount: number,
+                       paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    // const results =  await payment$.pipe().toPromise();
-    // return results
+
     return payment$
+
   }
 
-   processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  async processDSIEMVCreditPayment(site: ISite, payment: IPOSPayment, order: IPOSOrder, amount: number){
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    const payment$ = this.paymentService.postPOSPayment(site, payment)
+    payment$.subscribe(data =>
+      {
+        payment.amountPaid = amount;
+        //then we open the dialog to process the sale.
+        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({payment, amount});
+        this._dialog.next(this.dialogRef)
+      }
+    )
+
+  }
+
+  async processCreditCardResponse(response: any, payment: IPOSPayment) {
+    const site = this.sitesService.getAssignedSite();
+
+    if (response) {
+      const responseMessage   = JSON.stringify(response)
+      const commmandResponse  = JSON.parse(responseMessage) as CommandResponse;
+      const cmdResponse       = commmandResponse.CmdResponse;
+      const trans             = commmandResponse.TranResponse;
+      payment                 = this.applyEMVResponseToPayment(trans, payment)
+
+      const status = cmdResponse?.TextResponse;
+      const cmdStatus = cmdResponse?.CmdStatus;
+      if (cmdStatus === 'TimeOut'.toLowerCase() ) {
+        this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
+        return
+      }
+
+      if (cmdStatus === 'error'.toLowerCase() ) {
+        this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
+        return
+      }
+
+      //"AP*", "Approved", "Approved, Partial AP"
+      //then we can get the payment Method Type from Card Type.
+
+      if (cmdStatus === 'AP*' || cmdStatus === 'Approved' || cmdStatus === 'Partial AP') {
+        const cardType = commmandResponse?.TranResponse?.CardType;
+        const paymentMethod = await this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
+          switchMap( data => {
+            payment.paymentMethodID = data.id;
+            return this.paymentService.putPOSPayment(site, payment)
+          }
+        )).pipe(
+          switchMap( data => {
+            payment.paymentMethodID = data.id
+            //then we can get the current order.
+            return this.orderService.getOrder(site, payment.orderID.toString(), false);
+          }
+        )).subscribe(data => {
+          this.orderService.updateOrderSubscription(data)
+          return
+        })
+      }
+
+      return ;
+    }
+  }
+
+  applyEMVResponseToPayment(trans: TranResponse, payment: IPOSPayment) {
+    //void =6
+    //refund = 5;
+    //preauth = 3
+    //preauth capture = 7
+    //force = 4;
+    payment.accountNum    = trans.AcctNo;
+    payment.refNumber     = trans.RefNo;
+    payment.aid           = trans.AID;
+    payment.tranType      = trans.TranCode;
+    payment.approvalCode  = trans.AuthCode;
+    payment.saleType      = 1;
+    payment.entryMethod   = trans.EntryMethod;
+    return payment;
+  }
+
+  processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     if (order.clients_POSOrders) {
       if (order.clients_POSOrders.loyaltyPointValue >= amount) {
         const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)

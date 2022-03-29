@@ -1,9 +1,11 @@
+import { T } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { DSIEMVTransactionsService, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { CmdResponse, CommandResponse, DSIEMVTransactionsService, TranResponse, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -12,7 +14,7 @@ import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/sett
   styleUrls: ['./dsiemvelectron.component.scss']
 })
 export class DSIEMVElectronComponent implements OnInit {
-
+  amountForm : FormGroup;
   inputForm  : FormGroup;
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
@@ -20,26 +22,15 @@ export class DSIEMVElectronComponent implements OnInit {
   responseMessage: string;
   isElectron: boolean
   pathForm  : FormGroup;
-
-  // "<TStream>" & vbCrLf &
-  // "    <Admin>" & vbCrLf &
-  // "        <HostOrIP>dsl1.dsipscs.com</HostOrIP>" & vbCrLf &
-  // "        <IpPort>9000</IpPort>" & vbCrLf &
-  // "        <MerchantID>700000012262</MerchantID>" & vbCrLf &
-  // "        <TerminalID>001</TerminalID>" & vbCrLf &
-  // "        <OperatorID>TEST</OperatorID>" & vbCrLf &
-  // "        <UserTrace>Dev1</UserTrace>" & vbCrLf &
-  // "        <TranCode>EMVParamDownload</TranCode>" & vbCrLf &
-  // "        <SecureDevice>EMV_VX805_PAYMENTECH</SecureDevice>" & vbCrLf &
-  // "        <ComPort>1</ComPort>" & vbCrLf &
-  // "        <SequenceNo>0010010010</SequenceNo>" & vbCrLf &
-  // "    </Admin>" & vbCrLf &
-  // "</TStream
+  responseObject: any;
+  cmdResponse: CommandResponse;
+  tranResponse: TranResponse;
 
   pathName = 'default'
   get f() {return this.pathForm.controls}
   constructor(private uISettingsService: UISettingsService,
               private dsiEMVService: DSIEMVTransactionsService,
+              private dsiProcess: DSIProcessService,
               private fb: FormBuilder,
               private electronService : ElectronService) { }
 
@@ -57,6 +48,10 @@ export class DSIEMVElectronComponent implements OnInit {
     this.pathForm = this.fb.group({
       pathName: ['']
     })
+
+    this.amountForm = this.fb.group({
+      amount: ['1.00']
+    })
   }
 
   saveSettings() {
@@ -68,6 +63,7 @@ export class DSIEMVElectronComponent implements OnInit {
     console.log('json',json)
     localStorage.setItem('DSIEMVSettings', json)
     console.log('save settings',json)
+
   }
 
   loadSettings() {
@@ -130,9 +126,10 @@ export class DSIEMVElectronComponent implements OnInit {
   }
 
   updateSetting(){
-    this.saveSettings(); //65000004171545
-    //  this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
-    //  })
+    this.saveSettings();
+    this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
+      console.log('save', data)
+    })
   }
 
   async pinPadReset(){
@@ -153,60 +150,90 @@ export class DSIEMVElectronComponent implements OnInit {
       const response    = await this.dsiEMVService.pinPadReset(transaction);
       console.log('response', response)
       this.responseMessage = 'failed'
-      if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
-      this.responseMessage = response.CmdResponse.TextResponse
-    }
+      if (response) {
+        this.responseObject = response
+        this.responseMessage  =  JSON.stringify(response)
+      }
     } catch (error) {
       console.log('response error', error)
     }
   }
 
   async MercuryPinPadReset(){
-    const transaction = this.inputForm.value as Transaction;
-    const response    = await this.dsiEMVService.mercuryPinPadReset(transaction);
-    this.responseMessage = 'failed'
-    if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
-      this.responseMessage = response.CmdResponse.TextResponse
-   }
+    const transaction       = this.inputForm.value as Transaction;
+    const response          = await this.dsiEMVService.mercuryPinPadReset(transaction);
+    this.responseMessage = 'waiting'
+    if (response) {
+      this.responseObject = response
+      this.responseMessage  =  JSON.stringify(response)
+    }
   }
 
   async downloadParams(){
-    const response = await this.dsiEMVService.mercuryPinPadTest();
-    this.responseMessage = 'failed'
-    if (response && response.CmdResponse && response.CmdResponse.TextResponse) {
-     this.responseMessage = response.CmdResponse.TextResponse
+    const response         = await this.dsiEMVService.mercuryPinPadTest();
+    this.responseMessage = 'waiting'
+    if (response) {
+      this.responseObject = response
+      this.responseMessage  =  JSON.stringify(response)
     }
    }
 
   async  dollarSaleTest(){
-    const response = await this.dsiEMVService.runOpenWord();
-    this.responseMessage = 'failed'
-    if (response) {
-     this.responseMessage =  response
-    }
-   }
 
-   async  preAuthTest(){
-    const response = await this.dsiEMVService.testADODBConnection();
-    this.responseMessage = 'failed'
+    const amount = this.amountForm.controls['amount'].value;
+    if (!amount) {
+      return
+    }
+
+    const testAmount       = amount*100
+    const response         = await this.dsiProcess.emvSale(testAmount, this.getRandomInt(1, 300), false, false );
+    this.responseMessage   = 'waiting'
+
     if (response) {
-     this.responseMessage =  response
+
+      this.responseObject  = response
+      this.responseMessage = JSON.stringify(response)
+      this.cmdResponse = JSON.parse(this.responseMessage)  as CommandResponse;
+      this.tranResponse =  this.cmdResponse.TranResponse
+    }
+
+  }
+
+  clearResponse() {
+    this.responseObject  = '';
+    this.cmdResponse = null;
+  }
+
+  async  preAuthTest(){
+     const response         = await this.dsiEMVService.testADODBConnection();
+    this.responseMessage = 'waiting'
+    if (response) {
+      this.responseObject = response
+      this.responseMessage =  JSON.stringify(response)
     }
    }
 
   async testActiveX() {
-    const response = await this.dsiEMVService.textActiveX(this.f.pathName.value);
-    this.responseMessage = 'failed'
+    const response         = await this.dsiEMVService.textActiveX(this.f.pathName.value);
+    this.responseMessage = 'waiting'
     if (response) {
-    this.responseMessage =  response
+      this.responseObject = response
+      this.responseMessage =  JSON.stringify(response)
     }
   }
 
   async runCreateFile() {
     const response = await this.dsiEMVService.runCreateFile();
-    this.responseMessage = 'failed'
+    this.responseMessage = 'waiting'
     if (response) {
-    this.responseMessage =  response
+      this.responseObject = response
+      this.responseMessage =  JSON.stringify(response)
     }
+  }
+
+  getRandomInt(min, max) : number{
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 }

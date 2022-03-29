@@ -9,8 +9,50 @@
 
   <mat-card-content>
 
-    <div *ngIf="responseMessage">
-      Respsonse:  {{responseMessage}}
+    <div class="dsi-response" *ngIf="tranResponse">
+      <mat-card>
+        <mat-card-title>
+          <h3>Response Data</h3>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="results-grid">
+            <div>Transaction Code</div>
+            <div>{{tranResponse?.TranCode}}</div>
+
+            <div>Card Type </div>
+            <div>{{tranResponse?.CardType}}</div>
+
+            <div>Entry Method</div>
+            <div>{{tranResponse?.EntryMethod}}</div>
+
+            <div>Capture Status</div>
+            <div>{{tranResponse?.CaptureStatus}}</div>
+
+            <div>Record No </div>
+            <div>{{tranResponse?.RecordNo}}</div>
+
+            <div>Ref No </div>
+            <div>{{tranResponse?.RefNo}}</div>
+
+            <div>Acq Ref Data </div>
+            <div>{{tranResponse?.AcqRefData}}</div>
+
+            <div>Acct No </div>
+            <div>{{tranResponse?.AcctNo}}</div>
+
+            <div>Amount </div>
+            <div>{{tranResponse?.Amount?.Purchase | currency}}</div>
+            <div>Authorized </div>
+            <div>{{tranResponse?.Amount?.Authorize | currency}}</div>
+
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button (click)="clearResponse()">Clear Response</button>
+        </mat-card-actions>
+      </mat-card>
+
     </div>
 
     <div  *ngIf="inputForm; else loading"
@@ -174,6 +216,20 @@
     </div>
 
     <mat-divider></mat-divider>
+
+    <div  class="grid-views text-container">
+      <div *ngIf="amountForm"
+           [formGroup]="amountForm">
+        <div class="grid-item">
+          <app-value-fields
+              [fieldType]     ="'text'"
+              [inputForm]     ="amountForm"
+              [fieldName]     ="'amount'">
+              Amount to Test
+          </app-value-fields>
+        </div>
+      </div>
+    </div>div>
 
     <div  class="grid-views text-container">
       <div *ngIf="pathForm"
