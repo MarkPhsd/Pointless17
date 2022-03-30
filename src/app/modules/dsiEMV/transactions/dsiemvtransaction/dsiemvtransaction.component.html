@@ -23,11 +23,25 @@
       <div>Amount</div>
       <div>{{amount | currency}}</div>
     </div>
+
+    <div *ngIf="processing">
+      <div>
+        <h2>{{message}}</h2>
+      </div>
+      <div>
+        <mat-spinner [diameter]="50"> </mat-spinner>
+      </div>
+    </div>
+
+    <div *ngIf="!processing">
+      <h2>{{message}}</h2>
+    </div>
+
   </mat-card-content>
 
   <mat-card-actions>
     <div class="action-buttons">
-      <div><button mat-raised-button (click)="process()"><mat-icon>credit</mat-icon>Process</button></div>
+      <div *ngIf="!processing"><button mat-raised-button (click)="process()"><mat-icon>credit_card</mat-icon>Process</button></div>
       <div><button mat-raised-button (click)="cancel()"><mat-icon>close</mat-icon>Cancel</button></div>
     </div>
   </mat-card-actions>

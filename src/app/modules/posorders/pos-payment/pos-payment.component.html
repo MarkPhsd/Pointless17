@@ -47,57 +47,70 @@
 
       <div *ngIf="!paymentsEqualTotal && paymentIsReady">
             <div class="grid-header-item" *ngIf="stepSelection == 1">
-              <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0 " >
-                <mat-card-content>
 
-                  <span class="item-buttons-container" *ngIf="order.wicTotal && order.wicTotal !=0 ">
-                    <button class="payment-buttons" mat-raised-button (click)="applyWICPayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>WIC Payment
-                    </button>
-                  </span>
+              <div>
 
-                  <span class="item-buttons-container" *ngIf="order.ebtTotal && order.ebtTotal !=0 ">
-                    <button class="payment-buttons"  mat-raised-button (click)="applyEBTPayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>EBT Payment
-                    </button>
-                  </span>
+                <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0 " >
+                  <mat-card-content>
 
-                </mat-card-content>
-              </mat-card>
+                    <span class="item-buttons-container" *ngIf="order.wicTotal && order.wicTotal !=0 ">
+                      <button class="payment-buttons" mat-raised-button (click)="applyWICPayment()">
+                        <mat-icon color="warn">credit_card</mat-icon>WIC Payment
+                      </button>
+                    </span>
 
-              <!-- Payment Method Selection -->
-              <mat-card class="card-dimensions">
-                <mat-card-content class="payment-dimensions">
-                  <app-mat-toggle-selector
-                      class              = "card-height"
-                      [list$]            = "paymentMethods$"
-                      [hideAllOption]    = "'true'"
-                      [toggleDimensions] = "'toggle-group-tall'"
-                      [buttonDimensions] = "'button-dimensions-tall'"
-                      (outPutItem)       = "getPaymentMethod($event)"
-                    >
-                    Select Payment Method
-                  </app-mat-toggle-selector>
+                    <span class="item-buttons-container" *ngIf="order.ebtTotal && order.ebtTotal !=0 ">
+                      <button class="payment-buttons"  mat-raised-button (click)="applyEBTPayment()">
+                        <mat-icon color="warn">credit_card</mat-icon>EBT Payment
+                      </button>
+                    </span>
 
-                  <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining >0">
-                    <button class="payment-buttons"
-                        mat-raised-button
-                        (click)="processDSICreditCardPayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Chip Payment
-                    </button>
-                  </div>
+                  </mat-card-content>
+                </mat-card>
 
+                <mat-card>
+                  <mat-card-content>
+                    <div class="item-container" >
+                      <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining >0">
+                        <button class="payment-buttons"
+                            mat-raised-button
+                            (click)="processDSICreditCardPayment()">
+                          <mat-icon color="warn">credit_card</mat-icon>Chip Payment
+                        </button>
+                      </div>
 
-                  <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
-                    <button class="payment-buttons"
-                        mat-raised-button
-                        (click)="applyStripePayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Stripe Payment
-                    </button>
-                  </div>
+                      <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
+                        <button class="payment-buttons"
+                            mat-raised-button
+                            (click)="applyStripePayment()">
+                          <mat-icon color="warn">credit_card</mat-icon>Stripe Payment
+                        </button>
+                      </div>
+                    </div>
+                  </mat-card-content>
+                </mat-card>
 
-                </mat-card-content>
-              </mat-card>
+              </div>
+
+              <div>
+                <!-- Payment Method Selection -->
+                <mat-card class="card-dimensions">
+                  <mat-card-content class="payment-dimensions">
+
+                      <app-mat-toggle-selector
+                          class              = "card-height"
+                          [list$]            = "paymentMethods$"
+                          [hideAllOption]    = "'true'"
+                          [toggleDimensions] = "'toggle-group-tall'"
+                          [buttonDimensions] = "'button-dimensions-tall'"
+                          (outPutItem)       = "getPaymentMethod($event)"
+                        >
+                        Select Payment Method
+                      </app-mat-toggle-selector>
+
+                  </mat-card-content>
+                </mat-card>
+              </div>
             </div>
 
             <div class="grid-header-item" *ngIf="stepSelection == 2">

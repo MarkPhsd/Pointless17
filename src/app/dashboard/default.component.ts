@@ -78,6 +78,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   initSubscriptions() {
     this.matorderBar = 'mat-orderBar-wide'
+
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
       if (data) {
@@ -92,12 +93,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this._user =     this.authorizationService.user$.subscribe(data => {
       this.user = data
     })
+
     this.toolBarUIService.orderBar$.subscribe(data => {
       this.orderBarOpen = data
+       console.log('orderBarOpen', data)
     })
+
     this.toolbarSideBar = this.toolBarUIService.toolbarSideBar$.subscribe( data => {
       this.sideBarOpen = data
       this.barType =  "mat-drawer-searchbar"
+
     })
     this.searchbarSidebar = this.toolBarUIService.searchSideBar$.subscribe( data => {
       this.searchBarOpen = data

@@ -82,7 +82,6 @@ export class PosPaymentComponent implements OnInit {
 
     )).subscribe(data => {
       this.serviceType = data
-      // console.log('data', this.serviceType)
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
@@ -116,8 +115,7 @@ export class PosPaymentComponent implements OnInit {
     this.initSubscriptions();
     this.getPaymentMethods(site)
     try {
-      this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings.enabled;
-      console.log('dsiEmv Enabled', this.dsiEMVEnabled)
+      this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
     } catch (error) {
       console.log('error pospayment init' , error)
     }
@@ -135,19 +133,17 @@ export class PosPaymentComponent implements OnInit {
     this.uISettingsService.getSetting('StripeAPISettings').subscribe(data => {
       if (data) {
         const stripeAPISettings   = JSON.parse(data.text) as StripeAPISettings;
-        this.stripeEnabled        = stripeAPISettings.enabled;
+        this.stripeEnabled        = stripeAPISettings?.enabled;
       }
     });
   }
 
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
-
     if (this.platFormService.isApp()) {
       this.paymentMethods$ = paymentMethods$
       return
     }
-
     paymentMethods$.subscribe(data => {
       if (!this.platFormService.isApp()) {
         const list = data.filter( item => item.enabledOnline == true)
@@ -155,7 +151,6 @@ export class PosPaymentComponent implements OnInit {
         return
       }
     })
-
   }
 
   @HostListener("window:resize", [])
@@ -207,7 +202,6 @@ export class PosPaymentComponent implements OnInit {
         }
         return of(null)
       })).subscribe(result => {
-          console.log('result', result)
           if (!result) { return }
           this.serviceType = result;
           this.processPaymentReady(result)
@@ -261,10 +255,7 @@ export class PosPaymentComponent implements OnInit {
       if (event == 0) {
         //then check the form, it could be manually entered.
         if (this.paymentAmountForm) {
-          console.log('payment form initiated')
-          console.log(this.paymentAmountForm.value)
           const value =  this.paymentAmountForm.controls['itemName'].value
-          console.log(value)
           if (value && +value != 0) { event = +value}
         }
       }
@@ -285,10 +276,6 @@ export class PosPaymentComponent implements OnInit {
       const data = {title: 'Payment', amount: order.balanceRemaining}
       this.openStripePayment(data)
     }
-    // <stripe-check-out
-    // (outPutPayment) ="processResults($event)"
-    // [maxAmount]="order.balanceRemaining"
-    // [amount]="order.balanceRemaining"><mat-icon>credit_card</mat-icon>Credit Card</stripe-check-out>
   }
 
   processDSICreditCardPayment() {
@@ -322,25 +309,25 @@ export class PosPaymentComponent implements OnInit {
     if (!event) {  this.initPaymentForm(); return }
     if (this.order &&  this.paymentMethod) {
 
-      const amount = this.formatValueEntered(event)
+        const amount = this.formatValueEntered(event)
 
-      const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
-                                 this.paymentMethod.isCash,
-                                 this.order.balanceRemaining);
+        const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
+                                  this.paymentMethod.isCash,
+                                  this.order.balanceRemaining);
 
-      if (!isValidAmount) { return }
+        if (!isValidAmount) { return }
 
-      const processResults$ = this.processGetResults(amount, this.posPayment)
-      processResults$.subscribe( {
-        next: (data) => {
-          if (!data) {
-            this.notify('Payment not processed', 'failure', 1000)
-          }
-          this.processResults(data)
-        },
-        error: (e) => console.error(e)
-      }
-    )
+        const processResults$ = this.processGetResults(amount, this.posPayment)
+        processResults$.subscribe( {
+          next: (data) => {
+            if (!data) {
+              this.notify('Payment not processed', 'failure', 1000)
+            }
+            this.processResults(data)
+          },
+          error: (e) => console.error(e)
+        }
+      )
     }
 
     //if order or payment method don't exist, we have a bigger problem, but we can ignore for now.

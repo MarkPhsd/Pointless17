@@ -1,5 +1,6 @@
 button {
-  height: 50px;
+  height: 65px;
+  width: 175px;
 }
 
 .action-buttons {
@@ -23,4 +24,9 @@ button {
   grid-template-columns: 150px 150px;
   gap: 10;
   font-size: large;
+}
+
+mat-spinner  {
+  position: relative;
+  margin: 10px;
 }

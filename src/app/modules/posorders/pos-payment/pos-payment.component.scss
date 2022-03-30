@@ -226,9 +226,12 @@ mat-card {
 
 .payment-dimensions {
   height: 100%;
-  max-height: 450px;
+  max-height: 650px;
   overflow-y: auto;
   overflow-x: hidden;
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(200, 1fr) );
+  gap: 10px;
 }
 
 .summary {

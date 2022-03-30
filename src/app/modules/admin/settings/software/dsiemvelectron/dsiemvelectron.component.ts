@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { CmdResponse, CommandResponse, DSIEMVTransactionsService, TranResponse, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { CmdResponse, RStream, DSIEMVTransactionsService, TranResponse, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
@@ -24,7 +24,7 @@ export class DSIEMVElectronComponent implements OnInit {
   isElectron: boolean
   pathForm  : FormGroup;
   responseObject: any;
-  cmdResponse: CommandResponse;
+  cmdResponse: RStream;
   tranResponse: TranResponse;
 
   pathName = 'default'
@@ -183,7 +183,7 @@ export class DSIEMVElectronComponent implements OnInit {
     if (response) {
       this.responseObject  = response
       this.responseMessage = JSON.stringify(response)
-      this.cmdResponse = JSON.parse(this.responseMessage)  as CommandResponse;
+      this.cmdResponse = JSON.parse(this.responseMessage)  as RStream;
       this.tranResponse =  this.cmdResponse.TranResponse
     }
   }

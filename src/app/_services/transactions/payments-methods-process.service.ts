@@ -6,7 +6,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
 import { IPaymentMethod, PaymentMethodsService } from './payment-methods.service';
 import { POSPaymentService } from './pospayment.service';
-import { CmdResponse, CommandResponse, TranResponse } from '../dsiEMV/dsiemvtransactions.service';
+import { CmdResponse, RStream, TranResponse } from '../dsiEMV/dsiemvtransactions.service';
 import { transcode } from 'buffer';
 import { DSIProcessService } from '../dsiEMV/dsiprocess.service';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
@@ -116,29 +116,36 @@ export class PaymentsMethodsProcessService {
     const site = this.sitesService.getAssignedSite();
 
     if (response) {
-      const responseMessage   = JSON.stringify(response)
-      const commmandResponse  = JSON.parse(responseMessage) as CommandResponse;
-      const cmdResponse       = commmandResponse.CmdResponse;
-      const trans             = commmandResponse.TranResponse;
-      payment                 = this.applyEMVResponseToPayment(trans, payment)
+
+      const rStream = response.RStream as RStream;
+
+      const cmdResponse       = rStream.CmdResponse;
+      const trans             = rStream.TranResponse;
+
+      console.log('processCreditCardResponse response', response)
+      console.log('processCreditCardResponse response', rStream)
+      console.log('processCreditCardResponse cmdResponse', cmdResponse)
+      console.log('processCreditCardResponse trans', trans)
 
       const status = cmdResponse?.TextResponse;
       const cmdStatus = cmdResponse?.CmdStatus;
-      if (cmdStatus === 'TimeOut'.toLowerCase() ) {
+
+      if (cmdResponse.CmdStatus === 'TimeOut'.toLowerCase() ) {
         this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
-        return
+        return cmdResponse
       }
 
-      if (cmdStatus === 'error'.toLowerCase() ) {
+      if (cmdResponse.CmdStatus === 'Error'.toLowerCase() ) {
         this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
-        return
+        return cmdResponse
       }
 
+      payment                 = this.applyEMVResponseToPayment(trans, payment)
       //"AP*", "Approved", "Approved, Partial AP"
       //then we can get the payment Method Type from Card Type.
 
-      if (cmdStatus === 'AP*' || cmdStatus === 'Approved' || cmdStatus === 'Partial AP') {
-        const cardType = commmandResponse?.TranResponse?.CardType;
+      if (cmdResponse.CmdStatus === 'AP*' || cmdResponse.CmdStatus === 'Approved' || cmdResponse.CmdStatus === 'Partial AP') {
+        const cardType = trans?.CardType;
         const paymentMethod = await this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
           switchMap( data => {
             payment.paymentMethodID = data.id;
@@ -154,11 +161,11 @@ export class PaymentsMethodsProcessService {
           this.orderService.updateOrderSubscription(data)
           //print receipt prompt
           //print receipt auto
-          return
+
         })
       }
 
-      return ;
+      return cmdResponse;
     }
   }
 
@@ -168,14 +175,16 @@ export class PaymentsMethodsProcessService {
     //preauth = 3
     //preauth capture = 7
     //force = 4;
-    payment.accountNum    = trans.AcctNo;
-    payment.refNumber     = trans.RefNo;
-    payment.aid           = trans.AID;
-    payment.tranType      = trans.TranCode;
-    payment.approvalCode  = trans.AuthCode;
+
+    payment.accountNum    = trans?.AcctNo;
+    payment.refNumber     = trans?.RefNo;
+    payment.aid           = trans?.AID;
+    payment.tranType      = trans?.TranCode;
+    payment.approvalCode  = trans?.AuthCode;
     payment.saleType      = 1;
-    payment.entryMethod   = trans.EntryMethod;
+    payment.entryMethod   = trans?.EntryMethod;
     return payment;
+
   }
 
   processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {

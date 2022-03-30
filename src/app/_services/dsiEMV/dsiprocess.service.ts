@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IPOSPayment } from 'src/app/_interfaces';
-import { Account, Amount, CmdResponse, CommandResponse, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
+import { Account, Amount, CmdResponse, RStream, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class DSIProcessService {
     return transaction
   }
 
-  pinPadReset(): Promise<CommandResponse> {
+  pinPadReset(): Promise<RStream> {
     const item = localStorage.getItem('DSIEMVSettings')
     if (!item) { return }
     const transactiontemp = JSON.parse(item) as Transaction;
@@ -37,13 +37,13 @@ export class DSIProcessService {
     return this.dsi.pinPadReset(transaction)
   }
 
-  async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<CommandResponse>  {
+  async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
     const commandResponse = this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt)
-    console.log(commandResponse)
+    console.log('emvSale response', commandResponse)
     return commandResponse;
   }
 
-  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<CommandResponse> {
+  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
     const commandResponse = this.emvTransaction('EMVReturn', amount, paymentID, manual, false)
     return commandResponse;
   }
@@ -79,7 +79,7 @@ export class DSIProcessService {
     return this.dsi.emvTransaction(transaction)
   }
 
-  async emvTransaction(type: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean ): Promise<CommandResponse> {
+  async emvTransaction(type: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean ): Promise<RStream> {
     const reset               = await this.pinPadReset(); //ignore response for now.
     const item                = localStorage.getItem('DSIEMVSettings')
     if (!item) { return null }
