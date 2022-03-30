@@ -49,14 +49,25 @@ export class PriceCategoryItemService {
     return  this.http.get<ProductPrice[]>(url)
   };
 
-  save(site: ISite,  item: ProductPrice2): Observable<any> {
+  savePriceList(site: ISite,  items: ProductPrice2[]): Observable<any> {
 
+    const controller ="/ProductPrices/"
+
+    const endPoint = `POSTProductPriceList`
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, items)
+
+  }
+
+  save(site: ISite,  item: ProductPrice2): Observable<any> {
     if (item.id) {
       return  this.put(site, item.id, item);
-
     } else {
       return this.post(site, item);
-
     }
   }
 

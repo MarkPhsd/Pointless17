@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subscription, switchMap, } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder, IPOSPayment,  ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
@@ -12,6 +12,7 @@ import { DSIProcessService } from '../dsiEMV/dsiprocess.service';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
+import { DSIEMVSettings } from '../system/settings/uisettings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,8 @@ export class PaymentsMethodsProcessService {
       }
     });
   }
+
+
   constructor(
     private sitesService     : SitesService,
     private paymentService : POSPaymentService,
@@ -42,6 +45,13 @@ export class PaymentsMethodsProcessService {
     private dialogOptions   : ProductEditButtonService,
     private matSnackBar     : MatSnackBar,) {
 
+  }
+
+  get DSIEmvSettings(): DSIEMVSettings {
+    const item = localStorage.getItem('DSIEMVSettings');
+    if (!item) { return }
+    const EMVSettings = JSON.parse(item)
+    return EMVSettings
   }
 
   enterPointCashValue(event, paymentMethod: IPaymentMethod, posPayment: IPOSPayment, order: IPOSOrder ): Observable<IPaymentResponse> {
@@ -70,26 +80,35 @@ export class PaymentsMethodsProcessService {
                        order: IPOSOrder, amount: number,
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
-    const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
+    if (this.DSIEmvSettings.enabled) {
+      this.processDSIEMVCreditPayment(order, amount)
+      return
+    }
 
+    const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
     return payment$
 
   }
 
-  async processDSIEMVCreditPayment(site: ISite, payment: IPOSPayment, order: IPOSOrder, amount: number){
+  processDSIEMVCreditPayment( order: IPOSOrder, amount: number) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
     //we can't get the type of payment before we get the PaymentID.
     //so we just have to request the ID, and then we can establish everything after that.
-    const payment$ = this.paymentService.postPOSPayment(site, payment)
+    const site = this.sitesService.getAssignedSite();
+    const  posPayment = {} as IPOSPayment;
+    posPayment.orderID = order.id;
+    const payment$  = this.paymentService.postPOSPayment(site, posPayment)
     payment$.subscribe(data =>
       {
-        payment.amountPaid = amount;
-        //then we open the dialog to process the sale.
-        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({payment, amount});
+        data.amountPaid = amount;
+        console.log('posted new payment', data)
+        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount});
         this._dialog.next(this.dialogRef)
+        return of(data)
       }
     )
+    // return of(posPayment)
 
   }
 
@@ -133,6 +152,8 @@ export class PaymentsMethodsProcessService {
           }
         )).subscribe(data => {
           this.orderService.updateOrderSubscription(data)
+          //print receipt prompt
+          //print receipt auto
           return
         })
       }

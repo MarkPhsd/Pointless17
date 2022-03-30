@@ -1,6 +1,7 @@
 import { T } from '@angular/cdk/keycodes';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
@@ -32,19 +33,14 @@ export class DSIEMVElectronComponent implements OnInit {
               private dsiEMVService: DSIEMVTransactionsService,
               private dsiProcess: DSIProcessService,
               private fb: FormBuilder,
+              private matSnack: MatSnackBar,
               private electronService : ElectronService) { }
 
   ngOnInit(): void {
     if (this.electronService.remote) {
       this.isElectron = true;
     }
-    this.inputForm = this.uISettingsService.initDSIEMVForm(this.inputForm)
-    this.uISettingsService.getSetting('DSIEMVSettings').subscribe(data => {
-      if (data) {
-        this.uiISettingJSON = JSON.parse(data.text) as DSIEMVSettings
-        this.initForm(data);
-      }
-    });
+    this.initForm();
     this.pathForm = this.fb.group({
       pathName: ['']
     })
@@ -54,26 +50,27 @@ export class DSIEMVElectronComponent implements OnInit {
     })
   }
 
-  saveSettings() {
-    console.log(this.inputForm.value)
-    if (!this.inputForm) { return }
-    const item = this.inputForm.value;
-    console.log(item)
-    const json = JSON.stringify(item);
-    console.log('json',json)
-    localStorage.setItem('DSIEMVSettings', json)
-    console.log('save settings',json)
 
+
+  initForm() {
+    this.inputForm = this.uISettingsService.initDSIEMVForm(this.inputForm)
+    this.loadSettings()
   }
 
   loadSettings() {
-    console.log('load settings')
     if (!this.inputForm) { return }
     const item = localStorage.getItem('DSIEMVSettings');
-    console.log('load settings',item)
     if (!item) { return }
-    const obj = JSON.parse(item)
+    const obj = JSON.parse(item) as DSIEMVSettings;
     this.inputForm.patchValue(obj)
+  }
+
+    saveSettings() {
+    console.log(this.inputForm.value)
+    if (!this.inputForm) { return }
+    const item = this.inputForm.value;
+    const json = JSON.stringify(item);
+    localStorage.setItem('DSIEMVSettings', json)
   }
 
   initParamDownload_Transaction() {
@@ -113,23 +110,17 @@ export class DSIEMVElectronComponent implements OnInit {
     this.inputForm.patchValue(transaction);
   }
 
-  initForm(setting: ISetting) {
-    const form = this.inputForm
-    this.inputForm = this.uISettingsService.initDSIEMVForm(form)
-    this.loadSettings()
-    this.uISettingsService.setFormValue(form, setting,  'DSIEMVSettings').subscribe(data => {
-      if (data) {
-        const config = JSON.parse(data.text) as DSIEMVSettings
-        this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
-      }
-    })
+  deleteSettings() {
+    localStorage.removeItem('DSIEMVSettings') //, json)
+    this.initForm();
   }
 
   updateSetting(){
     this.saveSettings();
-    this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
-      console.log('save', data)
-    })
+    // this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
+    //   console.log('save', data)
+    //   this.matSnack.open('Saved', 'success', {duration: 2000})
+    // })
   }
 
   async pinPadReset(){
@@ -190,13 +181,11 @@ export class DSIEMVElectronComponent implements OnInit {
     this.responseMessage   = 'waiting'
 
     if (response) {
-
       this.responseObject  = response
       this.responseMessage = JSON.stringify(response)
       this.cmdResponse = JSON.parse(this.responseMessage)  as CommandResponse;
       this.tranResponse =  this.cmdResponse.TranResponse
     }
-
   }
 
   clearResponse() {

@@ -30,75 +30,75 @@
         Remaining Balance
       </div>
       <div class="totals">
-        {{order.balanceRemaining | currency}}
+        {{order?.balanceRemaining | currency}}
       </div>
       <div>
         Payments
       </div>
       <div class="totals">
-        {{order.totalPayments | currency}}
+        {{order?.totalPayments | currency}}
       </div>
     </div>
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="order.posPayments">
 
-    <div  class="payment-grid"
+    <div
         *ngFor="let item of order.posPayments">
-        <div *ngIf="item.paymentMethod" class="grid-item">
-          {{item.paymentMethod.name}}
-          <span  *ngIf="item.paymentMethod.isCreditCard">
-            <button  mat-button (click)="editPayment(item)"><mat-icon>edit</mat-icon></button>
-          </span>
-          <div *ngIf="item.paymentMethod.isCash && item.amountPaid > 0">
-            <span *ngIf="item.amountPaid - item.amountReceived !=0">
-              Due:
+        <div class="payment-grid" *ngIf="item.completionDate && item.amountPaid>0">
+          <div *ngIf="item.paymentMethod" class="grid-item">
+            {{item.paymentMethod.name}}
+            <span  *ngIf="item?.paymentMethod?.isCreditCard">
+              <button  mat-button (click)="editPayment(item)"><mat-icon>edit</mat-icon></button>
             </span>
+            <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
+              <span *ngIf="item.amountPaid - item.amountReceived !=0">
+                Due:
+              </span>
+            </div>
           </div>
-        </div>
-        <div *ngIf="item.paymentMethod.isCreditCard && item.cardNum" >
-          {{item.cardNum}}
-          <div *ngIf="item.cardHolder">
-            <span >
-              {{item.cardHolder}}
-            </span>
+          <div *ngIf="item?.paymentMethod?.isCreditCard && item?.cardNum" >
+            {{item.cardNum}}
+            <div *ngIf="item.cardHolder">
+              <span >
+                {{item.cardHolder}}
+              </span>
+            </div>
           </div>
-        </div>
-        <div>
-          {{item.amountPaid | currency}}
-          <div  *ngIf="item.tipAmount > 0">
-            Tip {{item.tipAmount  | currency}}
+          <div>
+            {{item.amountPaid | currency}}
+            <div  *ngIf="item?.tipAmount > 0">
+              Tip {{item.tipAmount  | currency}}
+            </div>
+            <div class="totals" *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
+              <span  *ngIf="item.amountPaid - item.amountReceived !=0">
+                {{  (item.amountReceived - item.amountPaid)  | currency }}
+              </span>
+            </div>
           </div>
-          <div class="totals" *ngIf="item.paymentMethod.isCash && item.amountPaid > 0">
-            <span  *ngIf="item.amountPaid - item.amountReceived !=0">
-              {{  (item.amountReceived - item.amountPaid)  | currency }}
-            </span>
+          <div>
+            <button mat-button
+                    class="grid-item-button"
+                    (click)="printPaymentReceipt(item)"
+                    ><mat-icon>print</mat-icon></button>
           </div>
+          <div *ngIf="isAuthorized && !item.voidReason">
+            <button mat-button
+                    class="grid-item-button"
+                    (click)="voidPayment(item)"
+                    ><mat-icon>cancel</mat-icon></button>
+          </div>
+          <div *ngIf="!isAuthorized && !item.voidReason">
+            <button mat-button
+                    class="grid-item-button"
+                    (click)="voidPayment(item)"
+                    ><mat-icon>cancel</mat-icon>Void</button>
+          </div>
+          <div *ngIf="item.voidReason" >
+            <mat-label class="void-info">
+              {{item.voidReason}}
+            </mat-label>
         </div>
-        <div>
-          <button mat-button
-                  class="grid-item-button"
-                  (click)="printPaymentReceipt(item)"
-                  ><mat-icon>print</mat-icon></button>
-        </div>
-
-        <div *ngIf="isAuthorized && !item.voidReason">
-          <button mat-button
-                  class="grid-item-button"
-                  (click)="voidPayment(item)"
-                  ><mat-icon>cancel</mat-icon></button>
-        </div>
-        <div *ngIf="!isAuthorized && !item.voidReason">
-          <button mat-button
-                  class="grid-item-button"
-                  (click)="voidPayment(item)"
-                  ><mat-icon>cancel</mat-icon>Void</button>
-        </div>
-
-        <div *ngIf="item.voidReason" >
-          <mat-label class="void-info">
-            {{item.voidReason}}
-          </mat-label>
         </div>
     </div>
 

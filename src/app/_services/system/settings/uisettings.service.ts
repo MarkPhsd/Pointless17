@@ -332,7 +332,7 @@ export class UISettingsService {
       PinPadIpPort     : [''],
       SequenceNo       : [''],
       DisplayTextHandle: [''],
-      enabled: [''],
+      enabled          : [''],
     })
     return fb
   }

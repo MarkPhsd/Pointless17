@@ -1,0 +1,26 @@
+button {
+  height: 50px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-around;
+  margin: 5px;
+  flex-direction: row;
+
+}
+
+.grid-items {
+  display: flex;
+  justify-content: space-around;
+  margin: 5px;
+  flex-direction: row;
+  font-size: medium;
+}
+
+.grid-totals {
+  display:grid;
+  grid-template-columns: 150px 150px;
+  gap: 10;
+  font-size: large;
+}

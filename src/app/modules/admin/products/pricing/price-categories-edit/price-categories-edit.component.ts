@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable,  } from 'rxjs';
+import { Observable, of, switchMap,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -167,14 +167,15 @@ export class PriceCategoriesEditComponent implements OnInit {
     )
   }
 
-  saveAllItems() {
+  saveAllItems(): Observable<ProductPrice2> {
     let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    console.log('pricing', pricing)
     if (pricing) {
-      const items = this.productPrices.value
-      items.forEach(data => {
-        this.updateItem(data);
-      })
+      const site = this.siteService.getAssignedSite();
+      const items = this.productPrices.value  as ProductPrice[];
+      console.log('prices', items)
       this.saving = false;
+      return this.priceCategoryItemService.savePriceList(site, items)
     }
   }
 
@@ -188,28 +189,27 @@ export class PriceCategoriesEditComponent implements OnInit {
       this.saving = true;
       this.updateItemByItem(price2)
     } catch (error) {
-
+      console.log('error', error)
     }
 
   };
 
   updateItemByItem(price: ProductPrice2) {
     if (!price) { return }
-    try {
       const site = this.siteService.getAssignedSite()
       return new Promise(resolve => {
         const price$ = this.priceCategoryItemService.save(site, price)
-        price$.subscribe( data => {
-          resolve(true)
-        }, error => {
-          this.notifyEvent(`Update item. ${error}`, "Failure")
-          resolve(false)
-        })
-        }
-      )
-    } catch (error) {
-      console.log('error', error)
-    }
+        price$.subscribe( {
+          next: data => {
+              resolve(true)
+            },
+          error: error => {
+              this.notifyEvent(`Update item. ${error}`, "Failure")
+              resolve(false)
+            }
+          }
+        )
+    })
   }
 
   searchSize(i: number) {
@@ -223,7 +223,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     this.toggleSearchSize[i] = !this.toggleSearchSize[i];
   }
 
-  async updateCategory(item): Promise<boolean> {
+  updateCategory(item): Observable<any> {
     let result: boolean;
     if (!this.inputForm.valid) { return }
     const priceCategory = this.inputForm.value;
@@ -234,30 +234,38 @@ export class PriceCategoriesEditComponent implements OnInit {
     price2.id = priceCategory.id
     price2.uid = priceCategory.uid
     price2.name = priceCategory.name
+    const site = this.siteService.getAssignedSite()
+    const product$ = this.priceCategoryService.save(site, price2)
 
-    return new Promise(resolve => {
-      const site = this.siteService.getAssignedSite()
-      const product$ = this.priceCategoryService.save(site, price2)
-
-      product$.subscribe( data => {
-        this.saveAllItems();
-        this.notifyEvent('Item Updated', 'Success')
-        resolve(true)
-        }, error => {
-          this.notifyEvent(`Update item. ${error}`, "Failure")
-          resolve(false)
-        })
-
-      }
-    )
+    product$.pipe(
+      switchMap( data => {
+        return this.saveAllItems()
+      }))
+    return product$;
   };
 
+  updateCategoryAll(item){
+    const category  = item.value as PriceCategories;
+    this.updateCategory(category).subscribe( {
+      next: data => { this.notifyEvent('Items saved', 'Success') },
+        error: err => {
+          console.log('error', err)
+          this.notifyEvent('Items not saved ' + err, 'Failure')
+        }
+    });
+  }
   async updateCategoryExit(item) {
-    const category  = item.value as PriceCategories
-    const result = await this.updateCategory(category)
-    if (result) {
-      this.onCancel(item);
-    }
+    const category  = item.value as PriceCategories;
+    this.updateCategory(category).subscribe( {
+      next: data => {
+        this.notifyEvent('Items saved', 'Success')
+        this.onCancel(null)},
+      error: err => {
+        console.log('error', err)
+        this.notifyEvent('Items not saved ' + err, 'Failure')
+      }
+    });
+
   }
 
   onCancel(event) {

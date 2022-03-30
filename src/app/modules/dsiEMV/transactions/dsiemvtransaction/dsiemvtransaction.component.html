@@ -1,6 +1,21 @@
 <mat-card>
   <mat-card-title>
     <div>Sale</div>
+    <div class="grid-totals">
+      <div>
+        Payment #
+      </div>
+      <div>
+        {{payment?.id}}
+      </div>
+      <div>
+        Order #
+      </div>
+      <div>
+        {{payment?.orderID}}
+      </div>
+    </div>
+
   </mat-card-title>
 
   <mat-card-content>

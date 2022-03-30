@@ -313,23 +313,26 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
- async startProcessing() {
+  startProcessing() {
     this.submitted      = true;
     this.statusMessage  = "...loggining in"
     this.spinnerLoading = true;
   }
 
  async onSubmit() {
-    await this.startProcessing()
+    this.submitted      = true;
+    this.statusMessage  = "...loggining in"
+    this.spinnerLoading = true;
+    this.startProcessing()
+
     if (!this.validateForm(this.loginForm)) { return }
+
     const userName = this.f.username.value;
     const password = this.f.password.value;
-    await this.startProcessing()
 
     this.userSwitchingService.login(userName, password)
-      .pipe()
-      .subscribe(
-        user =>
+      .subscribe({
+       next: user =>
         {
           if (user) {
             console.log ('login user', user)
@@ -349,14 +352,15 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
           }
         },
-        error => {
+       error: error => {
           this.updateLoginStatus(6)
           const message = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
           this.statusMessage = message
           this.notifyEvent(message, 'error')
           return
         }
-    );
+      })
+    ;
 
     this.updateLoginStatus(6) //clearn login settings
   }

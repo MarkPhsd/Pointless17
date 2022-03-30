@@ -13,7 +13,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { DSIEMVSettings, StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
@@ -48,8 +48,8 @@ export class PosPaymentComponent implements OnInit {
   _order          :   Subscription;
   showInput       =   true // initialize keypad open
   stepSelection   =   1;
-  stripeEnabled    : boolean;
-
+  stripeEnabled   : boolean;
+  dsiEMVEnabled   : boolean;
   paymentSummary$    : Observable<IPOSPaymentsOptimzed>;
   paymentSummary     : IPOSPaymentsOptimzed;
   paymentsEqualTotal : boolean;
@@ -115,7 +115,12 @@ export class PosPaymentComponent implements OnInit {
     this.initForms();
     this.initSubscriptions();
     this.getPaymentMethods(site)
-
+    try {
+      this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings.enabled;
+      console.log('dsiEmv Enabled', this.dsiEMVEnabled)
+    } catch (error) {
+      console.log('error pospayment init' , error)
+    }
     if (this.order) {
       const searchModel = {} as IPaymentSearchModel
       searchModel.orderID = this.order.id
@@ -286,6 +291,13 @@ export class PosPaymentComponent implements OnInit {
     // [amount]="order.balanceRemaining"><mat-icon>credit_card</mat-icon>Credit Card</stripe-check-out>
   }
 
+  processDSICreditCardPayment() {
+    const order = this.order;
+    if (order) {
+      this.paymentsMethodsService.processDSIEMVCreditPayment(this.order, order.balanceRemaining)
+    }
+  }
+
   openStripePayment(data: any){
     let dialogRef: any;
     const site = this.sitesService.getAssignedSite();
@@ -435,7 +447,14 @@ export class PosPaymentComponent implements OnInit {
    processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
       // const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
       // const results =  await payment$.pipe().toPromise();
+      const enabled = this.paymentsMethodsService.DSIEmvSettings.enabled
+
+      if (enabled) {
+        this.paymentsMethodsService.processDSIEMVCreditPayment(order, amount)
+        return
+      }
       return this.paymentsMethodsService.processCreditPayment(site, posPayment, order, amount, paymentMethod )
+
    }
 
   processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {

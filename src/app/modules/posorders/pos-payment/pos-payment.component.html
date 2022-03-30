@@ -79,11 +79,20 @@
                     Select Payment Method
                   </app-mat-toggle-selector>
 
+                  <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining >0">
+                    <button class="payment-buttons"
+                        mat-raised-button
+                        (click)="processDSICreditCardPayment()">
+                      <mat-icon color="warn">credit_card</mat-icon>Chip Payment
+                    </button>
+                  </div>
+
+
                   <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyStripePayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Credit Payment
+                      <mat-icon color="warn">credit_card</mat-icon>Stripe Payment
                     </button>
                   </div>
 

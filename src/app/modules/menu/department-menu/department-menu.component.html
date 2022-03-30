@@ -19,19 +19,17 @@
 
     <mat-card>
       <mat-card-subtitle>
-
         <div class="title-container">
           <div>
             <span class="item-font">
-            <span [class]="'mdi ' + item.icon"></span>
-                  </span>
-                  <span class="item-text">
-                    {{item.name}}
+                <span [class]="'mdi ' + item.icon"></span>
+            </span>
+
+            <span class="item-text">
+               {{item.name}}
             </span>
           </div>
         </div>
-
-
       </mat-card-subtitle>
 
       <mat-card-content>
@@ -46,14 +44,16 @@
                         mat-raised-button
                         (mouseover)="categoryListDisplay(item)"
                         (click)="categoryList(item)">
-                  <div class="grid-toggle-tiny">
-                    <div class="item-font" *ngIf="item.icon && item.icon !=''">
-                      <span [class]="'mdi ' + item.icon"></span>
+                    <div class="grid-toggle-tiny">
+                      <div>
+                        <span class="item-font-category" *ngIf="item.icon && item.icon !=''">
+                          <span [class]="'mdi ' + item.icon"></span> {{item.name}}
+                        </span>
+                        <span class="item-text-category" *ngIf="!item.icon || item.icon ===''">
+                          {{item.name}}
+                        </span>
+                      </div>
                     </div>
-                    <div class="item-text">
-                      {{item.name}}
-                    </div>
-                  </div>
                 </button>
               </div>
 
@@ -74,20 +74,19 @@
                        (mouseover)="subCategoryList(item)" (click)="subCategoryListDisplay(item)">
 
                 <div class="grid-toggle-tiny">
-                  <div class="item-font-category" *ngIf="item.icon && item.icon !=''">
-                    <span [class]="'mdi ' + item.icon"></span>
-                  </div>
-                  <div class="item-text-category">
-                    {{item.name}}
+                  <div>
+                    <span class="item-font-category" *ngIf="item.icon && item.icon !=''">
+                      <span [class]="'mdi ' + item.icon"></span> {{item.name}}
+                    </span>
+                    <span class="item-text-category" *ngIf="!item.icon || item.icon ===''">
+                      {{item.name}}
+                    </span>
                   </div>
                 </div>
 
               </button>
-
           </div>
-
         </div>
-
 
 
       </mat-card-content>

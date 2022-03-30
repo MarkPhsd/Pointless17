@@ -150,14 +150,20 @@
           </app-value-fields>
         </div>
 
+        <div class="toggle-fields">
+          <div>
+            <mat-slide-toggle
+              formControlName="enabled"
+              >
+              <mat-label>Enable</mat-label>
+            </mat-slide-toggle>
+          </div>
+          <div>Enabled on each device.</div>
+
+        </div>
+
     </div>
     <div  class="grid-views">
-      <div class="grid-item">
-        <button mat-raised-button
-                color="primary"
-                (click)="updateSetting()"><mat-icon>save</mat-icon>Save
-        </button>
-      </div>
 
       <div *ngIf="isElectron" class="grid-item">
         <button mat-raised-button
@@ -207,7 +213,15 @@
                 (click)="saveSettings()">Save Settings
         </button>
       </div>
-           <div *ngIf="isElectron"  class="grid-item">
+
+      <div *ngIf="isElectron"  class="grid-item">
+        <button mat-raised-button
+                color="primary"
+                (click)="deleteSettings()">Delete Settings
+        </button>
+      </div>
+
+      <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
                 (click)="loadSettings()">Load Settings
@@ -229,7 +243,7 @@
           </app-value-fields>
         </div>
       </div>
-    </div>div>
+    </div>
 
     <div  class="grid-views text-container">
       <div *ngIf="pathForm"
