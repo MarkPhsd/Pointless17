@@ -8,6 +8,8 @@ import { DashboardContentModel, DashboardModel } from 'src/app/modules/admin/gri
 import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
 import { ActivatedRoute } from '@angular/router';
 import { GridsterDashboardService } from 'src/app/_services/system/gridster-dashboard.service';
+import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'grid-menu-layout',
@@ -45,9 +47,10 @@ export class GridMenuLayoutComponent implements OnInit {
 	constructor(
     public layoutService: GridsterLayoutService,
     private _route: ActivatedRoute,
+    private siteService: SitesService,
+    private gridData: GridsterDataService,
     private _ds: GridsterDashboardService)
-    {}
-
+  {}
 
 	ngOnInit() {
 		// Grid options
@@ -60,19 +63,29 @@ export class GridMenuLayoutComponent implements OnInit {
 
 	getData() {
 		// We get the id in get current router dashboard/:id
-		this._route.params.subscribe(params => {
-			// + is used to cast string to int
-			this.layoutService.dashboardId = +params["id"];
-			// We make a get request with the dashboard id
-			this._ds.getDashboard(this.layoutService.dashboardId).subscribe(dashboard => {
-				// We fill our dashboardCollection with returned Observable
-				this.layoutService.dashboardCollection = dashboard;
-				// We parse serialized Json to generate components on the fly
-				this.layoutService.parseJson(this.layoutService.dashboardCollection);
-				// We copy array without reference
-				this.layoutService.dashboardArray = this.layoutService.dashboardCollection.dashboard.slice();
-			});
-		});
+		// this._route.params.subscribe(params => {
+		// 	// + is used to cast string to int
+		// 	this.layoutService.dashboardId = +params["id"];
+		// 	// We make a get request with the dashboard id
+		// 	this._ds.getDashboard(this.layoutService.dashboardId).subscribe(dashboard => {
+		// 		// We fill our dashboardCollection with returned Observable
+		// 		this.layoutService.dashboardCollection = dashboard;
+		// 		// We parse serialized Json to generate components on the fly
+		// 		this.layoutService.parseJson(this.layoutService.dashboardCollection);
+		// 		// We copy array without reference
+		// 		this.layoutService.dashboardArray = this.layoutService.dashboardCollection.dashboard.slice();
+		// 	});
+		// });
+    const site = this.siteService.getAssignedSite();
+    const gridData$ = this.gridData.getGrid(site,this.layoutID)
+
+    gridData$.subscribe({ 
+      next: data => { 
+        this.layoutService.dashboardCollection = data
+        this.layoutService.parseJson(data)
+        this.layoutService.dashboardArray = this.layoutService.dashboardCollection.dashboard.slice();
+      }
+    })
 	}
 
 	openItemSettings(id) {
