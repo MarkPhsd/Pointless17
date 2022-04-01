@@ -237,6 +237,16 @@ constructor(  private _snackBar              : MatSnackBar,
 
   }
 
+  listAll(){
+    const control = this.itemName
+    if (control) { control.setValue('') }
+    this.categoryID        = 0;
+    this.productTypeSearch = 0;
+    this.brandID           = 0
+    this.initForm()
+    this.refreshSearch(1);
+  }
+
   initForm() {
     this.searchForm   = this.fb.group( {
       itemName          : [''],
@@ -351,17 +361,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
-  listAll(){
-
-    const control = this.itemName
-
-    if (control) { control.setValue('') }
-    this.categoryID        = 0;
-    this.productTypeSearch = 0;
-    this.brandID           = 0
-    this.initForm()
-    this.refreshSearch(1);
-  }
 
 
   //initialize filter each time before getting data.

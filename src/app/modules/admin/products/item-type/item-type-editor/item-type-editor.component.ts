@@ -93,22 +93,46 @@ export class ItemTypeEditorComponent   {
     }
   }
 
-  async initializeForm(id: any, form: FormGroup)  {
+  initializeForm(id: any, form: FormGroup)  {
     if (form && id) {
       const site = this.siteService.getAssignedSite();
       this.itemType$ = this.itemTypeService.getItemType(site, id)
-      this.itemType = await this.itemType$.pipe().toPromise();
-      if (this.itemType) {
+      this.itemType$.subscribe(
+        {
+          next:  data => {
+            this.initFormData(data)
+          },
+          error: error =>  {
+            console.log(error)
+          }
+        }
+      )
+    }
+  };
+
+  initFormData(itemType: IItemType) {
+
+    this.itemType = itemType;
+    if (this.itemType) {
+      try {
         this.inputForm.patchValue(this.itemType)
+      } catch (error) {
+            console.log(error)
+      }
+      try {
         this.labelTypeID     = this.itemType.labelTypeID
         this.printerName     = this.itemType.printerName
         this.prepTicketID    = this.itemType.prepTicketID
         this.printLocationID = this.itemType.printLocationID
         this.packageType     = this.itemType.packageType;
         this.typeName        = this.itemType.type;
+      } catch (error) {
+        console.log(error)
       }
+
     }
-  };
+  }
+
 
   initFormFields(): FormGroup {
     this.inputForm  = this.fbItemTypeService.initForm(this.inputForm);

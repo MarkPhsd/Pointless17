@@ -1,10 +1,11 @@
 import { Component, Inject, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { OrdersService } from 'src/app/_services';
+import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -17,29 +18,46 @@ export class PosOrderItemEditComponent  {
   posOrderItem: PosOrderItem;
   editField   = 'modifierNote'
   instructions: 'Make changes'
-  // menuItem    : IMenuItem;
+  menuItem    : IMenuItem;
+  decimals    = 2;
+  requireWholeNumber: boolean;
 
+  inputValueType = 'decimal'
   constructor(
       private posOrderItemService : POSOrderItemServiceService,
       private orderService        : OrdersService,
       private siteService         : SitesService,
       private _fb                 : FormBuilder,
+      private menuService         : MenuService,
       private dialogRef           : MatDialogRef<PosOrderItemEditComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
     if (data) {
-      console.log(data)
+
       this.instructions = data.instructions
       this.editField    = data.editField
       this.posOrderItem = data.orderItem;
+      this.menuItem     = data.menuItem
+
+      if (this.menuItem) {
+        this.requireWholeNumber = this.menuItem.itemType?.requireWholeNumber
+      }
+      // if (this.posOrderItem) {
+      //   if (this.posOrderItem.productID) {
+      //     const site = this.siteService.getAssignedSite();
+
+      //   }
+      // }
     }
     this.initForm();
 
   }
 
   initForm() {
+
     if (this.posOrderItem) {
+      this.initValueType()
 
       if (this.editField == 'modifierNote') {
         this.inputForm = this._fb.group({
@@ -57,6 +75,22 @@ export class PosOrderItemEditComponent  {
     }
   }
 
+  initValueType() {
+    if (!this.menuItem) {
+      this.decimals = 2
+      return
+    }
+    if (this.menuItem?.itemType?.requireWholeNumber) {
+      this.inputValueType = 'number'
+      this.decimals = 0
+      return
+    }
+    if (!this.menuItem?.itemType?.requireWholeNumber) {
+      this.inputValueType = 'decimal'
+      this.decimals = 2
+      return
+    }
+  }
   saveChange(event) {
     console.log('event', event)
     const item = this.getItemValue();
@@ -84,7 +118,6 @@ export class PosOrderItemEditComponent  {
         }
       }
     }
-
   }
 
   updateQuantity(item: PosOrderItem) {

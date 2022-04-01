@@ -268,6 +268,7 @@ import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-man
 import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
 import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
+import { NumericDirective } from '../_directives/numeric-directive.directive';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -312,6 +313,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DemographicsComponent,
     DiscountTypeSelectionComponent,
     DndDirective,
+
     DSIEMVTransactionComponent,
     EditSelectedItemsComponent,
     EditCSSStylesComponent,
@@ -369,6 +371,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuBoardComponent,
     MenuItemModalComponent,
     NewInventoryItemComponent,
+    NumericDirective,
     OrderItemsListComponent,
     OrderItemListComponent,
     OrderBarComponent,
@@ -536,6 +539,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     RouterModule,
     HammerModule,
     SimpleTinyComponent,
+      NumericDirective,
   ],
 
   providers: [

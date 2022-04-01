@@ -5,19 +5,40 @@
 
     <div class="header-info"
          [formGroup]="inputForm">
+      <!-- <div *ngIf="inputType === 'text'"> -->
+      <div>
+        <mat-form-field  appearance="outline">
+            <mat-label >
+              <ng-content></ng-content>
+            </mat-label>
+            <input   matInput
+                    #input
+                    appAutoFocusInput
+                    [(ngModel)]="cashValue"
+                    [type]             ="inputType"
+                    [formControlName]  ="fieldName"
+                    class="form-control" >
+        </mat-form-field>
+    </div>
+<!--
+    <div *ngIf="inputType === 'number'">
       <mat-form-field  appearance="outline">
           <mat-label >
             <ng-content></ng-content>
           </mat-label>
-          <input   matInput
-                   #input
-                   appAutoFocusInput
-                   [(ngModel)]="cashValue"
-                   [type]             ="inputType"
-                   [formControlName]  ="fieldName"
-                   class="form-control" >
+          <input  matInput
+                  #input
+                  numeric
+                  decimals=decimals
+                  appAutoFocusInput
+                  [(ngModel)]="cashValue"
+                  [type]             ="'text'"
+                  [formControlName]  ="fieldName"
+                  class="form-control" >
       </mat-form-field>
-    </div>
+    </div> -->
+
+    <!-- numeric decimals="2" -->
 
     <div>
       <button class= "keyboard-button"
@@ -114,6 +135,7 @@
           <button mat-button  (click)="returnEnterPress()">Enter
           </button>
         </div>
+
 
       </div>
     </mat-card-content>

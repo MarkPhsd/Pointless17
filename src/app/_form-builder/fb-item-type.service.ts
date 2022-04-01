@@ -37,10 +37,11 @@ export class FbItemTypeService {
       metrcCategoryID     : [''],
       preptTicketID       : [''],
       instructions:         [''],
-      packagingMaterial     : [''],
-      portionValue       :  [''],
+      packagingMaterial   : [''],
+      portionValue        : [''],
       enableCustomNote    : [''],
-      wicEBT            : [''],
+      wicEBT              : [''],
+      requireWholeNumber  : [''],
     })
     return inputForm
   }

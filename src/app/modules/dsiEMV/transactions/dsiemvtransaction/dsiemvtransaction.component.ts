@@ -25,7 +25,6 @@ export class DSIEMVTransactionComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {
-      console.log('dsi emv', data)
     if (data)  {
       this.payment = data.data;
       this.amount  = data.amount;

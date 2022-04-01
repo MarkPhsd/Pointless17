@@ -61,6 +61,7 @@ export class ToolBarUIService {
 
 
   updateBarSize(value: boolean) {
+    console.log('updateBarSize', value)
     this._barSize.next(value)
     this.barSize = value;
     this.resizeWindow();
@@ -98,6 +99,9 @@ export class ToolBarUIService {
   }
 
   switchToolBarSideBar() {
+    console.log('searchBar', this.searchBar)
+    console.log('toolBar', this.toolBar)
+
     if (this.searchBar) {
       this.searchBar = false
       this._searchSideBar.next(false)

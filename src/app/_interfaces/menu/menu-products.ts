@@ -138,6 +138,7 @@ export interface ItemType {
   instructions        : string;
   enableCustomNote   : boolean;
   wicebt             : number;
+  requireWholeNumber : boolean;
 }
 
 export interface ItemTypeCategory {

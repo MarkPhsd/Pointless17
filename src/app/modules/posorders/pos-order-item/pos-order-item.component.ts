@@ -153,15 +153,17 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
+
     if (this.orderItem) {
       this.menuItem$  = this.menuService.getMenuItemByID(site, this.orderItem.productID)
     }
+
     if (this.menuItem) {
       this.itemName   =  this.getItemName(this.menuItem.name)
       this.imagePath  =  this.getItemSrc(this.menuItem)
     }
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
-      // this.customcard = 'margin-left: 15px;'
+
     }
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
@@ -223,43 +225,52 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     let dialogRef: any;
     if (!this.orderItem) {return}
 
-    const item = {orderItem: this.orderItem,
-                  editField: editField,
-                  menuItem: this.menuItem,
-                  instructions: instructions}
+    const site = this.siteService.getAssignedSite();
 
-    //a little formating
-    let height  = '455px';
-    let width   = '300px'
-    if (editField == 'quantity') {
-      height  = '555px';
-      width  = '425px'
-    }
+    this.menuService.getMenuItemByID(site, this.orderItem.productID).subscribe(data => {
+        this.menuItem = data;
+        console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
+        const item = {orderItem: this.orderItem,
+                      editField: editField,
+                      menuItem: this.menuItem,
+                      instructions: instructions}
 
-    dialogRef = this.dialog.open(PosOrderItemEditComponent,
-      { width     : width,
-        minWidth  : '300px',
-        height    : height,
-        minHeight : height,
-        data      : item
-      },
-    )
+        //a little formating
+        let height  = '455px';
+        let width   = '300px'
+        if (editField == 'quantity') {
+          height  = '555px';
+          width  = '425px'
+        }
 
-    dialogRef.afterClosed().subscribe(result => {
-      // this.refreshData();
-      // update order
-    });
+        dialogRef = this.dialog.open(PosOrderItemEditComponent,
+        { width     : width,
+          minWidth  : '300px',
+          height    : height,
+          minHeight : height,
+          data      : item
+        },
+        )
 
+        dialogRef.afterClosed().subscribe(result => {
+        // this.refreshData();
+        // update order
+        });
+    })
   }
 
   editSerial() {
     if (this.orderItem) {
       const site = this.siteService.getAssignedSite();
       const item$ = this.posOrderItemService.getPOSOrderItem(site, this.orderItem.id)
-      item$.subscribe( data => {
+      item$.subscribe(
+        {
+          next: data => {
           this.orderMethodsService.promptSerial(this.menuItem, data.id, true, data.serialCode)
-        }, err => {
-          console.log('error', err)
+            },
+          error: err => {
+            console.log('error', err)
+          }
         }
       )
     }

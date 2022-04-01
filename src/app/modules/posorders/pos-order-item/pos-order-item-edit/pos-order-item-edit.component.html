@@ -4,6 +4,7 @@
   <mat-card-subtitle *ngIf="instructions && editField">
     {{instructions}}
   </mat-card-subtitle>
+
   <mat-card-content *ngIf="posOrderItem">
 
     <div [formGroup]="inputForm"
@@ -20,11 +21,13 @@
         </mat-form-field>
       </div>
 
-      <div *ngIf="editField == 'quantity'">
+      <div *ngIf="menuItem && editField === 'quantity'">
         <app-key-pad
                 [inputForm]           = "inputForm"
-                [inputTypeValue]      = "'decimal'"
+                [inputTypeValue]      = "'number'"
+                [decimals]            = decimals
                 [showInput]           = "true"
+                [requireWholeNumber]  = "menuItem.itemType?.requireWholeNumber"
                 (outPutReturnEnter)   = "saveChange($event)">
                 Enter Quantity
         </app-key-pad>

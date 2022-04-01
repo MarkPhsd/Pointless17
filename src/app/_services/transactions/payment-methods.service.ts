@@ -118,7 +118,7 @@ export class PaymentMethodsService {
 
     const controller = "/PaymentMethods/"
 
-    const endPoint  = "getPaymentMethod"
+    const endPoint  = "getPaymentMethodByName"
 
     const parameters = `?name=${name}`
 
