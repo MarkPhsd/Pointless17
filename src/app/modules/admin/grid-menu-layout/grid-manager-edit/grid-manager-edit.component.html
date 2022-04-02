@@ -1,0 +1,62 @@
+<mat-card>
+  <mat-card-title>
+    <div class="grid-title">
+      <div>
+        Edit Dashboard
+      </div>
+
+      <div>
+        <app-edit-buttons-standard
+          (outputeupdateItem)     ="update($event)"
+          (outputupdateItemExit)  ="updateExit($event)"
+          (outputupdatedeleteItem)="delete($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
+          enableDelete            ="true"
+        ></app-edit-buttons-standard>
+      </div>
+    </div>
+
+    <mat-divider></mat-divider>
+  </mat-card-title>
+
+  <mat-card-content >
+    <div [formGroup]="inputForm"
+          *ngIf="inputForm && dashboardModel; else loading;" >
+      <div class="grid-forms">
+        <div class="grid-items">
+          <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'name'"
+            [fieldsClass]="'font-small'">
+            Name
+        </app-value-fields>
+        </div>
+
+        <div class="grid-items">
+          <mat-button-toggle-group name="type"
+                    aria-label="item Type"
+                    formControlName="type">
+            <mat-button-toggle class="discount-type-button"
+                    [value]="item"
+                    (tapClick)="setType(item)"
+                    *ngFor="let item of types" >
+            {{item}}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
+        <div class="grid-items">
+          <mat-slide-toggle
+              name="active"
+              formControlName="active">
+            <mat-label class="mat-label">Enabled</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+      </div>
+    </div>
+  </mat-card-content>
+
+  <ng-template #loading>
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>

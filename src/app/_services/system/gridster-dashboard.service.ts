@@ -1,7 +1,7 @@
 
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DashboardModel, WidgetModel } from "src/app/modules/admin/grid-menu-layout/grid-models";
 
 @Injectable({
@@ -12,26 +12,36 @@ export class GridsterDashboardService {
 
 	// Return Array of WidgetModel
 	getWidgets(): Observable<Array<WidgetModel>> {
-		return this._http.get<Array<WidgetModel>>(`http://localhost:3000/widgets`);
+
+    let list = [] as WidgetModel[]
+    let item = {} as WidgetModel;
+    item.name = 'Graph'
+    item.identifier = 'graph'
+
+    list.push(item);
+
+		return of(list) ; this._http.get<Array<WidgetModel>>(`http://localhost:3000/widgets`);
 	}
 
-	// Return Array of DashboardModel
-	getDashboards(): Observable<Array<DashboardModel>> {
-		return this._http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
-	}
+	// // Return Array of DashboardModel
+	// getDashboards(): Observable<Array<DashboardModel>> {
+	// 	return this._http.get<Array<DashboardModel>>('http://localhost:3000/dashboards');
+	// }
 
-	// Return an object
-	getDashboard(id: number): Observable<DashboardModel> {
-		return this._http.get<DashboardModel>(`http://localhost:3000/dashboards/${id}`);
-	}
+	// // Return an object
+	// getDashboard(id: number): Observable<DashboardModel> {
+	// 	return this._http.get<DashboardModel>(`http://localhost:3000/dashboards/${id}`);
+	// }
 
 	// Update json
-	updateDashboard(id: number, params): Observable<DashboardModel> {
-		const httpOptions = {
-			headers: new HttpHeaders({
-			  'Content-Type':  'application/json'
-			})
-		};
-		return this._http.put<DashboardModel>(`http://localhost:3000/dashboards/${id}`, params, httpOptions);
-	}
+	// updateDashboard(id: number, params): Observable<DashboardModel> {
+	// 	const httpOptions = {
+	// 		headers: new HttpHeaders({
+	// 		  'Content-Type':  'application/json'
+	// 		})
+	// 	};
+	// 	return this._http.put<DashboardModel>(`http://localhost:3000/dashboards/${id}`, params, httpOptions);
+	// }
+
+
 }

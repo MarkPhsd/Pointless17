@@ -1,18 +1,12 @@
 @import "/src/mixins.scss";
-
 :host {
   display: block;
   flex-direction: column;
   height: 100%;
-
 }
 
 router-outlet {
   z-index: 1;
-}
-
-app-header {
-  width:  100%;
 }
 
 app-sticky-header {
@@ -22,7 +16,7 @@ app-sticky-header {
 }
 
 mat-drawer-container {
-  height: 96%;
+  height: 93%;
   padding-top: -5px;
   overflow: hidden;
 }
@@ -31,15 +25,13 @@ mat-drawer-content {
   padding: 5px;
   margin-left: 5px;
   margin-right: 5px;
-  min-height: 94%;
-  max-height: 94%;
   overflow: hidden;
   overflow-y: auto;
 }
 
 mat-sidebar {
   border-right: 1px solid #eee;
-  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
+  // box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   background-color:rgb(55, 55, 59);
 }
 
@@ -63,11 +55,9 @@ mat-sidebar {
   min-width: 350px !important;
   max-width: 350px;
   border-right: 1px solid #eee;
-  box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   overflow: hidden;
   @include for-phone-only  {
     width: 55px;
-    box-shadow: 3px 0 3px rgba(0,0,0,.24);
   }
 }
 
@@ -126,4 +116,10 @@ mat-sidebar {
   top: 20px;
   right: 45px;
   font-size: 60px;
+}
+
+.menu-grid {
+  display: flex;
+  justify-content:space-between;
+  margin: 5px;
 }

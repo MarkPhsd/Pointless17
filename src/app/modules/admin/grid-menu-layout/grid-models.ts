@@ -8,7 +8,9 @@ export interface DashboardModel {
   username: string;
   roles: widgetRoles[]
   name: string;
+  active: boolean;
   type: string;  //preset types, menu, report widget, restaurant/ operation layout.
+  jSONBject: string;
   dashboard: Array<DashboardContentModel>;
 }
 
@@ -20,17 +22,22 @@ export interface DashboardContentModel {
   component?: any;
   name: string;
   id: number;
-  properties: string ; // json object
+  properties:  DashBoardComponentProperties ; // json object
 }
 
 //not stored in database as table.
 export interface DashBoardComponentProperties {
-  id   : number;
-  name : string;
-  roles: widgetRoles[]
-  rangeType: string;        //hour, month, day, year
+  id          : number;
+  name        : string;
+  roles       : widgetRoles[]
   lengtOfRange: string;     //number of range month, year etc
-  type: string; //preset types, menu, report widget
+  rangeType   : string;        //hour, month, day, year
+  type          : string; //preset types, menu, report widget
+  cardValueType : string;
+  dateFrom      : string;
+  dateTo        : string;
+  menuType    : string;
+  categoryID  : string;
 }
 
 export interface widgetRoles {

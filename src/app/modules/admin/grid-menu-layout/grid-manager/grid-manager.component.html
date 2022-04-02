@@ -1,40 +1,80 @@
-
 <mat-toolbar [color]="matToolbarColor">
-  <mat-toolbar-row>
-		<a class="nav-link nav-icon" (click)="toggleMenu()">
-		  <mat-icon>menu</mat-icon>
-		</a>
-    <button mat-raised-button >
-      <a (click)="modal = !modal" clrDropdownItem>Preferences</a>
-    </button>
+  <mat-toolbar-row class="menu-grid">
+    <div>
+      <a class="nav-link nav-icon" (click)="toggleMenu()">
+        <mat-icon>menu</mat-icon>
+      </a>
+    </div>
+    <div>
+      <button mat-raised-button >
+        <a (click)="modal = !modal" clrDropdownItem>Preferences</a>
+      </button>
+    </div>
   </mat-toolbar-row>
 </mat-toolbar>
 
 <mat-drawer-container >
-  <mat-drawer>
+  <mat-drawer
+      position  ="start"
+      [mode]    ="'side'"
+      [opened]  ="toggle"
+      [class]   ="'mat-orderBar-wide'" >
+
     <ul class="nav-list">
       <section class="nav-group collapsible">
-				<label for="tabexample1">Widgets</label>
-			</section>
+        <label for="tabexample1">Widget Selection</label>
+      </section>
       <li *ngFor="let widget of widgetCollection">
-        <!--
-          Draggable widget from store using vanilla javascript event (dragstart)
-          onDrag() is call, it take $event and a widget identifier as parameters
-        -->
-        <a draggable="true" class="nav-link" (dragstart)="onDrag($event, widget.identifier)">
+        <a draggable="true" class="nav-link"
+           (dragstart)="onDrag($event, widget.identifier)">
           <mat-icon>drag</mat-icon>
           {{ widget.name }}
         </a>
       </li>
     </ul>
+
+    <div class="header-items">
+      <button mat-button
+              (click)="addGrid()">
+        <mat-icon>add_box</mat-icon>Add Dashboard</button>
+    </div>
+    <div *ngIf="layoutService.dashboardModel" class="header-items">
+      <button mat-button
+              (click)="editGrid()">
+        <mat-icon>edit</mat-icon>Edit Current </button>
+    </div>
+    <div class="header-items">
+      <button mat-button
+              (click)="refresh()">
+        <mat-icon>refresh</mat-icon>Refresh</button>
+    </div>
   </mat-drawer>
 
-  <mat-drawer-content>
-    <mat-tab *ngFor="let dashboard of dashboardCollection">
-			<button routerLink="dashboard/{{dashboard.id}}">{{ dashboard.username }}</button>
-		</mat-tab>
+  <mat-drawer-content *ngIf="dashboardCollection">
+    <!-- <mat-tab *ngFor="let dashboard of dashboardCollection">
+			<button mat-raised-button (click)="setLayout(dashboard)">{{ dashboard.name }}</button>
+		</mat-tab> -->
 
-		<grid-menu-layout [id]="layoutID"></grid-menu-layout>
+    <div *ngIf="inputForm" class="grid-items">
+      <mat-button-toggle-group
+                name="type"
+                aria-label="item Type"
+                formControlName="type">
+        <mat-button-toggle
+                class="discount-type-button"
+                [value]="item.id"
+                (click)="listMenu(item.id)"
+                *ngFor="let item of dashboardCollection" >
+            {{item.name}}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+          <!-- (click)="setLayout(item)" -->
+          <!-- routerLink="grid-menu-layout;id={{item.id}}" -->
+		<!-- <grid-menu-layout [layoutID]="layoutID"></grid-menu-layout> -->
+
+    <router-outlet></router-outlet>
+    <router-outlet #outlet="outlet"></router-outlet>
 
   </mat-drawer-content>
 

@@ -23,6 +23,9 @@ export class CardComponent  implements OnInit , OnChanges{
   value               : boolean;
   tempVal             : boolean;
 
+  @Input() disabledVehicleAView: boolean;
+	@Input() disabledVehicleBView: boolean;
+
   //descriptions for component headings
   @Input() label      : string;
   @Input() total      : string;

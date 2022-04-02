@@ -6,10 +6,12 @@ import { DashboardContentModel, DashboardModel } from 'src/app/modules/admin/gri
 
 // COMPONENTS
 import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GridsterDashboardService } from 'src/app/_services/system/gridster-dashboard.service';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { MatDialog } from '@angular/material/dialog';
+import { GridComponentPropertiesComponent } from './grid-component-properties/grid-component-properties.component';
 
 @Component({
   selector: 'grid-menu-layout',
@@ -18,7 +20,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class GridMenuLayoutComponent implements OnInit {
 
-  @Input() layoutID : number;
+  @Input() layoutID : any;
 
   get options(): GridsterConfig {
     return this.layoutService.options;
@@ -39,23 +41,34 @@ export class GridMenuLayoutComponent implements OnInit {
 		disabledVehicleBView: this.bButtonDisabled,
 		something: () => 'can be really complex'
 	  };
-
 	  outputs = {
 		onSomething: (type) => alert(type)
   }
 
 	constructor(
-    public layoutService: GridsterLayoutService,
-    private _route: ActivatedRoute,
-    private siteService: SitesService,
-    private gridData: GridsterDataService,
-    private _ds: GridsterDashboardService)
+    public layoutService  : GridsterLayoutService,
+    private _route        : ActivatedRoute,
+    private siteService   : SitesService,
+    private gridData      : GridsterDataService,
+    private dialog        : MatDialog,
+    private router        : Router,
+    private _ds           : GridsterDashboardService)
   {}
 
 	ngOnInit() {
-		// Grid options
-		this.getData();
+    // if (!this.layoutService.dashboardModel) {
+    //   this.router.navigate(['menu-manager'])
+    //   return;
+    // }
+	  this.initSubscription();
 	}
+
+  initSubscription() {
+    this._route.params.subscribe( data => {
+      this.layoutID = +data["id"];
+      this.getData();
+    })
+  }
 
 	display(event) {
 
@@ -79,22 +92,29 @@ export class GridMenuLayoutComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     const gridData$ = this.gridData.getGrid(site,this.layoutID)
 
-    gridData$.subscribe({ 
-      next: data => { 
-        this.layoutService.dashboardCollection = data
+    gridData$.subscribe({
+      next: data => {
+        this.layoutService.dashboardModel = data
         this.layoutService.parseJson(data)
-        this.layoutService.dashboardArray = this.layoutService.dashboardCollection.dashboard.slice();
+        // console.log('gridData subscribe', data)
+        this.layoutService.dashboardArray =  data.dashboard;
       }
     })
 	}
 
-	openItemSettings(id) {
-		//open modal popup.
+	openItemSettings(item) {
+    if (!item || !item.properties)
+    this.openEditor(item)
 	}
 
 	itemChange() {
-
+    this.layoutService.itemChange()
 	}
+
+  onDrop(ev) {
+    console.log('drop', ev)
+    const content =  this.layoutService.onDrop(ev)
+  }
 
 	changedOptions() {
 		this.options.api.optionsChanged();
@@ -106,4 +126,16 @@ export class GridMenuLayoutComponent implements OnInit {
 		);
 		this.itemChange();
 	}
+
+  openEditor(item: DashboardContentModel) {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(GridComponentPropertiesComponent,
+      { width:        '500px',
+        minWidth:     '500px',
+        height:       '650px',
+        minHeight:    '650px',
+        data : item
+      },
+    )
+  }
 }

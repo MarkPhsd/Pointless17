@@ -3,8 +3,10 @@ import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { UUID } from 'angular2-uuid';
 import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
 import { ActivatedRoute } from '@angular/router';
-import { DashboardContentModel, DashboardModel } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridsterDashboardService } from './gridster-dashboard.service';
+import { GridsterDataService } from '../gridster/gridster-data.service';
+import { SitesService } from '../reporting/sites.service';
 
 export interface IComponent {
   id: string;
@@ -16,15 +18,17 @@ export interface IComponent {
 })
 export class GridsterLayoutService {
 
-  public dashBoardModel: DashboardModel;
+  public dashboardID: number;
+
   public dashboardContentModel: DashboardContentModel;
   public layout: GridsterItem[] = [];
   public components: IComponent[] = [];
   public dropId: string;
   // protected options: GridsterConfig;
-  public  dashboardId: number;
-  public dashboardCollection: DashboardModel;
-  public dashboardArray: DashboardContentModel[];
+
+  public dashboardId: number;
+	public dashboardModel: DashboardModel;
+	public dashboardArray: DashboardContentModel[];
 
 	protected componentCollection = [
 		{ name: "Line Chart"    , componentInstance: CardComponent },
@@ -55,7 +59,10 @@ export class GridsterLayoutService {
 
   };
 
-  constructor(private _ds: GridsterDashboardService) { }
+  constructor(
+    private siteService    : SitesService,
+    private gridDataService: GridsterDataService,
+    private _ds            : GridsterDashboardService) { }
 
   addItem(): void {
     this.layout.push({
@@ -79,9 +86,8 @@ export class GridsterLayoutService {
   }
 
   dropItem(dragId: string): void {
-    const { components } = this;
-    const comp: IComponent = components.find(c => c.id === this.dropId);
-
+    const { components }    = this;
+    const comp: IComponent  = components.find(c => c.id === this.dropId);
     const updateIdx: number = comp ? components.indexOf(comp) : components.length;
     const componentItem: IComponent = {
       id: this.dropId,
@@ -96,57 +102,97 @@ export class GridsterLayoutService {
   }
 
 	itemChange() {
-    this.dashboardCollection.dashboard = this.dashboardArray;
-    let tmp = JSON.stringify(this.dashboardCollection);
-    let parsed: DashboardModel = JSON.parse(tmp);
-    this.serialize(parsed.dashboard);
-    console.log(this.dashboardArray);
-    this._ds.updateDashboard(this.dashboardId, parsed).subscribe();
+    this.saveDashBoard()
+  }
+
+  saveDashBoard() {
+    const site     = this.siteService.getAssignedSite();
+    let jsonObject = JSON.stringify(this.dashboardModel);
+    this.dashboardModel.jSONBject = jsonObject
+    // let parsed: DashboardModel = JSON.parse(tmp);
+    // this.serialize(parsed.dashboard);
+    console.log(this.dashboardModel);
+    this.gridDataService.updateGrid(site, this.dashboardModel).subscribe(
+      {
+        next: data => {
+          console.log('saved',data)
+        },
+        error: err => {
+          console.log('save failed', err)
+        }
+      }
+    );
   }
 
   onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
-		switch (componentType) {
-			case "radar_chart":
-				return this.dashboardArray.push({
-					cols: 5,
-					rows: 5,
-					x: 0,
-					y: 0,
-					component: CardComponent,
-					name: "Radar Chart",
-					id: 0,
-					properties:  ''
-				});
-			case "line_chart":
-				return this.dashboardArray.push({
-					cols: 5,
-					rows: 5,
-					x: 0,
-					y: 0,
-					component: CardComponent,
-					name: "Line Chart",
-					id: 0,
-					properties: '0'
-				});
-			case "doughnut_chart":
-				return this.dashboardArray.push({
-					cols: 5,
-					rows: 5,
-					x: 0,
-					y: 0,
-					component: CardComponent,
-					name: "Doughnut Chart",
-					id: 0,
-					properties: ''
-				});
-		}
+    console.log(componentType)
+		// switch (componentType) {
+		// 	case "radar_chart":
+    //     let item = {
+		// 			cols: 5,
+		// 			rows: 5,
+		// 			x: 0,
+		// 			y: 0,
+		// 			component: CardComponent,
+		// 			name: "Radar Chart",
+		// 			id: 0,
+		// 			properties:  ''
+		// 		} as DashboardContentModel;
+    //     return this.dashboardArray.push(item);
+		// 	case "line_chart":
+    //      item = {
+		// 			cols: 5,
+		// 			rows: 5,
+		// 			x: 0,
+		// 			y: 0,
+		// 			component: CardComponent,
+		// 			name: "Line Chart",
+		// 			id: 0,
+		// 			properties: '0'
+    //     } as DashboardContentModel;
+    //     return this.dashboardArray.push(item);
+		// 	case "doughnut_chart":
+    //      item = {
+		// 			cols: 5,
+		// 			rows: 5,
+		// 			x: 0,
+		// 			y: 0,
+		// 			component: CardComponent,
+		// 			name: "Doughnut Chart",
+		// 			id: 0,
+		// 			properties: ''
+    //     } as DashboardContentModel;
+    //     this.dashboardArray.push(item);
+		// }
+
+    const itemProperties = {} as  DashBoardComponentProperties;
+    let item = {
+      cols: 5,
+      rows: 5,
+      x: 0,
+      y: 0,
+      component: CardComponent,
+      name: "Doughnut Chart",
+      id: 0,
+      properties: itemProperties,
+    } as DashboardContentModel;
+
+    if (!this.dashboardArray){ this.dashboardArray = [] as DashboardContentModel[]}
+    this.dashboardArray.push(item);
+    this.dashboardModel.dashboard = this.dashboardArray;
+    console.log('this.dashboardModel', this.dashboardModel)
+    return this.dashboardArray;
+
 	}
 
   	// Super TOKENIZER 2.0 POWERED BY NATCHOIN
-	parseJson(dashboardCollection: DashboardModel) {
+	parseJson(dashboardModel: DashboardModel) {
 		// We loop on our dashboardCollection
-		dashboardCollection.dashboard.forEach(dashboard => {
+    console.log('json', dashboardModel)
+    if (!dashboardModel.dashboard) { return }
+
+		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
@@ -157,11 +203,15 @@ export class GridsterLayoutService {
 				}
 			});
 		});
+
 	}
 
-	serialize(dashboardCollection) {
+	serialize(dashboardModel) {
 		// We loop on our dashboardCollection
-		dashboardCollection.forEach(dashboard => {
+
+    console.log('json', dashboardModel)
+    if (!dashboardModel.dashboard) { return }
+		dashboardModel.forEach(dashboard => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection

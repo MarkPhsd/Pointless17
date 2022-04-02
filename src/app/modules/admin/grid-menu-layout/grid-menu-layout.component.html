@@ -1,19 +1,27 @@
-
-<gridster [options]="options" (drop)="layoutService.onDrop($event)" style="background-color: transparent;">
+<gridster class="content-container"
+          [options]="options"
+          (drop)="onDrop($event)"
+          >
 	<!-- Earch grister-item is generated with *ngFor -->
-	<gridster-item [item]="item" *ngFor="let item of layoutService.dashboardArray">
+
+	<gridster-item  [item]="item"
+                  *ngFor="let item of layoutService.dashboardArray">
 		<!-- Delete button call removeItem() who takes as parameter item -->
-		<button class="btn btn-icon btn-danger" style="margin-left: 10px; margin-top: 10px;" (click)="removeItem(item)">
+		<button class="btn btn-icon btn-danger"
+            style="margin-left: 10px; margin-top: 10px;"
+            (click)="removeItem(item)">
 			<mat-icon>delete</mat-icon>
 		</button>
 		<!-- Drag button (need drag-handler class) -->
-		<button class="btn btn-icon drag-handler" style="margin-left: 10px; margin-top: 10px;">
+		<!-- <button class="btn btn-icon drag-handler"
+            style="margin-left: 10px; margin-top: 10px;">
 			<mat-icon>drag</mat-icon>
-		</button>
-		<button class="btn btn-icon drag-handler" style="margin-left: 10px; margin-top: 10px;" (click)="openItemSettings(item.id)">
+		</button> -->
+		<button class="btn btn-icon drag-handler"
+            style="margin-left: 10px; margin-top: 10px;"
+            (click)="openItemSettings(item.id)">
 			<mat-icon>settings</mat-icon>
 		</button>
-
 		<!--
 			Disable drag option with no-drag class
 			ndc-dynamic tag is from ng-dynamic-component library

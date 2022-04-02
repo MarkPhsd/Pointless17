@@ -192,7 +192,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
           const numVal = parseInt( this.value)
           this.formatted = Number(numVal).toLocaleString('en', this.options);
           console.log(numVal)
-
         }
         if (!this.requireWholeNumber) {
           const numVal = parseInt( this.value) / 1 * this.decimals

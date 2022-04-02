@@ -4,7 +4,6 @@
   display: block;
   flex-direction: column;
   height: 100%;
-
 }
 
 router-outlet {
@@ -21,8 +20,6 @@ app-sticky-header {
   display: flex;
 }
 
-
-
 .mat-content {
   overflow: hidden;
 }
@@ -31,7 +28,6 @@ mat-drawer-container {
   height: 96%;
   padding-top: -5px;
   overflow: hidden;
-
 }
 
 mat-drawer-content {

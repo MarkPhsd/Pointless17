@@ -11,6 +11,13 @@
     flex-direction: column;
   }
 // }
+
 button {
   height: 30px;
+}
+
+.content-container {
+  min-height: 80vh;
+  height: initial;
+  background-color: azure;
 }

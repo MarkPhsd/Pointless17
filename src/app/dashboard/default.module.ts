@@ -264,11 +264,9 @@ import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settin
 import { NgxStripeModule } from 'ngx-stripe';
 import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 // import { NgxStripeModule } from 'ngx-stri../modules/admin/settings/stripe-settings/stripe-settings.component
-import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
-import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
-import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { NumericDirective } from '../_directives/numeric-directive.directive';
+
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -349,9 +347,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
-    GridManagerComponent,
-    GridSettingsComponent,
-    GridMenuLayoutComponent,
     LabelViewSelectorComponent,
     ListPrintersElectronComponent,
     MenuGroupItemEditComponent,
@@ -539,7 +534,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     RouterModule,
     HammerModule,
     SimpleTinyComponent,
-      NumericDirective,
+    NumericDirective,
   ],
 
   providers: [
@@ -575,9 +570,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
    {provide: RouteReuseStrategy , useClass: RouteReuseService},
 
-
   ],
-
 })
 
 export class DefaultModule { }

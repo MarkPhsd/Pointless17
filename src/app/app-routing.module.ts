@@ -113,10 +113,20 @@ import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.comp
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 
+// export const ROUTES: Routes = [
+//   { path: '', pathMatch: 'full', redirectTo: 'dashboard/1' },
+//   { path: 'dashboard/:id', component: DashboardComponent },
+// ]
 
 const routes: Routes = [
 
-   {path: '', component: DefaultComponent,
+    {path: 'menu-manager', component: GridManagerComponent,
+      children: [
+        { path: 'grid-menu-layout', component: GridMenuLayoutComponent ,data: {  title: 'Menus', animation: 'isLeft'}},
+      ]
+    },
+
+    {path: '', component: DefaultComponent,
       children: [
 
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
@@ -269,8 +279,10 @@ const routes: Routes = [
       ]
     },
 
-    { path:  'menu-board-designer',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-    { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
+    // { path: '', pathMatch: 'full', redirectTo: 'dashboard/7' },
+
+    // { path:  'menu-board-designer',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    // { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
 
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
 

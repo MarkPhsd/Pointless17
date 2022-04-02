@@ -256,7 +256,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this._renderer.removeClass(document.body, 'dark-theme');
     this._renderer.removeClass(document.body, 'light-theme');
     this._renderer.addClass(document.body, theme);
-    // this.themesService.renderTheme();
   }
 
   public searchBarToggler() {

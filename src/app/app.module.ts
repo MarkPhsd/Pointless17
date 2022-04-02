@@ -47,6 +47,19 @@ import { AgGridToggleComponent } from './_components/_aggrid/ag-grid-toggle/ag-g
 import { NGXMaterialModule } from './ngx-material.module';
 import { AppInitService } from './_services/system/app-init.service';
 import { ElectronService, NgxElectronModule } from 'ngx-electron';
+import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
+import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
+import { GridManagerEditComponent } from './modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
+import { GridSettingsComponent } from './modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
+import { CardComponent } from './modules/admin/reports/card/card.component';
+import { DynamicModule } from 'ng-dynamic-component';
+import { GridComponentPropertiesComponent } from './modules/admin/grid-menu-layout/grid-component-properties/grid-component-properties.component';
+// import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
+// import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
+// import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
+// import { GridManagerEditComponent } from '../modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
+
+
 // import { NGXMaterialModule } from './ngx-material.module';
 
 // import { NgxKeypadModule } from 'ngx-keypad';
@@ -83,10 +96,16 @@ export function init_app(appLoadService: AppInitService) {
     RegisterAccountMainComponent,
     ResetpasswordComponent,
     SafeHtmlPipe,
+    GridManagerComponent,
+    GridSettingsComponent,
+    GridMenuLayoutComponent,
+    GridManagerEditComponent,
+    GridComponentPropertiesComponent,
   ],
 
   imports: [
     AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
+    DynamicModule,
     AppRoutingModule,
     AppMaterialModule,
     BrowserAnimationsModule,

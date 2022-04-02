@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, HostListener } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, HostListener, Input } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReportingService,DashboardService,AuthenticationService } from 'src/app/_services';
 
@@ -37,8 +37,9 @@ export class FilterComponent implements OnInit {
   filterForm: FormGroup;
   calDate: IDatePicker;
   counter: number;
-  dateRange: string;
 
+
+  @Input()  dateRange: string;
   @Output() messageOut = new EventEmitter<string>();
   @Output() counterOut = new EventEmitter<number>();
 
@@ -78,8 +79,14 @@ export class FilterComponent implements OnInit {
 
   ngOnInit() {
     this.counter =0;
+
+    // if (this.dateRange) {
+    //   this.initDateForm();
+    //   //filt out some time.
+    //   return
+    // }
     this.setFilterDateToday()
-    this.initDateForm();
+
     this.updateItemsPerPage();
   }
 
