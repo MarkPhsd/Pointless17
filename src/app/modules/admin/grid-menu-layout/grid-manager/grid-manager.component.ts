@@ -20,11 +20,11 @@ export class GridManagerComponent implements OnInit {
   dashboardModel: DashboardModel;
   layoutID      : number;
 	// Components variables
-	 toggle: boolean;
-	 modal: boolean;
-	 widgetCollection: WidgetModel[];
-	 dashboardCollection: DashboardModel[];
-   matToolbarColor = 'primary';
+  toggle: boolean;
+  modal: boolean;
+  widgetCollection: WidgetModel[];
+  dashboardCollection: DashboardModel[];
+  matToolbarColor = 'primary';
   inputForm: FormGroup;
 
 	constructor(private _ds: GridsterDashboardService,
@@ -41,12 +41,19 @@ export class GridManagerComponent implements OnInit {
     this.refresh();
 	}
 
-  listMenu(id: string) {
-    this.router.navigate(["/menu-manager/grid-menu-layout/", {id:id}]);
+  saveChanges() {
+    this.layoutService.itemChange(null)
+
   }
+
+  listMenu(id: string) {
+    this.layoutService.forceRefresh(id)
+  }
+
 
   refresh() {
 		// We make a get request to get all widgets from our REST API
+    // const id = this.layoutService.dashboardModel.id;
 		this._ds.getWidgets().subscribe(widgets => {
 			this.widgetCollection = widgets;
 		});
@@ -55,11 +62,22 @@ export class GridManagerComponent implements OnInit {
 		// We make get request to get all dashboards from our REST API
 		this.gridDataService.getGrids(site).subscribe(dashboards => {
 			this.dashboardCollection = dashboards;
+      if (!this.layoutService.dashboardModel) {
+        this.listMenu(dashboards[0].id.toString())
+      }
 		});
+
+  }
+
+  reset() {
+    const path = "/menu-manager/"
+    this.layoutService.stateChanged = false
+    this.router.navigate([path]);
   }
 
 	onDrag(event, identifier) {
 		event.dataTransfer.setData('widgetIdentifier', identifier);
+    this.layoutService.itemChange(null);
 	}
 
 	// Method call when toggle button is clicked in navbar
@@ -68,6 +86,11 @@ export class GridManagerComponent implements OnInit {
 	}
 
   addGrid() {
+    this.dashboardCollection = null;
+    this.dashboardModel = null;
+    this.layoutService.dashboardModel = null;
+    this.layoutService.dashboardContentModel = null;
+    this.layoutService.dashboardID = 0;
     this.openEditor(0)
   }
 

@@ -1,8 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { GridsterLayoutService,IComponent  } from 'src/app/_services/system/gridster-layout.service';
-
-import { DashboardContentModel, DashboardModel } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import {CompactType, DisplayGrid, Draggable, GridsterConfig, GridsterItem, GridType, PushDirections, Resizable} from 'angular-gridster2';
+import { DashboardContentModel, DashboardModel, DashBoardProperties } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 
 // COMPONENTS
 import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
@@ -12,6 +11,7 @@ import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.se
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GridComponentPropertiesComponent } from './grid-component-properties/grid-component-properties.component';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'grid-menu-layout',
@@ -21,10 +21,10 @@ import { GridComponentPropertiesComponent } from './grid-component-properties/gr
 export class GridMenuLayoutComponent implements OnInit {
 
   @Input() layoutID : any;
-
-  get options(): GridsterConfig {
-    return this.layoutService.options;
-  }
+  options: GridsterConfig;
+  // get options(): GridsterConfig {
+  //   return this.layoutService.options;
+  // }
   get layout(): GridsterItem[] {
     return this.layoutService.layout;
   }
@@ -32,102 +32,120 @@ export class GridMenuLayoutComponent implements OnInit {
     return this.layoutService.components;
   }
 
-	aButtonDisabled = true;
-	bButtonDisabled = true;
+  _dashboard : Subscription;
+
+	aButtonDisabled          = true;
+	bButtonDisabled          = true;
+  @Input() designerMode    = true;
+  gridsteritemclass= 'gridster-item';
 
 	inputs = {
 		hello: 'world from input',
 		disabledVehicleAView: this.aButtonDisabled,
 		disabledVehicleBView: this.bButtonDisabled,
 		something: () => 'can be really complex'
-	  };
-	  outputs = {
+  };
+
+  inputsList: any[];
+
+  outputs = {
 		onSomething: (type) => alert(type)
   }
 
+  backgroundColor = '#82a1ad';
+  opacity         = 5;
+
 	constructor(
     public layoutService  : GridsterLayoutService,
-    private _route        : ActivatedRoute,
-    private siteService   : SitesService,
-    private gridData      : GridsterDataService,
     private dialog        : MatDialog,
-    private router        : Router,
-    private _ds           : GridsterDashboardService)
+  )
   {}
 
 	ngOnInit() {
-    // if (!this.layoutService.dashboardModel) {
-    //   this.router.navigate(['menu-manager'])
-    //   return;
-    // }
-	  this.initSubscription();
+    this.updateGridsterUserMode(this.designerMode);
+    this.options = {
+			gridType: "fit",
+			enableEmptyCellDrop: true,
+			emptyCellDropCallback: this.layoutService.onDrop,
+			pushItems: true,
+			swap: true,
+			pushDirections: { north: true, east: true, south: true, west: true },
+			resizable: { enabled: true },
+			// itemChangeCallback: this.itemChange.bind(this),
+      itemChangeCallback : this.nodifyChanges.bind(this),
+			draggable: {
+				enabled: true,
+				// ignoreContent: true,
+				// dropOverItems: true,
+				// dragHandleClass: "drag-handler",
+				// ignoreContentClass: "drag",
+			},
+			displayGrid: DisplayGrid.OnDragAndResize,
+			minCols: 40,
+			minRows: 40,
+      mobileBreakpoint: 640,
+		};
+    this.initSubscription();
+
+
 	}
 
+  saveChanges() {
+    this.itemChange()
+  }
+
+  nodifyChanges() {
+    this.layoutService.stateChanged = true
+  }
+
+  updateGridsterUserMode(mode: boolean) {
+    this.designerMode    = mode;
+    if (mode) {
+      this.gridsteritemclass= 'gridster-item';
+    }
+    if (!mode) {
+      this.gridsteritemclass= 'gridster-item-user';
+    }
+  }
+
   initSubscription() {
-    this._route.params.subscribe( data => {
-      this.layoutID = +data["id"];
-      this.getData();
+     this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
+      // this.layoutService.getData(this.layoutService.dashboardID);
+      if (!data) {
+        this.layoutService.forceRefresh(null);
+        return;
+      }
+      if (this.layoutService.dashboardProperties) {
+        this.backgroundColor = this.layoutService.dashboardProperties.backgroundColor;
+        this.opacity         = this.layoutService.dashboardProperties.opacity;
+      }
+
     })
   }
 
-	display(event) {
-
-	}
-
-	getData() {
-		// We get the id in get current router dashboard/:id
-		// this._route.params.subscribe(params => {
-		// 	// + is used to cast string to int
-		// 	this.layoutService.dashboardId = +params["id"];
-		// 	// We make a get request with the dashboard id
-		// 	this._ds.getDashboard(this.layoutService.dashboardId).subscribe(dashboard => {
-		// 		// We fill our dashboardCollection with returned Observable
-		// 		this.layoutService.dashboardCollection = dashboard;
-		// 		// We parse serialized Json to generate components on the fly
-		// 		this.layoutService.parseJson(this.layoutService.dashboardCollection);
-		// 		// We copy array without reference
-		// 		this.layoutService.dashboardArray = this.layoutService.dashboardCollection.dashboard.slice();
-		// 	});
-		// });
-    const site = this.siteService.getAssignedSite();
-    const gridData$ = this.gridData.getGrid(site,this.layoutID)
-
-    gridData$.subscribe({
-      next: data => {
-        this.layoutService.dashboardModel = data
-        this.layoutService.parseJson(data)
-        // console.log('gridData subscribe', data)
-        this.layoutService.dashboardArray =  data.dashboard;
-      }
-    })
-	}
-
 	openItemSettings(item) {
-    if (!item || !item.properties)
     this.openEditor(item)
 	}
 
-	itemChange() {
-    this.layoutService.itemChange()
-	}
+  itemChange() {
+    this.layoutService.itemChange(null)
+  }
 
   onDrop(ev) {
-    console.log('drop', ev)
     const content =  this.layoutService.onDrop(ev)
   }
 
-	changedOptions() {
+	changedOptionsEvent() {
 		this.options.api.optionsChanged();
 	}
 
 	removeItem(item) {
-		this.layoutService.dashboardArray.splice(
-			this.layoutService.dashboardArray.indexOf(item),
-		);
-		this.itemChange();
+    this.layoutService.removeCard(item)
+    this.layoutService.saveDashBoard();
 	}
 
   openEditor(item: DashboardContentModel) {
+    console.log(item)
     let dialogRef: any;
     dialogRef = this.dialog.open(GridComponentPropertiesComponent,
       { width:        '500px',

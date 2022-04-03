@@ -23,6 +23,7 @@
           *ngIf="inputForm &&   dashBoardContent; else loading;" >
       <div class="grid-forms">
         <div class="grid-items">
+
           <app-value-fields
             [inputForm]="inputForm"
             [fieldName]="'name'"
@@ -31,6 +32,7 @@
           </app-value-fields>
 
           <div class="grid-items">
+            <mat-label>Type of Card</mat-label>
             <mat-button-toggle-group name="type"
                       aria-label="item Type"
                       formControlName="type">
@@ -48,7 +50,7 @@
               <mat-button-toggle-group name="type"
                         aria-label="item Type"
                         formControlName="rangeType">
-                <mat-button-toggle class="discount-type-button"
+                <mat-button-toggle
                         [value]="item"
                         (click)="setRangeType(item)"
                         *ngFor="let item of rangeTypes" >
@@ -64,7 +66,6 @@
                       [formControlName] ="'cardValueType'"
                       (selectionChange)="setCardValueType($event.value)">
                     <mat-option value="">
-
                     </mat-option>
                     <mat-option
                         *ngFor="let item of cardValueTypes"
@@ -75,15 +76,20 @@
               </mat-form-field>
             </div>
 
-            <div *ngIf="cardType === 'menu' && (cardValueType === 'Category')">
-              <div class="grid-item"
-                    *ngIf="categories$">
-                  <form-select-list [searchForm]      = "inputForm"
-                                    [formFieldName]   = "'categoryID'"
-                                    [list$]           = "categories$"
-                                    [showActiveInactive]="true"
-                                    (selectionChange) = "setCategory($event)">
-                  <div fieldSearchDescription>Category</div>
+            <div class="small-margin"
+                 *ngIf="cardType === 'menu' &&
+                       (cardValueType === 'Category' || cardValueType === 'Specials')">
+              <div *ngIf="itemValue">
+                Selected : {{itemValue?.name}}
+              </div>
+              <div class="grid-item">
+                  <form-select-list [searchForm]           = "inputForm"
+                                    [formFieldName]        = "'listItemID'"
+                                    [list$]                 = "list$"
+                                    [showActiveInactive]   = "true"
+                                    [formValue]            = 'itemValue'
+                                    (selectionChangeValue) = "setCategory($event)">
+                  <div fieldSearchDescription>Select</div>
                   </form-select-list>
               </div>
             </div>

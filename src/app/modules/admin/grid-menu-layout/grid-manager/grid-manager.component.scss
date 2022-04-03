@@ -35,6 +35,9 @@ mat-sidebar {
   background-color:rgb(55, 55, 59);
 }
 
+mat-card {
+  margin: 5px;
+}
 .mat-content {
   overflow: hidden;
 }
@@ -52,12 +55,12 @@ mat-sidebar {
 }
 
 .mat-orderBar-wide {
-  min-width: 350px !important;
-  max-width: 350px;
+  min-width: 250px !important;
+  max-width: 250px;
   border-right: 1px solid #eee;
   overflow: hidden;
   @include for-phone-only  {
-    width: 55px;
+    width: 150px;
   }
 }
 
@@ -111,6 +114,11 @@ mat-sidebar {
   margin: 5px; /* 30px top margin to avoid conflict with the close button on smaller screens */
 }
 
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .overlay .closebtn {
   position: absolute;
   top: 20px;

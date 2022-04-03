@@ -55,6 +55,34 @@
 
       </div>
     </div>
+
+    backgroundColor {{backgroundColor}}
+    <div *ngIf="inputProperties">
+
+      <div class="grid-items">
+        <input [(colorPicker)]="backgroundColor"
+               [style.background]="backgroundColor"/>
+      </div>
+
+      <div class="grid-items">
+        Value {{opacity}}
+        <mat-slider
+                    thumbLabel
+                    [displayWith]="formatLabel"
+                    tickInterval="1000"
+                    step="1"
+                    min="0"
+                    max="100"
+                    [(ngModel)]="opacity"
+                    aria-label="units"
+        ></mat-slider>
+      </div>
+
+    </div>
+
+    opacity
+
+
   </mat-card-content>
 
   <ng-template #loading>

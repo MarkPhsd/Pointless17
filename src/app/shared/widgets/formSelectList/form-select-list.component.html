@@ -25,34 +25,30 @@
 
             <div *ngIf="showActiveInactive" class="mat-icon">
               <span *ngIf="inputField.value.active"><mat-icon color="primary">toggle_on</mat-icon></span>
-              <span *ngIf="!inputField.value.active"><mat-icon color="warn"> toggle_off</mat-icon></span>
+              <span *ngIf="!inputField.value.active"><mat-icon color="warn">toggle_off</mat-icon></span>
             </div>
           </div>
 
         </mat-select-trigger>
 
-        <div *ngIf="(list$ | async) as list">
-
+        <div *ngIf="itemList">
           <mat-option [value]="0">
             Clear
           </mat-option>
-          <mat-option  *ngFor="let item of list"
+          <mat-option  *ngFor="let item of itemList"
                        [value]="item">
-
             {{ item.name }}
-
             <span *ngIf="showActiveInactive">
               <span *ngIf="item.active"><mat-icon color="primary">toggle_on</mat-icon></span>
               <span *ngIf="!item.active"><mat-icon color="warn"> toggle_off</mat-icon></span>
             </span>
-
           </mat-option>
-
         </div>
       </mat-select>
     </mat-form-field>
 
 </div>
+
 <!--
 <mat-form-field appearance="fill">
   <mat-label>Toppings</mat-label>

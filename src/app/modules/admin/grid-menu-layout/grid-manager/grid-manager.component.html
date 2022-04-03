@@ -20,40 +20,67 @@
       [opened]  ="toggle"
       [class]   ="'mat-orderBar-wide'" >
 
-    <ul class="nav-list">
-      <section class="nav-group collapsible">
-        <label for="tabexample1">Widget Selection</label>
-      </section>
-      <li *ngFor="let widget of widgetCollection">
-        <a draggable="true" class="nav-link"
-           (dragstart)="onDrag($event, widget.identifier)">
-          <mat-icon>drag</mat-icon>
-          {{ widget.name }}
-        </a>
-      </li>
-    </ul>
+    <mat-card>
+      <mat-card-subtitle>
+        <section class="nav-group collapsible">
+          <label for="tabexample1">Drag Widget Items</label>
+        </section>
+      </mat-card-subtitle>
+      <mat-card-content>
+        <ul class="nav-list">
+          <li>
+             <a draggable="true" class="nav-link"
+                (dragstart)="onDrag($event, 'graph')">
+              <mat-icon>drag_indicator</mat-icon>
+              Default
+            </a>
+          </li>
+          <li *ngFor="let widget of widgetCollection">
+            <a draggable="true" class="nav-link"
+               (dragstart)="onDrag($event, widget.identifier)">
+              <mat-icon>drag_indicator</mat-icon>
+              {{ widget.name }}
+            </a>
+          </li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
 
-    <div class="header-items">
-      <button mat-button
-              (click)="addGrid()">
-        <mat-icon>add_box</mat-icon>Add Dashboard</button>
-    </div>
-    <div *ngIf="layoutService.dashboardModel" class="header-items">
-      <button mat-button
-              (click)="editGrid()">
-        <mat-icon>edit</mat-icon>Edit Current </button>
-    </div>
-    <div class="header-items">
-      <button mat-button
-              (click)="refresh()">
-        <mat-icon>refresh</mat-icon>Refresh</button>
-    </div>
+    <mat-card>
+      <mat-card-content>
+        <div class="header-items">
+          <button mat-button
+                  (click)="addGrid()">
+            <mat-icon>add_box</mat-icon>Add Dashboard</button>
+        </div>
+
+        <div *ngIf="layoutService.dashboardModel" class="header-items">
+          <button mat-button
+                  (click)="editGrid()">
+            <mat-icon>edit</mat-icon>Edit Current </button>
+        </div>
+
+        <div *ngIf="layoutService.stateChanged">
+          <button mat-button color="accent" (click)="saveChanges()"><mat-icon>save</mat-icon>Save Required</button>
+        </div>
+
+        <div class="header-items">
+          <button mat-button
+                  (click)="layoutService.forceRefresh(layoutService?.dashboardModel?.id)">
+            <mat-icon>refresh</mat-icon>Refresh</button>
+        </div>
+
+        <div class="header-items">
+          <button mat-button
+                  (click)="reset()">
+            <mat-icon>restart_alt</mat-icon>Reset</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
   </mat-drawer>
 
   <mat-drawer-content *ngIf="dashboardCollection">
-    <!-- <mat-tab *ngFor="let dashboard of dashboardCollection">
-			<button mat-raised-button (click)="setLayout(dashboard)">{{ dashboard.name }}</button>
-		</mat-tab> -->
 
     <div *ngIf="inputForm" class="grid-items">
       <mat-button-toggle-group
@@ -69,11 +96,7 @@
           </mat-button-toggle>
         </mat-button-toggle-group>
       </div>
-          <!-- (click)="setLayout(item)" -->
-          <!-- routerLink="grid-menu-layout;id={{item.id}}" -->
-		<!-- <grid-menu-layout [layoutID]="layoutID"></grid-menu-layout> -->
 
-    <router-outlet></router-outlet>
     <router-outlet #outlet="outlet"></router-outlet>
 
   </mat-drawer-content>

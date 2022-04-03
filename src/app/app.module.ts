@@ -134,6 +134,7 @@ export function init_app(appLoadService: AppInitService) {
     AgGridToggleComponent,
     NGXMaterialModule,
     SharedModule,
+
   ],
 
   providers: [

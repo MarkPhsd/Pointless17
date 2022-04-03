@@ -1,38 +1,37 @@
-<gridster class="content-container"
-          [options]="options"
-          (drop)="onDrop($event)"
-          >
-	<!-- Earch grister-item is generated with *ngFor -->
+<div *ngIf="designerMode">
+  BackColor: {{backgroundColor}} Opacity: {{opacity}}
+</div>
 
-	<gridster-item  [item]="item"
-                  *ngFor="let item of layoutService.dashboardArray">
-		<!-- Delete button call removeItem() who takes as parameter item -->
-		<button class="btn btn-icon btn-danger"
-            style="margin-left: 10px; margin-top: 10px;"
-            (click)="removeItem(item)">
-			<mat-icon>delete</mat-icon>
-		</button>
-		<!-- Drag button (need drag-handler class) -->
-		<!-- <button class="btn btn-icon drag-handler"
-            style="margin-left: 10px; margin-top: 10px;">
-			<mat-icon>drag</mat-icon>
-		</button> -->
-		<button class="btn btn-icon drag-handler"
-            style="margin-left: 10px; margin-top: 10px;"
-            (click)="openItemSettings(item.id)">
-			<mat-icon>settings</mat-icon>
-		</button>
-		<!--
-			Disable drag option with no-drag class
-			ndc-dynamic tag is from ng-dynamic-component library
-			he generates a dynamic component on the fly
-		-->
-		<!-- <ndc-dynamic  [ndcDynamicComponent]="item.component" (moduleInfo)="display($event)"></ndc-dynamic> -->
+<div *ngIf="layoutService.dashboardModel">
 
-		<ng-container
-						*ngComponentOutlet="item.component;
-						ndcDynamicInputs: inputs;
-						ndcDynamicOutputs: outputs">
-    </ng-container>
-	</gridster-item>
-</gridster>
+  <gridster [style.background]="backgroundColor"
+            class="content-container"
+            [options]="options"
+            (drop)="onDrop($event)"
+            >
+
+    <gridster-item  [style.opacity]="opacity/100"
+                    [item]="item"
+                    *ngFor="let item of layoutService.dashboardArray">
+
+        <div>
+          <div class="menu-bar" *ngIf="designerMode">
+            <mat-menu-basic
+              [enableDelete]="true"
+              [enableOpen]="true"
+              (outputDelete)="removeItem(item)"
+              (outputOpen)="openItemSettings(item)">
+            </mat-menu-basic>
+          </div>
+          <div [class]="gridsteritemclass">
+            <ng-container
+                    *ngComponentOutlet="item.component;
+                    ndcDynamicInputs  : item.object;
+                    ndcDynamicOutputs : outputs">
+            </ng-container>
+          </div>
+        </div>
+    </gridster-item>
+  </gridster>
+
+</div>

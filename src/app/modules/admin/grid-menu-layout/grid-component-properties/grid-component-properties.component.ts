@@ -4,16 +4,26 @@ import { Observable } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterDashboardService } from 'src/app/_services/system/gridster-dashboard.service';
-import { DashboardContentModel, DashboardModel } from '../grid-models';
+import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from '../grid-models';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
+import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
+import { json } from 'stream/consumers';
+import { itemsAnimation } from 'src/app/_animations/list-animations';
 export interface ValueTypeList {
   filter: string;
   name  : string;
   icon  : string;
+}
+
+export interface ItemValue {
+  name: string;
+  id: string;
+  active: boolean;
 }
 @Component({
   selector: 'app-grid-component-properties',
@@ -24,17 +34,22 @@ export interface ValueTypeList {
 export class GridComponentPropertiesComponent implements OnInit {
 
   dashBoardContent: DashboardContentModel;
-  inputForm   : FormGroup;
-  rangeTypes = ['year', 'month', 'date', 'week', 'hour',]
+  inputForm       : FormGroup;
+  rangeTypes      = ['year', 'month', 'date', 'week', 'hour','currentDay']
+
   cardTypes  = [
     {name: 'chart', icon: 'bar_chart', filter: 'none'},
     {name: 'report', icon: 'list', filter: 'none'},
     {name: 'menu', icon: 'menu', filter: 'none'},
     {name: 'tables', icon: 'table', filter: 'none'},
-  ]as ValueTypeList[];
-  cardType: string;
+  ] as ValueTypeList[];
+
+  itemValue       : ItemValue;
+  cardType        : string;
   cardValueTypes  = [] as ValueTypeList[];
+
   cardValueType: string;
+  listItemID   : string;
 
   chartTypes = [
     {name: 'Bar', icon: 'bar_chart', filter: 'none'},
@@ -44,56 +59,51 @@ export class GridComponentPropertiesComponent implements OnInit {
     {name: 'Pie', icon: 'pie_chart', filter: 'none'},
     {name: 'Scatter', icon: 'scatter_chart', filter: 'none'},
     {name: 'Candlestick', icon: 'candlestick_chart', filter: 'none'},
-  ]
+  ] as ValueTypeList[];
 
   menuBoardTypes = [
     {name: 'Flowers', icon: 'list', filter: 'MMJ'},
     {name: 'Category', icon: 'list', filter: ''},
-
+    {name: 'Specials', icon: 'list', filter: ''},
   ] as ValueTypeList[];
 
-  menuBoardType: ValueTypeList
-  // categories$ = Observable<Categories>
+  menuBoardType    : ValueTypeList
   categories$      : Observable<IMenuItem[]>;
+  specials$        : Observable<IPriceSchedule[]>;
+  list$            : Observable<any[]>;
+  list             : any[];
+
   constructor(
     private siteService        : SitesService,
-    private gridDataService    : GridsterDataService,
     private dialogRef          : MatDialogRef<GridComponentPropertiesComponent>,
     public layoutService       : GridsterLayoutService,
     private menuService        : MenuService,
+    private priceScheduleService: PriceScheduleService,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialog             : MatDialog,
     private fb                 : FormBuilder,
     private _snackBar          : MatSnackBar,) {
-
     if (data) {
       this.dashBoardContent = data;
     }
-}
+  }
 
   ngOnInit() {
     this.fillForm();
     const site = this.siteService.getAssignedSite();
     this.categories$    = this.menuService.getListOfCategoriesAll(site)
+    this.specials$      = this.priceScheduleService.getList(site);
   }
 
-  onCancel(event) {
-    this.dialogRef.close()
-  }
+  onCancel(event) {this.dialogRef.close()}
 
   setCardType(item: ValueTypeList) {
     this.cardType = item.name;
     this.setCardTypeValuesList(item.name);
-    console.log('this.cardValueType', this.cardValueTypes)
-    console.log('type', item)
-    if (this.inputForm) {
-      this.inputForm.controls['type'].setValue(item.name)
-    }
+    if (this.inputForm) { this.inputForm.controls['type'].setValue(item.name) }
   }
+
   setRangeType(type: string) {
-    if (this.inputForm) {
-      this.inputForm.controls['rangeType'].setValue(type)
-    }
+    if (this.inputForm) { this.inputForm.controls['rangeType'].setValue(type) }
   }
 
   setCardTypeValuesList(type: string) {
@@ -107,9 +117,9 @@ export class GridComponentPropertiesComponent implements OnInit {
       {name: 'Order Count',  filter: 'report', icon: ''},
       {name: 'Avg Count',    filter: 'report', icon: ''},
 
-      {name: 'Square',        filter: 'table', icon: ''},
-      {name: 'Round',         filter: 'table', icon: ''},
-      {name: 'Half Found',    filter: 'table', icon: ''},
+      {name: 'Square',       filter: 'table', icon: ''},
+      {name: 'Round',        filter: 'table', icon: ''},
+      {name: 'Half Found',   filter: 'table', icon: ''},
     ]
 
     if (type === 'tables') { type = 'table'}
@@ -118,26 +128,34 @@ export class GridComponentPropertiesComponent implements OnInit {
 
     if (type === 'menu') {
       this.cardValueTypes = this.menuBoardTypes;
-
     }
-
   }
 
-  setCategory(id: number) {
-    if (this.inputForm) {
-      this.inputForm.controls['categoryID'].setValue(id)
-    }
+  setCategory(value: string) {
+    this.listItemID = value;
+    this.setSelectValue(value)
   }
 
   setCardValueType(type: string) {
     this.cardValueType = type;
-    if (this.inputForm) {
-      this.inputForm.controls['cardValueType'].setValue(type)
+    //set the list type to look up
+    this.refreshTypeList(type);
+    if (this.inputForm) { this.inputForm.controls['cardValueType'].setValue(type)  }
+  }
+
+  refreshTypeList(type: string) {
+    this.list$      = null;
+    this.listItemID = null;
+    const site      = this.siteService.getAssignedSite();
+    if (type === 'Category') {
+      this.list$ = this.menuService.getListOfCategoriesAll(site)
+    }
+    if (type === 'Specials') {
+      this.list$  = this.priceScheduleService.getList(site);
     }
   }
 
   receiveData() {
-
   }
 
   fillForm() {
@@ -150,57 +168,109 @@ export class GridComponentPropertiesComponent implements OnInit {
   }
 
   initForm() {
-    this.inputForm = this.fb.group( {
-      id       : [''],
-      username : [''],
-      name     : [''],
-      type     : [''], //preset types, menu, report widget, restaurant/ operation layout.
-      jSONBject: [''],
-      active   : [''],
-      rangeType: [''],
+    this.inputForm = this.fb.group({
+      id           : [''],
+      username     : [''],
+      name         : [''],
+      type         : [''], //preset types, menu, report widget, restaurant/ operation layout.
+      active       : [''],
+      rangeType    : [''],
       cardValueType: [''],
-      menuType   : [''],
-      categoryID : [''],
+      menuType     : [''],
+      listItemID   : [''],
     })
     return this.inputForm
   };
 
   initFormData() {
-    const site     = this.siteService.getAssignedSite();
-    this.inputForm.patchValue(this.dashBoardContent)
+    const site = this.siteService.getAssignedSite();
+    let object = {} as DashBoardComponentProperties;
+
+    const item = this.dashBoardContent.properties
+    if (!item) {
+      object               = {} as DashBoardComponentProperties;
+      object.name          = this.dashBoardContent.name;
+      object.id            = this.dashBoardContent.id;
+      object.type          = '';
+      object.cardValueType = '';
+      object.listItemID    = '';
+    }
+
+    if (item) {
+      let item = JSON.parse(this.dashBoardContent.properties) as DashBoardComponentProperties;
+      object.name          = item?.name;
+      object.id            = this.dashBoardContent.id;
+      object.dateFrom      = item?.dateFrom;
+      object.dateTo        = item?.dateTo;
+      object.rangeType     = item?.rangeType;
+      object.type          = item?.type;
+      object.menuType      = item?.menuType;
+      object.lengthOfRange = item?.lengthOfRange;
+      object.listItemID    = item?.listItemID;
+      object.cardValueType = item?.cardValueType;
+    }
+
+    //refesh form values and local variables
+    this.inputForm.patchValue(object);
+    if (object.type)            { this.cardType = object?.type };
+    if (object.cardValueType)   { this.cardValueType = object?.cardValueType  };
+
+    this.setCardTypeValuesList(object.type);
+
+    this.refreshTypeList(this.cardValueType);
+    if (object.listItemID) {  this.listItemID = object?.listItemID; }
+
+    if (object.listItemID) { this.setSelectValue(object?.listItemID); }
+
   }
 
   update(event): void {
-    const site = this.siteService.getAssignedSite();
-    if (!this.inputForm) { return }
-    let result = ''
-    let model = this.inputForm.value as DashboardContentModel;
-    //set values of dashboardmodel
-    // model = this.setValues(model)
+    //update the DashboardContentModel in memory
+    const content = this.updateCard();
+    // then slice out the current DashboardContentModel from the DashboardModel
+    // apply the updated DashboardContentModel
+    const dashBoard = this.layoutService.dashboardModel;
+    const id        = content.id;
+    const list      = dashBoard.dashboard.filter( data =>
+       {return data.id != id}
+    )
 
-    // if (model.id) {
-    //   const  model$ = this.gridDataService.updateGrid(site, model);
-    //   this.publish(model$)
-    // }
-
-    // if (!model.id) {
-    //   const  model$ = this.gridDataService.addGrid(site, model);
-    //   this.publish(model$)
-    // }
-
+    dashBoard.dashboard =  list
+    dashBoard.dashboard.push(content);
+    this.updateDashBoard(dashBoard)
   };
 
-  publish(model$: Observable<DashboardContentModel>) {
-    model$.subscribe(
-      {
-        next : data =>{
-          this.notifyEvent('Saved', "Saved")
-        },
-        error: err => {
-            this.notifyEvent(err, "Failure")
-        }
+  updateCard(): DashboardContentModel {
+    const site = this.siteService.getAssignedSite();
+    if (!this.inputForm) { return }
+    const id            = this.dashBoardContent.id;
+    const content       = this.dashBoardContent;
+    let model           = this.inputForm.value as DashBoardComponentProperties;
+    model.listItemID    = this.listItemID;
+    model.id            = this.dashBoardContent.id;
+    model.cardValueType = this.cardValueType;
+    model.type          = this.cardType;
+    model.name          = model.name;
+    content.component   = null;
+    const jsonObject    = JSON.stringify(model);
+    content.properties  = jsonObject;
+    return content;
+  }
+
+  updateDashBoard(dashBoard: DashboardModel) {
+    this.layoutService.dashboardModel = dashBoard;
+    this.layoutService.dashboardArray = this.layoutService.dashboardArray
+    this.layoutService.saveDashBoard();
+  }
+
+  setSelectValue(value: string) {
+    if (value) {
+      if (this.inputForm) {
+        const item =   JSON.parse(JSON.stringify(value))
+        this.inputForm.controls['listItemID'].setValue(value);
+        this.itemValue = item
       }
-    )
+    }
   }
 
   updateExit(event) {
@@ -214,4 +284,5 @@ export class GridComponentPropertiesComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
+
 }

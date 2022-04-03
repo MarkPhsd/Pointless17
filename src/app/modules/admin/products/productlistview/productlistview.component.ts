@@ -410,7 +410,6 @@ constructor(  private _snackBar              : MatSnackBar,
     const site               = this.siteService.getAssignedSite()
     if (page != 0) { this.currentPage         = page}
     const productSearchModel = this.initSearchModel();
-    console.log(productSearchModel)
     this.onGridReady(this.params)
   }
 

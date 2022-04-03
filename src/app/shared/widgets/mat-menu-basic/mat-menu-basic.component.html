@@ -1,0 +1,37 @@
+<div >
+  <button aria-label="user menu"
+            mat-button
+            class="more-button"
+            [matMenuTriggerFor]="menu"
+            #menuTrigger="matMenuTrigger"
+            (click)="menuTrigger.openMenu()">
+      <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu class="mat-menu-panel" [overlapTrigger]="false" #menu="matMenu">
+    <span (mouseleave)="menuTrigger.closeMenu()">
+
+      <div class="button-list">
+        <div *ngIf="enableOpen">
+          <button mat-button  color="primary"
+                  (click)="open()"><mat-icon>view</mat-icon>Open</button>
+        </div>
+
+        <div *ngIf="enableSave">
+          <button mat-button  color="primary"
+                  (click)="save()"><mat-icon>save</mat-icon>Save</button>
+        </div>
+
+        <div *ngIf="enablePrint">
+          <button mat-button  color="primary"
+                  (click)="print()"><mat-icon>print</mat-icon>Print</button>
+        </div>
+
+        <div *ngIf="enableDelete">
+          <button mat-button  color="warn"
+                  (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+        </div>
+
+      </div>
+    </span>
+  </mat-menu>
+</div>

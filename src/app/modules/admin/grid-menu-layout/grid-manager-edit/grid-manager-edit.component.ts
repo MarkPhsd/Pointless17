@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterDashboardService } from 'src/app/_services/system/gridster-dashboard.service';
-import { DashboardModel } from '../grid-models';
+import { DashboardModel, DashBoardProperties } from '../grid-models';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
@@ -25,6 +25,19 @@ export class GridManagerEditComponent implements OnInit {
   dashboardModel : DashboardModel;
   dashboardModel$: Observable<DashboardModel>;
 
+  inputProperties: FormGroup;
+  dashBoardProperties: DashBoardProperties;
+  backgroundColor: string;
+  opacity: number;
+
+  formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    this.opacity = value;
+    return value;
+  }
+
 	constructor(
               private siteService        : SitesService,
               private gridDataService    : GridsterDataService,
@@ -33,7 +46,7 @@ export class GridManagerEditComponent implements OnInit {
               @Inject(MAT_DIALOG_DATA) public data: any,
               private dialog             : MatDialog,
               private fb                 : FormBuilder,
-              private _snackBar          : MatSnackBar,
+
   ) {
     const site           = this.siteService.getAssignedSite();
 
@@ -65,6 +78,7 @@ export class GridManagerEditComponent implements OnInit {
       return
     }
     this.initFormData();
+    this.initPropertiesForm(this.dashboardModel);
   }
 
   setType(type: string) {
@@ -73,10 +87,27 @@ export class GridManagerEditComponent implements OnInit {
     }
   }
 
+  initPropertiesForm(model: DashboardModel) {
+    this.inputProperties = this.fb.group( {
+      backgroundColor   : [''],
+      image             : [''],
+      opacity           : ['']
+    })
+    if (model) {
+      if (model.userName) {
+        const jsonObject = JSON.parse(model.userName) as DashBoardProperties;
+        this.backgroundColor = jsonObject.backgroundColor
+        this.opacity = jsonObject.opacity;
+        this.inputProperties.patchValue(jsonObject)
+      }
+    }
+  }
+  // inputProperties: FormGroup;
+  // dashBoardProperties: DashBoardProperties;
   initForm() {
     this.inputForm = this.fb.group( {
       id       : [''],
-      username : [''],
+      userName : [''],
       name     : [''],
       type     : [''], //preset types, menu, report widget, restaurant/ operation layout.
       jSONBject: [''],
@@ -91,7 +122,7 @@ export class GridManagerEditComponent implements OnInit {
   }
 
   delete(event) {
-    this.notifyEvent('This method is not an option', 'disabled')
+    this.layoutService.notifyEvent('This method is not an option', 'disabled')
   }
 
   setValues(model: DashboardModel) {
@@ -101,52 +132,27 @@ export class GridManagerEditComponent implements OnInit {
       this.dashboardModel.active = model.active;
       this.dashboardModel.id     = model.id;
     }
+    const properties = {} as DashBoardProperties
+    properties.backgroundColor = this.backgroundColor;
+    properties.opacity = this.opacity;
+    const properitesJson = JSON.stringify(properties);
+    this.dashboardModel.userName = properitesJson;
+    const json = JSON.stringify(this.dashboardModel);
+    this.dashboardModel.jsonObject = json;
     return this.dashboardModel;
   }
 
   update(event): void {
-    const site = this.siteService.getAssignedSite();
     if (!this.inputForm) { return }
-    let result = ''
     let model = this.inputForm.value as DashboardModel;
-    //set values of dashboardmodel
     model = this.setValues(model)
-
-    if (model.id) {
-      const  model$ = this.gridDataService.updateGrid(site, model);
-      this.publish(model$)
-    }
-
-    if (!model.id) {
-      const  model$ = this.gridDataService.addGrid(site, model);
-      this.publish(model$)
-    }
-
+    this.layoutService.saveModel(model)
   };
-
-  publish(model$: Observable<DashboardModel>) {
-    model$.subscribe(
-      {
-        next : data =>{
-          this.notifyEvent('Saved', "Saved")
-        },
-        error: err => {
-            this.notifyEvent(err, "Failure")
-        }
-      }
-    )
-  }
 
   updateExit(event) {
     this.update(event)
     this.dialogRef.close()
   }
 
-  notifyEvent(message: string, action: string) {
-    this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
-    });
-  }
 }
 

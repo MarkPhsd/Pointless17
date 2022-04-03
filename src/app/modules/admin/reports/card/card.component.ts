@@ -36,11 +36,15 @@ export class CardComponent  implements OnInit , OnChanges{
   @Input() dateTo     : string ;
   @Input() data       : any[];
   @Input() zrunID     : string;
-  @Input() groupBy    : string;;
-  @Input() chartName  : string;;
-
-  @Input() counter : number;
+  @Input() groupBy    : string;
+  @Input() chartName  : string;
+  @Input() counter    : number;
+  @Input() sites      : ISite[];
+  @Input() site       : ISite;
+  @Input() chartType  = 'line';
   lastCounter: number;
+
+  @Input() name  = 'Name';
 
   //instance of highchart
   Highcharts      = Highcharts;
@@ -52,8 +56,7 @@ export class CardComponent  implements OnInit , OnChanges{
   options         : any;
   //data
   sites$          : Observable<ISite[]>
-  @Input() sites           : ISite[];
-  @Input() site            : ISite;
+
   salesPayment    : ISalesPayments;
   xAxis           : any;
   subTitle        : any;
@@ -73,6 +76,7 @@ export class CardComponent  implements OnInit , OnChanges{
   }
 
   ngOnInit() {
+    console.log('this chart happened')
     this.initChart('Values');
     this.initDates();
     if (this.sites || this.site) {
@@ -361,7 +365,7 @@ export class CardComponent  implements OnInit , OnChanges{
 
     this.chartOptions =  {
       chart: {
-          type: 'line',
+          type: this.chartType,
           backgroundColor: null,
           scrollablePlotArea: this.scrollablePlotHeight,
           borderWidth: 0,

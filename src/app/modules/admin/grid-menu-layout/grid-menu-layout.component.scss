@@ -20,4 +20,33 @@ button {
   min-height: 80vh;
   height: initial;
   background-color: azure;
+  z-index: 2;
+}
+
+.menu-bar {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  top: 0;
+  left: 0;
+  z-index: 4;
+}
+
+.gridster-item {
+  position: relative;
+  top: -30px;
+  left: 0;
+  // z-index: 3;
+  border-radius: 15px;
+  padding: 5px;
+}
+
+.gridster-item-user {
+  position: relative;
+  top: 0px;
+  left: 0;
+  // z-index: 3;
+  border-radius: 15px;
+  padding: 5px;
 }

@@ -90,7 +90,7 @@ import { PosOrderTransactionDataComponent } from '../modules/posorders/pos-order
 import { PaymentBalanceComponent } from '../modules/posorders/payment-balance/payment-balance.component';
 import { DeviceInfoComponent } from '../modules/admin/settings/device-info/device-info.component';
 import { CannabisItemEditComponent } from '../modules/admin/products/productedit/cannabis-item-edit/cannabis-item-edit.component';
-import { FoodProductEditComponent } from '../modules/admin/products/productedit/food-product-edit/food-product-edit.component';
+// import { FoodProductEditComponent } from '../modules/admin/products/productedit/food-product-edit/food-product-edit.component';
 import { LiquorProductEditComponent } from '../modules/admin/products/productedit/liquor-product-edit/liquor-product-edit.component';
 import { RetailProductEditComponent } from '../modules/admin/products/productedit/retail-product-edit/retail-product-edit.component';
 import { ChangeDueComponent } from '../modules/posorders/components/balance-due/balance-due.component';
@@ -135,7 +135,8 @@ import { ImageSwiperComponent } from './widgets/image-swiper/image-swiper.compon
 import { SwiperModule } from 'swiper/angular';
 import { CompanyInfoHeaderComponent } from './widgets/company-info-header/company-info-header.component';
 import { GridsterModule } from 'angular-gridster2';
-
+import { ColorPickerModule } from 'ngx-color-picker';
+import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -183,9 +184,9 @@ import { GridsterModule } from 'angular-gridster2';
     FacilitySearchSelectorComponent,
     FastUserSwitchComponent,
     FilterComponent,
-     FilterPipe,
-    FoodProductEditComponent,
+    FilterPipe,
     FormSelectListComponent,
+    // FoodProductEditComponent,
     FooterComponent,
     HeaderComponent,
     GenericIdSelectComponent,
@@ -205,6 +206,7 @@ import { GridsterModule } from 'angular-gridster2';
     MatSelectComponent,
     MatSpinnerOverlayComponent,
     MatToggleSelectorComponent,
+    MatMenuBasicComponent,
     MatSelectNGModelComponent,
     MetaTagChipsComponent,
     MenuCompactComponent,
@@ -286,6 +288,7 @@ import { GridsterModule } from 'angular-gridster2';
     HammerModule,
     IonicModule.forRoot(),
     // NgtUniversalModule,
+    ColorPickerModule,
     GridsterModule,
     QuicklinkModule,
     RouterModule,
@@ -309,6 +312,7 @@ import { GridsterModule } from 'angular-gridster2';
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
     CardComponent,
+    ColorPickerModule,
     CategorySelectComponent,
     ClientSearchSelectorComponent,
     ExitLabelSelectionComponent,
@@ -330,7 +334,7 @@ import { GridsterModule } from 'angular-gridster2';
     FastUserSwitchComponent,
     FilterComponent,
     FilterPipe,
-    FoodProductEditComponent,
+    // FoodProductEditComponent,
     FooterComponent,
     FormSelectListComponent,
     GenericIdSelectComponent,
@@ -348,6 +352,7 @@ import { GridsterModule } from 'angular-gridster2';
     LogoComponent,
     Label1by8Component,
     MatDateRangeComponent,
+    MatMenuBasicComponent,
     MatToggleSelectorComponent,
     MatSelectComponent,
     MatSelectNGModelComponent,

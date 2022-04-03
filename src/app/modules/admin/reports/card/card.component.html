@@ -1,10 +1,8 @@
   <div *ngIf="sitesErrorMessage">
-   <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+    <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
   </div>
 
-
-  disabledVehicleBView {{disabledVehicleBView}}
-  disabledVehicleAView {{disabledVehicleAView}}
+  {{name}}
 
   <button mat-button
           (click)="refresh()">

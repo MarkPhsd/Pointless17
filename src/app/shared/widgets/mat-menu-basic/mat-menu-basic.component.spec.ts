@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GridMenuLayoutComponent } from './grid-menu-layout.component';
+import { MatMenuBasicComponent } from './mat-menu-basic.component';
 
-describe('GridMenuLayoutComponent', () => {
-  let component: GridMenuLayoutComponent;
-  let fixture: ComponentFixture<GridMenuLayoutComponent>;
+describe('MatMenuBasicComponent', () => {
+  let component: MatMenuBasicComponent;
+  let fixture: ComponentFixture<MatMenuBasicComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ GridMenuLayoutComponent ]
+      declarations: [ MatMenuBasicComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(GridMenuLayoutComponent);
+    fixture = TestBed.createComponent(MatMenuBasicComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
