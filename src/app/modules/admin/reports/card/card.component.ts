@@ -8,6 +8,8 @@ import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
+import { DashBoardComponentProperties } from '../../grid-menu-layout/grid-models';
 
 @Component({
   selector: 'app-widget-card',
@@ -41,10 +43,16 @@ export class CardComponent  implements OnInit , OnChanges{
   @Input() counter    : number;
   @Input() sites      : ISite[];
   @Input() site       : ISite;
-  @Input() chartType  = 'line';
-  lastCounter: number;
 
-  @Input() name  = 'Name';
+
+  @Input() name         = 'A Chart';
+  @Input() chartType    = 'line';
+  @Input() chartHeight  = '350px'
+  @Input() menuType     : string;
+  @Input() cardValueType: string;
+  @Input() rangeType    : string;
+
+  lastCounter: number;
 
   //instance of highchart
   Highcharts      = Highcharts;
@@ -71,14 +79,24 @@ export class CardComponent  implements OnInit , OnChanges{
   constructor(private  sitesService      : SitesService,
               private  reportingService  : ReportingService,
               public   route             : ActivatedRoute,
-              private salesPaymentService: SalesPaymentsService
+              public balanceSheetService : BalanceSheetService,
+              private salesPaymentService: SalesPaymentsService,
                ) {
   }
 
   ngOnInit() {
-    console.log('this chart happened')
+
+    //get the current days sales date range.
+
     this.initChart('Values');
     this.initDates();
+
+    if (!this.dateFrom || !this.dateTo) {
+      this.groupBy = 'hour'
+      
+      return
+    }
+
     if (this.sites || this.site) {
       if (!this.sites) {
         this.sites = [] as ISite[]
@@ -95,7 +113,13 @@ export class CardComponent  implements OnInit , OnChanges{
         }
       )
     }
+
   };
+
+  getCurrentSalesRange() {
+    //balanceSheetService
+
+  }
 
   ngOnChanges() {
     this.refresh();
@@ -195,7 +219,7 @@ export class CardComponent  implements OnInit , OnChanges{
   }
 
   updateChartSites(dateFrom: string, dateTo: string, sites: ISite[]) {
-    this.updateChartMetrics( sites)
+    this.updateChartMetrics(sites)
     this.updateChartSitesSales(dateFrom, dateTo, sites)
   }
 
@@ -369,7 +393,7 @@ export class CardComponent  implements OnInit , OnChanges{
           backgroundColor: null,
           scrollablePlotArea: this.scrollablePlotHeight,
           borderWidth: 0,
-          height: 300,
+          height: this.chartHeight,
       },
       title: {text: this.chartName },
       subtitle : this.chartName,
@@ -443,7 +467,6 @@ export class CardComponent  implements OnInit , OnChanges{
     };
     return groupBy(array, key)
   }
-
 }
 
 
