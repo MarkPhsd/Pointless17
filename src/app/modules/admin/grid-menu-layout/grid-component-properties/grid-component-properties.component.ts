@@ -50,7 +50,13 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   cardValueType: string;
   listItemID   : string;
-
+  opacity      : number;
+  border       : number;
+  borderRadius : number;
+  layerIndex        : number;
+  _borderRadius: string;
+  _border :string;
+  _layer : string;
   chartTypes = [
     {name: 'Bar', icon: 'bar_chart', filter: 'none'},
     {name: 'Line', icon: 'show_chart', filter: 'none'},
@@ -178,6 +184,7 @@ export class GridComponentPropertiesComponent implements OnInit {
       cardValueType: [''],
       menuType     : [''],
       listItemID   : [''],
+      chartHeight  : [''],
     })
     return this.inputForm
   };
@@ -208,25 +215,38 @@ export class GridComponentPropertiesComponent implements OnInit {
       object.lengthOfRange = item?.lengthOfRange;
       object.listItemID    = item?.listItemID;
       object.cardValueType = item?.cardValueType;
+
+      object.border       = item?.border;
+      object.borderRadius = item?.borderRadius;
+      object.opacity      = item?.opacity;
+      object.layerIndex   = item?.layerIndex;
+
+      object.chartHeight  = item?.chartHeight;
     }
 
+    if (! object.layerIndex ) { object.layerIndex = 1;}
     //refesh form values and local variables
     this.inputForm.patchValue(object);
+
     if (object.type)            { this.cardType = object?.type };
     if (object.cardValueType)   { this.cardValueType = object?.cardValueType  };
+
+    if (object.border)          { this.border = object?.border  };
+    if (object.borderRadius)    { this.borderRadius = object?.borderRadius  };
+    if (object.opacity)         { this.opacity = object?.opacity  };
+    if (object.layerIndex)      { this.layerIndex = object?.layerIndex  };
 
     this.setCardTypeValuesList(object.type);
 
     this.refreshTypeList(this.cardValueType);
     if (object.listItemID) {  this.listItemID = object?.listItemID; }
-
     if (object.listItemID) { this.setSelectValue(object?.listItemID); }
 
   }
 
   update(event): void {
     //update the DashboardContentModel in memory
-    const content = this.updateCard();
+    const content = this.updateCard(this.inputForm);
     // then slice out the current DashboardContentModel from the DashboardModel
     // apply the updated DashboardContentModel
     const dashBoard = this.layoutService.dashboardModel;
@@ -240,19 +260,30 @@ export class GridComponentPropertiesComponent implements OnInit {
     this.updateDashBoard(dashBoard)
   };
 
-  updateCard(): DashboardContentModel {
+  updateCard(form: FormGroup): DashboardContentModel {
     const site = this.siteService.getAssignedSite();
-    if (!this.inputForm) { return }
+    if (!form) { return }
     const id            = this.dashBoardContent.id;
     const content       = this.dashBoardContent;
-    let model           = this.inputForm.value as DashBoardComponentProperties;
+    let model           = form.value as DashBoardComponentProperties;
     model.listItemID    = this.listItemID;
     model.id            = this.dashBoardContent.id;
     model.cardValueType = this.cardValueType;
     model.type          = this.cardType;
-    model.name          = model.name;
+
+    model.layerIndex    = this.layerIndex;
+    model.border        = this.border;
+    model.borderRadius  = this.borderRadius;
+    model.opacity       = this.opacity;
+
+    if (model?.cardValueType.toLowerCase() ===  'flowers'){
+      content.componentName = 'Flowers'
+    }
+
+
     content.component   = null;
     const jsonObject    = JSON.stringify(model);
+    console.log('model', model)
     content.properties  = jsonObject;
     return content;
   }
@@ -284,5 +315,38 @@ export class GridComponentPropertiesComponent implements OnInit {
       verticalPosition: 'top'
     });
   }
+
+  formatOpacity(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    this.opacity = value;
+    return value;
+  }
+  formatBorder(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    this.border = value;
+    this._border  = `${value}px`
+    return value;
+  }
+  formatBorderRadius(value: number) {
+    if (value >= 1000) {
+      return Math.round(+value / 1000) + 'k';
+    }
+    this.borderRadius = value;
+    this._borderRadius  = `${value}px`
+    return value;
+  }
+  formatLayer(value: number) {
+    if (value >= 1000) {
+      return Math.round(+value / 1000) + 'k';
+    }
+    this.layerIndex = value;
+    this._layer  = `${value}px`
+    return value;
+  }
+
 
 }

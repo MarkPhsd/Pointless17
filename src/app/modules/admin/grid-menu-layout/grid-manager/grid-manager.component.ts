@@ -22,8 +22,7 @@ export class GridManagerComponent implements OnInit {
 	// Components variables
   toggle: boolean;
   modal: boolean;
-  widgetCollection: WidgetModel[];
-  dashboardCollection: DashboardModel[];
+
   matToolbarColor = 'primary';
   inputForm: FormGroup;
 
@@ -50,22 +49,14 @@ export class GridManagerComponent implements OnInit {
     this.layoutService.forceRefresh(id)
   }
 
-
   refresh() {
 		// We make a get request to get all widgets from our REST API
     // const id = this.layoutService.dashboardModel.id;
 		this._ds.getWidgets().subscribe(widgets => {
-			this.widgetCollection = widgets;
+			this.layoutService.widgetCollection = widgets;
 		});
 
-    const site = this.siteService.getAssignedSite();
-		// We make get request to get all dashboards from our REST API
-		this.gridDataService.getGrids(site).subscribe(dashboards => {
-			this.dashboardCollection = dashboards;
-      if (!this.layoutService.dashboardModel) {
-        this.listMenu(dashboards[0].id.toString())
-      }
-		});
+    this.layoutService.refreshCollection()
 
   }
 
@@ -86,7 +77,7 @@ export class GridManagerComponent implements OnInit {
 	}
 
   addGrid() {
-    this.dashboardCollection = null;
+    this.layoutService.dashboardCollection = null;
     this.dashboardModel = null;
     this.layoutService.dashboardModel = null;
     this.layoutService.dashboardContentModel = null;

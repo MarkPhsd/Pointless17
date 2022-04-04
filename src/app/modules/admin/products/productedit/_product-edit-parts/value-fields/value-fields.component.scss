@@ -10,8 +10,10 @@ mat-form-field {
   font-size: medium;
 }
 
-.fields-small .field-small {
-  // margin: 4px ;
+.fields-small .font-small .field-small {
   font-size: small;
-  // width: 70px;
+}
+
+.font-medium .fields-medium .field-medium {
+  font-size: small;
 }

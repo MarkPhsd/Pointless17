@@ -7,5 +7,34 @@
 }
 
 mat-card {
-  height: 98%;
+  // height: 98%;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+}
+
+mat-card-title  {
+  // max-height: 200px;
+}
+
+mat-card-content   {
+  // overflow-y: auto;
+  // overflow-x: auto;
+}
+
+.grid-values {
+  display: grid;
+  grid-template-columns: 50px 300px;
+  gap: 5px;
+}
+
+.grid {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(360px, 1fr) );
+}
+
+.field {
+  max-width: 200px;
+  width: 200px;
+  margin: 5px;
 }

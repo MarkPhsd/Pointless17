@@ -1,9 +1,10 @@
+import { DatePipe } from '@angular/common';
 import { ReturnStatement } from '@angular/compiler';
 import { Component, OnInit, Input, OnChanges,  SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, switchMap } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
@@ -81,6 +82,7 @@ export class CardComponent  implements OnInit , OnChanges{
               public   route             : ActivatedRoute,
               public balanceSheetService : BalanceSheetService,
               private salesPaymentService: SalesPaymentsService,
+              private datePipe: DatePipe,
                ) {
   }
 
@@ -91,12 +93,18 @@ export class CardComponent  implements OnInit , OnChanges{
     this.initChart('Values');
     this.initDates();
 
+    console.log('this.dateFrom || !this.dateTo', this.dateFrom,this.dateTo)
     if (!this.dateFrom || !this.dateTo) {
       this.groupBy = 'hour'
-      
+      this.refreshCurrentSales();
       return
     }
 
+    this.refreshSitesData();
+
+  };
+
+  refreshSitesData() {
     if (this.sites || this.site) {
       if (!this.sites) {
         this.sites = [] as ISite[]
@@ -113,8 +121,7 @@ export class CardComponent  implements OnInit , OnChanges{
         }
       )
     }
-
-  };
+  }
 
   getCurrentSalesRange() {
     //balanceSheetService
@@ -136,11 +143,49 @@ export class CardComponent  implements OnInit , OnChanges{
     }
   }
 
+  // addDates(StartDate: any, NumberOfDays : number): Date{
+  //   if (!StartDate) { return null}
+  //   StartDate.setDate(StartDate.getDate() + NumberOfDays);
+  //   return StartDate;
+  // }
+
+  addDates(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
+ }
+
+  refreshCurrentSales() {
+   //get the observable, then pipe through to the sites if needed.
+   const site = this.sitesService.getAssignedSite();
+   const zrun$ = this.balanceSheetService.getZRUNBalanceSheet(site)
+   const sites$ = this.sitesService.getSites()
+   zrun$.pipe(
+     switchMap(data => {
+     if (data.endTime) {
+      this.dateFrom = this.dateConvert(data.startTime)
+      this.dateTo   = this.dateConvert(data.endTime)
+     }
+     if (!data.endTime && data.startTime) {
+      this.dateFrom   =  this.datePipe.transform(data.startTime, 'M/d/yy')
+      const startdate = new Date(data.startTime)
+      this.dateTo     = this.addDates(startdate, 1).toISOString();
+    }
+    this.dateFrom = this.datePipe.transform(data.startTime, 'M/d/yy')
+    this.dateTo   = this.datePipe.transform(this.dateTo , 'M/d/yy')
+    this.zrunID   = data.id.toString();
+    return sites$
+   })).subscribe(data => {
+    this.sites  = data;
+    this.refresh();
+   })
+  }
+
+
   getCountVersion() {  }
 
   dateConvert(dateString: string) {
     if (dateString.length == 8) {
-      const month = dateString.substr(0, 2);
+      const month =  dateString.substr(0, 2);
       const day   = dateString.substr(2, 2);
       const year  = dateString.substr(4, 4);
       return `${month}/${day}/${year}`
@@ -189,6 +234,7 @@ export class CardComponent  implements OnInit , OnChanges{
     if (this.groupBy.toLowerCase() === 'hour') {
       const  categories = [] as any[];
       let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+      console.log(dataSeriesValues)
       dataSeriesValues.forEach(data => { if (data) { categories.push(data.date) } })
       if (categories) { this.chartCategories = categories; }
       const xAxis = {

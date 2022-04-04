@@ -2,13 +2,14 @@ import { Injectable } from '@angular/core';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { UUID } from 'angular2-uuid';
 import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
-import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties, WidgetModel } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridsterDashboardService } from './gridster-dashboard.service';
 import { GridsterDataService } from '../gridster/gridster-data.service';
 import { SitesService } from '../reporting/sites.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { StrainBoardComponent } from 'src/app/modules/tv-menu/strainBoard/strain-board/strain-board.component';
 
 export interface IComponent {
   id: string;
@@ -19,6 +20,9 @@ export interface IComponent {
   providedIn: 'root'
 })
 export class GridsterLayoutService {
+
+  public widgetCollection: WidgetModel[];
+  public dashboardCollection: DashboardModel[];
 
   public dashboardID: number;
 
@@ -38,35 +42,35 @@ export class GridsterLayoutService {
   dashboardProperties: DashBoardProperties;
 
 	protected componentCollection = [
-		{ name: "Chart"    , componentInstance: CardComponent },
-		{ name: "Chart"   , componentInstance: CardComponent },
-		{ name: "Chart"   , componentInstance: CardComponent }
+		{ name: "Chart"     , componentInstance: CardComponent },
+		{ name: "Chart"     , componentInstance: CardComponent },
+		{ name: "Flowers"   , componentInstance: StrainBoardComponent }
 	];
 
   stateChanged: boolean;
 
-  public options: GridsterConfig = {
+  // public options: GridsterConfig = {
 
-    gridType: "fit",
-    enableEmptyCellDrop: true,
-    emptyCellDropCallback: this.onDrop,
-    pushItems: true,
-    swap: true,
-    pushDirections: { north: true, east: true, south: true, west: true },
-    resizable: { enabled: true },
-    itemChangeCallback: this.itemChange.bind(this),
-    draggable: {
-      enabled: true,
-      // ignoreContent: true,
-      // dropOverItems: true,
-      // dragHandleClass: "drag-handler",
-      // ignoreContentClass: "drag",
-    },
-    displayGrid: "always",
-    minCols: 10,
-    minRows: 10
+  //   gridType: "fit",
+  //   enableEmptyCellDrop: true,
+  //   emptyCellDropCallback: this.onDrop,
+  //   pushItems: true,
+  //   swap: true,
+  //   pushDirections: { north: true, east: true, south: true, west: true },
+  //   resizable: { enabled: true },
+  //   itemChangeCallback: this.itemChange.bind(this),
+  //   draggable: {
+  //     enabled: true,
+  //     // ignoreContent: true,
+  //     // dropOverItems: true,
+  //     // dragHandleClass: "drag-handler",
+  //     // ignoreContentClass: "drag",
+  //   },
+  //   displayGrid: "always",
+  //   minCols: 250,
+  //   minRows: 250,
 
-  };
+  // };
 
   constructor(
     private siteService    : SitesService,
@@ -86,9 +90,9 @@ export class GridsterLayoutService {
   }
 
   updateDashboardModel(dashboard:DashboardModel) {
-    this._dashboardModel.next(dashboard)
     this.dashboardModel = dashboard;
     this.dashboardArray = dashboard.dashboard;
+    this._dashboardModel.next(dashboard)
   }
 
   deleteItem(id: string): void {
@@ -146,7 +150,9 @@ export class GridsterLayoutService {
     const site     = this.siteService.getAssignedSite();
     this.dashboardArray = null
     this.dashboardModel = null
-    this.gridDataService.updateGrid(site, model).subscribe(
+    let forceRefreshList = false;
+    if (model.id == 0) { forceRefreshList = true}
+    this.gridDataService.saveGrid(site, model).subscribe(
       {
         next: data => {
           this.dashboardArray = data.dashboard;
@@ -154,8 +160,13 @@ export class GridsterLayoutService {
           this.stateChanged = false
           this.updateDashboardModel(data)
           this.forceRefresh(data.id);
+          if (forceRefreshList) {
+
+          }
         },
         error: err => {
+           this.forceRefresh(null);
+          this.notifyEvent('Save failed: ' + err, 'Failed')
           console.log('save failed', err)
         }
       }
@@ -184,10 +195,10 @@ export class GridsterLayoutService {
 
   forceRefresh(id: any) {
     if (!id) {
+      console.log('this id was empty')
       this.router.navigate(["/menu-manager/"]);
       return;
     }
-
     const path = "/menu-manager/grid-menu-layout/"
     const item = {id:id};
     this.stateChanged = false
@@ -195,6 +206,23 @@ export class GridsterLayoutService {
     this.router.navigate([path]);
   }
 
+  refreshCollection() {
+    const site = this.siteService.getAssignedSite();
+		// We make get request to get all dashboards from our REST API
+		this.gridDataService.getGrids(site).subscribe(dashboards => {
+			this.dashboardCollection = dashboards;
+      if (!this.dashboardModel) {
+        if (dashboards[0]) {
+          // const dashboard = dashboards[0]
+          // console.log(dashboard.id, dashboard)
+          // this.forceRefresh(dashboard.id)
+        }
+
+      } else {
+        // this.forceRefresh(this.dashboardModel.id.toString())
+      }
+		});
+  }
 
   onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
@@ -244,12 +272,12 @@ export class GridsterLayoutService {
     }
 
     let id = +this.dashboardArray.length + 1
-
+    console.log(ev)
     let item = {
-      cols: 5,
-      rows: 5,
-      x: 0,
-      y: 0,
+      cols: 50,
+      rows: 50,
+      x: 40,
+      y: 40,
       component: CardComponent,
       name: "Chart",
       componentName: 'Chart',
@@ -275,10 +303,13 @@ export class GridsterLayoutService {
 
         this.parseJson(data)
         this.dashboardArray =  data.dashboard;
-
         this.dashboardArray.forEach(data => {
+          data.layerIndex = 1;
           if (data.properties) {
             data.object = JSON.parse(data.properties)
+            if (data?.object?.layerIndex)  {
+              data.layerIndex = data?.object?.layerIndex
+            }
           }
         })
         this.updateDashboardModel(data)

@@ -27,7 +27,7 @@
         </section>
       </mat-card-subtitle>
       <mat-card-content>
-        <ul class="nav-list">
+        <ul class="nav-list" *ngIf="layoutService.widgetCollection">
           <li>
              <a draggable="true" class="nav-link"
                 (dragstart)="onDrag($event, 'graph')">
@@ -35,7 +35,7 @@
               Default
             </a>
           </li>
-          <li *ngFor="let widget of widgetCollection">
+          <li *ngFor="let widget of layoutService.widgetCollection">
             <a draggable="true" class="nav-link"
                (dragstart)="onDrag($event, widget.identifier)">
               <mat-icon>drag_indicator</mat-icon>
@@ -61,7 +61,10 @@
         </div>
 
         <div *ngIf="layoutService.stateChanged">
-          <button mat-button color="accent" (click)="saveChanges()"><mat-icon>save</mat-icon>Save Required</button>
+          <button mat-button color="accent"
+            (click)="saveChanges()">
+            <mat-icon>save</mat-icon>Save Required
+          </button>
         </div>
 
         <div class="header-items">
@@ -80,7 +83,7 @@
 
   </mat-drawer>
 
-  <mat-drawer-content *ngIf="dashboardCollection">
+  <mat-drawer-content *ngIf="layoutService.dashboardCollection">
 
     <div *ngIf="inputForm" class="grid-items">
       <mat-button-toggle-group
@@ -89,9 +92,9 @@
                 formControlName="type">
         <mat-button-toggle
                 class="discount-type-button"
-                [value]="item.id"
-                (click)="listMenu(item.id)"
-                *ngFor="let item of dashboardCollection" >
+                [value]="item?.id"
+                (click)="listMenu(item?.id)"
+                *ngFor="let item of layoutService.dashboardCollection" >
             {{item.name}}
           </mat-button-toggle>
         </mat-button-toggle-group>

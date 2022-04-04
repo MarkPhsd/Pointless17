@@ -30,13 +30,6 @@ export class GridManagerEditComponent implements OnInit {
   backgroundColor: string;
   opacity: number;
 
-  formatLabel(value: number) {
-    if (value >= 1000) {
-      return Math.round(value / 1000) + 'k';
-    }
-    this.opacity = value;
-    return value;
-  }
 
 	constructor(
               private siteService        : SitesService,
@@ -153,6 +146,15 @@ export class GridManagerEditComponent implements OnInit {
     this.update(event)
     this.dialogRef.close()
   }
+
+  formatLabel(value: number) {
+    if (value >= 1000) {
+      return Math.round(value / 1000) + 'k';
+    }
+    this.opacity = value;
+    return value;
+  }
+
 
 }
 

@@ -54,6 +54,7 @@ import { GridSettingsComponent } from './modules/admin/grid-menu-layout/grid-set
 import { CardComponent } from './modules/admin/reports/card/card.component';
 import { DynamicModule } from 'ng-dynamic-component';
 import { GridComponentPropertiesComponent } from './modules/admin/grid-menu-layout/grid-component-properties/grid-component-properties.component';
+import { GridDesignerInfoComponent } from './modules/admin/grid-menu-layout/grid-designer-info/grid-designer-info.component';
 // import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 // import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
 // import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
@@ -101,6 +102,7 @@ export function init_app(appLoadService: AppInitService) {
     GridMenuLayoutComponent,
     GridManagerEditComponent,
     GridComponentPropertiesComponent,
+    GridDesignerInfoComponent,
   ],
 
   imports: [

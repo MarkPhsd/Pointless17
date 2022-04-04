@@ -99,8 +99,8 @@ export class GridsterDataService {
      return this.updateGrid(site, grid)
     }
     if (!grid.id) {
-      return this.updateGrid(site, grid)
-     }
+      return this.addGrid(site, grid)
+    }
 
   };
 

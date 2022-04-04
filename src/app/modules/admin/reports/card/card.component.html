@@ -1,8 +1,14 @@
-  <div *ngIf="sitesErrorMessage">
+  <div class="warning"  *ngIf="sitesErrorMessage">
     <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
   </div>
 
-  {{name}}
+  <div class="title" *ngIf="menuType">
+    {{name}}.  From {{dateFrom}} to {{dateTo}}. ID:{{zrunID}}.
+  </div>
+
+  <div *ngIf="!menuType">
+    {{name}}
+  </div>
 
   <button mat-button
           (click)="refresh()">
@@ -12,9 +18,9 @@
   <div id="widget"
       *ngIf="chartOptions">
     <highcharts-chart
-      [Highcharts]="Highcharts"
-      [options]="chartOptions"
-      [oneToOne]="true"
-      >
+        [Highcharts]="Highcharts"
+        [options]="chartOptions"
+        [oneToOne]="true"
+        >
     </highcharts-chart>
   </div>

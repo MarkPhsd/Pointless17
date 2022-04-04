@@ -15,6 +15,10 @@
           <button mat-button  color="primary"
                   (click)="open()"><mat-icon>view</mat-icon>Open</button>
         </div>
+        <div *ngIf="enableSettings">
+          <button mat-button  color="primary"
+                  (click)="settings()"><mat-icon>settings</mat-icon>Settings</button>
+        </div>
 
         <div *ngIf="enableSave">
           <button mat-button  color="primary"

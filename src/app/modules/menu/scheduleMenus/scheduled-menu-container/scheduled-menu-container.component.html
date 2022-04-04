@@ -5,20 +5,20 @@
 
       <scheduled-menu-image
           [hideButton]="true"
-          [url]="bucket+item.image"
+          [url]="bucket+item?.image"
           [item]="item">
       </scheduled-menu-image>
     </div>
-    <div *ngIf="item.type.toLowerCase() != 'menu list'">
+    <div *ngIf="item?.type.toLowerCase() != 'menu list'">
       <scheduled-menu-header
           [priceSchedule]="item"
           [showText]="true" >
       </scheduled-menu-header>
     </div>
-    <div *ngIf="item.type.toLowerCase() === 'menu list'">
+    <div *ngIf="item?.type.toLowerCase() === 'menu list'">
       <scheduled-menu-header
-          [name]="item.name"
-          [description]="item.description"
+          [name]="item?.name"
+          [description]="item?.description"
           [priceSchedule]="item"
           [url]="url"
           [isApp]="isApp"
@@ -29,7 +29,7 @@
 
   <div>
     <mat-card class="items-container">
-      <mat-card-content>
+      <mat-card-content  *ngIf="item">
         <scheduled-menu-items
           [schedule]="item"
           [showAllFlag]="showAllFlag"
