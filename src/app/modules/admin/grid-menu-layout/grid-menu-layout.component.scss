@@ -1,27 +1,44 @@
-// :host {
-  .toolbar {
-    height: 100px;
-    display: flex;
-  }
-  .gridster {
-    top: 200px;
-    position: relative;
-    display: flex;
-    height: 500px;
-    flex-direction: column;
-  }
+// .gridster {
+//   top: 200px;
+//   position: relative;
+//   display: flex;
+//   height: 500px;
+//   flex-direction: column;
 // }
+.content-container {
+  min-height: 100vh;
+  height: initial;
+}
+
+.gridster-container {
+  min-height: 100%;
+  height: calc(100vh - 3em - 50px);
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bg {
+
+}
+
+gridster-item {
+  border-radius: 5px;
+  border: 1px;
+}
+
+mat-checkbox {
+  margin-left: 5px;
+  margin-right: 5px;
+}
 
 button {
   height: 30px;
 }
 
-.content-container {
-  min-height: 80vh;
-  height: initial;
-  background-color: azure;
-  z-index: 2;
-}
+
+
 
 .menu-bar {
   position: relative;
@@ -51,11 +68,3 @@ button {
   padding: 5px;
 }
 
-gridster-item {
-  border-radius: 5px;
-  border: 1px;
-}
-mat-checkbox {
-  margin-left: 5px;
-  margin-right: 5px;
-}
