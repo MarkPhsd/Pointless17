@@ -1,5 +1,4 @@
-
-  <div *ngIf="toggleTheme === 'light-theme'">
+  <div *ngIf="!toggleTheme || toggleTheme === 'light-theme'">
     <button aria-label="theme"
             mat-button
             class="menu-button"

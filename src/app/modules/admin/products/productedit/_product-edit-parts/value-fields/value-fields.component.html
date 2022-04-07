@@ -16,6 +16,7 @@
         </div>
         <div *ngIf="type === 'input' && !passwordMask">
           <input matInput
+                [class]="fieldsClass"
                 [type]="fieldType"
                 [formControlName]="fieldName">
         </div>

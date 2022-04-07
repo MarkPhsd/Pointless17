@@ -5,7 +5,7 @@
         Edit Dashboard
       </div>
 
-      <div>
+      <div class="buttons">
         <app-edit-buttons-standard
           (outputeupdateItem)     ="update($event)"
           (outputupdateItemExit)  ="updateExit($event)"
@@ -20,32 +20,19 @@
   </mat-card-title>
 
   <mat-card-content >
-    <div [formGroup]="inputForm"
+    <div class="grid" [formGroup]="inputForm"
           *ngIf="inputForm && dashboardModel; else loading;" >
-      <div class="grid-forms">
-        <div class="grid-items">
+
+        <div>
           <app-value-fields
             [inputForm]="inputForm"
             [fieldName]="'name'"
-            [fieldsClass]="'font-small'">
-            Name
-        </app-value-fields>
+            [fieldsClass]="'fields-small'">
+              Name
+          </app-value-fields>
         </div>
 
-        <div class="grid-items">
-          <mat-button-toggle-group name="type"
-                    aria-label="item Type"
-                    formControlName="type">
-            <mat-button-toggle class="discount-type-button"
-                    [value]="item"
-                    (tapClick)="setType(item)"
-                    *ngFor="let item of types" >
-            {{item}}
-            </mat-button-toggle>
-          </mat-button-toggle-group>
-        </div>
-
-        <div class="grid-items">
+        <div>
           <mat-slide-toggle
               name="active"
               formControlName="active">
@@ -53,19 +40,44 @@
           </mat-slide-toggle>
         </div>
 
-      </div>
+        <div class="span-col-all">
+          <mat-button-toggle-group name="type"
+                    aria-label="item Type"
+                    formControlName="type">
+            <mat-button-toggle class="discount-type-button"
+                    [value]="item"
+                    (click)="setType(item)"
+                    *ngFor="let item of types" >
+            {{item}}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+
     </div>
 
-    backgroundColor {{backgroundColor}}
-    <div *ngIf="inputProperties">
+    <mat-divider></mat-divider>
 
-      <div class="grid-items">
+    <h4>Features </h4>
+    <div class="grid"
+         *ngIf="inputProperties" >
+
+      <div>
+        <app-value-fields
+          [inputForm]="inputProperties"
+          [fieldName]="'icon'"
+          [fieldsClass]="'fields-small'">
+          Icon - (Use mdi icons)
+        </app-value-fields>
+      </div>
+
+      <div class="span-col-2">
+        backgroundColor {{backgroundColor}}
         <input [(colorPicker)]="backgroundColor"
                [style.background]="backgroundColor"/>
       </div>
 
-      <div class="grid-items">
-        Value {{opacity}}
+      <div class="span-col-all">
+        Opacity {{opacity}}
         <mat-slider
                     thumbLabel
                     [displayWith]="formatLabel"
@@ -78,9 +90,83 @@
         ></mat-slider>
       </div>
 
+      <div></div>
+
+      <div class="span-col-2"
+           *ngIf="backgroundBlendModes">
+        <mat-form-field  appearance="outline">
+            <mat-label> Background Blend Mode </mat-label>
+            <mat-select
+                [(ngModel)]       = "backgroundblendmode"
+                (selectionChange) = "setBlendMode($event.value)">
+              <mat-option value="">
+              </mat-option>
+              <mat-option [value]="item" *ngFor="let item of backgroundBlendModes">
+                  {{item}}
+              </mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div></div>
+
+      <div>Input Expected Pixel Height and Width to ensure layout dimensions fit the type of screen that will use this dashboard (for TV's and Customer displays.).
+        <app-info-instructions></app-info-instructions>
+      </div>
+      <div></div>
+
+      <div class="span-col-2">
+        <app-value-fields
+            [inputForm]="inputProperties"
+            [fieldName]="'pixelWidth'"
+            [fieldsClass]="'fields-small'">
+            Width
+        </app-value-fields>
+      </div>
+
+      <div class="span-col-2">
+        <app-value-fields
+          [inputForm]="inputProperties"
+          [fieldName]="'pixelHeight'"
+          [fieldsClass]="'fields-small'">
+          Height
+        </app-value-fields>
+      </div>
+
+      <div>Grid Column and Rows (Determines Size of Grid Blocks)
+        <app-info-instructions></app-info-instructions>
+      </div>
+      <div></div>
+      <div class="span-col-2">
+        <app-value-fields
+            [inputForm]="inputProperties"
+            [fieldName]="'gridColumns'"
+            [fieldsClass]="'fields-small'">
+            Columns
+        </app-value-fields>
+      </div>
+
+      <div class="span-col-2">
+        <app-value-fields
+          [inputForm]="inputProperties"
+          [fieldName]="'gridRows'"
+          [fieldsClass]="'fields-small'">
+          Rows
+        </app-value-fields>
+      </div>
+
+      <div></div>
+      <div class="grid-items span-col-all">
+        <mat-card class="image-container">
+          <app-widget-uploader
+              [(fileNames)]="image"
+              (messageOut) ="receivedImage($event)" >
+            Background Image
+          </app-widget-uploader>
+        </mat-card>
+      </div>
+
     </div>
-
-
   </mat-card-content>
 
   <ng-template #loading>

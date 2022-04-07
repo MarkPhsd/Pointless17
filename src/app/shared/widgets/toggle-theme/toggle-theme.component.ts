@@ -12,7 +12,6 @@ export class ToggleThemeComponent{
     this.renderTheme();
   }
 
-
   switchTheme() {
     if (this.toggleTheme === 'dark-theme' ) {
       localStorage.setItem('angularTheme', 'light-theme')

@@ -121,7 +121,7 @@ const routes: Routes = [
 
     {path: 'menu-manager', component: GridManagerComponent,
       children: [
-        { path: 'grid-menu-layout', component: GridMenuLayoutComponent ,data: {  title: 'Menus', animation: 'isLeft'}},
+        { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menus', animation: 'isLeft'}},
       ]
     },
 

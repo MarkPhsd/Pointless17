@@ -1,14 +1,36 @@
-.grid-forms {
-  // display: grid;
-  // grid-template-columns: 1fr;
-  gap: 5px;
-  margin: 5px;
-}
-
-.grid-items {
-  margin: 5px;
-}
-
 mat-slider {
   width: 300px;
+}
+
+.buttons {
+  margin: 3px;
+}
+
+.grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  // grid-template-columns: 1fr 1fr 1fr 1fr;
+  width: 95%;
+  margin-top: 5px;
+}
+
+.span-col-1 {
+  column-span: 1;
+}
+
+.span-col-2 {
+  column-span:2;
+}
+.span-col-3 {
+  column-span:3;
+}
+
+.span-col-all {
+  column-span: all;
+}
+
+mat-divider {
+  margin-top: 3px;
+  margin-bottom: 3px;
 }

@@ -7,30 +7,31 @@
 }
 
 mat-card {
-  // height: 98%;
-  // overflow-y: auto;
-  // overflow-x: hidden;
+  height: 98%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+mat-button-toggle-group {
+  flex-wrap: wrap;
+  max-width: 485px;
 }
 
-mat-card-title  {
-  // max-height: 200px;
-}
-
-mat-card-content   {
-  // overflow-y: auto;
-  // overflow-x: auto;
+mat-button-toggle {
+  // border: 1px solid #5b5872;
+  border-radius: 4px;
+  margin:  3px;
 }
 
 .grid-values {
   display: grid;
-  grid-template-columns: 50px 300px;
+  grid-template-columns: 150px 300px;
   gap: 5px;
 }
 
 .grid {
   display: grid;
   gap: 5px;
-  grid-template-columns: repeat( auto-fit, minmax(360px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(475px, 1fr) );
 }
 
 .field {

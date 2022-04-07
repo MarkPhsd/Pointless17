@@ -1,0 +1,6 @@
+<div *ngIf="order$ && (order$ | async) as order">
+  <pos-order-items
+    [disableActions]="disableActions"
+    [order]="order">
+  </pos-order-items>
+</div>

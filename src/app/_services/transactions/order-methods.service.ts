@@ -523,7 +523,7 @@ export class OrderMethodsService {
 
   closeOrder(site: ISite, order: IPOSOrder) {
     if (order) {
-      const result$ = this.orderService.completOrder(site, order.id)
+      const result$ = this.orderService.completeOrder(site, order.id)
       result$.subscribe(data=>  {
         this.notifyEvent(`Order Paid for`, 'Order Completed')
         this.orderService.updateOrderSubscription(data)

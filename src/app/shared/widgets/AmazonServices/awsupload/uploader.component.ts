@@ -106,11 +106,9 @@ export class UploaderComponent implements OnInit {
   };
 
   async uploadFile_alt(file: any) {
-
-      if (!this.files) {this.files = []  as File[] }
-      this.files.push(file);
-      this.removeDuplicateFileNames()
-
+    if (!this.files) {this.files = []  as File[] }
+    this.files.push(file);
+    this.removeDuplicateFileNames()
   }
 
   //this loops the this.files array.
@@ -122,8 +120,6 @@ export class UploaderComponent implements OnInit {
 
       [...this.files].forEach(file =>
         {
-          console.log("File Name " + file.name ,"File Array String" + this.fileNames)
-
           if (this.fileNames)
           { this.fileNames = file.name + ',' +  this.fileNames}
           else
@@ -154,22 +150,17 @@ export class UploaderComponent implements OnInit {
   deleteFile(name:string) {
 
     if ( this.fileNames != undefined || this.fileNames != '') {
-
-        const removeFile = name // this.files[index].name
-        this.fileNames  = this.fileNames.replace(name, '')
-        this.fileNames  = this.fileNames.replace(',,', ',')
-
-        if (this.fileNames.substring(1, 1) === "," && this.fileNames.length>1) {
-          this.fileNames = this.fileNames.substring(2, this.fileNames.length -1)
-        }
-
-        if (this.fileNames.trim() === ',' ) {
-          this.fileNames = ''
-          console.log("Filenames ", this.fileNames)
-        }
-
-        this.messageOut.emit(this.fileNames)
-        return
+      const removeFile = name // this.files[index].name
+      this.fileNames  = this.fileNames.replace(name, '')
+      this.fileNames  = this.fileNames.replace(',,', ',')
+      if (this.fileNames.substring(1, 1) === "," && this.fileNames.length>1) {
+        this.fileNames = this.fileNames.substring(2, this.fileNames.length -1)
+      }
+      if (this.fileNames.trim() === ',' ) {
+        this.fileNames = ''
+      }
+      this.messageOut.emit(this.fileNames)
+      return
     }
 
     this.messageOut.emit('')

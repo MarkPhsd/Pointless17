@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { GridsterDashboardService } from 'src/app/_services/system/gridster-dashboard.service';
 import { DashboardModel, DashBoardProperties } from '../grid-models';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,7 +15,12 @@ import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.
 })
 export class GridManagerEditComponent implements OnInit {
 
-  types = ['Menu', 'Report', 'Seating/Table Layout']
+  image: string;
+  backgroundblendmode: string;
+  backgroundBlendModes = ["normal","multiply","screen","overlay","darken","lighten","color-dodge",
+                      "color-burn","hard-light"," soft-light","difference","exclusion","hue",
+                      "saturation","color","luminosity" ]
+  types = ['Menu', 'Report', 'Seating/Table Layout', 'Order']
   id          : number;
   inputForm   : FormGroup;
   bucketName  : string;
@@ -53,7 +57,6 @@ export class GridManagerEditComponent implements OnInit {
       this.id              = data.id;
       this.dashboardModel$ = this.gridDataService.getGrid(site,  this.id);
     }
-
   };
 
   ngOnInit() {
@@ -80,17 +83,35 @@ export class GridManagerEditComponent implements OnInit {
     }
   }
 
+  setBlendMode(type: string) {
+    if (this.inputForm) {
+      this.inputProperties.controls['backgroundblendmode'].setValue(type)
+      this.backgroundblendmode = type;
+    }
+  }
+
   initPropertiesForm(model: DashboardModel) {
+
     this.inputProperties = this.fb.group( {
-      backgroundColor   : [''],
-      image             : [''],
-      opacity           : ['']
-    })
+        backgroundColor       : [''],
+        image                 : [''],
+        opacity               : [''],
+        backgroundblendmode   : [''],
+        icon                  : [''],
+        gridColumns           : [''],
+        gridRows              : [''],
+        pixelHeight:  [''],
+        pixelWidth:   [''],
+      }
+    )
+
     if (model) {
       if (model.userName) {
-        const jsonObject = JSON.parse(model.userName) as DashBoardProperties;
-        this.backgroundColor = jsonObject.backgroundColor
-        this.opacity = jsonObject.opacity;
+        const jsonObject          = JSON.parse(model.userName) as DashBoardProperties;
+        this.backgroundColor      = jsonObject.backgroundColor
+        this.image                = jsonObject.image
+        this.opacity              = jsonObject.opacity;
+        this.backgroundblendmode  = jsonObject.backgroundblendmode
         this.inputProperties.patchValue(jsonObject)
       }
     }
@@ -125,9 +146,13 @@ export class GridManagerEditComponent implements OnInit {
       this.dashboardModel.active = model.active;
       this.dashboardModel.id     = model.id;
     }
-    const properties = {} as DashBoardProperties
+    const properties =  this.inputProperties.value as DashBoardProperties
+
     properties.backgroundColor = this.backgroundColor;
-    properties.opacity = this.opacity;
+    properties.opacity   = this.opacity;
+    properties.image     = this.image;
+    properties.backgroundblendmode = this.backgroundblendmode;
+
     const properitesJson = JSON.stringify(properties);
     this.dashboardModel.userName = properitesJson;
     const json = JSON.stringify(this.dashboardModel);
@@ -145,6 +170,11 @@ export class GridManagerEditComponent implements OnInit {
   updateExit(event) {
     this.update(event)
     this.dialogRef.close()
+  }
+
+  receivedImage(event) {
+    // this.inputForm.controls['image'].setValue(event)
+    this.image = event
   }
 
   formatLabel(value: number) {

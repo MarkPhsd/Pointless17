@@ -1,0 +1,6 @@
+<div *ngIf="order$ && (order$ | async) as order">
+  <app-order-header-demo-graphics
+    [order]="order"
+    [disableActions]="disableActions">
+  </app-order-header-demo-graphics>
+</div>

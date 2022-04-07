@@ -137,6 +137,10 @@ import { CompanyInfoHeaderComponent } from './widgets/company-info-header/compan
 import { GridsterModule } from 'angular-gridster2';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.component';
+import { IFrameComponent } from './widgets/i-frame/i-frame.component';
+import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.component';
+import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
+import {YouTubePlayerModule} from '@angular/youtube-player'
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -274,6 +278,9 @@ import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.c
     OverLayComponent,
     MyThingComponent,
     LogoComponent,
+    IFrameComponent,
+    YoutubePlayerComponent,
+    SafeHtmlPipe,
   ],
 
   imports: [
@@ -295,6 +302,7 @@ import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.c
     ReactiveFormsModule,
     ReactiveFormsModule,
     SwiperModule,
+    YouTubePlayerModule,
   ],
 
   exports: [
@@ -403,6 +411,7 @@ import { MatMenuBasicComponent } from './widgets/mat-menu-basic/mat-menu-basic.c
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,
+    ToggleThemeComponent,
     TruncateTextPipe,
     UIHomePageSettingsComponent,
     UnitTypeFieldsComponent,

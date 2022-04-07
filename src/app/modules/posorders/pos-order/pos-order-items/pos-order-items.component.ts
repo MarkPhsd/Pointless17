@@ -1,5 +1,5 @@
 // import { Route } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription, } from 'rxjs';
 import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
@@ -8,6 +8,8 @@ import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { ISite } from 'src/app/_interfaces';
+import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 
 @Component({
   selector: 'pos-order-items',
@@ -21,6 +23,8 @@ export class PosOrderItemsComponent implements OnInit {
   @Input() mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
 
+  @Input() disableActions = false;
+
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
 
@@ -28,31 +32,45 @@ export class PosOrderItemsComponent implements OnInit {
   smallDevice    : boolean;
   animationState : string;
   _order         : Subscription;
+  order$        : Observable<IPOSOrder>
   gridScroller   : '';
 
   bottomSheetOpen  : boolean ;
   _bottomSheetOpen : Subscription;
 
   wideBar         : boolean;
-
+  site    : ISite;
+  posName: string;
   initSubscriptions() {
 
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
     })
+    //if disable
+    console.log('this.disableActions', this.disableActions)
+    if (this.disableActions) {
+      // this.refreshOrderFromPOSDevice()
+    }
 
-    this._order = this.orderService.currentOrder$.subscribe( order => {
-      this.order = order
-      setTimeout(() => {
-        this.scrollToBottom();
-      }, 200);
-    })
+    if (!this.disableActions) {
+      this._order = this.orderService.currentOrder$.subscribe( order => {
+        this.order = order
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 200);
+      })
+    }
+
+    setTimeout(() => {
+      this.scrollToBottom();
+    }, 200);
 
     this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.uiConfig = data;
     })
-
   }
+
+
 
   constructor(
                 private orderService: OrdersService,
@@ -76,26 +94,21 @@ export class PosOrderItemsComponent implements OnInit {
       uiHomePage = await this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings');
     }
 
-    if (uiHomePage) {
-      this.wideBar = uiHomePage.wideOrderBar
-    }
+    if (uiHomePage) {this.wideBar = uiHomePage.wideOrderBar}
     await this.uiSettingsService.subscribeToCachedConfig()
     this.initSubscriptions();
     this.orderItemsPanel = 'item-list';
+
   }
 
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
-
-    // this.gridRight       = 'grid-order-header ';
-    // this.orderlayout     = 'order-layout-empty';
     this.orderItemsPanel = 'item-list';
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
-      // this.orderItemsPanel = 'item-list-small';
     }
 
     if (!this.mainPanel) {
@@ -114,7 +127,7 @@ export class PosOrderItemsComponent implements OnInit {
   }
 
   async swipeItemFromList(index) {
-    // console.log(index)
+    if (this.disableActions) {return}
     const item =  this.order.posOrderItems[index]
     if (!item)  { return }
     this.orderMethodService.removeItemFromList(index, item)
@@ -150,7 +163,6 @@ export class PosOrderItemsComponent implements OnInit {
 
   scrollToBottom(): void {
     setTimeout(() => {
-      // console.log('scrolling')
       try {
         if (this.myScrollContainer) {
           this.myScrollContainer.nativeElement.scrollTop =
@@ -162,6 +174,11 @@ export class PosOrderItemsComponent implements OnInit {
     }, 300);
   }
 
+  trackByFN(_, {id, unitName, unitPrice, quantity,
+                modifierNote, serialCode, printed,
+                serviceType, taxTotal , wicebt}: IPOSOrderItem): number {
+    return id;
+  }
 
 }
 

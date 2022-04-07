@@ -4,6 +4,9 @@ import { Observable} from 'rxjs';
 import { ICompany, ISite } from   'src/app/_interfaces';
 import { AppInitService } from '../system/app-init.service';
 import { DashboardModel } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import { Router } from '@angular/router';
+import { AuthenticationService } from '..';
+import { IItemBasic } from '../menu/meta-tags.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,15 +18,26 @@ export class GridsterDataService {
 
   constructor( private http: HttpClient,
                private appInitService  : AppInitService,
+               private router: Router,
+               private authService: AuthenticationService,
               ) {
     this.apiUrl  = this.appInitService.apiBaseUrl()
+  }
+
+  getUser()  {
+    console.log(this.authService.userValue)
+    return this.authService.userValue;
   }
 
   getGrids(site: ISite): Observable<DashboardModel[]> {
 
     const controller = '/GR_DashboardController/'
 
-    const endPoint = 'GetGR_Dashboards'
+    let endPoint = 'GetGR_Dashboards'
+    const user = this.getUser();
+    if (user) {
+      endPoint = 'GetGR_Dashboards_User'
+    }
 
     const parameters = ''
 
@@ -33,12 +47,34 @@ export class GridsterDataService {
 
   };
 
+  getGridsOptimized(site: ISite): Observable<IItemBasic[]> {
+
+    const controller = '/GR_DashboardController/'
+
+    let endPoint = 'GetGR_Dashboards_Optimized'
+    const user = this.getUser();
+    if (user) {
+      endPoint = 'GetGR_Dashboards_User_Optimized'
+    }
+
+    const parameters = ''
+
+    const url = `${this.apiUrl}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IItemBasic[]>(url)
+
+  };
+
   //GetGR_DashboardByType
   getGridByType(site: ISite, type: string): Observable<DashboardModel[]> {
 
     const controller = '/GR_DashboardController/'
 
-    const endPoint = 'GetGR_DashboardsByType'
+    let endPoint = 'GetGR_DashboardsByType'
+    const user = this.getUser();
+    if (user) {
+      endPoint = 'GetGR_DashboardsByType_User'
+    }
 
     const parameters = `?type=${type}`
 
@@ -50,9 +86,17 @@ export class GridsterDataService {
 
   getGrid(site: ISite, id: number): Observable<DashboardModel> {
 
+    if ( id == 0) {
+      this.router.navigateByUrl('/menu-manager')
+      return null;
+    }
     const controller = '/GR_DashboardController/'
 
-    const endPoint = 'GetGR_Dashboard'
+    let endPoint = 'GetGR_Dashboard'
+    const user = this.getUser();
+    if (user) {
+      endPoint = 'GetGR_Dashboard_User'
+    }
 
     const parameters = `?id=${id}`
 

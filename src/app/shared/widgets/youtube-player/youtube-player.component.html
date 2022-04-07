@@ -1,0 +1,11 @@
+<div class="container">
+  <youtube-player
+    [width]="chartWidth" [height]="chartHeight"
+    suggestedQuality="highres"
+    [playerVars]="playerConfig"
+    (ready)="onReady($event)"
+    [videoId]="url"
+  ></youtube-player>
+</div>
+
+

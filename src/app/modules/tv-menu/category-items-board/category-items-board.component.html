@@ -1,0 +1,29 @@
+<mat-card>
+  <div [class]="gridClass">
+    <div>Species</div>
+    <div>Item</div>
+    <div>THC</div>
+    <div>Price</div>
+  </div>
+ <mat-divider></mat-divider>
+
+ <mat-content>
+  <div [style.height]="chartHeight" class="menu-list"
+       *ngIf="(results$ | async) as list; else loading">
+    <div *ngFor="let item of list.results">
+      <category-items-board-item
+        *ngIf="item"
+        [MMJMenu]="MMJMenu"
+        [item]="item">
+      </category-items-board-item>
+    </div>
+  </div>
+ </mat-content>
+
+</mat-card>
+
+<ng-template #loading>
+  ...loading
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>
+

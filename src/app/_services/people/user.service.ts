@@ -30,15 +30,15 @@ export class UserService {
       }
     }
 
-    getProfileOfUSerByID(id: number):  Observable<IUserProfile>  {
-      const url = `${this.apiUrl}/clients/getClientByID?=${id}`;
-      return this.http.get<IUserProfile>(url);
-    }
+  getProfileOfUSerByID(id: number):  Observable<IUserProfile>  {
+    const url = `${this.apiUrl}/clients/getClientByID?=${id}`;
+    return this.http.get<IUserProfile>(url);
+  }
 
-    getRemoteProfile(site: ISite):  Observable<IUserProfile>  {
-      const user = this.auth.userValue
-      if (user) {
-        return this.http.post<IUserProfile>(`${site.url}/users/GetUserInfo`, user)
-      }
+  getRemoteProfile(site: ISite):  Observable<IUserProfile>  {
+    const user = this.auth.userValue
+    if (user) {
+      return this.http.post<IUserProfile>(`${site.url}/users/GetUserInfo`, user)
     }
+  }
 }

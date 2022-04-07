@@ -29,36 +29,6 @@ mat-card {
 
 .grid-flow {
 
-  // @include for-tablet-portrait-up {
-  //   --gap: 5px;
-  //   margin-top: 2px;
-  //   margin-right: 2px;
-  //   display: grid;
-  //   gap: var(--gap);
-  //   grid-template-columns: 75px 100px 50px 50px 65px;
-  //   overflow-y: visible;
-  // }
-
-  // @include for-tablet-landscape-up {
-  //   --gap: 5px;
-  //   margin-top: 2px;
-  //   margin-right: 2px;
-  //   display: grid;
-  //   gap: var(--gap);
-  //   grid-template-columns: 75px 100px 50px 50px 65px;
-  //   overflow-y: visible;
-  // }
-
-  // @include for-desktop-up {
-  //   --gap: 5px;
-  //   margin-top: 2px;
-  //   margin-right: 2px;
-  //   display: grid;
-  //   gap: var(--gap);
-  //   grid-template-columns: 75px 100px 50px 50px 65px;
-  //   overflow-y: visible;
-  // }
-
   @include for-phone-only {
     --gap: 5px;
     margin-top: 2px;
@@ -66,7 +36,7 @@ mat-card {
     display: grid;
     gap: var(--gap);
 
-    grid-template-columns: 75px 100px 50px 50px 65px;
+    grid-template-columns: 50px 100px 50px 50px 65px;
     overflow-y: visible;
   }
 
@@ -76,7 +46,7 @@ mat-card {
     margin-right: 2px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: 100px 175px 100px 100px 125px;
+    grid-template-columns: 50px 175px 100px 100px 125px;
     overflow-y: hidden;
   }
 
@@ -84,7 +54,7 @@ mat-card {
   display    : grid;
   gap        : 10px;
   margin-left: 5px;
-  grid-template-columns: 45px 100px 50px 50px 65px;
+  grid-template-columns: 50px 100px 50px 50px 65px;
   overflow-y : hidden;
   overflow-x: hidden;
 }
@@ -108,55 +78,9 @@ mat-card {
 }
 
 .prices {
-  // font-size  : 1vw;
-  // font-weight: 500;
-  // line-height: 1.2em;
-  // margin     : .2em  ;
-
-  @include for-phone-only {
-    font-size  : 2.5vw;
-    font-weight: 500;
-    line-height: 1.2em;
-    // margin     : .2em  ;
-    background-color: rgb(54, 84, 124);
-  }
-
-  @include for-tablet-portrait-up {
-    font-size  : 1vw;
-    font-weight: 500;
-    line-height: 1.2em;
-    // margin     : .2em  ;
-    background-color: rgb(51, 223, 151);
-  }
-
-  @include for-tablet-landscape-up {
-    font-size  : 1vw;
-    font-weight: 500;
-    line-height: 1.2em;
-    // margin     : .2em  ;
-    background-color: rgb(54, 124, 95);
-  }
-  @include for-desktop-up {
-    font-size  : 1vw;
-    font-weight: 500;
-    line-height: 1.2em;
-    // margin     : .2em  ;
-    background-color: rgb(124, 94, 54);
-  }
-
-  @include for-big-desktop-up {
-    font-size  : .9vw;
-    font-weight: 500;
-    line-height: 1.2em;
-    // margin     : .2em;
-    background-color: antiquewhite;
-  }
-
-  font-size  : 1vw;
+  font-size: clamp(1rem, 1vw, 1.5rem);
   font-weight: 500;
   line-height: 1.2em;
-  // margin     : .2em;
-  background-color: rgb(75, 31, 49);
 }
 
 .badge {
@@ -172,19 +96,3 @@ mat-card {
   //   margin-left: 10px;
   // }
 }
-
-// @mixin for-phone-only {
-//   @media (max-width: 599px) { @content; }
-// }
-// @mixin for-tablet-portrait-up {
-//   @media (min-width: 600px) { @content; }
-// }
-// @mixin for-tablet-landscape-up {
-//   @media (min-width: 900px) { @content; }
-// }
-// @mixin for-desktop-up {
-//   @media (min-width: 1200px) { @content; }
-// }
-// @mixin for-big-desktop-up {
-//   @media (min-width: 1800px) { @content; }
-// }

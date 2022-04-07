@@ -1,17 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GridsterLayoutService,IComponent  } from 'src/app/_services/system/gridster-layout.service';
-import {CompactType, DisplayGrid, Draggable, GridsterConfig, GridsterItem, GridType, PushDirections, Resizable} from 'angular-gridster2';
-import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import { GridsterConfig, GridsterItem, } from 'angular-gridster2';
+import { DashBoardComponentProperties, DashboardContentModel,  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 
 // COMPONENTS
-import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { GridsterDashboardService } from 'src/app/_services/system/gridster-dashboard.service';
-import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialog } from '@angular/material/dialog';
 import { GridComponentPropertiesComponent } from './grid-component-properties/grid-component-properties.component';
-import {  Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
+import { AuthenticationService, AWSBucketService } from 'src/app/_services';
 
 @Component({
   selector: 'grid-menu-layout',
@@ -21,10 +17,10 @@ import {  Subscription } from 'rxjs';
 export class GridMenuLayoutComponent implements OnInit {
 
   @Input() layoutID : any;
-  options: GridsterConfig;
-  // get options(): GridsterConfig {
-  //   return this.layoutService.options;
-  // }
+
+  get options(): GridsterConfig {
+    return this.layoutService.options;
+  }
   get layout(): GridsterItem[] {
     return this.layoutService.layout;
   }
@@ -54,82 +50,42 @@ export class GridMenuLayoutComponent implements OnInit {
 		onSomething: (type) => alert(type)
   }
 
-  backgroundColor = '#82a1ad';
-  opacity         = 5;
+  backgroundblendmode = ''
+  backgroundColor     = '#82a1ad';
+  opacity             = 1;
+  image               = ''
+  bucket:             string;
+
+  pixelminHeight     = '100%';
+  pixelHeight        = 'calc(100vh - 1em - 50px) ';
+  pixelWidth         = '100%'
+
+  // min-height: 100%;
+  // height: calc(100vh - 1em - 50px);
 
 	constructor(
     public layoutService  : GridsterLayoutService,
     private dialog        : MatDialog,
+    public authService    : AuthenticationService,
+    private awsservice    : AWSBucketService,
   )
   {}
 
-	ngOnInit() {
+  async	ngOnInit() {
     this.updateGridsterUserMode(this.designerMode);
-    // this.options = {
-		// 	gridType: "fit",
-		// 	enableEmptyCellDrop: true,
-		// 	emptyCellDropCallback: this.layoutService.onDrop,
-		// 	swap: true,
-    //   swapWhileDragging: false,
-		// 	// pushItems: true,
-		// 	// pushDirections: { north: true, east: true, south: true, west: true },
-		// 	resizable: { enabled: true },
-		// 	// itemChangeCallback: this.itemChange.bind(this),
-    //   itemChangeCallback : this.modifyChanges.bind(this),
-    //   allowMultiLayer    : true,
-		// 	draggable: {
-		// 		enabled: true,
-		// 		// ignoreContent: true,
-		// 		// dropOverItems: true,
-		// 		// dragHandleClass: "drag-handler",
-		// 		// ignoreContentClass: "drag",
-		// 	},
-    //   minCols: 250,
-		// 	minRows: 250,
-    //   mobileBreakpoint: 640,
-    //   maxLayerIndex: 100,
-    //   defaultLayerIndex:1,
-		// };
-
-    this.options = {
-      gridType: GridType.Fit,
-      displayGrid: DisplayGrid.OnDragAndResize,
-      pushItems: true,
-			// pushDirections: { north: true, east: true, south: true, west: true },
-      swap             : true,
-      swapWhileDragging: true,
-      allowMultiLayer  : true,
-      resizable: { enabled: true },
-      enableEmptyCellDrop: true,
-			emptyCellDropCallback: this.layoutService.onDrop,
-      itemChangeCallback : this.modifyChanges.bind(this),
-      draggable: {
-        enabled: true
-      },
-      minCols: 100,
-			minRows: 100,
-      maxCols: 100,
-      maxRows: 100,
-      maxItemRows: 100,
-      maxItemCols: 100,
-      maxItemArea: 1000000,
-      mobileBreakpoint: 640,
-    };
-
     this.initSubscription();
+    this.layoutService.toggleDesignerMode(true)
+    this.changedOptions();
+    this.layoutService.changedOptions();
+    this.bucket = await this.awsservice.awsBucketURL();
 	}
 
   saveChanges() {
     this.itemChange()
   }
 
-  modifyChanges() {
-    this.layoutService.stateChanged = true
-    console.log(this.layoutService.stateChanged)
-  }
-
   updateGridsterUserMode(mode: boolean) {
-    this.designerMode    = mode;
+    this.layoutService.designerMode    = mode;
     if (mode) {
       this.gridsteritemclass= 'gridster-item';
     }
@@ -140,15 +96,53 @@ export class GridMenuLayoutComponent implements OnInit {
 
   initSubscription() {
      this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
-      // this.layoutService.getData(this.layoutService.dashboardID);
       if (!data) {
         this.layoutService.forceRefresh(null);
         return;
       }
+
+      this.backgroundblendmode = 'normal'
+      this.backgroundColor     = 'white';
+      this.opacity             = 1;
+      this.image               = ''
+
       if (this.layoutService.dashboardProperties) {
         this.backgroundColor = this.layoutService.dashboardProperties.backgroundColor;
         this.opacity         = this.layoutService.dashboardProperties.opacity;
+        this.backgroundblendmode = this.layoutService.dashboardProperties.backgroundblendmode;
+        this.image  = this.bucket + this.layoutService.dashboardProperties.image;
+
+        this.pixelminHeight     = '100%';
+        this.pixelHeight        = 'calc(100vh - 1em - 50px)'
+        this.pixelWidth         = '100%'
+
+        this.pixelminHeight = this.layoutService.dashboardProperties.pixelHeight;
+        this.pixelHeight = this.layoutService.dashboardProperties.pixelHeight;
+        this.pixelWidth  = this.layoutService.dashboardProperties.pixelWidth;
+
+        let rows = 100;
+        let cols = 100;
+        if (this.layoutService.dashboardProperties.gridRows) {
+          rows =  this.layoutService.dashboardProperties.gridRows
+        }
+        if (this.layoutService.dashboardProperties.gridColumns) {
+          cols =   this.layoutService.dashboardProperties.gridColumns
+        }
+
+        this.layoutService.options.minCols = cols;
+        this.layoutService.options.minRows = rows;
+        this.layoutService.options.maxCols = cols;
+        this.layoutService.options.maxRows = rows;
+        this.layoutService.options.maxItemRows = rows;
+        this.layoutService.options.maxItemCols = cols;
+
+        // this.pixelminHeight     = '100%';
+        // this.pixelHeight        this.layoutService.options.pixel= 'calc(100vh - 1em - 50px)'
+        // this.pixelWidth         = '100%'
+
+        this.layoutService.changedOptions();
       }
+
     })
   }
 
@@ -171,7 +165,6 @@ export class GridMenuLayoutComponent implements OnInit {
   changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
-
     }
   }
 
@@ -181,7 +174,6 @@ export class GridMenuLayoutComponent implements OnInit {
 	}
 
   openEditor(item: DashboardContentModel) {
-    console.log(item)
     let dialogRef: any;
     dialogRef = this.dialog.open(GridComponentPropertiesComponent,
       { width:        '650px',

@@ -1,4 +1,4 @@
-import { Component,  OnInit,  } from '@angular/core';
+import { Component,  Input,  OnInit,  } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, delay, repeatWhen } from 'rxjs/operators';
 import { IEighthMenu, IFlowerMenu, TvMenuPriceTierService } from 'src/app/_services/menu/tv-menu-price-tier.service';
@@ -23,6 +23,7 @@ export class StrainBoardComponent implements OnInit {
   headers: any;
   eighthMenu$: Observable<IEighthMenu[]>;
   eighthMenu: IEighthMenu[]
+  @Input() chartHeight: any;
 
   constructor(private tvMenuPriceTierService: TvMenuPriceTierService,
               private siteService:            SitesService,
@@ -42,16 +43,7 @@ export class StrainBoardComponent implements OnInit {
         return throwError(err);
       })
     )
-    // this.refreshFlowers();
   }
-
-
-  // refreshFlowers() {
-  //   this.eighthMenu$.subscribe( data=> {
-  //     this.eighthMenu = data
-  //     // this.headers =  [...new Set(this.eighthMenu.map(item => item.))]
-  //   })
-  // }
 
 }
 

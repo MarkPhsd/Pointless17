@@ -1,8 +1,5 @@
-<mat-card *ngIf="order && order.clients_POSOrders">
-
-
+<mat-card *ngIf="order && order.clients_POSOrders; trackBy: trackByFn">
   <mat-card-content>
-
     <div class="grid-demo">
       <div class="grid-contact">
         <div> Customer </div>
@@ -22,14 +19,14 @@
       </div>
 
       <div>
-        <div *ngIf="canRemoveClient" >
+        <div *ngIf="!disableActions && canRemoveClient" >
           <button mat-button
                   (click)="removeClient()">
               <mat-icon>clear</mat-icon>Clear
           </button>
         </div>
 
-        <div *ngIf="order.clientID !=0">
+        <div *ngIf="!disableActions &&  order.clientID !=0">
           <button mat-button
                   (click)="openClient()">
               <mat-icon>open_in_new</mat-icon> View
@@ -41,7 +38,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="!order.clients_POSOrders">
+<mat-card *ngIf="!disableActions &&  !order.clients_POSOrders">
   <span class="float-left">
     <app-client-search-selector
         (itemSelect)="assignCustomer($event)">

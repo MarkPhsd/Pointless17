@@ -98,7 +98,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    closeOrder() {
      if (this.order) {
      const site = this.siteService.getAssignedSite();
-     const result$ = this.orderService.completOrder(site, this.order.id)
+     const result$ = this.orderService.completeOrder(site, this.order.id)
      result$.subscribe(data=>  {
        this.router.navigateByUrl('/pos-orders')
        this.paymentService.updatePaymentSubscription(null)

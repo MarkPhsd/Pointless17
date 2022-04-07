@@ -1,0 +1,11 @@
+mat-checkbox {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+
+.grid {
+  display: grid;
+  gap: 5px;
+  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+}

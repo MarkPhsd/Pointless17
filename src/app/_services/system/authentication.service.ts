@@ -40,8 +40,6 @@ export class AuthenticationService {
       if (user) {
         localStorage.setItem('user', JSON.stringify(user));
       }
-      // console.log('update user' ,  localStorage.getItem('user'))
-
     }
 
     updateUserX(user: IUser) {
@@ -76,6 +74,23 @@ export class AuthenticationService {
         }
       }
       return this._user.value;
+    }
+
+    public get isAuthorized(): boolean {
+      try {
+        if  (this.userValue  != null) {
+          if  (this.userValue &&
+          (this.userValue.roles === 'admin' || this.userValue.roles === 'manager')) {
+            // console.log('this.user Value', this.userValue)
+            return true
+          }
+        }
+      } catch (error) {
+        console.log('error', error)
+      }
+
+      // console.log('this.user no Value', this.userValue)
+      return false
     }
 
     public get userxValue(): IUser {
@@ -130,7 +145,6 @@ export class AuthenticationService {
       localStorage.removeItem('orderSubscription')
       this.updateUser(null);
       this.updateUserX(null);
-
     }
 
     requestUserSetupToken(userName: string): Observable<IUserExists> {
@@ -158,26 +172,28 @@ export class AuthenticationService {
     updatePassword(user: IUser): any {
       let url = `${this.apiUrl}/users/updatePassword`
       return this.http.post<any>(url, { token: user.token, userName: user.username, password: user.password } )
-      .subscribe(
-          data => {
+      .subscribe({
+        next: data => {
           return "Password updated.";
         },
-          error => {
+        error:  error => {
           return error
         }
-      )
+      })
     }
 
     _updatePassword(user: IUser) {
       const url = `${this.apiUrl}/users/updatePassword`
       return this.http.post<any>(url, { token: user.token, userName: user.username, password: user.password } )
-      .subscribe(
-          data => {
+      .subscribe( {
+        next: data => {
           return "Password updated.";
         },
-          error => {
+        error:  error => {
           return error
         }
+      }
+
       )
     }
 

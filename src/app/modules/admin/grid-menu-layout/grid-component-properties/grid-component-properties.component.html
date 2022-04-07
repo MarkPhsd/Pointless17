@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title>
-    <div class="grid-title">
+    <div class="grid">
       <div>
         Edit Card
       </div>
@@ -13,53 +13,72 @@
           enableDelete            ="false"
         ></app-edit-buttons-standard>
       </div>
+
     </div>
 
     <mat-divider></mat-divider>
   </mat-card-title>
+  <mat-card-subtitle>
+    <div [style.font-color]="'red'" *ngIf="message && message.length>0">
+      <mat-icon>warning</mat-icon>
+      <h4>Please check the settings:</h4>
+      <div *ngFor="let item of message">
+        {{item}}
+      </div>
+    </div>
+  </mat-card-subtitle>
+  <mat-card-content >
+      <div [formGroup]="inputForm"
+           *ngIf="inputForm && dashBoardContent; else loading;">
+        <div>
+          <mat-label>Type of Card</mat-label>
+        </div>
+        <div>
+          <mat-button-toggle-group name="type"
+                    aria-label="item Type"
+                    formControlName="type">
+            <mat-button-toggle
+                    [value]="item.name"
+                    (click)="setCardType(item)"
+                    *ngFor="let item of cardTypes" >
+              <mat-icon>{{item.icon}} </mat-icon> {{item.name}}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+        </div>
+      </div>
 
-    <mat-card-content >
       <div [formGroup]="inputForm"
             *ngIf="inputForm &&   dashBoardContent; else loading;" >
-        <div class="grid-items">
+        <div class="grid">
+
           <app-value-fields
             [inputForm]="inputForm"
             [fieldName]="'name'"
             [fieldsClass]="'field-small'">
-              Name
+            Name
           </app-value-fields>
 
-          <div class="grid-items">
-            <div>
-              <mat-label>Type of Card</mat-label>
-            </div>
+          <div *ngIf="cardType === 'chart' ||
+                      cardType === 'report'
+                      "
+                class="grid-items">
             <mat-button-toggle-group name="type"
                       aria-label="item Type"
-                      formControlName="type">
-              <mat-button-toggle class="discount-type-button"
-                      [value]="item.name"
-                      (click)="setCardType(item)"
-                      *ngFor="let item of cardTypes" >
-                <mat-icon>{{item.icon}} </mat-icon> {{item.name}}
+                      formControlName="rangeType">
+              <mat-button-toggle
+                      [value]="item"
+                      (click)="setRangeType(item)"
+                      *ngFor="let item of rangeTypes" >
+                  {{item}}
               </mat-button-toggle>
             </mat-button-toggle-group>
           </div>
 
-          <span >
-            <div *ngIf="cardType === 'chart' || cardType === 'report'" class="grid-items">
-              <mat-button-toggle-group name="type"
-                        aria-label="item Type"
-                        formControlName="rangeType">
-                <mat-button-toggle
-                        [value]="item"
-                        (click)="setRangeType(item)"
-                        *ngFor="let item of rangeTypes" >
-                    {{item}}
-                </mat-button-toggle>
-              </mat-button-toggle-group>
-            </div>
-
-            <div class="grid-items" *ngIf="cardValueTypes">
+          <div class="grid-items" *ngIf="cardValueTypes">
+            <span *ngIf="cardType === 'chart' ||
+                          cardType === 'report' ||
+                          cardType === 'menu' ||
+                          cardType === 'order'">
               <mat-form-field  appearance="outline">
                   <mat-label> Value Type </mat-label>
                   <mat-select
@@ -74,35 +93,110 @@
                     </mat-option>
                   </mat-select>
               </mat-form-field>
+            </span>
+          </div>
+
+          <div *ngIf="cardType === 'youtube'">
+
+            <div>
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'url'"
+                  [fieldsClass]="'field-small'">
+                  Video ID
+              </app-value-fields>
+              <mat-label>
+                If your video is found at https://www.youtube.com/watch?v=PRQCAL_1234, then your video id is PRQCAL_RMVo.
+              </mat-label>
             </div>
 
-            <div class="small-margin"
-                  *ngIf="cardType === 'menu' &&
-                        (cardValueType === 'Category' || cardValueType === 'Specials')">
-              <div *ngIf="itemValue">
-                Selected : {{itemValue?.name}}
-              </div>
-              <div class="grid-item">
-                  <form-select-list [searchForm]           = "inputForm"
-                                    [formFieldName]        = "'listItemID'"
-                                    [list$]                 = "list$"
-                                    [showActiveInactive]   = "true"
-                                    [formValue]            = 'itemValue'
-                                    (selectionChangeValue) = "setCategory($event)">
-                  <div fieldSearchDescription>Select</div>
-                  </form-select-list>
-              </div>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="autoRepeat" >
+                <mat-label>Repeat</mat-label>
+              </mat-slide-toggle>
             </div>
 
-          </span>
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="autoPlay" >
+                <mat-label>Auto Play</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+          </div>
+
+          <div *ngIf="cardType === 'iframe'">
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'url'"
+                [fieldsClass]="'field-small'">
+                URL
+            </app-value-fields>
+          </div>
+
+          <div *ngIf="cardType === 'order'">
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="disableActions" >
+                <mat-label>Disable Actions</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div class="grid-values grid-items">
+              <div>
+                Refresh in Seconds {{refreshTime}}
+              </div>
+              <div>
+                <mat-slider
+                            thumbLabel
+                            [displayWith]="formatRefreshTime"
+                            tickInterval="1000"
+                            step="1"
+                            min="0"
+                            max="100"
+                            [(ngModel)]="refreshTime"
+                            aria-label="units"
+                ></mat-slider>
+              </div>
+            </div>
+          </div>
+
+          <div class="small-margin"
+                *ngIf="cardType === 'menu'">
+
+            <div *ngIf="itemValue">
+              Selected : {{itemValue?.name}}
+            </div>
+            <div class="grid-item">
+                <form-select-list [searchForm]           = "inputForm"
+                                  [formFieldName]        = "'listItemID'"
+                                  [list$]                = "list$"
+                                  [showActiveInactive]   = "true"
+                                  [formValue]            = 'itemValue'
+                                  (selectionChangeValue) = "setCategory($event)">
+                <div fieldSearchDescription>Select</div>
+                </form-select-list>
+            </div>
+
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="MMJMenu" >
+                <mat-label>Cannabis Style Menu</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+          </div>
+
+
         </div>
       </div>
     </mat-card-content>
 
-    <mat-card-content>
+    <mat-card-content >
       <mat-title>Design Properties</mat-title>
       <div class="grid">
-        <div class="grid-values grid-items">
+        <div class="grid-values grid-items ">
           <div>
             Opacity {{opacity}}
           </div>
@@ -170,23 +264,29 @@
             ></mat-slider>
           </div>
         </div>
-      </div>
 
-      <div class="grid">
-        <div>
-          <mat-label>Enter Number and Pixels or Percentage px or %: 400px or 400%</mat-label>
+        <div class="grid">
+          <div>
+            <mat-label>Enter Number and Pixels or Percentage px or %: 400px or 400%</mat-label>
+          </div>
+          <div class="field">
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'chartHeight'"
+                [fieldsClass]="'field-small'">
+                Height
+              </app-value-fields>
+          </div>
+          <div class="field">
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'chartWidth'"
+                [fieldsClass]="'field-small'">
+                Width
+              </app-value-fields>
+          </div>
         </div>
-        <div class="field">
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'chartHeight'"
-              [fieldsClass]="'field-small'">
-              Chart height
-            </app-value-fields>
-        </div>
-
       </div>
-
     </mat-card-content>
   </mat-card>
 

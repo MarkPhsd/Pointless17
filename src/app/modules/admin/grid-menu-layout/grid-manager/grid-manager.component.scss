@@ -4,42 +4,65 @@
   flex-direction: column;
   height: 100%;
 }
-
 router-outlet {
   z-index: 1;
 }
 
-app-sticky-header {
-  z-index: 1000;
-  height: 75px;
-  display: flex;
+mat-toolbar {
+  height: 50px;
 }
 
+mat-toolbar-row {
+  padding: 3px;
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  margin: 5px;
+  width: 100%;
+  align-items: flex-start;
+}
+
+
+// mat-toolbar-multiple-rows {
+//   height: 50px;
+// }
+
 mat-drawer-container {
-  height: 93%;
+  height: 97%;
   padding-top: -5px;
   overflow: hidden;
 }
 
 mat-drawer-content {
-  padding: 5px;
-  margin-left: 5px;
-  margin-right: 5px;
   overflow: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 mat-sidebar {
   border-right: 1px solid #eee;
-  // box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   background-color:rgb(55, 55, 59);
+}
+
+mat-icon {
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 10px;
+  height: 36px;
+  height: 36px;
 }
 
 mat-card {
   margin: 5px;
 }
+
 .mat-content {
   overflow: hidden;
+}
+
+.widgets-selection {
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .mat-orderBar {
@@ -119,6 +142,13 @@ mat-card {
   margin: 0;
   padding: 0;
 }
+
+.nav-list {
+  list-style: none;
+  margin: 5ox;
+  padding: 5ox;
+}
+
 .overlay .closebtn {
   position: absolute;
   top: 20px;
@@ -126,8 +156,13 @@ mat-card {
   font-size: 60px;
 }
 
-.menu-grid {
-  display: flex;
-  justify-content:space-between;
-  margin: 5px;
+.menu-grid-menu {
+  display: grid;
+  gap: 15px;
+  grid-template-columns: repeat( auto-fit, minmax(50px, 1fr) );
+  width: 155px;
+}
+
+.icon-position {
+  margin-top: 7px;
 }

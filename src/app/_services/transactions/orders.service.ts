@@ -116,7 +116,6 @@ export class OrdersService {
     return JSON.parse(order) as IPOSOrder;
   }
 
-
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     this._posSearchModel.next(searchModel);
   }
@@ -158,36 +157,32 @@ export class OrdersService {
   get posName(): string { return localStorage.getItem("POSName") }
 
   getTodaysOpenOrders(site: ISite):  Observable<IPOSOrder[]> {
-
-      const controller = "/POSOrders/"
-
-      const endPoint  = "GetOrdersbyPage"
-
-      const parameters = "?pageNumber=1&pageSize=1000"
-
-      const url = `${site.url}${controller}${endPoint}${parameters}`
-
-      return this.http.get<IPOSOrder[]>(url);
-
-  }
-
-  completOrder(site: ISite , id: number) {
-
     const controller = "/POSOrders/"
 
-    const endPoint  = "completOrder"
+    const endPoint  = "GetOrdersbyPage"
+
+    const parameters = "?pageNumber=1&pageSize=1000"
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder[]>(url);
+  }
+
+  completeOrder(site: ISite , id: number) {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "completeOrder"
 
     const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IPOSOrder>(url);
-
   }
-    // GetActiveEmployees(Name As String, StartDate As String, EndDate As String)
+
+  // GetActiveEmployees(Name As String, StartDate As String, EndDate As String)
 
   getActiveEmployees(site: ISite):  Observable<IItemBasic[]>  {
-
     const controller = "/POSOrders/"
 
     const endPoint  = "getActiveEmployees"
@@ -197,7 +192,6 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IItemBasic[]>(url);
-
   }
 
   getUserCurrentOrder(site: ISite, userID: number) {
@@ -220,7 +214,6 @@ export class OrdersService {
   // Public Property Summary As POSOrdersSummarized
   // Public Property ErrorMessage As String
   getPendingInBalanceSheet(site: ISite, id: number): Observable<IOrdersPaged> {
-
     const controller = "/POSOrders/";
 
     const endPoint = "GetPendingInBalanceSheet";
@@ -234,7 +227,6 @@ export class OrdersService {
 
   //getOrderCountCompletedInBalanceSheet
   getOrderCountCompletedInBalanceSheet(site: ISite, sheet: IBalanceSheet ): Observable<IOrdersPaged> {
-
     const controller = "/POSOrders/";
 
     const endPoint = "getOrderCountCompletedInBalanceSheet";
@@ -248,19 +240,19 @@ export class OrdersService {
 
   claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
     if (history === undefined) {history = false};
-
     if (history) { return }
+
+    const posName = localStorage.getItem('devicename')
 
     const controller = "/POSOrders/"
 
     const endPoint  = "claimOrder"
 
-    const parameters = `?ID=${id}`
+    const parameters = `?ID=${id}&posName=${posName}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<any>(url);
-
   }
 
   releaseOrder(site: ISite, id: number):  Observable<any>  {
@@ -274,18 +266,18 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<any>(url);
-
   }
 
   getOrder(site: ISite, id: string, history: boolean):  Observable<IPOSOrder>  {
 
     if (history === undefined) {history = false};
+    const deviceName = localStorage.getItem('devicename')
 
     const controller = "/POSOrders/"
 
     const endPoint  = "GetPOSOrder"
 
-    const parameters = `?ID=${id}&history=${history}`
+    const parameters = `?ID=${id}&history=${history}&deviceName=${deviceName}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -312,7 +304,6 @@ export class OrdersService {
   postNewDefaultOrder(site: ISite, orderPayload: OrderPayload):  Observable<IPOSOrder>  {
 
     //get default settings
-
     const controller = "/POSOrders/"
 
     const endPoint  = "PostNewDefaultOrder"
@@ -445,8 +436,6 @@ export class OrdersService {
 
   }
 
-
-
   deleteCheckInsOfClient(site: ISite, clientID: number): any {
 
     const controller = '/POSOrders/'
@@ -520,7 +509,6 @@ export class OrdersService {
   newOrderWithPayload(site: ISite, serviceType: IServiceType) {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
-
     const order$       = this.postOrderWithPayload(site, orderPayload)
     order$.subscribe( {
         next:  order => {
@@ -534,14 +522,12 @@ export class OrdersService {
     )
   }
 
-
   navToMenu() {
     if (this.router.url != '/app-main-menu'){
       if (this.router.url.substring(0, '/menuitems-infinite'.length) != '/menuitems-infinite') {
          this.router.navigate(['/app-main-menu']);
         return
       }
-
     }
   }
 

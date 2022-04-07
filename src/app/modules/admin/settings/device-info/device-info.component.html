@@ -6,7 +6,7 @@
         Device Info
       </div>
       <div>
-        {{this.deviceService.getDeviceInfo() | json }}
+        {{this.deviceService.getDeviceInfo() | json}}
       </div>
 
       <div>
@@ -15,8 +15,7 @@
 
       <div>
         <mat-checkbox [(ngModel)]="isMobile"
-                      color="primary"
-                    >
+                      color="primary">
               </mat-checkbox>
       </div>
 
@@ -27,8 +26,7 @@
       <div>
         <!-- {{this.deviceService.isTablet()}} -->
         <mat-checkbox [(ngModel)]="isTablet"
-                      color="primary"
-                    >
+                      color="primary">
         </mat-checkbox>
       </div>
 
@@ -38,8 +36,7 @@
       <div>
         <!-- {{this.deviceService.isDesktop()}} -->
         <mat-checkbox [(ngModel)]="isDesktopDevice"
-                      color="primary"
-                    >
+                      color="primary">
         </mat-checkbox>
       </div>
 
@@ -49,7 +46,7 @@
               <mat-label>Device Name</mat-label>
                 <input  matInput
                   [(ngModel)]="deviceName"
-                  type="text" >
+                  type="text">
             </mat-form-field>
           </div>
           <div>

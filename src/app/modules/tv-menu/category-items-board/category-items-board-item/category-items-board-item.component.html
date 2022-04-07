@@ -1,0 +1,32 @@
+<div *ngIf="item"  [class]="gridClass">
+
+  <div class="badge">
+    <div  *ngIf="item?.species === 'Hybrid'" class="hybrid">
+      {{item.species}}
+    </div>
+    <div *ngIf="item?.species  === 'Sativa'" class="sativa">
+      {{item.species}}
+    </div>
+    <div *ngIf="item?.species  === 'Indica'" class="indica">
+        {{item.species}}
+    </div>
+  </div>
+
+  <div>
+    {{item.name }}
+  </div>
+
+  <div >
+    {{(+item.thc/100)| percent}}
+  </div>
+
+  <div>
+    {{item.retail | currency}}
+  </div>
+
+  <div class="item-span">
+    {{item?.onlineShortDescription}}
+  </div>
+
+</div>
+

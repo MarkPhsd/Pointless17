@@ -1,13 +1,18 @@
-<!-- <div *ngIf="designerMode">
-  BackColor: {{layoutService.dashboardModel.backgroundColor}} Opacity: {{layoutService.dashboardModel.opacity}}
-  State Changed {{ layoutService.stateChanged}}
-  <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
+<div *ngIf="authService.isAuthorized &&
+            layoutService.designerMode &&
+            layoutService.options &&
+            layoutService.dashboardModel"
+    class="grid"
+    >
+  <h4>Designer Options</h4>
+  <mat-divider></mat-divider>
+  <mat-checkbox [(ngModel)]="layoutService.options.swap" (ngModelChange)="layoutService.changedOptions()">
     Swap
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.swapWhileDragging" (ngModelChange)="changedOptions()">
+  <mat-checkbox [(ngModel)]="layoutService.options.swapWhileDragging" (ngModelChange)="layoutService.changedOptions()">
     Swap Items While Dragging
   </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
+  <mat-checkbox [(ngModel)]="layoutService.options.pushItems" (ngModelChange)="layoutService.changedOptions()">
     Push Items
   </mat-checkbox>
-</div> -->
+</div>

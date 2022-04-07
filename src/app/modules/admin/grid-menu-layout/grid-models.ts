@@ -1,6 +1,7 @@
 export interface WidgetModel {
   name: string;
   identifier: string;
+  icon  : string;
 }
 
 export interface DashboardModel {
@@ -12,14 +13,21 @@ export interface DashboardModel {
   type: string;  //preset types, menu, report widget, restaurant/ operation layout.
   jsonObject: string;
   dashboard: Array<DashboardContentModel>;
+  errorMessage: string;
+
 }
 
 export interface  DashBoardProperties {
   backgroundColor: string;
   image          : string;
   opacity        : number;
+  backgroundblendmode : string;
+  icon:           string;
+  gridColumns    : number;
+  gridRows       : number;
+  pixelHeight    : string;
+  pixelWidth     : string;
 }
-
 
 export interface DashboardContentModel {
   id: number;
@@ -45,17 +53,26 @@ export interface DashBoardComponentProperties {
   opacity        : number;
   borderRadius   : number;
   border         : number;
-  layerIndex:     number;
+  layerIndex     : number;
 
-  lengthOfRange  : string;     //number of range month, year etc
-  rangeType      : string;        //hour, month, day, year
+  lengthOfRange  : string; //number of range month, year etc
+  rangeType      : string; //hour, month, day, year
   type           : string; //preset types, menu, report widget
   cardValueType  : string; //componentName
-  dateFrom       : string;
-  dateTo         : string;
+  dateFrom       : string; //not implemented
+  dateTo         : string; //not implemented
 
+  MMJMenu        : boolean;
   chartHeight    : string;
+  chartWidth     : string;
+  itemID         : string;
 
+  disableActions : boolean;
+  autoPlay  : boolean;
+  url       : string;
+  autoRepeat: boolean;
+
+  refreshTime: number;
 }
 
 export interface widgetRoles {
@@ -63,17 +80,18 @@ export interface widgetRoles {
   clientTypeID: number;
 }
 
-export const WidgetsMock: WidgetModel[] = [
-  {
-      name: 'Radar Chart',
-      identifier: 'radar_chart'
-  },
-  {
-      name: 'Doughnut Chart',
-      identifier: 'doughnut_chart'
-  },
-  {
-      name: 'Line Chart',
-      identifier: 'line_chart'
-  }
-]
+// export const WidgetsMock: WidgetModel[] = [
+//   {
+//       name: 'Radar Chart',
+//       identifier: 'radar_chart'
+
+//   },
+//   {
+//       name: 'Doughnut Chart',
+//       identifier: 'doughnut_chart'
+//   },
+//   {
+//       name: 'Line Chart',
+//       identifier: 'line_chart'
+//   }
+// ]

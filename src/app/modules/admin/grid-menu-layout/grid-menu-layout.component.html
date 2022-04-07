@@ -1,32 +1,32 @@
-<div *ngIf="designerMode">
-  <mat-checkbox [(ngModel)]="options.swap" (ngModelChange)="changedOptions()">
-    Swap
-  </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.swapWhileDragging" (ngModelChange)="changedOptions()">
-    Swap Items While Dragging
-  </mat-checkbox>
-  <mat-checkbox [(ngModel)]="options.pushItems" (ngModelChange)="changedOptions()">
-    Push Items
-  </mat-checkbox>
-</div>
-
-<div *ngIf="layoutService.dashboardModel">
-
+<div    [style.height]="pixelHeight"
+        [style.max-height]="pixelHeight"
+         *ngIf="layoutService.dashboardModel">
+  {{pixelHeight}}
   <gridster [style.background]="backgroundColor"
             [style.opacity]="opacity/100"
-            class="content-container"
+            [style.background-blend-mode]="backgroundblendmode"
+            [style.background-image]="'url('+ image +')'"
+
+            [style.background-position] = "'center'"
+            [style.background-repeat]   = "'no-repeat'"
+            [style.background-size]     = "'cover'"
+            [style.max-height]="pixelHeight"
+            [style.height]="pixelHeight"
+            [style.width]="pixelWidth"
+
             [options]="options"
+            class="gridster-container"
             (drop)="onDrop($event)"
-            >
+          >
 
     <gridster-item  [style.opacity]="getOpacity(item?.object?.opacity/100)"
                     [style.border-radius]="getBorderRadius(item?.object?.borderRadius)"
                     [style.border]="getBorder(item?.object?.border)"
                     [item]="item"
                     *ngFor="let item of layoutService.dashboardArray">
-
         <div>
-          <div class="menu-bar" *ngIf="designerMode">
+          <div  class="menu-bar" *ngIf="authService.isAuthorized &&
+                                      layoutService.designerMode">
           <mat-menu-basic
               [enableDelete]="true"
               [enableSettings]="true"
@@ -36,6 +36,10 @@
           </div>
 
           <div [class]="gridsteritemclass">
+            <div class="title">
+              <mat-lab class="title"> {{ item?.object?.name }} </mat-lab>
+            </div>
+
             <ng-container
                     class="cutting-corners"
                     *ngComponentOutlet="item.component;
@@ -46,5 +50,6 @@
         </div>
     </gridster-item>
   </gridster>
+
 
 </div>

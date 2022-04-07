@@ -62,6 +62,7 @@ export class ToolBarUIService {
 
   updateBarSize(value: boolean) {
     console.log('updateBarSize', value)
+    if (!value) {return}
     this._barSize.next(value)
     this.barSize = value;
     this.resizeWindow();

@@ -1,3 +1,8 @@
+
+
+mat-card  {
+  width: 100%;
+}
 .transaction-data-side-panel {
   display      : grid;
   grid-template-columns: 65px 125px;
@@ -6,6 +11,11 @@
   overflow-x   : hidden;
   font-size    : large;
   margin-bottom: 5px;
+}
+
+.foreground-color {
+  //  color: mat-contrast($accent, 500);
+  // color: rgba(black, 0.87)
 }
 
 .transaction-data {

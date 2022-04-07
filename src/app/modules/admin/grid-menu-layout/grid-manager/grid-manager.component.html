@@ -1,15 +1,29 @@
 <mat-toolbar [color]="matToolbarColor">
-  <mat-toolbar-row class="menu-grid">
-    <div>
-      <a class="nav-link nav-icon" (click)="toggleMenu()">
-        <mat-icon>menu</mat-icon>
-      </a>
+  <mat-toolbar-row>
+    <div class="menu-grid-menu">
+      <div class="icon-position">
+        <app-logo [logoSize]="'small'"></app-logo>
+      </div>
+
+      <div  *ngIf="allowDesign">
+        <a (click)="toggleMenu()">
+          <mat-icon color="warn">menu</mat-icon>
+        </a>
+      </div>
     </div>
+
     <div>
-      <button mat-raised-button >
-        <a (click)="modal = !modal" clrDropdownItem>Preferences</a>
-      </button>
+      <app-dashboard-menu></app-dashboard-menu>
     </div>
+
+    <div>
+      <app-toggle-theme></app-toggle-theme>
+    </div>
+
+    <div>
+      <api-status-display></api-status-display>
+    </div>
+
   </mat-toolbar-row>
 </mat-toolbar>
 
@@ -20,25 +34,18 @@
       [opened]  ="toggle"
       [class]   ="'mat-orderBar-wide'" >
 
-    <mat-card>
+    <mat-card class="widgets-selection">
       <mat-card-subtitle>
         <section class="nav-group collapsible">
-          <label for="tabexample1">Drag Widget Items</label>
+          <label for="tabexample1">Widgets</label>
         </section>
       </mat-card-subtitle>
       <mat-card-content>
         <ul class="nav-list" *ngIf="layoutService.widgetCollection">
-          <li>
-             <a draggable="true" class="nav-link"
-                (dragstart)="onDrag($event, 'graph')">
-              <mat-icon>drag_indicator</mat-icon>
-              Default
-            </a>
-          </li>
           <li *ngFor="let widget of layoutService.widgetCollection">
             <a draggable="true" class="nav-link"
                (dragstart)="onDrag($event, widget.identifier)">
-              <mat-icon>drag_indicator</mat-icon>
+              <mat-icon>{{ widget.icon }}</mat-icon>
               {{ widget.name }}
             </a>
           </li>
@@ -78,27 +85,24 @@
                   (click)="reset()">
             <mat-icon>restart_alt</mat-icon>Reset</button>
         </div>
+        <div class="header-items">
+          <button mat-button
+                  (click)="toggleDesignMode()">
+            <mat-icon *ngIf="layoutService.designerMode">toggle_off</mat-icon>
+            <mat-icon *ngIf="!layoutService.designerMode">toggle_on</mat-icon>
+            Toggle Designer Mode</button>
+        </div>
+
+        <mat-divider></mat-divider>
+        <grid-designer-info></grid-designer-info>
+
       </mat-card-content>
     </mat-card>
 
   </mat-drawer>
 
-  <mat-drawer-content *ngIf="layoutService.dashboardCollection">
-
-    <div *ngIf="inputForm" class="grid-items">
-      <mat-button-toggle-group
-                name="type"
-                aria-label="item Type"
-                formControlName="type">
-        <mat-button-toggle
-                class="discount-type-button"
-                [value]="item?.id"
-                (click)="listMenu(item?.id)"
-                *ngFor="let item of layoutService.dashboardCollection" >
-            {{item.name}}
-          </mat-button-toggle>
-        </mat-button-toggle-group>
-      </div>
+  <mat-drawer-content *ngIf="layoutService.dashboardCollection &&
+                             layoutService.dashboardCollection.length>0">
 
     <router-outlet #outlet="outlet"></router-outlet>
 

@@ -1,65 +1,67 @@
-<div  #scrollMe
-      [class]="orderItemsPanel" >
+  <div  #scrollMe
+        *ngIf="order && order.posOrderItems && order.posOrderItems.length>0"
+        [class]="orderItemsPanel" >
 
-  <ion-item-sliding
-            class="nopadd"
-            *ngFor="let item of order.posOrderItems; let i = index"
-            (ionSwipe)="swipeItemFromList(i)" >
+    <ion-item-sliding
+              class="nopadd"
+              *ngFor="let item of order.posOrderItems; let i = index;trackBy: trackByFN"
+              (ionSwipe)="swipeItemFromList(i)" >
 
-    <div *ngIf="uiConfig &&
-               (
-                (mainPanel || bottomSheetOpen)
-                || order.history ||
-                ((item.id == item.idRef ||  !item.idRef) || item.prompGrouptID == 0)
-               )">
+      <div *ngIf="uiConfig &&
+                (
+                  (mainPanel || bottomSheetOpen)
+                  || order.history ||
+                  ((item.id == item.idRef ||  !item.idRef) || item.prompGrouptID == 0)
+                )">
 
-      <ion-item *ngIf="item" >
-        <pos-order-item
-                    [class]      ="gridScroller"
-                    [index]      ="i"
-                    [quantity]   ="item?.quantity"
-                    [unitPrice]  ="item?.unitPrice"
-                    [total]      ="item?.total"
-                    [subTotal]   ="item?.subTotal"
-                    [id]         ="item?.id"
-                    [orderItem]  ="item"
-                    [printed]    ="item.printed"
-                    [onlineShortDescription]="item?.posOrderMenuItem?.onlineShortDescription"
-                    [placeHolderImage]="'placeholderproduct.jpg'"
-                    [mainImage]   ="item?.posOrderMenuItem?.urlImageMain"
-                    [productName] = "item?.productName"
-                    [cbd]      ="item?.posOrderMenuItem?.cbd"
-                    [thc]      ="item?.posOrderMenuItem?.thc"
-                    [menuItem] ="item?.posOrderMenuItem"
-                    [productID]="item?.productID"
-                    [order]    ="order"
-                    [uiConfig] ="uiConfig"
-                    [mainPanel]="mainPanel"
-                    [wideBar]  ="wideBar"
-                    (outputDelete)="removeItemFromList($event)"
-        ></pos-order-item>
-      </ion-item>
-    </div>
-    <ion-item-options *ngIf="item.printed">
-      <ion-item-option color="accent">
-        <mat-icon>remove_shopping_cart</mat-icon>
-        Void
-      </ion-item-option>
-    </ion-item-options>
+        <ion-item *ngIf="item" >
+          <pos-order-item
+                      [class]      ="gridScroller"
+                      [index]      ="i"
+                      [quantity]   ="item?.quantity"
+                      [unitPrice]  ="item?.unitPrice"
+                      [total]      ="item?.total"
+                      [subTotal]   ="item?.subTotal"
+                      [id]         ="item?.id"
+                      [orderItem]  ="item"
+                      [printed]    ="item.printed"
+                      [onlineShortDescription]="item?.posOrderMenuItem?.onlineShortDescription"
+                      [placeHolderImage]="'placeholderproduct.jpg'"
+                      [mainImage]   ="item?.posOrderMenuItem?.urlImageMain"
+                      [productName] = "item?.productName"
+                      [cbd]      ="item?.posOrderMenuItem?.cbd"
+                      [thc]      ="item?.posOrderMenuItem?.thc"
+                      [menuItem] ="item?.posOrderMenuItem"
+                      [productID]="item?.productID"
+                      [order]    ="order"
+                      [uiConfig] ="uiConfig"
+                      [mainPanel]="mainPanel"
+                      [wideBar]  ="wideBar"
+                      [disableActions]="disableActions"
+                      (outputDelete)="removeItemFromList($event)"
+          ></pos-order-item>
+        </ion-item>
 
-    <ion-item-options *ngIf="!item.printed">
-      <ion-item-option color="warn">
-        <button mat-button color="primary" (click)="removeItemFromList(i)" >
-          <mat-icon>delete</mat-icon>
-          Delete
-        </button>
-      </ion-item-option>
-    </ion-item-options>
+      </div>
 
-  </ion-item-sliding>
+      <ion-item-options *ngIf="item.printed">
+        <ion-item-option color="accent">
+          <mat-icon>remove_shopping_cart</mat-icon>
+          Void
+        </ion-item-option>
+      </ion-item-options>
 
-</div>
+      <ion-item-options *ngIf="!item.printed">
+        <ion-item-option color="warn">
+          <button mat-button color="primary" (click)="removeItemFromList(i)" >
+            <mat-icon>delete</mat-icon>
+            Delete
+          </button>
+        </ion-item-option>
+      </ion-item-options>
 
+    </ion-item-sliding>
 
+  </div>
 
 

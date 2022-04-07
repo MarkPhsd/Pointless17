@@ -11,6 +11,8 @@ export class OrderTotalComponent implements OnInit {
 
   @Input() order: IPOSOrder
   @Input() mainPanel = false;
+  @Input() disableActions: boolean;
+  @Input() refreshTime = 1;
 
   transactionDataClass ="transaction-data"
   constructor(  public  route: ActivatedRoute) {

@@ -1,0 +1,6 @@
+<div *ngIf="order$ && (order$ | async) as order">
+  <limit-values-progress-bars
+    [order]="order"
+    >
+  </limit-values-progress-bars>
+</div>

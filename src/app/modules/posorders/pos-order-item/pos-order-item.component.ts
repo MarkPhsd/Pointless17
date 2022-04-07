@@ -61,6 +61,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   @Input() hideAddAnotherOne: number;
   @Input() mainPanel      : boolean;
   @Input() wideBar        = false;
+  @Input() disableActions = false;
   customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
@@ -423,6 +424,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
   swipeOutItem(){
     // console.log(this.index, this.orderItem)
+    if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }
 

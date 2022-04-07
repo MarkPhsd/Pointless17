@@ -266,6 +266,7 @@ import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settin
 // import { NgxStripeModule } from 'ngx-stri../modules/admin/settings/stripe-settings/stripe-settings.component
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { NumericDirective } from '../_directives/numeric-directive.directive';
+import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -407,6 +408,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     POSOrderScheduleFormComponent,
     PosOrderPriceScheduleInfoComponent,
     PosOrderScheduleDescriptionComponent,
+    PosOrderBoardComponent,
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,

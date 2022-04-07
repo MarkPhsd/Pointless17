@@ -5,7 +5,6 @@
 
     <div class="header-info"
          [formGroup]="inputForm">
-      <!-- <div *ngIf="inputType === 'text'"> -->
       <div>
         <mat-form-field  appearance="outline">
             <mat-label >
@@ -20,26 +19,6 @@
                     class="form-control" >
         </mat-form-field>
     </div>
-<!--
-    <div *ngIf="inputType === 'number'">
-      <mat-form-field  appearance="outline">
-          <mat-label >
-            <ng-content></ng-content>
-          </mat-label>
-          <input  matInput
-                  #input
-                  numeric
-                  decimals=decimals
-                  appAutoFocusInput
-                  [(ngModel)]="cashValue"
-                  [type]             ="'text'"
-                  [formControlName]  ="fieldName"
-                  class="form-control" >
-      </mat-form-field>
-    </div> -->
-
-    <!-- numeric decimals="2" -->
-
     <div>
       <button class= "keyboard-button"
               mat-button
@@ -47,7 +26,6 @@
         <mat-icon>keyboard_alt</mat-icon>
       </button>
     </div>
-
   </div>
 
   <div class="checkbox" *ngIf="inputTypeValue === 'password'" >
