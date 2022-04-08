@@ -46,6 +46,60 @@ export class GridsterLayoutService {
   public dashboardModel$        = this._dashboardModel.asObservable();
   dashboardProperties: DashBoardProperties;
 
+  public cartTypeCollection  = [
+    { type: "arcdiagram" , icon: '' },
+    { type: "area" , icon: '' },
+    { type: "arearange" , icon: '' },
+    { type: "areaspline" , icon: '' },
+    { type: "areasplinerange" , icon: '' },
+    { type: "bar" , icon: 'bar_chart' },
+    { type: "bellcurve" , icon: '' },
+    { type: "boxplot" , icon: '' },
+    { type: "bubble" , icon: 'bubble_chart' },
+    { type: "bullet" , icon: '' },
+    { type: "column" , icon: '' },
+    { type: "columnpyramid" , icon: '' },
+    { type: "columnrange" , icon: '' },
+    { type: "cylinder" , icon: '' },
+    { type: "dependencywheel" , icon: '' },
+    { type: "dumbbell" , icon: '' },
+    { type: "errorbar" , icon: '' },
+    { type: "funnel" , icon: '' },
+    { type: "funnel3d" , icon: '' },
+    { type: "gauge" , icon: '' },
+    { type: "heatmap" , icon: '' },
+    { type: "histogram" , icon: '' },
+    { type: "item" , icon: '' },
+    { type: "line" , icon: 'show_chart' },
+    { type: "lollipop" , icon: '' },
+    { type: "networkgraph" , icon: '' },
+    { type: "organization" , icon: '' },
+    { type: "packedbubble" , icon: '' },
+    { type: "pareto" , icon: '' },
+    { type: "pie" , icon: 'pie_chart' },
+    { type: "polygon" , icon: '' },
+    { type: "pyramid" , icon: '' },
+    { type: "pyramid3d" , icon: '' },
+    { type: "sankey" , icon: '' },
+    { type: "scatter" , icon: 'scatter_chart' },
+    { type: "scatter3d" , icon: '' },
+    { type: "solidgauge" , icon: '' },
+    { type: "spline" , icon: '' },
+    { type: "streamgraph" , icon: '' },
+    { type: "sunburst" , icon: '' },
+    { type: "tilemap" , icon: '' },
+    { type: "timeline" , icon: '' },
+    { type: "treemap" , icon: '' },
+    { type: "variablepie" , icon: '' },
+    { type: "variwide" , icon: '' },
+    { type: "vector" , icon: '' },
+    { type: "venn" , icon: '' },
+    { type: "waterfall" , icon: '' },
+    { type: "windbarb" , icon: '' },
+    { type: "wordcloud" , icon: '' },
+    { type: "xrange" , icon: '' },
+  ]
+
 	protected componentCollection = [
 		{ name: "Category"      , componentInstance: CategoryItemsBoardComponent },
 		{ name: "Flowers"       , componentInstance: StrainBoardComponent },
@@ -60,7 +114,8 @@ export class GridsterLayoutService {
     { name: "Limits"         , componentInstance: LimitValuesCardComponent },
 
     { name: "Iframe"        , componentInstance: IFrameComponent },
-    { name: "YouTube"      , componentInstance: YoutubePlayerComponent },
+    { name: "YouTube"       , componentInstance: YoutubePlayerComponent },
+    // { name: "youtube"       , componentInstance: YoutubePlayerComponent },
 	];
 
   stateChanged: boolean;
@@ -285,8 +340,8 @@ export class GridsterLayoutService {
     let list = [] as WidgetModel[]
 
     let item = {} as WidgetModel;
-    item.name = 'Graph'
-    item.identifier = 'graph'
+    item.name = 'Chart'
+    item.identifier = 'chart'
     item.icon = 'analytics'
     list.push(item);
 
@@ -395,7 +450,7 @@ export class GridsterLayoutService {
         } as DashboardContentModel;
         this.itemChange(item);
         return this.dashboardArray.push(item);
-      case 'ordertotal' :
+      case 'limits' :
           item = {
            cols: 40,
            rows: 40,
@@ -465,7 +520,7 @@ export class GridsterLayoutService {
            } as DashboardContentModel;
            this.itemChange(item);
            return this.dashboardArray.push(item);
-        case 'menuitem' :
+      case 'menuitem' :
            item = {
             cols: 40,
             rows: 40,

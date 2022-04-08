@@ -38,7 +38,6 @@ export class DashboardMenuComponent implements OnInit {
   initSubscriptions() {
     this._dashboardModel = this.layoutService.dashboardModel$.subscribe(data =>
       {
-        console.log('initsubscription', data)
         this.filterCollection(this.layoutService.dashboardCollection)
       }
     )
@@ -53,6 +52,7 @@ export class DashboardMenuComponent implements OnInit {
     }
     this.collection = this.layoutService.dashboardCollection.filter(data => {
       if (data.type === 'Menu' || data.type === 'POSOrder'  || data.type === 'Order') {
+        this.layoutService._dashboardModel.next(data)
         return data
       }
     })

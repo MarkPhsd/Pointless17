@@ -1,7 +1,7 @@
 <div    [style.height]="pixelHeight"
         [style.max-height]="pixelHeight"
          *ngIf="layoutService.dashboardModel">
-  {{pixelHeight}}
+
   <gridster [style.background]="backgroundColor"
             [style.opacity]="opacity/100"
             [style.background-blend-mode]="backgroundblendmode"
@@ -37,7 +37,8 @@
 
           <div [class]="gridsteritemclass">
             <div class="title">
-              <mat-lab class="title"> {{ item?.object?.name }} </mat-lab>
+              <mat-label class="title"> {{ item?.object?.name }}  </mat-label >
+              <span *ngIf="layoutService.designerMode">  | Type:  {{ item?.componentName }}</span>
             </div>
 
             <ng-container

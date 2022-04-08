@@ -72,9 +72,9 @@ export class ReportingService {
   }
 
   private tempCode(){
-      let newDate = new Date();
-      this.dateTo =  new Date(newDate.setDate(newDate.getDate()+1)).toDateString();
-      this.dateFrom =  new Date(newDate.setMonth(newDate.getMonth()-1)).toDateString();
+    let newDate = new Date();
+    this.dateTo =  new Date(newDate.setDate(newDate.getDate()+1)).toDateString();
+    this.dateFrom =  new Date(newDate.setMonth(newDate.getMonth()-1)).toDateString();
   }
 
   getHourlySeries(values: number) {
@@ -91,10 +91,48 @@ export class ReportingService {
     dateEnd = new Date(end);
 
     for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
-        var loopDay = new Date(d);
-        this.dateSeries.push(
-          formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
-        )
+      var loopDay = new Date(d);
+      this.dateSeries.push(
+        formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
+      )
+    }
+    return this.dateSeries
+  }
+
+  getYearSeries(value) {
+    this.dateSeries = [];
+    let dateStart: Date;
+    let dateEnd: Date;
+
+    var d = new Date(new Date().getFullYear(), 0, 1);
+
+    //we will establish 5 years as the default;
+    dateStart = new Date(value);
+    dateEnd = new Date();
+
+    for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay = new Date(d);
+      this.dateSeries.push(
+        formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
+      )
+    }
+    return this.dateSeries
+  }
+
+  getMonthSeries(value) {
+    this.dateSeries = [];
+    let dateStart: Date;
+    let dateEnd: Date;
+    if (!value) value = 12
+    //we will establish 12 years as the default;
+    // dateStart = new Date(start);
+    // dateEnd = new Date(end);
+
+    for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay = new Date(d);
+      this.dateSeries.push(
+        formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
+      )
     }
     return this.dateSeries
   }

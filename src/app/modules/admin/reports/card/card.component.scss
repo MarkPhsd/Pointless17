@@ -4,6 +4,48 @@ h4 {
     margin-top: 0;
     margin-bottom: 5px;
 }
+.container {
+  height: 100%;
+  width: 100%;
+  .info {
+    top     : 35px;
+    left    : 20px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: hidden;
+  }
+}
+
+.container:hover {
+
+  height: 100%;
+  width: 100%;
+
+  .info  {
+    top     : 35px;
+    left    : 20px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: visible;
+  }
+}
+
+.grid-info {
+  display: grid;
+  grid-template-columns: 150px 150px;
+  grid-gap: 2px;
+  width: 360px;
+}
+
+
+.hoverable:not(:hover) + .show-on-hover {
+  display: none;
+}
+// .info {
+//   visibility: hidden;
+// }
 
 .total {
     font-size: 3em;

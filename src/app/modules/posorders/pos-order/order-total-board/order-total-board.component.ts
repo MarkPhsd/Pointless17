@@ -12,7 +12,6 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class OrderTotalBoardComponent implements OnInit {
 
-
   site    : ISite;
   posName : string;
   order$  : Observable<IPOSOrder>;

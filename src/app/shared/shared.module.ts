@@ -141,6 +141,7 @@ import { IFrameComponent } from './widgets/i-frame/i-frame.component';
 import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.component';
 import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
 import {YouTubePlayerModule} from '@angular/youtube-player'
+import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -258,6 +259,7 @@ import {YouTubePlayerModule} from '@angular/youtube-player'
     SiteSelectorComponent,
     SpeciesListComponent,
     StatusLookupComponent,
+    StrainIndicatorComponent,
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,
@@ -408,6 +410,7 @@ import {YouTubePlayerModule} from '@angular/youtube-player'
     SidebarComponent,
     SpeciesListComponent,
     StatusLookupComponent,
+    StrainIndicatorComponent,
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,

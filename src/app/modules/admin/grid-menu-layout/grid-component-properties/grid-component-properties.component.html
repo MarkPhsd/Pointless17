@@ -59,8 +59,7 @@
           </app-value-fields>
 
           <div *ngIf="cardType === 'chart' ||
-                      cardType === 'report'
-                      "
+                      cardType === 'report'"
                 class="grid-items">
             <mat-button-toggle-group name="type"
                       aria-label="item Type"
@@ -75,7 +74,7 @@
           </div>
 
           <div class="grid-items" *ngIf="cardValueTypes">
-            <span *ngIf="cardType === 'chart' ||
+            <span  *ngIf="cardType === 'chart' ||
                           cardType === 'report' ||
                           cardType === 'menu' ||
                           cardType === 'order'">
@@ -94,6 +93,66 @@
                   </mat-select>
               </mat-form-field>
             </span>
+          </div>
+
+          <div class="grid-items" *ngIf="cardValueTypes">
+            <span  *ngIf="cardType === 'chart'">
+              <mat-form-field  appearance="outline">
+                  <mat-label> Chart Type </mat-label>
+                  <mat-select
+                      [formControlName] ="'chartType'"
+                      (selectionChange) ="setChartType($event.value)">
+                    <mat-option value="">
+                    </mat-option>
+                    <mat-option
+                          *ngFor="let item of layoutService.cartTypeCollection"
+                          [value]="item.type">
+                        {{item.type}} <mat-icon>{{item.icon}}</mat-icon>
+                    </mat-option>
+                  </mat-select>
+              </mat-form-field>
+            </span>
+
+            <div class="grid-values grid-items">
+              <div>
+                Units Back {{rangeValue}}
+              </div>
+              <div>
+                 <mat-label>Units refer to the range value, hour, day, month etc.</mat-label>
+              </div>
+              <div></div>
+              <div>
+                <mat-slider
+                            thumbLabel
+                            [displayWith]="formatRangeValue"
+                            tickInterval="1000"
+                            step="1"
+                            min="0"
+                            max="100"
+                            [(ngModel)]="rangeValue"
+                            aria-label="units"
+                ></mat-slider>
+              </div>
+            </div>
+
+            <div class="grid-values grid-items">
+              <div>
+                Refresh in Seconds {{refreshTime}}
+              </div>
+              <div>
+                <mat-slider
+                            thumbLabel
+                            [displayWith]="formatRefreshTime"
+                            tickInterval="1000"
+                            step="1"
+                            min="0"
+                            max="100"
+                            [(ngModel)]="refreshTime"
+                            aria-label="units"
+                ></mat-slider>
+              </div>
+            </div>
+
           </div>
 
           <div *ngIf="cardType === 'youtube'">
@@ -187,7 +246,6 @@
             </div>
 
           </div>
-
 
         </div>
       </div>
@@ -290,16 +348,6 @@
     </mat-card-content>
   </mat-card>
 
-
   <ng-template #loading>
     <mat-spinner [diameter]="50"></mat-spinner>
   </ng-template>
-
-  <!-- id   : number;
-  name : string;
-  roles: widgetRoles[]
-  rangeType: string;        //hour, month, day, year
-  lengtOfRange: string;     //number of range month, year etc
-  type: string; //preset types, menu, report widget
-  dateFrom: string;
-  dateTo   : string; -->

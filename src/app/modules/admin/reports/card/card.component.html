@@ -1,7 +1,39 @@
+
+<div class="container">
+
   <div class="warning"  *ngIf="sitesErrorMessage">
     <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
   </div>
 
+  <div class="info">
+    <mat-card *ngIf="layoutService.designerMode" >
+      <div class="grid-info">
+        <div>Group by</div>
+        <div>{{groupBy}}</div>
+
+        <div>Range Type</div>
+        <div>{{rangeType}}</div>
+
+        <!-- <div>Menu Type</div>
+        <div>{{menuType}}</div> -->
+
+        <div>Report Type</div>
+        <div>{{cardValueType}}</div>
+
+        <div>Chart Type</div>
+        <div>{{chartType}}</div>
+
+        <div>From</div>
+        <div> {{dateFrom}}</div>
+
+        <div>To</div>
+        <div> {{dateTo}}</div>
+
+        <div>ZRun ID</div>
+        <div>{{zrunID}}</div>
+      </div>
+    </mat-card>
+  </div>
   <div class="title" *ngIf="menuType">
     {{name}}.  From {{dateFrom}} to {{dateTo}}. ID:{{zrunID}}.
   </div>
@@ -24,3 +56,5 @@
         >
     </highcharts-chart>
   </div>
+
+</div>

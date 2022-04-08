@@ -1,17 +1,8 @@
 <mat-card-content>
 
   <div *ngIf="item" class="grid-flow prices border">
-    <div class="badge">
-      <div  *ngIf="item?.species === 'Hybrid'" class="hybrid">
-        H
-      </div>
-      <div *ngIf="item?.species  === 'Sativa'" class="sativa">
-        S
-      </div>
-      <div *ngIf="item?.species  === 'Indica'" class="indica">
-        I
-      </div>
-    </div>
+    <app-strain-indicator [species]="item?.species"></app-strain-indicator>
+
     <div >
       {{item.name }}
     </div>

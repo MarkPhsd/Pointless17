@@ -1,15 +1,7 @@
 <div *ngIf="item"  [class]="gridClass">
 
-  <div class="badge">
-    <div  *ngIf="item?.species === 'Hybrid'" class="hybrid">
-      {{item.species}}
-    </div>
-    <div *ngIf="item?.species  === 'Sativa'" class="sativa">
-      {{item.species}}
-    </div>
-    <div *ngIf="item?.species  === 'Indica'" class="indica">
-        {{item.species}}
-    </div>
+  <div *ngIf="MMJMenu">
+    <app-strain-indicator [species]="item?.species"></app-strain-indicator>
   </div>
 
   <div>

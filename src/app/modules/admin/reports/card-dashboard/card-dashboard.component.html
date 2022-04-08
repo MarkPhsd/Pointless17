@@ -1,0 +1,19 @@
+<div *ngIf="sites$ && (sites$ | async) as sites">
+  <app-widget-card
+    [name]         ="name"
+    [chartType]    ="chartType"
+    [chartHeight]  ="chartHeight"
+    [menuType]     ="menuType"
+    [cardValueType]="cardValueType"
+    [rangeType]    ="rangeType"
+    [sites]        ="sites">
+  </app-widget-card>
+</div>
+
+
+<!-- @Input() name         = 'A Chart';
+@Input() chartType    = 'line';
+@Input() chartHeight  = '350px'
+@Input() menuType     : string;
+@Input() cardValueType: string;
+@Input() rangeType    : string; -->

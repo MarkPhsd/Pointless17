@@ -3,8 +3,7 @@
 mat-card {
   max-width  : 650px;
   min-width  : 355px;
-  margin : 10px;
-  // opacity: 50%;
+  margin     : 10px;
 }
 .container {
   max-height: 98%;
@@ -15,20 +14,17 @@ mat-card {
 
 .menu-list {
   max-height: 94%;
-  height: 90%;
+  height    : 90%;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .bg {
-  /* The image used */
-  // background-image: url('https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg');
-  /* Full height */
-  height: 99%;
-  max-height: 1000px;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  height              : 99%;
+  max-height          : 1000px;
+  background-position : center;
+  background-repeat   : no-repeat;
+  background-size     : cover;
 }
 
 .border  {
@@ -87,7 +83,7 @@ mat-card {
     margin-right: 2px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns:  1fr 65px;
+    grid-template-columns:  90px 1fr 65px;
     overflow-y: visible;
   }
 
@@ -116,43 +112,6 @@ mat-card {
     font-weight: 500;
     line-height: 1.2em;
 
-    // @include for-phone-only {
-    //   font-size  : 2.5vw;
-    //   font-weight: 500;
-    //   line-height: 1.2em;
-    //   // margin     : .2em  ;
-    //   background-color: rgb(54, 84, 124);
-    // }
-
-    // @include for-tablet-portrait-up {
-    //   font-size  : 1vw;
-    //   font-weight: 500;
-    //   line-height: 1.2em;
-    //   // margin     : .2em  ;
-    //   // background-color: rgb(51, 223, 151);
-    // }
-
-    // @include for-tablet-landscape-up {
-    //   font-size  : 1vw;
-    //   font-weight: 500;
-    //   line-height: 1.2em;
-    //   // margin     : .2em  ;
-    //   // background-color: rgb(54, 124, 95);
-    // }
-    // @include for-desktop-up {
-    //   font-size  : .9vw;
-    //   font-weight: 500;
-    //   line-height: 1.2em;
-    //   // margin     : .2em  ;
-    //   // background-color: rgb(124, 94, 54);
-    // }
-
-    // @include for-big-desktop-up {
-    //   font-size  : .9vw;
-    //   font-weight: 500;
-    //   line-height: 1.2em;
-    //   // background-color: rgb(124, 94, 54);
-    // }
   }
 
 

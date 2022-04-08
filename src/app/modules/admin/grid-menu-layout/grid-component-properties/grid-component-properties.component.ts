@@ -3,14 +3,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { DashBoardComponentProperties, DashboardContentModel, DashboardModel } from '../grid-models';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
-
 export interface ValueTypeList {
   filter: string;
   name  : string;
@@ -59,18 +58,12 @@ export class GridComponentPropertiesComponent implements OnInit {
   refreshTime  : number;
   layerIndex        : number;
   disableActions : boolean;
+  rangeValue : number;
   _borderRadius: string;
   _border :string;
   _layer : string;
-  chartTypes = [
-    {name: 'Bar', icon: 'bar_chart', filter: 'none'},
-    {name: 'Line', icon: 'show_chart', filter: 'none'},
-    {name: 'Bubble', icon: 'bubble_chart', filter: 'none'},
-    {name: 'Donut', icon: 'donut_chart', filter: 'none'},
-    {name: 'Pie', icon: 'pie_chart', filter: 'none'},
-    {name: 'Scatter', icon: 'scatter_chart', filter: 'none'},
-    {name: 'Candlestick', icon: 'candlestick_chart', filter: 'none'},
-  ] as ValueTypeList[];
+
+  chartTypes = [];
 
   menuBoardTypes = [
     {name: 'Flowers',          icon: 'list',    filter:  'MMJ'},
@@ -104,6 +97,7 @@ export class GridComponentPropertiesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.chartTypes = this.layoutService.cartTypeCollection;
     this.fillForm();
     const site          = this.siteService.getAssignedSite();
     this.categories$    = this.menuService.getListOfCategoriesAll(site)
@@ -196,6 +190,7 @@ export class GridComponentPropertiesComponent implements OnInit {
       active        : [''],
       rangeType     : [''],
       cardValueType : [''],
+      chartType     : [''],
       menuType      : [''],
       listItemID    : [''],
       chartHeight   : [''],
@@ -206,6 +201,7 @@ export class GridComponentPropertiesComponent implements OnInit {
       url           : [''],
       autoRepeat    : [''],
       refreshTime   : [''],
+      rangeValue    : [''],
     })
     return this.inputForm
   };
@@ -240,18 +236,27 @@ export class GridComponentPropertiesComponent implements OnInit {
       object.borderRadius = item?.borderRadius;
       object.opacity      = item?.opacity;
       object.layerIndex   = item?.layerIndex;
-      object.MMJMenu      = item?.MMJMenu;
-      object.chartHeight  = item?.chartHeight;
-      object.chartWidth   = item?.chartWidth;
+      object.MMJMenu       = item?.MMJMenu;
+      object.chartHeight    = item?.chartHeight;
+      object.chartWidth     = item?.chartWidth;
       object.disableActions= item?.disableActions;
-      object.url        = item?.url;
-      object.autoPlay   = item?.autoPlay;
-      object.autoRepeat = item?.autoRepeat;
-      object.refreshTime= item?.refreshTime;
+      object.url           = item?.url;
+      object.autoPlay      = item?.autoPlay;
+      object.autoRepeat    = item?.autoRepeat;
+      object.refreshTime   = item?.refreshTime;
+      object.chartType     = item?.chartType;
+      object.rangeValue    = item?.rangeValue;
     }
 
+    console.log('object.rangeValue', object.rangeValue)
+    //establish default range value.
+    if (!object.rangeValue || object.rangeValue == 0) {
+      this.rangeValue  = +12
+      object.rangeValue = this.rangeValue;
+    }
+
+    console.log(object)
     if (! object.layerIndex ) { object.layerIndex = 1;}
-    //refesh form values and local variables
     this.inputForm.patchValue(object);
 
     if (object.type)            { this.cardType = object?.type };
@@ -275,6 +280,7 @@ export class GridComponentPropertiesComponent implements OnInit {
     const content = this.updateCard(this.inputForm);
     // then slice out the current DashboardContentModel from the DashboardModel
     // apply the updated DashboardContentModel
+
     const dashBoard = this.layoutService.dashboardModel;
     if ( content.id) {
       const id        = content.id;
@@ -303,6 +309,7 @@ export class GridComponentPropertiesComponent implements OnInit {
     model.borderRadius  = this.borderRadius;
     model.opacity       = this.opacity;
     model.refreshTime   = this.refreshTime;
+    model.rangeValue    = this.rangeValue;
     if (!this.validateCard(model)) {return}
 
     content = this.setComponentName(model, content)
@@ -310,6 +317,7 @@ export class GridComponentPropertiesComponent implements OnInit {
     if (content.component)  {
       content.component   = '';
     }
+    content.name        = model.name;
 
     const jsonObject    = JSON.stringify(model);
     content.properties  = jsonObject;
@@ -402,6 +410,16 @@ export class GridComponentPropertiesComponent implements OnInit {
     }
   }
 
+  setChartType(value: string) {
+    if (value) {
+      if (this.inputForm) {
+        console.log(value)
+        const item = { chartType: value}
+        this.inputForm.patchValue(item)
+      }
+    }
+  }
+
   updateExit(event) {
     this.update(event)
     this.dialogRef.close()
@@ -450,6 +468,13 @@ export class GridComponentPropertiesComponent implements OnInit {
       return Math.round(+value / 1000) + 'k';
     }
     this.refreshTime = value;
+    return value;
+  }
+  formatRangeValue(value: number) {
+    if (value >= 1000) {
+      return Math.round(+value / 1000) + 'k';
+    }
+    this.rangeValue = value;
     return value;
   }
 

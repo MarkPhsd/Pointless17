@@ -59,14 +59,8 @@ import { CategoryItemsBoardItemComponent } from './modules/tv-menu/category-item
 import { OrderTotalBoardComponent } from './modules/posorders/pos-order/order-total-board/order-total-board.component';
 import { OrderHeaderDemographicsBoardComponent } from './modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component';
 import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/limit-values-card.component';
-// import { GridManagerComponent } from '../modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
-// import { GridSettingsComponent } from '../modules/admin/grid-menu-layout/grid-settings/grid-settings.component';
-// import { GridMenuLayoutComponent } from '../modules/admin/grid-menu-layout/grid-menu-layout.component';
-// import { GridManagerEditComponent } from '../modules/admin/grid-menu-layout/grid-manager-edit/grid-manager-edit.component';
-
 
 // import { NGXMaterialModule } from './ngx-material.module';
-
 // import { NgxKeypadModule } from 'ngx-keypad';
 // import * as CapacitorSQLPlugin from 'capacitor-sqlite';
 // import { IonCustomScrollbarModule } from 'ion-custom-scrollbar'
@@ -95,6 +89,7 @@ export function init_app(appLoadService: AppInitService) {
     CurrencyFormatterDirective,
     DsiEMVPaymentComponent,
     LoginComponent,
+
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
     RegisterAccountExistingUserWithTokenComponent,
@@ -112,6 +107,7 @@ export function init_app(appLoadService: AppInitService) {
     OrderHeaderDemographicsBoardComponent,
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
+
   ],
 
   imports: [
@@ -146,7 +142,6 @@ export function init_app(appLoadService: AppInitService) {
     AgGridToggleComponent,
     NGXMaterialModule,
     SharedModule,
-
   ],
 
   providers: [
@@ -158,7 +153,7 @@ export function init_app(appLoadService: AppInitService) {
     HttpClientCacheService,
 
     Printer,
-    BluetoothSerial,
+  BluetoothSerial,
     RenderingService,
     PagerService,
     StatusBar,
@@ -170,8 +165,6 @@ export function init_app(appLoadService: AppInitService) {
       multi: true
     },
     Title
-
-
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   bootstrap: [AppComponent],

@@ -34,17 +34,14 @@
       [opened]  ="toggle"
       [class]   ="'mat-orderBar-wide'" >
 
-    <mat-card class="widgets-selection">
-      <mat-card-subtitle>
-        <section class="nav-group collapsible">
-          <label for="tabexample1">Widgets</label>
-        </section>
-      </mat-card-subtitle>
+    <mat-card *ngIf="dashboardModel" class="widgets-selection">
       <mat-card-content>
+        <h4><mat-icon>widgets</mat-icon> Widgets</h4>
+        <mat-divider></mat-divider>
         <ul class="nav-list" *ngIf="layoutService.widgetCollection">
           <li *ngFor="let widget of layoutService.widgetCollection">
             <a draggable="true" class="nav-link"
-               (dragstart)="onDrag($event, widget.identifier)">
+                (dragstart)="onDrag($event, widget.identifier)">
               <mat-icon>{{ widget.icon }}</mat-icon>
               {{ widget.name }}
             </a>
@@ -55,6 +52,10 @@
 
     <mat-card>
       <mat-card-content>
+        <h4><mat-icon>design_services</mat-icon>Designer</h4>
+        <div>
+          <mat-divider></mat-divider>
+        </div>
         <div class="header-items">
           <button mat-button
                   (click)="addGrid()">
@@ -93,19 +94,15 @@
             Toggle Designer Mode</button>
         </div>
 
-        <mat-divider></mat-divider>
-        <grid-designer-info></grid-designer-info>
-
       </mat-card-content>
     </mat-card>
 
+    <grid-designer-info></grid-designer-info>
   </mat-drawer>
 
   <mat-drawer-content *ngIf="layoutService.dashboardCollection &&
                              layoutService.dashboardCollection.length>0">
-
     <router-outlet #outlet="outlet"></router-outlet>
-
   </mat-drawer-content>
 
 </mat-drawer-container>

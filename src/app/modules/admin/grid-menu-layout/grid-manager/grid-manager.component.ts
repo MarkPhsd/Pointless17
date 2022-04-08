@@ -1,4 +1,4 @@
-import { Component,  OnInit } from '@angular/core';
+import { Component,  OnDestroy,  OnInit } from '@angular/core';
 import { GridsterLayoutService   } from 'src/app/_services/system/gridster-layout.service';
 import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
@@ -6,12 +6,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'menu-manager',
   templateUrl: './grid-manager.component.html',
   styleUrls: ['./grid-manager.component.scss']
 })
-export class GridManagerComponent implements OnInit {
+export class GridManagerComponent implements OnInit, OnDestroy {
 
   dashboardModel: DashboardModel;
   layoutID      : number;
@@ -23,7 +24,12 @@ export class GridManagerComponent implements OnInit {
   inputForm: FormGroup;
   allowDesign: boolean;
 
-	constructor(
+  _dashboard : Subscription;
+
+
+
+
+  constructor(
               private dialog             : MatDialog,
               private router            : Router,
               public layoutService: GridsterLayoutService,
@@ -39,7 +45,22 @@ export class GridManagerComponent implements OnInit {
     if (this.auth.isAuthorized)  {
       this.allowDesign = true;
     }
+    this.initSubscriptions();
 	}
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._dashboard) {
+      this._dashboard.unsubscribe()
+    }
+  }
+
+  initSubscriptions() {
+    this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
+      this.dashboardModel = data
+    })
+  }
 
   saveChanges() {
     this.layoutService.itemChange(null)

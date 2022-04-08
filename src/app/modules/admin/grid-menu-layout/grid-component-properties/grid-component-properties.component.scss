@@ -22,9 +22,13 @@ mat-button-toggle {
   margin:  3px;
 }
 
+mat-slider {
+  width: 275px;
+}
+
 .grid-values {
   display: grid;
-  grid-template-columns: 150px 300px;
+  grid-template-columns: 150px 350px;
   gap: 5px;
 }
 
@@ -33,6 +37,7 @@ mat-button-toggle {
   gap: 5px;
   grid-template-columns: repeat( auto-fit, minmax(475px, 1fr) );
 }
+
 
 .field {
   max-width: 200px;

@@ -59,23 +59,6 @@ mat-card {
   overflow-x: hidden;
 }
 
-.indica {
-  background-color: rgb(89, 148, 30);
-  font-weight: 600;
-  border-radius: 10px;
-}
-
-.sativa {
-  background-color: rgb(189, 79, 79);
-  font-weight: 600;
-  border-radius: 10px;
-}
-
-.hybrid {
-  background-color: rgb(60, 137, 219);
-  font-weight: 600;
-  border-radius: 10px;
-}
 
 .prices {
   font-size: clamp(1rem, 1vw, 1.5rem);
@@ -83,16 +66,4 @@ mat-card {
   line-height: 1.2em;
 }
 
-.badge {
-  // margin-top : 3px;
-  // margin-left: 10px;
 
-  // @include for-desktop-up {
-  //   margin-top : 15px;
-  //   margin-left: 10px;
-  // }
-  // @include for-big-desktop-up {
-  //   margin-top : 12px;
-  //   margin-left: 10px;
-  // }
-}

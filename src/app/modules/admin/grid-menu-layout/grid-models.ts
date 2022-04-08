@@ -3,7 +3,6 @@ export interface WidgetModel {
   identifier: string;
   icon  : string;
 }
-
 export interface DashboardModel {
   id: number;
   userName: string;
@@ -14,7 +13,6 @@ export interface DashboardModel {
   jsonObject: string;
   dashboard: Array<DashboardContentModel>;
   errorMessage: string;
-
 }
 
 export interface  DashBoardProperties {
@@ -61,6 +59,7 @@ export interface DashBoardComponentProperties {
   cardValueType  : string; //componentName
   dateFrom       : string; //not implemented
   dateTo         : string; //not implemented
+  chartType      : string;
 
   MMJMenu        : boolean;
   chartHeight    : string;
@@ -68,11 +67,12 @@ export interface DashBoardComponentProperties {
   itemID         : string;
 
   disableActions : boolean;
-  autoPlay  : boolean;
-  url       : string;
-  autoRepeat: boolean;
+  autoPlay       : boolean;
+  url            : string;
+  autoRepeat     : boolean;
 
-  refreshTime: number;
+  refreshTime    : number;
+  rangeValue     : number;
 }
 
 export interface widgetRoles {

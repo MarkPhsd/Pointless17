@@ -1,5 +1,4 @@
 import { DatePipe } from '@angular/common';
-import { ReturnStatement } from '@angular/compiler';
 import { Component, OnInit, Input, OnChanges,  SimpleChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
@@ -9,9 +8,8 @@ import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
-import { DashBoardComponentProperties } from '../../grid-menu-layout/grid-models';
-
 @Component({
   selector: 'app-widget-card',
   templateUrl: './card.component.html',
@@ -45,7 +43,6 @@ export class CardComponent  implements OnInit , OnChanges{
   @Input() sites      : ISite[];
   @Input() site       : ISite;
 
-
   @Input() name         = 'A Chart';
   @Input() chartType    = 'line';
   @Input() chartHeight  = '350px'
@@ -59,13 +56,12 @@ export class CardComponent  implements OnInit , OnChanges{
   Highcharts      = Highcharts;
   chartData       : any[];
   chart           : Highcharts.Chart;
-  chartOptions    : {};
+  chartOptions    : any;
   chartCategories : any[];
   // dataSeriesValues: any[];
   options         : any;
   //data
   sites$          : Observable<ISite[]>
-
   salesPayment    : ISalesPayments;
   xAxis           : any;
   subTitle        : any;
@@ -82,26 +78,20 @@ export class CardComponent  implements OnInit , OnChanges{
               public   route             : ActivatedRoute,
               public balanceSheetService : BalanceSheetService,
               private salesPaymentService: SalesPaymentsService,
-              private datePipe: DatePipe,
+              public  layoutService      : GridsterLayoutService,
+              private datePipe           : DatePipe,
                ) {
   }
 
   ngOnInit() {
-
-    //get the current days sales date range.
-
     this.initChart('Values');
     this.initDates();
-
-    console.log('this.dateFrom || !this.dateTo', this.dateFrom,this.dateTo)
     if (!this.dateFrom || !this.dateTo) {
       this.groupBy = 'hour'
       this.refreshCurrentSales();
       return
     }
-
     this.refreshSitesData();
-
   };
 
   refreshSitesData() {
@@ -125,7 +115,6 @@ export class CardComponent  implements OnInit , OnChanges{
 
   getCurrentSalesRange() {
     //balanceSheetService
-
   }
 
   ngOnChanges() {
@@ -142,12 +131,6 @@ export class CardComponent  implements OnInit , OnChanges{
       this.groupBy  = groupBy;
     }
   }
-
-  // addDates(StartDate: any, NumberOfDays : number): Date{
-  //   if (!StartDate) { return null}
-  //   StartDate.setDate(StartDate.getDate() + NumberOfDays);
-  //   return StartDate;
-  // }
 
   addDates(date: Date, days: number): Date {
     date.setDate(date.getDate() + days);
@@ -179,7 +162,6 @@ export class CardComponent  implements OnInit , OnChanges{
     this.refresh();
    })
   }
-
 
   getCountVersion() {  }
 
@@ -295,7 +277,7 @@ export class CardComponent  implements OnInit , OnChanges{
   isMultiSiteReport() {
     if (this.groupBy.toLowerCase()  === 'date' || this.groupBy.toLowerCase() === 'hour' ||
          this.groupBy.toLowerCase() === 'month' || this.groupBy.toLowerCase() === 'year')
-    {  return  true; }
+    { return  true; }
     return false
   }
 
@@ -371,9 +353,32 @@ export class CardComponent  implements OnInit , OnChanges{
           }
 
           if (this.groupBy.toLowerCase() === 'month') {
+
           }
 
           if (this.groupBy.toLowerCase() === 'year') {
+           let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+            dataSeriesValues.forEach( (data, index) => {
+                try {
+                  const item = sales.filter( item => {})
+                } catch (error) {
+                  console.log(sales)
+                  return
+                }
+                const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
+                if (item && item.length>0) {
+                  let value = 0;
+                  try {
+                    if ( item[0].amountPaid) { value = item[0].amountPaid }
+                    if (!item[0].amountPaid) { value = item[0].amountPaid }
+                  } catch (error) {
+                  }
+                  const row = { date: item[0].dateHour, value:  value }
+                  dataSeriesValues[index] = row
+                }
+              }
+            )
+            this.setChartData(site.name, dataSeriesValues)
           }
 
           if ( this.groupBy === 'scrub' ) {
@@ -435,7 +440,7 @@ export class CardComponent  implements OnInit , OnChanges{
 
     this.chartOptions =  {
       chart: {
-          type: this.chartType,
+          type: 'bar',
           backgroundColor: null,
           scrollablePlotArea: this.scrollablePlotHeight,
           borderWidth: 0,
@@ -457,6 +462,7 @@ export class CardComponent  implements OnInit , OnChanges{
       }
     };
 
+    this.chartOptions.chart.type = this.chartType;
     HC_exporting(Highcharts);
 
     setTimeout(() => {

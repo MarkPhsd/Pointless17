@@ -4,6 +4,11 @@
   flex-direction: column;
   height: 100%;
 }
+
+h4 {
+  font: 18px;
+}
+
 router-outlet {
   z-index: 1;
 }
@@ -60,7 +65,7 @@ mat-card {
 }
 
 .widgets-selection {
-  height: 400px;
+  height: 350px;
   overflow-y: auto;
   overflow-x: hidden;
 }

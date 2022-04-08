@@ -1,11 +1,32 @@
-<div class="container">
-  <youtube-player
-    [width]="chartWidth" [height]="chartHeight"
-    suggestedQuality="highres"
-    [playerVars]="playerConfig"
-    (ready)="onReady($event)"
-    [videoId]="url"
-  ></youtube-player>
-</div>
+<mat-card  *ngIf="layoutService.designerMode"
+           [style.width]="chartWidth"
+           [style.height]="chartHeight">
 
+  <div class="description">
+    Youtube video will play when not in design mode.
+    The size of the icon indicates the size of the video.
+    <div>
+     <button mat-raised-button (click)="toggleDesignMode()">
+      <mat-icon>toggle_on</mat-icon>Enable
+      </button>
+    </div>
+  </div>
 
+  <mat-icon [style.font-size]="chartHeight">
+    ondemand_video
+  </mat-icon>
+
+</mat-card>
+
+<mat-card  *ngIf="!layoutService.designerMode" >
+  <div  class="container" >
+    <youtube-player
+      [width]="chartWidth"
+      [height]="chartHeight"
+      suggestedQuality="highres"
+      [playerVars]="playerConfig"
+      (ready)="onReady($event)"
+      [videoId]="url"
+    ></youtube-player>
+  </div>
+</mat-card>
