@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output, HostListener, Input } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, HostListener, Input, OnChanges } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReportingService,DashboardService,AuthenticationService } from 'src/app/_services';
 
@@ -21,14 +21,13 @@ interface IDaterange {
     dateFrom: string;
     dateTo: string
 }
-
 @Component({
     selector:   'app-widget-filter',
     templateUrl: './filter.component.html',
     styleUrls: [ './filter.component.scss']
   })
 
-export class FilterComponent implements OnInit {
+export class FilterComponent implements OnInit,OnChanges {
   dateRangeForm        : FormGroup;
   dateFrom             : Date;
   dateTo               : Date;
@@ -38,14 +37,12 @@ export class FilterComponent implements OnInit {
   calDate: IDatePicker;
   counter: number;
 
-
   @Input()  dateRange: string;
   @Output() messageOut = new EventEmitter<string>();
   @Output() counterOut = new EventEmitter<number>();
 
   @HostListener("window:resize", [])
-  updateItemsPerPage() {
-
+  updateDateRangeResize() {
     if (!this.dateRange)  { this.initDateForm }
     if (this.dateRangeForm) {
       const dtFrom   = this.dateRangeForm.get("start").value
@@ -72,61 +69,57 @@ export class FilterComponent implements OnInit {
       public fb: FormBuilder,
       private reportingService: ReportingService,
       )
-  {
-
-  }
-
+  {  }
 
   ngOnInit() {
     this.counter =0;
-
+    this.initDateForm()
     // if (this.dateRange) {
     //   this.initDateForm();
     //   //filt out some time.
     //   return
     // }
     this.setFilterDateToday()
-
-    this.updateItemsPerPage();
+    this.updateDateRangeResize();
   }
 
   ngOnChanges() {
     this.refreshDateSearch();
   }
 
-    //sets the default dates
+  //sets the default dates
   setFilterDateToday() {
     const today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
   }
 
-    async initDateForm() {
+  initDateForm() {
 
-      this.dateRangeForm = new FormGroup({
-        start: new FormControl(),
-        end: new FormControl()
-      });
+    this.dateRangeForm = new FormGroup({
+      start: new FormControl(),
+      end: new FormControl()
+    });
 
-      let today = new Date();
-      const month = today.getMonth();
-      const year = today.getFullYear();
-      today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+    let today = new Date();
+    const month = today.getMonth();
+    const year = today.getFullYear();
+    today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
 
-      this.dateRangeForm =  this.fb.group({
-        start: new Date(year, month, 1),
-        end: today // new Date()
-      })
-      this.dateRangeForm =  this.fb.group({
-        start: [],
-        end: [], // new Date()
-      })
+    this.dateRangeForm =  this.fb.group({
+      start: new Date(year, month, 1),
+      end: today // new Date()
+    })
+    this.dateRangeForm =  this.fb.group({
+      start: [],
+      end: [], // new Date()
+    })
 
-      this.subscribeToDatePicker();
+    this.subscribeToDatePicker();
 
-    }
+  }
 
-    subscribeToDatePicker()
+  subscribeToDatePicker()
     {
       if (this.dateRangeForm) {
         this.dateRangeForm.get('start').valueChanges.subscribe(res=>{

@@ -1,12 +1,46 @@
 
-.container {
-  margin-left: 10px;
-  margin-top: 20px;
+// .container {
+//   z-index: 1;
+//   position: absolute;
+//   top:  0;
+//   left: 0;
+// }
+
+// .description {
+//   z-index: 100;
+//   position: absolute;
+//   top:  20px;
+//   left: 20px;
+// }
+mat-card  {
+  padding: 0px;
+  margin: 0px;
 }
 
-.description {
-  z-index: 100;
-  position: absolute;
-  top:  20px;
-  left: 20px;
+.container {
+  height: 100%;
+  width: 100%;
+  .info {
+    top     : 35px;
+    left    : 20px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: hidden;
+  }
+}
+
+.container:hover {
+
+  height: 100%;
+  width: 100%;
+
+  .info  {
+    top     : 35px;
+    left    : 20px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: visible;
+  }
 }

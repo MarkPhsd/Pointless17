@@ -39,49 +39,46 @@
 
       <div class="grid-charts">
           <div>
-              <mat-card  fxFlex="100">
-                  <app-widget-card [dateFrom] ="dateFrom"
-                                  [dateTo]   ="dateTo"
-                                  groupBy    ="date"
-                                  chartName  ="ByDate"
-                                  [counter]  ="count+1"
-                    ></app-widget-card>
-              </mat-card>
+            <app-widget-card
+              [dateFrom] ="dateFrom"
+              [dateTo]   ="dateTo"
+              groupBy    ="date"
+              chartName  ="ByDate"
+              [counter]  ="count+1"
+            ></app-widget-card>
           </div>
 
           <div>
-              <mat-card  fxFlex="100">
-                  <app-widget-card [dateFrom]="dateFrom"
-                                  [dateTo]   ="dateFrom"
-                                  groupBy    ="hour"
-                                  chartName  ="Hourly"
-                                  [counter]  ="count+1"
-                                  [notifier]="childNotifier"
-                    ></app-widget-card>
-              </mat-card>
+            <app-widget-card
+              [dateFrom]="dateFrom"
+              [dateTo]   ="dateFrom"
+              groupBy    ="hour"
+              chartName  ="Hourly"
+              [counter]  ="count+1"
+              [notifier]="childNotifier"
+            ></app-widget-card>
           </div>
 
           <div>
-              <mat-card  fxFlex="100">
-                  <app-widget-card [dateFrom] ="dateFrom"
-                                  [dateTo]   ="dateTo"
-                                  groupBy    ="orderemployeecount"
-                                  chartName  ="Employee Order Count"
-                                  [counter]  ="count+1"
-                                  [notifier]="childNotifier"
-                    ></app-widget-card>
-              </mat-card>
+            <app-widget-card
+              [dateFrom] ="dateFrom"
+              [dateTo]   ="dateTo"
+              groupBy    ="orderemployeecount"
+              chartName  ="Employee Order Count"
+              [counter]  ="count+1"
+              [notifier]="childNotifier"
+              ></app-widget-card>
           </div>
+
           <div>
-            <mat-card fxFlex="100">
-                <app-widget-card [dateFrom] ="dateFrom"
-                                [dateTo]   ="dateTo"
-                                groupBy    ="orderemployeesales"
-                                chartName  ="Employee Order Sales"
-                                [counter]  ="count+1"
-                                [notifier]="childNotifier"
-                  ></app-widget-card>
-            </mat-card>
+            <app-widget-card
+              [dateFrom] ="dateFrom"
+              [dateTo]   ="dateTo"
+              groupBy    ="orderemployeesales"
+              chartName  ="Employee Order Sales"
+              [counter]  ="count+1"
+              [notifier]="childNotifier"
+            ></app-widget-card>
           </div>
 
         </div>

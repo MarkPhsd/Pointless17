@@ -108,9 +108,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   enterValue(event) {
-    console.log(this.value)
+    console.log('enterValue', this.value)
     this.value =  this.value + event
-    console.log(this.value)
+    console.log('value composed', this.value)
     this.updateDisplayOutput()
   }
 
@@ -174,6 +174,20 @@ export class KeyPadComponent implements OnInit, OnChanges {
       }
 
       //decimal
+      let divider = 0
+      if (!this.decimals) {
+        this.decimals = 2
+        divider = 100
+      }
+      if (this.decimals = 1) {
+        divider = 10
+      }
+      if (this.decimals = 2) {
+        divider = 100
+      }
+      if (this.decimals = 0) {
+        divider = 1
+      }
       if ( (this.inputTypeValue == 'number' &&  this.requireWholeNumber) || this.inputTypeValue == 'decimal' ) {
         if (this.requireWholeNumber) {
           const numVal = parseInt( this.value)
@@ -181,7 +195,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
           console.log(numVal)
         }
         if (!this.requireWholeNumber) {
-          const numVal = parseInt( this.value) / 1 * this.decimals
+          const numVal = parseInt( this.value) / divider
           this.formatted = Number(numVal).toLocaleString('en', this.options);
         }
       }
@@ -216,12 +230,14 @@ export class KeyPadComponent implements OnInit, OnChanges {
       }
 
     } else {
+
       if (this.inputTypeValue == 'text' ) {
         // const numVal = parseInt( this.value)
         this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
       } else {
         this.formatted = Number(0).toLocaleString('en', this.options);
       }
+
     }
 
     console.log('refreshdisplay formatted', this.value, this.formatted)

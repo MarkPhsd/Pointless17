@@ -1,11 +1,16 @@
-<div *ngIf="item">
+<div >
   <div *ngIf="inputForm">
     <div [formGroup]="inputForm">
       <mat-card>
         <mat-card-title>
-          Edit
-          {{item.name}} <br>
+          Edit {{item.name}} <br>
+          Menu Group
         </mat-card-title>
+        <mat-card-subtitle>
+          <button mat-button (click)="save()">
+            <mat-icon>save</mat-icon>
+          </button>
+        </mat-card-subtitle>
 
         <mat-card-content>
             <div class="grid-container">
@@ -70,7 +75,6 @@
                         [(ngModel)]     ="minimized"
                         >
                 </mat-slide-toggle>
-
               </div>
 
               <div  class="fields">
@@ -80,11 +84,9 @@
 
         </mat-card-content>
 
-        <mat-card-actions>
-          <button mat-button (click)="save()">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-card-actions>
+        <!-- <mat-card-actions>
+
+        </mat-card-actions> -->
 
 
      </mat-card>

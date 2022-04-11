@@ -38,8 +38,8 @@ export class GridManagerEditComponent implements OnInit {
 	constructor(
               private siteService        : SitesService,
               private gridDataService    : GridsterDataService,
-              private dialogRef          : MatDialogRef<GridManagerEditComponent>,
               public layoutService       : GridsterLayoutService,
+              private dialogRef          : MatDialogRef<GridManagerEditComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any,
               private dialog             : MatDialog,
               private fb                 : FormBuilder,

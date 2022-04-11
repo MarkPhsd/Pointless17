@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, of, Subscription, } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription, } from 'rxjs';
 import { ISite, IUser }   from 'src/app/_interfaces';
 import { AccordionMenu, MenuGroup, SubMenu }  from 'src/app/_interfaces/index';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -15,6 +15,9 @@ export interface ResultCheck {
 })
 
 export class MenusService {
+
+  private _accordionMenu    = new BehaviorSubject<AccordionMenu>(null);
+  public  accordionMenu$    = this._accordionMenu.asObservable();
 
   submenu = {} as SubMenu[]
   accordionMenus: AccordionMenu[] = [
@@ -218,6 +221,9 @@ export class MenusService {
                  this.initSubscription();
                }
 
+  updateAccordionMenuSubscription(accordionMenu: AccordionMenu) {
+    this._accordionMenu.next(accordionMenu)
+  }
   getAnonymous(): string {
     return 'admin,manager,user,employee,anonymous'
   }
@@ -404,7 +410,17 @@ export class MenusService {
     return this.http.get<SubMenu>(url)
   }
 
+  postAccordionMenu(site: ISite,  accordionMenu: AccordionMenu): Observable<AccordionMenu> {
+    const controller = "/MenuGroups/"
 
+    const endPoint = 'PostAccordionMenu';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<AccordionMenu>(url, accordionMenu)
+  }
   putAccordionMenuByID(site: ISite, id: number, accordionMenu: AccordionMenu): Observable<AccordionMenu> {
     const controller = "/MenuGroups/"
 
@@ -441,6 +457,20 @@ export class MenusService {
 
     return this.http.put<SubMenu>(url, subMenu)
   }
+
+  postSubMenuItem(site: ISite, subMenu: SubMenu): Observable<SubMenu> {
+
+    const controller = "/MenuGroups/"
+
+    const endPoint = 'PostSubMenuItem';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<SubMenu>(url, subMenu)
+  }
+
 
   getDefaultMenuData() {
     return

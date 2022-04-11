@@ -11,7 +11,7 @@ import { AppInitService } from '../_services/system/app-init.service';
 import { AuthenticationService, IDepartmentList, ThemesService } from '../_services';
 import { IUser } from '../_interfaces';
 import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
-
+import { isDevMode } from '@angular/core';
 @Component({
   selector: 'app-default',
   templateUrl: './default.component.html',
@@ -22,7 +22,10 @@ import { UIHomePageSettings, UISettingsService } from '../_services/system/setti
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   departmentID     =0
-
+  get platForm() {  return Capacitor.getPlatform(); }
+  toggleControl     = new FormControl(false);
+  isSafari        : any;
+  posts           : any;
   pages = new      Array(10);
   itemChange$:     Observable<number>;
   next$:           Observable<number>;
@@ -30,119 +33,175 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   routeTrigger$:   Observable<object>;
   toolbarTiny:     boolean;
   orderBarOpen:    boolean;
-  sidebarMode   =  'side'
-  id:              any;
+  sidebarMode    = 'side'
+  id             : any;
   smallDevice    : boolean;
 
   advertisingOutlet : string;
   messageOutlet     : string;
 
-  drawer: any;
+  drawer          : any;
   @HostBinding('class') className = '';
   @HostListener('unloaded')
 
-  get platForm() {  return Capacitor.getPlatform(); }
-  toggleControl     = new FormControl(false);
-  isSafari        : any;
-  posts           : any;
 
-  searchbarSidebar: Subscription;
-  toolbarSideBar  : Subscription;
-  sideBarOpen     : boolean;
-  searchBarOpen   : boolean;
+  _leftSideBarToggle: Subscription;
+  leftSideBarToggle = false;
+
+  _mainMenuBar    : Subscription;
+  mainMenuBar     : boolean;
+
+  _searchSideBar    : Subscription;
+  searchSideBar     : boolean;
+  searchBarWidth    : number;
+
+  _barSize        : Subscription;
+  barSize         : boolean;
+  smallMenu        = false;
 
   _orderBar       : Subscription;
   orderBar        : boolean;
 
-  searchBarWidthSubscription: Subscription;
-  searchBarWidth  : number;
+  _department : Subscription;
+  department  : IDepartmentList;
 
-  _department: Subscription;
-  department : IDepartmentList;
+  matorderBar = 'mat-orderBar-wide'
+  barType     = "mat-drawer-toolbar"
+  apiUrl      : any;
 
-  matorderBar     = 'mat-orderBar-wide'
-  barType         = "mat-drawer-toolbar"
-  apiUrl: any;
+  _user       : Subscription;
+  user        : IUser;
 
-  _user: Subscription;
-  user : IUser;
+  style       = "width:195px"
 
-  style = "width:195px"
+  _uiSettings : Subscription;
+  uiSettings  : UIHomePageSettings;
+  devMode     : boolean;
 
-  _barSize: Subscription;
-  barSize : boolean;
-  smallMenu = false;
+  homePageSubscriber(){
+    try {
+      this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+        this.uiSettings = data;
+        if (data) {
+          if (data.wideOrderBar) {
+            if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
+            if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
+          }
+        }
+      })
+    } catch (error) {
+      console.log('HomePage Subscriber', error)
+    }
+  }
 
-  _uiSettings: Subscription;
-  uiSettings : UIHomePageSettings;
+  userSubscriber() {
+    try {
+      this._user =     this.authorizationService.user$.subscribe(data => {
+        this.user = data
+      })
+    } catch (error) {
+      console.log('userSubscriber', error)
+    }
+  }
+
+  orderBarSubscriber() {
+    try {
+      this.toolBarUIService.orderBar$.subscribe(data => {
+        this.orderBarOpen = data
+      })
+    } catch (error) {
+      console.log('orderBarSubscriber', error)
+    }
+  }
+
+  departmentMenuSubscriber() {
+    try {
+      this._department  = this.toolBarUIService.departmentMenu$.subscribe( data => {
+        if (!data) {
+          this.department = null
+          this.departmentID  = 0;
+          return
+        }
+        this.department = data;
+        this.departmentID = data.id
+      })
+    } catch (error) {
+      console.log('departmentMenuSubscriber', error)
+    }
+  }
+
+  toolbarSideBarSubscriber() {
+    try {
+      this._mainMenuBar = this.toolBarUIService.mainMenuSideBar$.subscribe( data => {
+        this.mainMenuBar = data
+        this.barType =  "mat-drawer-searchbar"
+      })
+    } catch (error) {
+      console.log('toolbarSideBarSubscriber', error)
+    }
+  }
+
+  searchSideBarSubscriber() {
+    this._searchSideBar = this.toolBarUIService.searchSideBar$.subscribe( data => {
+      this.searchSideBar = data
+    })
+  }
+
+  searchBarWidthSubscriber() {
+    try {
+      this._searchSideBar = this.toolBarUIService._searchBarWidth$.subscribe(data => {
+        this.searchBarWidth = data
+        console.log('_searchSideBar', data)
+        if (data) {
+          if (data == 55 || this.smallMenu) {
+            this.barType =  "mat-drawer-searchbar-tiny"
+          }
+        }
+
+        if (!data && data != 0 || this.smallMenu) {
+          this.barType =  "mat-drawer-searchbar-tiny"
+          this.style   = `width:${this.style}`
+        }
+      })
+    } catch (error) {
+      console.log('searchBarWidthSubscriber', error)
+    }
+  }
+
+  leftSideBarToggleSubscriber() {
+    this._leftSideBarToggle = this.toolbarUIService.leftSideBarToggle$.subscribe(data => {
+      this.leftSideBarToggle = data;
+    })
+  }
+
+  barSizeSubscriber() {
+    try {
+      this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
+        if (data) {
+          this.barType = "mat-drawer-searchbar-tiny"
+          this.smallMenu = data;
+          return;
+        }
+        this.barType   = "mat-drawer-toolbar"
+        this.smallMenu = false;
+      })
+    } catch (error) {
+      console.log('searchBarWidthSubscriber', error)
+    }
+  }
 
   initSubscriptions() {
     this.matorderBar = 'mat-orderBar-wide'
-
-    this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-      this.uiSettings = data;
-      if (data) {
-        if (data.wideOrderBar) {
-          if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
-          if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-         }
-      }
-    })
-
     this.style = ""
-    this._user =     this.authorizationService.user$.subscribe(data => {
-      this.user = data
-    })
-
-    this.toolBarUIService.orderBar$.subscribe(data => {
-      this.orderBarOpen = data
-       console.log('orderBarOpen', data)
-    })
-
-    this.toolbarSideBar = this.toolBarUIService.toolbarSideBar$.subscribe( data => {
-      this.sideBarOpen = data
-      this.barType =  "mat-drawer-searchbar"
-
-    })
-    this.searchbarSidebar = this.toolBarUIService.searchSideBar$.subscribe( data => {
-      this.searchBarOpen = data
-      this.barType = "mat-drawer-toolbar"
-      this.style = ""
-    })
-
-    this._department  = this.toolBarUIService.departmentMenu$.subscribe( data => {
-      if (!data) {
-        this.department = null
-        this.departmentID  = 0;
-        return
-      }
-      this.department = data;
-      this.departmentID = data.id
-    })
-
-    this.searchBarWidthSubscription = this.toolBarUIService._searchBarWidth$.subscribe(data => {
-      if (data) {
-        if (data == 55 || this.smallMenu) {
-          this.barType =  "mat-drawer-searchbar-tiny"
-        }
-      }
-      if (!data && data != 0 || this.smallMenu) {
-        this.barType =  "mat-drawer-searchbar-tiny"
-        this.style = `width:${this.style}`
-        this.searchBarWidth = data
-      }
-    })
-    this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
-      if (data) {
-        this.barType =  "mat-drawer-searchbar-tiny"
-        this.style = `width:${this.style}`
-        return
-      }
-      this.barType = "mat-drawer-toolbar"
-      this.style = ""
-      this.smallMenu = data;
-    })
-
+    this.homePageSubscriber();
+    this.userSubscriber();
+    this.orderBarSubscriber();
+    this.toolbarSideBarSubscriber();
+    this.departmentMenuSubscriber();
+    this.searchSideBarSubscriber();
+    this.searchBarWidthSubscriber();
+    this.barSizeSubscriber();
+    this.leftSideBarToggleSubscriber();
   }
 
   constructor(
@@ -152,7 +211,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private cd              : ChangeDetectorRef,
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
-               private toolbarUIService        : ToolBarUIService,
+               public toolbarUIService        : ToolBarUIService,
                private uiSettingsService       : UISettingsService,
               //  private themesService           : ThemesService,
                ) {
@@ -160,16 +219,38 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.platForm == 'web') {
       this.sidebarMode   =  'side'
     }
+    this.devMode = isDevMode()
   }
 
- async  ngOnInit() {
+  ngOnInit() {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.renderTheme();
-    this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
+    this.initSettings();
+  }
+
+  initSettings() {
+    this.uiSettingsService.getSetting('UIHomePageSettings').subscribe(
+      { next: data => {
+          const ui = {} as UIHomePageSettings
+          if (data.text) {
+            const ui = JSON.parse(data.text)
+            this.uiSettingsService.updateHomePageSetting(ui);
+            this.initUI();
+            return
+          }
+      },
+        error : err => {
+          console.log('error', err)
+      }
+    })
     this.initSubscriptions();
-    this.refreshToolBarType();
+  }
+
+  initUI() {
     const bar = this.getBoolean(localStorage.getItem('barSize'))
     this.toolbarUIService.updateBarSize(bar)
+    this.refreshToolBarType();
+    this.initSubscriptions();
   }
 
   getBoolean(value){
@@ -207,15 +288,20 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     if (this.id) {
       clearInterval(this.id);
     }
+
     this.toolbarTiny = true
-    if (this.toolbarSideBar) {
-      this.toolbarSideBar.unsubscribe();
-      this.toolbarSideBar = null;
+    if (this._mainMenuBar) {
+      this._mainMenuBar.unsubscribe();
     }
-    if (this.searchbarSidebar) {
-      this.searchbarSidebar.unsubscribe();
-      this.searchBarOpen = null;
+
+    if (this._mainMenuBar) {
+      this._mainMenuBar.unsubscribe();
     }
+
+    if (this._leftSideBarToggle) {
+      this._leftSideBarToggle.unsubscribe();
+    }
+
     if (this._user) {
       this._user.unsubscribe();
     }
@@ -259,23 +345,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public searchBarToggler() {
-    this.searchBarOpen   = !this.searchBarOpen;
-    if (this.sideBarOpen)    {
-      this.sideBarOpen = true
-    }
-    else {
-      if (!this.sideBarOpen) {
-        this.sideBarOpen = true
-      }
-    }
-    this.toolBarUIService.updateSearchBarSideBar(this.searchBarOpen)
+    this.toolBarUIService.switchSearchBarSideBar()
   }
 
-  public sideBarToggler() {
-    this.sideBarOpen   = !this.sideBarOpen;
-    if (this.sideBarOpen && !this.searchBarOpen) {
-    }
-    this.toolBarUIService.updateToolBarSideBar(this.sideBarOpen)
+  public menuBarToggler() {
+    this.toolBarUIService.switchToolBarSideBar()
   }
 
   prepareRoute(outlet: RouterOutlet) {

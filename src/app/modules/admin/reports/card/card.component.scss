@@ -7,6 +7,7 @@ h4 {
 .container {
   height: 100%;
   width: 100%;
+  min-height: 300px;
   .info {
     top     : 35px;
     left    : 20px;
@@ -21,7 +22,7 @@ h4 {
 
   height: 100%;
   width: 100%;
-
+  min-height: 300px;
   .info  {
     top     : 35px;
     left    : 20px;
@@ -67,7 +68,7 @@ h4 {
   max-width : 95%;
   min-width : 500px;
   width     : 95%;
-  // min-height: 300px;
+  min-height: 300px;
   height    : 95%;
 
   @include for-phone-only {
@@ -80,7 +81,7 @@ h4 {
 }
 
 .title {
-  font-size: larger;
+  font-size: smaller;
   font-weight: 500px;
 }
 

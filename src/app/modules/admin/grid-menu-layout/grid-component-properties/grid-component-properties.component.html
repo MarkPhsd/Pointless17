@@ -4,22 +4,20 @@
       <div>
         Edit Card
       </div>
-
       <div>
         <app-edit-buttons-standard
           (outputeupdateItem)     ="update($event)"
           (outputupdateItemExit)  ="updateExit($event)"
-           (outputupdateonCancel)  ="onCancel($event)"
+          (outputupdateonCancel)  ="onCancel($event)"
           enableDelete            ="false"
         ></app-edit-buttons-standard>
       </div>
-
     </div>
-
-    <mat-divider></mat-divider>
   </mat-card-title>
+
   <mat-card-subtitle>
-    <div [style.font-color]="'red'" *ngIf="message && message.length>0">
+    <div [style.font-color]="'red'"
+        *ngIf="message && message.length>0">
       <mat-icon>warning</mat-icon>
       <h4>Please check the settings:</h4>
       <div *ngFor="let item of message">
@@ -27,13 +25,21 @@
       </div>
     </div>
   </mat-card-subtitle>
-  <mat-card-content >
-      <div [formGroup]="inputForm"
-           *ngIf="inputForm && dashBoardContent; else loading;">
-        <div>
-          <mat-label>Type of Card</mat-label>
-        </div>
-        <div>
+
+  <mat-card-content
+      *ngIf="inputForm && dashBoardContent; else loading;">
+
+      <div class="info-container">
+
+        <app-value-fields
+          [inputForm]="inputForm"
+          [fieldName]="'name'"
+          [fieldsClass]="'field-small'">
+          Name
+        </app-value-fields>
+
+        <div [formGroup]="inputForm">
+          <div><h4>Card Type</h4></div>
           <mat-button-toggle-group name="type"
                     aria-label="item Type"
                     formControlName="type">
@@ -45,43 +51,125 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
         </div>
-      </div>
 
-      <div [formGroup]="inputForm"
-            *ngIf="inputForm &&   dashBoardContent; else loading;" >
-        <div class="grid">
+        <div class="grid" >
+           <div class="grid-items"
+                *ngIf="cardValueTypes">
+            <div  [formGroup]="inputForm"
+                  *ngIf="cardType === 'chart'">
+              <mat-form-field  appearance="outline">
+                  <mat-label> Chart Type </mat-label>
+                  <mat-select
+                      formControlName ="chartType"
+                      (selectionChange) ="setChartType($event.value)">
+                    <mat-option value="">
+                    </mat-option>
+                    <mat-option
+                          *ngFor="let item of layoutService.cartTypeCollection"
+                          [value]="item.type">
+                        {{item.type}} <mat-icon>{{item.icon}}</mat-icon>
+                    </mat-option>
+                  </mat-select>
 
-          <app-value-fields
-            [inputForm]="inputForm"
-            [fieldName]="'name'"
-            [fieldsClass]="'field-small'">
-            Name
-          </app-value-fields>
+              </mat-form-field>
+            </div>
 
-          <div *ngIf="cardType === 'chart' ||
-                      cardType === 'report'"
-                class="grid-items">
-            <mat-button-toggle-group name="type"
-                      aria-label="item Type"
-                      formControlName="rangeType">
-              <mat-button-toggle
-                      [value]="item"
-                      (click)="setRangeType(item)"
-                      *ngFor="let item of rangeTypes" >
-                  {{item}}
-              </mat-button-toggle>
-            </mat-button-toggle-group>
+            <div [formGroup]="inputForm"
+                 *ngIf="cardType === 'chart' ||
+                        cardType === 'report'" >
+
+              <mat-form-field  appearance="outline">
+                <mat-label> Value Type </mat-label>
+                <mat-select
+                    formControlName ="cardValueType"
+                    (selectionChange)="setCardValueType($event.value)">
+                  <mat-option value="">
+                  </mat-option>
+                  <mat-option
+                      *ngFor="let item of cardValueTypesTemp"
+                        [value]="item.name">
+                      {{item.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div [formGroup]="inputForm" class="toggle-fields">
+              <mat-slide-toggle
+                        [(dateRangeReport)]="dateRangeReport"
+                        formControlName="dateRangeReport" >
+                <mat-label>Use Specific Dates - For history report dashboards.</mat-label>
+              </mat-slide-toggle>
+            </div>
+
+            <div  *ngIf="(cardType === 'chart' ||
+                         cardType === 'report') && dateRangeReport"
+                  class="grid-items">
+
+              <div  [formGroup]="inputForm">
+                <mat-button-toggle-group name="type"
+                          aria-label="item Type"
+                          formControlName="rangeType">
+                  <mat-button-toggle
+                          [value]="item"
+                          (click)="setRangeType(item)"
+                          *ngFor="let item of rangeTypes" >
+                      {{item}}
+                  </mat-button-toggle>
+                </mat-button-toggle-group>
+              </div>
+
+              <div class="grid-values grid-items">
+                <div>
+                  Units Back {{rangeValue}}
+                </div>
+                <div>
+                  <mat-label>Units refer to the range value, hour, day, month etc.</mat-label>
+                </div>
+                <div></div>
+                <div>
+                  <mat-slider
+                              thumbLabel
+                              [displayWith]="formatRangeValue"
+                              tickInterval="1000"
+                              step="1"
+                              min="0"
+                              max="100"
+                              [(ngModel)]="rangeValue"
+                              aria-label="units"
+                  ></mat-slider>
+                </div>
+              </div>
+
+              <div class="grid-values grid-items">
+                <div>
+                  Refresh in Seconds {{refreshTime}}
+                </div>
+                <div>
+                  <mat-slider
+                              thumbLabel
+                              [displayWith]="formatRefreshTime"
+                              tickInterval="1000"
+                              step="1"
+                              min="0"
+                              max="100"
+                              [(ngModel)]="refreshTime"
+                              aria-label="units"
+                  ></mat-slider>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="grid-items" *ngIf="cardValueTypes">
-            <span  *ngIf="cardType === 'chart' ||
-                          cardType === 'report' ||
-                          cardType === 'menu' ||
+          <div *ngIf="cardValueTypes"
+               class="grid-items">
+            <span  *ngIf="cardType === 'menu' ||
                           cardType === 'order'">
+
               <mat-form-field  appearance="outline">
                   <mat-label> Value Type </mat-label>
                   <mat-select
-                      [formControlName] ="'cardValueType'"
+                      formControlName ="cardValueType"
                       (selectionChange)="setCardValueType($event.value)">
                     <mat-option value="">
                     </mat-option>
@@ -95,69 +183,9 @@
             </span>
           </div>
 
-          <div class="grid-items" *ngIf="cardValueTypes">
-            <span  *ngIf="cardType === 'chart'">
-              <mat-form-field  appearance="outline">
-                  <mat-label> Chart Type </mat-label>
-                  <mat-select
-                      [formControlName] ="'chartType'"
-                      (selectionChange) ="setChartType($event.value)">
-                    <mat-option value="">
-                    </mat-option>
-                    <mat-option
-                          *ngFor="let item of layoutService.cartTypeCollection"
-                          [value]="item.type">
-                        {{item.type}} <mat-icon>{{item.icon}}</mat-icon>
-                    </mat-option>
-                  </mat-select>
-              </mat-form-field>
-            </span>
-
-            <div class="grid-values grid-items">
-              <div>
-                Units Back {{rangeValue}}
-              </div>
-              <div>
-                 <mat-label>Units refer to the range value, hour, day, month etc.</mat-label>
-              </div>
-              <div></div>
-              <div>
-                <mat-slider
-                            thumbLabel
-                            [displayWith]="formatRangeValue"
-                            tickInterval="1000"
-                            step="1"
-                            min="0"
-                            max="100"
-                            [(ngModel)]="rangeValue"
-                            aria-label="units"
-                ></mat-slider>
-              </div>
-            </div>
-
-            <div class="grid-values grid-items">
-              <div>
-                Refresh in Seconds {{refreshTime}}
-              </div>
-              <div>
-                <mat-slider
-                            thumbLabel
-                            [displayWith]="formatRefreshTime"
-                            tickInterval="1000"
-                            step="1"
-                            min="0"
-                            max="100"
-                            [(ngModel)]="refreshTime"
-                            aria-label="units"
-                ></mat-slider>
-              </div>
-            </div>
-
-          </div>
 
           <div *ngIf="cardType === 'youtube'">
-
-            <div>
+             <div>
               <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'url'"
@@ -185,7 +213,7 @@
 
           </div>
 
-          <div *ngIf="cardType === 'iframe'">
+           <div *ngIf="cardType === 'iframe'">
             <app-value-fields
                 [inputForm]="inputForm"
                 [fieldName]="'url'"
@@ -194,7 +222,7 @@
             </app-value-fields>
           </div>
 
-          <div *ngIf="cardType === 'order'">
+           <div *ngIf="cardType === 'order'">
             <div class="toggle-fields">
               <mat-slide-toggle
                         formControlName="disableActions" >
@@ -221,9 +249,8 @@
             </div>
           </div>
 
-          <div class="small-margin"
+           <div class="small-margin"
                 *ngIf="cardType === 'menu'">
-
             <div *ngIf="itemValue">
               Selected : {{itemValue?.name}}
             </div>
@@ -237,114 +264,115 @@
                 <div fieldSearchDescription>Select</div>
                 </form-select-list>
             </div>
-
             <div class="toggle-fields">
               <mat-slide-toggle
                         formControlName="MMJMenu" >
                 <mat-label>Cannabis Style Menu</mat-label>
               </mat-slide-toggle>
             </div>
-
-          </div>
-
-        </div>
-      </div>
-    </mat-card-content>
-
-    <mat-card-content >
-      <mat-title>Design Properties</mat-title>
-      <div class="grid">
-        <div class="grid-values grid-items ">
-          <div>
-            Opacity {{opacity}}
-          </div>
-          <div>
-            <mat-slider
-                        thumbLabel
-                        [displayWith]="formatOpacity"
-                        tickInterval="1000"
-                        step="1"
-                        min="0"
-                        max="100"
-                        [(ngModel)]="opacity"
-                        aria-label="units"
-            ></mat-slider>
-          </div>
-        </div>
-        <div class="grid-values grid-items">
-          <div>
-            Border {{border}}
-          </div>
-          <div>
-            <mat-slider
-                        thumbLabel
-                        [displayWith]="formatBorder"
-                        tickInterval="1000"
-                        step="1"
-                        min="0"
-                        max="100"
-                        [(ngModel)]="border"
-                        aria-label="units"
-            ></mat-slider>
-          </div>
-        </div>
-        <div class="grid-values grid-items">
-          <div>
-            Border-Radius {{borderRadius}}
-          </div>
-          <div>
-            <mat-slider
-                        thumbLabel
-                        [displayWith]="formatBorderRadius"
-                        tickInterval="1000"
-                        step="1"
-                        min="0"
-                        max="100"
-                        [(ngModel)]="borderRadius"
-                        aria-label="units"
-            ></mat-slider>
-          </div>
-        </div>
-        <div class="grid-values grid-items">
-          <div>
-            Layer {{layerIndex}}
-          </div>
-          <div>
-            <mat-slider
-                        thumbLabel
-                        [displayWith]="formatLayer"
-                        tickInterval="1000"
-                        step="1"
-                        min="0"
-                        max="100"
-                        [(ngModel)]="layerIndex"
-                        aria-label="units"
-            ></mat-slider>
           </div>
         </div>
 
+        <mat-title><h4>Design Properties</h4></mat-title>
         <div class="grid">
-          <div>
-            <mat-label>Enter Number and Pixels or Percentage px or %: 400px or 400%</mat-label>
+           <div class="grid-values grid-items ">
+            <div>
+              Opacity {{opacity}}
+            </div>
+            <div>
+              <mat-slider
+                          thumbLabel
+                          [displayWith]="formatOpacity"
+                          tickInterval="1000"
+                          step="1"
+                          min="0"
+                          max="100"
+                          [(ngModel)]="opacity"
+                          aria-label="units"
+              ></mat-slider>
+            </div>
           </div>
-          <div class="field">
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'chartHeight'"
-                [fieldsClass]="'field-small'">
-                Height
-              </app-value-fields>
+
+          <div class="grid-values grid-items">
+            <div>
+              Border {{border}}
+            </div>
+            <div>
+              <mat-slider
+                          thumbLabel
+                          [displayWith]="formatBorder"
+                          tickInterval="1000"
+                          step="1"
+                          min="0"
+                          max="100"
+                          [(ngModel)]="border"
+                          aria-label="units"
+              ></mat-slider>
+            </div>
           </div>
-          <div class="field">
-            <app-value-fields
-                [inputForm]="inputForm"
-                [fieldName]="'chartWidth'"
-                [fieldsClass]="'field-small'">
-                Width
-              </app-value-fields>
+
+          <div class="grid-values grid-items">
+            <div>
+              Border-Radius {{borderRadius}}
+            </div>
+            <div>
+              <mat-slider
+                          thumbLabel
+                          [displayWith]="formatBorderRadius"
+                          tickInterval="1000"
+                          step="1"
+                          min="0"
+                          max="100"
+                          [(ngModel)]="borderRadius"
+                          aria-label="units"
+              ></mat-slider>
+            </div>
+          </div>
+
+          <div class="grid-values grid-items">
+            <div>
+              Layer {{layerIndex}}
+            </div>
+            <div>
+              <mat-slider
+                          thumbLabel
+                          [displayWith]="formatLayer"
+                          tickInterval="1000"
+                          step="1"
+                          min="0"
+                          max="100"
+                          [(ngModel)]="layerIndex"
+                          aria-label="units"
+              ></mat-slider>
+            </div>
+          </div>
+
+           <div class="grid">
+            <div>
+              <mat-label>Enter Number and Pixels or Percentage px or %: 400px or 400%</mat-label>
+            </div>
+            <div class="field">
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'chartHeight'"
+                  [fieldsClass]="'field-small'">
+                  Height
+                </app-value-fields>
+            </div>
+            <div class="field">
+              <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'chartWidth'"
+                  [fieldsClass]="'field-small'">
+                  Width
+                </app-value-fields>
+            </div>
           </div>
         </div>
+
       </div>
+
+
     </mat-card-content>
   </mat-card>
 

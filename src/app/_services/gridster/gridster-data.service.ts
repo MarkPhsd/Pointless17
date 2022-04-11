@@ -25,7 +25,7 @@ export class GridsterDataService {
   }
 
   getUser()  {
-    console.log(this.authService.userValue)
+    // console.log(this.authService.userValue)
     return this.authService.userValue;
   }
 

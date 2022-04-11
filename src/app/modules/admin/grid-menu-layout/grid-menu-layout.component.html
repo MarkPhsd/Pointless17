@@ -40,13 +40,14 @@
               <mat-label class="title"> {{ item?.object?.name }}  </mat-label >
               <span *ngIf="layoutService.designerMode">  | Type:  {{ item?.componentName }}</span>
             </div>
-
-            <ng-container
-                    class="cutting-corners"
-                    *ngComponentOutlet="item.component;
-                    ndcDynamicInputs  : item.object;
-                    ndcDynamicOutputs : outputs">
-            </ng-container>
+            <div *ngIf="sites">
+              <ng-container
+                      class="cutting-corners"
+                      *ngComponentOutlet="item.component;
+                      ndcDynamicInputs  : item.object;
+                      ndcDynamicOutputs : outputs">
+              </ng-container>
+            </div>
           </div>
         </div>
     </gridster-item>

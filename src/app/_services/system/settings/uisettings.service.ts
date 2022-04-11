@@ -233,10 +233,14 @@ export class UISettingsService {
   }
 
   async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
-    const setting = await this.getSetting(name).toPromise();
-    const config = JSON.parse(setting.text) as UIHomePageSettings
-    this.updateHomePageSetting(config);
-    return config
+    try {
+      const setting = await this.getSetting(name).toPromise();
+      const config = JSON.parse(setting.text) as UIHomePageSettings
+      this.updateHomePageSetting(config);
+      return config
+    } catch (error) {
+      console.log('error on Subscriber', error)
+    }
   }
 
   getSetting(name: string): Observable<ISetting> {
@@ -305,7 +309,7 @@ export class UISettingsService {
       menuItemSize          : [''],
       staffBrandsEnabled    : [''],
       staffCategoriesEnabled: [''],
-      staffDeparmentsEnabled: [''],
+      staffDepartmentsEnabled: [''],
       staffTierMenuEnabled  : [''],
       staffTypesEnabled     : [''],
       backgroundImage       : [''],
@@ -338,23 +342,19 @@ export class UISettingsService {
   }
 
   initStripeAPISettingsForm(config: any, fb: FormGroup): FormGroup {
-
     fb = this._fb.group({
       id               : [''],
       apiSecret        : [''],
       apiKey           : [''],
       enabled          : [''],
     })
-
     if (!config) { return fb}
     fb.patchValue(config)
     return fb
   }
 
   initDSIEMVSettingsForm(config: any, fb: FormGroup): FormGroup {
-
     if (!config) { return this.initDSIEMVForm(fb)};
-
     fb = this._fb.group({
       id               : [config.id],
       HostOrIP         : [config.DisplayTextHandle],
@@ -409,30 +409,26 @@ export class UISettingsService {
   setFormValue(inputForm: FormGroup,
                      setting: ISetting,
                      name: string): Observable<ISetting> {
-
     inputForm = this.initForm(inputForm);
     return  this.initConfig(setting, name)
-
   }
 
   initForms_Sub(inputForm: FormGroup, name: string, config: any): FormGroup {
     if (name == 'UITransactionSetting') {
-      inputForm = this.initUITransactionsForm(config, inputForm);
+      return this.initUITransactionsForm(config, inputForm);
     }
 
     if (name == 'UIHomePageSettings') {
-      inputForm = this.initHomePageSettingsForm(config, inputForm);
+      return this.initHomePageSettingsForm(config, inputForm);
     }
 
     if (name == 'DSIEMVSettings') {
-      inputForm = this.initDSIEMVSettingsForm(config, inputForm);
-
+      return this.initDSIEMVSettingsForm(config, inputForm);
     }
 
     if (name == 'StripeAPISettings') {
-      inputForm = this.initStripeAPISettingsForm(config, inputForm);
+      return this.initStripeAPISettingsForm(config, inputForm);
     }
-    return inputForm
   }
 
   initConfig(setting: ISetting, name: string): Observable<ISetting> {

@@ -4,7 +4,7 @@
   text-align: left !important;
   padding: 0 !important;
   z-index: 10 !important;
-  // font-size: .9em;
+
   @include for-phone-only  {
     font-size: .9em;
   }
@@ -16,6 +16,7 @@
 .item-font {
   font-size: 1.5rem;
 }
+
 .toggle-buttons-wide {
   width: 95%;
   margin-left: 5px;
@@ -41,11 +42,13 @@
 
 .mat-button-toggle  {
   height: 60px;
+  margin-bottom: 10px;
 }
 
 .toggle-buttons-height {
   overflow-y: auto;
   overflow-x: hidden;
+
   @include for-phone-only  {
     max-width: 350px;
     width: 100%;
@@ -53,18 +56,22 @@
 }
 
 .toggle-buttons-height-size-tall {
-  max-height: 550px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 100%;
   @include for-phone-only  {
-    max-height: 75vh;
+    max-width: 350px;
+    width: 100%;
   }
+
 }
 
 .toggle-buttons-height-medium {
-  max-height: 350px;
+  // max-height: 350px;
 }
 
 .toggle-buttons-height-short {
-  max-height: 250px;
+  // max-height: 250px;
 }
 
 .toggle-buttons {
@@ -72,6 +79,7 @@
   align-content: center;
   width: 95%;
   margin-left: 5px;
+
   @include for-phone-only  {
     width: 100%;
   }
@@ -90,7 +98,6 @@
 
 .toggle-group {
   width: 100%;
-  // height: 85vh;
   overflow-y: auto;
   overflow-x: hidden;
   @include for-phone-only  {
@@ -101,7 +108,7 @@
 
 .toggle-group-short {
   width: 100%;
-  height: 450h;
+  max-height: 450h;
   overflow-y: auto;
   overflow-x: hidden;
   @include for-phone-only  {
@@ -111,7 +118,6 @@
 
 .toggle-group-tall {
   width: 100%;
-  // height: 95vh;
   overflow-y: auto;
   overflow-x: hidden;
   @include for-phone-only  {
@@ -134,22 +140,6 @@ mat-button-toggle {
   display: flex;
 }
 
-// :host .mat-menu {
-//   position  : relative !important;
-//   left      : 175px    !important;
-//   width     : 100%     !important;
-//   min-width : 650px    !important;
-//   overflow-x: hidden   !important;
-// }
-
-// .mat-menu-panel {
-//   position  : relative !important;
-//   left      : 175px    !important;
-//   width     : 100%     !important;
-//   min-width : 650px    !important;
-//   overflow-x: hidden   !important;
-// }
-
 mat-menu .mat-menu-panel{
   position  : relative !important;
   left      : 175px    !important;
@@ -159,7 +149,6 @@ mat-menu .mat-menu-panel{
   padding:  10px;
   margin-left: 100px;
 }
-
 
 .mat-menu-panel.matpanel {
   position  : relative !important;

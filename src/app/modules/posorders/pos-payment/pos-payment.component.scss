@@ -163,6 +163,7 @@ mat-card {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
 
   @include for-phone-only  {
     width     : 100%;
@@ -172,16 +173,11 @@ mat-card {
     overflow-y: auto;
     overflow-x: hidden;
   }
-
 }
 
 .card-dimensions-larger {
   width: 100%;
   height: 575px;
-  // overflow: auto;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
 }
 
 .card-dimensions-small {
@@ -210,6 +206,17 @@ mat-card {
     grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
   }
 }
+.payment-height {
+  height    : 355px;
+  min-height: 355px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  @include for-phone-only  {
+    height    : 250px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+}
 
 .card-height {
   height    : 155px;
@@ -225,13 +232,15 @@ mat-card {
 }
 
 .payment-dimensions {
-  height: 100%;
-  max-height: 650px;
+  max-height: 550px;
+  min-height: 550px;
   overflow-y: auto;
   overflow-x: hidden;
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(200, 1fr) );
-  gap: 10px;
+  @include for-phone-only  {
+    height    : 350px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 }
 
 .summary {

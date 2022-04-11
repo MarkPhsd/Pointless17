@@ -12,6 +12,7 @@ export interface IReportItemSaleSummary {
   results: IReportItemSales[];
   summary: IReportItemSales;
   resultMessage: string;
+  site   : ISite;
 }
 
 export interface IReportItemSales {
@@ -55,7 +56,6 @@ export interface IReportItemSales {
   department:              string;
   weightedItem:            number;
   siteID:                  number;
-
 }
 
 export interface IReportingSearchModel {
@@ -75,6 +75,7 @@ export interface IReportingSearchModel {
   groupByProduct:               boolean;
   groupByCategory:              boolean;
   groupByDepartment:            boolean;
+  groupByType                 : boolean;
   groupByDate:                  boolean;
   weightedItem:                 boolean;
   productsOnly:                 boolean;
@@ -103,6 +104,10 @@ export interface ITaxReport {
   giftCardIssuances:        number;
   paidOuts:                 number;
   resultsMessage          : string;
+  productName              : string;
+  itemType                : string;
+  category                : string;
+  department              : string;
 }
 
 @Injectable({
@@ -142,7 +147,41 @@ export class ReportingItemsSalesService {
 
   }
 
+  getCategorySalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getCategorySalesReport`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.put<IReportItemSales[]>(url, IReportingSearchModel )
+
+  }
+
+  getDepartmentSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getDepartmentSalesReport`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.put<IReportItemSales[]>(url, IReportingSearchModel )
+
+}
+
+  getTypeSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
+
+    const controller = `/ReportItemSales/`
+
+    const endPoint = `getTypeSalesReport`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.put<IReportItemSales[]>(url, IReportingSearchModel )
+
+  }
   searchItemReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
     const controller = `/ReportItemSales/`

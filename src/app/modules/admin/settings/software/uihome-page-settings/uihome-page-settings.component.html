@@ -9,12 +9,12 @@
 
   <mat-card-content>
 
-    <div  *ngIf="inputForm; else loading"
+    <div  *ngIf="inputForm && uiHomePage; else loading"
           [formGroup]="inputForm">
 
       <div class="grid-view-sections">
 
-        <div>
+        <div class="grid-item">
           <app-value-fields
               [fieldType]     ="'text'"
               [inputForm]     ="inputForm"
@@ -72,7 +72,7 @@
           </div>
 
           <div>
-            <div>Staff View </div>
+         <div>Staff View </div>
             <mat-divider></mat-divider>
             <div class="toggle-fields">
               <mat-slide-toggle
@@ -113,8 +113,6 @@
                 <mat-label>Tier Menu</mat-label>
               </mat-slide-toggle>
             </div>
-
-
           </div>
         </div>
 
@@ -130,50 +128,9 @@
             </app-value-fields>
           </div>
         </div>
-
-        <div>
-          <div>Images</div>
-          <mat-divider></mat-divider>
-          <div class="grid-views">
-            <div class="grid-item">
-              <mat-card class="image-container">
-                <app-widget-uploader
-                    [(fileNames)]="backgroundImage"
-                    (messageOut) ="received_Image($event)"
-                    >
-                    Upload Background Image
-                </app-widget-uploader>
-              </mat-card>
-            </div>
-
-            <div class="grid-item">
-              <mat-card class="image-container">
-                <app-widget-uploader
-                    [(fileNames)]="logoHomePage"
-                    (messageOut) ="received_Logo($event)"
-                    >
-                    Upload Home Page Logo
-                </app-widget-uploader>
-              </mat-card>
-            </div>
-
-            <div class="grid-item">
-              <mat-card class="image-container">
-                <app-widget-uploader
-                    [(fileNames)]="tinyLogo"
-                    (messageOut) ="received_TinyLogo($event)"
-                    >
-                    Tiny Logo
-                </app-widget-uploader>
-              </mat-card>
-            </div>
-          </div>
-        </div>
-
         <div>
           <div>Order Settings</div>
           <mat-divider></mat-divider>
-
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="wideOrderBar"
@@ -184,13 +141,51 @@
         </div>
 
       </div>
+    </div>
 
-      <div>
-        <button mat-raised-button
-                color="primary"
-                (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
+    <div **ngIf="uiHomePage">
+      <div>Images</div>
+      <mat-divider></mat-divider>
+      <div class="grid-views">
+        <div class="grid-item">
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="backgroundImage"
+                (messageOut) ="received_Image($event)"
+                >
+                Upload Background Image
+            </app-widget-uploader>
+          </mat-card>
+        </div>
+
+        <div class="grid-item">
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="logoHomePage"
+                (messageOut) ="received_Logo($event)"
+                >
+                Upload Home Page Logo
+            </app-widget-uploader>
+          </mat-card>
+        </div>
+
+        <div class="grid-item">
+          <mat-card class="image-container">
+            <app-widget-uploader
+                [(fileNames)]="tinyLogo"
+                (messageOut) ="received_TinyLogo($event)"
+                >
+                Tiny Logo
+            </app-widget-uploader>
+          </mat-card>
+        </div>
       </div>
+    </div>
 
+    <div>
+      <button mat-raised-button
+              color="primary"
+              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
     </div>
   </mat-card-content>
 

@@ -153,7 +153,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       }
     )
 
-    this.toolbarServiceUI.toolbarSideBar$.subscribe(data => {
+    this.toolbarServiceUI.mainMenuSideBar$.subscribe(data => {
       this.menuBar = data
       this.refreshGridClass()
       }

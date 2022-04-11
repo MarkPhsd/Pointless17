@@ -19,6 +19,9 @@ import { OrderTotalBoardComponent } from 'src/app/modules/posorders/pos-order/or
 import { IFrameComponent } from 'src/app/shared/widgets/i-frame/i-frame.component';
 import { YoutubePlayerComponent } from 'src/app/shared/widgets/youtube-player/youtube-player.component';
 import { LimitValuesCardComponent } from 'src/app/modules/posorders/limit-values-card/limit-values-card.component';
+import { ISite } from 'src/app/_interfaces';
+import { ReportingService } from '../reporting/reporting.service';
+import { CardDashboardComponent } from 'src/app/modules/admin/reports/card-dashboard/card-dashboard.component';
 export interface IComponent {
   id: string;
   componentRef: string;
@@ -45,7 +48,7 @@ export class GridsterLayoutService {
   public _dashboardModel      = new BehaviorSubject<DashboardModel>(null);
   public dashboardModel$        = this._dashboardModel.asObservable();
   dashboardProperties: DashBoardProperties;
-
+  sites: ISite[];
   public cartTypeCollection  = [
     { type: "arcdiagram" , icon: '' },
     { type: "area" , icon: '' },
@@ -105,7 +108,7 @@ export class GridsterLayoutService {
 		{ name: "Flowers"       , componentInstance: StrainBoardComponent },
     { name: "MenuItem"      , componentInstance: MenuitemComponent },
 
-		{ name: "Chart"         , componentInstance: CardComponent },
+		{ name: "Chart"         , componentInstance: CardDashboardComponent },
     { name: "report"         , componentInstance: CardComponent },
 
     { name: "POSOrder"      , componentInstance: PosOrderBoardComponent },
@@ -153,7 +156,12 @@ export class GridsterLayoutService {
     private _snackBar      : MatSnackBar,
     private router         : Router,
     private  authService   : AuthenticationService,
-) { }
+    private reportingService: ReportingService,
+
+  ) {
+
+  }
+
 
   addItem(): void {
     this.layout.push({
@@ -555,7 +563,6 @@ export class GridsterLayoutService {
         if (this.dashboardModel.userName) {
           this.dashboardProperties = JSON.parse(data.userName)  as DashBoardProperties
         }
-
         this.parseJson(data)
         this.dashboardArray =  data.dashboard;
         this.dashboardArray.forEach(data => {
@@ -572,6 +579,7 @@ export class GridsterLayoutService {
     })
 	}
 
+
   removeCard(item) {
     const dashBoard = this.dashboardModel;
     const list = dashBoard.dashboard.filter( data => data.id != item.id)
@@ -583,15 +591,12 @@ export class GridsterLayoutService {
   // Super TOKENIZER 2.0 POWERED BY NATCHOIN
 	parseJson(dashboardModel: DashboardModel) {
 		// We loop on our dashboardCollection
-
-    console.log(this.componentCollection)
-    console.log(dashboardModel.dashboard)
     if (!dashboardModel.dashboard) {
       dashboardModel.dashboard = [] as DashboardContentModel[]
     }
-
 		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
+      dashboard = this.initComponentComplexData(dashboard)
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
@@ -602,15 +607,43 @@ export class GridsterLayoutService {
 		});
 	}
 
-	serialize(dashboardModel: DashboardModel) {
-		// We loop on our dashboardCollection
-    console.log(this.componentCollection)
-    console.log(dashboardModel.dashboard)
-    if (!dashboardModel.dashboard) { return }
+  initComponentComplexData(item: DashboardContentModel): DashboardContentModel {
 
+    const properties = this.getDateRange(item.properties)
+    item.properties = properties;
+    return item;
+  }
+  //date range type is year month day etc.
+  getDateRange(item: DashBoardComponentProperties ) {
+
+    //if dateRangeReport then use the filter variable date ranges.
+    //otherwise use
+    if (!item?.dateRangeReport) {
+      //then we have to figure out the date range
+      if (item.rangeValue) {
+        if (item.rangeType === 'year') {
+
+        }
+        if (item.rangeType === 'month') {
+
+        }
+        if (item.rangeType === 'week') {
+
+        }
+        if (item.rangeType === 'date') {
+
+        }
+      }
+    }
+
+    return item;
+  }
+
+
+	serialize(dashboardModel: DashboardModel) {
+    if (!dashboardModel.dashboard) { return }
 		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
-
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection

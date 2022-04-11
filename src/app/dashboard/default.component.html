@@ -1,58 +1,48 @@
-<app-header>
-</app-header>
+<app-header></app-header>
 
 <mat-drawer-container >
   <mat-drawer
               position="start"
               [class]="barType"
               [mode]="sidebarMode"
-              [opened]="sideBarOpen">
+              [opened]="leftSideBarToggle">
 
-      <div    [hidden]="searchBarOpen" >
-        <div  [hidden]="toolbarTiny">
-          <app-menu-minimal>
-          </app-menu-minimal>
-        </div>
-        <div  [hidden]="!toolbarTiny" >
-          <app-menu-tiny>
-          </app-menu-tiny>
-        </div>
+    <div    [hidden]="searchSideBar" >
+      <div  [hidden]="toolbarTiny">
+        <app-menu-minimal>
+        </app-menu-minimal>
       </div>
 
-      <div [hidden]="!searchBarOpen">
-        <app-menu-search-bar>
-        </app-menu-search-bar>
+      <div  [hidden]="!toolbarTiny" >
+        <app-menu-tiny>
+        </app-menu-tiny>
       </div>
+    </div>
+
+    <div [hidden]="!searchSideBar">
+      <app-menu-search-bar>
+      </app-menu-search-bar>
+    </div>
 
   </mat-drawer>
 
   <mat-drawer-content>
 
-      <!-- <div class="animations"   *ngIf="advertisingOutlet"
-            [@routeAnimations]="prepareAdvertisingRoute(outlet)" >
-          <router-outlet #outlet="outlet"></router-outlet>
-      </div>
-
-      <div class="animations"  *ngIf="messageOutlet"
-          [@routeAnimations]="prepareMessageRoute(outlet)" >
-          <router-outlet #outlet="outlet"></router-outlet>
-      </div> -->
-
-      <div *ngIf="departmentID && departmentID !=0" class="overlay">
-          <app-department-menu
-            [departmentID]="departmentID">
-          </app-department-menu>
-      </div>
-
-      <div class="animations"
-           [@routeAnimations]="prepareRoute(outlet)" >
-          <router-outlet #outlet="outlet"></router-outlet>
-      </div>
-
-      <!-- <div *ngIf="department"  class="animations department-menu">
-        <app-department-menu>
+    <div *ngIf="departmentID && departmentID !=0" class="overlay">
+        <app-department-menu
+          [departmentID]="departmentID">
         </app-department-menu>
-      </div> -->
+    </div>
+
+    <div class="animations"
+          [@routeAnimations]="prepareRoute(outlet)" >
+        <router-outlet #outlet="outlet"></router-outlet>
+    </div>
+
+    <!-- <div *ngIf="department"  class="animations department-menu">
+      <app-department-menu>
+      </app-department-menu>
+    </div> -->
 
   </mat-drawer-content>
 

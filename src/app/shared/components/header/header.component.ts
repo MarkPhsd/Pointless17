@@ -114,7 +114,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.user  = data
       this.getUserInfo()
     })
-
   }
 
   constructor(private authenticationService : AuthenticationService,
@@ -127,7 +126,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private messageService:         MessageService,
               public  breakpointObserver:     BreakpointObserver,
               private siteService:            SitesService,
-              private toolbarUIService:       ToolBarUIService,
+              public toolbarUIService:       ToolBarUIService,
               private location:               Location,
               private scaleService          : ScaleService,
               private navigationService     : NavigationService,
@@ -141,13 +140,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async  ngOnInit() {
-
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');
     this.platFormService.getPlatForm();
     this.initSubscriptions();
-
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -171,7 +168,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.userSwitchingService.assignCurrentOrder(userProfile)
     }
   }
-
 
   ngOnDestroy(): void {
 
@@ -346,9 +342,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleSideBar() {
-    console.log(!this.openOrderBar)
     this.openOrderBar = !this.openOrderBar
-    this.outPutToggleSideBar.emit(this.openOrderBar)
     this.toolbarUIService.switchToolBarSideBar()
   }
 

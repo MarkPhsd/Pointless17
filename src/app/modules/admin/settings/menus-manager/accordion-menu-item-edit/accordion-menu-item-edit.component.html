@@ -1,95 +1,89 @@
 
-<div *ngIf="item">
+<div *ngIf="item && inputForm"  [formGroup]="inputForm">
+  <mat-card>
+    <mat-card-title>
+      Edit  {{item.name}} <br>
+      Accordion {{item.menuGroupID}}
+    </mat-card-title>
 
-  <div *ngIf="inputForm">
-    <div [formGroup]="inputForm">
-      <mat-card>
-        <mat-card-title>
-          Edit  {{item.name}} <br>
-        </mat-card-title>
+    <mat-card-content>
+        <div class="grid-container">
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Name</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="name"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-        <mat-card-content>
-            <div class="grid-container">
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Icon</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="icon"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Name</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="name"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Router Link</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="routerLink"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Name</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="icon"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Router Link Active</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="routerLinkActive"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Router Link</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="routerLink"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Access</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="userType"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Router Link Active</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="routerLinkActive"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div  class="fields">
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Access</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="userType"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+            <mat-label >Active</mat-label>
+            <mat-slide-toggle
+                    class           ="price-values"
+                    formGroupName   ="active"
+                    formControlName ="active"
+                    [(ngModel)]     ="active"
+                    >
+            </mat-slide-toggle>
 
-              <div  class="fields">
+          </div>
 
-                <mat-label >Active</mat-label>
-                <mat-slide-toggle
-                        class           ="price-values"
-                        formGroupName   ="active"
-                        formControlName ="active"
-                        [(ngModel)]     ="active"
-                        >
-                </mat-slide-toggle>
+          <div *ngIf="item.method" class="fields">
+            method:               {{item.method}}
+          </div>
+        </div>
 
-              </div>
+    </mat-card-content>
 
-              <div *ngIf="item.method" class="fields">
-                method:               {{item.method}}
-              </div>
-            </div>
-
-        </mat-card-content>
-
-        <mat-card-actions>
-          <button mat-button (click)="save()">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-card-actions>
+    <mat-card-actions>
+      <button mat-button (click)="save()">
+        <mat-icon>save</mat-icon>
+      </button>
+    </mat-card-actions>
 
 
-     </mat-card>
-
-    </div>
-  </div>
+  </mat-card>
 </div>

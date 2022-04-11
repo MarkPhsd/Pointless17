@@ -127,7 +127,8 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
           }
         )
 
-      ).subscribe( data => {
+      ).subscribe(
+        {next: data => {
 
         if (user.roles === 'admin' ) {
           if (!data) {  return }
@@ -141,9 +142,10 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
           return
         }
 
-      }, error=> {
+      },
+      error: error=> {
         console.log('error', error)
-      })
+      }})
     } catch (error) {
       console.log('error', error)
     }

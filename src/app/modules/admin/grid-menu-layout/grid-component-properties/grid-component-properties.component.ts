@@ -14,6 +14,7 @@ export interface ValueTypeList {
   filter: string;
   name  : string;
   icon  : string;
+  usesRange: boolean;
 }
 
 export interface ItemValue {
@@ -34,6 +35,29 @@ export class GridComponentPropertiesComponent implements OnInit {
   dashBoardContent: DashboardContentModel;
   inputForm       : FormGroup;
   rangeTypes      = ['year', 'month', 'date', 'week', 'hour','currentDay']
+  cardValueTypesTemp = []
+  cardValueTypes  = [
+    // {name: 'Top Products', filter: 'report', icon: ''},
+    {name: 'Sales Totals', filter: 'report', icon: '', usesRange: true},
+    {name: 'Tax',          filter: 'report', icon: '', usesRange: true},
+
+    {name: 'Product Sales',     filter: 'report', icon: '', usesRange: true},
+    {name: 'Category Sales',    filter: 'report', icon: '', usesRange: true},
+    {name: 'Department Sales',  filter: 'report', icon: '', usesRange: true},
+    {name: 'Type Sales',        filter: 'report', icon: '', usesRange: true},
+
+    {name: 'Sales',             filter: 'report', icon: '', usesRange: true},
+    {name: 'Order Count',       filter: 'report', icon: '', usesRange: true},
+    {name: 'Avg Count',         filter: 'report', icon: '', usesRange: true},
+
+    {name: 'Employee Sales Count',  filter: 'report', icon: '', usesRange: true},
+    {name: 'Employee Sales',        filter: 'report', icon: '', usesRange: true},
+
+    {name: 'Square',       filter: 'table', icon: '', usesRange: true},
+    {name: 'Round',        filter: 'table', icon: '', usesRange: true},
+    {name: 'Half Found',   filter: 'table', icon: '', usesRange: true},
+  ]
+
 
   cardTypes  = [
     {name: 'chart'  ,  icon: 'bar_chart', filter: 'none'},
@@ -48,17 +72,20 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   itemValue       : ItemValue;
   cardType        : string;
-  cardValueTypes  = [] as ValueTypeList[];
 
   cardValueType: string;
   listItemID   : string;
+  chartType    : string;
   opacity      : number;
   border       : number;
   borderRadius : number;
   refreshTime  : number;
-  layerIndex        : number;
+  layerIndex     : number;
   disableActions : boolean;
-  rangeValue : number;
+  rangeType      : string;
+  rangeValue     : number;
+  dateRangeReport: boolean;
+
   _borderRadius: string;
   _border :string;
   _layer : string;
@@ -98,6 +125,7 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   ngOnInit() {
     this.chartTypes = this.layoutService.cartTypeCollection;
+    if (!this.dashBoardContent) { return }
     this.fillForm();
     const site          = this.siteService.getAssignedSite();
     this.categories$    = this.menuService.getListOfCategoriesAll(site)
@@ -113,38 +141,19 @@ export class GridComponentPropertiesComponent implements OnInit {
   }
 
   setRangeType(type: string) {
+    this.rangeType = type
     if (this.inputForm) { this.inputForm.controls['rangeType'].setValue(type) }
   }
 
-  setCardTypeValuesList(type: string) {
-
-    const cardValueType  = [
-      {name: 'Top Products', filter: 'report', icon: ''},
-      {name: 'Sales Totals', filter: 'report', icon: ''},
-      {name: 'Tax',          filter: 'report', icon: ''},
-
-      {name: 'Sales',        filter: 'report', icon: ''},
-      {name: 'Order Count',  filter: 'report', icon: ''},
-      {name: 'Avg Count',    filter: 'report', icon: ''},
-
-      {name: 'Square',       filter: 'table', icon: ''},
-      {name: 'Round',        filter: 'table', icon: ''},
-      {name: 'Half Found',   filter: 'table', icon: ''},
-    ]
-
-    if (type === 'tables') { type = 'table'}
-    if (type === 'chart')  { type = 'report'}
-    this.cardValueTypes = cardValueType.filter( data => data.filter === type)
-
-    if (type === 'menu') {
-      this.cardValueTypes = this.menuBoardTypes;
+  initRange(type: string) {
+    this.dateRangeReport = false;
+    if (!type) {return}
+    const items = this.cardValueTypes.filter( data => data.name === type)
+    if (items && items[0].usesRange) {
+      this.dateRangeReport = true;
     }
-
-    if (type === 'order') {
-      this.cardValueTypes = this.menuBoardTypes.filter( data => data.filter === type);
-    }
-
   }
+
 
   setCategory(value: string) {
     this.listItemID = value;
@@ -153,6 +162,7 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   setCardValueType(type: string) {
     this.cardValueType = type;
+    this.initRange(type)
     this.refreshTypeList(type);
     if (this.inputForm) { this.inputForm.controls['cardValueType'].setValue(type)  }
   }
@@ -198,13 +208,22 @@ export class GridComponentPropertiesComponent implements OnInit {
       MMJMenu       : [''],
       disableActions: [''],
       autoPlay      : [''],
-      url           : [''],
       autoRepeat    : [''],
+      url           : [''],
       refreshTime   : [''],
-      rangeValue    : [''],
+      dateRangeReport  : [''],
+      // rangeValue    : [''],
+      // opacity       : [''],
     })
     return this.inputForm
   };
+
+  // object.border        = item?.border;
+  // object.borderRadius  = item?.borderRadius;
+  // object.opacity       = item?.opacity;
+  // object.layerIndex    = item?.layerIndex;
+  // object.refreshTime   = item?.refreshTime;
+  // object.rangeValue    = item?.rangeValue;
 
   initFormData() {
     const site = this.siteService.getAssignedSite();
@@ -232,46 +251,67 @@ export class GridComponentPropertiesComponent implements OnInit {
       object.lengthOfRange = item?.lengthOfRange;
       object.listItemID    = item?.listItemID;
       object.cardValueType = item?.cardValueType;
-      object.border       = item?.border;
-      object.borderRadius = item?.borderRadius;
-      object.opacity      = item?.opacity;
-      object.layerIndex   = item?.layerIndex;
+
       object.MMJMenu       = item?.MMJMenu;
-      object.chartHeight    = item?.chartHeight;
-      object.chartWidth     = item?.chartWidth;
+      object.chartHeight   = item?.chartHeight;
+      object.chartWidth    = item?.chartWidth;
       object.disableActions= item?.disableActions;
       object.url           = item?.url;
       object.autoPlay      = item?.autoPlay;
       object.autoRepeat    = item?.autoRepeat;
-      object.refreshTime   = item?.refreshTime;
       object.chartType     = item?.chartType;
+      object.dateRangeReport = item?.dateRangeReport;
+
+      object.border        = item?.border;
+      object.borderRadius  = item?.borderRadius;
+      object.opacity       = item?.opacity;
+      object.layerIndex    = item?.layerIndex;
+      object.refreshTime   = item?.refreshTime;
       object.rangeValue    = item?.rangeValue;
     }
 
-    console.log('object.rangeValue', object.rangeValue)
     //establish default range value.
-    if (!object.rangeValue || object.rangeValue == 0) {
-      this.rangeValue  = +12
-      object.rangeValue = this.rangeValue;
-    }
-
-    console.log(object)
+    this.rangeValue  = +object?.rangeValue
     if (! object.layerIndex ) { object.layerIndex = 1;}
     this.inputForm.patchValue(object);
 
     if (object.type)            { this.cardType = object?.type };
-    if (object.cardValueType)   { this.cardValueType = object?.cardValueType  };
-
+    if (object.cardValueType)   { this.cardValueType = object?.cardValueType };
     if (object.border)          { this.border = object?.border  };
-    if (object.borderRadius)    { this.borderRadius = object?.borderRadius  };
+    if (object.borderRadius)    { this.borderRadius = object?.borderRadius };
     if (object.opacity)         { this.opacity = object?.opacity  };
-    if (object.layerIndex)      { this.layerIndex = object?.layerIndex  };
+    if (object.layerIndex)      { this.layerIndex = object?.layerIndex };
 
     this.setCardTypeValuesList(object.type);
 
     this.refreshTypeList(this.cardValueType);
-    if (object.listItemID) {  this.listItemID = object?.listItemID; }
-    if (object.listItemID) { this.setSelectValue(object?.listItemID); }
+    if (object.listItemID) {  this.listItemID = object?.listItemID; };
+    if (object.listItemID) { this.setSelectValue(object?.listItemID); };
+    this.initRange(this.cardValueType);
+  }
+
+  setCardTypeValuesList(type: string) {
+
+    let cardValueTypes = this.cardValueTypes;
+
+    if (type === 'tables') { type = 'table'}
+    if (type === 'chart')  { type = 'report'}
+
+    cardValueTypes = cardValueTypes.filter( data => data.filter === type)
+
+    if (type === 'menu') {
+      this.cardValueTypes = this.menuBoardTypes;
+      this.cardValueTypesTemp = cardValueTypes;
+      return
+    }
+
+    if (type === 'order') {
+      this.cardValueTypes = this.menuBoardTypes.filter( data => data.filter === type);
+      this.cardValueTypesTemp = cardValueTypes;
+      return
+    }
+
+    this.cardValueTypesTemp = this.cardValueTypes;
 
   }
 
@@ -280,22 +320,21 @@ export class GridComponentPropertiesComponent implements OnInit {
     const content = this.updateCard(this.inputForm);
     // then slice out the current DashboardContentModel from the DashboardModel
     // apply the updated DashboardContentModel
-
     const dashBoard = this.layoutService.dashboardModel;
     if ( content.id) {
       const id        = content.id;
       const list      = dashBoard.dashboard.filter( data =>
         {return data.id != id}
-        )
-        dashBoard.dashboard =  list
-        dashBoard.dashboard.push(content);
+      )
+      dashBoard.dashboard =  list
+      dashBoard.dashboard.push(content);
     }
     this.updateDashBoard(dashBoard)
   };
 
   updateCard(form: FormGroup): DashboardContentModel {
     const site = this.siteService.getAssignedSite();
-    if (!form) { return }
+    if (!form) {return  }
     const id            = this.dashBoardContent.id;
     let content         = this.dashBoardContent;
     let model           = form.value as DashBoardComponentProperties;
@@ -310,15 +349,14 @@ export class GridComponentPropertiesComponent implements OnInit {
     model.opacity       = this.opacity;
     model.refreshTime   = this.refreshTime;
     model.rangeValue    = this.rangeValue;
+    model.dateRangeReport = this.dateRangeReport;
     if (!this.validateCard(model)) {return}
-
+    console.log(model)
     content = this.setComponentName(model, content)
 
-    if (content.component)  {
-      content.component   = '';
-    }
+    if (content.component)  {content.component   = ''}
     content.name        = model.name;
-
+    console.log(model)
     const jsonObject    = JSON.stringify(model);
     content.properties  = jsonObject;
     return content;
@@ -413,9 +451,9 @@ export class GridComponentPropertiesComponent implements OnInit {
   setChartType(value: string) {
     if (value) {
       if (this.inputForm) {
-        console.log(value)
         const item = { chartType: value}
         this.inputForm.patchValue(item)
+        this.chartType = value;
       }
     }
   }

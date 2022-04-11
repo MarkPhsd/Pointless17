@@ -98,9 +98,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
-
-  initSubscriptions() {
-
+  transactionUISettingsSubscriber() {
     this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.enableLimitsView  =false;
       if (data) {
@@ -108,7 +106,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         this.enableLimitsView = data.enableLimitsView
       }
     });
+  }
 
+  homePageSettingSubscriber() {
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
       if (data) {
@@ -117,9 +117,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         }
       }
     })
+  }
 
+  currentOrderSusbcriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
+      console.log(data)
       this.canRemoveClient = true
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
         this.canRemoveClient = false
@@ -130,10 +133,20 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.checkIfPaymentsMade()
       this.checkIfItemsPrinted()
     })
+  }
 
+  userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
     })
+  }
+
+  initSubscriptions() {
+    this.transactionUISettingsSubscriber();
+    this.homePageSettingSubscriber();
+    this.currentOrderSusbcriber();
+    this.userSubscriber();
+    this.initBarSubscription();
   }
 
   initBarSubscription() {
@@ -200,14 +213,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   async ngOnInit() {
-    this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
-    this.uiTransactionSettings =  await this.uiSettingsService.subscribeToCachedConfig()
+
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     this.sidePanelWidth = this.el.nativeElement.offsetWidth;
     this.initSubscriptions();
-    this.initBarSubscription();
+
     if (this.sidePanelWidth < 210) {
       this.isNotInSidePanel = false
       this.sidePanelPercentAdjust = 80
@@ -218,6 +230,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     this.initAuthorization();
     this.toolbarUIService.hidetoolBars();
+
+    this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
+    this.uiTransactionSettings =  await this.uiSettingsService.subscribeToCachedConfig()
   }
 
 
@@ -225,15 +240,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
-    console.log('isStaff', this.isStaff)
     if (this.isUser) {
       // this.showScheduleFilter = true;
       // this.showDateFilter = true;
     }
-
   }
-
-
 
   openClient() {
     if (this.order && this.order.clients_POSOrders) {

@@ -1,19 +1,64 @@
-<div *ngIf="sites$ && (sites$ | async) as sites">
-  <app-widget-card
-    [name]         ="name"
-    [chartType]    ="chartType"
-    [chartHeight]  ="chartHeight"
-    [menuType]     ="menuType"
-    [cardValueType]="cardValueType"
-    [rangeType]    ="rangeType"
-    [sites]        ="sites">
-  </app-widget-card>
-</div>
+  <div class="container">
+
+    <div class="info-message" *ngIf="reportItemSaleSummaries &&
+                                    (errorMessage && errorMessage.length>0)">
+      <mat-card  fxFlex="100">
+        <div *ngFor="let item of errorMessage">
+          <mat-label> <mat-icon>warn</mat-icon>   {{item}} </mat-label>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="info" *ngIf="layoutService.designerMode &&
+                            reportItemSaleSummaries">
+      <mat-card >
+        <div class="grid-info">
+          <div>Group by</div>
+          <div>{{groupBy}}</div>
+
+          <div>Range Type</div>
+          <div>{{rangeType}}</div>
+
+          <div>Range Value</div>
+          <div>{{rangeValue}}</div>
+
+          <div>Menu Type</div>
+          <div>{{menuType}}</div>
+
+          <div>Report Type</div>
+          <div>{{cardValueType}}</div>
+
+          <div>Chart Type</div>
+          <div>{{chartType}}</div>
+
+          <div>From</div>
+          <div> {{dateFrom}}</div>
+
+          <div>To</div>
+          <div> {{dateTo}}</div>
+
+          <div>ZRun ID</div>
+          <div>{{zrunID}}</div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div class="card-display">
+      <app-widget-card
+          *ngIf="itemNames && reportItemSaleSummaries"
+          [reportItemSaleSummaries]="reportItemSaleSummaries"
+          [name]         ="name"
+          [itemNames]    ="itemNames"
+          [chartHeight]  ="chartHeight"
+          [chartType]    ="chartType"
+          [menuType]     ="menuType"
+          [rangeValue]   ='rangeValue'
+          [rangeType]    = 'rangeType'
+          [cardValueType]="cardValueType"
+        >
+      </app-widget-card>
+    </div>
+
+  </div>
 
 
-<!-- @Input() name         = 'A Chart';
-@Input() chartType    = 'line';
-@Input() chartHeight  = '350px'
-@Input() menuType     : string;
-@Input() cardValueType: string;
-@Input() rangeType    : string; -->

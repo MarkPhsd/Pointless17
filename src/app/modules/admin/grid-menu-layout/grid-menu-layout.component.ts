@@ -8,6 +8,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { GridComponentPropertiesComponent } from './grid-component-properties/grid-component-properties.component';
 import { Subscription } from 'rxjs';
 import { AuthenticationService, AWSBucketService } from 'src/app/_services';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { ISite } from 'src/app/_interfaces';
 
 @Component({
   selector: 'grid-menu-layout',
@@ -62,23 +64,39 @@ export class GridMenuLayoutComponent implements OnInit {
 
   // min-height: 100%;
   // height: calc(100vh - 1em - 50px);
+  sites: ISite[];
 
 	constructor(
     public layoutService  : GridsterLayoutService,
     private dialog        : MatDialog,
     public authService    : AuthenticationService,
     private awsservice    : AWSBucketService,
+    private  sitesService      : SitesService,
   )
   {}
 
   async	ngOnInit() {
+    this.bucket = await this.awsservice.awsBucketURL();
+    this.sitesService.getSites().subscribe(
+      { next: data => {
+        this.sites  = data;
+        this.layoutService.sites = data;
+        this.initGridsterSettings()
+      },
+        error: err =>  {
+          this.initGridsterSettings()
+        }
+      }
+    )
+	}
+
+  initGridsterSettings() {
     this.updateGridsterUserMode(this.designerMode);
     this.initSubscription();
     this.layoutService.toggleDesignerMode(true)
     this.changedOptions();
     this.layoutService.changedOptions();
-    this.bucket = await this.awsservice.awsBucketURL();
-	}
+  }
 
   saveChanges() {
     this.itemChange()
@@ -129,6 +147,9 @@ export class GridMenuLayoutComponent implements OnInit {
           cols =   this.layoutService.dashboardProperties.gridColumns
         }
 
+        if (this.sites) {
+          this.layoutService.options.sites = this.sites;
+        }
         this.layoutService.options.minCols = cols;
         this.layoutService.options.minRows = rows;
         this.layoutService.options.maxCols = cols;
@@ -177,9 +198,9 @@ export class GridMenuLayoutComponent implements OnInit {
     let dialogRef: any;
     dialogRef = this.dialog.open(GridComponentPropertiesComponent,
       { width:        '650px',
-        minWidth:     '399px',
-        height:       '650px',
-        minHeight:    '650px',
+        minWidth:     '650px',
+        height:       '850px',
+        minHeight:    '850px',
         data : item
       },
     )

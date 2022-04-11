@@ -19,60 +19,64 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
-  uiHomePage = {} as UIHomePageSettings;
+  uiHomePage : UIHomePageSettings;
 
   constructor(private uISettingsService: UISettingsService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    const form = this.inputForm
+    this.inputForm = this.uISettingsService.initHomePageForm(form)
     this.uISettingsService.getSetting('UIHomePageSettings').subscribe(data => {
+      console.log('data', data)
       if (data) {
         this.uiHomePage   = JSON.parse(data.text) as UIHomePageSettings
-
-        try {
-          if (this.uiHomePage?.backgroundImage == null) {
-            this.uiHomePage.backgroundImage = ''
-            this.backgroundImage = this.uiHomePage.backgroundImage;
-          }
-
-        } catch (error) {
-
-        }
-        try {
-          if (this.uiHomePage?.tinyLogo == null) {
-            this.uiHomePage.tinyLogo = ''
-            this.tinyLogo =  this.uiHomePage.tinyLogo;
-          }
-        } catch (error) {
-
-        }
-        try {
-          if (this.uiHomePage?.logoHomePage  == null) {
-            this.uiHomePage.logoHomePage =''
-            this.logoHomePage = this.uiHomePage.logoHomePage;
-          }
-        } catch (error) {
-
-        }
-
-        this.initForm(data);
+        this.initializeImages(this.uiHomePage)
+        this.initForm(this.uiHomePage);
         return
       }
     });
-    const form = this.inputForm
-    this.inputForm = this.uISettingsService.initHomePageForm(form)
   }
 
-  initForm(setting: ISetting) {
-    const form = this.inputForm
-    this.inputForm = this.uISettingsService.initHomePageForm(form)
-    this.uISettingsService.setFormValue(form, setting, 'UIHomePageSettings').subscribe(
-      data => {
-        if (data) {
-          const config = JSON.parse(data.text)
-          this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
-        }
+  initializeImages(data: UIHomePageSettings) {
+    try {
+      if (this.uiHomePage?.backgroundImage == null) {
+        this.uiHomePage.backgroundImage = ''
+        this.backgroundImage = data.backgroundImage;
       }
-    )
+    } catch (error) {
+    }
+
+    try {
+      if (this.uiHomePage?.tinyLogo == null) {
+        this.uiHomePage.tinyLogo = ''
+        this.tinyLogo =  data.tinyLogo;
+      }
+    } catch (error) {
+    }
+
+    try {
+      if (this.uiHomePage?.logoHomePage  == null) {
+        this.uiHomePage.logoHomePage =''
+        this.logoHomePage = data.logoHomePage;
+      }
+    } catch (error) {
+    }
+  }
+
+  initForm(data: UIHomePageSettings) {
+    if (this.inputForm) {
+      const form = this.inputForm;
+      this.inputForm.patchValue(data)
+      return
+      // this.uISettingsService.setFormValue(form, setting, 'UIHomePageSettings').subscribe(
+      //   data => {
+      //     if (data) {
+      //       const config = JSON.parse(data.text)
+      //       this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
+      //     }
+      //   }
+      // )
+    }
   }
 
   updateSetting(){
@@ -103,7 +107,7 @@ export class UIHomePageSettingsComponent implements OnInit {
   received_TinyLogo(event) {
     this.tinyLogo = event
     this.inputForm.patchValue({tinyLogo: event})
-    console.log('this inputform', this.inputForm  )
+
   };
 
 }

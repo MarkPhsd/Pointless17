@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { Observable, } from 'rxjs';
 import { ISalesPayments, ISalesReportingOrdersSummary, IUser, ISite, ISalesReportingFilter }   from 'src/app/_interfaces';
-import { formatDate } from '@angular/common';
 import { AppInitService } from '../system/app-init.service';
+import { IDateRange, ReportDateHelpersService } from './report-date-helpers.service';
+import { formatDate, DatePipe } from '@angular/common';
+import { IReportItemSales, IReportItemSaleSummary } from './reporting-items-sales.service';
 
 // this.symbolSearchService.getSymbolData('xl')
 // .switchMap(stock => {
@@ -20,55 +22,57 @@ import { AppInitService } from '../system/app-init.service';
 //   err => this.sharedService.handleError
 // );
 
-
 export interface rowValue {
   date: string;
   value: number;
 }
-
 @Injectable({
   providedIn: 'root'
 })
 export class ReportingService {
 
   ///salespayments?DateFrom=4/1/2019&DateTo=5/1/2019&GroupBy=Date
-  Parameter = ''
+  Parameter   = ''
 
-  dateFrom: string; //From and to Dates for Reports.
-  dateTo: string;
+  dateFrom    : string; //From and to Dates for Reports.
+  dateTo      : string;
 
-  dateSeries: any[]; //getDateSeries(datefrom, dateTo) retrieved to do series labeling in charts.
-  dataSeries: any[];
+  dateSeries  : any[]; //getDateSeries(datefrom, dateTo) retrieved to do series labeling in charts.
+  dataSeries  : any[];
+  users       : any[];
 
-  users: any[];
+  groupBy     = "date";
 
-  groupBy = "date";
-
-  anyvalues: any;
-  //data Values - charts need a Data[] format
+  anyvalues   : any;   //data Values - charts need a Data[] format
 
   dataSeriesValues: any[];
-  sales: any[];
+  sales       : any[];
   salesResults: any[];
-  salesValues: any[];
-  chartValues: any[];
-  chartData: any[];
-  label: string;
+  salesValues : any[];
+  chartValues : any[];
+  chartData   : any[];
+  label       : string;
 
-  seriesNames: any[];
+  seriesNames : any[];
   jsonResponse: any;
 
-  salesPayments: ISalesPayments[];
-  chartOptions: {};
+  salesPayments : ISalesPayments[];
+  chartOptions  : {};
 
-  hourFrom : number;
-  hourTo   : number;
-  apiUrl   : any;
+  hourFrom      : number;
+  hourTo        : number;
+  apiUrl        : any;
 
   constructor( private http            : HttpClient,
                private appInitService  : AppInitService,
-            ) {
+               private dateHelpers     : ReportDateHelpersService,
+               private datePipe        : DatePipe
+  ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
+  }
+
+  updateDateRange(dateRange: IDateRange) {
+
   }
 
   private tempCode(){
@@ -168,6 +172,11 @@ export class ReportingService {
     return date;
   }
 
+  addDates(date: Date, days: number): Date {
+    date.setDate(date.getDate() + days);
+    return date;
+  }
+
   push24HoursToDateArray(date, dateSeries) {
     let i = 0
     const dateString = this.getDateString(date.toDateString())
@@ -183,28 +192,40 @@ export class ReportingService {
   getDateString(dateString) {
     if (!dateString) { return }
     return new Date(dateString).toLocaleDateString('en-US', {
-      day: '2-digit',
+      day  : '2-digit',
       month: '2-digit',
-      year: 'numeric',
+      year : 'numeric',
     })
   }
 
   getDateSeriesWithValue(start: string, end: string) : rowValue[] {
-
     this.dateSeries = [];
     let dateStart: Date;
     let dateEnd: Date;
     dateStart = new Date(start);
     dateEnd = new Date(end);
-
     for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
-        var loopDay = new Date(d);
-        this.dateSeries.push(
-          {date: formatDate(loopDay, 'yyyy/MM/dd', 'en-US'), value: 0}
-        )
+      var loopDay = new Date(d);
+      this.dateSeries.push(
+        {date: formatDate(loopDay, 'yyyy/MM/dd', 'en-US'), value: 0}
+      )
     }
     return this.dateSeries
+  }
 
+  getMonthSeriesWithValue(start: string, end: string) : rowValue[] {
+    this.dateSeries = [];
+    let dateStart: Date;
+    let dateEnd: Date;
+    dateStart = new Date(start);
+    dateEnd = new Date(end);
+    for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay = new Date(d);
+      this.dateSeries.push(
+        {date: formatDate(loopDay, 'yyyy/MM/dd', 'en-US'), value: 0}
+      )
+    }
+    return this.dateSeries
   }
 
   getResults(url: string, parameters: string, headers: HttpHeaders, InterFaceName: any[]) {
@@ -219,12 +240,11 @@ export class ReportingService {
   };
 
   getSales(site: ISite, dateFrom: string, dateTo: string, groupBY: string): Observable<ISalesPayments[]> {
-
     const controller = `/SalesPayments/`
+
     const endPoint = `getSalesSummary`
 
     let filter = {} as ISalesReportingFilter
-
     filter.startDate = dateFrom
     filter.endDate = dateTo
     filter.groupBy = groupBY
@@ -233,6 +253,88 @@ export class ReportingService {
 
     return  this.http.post<ISalesReportingOrdersSummary[]>(url, filter )
   };
+
+  getDataSeriesValues(salesValues: any): any[] {
+    this.salesPayments = salesValues;
+    this.dataSeriesValues =  [];
+    if (salesValues?.length) {
+      for(var i = 0; i < salesValues.length; i++)(
+        this.dataSeriesValues.push(salesValues[i].amountPaid)
+          );
+      }
+    return  this.dataSeriesValues;
+  };
+
+  //get the current date for the filter
+  setFilterToday() {
+    //in the API always get +1 for the sales.
+    this.dateFrom = new Date().toLocaleDateString();
+    let tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.dateTo = tomorrow.toLocaleDateString();
+    this.tempCode();
+  }
+
+  dateConvert(dateString: string) {
+    if (dateString.length == 8) {
+      const month =  dateString.substr(0, 2);
+      const day   = dateString.substr(2, 2);
+      const year  = dateString.substr(4, 4);
+      // return this.datePipe.transform(dateString,'MM/dd/yyyy');
+      return `${month}/${day}/${year}`
+    }
+  }
+
+
+  getHoursBackUsingCurrentDate(value): IDateRange {
+    const startDate     = this.dateHelpers.getCurrentDay();
+    const d             = new Date();
+    const endDate       =  this.datePipe.transform(this.addDates(d, value), 'MM/dd/yyyy');
+    const dateRange     = {} as IDateRange;
+    dateRange.startdate = startDate;
+    dateRange.endDate   = endDate;
+    return dateRange;
+  }
+
+  getDaysBackUsingCurrentDate(value): IDateRange {
+    const startDate     = this.dateHelpers.getCurrentDay();
+    const d             = new Date();
+    const endDate       =  this.datePipe.transform(this.addDates(d, value), 'MM/dd/yyyy');
+    const dateRange     = {} as IDateRange;
+    dateRange.startdate = startDate;
+    dateRange.endDate   = endDate;
+    return dateRange;
+  }
+
+  getWeeksBackUsingCurrentDate(value) {
+    const startDate     = this.dateHelpers.getCurrentDay();
+    const d             = new Date();
+    const endDate       = this.datePipe.transform(this.addDates(d, value), 'MM/dd/yyyy');
+    const dateRange     = {} as IDateRange;
+    dateRange.startdate = startDate;
+    dateRange.endDate   = endDate;
+    return dateRange;
+  }
+
+  getMonthBackUsingCurrentDate(value) {
+    const startDate     = this.dateHelpers.getFirstDayOfMonthFromCurrentMonth(-value);
+    const endDate       = this.dateHelpers.getLastDayofCurrentMonth()
+
+    const dateRange     = {} as IDateRange;
+    dateRange.startdate = this.datePipe.transform(startDate, 'MM/dd/yyyy');
+    dateRange.endDate   = this.datePipe.transform(endDate  , 'MM/dd/yyyy');;
+    return dateRange;
+  }
+
+  getYearsBackUsingCurrentDate(value) {
+    const startDate     = this.dateHelpers.getCurrentYear();
+    const year          = new Date(startDate)
+    const endDate       = this.dateHelpers.getLastYearInSeries(year, value, false)
+    const dateRange     = {} as IDateRange;
+    dateRange.startdate = this.datePipe.transform(startDate, 'MM/dd/yyyy');
+    dateRange.endDate   = endDate;
+    return dateRange;
+  }
 
   //SalesReportingOrders?DateFrom=1/1/2020&DateTo=1/15/2020&GroupBY=Range
   getSalesOrderSummary(site: ISite,dateFrom: string, dateTo: string, groupBY: string): Observable<ISalesReportingOrdersSummary[]> {
@@ -247,27 +349,24 @@ export class ReportingService {
 
   };
 
-  getDataSeriesValues(salesValues: any): any[] {
-    this.salesPayments = salesValues;
-    this.dataSeriesValues =  [];
-    if (salesValues?.length) {
-      for(var i = 0; i < salesValues.length; i++)(
-        this.dataSeriesValues.push(salesValues[i].amountPaid)
-          );
-      }
-    return  this.dataSeriesValues;
-  };
+  ///Product Sales////
+  listofProductsInSales(sales:  IReportItemSales[]): string[] {
+    let itemNames = [] as string[]
+    for (let item of sales)  {
+      itemNames.push(item.productName)
+    }
+    itemNames =  [...new Set(itemNames)]
+    return itemNames;
+  }
 
-
-
-  //get the current date for the filter
-  setFilterToday() {
-    //in the API always get +1 for the sales.
-    this.dateFrom = new Date().toLocaleDateString();
-    let tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    this.dateTo = tomorrow.toLocaleDateString();
-    this.tempCode();
+  //not implemented
+  listofSumProductsInSales(sales: IReportItemSales[]): string[]  {
+    let itemNames = [] as string[]
+    for (let item of sales)  {
+      itemNames.push(item.productName)
+    }
+    itemNames =  [...new Set(itemNames)]
+    return itemNames
   }
 
 }

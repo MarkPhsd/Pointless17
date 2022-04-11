@@ -111,6 +111,9 @@ import { FunctionGroupEditComponent } from './modules/admin/settings/function-gr
 import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
+import { UIHomePageSettingsComponent } from './modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
+import { UITransactionsComponent } from './modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
+import { StripeSettingsComponent } from './modules/admin/settings/stripe-settings/stripe-settings.component';
 
 // export const ROUTES: Routes = [
 //   { path: '', pathMatch: 'full', redirectTo: 'dashboard/1' },
@@ -279,6 +282,11 @@ const routes: Routes = [
     },
 
     // { path: '', pathMatch: 'full', redirectTo: 'dashboard/7' },
+
+//UIHomePageSettingsComponent
+    { path:  'homepagesettings',   component: UIHomePageSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    { path:  'transactionsSettings',   component: UITransactionsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    { path:  'stripesettings ',   component: StripeSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
 
     { path:  'menu-board-designer',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
     { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},

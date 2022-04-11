@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
@@ -6,11 +6,16 @@ import { SubMenu }  from 'src/app/_interfaces/index';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { Observable } from 'rxjs';
 import { MenusService } from 'src/app/_services/system/menus.service';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-menu-group-item-edit',
   templateUrl: './menu-group-item-edit.component.html',
-  styleUrls: ['./menu-group-item-edit.component.scss']
+  styleUrls: ['./menu-group-item-edit.component.scss'],
+  providers: [
+    { provide: MAT_DIALOG_DATA, useValue: {} },
+    { provide: MatDialogRef, useValue: {} }
+  ]
 })
 export class MenuGroupItemEditComponent implements OnInit, OnChanges {
 
@@ -19,15 +24,24 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   @Input() id             : number;
   inputForm               : FormGroup;
   minimized                  : boolean;
-
+  accordionID             : number;
   constructor(
     private fbNavService: FbNavMenuService,
     private fb: FormBuilder,
-    private siteService: SitesService,
-    private _snackBar: MatSnackBar,
-    private menusService: MenusService,
+    private siteService            : SitesService,
+    private _snackBar              : MatSnackBar,
+    private menusService           : MenusService,
+    private dialogRef              : MatDialogRef<MenuGroupItemEditComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    // private dialog                 : MatDialog,
   )
-  {}
+  {
+    console.log(data)
+    if (data) {
+      this.accordionID = data.accordionID;
+      this.id = data.id;
+    }
+  }
 
   ngOnInit() {
     this.refreshData();
@@ -70,12 +84,26 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
     if (this.inputForm.valid) {
       this.item = this.inputForm.value
       this.item.minimized = this.minimized
-      const item$ = this.menusService.putSubMenuByID(site , this.item.id,  this.item)
-      item$.subscribe(data=> {
-          this._snackBar.open('Item saved', 'Success', {duration: 2000})
-        }, err => {
-          this._snackBar.open('Item not saved', 'Failure', {duration: 2000})
-          console.log(err)
+      let item$: any;
+
+      if (this.id != 0) {
+         item$ = this.menusService.putSubMenuByID(site, this.item.id, this.item)
+      }
+
+      if (this.id == 0) {
+        this.item.menuID = this.accordionID
+        item$ = this.menusService.postSubMenuItem(site, this.item)
+      }
+
+      item$.subscribe(
+        {
+            next: data=> {
+            this._snackBar.open('Item saved', 'Success', {duration: 2000})
+          },
+          error : err => {
+            this._snackBar.open('Item not saved', 'Failure', {duration: 2000})
+            console.log(err)
+          }
         }
       )
     }

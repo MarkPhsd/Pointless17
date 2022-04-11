@@ -73,6 +73,7 @@ export interface DashBoardComponentProperties {
 
   refreshTime    : number;
   rangeValue     : number;
+  dateRangeReport: boolean;
 }
 
 export interface widgetRoles {

@@ -1,60 +1,32 @@
+<mat-card  fxFlex="100">
+  <div class="container">
+    <div class="warning"  *ngIf="sitesErrorMessage">
+      <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+    </div>
 
-<div class="container">
+    <div class="title" *ngIf="!menuType">
+      <span *ngIf="dateFrom && dateTo">From {{dateFrom}} to {{dateTo}}. </span>
+      <span *ngIf="zrunID">ID: {{zrunID}}. </span>
+    </div>
 
-  <div class="warning"  *ngIf="sitesErrorMessage">
-    <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
+    <div class="title" *ngIf="menuType">
+      <span *ngIf="dateFrom && dateTo">Range {{rangeValue}} {{rangeType}}. From {{dateFrom}} to {{dateTo}}. </span>
+      <span *ngIf="zrunID">ID: {{zrunID}}. </span>
+    </div>
+
+    <button mat-button
+            (click)="refresh()">
+            <mat-icon>refresh</mat-icon>
+    </button>
+
+    <div id="widget"
+        *ngIf="chartOptions">
+      <highcharts-chart
+          [Highcharts]="Highcharts"
+          [options]="chartOptions"
+          [oneToOne]="true">
+      </highcharts-chart>
+    </div>
+
   </div>
-
-  <div class="info">
-    <mat-card *ngIf="layoutService.designerMode" >
-      <div class="grid-info">
-        <div>Group by</div>
-        <div>{{groupBy}}</div>
-
-        <div>Range Type</div>
-        <div>{{rangeType}}</div>
-
-        <!-- <div>Menu Type</div>
-        <div>{{menuType}}</div> -->
-
-        <div>Report Type</div>
-        <div>{{cardValueType}}</div>
-
-        <div>Chart Type</div>
-        <div>{{chartType}}</div>
-
-        <div>From</div>
-        <div> {{dateFrom}}</div>
-
-        <div>To</div>
-        <div> {{dateTo}}</div>
-
-        <div>ZRun ID</div>
-        <div>{{zrunID}}</div>
-      </div>
-    </mat-card>
-  </div>
-  <div class="title" *ngIf="menuType">
-    {{name}}.  From {{dateFrom}} to {{dateTo}}. ID:{{zrunID}}.
-  </div>
-
-  <div *ngIf="!menuType">
-    {{name}}
-  </div>
-
-  <button mat-button
-          (click)="refresh()">
-          <mat-icon>refresh</mat-icon>
-  </button>
-
-  <div id="widget"
-      *ngIf="chartOptions">
-    <highcharts-chart
-        [Highcharts]="Highcharts"
-        [options]="chartOptions"
-        [oneToOne]="true"
-        >
-    </highcharts-chart>
-  </div>
-
-</div>
+</mat-card>

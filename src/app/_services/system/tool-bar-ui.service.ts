@@ -6,24 +6,26 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ToolBarUIService {
 
-  private _toolbarSideBar   = new BehaviorSubject<any>(null);
-  public toolbarSideBar$    = this._toolbarSideBar.asObservable();
+  private _leftSideBarToggle    = new BehaviorSubject<any>(null);
+  public  leftSideBarToggle$    = this._leftSideBarToggle.asObservable();
+
+  private _mainMenuSideBar   = new BehaviorSubject<any>(null);
+  public mainMenuSideBar$    = this._mainMenuSideBar.asObservable();
 
   private _searchSideBar    = new BehaviorSubject<any>(null);
   public searchSideBar$     = this._searchSideBar.asObservable();
 
-  private _orderBar          = new BehaviorSubject<any>(null);
-  public  orderBar$          = this._orderBar.asObservable();
-
-  private  searchBarWidth     = 195;
   private _searchBarWidth    = new BehaviorSubject<number>(null);
   public  _searchBarWidth$   = this._searchBarWidth.asObservable();
 
-  private _departmentMenu     = new BehaviorSubject<any>(null);
-  public  departmentMenu$     = this._departmentMenu.asObservable();
-
   private _barSize    = new BehaviorSubject<boolean>(null);
   public  barSize$    = this._barSize.asObservable();
+
+  private _orderBar          = new BehaviorSubject<any>(null);
+  public  orderBar$          = this._orderBar.asObservable();
+
+  private _departmentMenu     = new BehaviorSubject<any>(null);
+  public  departmentMenu$     = this._departmentMenu.asObservable();
 
   private _departmentID    = new BehaviorSubject<number>(null);
   public  departmentID$    = this._barSize.asObservable();
@@ -31,12 +33,13 @@ export class ToolBarUIService {
 
   private barSize   : boolean;
 
-  private toolBar   : boolean;
-  private searchBar : boolean;
-  private orderBar  : boolean;
+  public  mainMenuSideBar   : boolean;
+  private leftSideBarToggle        : boolean;
+  public searchBar : boolean;
+  public orderBar  : boolean;
 
   constructor() {
-    this.toolBar = false;
+    this.mainMenuSideBar = false;
     this.searchBar = false;
     this.orderBar = false
     this._orderBar.next(false)
@@ -59,10 +62,14 @@ export class ToolBarUIService {
     }, 300);
   }
 
+  updateleftSideBarToggle(value: boolean) {
+    this._leftSideBarToggle.next(value)
+    this.leftSideBarToggle = value;
+    console.log('updateleftSideBarToggle', value)
+  }
 
   updateBarSize(value: boolean) {
-    console.log('updateBarSize', value)
-    if (!value) {return}
+    if (!value) { this._barSize.next(true)}
     this._barSize.next(value)
     this.barSize = value;
     this.resizeWindow();
@@ -73,6 +80,10 @@ export class ToolBarUIService {
     // this._searchBarWidth.next(value)
     // console.log(this.searchBarWidth)
     // console.log('value', value)
+  }
+
+  updateSideBar(value: boolean) {
+
   }
 
   updateOrderBar(value: boolean) {
@@ -86,33 +97,28 @@ export class ToolBarUIService {
   }
 
   updateToolBarSideBar(value: boolean) {
-    this.toolBar = value
+    this.mainMenuSideBar = value
     this.searchBar = false;
-    this._toolbarSideBar.next(value);
+    this._mainMenuSideBar.next(value);
+    this._leftSideBarToggle.next(this.mainMenuSideBar);
     this.resizeWindow();
   }
 
   updateSearchBarSideBar(value: boolean) {
     this.searchBar = value
-    this.toolBar = false;
-    this._toolbarSideBar.next(value);
+    this.mainMenuSideBar = false;
+    this._mainMenuSideBar.next(value);
+    this._leftSideBarToggle.next(this.searchBar);
     this.resizeWindow();
   }
 
   switchToolBarSideBar() {
-    console.log('searchBar', this.searchBar)
-    console.log('toolBar', this.toolBar)
-
-    if (this.searchBar) {
-      this.searchBar = false
-      this._searchSideBar.next(false)
-    } else {
-      this.searchBar = false;
-      this.toolBar   = ! this.toolBar
-      this._toolbarSideBar.next(this.toolBar);
-      this._searchSideBar.next(false);
-      this.updateBarSize(this.barSize)
-    }
+    this.searchBar         = false;
+    this.mainMenuSideBar   =  !this.mainMenuSideBar
+    this._mainMenuSideBar.next(this.mainMenuSideBar);
+    this._searchSideBar.next(false);
+    this._leftSideBarToggle.next(this.mainMenuSideBar);
+    this.updateBarSize(this.barSize)
     this.resizeWindow();
   }
 
@@ -121,52 +127,95 @@ export class ToolBarUIService {
     this.updateOrderBar(false)
   }
 
-  switchSearchBarSideBar() {
-    //if the toolbar is showing and is in search mode,
-    //then hide the toolbar.
-    if (!this.toolBar && this.searchBar) {
-      this.toolBar = true
-      this.searchBar = true
-      this._searchSideBar.next(true)
-      this._toolbarSideBar.next(true);
-      this.resizeWindow();
-      return
-    }
-
-    if (this.toolBar && this.searchBar)
-      {
-        this.searchBar = false
-        this.toolBar   = false
-        // this.hidetoolBars
-        this._searchSideBar.next(false)
-        this._toolbarSideBar.next(false);
-        this.resizeWindow();
-        return
-       } else
-
-    {
-      //if the toolbar is showing
-      // and is not in seach mode.
-      if (this.toolBar && !this.searchBar )   { this.searchBar = true; }
-      //if the toolbar is not showing
-      if (!this.toolBar )    {
-        this.searchBar = true;
-        this.toolBar   = true;
-      }
-    }
-
-    this._searchSideBar.next(this.searchBar)
-    this._toolbarSideBar.next(this.toolBar);
+  hideToolbarSearchBar() {
+    this.searchBar = false
+    this.mainMenuSideBar   = false
+    this._searchSideBar.next(false)
+    this._leftSideBarToggle.next(false);
+    this._mainMenuSideBar.next(false);
     this.resizeWindow();
   }
 
   showSearchSideBar() {
-    this.searchBar = true
-    this.toolBar   = false
+    this.searchBar         = true
+    this.mainMenuSideBar   = false
     this._searchSideBar.next(true)
-    this._toolbarSideBar.next(false);
+    this._mainMenuSideBar.next(false);
+    this._leftSideBarToggle.next(true);
+     this.resizeWindow();
+  }
+
+  switchSearchBarSideBar() {
+
+    console.log('mainSideBar',this.mainMenuSideBar)
+    console.log('searchBar', this.searchBar)
+    console.log('leftSideBarToggle', this.leftSideBarToggle)
+
+    if (!this.leftSideBarToggle ||
+         this.leftSideBarToggle == undefined) {
+
+      if (this.searchBar) {
+        this.hideToolbarSearchBar();
+        return
+      }
+      this.showSearchSideBar();
+      return
+    }
+
+    if (this.searchBar) {
+      if (this.mainMenuSideBar) {
+        this._leftSideBarToggle.next(true)
+        this._mainMenuSideBar.next(true)
+        this._searchSideBar.next(false)
+        this.resizeWindow();
+        return
+      }
+      this.hideToolbarSearchBar();
+      return
+    }
+
+    if (!this.mainMenuSideBar && this.searchBar) {
+      console.log('this')
+      this.showSearchSideBar();
+      return
+    }
+
+    if (this.mainMenuSideBar && !this.searchBar) {
+      console.log('then')
+      this.showSearchSideBar();
+      return
+    }
+
+    if (this.mainMenuSideBar && this.leftSideBarToggle) {
+      this._leftSideBarToggle.next(true);
+      this._mainMenuSideBar.next(false)
+      this.resizeWindow();
+      return
+    }
+
+    if (!this.mainMenuSideBar && !this.searchBar) {
+      this.showSearchSideBar();
+      return
+    }
+
+    if (this.searchBar) {
+      this._leftSideBarToggle.next(false);
+      this._mainMenuSideBar.next(false)
+      this.resizeWindow();
+      return
+    }
+
+  }
+
+  showToolbarHideSearchBar() {
+    this.searchBar = true;
+    this.mainMenuSideBar   = true;
+    this._searchSideBar.next(false)
+    this._mainMenuSideBar.next(true);
     this.resizeWindow();
   }
+
+
 
 
 }

@@ -1,11 +1,9 @@
 <mat-toolbar [color]="matToolbarColor">
-
   <mat-toolbar-row>
      <div  fxFlex
            fxLayout="row"
            fxLayoutAlign="start start">
       <div class="grid-flow">
-
         <div *ngIf="!smallDevice && isApp">
           <button aria-label="back" mat-button
                   (click)="goBack()">
@@ -13,10 +11,8 @@
           </button>
         </div>
 
-        <div class="logo"
-            *ngIf="!isApp" >
-            <app-logo [logoSize]="'small'"
-                    ></app-logo>
+        <div class="logo" *ngIf="!isApp" >
+          <app-logo [logoSize]="'small'" ></app-logo>
         </div>
 
         <div *ngIf="isUserStaff || isAdmin">

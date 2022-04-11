@@ -1,0 +1,126 @@
+@import "/src/mixins.scss";
+
+h4 {
+    margin-top: 0;
+    margin-bottom: 5px;
+}
+.container {
+  // height: 100%;
+  // width: 100%;
+  .info {
+    top     : 35px;
+    left    : 20px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    width   : 360px;
+    visibility: hidden;
+  }
+
+  .info-message {
+    top     : 35px;
+    left    : 350px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: hidden;
+    height  : 360px;
+  }
+}
+.card-display {
+  height: 100%;
+  width: 100%;
+}
+
+.container:hover {
+
+  // height: 100%;
+  // width: 100%;
+
+  .info  {
+    top     : 35px;
+    left    : 20px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: visible;
+    height  : 300px;
+    width    : 360px;
+    overflow-y: auto;
+  }
+
+  .infomessage  {
+    top     : 35px;
+    left    : 250px;
+    position: absolute;
+    z-index : 100;
+    opacity : 70%;
+    visibility: visible;
+    height  : 300px;
+  }
+}
+
+.grid-info {
+  display: grid;
+  grid-template-columns: 150px 150px;
+  grid-gap: 2px;
+  width: 360px;
+}
+.hoverable:not(:hover) + .show-on-hover {
+  display: none;
+}
+// .info {
+//   visibility: hidden;
+// }
+
+.total {
+    font-size: 3em;
+}
+
+.description {
+    color: green;
+    font-size: 2em;
+}
+
+.mat-icon {
+    position: relative;
+    font-size: 2em;
+    padding: 0 20px;
+    top: 5px;
+}
+
+mat-card {
+  min-height: 400px;
+}
+
+#widget {
+  // max-width : 95%;
+  // min-width : 500px;
+  // width     : 95%;
+  // // min-height: 300px;
+  // height    : 95%;
+
+  @include for-phone-only {
+    max-width : 100%;
+    min-width : 320px;
+    width     : 100%;
+    // min-height: 300px;
+    height    : 100%;
+  }
+}
+
+.title {
+  font-size: smaller;
+  font-weight: 500px;
+}
+
+.warning {
+  font-size: larger;
+  background-color: rgb(134, 6, 31);
+  background-blend-mode: color-burn;
+}
+
+.itemNames-display {
+  height: 300px;
+  overflow-y: auto;
+}

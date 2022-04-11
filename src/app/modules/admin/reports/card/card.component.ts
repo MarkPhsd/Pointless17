@@ -3,13 +3,21 @@ import { Component, OnInit, Input, OnChanges,  SimpleChanges } from '@angular/co
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
-import { Observable, Subject, switchMap } from 'rxjs';
+import numeral from 'numeral';
+import { Observable, Subject, Subscription, switchMap } from 'rxjs';
 import { ISalesPayments, ISite }  from 'src/app/_interfaces';
 import { ReportingService } from 'src/app/_services';
+import { IReportingSearchModel, IReportItemSaleSummary, ReportingItemsSalesService } from 'src/app/_services/reporting/reporting-items-sales.service';
 import { IPaymentSalesSearchModel, PaymentSummary, SalesPaymentsService } from 'src/app/_services/reporting/sales-payments.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
 import { BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
+
+export interface ProductSale {
+  name: string;
+  value: number;
+  count: number;
+}
 @Component({
   selector: 'app-widget-card',
   templateUrl: './card.component.html',
@@ -23,9 +31,6 @@ export class CardComponent  implements OnInit , OnChanges{
   @Input() notifier   : Subject<boolean>
   value               : boolean;
   tempVal             : boolean;
-
-  @Input() disabledVehicleAView: boolean;
-	@Input() disabledVehicleBView: boolean;
 
   //descriptions for component headings
   @Input() label      : string;
@@ -43,12 +48,17 @@ export class CardComponent  implements OnInit , OnChanges{
   @Input() sites      : ISite[];
   @Input() site       : ISite;
 
-  @Input() name         = 'A Chart';
+  @Input() name         = '';
   @Input() chartType    = 'line';
   @Input() chartHeight  = '350px'
   @Input() menuType     : string;
   @Input() cardValueType: string;
   @Input() rangeType    : string;
+  @Input() rangeValue   : number;
+  @Input() itemNames    : string[];
+  @Input() salesSummary : IReportItemSaleSummary;
+  @Input() reportItemSaleSummaries: IReportItemSaleSummary[]
+  reportType: string;
 
   lastCounter: number;
 
@@ -66,13 +76,24 @@ export class CardComponent  implements OnInit , OnChanges{
   xAxis           : any;
   subTitle        : any;
 
+  dataSeriesValues : any[];
+
   scrollablePlotHeight = {
-    minWidth       : 1500,
-    opacity        : 0,
-    scrollPositionX: -10
+    minWidth        : 1500,
+    opacity         : 0,
+    scrollPositionX : -10
   }
 
   sitesErrorMessage: string;
+  _sites: Subscription;
+
+  initSubscriptions() {
+    if (this.sites) {return}
+    this.sitesService.sites$.subscribe(data => {
+      this.sites = data;
+    })
+  }
+
   constructor(private  sitesService      : SitesService,
               private  reportingService  : ReportingService,
               public   route             : ActivatedRoute,
@@ -80,28 +101,64 @@ export class CardComponent  implements OnInit , OnChanges{
               private salesPaymentService: SalesPaymentsService,
               public  layoutService      : GridsterLayoutService,
               private datePipe           : DatePipe,
-               ) {
+              private reportingItemsSalesService: ReportingItemsSalesService
+      ) {
   }
 
   ngOnInit() {
-    this.initChart('Values');
-    this.initDates();
-    if (!this.dateFrom || !this.dateTo) {
-      this.groupBy = 'hour'
-      this.refreshCurrentSales();
+
+    //only works for product sales so far.
+    if (this.cardValueType && this.reportItemSaleSummaries) {
+      this.initSeriesLabels();
+      let options = this.initChart('values');
+      this.refreshProductSales();
+
+      if (options) {
+        const chart = {
+          type: this.chartType,
+          backgroundColor: null,
+          scrollablePlotArea: this.scrollablePlotHeight,
+          borderWidth: 0,
+          height: this.chartHeight,
+        };
+        options.chart = chart // { chart };
+        options.series = this.chartData //{ series:  this.chartData };
+        this.chartOptions = options;
+        console.log(options)
+      }
+
       return
     }
-    this.refreshSitesData();
+
+    this.initSubscriptions();
+    this.refreshSitesData()
+    this.initChart('Values');
+    if (this.cardValueType) { this.initDates() };
+    if (!this.cardValueType) {this.initDates() };
+    this.refreshChart();
   };
+
+  ngOnChanges() {
+    this.refresh();
+  }
+
+  refreshChart() {
+    this.reportType = this.cardValueType;
+    const reportType = this.reportType;
+    if ((!this.dateFrom || !this.dateTo) && !this.reportType) {
+      if (!this.groupBy) {this.groupBy = 'hour'}
+      this.getStartEndFromZRun().subscribe(data => {
+        console.log(data)
+      })
+    }
+    this.refreshSitesData();
+  }
 
   refreshSitesData() {
     if (this.sites || this.site) {
-      if (!this.sites) {
-        this.sites = [] as ISite[]
-        this.sites.push(this.site)
-      }
+      if (!this.sites) { this.sites.push(this.site)}
       this.refresh();
-      return
+      return;
     }
 
     if (!this.sites) {
@@ -113,85 +170,84 @@ export class CardComponent  implements OnInit , OnChanges{
     }
   }
 
-  getCurrentSalesRange() {
-    //balanceSheetService
-  }
-
-  ngOnChanges() {
-    this.refresh();
-  }
-
   initDates(){
     let dateFrom = this.route.snapshot.paramMap.get('dateFrom');
     let dateTo   = this.route.snapshot.paramMap.get('dateTo');
     let groupBy  = this.route.snapshot.paramMap.get('groupBy');
     if (dateFrom && dateTo && groupBy) {
-      this.dateFrom = this.dateConvert(dateFrom)
-      this.dateTo   = this.dateConvert(dateTo)
+      this.dateFrom = this.reportingService.dateConvert(dateFrom)
+      this.dateTo   = this.reportingService.dateConvert(dateTo)
       this.groupBy  = groupBy;
     }
   }
 
-  addDates(date: Date, days: number): Date {
-    date.setDate(date.getDate() + days);
-    return date;
- }
-
-  refreshCurrentSales() {
-   //get the observable, then pipe through to the sites if needed.
-   const site = this.sitesService.getAssignedSite();
-   const zrun$ = this.balanceSheetService.getZRUNBalanceSheet(site)
-   const sites$ = this.sitesService.getSites()
-   zrun$.pipe(
-     switchMap(data => {
-     if (data.endTime) {
-      this.dateFrom = this.dateConvert(data.startTime)
-      this.dateTo   = this.dateConvert(data.endTime)
-     }
-     if (!data.endTime && data.startTime) {
-      this.dateFrom   =  this.datePipe.transform(data.startTime, 'M/d/yy')
-      const startdate = new Date(data.startTime)
-      this.dateTo     = this.addDates(startdate, 1).toISOString();
-    }
-    this.dateFrom = this.datePipe.transform(data.startTime, 'M/d/yy')
-    this.dateTo   = this.datePipe.transform(this.dateTo , 'M/d/yy')
-    this.zrunID   = data.id.toString();
-    return sites$
-   })).subscribe(data => {
-    this.sites  = data;
-    this.refresh();
-   })
+  getStartEndFromZRun() : Observable<ISite[]> {
+    //get the observable, then pipe through to the sites if needed.
+    const site = this.sitesService.getAssignedSite();
+    const zrun$ = this.balanceSheetService.getZRUNBalanceSheet(site)
+    const sites$ = this.sitesService.getSites()
+    return zrun$.pipe(
+      switchMap(data => {
+      if (data.endTime) {
+        this.dateFrom = this.reportingService.dateConvert(data.startTime)
+        this.dateTo   = this.reportingService.dateConvert(data.endTime)
+      }
+      if (!data.endTime && data.startTime) {
+        this.dateFrom   =  this.datePipe.transform(data.startTime, 'M/d/yy')
+        const startdate = new Date(data.startTime)
+        this.dateTo     = this.reportingService.addDates(startdate, 1).toISOString();
+      }
+      this.dateFrom = this.datePipe.transform(data.startTime, 'M/d/yy')
+      this.dateTo   = this.datePipe.transform(this.dateTo , 'M/d/yy')
+      this.zrunID   = data.id.toString();
+      return sites$
+    }))
   }
 
   getCountVersion() {  }
 
-  dateConvert(dateString: string) {
-    if (dateString.length == 8) {
-      const month =  dateString.substr(0, 2);
-      const day   = dateString.substr(2, 2);
-      const year  = dateString.substr(4, 4);
-      return `${month}/${day}/${year}`
-    }
-  }
-
-  async refresh() {
+  refresh() {
     this.getCountVersion();
-    if (this.dateFrom && this.dateTo && this.groupBy) {
-      this.initArrays();
+    if (this.sites && this.dateFrom && this.dateTo && this.groupBy) {
+      this.initSeriesLabels();
+      this.initChart('values')
       this.initSeries();
-      if (this.sites) {
-        this.updateChartSites(this.dateFrom, this.dateTo, this.sites);
-      }
+      this.updateChartSites(this.dateFrom, this.dateTo, this.sites);
     }
   }
 
-  initArrays() {
+  isProductSalesType(type) {
+    if (!this.cardValueType) { return false }
+    if (this.cardValueType.toLowerCase() === 'product sales') { return true}
+    if (this.cardValueType.toLowerCase() === 'category sales') { return true}
+    if (this.cardValueType.toLowerCase() === 'department sales') { return true}
+    if (this.cardValueType.toLowerCase() === 'type sales') { return true}
+  }
+
+  initSeriesLabels() {
     this.reportingService.dateSeries  = [];
     this.chartCategories              = [];
     this.chartData                    = [];
-    let valuesName   = 'Values'
-    const subTitle   =  {text: "Range: " + this.dateFrom + " to " + this.dateTo}
-    this.subTitle    = subTitle;
+    let valuesName                    = 'Values'
+    const subTitle                    =  {text: "Range: " + this.dateFrom + " to " + this.dateTo}
+    this.subTitle                     = subTitle;
+    if (!this.chartOptions) { this.initChart(valuesName)}
+
+    if (this.isProductSalesType(this.cardValueType)) {
+      this.chartCategories = this.itemNames;
+      const xAxis = {
+        labels    : { enabled: true },
+        categories: this.itemNames,
+        crosshair : true,
+      }
+      this.chartOptions = { xAxis: [ xAxis ] }
+
+      // this.chartOptions.chart.type = this.chartType;
+      this.xAxis = xAxis;
+      return;
+    }
+
+    if (!this.groupBy) { return }
 
     if (this.groupBy.toLowerCase() === 'date') {
       const  categories = [] as any[];
@@ -203,6 +259,7 @@ export class CardComponent  implements OnInit , OnChanges{
           categories.push(date)
         }
       })
+
       if (categories) { this.chartCategories = categories; }
       const xAxis = {
         labels    : { enabled: true },
@@ -211,6 +268,7 @@ export class CardComponent  implements OnInit , OnChanges{
       }
       this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
+      return;
     }
 
     if (this.groupBy.toLowerCase() === 'hour') {
@@ -224,8 +282,9 @@ export class CardComponent  implements OnInit , OnChanges{
         crosshair : true,
         categories: categories
       }
-      this.chartOptions = { xAxis: [ xAxis ] }
+      // this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
+      return;
     }
 
     if (this.groupBy.toLowerCase() === 'orderemployeecount'
@@ -242,20 +301,15 @@ export class CardComponent  implements OnInit , OnChanges{
         max       : dataSeriesValues.length
       }
       this.xAxis = xAxis;
+      return;
     }
-    this.initChart(valuesName);
+
+    //
   }
 
   updateChartSites(dateFrom: string, dateTo: string, sites: ISite[]) {
     this.updateChartMetrics(sites)
     this.updateChartSitesSales(dateFrom, dateTo, sites)
-  }
-
-  setChartData(name: string, dataSeriesValues: any[]) {
-    const newSeries = [] as any[];
-    dataSeriesValues.forEach(data => { newSeries.push( [ data.date, data.value ] ) })
-    this.chartData.push ( { name: name, data: newSeries } )
-    this.chartOptions = { series:  this.chartData }
   }
 
   refreshSales(site: ISite) {
@@ -281,19 +335,117 @@ export class CardComponent  implements OnInit , OnChanges{
     return false
   }
 
+  initLocalSeries() {
+    let dataSeriesValues: any;
+    if (this.groupBy.toLowerCase() === 'date') {
+      let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
+      this.dataSeriesValues = dataSeriesValues
+    }
+    if ( this.groupBy === 'hour' ) {
+      let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+      this.dataSeriesValues = dataSeriesValues
+    }
+    //requires work
+    if (this.groupBy.toLowerCase() === 'month') {
+      let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+      this.dataSeriesValues = dataSeriesValues
+    }
+    //requires work
+    if (this.groupBy.toLowerCase() === 'year') {
+     let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+     this.dataSeriesValues = dataSeriesValues
+    }
+    return dataSeriesValues
+  }
+
+  refreshProductSales() {
+    if (this.reportItemSaleSummaries && this.itemNames) {
+      this.reportItemSaleSummaries.forEach(item => { this.updateProductSales(item.site, item, this.itemNames)})
+
+    }
+  }
+
+  updateProductSales(site: ISite, reportItemSaleSummaries: IReportItemSaleSummary, itemNames: string[]) {
+    //list all products in array of items.
+    this.chartCategories = itemNames;
+    if (!itemNames) { return }
+    const productList = this.getProductValuesSeries(itemNames)
+    if (!productList) { return }
+    const salesList = reportItemSaleSummaries.results;
+    let siteSales = [] as ProductSale[];
+    for (let saleTotal of salesList){
+      const item = {} as ProductSale
+      item.value = saleTotal.itemTotal;
+      item.name  = saleTotal.productName;
+      siteSales.push(item)
+    }
+    this.setChartProductSalesData(site.name, siteSales)
+  }
+
+  setChartProductSalesData(name: string, list: ProductSale[]) {
+    let newSeries = [] as any[];
+    try {
+      list.forEach(data => {
+        newSeries.push( [ data.name, data.value ]
+        )
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
+
+    newSeries.sort((a, b) => (a.value > b.value) ? 1 : -1)
+    newSeries = newSeries.slice(0,50);
+    //reset the product names to the top 50 because
+    //there can be multple locations, and the average number of product
+    //names willl have to be associated with the total products.
+    //call initArrays which will restruture the report based on this adjusted list
+    this.itemNames = [];
+    newSeries.forEach(data => { this.itemNames.push( data.name) })
+    this.chartCategories = this.itemNames;
+    this.initSeriesLabels();
+
+    if (!this.chartData) { this.chartData = []}
+      this.chartData.push ( { name: name, data: newSeries }
+    )
+
+    // this.chartOptions.series = this.chartData
+    // this.chartOptions = { series:  this.chartData }
+
+  }
+
+  setChartDateSeriesData(name: string, dataSeriesValues: any[]) {
+    const newSeries = [] as any[];
+    dataSeriesValues.forEach(data => { newSeries.push( [ data.date, data.value ] ) })
+    this.chartData.push ( { name: name, data: newSeries } )
+    this.chartOptions = { series:  this.chartData }
+  }
+
+  getProductValuesSeries(itemNames: string[]): ProductSale[]  {
+    //list all products in array of items.
+    if (!itemNames) { return }
+    const productList = [] as ProductSale[];
+
+    for (let name of itemNames) {
+      const item = {name: name, value: 0, count: 0} as ProductSale;
+      productList.push( item )
+    }
+
+    return productList;
+  }
+
   updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
-
     if (!this.isMultiSiteReport()) { return }
-    this.initArrays();
-
+    this.initSeriesLabels();
+    this.initChart('values')
+    // let dataSeriesValues =  this.initLocalSeries();
+    // if (!this.dataSeriesValues) { return }
+    let dataSeriesValues = [] as any[]
     for (let site of sites) {
       let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo, this.groupBy)
       sales$.subscribe( sales => {
-        let dataSeriesValues  = [] as any[]
         if  (sales) {
           if (this.groupBy.toLowerCase() === 'date') {
-            let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
-            if (dataSeriesValues && sales) {
+              let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
               site.salesData  = sales;
               // we have to filter and compare dates
               //the dates have to be convered to strings to compare
@@ -323,12 +475,11 @@ export class CardComponent  implements OnInit , OnChanges{
                     dataSeriesValues[index] = row
                   }
               })
-              this.setChartData(site.name, dataSeriesValues)
-            }
+              this.setChartDateSeriesData(site.name, dataSeriesValues)
           }
 
           if ( this.groupBy === 'hour' ) {
-            let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+            let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
             dataSeriesValues.forEach( (data, index) => {
                 try {
                   const item = sales.filter( item => {})
@@ -349,7 +500,7 @@ export class CardComponent  implements OnInit , OnChanges{
                 }
               }
             )
-            this.setChartData(site.name, dataSeriesValues)
+            this.setChartDateSeriesData(site.name, dataSeriesValues)
           }
 
           if (this.groupBy.toLowerCase() === 'month') {
@@ -357,7 +508,7 @@ export class CardComponent  implements OnInit , OnChanges{
           }
 
           if (this.groupBy.toLowerCase() === 'year') {
-           let dataSeriesValues =  this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
+            let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
             dataSeriesValues.forEach( (data, index) => {
                 try {
                   const item = sales.filter( item => {})
@@ -378,14 +529,14 @@ export class CardComponent  implements OnInit , OnChanges{
                 }
               }
             )
-            this.setChartData(site.name, dataSeriesValues)
+            this.setChartDateSeriesData(site.name, dataSeriesValues)
           }
 
           if ( this.groupBy === 'scrub' ) {
             site.salesData  = sales
             site.salesData.forEach( dateValue =>  {
               dataSeriesValues.push(
-                  [dateValue.dateHour , dateValue.amountPaid]
+                [dateValue.dateHour , dateValue.amountPaid]
               )
             })
             this.chartData.push ( { name: site.name, data: dataSeriesValues } )
@@ -401,7 +552,7 @@ export class CardComponent  implements OnInit , OnChanges{
   updateChartMetrics(sites: ISite[]) {
     if (!sites) { return }
     if ( this.groupBy === 'orderemployeecount' || this.groupBy.toLowerCase() === 'orderemployeesales') {
-      this.initArrays();
+      this.initSeriesLabels();
       for (let site of sites) {
         const sales$ = this.refreshSales(site);
         sales$.subscribe( summary => {
@@ -433,24 +584,28 @@ export class CardComponent  implements OnInit , OnChanges{
         }
       }
     )
-    this.setChartData(employeName, dataSeriesValues)
+    this.setChartDateSeriesData(employeName, dataSeriesValues)
   }
 
   initChart(chartValuesName: string) {
 
+    if (!this.chartType) { this.chartType = 'line'}
+
+    if (this.name) {  this.chartName = this.name   }
+
     this.chartOptions =  {
       chart: {
-          type: 'bar',
-          backgroundColor: null,
-          scrollablePlotArea: this.scrollablePlotHeight,
-          borderWidth: 0,
-          height: this.chartHeight,
+        type: this.chartType,
+        backgroundColor: null,
+        scrollablePlotArea: this.scrollablePlotHeight,
+        borderWidth: 0,
+        height: this.chartHeight,
       },
       title: {text: this.chartName },
       subtitle : this.chartName,
       xAxis: this.xAxis,
       yAxis: {
-        title:{ text: chartValuesName},
+        title: { text: chartValuesName},
         labels: { enabled: true },
         tickWidth: 1,
         lineWidth: 1,
@@ -462,20 +617,32 @@ export class CardComponent  implements OnInit , OnChanges{
       }
     };
 
-    this.chartOptions.chart.type = this.chartType;
     HC_exporting(Highcharts);
-
     setTimeout(() => {
       window.dispatchEvent(
         new Event('resize')
       );
     }, 300);
 
+    return this.chartOptions
   };
 
   initSeries() {
     this.initHourSeries()
     this.initDateSeries()
+  }
+
+  initMonthSeries() {
+    try {
+      if (!this.chartCategories) {
+        if (this.groupBy == "month") {
+          this.chartCategories = this.reportingService.dateSeries;
+          return this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
+        }
+      }
+    } catch (error) {
+      return
+    }
   }
 
   initDateSeries() {
@@ -494,8 +661,6 @@ export class CardComponent  implements OnInit , OnChanges{
   initHourSeries() {
     try {
       if (this.groupBy === "hour" ) {
-        // console.log('this.groupBy', this.groupBy)
-        //this is an adjustment so that the hourly charts show just one day.
         let newDate = new Date(this.dateFrom);
         this.dateTo =  new Date(newDate.setDate(newDate.getDate()+1)).toLocaleDateString();
       }

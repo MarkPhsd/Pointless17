@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
+import { BehaviorSubject, Observable, } from 'rxjs';
 import { ISite, IUser }   from 'src/app/_interfaces';
 
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
@@ -19,6 +19,13 @@ export class SitesService {
   site: ISite;
   apiUrl: any;
 
+  private _sites    = new BehaviorSubject<ISite[]>(null);
+  public  sites$    = this._sites.asObservable();
+
+  updateSitesSubscriber(site: ISite[]) {
+    this._sites.next(site)
+  }
+
   constructor( private http            : HttpClient,
                private auth            : AuthenticationService,
                private appInitService  : AppInitService,
@@ -26,8 +33,9 @@ export class SitesService {
                private httpClient      : HttpClient,
                private snackBar        : MatSnackBar,
 
-               ) {
-      this.apiUrl   = this.appInitService.apiBaseUrl()
+    ) {
+
+    this.apiUrl   = this.appInitService.apiBaseUrl()
 
   }
 

@@ -100,10 +100,10 @@
     <grid-designer-info></grid-designer-info>
   </mat-drawer>
 
-  <mat-drawer-content *ngIf="layoutService.dashboardCollection &&
-                             layoutService.dashboardCollection.length>0">
-    <router-outlet #outlet="outlet"></router-outlet>
-  </mat-drawer-content>
+    <mat-drawer-content *ngIf="layoutService.dashboardCollection &&
+                              layoutService.dashboardCollection.length>0">
+        <router-outlet #outlet="outlet"></router-outlet>
+    </mat-drawer-content>
 
 </mat-drawer-container>
 

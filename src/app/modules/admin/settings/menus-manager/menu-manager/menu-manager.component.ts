@@ -1,5 +1,6 @@
 import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
 import { Component, OnInit,OnDestroy } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
@@ -7,6 +8,8 @@ import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
+import { AccordionMenuItemEditComponent } from '../accordion-menu-item-edit/accordion-menu-item-edit.component';
+import { MenuGroupItemEditComponent } from '../menu-group-item-edit/menu-group-item-edit.component';
 
 // https://marceljuenemann.github.io/angular-drag-and-drop-lists/demo/#/nested
 // https://material.angular.io/cdk/drag-drop/overview
@@ -20,16 +23,14 @@ import { MenusService } from 'src/app/_services/system/menus.service';
 export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   menu$:           Observable<MenuGroup[]>;
-
   accordionMenu$:  Observable<AccordionMenu[]>;
+  accordionMenuItem$ :  Observable<AccordionMenu>;
   accordionMenus:  AccordionMenu[];
-  submenu:         SubMenu[];
-
-  accordionMenu : AccordionMenu;
-  submenuItem   : SubMenu;
-
-  user              : IUser;
-  _user             : Subscription;
+  submenu       :  SubMenu[];
+  accordionMenu :  AccordionMenu;
+  submenuItem   :  SubMenu;
+  user          :  IUser;
+  _user         :  Subscription;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
@@ -38,10 +39,12 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   }
 
   constructor(
+              private dialog      : MatDialog,
               private menusService: MenusService,
-              private siteService: SitesService,
+              private siteService : SitesService,
               private authenticationService: AuthenticationService,
-              private _snackBar: MatSnackBar){
+              private _snackBar   : MatSnackBar)
+              {
   }
 
   ngOnInit() {
@@ -69,39 +72,72 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     this.submenuItem       = event
   }
 
+  addAccordionMenu() {
+    let id = 0;
+    let menuGroupID = 0;
+    if (this.accordionMenu) {
+      menuGroupID = this.accordionMenus[0].menuGroupID
+      id = this.accordionMenu.id
+    }
+
+    let dialogRef: any;
+    const data = { id: id, menuGroupID: menuGroupID};
+    const item = {} as AccordionMenu;
+    item.menuGroupID = menuGroupID;
+    this.menusService.updateAccordionMenuSubscription(item)
+
+    dialogRef = this.dialog.open(AccordionMenuItemEditComponent,
+      { width     : '600px',
+        minWidth  : '600px',
+        height    : '450px',
+        minHeight : '450px',
+        data      : data
+      },
+    )
+  }
+
+  addSubMenu() {
+    let id = 0;
+    if (!this.accordionMenu) {return }
+    const accordionID = this.accordionMenu.id;
+    if (this.submenuItem) {
+      id = this.submenuItem.id
+      return
+    }
+    let dialogRef: any;
+    const data = { id: id, accordionID: accordionID}
+    dialogRef = this.dialog.open(MenuGroupItemEditComponent,
+      { width    :    '500px',
+        minWidth :    '500px',
+        height   :    '650px',
+        minHeight:    '650px',
+        data     :    data
+      },
+    )
+  }
+
   assignSubMenu(item: AccordionMenu, submenu: SubMenu[]) {
+    const site       =  this.siteService.getAssignedSite();
     this.submenu       = submenu;
     this.accordionMenu = item;
+    this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id)
     this.submenuItem   = null;
   }
 
   async initMenu() {
     const site       =  this.siteService.getAssignedSite();
-
     const result = window.confirm('Do you want to reset the menu?')
-
     if (!result) {return}
-
     if (this.user) {
-
-      const deleteMenu = await this.menusService.deleteMenu(site).pipe().toPromise();
-      const menu$      =  this.menusService.createMainMenu(this.user, site)
-      const menu       =  await menu$.pipe().toPromise()
-
-      //if the main menus hav ebeen created delete the sub menu's and make them also
-      if (menu.id) {
-        const clearMenu$ = this.menusService.deleteMenuGroup(site,menu.id)
-        clearMenu$.pipe(switchMap (data => {
-          return  this.menusService.createMainMenu(this.user, site)
-          })).pipe(switchMap(menu => {
-            return this.menusService.getMainMenu(site);
-            })
-          ).subscribe(accordionMenu=> {
-            this.accordionMenus = accordionMenu
-          })
+      const deleteMenu$ =  this.menusService.deleteMenu(site);
+      deleteMenu$.pipe(switchMap( data => {
+        return this.menusService.createMainMenu(this.user, site)
         }
-      }
+      )).subscribe( data =>
+        this.accordionMenus  = data.accordionMenus
+      )
     }
+  }
 
   dropAccordion(event: CdkDragDrop<string[]>) {
     moveItemInArray(this.accordionMenus, event.previousIndex, event.currentIndex);
@@ -120,7 +156,6 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     //assign the sortOrder the number of the index.
     if (this.submenu) {
       this.menusService.putSubMenuGrouplist(site, this.submenu).subscribe( data=> {
-
       })
     }
   }

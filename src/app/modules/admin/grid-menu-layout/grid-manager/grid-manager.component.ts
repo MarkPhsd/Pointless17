@@ -7,6 +7,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { Subscription } from 'rxjs';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { ISite } from 'src/app/_interfaces';
 @Component({
   selector: 'menu-manager',
   templateUrl: './grid-manager.component.html',
@@ -28,17 +30,18 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
 
 
-
   constructor(
               private dialog             : MatDialog,
               private router            : Router,
               public layoutService: GridsterLayoutService,
               private fb: FormBuilder,
               private auth: AuthenticationService,
+
               ){};
 
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
+    // this.initSites();
     this.inputForm = this.fb.group({type: ['']})
     this.refresh();
     this.layoutService.toggleDesignerMode(false);
@@ -47,6 +50,8 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     }
     this.initSubscriptions();
 	}
+
+
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

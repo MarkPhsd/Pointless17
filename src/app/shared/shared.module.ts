@@ -142,6 +142,7 @@ import { YoutubePlayerComponent } from './widgets/youtube-player/youtube-player.
 import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
 import {YouTubePlayerModule} from '@angular/youtube-player'
 import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
+import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -169,6 +170,7 @@ import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/st
     DisableControlDirective,
     CashValueCalcComponent,
     CardComponent,
+    CardDashboardComponent,
     CompanyInfoHeaderComponent,
     ClientSearchSelectorComponent,
     CannabisItemEditComponent,
@@ -322,6 +324,7 @@ import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/st
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
     CardComponent,
+    CardDashboardComponent,
     ColorPickerModule,
     CategorySelectComponent,
     ClientSearchSelectorComponent,
@@ -344,7 +347,6 @@ import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/st
     FastUserSwitchComponent,
     FilterComponent,
     FilterPipe,
-    // FoodProductEditComponent,
     FooterComponent,
     FormSelectListComponent,
     GenericIdSelectComponent,

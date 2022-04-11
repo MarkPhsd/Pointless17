@@ -64,7 +64,7 @@ export class PollingService   {
               //make sure we always have the current url;
               this.getCurrentUrl()
               // console.log('this.apiUrl', this.getCurrentUrl())
-              return this.http.get(`${this.apiUrl}/Companies/GetPrimaryCompany`)
+              return this.http.get(`${this.apiUrl}/system/PingServer`)
             }
             ),
             catchError(() => {

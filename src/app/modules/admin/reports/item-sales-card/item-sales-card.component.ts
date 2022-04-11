@@ -17,6 +17,7 @@ export class ItemSalesCardComponent implements OnChanges {
   @Input() notifier : Subject<boolean>
   @Input() zrunID   : string;
   @Input() groupBy  : string;
+  @Input() reportName: string;
   sales$:  Observable<IReportItemSaleSummary>;
   showAll: boolean;
 
@@ -31,19 +32,24 @@ export class ItemSalesCardComponent implements OnChanges {
   }
 
   refreshSales() {
-
+    const searchModel = {} as IReportingSearchModel
     if (this.groupBy === 'items') {
-      const searchModel = {} as IReportingSearchModel
-      searchModel.startDate = this.dateFrom;
-      searchModel.endDate = this.dateTo;
-      searchModel.zrunID = this.zrunID;
       searchModel.groupByProduct = true;
-      console.log(searchModel)
-      this.sales$ =
-          this.reportingItemsSalesService.groupItemSales(this.site, searchModel)
-      return
     }
-
+    if (this.groupBy === 'category') {
+      searchModel.groupByCategory = true;
+    }
+    if (this.groupBy === 'department') {
+      searchModel.groupByDepartment = true;
+    }
+    if (this.groupBy === 'type') {
+      searchModel.groupByType = true;
+    }
+    searchModel.startDate = this.dateFrom;
+    searchModel.endDate = this.dateTo;
+    searchModel.zrunID = this.zrunID;
+    this.sales$ = this.reportingItemsSalesService.groupItemSales(this.site, searchModel)
+    return
   }
 
 
