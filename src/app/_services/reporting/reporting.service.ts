@@ -285,7 +285,6 @@ export class ReportingService {
     }
   }
 
-
   getHoursBackUsingCurrentDate(value): IDateRange {
     const startDate     = this.dateHelpers.getCurrentDay();
     const d             = new Date();
@@ -299,7 +298,7 @@ export class ReportingService {
   getDaysBackUsingCurrentDate(value): IDateRange {
     const startDate     = this.dateHelpers.getCurrentDay();
     const d             = new Date();
-    const endDate       =  this.datePipe.transform(this.addDates(d, value), 'MM/dd/yyyy');
+    const endDate       = this.datePipe.transform(this.addDates(d, value), 'MM/dd/yyyy');
     const dateRange     = {} as IDateRange;
     dateRange.startdate = startDate;
     dateRange.endDate   = endDate;

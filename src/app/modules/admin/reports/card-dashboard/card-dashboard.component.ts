@@ -25,7 +25,8 @@ export class CardDashboardComponent implements OnInit {
   @Input() refreshTime  = 1;
   @Input() name         = 'A Chart';
   @Input() chartType    = 'line';
-  @Input() chartHeight  = '350px'
+  @Input() chartHeight  = '350px';
+  @Input() chartWidth   = '1200';
   @Input() menuType     : string;
   @Input() cardValueType: string;
   @Input() rangeType    : string;
@@ -36,7 +37,7 @@ export class CardDashboardComponent implements OnInit {
   errorMessage =[]  as string[]
   groupBy : string;
   itemNames = [] as string[]
-
+  showReport: boolean;
   reportItemSaleSummary$: Observable<IReportItemSaleSummary>
   zrunID   : string;
   _sites   : Subscription;
@@ -69,47 +70,79 @@ export class CardDashboardComponent implements OnInit {
               public  layoutService             : GridsterLayoutService,
               private datePipe                  : DatePipe,
               private sitesService              : SitesService,
-              private matSnack                  : MatSnackBar,
-              private reportingItemsSalesService: ReportingItemsSalesService
+               private reportingItemsSalesService: ReportingItemsSalesService
     ) { }
 
-  ngOnInit(): void {
 
+  getReportType() {
+    const reportType = this.cardValueType.toLowerCase();
+    console.log(reportType)
+
+    if (reportType === 'category sales' ||
+        reportType === 'department sales' ||
+        reportType === 'type sales'  ||
+        reportType === 'product sales') {
+      this.refreshProductSalesGroup();
+    }
+
+    if (reportType === 'sales' ||
+        reportType === 'sales count' ||
+        reportType === 'employee sales' ||
+        reportType === 'employee sales count'
+        ) {
+      this.refreshPaymentBasedSales();
+    }
+
+  }
+
+  ngOnInit(): void {
+   this.getReportType()
+  }
+
+
+
+  refreshProductSalesGroup() {
     this.sitesService.getSites().subscribe(data => {
-      this.sitesService.updateSitesSubscriber(data)
-      this.initSubscriptions();
-      const i = 0
-      data.forEach(site => {
-        if (!this.validateCard(site)) {
+      if (data) {
+        this.sitesService.updateSitesSubscriber(data)
+        this.initSubscriptions();
+        const i = 0
+
+        if (!this.validateCard()) {
           console.log('card not valid')
           return
         }
 
-        this.refreshProductBasedSales(site).subscribe(
-          {next:
-            data => {
-              data.site = site;
-              if (data.resultMessage) {
-                this.errorMessage.push(`${site.name} - ${data.resultMessage}`);
+        data.forEach(site => {
+          let sales$ = this.refreshProductBasedSales(site);
+          if (sales$) {
+            sales$.subscribe(
+              {next:
+                data => {
+                  data.site = site;
+                  if (data.resultMessage) {
+                    this.errorMessage.push(`${site.name} - ${data.resultMessage}`);
+                  }
+                  if (!data.resultMessage) {
+                    if (!this.reportItemSaleSummaries) { this.reportItemSaleSummaries = [] as IReportItemSaleSummary[] }
+                    let itemNames = this.reportingService.listofProductsInSales(data.results)
+                    this.itemNames = [... itemNames, ...this.itemNames]
+                    this.itemNames = [... new Set(this.itemNames)]
+                    this.reportItemSaleSummaries.push(data)
+                  }
+                },
+                error: error => {
+                  this.errorMessage.push(`${site.name} - ${error}`);
+                }
               }
-              if (!data.resultMessage) {
-                if (!this.reportItemSaleSummaries) { this.reportItemSaleSummaries = [] as IReportItemSaleSummary[] }
-                let itemNames = this.reportingService.listofProductsInSales(data.results)
-                this.itemNames = [... itemNames, ...this.itemNames]
-                this.itemNames = [... new Set(this.itemNames)]
-                this.reportItemSaleSummaries.push(data)
-              }
-            },
-            error: error => {
-              this.errorMessage.push(`${site.name} - ${error}`);
-            }
+            )
           }
-        )
-      });
+        });
+      }
     })
   }
 
-  validateCard(site: ISite): boolean {
+  validateCard(): boolean {
     const message = []  as string[];
     let result: boolean;
 
@@ -147,7 +180,6 @@ export class CardDashboardComponent implements OnInit {
   }
 
   getGroupBy(searchModel: IReportingSearchModel, reportType: string) {
-
     if (reportType === 'category sales')  { searchModel.groupByCategory = true;}
     if (reportType === 'department sales'){ searchModel.groupByDepartment = true;}
     if (reportType === 'type sales')      { searchModel.groupByType = true;}
@@ -156,11 +188,16 @@ export class CardDashboardComponent implements OnInit {
 
     return searchModel;
   }
-  refreshProductBasedSales(site: ISite) : Observable<IReportItemSaleSummary> {
-    if (!site) { return }
-    if (!this.cardValueType) { return }
-    const reportType = this.cardValueType.toLowerCase();
 
+  refreshProductBasedSales(site: ISite) : Observable<IReportItemSaleSummary> {
+    if (!site) { return  }
+
+    if (!this.cardValueType) {
+      console.log(this.cardValueType)
+      return
+    }
+
+    const reportType = this.cardValueType.toLowerCase();
 
     if (reportType === 'category sales' ||
         reportType === 'department sales' ||
@@ -171,7 +208,6 @@ export class CardDashboardComponent implements OnInit {
       if (this.rangeType === 'currentday') {
         //we can use this method to get the date range for the ZRUN.
         const zrun$ = this.getStartEndFromZRun()
-
         this.sales$ = zrun$.pipe(
           switchMap(data => {
             let searchModel = {} as IReportingSearchModel
@@ -190,37 +226,13 @@ export class CardDashboardComponent implements OnInit {
           this.rangeType === 'date' ||
           this.rangeType === 'hour'
         ) {
-
-          //we can use this method to get the date range for the ZRUN.
-          let item: IDateRange
-          if (this.rangeType === 'hour') {
-            if (this.rangeValue == 0) {   this.rangeValue = 24 }
-            item = this.reportingService.getHoursBackUsingCurrentDate(this.rangeValue)
-          }
-
-          if (this.rangeType === 'date') {
-
-            item = this.reportingService.getDaysBackUsingCurrentDate(this.rangeValue)
-          }
-
-          if (this.rangeType === 'month') {
-            item = this.reportingService.getMonthBackUsingCurrentDate(this.rangeValue)
-          }
-
-          if (this.rangeType === 'week') {
-
-            item = this.reportingService.getWeeksBackUsingCurrentDate(this.rangeValue)
-          }
-
-          if (this.rangeType === 'year') {
-            // if (this.rangeValue == 0) { this.rangeValue = 1 }
-            item = this.reportingService.getYearsBackUsingCurrentDate(this.rangeValue)
-          }
+          const item = this.getRange();
 
           if (item) {
             this.dateFrom         = item.startdate;
             this.dateTo           = item.endDate
             const searchModel = this.initSearchModel(item.startdate,item.endDate,0,reportType)
+            this.setChartName(searchModel, this.name)
             return this.reportingItemsSalesService.groupItemSales(site, searchModel)
           }
       }
@@ -229,12 +241,102 @@ export class CardDashboardComponent implements OnInit {
     return null;
   }
 
-  initSearchModel(startDate,endDate,zRunID,reprotType) {
+  refreshPaymentBasedSales() : Observable<IReportItemSaleSummary> {
+    console.log('refreshPaymentBasedSales', this.cardValueType, this.rangeType)
+    if (!this.cardValueType) {
+      console.log(this.cardValueType)
+      return
+    }
+
+    const reportType = this.cardValueType.toLowerCase();
+
+    if (this.rangeType === 'currentday') {
+      //we can use this method to get the date range for the ZRUN.
+      const zrun$ = this.getStartEndFromZRun()
+      // this.sales$ = zrun$.pipe(
+      //   switchMap(data => {
+      zrun$.subscribe(data => {
+        let searchModel = {} as IReportingSearchModel
+        searchModel.startDate = this.dateFrom;
+        searchModel.endDate   = this.dateTo;
+        searchModel.zrunID    = this.zrunID;
+        this.groupBy          = 'hour'
+        searchModel           = this.getGroupBy(searchModel, reportType)
+        this.setChartName(searchModel, this.name)
+        this.showReport = true;
+        return;
+          // return this.reportingItemsSalesService.groupItemSales(site, searchModel)
+      })
+    }
+
+    if (this.rangeType === 'month' ||
+        this.rangeType === 'week' ||
+        this.rangeType === 'year' ||
+        this.rangeType === 'month' ||
+        this.rangeType === 'date' ||
+        this.rangeType === 'hour'
+      ) {
+        const item = this.getRange();
+        console.log('item model', item)
+        if (item) {
+          this.dateFrom         = item.startdate;
+          this.dateTo           = item.endDate
+          this.groupBy          = this.rangeType
+          const searchModel = this.initSearchModel(item.startdate,item.endDate,0, reportType)
+          this.setChartName(searchModel, this.name)
+          this.showReport = true;
+          // return this.reportingItemsSalesService.groupItemSales(site, searchModel)
+        }
+    }
+
+    return null;
+  }
+
+  getRange() {
+    //we can use this method to get the date range for the ZRUN.
+    let item: IDateRange
+    if (this.rangeType === 'hour') {
+      if (this.rangeValue == 0) {   this.rangeValue = 24 }
+      item = this.reportingService.getHoursBackUsingCurrentDate(this.rangeValue)
+    }
+
+    if (this.rangeType === 'date') {
+
+      item = this.reportingService.getDaysBackUsingCurrentDate(this.rangeValue)
+    }
+
+    if (this.rangeType === 'month') {
+      item = this.reportingService.getMonthBackUsingCurrentDate(this.rangeValue)
+    }
+
+    if (this.rangeType === 'week') {
+      item = this.reportingService.getWeeksBackUsingCurrentDate(this.rangeValue)
+    }
+
+    if (this.rangeType === 'year') {
+      item = this.reportingService.getYearsBackUsingCurrentDate(this.rangeValue)
+    }
+    return item;
+  }
+
+  setChartName(searchModel: IReportingSearchModel, name: string) {
+    try {
+      let range = ''
+      let rangeValue = ''
+      if (searchModel.startDate && searchModel.endDate) { range = `, ${searchModel.startDate} to ${searchModel.endDate}`}
+      if (this.rangeType && this.rangeValue) { rangeValue = `, ${this.rangeValue} ${this.rangeType} range` }
+      this.name = `${name}  ${rangeValue} ${range}`
+    } catch (error) {
+
+    }
+  }
+
+  initSearchModel(startDate,endDate,zRunID, reportType) {
     let searchModel     = {} as IReportingSearchModel
-    searchModel = this.getGroupBy(searchModel, reprotType)
-    searchModel.startDate = this.dateFrom;
-    searchModel.endDate   = this.dateTo;
-    searchModel.zrunID    = this.zrunID;
+    searchModel = this.getGroupBy(searchModel, reportType)
+    searchModel.startDate = startDate;
+    searchModel.endDate   = endDate;
+    searchModel.zrunID    = zRunID;
     return searchModel
   }
 
@@ -260,120 +362,5 @@ export class CardDashboardComponent implements OnInit {
       return sites$
     }))
   }
-
-  // updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
-
-  //   this.initArrays();
-  //   // let dataSeriesValues =  this.initLocalSeries();
-  //   // if (!this.dataSeriesValues) { return }
-  //   let dataSeriesValues = [] as any[]
-  //   for (let site of sites) {
-  //     let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo, this.groupBy)
-  //     sales$.subscribe( sales => {
-  //       if  (sales) {
-  //         if (this.groupBy.toLowerCase() === 'date') {
-  //             let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
-  //             site.salesData  = sales;
-  //             // we have to filter and compare dates
-  //             //the dates have to be convered to strings to compare
-  //             dataSeriesValues.forEach( (data, index) => {
-  //                 const  dt1 = new Date(data.date);
-  //                 try {
-  //                   const item = sales.filter( item => {})
-  //                 } catch (error) {
-  //                   // console.log(sales)
-  //                 }
-  //                 const item = sales.filter( item =>
-  //                   {
-  //                     const  dt2 = new Date(item.dateCompleted);
-  //                     if( dt2.toString() === dt1.toString())
-  //                     { return item }
-  //                   }
-  //                 );
-  //                 if (item && dt1) {
-  //                   const date = this.reportingService.getDateString(dt1.toDateString())
-  //                   let value = 0;
-  //                   try {
-  //                     if ( item[0].amountPaid) { value = item[0].amountPaid }
-  //                     if (!item[0].amountPaid) { value = item[0].amountPaid }
-  //                   } catch (error) {
-  //                   }
-  //                   const row = { date: date, value: value }
-  //                   dataSeriesValues[index] = row
-  //                 }
-  //             })
-  //             this.setChartData(site.name, dataSeriesValues)
-  //         }
-
-  //         if ( this.groupBy === 'hour' ) {
-  //           let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
-  //           dataSeriesValues.forEach( (data, index) => {
-  //               try {
-  //                 const item = sales.filter( item => {})
-  //               } catch (error) {
-  //                 console.log(sales)
-  //                 return
-  //               }
-  //               const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
-  //               if (item && item.length>0) {
-  //                 let value = 0;
-  //                 try {
-  //                   if ( item[0].amountPaid) { value = item[0].amountPaid }
-  //                   if (!item[0].amountPaid) { value = item[0].amountPaid }
-  //                 } catch (error) {
-  //                 }
-  //                 const row = { date: item[0].dateHour, value:  value }
-  //                 dataSeriesValues[index] = row
-  //               }
-  //             }
-  //           )
-  //           this.setChartData(site.name, dataSeriesValues)
-  //         }
-
-  //         if (this.groupBy.toLowerCase() === 'month') {
-
-  //         }
-
-  //         if (this.groupBy.toLowerCase() === 'year') {
-  //           let dataSeriesValues = this.reportingService.getDateSeriesWithHours(this.dateFrom, this.dateTo)
-  //           dataSeriesValues.forEach( (data, index) => {
-  //               try {
-  //                 const item = sales.filter( item => {})
-  //               } catch (error) {
-  //                 console.log(sales)
-  //                 return
-  //               }
-  //               const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
-  //               if (item && item.length>0) {
-  //                 let value = 0;
-  //                 try {
-  //                   if ( item[0].amountPaid) { value = item[0].amountPaid }
-  //                   if (!item[0].amountPaid) { value = item[0].amountPaid }
-  //                 } catch (error) {
-  //                 }
-  //                 const row = { date: item[0].dateHour, value:  value }
-  //                 dataSeriesValues[index] = row
-  //               }
-  //             }
-  //           )
-  //           this.setChartData(site.name, dataSeriesValues)
-  //         }
-
-  //         if ( this.groupBy === 'scrub' ) {
-  //           site.salesData  = sales
-  //           site.salesData.forEach( dateValue =>  {
-  //             dataSeriesValues.push(
-  //               [dateValue.dateHour , dateValue.amountPaid]
-  //             )
-  //           })
-  //           this.chartData.push ( { name: site.name, data: dataSeriesValues } )
-  //           this.chartOptions = { series:  this.chartData }
-  //           dataSeriesValues = [];
-  //         }
-  //       }
-  //     }
-  //     )
-  //   }
-  // }
 
 }

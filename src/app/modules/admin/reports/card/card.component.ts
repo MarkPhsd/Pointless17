@@ -51,6 +51,7 @@ export class CardComponent  implements OnInit , OnChanges{
   @Input() name         = '';
   @Input() chartType    = 'line';
   @Input() chartHeight  = '350px'
+  @Input() chartWidth   = '1200'
   @Input() menuType     : string;
   @Input() cardValueType: string;
   @Input() rangeType    : string;
@@ -106,27 +107,51 @@ export class CardComponent  implements OnInit , OnChanges{
   }
 
   ngOnInit() {
+    // order of operations
+    // this.initSeriesLabels();
+    // this.initChart('values')
+    // this.initSeries();
 
     //only works for product sales so far.
     if (this.cardValueType && this.reportItemSaleSummaries) {
-      this.initSeriesLabels();
+      const xAxis = this.initSeriesLabels();
       let options = this.initChart('values');
       this.refreshProductSales();
-
       if (options) {
+
+        if (!this.chartWidth) { this.chartWidth = '1200'}
+        const scrollablePlot = {
+          minWidth        : +this.chartWidth,
+          opacity         : 0,
+          scrollPositionX : -10
+        }
+
         const chart = {
           type: this.chartType,
           backgroundColor: null,
-          scrollablePlotArea: this.scrollablePlotHeight,
+          scrollablePlotArea: scrollablePlot,
           borderWidth: 0,
           height: this.chartHeight,
         };
+        const yAxis = {
+          title:  { text: 'values'},
+          labels: { enabled: true },
+          tickWidth: 1,
+          lineWidth: 1,
+          opposite: false
+        }
+        options.yAxis = yAxis;
+        options.xAxis = xAxis;
         options.chart = chart // { chart };
-        options.series = this.chartData //{ series:  this.chartData };
-        this.chartOptions = options;
-        console.log(options)
-      }
+        options.series =   this.chartData
+        const sort =  {  dataSorting: {
+                          enabled: true
+                          }
+                      }
+        options.series.sort = sort;
 
+        this.chartOptions = options;
+      }
       return
     }
 
@@ -148,7 +173,6 @@ export class CardComponent  implements OnInit , OnChanges{
     if ((!this.dateFrom || !this.dateTo) && !this.reportType) {
       if (!this.groupBy) {this.groupBy = 'hour'}
       this.getStartEndFromZRun().subscribe(data => {
-        console.log(data)
       })
     }
     this.refreshSitesData();
@@ -240,11 +264,9 @@ export class CardComponent  implements OnInit , OnChanges{
         categories: this.itemNames,
         crosshair : true,
       }
-      this.chartOptions = { xAxis: [ xAxis ] }
-
-      // this.chartOptions.chart.type = this.chartType;
+      // this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
-      return;
+      return xAxis;
     }
 
     if (!this.groupBy) { return }
@@ -266,7 +288,7 @@ export class CardComponent  implements OnInit , OnChanges{
         categories: categories,
         crosshair : true,
       }
-      this.chartOptions = { xAxis: [ xAxis ] }
+      // this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
       return;
     }
@@ -282,7 +304,6 @@ export class CardComponent  implements OnInit , OnChanges{
         crosshair : true,
         categories: categories
       }
-      // this.chartOptions = { xAxis: [ xAxis ] }
       this.xAxis = xAxis;
       return;
     }
@@ -304,7 +325,6 @@ export class CardComponent  implements OnInit , OnChanges{
       return;
     }
 
-    //
   }
 
   updateChartSites(dateFrom: string, dateTo: string, sites: ISite[]) {
@@ -361,7 +381,6 @@ export class CardComponent  implements OnInit , OnChanges{
   refreshProductSales() {
     if (this.reportItemSaleSummaries && this.itemNames) {
       this.reportItemSaleSummaries.forEach(item => { this.updateProductSales(item.site, item, this.itemNames)})
-
     }
   }
 
@@ -394,7 +413,7 @@ export class CardComponent  implements OnInit , OnChanges{
     }
 
     newSeries.sort((a, b) => (a.value > b.value) ? 1 : -1)
-    newSeries = newSeries.slice(0,50);
+    newSeries = newSeries.slice(0,150);
     //reset the product names to the top 50 because
     //there can be multple locations, and the average number of product
     //names willl have to be associated with the total products.
@@ -410,7 +429,6 @@ export class CardComponent  implements OnInit , OnChanges{
 
     // this.chartOptions.series = this.chartData
     // this.chartOptions = { series:  this.chartData }
-
   }
 
   setChartDateSeriesData(name: string, dataSeriesValues: any[]) {
@@ -445,37 +463,37 @@ export class CardComponent  implements OnInit , OnChanges{
       sales$.subscribe( sales => {
         if  (sales) {
           if (this.groupBy.toLowerCase() === 'date') {
-              let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
-              site.salesData  = sales;
-              // we have to filter and compare dates
-              //the dates have to be convered to strings to compare
-              dataSeriesValues.forEach( (data, index) => {
-                  const  dt1 = new Date(data.date);
+            let dataSeriesValues =  this.reportingService.getDateSeriesWithValue(this.dateFrom, this.dateTo)
+            site.salesData  = sales;
+            // we have to filter and compare dates
+            //the dates have to be convered to strings to compare
+            dataSeriesValues.forEach( (data, index) => {
+                const  dt1 = new Date(data.date);
+                try {
+                  const item = sales.filter( item => {})
+                } catch (error) {
+                  // console.log(sales)
+                }
+                const item = sales.filter( item =>
+                  {
+                    const  dt2 = new Date(item.dateCompleted);
+                    if( dt2.toString() === dt1.toString())
+                    { return item }
+                  }
+                );
+                if (item && dt1) {
+                  const date = this.reportingService.getDateString(dt1.toDateString())
+                  let value = 0;
                   try {
-                    const item = sales.filter( item => {})
+                    if ( item[0].amountPaid) { value = item[0].amountPaid }
+                    if (!item[0].amountPaid) { value = item[0].amountPaid }
                   } catch (error) {
-                    // console.log(sales)
                   }
-                  const item = sales.filter( item =>
-                    {
-                      const  dt2 = new Date(item.dateCompleted);
-                      if( dt2.toString() === dt1.toString())
-                      { return item }
-                    }
-                  );
-                  if (item && dt1) {
-                    const date = this.reportingService.getDateString(dt1.toDateString())
-                    let value = 0;
-                    try {
-                      if ( item[0].amountPaid) { value = item[0].amountPaid }
-                      if (!item[0].amountPaid) { value = item[0].amountPaid }
-                    } catch (error) {
-                    }
-                    const row = { date: date, value: value }
-                    dataSeriesValues[index] = row
-                  }
-              })
-              this.setChartDateSeriesData(site.name, dataSeriesValues)
+                  const row = { date: date, value: value }
+                  dataSeriesValues[index] = row
+                }
+            })
+            this.setChartDateSeriesData(site.name, dataSeriesValues)
           }
 
           if ( this.groupBy === 'hour' ) {
@@ -551,7 +569,8 @@ export class CardComponent  implements OnInit , OnChanges{
 
   updateChartMetrics(sites: ISite[]) {
     if (!sites) { return }
-    if ( this.groupBy === 'orderemployeecount' || this.groupBy.toLowerCase() === 'orderemployeesales') {
+    if ( this.groupBy.toLowerCase() === 'orderemployeecount' ||
+         this.groupBy.toLowerCase() === 'orderemployeesales') {
       this.initSeriesLabels();
       for (let site of sites) {
         const sales$ = this.refreshSales(site);
@@ -590,8 +609,7 @@ export class CardComponent  implements OnInit , OnChanges{
   initChart(chartValuesName: string) {
 
     if (!this.chartType) { this.chartType = 'line'}
-
-    if (this.name) {  this.chartName = this.name   }
+    if (this.name)       { this.chartName = this.name   }
 
     this.chartOptions =  {
       chart: {
@@ -605,7 +623,7 @@ export class CardComponent  implements OnInit , OnChanges{
       subtitle : this.chartName,
       xAxis: this.xAxis,
       yAxis: {
-        title: { text: chartValuesName},
+        title:  { text: chartValuesName},
         labels: { enabled: true },
         tickWidth: 1,
         lineWidth: 1,
@@ -623,7 +641,6 @@ export class CardComponent  implements OnInit , OnChanges{
         new Event('resize')
       );
     }, 300);
-
     return this.chartOptions
   };
 

@@ -1,10 +1,12 @@
-<mat-card  fxFlex="100">
+<mat-card>
   <div class="container">
     <div class="warning"  *ngIf="sitesErrorMessage">
       <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
     </div>
+    <!-- <span *ngIf="rangeValue">Range {{rangeValue}} {{rangeType}}.</span>
+    <span *ngIf="dateFrom && dateTo">From {{dateFrom}} to {{dateTo}}. </span> -->
 
-    <div class="title" *ngIf="!menuType">
+    <!-- <div class="title" *ngIf="!menuType">
       <span *ngIf="dateFrom && dateTo">From {{dateFrom}} to {{dateTo}}. </span>
       <span *ngIf="zrunID">ID: {{zrunID}}. </span>
     </div>
@@ -12,8 +14,13 @@
     <div class="title" *ngIf="menuType">
       <span *ngIf="dateFrom && dateTo">Range {{rangeValue}} {{rangeType}}. From {{dateFrom}} to {{dateTo}}. </span>
       <span *ngIf="zrunID">ID: {{zrunID}}. </span>
-    </div>
-
+    </div> -->
+    <!-- this.sites && this.dateFrom && this.dateTo && this.groupBy -->
+    <!-- dateFrom   {{dateFrom}}
+    dateTo     {{dateTo}}
+    groupBy    {{groupBy}}
+    reportType {{reportType}}
+    sites {{sites}} -->
     <button mat-button
             (click)="refresh()">
             <mat-icon>refresh</mat-icon>
@@ -23,8 +30,8 @@
         *ngIf="chartOptions">
       <highcharts-chart
           [Highcharts]="Highcharts"
-          [options]="chartOptions"
-          [oneToOne]="true">
+          [options]   ="chartOptions"
+          [oneToOne]  ="true">
       </highcharts-chart>
     </div>
 
