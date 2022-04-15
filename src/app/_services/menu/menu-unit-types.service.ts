@@ -37,6 +37,20 @@ export class MenuUnitTypesService {
 
   }
 
+  deleteUnit(site: ISite, id: number): Observable<any> {
+
+    const controller ="/UnitTypes/"
+
+    const endPoint = `DeleteUnitType`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.delete<any>(url)
+
+   }
+
   getUnitType(site: ISite, id: any):  Observable<UnitType>  {
 
     const controller =  `/UnitTypes/`

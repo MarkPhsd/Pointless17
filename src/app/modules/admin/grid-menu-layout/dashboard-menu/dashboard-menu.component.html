@@ -9,7 +9,7 @@
                 *ngFor="let item of collection"
                 class="discount-type-button"
                 [value]="item.id"
-                (click)="layoutService.forceRefresh(item?.id)"
+                (click)="forceRefresh(item)"
                 >
             {{item.name}}
           </mat-button-toggle>

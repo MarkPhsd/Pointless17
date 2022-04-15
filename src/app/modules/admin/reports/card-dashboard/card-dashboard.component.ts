@@ -52,15 +52,8 @@ export class CardDashboardComponent implements OnInit {
     })
   }
 
-  initDateSubscriber(){
-    this._sites = this.sitesService.sites$.subscribe( data => {
-      this.sites = data;
-    })
-  }
-
   initSubscriptions() {
     this.initSitesSubscriber();
-    this.initDateSubscriber();
   }
 
   constructor(
@@ -76,7 +69,6 @@ export class CardDashboardComponent implements OnInit {
 
   getReportType() {
     const reportType = this.cardValueType.toLowerCase();
-    console.log(reportType)
 
     if (reportType === 'category sales' ||
         reportType === 'department sales' ||
@@ -98,8 +90,6 @@ export class CardDashboardComponent implements OnInit {
   ngOnInit(): void {
    this.getReportType()
   }
-
-
 
   refreshProductSalesGroup() {
     this.sitesService.getSites().subscribe(data => {
@@ -242,9 +232,7 @@ export class CardDashboardComponent implements OnInit {
   }
 
   refreshPaymentBasedSales() : Observable<IReportItemSaleSummary> {
-    console.log('refreshPaymentBasedSales', this.cardValueType, this.rangeType)
     if (!this.cardValueType) {
-      console.log(this.cardValueType)
       return
     }
 
@@ -277,7 +265,6 @@ export class CardDashboardComponent implements OnInit {
         this.rangeType === 'hour'
       ) {
         const item = this.getRange();
-        console.log('item model', item)
         if (item) {
           this.dateFrom         = item.startdate;
           this.dateTo           = item.endDate
@@ -306,7 +293,7 @@ export class CardDashboardComponent implements OnInit {
     }
 
     if (this.rangeType === 'month') {
-      item = this.reportingService.getMonthBackUsingCurrentDate(this.rangeValue)
+      item = this.reportingService.getMonthsBackUsingCurrentDate(this.rangeValue)
     }
 
     if (this.rangeType === 'week') {

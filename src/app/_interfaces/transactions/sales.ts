@@ -35,6 +35,7 @@ export interface ISalesPayments {
     month: number|null;
     serverName: string;
     dateHour: string;
+    year      : number|null;
 }
 
 
@@ -53,5 +54,7 @@ export interface ISalesReportingOrdersSummary {
     taxTotal3: number|null;
     GSTTaxTotal: number|null;
     orderTotal: number|null;
+    year      : number|null;
+    yearMonth: string;
 }
 

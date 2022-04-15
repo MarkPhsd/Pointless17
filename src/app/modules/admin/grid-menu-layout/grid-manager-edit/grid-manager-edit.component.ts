@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { GridsterDataService } from 'src/app/_services/gridster/gridster-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { DashboardModel, DashBoardProperties } from '../grid-models';
+import { DashboardModel, DashBoardProperties, widgetRoles } from '../grid-models';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
@@ -14,6 +14,9 @@ import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.
   styleUrls: ['./grid-manager-edit.component.scss']
 })
 export class GridManagerEditComponent implements OnInit {
+
+  SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
+  public selectedIndex          : number;
 
   image: string;
   backgroundblendmode: string;
@@ -45,35 +48,74 @@ export class GridManagerEditComponent implements OnInit {
               private fb                 : FormBuilder,
 
   ) {
-    const site           = this.siteService.getAssignedSite();
 
-    if (this.layoutService.dashboardModel) {
-      this.id              = data.id;
-      this.dashboardModel = this.layoutService.dashboardModel;
-      return
-    }
-
-    if (data) {
-      this.id              = data.id;
-      this.dashboardModel$ = this.gridDataService.getGrid(site,  this.id);
-    }
   };
 
   ngOnInit() {
-    this.fillForm();
+
+    const site  = this.siteService.getAssignedSite();
+    console.log('dashboard', this.layoutService.dashboardModel)
+
+    if (this.layoutService.dashboardModel == null) {
+      console.log('initialized')
+      this.dashboardModel = {} as DashboardModel
+      this.layoutService.updateDashboardModel(this.dashboardModel)
+      this.fillForm();
+      return;
+    }
+    
+    this.layoutService.dashboardModel$.subscribe(data => { 
+        if (data) {
+          this.dashboardModel = data;
+          this.fillForm();
+          return;
+        }
+
+        if (!data && data != null) { 
+          const id  = data.id;
+          this.gridDataService.getGrid(site,  id).subscribe(data => { 
+            this.dashboardModel = data;
+            this.fillForm();
+          }
+        )
+        
+        if (data == null) {
+          this.dashboardModel = {} as DashboardModel
+          this.fillForm();
+          return;
+        }
+      
+       } 
+      }
+    )
+  
   }
 
   onCancel(event) {
     this.dialogRef.close()
   }
 
+  setRoles(roles: widgetRoles[]) {
+    if (roles) {
+      this.dashboardModel.widgetRoles = roles;
+      this.dashboardModel.widgetRolesJSON = JSON.stringify(roles);
+    }
+  }
+
+  setRolesJSON(roles: string) {
+    if (roles) {
+      this.dashboardModel.widgetRolesJSON = roles
+    }
+  }
+
   fillForm() {
     this.initForm();
+
+    this.initFormData();
     if (!this.dashboardModel) {
       this.dashboardModel = {} as DashboardModel;
-      return
     }
-    this.initFormData();
+
     this.initPropertiesForm(this.dashboardModel);
   }
 
@@ -116,6 +158,7 @@ export class GridManagerEditComponent implements OnInit {
       }
     }
   }
+
   // inputProperties: FormGroup;
   // dashBoardProperties: DashBoardProperties;
   initForm() {
@@ -131,12 +174,13 @@ export class GridManagerEditComponent implements OnInit {
   };
 
   initFormData() {
-    const site     = this.siteService.getAssignedSite();
     this.inputForm.patchValue(this.dashboardModel)
   }
 
   delete(event) {
-    this.layoutService.notifyEvent('This method is not an option', 'disabled')
+    const result = window.confirm('Are you sure you want to delete this item?')
+    if (!result) { return }
+    this.layoutService.deleteModel(this.dashboardModel)
   }
 
   setValues(model: DashboardModel) {
@@ -146,15 +190,16 @@ export class GridManagerEditComponent implements OnInit {
       this.dashboardModel.active = model.active;
       this.dashboardModel.id     = model.id;
     }
-    const properties =  this.inputProperties.value as DashBoardProperties
 
-    properties.backgroundColor = this.backgroundColor;
-    properties.opacity   = this.opacity;
-    properties.image     = this.image;
-    properties.backgroundblendmode = this.backgroundblendmode;
-
-    const properitesJson = JSON.stringify(properties);
-    this.dashboardModel.userName = properitesJson;
+    if (this.inputProperties) {
+      const properties =  this.inputProperties.value as DashBoardProperties
+      properties.backgroundColor = this.backgroundColor;
+      properties.opacity   = this.opacity;
+      properties.image     = this.image;
+      properties.backgroundblendmode = this.backgroundblendmode;
+      const properitesJson = JSON.stringify(properties);
+      this.dashboardModel.userName = properitesJson;
+    }
     const json = JSON.stringify(this.dashboardModel);
     this.dashboardModel.jsonObject = json;
     return this.dashboardModel;
@@ -184,7 +229,26 @@ export class GridManagerEditComponent implements OnInit {
     this.opacity = value;
     return value;
   }
+  // Action triggered when user swipes mat-tabs
+  swipe(selectedIndex: any, action = this.SWIPE_ACTION.RIGHT) {
+    // Out of range
+    if ( selectedIndex < 0 || selectedIndex > 1 ) return;
 
+    // Swipe left, next tab
+    if (action === this.SWIPE_ACTION.LEFT) {
+      const isLast = selectedIndex === 1;
+      selectedIndex = isLast ? 0 : selectedIndex + 1;
+    }
 
+    // Swipe right, previous tab
+    if (action === this.SWIPE_ACTION.RIGHT) {
+      const isFirst = selectedIndex === 0;
+      selectedIndex = isFirst ? 1 :  selectedIndex - 1;
+    }
+  }
+
+  selectChange(): void{
+    console.log("Selected INDEX: " + this.selectedIndex);
+  }
 }
 

@@ -1,4 +1,4 @@
-import { Component,  OnDestroy,  OnInit } from '@angular/core';
+import { Component,  OnDestroy,  OnInit, Renderer2 } from '@angular/core';
 import { GridsterLayoutService   } from 'src/app/_services/system/gridster-layout.service';
 import { DashboardModel  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridManagerEditComponent } from '../grid-manager-edit/grid-manager-edit.component';
@@ -7,8 +7,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { Subscription } from 'rxjs';
-import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ISite } from 'src/app/_interfaces';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
+
 @Component({
   selector: 'menu-manager',
   templateUrl: './grid-manager.component.html',
@@ -16,42 +16,48 @@ import { ISite } from 'src/app/_interfaces';
 })
 export class GridManagerComponent implements OnInit, OnDestroy {
 
-  dashboardModel: DashboardModel;
+  dashboardModel: DashboardModel
   layoutID      : number;
 	// Components variables
   toggle: boolean;
   modal: boolean;
-
+  accordionStep = 3;
   matToolbarColor = 'primary';
   inputForm: FormGroup;
   allowDesign: boolean;
+  hideMenu   : boolean;
 
   _dashboard : Subscription;
-
-
-
+  isSafari        : any;
   constructor(
               private dialog             : MatDialog,
               private router            : Router,
               public layoutService: GridsterLayoutService,
               private fb: FormBuilder,
               private auth: AuthenticationService,
-
+              private navigationService     : NavigationService,
+              private _renderer       : Renderer2,
               ){};
 
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
-    // this.initSites();
+
+    this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+    this.renderTheme();
     this.inputForm = this.fb.group({type: ['']})
     this.refresh();
-    this.layoutService.toggleDesignerMode(false);
     if (this.auth.isAuthorized)  {
       this.allowDesign = true;
     }
     this.initSubscriptions();
+
 	}
-
-
+  renderTheme() {
+    const theme = localStorage.getItem('angularTheme')
+    this._renderer.removeClass(document.body, 'dark-theme');
+    this._renderer.removeClass(document.body, 'light-theme');
+    this._renderer.addClass(document.body, theme);
+  }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -59,6 +65,11 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     if (this._dashboard) {
       this._dashboard.unsubscribe()
     }
+  }
+
+  goHome() {
+
+    this.navigationService.navHome();
   }
 
   initSubscriptions() {
@@ -91,14 +102,37 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.router.navigate([path]);
   }
 
+  setStep(value: number) {
+    this.accordionStep = value
+    console.log(value)
+  }
+
 	onDrag(event, identifier) {
 		event.dataTransfer.setData('widgetIdentifier', identifier);
     this.layoutService.itemChange(null);
 	}
 
   toggleDesignMode() {
-    this.layoutService.toggleDesignerMode(!this.layoutService.designerMode)
+   
+    if (!this.layoutService.designerMode){ 
+      console.log(this.layoutService.designerMode)
+      localStorage.setItem('dashBoardDesignerMode', 'true')
+      this.layoutService.toggleDesignerMode(true)
+      return
+    }
+
+    if (this.layoutService.designerMode){ 
+      localStorage.setItem('dashBoardDesignerMode', 'false')
+      this.layoutService.toggleDesignerMode(false)
+      return
+    }
+    
   }
+
+  hide() { 
+    this.hideMenu = true;
+  }
+
 	// Method call when toggle button is clicked in navbar
 	toggleMenu(): void {
 		this.toggle = !this.toggle;
@@ -111,10 +145,10 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   addGrid() {
     this.layoutService.dashboardCollection = null;
-    this.dashboardModel = null;
     this.layoutService.dashboardModel = null;
     this.layoutService.dashboardContentModel = null;
     this.layoutService.dashboardID = 0;
+    this.layoutService.updateDashboardModel(null)
     this.openEditor(0)
   }
 
@@ -125,11 +159,11 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   }
 
   setLayout(dashboard: DashboardModel) {
-    this.dashboardModel = dashboard;
     this.layoutID       = dashboard.id;
+    this.dashboardModel = dashboard;
   }
 
-  openEditor(id: any) {
+  openEditor(id: number) {
     let dialogRef: any;
     dialogRef = this.dialog.open(GridManagerEditComponent,
       { width:        '500px',

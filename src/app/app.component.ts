@@ -12,7 +12,6 @@ import { Title } from '@angular/platform-browser';
 import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -21,7 +20,6 @@ LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,Lice
 })
 export class AppComponent {
 
-  // title = 'CCS Dashboard';
   toggleTheme = new FormControl(false);
   user: IUser;
   _user: Subscription;
@@ -58,7 +56,6 @@ export class AppComponent {
       this.backButtonEvent();
       this.awsService.awsBucket();
       this.setTitle();
-
       this.devMode = isDevMode();
       if (this.electronService.isElectronApp && !this.devMode) {
         // this.AuthService.logout();
@@ -79,7 +76,6 @@ export class AppComponent {
       this.router.events.subscribe(event => {
         if(event instanceof NavigationEnd) {
           const title = this.getTitle( this.router.routerState, this.router.routerState.root).join('-');
-          // console.log('title', title)
           if (!title) {
             this.titleService.setTitle('Pointless POS');
             return
@@ -114,15 +110,12 @@ export class AppComponent {
     this.authenticationService.logout();
   }
 
-  // active hardware back button
   backButtonEvent() {
-    // console.log("backButtonEvent Initialized")
     this.platform.backButton.subscribe(outlet => {
       this.routerOutlets.forEach(async (outlet: IonRouterOutlet) => {
         // console.log(outlet.getLastUrl)
         if (outlet && outlet.canGoBack()) {
           outlet.pop();
-
         } else if (this.router.url === '/home') {
           if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
             // this.platform.exitApp(); // Exit from app
@@ -135,7 +128,6 @@ export class AppComponent {
               position: 'middle'
             });
             toast.present();
-            // console.log(JSON.stringify(toast));
             this.lastTimeBackPress = new Date().getTime();
           }
         }

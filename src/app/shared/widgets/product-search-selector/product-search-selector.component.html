@@ -4,27 +4,27 @@
                     appearance="outline"
                     fxFlexFill>
 
-    <mat-label>Search Items</mat-label>
+      <mat-label>Search Items</mat-label>
 
-    <input
-           #input
-           type="text"
-           placeholder="Search Items"
-           matInput
-           [formControlName]="formControlName"
-           [matAutocomplete]="auto">
+      <input
+            #input
+            type="text"
+            placeholder="Search Items"
+            matInput
+            [formControlName]="formControlName"
+            [matAutocomplete]="auto">
 
-    <mat-autocomplete panelWidth="auto"
-                      #auto="matAutocomplete"
-                      (optionSelected)="onChange($event)">
+      <mat-autocomplete panelWidth="auto"
+                        #auto="matAutocomplete"
+                        (optionSelected)="onChange($event)">
 
-      <mat-option *ngFor="let item of results$ | async"
-                  [value]="item">
-             {{item.name}}
-      </mat-option>
+        <mat-option *ngFor="let item of results$ | async"
+                    [value]="item">
+              {{item.name}}
+        </mat-option>
 
-    </mat-autocomplete>
- </mat-form-field>
+      </mat-autocomplete>
+  </mat-form-field>
 </div>
 
 

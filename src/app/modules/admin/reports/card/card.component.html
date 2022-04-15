@@ -3,24 +3,10 @@
     <div class="warning"  *ngIf="sitesErrorMessage">
       <mat-icon>alerts</mat-icon> {{sitesErrorMessage}}
     </div>
-    <!-- <span *ngIf="rangeValue">Range {{rangeValue}} {{rangeType}}.</span>
-    <span *ngIf="dateFrom && dateTo">From {{dateFrom}} to {{dateTo}}. </span> -->
+    
+    <button mat-button (click)="showData = !showData"><mat-icon>data</mat-icon>Show Raw Data</button>
+    <div *ngIf="showData" class="data-view"> {{this.chartOptions  | json}}</div>
 
-    <!-- <div class="title" *ngIf="!menuType">
-      <span *ngIf="dateFrom && dateTo">From {{dateFrom}} to {{dateTo}}. </span>
-      <span *ngIf="zrunID">ID: {{zrunID}}. </span>
-    </div>
-
-    <div class="title" *ngIf="menuType">
-      <span *ngIf="dateFrom && dateTo">Range {{rangeValue}} {{rangeType}}. From {{dateFrom}} to {{dateTo}}. </span>
-      <span *ngIf="zrunID">ID: {{zrunID}}. </span>
-    </div> -->
-    <!-- this.sites && this.dateFrom && this.dateTo && this.groupBy -->
-    <!-- dateFrom   {{dateFrom}}
-    dateTo     {{dateTo}}
-    groupBy    {{groupBy}}
-    reportType {{reportType}}
-    sites {{sites}} -->
     <button mat-button
             (click)="refresh()">
             <mat-icon>refresh</mat-icon>

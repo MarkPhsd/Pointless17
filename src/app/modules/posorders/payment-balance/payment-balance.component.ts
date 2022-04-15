@@ -68,12 +68,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
    }
 
-
-    editCart() {
-      this.router.navigate(["/currentorder/",{mainPanel:true}]);
-      this.toolbarUIService.updateOrderBar(false)
-      this.toolbarUIService.resetOrderBar(true)
-    }
+  editCart() {
+    this.router.navigate(["/currentorder/",{mainPanel:true}]);
+    this.toolbarUIService.updateOrderBar(false)
+    this.toolbarUIService.resetOrderBar(true)
+  }
 
    editPayment(payment: IPOSPayment) {
     //get payment

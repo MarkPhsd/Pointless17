@@ -16,6 +16,7 @@ export class PosOrderBoardComponent implements OnInit {
   posName : string;
   order$  : Observable<IPOSOrder>;
   @Input() disableActions: boolean;
+  @Input() chartHeight: string;
   @Input() refreshTime = 1;
   constructor(
     private siteService:  SitesService,

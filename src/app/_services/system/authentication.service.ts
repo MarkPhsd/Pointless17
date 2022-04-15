@@ -81,7 +81,6 @@ export class AuthenticationService {
         if  (this.userValue  != null) {
           if  (this.userValue &&
           (this.userValue.roles === 'admin' || this.userValue.roles === 'manager')) {
-            // console.log('this.user Value', this.userValue)
             return true
           }
         }

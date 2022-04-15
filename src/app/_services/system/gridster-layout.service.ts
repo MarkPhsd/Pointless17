@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import {CompactType, DisplayGrid, Draggable, GridsterConfig, GridsterItem, GridType, PushDirections, Resizable} from 'angular-gridster2';
+import { DisplayGrid, GridsterConfig, GridsterItem, GridType, } from 'angular-gridster2';
 import { UUID } from 'angular2-uuid';
 import { CardComponent } from 'src/app/modules/admin/reports/card/card.component';
-import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties, WidgetModel } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import { DashBoardComponentProperties, DashboardContentModel, DashboardModel, DashBoardProperties, WidgetModel, widgetRoles } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 import { GridsterDataService } from '../gridster/gridster-data.service';
 import { SitesService } from '../reporting/sites.service';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -12,16 +12,17 @@ import { StrainBoardComponent } from 'src/app/modules/tv-menu/strainBoard/strain
 import { AuthenticationService } from './authentication.service';
 import { CategoryItemsBoardComponent } from 'src/app/modules/tv-menu/category-items-board/category-items-board.component';
 import { PosOrderItemsComponent } from 'src/app/modules/posorders/pos-order/pos-order-items/pos-order-items.component';
-import { MenuitemComponent } from 'src/app/modules/menu/menuitem/menuitem.component';
 import { PosOrderBoardComponent } from 'src/app/modules/posorders/pos-order/pos-order-board/pos-order-board.component';
 import { OrderHeaderDemographicsBoardComponent } from 'src/app/modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component';
 import { OrderTotalBoardComponent } from 'src/app/modules/posorders/pos-order/order-total-board/order-total-board.component';
 import { IFrameComponent } from 'src/app/shared/widgets/i-frame/i-frame.component';
 import { YoutubePlayerComponent } from 'src/app/shared/widgets/youtube-player/youtube-player.component';
 import { LimitValuesCardComponent } from 'src/app/modules/posorders/limit-values-card/limit-values-card.component';
-import { ISite } from 'src/app/_interfaces';
-import { ReportingService } from '../reporting/reporting.service';
+import { ISetting, ISite } from 'src/app/_interfaces';
 import { CardDashboardComponent } from 'src/app/modules/admin/reports/card-dashboard/card-dashboard.component';
+import { MenuItemCardDashboardComponent } from 'src/app/modules/menu/menu-item-card/menu-item-card.component';
+import { SettingsService } from './settings.service';
+import { TiersWithPricesComponent } from 'src/app/modules/menu/tierMenu/tiers-with-prices/tiers-with-prices.component';
 export interface IComponent {
   id: string;
   componentRef: string;
@@ -45,8 +46,13 @@ export class GridsterLayoutService {
   public dashboardId: number;
 	public dashboardModel: DashboardModel;
 	public dashboardArray: DashboardContentModel[];
+
   public _dashboardModel      = new BehaviorSubject<DashboardModel>(null);
   public dashboardModel$        = this._dashboardModel.asObservable();
+
+  public _dashboardModels      = new BehaviorSubject<DashboardModel[]>(null);
+  public dashboardModels$        = this._dashboardModels.asObservable();
+
   dashboardProperties: DashBoardProperties;
   sites: ISite[];
   public cartTypeCollection  = [
@@ -104,20 +110,21 @@ export class GridsterLayoutService {
   ]
 
 	protected componentCollection = [
-		{ name: "Category"      , componentInstance: CategoryItemsBoardComponent },
-		{ name: "Flowers"       , componentInstance: StrainBoardComponent },
-    { name: "MenuItem"      , componentInstance: MenuitemComponent },
+		{ name: "Category"    , componentInstance: CategoryItemsBoardComponent },
+    { name: "Product"     , componentInstance: MenuItemCardDashboardComponent},
+		{ name: "Flowers"     , componentInstance: StrainBoardComponent },
+    { name: "FlowerPrices", componentInstance: TiersWithPricesComponent},
 
-		{ name: "Chart"         , componentInstance: CardDashboardComponent },
-    { name: "report"         , componentInstance: CardComponent },
+		{ name: "Chart"       , componentInstance: CardDashboardComponent },
+    { name: "report"      , componentInstance: CardComponent },
 
-    { name: "POSOrder"      , componentInstance: PosOrderBoardComponent },
-    { name: "ClientInfo"    , componentInstance: OrderHeaderDemographicsBoardComponent },
-    { name: "OrderTotal"    , componentInstance: OrderTotalBoardComponent },
-    { name: "Limits"         , componentInstance: LimitValuesCardComponent },
+    { name: "POSOrder"    , componentInstance: PosOrderBoardComponent },
+    { name: "ClientInfo"  , componentInstance: OrderHeaderDemographicsBoardComponent },
+    { name: "OrderTotal"  , componentInstance: OrderTotalBoardComponent },
+    { name: "Limits"      , componentInstance: LimitValuesCardComponent },
 
-    { name: "Iframe"        , componentInstance: IFrameComponent },
-    { name: "YouTube"       , componentInstance: YoutubePlayerComponent },
+    { name: "Iframe"      , componentInstance: IFrameComponent },
+    { name: "YouTube"     , componentInstance: YoutubePlayerComponent },
     // { name: "youtube"       , componentInstance: YoutubePlayerComponent },
 	];
 
@@ -139,6 +146,8 @@ export class GridsterLayoutService {
       draggable: {
         enabled: true
       },
+      // draggable: { enabled: false},
+      // resizable: { enabled: true},
       minCols: 100,
 			minRows: 100,
       maxCols: 100,
@@ -155,13 +164,10 @@ export class GridsterLayoutService {
     private gridDataService: GridsterDataService,
     private _snackBar      : MatSnackBar,
     private router         : Router,
-    private  authService   : AuthenticationService,
-    private reportingService: ReportingService,
-
+    private authService    : AuthenticationService,
+    private settingsService: SettingsService,
   ) {
-
   }
-
 
   addItem(): void {
     this.layout.push({
@@ -173,12 +179,20 @@ export class GridsterLayoutService {
     });
   }
 
+  getGridsterDesignSettings(): Observable<ISetting> {
+    const site     = this.siteService.getAssignedSite();
+    return this.settingsService.getSettingByName(site, 'GridsterSettings')
+  }
+
   updateDashboardModel(dashboard:DashboardModel) {
-    this.dashboardModel = dashboard;
-    this.dashboardArray = dashboard.dashboard;
+    if (dashboard) {
+      this.dashboardModel = dashboard;
+      this.dashboardArray = dashboard.dashboard;
+    }
     this._dashboardModel.next(dashboard)
-    // collection = this.layoutService.dashboardCollection;
-    this.refreshCollection();
+    if (dashboard) { 
+      this.refreshCollection();
+    }
   }
 
   deleteItem(id: string): void {
@@ -216,13 +230,18 @@ export class GridsterLayoutService {
        this.dashboardModel.dashboard.push(item)
       }
     }
-    this.dashboardModel.dashboard = this.dashboardArray;
-    let  tmp = JSON.stringify(this.dashboardModel);
+    try {
+      this.dashboardModel.dashboard = this.dashboardArray;
 
-    let parsed: DashboardModel = JSON.parse(tmp);
-    this.serialize(parsed);
-    this.dashboardModel.jsonObject  = tmp;
-    this.saveModel(this.dashboardModel);
+      let  tmp = JSON.stringify(this.dashboardModel);
+
+      let parsed: DashboardModel = JSON.parse(tmp);
+      this.serialize(parsed);
+      this.dashboardModel.jsonObject  = tmp;
+      this.saveModel(this.dashboardModel);
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   saveDashBoard() {
@@ -232,12 +251,21 @@ export class GridsterLayoutService {
     this.saveModel(this.dashboardModel)
   }
 
+  deleteModel(model:DashboardModel) {
+    const site     = this.siteService.getAssignedSite();
+    this.gridDataService.deleteGrid(site, model.id).subscribe(data => {
+      this.refreshCollection();
+    })
+
+  }
+
   saveModel(model:DashboardModel) {
     const site     = this.siteService.getAssignedSite();
     this.dashboardArray = null
     this.dashboardModel = null
     let forceRefreshList = false;
     if (model.id == 0) { forceRefreshList = true}
+    console.log(model)
     this.gridDataService.saveGrid(site, model).subscribe(
       {
         next: data => {
@@ -250,7 +278,7 @@ export class GridsterLayoutService {
           this.updateDashboardModel(data)
           this.forceRefresh(data.id);
           if (forceRefreshList) {
-
+            this.refreshCollection();
           }
         },
         error: err => {
@@ -287,44 +315,74 @@ export class GridsterLayoutService {
   }
 
   toggleDesignerMode(mode) {
+
     if (this.authService.isAuthorized)  {
-       this.designerMode = mode
-    }  else {this.designerMode = false;  }
-    this.options.draggable = { enabled: this.designerMode}
-    this.options.resizable = { enabled: this.designerMode}
+      this.designerMode = mode
+      
+      const designerMode = localStorage.getItem('dashBoardDesignerMode') 
+      if (designerMode === 'true' || designerMode === 'false') {
+        mode = (designerMode == 'true')
+        if (designerMode) { 
+          this.designerMode = mode
+        }
+      }
+
+
+    }  else {
+      this.designerMode = false; 
+    }
+
+    this.options.draggable = { enabled: mode}
+    this.options.resizable = { enabled: mode}
     this.changedOptions();
   }
+
+  initGridDesignerMode() { 
+    const designerMode = localStorage.getItem('dashBoardDesignerMode') 
+    let mode = (designerMode == 'true')
+    this.designerMode = mode;
+    this.options.draggable = { enabled: mode}
+    this.options.resizable = { enabled: mode}
+  }
+
 
   changedOptions(): void {
     if (this.options.api && this.options.api.optionsChanged) {
       this.options.api.optionsChanged();
     }
   }
+
   forceChangeOptions(): void {
-    // if (this.options.api && this.options.api.optionsChanged) {
-      this.options.api.optionsChanged();
-    // }
+    this.initGridDesignerMode();  
+    this.options.api.optionsChanged();
   }
 
+  reloadRoute(route) {
+    this.router.navigateByUrl('/menu-board', { skipLocationChange: true }).then(() => {
+        this.router.navigate(route);
+    }); 
+  }
 
   forceRefresh(id: number) {
-    if (id == 0) {
-      console.log('this id was empty')
-      this.router.navigate(["/menu-manager/"]);
-      return;
+    if (id != 0) {
+      if (id == null) { return }
+      const path = "/menu-board/grid-menu-layout/";
+      const item = {id:id};
+      this.stateChanged = false;
+      const route = [path, item]
+      this.reloadRoute(route);
+      this.router.navigate([path, item]);
+      // this.router.navigateByUrl(path, { skipLocationChange: true }).then(() => {
+      //  }); 
     }
-    const path = "/menu-manager/grid-menu-layout/"
-    const item = {id:id};
-    this.stateChanged = false
-    this.getData(+id)
-    this.router.navigate([path]);
   }
 
   refreshCollection() {
     const collection$ = this.getCollection()
     collection$.subscribe(dashboards => {
-      console.log(dashboards)
+      this._dashboardModels.next(dashboards)
 			this.dashboardCollection = dashboards;
+      this.initGridDesignerMode()
       this.changedOptions();
       if (!this.dashboardModel) {
         if (dashboards[0]) {
@@ -351,41 +409,55 @@ export class GridsterLayoutService {
     item.name = 'Chart'
     item.identifier = 'chart'
     item.icon = 'analytics'
+    item.type = 'analytics'
+    list.push(item);
+
+    item = {} as WidgetModel;
+    item.name = 'Report'
+    item.identifier = 'Report'
+    item.icon = 'list'
+    item.type = 'analytics'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'Menu'
     item.identifier = 'menu'
     item.icon = 'category'
+    item.type = 'menu'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'Menu Item'
     item.identifier = 'menuitem'
     item.icon = 'inventory'
+    item.type = 'menu'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'POSOrder'
     item.identifier = 'order'
     item.icon = 'shopping_cart'
+    item.type = 'order'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'ClientInfo'
     item.identifier = 'clientinfo'
     item.icon = 'person'
+    item.type = 'order'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'OrderTotal'
     item.identifier = 'ordertotal'
     item.icon = 'credit_card'
+    item.type = 'order'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'Limits'
     item.identifier = 'limits'
+    item.type = 'order'
     item.icon = 'production_quantity_limits'
     list.push(item);
 
@@ -393,157 +465,149 @@ export class GridsterLayoutService {
     item.name = 'Iframe'
     item.identifier = 'iframe'
     item.icon = 'whatshot'
+    item.type = 'advertising'
     list.push(item);
 
     item = {} as WidgetModel;
     item.name = 'Youtube'
     item.identifier = 'youtube'
     item.icon = 'smart_display'
+    item.type = 'advertising'
     list.push(item);
 
 		return of(list) ;
 	}
 
+  getRandomInt(min, max) : number{
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   onDrop(ev) {
 		const componentType = ev.dataTransfer.getData("widgetIdentifier");
     console.log(componentType)
 
-    const itemProperties = {} as  DashBoardComponentProperties;
     if (!this.dashboardArray) {
       this.dashboardArray = [] as DashboardContentModel[]
     }
-    let item = {} as DashboardContentModel;
-    let id = +this.dashboardArray.length + 1
+    if (!this.dashboardModel.dashboard) {
+      this.dashboardModel.dashboard= [] as DashboardContentModel[]
+    }
+
+    let id = this.getRandomInt(1, 100000)// +this.dashboardArray.length + 1
 
 		switch (componentType) {
       case 'youtube' :
-        item = {
-         cols: 40,
-         rows: 40,
-         x: 0,
-         y: 0,
-         component: YoutubePlayerComponent,
-         name: "YouTube",
-         componentName: 'youtube',
-         id:  id,
-         properties: '',
-       } as DashboardContentModel;
-       this.itemChange(item);
-       return this.dashboardArray.push(item);
+        this.applyItem(id, 'YouTube', 'YouTube', YoutubePlayerComponent );
+        return;
       case 'iframe' :
-        item = {
-         cols: 40,
-         rows: 40,
-         x: 0,
-         y: 0,
-         component: IFrameComponent,
-         name: "IFrame",
-         componentName: 'IFrame',
-         id:  id,
-         properties: '',
-       } as DashboardContentModel;
-       this.itemChange(item);
-       return this.dashboardArray.push(item);
+        this.applyItem(id, 'IFrame', 'IFrame', IFrameComponent );
+        return;
       case 'clientinfo' :
-         item = {
-          cols: 40,
-          rows: 40,
-          x: 0,
-          y: 0,
-          component: OrderHeaderDemographicsBoardComponent,
-          name: "ClientInfo",
-          componentName: 'ClientInfo',
-          id:  id,
-          properties: '',
-        } as DashboardContentModel;
-        this.itemChange(item);
-        return this.dashboardArray.push(item);
+        this.applyItem(id, 'ClientInfo', 'ClientInfo', OrderHeaderDemographicsBoardComponent );
+        return
       case 'limits' :
-          item = {
-           cols: 40,
-           rows: 40,
-           x: 0,
-           y: 0,
-           component: LimitValuesCardComponent,
-           name: "Limits",
-           componentName: 'Limits',
-           id:  id,
-           properties: '',
-         } as DashboardContentModel;
-         this.itemChange(item);
-         return this.dashboardArray.push(item);
+        this.applyItem(id, 'Limits', 'Limits', LimitValuesCardComponent );
+         return
       case 'ordertotal' :
-         item = {
-          cols: 40,
-          rows: 40,
-          x: 0,
-          y: 0,
-          component: OrderTotalBoardComponent,
-          name: "OrderTotal",
-          componentName: 'OrderTotal',
-          id:  id,
-          properties: '',
-        } as DashboardContentModel;
-        this.itemChange(item);
-        return this.dashboardArray.push(item);
+        this.applyItem(id, 'OrderTotal', 'OrderTotal', OrderTotalBoardComponent );
+        return
       case 'order' :
-         item = {
-          cols: 40,
-          rows: 40,
-          x: 0,
-          y: 0,
-          component: PosOrderItemsComponent,
-          name: "POSOrder",
-          componentName: 'POSOrder',
-          id:  id,
-          properties: '',
-        } as DashboardContentModel;
-        this.itemChange(item);
-        return this.dashboardArray.push(item);
+        this.applyItem(id, 'POSOrder', 'POSOrder', PosOrderItemsComponent );
+        return
       case 'chart' :
-           item = {
-            cols: 40,
-            rows: 40,
-            x: 0,
-            y: 0,
-            component: CardComponent,
-            name: "Chart",
-            componentName: 'Chart',
-            id:  id,
-            properties: '',
-          } as DashboardContentModel;
-          this.itemChange(item);
-          return this.dashboardArray.push(item);
+        this.applyItem(id, 'Chart', 'Chart', CardComponent );
+        return
       case 'menu' :
-            item = {
-             cols: 40,
-             rows: 40,
-             x: 0,
-             y: 0,
-             component: CategoryItemsBoardComponent,
-             name: "Category",
-             componentName: 'Category',
-             id:  id,
-             properties: '',
-           } as DashboardContentModel;
-           this.itemChange(item);
-           return this.dashboardArray.push(item);
+        this.applyItem(id, 'Category', 'Category', CategoryItemsBoardComponent );
+        return
       case 'menuitem' :
-           item = {
-            cols: 40,
-            rows: 40,
-            x: 0,
-            y: 0,
-            component: MenuitemComponent,
-            name: "Menu Item",
-            componentName: 'MenuItem',
-            id:  id,
-            properties: '',
-          } as DashboardContentModel;
-          this.itemChange(item);
-          return this.dashboardArray.push(item);
+        this.applyItem(id, "Menu Item", 'MenuItem', MenuItemCardDashboardComponent );
+        return
+      case 'flowerprices' :
+       this.applyItem(id, "Flower Prices", 'FlowerPrices', TiersWithPricesComponent );
+        return
     }
 	}
+
+  applyItem(id: number, name: string, componentName: string, component: any) {
+    if (!this.dashboardArray) { return }
+    console.log(name,componentName)
+    const properties = {} as DashBoardComponentProperties;
+    properties.name = componentName;
+    let jsonString = ''
+
+    if (componentName) {
+
+      const types = this.componentCollection.filter(data =>
+         { return data.name.toLowerCase() === componentName.toLowerCase()}
+      )
+
+      if (componentName.toLowerCase() === 'posorder') {
+        properties.type = 'order'
+        properties.cardValueType = 'POSOrder'
+      }
+      if (componentName.toLowerCase() === 'clientinfo') {
+        properties.type = 'order'
+        properties.cardValueType = 'ClientInfo'
+      }
+      if (componentName.toLowerCase() === 'limits') {
+        properties.type = 'order'
+        properties.cardValueType = 'limits'
+      }
+      if (componentName.toLowerCase() === 'ordertotal') {
+        properties.type = 'order'
+        properties.cardValueType = 'OrderTotal'
+      }
+
+      if (componentName.toLowerCase() === 'menuitem') {
+        properties.type = 'menu'
+        properties.cardValueType = 'Product'
+      }
+
+      if (componentName.toLowerCase() === 'menu' || componentName.toLowerCase() === 'menu') {
+        properties.type = 'menu'
+      }
+
+
+      if (types && types.length>0) {
+        const type  = types[0].name.toLowerCase()
+        if (type === 'category'){
+
+        }
+        if (type === 'category'){
+
+        }
+        if (type === 'category'){
+
+        }
+      }
+
+      jsonString = JSON.stringify(properties)
+
+    }
+
+    const  item = {
+      componentName: componentName,
+      cols      : 40,
+      rows      : 40,
+      x         : 0,
+      y         : 0,
+      component : component,
+      name      : name,
+      id        :  id,
+      properties: jsonString,
+    } as DashboardContentModel;
+
+    this.itemChange(item);
+    if (this.dashboardModel) {
+      if (!this.dashboardModel.dashboard) {
+        this.dashboardModel.dashboard = [] as DashboardContentModel[]
+      }
+      this.dashboardModel.dashboard.push(item)
+    }
+  }
 
   modifyChanges() {
     this.stateChanged = true
@@ -551,11 +615,12 @@ export class GridsterLayoutService {
 
   getData(id: number) {
     const site = this.siteService.getAssignedSite();
-    const gridData$ = this.gridDataService.getGrid(site, id)
-    if (id == 0) {
+    if (id == 0 || id == undefined) {
       this.router.navigateByUrl('/menu-manager')
       return
     }
+
+    const gridData$ = this.gridDataService.getGrid(site, id)
     gridData$.subscribe({
       next: data => {
         this.dashboardModel = data
@@ -563,6 +628,11 @@ export class GridsterLayoutService {
         if (this.dashboardModel.userName) {
           this.dashboardProperties = JSON.parse(data.userName)  as DashBoardProperties
         }
+  
+        if (this.dashboardModel.widgetRolesJSON) {
+          this.dashboardModel.widgetRoles = JSON.parse(data.widgetRolesJSON)  as widgetRoles[]
+        }
+
         this.parseJson(data)
         this.dashboardArray =  data.dashboard;
         this.dashboardArray.forEach(data => {
@@ -579,7 +649,6 @@ export class GridsterLayoutService {
     })
 	}
 
-
   removeCard(item) {
     const dashBoard = this.dashboardModel;
     const list = dashBoard.dashboard.filter( data => data.id != item.id)
@@ -588,15 +657,37 @@ export class GridsterLayoutService {
     this.dashboardModel.dashboard = list;
   }
 
-  // Super TOKENIZER 2.0 POWERED BY NATCHOIN
-	parseJson(dashboardModel: DashboardModel) {
+  // // Super TOKENIZER 2.0 POWERED BY NATCHOIN
+	// parseJson(dashboardModel: DashboardModel) {
+	// 	// We loop on our dashboardCollection
+  //   if (!dashboardModel || !dashboardModel.dashboard) {
+  //     return;
+  //   }
+	// 	dashboardModel.dashboard.forEach(dashboard => {
+	// 		// We loop on our componentCollection
+  //     dashboard = this.initComponentComplexData(dashboard)
+	// 		this.componentCollection.forEach(component => {
+	//       // We check if component key in our dashboardCollection
+	// 			// is equal to our component name key in our componentCollection
+  //       console.log(dashboard.componentName.toLowerCase() ,component.name.toLowerCase())
+  //       if (dashboard.componentName.toLowerCase() === component.name.toLowerCase()) {
+  //         dashboard.component = component.componentInstance;
+  //       }
+	// 		});
+	// 	});
+  //   this.updateDashboardModel(dashboardModel)
+  //   this.dashboardModel = dashboardModel
+	// }
+
+  parseJson(dashboardModel: DashboardModel) {
 		// We loop on our dashboardCollection
+
     if (!dashboardModel.dashboard) {
       dashboardModel.dashboard = [] as DashboardContentModel[]
     }
+
 		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
-      dashboard = this.initComponentComplexData(dashboard)
 			this.componentCollection.forEach(component => {
 				// We check if component key in our dashboardCollection
 				// is equal to our component name key in our componentCollection
@@ -608,14 +699,14 @@ export class GridsterLayoutService {
 	}
 
   initComponentComplexData(item: DashboardContentModel): DashboardContentModel {
-
-    const properties = this.getDateRange(item.properties)
-    item.properties = properties;
+    const properties = JSON.parse(item.properties)
+    console.log(properties)
+    item.object = this.getDateRange(properties);
     return item;
   }
+
   //date range type is year month day etc.
   getDateRange(item: DashBoardComponentProperties ) {
-
     //if dateRangeReport then use the filter variable date ranges.
     //otherwise use
     if (!item?.dateRangeReport) {
@@ -635,13 +726,14 @@ export class GridsterLayoutService {
         }
       }
     }
-
     return item;
   }
 
-
 	serialize(dashboardModel: DashboardModel) {
-    if (!dashboardModel.dashboard) { return }
+    if (!dashboardModel.dashboard) {
+
+      return
+    }
 		dashboardModel.dashboard.forEach(dashboard => {
 			// We loop on our componentCollection
 			this.componentCollection.forEach(component => {

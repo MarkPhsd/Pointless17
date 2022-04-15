@@ -33,21 +33,20 @@
               (outputDelete)="removeItem(item)"
               (outputSettings)="openItemSettings(item)">
             </mat-menu-basic>
+
           </div>
 
           <div [class]="gridsteritemclass">
-            <div class="title">
-              <mat-label class="title"> {{ item?.object?.name }}  </mat-label >
-              <span *ngIf="layoutService.designerMode">  | Type:  {{ item?.componentName }}</span>
-            </div>
-            <div *ngIf="sites">
-              <ng-container
-                      class="cutting-corners"
-                      *ngComponentOutlet="item.component;
-                      ndcDynamicInputs  : item.object;
-                      ndcDynamicOutputs : outputs">
-              </ng-container>
-            </div>
+            <mat-label class="title">
+               {{ item?.object?.name }}
+            </mat-label >
+            <ng-container
+                    class="cutting-corners"
+                    *ngComponentOutlet="item.component;
+                    ndcDynamicInputs  : item.object;
+                    ndcDynamicOutputs : outputs">
+            </ng-container>
+
           </div>
         </div>
     </gridster-item>

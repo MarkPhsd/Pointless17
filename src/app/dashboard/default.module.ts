@@ -267,6 +267,8 @@ import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settin
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { NumericDirective } from '../_directives/numeric-directive.directive';
 import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
+import { MenuItemCardDashboardComponent } from '../modules/menu/menu-item-card/menu-item-card.component';
+import { DashBoardRoutingModule } from '../dash-board-routing.module';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -482,6 +484,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StrainProductEditComponent,
     StrainBoardComponent,
     StrainCardComponent,
+
+    MenuItemCardDashboardComponent,
     StripeSettingsComponent,
     StripeCheckOutComponent,
     UITransactionsComponent,
@@ -510,6 +514,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
    imports: [
       AgGridModule.withComponents([ButtonRendererComponent, AgGridToggleComponent]),
+      DashBoardRoutingModule,
       AppRoutingModule,
       AppMaterialModule,
       BrowserAnimationsModule,
@@ -526,7 +531,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       RouterModule,
       SharedModule,
       NgxStripeModule.forRoot(),
-      // QuicklinkStrategy,
+   
     ],
 
   exports: [

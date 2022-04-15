@@ -1,15 +1,13 @@
 <mat-card>
-
-
   <mat-card-content>
 
     <tiers-with-prices
       (outPutSetPriceTier)="setPriceTier($event)">
     </tiers-with-prices>
 
-        <app-tier-items
-              [priceTier]="priceTier"
-        ></app-tier-items>
+    <app-tier-items
+          [priceTier]="priceTier"
+    ></app-tier-items>
   </mat-card-content>
 </mat-card>
 

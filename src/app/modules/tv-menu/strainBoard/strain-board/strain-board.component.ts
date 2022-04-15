@@ -32,12 +32,12 @@ export class StrainBoardComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const minutes = 600
+    const minutes = 1000 * 5
     this.eighthMenu$  = this.tvMenuPriceTierService.gGetEighthMenu(this.siteService.getAssignedSite())
     .pipe(
       repeatWhen(notifications =>
         notifications.pipe(
-          delay(minutes* 5)),
+          delay(minutes)),
       ),
       catchError((err: any) => {
         return throwError(err);

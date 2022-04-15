@@ -120,6 +120,21 @@ export class GridsterDataService {
 
   };
 
+  deleteGrid(site: ISite, id: number): Observable<any> {
+
+    const controller = '/GR_DashboardController/'
+
+    const endPoint = 'DeleteGR_Dashboard'
+
+    const parameters = `?id=${id}`
+
+    const url = `${this.apiUrl}${controller}${endPoint}${parameters}`
+
+    return  this.http.delete<any>(url)
+
+  };
+
+
   updateGrid(site: ISite, grid: DashboardModel): Observable<DashboardModel> {
 
     const controller = '/GR_DashboardController/'

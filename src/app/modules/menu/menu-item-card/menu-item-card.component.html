@@ -1,0 +1,20 @@
+<div  *ngIf="(menu$ | async) as menuItem">
+  <mat-card class="mat-card-background">
+    <mat-card class="mat-card-product">
+      <mat-card-title>
+        <div class="title">{{menuItem.name}}</div>
+        <div class="prices" >
+          <menu-item-extended-prices
+              [isUserStaff]="false"
+              [menuItem]="menuItem">
+          </menu-item-extended-prices>
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="gallery"  *ngIf="menuItem.urlImageMain || menuItem.urlImageOther">
+          <app-menu-item-gallery [menuItem]="menuItem"></app-menu-item-gallery>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-card>>
+</div>

@@ -18,6 +18,23 @@ export class DSIEMVTransactionComponent implements OnInit {
   message: string;
   resultMessage: string;
   processing: boolean;
+  type      : string;
+  action    : number ;
+  transactiondata: any;
+  //action = 0 or 1 = sale
+  //action = 2 = void
+  //action = 3 = refund
+  //action = 4 = preauth
+  //action = 5 = forceauth
+  //action = 6 = EBT
+  //action = 7 = WIC
+  
+    //void =6
+    //refund = 5;
+    //preauth = 3
+    //preauth capture = 7
+    //force = 4;
+
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
     private dsiProcess      : DSIProcessService,
@@ -28,13 +45,37 @@ export class DSIEMVTransactionComponent implements OnInit {
     if (data)  {
       this.payment = data.data;
       this.amount  = data.amount;
+      this.action  = data.action
+      this.transactiondata = data;
     }
   }
 
   ngOnInit(): void {
     const i = 0;
      this.message  = 'Press Process to use Card'
-     this.process();
+     this.processing = false;
+     this.displayAction(this.action)
+
+     if (this.action == 0 || this.action == 1) { 
+       this.process(); 
+       return
+     }
+
+  }
+
+  displayAction(action: number) { 
+      if (this.action == 0 || this.action == 1) {this.type = 'Sale' }
+      if (this.action == 2 ) {this.type = 'Void' }
+      if (this.action == 3 ) {this.type = 'Refund' }
+      if (this.action == 4 ) {this.type = 'Pre Auth' }
+      if (this.action == 6 ) {this.type = 'Force Auth' }
+      if (this.action == 7 ) {this.type = 'WIC' }
+      //action = 2 = void
+      //action = 3 = refund
+      //action = 4 = preauth
+      //action = 5 = forceauth
+      //action = 6 = EBT
+      //action = 7 = WIC
   }
 
   async process() {
@@ -42,11 +83,127 @@ export class DSIEMVTransactionComponent implements OnInit {
     this.message  = 'Please check the device for input if required.'
     this.resultMessage = '';
     setTimeout(()=>{
-      this.processCard();
+      this.processTransation();
     },50);
   }
 
-  async processCard() {
+  processTransation() { 
+   
+    if (this.action == 0 || this.action == 1) {
+      this.processSaleCard();
+      return
+    }
+    if (this.action == 2) { 
+      this.processVoidCard();
+      return
+    }
+    // if (this.action == 3) { 
+    //   this.processRefundCard();
+    //   return
+    // }
+    // if (this.action == 4) { 
+    //   this.procesPreAuthCard();
+    //   return
+    // }
+    // if (this.action == 5) { 
+    //   this.procesPreAuthCard();
+    //   return
+    // }
+    // if (this.action == 6) { 
+    //   this.procesPreAuthCard();
+    //   return
+    // }
+    // if (this.action == 7) { 
+    //   this.procesPreAuthCard();
+    //   return
+    // }
+  }
+
+  async processSaleCard() {
+    const amount = this.amount
+    const payment = this.payment
+    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    if (!response) {
+      this.message = 'Processing failed, reason uknown.'
+      this.processing = false;
+    }
+    if (response) {
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       this.readResult(cmdResponse);
+    }
+  }
+
+  async processVoidCard() {
+    const amount = this.amount
+    const payment = this.payment
+    const response  = await this.dsiProcess.emvVoid(this.payment);
+    if (!response) {
+      this.message = 'Processing failed, reason uknown.'
+      this.processing = false;
+    }
+    if (response) {
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       this.readResult(cmdResponse);
+    }
+  }
+
+  async processRefundCard() {
+    const amount = this.amount
+    const payment = this.payment
+    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    if (!response) {
+      this.message = 'Processing failed, reason uknown.'
+      this.processing = false;
+    }
+    if (response) {
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       this.readResult(cmdResponse);
+    }
+  }
+
+  async procesPreAuthCard() {
+    const amount = this.amount
+    const payment = this.payment
+    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    if (!response) {
+      this.message = 'Processing failed, reason uknown.'
+      this.processing = false;
+    }
+    if (response) {
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       this.readResult(cmdResponse);
+    }
+  }
+  
+  async procesForceAuthCard() {
+    const amount = this.amount
+    const payment = this.payment
+    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    if (!response) {
+      this.message = 'Processing failed, reason uknown.'
+      this.processing = false;
+    }
+    if (response) {
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       this.readResult(cmdResponse);
+    }
+  }
+
+  async procesWIC() {
+    const amount = this.amount
+    const payment = this.payment
+    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    if (!response) {
+      this.message = 'Processing failed, reason uknown.'
+      this.processing = false;
+    }
+    if (response) {
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       this.readResult(cmdResponse);
+    }
+  }
+
+  async procesEBT() {
     const amount = this.amount
     const payment = this.payment
     const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );

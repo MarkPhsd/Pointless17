@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title>
-    <div>Sale</div>
+    <div>Transaction Type: {{type}} ( {{ action}} ) </div>
     <div class="grid-totals">
       <div>
         Payment #
@@ -15,7 +15,7 @@
         {{payment?.orderID}}
       </div>
     </div>
-
+  
   </mat-card-title>
 
   <mat-card-content>
@@ -41,8 +41,14 @@
 
   <mat-card-actions>
     <div class="action-buttons">
-      <div *ngIf="!processing"><button mat-raised-button (click)="process()"><mat-icon>credit_card</mat-icon>Process</button></div>
-      <div><button mat-raised-button (click)="cancel()"><mat-icon>close</mat-icon>Cancel</button></div>
+      <div *ngIf="!processing"><button mat-raised-button 
+          (click)="process()"><mat-icon>credit_card</mat-icon>Process</button></div>
+      <div><button mat-raised-button
+                   (click)="cancel()">
+        <mat-icon>close</mat-icon>Cancel</button>
+      </div>
     </div>
   </mat-card-actions>
 </mat-card>
+
+<!-- {{transactiondata | json}} -->

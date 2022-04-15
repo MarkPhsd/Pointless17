@@ -5,8 +5,8 @@ h4 {
     margin-bottom: 5px;
 }
 .container {
-  height: 100%;
-  width: 100%;
+  // height: 100%;
+  // width: 100%;
   min-height: 300px;
   .info {
     top     : 35px;
@@ -18,10 +18,16 @@ h4 {
   }
 }
 
+.data-view {
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .container:hover {
 
-  height: 100%;
-  width: 100%;
+  // height: 100%;
+  // width: 100%;
   min-height: 300px;
   .info  {
     top     : 35px;
@@ -40,7 +46,6 @@ h4 {
   width: 360px;
 }
 
-
 .hoverable:not(:hover) + .show-on-hover {
   display: none;
 }
@@ -49,27 +54,27 @@ h4 {
 // }
 
 .total {
-    font-size: 3em;
+  font-size: 3em;
 }
 
 .description {
-    color: green;
-    font-size: 2em;
+  color: green;
+  font-size: 2em;
 }
 
 .mat-icon {
-    position: relative;
-    font-size: 2em;
-    padding: 0 20px;
-    top: 5px;
+  position: relative;
+  font-size: 2em;
+  padding: 0 20px;
+  top: 5px;
 }
 
 #widget {
-  max-width : 95%;
-  min-width : 500px;
-  width     : 95%;
+  // max-width : 95%;
+  // min-width : 500px;
+  // width     : 95%;
   min-height: 300px;
-  height    : 95%;
+  // height    : 95%;
 
   @include for-phone-only {
     max-width : 100%;

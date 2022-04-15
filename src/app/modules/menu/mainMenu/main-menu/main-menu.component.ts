@@ -22,8 +22,6 @@ export class MainMenuComponent implements OnInit  {
     private userAuthorizationService: UserAuthorizationService,
     private authentication: AuthenticationService,
   ) {
-
-
   }
 
     ngOnInit(): void {

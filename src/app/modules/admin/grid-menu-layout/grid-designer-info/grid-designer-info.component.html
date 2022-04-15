@@ -1,26 +1,32 @@
-<div *ngIf="authService.isAuthorized &&
-            layoutService.designerMode &&
-            layoutService.options &&
-            layoutService.dashboardModel"
-    class="grid"
-    >
-<mat-card>
-  <h4><mat-icon>settings</mat-icon> Settings </h4>
-
-  <div>
+<div *ngIf="(setting$ | async) as grid">
+  <div *ngIf="authService.isAuthorized &&
+              layoutService.designerMode &&
+              layoutService.options &&
+              layoutService.dashboardModel"
+            class="grid"
+            >
+    <mat-card>
+    <h4><mat-icon>settings</mat-icon> Settings </h4>
     <mat-divider></mat-divider>
-  </div>
-  <div>
-    <mat-checkbox [(ngModel)]="layoutService.options.swap" (ngModelChange)="layoutService.changedOptions()">
+
+    <div>
+    <mat-checkbox [(ngModel)]="layoutService.options.swap"
+            (ngModelChange)="changedOptions()">
       Swap
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="layoutService.options.swapWhileDragging" (ngModelChange)="layoutService.changedOptions()">
+    <mat-checkbox [(ngModel)]="layoutService.options.swapWhileDragging"
+            (ngModelChange)="changedOptions()">
       Swap Items While Dragging
     </mat-checkbox>
-    <mat-checkbox [(ngModel)]="layoutService.options.pushItems" (ngModelChange)="layoutService.changedOptions()">
+    <mat-checkbox [(ngModel)]="layoutService.options.pushItems"
+            (ngModelChange)="changedOptions()">
       Push Items
     </mat-checkbox>
-  </div>
-</mat-card>
 
+    </div>
+    </mat-card>
+
+    </div>
 </div>
+
+

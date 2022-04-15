@@ -31,15 +31,15 @@ export interface ItemValue {
 export class GridComponentPropertiesComponent implements OnInit {
 
   message : string[];
-
+  productName: string;
   dashBoardContent: DashboardContentModel;
   inputForm       : FormGroup;
   rangeTypes      = ['year', 'month', 'date', 'week', 'hour','currentDay']
   cardValueTypesTemp = []
   cardValueTypes  = [
     // {name: 'Top Products', filter: 'report', icon: ''},
-    {name: 'Sales Totals', filter: 'report', icon: '', usesRange: true},
-    {name: 'Tax',          filter: 'report', icon: '', usesRange: true},
+    {name: 'Sales Totals',      filter: 'report', icon: '', usesRange: true},
+    {name: 'Tax',               filter: 'report', icon: '', usesRange: true},
 
     {name: 'Product Sales',     filter: 'report', icon: '', usesRange: true},
     {name: 'Category Sales',    filter: 'report', icon: '', usesRange: true},
@@ -53,11 +53,10 @@ export class GridComponentPropertiesComponent implements OnInit {
     {name: 'Employee Sales Count',  filter: 'report', icon: '', usesRange: true},
     {name: 'Employee Sales',        filter: 'report', icon: '', usesRange: true},
 
-    {name: 'Square',       filter: 'table', icon: '', usesRange: true},
-    {name: 'Round',        filter: 'table', icon: '', usesRange: true},
-    {name: 'Half Found',   filter: 'table', icon: '', usesRange: true},
+    {name: 'Square',            filter: 'table', icon: '', usesRange: true},
+    {name: 'Round',             filter: 'table', icon: '', usesRange: true},
+    {name: 'Half Found',        filter: 'table', icon: '', usesRange: true},
   ]
-
 
   cardTypes  = [
     {name: 'chart'  ,  icon: 'bar_chart', filter: 'none'},
@@ -70,16 +69,28 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   ] as ValueTypeList[];
 
-  itemValue       : ItemValue;
-  cardType        : string;
+  menuBoardTypes = [
+    {name: 'Flowers',          icon: 'list',    filter:  'menu'},
+    {name: 'Category',         icon: 'list',    filter:  'menu'},
+    {name: 'Specials',         icon: 'list',    filter:  'menu'},
+    {name: 'Product',          icon: 'product', filter:  'menu'},
+    {name: 'FlowerPrices',     icon: 'list',    filter:  'menu'},
+    {name: 'POSOrder',         icon: 'cart'   , filter:  'order'},
+    {name: 'ClientInfo',       icon: 'cart'   , filter:  'order'},
+    {name: 'OrderTotal',       icon: 'cart'   , filter:  'order'},
+    {name: 'Limits',           icon: 'production_quantity_limits'   , filter:  'order'},
+  ] as ValueTypeList[];
 
-  cardValueType: string;
-  listItemID   : string;
-  chartType    : string;
-  opacity      : number;
-  border       : number;
-  borderRadius : number;
-  refreshTime  : number;
+  itemValue      : ItemValue;
+  cardType       : string;
+
+  cardValueType  : string;
+  listItemID     : string;
+  chartType      : string;
+  opacity        : number;
+  border         : number;
+  borderRadius   : number;
+  refreshTime    : number;
   layerIndex     : number;
   disableActions : boolean;
   rangeType      : string;
@@ -90,19 +101,7 @@ export class GridComponentPropertiesComponent implements OnInit {
   _border :string;
   _layer : string;
 
-  chartTypes = [];
-
-  menuBoardTypes = [
-    {name: 'Flowers',          icon: 'list',    filter:  'MMJ'},
-    {name: 'Category',         icon: 'list',    filter:  ''},
-    {name: 'Specials',         icon: 'list',    filter:  ''},
-    {name: 'Single Item',      icon: 'product', filter:  ''},
-    {name: 'POSOrder',         icon: 'cart'   , filter:  'order'},
-    {name: 'ClientInfo',       icon: 'cart'   , filter:  'order'},
-    {name: 'OrderTotal',       icon: 'cart'   , filter:  'order'},
-    {name: 'Limits',           icon: 'production_quantity_limits'   , filter:  'order'},
-  ] as ValueTypeList[];
-
+  chartTypes       = [];
   menuBoardType    : ValueTypeList
   categories$      : Observable<IMenuItem[]>;
   specials$        : Observable<IPriceSchedule[]>;
@@ -149,11 +148,40 @@ export class GridComponentPropertiesComponent implements OnInit {
     this.dateRangeReport = false;
     if (!type) {return}
     const items = this.cardValueTypes.filter( data => data.name === type)
-    if (items && items[0].usesRange) {
-      this.dateRangeReport = true;
+    if (items && items.length>0) {
+      if (items && items[0].usesRange) {
+        this.dateRangeReport = true;
+      }
     }
   }
 
+  getItem(event) {
+    const item = event
+    if (item) {
+      if (item.id) {
+        const site = this.siteService.getAssignedSite();
+        this.menuService.getMenuItemByID(site, item.id).subscribe(data => {
+            this.listItemID  = data.id
+            this.productName = data.name;
+            this.inputForm.patchValue({productName: data.name})
+            this.inputForm.patchValue({listItemID: data.id})
+            this.updateCard(this.inputForm)
+          }
+        )
+      }
+    }
+  }
+
+  getProductName(id, cardType, valueType) {
+    if (!cardType) {return }
+    if (cardType.toLowerCase() != 'menu') { return }
+    if (valueType.toLowerCase() != 'product') { return }
+    const site = this.siteService.getAssignedSite();
+    this.menuService.getMenuItemByID(site, id).subscribe(data => {
+      this.productName = data.name;
+      }
+    )
+  }
 
   setCategory(value: string) {
     this.listItemID = value;
@@ -193,37 +221,41 @@ export class GridComponentPropertiesComponent implements OnInit {
 
   initForm() {
     this.inputForm = this.fb.group({
-      id            : [''],
-      username      : [''],
-      name          : [''],
-      type          : [''], //preset types, menu, report widget, restaurant/ operation layout.
-      active        : [''],
-      rangeType     : [''],
-      cardValueType : [''],
-      chartType     : [''],
-      menuType      : [''],
-      listItemID    : [''],
-      chartHeight   : [''],
-      chartWidth    : [''],
-      MMJMenu       : [''],
-      disableActions: [''],
-      autoPlay      : [''],
-      autoRepeat    : [''],
-      url           : [''],
-      refreshTime   : [''],
-      dateRangeReport  : [''],
-      // rangeValue    : [''],
-      // opacity       : [''],
+      id            : [''], //
+      name          : [''], // : string;
+      roles         : [''], // : widgetRoles[]
+      menuType      : [''], // : string;
+      listItemID     : [''], //: string;
+      opacity        : [''], //: number;
+      borderRadius   : [''], //: number;
+      border         : [''], //: number;
+      layerIndex     : [''], //: number;
+
+      lengthOfRange  : [''], //: string; //number of range month, year etc
+      rangeType      : [''], //: string; //hour, month, day, year
+      type           : [''], //: string; //preset types, menu, report widget
+      cardValueType  : [''], //: string; //componentName
+      dateFrom       : [''], //: string; //not implemented
+      dateTo         : [''], //: string; //not implemented
+      chartType      : [''], //: string;
+
+      MMJMenu        : [''], //: boolean;
+      chartHeight    : [''], //: string;
+      chartWidth     : [''], //: string;
+      itemID         : [''], //: string;
+
+      disableActions : [''], //: boolean;
+      autoPlay       : [''], //: boolean;
+      url            : [''], //: string;
+      autoRepeat     : [''], //: boolean;
+
+      refreshTime    : [''], //: number;
+      rangeValue     : [''], //: number;
+      dateRangeReport: [''], //: boolean;
+      productName    : [''], //: boolean;
     })
     return this.inputForm
   };
-
-  // object.border        = item?.border;
-  // object.borderRadius  = item?.borderRadius;
-  // object.opacity       = item?.opacity;
-  // object.layerIndex    = item?.layerIndex;
-  // object.refreshTime   = item?.refreshTime;
-  // object.rangeValue    = item?.rangeValue;
 
   initFormData() {
     const site = this.siteService.getAssignedSite();
@@ -268,6 +300,7 @@ export class GridComponentPropertiesComponent implements OnInit {
       object.layerIndex    = item?.layerIndex;
       object.refreshTime   = item?.refreshTime;
       object.rangeValue    = item?.rangeValue;
+      object.productName   = item?.productName;
     }
 
     //establish default range value.
@@ -275,7 +308,15 @@ export class GridComponentPropertiesComponent implements OnInit {
     if (! object.layerIndex ) { object.layerIndex = 1;}
     this.inputForm.patchValue(object);
 
+    this.cardType = ''
+    this.cardValueType = ''
+    this.border = 0
+    this.borderRadius = 5
+    this.opacity    = 0
+    this.layerIndex = 1
+    this.productName = object?.productName;
     if (object.type)            { this.cardType = object?.type };
+
     if (object.cardValueType)   { this.cardValueType = object?.cardValueType };
     if (object.border)          { this.border = object?.border  };
     if (object.borderRadius)    { this.borderRadius = object?.borderRadius };
@@ -294,25 +335,27 @@ export class GridComponentPropertiesComponent implements OnInit {
 
     let cardValueTypes = this.cardValueTypes;
 
-    if (type === 'tables') { type = 'table'}
-    if (type === 'chart')  { type = 'report'}
-
-    cardValueTypes = cardValueTypes.filter( data => data.filter === type)
-
-    if (type === 'menu') {
-      this.cardValueTypes = this.menuBoardTypes;
+    if (type === 'order') {
+      cardValueTypes = this.menuBoardTypes.filter( data => data.filter === type);
       this.cardValueTypesTemp = cardValueTypes;
       return
     }
 
-    if (type === 'order') {
-      this.cardValueTypes = this.menuBoardTypes.filter( data => data.filter === type);
-      this.cardValueTypesTemp = cardValueTypes;
+    if (type === 'tables') { type = 'table'}
+    if (type === 'chart')  { type = 'report'}
+    cardValueTypes = cardValueTypes.filter( data => data.filter === type)
+
+    if (type == 'report') {
+      this.cardValueTypesTemp = cardValueTypes.filter( data => data.filter === type)
+      return
+    }
+
+    if (type === 'menu') {
+      this.cardValueTypesTemp = this.menuBoardTypes.filter( data => data.filter === type)
       return
     }
 
     this.cardValueTypesTemp = this.cardValueTypes;
-
   }
 
   update(event): void {
@@ -335,36 +378,41 @@ export class GridComponentPropertiesComponent implements OnInit {
   updateCard(form: FormGroup): DashboardContentModel {
     const site = this.siteService.getAssignedSite();
     if (!form) {return  }
-    const id            = this.dashBoardContent.id;
-    let content         = this.dashBoardContent;
-    let model           = form.value as DashBoardComponentProperties;
-    model.listItemID    = this.listItemID;
-    model.id            = this.dashBoardContent.id;
-    model.cardValueType = this.cardValueType;
-    model.type          = this.cardType;
-
-    model.layerIndex    = this.layerIndex;
-    model.border        = this.border;
-    model.borderRadius  = this.borderRadius;
-    model.opacity       = this.opacity;
-    model.refreshTime   = this.refreshTime;
-    model.rangeValue    = this.rangeValue;
+    const id              = this.dashBoardContent.id;
+    let content           = this.dashBoardContent;
+    let model             = form.value as DashBoardComponentProperties;
+    model.listItemID      = this.listItemID;
+    model.id              = this.dashBoardContent.id;
+    model.cardValueType   = this.cardValueType;
+    model.type            = this.cardType;
+    model.layerIndex      = this.layerIndex;
+    model.border          = this.border;
+    model.borderRadius    = this.borderRadius;
+    model.opacity         = this.opacity;
+    model.refreshTime     = this.refreshTime;
+    model.rangeValue      = this.rangeValue;
     model.dateRangeReport = this.dateRangeReport;
-    if (!this.validateCard(model)) {return}
     console.log(model)
+    if (!this.validateCard(model)) {return}
     content = this.setComponentName(model, content)
 
     if (content.component)  {content.component   = ''}
     content.name        = model.name;
-    console.log(model)
     const jsonObject    = JSON.stringify(model);
     content.properties  = jsonObject;
+    this.dashBoardContent.properties = content.properties ;
+    this.fillForm()
     return content;
   }
 
   setComponentName( model: DashBoardComponentProperties, content: DashboardContentModel,) {
 
     if (!model.cardValueType) { return content}
+
+    if (model.cardValueType === 'Product') {
+      content.componentName = 'product'
+      return content
+    }
 
     if (model.type === 'youtube') {
       content.componentName = 'youtube'
@@ -376,7 +424,6 @@ export class GridComponentPropertiesComponent implements OnInit {
       return content
     }
 
-    console.log(model?.cardValueType)
     if (model?.type.toLowerCase() ===  'order'){
       content.componentName = model?.cardValueType
       return content
@@ -384,6 +431,11 @@ export class GridComponentPropertiesComponent implements OnInit {
 
     if (model?.cardValueType.toLowerCase() ===  'flowers'){
       content.componentName = 'Flowers'
+      return content
+    }
+
+    if (model?.cardValueType.toLowerCase() ===  'flowerprices'){
+      content.componentName = 'FlowerPrices'
       return content
     }
 
@@ -421,17 +473,12 @@ export class GridComponentPropertiesComponent implements OnInit {
     this.message = []
 
     if ( model.type === 'order') {
-      // model.cardValueType = 'posorder'
       return true;
     }
 
     if (model.type != 'youtube' && model.type != 'iframe' ) {
       if (!model.cardValueType)  {
         this.message.push("No type assigned.")
-        result = false
-      }
-      if (!model.name)  {
-        this.message.push("No Name assigned.")
         result = false
       }
     }
@@ -470,11 +517,36 @@ export class GridComponentPropertiesComponent implements OnInit {
     });
   }
 
+  // setOpacity(event) {
+  //   this.opacity = event
+  //   if (this.inputForm) {
+  //     this.inputForm.patchValue({opacity: event})
+  //   }
+  // }
+  // setBorder(event){
+  //   this.border  = event
+  //   if (this.inputForm) {
+  //     this.inputForm.patchValue({border: event})
+  //   }
+  // }
+  // setBorderRadius(event){
+  //   this.borderRadius = event
+  //   if (this.inputForm) {
+  //     this.inputForm.patchValue({borderRadius: event})
+  //   }
+  // }
+  // setLayer(event) {
+  //   this.layerIndex = event
+  //   if (this.inputForm) {
+  //     this.inputForm.patchValue({layerIndex: event})
+  //   }
+  // }
+
   formatOpacity(value: number) {
     if (value >= 1000) {
       return Math.round(value / 1000) + 'k';
     }
-    this.opacity = value;
+    const item =   {opacity: value }
     return value;
   }
   formatBorder(value: number) {

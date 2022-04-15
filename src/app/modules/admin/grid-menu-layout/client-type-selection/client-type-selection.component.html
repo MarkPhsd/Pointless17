@@ -1,0 +1,30 @@
+<!-- 
+<div *ngIf="clientTypeList">client true </div>
+<div *ngIf="dashboardModel">dashboardModel true </div> -->
+
+
+<div *ngIf="dashboardModel && clientTypeList">
+  <mat-card>
+    <mat-card-subtitle>
+      <div class="subtitle">
+        Leave on for all types, or turn on to selected types.
+      </div>
+    </mat-card-subtitle>
+    <mat-divider></mat-divider>
+
+    <div *ngIf="dashboardModel">
+        <mat-selection-list #list
+                            [compareWith] ="compareFunction"
+                            [(ngModel)]   ="savedClientTypes" >
+          <mat-list-option *ngFor         ="let itemType of clientTypeList; 
+                                           let i =index;"
+                            [value]       ="itemType"
+                            (click)       ="setValues()"
+                            >
+                {{itemType.name}}
+          </mat-list-option>
+        </mat-selection-list>
+    </div>
+
+  </mat-card>
+</div>

@@ -47,7 +47,6 @@ import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcod
 import { PackageListComponent } from './modules/admin/metrc/packages/package-list.component';
 import { ItemCategoriesListComponent } from './modules/admin/metrc/items/item-categories-list/item-categories-list.component';
 import { ProductSearchSelectorComponent } from './shared/widgets/product-search-selector/product-search-selector.component'
-import { PreloadAllModules } from '@angular/router';
 import { InventoryLocationsComponent } from 'src/app/modules/admin/inventory/inventory-locations/inventory-locations.component';
 import { FacilitiesListComponent } from 'src/app/modules/admin/metrc/facilities/facilities-list/facilities-list.component';
 import { InventoryListComponent } from './modules/admin/inventory/inventory-list/inventory-list/inventory-list.component';
@@ -108,32 +107,19 @@ import { OverLayComponent } from './shared/widgets/over-lay/over-lay.component';
 import { LogoComponent } from './shared/widgets/logo/logo.component';
 import { FunctionGroupListComponent } from './modules/admin/settings/function-groups/function-group-list/function-group-list.component';
 import { FunctionGroupEditComponent } from './modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
-import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
-import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
-import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { UIHomePageSettingsComponent } from './modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 import { UITransactionsComponent } from './modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
 import { StripeSettingsComponent } from './modules/admin/settings/stripe-settings/stripe-settings.component';
-
-// export const ROUTES: Routes = [
-//   { path: '', pathMatch: 'full', redirectTo: 'dashboard/1' },
-//   { path: 'dashboard/:id', component: DashboardComponent },
-// ]
+import { PreloadAllModules } from '@angular/router';
 
 const routes: Routes = [
-
-    {path: 'menu-manager', component: GridManagerComponent,
-      children: [
-        { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menus', animation: 'isLeft'}},
-      ]
-    },
-
+    // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+  
     {path: '', component: DefaultComponent,
       children: [
-
+        { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
 
-        { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },
 
         { path: 'app-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
@@ -282,53 +268,38 @@ const routes: Routes = [
     },
 
     // { path: '', pathMatch: 'full', redirectTo: 'dashboard/7' },
-
-//UIHomePageSettingsComponent
-    { path:  'homepagesettings',   component: UIHomePageSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-    { path:  'transactionsSettings',   component: UITransactionsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-    { path:  'stripesettings ',   component: StripeSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-
-    { path:  'menu-board-designer',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-    { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
-
+    // { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
+   
+    // { path: 'homepagesettings',   component: UIHomePageSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    // { path: 'transactionsSettings',   component: UITransactionsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    // { path: 'stripesettings ',   component: StripeSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
-
     { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
-
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
     { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-
     { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},
-
     { path: 'agtest', component: AgGridTestComponent, data: { animation: 'isLeft'}},
-
     { path: 'printerSettings', component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
     { path: 'brandslist2', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
     { path: 'catscroll', component: CategoryScrollComponent, data: { animation: 'isLeft'}},
-
     { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { title: 'Item Search',  animation: 'isLeft'}},
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
-
     { path: 'login', component: LoginComponent, data: { title: 'Pointless Login', animation: 'isLeft'}},
     { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
     { path: 'changepassword', component: ChangepasswordComponent,data: {  title: 'Change Password',  animation: 'isLeft'}},
-
     { path: 'api-setting', component: APISettingComponent , data: { title: 'API Setting',  animation: 'isLeft'}},
     { path: 'apisetting',  component: APISettingComponent , data: { title: 'API Setting', animation: 'isLeft'}},
-
     { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
     { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
-
     { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
-
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
-
     { path: 'app-widget-card', component: CardComponent, data: { animation: 'isLeft'}},
-
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
-
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
+   
+    // { path: '/menu-board/grid-menu-layout',  redirectTo: '/menu-board', pathMatch: 'full' },
+
     { path: '**', component: PageNotFoundComponent},
 ];
 
@@ -336,6 +307,7 @@ const routes: Routes = [
   imports:[
     // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
     RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
+    // RouterModule.forRoot(routes, { enableTracing: true })
   ],
   // imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],

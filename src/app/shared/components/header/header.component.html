@@ -19,7 +19,7 @@
           <button aria-label="menu"
                   mat-button
                   (click)="toggleSideBar()">
-            <mat-icon >menu</mat-icon>
+            <mat-icon >{{menuBar}}</mat-icon>
           </button>
         </div>
 
@@ -27,8 +27,11 @@
           <button aria-label="search"
                   mat-button
                   (click)="toggleSearchMenu()">
-            <mat-icon >search</mat-icon>
+
+             <mat-icon >{{searchBar}}</mat-icon>
           </button>
+
+
         </div>
 
         <div>

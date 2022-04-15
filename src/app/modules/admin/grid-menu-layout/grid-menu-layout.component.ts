@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { GridsterLayoutService,IComponent  } from 'src/app/_services/system/gridster-layout.service';
 import { GridsterConfig, GridsterItem, } from 'angular-gridster2';
-import { DashBoardComponentProperties, DashboardContentModel,  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
+import { DashBoardComponentProperties, DashboardContentModel, DashBoardProperties,  } from 'src/app/modules/admin/grid-menu-layout/grid-models';
 
 // COMPONENTS
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +10,8 @@ import { Subscription } from 'rxjs';
 import { AuthenticationService, AWSBucketService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
   selector: 'grid-menu-layout',
@@ -62,8 +64,6 @@ export class GridMenuLayoutComponent implements OnInit {
   pixelHeight        = 'calc(100vh - 1em - 50px) ';
   pixelWidth         = '100%'
 
-  // min-height: 100%;
-  // height: calc(100vh - 1em - 50px);
   sites: ISite[];
 
 	constructor(
@@ -71,19 +71,48 @@ export class GridMenuLayoutComponent implements OnInit {
     private dialog        : MatDialog,
     public authService    : AuthenticationService,
     private awsservice    : AWSBucketService,
-    private  sitesService      : SitesService,
+    private  sitesService     : SitesService,
+    public route              : ActivatedRoute,
+    private navigationService : NavigationService,
   )
   {}
 
   async	ngOnInit() {
+    this.initSubscription();
     this.bucket = await this.awsservice.awsBucketURL();
+    const id = this.route.snapshot.paramMap.get('id');
+    // if (!id || !this.layoutService.dashboardCollection) { 
+    //   this.navigationService.navDashboard()
+    //   return;
+    // }
+    this.initSites(id);
+  
+  }
+
+  initDesigerMode() {
+    const designerMode = localStorage.getItem('dashBoardDesignerMode') 
+    if (designerMode === 'true' || designerMode === 'false') {
+      const mode = (designerMode == 'true')
+      if (designerMode) { 
+        this.designerMode = mode
+        this.layoutService.designerMode = mode;
+      }
+    }
+  }
+
+  initSites(id) {
     this.sitesService.getSites().subscribe(
       { next: data => {
         this.sites  = data;
         this.layoutService.sites = data;
         this.initGridsterSettings()
+        if ( id ) {
+          this.layoutService.getData(+id) //(this.id);
+          return
+        }
       },
         error: err =>  {
+          console.log('siets not retrieved')
           this.initGridsterSettings()
         }
       }
@@ -91,9 +120,9 @@ export class GridMenuLayoutComponent implements OnInit {
 	}
 
   initGridsterSettings() {
+    this.initDesigerMode()
     this.updateGridsterUserMode(this.designerMode);
     this.initSubscription();
-    this.layoutService.toggleDesignerMode(true)
     this.changedOptions();
     this.layoutService.changedOptions();
   }
@@ -113,23 +142,33 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
   initSubscription() {
-     this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
+    this.sitesService.sites$.subscribe(data => {
+      this.sites = data
+    })
+    this._dashboard = this.layoutService._dashboardModel.subscribe(data => {
+      this.layoutService.dashboardModel = data;
       if (!data) {
+        console.log('null')
         this.layoutService.forceRefresh(null);
         return;
       }
 
+      if (data.userName) {
+        this.layoutService.dashboardProperties = JSON.parse(data.userName) as DashBoardProperties
+      }
       this.backgroundblendmode = 'normal'
       this.backgroundColor     = 'white';
       this.opacity             = 1;
       this.image               = ''
+   
 
       if (this.layoutService.dashboardProperties) {
+
         this.backgroundColor = this.layoutService.dashboardProperties.backgroundColor;
         this.opacity         = this.layoutService.dashboardProperties.opacity;
         this.backgroundblendmode = this.layoutService.dashboardProperties.backgroundblendmode;
         this.image  = this.bucket + this.layoutService.dashboardProperties.image;
-
+ 
         this.pixelminHeight     = '100%';
         this.pixelHeight        = 'calc(100vh - 1em - 50px)'
         this.pixelWidth         = '100%'
@@ -156,14 +195,8 @@ export class GridMenuLayoutComponent implements OnInit {
         this.layoutService.options.maxRows = rows;
         this.layoutService.options.maxItemRows = rows;
         this.layoutService.options.maxItemCols = cols;
-
-        // this.pixelminHeight     = '100%';
-        // this.pixelHeight        this.layoutService.options.pixel= 'calc(100vh - 1em - 50px)'
-        // this.pixelWidth         = '100%'
-
         this.layoutService.changedOptions();
       }
-
     })
   }
 
@@ -176,7 +209,7 @@ export class GridMenuLayoutComponent implements OnInit {
   }
 
   onDrop(ev) {
-    const content =  this.layoutService.onDrop(ev)
+    const content = this.layoutService.onDrop(ev)
   }
 
 	changedOptionsEvent() {

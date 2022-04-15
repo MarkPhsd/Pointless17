@@ -77,9 +77,7 @@ export class ProductEditButtonService {
       },
     )
     return dialogRef;
-
   }
-
 
   openNewItemSelector() {
     let dialogRef: any;
@@ -94,10 +92,8 @@ export class ProductEditButtonService {
     )
   }
 
-
   openPSMenuGroupEditor(id: any) {
     let dialogRef: any;
-
     dialogRef = this.dialog.open(PSMenuGroupEditComponent,
       { width    : '500px',
         minWidth : '500px',
@@ -108,9 +104,7 @@ export class ProductEditButtonService {
     )
   }
 
-
   async openProductDialog(id: any) {
-
     let product = {} as IProduct;
     const site = this.siteService.getAssignedSite();
     product = await this.menuService.getProduct(site, id).pipe().toPromise();
@@ -472,17 +466,13 @@ export class ProductEditButtonService {
     //   const productTypeID = data.prodModifierType
     //   this.openProductEditor(id, productTypeID)
       const site = this.siteService.getAssignedSite();
-
       if (payment) {
-
         let action      = {}  as PaymentWithAction;
         action.action   = 1;
         action.payment  = payment;
         action.id       = payment.id
-
         let method = {} as IPaymentMethod
         const method$ = this.paymentMethodService.getCacheMethod(site,payment.paymentMethodID);
-
         method$.subscribe(data => {
           action.paymentMethod = data;
           dialogRef = this.dialog.open(AdjustPaymentComponent,
@@ -490,10 +480,9 @@ export class ProductEditButtonService {
               minWidth:     '450px',
               height:       '400px',
               minHeight:    '400px',
-              data : action
+              data     : action
           })
         })
-
       }
 
   }

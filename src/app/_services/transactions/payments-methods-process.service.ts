@@ -102,8 +102,7 @@ export class PaymentsMethodsProcessService {
     payment$.subscribe(data =>
       {
         data.amountPaid = amount;
-        console.log('posted new payment', data)
-        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount});
+        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: 1});
         this._dialog.next(this.dialogRef)
         return of(data)
       }
@@ -146,7 +145,7 @@ export class PaymentsMethodsProcessService {
 
       if (cmdResponse.CmdStatus === 'AP*' || cmdResponse.CmdStatus === 'Approved' || cmdResponse.CmdStatus === 'Partial AP') {
         const cardType = trans?.CardType;
-        const paymentMethod = await this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
+        this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
           switchMap( data => {
             payment.paymentMethodID = data.id;
             return this.paymentService.putPOSPayment(site, payment)

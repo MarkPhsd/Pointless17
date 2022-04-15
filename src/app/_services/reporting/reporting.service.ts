@@ -6,6 +6,7 @@ import { AppInitService } from '../system/app-init.service';
 import { IDateRange, ReportDateHelpersService } from './report-date-helpers.service';
 import { formatDate, DatePipe } from '@angular/common';
 import { IReportItemSales, IReportItemSaleSummary } from './reporting-items-sales.service';
+import { DateHelperService } from './date-helper.service';
 
 // this.symbolSearchService.getSymbolData('xl')
 // .switchMap(stock => {
@@ -25,6 +26,8 @@ import { IReportItemSales, IReportItemSaleSummary } from './reporting-items-sale
 export interface rowValue {
   date: string;
   value: number;
+  year: number;
+  month: number;
 }
 @Injectable({
   providedIn: 'root'
@@ -66,7 +69,8 @@ export class ReportingService {
   constructor( private http            : HttpClient,
                private appInitService  : AppInitService,
                private dateHelpers     : ReportDateHelpersService,
-               private datePipe        : DatePipe
+               private datePipe        : DatePipe,
+               private dateHelper : DateHelperService,
   ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
   }
@@ -97,7 +101,7 @@ export class ReportingService {
     for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
       var loopDay = new Date(d);
       this.dateSeries.push(
-        formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
+        this.datePipe.transform(loopDay, 'MM/dd/yyyy')
       )
     }
     return this.dateSeries
@@ -117,7 +121,7 @@ export class ReportingService {
     for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
       var loopDay = new Date(d);
       this.dateSeries.push(
-        formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
+        this.datePipe.transform(loopDay, 'MM/dd/yyyy')
       )
     }
     return this.dateSeries
@@ -135,11 +139,82 @@ export class ReportingService {
     for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
       var loopDay = new Date(d);
       this.dateSeries.push(
-        formatDate(loopDay, 'yyyy/MM/dd', 'en-US')
+        this.datePipe.transform(loopDay, 'MM/dd/yyyy')
       )
     }
     return this.dateSeries
   }
+
+  getMonthSeriesByCount(dateStarting: Date, count: number, foward: boolean): string[] {
+    const series = [];
+    const month = this.getMonthString(dateStarting);
+    series.push(month);
+    for (let i = 1; i < count; i += 1) {
+      let y = i;
+      if (!foward) {
+        y = -i;
+      }
+      let newDate = new Date(
+        dateStarting.setMonth(dateStarting.getMonth() + y)
+      );
+      let month = this.getMonthString(newDate);
+      series.push(month);
+    }
+    return series;
+  }
+
+ getMonthSeriesValueByCount(dateStarting: Date, count: number, foward: boolean): rowValue[] {
+   const series = [];
+    const month = this.getMonthString(dateStarting);
+
+    series.push(month);
+    for (let i = 1; i < count; i += 1) {
+      let y = i;
+      if (!foward) {
+        y = -i;
+      }
+      // let newDate = new Date(
+      //   dateStarting.setMonth(dateStarting.getMonth() + y)
+      // );
+      const date = new Date(month)
+      const result = this.dateHelper.add('month', y, date)
+
+      // let month = this.getMonthString(newDate);
+      const dateValue = this.datePipe.transform(result, 'MM/dd/yyyy')
+      const yearValue = this.datePipe.transform(result, 'yyyy')
+      const monthValue = this.datePipe.transform(result, 'MM')
+      const item = {date: dateValue, value: 0, year: +yearValue, month: +monthValue }
+      series.push(item);
+    }
+
+    return series;
+}
+
+  getMonthWithDatesSeries(start: string, end: string) {
+    this.dateSeries = [];
+    // let dateStart: Date;
+    // let dateEnd: Date;
+    // if (!value) value = 12
+    //we will establish 12 years as the default;
+    let dateStart = new Date(start);
+    let dateEnd = new Date(end);
+
+    console.log('start Date' , this.datePipe.transform(dateStart, 'MM/dd/yyyy'))
+    console.log('end   Date' , this.datePipe.transform(dateEnd,   'MM/dd/yyyy'))
+
+    for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
+      var loopDay = new Date(d);
+
+      this.dateSeries.push(
+        this.datePipe.transform(loopDay, 'MM/dd/yyyy')
+      )
+    }
+
+    console.log(this.dataSeries)
+    return this.dateSeries
+  }
+
+
 
   getDateSeriesWithHours(start: string, end: string): rowValue[] {
     this.dateSeries =  [];
@@ -213,19 +288,31 @@ export class ReportingService {
     return this.dateSeries
   }
 
-  getMonthSeriesWithValue(start: string, end: string) : rowValue[] {
-    this.dateSeries = [];
-    let dateStart: Date;
-    let dateEnd: Date;
-    dateStart = new Date(start);
-    dateEnd = new Date(end);
-    for (var d = dateStart; d <= dateEnd; d.setDate(d.getDate() + 1)) {
-      var loopDay = new Date(d);
-      this.dateSeries.push(
-        {date: formatDate(loopDay, 'yyyy/MM/dd', 'en-US'), value: 0}
-      )
+  // getMonthSeriesWithValue(start: string, end: string) : rowValue[] {
+  getMonthSeriesWithValue(dateStarting: Date, count: number, foward: boolean):  rowValue[] {
+
+    const series = [];
+    const month = this.getMonthString(dateStarting);
+    series.push(month);
+    for (let i = 1; i < count; i += 1) {
+      let y = i;
+      if (!foward) {
+        y = -i;
+      }
+      let newDate = new Date(
+        dateStarting.setMonth(dateStarting.getMonth() + y)
+      );
+
+      const item = {date: month, value: 0}
+      series.push(item);
     }
-    return this.dateSeries
+     console.log('getMonthSeriesWithValue', series)
+     return series;
+  }
+
+  getMonthString(month: Date): string {
+    // console.log(month);
+    return this.datePipe.transform(month, 'MM/dd/yyyy');
   }
 
   getResults(url: string, parameters: string, headers: HttpHeaders, InterFaceName: any[]) {
@@ -315,12 +402,16 @@ export class ReportingService {
     return dateRange;
   }
 
-  getMonthBackUsingCurrentDate(value) {
+  getMonthsBackUsingCurrentDate(value) {
     const startDate     = this.dateHelpers.getFirstDayOfMonthFromCurrentMonth(-value);
     const endDate       = this.dateHelpers.getLastDayofCurrentMonth()
 
+    let dateStart       = Date();
     const dateRange     = {} as IDateRange;
-    dateRange.startdate = this.datePipe.transform(startDate, 'MM/dd/yyyy');
+    const startMonth    = this.dateHelpers.getFirstMonthInSeries(startDate, value, false)
+    // const startMonth    = dateStart.setDate(dateStart.getDate() + value)
+
+    dateRange.startdate = this.datePipe.transform(startMonth, 'MM/dd/yyyy');
     dateRange.endDate   = this.datePipe.transform(endDate  , 'MM/dd/yyyy');;
     return dateRange;
   }

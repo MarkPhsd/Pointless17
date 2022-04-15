@@ -139,6 +139,14 @@ export class ReportDateHelpersService {
     return this.datePipe.transform(month, 'MM/01/yyyy');
   }
 
+  getFirstMonthInSeries(dateStarting: Date, count: number, foward: boolean): string {
+    const month = this.getMonthString(dateStarting);
+    if (!foward) { count = -count }
+    let firstDate = new Date(
+        dateStarting.setMonth(dateStarting.getMonth() + count));
+    return this.getMonthString(firstDate);
+  }
+
   getLastMonthInSeries(dateStarting: Date, count: number, foward: boolean): string {
     const month = this.getMonthString(dateStarting);
     if (!foward) { count = -count }

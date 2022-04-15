@@ -9,8 +9,7 @@
       </mat-card>
     </div>
 
-    <div class="info" *ngIf="layoutService.designerMode &&
-                            reportItemSaleSummaries">
+    <div class="info" *ngIf="layoutService.designerMode">
       <mat-card >
         <div class="grid-info">
           <div>Group by</div>
@@ -45,20 +44,32 @@
 
     <div class="card-display">
       <app-widget-card
-          *ngIf="itemNames && reportItemSaleSummaries"
+          *ngIf="showReport || (itemNames && reportItemSaleSummaries); else loading"
           [reportItemSaleSummaries]="reportItemSaleSummaries"
           [name]         ="name"
+
+          [sites]        ='sites'
+          [dateFrom]     ='dateFrom'
+          [dateTo]       ='dateTo'
+          [zrunID]       ='zrunID'
+          [groupBy]      ='groupBy'
+
           [itemNames]    ="itemNames"
           [chartHeight]  ="chartHeight"
           [chartType]    ="chartType"
           [menuType]     ="menuType"
           [rangeValue]   ='rangeValue'
-          [rangeType]    = 'rangeType'
+          [rangeType]    ='rangeType'
           [cardValueType]="cardValueType"
+          [chartWidth]   ='chartWidth'
         >
       </app-widget-card>
     </div>
-
+    <ng-template #loading>
+      
+      ...loading <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
+    
   </div>
 
 

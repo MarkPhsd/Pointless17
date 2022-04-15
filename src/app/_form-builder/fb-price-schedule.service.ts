@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { DateRange } from '@angular/material/datepicker';
-import { ClientType, IPriceSchedule, WeekDay , DateFrame, TimeFrame, OrderType, DiscountInfo  } from '../_interfaces/menu/price-schedule';
+import { IPriceSchedule, DateFrame, TimeFrame, OrderType, DiscountInfo  } from '../_interfaces/menu/price-schedule';
 import { DatePipe } from '@angular/common';
 import { PriceScheduleDataService } from '../_services/menu/price-schedule-data.service';
 
@@ -315,7 +314,7 @@ export class FbPriceScheduleService {
   // }
 
 
-  addClientTypes(inputForm: FormGroup, items: ClientType[]) {
+  addClientTypes(inputForm: FormGroup, items: any[]) {
     // this.addArray(inputForm, 'clientTypes', clientTypes)
 
     if (!inputForm) { return }

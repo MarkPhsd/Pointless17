@@ -1,18 +1,30 @@
+import { GridType } from "angular-gridster2";
+import { ClientType } from "src/app/_interfaces/menu/price-schedule";
+
+export interface GridsterSettings {
+  swap             : boolean;
+  swapWhileDragging: boolean;
+  pushItems        : boolean;
+  gridType         : string;
+}
+
 export interface WidgetModel {
   name: string;
   identifier: string;
   icon  : string;
+  type  : string;
 }
 export interface DashboardModel {
   id: number;
   userName: string;
-  roles: widgetRoles[]
   name: string;
   active: boolean;
   type: string;  //preset types, menu, report widget, restaurant/ operation layout.
   jsonObject: string;
   dashboard: Array<DashboardContentModel>;
   errorMessage: string;
+  widgetRolesJSON: string;
+  widgetRoles: widgetRoles[]
 }
 
 export interface  DashBoardProperties {
@@ -25,6 +37,7 @@ export interface  DashBoardProperties {
   gridRows       : number;
   pixelHeight    : string;
   pixelWidth     : string;
+  mobileBreakpoint: number,
 }
 
 export interface DashboardContentModel {
@@ -74,11 +87,13 @@ export interface DashBoardComponentProperties {
   refreshTime    : number;
   rangeValue     : number;
   dateRangeReport: boolean;
+  productName    : string;
 }
 
 export interface widgetRoles {
   id          : number;
   clientTypeID: number;
+  name:            string;
 }
 
 // export const WidgetsMock: WidgetModel[] = [

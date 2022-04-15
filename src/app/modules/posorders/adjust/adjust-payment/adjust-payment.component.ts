@@ -3,8 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription,Observable } from 'rxjs';
-import { PaymentWithAction } from 'src/app/_interfaces';
+import { IPOSPayment, PaymentWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
@@ -25,7 +26,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   list$                   : Observable<IItemBasic[]>;
   setting                 : IItemBasic;
   settingID               : number;
-  isAuthorized   = false;
+  isAuthorized            = false;
+
   initSubscriptions() {
     this._paymentWithAction = this.pOSPaymentService.paymentWithAction$.subscribe(data=> {
       this.paymentWithAction = data
@@ -39,6 +41,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private matSnackBar           : MatSnackBar,
                 private userAuthorization     : UserAuthorizationService,
                 private adjustMentService     : AdjustmentReasonsService,
+                private productEditButonService: ProductEditButtonService,
                 private requestMessageService : RequestMessageService,
                 private dialogRef: MatDialogRef<AdjustPaymentComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: PaymentWithAction,
@@ -47,7 +50,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (data) {
       const site = this.siteService.getAssignedSite();
       this.paymentWithAction = data
-
       this.pOSPaymentService.updateItemWithAction(data);
       this.list$  = this.adjustMentService.getReasonsByFilter(site, 2);
       this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
@@ -55,8 +57,14 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
 
-  closeDialog() {
+  closeDialog(payment: IPOSPayment  ) {
+
+    if (payment) { 
+      const data = {payment: payment, id: payment.id }
+      this.productEditButonService.openDSIEMVTransaction(data)
+    }
     this.dialogRef.close();
+
   }
 
   // void = 1,
@@ -95,12 +103,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         if (response && response.result) {
           this.updateSubscription()
           this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
-          this.closeDialog();
+          this.closeDialog(response.payment);
         }
       }
     )
   }
-
 
   async updateSubscription() {
     //update the order service.
@@ -115,7 +122,9 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._paymentWithAction.unsubscribe();
+    if (this._paymentWithAction) { 
+      this._paymentWithAction.unsubscribe();
+    }
   }
 
   notifyEvent(message: string, title: string) {

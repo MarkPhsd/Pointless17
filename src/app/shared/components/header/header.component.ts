@@ -90,6 +90,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   _user               : Subscription;
 
   message: string;
+  menuBar    = 'menu'
+  searchBar  = 'search';
 
   //themes
   matToolbarColor = 'primary';
@@ -113,6 +115,25 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
       this.getUserInfo()
+    })
+
+
+    
+    this._user = this.toolbarUIService.searchSideBar$.subscribe( data => {
+      if (data) { 
+        this.searchBar = 'search_off'
+      }
+      if (!data) { 
+        this.searchBar = 'search'
+      }
+    })
+    this._user = this.toolbarUIService.mainMenuSideBar$.subscribe( data => {
+      if (data) {  this.searchBar = 'menu_open'
+        this.menuBar = 'menu_open'
+      }
+      if (!data) { 
+        this.menuBar = 'menu'
+      }
     })
   }
 

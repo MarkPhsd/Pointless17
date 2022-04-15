@@ -1,0 +1,36 @@
+.title  {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  font-size: clamp(1rem, 1vw, 1.5rem);
+}
+.prices {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  // font-size: larger;
+  font-size: clamp(1rem, 1vw, 1.5rem);
+}
+.gallery {
+  display: flex;
+  justify-content: center;
+  height: 75%;
+  width: 100%;
+}
+
+body {
+  // background: #888
+}
+
+.mat-card-background { 
+  position: absolute;
+  left: -25px;
+  top: -25px;
+  height: 125%;
+  width: 125%;
+}
+
+.mat-card-product  { 
+  left: -25px;
+  top: 20px
+}

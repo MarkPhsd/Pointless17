@@ -11,8 +11,9 @@ import { DashboardModel } from '../grid-models';
 })
 export class DashboardMenuComponent implements OnInit {
 
-  _dashboardModel: Subscription
-  collection: DashboardModel[]
+  _dashboardModel: Subscription;
+  collection: DashboardModel[];
+
   constructor(
     public layoutService       : GridsterLayoutService,
     public authService         : AuthenticationService,
@@ -26,7 +27,6 @@ export class DashboardMenuComponent implements OnInit {
 
   initCollection() {
     const collection$ = this.layoutService.getCollection();
-
     collection$.subscribe( {
       next: data => {
         this.layoutService.dashboardCollection = data;
@@ -36,21 +36,21 @@ export class DashboardMenuComponent implements OnInit {
   }
 
   initSubscriptions() {
-    this._dashboardModel = this.layoutService.dashboardModel$.subscribe(data =>
+    this._dashboardModel = this.layoutService.dashboardModels$.subscribe(data =>
       {
-        this.filterCollection(this.layoutService.dashboardCollection)
+        this.filterCollection(data)
       }
     )
   }
 
   filterCollection(dashBoardModels: DashboardModel[]) {
-    if (!this.layoutService.dashboardCollection) { return }
+    if (!dashBoardModels) { return }
     this.collection = null;
     if (this.authService.isAuthorized)  {
-      this.collection = this.layoutService.dashboardCollection;
+      this.collection = dashBoardModels;
       return
     }
-    this.collection = this.layoutService.dashboardCollection.filter(data => {
+    this.collection = dashBoardModels.filter(data => {
       if (data.type === 'Menu' || data.type === 'POSOrder'  || data.type === 'Order') {
         this.layoutService._dashboardModel.next(data)
         return data
@@ -58,6 +58,13 @@ export class DashboardMenuComponent implements OnInit {
     })
   }
 
-  // this.authser.isAuthorized
+  forceRefresh(item) {
+    // console.log(item)
+    if (!item.id) {return }
+    
+    this.layoutService.forceRefresh(item.id)
+
+  }
+
 
 }

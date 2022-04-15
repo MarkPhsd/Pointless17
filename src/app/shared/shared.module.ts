@@ -143,6 +143,7 @@ import { SafeHtmlPipe } from '../_pipes/safe-html.pipe';
 import {YouTubePlayerModule} from '@angular/youtube-player'
 import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
 import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
+import { DashBoardRoutingModule } from '../dash-board-routing.module';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -289,6 +290,7 @@ import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/
 
   imports: [
     AppRoutingModule,
+    DashBoardRoutingModule,
     AppMaterialModule,
     CommonModule,
     BrowserAnimationsModule,
@@ -298,7 +300,6 @@ import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/
     GalleryModule,
     HammerModule,
     IonicModule.forRoot(),
-    // NgtUniversalModule,
     ColorPickerModule,
     GridsterModule,
     QuicklinkModule,

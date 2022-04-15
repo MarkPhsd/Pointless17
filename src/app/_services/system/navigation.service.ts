@@ -24,4 +24,12 @@ export class NavigationService {
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigate(['/pos-orders']);
   }
+
+  navDashboard(){
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+      this.router.navigate(['/menu-manager']);
+    });
+  }
+
 }

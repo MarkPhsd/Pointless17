@@ -186,7 +186,19 @@ export class MenusService {
         { name: 'Prompts & Kits', method: '' ,  minimized: true, routerLink: '/prompt-kits',          routerLinkActive: 'speaker-group', onClick: '', icon: 'kit', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
-
+    {
+      id:             0,
+      name:          'Dashboard',
+      icon:          'dashboard',
+      active:        true,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getUsers(),
+      routerLink:       '/menu-board',
+      routerLinkActive: 'menu-board',
+      method:           '',
+      submenus: [ ]
+    },
     {
       id:        0,
       name:     'Settings',

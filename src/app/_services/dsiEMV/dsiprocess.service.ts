@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IPOSPayment } from 'src/app/_interfaces';
-import { Account, Amount, CmdResponse, RStream, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
-
+import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -38,17 +37,23 @@ export class DSIProcessService {
   }
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
-    const commandResponse = this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt)
+    const commandResponse = this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '')
     console.log('emvSale response', commandResponse)
     return commandResponse;
   }
 
   emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
-    const commandResponse = this.emvTransaction('EMVReturn', amount, paymentID, manual, false)
+    const commandResponse = this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit')
     return commandResponse;
   }
 
-  async voidSale(posPayment: IPOSPayment ) {
+  // async emvVoid(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
+  //   const commandResponse = this.emvTransaction('EMVVoid', amount, paymentID, manual, tipPrompt)
+  //   console.log('emvSale response', commandResponse)
+  //   return commandResponse;
+  // }
+
+  async emvVoid(posPayment: IPOSPayment ): Promise<RStream> {
     const reset               = await this.pinPadReset(); //ignore response for now.
     const item                = localStorage.getItem('DSIEMVSettings')
     if (!item) { return null }
@@ -58,13 +63,20 @@ export class DSIProcessService {
     transaction.TranCode = 'VoidSaleByRecordNo';
 
     if (transaction.SecureDevice === 'EMV_VX805_PAYMENTECH') {
-      transaction.TranType = 'EMVVoidSale';
-      transaction.TranCode = '';
+      transaction.TranType = 'Credit';
+      transaction.TranCode = 'EMVVoidSale';
+    }
+
+    if (transaction.SecureDevice === "EMV_VX805_MERCURY" ||
+        transaction.SecureDevice === "EMV_VX805_VANTIV" ||
+        transaction.SecureDevice === "EMV_VX805_RAPIDCONNECT") {
+      transaction.TranType = 'Credit';
+      transaction.TranCode = 'VoidSaleByRecordNo';
     }
 
     transaction.InvoiceNo   = posPayment.id.toString();
     transaction.RefNo       = posPayment.refNumber.toString();
-    transaction.AuthCode    =posPayment.approvalCode.toString();
+    transaction.AuthCode    = posPayment.approvalCode.toString();
     transaction.RecordNo    = posPayment.ccNumber;
     transaction.Frequency   = 'OneTime'
     transaction.AcqRefData  = posPayment.dlNumber.toString();
@@ -79,14 +91,21 @@ export class DSIProcessService {
     return this.dsi.emvTransaction(transaction)
   }
 
-  async emvTransaction(type: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean ): Promise<RStream> {
+  
+  // XML = XML & setTag("TranType", opay.TranType) 'CREDIT/DEBIT/EBT
+  // XML = XML & setTag("TranCode", opay.TranCode) ''SALE/REFUND/VOUCHERReturn
+
+  async emvTransaction(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
     const reset               = await this.pinPadReset(); //ignore response for now.
     const item                = localStorage.getItem('DSIEMVSettings')
     if (!item) { return null }
     const transactiontemp     = JSON.parse(item) as Transaction;
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
-    transaction.TranCode      = type ;
+    transaction.TranCode      = TranCode;
+    if (TranType) { 
+      transaction.TranType      = TranType;
+    }
     transaction.InvoiceNo     = paymentID.toString();
     transaction.RefNo         = paymentID.toString();
     if (manual) {
@@ -98,11 +117,10 @@ export class DSIProcessService {
     if (tipPrompt) {
       transaction.Amount.Gratuity = 'Prompt'
     }
-    return this.dsi.emvTransaction(transaction)
+    return await this.dsi.emvTransaction(transaction)
   }
 
   applyAmouunt(amount: number, gratuity: number): Amount {
-
     return null
   }
 

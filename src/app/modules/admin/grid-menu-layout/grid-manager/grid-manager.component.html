@@ -1,55 +1,151 @@
-<mat-toolbar [color]="matToolbarColor">
-  <mat-toolbar-row>
-    <div class="menu-grid-menu">
-      <div class="icon-position">
-        <app-logo [logoSize]="'small'"></app-logo>
+<div *ngIf="!hideMenu">
+  <mat-toolbar   [color]="matToolbarColor">
+    <mat-toolbar-row>
+      <div class="menu-grid-menu">
+        <div class="icon-position">
+          <app-logo [logoSize]="'small'"></app-logo>
+        </div>
+
+        <div>
+          <button aria-label="home"
+                  mat-button
+                  (click)="goHome()">
+            <mat-icon >home</mat-icon>
+          </button>
+        </div>
+
+        <div  *ngIf="allowDesign">
+          <button (click)="toggleMenu()"
+                  aria-label="menu"
+                  mat-button>
+            <mat-icon >menu</mat-icon>
+          </button>
+        </div>
+
+        <div  *ngIf="allowDesign">
+          <button (click)="hide()"
+                  aria-label="menu"
+                  mat-button>
+            <mat-icon>menu_open</mat-icon>
+          </button>
+        </div>
+
       </div>
 
-      <div  *ngIf="allowDesign">
-        <a (click)="toggleMenu()">
-          <mat-icon color="warn">menu</mat-icon>
-        </a>
+      <div>
+        <app-dashboard-menu></app-dashboard-menu>
       </div>
-    </div>
 
-    <div>
-      <app-dashboard-menu></app-dashboard-menu>
-    </div>
+      <div>
+        <app-toggle-theme></app-toggle-theme>
+      </div>
 
-    <div>
-      <app-toggle-theme></app-toggle-theme>
-    </div>
+      <div>
+        <api-status-display></api-status-display>
+      </div>
 
-    <div>
-      <api-status-display></api-status-display>
-    </div>
-
-  </mat-toolbar-row>
-</mat-toolbar>
-
+    </mat-toolbar-row>
+  </mat-toolbar>
+</div>
 <mat-drawer-container >
   <mat-drawer
       position  ="start"
       [mode]    ="'side'"
       [opened]  ="toggle"
       [class]   ="'mat-orderBar-wide'" >
+      <mat-card>
+        <mat-card-content>
 
-    <mat-card *ngIf="dashboardModel" class="widgets-selection">
-      <mat-card-content>
-        <h4><mat-icon>widgets</mat-icon> Widgets</h4>
-        <mat-divider></mat-divider>
-        <ul class="nav-list" *ngIf="layoutService.widgetCollection">
-          <li *ngFor="let widget of layoutService.widgetCollection">
-            <a draggable="true" class="nav-link"
-                (dragstart)="onDrag($event, widget.identifier)">
-              <mat-icon>{{ widget.icon }}</mat-icon>
-              {{ widget.name }}
-            </a>
-          </li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+          <h4><mat-icon>widgets</mat-icon> Widgets</h4>
+          <mat-divider></mat-divider>
 
+          <div class="widget-list">
+            <mat-accordion multi="false">
+              <mat-expansion-panel [expanded]="accordionStep === 3"
+                        (opened)="setStep(3)"
+                        hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>analytics</mat-icon> Analytics
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+                <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                  <li *ngFor="let widget of layoutService.widgetCollection">
+                    <div *ngIf="widget.type === 'analytics'">
+                      <a draggable="true" class="nav-link"
+                        (dragstart)="onDrag($event, widget.identifier)">
+                        <mat-icon>{{ widget.icon }}</mat-icon>
+                        {{ widget.name }}
+                      </a>
+                    </div>
+                  </li>
+                </ul>
+              </mat-expansion-panel>
+              <mat-expansion-panel [expanded]="accordionStep === 0"
+                                  (opened)="setStep(0)"
+                                  hideToggle>
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <mat-icon>shopping_cart</mat-icon> Orders
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                  <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                    <li *ngFor="let widget of layoutService.widgetCollection">
+                      <div *ngIf="widget.type === 'order'">
+                        <a draggable="true" class="nav-link"
+                            (dragstart)="onDrag($event, widget.identifier)">
+                          <mat-icon>{{ widget.icon }}</mat-icon>
+                          {{ widget.name }}
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+              </mat-expansion-panel>
+              <mat-expansion-panel [expanded]="accordionStep === 1"
+                          (opened)="setStep(1)"
+                          hideToggle>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                <mat-icon>menu_book</mat-icon> Menus
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+                  <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                    <li *ngFor="let widget of layoutService.widgetCollection">
+                      <div *ngIf="widget.type === 'menu'">
+                        <a draggable="true" class="nav-link"
+                            (dragstart)="onDrag($event, widget.identifier)">
+                          <mat-icon>{{ widget.icon }}</mat-icon>
+                          {{ widget.name }}
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+              </mat-expansion-panel>
+
+              <mat-expansion-panel [expanded]="accordionStep === 2 "
+                          (opened)="setStep(2)"
+                          hideToggle>
+                <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon>stars</mat-icon>  Marketing
+                </mat-panel-title>
+                </mat-expansion-panel-header>
+                  <ul class="nav-list" *ngIf="layoutService.widgetCollection">
+                    <li *ngFor="let widget of layoutService.widgetCollection">
+                      <div *ngIf="widget.type === 'advertising'">
+                        <a draggable="true" class="nav-link"
+                            (dragstart)="onDrag($event, widget.identifier)">
+                          <mat-icon>{{ widget.icon }}</mat-icon>
+                          {{ widget.name }}
+                        </a>
+                      </div>
+                    </li>
+                  </ul>
+              </mat-expansion-panel>
+            </mat-accordion>
+          </div>
+        </mat-card-content>
+      </mat-card>
     <mat-card>
       <mat-card-content>
         <h4><mat-icon>design_services</mat-icon>Designer</h4>
@@ -100,7 +196,7 @@
     <grid-designer-info></grid-designer-info>
   </mat-drawer>
 
-    <mat-drawer-content *ngIf="layoutService.dashboardCollection &&
+    <mat-drawer-content class="mat-drawer-content" *ngIf="layoutService.dashboardCollection &&
                               layoutService.dashboardCollection.length>0">
         <router-outlet #outlet="outlet"></router-outlet>
     </mat-drawer-content>
