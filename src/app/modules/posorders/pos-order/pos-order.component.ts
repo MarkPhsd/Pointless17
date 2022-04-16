@@ -130,6 +130,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       if (this.order && this.order.posPayments && this.order.posPayments.length > 0)  {
         this.canRemoveClient = false
       }
+      if (!data) { return }
       this.checkIfPaymentsMade()
       this.checkIfItemsPrinted()
     })

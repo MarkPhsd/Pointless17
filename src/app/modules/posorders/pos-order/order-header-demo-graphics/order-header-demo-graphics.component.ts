@@ -13,7 +13,7 @@ export class OrderHeaderDemoGraphicsComponent  {
 
   @Input()  canRemoveClient = false;
   @Input()  order           : IPOSOrder;
-  @Input()  disableActions: boolean;
+  @Input()  disableActions  = false;
   @Output() outPutOpenClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
@@ -30,7 +30,7 @@ export class OrderHeaderDemoGraphicsComponent  {
   }
 
   openClient() {
-    if (!this.disableActions) { return }
+    if (this.disableActions) { return }
     if (this.order) {
       if (this.order.clients_POSOrders) {
         this.router.navigate(["/profileEditor", {id: this.order.clientID}]);

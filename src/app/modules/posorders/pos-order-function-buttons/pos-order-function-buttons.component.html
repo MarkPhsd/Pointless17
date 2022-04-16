@@ -8,7 +8,7 @@
 
 
   <div>
-    <button *ngIf="isStaff || (order.history || order.balanceRemaining < order.total)"
+    <button *ngIf="isStaff || (order.history || order.balanceRemaining < order.total) && isApp"
             mat-raised-button
             class="button"
             color="primary"
@@ -21,7 +21,7 @@
   </div>
 
 
-  <div *ngIf="(!order.history || !order.completionDate) || isStaff">
+  <div *ngIf="(!order.history || !order.completionDate) || isStaff ">
     <button mat-raised-button
             class="button"
             color="primary"
@@ -34,7 +34,7 @@
     </button>
   </div>
 
-  <div *ngIf="isStaff">
+  <div *ngIf="isStaff  && isApp">
     <button mat-raised-button
             class="button"
             color="primary"
@@ -44,7 +44,7 @@
     </button>
   </div>
 
-  <div *ngIf="isStaff">
+  <div *ngIf="isStaff && isApp">
     <button mat-raised-button
             class="button"
             color="primary"

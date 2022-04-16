@@ -199,7 +199,7 @@
               </app-value-fields>
             </div>
 
-            <div *ngIf="itemType && itemType.type &&  (itemType.name?.toLowerCase() === 'generic')">
+            <div *ngIf="itemType && itemType.type">
               <prompt-group-select
                  [inputForm]="productForm"
               ></prompt-group-select>

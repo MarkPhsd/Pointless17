@@ -1,4 +1,3 @@
-
 {
   "apiUrl"     : "https://localhost:44309/api",
   "useAppGate" : false,
@@ -6,4 +5,4 @@
   "company"    : "Pointless POS",
   "logo"       : "https://cafecartel.com/temp/logo.png",
   "appUrl"     : "https://ockosherstore.web.app/"
-}
+}  

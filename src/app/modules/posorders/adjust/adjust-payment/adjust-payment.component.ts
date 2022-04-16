@@ -10,6 +10,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
@@ -56,13 +57,15 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  closeDialog(payment: IPOSPayment  ) {
+  closeDialog(payment: IPOSPayment , method: IPaymentMethod ) {
 
     if (payment) { 
-      const data = {payment: payment, id: payment.id }
-      this.productEditButonService.openDSIEMVTransaction(data)
+      if (!method || method.isCreditCard || method.wic || method.ebt ) { 
+        const data = { payment: payment, id: payment.id }
+        this.productEditButonService.openDSIEMVTransaction(data)
+      } 
     }
+
     this.dialogRef.close();
 
   }
@@ -103,7 +106,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         if (response && response.result) {
           this.updateSubscription()
           this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
-          this.closeDialog(response.payment);
+          this.closeDialog(response.payment, response.paymentMethod);
         }
       }
     )

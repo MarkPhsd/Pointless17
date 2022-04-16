@@ -6,7 +6,7 @@
 
   .container {
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
   }
 
   h3, .h3 {
@@ -176,16 +176,20 @@
     width: 100%;
   }
 
+  //1024 x768
   @include for-tablet-landscape-up  {
-    max-height:   400px;
+    max-height:   550px;
+    height:   99%;
   }
 
   @include for-desktop-up {
-    max-height:   600px;
+    max-height:  600px;
+    height:   99%;
   }
 
   @include for-big-desktop-up {
-    max-height:   700px;
+    max-height:   800px;
+    height:   99%;
   }
 
 }
@@ -205,14 +209,17 @@
   }
 
   @include for-tablet-landscape-up  {
+    max-height: 700px;
     height:   99%;
   }
 
   @include for-desktop-up {
+    max-height:  600px;
     height:   99%;
   }
 
   @include for-big-desktop-up {
+    max-height:   800px;
     height:   99%;
   }
 

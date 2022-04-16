@@ -17,16 +17,17 @@
         <div > Age </div>
         <div> {{order?.clients_POSOrders?.age}} | DOB ({{order?.clients_POSOrders?.dob | date : 'shortDate' }}) </div>
       </div>
-
+  
       <div>
         <div *ngIf="!disableActions && canRemoveClient" >
+       
           <button mat-button
                   (click)="removeClient()">
               <mat-icon>clear</mat-icon>Clear
           </button>
         </div>
-
-        <div *ngIf="!disableActions &&  order.clientID !=0">
+     
+        <div *ngIf="!disableActions && order.clientID !=0">
           <button mat-button
                   (click)="openClient()">
               <mat-icon>open_in_new</mat-icon> View
@@ -38,7 +39,7 @@
   </mat-card-content>
 </mat-card>
 
-<mat-card *ngIf="!disableActions &&  !order.clients_POSOrders">
+<mat-card *ngIf="!disableActions && !order.clients_POSOrders">
   <span class="float-left">
     <app-client-search-selector
         (itemSelect)="assignCustomer($event)">

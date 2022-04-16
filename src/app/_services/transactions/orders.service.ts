@@ -14,6 +14,7 @@ import { PlatformService } from '../system/platform.service';
 import { Router } from '@angular/router';
 import { SitesService } from '../reporting/sites.service';
 import { ItemWithAction } from './posorder-item-service.service';
+import { AuthenticationService } from '../system/authentication.service';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -127,7 +128,8 @@ export class OrdersService {
         private toolbarServiceUI: ToolBarUIService,
         private router: Router,
         private siteService: SitesService,
-            )
+        private authorizationService: AuthenticationService,
+    )
   {
     this.isApp = this.platFormService.isApp()
     const order = this.getStateOrder();
@@ -510,8 +512,14 @@ export class OrdersService {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
     const order$       = this.postOrderWithPayload(site, orderPayload)
+    console.log('orderPayload', orderPayload)
     order$.subscribe( {
         next:  order => {
+          console.log('order', order)
+          if (order.resultMessage) { 
+            this.notificationEvent(`Error submitting Order ${order.resultMessage}`, "Posted")
+            return
+          }
           this.setActiveOrder(site, order)
           this.navToMenu();
         },
@@ -538,18 +546,19 @@ export class OrdersService {
     orderPayload.deviceName = this.getCurrentAssignedBalanceSheetDeviceName();
     const order = {} as IPOSOrder;
     order.deviceName =  orderPayload.deviceName;
-    order.employeeID = parseInt(this.getEmployeeID());
+    order.employeeID = +this.getEmployeeID();
     orderPayload.order = order
     return orderPayload
   }
 
-  getEmployeeID() {
-    const id = localStorage.getItem('employeeIDLogin')  ;
+  getEmployeeID(): number {
+    const id = +this.authorizationService?.userValue?.id;
+    // const id = localStorage.getItem('employeeIDLogin')  ;
     console.log('employeeIDLogin', id)
     if (id) {
-      return id
+      return +id
     }
-    return '0'
+    return  0
   }
 
   getCurrentAssignedBalanceSheetDeviceName(): string {

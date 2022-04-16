@@ -92,7 +92,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   message: string;
   menuBar    = 'menu'
   searchBar  = 'search';
-
+  flexsections = 'flex-sections'
   //themes
   matToolbarColor = 'primary';
 
@@ -178,6 +178,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.pollingService.poll();
     this.initUserOrder();
     this.updateScreenSize();
+  }
+
+  refreshUserBar(user) {
+    if (user) { 
+      this.flexsections = 'flex-sections'
+      return
+    }
+    if (!user) { 
+      this.flexsections = 'flex-sections-nouser'
+      return
+    }
   }
 
   //if there is a current order for this user, then we can assign it here.
@@ -271,7 +282,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.user) {
        user = JSON.parse(localStorage.getItem('user')) as IUser;
     }
-
+    this.refreshUserBar(user) 
     if (!user) {  return null }
 
     this.isAdmin      = false;
@@ -295,6 +306,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isUserStaff      = true
       this.showPOSFunctions = true;
     }
+
+ 
+
+   
   }
 
   initUserInfo() {

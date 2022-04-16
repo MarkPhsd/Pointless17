@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, Input,EventEmitter, HostListener } from '@angular/core';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'pos-order-function-buttons',
@@ -7,8 +8,9 @@ import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
   styleUrls: ['./pos-order-function-buttons.component.scss']
 })
 
-export class PosOrderFunctionButtonsComponent {
+export class PosOrderFunctionButtonsComponent implements OnInit {
 
+  isApp = false; 
   @Output() outPutPrint         = new EventEmitter();
   @Output() outPutPrintLabel    = new EventEmitter();
   @Output() outPutRePrintLabel  = new EventEmitter();
@@ -33,7 +35,11 @@ export class PosOrderFunctionButtonsComponent {
   @Input() order       : IPOSOrder;
 
   smallDevice    : boolean;
-  constructor() { }
+  constructor(private platFormService: PlatformService, ) { }
+
+  ngOnInit() { 
+    this.isApp = this.platFormService.isApp()
+  }
 
   @HostListener("window:resize", [])
    updateItemsPerPage() {
