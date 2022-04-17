@@ -23,6 +23,17 @@
             ></app-order-card>
           </ng-container>
         </div>
+        
+        <div  [class]="grid"
+              *ngIf="cardStyle === 'prep' && orders && site">
+          <ng-container *ngFor="let order of orders; let i = index">
+            <app-order-prep
+              (click)="setActiveOrder(order)"
+              [order]="order"
+              [site] ="site"
+            ></app-order-prep>
+          </ng-container>
+        </div>
 
         <div  class='grid-flow-panel'  *ngIf="cardStyle === 'panel' && orders">
           <ng-container *ngFor="let order of orders; let i = index">

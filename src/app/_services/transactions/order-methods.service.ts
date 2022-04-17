@@ -261,7 +261,6 @@ export class OrderMethodsService {
 
     if (!valid) { return };
 
-    console.log('triggered');
     this.initItemProcess();
 
     if (quantity === 0 ) { quantity = 1};
@@ -320,7 +319,8 @@ export class OrderMethodsService {
   // tslint:disable-next-line: typedef
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
     addItem$.subscribe(data => {
-
+      
+      console.log('processItemPostResults')
       if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription) {
@@ -338,7 +338,6 @@ export class OrderMethodsService {
       if (this.openDialogsExist) {
           this.notification('Item added to cart.', 'Check Cart');
         }
-
       }
     )
   }
@@ -362,7 +361,7 @@ export class OrderMethodsService {
      this.processAddItem(this.order, barcode, null, quantity, input);
   }
 
-  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string) {
+  promptSerial(menuItem: IMenuItem, id: number, editOverRide: boolean, serial: string): boolean {
 
     if (id) {
       if ( (menuItem && menuItem.itemType.requiresSerial) || editOverRide)
@@ -390,8 +389,12 @@ export class OrderMethodsService {
             this.initItemProcess();
            }
         });
+        return true;
       }
     }
+
+    return false;
+
   }
 
   async  promptOpenPriceOption(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem): Promise<boolean> {
@@ -533,11 +536,12 @@ export class OrderMethodsService {
    }
   }
 
-  async openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
+  openPromptWalkThrough(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
     if (!posItem || posItem.promptGroupID == 0 || !posItem.promptGroupID) { return }
-    const prompt = await this.promptGroupService.getPrompt(site, item.promptGroupID).pipe().toPromise()
-    this.openPromptWalkThroughWithItem(prompt, posItem);
+    const prompt = this.promptGroupService.getPrompt(site, item.promptGroupID).subscribe ( prompt => {
+      this.openPromptWalkThroughWithItem(prompt, posItem);
+    })
   }
 
   //, pricing:  priceList[]
@@ -556,7 +560,7 @@ export class OrderMethodsService {
   async handleProcessItem() {
     const process = this.itemProcessSection;
 
-    // console.log('handleProcessItems', process)
+    console.log('handleProcessItems', process)
     if (!this.processItem) {
       // console.log('no processItem')
       this.orderService.updateOrderSubscription(this.order)
@@ -571,9 +575,9 @@ export class OrderMethodsService {
       }
       case  1: {
           if (!this.processItem.posItem.serialCode) {
-            // console.log('pre process serial', this.processItem.item, this.processItem.posItem.id, false, '')
-            this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')
-            // console.log('Handle Process Item promptSerial', 1)
+            if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) { 
+              this.updateProcess();
+            }
           } else {
             this.updateProcess();
           }

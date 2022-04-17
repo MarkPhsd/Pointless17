@@ -1,0 +1,73 @@
+<div class="container">
+  
+  <mat-card>
+
+    <mat-card-content class="center">
+
+      <div *ngIf="!smallDevice" class="grid-orderproperties">
+
+        <div class='date-header' *ngIf="order.orderDate">
+          {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} min.
+        </div>
+
+        <div class="orderType">
+            {{order.serviceType | truncateText : 15}}
+        </div>
+
+        <div class="employee-name">
+          {{order.employeeName | truncateText : 12 }}
+        </div>
+
+        <div *ngIf="order.completionDate">
+          {{order.completionDate |  date: 'shortDate'}}
+        </div>
+
+        <div *ngIf="!order.completionDate"
+              class="time">
+          {{order.completionDate |  date: 'shortTime'}}
+        </div>
+      </div>
+
+      <div class="center">
+
+        <div class="grid-totals">
+          <div class="field-center">
+            <div class="orderID">
+              {{order.id}}
+            </div>
+          </div>
+
+          <div class="field-center">
+            <div class="order-name" >
+              <div *ngIf="smallDevice">
+                {{ order.customerName | truncateText : 15}}
+              </div>
+              <div *ngIf="!smallDevice">
+                {{ order.customerName | truncateText : 12}}
+              </div>
+            </div>
+          </div>
+
+          <div class="items">Items</div>
+          <div class="itemcount">{{order.itemCount}} </div>
+
+        </div>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+
+  <div class="order-items" 
+      *ngIf="(orderItems$ | async) as orderItems">
+      <!-- {{orderItems | json}} -->
+    <pos-order-items
+      [mainPanel]    ="false"
+      [printLocation]="printLocation"
+      [prepStatus]   ='prepStatus'
+      [prepScreen]   ='true'
+      [order]        ="orderItems">
+    </pos-order-items>
+  </div>
+
+
+</div>

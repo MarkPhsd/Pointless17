@@ -1,28 +1,47 @@
 <div class="parent-container">
-  <div *ngIf="isAuthorized">
-    <button mat-button (click)="changeView()">
-      <mat-icon>
-        <span *ngIf="viewType == 1">view_list</span>
-        <span *ngIf="viewType == 0">view_module</span>
-      </mat-icon>
-      <span *ngIf="viewType == 1">View List</span>
-      <span *ngIf="viewType == 0">View Grid</span>
-    </button>
+ 
+  <div>
+    <span *ngIf="isAuthorized || isStaff">
+
+      <button mat-button (click)="changeView()">
+        <mat-icon>
+          <span *ngIf="viewType == 1">view_list</span>
+          <span *ngIf="viewType == 0">view_module</span>
+          <span *ngIf="viewType == 3">view_module</span>
+        </mat-icon>
+        <span *ngIf="viewType == 1">View List</span>
+        <span *ngIf="viewType == 0">View Grid</span>
+        <span *ngIf="viewType == 3">View Grid</span>
+      </button>
+
+      <button mat-button (click)="filterBottomSheet()">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-button (click)="newOrder()">
+        <mat-icon>receipt</mat-icon><span>New Order</span>
+      </button>
+      <button mat-button (click)="newOrderOptions()">
+        <mat-icon>add</mat-icon><span>Other New</span>
+      </button>
+    </span>
+
+    <span  *ngIf="isAuthorized">
+      <span *ngIf="smallDevice || hidePanel">
+        <button mat-button (click)="displayPanel($event)">
+          <mat-icon>view</mat-icon><span>Expand Filter Panel</span>
+        </button>
+      </span>
+    </span>
+    <span>
+      <button mat-button (click)="setViewType(3)">
+        <mat-icon>print  </mat-icon> View Prep
+      </button>
+    </span>
+
   </div>
 
-  <div *ngIf="smallDevice">
-    <button mat-button (click)="filterBottomSheet()">
-      <mat-icon>search</mat-icon>
-    </button>
-    <button mat-button (click)="newOrder()">
-      <mat-icon>receipt</mat-icon><span>New Order</span>
-   </button>
-   <button mat-button (click)="newOrderOptions()">
-     <mat-icon>add</mat-icon><span>Other New</span>
-   </button>
-  </div>
+  <div [class]="gridcontainer">
 
-  <div class="grid-container">
     <span *ngIf="viewType == 1">
       <app-order-cards
         [cardStyle]="'block'"
@@ -44,11 +63,45 @@
       </app-order-cards>
     </span>
 
-    <div *ngIf="!smallDevice" class="filter-container">
-      <app-order-filter-panel>
+    <span *ngIf="viewType == 3">
+      <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
+    
+        <mat-button-toggle-group
+              *ngFor       ="let item of printLocations;let i = index"
+              name        ="toggleOpenClosedAll"
+              class       ="toggle-view"
+              [(ngModel)] ="printLocation"
+              (click)     ="updatePrinterLocation(item)" >
+          <mat-button-toggle value="item.id" >{{item.name}}</mat-button-toggle>
+        </mat-button-toggle-group>
+    
+        <span>
+          <button class="toggle-button"
+                  mat-button
+                  (click)="togglePrintStatus()">
+            <span *ngIf="prepStatus">
+              <mat-icon>hourglass_bottom</mat-icon>Completed
+            </span>
+            <span *ngIf="!prepStatus">
+              <mat-icon>hourglass_top</mat-icon>Waiting
+            </span>
+          </button>
+        </span>
+    
+      </span>
+      <app-order-cards
+        [site]= 'site'
+        [cardStyle]="'prep'">
+      </app-order-cards>
+    </span>
+
+    <div *ngIf="!smallDevice && !hidePanel" 
+         class="filter-container">
+      <app-order-filter-panel
+          (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>
     </div>
-
+    
   </div>
 
 </div>

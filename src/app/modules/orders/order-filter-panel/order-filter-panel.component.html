@@ -10,6 +10,7 @@
           <span>Reset</span>
         </button>
       </div>
+
       <div >
         <button class="button"
                 mat-button
@@ -35,6 +36,7 @@
           <span>Payments</span>
         </button>
       </div>
+
       <div *ngIf="isStaff">
         <button class="button"
                   mat-button
@@ -42,13 +44,24 @@
             <mat-icon>add</mat-icon><span>Other New</span>
         </button>
       </div>
-      <div>
-        <button *ngIf="smallDevice"
+
+      <div  *ngIf="smallDevice">
+        <button
                 mat-button
                 (click)="exitBottomSheet()">
           <mat-icon>close</mat-icon><span>Exit</span>
         </button>
       </div>
+
+      <div>
+        <button class="button"
+                mat-button
+                (click)="displayPanel()">
+                <mat-icon>close_fullscreen</mat-icon>
+          <span></span>
+        </button>
+      </div>
+
     </div>
 
     <div class="center-keypad">
@@ -79,6 +92,8 @@
       </mat-date-range>
     </div>
 
+
+
     <mat-button-toggle-group
           *ngIf       ="searchModel"
           name        ="toggleOpenClosedAll"
@@ -106,7 +121,8 @@
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
-          *ngIf="isStaff"
+          *ngIf="isStaff && viewType !=0"
+
           name        ="toggleOrdersGreaterThanZero"
           class       ="toggle-view"
           [(ngModel)] ="toggleOrdersGreaterThanZero"
@@ -121,8 +137,7 @@
           name        = "toggleTypeEmployee"
           class       ="toggle-view"
           [(ngModel)] ="toggleTypeEmployee"
-          (change)    ="changeToggleTypeEmployee()"
-        >
+          (change)    ="changeToggleTypeEmployee()" >
       <mat-button-toggle value="1"
                         matTooltip="User filter."
                         matTooltipPosition="above"
@@ -134,6 +149,7 @@
           <mat-icon>receipt</mat-icon> </mat-button-toggle>
     </mat-button-toggle-group>
 
+     
     <div *ngIf="isStaff" [hidden]="toggleTypeEmployee  === '0' && searchModel"
          class="toggle-selector">
       <app-mat-toggle-selector
@@ -155,29 +171,6 @@
             Sale Type
       </app-mat-toggle-selector>
     </div>
-
-    <!-- <div *ngIf="electronEnabled || printingEnabled">
-      <div [formGroup]="printForm">
-        <mat-form-field appearance="outline">
-          <mat-label >Print Quantity</mat-label>
-          <input matInput
-                  type="number"
-                  [(ngModel)] = "printQuantity"
-                  formControlName="printQuantity"
-                  class="form-control" >
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div *ngIf="electronEnabled || printingEnabled">
-      <div class="grid-container">
-        <button class="info-buttons"
-                mat-raised-button color="primary"
-                ><mat-icon>print</mat-icon>Sku </button>
-
-      </div>
-    </div>
- -->
 
   </mat-card-content>
 </mat-card>

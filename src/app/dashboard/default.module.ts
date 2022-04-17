@@ -269,6 +269,7 @@ import { NumericDirective } from '../_directives/numeric-directive.directive';
 import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
 import { MenuItemCardDashboardComponent } from '../modules/menu/menu-item-card/menu-item-card.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
+import { OrderPrepComponent } from '../modules/orders/order-prep/order-prep.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -375,6 +376,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrderBarComponent,
     OrderTypeSelectionComponent,
     OrderCardComponent,
+    OrderPrepComponent,
     OrderCardsComponent,
     OrderFilterPanelComponent,
     OrdersListComponent,

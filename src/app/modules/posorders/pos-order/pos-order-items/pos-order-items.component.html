@@ -6,13 +6,9 @@
               class="nopadd"
               *ngFor="let item of order.posOrderItems; let i = index;trackBy: trackByFN"
               (ionSwipe)="swipeItemFromList(i)" >
-
-      <div *ngIf="uiConfig &&
-                (
-                  (mainPanel || bottomSheetOpen)
-                  || order.history ||
-                  ((item.id == item.idRef ||  !item.idRef) || item.prompGrouptID == 0)
-                )">
+              <!-- ||
+             -->
+      <div *ngIf="uiConfig">
 
         <ion-item *ngIf="item" >
           <pos-order-item
@@ -37,6 +33,7 @@
                       [uiConfig] ="uiConfig"
                       [mainPanel]="mainPanel"
                       [wideBar]  ="wideBar"
+                      [prepScreen]="prepScreen"
                       [disableActions]="disableActions"
                       (outputDelete)="removeItemFromList($event)"
           ></pos-order-item>

@@ -5,3 +5,11 @@ mat-action-row {
 mat-expansion-panel {
   margin: 3px;
 }
+
+
+.grid-items { 
+  max-height: 400px;
+  // height:     400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

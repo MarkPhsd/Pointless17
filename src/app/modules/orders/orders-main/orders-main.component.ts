@@ -7,8 +7,9 @@ import { NewOrderTypeComponent } from '../../posorders/components/new-order-type
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { Subscription } from 'rxjs';
-import { IUser } from 'src/app/_interfaces';
+import { Observable, Subscription } from 'rxjs';
+import { ISite, IUser } from 'src/app/_interfaces';
+import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 
 @Component({
   selector: 'app-orders-main',
@@ -19,27 +20,68 @@ import { IUser } from 'src/app/_interfaces';
 export class OrdersMainComponent implements OnInit, OnDestroy {
 
   smallDevice  : boolean;
-  viewType     = 1;
+  site         : ISite;
   isAuthorized : boolean;
-  isStaff     : boolean;
-  isUser      : boolean;
-  listHeight = '84vh'
+  isStaff      : boolean;
+  isUser       : boolean;
+  listHeight   = '84vh'
+  hidePanel    : boolean;
 
   isMenuOpen = false;
   _user: Subscription;
   user: IUser;
+  gridcontainer = 'grid-container'
+  viewType     = 1;
+  _viewType: Subscription;
 
+  printLocation       = 0;
+  prepStatus         = false;
+  printerLocations$   : Observable<IPrinterLocation[]>;
+  _prepStatus         : Subscription;
+  _printLocation      : Subscription;
+
+  initStatusSubscriber() { 
+    this._prepStatus = this.orderService.printStatus$.subscribe( data => { 
+      if (!data) { 
+        this.prepStatus = false
+      }
+      this.prepStatus = data;
+    })
+  }
+
+  initPrintLocationSubscriber() {
+    this._printLocation = this.orderService.printerLocation$.subscribe( data => { 
+      if (!data) { 
+        this.printLocation = 0
+      }
+      this.printLocation = data;
+    })
+  }
+
+  initSubscriptions(){ 
+    this.initStatusSubscriber();
+    this.initPrintLocationSubscriber();
+
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => { 
+      this.viewType = data;
+    })
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => { 
+      this.viewType = data;
+    })
+
+  }
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
     private siteService      : SitesService,
     public userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
+    private printerService  : PrinterLocationsService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
+    this.orderService.updateViewOrderType(1)
   }
-
 
   ngOnInit(): void {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -47,14 +89,55 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
     })
+    this.site = this.siteService.getAssignedSite();
+    this.displayPanel(null)
+    this.initSubscriptions();
+    this.printerLocations$ = this.printerService.getLocations()
+  }
 
+  updatePrinterLocation(event) { 
+    if (event) { 
+      this.orderService.updateOrderPrinterLocation(event.id)
+    }
+  }
+
+  updatePrintStatus(value:boolean) { 
+    if (value) { 
+      this.orderService.updatePrintStatus(value)
+    }
+  }
+
+  togglePrintStatus() {
+    this.updatePrintStatus(!this.prepStatus)
+  }
+
+  displayPanel(event)  { 
+    const show =  localStorage.getItem('OrderFilterPanelVisible')
+    if (show === 'false') {
+      this.hidePanel = true
+      this.gridcontainer = 'grid-container-full'
+      return 
+    }
+    this.hidePanel = false
+    this.gridcontainer = 'grid-container'
+  }
+
+  hideFilterPanel(event) { 
+    this.hidePanel = event
+    console.log(this.hidePanel, event)
+    if (event) {
+      localStorage.setItem('OrderFilterPanelVisible', 'true')
+    }
+    if (!event) {
+      localStorage.setItem('OrderFilterPanelVisible', 'false')
+    }
+    this.displayPanel(event)
   }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     if (this._user) {this._user.unsubscribe()}
-
   }
 
   initAuthorization() {
@@ -80,7 +163,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   async newOrder(){
     const site = this.siteService.getAssignedSite();
-    await this.orderService.newDefaultOrder(site);
+    this.orderService.newDefaultOrder(site);
   }
 
   newOrderOptions() {
@@ -90,12 +173,24 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   changeView() {
     if (this.viewType == 1) {
       this.viewType = 0
+      this.orderService.updateViewOrderType(this.viewType)
       return
     }
     if (this.viewType == 0) {
       this.viewType = 1
+      this.orderService.updateViewOrderType(this.viewType)
       return
     }
+    if (this.viewType == 3) {
+      this.viewType = 0
+      this.orderService.updateViewOrderType(this.viewType)
+      return
+    }
+  }
+
+  setViewType(value) { 
+    this.viewType = value;
+    this.orderService.updateViewOrderType(value)
   }
 
 }

@@ -1,7 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { IPromptSubResults, MenuSubPromptSearchModel, PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
-import { editWindowState, IPromptResults, MenuPromptSearchModel, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
-import { PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
+import { Component, OnInit, Input,OnDestroy } from '@angular/core';
+import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptGroup, SelectedPromptSubGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { OrdersService } from 'src/app/_services';
@@ -15,14 +13,14 @@ import { POSOrderItemServiceService } from 'src/app/_services/transactions/posor
   templateUrl: './prompt-sub-group-panel.component.html',
   styleUrls: ['./prompt-sub-group-panel.component.scss']
 })
-export class PromptSubGroupPanelComponent implements OnInit {
-  initialStep      = 0
-  accordionStep    = 0
-
+export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
   subGroups        : SelectedPromptSubGroup[]
 
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
+
+  _accordionStep     : Subscription;
+  accordionStep      : number
 
   orderPromptGroup : IPromptGroup;
   _orderPromptGroup: Subscription;
@@ -56,6 +54,10 @@ export class PromptSubGroupPanelComponent implements OnInit {
         console.log('accordion from parent updated', this.accordionStep)
       }
     })
+
+    this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => { 
+      this.accordionStep = data;
+    })
   }
 
   constructor(
@@ -68,13 +70,20 @@ export class PromptSubGroupPanelComponent implements OnInit {
   {
     this.intSubscriptions()
     this.subGroups = this.promptGroup.selected_PromptSubGroups
-    // this.subGroups[0].promptSubGroups.name
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    
+    this.promptWalkService.updateAccordionStep(0)
+  }
   ngOnInit(): void {
     console.log('')
   }
 
-
+  setStep(event) { 
+    this.accordionStep = event;
+  }
 
 }

@@ -9,13 +9,13 @@
           [item]="item">
       </scheduled-menu-image>
     </div>
-    <div *ngIf="item?.type.toLowerCase() != 'menu list'">
+    <div *ngIf="item && item.type && item?.type.toLowerCase() != 'menu list'">
       <scheduled-menu-header
           [priceSchedule]="item"
           [showText]="true" >
       </scheduled-menu-header>
     </div>
-    <div *ngIf="item?.type.toLowerCase() === 'menu list'">
+    <div *ngIf="item && item.type && item?.type.toLowerCase() === 'menu list'">
       <scheduled-menu-header
           [name]="item?.name"
           [description]="item?.description"

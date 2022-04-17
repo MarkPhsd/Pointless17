@@ -93,7 +93,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   _uiSettings: Subscription;
   uiSettings : UIHomePageSettings;
-  wideBar    =  false;
+  wideBar    =  true;
   enableLimitsView : boolean;
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;

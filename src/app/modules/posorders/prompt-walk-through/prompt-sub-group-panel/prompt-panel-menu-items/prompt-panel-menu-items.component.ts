@@ -23,7 +23,9 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   @Input() subGroup               : PromptSubGroups;
   @Input() index                  : number;
   panelIndex                      = 0;
-  @Input() accordionStep          : number;
+
+  _accordionStep     : Subscription;
+  @Input()  accordionStep      : number
 
   @Output() outputSetStep  = new EventEmitter();
   @Output() outputNextStep = new EventEmitter();
@@ -39,12 +41,14 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   orderPromptGroup : IPromptGroup;
   _orderPromptGroup: Subscription;
 
-  intSubscriptions() {
+  initPOSItemSubscriber() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
       this.posItem = data;
     })
+  }
 
-    this._orderPromptGroup  = this.promptWalkService.orderPromptGroup$.subscribe( data => {
+  initPromptSubscriber() {
+      this._orderPromptGroup  = this.promptWalkService.orderPromptGroup$.subscribe( data => {
       this.orderPromptGroup = data;
       if (this.orderPromptGroup)
       {
@@ -52,6 +56,20 @@ export class PromptPanelMenuItemsComponent implements OnInit {
         console.log('this panel update', data.selected_PromptSubGroups[this.index].promptSubGroups.name, this.panelIndex)
       }
     })
+  }
+
+  initAccordionSubscriber() {
+    this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => { 
+      this.accordionStep = data;
+      console.log('accordion update', data)
+    })
+  }
+
+  intSubscriptions() {
+ 
+    this.initPOSItemSubscriber
+    this.initPromptSubscriber()
+    this.initAccordionSubscriber()
 
   }
 
@@ -64,7 +82,6 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   }
 
   async ngOnInit() {
-    console.log('')
     if (this.subGroup) {
       // this.subGroup.promptSubGroups.name
       // this.subGroup.promptSubGroups.promptMenuItems
@@ -87,17 +104,21 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   nextStep(event) {
     this.accordionStep++;
-    console.log('next step')
-    console.log('AccordionStep', this.accordionStep)
+    this.promptWalkService.updateAccordionStep(this.accordionStep)
+    this.setStep(this.accordionStep )
   }
 
   prevStep(event) {
     this.accordionStep --;
-    console.log('prev step')
-    console.log('AccordionStep', this.accordionStep)
+    this.promptWalkService.updateAccordionStep(this.accordionStep)
+    this.setStep(this.accordionStep )
+
   }
 
   setStep(index: number) {
-    this.accordionStep = index;
+    if (index == this.accordionStep) { 
+      return true;
+    }
+    return false;
   }
 }

@@ -1,14 +1,19 @@
 @import "/src/mixins.scss";
 @import '/src/theme/variables.scss';
 
+.container {
+  max-height: 800px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 mat-card {
   padding: 1px;
-  max-height: 145px;
-  min-height: 145px;
-  height:     145px;
-  width     : 175px;
+  min-height: 100px;
+  height:     100px;
+  width     : 100%;
   overflow: hidden;
-
+  margin-bottom: 5px;
   @include for-phone-only  {
     border-radius: 100px;
     // padding: 1px;
@@ -30,7 +35,7 @@ mat-card:active {
 }
 
 mat-card-subtitle {
-  padding: 1px;
+  padding: 4px;
 }
 
 .grid-orderproperties {
@@ -38,12 +43,18 @@ mat-card-subtitle {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-gap: 5px;
-  height: 75px;
-  padding: 1px;
+  max-height: 75px;
+  padding: 5px;
 
   @include for-phone-only  {
     visibility: hidden;
   }
+}
+
+.order-items { 
+  height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .grid-totals {

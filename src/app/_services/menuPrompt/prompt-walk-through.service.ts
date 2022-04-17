@@ -46,6 +46,10 @@ export class PromptWalkThroughService {
   private _promptTotal         = new BehaviorSubject<number>(null);
   public  promptTotal$         = this._promptTotal.asObservable();
 
+  
+  private _accordionStep         = new BehaviorSubject<number>(null);
+  public  accordionStep$         = this._accordionStep.asObservable();
+
   updatePromptGroup(orderPromptGroup:  IPromptGroup) {
      this._orderPromptGroup.next(orderPromptGroup);
      if (!orderPromptGroup) {
@@ -56,18 +60,22 @@ export class PromptWalkThroughService {
     }
   }
 
+  updateAccordionStep(number) { 
+    this._accordionStep.next(number)
+  }
+
   constructor(private orderService         : OrdersService,
               private OrderItemService     : POSOrderItemServiceService,
               private promptSubService     : PromptGroupService,
               private promptSubGroupService: PromptSubGroupsService
-              ) { }
+              ) { 
+                this._accordionStep.next(0)
+              }
 
   canItemBeAdded(item: IMenuItem, orderPromptGroup: IPromptGroup,
                  index: number, subGroupInfo : PromptSubGroups): IPromptGroup {
 
     let prompt = orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups
-
-    console.log(prompt.name)
 
     //&& subGroupInfo && prompt.promptSubGroupID == subGroupInfo.id
     if (prompt) {

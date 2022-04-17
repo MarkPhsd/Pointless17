@@ -14,11 +14,12 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 })
 export class PromptGroupEditComponent implements OnInit {
 
-  inputForm     : FormGroup;
-  @Input()   prompt         : IPromptGroup;
-  id            : any;
-  imageMain     : string;
-  instructions  : string;
+  inputForm       : FormGroup;
+  @Input() prompt : IPromptGroup;
+  id              : any;
+  imageMain       : string;
+  instructions    : string;
+
   constructor(
     public        route: ActivatedRoute,
     public           fb: FormBuilder,
@@ -38,22 +39,20 @@ export class PromptGroupEditComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
-    console.log('this.id ngoninit', this.id)
+  ngOnInit() {
     if (this.id) {
      const site = this.siteService.getAssignedSite();
-     this.prompt = await this.promptService.getPrompt(site, this.id).pipe().toPromise();
-     this.getPrompt(this.id)
+      this.promptService.getPrompt(site, this.id).subscribe( data => { 
+        this.prompt = data ;
+        this.getPrompt(data.id)
+    })
    }
  }
 
   getPrompt(id: number) {
     this.inputForm =  this.promptService.initForm(this.inputForm)
-    console.log('this.id ngoninit', this.id, this.prompt)
     if (  this.inputForm ) {
-      if (!id || id == 0) {
-        this.prompt  = {} as  IPromptGroup;
-      }
+      if (!id || id == 0) { this.prompt  = {} as  IPromptGroup; }
       if (this.prompt) {
         this.inputForm.patchValue(this.prompt)
       }
@@ -67,15 +66,15 @@ export class PromptGroupEditComponent implements OnInit {
         const site = this.siteService.getAssignedSite()
         this.prompt = this.inputForm.value
         const prompt$ = this.promptService.save(site, this.prompt)
-
-        prompt$.subscribe( data => {
-          this.notifyEvent('Item Updated', 'Success')
-          resolve(true)
-        }, error => {
-          this.notifyEvent(`Update item. ${error}`, "Failure")
-          resolve(false)
-        })
-
+        prompt$.subscribe( {
+          next: data => {
+            this.notifyEvent('Item Updated', 'Success')
+            resolve(true)
+          }, error: error => {
+            this.notifyEvent(`Update item. ${error}`, "Failure")
+            resolve(false)
+          }}
+        )
        }
       }
     )
@@ -96,9 +95,8 @@ export class PromptGroupEditComponent implements OnInit {
     const site = this.siteService.getAssignedSite()
     if (!this.prompt) {
       this._snackBar.open("No Product Selected", "Success")
-       return
+      return
     }
-    console.log( this.prompt)
     this.promptService.deletePrompt(site, this.prompt.id).subscribe( data =>{
       this._snackBar.open("Item deleted", "Success")
       this.onCancel(event)
@@ -115,7 +113,6 @@ export class PromptGroupEditComponent implements OnInit {
     let data = event
     this.imageMain = data
     this.prompt.image = event
-    // this.urlImageOther_ctl.setValue(data)
     if (this.id) {  this.updateItem(null); }
   };
 
@@ -124,7 +121,6 @@ export class PromptGroupEditComponent implements OnInit {
     this.imageMain = event
     this.prompt.image = event
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

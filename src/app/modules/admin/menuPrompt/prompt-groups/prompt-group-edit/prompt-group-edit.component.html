@@ -1,12 +1,9 @@
 <div *ngIf="prompt && inputForm; else loading"
-     class="container" >
+     [formGroup]="inputForm" 
+     class="container">
 
-    <div [formGroup]="inputForm"
-        >
-
-      <mat-card  class="mat-card" >
+    <mat-card  class="mat-card" >
         <mat-card-title >
-
           <div class="header-container" >
             <div>
               <h4>
@@ -21,11 +18,11 @@
 
             <div>
               <app-edit-buttons-standard
-                    (outputeupdateItem)     ="updateItem($event)"
-                    (outputupdateItemExit)  ="updateItemExit($event)"
-                    (outputupdatedeleteItem)="deleteItem($event)"
-                    (outputupdateonCancel)  ="onCancel($event)"
-                    (outputCopy)            ="copyItem($event)"
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+                (outputCopy)            ="copyItem($event)"
               ></app-edit-buttons-standard>
             </div>
 
@@ -72,7 +69,7 @@
           </div>
         </mat-card-content>
     </mat-card>
-  </div>
+ 
 </div>
 
 <ng-template #loading >

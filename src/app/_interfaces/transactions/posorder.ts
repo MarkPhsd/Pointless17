@@ -31,6 +31,8 @@ export interface IPOSOrderSearchModel {
   orderID           :          number;
   scheduleDate_To   :          string;
   scheduleDate_From :          string;
+  printStatus       :          boolean;
+  printLocation     :          number;
 }
 
 

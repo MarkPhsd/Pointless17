@@ -19,16 +19,20 @@ import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 export class PosOrderItemsComponent implements OnInit {
 
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
-  @Input() order          : IPOSOrder;
-  @Input() mainPanel      : boolean;
+  @Input()  order          : IPOSOrder;
+  @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
 
+  @Input() printLocation  : number;
+  @Input() prepStatus     : boolean;
+  @Input() prepScreen     : boolean;
+  @Input() site:            ISite;
   @Input() disableActions = false;
 
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
 
-  orderItemsPanel: string;
+  @Input() orderItemsPanel: string;
   smallDevice    : boolean;
   animationState : string;
   _order         : Subscription;
@@ -39,27 +43,28 @@ export class PosOrderItemsComponent implements OnInit {
   _bottomSheetOpen : Subscription;
 
   wideBar         : boolean;
-  site    : ISite;
   posName: string;
-  initSubscriptions() {
 
+  initSubscriptions() {
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
     })
-    //if disable
-    console.log('this.disableActions', this.disableActions)
+
     if (this.disableActions) {
       // this.refreshOrderFromPOSDevice()
     }
 
-    if (!this.disableActions) {
-      this._order = this.orderService.currentOrder$.subscribe( order => {
-        this.order = order
-        setTimeout(() => {
-          this.scrollToBottom();
-        }, 200);
-      })
+    if (!this.prepScreen) { 
+      if (!this.disableActions) {
+        this._order = this.orderService.currentOrder$.subscribe( order => {
+          this.order = order
+          setTimeout(() => {
+            this.scrollToBottom();
+          }, 200);
+        })
+      }
     }
+  
 
     setTimeout(() => {
       this.scrollToBottom();
@@ -69,8 +74,6 @@ export class PosOrderItemsComponent implements OnInit {
       this.uiConfig = data;
     })
   }
-
-
 
   constructor(
                 private orderService: OrdersService,
@@ -97,7 +100,13 @@ export class PosOrderItemsComponent implements OnInit {
     if (uiHomePage) {this.wideBar = uiHomePage.wideOrderBar}
     await this.uiSettingsService.subscribeToCachedConfig()
     this.initSubscriptions();
-    this.orderItemsPanel = 'item-list';
+
+    if (this.prepScreen) { 
+      this.orderItemsPanel = 'item-list-prep';
+    }
+    if (!this.prepScreen) { 
+      this.orderItemsPanel = 'item-list';
+    }
 
   }
 
@@ -105,8 +114,11 @@ export class PosOrderItemsComponent implements OnInit {
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
+
+    if (this.prepScreen) { return }
     this.orderItemsPanel = 'item-list';
 
+    
     if (window.innerWidth < 768) {
       this.smallDevice = true
     }

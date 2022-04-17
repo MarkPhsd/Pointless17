@@ -6,6 +6,7 @@ import { ActivatedRoute} from '@angular/router';
 import { Observable, Subscription} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { ISite } from 'src/app/_interfaces';
 // import { share } from 'rxjs/operators';
 
 @Component({
@@ -21,6 +22,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   scrollContainer     :   any;
   isNearBottom        :   any;
   @Input() cardStyle = 'block';
+  @Input() site: ISite;
+
   productSearchModel
   array               = [];
   sum                 = 15;
@@ -87,10 +90,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     private toolbarServiceUI : ToolBarUIService,
     )
   {
-
-//cardStyle
-
-
   }
 
   async ngOnInit()  {
@@ -98,7 +97,8 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.stateValue = this.route.snapshot.paramMap.get('value');
     this.initOrderBarSubscription();
     this.updateItemsPerPage();
-
+    this.site = this.siteService.getAssignedSite();
+    
     if (this.searchModel)  {
       const model           = this.searchModel
       this.employeeID       = model.employeeID
@@ -161,8 +161,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   refreshGridClass() {
-
-
     this.grid = "grid-flow";
     return;
   }

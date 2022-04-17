@@ -18,6 +18,8 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
+import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { PrinterLocations } from 'src/app/_services/menu/item-type.service';
 
 const { Keyboard } = Plugins;
 
@@ -73,6 +75,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   showDateFilter   : boolean;
   showScheduleFilter  = false ;
 
+  _viewType: Subscription;
+  viewType: number;
+
+  // printLocation       = 0;
+  // printStatus         = false;
+  // printerLocations$   : Observable<IPrinterLocation[]>;
+  
+  @Output() outPutHidePanel = new EventEmitter();
+
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
@@ -85,7 +96,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     )
   )
 
+  initViewTypeSubscriber() { 
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => { 
+      this.viewType = data;
+    })
+  }
+
+
   initSubscriptions() {
+    this.initViewTypeSubscriber();
     try {
       this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel = data
@@ -104,6 +123,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       private matSnack        : MatSnackBar,
       private fb              : FormBuilder,
       private userAuthorization  : UserAuthorizationService,
+  
       private _bottomSheet    : MatBottomSheet
   )
   {
@@ -114,7 +134,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.initAuthorization();
     this.initDateForm();
     this.initForm();
-    this.refreshSearch();
+    this.refreshSearch(); 
   }
 
   ngOnInit() {
@@ -122,6 +142,20 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     return
   }
 
+  displayPanel()  { 
+    const show =  localStorage.getItem('OrderFilterPanelVisible')
+    
+    if (show === 'true') {
+      localStorage.setItem('OrderFilterPanelVisible', 'false')
+      this.outPutHidePanel.emit(false)
+      return
+    }
+    if (show === 'false') {
+      localStorage.setItem('OrderFilterPanelVisible', 'true')
+      this.outPutHidePanel.emit(true)
+      return
+    }
+  }
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
@@ -214,7 +248,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
   ngOnDestroy() {
     if (this._searchModel) {
-    // this._searchModel.unsubscribe();
+      this._searchModel.unsubscribe();
+    }
+    if (this._viewType) { 
+      this._viewType.unsubscribe();
     }
   }
 
@@ -265,6 +302,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
       search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
 
+      // search.printLocation       = 0;
+      // search.printStatus         = false;
+      // if (this.viewType ==3) { 
+      //   search.printLocation       = this.printLocation;
+      //   search.printStatus         = this.printStatus
+      // }
       this.initOrderSearch(search)
       return this._searchItems$
     }

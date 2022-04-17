@@ -1,29 +1,23 @@
 <div *ngIf="subGroup" class="container">
-
-  <!-- <div *ngIf="orderPromptGroup">
-        {{orderPromptGroup.currentAccordionStep}}
-        </div>
-        <br>
-        index         {{index}}
-        accordionStep {{accordionStep}}
-  -->
-
+  <!-- accordionStep {{accordionStep}}
+  index {{index}}
+  setStep {{setStep(index)}} -->
   <mat-expansion-panel  [expanded] = "accordionStep === index"
                         (opened)   = "setStep(index)"
                         hideToggle>
 
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        <h4>
-          {{subGroup.name}}
-          <br>
-        </h4>
-        <div *ngIf ="imageURL" class="image">
-          <img class="image" [src]="imageURL">
-        </div>
-      </mat-panel-title>
-      <mat-panel-description>
-    </mat-panel-description>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <h4>
+            {{subGroup.name}}
+            <br>
+          </h4>
+          <div *ngIf ="imageURL" class="image">
+            <img class="image" [src]="imageURL">
+          </div>
+        </mat-panel-title>
+        <mat-panel-description>
+      </mat-panel-description>
     </mat-expansion-panel-header>
 
     <mat-action-row>
@@ -37,17 +31,18 @@
 
     <div [innerHTML]="subGroup.instructions"></div>
 
-    <div class="grid-items"
-         *ngFor="let item of subGroup.promptMenuItems;
-                  let i = index;">
-      <prompt-panel-menu-item
+    <div  class="grid-items">
+      <div       *ngFor="let item of subGroup.promptMenuItems;
+              let i = index;">
+        <prompt-panel-menu-item
           [promptMenuItem] = "item"
           [index]          = "index"
           (outputNextStep) = "nextStep('true')"
-          (outputPrevStep) = "prevStep('true')"
-        >
-      </prompt-panel-menu-item>
+          (outputPrevStep) = "prevStep('true')">
+        </prompt-panel-menu-item>
+      </div>
     </div>
+    
 
   </mat-expansion-panel>
 

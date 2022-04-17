@@ -2,13 +2,14 @@
   <!-- accordionStep {{accordionStep}} -->
   <mat-accordion
       class="example-headers-align"
-      multi="false"
-      >
+      multi="false"   >
+   
       <div *ngFor="let item of subGroups; let i = index">
+
         <prompt-panel-menu-items
               [subGroup]         ="item.promptSubGroups"
               [selectedSubGroup] ="item"
-              [index]            ="i"
+              [index]            ="i"   
               [accordionStep]    ="accordionStep"
               >
           </prompt-panel-menu-items>
@@ -16,6 +17,4 @@
   </mat-accordion>
 </div>
 
-<!-- (outputStep)       ="setStep($event)"
-(ouputPrevStep)    ="prevStep($event)"
-(outputNextStep)   ="nextStep($event)" -->
+<!-- -->

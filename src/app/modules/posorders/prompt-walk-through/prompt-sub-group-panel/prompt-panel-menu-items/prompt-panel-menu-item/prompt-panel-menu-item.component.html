@@ -1,12 +1,17 @@
 <div *ngIf="promptMenuItem"
       class="grid-items">
 
-  <div>
-    <button mat-button
-            class="buttons"
-            (click)="addItem()">
-     <mat-icon>add</mat-icon> {{promptMenuItem.prompt_Products.name}}
-    </button>
+  <div class="grid-items-buttons" >
+    <div>
+      <button mat-button
+        class="buttons"
+        (click)="addItem()">
+        <mat-icon>add</mat-icon> 
+      </button>
+    </div>
+    <div class='item-text'>
+      {{promptMenuItem.prompt_Products.name}}
+    </div>
   </div>
 
   <div *ngIf ="imageURL" class="image">

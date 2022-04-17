@@ -1,5 +1,15 @@
 @import "/src/mixins.scss";
 
+mat-button-toggle {
+  margin-left: 5px;
+  width: 150px;
+}
+
+toggle-button { 
+  margin-left: 5px;
+  width: 150px;
+}
+
 .parent-container {
   overflow: hidden;
   // height: 100%;
@@ -10,6 +20,21 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: auto 300px;
+  overflow: hidden;
+
+  @include for-phone-only  {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: auto;
+  }
+}
+
+.grid-container-full {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: auto ;
   overflow: hidden;
 
   @include for-phone-only  {

@@ -44,6 +44,16 @@ export interface IVoidOrder {
 
 export class OrdersService {
   get platForm() {  return Capacitor.getPlatform(); }
+  
+  //applies to order filter for POS
+  private _printStatus        = new BehaviorSubject<boolean>(null);
+  public printStatus$         = this._printStatus.asObservable();
+  //applies to order filter for POS
+  private _printerLocation    = new BehaviorSubject<number>(null);
+  public printerLocation$      = this._printerLocation.asObservable();
+  //applies to order filter for POS
+  private _viewOrderType      = new BehaviorSubject<number>(null);
+  public viewOrderType$       = this._viewOrderType.asObservable();
 
   private _posSearchModel     = new BehaviorSubject<IPOSOrderSearchModel>(null);
   public posSearchModel$      = this._posSearchModel.asObservable();
@@ -73,6 +83,18 @@ export class OrdersService {
     this._bottomSheetOpen.next(open);
   }
 
+  updateViewOrderType(value: number) { 
+    this._viewOrderType.next(value)
+  }
+
+  updatePrintStatus(value: boolean) {
+    this._printStatus.next(value)
+  }
+
+  updateOrderPrinterLocation(value: number) {
+    this._printerLocation.next(value)
+  }
+
   updateOrderSubscriptionClearOrder(id: number) {
     if (id) {
       const site = this.siteService.getAssignedSite();
@@ -85,7 +107,6 @@ export class OrdersService {
   }
 
   updateOrderSubscription(order: IPOSOrder) {
-
     this._currentOrder.next(order);
     if (order == null) {
       order = this.getStateOrder();

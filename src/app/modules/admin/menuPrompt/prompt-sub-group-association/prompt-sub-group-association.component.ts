@@ -94,30 +94,20 @@ export class PromptSubGroupAssociationComponent implements OnInit {
   constructor(  private _snackBar              : MatSnackBar,
                 private promptSubService       : PromptSubGroupsService,
                 private promptGroupService     : PromptGroupService,
-                private agGridService          : AgGridService,
                 private fb                     : FormBuilder,
                 private siteService            : SitesService,
-                private productEditButtonService: ProductEditButtonService,
-                private agGridFormatingService : AgGridFormatingService,
-                private awsService             : AWSBucketService,
-                private router: Router,
                 )
   {
     this.listBoxForm = this.fb.group({
       availableSearchInput: [''],
       selectedSearchInput: [''],
     });
-
   }
 
   ngOnInit() {
-    console.log('  ')
-    const site = this.siteService.getAssignedSite()
-    const searchModel = {} as MenuPromptSearchModel
-    searchModel.pageSize = 100;
-    searchModel.pageNumber = 1
-    this.promptResults$ = this.promptGroupService.searchMenuPrompts(site, searchModel)
+    this.refreshGroups()
   }
+
 
   // only call this when the prompt is selected.
   // pass the prompt, this will show the
@@ -125,34 +115,42 @@ export class PromptSubGroupAssociationComponent implements OnInit {
   //can be assigned on the left.
   //the groups that are assigned will be used to remove from the groups that are avalible.
   async refreshAssignment(id: number) {
-    const site   = this.siteService.getAssignedSite()
+    const site     = this.siteService.getAssignedSite()
     const prompts$ = this.promptGroupService.getPrompt(site, id)
-    const prompts  = await prompts$.pipe().toPromise();
+    const prompts = await prompts$.pipe().toPromise();
+    // prompts$.subscribe(prompts => { 
     if (prompts) {
       //then we have each group assisnged from the prompts.
+      console.log('prompt', prompts)
       this.assignSelectedAndAvalible(prompts.selected_PromptSubGroups)
     }
+    
   }
 
- async assignSelectedAndAvalible(selectedGroups: SelectedPromptSubGroup[]) {
-    //get avalible Sub Prompts that are created.
-    const searchModel = {} as MenuSubPromptSearchModel
+  refreshGroups() { 
+    const site = this.siteService.getAssignedSite()
+    const searchModel = {} as MenuPromptSearchModel
+    searchModel.pageSize = 100;
     searchModel.pageNumber = 1
-    searchModel.pageSize = 200;
+    this.promptResults$ = this.promptGroupService.searchMenuPrompts(site, searchModel)
+    this.availableItems = [];
+    this.selectedItems  = [];
+  }
 
-    const site      = this.siteService.getAssignedSite()
-    const results   = await this.promptSubService.searchSubPrompts(site, searchModel).pipe().toPromise();
-    const allGroups = results.results;
-
-    console.log(allGroups)
-    console.log('selectedGroups', selectedGroups)
+  async assignSelectedAndAvalible(selectedGroups: SelectedPromptSubGroup[]) {
+    //get avalible Sub Prompts that are created.
+    const searchModel      = {} as MenuSubPromptSearchModel
+    searchModel.pageNumber = 1
+    searchModel.pageSize   = 200;
+    const site             = this.siteService.getAssignedSite()
+    const results          = await this.promptSubService.searchSubPrompts(site, searchModel).pipe().toPromise();
+    const allGroups        = results.results;
 
     if (selectedGroups.length > 0) {
       const groups = selectedGroups
       //for each of these, we can remove matching item from the avalble list.  //avalible
       //Also we assign the in useGroupTaxes to the assigned list. //selected
       this.selectedItems = []
-      console.log('assign selected', groups)
       groups.forEach(data => {
         if (data && data.promptSubGroups) {
           this.selectedItems.push({value: data.promptSubGroupsID.toString(), text: data.promptSubGroups.name})
@@ -161,8 +159,49 @@ export class PromptSubGroupAssociationComponent implements OnInit {
       this.removeSelectedFromAvailable(allGroups, groups)
       return
     }
+
     if (selectedGroups.length == 0) { }
     this.removeSelectedFromAvailable(allGroups, undefined)
+  }
+
+  _assignSelectedAndAvalible(selectedGroups: SelectedPromptSubGroup[]) {
+    //get avalible Sub Prompts that are created.
+    const searchModel      = {} as MenuSubPromptSearchModel
+    searchModel.pageNumber = 1
+    searchModel.pageSize   = 200;
+    const site             = this.siteService.getAssignedSite()
+    if (selectedGroups.length > 0) {  
+      this.promptSubService.searchSubPrompts(site, searchModel).subscribe(
+        {
+          next: data => { 
+            if (data) { 
+              const allGroups        = data.results;
+              console.log('allgroups', allGroups )
+              console.log(', selectedGroups.length', selectedGroups.length)
+              if (selectedGroups.length > 0) {
+                const groups = selectedGroups
+                //for each of these, we can remove matching item from the avalble list.  //avalible
+                //Also we assign the in assogmed items  to the assigned list.             //selected
+                this.selectedItems = []
+                groups.forEach(data => {
+                  if (data && data.promptSubGroups) {
+                    this.selectedItems.push({value: data.promptSubGroupsID.toString(), text: data.promptSubGroups.name})
+                  }
+                })
+                this.removeSelectedFromAvailable(allGroups, groups)
+                return
+              }
+              if (selectedGroups.length == 0) { }
+              this.removeSelectedFromAvailable(allGroups, undefined)
+          }},
+          error: err => { 
+            if (selectedGroups.length == 0) { }
+            this.removeSelectedFromAvailable(undefined, undefined)
+            return;
+          }
+        }
+      )
+    }
   }
 
   setPromptItem(item) {
@@ -176,7 +215,6 @@ export class PromptSubGroupAssociationComponent implements OnInit {
     let allGroups  = xallGroups.map( item =>  ({ value: item.id.toString(), text: item.name }));
 
     if (xallAssignedGroups != undefined) {
-
       let allAssignedGroups   = xallAssignedGroups.map( item =>
          ({ value: item.promptSubGroupsID.toString(), text: item.promptSubGroups?.name.toString() })
       );
@@ -189,15 +227,17 @@ export class PromptSubGroupAssociationComponent implements OnInit {
           }
         })
       }
-
       if (allAssignedGroups != undefined) {
         allGroups =  allGroups.filter(item => !allAssignedGroups.includes(item));
       }
+      // return;
     }
 
-    this.refreshUnselected(allGroups)
-    return allGroups;
-
+    // if (!xallAssignedGroups) { 
+      this.refreshUnselected(allGroups)
+      return allGroups;
+    // }
+  
   }
 
   refreshUnselected(allGroups) {
@@ -211,13 +251,9 @@ export class PromptSubGroupAssociationComponent implements OnInit {
   saveAssignedGroups() {
     const site = this.siteService.getAssignedSite()
     const promptID = this.promptGroupsID;
-
     if (promptID && this.promptGroup) {
-
       let useGroups = {} as SelectedPromptSubGroup[]
-
       const selected = this.selectedItems
-
       const promptSubGroups = {} as PromptSubGroups
       if (selected) {
         // selected.forEach( item => { useGroups.push( { id:0, taxID: taxID, useGroupID: parseInt(item.value)  }) })
@@ -229,7 +265,6 @@ export class PromptSubGroupAssociationComponent implements OnInit {
                                          ));
         //push the list even if it's undefined. This way the list will be deleted if no items are assigned to it.
         this.promptGroup.selected_PromptSubGroups = useGroups
-
         const groups$ = this.promptGroupService.saveList(site,  this.promptGroup)
         groups$.subscribe( data => {
           console.log('saved')
@@ -242,14 +277,12 @@ export class PromptSubGroupAssociationComponent implements OnInit {
   // promptSubGroupsID: number;
   // id:                number;
   // promptSubGroups:   PromptSubGroups;
-
   convertToIlistBoxItem(listSource: any[]): IListBoxItem[] {
     var result = listSource.map(item => ({ value: item.id.toString(), text: item.name }));
     return result
   }
 
   setItemType(event) {
-    console.log(event)
     this.promptGroup = event;
     this.promptGroupsID = this.promptGroup.id;
     this.selectedItems =[]

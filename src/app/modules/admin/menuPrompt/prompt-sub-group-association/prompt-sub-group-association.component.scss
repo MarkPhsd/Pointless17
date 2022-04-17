@@ -6,6 +6,10 @@
   vertical-align: top;
 }
 
+button { 
+  margin: 10px;
+}
+
 .drag-drop-list {
   border: solid 1px;
   min-height: 60px;
@@ -70,11 +74,6 @@
   overflow-y: scroll;
 }
 
-// .grid-dual-list {
-//   display: grid;
-//   grid-template-columns: 1fr 1fr;
-//   gap: 10px;
-// }
 
 @media (min-width: 768px) {
   .drag-drop-container {

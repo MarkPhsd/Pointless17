@@ -62,12 +62,17 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   @Input() mainPanel      : boolean;
   @Input() wideBar        = false;
   @Input() disableActions = false;
+  @Input() prepScreen: string;
+  
   customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
   isNotInSidePanel        : boolean
   sidePanelWidth          : number
   sidePanelPercentAdjust  : number
+
+  @Input() printLocation : number;
+  @Input() prepStatus    : boolean;
 
   animationState          : string;
   color                   : ThemePalette = 'primary';
@@ -93,6 +98,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass       = 'product-name'
 
+  isModifier: boolean;
+  isItemKitItem: boolean;
 
   @HostListener("window:resize", [])
    updateItemsPerPage() {
@@ -172,6 +179,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
 
     this.updateCardStyle(this.mainPanel)
+
   }
 
   ngAfterViewInit() {
@@ -285,7 +293,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       } else {
         this.isNotInSidePanel = true
         this.sidePanelPercentAdjust = 80
-        this.customcard ='custom-card-side'
+        // this.customcard ='custom-card-side'
+        this.updateCardStyle(true)
       }
       if (this.onlineShortDescription) {
         this.onlineShortDescription =  this.truncateTextPipe.transform(this.onlineShortDescription.replace(/<[^>]+>/g, ''), 200)
@@ -357,10 +366,24 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   }
 
   updateCardStyle(option: boolean)  {
+
+    console.log('option', option, this.orderItem.id, this.orderItem.idRef)
+    if (this.orderItem && this.orderItem.id != this.orderItem.idRef) { 
+      this.customcard       ='custom-card-modifier';
+      this.productnameClass = 'productname-modifier'
+      this.isModifier       = true;
+      return
+    }
+
     this.customcard ='custom-card';
+
     if (!option) {
+
+
       this.customcard ='custom-card-side';
     }
+
+
   }
   openDialog() {
     const item = this.orderItem

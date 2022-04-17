@@ -19,6 +19,7 @@ export class PromptKitsComponent implements OnInit {
     this.windowState = this.promptGroupService.editWindowState$.subscribe( data => {
       if (!data) {
         this.initWindowState()
+        return;
       }
       this.editWindowState = data
       this.accordionStep = data.tabBosition;
@@ -63,7 +64,8 @@ export class PromptKitsComponent implements OnInit {
     this.editWindowState = {} as editWindowState;
     this.editWindowState.tabBosition = 0
     this.promptGroupService.updateEditWindowState(this.editWindowState)
-    console.log(this.editWindowState);
+    this.accordionStep =0
+   
   }
 
 }
