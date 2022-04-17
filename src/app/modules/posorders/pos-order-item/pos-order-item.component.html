@@ -1,3 +1,4 @@
+
 <mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
@@ -8,22 +9,24 @@
   <mat-card-content>
     <div class="grid-items">
       <div *ngIf="orderItem">
-        <div>
-          <span >
+        <div >
+          <span *ngIf="!isModifier  && !prepScreen">
             {{index+1}}:
           </span>
+          
           <span [class]="productnameClass" >
             {{ orderItem?.productName }}
           </span>
           <span class="product-name" *ngIf="orderItem.itemType">
             ( {{orderItem?.itemType?.name}} )
           </span>
-          <span  *ngIf="quantity">
+          <span  *ngIf="quantity && !prepScreen">
             {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
           </span>
-          <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode">
+          <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode && !prepScreen">
             {{ orderItem.serialCode }}
           </span>
+
           <span  *ngIf="( mainPanel || wideBar )
                         && orderItem
                         && orderItem.modifierNote
@@ -31,14 +34,16 @@
                         && orderItem.modifierNote != ''">
             {{ orderItem.modifierNote }}
           </span>
-          <span  *ngIf="mainPanel || bottomSheetOpen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
+       
+          <span  *ngIf="(mainPanel || bottomSheetOpen) && !prepScreen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
         </div>
 
         <div class="grid-item-span">
           <span *ngIf="orderItem.printed">
-            <mat-icon color="warn" >print</mat-icon> <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
+            <mat-icon color="warn" >print</mat-icon>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
-
+          
           <div class="void-info" *ngIf="orderItem.voidReason">
             <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
