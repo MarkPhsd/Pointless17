@@ -54,7 +54,7 @@ export class PosOrderItemsComponent implements OnInit {
       // this.refreshOrderFromPOSDevice()
     }
 
-    if (!this.prepScreen) { 
+    if (!this.prepScreen) {
       if (!this.disableActions) {
         this._order = this.orderService.currentOrder$.subscribe( order => {
           this.order = order
@@ -64,7 +64,7 @@ export class PosOrderItemsComponent implements OnInit {
         })
       }
     }
-  
+
 
     setTimeout(() => {
       this.scrollToBottom();
@@ -101,10 +101,11 @@ export class PosOrderItemsComponent implements OnInit {
     await this.uiSettingsService.subscribeToCachedConfig()
     this.initSubscriptions();
 
-    if (this.prepScreen) { 
+    if (this.prepScreen) {
       this.orderItemsPanel = 'item-list-prep';
+
     }
-    if (!this.prepScreen) { 
+    if (!this.prepScreen) {
       this.orderItemsPanel = 'item-list';
     }
 
@@ -118,7 +119,7 @@ export class PosOrderItemsComponent implements OnInit {
     if (this.prepScreen) { return }
     this.orderItemsPanel = 'item-list';
 
-    
+
     if (window.innerWidth < 768) {
       this.smallDevice = true
     }
@@ -136,6 +137,21 @@ export class PosOrderItemsComponent implements OnInit {
     const index = payload.index;
     const orderItem = payload.item
     this.orderMethodService.removeItemFromList(index, orderItem)
+  }
+
+  setAsPrepped(index) {
+    if (this.disableActions) {return}
+    const item =  this.order.posOrderItems[index]
+    if (!item)  { return }
+    this.orderMethodService.changePrepStatus(index, item)
+  }
+
+  swipeAction(i) {
+    if (this.prepScreen) {
+      this.setAsPrepped(i)
+      return
+    }
+    this.swipeItemFromList(i)
   }
 
   async swipeItemFromList(index) {

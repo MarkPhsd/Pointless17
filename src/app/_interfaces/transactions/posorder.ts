@@ -31,7 +31,7 @@ export interface IPOSOrderSearchModel {
   orderID           :          number;
   scheduleDate_To   :          string;
   scheduleDate_From :          string;
-  printStatus       :          boolean;
+  prepStatus        :          number;
   printLocation     :          number;
 }
 
@@ -107,6 +107,7 @@ export interface IPOSOrder {
   wicTotal              : number;//    As Double
   ebtTotal              : number;// As Double
   stateTotal            : number;// As Double
+
 }
 
 export interface ClientsPOSOrders {
@@ -230,6 +231,10 @@ export interface PosOrderItem {
   isSchedule_DiscountMember   :  number;
   isSchedule_DiscountedItem   :  number;
   discountScheduleID          :  number;
+  packagingMaterial           :  string;
+  portionValue                :  string;
+  itemPrepped                 :  string;
+  printLocation               :  number;
 }
 
 export interface PosPayment {

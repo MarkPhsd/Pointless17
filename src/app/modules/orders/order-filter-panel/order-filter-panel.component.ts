@@ -78,10 +78,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   _viewType: Subscription;
   viewType: number;
 
-  // printLocation       = 0;
-  // printStatus         = false;
-  // printerLocations$   : Observable<IPrinterLocation[]>;
-  
+  printLocation       = 0;
+  prepStatus          = 1;
+  _prepStatus         : Subscription;
+  _printLocation      : Subscription;
+  printerLocations$   : Observable<IPrinterLocation[]>;
+
   @Output() outPutHidePanel = new EventEmitter();
 
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
@@ -96,15 +98,33 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     )
   )
 
-  initViewTypeSubscriber() { 
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => { 
+  initStatusSubscriber() {
+    this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
+      if (!data) {
+        this.prepStatus = 1
+      }
+      if (data) {
+        this.prepStatus = data;
+      }
+    })
+  }
+
+  initPrintLocationSubscriber() {
+    this._printLocation = this.orderService.printerLocation$.subscribe( data => {
+      if (data) {
+        console.log('order filter printLocation')
+        this.printLocation = data;
+      }
+    })
+  }
+
+  initViewTypeSubscriber() {
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
       this.viewType = data;
     })
   }
 
-
-  initSubscriptions() {
-    this.initViewTypeSubscriber();
+  initSearchSubscriber() {
     try {
       this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel = data
@@ -112,6 +132,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       })
     } catch (error) {
     }
+  }
+
+  initSubscriptions() {
+    this.initStatusSubscriber();
+    this.initPrintLocationSubscriber();
+    this.initViewTypeSubscriber();
+    this.initSearchSubscriber();
   }
 
   constructor(
@@ -123,7 +150,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       private matSnack        : MatSnackBar,
       private fb              : FormBuilder,
       private userAuthorization  : UserAuthorizationService,
-  
+
       private _bottomSheet    : MatBottomSheet
   )
   {
@@ -134,7 +161,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.initAuthorization();
     this.initDateForm();
     this.initForm();
-    this.refreshSearch(); 
+    this.refreshSearch();
   }
 
   ngOnInit() {
@@ -142,10 +169,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     return
   }
 
-  displayPanel()  { 
+  displayPanel()  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
-    
-    if (show === 'true') {
+    console.log(show)
+    if (!show || show === 'true') {
       localStorage.setItem('OrderFilterPanelVisible', 'false')
       this.outPutHidePanel.emit(false)
       return
@@ -250,7 +277,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     if (this._searchModel) {
       this._searchModel.unsubscribe();
     }
-    if (this._viewType) { 
+    if (this._viewType) {
       this._viewType.unsubscribe();
     }
   }
@@ -302,12 +329,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
       search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
 
-      // search.printLocation       = 0;
-      // search.printStatus         = false;
-      // if (this.viewType ==3) { 
-      //   search.printLocation       = this.printLocation;
-      //   search.printStatus         = this.printStatus
-      // }
+      search.printLocation       = 0;
+      search.prepStatus          = 1;
+      if (this.viewType ==3) {
+        search.printLocation      = this.printLocation;
+        search.prepStatus         = 1//this.prepStatus
+      }
       this.initOrderSearch(search)
       return this._searchItems$
     }
@@ -363,15 +390,13 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   toggleScheduleDateRangeFilter() {
-    console.log('showScheduleFilter', this.showScheduleFilter);
-    this.showScheduleFilter  = !this.showScheduleFilter;
-    console.log('showScheduleFilter', this.showScheduleFilter);
+    this.showScheduleFilter = !this.showScheduleFilter;
     this.initScheduledDateForm();
   }
 
-   initDateForm() {
+  initDateForm() {
 
-    if (!this.showDateFilter) {
+    if (!this.showDateFilter ) {
       if (this.searchModel) {
         this.searchModel.completionDate_From = null;
         this.searchModel.completionDate_To = null;
@@ -401,15 +426,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
    initScheduledDateForm() {
 
-    if (!this.showDateFilter) {
-      if (this.searchModel) {
-        this.searchModel.scheduleDate_From = null;
-        this.searchModel.scheduleDate_To = null;
-      }
-      this.scheduleDateForm = null;
-      return
-    }
-
     this.scheduleDateForm = new FormGroup({
       start: new FormControl(),
       end: new FormControl()
@@ -426,11 +442,18 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
     this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
     this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
-    this.subscribeToDatePicker();
+    // this.subscribeToDatePicker();
+
+    if (!this.showScheduleFilter) {
+      if (this.searchModel) {
+        this.searchModel.scheduleDate_From = null;
+        this.searchModel.scheduleDate_To = null;
+      }
+      // this.scheduleDateForm = null;
+      return
+    }
+
   }
-
-
-
 
   subscribeToDatePicker()
     {
@@ -499,7 +522,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       }
     }
   }
-
 
   refreshDateSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel  }

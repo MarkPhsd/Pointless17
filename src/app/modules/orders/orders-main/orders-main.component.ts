@@ -8,7 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AuthenticationService, OrdersService } from 'src/app/_services';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { Observable, Subscription } from 'rxjs';
-import { ISite, IUser } from 'src/app/_interfaces';
+import { IPOSOrderSearchModel, ISite, IUser } from 'src/app/_interfaces';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 
 @Component({
@@ -35,48 +35,71 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   _viewType: Subscription;
 
   printLocation       = 0;
-  prepStatus         = false;
+  prepStatus          = 1;
   printerLocations$   : Observable<IPrinterLocation[]>;
   _prepStatus         : Subscription;
   _printLocation      : Subscription;
 
-  initStatusSubscriber() { 
-    this._prepStatus = this.orderService.printStatus$.subscribe( data => { 
-      if (!data) { 
-        this.prepStatus = false
+  searchModel: IPOSOrderSearchModel;
+
+  initStatusSubscriber() {
+    this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
+      if (data) {
+        this.prepStatus = data;
       }
-      this.prepStatus = data;
     })
   }
 
   initPrintLocationSubscriber() {
-    this._printLocation = this.orderService.printerLocation$.subscribe( data => { 
-      if (!data) { 
-        this.printLocation = 0
+    this._printLocation = this.orderService.printerLocation$.subscribe( data => {
+      if (data) {
+        console.log('order main  printLocation')
+        this.printLocation = data;
       }
-      this.printLocation = data;
     })
   }
 
-  initSubscriptions(){ 
+  initSearchModelSubscriber() {
+    this.orderService.posSearchModel$.subscribe(data => {
+      if (!data) {
+        this.searchModel = {} as IPOSOrderSearchModel
+      }
+      if (data) {
+        this.searchModel = data;
+      }
+    })
+  }
+
+  initSubscriptions(){
     this.initStatusSubscriber();
     this.initPrintLocationSubscriber();
+    this.initSearchModelSubscriber();
 
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => { 
-      this.viewType = data;
-    })
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => { 
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
       this.viewType = data;
     })
 
   }
+
+  destroySubscriptions() {
+    if (this._prepStatus) {
+      this._prepStatus.unsubscribe()
+    }
+    if (this._printLocation) {
+      this._printLocation.unsubscribe()
+    }
+    if (this._viewType) {
+      this._viewType.unsubscribe()
+    }
+  }
+
   constructor (
     public route             : ActivatedRoute,
     private _bottomSheet     : MatBottomSheet,
     private siteService      : SitesService,
-    public userAuthorization : UserAuthorizationService,
+    public  userAuthorization : UserAuthorizationService,
     private authenticationService: AuthenticationService,
-    private printerService  : PrinterLocationsService,
+    private printerService   : PrinterLocationsService,
     private orderService     : OrdersService)
   {
     this.initAuthorization();
@@ -95,34 +118,42 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.printerLocations$ = this.printerService.getLocations()
   }
 
-  updatePrinterLocation(event) { 
-    if (event) { 
-      this.orderService.updateOrderPrinterLocation(event.id)
+
+  updatePrinterLocation() {
+    this.searchModel.printLocation = this.printLocation;
+    this.searchModel.prepStatus    = this.prepStatus
+    this.orderService.updateOrderPrinterLocation(this.printLocation)
+    this.orderService.updatePrepStatus(this.prepStatus)
+    this.orderService.updateOrderSearchModel(this.searchModel)
+    console.log(this.searchModel)
+  }
+
+  updatePreptStatus(value:number) {
+    if (value) {
+      this.searchModel.printLocation = this.printLocation;
+      this.searchModel.prepStatus = this.prepStatus
+      // this.orderService.updateOrderPrinterLocation(this.printLocation)
+      this.orderService.updatePrepStatus(this.prepStatus)
+      this.orderService.updateOrderSearchModel(this.searchModel)
     }
   }
 
-  updatePrintStatus(value:boolean) { 
-    if (value) { 
-      this.orderService.updatePrintStatus(value)
-    }
+  togglePrepStatus() {
+    this.updatePreptStatus(this.prepStatus)
   }
 
-  togglePrintStatus() {
-    this.updatePrintStatus(!this.prepStatus)
-  }
-
-  displayPanel(event)  { 
+  displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
     if (show === 'false') {
       this.hidePanel = true
       this.gridcontainer = 'grid-container-full'
-      return 
+      return
     }
     this.hidePanel = false
     this.gridcontainer = 'grid-container'
   }
 
-  hideFilterPanel(event) { 
+  hideFilterPanel(event) {
     this.hidePanel = event
     console.log(this.hidePanel, event)
     if (event) {
@@ -137,6 +168,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    this.destroySubscriptions()
     if (this._user) {this._user.unsubscribe()}
   }
 
@@ -174,21 +206,19 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     if (this.viewType == 1) {
       this.viewType = 0
       this.orderService.updateViewOrderType(this.viewType)
-      return
     }
     if (this.viewType == 0) {
       this.viewType = 1
       this.orderService.updateViewOrderType(this.viewType)
-      return
     }
     if (this.viewType == 3) {
       this.viewType = 0
       this.orderService.updateViewOrderType(this.viewType)
-      return
     }
+    this.searchModel.prepStatus  = this.viewType;
   }
 
-  setViewType(value) { 
+  setViewType(value) {
     this.viewType = value;
     this.orderService.updateViewOrderType(value)
   }

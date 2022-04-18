@@ -285,6 +285,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  sendToPrep() {
+    if (this.order) {
+      const site = this.siteService.getAssignedSite()
+      this.orderMethodService.prepPrintUnPrintedItems(this.order.id)
+    }
+  }
+
   logAnimation(event) {
     // console.log(event)
   }

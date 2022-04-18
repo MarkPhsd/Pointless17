@@ -82,17 +82,20 @@
       </mat-date-range>
     </div>
 
-    <div *ngIf="(isAuthorized || isUser)" class="fields">
-      <button mat-raised-button class="button"
-              (click)="toggleScheduleDateRangeFilter()">Schedule Dates<mat-icon>date_range</mat-icon></button>
+    <div *ngIf="isAuthorized || isUser" class="fields">
+      <button mat-raised-button
+              class="button"
+              (click)="toggleScheduleDateRangeFilter()">
+              Schedule Dates
+        <mat-icon>date_range</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="showScheduleFilter && scheduleDateForm">
       <mat-date-range
-        *ngIf="showScheduleFilter"
-        [inputForm]      ="scheduleDateForm"
-        (outputDateRange)="emitDatePickerData($event)">
+          [inputForm]      ="scheduleDateForm"
+          (outputDateRange)="emitDatePickerData($event)">
       </mat-date-range>
     </div>
-
-
 
     <mat-button-toggle-group
           *ngIf       ="searchModel"
@@ -121,8 +124,7 @@
     </mat-button-toggle-group>
 
     <mat-button-toggle-group
-          *ngIf="isStaff && viewType !=0"
-
+          *ngIf       ="isStaff && viewType !=0"
           name        ="toggleOrdersGreaterThanZero"
           class       ="toggle-view"
           [(ngModel)] ="toggleOrdersGreaterThanZero"
@@ -149,7 +151,7 @@
           <mat-icon>receipt</mat-icon> </mat-button-toggle>
     </mat-button-toggle-group>
 
-     
+
     <div *ngIf="isStaff" [hidden]="toggleTypeEmployee  === '0' && searchModel"
          class="toggle-selector">
       <app-mat-toggle-selector
@@ -164,7 +166,7 @@
          [hidden]="toggleTypeEmployee === '1' && searchModel"
          class="toggle-selector">
       <app-mat-toggle-selector
-            *ngIf="searchModel"
+            *ngIf     ="searchModel"
             [id]      ="searchModel.serviceTypeID"
             [list$]   ="serviceTypes$"
             (outPutID)="setServiceType($event)">

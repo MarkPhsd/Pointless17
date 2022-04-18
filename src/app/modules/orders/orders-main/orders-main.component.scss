@@ -2,12 +2,12 @@
 
 mat-button-toggle {
   margin-left: 5px;
-  width: 150px;
+  width: 120px;
 }
 
-toggle-button { 
+toggle-button {
   margin-left: 5px;
-  width: 150px;
+  width: 120px;
 }
 
 .parent-container {
@@ -28,6 +28,9 @@ toggle-button {
     gap: var(--gap);
     grid-template-columns: auto;
   }
+}
+.toggle-sections {
+  margin-left: 10px;
 }
 
 .grid-container-full {

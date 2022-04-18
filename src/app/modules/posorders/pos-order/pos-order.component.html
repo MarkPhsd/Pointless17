@@ -17,7 +17,7 @@
           </limit-values-progress-bars>
         </div>
 
-    
+
         <div  class="grid-header-item"
               *ngIf="wideBar || mainPanel">
           <app-order-header-demo-graphics
@@ -37,6 +37,7 @@
         <div *ngIf="mainPanel">
 
           <pos-order-function-buttons
+                (outPutSendToPrep)  ="sendToPrep()"
                 (outPutPrintLabel)  ="printLabels()"
                 (outPutRePrintLabel)="rePrintLabels()"
                 (outPutPrintReceipt)="printReceipt()"

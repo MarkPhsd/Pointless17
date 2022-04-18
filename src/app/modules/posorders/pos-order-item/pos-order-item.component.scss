@@ -6,7 +6,7 @@ h3, .h3 {
   margin-bottom: -1px;
 }
 
-.button-list { 
+.button-list {
   overflow-y: auto;
   overflow-x: auto;
 }
@@ -62,7 +62,7 @@ mat-icon {
   }
 }
 
-.custom-card-modifier { 
+.custom-card-modifier {
   padding      : 10px;
   padding-left : 15px;
   margin       : 5px;
@@ -79,7 +79,7 @@ mat-icon {
   }
 }
 
-.productname-modifier { 
+.productname-modifier {
   color: cornflowerblue;
   // background-color: #fff;
   background-blend-mode: difference;
@@ -124,6 +124,27 @@ mat-icon {
   display: grid;
   gap: 10px;
   grid-template-columns: auto 50px;
+}
+
+.status-icon {
+  right: 0px;
+  top: 2px;
+  position: absolute;
+  margin-right: 8px;
+}
+
+.ready-icon {
+  right: 0px;
+  top: 35px;
+  position: absolute;
+  margin-right: 20px;
+}
+
+.ready-icon {
+  right: 0px;
+  top: 12px;
+  position: absolute;
+  margin-right: 8px;
 }
 
 .grid-item-span {

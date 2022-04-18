@@ -37,7 +37,7 @@ export class OrderCardComponent implements OnInit {
       }
       this.minutesOpen = this.getMinutesOpen(this.order)
     }
-    console.log('order?.clients_POSOrders?', this.order?.clients_POSOrders  )
+    // console.log('order?.clients_POSOrders?', this.order?.clients_POSOrders  )
 
   }
 

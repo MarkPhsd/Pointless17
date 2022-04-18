@@ -8,7 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
 import { ISite }   from 'src/app/_interfaces';
@@ -21,6 +21,9 @@ import { PrintingService } from '../system/printing.service';
 import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { DateHelperService } from '../reporting/date-helper.service';
+import { DatePipe } from '@angular/common';
+import { T } from '@angular/cdk/keycodes';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -83,6 +86,8 @@ export class OrderMethodsService {
               private printingService         : PrintingService,
               private userAuthorization       : UserAuthorizationService,
               private menuService             : MenuService,
+              private dateHelper              : DateHelperService,
+              private datePipe                : DatePipe,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -319,7 +324,7 @@ export class OrderMethodsService {
   // tslint:disable-next-line: typedef
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
     addItem$.subscribe(data => {
-      
+
       console.log('processItemPostResults')
       if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
 
@@ -575,7 +580,7 @@ export class OrderMethodsService {
       }
       case  1: {
           if (!this.processItem.posItem.serialCode) {
-            if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) { 
+            if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) {
               this.updateProcess();
             }
           } else {
@@ -672,9 +677,7 @@ export class OrderMethodsService {
     }
   }
 
-
   removeItemFromList(index: number, orderItem: PosOrderItem) {
-    console.log(orderItem)
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {
@@ -695,8 +698,69 @@ export class OrderMethodsService {
     }
   }
 
-  validateCustomerForOrder(client: IClientTable, ordersRequireCustomer: boolean) {
+  changePrepStatus(index: number, orderItem: PosOrderItem) {
+    if (orderItem) {
+      const site = this.siteService.getAssignedSite()
+      if (orderItem.id) {
+        const orderID = orderItem.orderID
+        this.posOrderItemService.setItemPrep(site,orderItem).subscribe( item => {
+          if (item) {
+            this.notifyEvent('Item Prepped!', "Success")
+            this.order.posOrderItems.splice(index, 1, item)
+            this.orderService.updateOrderSubscription(this.order)
+          }
+        })
+      }
+    }
+  }
 
+  setItemsAsPrepped(orderID: number, printLocation: number) {
+    if (orderID) {
+      const site = this.siteService.getAssignedSite()
+      this.posOrderItemService.setItemsAsPrepped(site, orderID, printLocation).pipe(
+        switchMap(data => {
+          return this.orderService.getOrder(site, orderID.toString(), false)
+        })).subscribe( order => {
+          if (order) {
+            this.notifyEvent('Item Sent to Prep!', "Success")
+            this.orderService.updateOrderSubscription(order)
+          }
+      })
+    }
+  }
+
+  prepPrintUnPrintedItems(id: number) {
+    if (id) {
+      const site = this.siteService.getAssignedSite()
+      this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
+        switchMap(data => {
+          return this.orderService.getOrder(site, id.toString(), false)
+        })).subscribe( order => {
+          if (order) {
+            this.notifyEvent('Item Sent to Prep!', "Success")
+            this.orderService.updateOrderSubscription(order)
+          }
+      })
+    }
+  }
+
+  prepPrintUnPrintedItem(index: number, orderItem: PosOrderItem) {
+    if (orderItem) {
+      const site = this.siteService.getAssignedSite()
+      if (orderItem.id) {
+        const orderID = orderItem.orderID
+        this.posOrderItemService.setItemPrep(site,orderItem).subscribe( item => {
+          if (item) {
+            this.notifyEvent('Item Prepped!', "Success")
+            this.order.posOrderItems.splice(index, 1, item)
+            this.orderService.updateOrderSubscription(this.order)
+          }
+        })
+      }
+    }
+  }
+
+  validateCustomerForOrder(client: IClientTable, ordersRequireCustomer: boolean) {
     const accountLocked   = client.accountDisabled;
     const accountDisabled = client.accountLocked;
     let resultMessage = ''
@@ -768,8 +832,8 @@ export class OrderMethodsService {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
-      verticalPosition: 'top'
+      duration: 1000,
+      verticalPosition: 'bottom'
     });
   }
 }

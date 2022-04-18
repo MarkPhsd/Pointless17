@@ -38,6 +38,16 @@
     <button mat-raised-button
             class="button"
             color="primary"
+            (click)="sendToPrep()">
+      <mat-icon>done</mat-icon>
+       Send to Prep
+    </button>
+  </div>
+
+  <div *ngIf="isStaff  && isApp">
+    <button mat-raised-button
+            class="button"
+            color="primary"
             (click)="printLabels()">
       <mat-icon>print</mat-icon>
        Labels

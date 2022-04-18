@@ -10,7 +10,8 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 
 export class PosOrderFunctionButtonsComponent implements OnInit {
 
-  isApp = false; 
+  isApp = false;
+  @Output() outPutSendToPrep    = new EventEmitter();
   @Output() outPutPrint         = new EventEmitter();
   @Output() outPutPrintLabel    = new EventEmitter();
   @Output() outPutRePrintLabel  = new EventEmitter();
@@ -37,7 +38,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   smallDevice    : boolean;
   constructor(private platFormService: PlatformService, ) { }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.isApp = this.platFormService.isApp()
   }
 
@@ -53,7 +54,9 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   showItems() {
     this.outPutShowItems.emit(true)
   }
-
+  sendToPrep(){
+    this.outPutSendToPrep.emit(true)
+  }
   rePrintLabels(){
     this.outPutRePrintLabel.emit(true)
   }

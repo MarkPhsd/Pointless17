@@ -44,11 +44,12 @@ export interface IVoidOrder {
 
 export class OrdersService {
   get platForm() {  return Capacitor.getPlatform(); }
-  
+
   //applies to order filter for POS
-  private _printStatus        = new BehaviorSubject<boolean>(null);
-  public printStatus$         = this._printStatus.asObservable();
+  private _prepStatus        = new BehaviorSubject<number>(null);
+  public prepStatus$         = this._prepStatus.asObservable();
   //applies to order filter for POS
+  public printerLocation    : number;
   private _printerLocation    = new BehaviorSubject<number>(null);
   public printerLocation$      = this._printerLocation.asObservable();
   //applies to order filter for POS
@@ -83,15 +84,16 @@ export class OrdersService {
     this._bottomSheetOpen.next(open);
   }
 
-  updateViewOrderType(value: number) { 
+  updateViewOrderType(value: number) {
     this._viewOrderType.next(value)
   }
 
-  updatePrintStatus(value: boolean) {
-    this._printStatus.next(value)
+  updatePrepStatus(value: number) {
+    this._prepStatus.next(value);
   }
 
   updateOrderPrinterLocation(value: number) {
+    this.printerLocation = value;
     this._printerLocation.next(value)
   }
 
@@ -103,7 +105,6 @@ export class OrdersService {
     localStorage.removeItem('orderSubscription')
     this.toolbarServiceUI.updateOrderBar(false)
     this.updateOrderSubscription(null);
-    console.log('update order')
   }
 
   updateOrderSubscription(order: IPOSOrder) {
@@ -154,7 +155,6 @@ export class OrdersService {
   {
     this.isApp = this.platFormService.isApp()
     const order = this.getStateOrder();
-    // console.log('current order from state', this.getStateOrder())
     if (order) {
       this.updateOrderSubscription(order)
     }
@@ -255,7 +255,6 @@ export class OrdersService {
     const endPoint = "getOrderCountCompletedInBalanceSheet";
 
     const parameters = ``
-
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.post<IOrdersPaged>(url, sheet )
@@ -274,7 +273,6 @@ export class OrdersService {
     const parameters = `?ID=${id}&posName=${posName}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
-
     return this.http.get<any>(url);
   }
 
@@ -297,7 +295,6 @@ export class OrdersService {
     const deviceName = localStorage.getItem('devicename')
 
     const controller = "/POSOrders/"
-
     const endPoint  = "GetPOSOrder"
 
     const parameters = `?ID=${id}&history=${history}&deviceName=${deviceName}`
@@ -317,7 +314,6 @@ export class OrdersService {
     const endPoint  = "postOrderWithPayload"
 
     const parameters = ``
-
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.post<IPOSOrder>(url, orderPayload);
@@ -410,6 +406,20 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IPOSOrder>(url)
+
+  }
+
+  getOrdersPrepBySearchPaged(site: ISite, POSOrderSearchModel: IPOSOrderSearchModel): Observable<POSOrdersPaged> {
+
+    const controller =  '/POSOrders/'
+
+    const endPoint  = 'getOrdersPagedPreStatus'
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<POSOrdersPaged>(url, POSOrderSearchModel)
 
   }
 
@@ -537,7 +547,7 @@ export class OrdersService {
     order$.subscribe( {
         next:  order => {
           console.log('order', order)
-          if (order.resultMessage) { 
+          if (order.resultMessage) {
             this.notificationEvent(`Error submitting Order ${order.resultMessage}`, "Posted")
             return
           }
@@ -599,7 +609,7 @@ export class OrdersService {
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
       if (!order.history && this.platFormService.isApp()) {
-        this.toolbarServiceUI.showSearchSideBar()
+        // this.toolbarServiceUI.showSearchSideBar()
         return
       }
 

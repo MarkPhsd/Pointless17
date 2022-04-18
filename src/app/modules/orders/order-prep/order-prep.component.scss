@@ -3,6 +3,7 @@
 
 .container {
   max-height: 800px;
+  max-width:  225px;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -10,8 +11,9 @@
 mat-card {
   padding: 1px;
   min-height: 100px;
-  height:     100px;
+  height:     125px;
   width     : 100%;
+
   overflow: hidden;
   margin-bottom: 5px;
   @include for-phone-only  {
@@ -51,7 +53,7 @@ mat-card-subtitle {
   }
 }
 
-.order-items { 
+.order-items {
   height: 600px;
   overflow-y: auto;
   overflow-x: hidden;

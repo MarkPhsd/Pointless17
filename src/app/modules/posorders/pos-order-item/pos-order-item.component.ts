@@ -63,7 +63,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   @Input() wideBar        = false;
   @Input() disableActions = false;
   @Input() prepScreen: string;
-  
+
   customcard               ='custom-card'
   orderPromptGroup        : IPromptGroup;
   menuItem$               : Observable<IMenuItem>;
@@ -367,8 +367,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
   updateCardStyle(option: boolean)  {
 
-    console.log('option', option, this.orderItem.id, this.orderItem.idRef)
-    if (this.orderItem && this.orderItem.id != this.orderItem.idRef) { 
+    // console.log('option', option, this.orderItem.id, this.orderItem.idRef)
+    if (this.orderItem && this.orderItem.id != this.orderItem.idRef) {
       this.customcard       ='custom-card-modifier';
       this.productnameClass = 'productname-modifier'
       this.isModifier       = true;

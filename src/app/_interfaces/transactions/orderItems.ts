@@ -7,12 +7,10 @@ export interface IProductPostOrderItem {
 }
 
 export interface ItemPricing {
-
   retail: number;
   unitName: string;
   unitID: number;
   dailySpecial: string;
   timeSpecial: string;
-
 }
 

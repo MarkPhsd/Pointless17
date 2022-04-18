@@ -13,7 +13,7 @@
           <span *ngIf="!isModifier  && !prepScreen">
             {{index+1}}:
           </span>
-          
+
           <span [class]="productnameClass" >
             {{ orderItem?.productName }}
           </span>
@@ -34,16 +34,33 @@
                         && orderItem.modifierNote != ''">
             {{ orderItem.modifierNote }}
           </span>
-       
+
+          <span class='status-icon' *ngIf="orderItem.printed && prepScreen">
+            <mat-icon color="warn" >print</mat-icon>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
+          </span>
+
+          <span  class='ready-icon' *ngIf="orderItem.itemPrepped && prepScreen">
+            <mat-icon color="alert" >done</mat-icon>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.itemPrepped | date: 'shortTime'}} </span>
+          </span>
+
+          <div class="void-icon void-info" *ngIf="orderItem.voidReason && prepScreen">
+            <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
+              Item voided:  {{ orderItem.voidReason }}
+            </span>
+          </div>
+
           <span  *ngIf="(mainPanel || bottomSheetOpen) && !prepScreen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
         </div>
 
-        <div class="grid-item-span">
+        <div class="grid-item-span" *ngIf="!prepScreen">
           <span *ngIf="orderItem.printed">
             <mat-icon color="warn" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
-          
+
           <div class="void-info" *ngIf="orderItem.voidReason">
             <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
@@ -54,7 +71,7 @@
 
       </div>
 
-      <div *ngIf="!disableActions" >
+      <div *ngIf="!disableActions && !prepScreen" >
         <button aria-label="user menu"
                   mat-button
                   class="more-button"

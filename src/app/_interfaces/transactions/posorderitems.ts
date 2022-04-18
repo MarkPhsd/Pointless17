@@ -54,6 +54,7 @@ export interface IPOSOrderItem {
   serialCode:                    string;
   packagingMaterial             :string;
   portionValue                  :string;
+  itemsPrepped                  : string;
 }
 
 export interface PosOrderMenuItem {

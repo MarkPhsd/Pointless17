@@ -1,5 +1,5 @@
 <div class="parent-container">
- 
+
   <div>
     <span *ngIf="isAuthorized || isStaff">
 
@@ -34,7 +34,7 @@
     </span>
     <span>
       <button mat-button (click)="setViewType(3)">
-        <mat-icon>print  </mat-icon> View Prep
+        <mat-icon>done</mat-icon> View Prep
       </button>
     </span>
 
@@ -62,32 +62,57 @@
         </h2>
       </app-order-cards>
     </span>
-
+    <!-- printLocation  {{printLocation}} prepStatus {{prepStatus}} -->
     <span *ngIf="viewType == 3">
       <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
-    
-        <mat-button-toggle-group
-              *ngFor       ="let item of printLocations;let i = index"
-              name        ="toggleOpenClosedAll"
-              class       ="toggle-view"
-              [(ngModel)] ="printLocation"
-              (click)     ="updatePrinterLocation(item)" >
-          <mat-button-toggle value="item.id" >{{item.name}}</mat-button-toggle>
-        </mat-button-toggle-group>
-    
-        <span>
-          <button class="toggle-button"
-                  mat-button
-                  (click)="togglePrintStatus()">
-            <span *ngIf="prepStatus">
-              <mat-icon>hourglass_bottom</mat-icon>Completed
-            </span>
-            <span *ngIf="!prepStatus">
-              <mat-icon>hourglass_top</mat-icon>Waiting
-            </span>
-          </button>
+
+        <span class="toggle-sections">
+          <mat-icon>location_on</mat-icon>
+          <mat-button-toggle-group
+                 name        ="toggleOpenClosedAll"
+                class       ="toggle-view"
+                [(ngModel)] ="printLocation"
+                (click)     ="updatePrinterLocation()" >
+            <mat-button-toggle
+                color="warn" value="0" >
+                  All
+            </mat-button-toggle>
+          </mat-button-toggle-group>
+          <mat-button-toggle-group
+                 *ngFor      ="let item of printLocations;let i = index"
+                name        ="toggleOpenClosedAll"
+                class       ="toggle-view"
+                [(ngModel)] ="printLocation"
+                (click)     ="updatePrinterLocation()" >
+            <mat-button-toggle
+                color="warn" [value]="item.id" >
+              <span *ngIf="item.name.toLowerCase()  == 'bar'"><mat-icon>blender</mat-icon></span>
+              <span *ngIf="item.name.toLowerCase()  == 'kitchen'"><mat-icon>soup_kitchen</mat-icon></span>
+              <span *ngIf="item.name.toLowerCase()  == 'barista'"><mat-icon>local_cafe</mat-icon></span>
+              {{item.name}}
+            </mat-button-toggle>
+          </mat-button-toggle-group>
         </span>
-    
+
+        <span class="toggle-sections">
+          <mat-icon>filter_alt</mat-icon>
+          <mat-button-toggle-group
+                  class="toggle-button"
+                  mat-button
+                  [(ngModel)] ="prepStatus"
+                  (click)="togglePrepStatus()">
+
+              <mat-button-toggle   color="primary" value="0" >
+                <mat-icon>pending</mat-icon>Pending
+              </mat-button-toggle>
+              <mat-button-toggle  color="primary" value="1" >
+                <mat-icon>hourglass_top</mat-icon>Prepping
+              </mat-button-toggle>
+              <mat-button-toggle  color="primary" value="2" >
+                <mat-icon>done</mat-icon>Ready
+              </mat-button-toggle>
+          </mat-button-toggle-group>
+        </span>
       </span>
       <app-order-cards
         [site]= 'site'
@@ -95,13 +120,13 @@
       </app-order-cards>
     </span>
 
-    <div *ngIf="!smallDevice && !hidePanel" 
+    <div *ngIf="!smallDevice && !hidePanel"
          class="filter-container">
       <app-order-filter-panel
           (outPutHidePanel)="hideFilterPanel($event)">
       </app-order-filter-panel>
     </div>
-    
+
   </div>
 
 </div>

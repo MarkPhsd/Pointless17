@@ -17,6 +17,14 @@
   }
 }
 
+.image:hover {
+  transform: scale(1.03);
+}
+
+.item-text:hover {
+  transform: scale(1.03);
+}
+
 .button-item {
   overflow-y: hidden;
   overflow-x: hidden;
@@ -30,9 +38,18 @@
   }
 }
 
-.item-text { 
+.item-text {
   text-overflow: ellipsis;
 }
+
+.freeze-text {
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+       -moz-user-select:none;
+       -ms-user-select:none;
+       user-select:none;
+}
+
 
 .grid-items-buttons {
   --gap: 5px;

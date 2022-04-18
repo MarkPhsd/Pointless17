@@ -346,6 +346,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
       items$.subscribe(data =>
         {
+            if (!data || !data.paging) { return }
             const resp         =  data.paging
             if (resp) {
               this.isfirstpage   = resp.isFirstPage

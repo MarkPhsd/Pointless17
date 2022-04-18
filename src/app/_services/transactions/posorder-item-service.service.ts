@@ -26,7 +26,7 @@ export interface ItemPostResults {
   itemTypeIsNothing: boolean;
   resultErrorDescription: string;
   menuItemWithPrice: IMenuItem
-  message:         string;
+  message:           string;
  }
 
  export interface  InventoryResults {
@@ -186,8 +186,6 @@ export class POSOrderItemServiceService {
 
   }
 
-
-
    postItemWithBarcode(site: ISite, newItem: NewItem): Observable<ItemPostResults> {
 
     newItem =  this.getNewItemWeight(newItem);
@@ -238,6 +236,48 @@ export class POSOrderItemServiceService {
 
   }
 
+  setItemPrep(site: ISite, item: PosOrderItem): Observable<PosOrderItem> {
+
+    const controller = "/POSOrderItems/";
+
+    let endPoint = "SetItemAsPrepped";
+    if (item.itemPrepped) {  endPoint = "SetItemAsUnPrepped" }
+
+    const parameters = `?id=${item.id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<PosOrderItem>(url)
+
+  }
+
+  setItemsAsPrepped(site: ISite, orderID: number, printLocation: number): Observable<any> {
+
+    const controller = "/POSOrderItems/";
+
+    let endPoint = "SetItemsAsPrepped";
+
+    const parameters = `?OrderID=${orderID}&PrintLocation=${printLocation}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
+  setItemAsUnPrinted(site: ISite, item: PosOrderItem): Observable<PosOrderItem> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "SetItemAsUnPrinted";
+
+    const parameters = `?id=${item.id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<PosOrderItem>(url)
+
+  }
 
   postPromptItems(site: ISite, iPrompt: IPromptGroup): Observable<IPromptGroup> {
 
@@ -357,6 +397,19 @@ export class POSOrderItemServiceService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.put<any>(url , item);
+  }
+
+   setUnPrintedItemsAsPrinted( site: ISite, orderID: number ) : Observable<any> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "SetUnPrintedItemsAsPrinted"
+
+    const parameters = `?id=${orderID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url);
   }
 
   voidPOSOrderItem(site: ISite, item: ItemWithAction ): Observable<string> {

@@ -1,7 +1,7 @@
 import {Component, HostListener, OnInit, OnDestroy,
   ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
 import { IPOSOrder,IPOSOrderSearchModel } from 'src/app/_interfaces/transactions/posorder';
-import { OrdersService } from 'src/app/_services';
+import { OrdersService, POSOrdersPaged } from 'src/app/_services';
 import { ActivatedRoute} from '@angular/router';
 import { Observable, Subscription} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -24,7 +24,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   @Input() cardStyle = 'block';
   @Input() site: ISite;
 
-  productSearchModel
+  // productSearchModel
   array               = [];
   sum                 = 15;
   throttle            = 300;
@@ -34,6 +34,10 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   modalOpen           = false;
   endOfRecords        = false;
   pagingInfo: any;
+
+  //pre values
+  invisibleOrders = [];
+  itemCount       = 0;
 
   p: any //html page
   items              = [];
@@ -72,16 +76,32 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   posOrders      :  IPOSOrder[];
 
   cardcontainer  = 'card-container'
-
+  menuBar         : any;
   grid           = 'grid-flow'
   _orderBar      : Subscription;
   orderBar       : boolean;
 
-  _menutBar      : Subscription;
-  menuBar        : boolean;
-
   _searchBar     : Subscription;
   searchBar      : boolean;
+
+  _viewType     : Subscription;
+  viewType      : number;
+
+  _printLocation  : Subscription;
+  printLocation   : number;
+
+  initViewSubscriber() {
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
+      this.viewType = data;
+    })
+  }
+
+  destroySubscriptions() {
+    if (this._orderBar) { this._orderBar.unsubscribe(); }
+    if (this._printLocation) { this._printLocation.unsubscribe()    }
+    if (this._viewType) { this._viewType.unsubscribe()}
+    if (this._searchBar) { this._searchBar.unsubscribe()}
+  }
 
   constructor(
     private orderService: OrdersService,
@@ -98,7 +118,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.initOrderBarSubscription();
     this.updateItemsPerPage();
     this.site = this.siteService.getAssignedSite();
-    
+
     if (this.searchModel)  {
       const model           = this.searchModel
       this.employeeID       = model.employeeID
@@ -115,17 +135,20 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this._orderBar) { this._orderBar.unsubscribe(); }
+
+    this.destroySubscriptions()
   }
 
   initSubscriptions() {
+    this.initViewSubscriber()
+    // this.initPrintLocationSubscriber();
     try {
       this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
+        console.log(data)
         this.nextPage(true)
-        // console.log('subscription updated', data)
       })
     } catch (error) {
     }
@@ -219,12 +242,23 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   async addToList(pageSize: number, pageNumber: number, reset : boolean)  {
-    let model = {} as IPOSOrderSearchModel
+    let model         = {} as IPOSOrderSearchModel
     if (this.searchModel)  {  model = this.searchModel}
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize
     const site        = this.siteService.getAssignedSite();
-    const results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
+    let results$      : Observable<POSOrdersPaged>;
+    this.invisibleOrders = [];
+    if (this.viewType == 3) {
+      model.pageNumber    = pageNumber
+      model.pageSize      = pageSize
+      results$            = this.orderService.getOrdersPrepBySearchPaged(site,model) //.pipe(share());
+    }
+
+    if (this.viewType != 3) {
+      results$    = this.orderService.getOrderBySearchPaged(site, model) //.pipe(share());
+    }
+
     this.loading      = true
 
     results$.subscribe(data => {
@@ -279,9 +313,29 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     )
   };
 
-  // listItem(id: string) {
-  //   this.router.navigate(["/menuitem/", {id:id}]);
-  // }
+
+  setThisCardInVisible(event) {
+    const i = event.index;
+    this.itemCount = event.count;
+    this.invisibleOrders.push(i)
+  }
+
+  isOrderVisible(i) { 
+
+    if (!i) { 
+      return true
+    }
+
+    const items = this.invisibleOrders.filter(p => { 
+      if  (p == i) { return p }
+    })
+
+    console.log(items)
+    if ( items.length == 0 ) {
+      return true
+    }
+  }
+
 
   onItemElementsChanged(): void {
   // if (this.isNearBottom()) {

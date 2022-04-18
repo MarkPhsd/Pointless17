@@ -5,7 +5,7 @@
     <ion-item-sliding
               class="nopadd"
               *ngFor="let item of order.posOrderItems; let i = index;trackBy: trackByFN"
-              (ionSwipe)="swipeItemFromList(i)" >
+              (ionSwipe)="swipeAction(i)" >
               <!-- ||
              -->
       <div *ngIf="uiConfig">
@@ -25,9 +25,9 @@
                       [placeHolderImage]="'placeholderproduct.jpg'"
                       [mainImage]   ="item?.posOrderMenuItem?.urlImageMain"
                       [productName] = "item?.productName"
-                      [cbd]      ="item?.posOrderMenuItem?.cbd"
-                      [thc]      ="item?.posOrderMenuItem?.thc"
-                      [menuItem] ="item?.posOrderMenuItem"
+                      [cbd]         ="item?.posOrderMenuItem?.cbd"
+                      [thc]         ="item?.posOrderMenuItem?.thc"
+                      [menuItem]    ="item?.posOrderMenuItem"
                       [productID]="item?.productID"
                       [order]    ="order"
                       [uiConfig] ="uiConfig"
@@ -41,14 +41,23 @@
 
       </div>
 
-      <ion-item-options *ngIf="item.printed">
+      <ion-item-options *ngIf="item.printed && !prepScreen">
         <ion-item-option color="accent">
           <mat-icon>remove_shopping_cart</mat-icon>
           Void
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item-options *ngIf="!item.printed">
+      <ion-item-options *ngIf="prepScreen">
+        <ion-item-option color="warn">
+          <button mat-button color="primary" (click)="setAsPrepped(i)" >
+            <span *ngIf="!item.itemPrepped" ><mat-icon>done       </mat-icon>Set Prepped</span>
+            <span *ngIf="item.itemPrepped"  ><mat-icon>remove_done</mat-icon>Undo Prep</span>
+          </button>
+        </ion-item-option>
+      </ion-item-options>
+
+      <ion-item-options *ngIf="!item.printed && !prepScreen">
         <ion-item-option color="warn">
           <button mat-button color="primary" (click)="removeItemFromList(i)" >
             <mat-icon>delete</mat-icon>

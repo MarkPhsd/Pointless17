@@ -1,11 +1,11 @@
 <div class="container">
-  
+
   <mat-card>
 
     <mat-card-content class="center">
 
       <div *ngIf="!smallDevice" class="grid-orderproperties">
-
+      
         <div class='date-header' *ngIf="order.orderDate">
           {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} min.
         </div>
@@ -32,8 +32,15 @@
 
         <div class="grid-totals">
           <div class="field-center">
-            <div class="orderID">
+            <div class="orderID grid-orderproperties">
               {{order.id}}
+              <span *ngIf="prepScreen && (prepStatus == 1)">
+                <button
+                        mat-raised-button color='primary'
+                      (click)="setItemsAsPrepped()">
+                      <mat-icon>done</mat-icon>
+                </button>
+              </span>
             </div>
           </div>
 
@@ -47,9 +54,13 @@
               </div>
             </div>
           </div>
-
-          <div class="items">Items</div>
-          <div class="itemcount">{{order.itemCount}} </div>
+      
+          <div *ngIf="!prepScreen" class="items">Items</div>
+          <div *ngIf="!prepScreen" class="itemcount">{{order.itemCount}} </div>
+        
+          <div *ngIf="prepScreen"class="items">Prep  </div>
+          <div *ngIf="prepScreen" class="itemcount">{{itemCount}} </div>
+        
 
         </div>
       </div>
@@ -57,17 +68,15 @@
 
   </mat-card>
 
-  <div class="order-items" 
-      *ngIf="(orderItems$ | async) as orderItems">
-      <!-- {{orderItems | json}} -->
-    <pos-order-items
-      [mainPanel]    ="false"
-      [printLocation]="printLocation"
-      [prepStatus]   ='prepStatus'
-      [prepScreen]   ='true'
-      [order]        ="orderItems">
-    </pos-order-items>
+  <div class="order-items"
+      *ngIf="orderItems">
+        <pos-order-items
+          [mainPanel]    ="false"
+          [printLocation]="printLocation"
+          [prepStatus]   ='prepStatus'
+          [prepScreen]   ='true'
+          [order]        ="orderItems">
+        </pos-order-items>
   </div>
-
 
 </div>

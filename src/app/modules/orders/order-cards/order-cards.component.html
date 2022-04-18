@@ -6,13 +6,13 @@
 <div>
   <div class="orders-container">
     <div  *ngIf="orders"
-          class="orders-list"
+          class                   ="orders-list"
           infiniteScroll
           [infiniteScrollDistance]="2"
           [infiniteScrollThrottle]="50"
-          (scrolled)="onScrollDown()"
-          (scrolledUp)="onScrollUp()"
-          [scrollWindow]="false">
+          (scrolled)              ="onScrollDown()"
+          (scrolledUp)            ="onScrollUp()"
+          [scrollWindow]          ="false">
 
         <div  [class]="grid"
               *ngIf="cardStyle === 'block' && orders">
@@ -23,14 +23,17 @@
             ></app-order-card>
           </ng-container>
         </div>
-        
+
         <div  [class]="grid"
               *ngIf="cardStyle === 'prep' && orders && site">
           <ng-container *ngFor="let order of orders; let i = index">
+            
             <app-order-prep
-              (click)="setActiveOrder(order)"
-              [order]="order"
-              [site] ="site"
+                (outPutSetVisibility)="setThisCardInVisible($event)"
+                *ngIf="isOrderVisible(i)"
+                [order]="order"
+                [site] ="site"
+                [index]="i"
             ></app-order-prep>
           </ng-container>
         </div>

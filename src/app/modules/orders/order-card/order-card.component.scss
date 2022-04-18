@@ -7,7 +7,7 @@ mat-card {
   min-height: 145px;
   height:     145px;
   width     : 175px;
-  overflow: hidden;
+  overflow  : hidden;
 
   @include for-phone-only  {
     border-radius: 100px;
