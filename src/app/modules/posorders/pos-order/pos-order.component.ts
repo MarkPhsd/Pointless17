@@ -170,6 +170,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private orderMethodService: OrderMethodsService,
               private userAuthorization : UserAuthorizationService,
               private uiSettingsService : UISettingsService,
+              private settingService: SettingsService,
               private productEditButtonService: ProductEditButtonService,
 
               // private printingService : Printing
@@ -232,8 +233,13 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.initAuthorization();
     this.toolbarUIService.hidetoolBars();
 
-    this.uiSettings =  await this.uiSettingsService.subscribeToCachedHomePageSetting('UIHomePageSettings')
-    this.uiTransactionSettings =  await this.uiSettingsService.subscribeToCachedConfig()
+    this.settingService.getUIHomePageSettings().subscribe(data => { 
+      this.uiSettings = data;
+    })
+    
+    this.settingService.getUITransactionSetting().subscribe(data => { 
+      this.uiTransactionSettings = data;
+    })
   }
 
 

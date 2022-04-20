@@ -314,9 +314,9 @@ export class DSIEMVTransactionsService {
   }
 
   async getResetXML() {
-     const settings = await this.uiSettingService.getDSIEMVSettings();
-     const item = {} as TStream
-     const transaction = {} as Transaction;
+    //  const settings = await this.uiSettingService.getDSIEMVSettings();
+    //  const item = {} as TStream
+    //  const transaction = {} as Transaction;
   }
 
   private getPadSettings(transaction: Transaction): Transaction {

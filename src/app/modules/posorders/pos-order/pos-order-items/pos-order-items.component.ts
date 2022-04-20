@@ -10,7 +10,7 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ISite } from 'src/app/_interfaces';
 import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
-
+import { SettingsService } from 'src/app/_services/system/settings.service';
 @Component({
   selector: 'pos-order-items',
   templateUrl: './pos-order-items.component.html',
@@ -46,6 +46,16 @@ export class PosOrderItemsComponent implements OnInit {
   posName: string;
 
   initSubscriptions() {
+    console.log('initSubscriptions');
+    this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
+      this.uiConfig = data;
+      console.log('initSubscriptions',data);
+      if (!data) { 
+        this.uiSettingsService.getTransactionUISettings();
+        console.log('getTransactionUISettings');
+      }
+    })
+
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
     })
@@ -64,15 +74,11 @@ export class PosOrderItemsComponent implements OnInit {
         })
       }
     }
-
-
     setTimeout(() => {
       this.scrollToBottom();
     }, 200);
 
-    this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
-      this.uiConfig = data;
-    })
+  
   }
 
   constructor(
@@ -84,22 +90,24 @@ export class PosOrderItemsComponent implements OnInit {
                 private uiSettingsService: UISettingsService,
                 private orderMethodService: OrderMethodsService,
                 private uiSettingService   : UISettingsService,
+                private settingService: SettingsService,
               )
  {
     this.orderItemsPanel = 'item-list';
  }
 
   async ngOnInit() {
-
+    this.initSubscriptions();
     let uiHomePage =  this.uiSettingService.homePageSetting
 
     if (!uiHomePage) {
-      uiHomePage = await this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings');
+      this.settingService.getUIHomePageSettings().subscribe(data => { 
+        uiHomePage = data;
+      }) //('UIHomePageSettings');
     }
 
     if (uiHomePage) {this.wideBar = uiHomePage.wideOrderBar}
-    await this.uiSettingsService.subscribeToCachedConfig()
-    this.initSubscriptions();
+   
 
     if (this.prepScreen) {
       this.orderItemsPanel = 'item-list-prep';
@@ -108,7 +116,6 @@ export class PosOrderItemsComponent implements OnInit {
     if (!this.prepScreen) {
       this.orderItemsPanel = 'item-list';
     }
-
   }
 
 

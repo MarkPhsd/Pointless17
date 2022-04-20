@@ -151,7 +151,7 @@
               [zrunID]  ="zrunID"
               [groupBy]="'OrderEmployeCount'">
               <mat-icon>people_alt</mat-icon> User Orders By Hour
-      </payment-report>
+        </payment-report>
 
         <payment-report
               [site]    ="localSite"
@@ -164,8 +164,6 @@
             <mat-divider></mat-divider>
         </payment-report>
       </div>
-
-
   </div>
 
   <div
@@ -173,13 +171,13 @@
       fxLayout="row"
       fxLayoutAlign="space-between center"
       flLayoutGap="20px">
-    <mat-card class="mat-card" fxFlex="100">
-        <app-widget-card [dateFrom] ="iBalanceSheet.startTime"
-                        [dateTo]   ="iBalanceSheet.startTime"
-                        [zrunID]   ="zrunID"
-                        [site]     ='localSite'
-                        groupBy    ="orderemployeecount"
-                        chartName  ="Employee Order Count"
+    <mat-card *ngIf="iBalanceSheet && iBalanceSheet.startTime" class="mat-card" fxFlex="100">
+        <app-widget-card [dateFrom]  ="iBalanceSheet.startTime"
+                         [dateTo]    ="iBalanceSheet.startTime"
+                         [zrunID]    ="zrunID"
+                         [site]      ='localSite'
+                         groupBy     ="orderemployeecount"
+                         chartName   ="Employee Order Count"
           ></app-widget-card>
     </mat-card>
   </div>

@@ -147,7 +147,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
         this.searchModel = data
         this.orders = [] as  IPOSOrder[];
         this.currentPage = 1
-        console.log(data)
         this.nextPage(true)
       })
     } catch (error) {
@@ -249,6 +248,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     const site        = this.siteService.getAssignedSite();
     let results$      : Observable<POSOrdersPaged>;
     this.invisibleOrders = [];
+
     if (this.viewType == 3) {
       model.pageNumber    = pageNumber
       model.pageSize      = pageSize
@@ -330,7 +330,7 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
       if  (p == i) { return p }
     })
 
-    console.log(items)
+    // console.log(items)
     if ( items.length == 0 ) {
       return true
     }

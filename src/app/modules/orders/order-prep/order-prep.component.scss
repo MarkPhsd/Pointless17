@@ -11,7 +11,7 @@
 mat-card {
   padding: 1px;
   min-height: 100px;
-  height:     125px;
+  height:     135px;
   width     : 100%;
 
   overflow: hidden;
@@ -55,8 +55,8 @@ mat-card-subtitle {
 
 .order-items {
   height: 600px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  // overflow-y: hidden;
+  // overflow-x: hidden;
 }
 
 .grid-totals {

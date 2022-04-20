@@ -714,18 +714,13 @@ export class OrderMethodsService {
     }
   }
 
-  setItemsAsPrepped(orderID: number, printLocation: number) {
+  setItemsAsPrepped(orderID: number, printLocation: number): Observable<any> {
     if (orderID) {
       const site = this.siteService.getAssignedSite()
-      this.posOrderItemService.setItemsAsPrepped(site, orderID, printLocation).pipe(
+     return this.posOrderItemService.setItemsAsPrepped(site, orderID, printLocation).pipe(
         switchMap(data => {
           return this.orderService.getOrder(site, orderID.toString(), false)
-        })).subscribe( order => {
-          if (order) {
-            this.notifyEvent('Item Sent to Prep!', "Success")
-            this.orderService.updateOrderSubscription(order)
-          }
-      })
+        }))
     }
   }
 

@@ -23,7 +23,8 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     // this.refreshSales()
-    console.log('')
+    // console.log('')
+    const i = 0
   }
 
   ngOnChanges() {

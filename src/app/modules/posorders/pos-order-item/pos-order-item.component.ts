@@ -6,7 +6,8 @@ import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, switchMap } from 'rxjs';
+import { IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
@@ -95,12 +96,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
   assignedPOSItem       : PosOrderItem;
   _assignedPOSItem      : Subscription;
 
-  transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
+  // transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass       = 'product-name'
 
   isModifier: boolean;
   isItemKitItem: boolean;
 
+  panel  ='string'
   @HostListener("window:resize", [])
    updateItemsPerPage() {
      this.smallDevice = false
@@ -149,7 +151,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
                 private menuService        : MenuService,
                 private posOrderItemService: POSOrderItemServiceService,
                 private promptGroupservice : PromptGroupService,
-                private uiSettingService   : UISettingsService,
                 private printingService    : PrintingService,
               )
   {
@@ -179,7 +180,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
 
     this.updateCardStyle(this.mainPanel)
-
   }
 
   ngAfterViewInit() {
@@ -369,7 +369,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
     // console.log('option', option, this.orderItem.id, this.orderItem.idRef)
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef) {
-      this.customcard       ='custom-card-modifier';
+      this.customcard       = 'custom-card-modifier';
       this.productnameClass = 'productname-modifier'
       this.isModifier       = true;
       return
@@ -378,13 +378,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     this.customcard ='custom-card';
 
     if (!option) {
-
-
       this.customcard ='custom-card-side';
     }
-
-
   }
+  
   openDialog() {
     const item = this.orderItem
     const data = { id: item.productID }
@@ -453,10 +450,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
   async editPrompt() {
     const site = this.siteService.getAssignedSite();
+    let item : IPurchaseOrderItem;
     if (this.orderItem) {
-      const item   = await this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id).pipe().toPromise()
-      const prompt = await this.promptGroupservice.getPrompt(site, item.promptGroupID).pipe().toPromise();
-      this.orderMethodsService.openPromptWalkThroughWithItem(prompt, item)
+      const item$ =  this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id)
+      item$.pipe(
+        switchMap(poitem => { 
+          item = poitem;
+          return this.promptGroupservice.getPrompt(site, item.promptGroupID)
+        })).subscribe( prompt =>{ 
+          this.orderMethodsService.openPromptWalkThroughWithItem(prompt, item)
+      })
     }
   }
 }

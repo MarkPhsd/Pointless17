@@ -8,7 +8,7 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-       <div class="grid-views">
+       <div class="grid-items">
 
           <div class="toggle-fields">
             <mat-slide-toggle
@@ -80,16 +80,75 @@
                   [inputForm]="inputForm">
               Default client Type
             </app-client-types-lookup>
-
           </div>
+      </div>
+
+      <mat-divider></mat-divider>
+      <h3>Operation Settings:</h3>
+      <div class="grid-small">
+        <div>
+          <mat-label>Max Orders allowed open by user.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'mAXOrdersOpen'">
+             Max Orders
+          </app-value-fields> 
+        </div> 
+        <div>
+          <mat-label>Prefix for Order Prep Labels.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'prefixBarcodeLabel'">
+              POS Pre Prefix Label
+          </app-value-fields> 
+        </div>  
+        <div>
+          <mat-label>Pre fix for intaken inventory items.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'lotPreBarCode'">
+              Lot Pre code prefix.
+          </app-value-fields> 
+        </div>  
+        <div>
+          <mat-label>Percentage of Buyer Amount.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'buyerAmountDiscount'">
+              Buyer Amount
+          </app-value-fields> 
+        </div>    
+        <div>
+          <mat-label>Log out time in minutes of inactivity.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'idleTime'">
+              Idle Log Out Time
+          </app-value-fields> 
+        </div>    
+        <div>
+          <mat-label>Minimum value of credit card payment.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'creditRecieptMinimum'">
+              Credit Payment Min.
+          </app-value-fields> 
+        </div>    
+        <div>
+          <mat-label>High tip warning on percentage compared of payment.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'highTipInputPercentage'">
+              High Tip %
+          </app-value-fields> 
+        </div>                                                  
       </div>
 
       <mat-divider></mat-divider>
       <h3>End of Day</h3>
       <div class="toggle-fields">
         <mat-slide-toggle
-                  formControlName="deleteUnClosedPrintedOrders"
-                  >
+                  formControlName="deleteUnClosedPrintedOrders" >
           <mat-label>Delete Unclosed Un Printed Orders</mat-label>
         </mat-slide-toggle>
       </div>

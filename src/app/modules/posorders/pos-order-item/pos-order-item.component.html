@@ -34,19 +34,19 @@
                         && orderItem.modifierNote != ''">
             {{ orderItem.modifierNote }}
           </span>
-
-          <span class='status-icon' *ngIf="orderItem.printed && prepScreen">
-            <mat-icon color="warn" >print</mat-icon>
+          
+          <span class='status-icon' *ngIf="orderItem.printed && prepScreen && !isModifier">
+            <mat-icon color="warn" *ngIf="orderItem.printed && !prepScreen" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
-          <span  class='ready-icon' *ngIf="orderItem.itemPrepped && prepScreen">
-            <mat-icon color="alert" >done</mat-icon>
+          <span  class='ready-icon' *ngIf="orderItem.itemPrepped && prepScreen && !isModifier">
+            <mat-icon color="alert" & *ngIf="prepScreen" >done</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.itemPrepped | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-icon void-info" *ngIf="orderItem.voidReason && prepScreen">
-            <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
+          <div class="void-icon void-info" *ngIf="orderItem.voidReason && prepScreen && !isModifier">
+            <span *ngIf="orderItem.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               Item voided:  {{ orderItem.voidReason }}
             </span>
@@ -55,13 +55,13 @@
           <span  *ngIf="(mainPanel || bottomSheetOpen) && !prepScreen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
         </div>
 
-        <div class="grid-item-span" *ngIf="!prepScreen">
+        <div class="grid-item-span" *ngIf="!prepScreen && !isModifier">
           <span *ngIf="orderItem.printed">
             <mat-icon color="warn" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-info" *ngIf="orderItem.voidReason">
+          <div class="void-info" *ngIf="orderItem.voidReason && !isModifier">
             <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               Item voided:  {{ orderItem.voidReason }}

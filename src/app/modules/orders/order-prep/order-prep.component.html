@@ -7,7 +7,7 @@
       <div *ngIf="!smallDevice" class="grid-orderproperties">
       
         <div class='date-header' *ngIf="order.orderDate">
-          {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} min.
+          {{order.orderDate |  date: 'shortTime'}}  |  {{minutesOpen}} .
         </div>
 
         <div class="orderType">
@@ -39,6 +39,13 @@
                         mat-raised-button color='primary'
                       (click)="setItemsAsPrepped()">
                       <mat-icon>done</mat-icon>
+                </button>
+              </span>
+              <span *ngIf="prepScreen && (prepStatus == 2)">
+                <button
+                      mat-raised-button color='primary'
+                      (click)="printOrder()">
+                      <mat-icon>print</mat-icon>
                 </button>
               </span>
             </div>

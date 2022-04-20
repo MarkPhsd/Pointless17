@@ -27,7 +27,6 @@
         <div  [class]="grid"
               *ngIf="cardStyle === 'prep' && orders && site">
           <ng-container *ngFor="let order of orders; let i = index">
-            
             <app-order-prep
                 (outPutSetVisibility)="setThisCardInVisible($event)"
                 *ngIf="isOrderVisible(i)"

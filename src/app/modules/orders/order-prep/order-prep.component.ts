@@ -3,6 +3,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 
@@ -81,6 +82,7 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   }
 
   constructor(private orderService: OrdersService,
+              private printingService: PrintingService,
               private orderMethodsService: OrderMethodsService,) {
     this.updateItemsPerPage();
   }
@@ -96,6 +98,16 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   ngOnInit() {
     this.initSubscriptions();
 
+    this.refreshOrder()
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.destroySubscriptions()
+  }
+
+  refreshOrder() { 
     const printerLocation = this.orderService.printerLocation
     if (this.order) {
       if(!this.order.total) {  this.order.total = 0      }
@@ -155,13 +167,6 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
 
     }
   }
-
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.destroySubscriptions()
-  }
-
   getMinutesOpen(order) : number {
     if (this.order.orderDate) {
       if (this.order.completionDate) {
@@ -184,8 +189,20 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
   }
 
   setItemsAsPrepped() {
-    if (this.order && this.printLocation && this.printLocation != 0)
-    this.orderMethodsService.setItemsAsPrepped(this.order.id, this.printLocation)
+    if (this.order && this.printLocation && this.printLocation != 0) {
+      const order$ =  this.orderMethodsService.setItemsAsPrepped(this.order.id, this.printLocation);
+      order$.subscribe( order => {
+        if (order) {
+          this.refreshOrder();
+          this.orderService.updateOrderSubscription(order);
+        }
+      })
+    }
+  }
+
+  printOrder() {
+    this.orderService.updateOrderSubscription(this.order)
+    this.printingService.previewReceipt()
   }
 
   openOrder() {

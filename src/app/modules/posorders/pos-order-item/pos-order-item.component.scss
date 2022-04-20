@@ -54,8 +54,8 @@ mat-icon {
 
 .custom-card {
   padding       : 10px;
-  margin       : 5px;
-
+  margin        : 5px;
+  min-height    : 50px;
   @include for-phone-only  {
     margin       : 5px;
     padding      : 5px;
@@ -79,6 +79,15 @@ mat-icon {
   }
 }
 
+.custom-card-side {
+  padding       : 10px;
+  margin-left   : 4px;
+  margin-top    : 4px;
+  margin-bottom : 4px;
+  margin-right  : 4px;
+  min-height    : 50px;
+}
+
 .productname-modifier {
   color: cornflowerblue;
   // background-color: #fff;
@@ -89,19 +98,13 @@ mat-icon {
   width: 40px;
 }
 
-.custom-card-side {
-  padding       : 10px;
-  margin-left   : 4px;
-  margin-top    : 4px;
-  margin-bottom : 4px;
-  margin-right  : 4px;
-}
 
 
 .panel{
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #f00;
+  min-height: 70px;
   $breakpoint: 600px;
   --multiplier: calc( #{$breakpoint} - 100%);
   .element{
@@ -112,6 +115,24 @@ mat-icon {
     background: orange;
   }
 }
+
+.panel-modifier {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid #f00;
+
+  $breakpoint: 600px;
+  --multiplier: calc( #{$breakpoint} - 100%);
+  .element{
+    min-width: 33%;
+    max-width: 100%;
+    flex-grow: 1;
+    flex-basis: calc( var(--multiplier) * 999 );
+    background: orange;
+  }
+}
+
+
 
 .item-details-grid {
   --gap: 20px;
@@ -130,21 +151,14 @@ mat-icon {
   right: 0px;
   top: 2px;
   position: absolute;
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .ready-icon {
   right: 0px;
   top: 35px;
   position: absolute;
-  margin-right: 20px;
-}
-
-.ready-icon {
-  right: 0px;
-  top: 12px;
-  position: absolute;
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .grid-item-span {

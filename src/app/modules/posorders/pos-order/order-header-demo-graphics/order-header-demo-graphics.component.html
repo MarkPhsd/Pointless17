@@ -20,7 +20,6 @@
   
       <div>
         <div *ngIf="!disableActions && canRemoveClient" >
-       
           <button mat-button
                   (click)="removeClient()">
               <mat-icon>clear</mat-icon>Clear
@@ -40,15 +39,36 @@
 </mat-card>
 
 <mat-card *ngIf="!disableActions && !order.clients_POSOrders">
-  <span class="float-left">
-    <app-client-search-selector
+  <div class="grid-demo">
+    <div>
+      <app-client-search-selector
         (itemSelect)="assignCustomer($event)">
-    </app-client-search-selector>
-  </span>
-  <span class="new-button float-left" >
-    <button mat-button
-            (click)="gotoAddClient()">
-            <mat-icon>add</mat-icon>New
-    </button>
-  </span>
+      </app-client-search-selector>
+    </div>
+    
+    <div class="new-button float-left" >
+      <button mat-button
+              (click)="gotoAddClient()">
+              <mat-icon>add</mat-icon>New
+      </button>
+    </div>
+  </div>
+
+  <div class="grid-demo">
+    <div>
+      <app-value-fields
+        [inputForm]="orderNameForm"
+        [fieldsClass]="'fontsmallest'"
+        [fieldName]="'name'">
+        Order Name
+      </app-value-fields>
+    </div>
+    <div>
+      <button mat-button
+              (click)="saveOrderName()">
+              <mat-icon>save</mat-icon>Set
+      </button>
+    </div>
+  </div>
+
 </mat-card>

@@ -1,4 +1,5 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, OnChanges } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService, OrdersService } from 'src/app/_services';
@@ -9,7 +10,9 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   templateUrl: './order-header-demo-graphics.component.html',
   styleUrls: ['./order-header-demo-graphics.component.scss']
 })
-export class OrderHeaderDemoGraphicsComponent  {
+export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
+
+  orderNameForm: FormGroup;
 
   @Input()  canRemoveClient = false;
   @Input()  order           : IPOSOrder;
@@ -17,14 +20,32 @@ export class OrderHeaderDemoGraphicsComponent  {
   @Output() outPutOpenClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
-
-
+  
   constructor(private router: Router,
               private siteService: SitesService,
               private contactService: ContactsService,
+              private fb: FormBuilder,
               private orderService: OrdersService)
                { }
 
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    const i = 0
+  }
+  ngOnChanges(): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    this.orderNameForm = this.fb.group({
+      name: [''],
+    })
+    if (this.order) { 
+      this.orderNameForm = this.fb.group({
+        name: [this.order.customerName],
+      })
+    }
+
+  }
   removeClient() {
     this.outPutRemoveClient.emit(true)
   }
@@ -36,6 +57,15 @@ export class OrderHeaderDemoGraphicsComponent  {
         this.router.navigate(["/profileEditor", {id: this.order.clientID}]);
         return;
       }
+    }
+  }
+
+  saveOrderName() { 
+    const orderName = this.orderNameForm.controls['name'].value;
+    if (this.order) { 
+      this.orderService.setOrderName(this.order.id, orderName).subscribe( data=> { 
+        
+      })
     }
   }
 

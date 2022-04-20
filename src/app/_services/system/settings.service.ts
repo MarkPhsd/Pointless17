@@ -8,6 +8,7 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 import { AdjustmentReason } from './adjustment-reasons.service';
 import { AppInitService } from './app-init.service';
 import { IItemBasic } from '..';
+import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
 
 interface IIsOnline {
   result: string;
@@ -185,7 +186,6 @@ export class SettingsService {
 
   }
 
-
   getSettingByNameNoRoles(site: ISite, name: String):  Observable<ISetting> {
 
     const controller = "/settings/"
@@ -198,6 +198,78 @@ export class SettingsService {
 
     const options = { url: url, cacheMins: 0}
     return this.httpCache.get<ISetting>(options);
+
+  }
+  
+  getDSIEMVSettings():  Observable<DSIEMVSettings> {
+
+    const site =  this.siteService.getAssignedSite()
+
+    const controller = "/settings/"
+
+    const endPoint = 'getDSIEMVSettings';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: url, cacheMins: 0};
+
+    return this.httpCache.get<DSIEMVSettings>(options);
+
+  }
+
+  getStripeAPISetting():  Observable<StripeAPISettings> {
+
+    const site =  this.siteService.getAssignedSite();
+
+    const controller = "/settings/"
+
+    const endPoint = 'getStripeAPISetting';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: url, cacheMins: 0};
+
+    return this.httpCache.get<StripeAPISettings>(options);
+
+  }
+
+  getUIHomePageSettings():  Observable<UIHomePageSettings> {
+  
+    const site =  this.siteService.getAssignedSite();
+
+    const controller = "/settings/"
+
+    const endPoint = 'getUIHomePageSettings';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: url, cacheMins: 0};
+
+    return this.httpCache.get<UIHomePageSettings>(options);
+
+  }
+
+  getUITransactionSetting():  Observable<TransactionUISettings> {
+
+    const site =  this.siteService.getAssignedSite();
+
+    const controller = "/settings/"
+
+    const endPoint = 'getUITransactionSetting';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: url, cacheMins: 0};
+
+    return this.httpCache.get<TransactionUISettings>(options);
 
   }
 

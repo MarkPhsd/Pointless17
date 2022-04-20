@@ -19,6 +19,16 @@ export interface TransactionUISettings {
   defaultClientTypeID: number;
   enablMEDClients: boolean;
   enableLimitsView: boolean;
+
+  prefixBarcodeLabel : string;
+  mAXOrdersOpen: string;
+  loyaltyPointSystemValue: string;
+  lotPreBarCode: string;
+  creditRecieptMinimum: string;
+  buyerAmountDiscount: string;
+  idleTime: string;
+  highTipInputPercentage: string;
+  
 }
 
 export interface StripeAPISettings {
@@ -150,97 +160,38 @@ export class UISettingsService {
       private siteService    : SitesService,
       private settingsService: SettingsService) {
 
-    const site = this.siteService.getAssignedSite();
-
-    this.getSetting('UITransactionSetting').subscribe(data => {
-      const ui = {} as TransactionUISettings
-      if (data.text) {
-        const ui = JSON.parse(data.text)
-        this.updateUISubscription(ui)
-        return
-      }
-      if (!data.text) { }
-    })
-
-    this.getSetting('UIHomePageSettings').subscribe(data => {
-      const ui = {} as UIHomePageSettings
-      if (data.text) {
-        const ui = JSON.parse(data.text)
-        this.updateUISubscription(ui)
-        return
-      }
-      if (!data.text) { }
-    })
-
-    this.getStripeAPISettings();
-
-    this.getDSIEMVSettings()
+    this.getTransactionUISettings();
+    this.subscribeToStripedCachedConfig();
+    this.getDSSIEmvSettings();
+    this.getUIHomePageSettings();
   }
 
-  getStripeAPISettings() {
-    this.getSetting('StripeAPISettings').subscribe(data => {
-      let ui = {} as StripeAPISettings
-      if (data.text) {
-       ui = JSON.parse(data.text) as StripeAPISettings
-      }
-      ui.id = data.id;
-      this.updateStripeAPISettings(ui)
+  getTransactionUISettings() { 
+    this.settingsService.getUITransactionSetting().subscribe(data => { 
+      this._transactionUISettings.next(data)
     })
   }
 
-  getDSIEMVSettings() {
-    this.getSetting('DSIEMVSettings').subscribe(data => {
-      const ui = {} as DSIEMVSettings
-      if (data.text) {
-        const ui = JSON.parse(data.text)
-        this.updateDSIEMVSettings(ui)
-        return
-      }
-      if (!data.text) {
-      }
+  getUIHomePageSettings() { 
+    this.settingsService.getUIHomePageSettings().subscribe(data => { 
+      this._homePageSetting.next(data)
     })
-
-    this.getSetting('DSIEMVAndroidSettings').subscribe(data => {
-      const ui = {} as DSIEMVAndroidSettings
-      if (data.text) {
-        const ui = JSON.parse(data.text)
-        this.updateDSIEMVAndroidSettings(ui)
-        return
-      }
-      if (!data.text) {
-      }
-    })
-
   }
 
+  getDSSIEmvSettings() { 
+     this.settingsService.getDSIEMVSettings().subscribe(data => { 
+      this._DSIEMVSettings.next(data)
+    })
+  }
   ////////////// subscribeToStripedCachedConfig
-  async  subscribeToStripedCachedConfig(): Promise<StripeAPISettings> {
-    const setting = await this.getSetting('StripeAPISettings').toPromise();
-    const config = JSON.parse(setting.text) as StripeAPISettings
-    this.updateStripeAPISettings(config);
-    return config
-  }
-
-  async  subscribeToCachedConfig(): Promise<TransactionUISettings> {
-    const setting = await this.getSetting('UITransactionSetting').toPromise();
-    const config = JSON.parse(setting.text) as TransactionUISettings
-    this.updateUISubscription(config);
-    return config
+  subscribeToStripedCachedConfig()  {
+   this.settingsService.getStripeAPISetting().subscribe(data => { 
+      this.updateStripeAPISettings(data);
+   });
   }
 
   get homePageSetting(): UIHomePageSettings {
     if (this.uihomePageSetting) { return  this.uihomePageSetting }
-  }
-
-  async  subscribeToCachedHomePageSetting(name: string): Promise<any> {
-    try {
-      const setting = await this.getSetting(name).toPromise();
-      const config = JSON.parse(setting.text) as UIHomePageSettings
-      this.updateHomePageSetting(config);
-      return config
-    } catch (error) {
-      console.log('error on Subscriber', error)
-    }
   }
 
   getSetting(name: string): Observable<ISetting> {
@@ -252,6 +203,13 @@ export class UISettingsService {
     }
 
     return this.settingsService.getSettingByNameNoRoles(site, name)
+  }
+
+  getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
+    this.settingsService.getDSIEMVSettings().subscribe(data => { 
+      this.updateDSIEMVSettings(data);
+   });
+    return this.settingsService.getDSIEMVSettings()
   }
 
   saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
@@ -396,6 +354,14 @@ export class UISettingsService {
       defaultClientTypeID         : [''],
       enablMEDClients             : [''],
       enableLimitsView            : [''],
+      
+      prefixBarcodeLabel          : [''],
+      maxOrdersOpen               : [''],
+      lotPreBarCode               : [''],
+      buyerAmountDiscount         : [''],
+      idleTime                    : [''],
+      creditRecieptMinimum        : [''],
+      highTipInputPercentage      : [''],
      })
     return fb
   }

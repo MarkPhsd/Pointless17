@@ -183,11 +183,13 @@ export class CardComponent  implements OnInit , OnChanges{
   refreshChart() {
     this.reportType = this.cardValueType;
     const reportType = this.reportType;
+
     if ((!this.dateFrom || !this.dateTo) && !this.reportType) {
       if (!this.groupBy) {this.groupBy = 'hour'}
       this.getStartEndFromZRun().subscribe(data => {
       })
     }
+
     this.refreshSitesData();
   }
 
@@ -233,7 +235,7 @@ export class CardComponent  implements OnInit , OnChanges{
 
     return zrun$.pipe(
       switchMap(data => {
-      if (data.endTime) {
+      if (data.endTime && data.startTime) {
         this.dateFrom = this.reportingService.dateConvert(data.startTime)
         this.dateTo   = this.reportingService.dateConvert(data.endTime)
       }
@@ -242,9 +244,13 @@ export class CardComponent  implements OnInit , OnChanges{
         const startdate = new Date(data.startTime)
         this.dateTo     = this.reportingService.addDates(startdate, 1).toISOString();
       }
-      this.dateFrom = this.datePipe.transform(data.startTime, 'M/d/yy')
-      this.dateTo   = this.datePipe.transform(this.dateTo   , 'M/d/yy')
-      this.zrunID   = data.id.toString();
+      if (data.startTime && this.dateTo) { 
+        this.dateFrom = this.datePipe.transform(data.startTime, 'M/d/yy')
+        this.dateTo   = this.datePipe.transform(this.dateTo   , 'M/d/yy')
+      } 
+      if (data.id) { 
+        this.zrunID   = data.id.toString();
+      }
       return sites$
     }))
   }
@@ -293,8 +299,8 @@ export class CardComponent  implements OnInit , OnChanges{
 
     if (this.isProductSalesType(this.cardValueType)) {
       this.chartCategories = this.itemNames;
-      console.log(this.itemNames)
-      console.log(this.chartCategories)
+      // console.log(this.itemNames)
+      // console.log(this.chartCategories)
      
       this.xAxis = this.getXAxis(this.chartCategories);
      
@@ -506,15 +512,15 @@ export class CardComponent  implements OnInit , OnChanges{
       const item = sales.filter( item => {})
       return true;
     } catch (error) {
-      console.log(sales)
+      // console.log(sales)
     }
-    console.log('validateSalesValue  false', sales)
+    // console.log('validateSalesValue  false', sales)
     return false
   }
 
   updateChartSitesSales(dateFrom: string, dateTo: string, sites: ISite[]) {
     if (!this.isMultiSiteReport()) { return }
-    console.log('updateChartSiteSales')
+    // console.log('updateChartSiteSales')
     this.initSeriesLabels();
     this.initChart('values')
     // let dataSeriesValues =  this.initLocalSeries();
@@ -534,7 +540,7 @@ export class CardComponent  implements OnInit , OnChanges{
                 try {
                   const item = sales.filter( item => {})
                 } catch (error) {
-                  console.log(sales)
+                  // console.log(sales)
                   return
                 }
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );
@@ -633,7 +639,7 @@ export class CardComponent  implements OnInit , OnChanges{
                 try {
                   const item = sales.filter( item => {})
                 } catch (error) {
-                  console.log(sales)
+                  // console.log(sales)
                   return
                 }
                 const item = sales.filter( item =>  { if( item.dateHour === data.date)  { return item } } );

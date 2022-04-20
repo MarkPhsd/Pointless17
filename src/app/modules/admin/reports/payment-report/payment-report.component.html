@@ -1,6 +1,9 @@
 <div *ngIf=" (sales$ | async) as sales; else loading">
 
   <div *ngIf="sales.resultMessage != 'success'">
+    <div  class="totals_label">
+     <h4> <ng-content></ng-content> </h4>
+   </div>
     {{sales.resultMessage}}
   </div>
 

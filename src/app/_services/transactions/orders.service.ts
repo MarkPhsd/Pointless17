@@ -217,6 +217,20 @@ export class OrdersService {
     return this.http.get<IItemBasic[]>(url);
   }
 
+  setOrderName(id: number, orderName: string):  Observable<any>  {
+    const site = this.siteService.getAssignedSite();
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "SetOrderName"
+
+    const parameters = `?orderID=${id}&orderName=${orderName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
   getUserCurrentOrder(site: ISite, userID: number) {
     let history = false;
     if (history === undefined) {history = false};

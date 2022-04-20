@@ -18,7 +18,9 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges {
   _order : Subscription;
   order  : IPOSOrder;
 
-  schedules : any[];
+  schedules     : any[];
+  expanded      : boolean;
+  showSchedules = false;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
@@ -35,6 +37,10 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges {
     const i = 0;
   }
 
+  expand() { 
+    this.expanded = !this.expanded
+    this.showSchedules = !this.showSchedules;
+  }
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.

@@ -1,13 +1,13 @@
   <div  #scrollMe
         *ngIf="order && order.posOrderItems && order.posOrderItems.length>0"
         [class]="orderItemsPanel" >
+       
 
     <ion-item-sliding
               class="nopadd"
               *ngFor="let item of order.posOrderItems; let i = index;trackBy: trackByFN"
               (ionSwipe)="swipeAction(i)" >
-              <!-- ||
-             -->
+        
       <div *ngIf="uiConfig">
 
         <ion-item *ngIf="item" >

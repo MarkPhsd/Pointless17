@@ -5,8 +5,6 @@
 <ng-container *ngIf="user$| async as user">
 
   <div *ngIf="user.roles === 'admin' || user.roles === 'manager' ">
-
-
     <h2 matSubheader>Orders</h2>
 
     <button
@@ -35,7 +33,6 @@
       <mat-icon>list</mat-icon>
       Payment History
     </button>
-
 
     <button
           mat-raised-button

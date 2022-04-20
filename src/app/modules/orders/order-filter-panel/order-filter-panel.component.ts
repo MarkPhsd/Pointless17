@@ -296,9 +296,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       this.searchModel = search;
     }
 
-    this.toggleSuspendedOrders       =  search.suspendedOrder.toString()      //= parseInt(this.toggleSuspendedOrders)
-    this.toggleOrdersGreaterThanZero =  search.greaterThanZero.toString()      //= parseInt(this.toggleOrdersGreaterThanZero)
-    this.toggleOpenClosedAll         =  search.closedOpenAllOrders.toString() //= parseInt(this.toggleOpenClosedAll)
+    if (search.suspendedOrder) { 
+      this.toggleSuspendedOrders       =  search.suspendedOrder.toString()      //= parseInt(this.toggleSuspendedOrders)
+    }
+    if (search.greaterThanZero) {
+      this.toggleOrdersGreaterThanZero =  search.greaterThanZero.toString()
+    }      //= parseInt(this.toggleOrdersGreaterThanZero)
+    if (search.closedOpenAllOrders) {
+      this.toggleOpenClosedAll         =  search.closedOpenAllOrders.toString() 
+    }//= parseInt(this.toggleOpenClosedAll)
   }
 
   changeToggleTypeEmployee() {
@@ -312,45 +318,47 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   // }
   }
 
-    orderSearch(searchPhrase) {
-      if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel }
-      this.searchModel.orderID = parseInt( searchPhrase)
-      this.initOrderSearch(this.searchModel)
+  orderSearch(searchPhrase) {
+    if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel }
+    this.searchModel.orderID = parseInt( searchPhrase)
+    this.initOrderSearch(this.searchModel)
+  }
+
+  refreshSearch() {
+    if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel
+    this.searchModel.serviceTypeID = 0
+    this.searchModel.employeeID    = 0
     }
 
-    refreshSearch() {
-      if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel
-      this.searchModel.serviceTypeID = 0
-      this.searchModel.employeeID    = 0
-      }
+    const search               = this.searchModel;
+    search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
+    search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
+    search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
 
-      const search               = this.searchModel;
-      search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
-      search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
-      search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
-
-      search.printLocation       = 0;
-      search.prepStatus          = 1;
-      if (this.viewType ==3) {
-        search.printLocation      = this.printLocation;
-        search.prepStatus         = 1//this.prepStatus
-      }
-      this.initOrderSearch(search)
-      return this._searchItems$
+    search.printLocation       = 0;
+    search.prepStatus          = 1;
+    if (this.viewType ==3) {
+      search.printLocation      = this.printLocation;
+      search.prepStatus         = 1//this.prepStatus
     }
+    this.initOrderSearch(search)
+    console.log(search)
+    return this._searchItems$
+  }
 
-    refreshOrderSearch(searchPhrase) {
-      this.searchModel = {} as IPOSOrderSearchModel
-      this.searchModel.serviceTypeID = 0
-      this.searchModel.employeeID    = 0
-      this.searchModel.orderID   = parseInt(searchPhrase)
-      const search               = this.searchModel;
-      search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
-      search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
-      search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
-      this.initOrderSearch(search)
-      return this._searchItems$
-    }
+  refreshOrderSearch(searchPhrase) {
+    this.searchModel = {} as IPOSOrderSearchModel
+    this.searchModel.serviceTypeID = 0
+    this.searchModel.employeeID    = 0
+    this.searchModel.orderID   = parseInt(searchPhrase)
+    const search               = this.searchModel;
+    search.suspendedOrder      = parseInt(this.toggleSuspendedOrders)
+    search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
+    search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
+    this.initOrderSearch(search)
+    console.log(search)
+    return this._searchItems$
+  }
 
   setServiceType(event) {
     if (!event) { return}
