@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -13,23 +14,22 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   backgroundImage: string;
   logoHomePage: string;
-  tinyLogo:     string;
+  tinyLogo    :     string;
+  inputForm   : FormGroup;
+  uiSettings  : ISetting;
+  uiSettings$ : Observable<ISetting>;
+  uiHomePage  : UIHomePageSettings;
 
-  inputForm  : FormGroup;
-
-  uiSettings : ISetting;
-  uiSettings$: Observable<ISetting>;
-  uiHomePage : UIHomePageSettings;
-
-  constructor(private uISettingsService: UISettingsService) { }
+  constructor(
+    private settingsService  : SettingsService,
+    private uISettingsService: UISettingsService) { }
 
   ngOnInit() {
     const form = this.inputForm
     this.inputForm = this.uISettingsService.initHomePageForm(form)
-    this.uISettingsService.getSetting('UIHomePageSettings').subscribe(data => {
-      console.log('data', data)
+    this.settingsService.getUIHomePageSettings().subscribe(data => {
       if (data) {
-        this.uiHomePage   = JSON.parse(data.text) as UIHomePageSettings
+        this.uiHomePage   = data
         this.initializeImages(this.uiHomePage)
         this.initForm(this.uiHomePage);
         return
@@ -39,24 +39,21 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   initializeImages(data: UIHomePageSettings) {
     try {
-      if (this.uiHomePage?.backgroundImage == null) {
-        this.uiHomePage.backgroundImage = ''
+      if (data.backgroundImage) {
         this.backgroundImage = data.backgroundImage;
       }
     } catch (error) {
     }
 
     try {
-      if (this.uiHomePage?.tinyLogo == null) {
-        this.uiHomePage.tinyLogo = ''
+      if (data.tinyLogo) {
         this.tinyLogo =  data.tinyLogo;
       }
     } catch (error) {
     }
 
     try {
-      if (this.uiHomePage?.logoHomePage  == null) {
-        this.uiHomePage.logoHomePage =''
+      if (data.logoHomePage) {
         this.logoHomePage = data.logoHomePage;
       }
     } catch (error) {
@@ -68,14 +65,6 @@ export class UIHomePageSettingsComponent implements OnInit {
       const form = this.inputForm;
       this.inputForm.patchValue(data)
       return
-      // this.uISettingsService.setFormValue(form, setting, 'UIHomePageSettings').subscribe(
-      //   data => {
-      //     if (data) {
-      //       const config = JSON.parse(data.text)
-      //       this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
-      //     }
-      //   }
-      // )
     }
   }
 

@@ -19,7 +19,17 @@
   overflow-x: hidden;
 }
 
-mat-toolbar {
+.mat-toolbar-android { 
+  padding-top   : 10px  !important;
+  padding-left  : 5px !important;
+  margin-top: 15px  !important;
+  width     : 100%  !important;
+  min-width : 300px;
+  height    : 65px !important;
+  overflow: hidden;
+}
+
+.mat-toolbar {
   padding-top   : 10px  !important;
   padding-left  : 5px !important;
   // margin-top: 15px  !important;

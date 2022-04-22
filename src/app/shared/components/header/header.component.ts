@@ -34,7 +34,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
   openOrderBar:                      boolean;
   @HostBinding('class') className = '';
-
+  mattoolbar                 ='mat-toolbar'
   isApp                      : boolean;
   company                    = {} as ICompany;
   compName:                  string;
@@ -147,7 +147,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private messageService:         MessageService,
               public  breakpointObserver:     BreakpointObserver,
               private siteService:            SitesService,
-              public toolbarUIService:       ToolBarUIService,
+              public  toolbarUIService:       ToolBarUIService,
               private location:               Location,
               private scaleService          : ScaleService,
               private navigationService     : NavigationService,
@@ -272,6 +272,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (window.innerWidth < 768) {
       this.smallDevice = true
     }
+
+    if (this.platFormService.androidApp) { 
+      this.mattoolbar = 'mat-toolbar-android'
+    }
   }
 
   getUserInfo() {
@@ -306,10 +310,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isUserStaff      = true
       this.showPOSFunctions = true;
     }
-
- 
-
-   
   }
 
   initUserInfo() {

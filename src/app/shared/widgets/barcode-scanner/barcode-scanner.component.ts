@@ -47,7 +47,7 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   cameraActive = false;
   parser$: Observable<IUserProfile>;
 
-   startScanSub = async () => {
+  startScanSub = async () => {
     BarcodeScanner.hideBackground(); // make background of WebView transparent
     const result = await BarcodeScanner.startScan(); // start scanning and wait for a result
     // if the result has content

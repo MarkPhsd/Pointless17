@@ -13,21 +13,19 @@
           [formGroup]="inputForm">
 
       <div class="grid-view-sections">
-
-        <div class="grid-item">
-          <app-value-fields
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'displayCompanyName'">
-              Company Name Display
-          </app-value-fields>
-        </div>
-
         <div class="grid-views">
           <div>
-
             <div>Customer View </div>
             <mat-divider></mat-divider>
+
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'displayCompanyName'">
+                  Company Name Display
+              </app-value-fields>
+            </div>
 
             <div class="toggle-fields">
               <mat-slide-toggle
@@ -39,8 +37,8 @@
 
             <div class="toggle-fields">
               <mat-slide-toggle
-                        formControlName="departmentsEnabled"
-                        >
+                        formControlName="departmentsEnabled">
+                     
                 <mat-label>Departments</mat-label>
               </mat-slide-toggle>
             </div>
@@ -160,6 +158,7 @@
 
         <div class="grid-item">
           <mat-card class="image-container">
+          
             <app-widget-uploader
                 [(fileNames)]="logoHomePage"
                 (messageOut) ="received_Logo($event)"
@@ -171,6 +170,7 @@
 
         <div class="grid-item">
           <mat-card class="image-container">
+      
             <app-widget-uploader
                 [(fileNames)]="tinyLogo"
                 (messageOut) ="received_TinyLogo($event)"

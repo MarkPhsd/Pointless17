@@ -144,6 +144,7 @@ import {YouTubePlayerModule} from '@angular/youtube-player'
 import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/strain-indicator.component';
 import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
+import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvpayment.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -186,6 +187,7 @@ import { DashBoardRoutingModule } from '../dash-board-routing.module';
     DepartmentSelectComponent,
     DeviceInfoComponent,
     DSIEMVElectronComponent,
+    DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     ExitLabelSelectionComponent,
     EditButtonsStandardComponent,
@@ -342,6 +344,7 @@ import { DashBoardRoutingModule } from '../dash-board-routing.module';
     DeviceInfoComponent,
     DisableControlDirective,
     DSIEMVElectronComponent,
+    DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,

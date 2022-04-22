@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
-// import { DSIEMV } from 'dsiemv-android-plugin';
 // import 'dsiemv-android-plugin';
+// import  'dsiemv-android-plugin';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { Router } from '@angular/router';
 // need to use interfaces direct from plugin.
 // web interface works as dsemandroid
-// import { shared}
-// import { Plugins} from '@capacitor/core'
-// const { DSIEMV } = Plugins;
-// {dsiemvandroid } from
+// // import { shared}
+import { Plugins} from '@capacitor/core'
+const  { dsiemvandroidPlugin, ZebraLabelPrinterPlugin } = Plugins;
+import 'ionic-zebra-label-printer'
 
 @Component({
   selector: 'app-dsi-emvpayment',
@@ -36,27 +36,27 @@ export class DsiEMVPaymentComponent  {
     this.instance = ''
   }
   async checkPermission() {
-    //   const dsiemvandroidPlugin = typeof  dsiEMVAndroidinstancePlugin
-    //   const options = { value: ' echo this '}
-    //   const status = await dsiemvandroidPlugin. ();
-    //   console.log('status', status)
-    //   this.result = status
+      // const dsiemvandroidPlugin = typeof  dsiEMVAndroidinstancePlugin
+      // const options = { value: ' echo this '}
+      // const status = await dsiemvandroidPlugin
+      // console.log('status', status)
+      // this.result = status
   }
 
   async getInstance() {
-    // try {
-    //   const status = await DSIEMV.getInstance();
-    //   this.instance = status
-    // } catch (error) {
-    //   console.log(error)
-    //   this.err = error
-    //   this.instance = 'Instance Implementation not available.'
-    // }
+    try {
+      const status = await dsiemvandroidPlugin.getInstance();
+      this.instance = status
+    } catch (error) {
+      console.log(error)
+      this.err = error
+      this.instance = 'Instance Implementation not available.'
+    }
   }
 
   async setFoundation() {
     // try {
-    //   const status = await DSIEMV.foundation();
+    //   const status = await dsiPayments.foundation();
     //   this.instance = status
     // } catch (error) {
     //   console.log(error)
@@ -69,25 +69,25 @@ export class DsiEMVPaymentComponent  {
 
     const options = { value: ' Get Echo. Following output is from Plugin: '}
     if (this.androidApp) {
-      // try {
-      //   const status = await DSIEMV.echo(options)
-      //   this.echoResponse = status.value;
-      // } catch (error) {
-      //   console.log(error)
-      //   this.echoResponse = 'Implementation not available.'
-      //   this.err = error
-      // }
+      try {
+        const status = await dsiemvandroidPlugin.echo(options)
+        this.echoResponse = status.value;
+      } catch (error) {
+        console.log(error)
+        this.echoResponse = 'Implementation not available.'
+        this.err = error
+      }
     }
 
     if (!this.isApp) {
-      // try {
-      //   const status = await DSIEMV.echo(options)
-      //   this.echoResponse = status.value;
-      // } catch (error) {
-      //   console.log(error)
-      //   this.echoResponse = 'Implementation not available.'
-      //   this.err = error
-      // }
+      try {
+        const status = await dsiemvandroidPlugin.echo(options)
+        this.echoResponse = status.value;
+      } catch (error) {
+        console.log(error)
+        this.echoResponse = 'Implementation not available.'
+        this.err = error
+      }
     }
   }
 

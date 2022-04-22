@@ -1,4 +1,7 @@
-<div><button mat-raised-button *ngIf="!expanded" (click)="expand()"><mat-icon>expand</mat-icon>Specials </button></div>
+<div><button mat-raised-button  
+             (click)="expand()">
+  <mat-icon>expand</mat-icon>Specials </button>
+</div>
 <mat-card *ngIf="schedules && schedules.length>0 && showSchedules">
   <div>
     <h5>

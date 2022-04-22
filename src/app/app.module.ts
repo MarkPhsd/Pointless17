@@ -35,13 +35,11 @@ import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcod
 import { HttpClientCacheService } from './_http-interceptors/http-client-cache.service';
 import { CacheClientService } from './_http-interceptors/cache-client.service';
 import { RenderingService } from './_services/system/rendering.service';
-// import { SafeHtmlPipe } from './_pipes/safe-html.pipe';
 import { PagerService } from './_services/system/agpager.service';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 import { AgGridTestComponent } from './shared/widgets/ag-grid-test/ag-grid-test.component';
 import { CurrencyFormatterDirective } from './_directives/currency-reactive.directive';
 import { AgGridImageFormatterComponent } from './_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { DsiEMVPaymentComponent } from './modules/admin/dsi-emvpayment/dsi-emvpayment.component';
 import { AgGridToggleComponent } from './_components/_aggrid/ag-grid-toggle/ag-grid-toggle.component';
 import { NGXMaterialModule } from './ngx-material.module';
 import { AppInitService } from './_services/system/app-init.service';
@@ -89,7 +87,6 @@ export function init_app(appLoadService: AppInitService) {
     ChangepasswordComponent,
     CategoriesAlternateComponent,
     CurrencyFormatterDirective,
-    DsiEMVPaymentComponent,
     LoginComponent,
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
@@ -136,7 +133,6 @@ export function init_app(appLoadService: AppInitService) {
 
   exports: [
     AppMaterialModule,
-    DsiEMVPaymentComponent,
     EditorModule,
     FormsModule,
     IonicModule,

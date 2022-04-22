@@ -1,4 +1,4 @@
-<mat-toolbar [color]="matToolbarColor">
+<mat-toolbar [class]="mattoolbar" [color]="matToolbarColor">
   <mat-toolbar-row>
  
     <div [class]="flexsections">
@@ -28,11 +28,8 @@
             <button aria-label="search"
                     mat-button
                     (click)="toggleSearchMenu()">
-
               <mat-icon >{{searchBar}}</mat-icon>
             </button>
-
-
           </div>
 
           <div>
