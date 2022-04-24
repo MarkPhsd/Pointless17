@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 // web interface works as dsemandroid
 // // import { shared}
 import { Plugins} from '@capacitor/core'
-const  { dsiemvandroidPlugin, ZebraLabelPrinterPlugin } = Plugins;
+const  {  ZebraLabelPrinterPlugin } = Plugins;
 import 'ionic-zebra-label-printer'
 
 @Component({
@@ -24,12 +24,13 @@ export class DsiEMVPaymentComponent  {
   echoResponse: any;
   echoPluginResponse: any;
   err: any
+
+  status: any;
   constructor(
     private platFormService: PlatformService,
     private router: Router,
     // private DsiEmvPaymentsService: DsiEmvPaymentsService
   ) { }
-  status: any;
 
   reset() {
     this.result = ''
@@ -44,14 +45,14 @@ export class DsiEMVPaymentComponent  {
   }
 
   async getInstance() {
-    try {
-      const status = await dsiemvandroidPlugin.getInstance();
-      this.instance = status
-    } catch (error) {
-      console.log(error)
-      this.err = error
-      this.instance = 'Instance Implementation not available.'
-    }
+    // try {
+    //   const status = await dsiemvandroidPlugin.getInstance();
+    //   this.instance = status
+    // } catch (error) {
+    //   console.log(error)
+    //   this.err = error
+    //   this.instance = 'Instance Implementation not available.'
+    // }
   }
 
   async setFoundation() {
@@ -67,28 +68,16 @@ export class DsiEMVPaymentComponent  {
 
   async getEcho() {
 
-    const options = { value: ' Get Echo. Following output is from Plugin: '}
-    if (this.androidApp) {
-      try {
-        const status = await dsiemvandroidPlugin.echo(options)
-        this.echoResponse = status.value;
-      } catch (error) {
-        console.log(error)
-        this.echoResponse = 'Implementation not available.'
-        this.err = error
-      }
-    }
-
-    if (!this.isApp) {
-      try {
-        const status = await dsiemvandroidPlugin.echo(options)
-        this.echoResponse = status.value;
-      } catch (error) {
-        console.log(error)
-        this.echoResponse = 'Implementation not available.'
-        this.err = error
-      }
-    }
+    // const options = { value: ' Get Echo. Following output is from Plugin: '}
+    // if (this.androidApp) {
+    //   try {
+    //     const status = await dsiemvandroidPlugin.echo(options)
+    //     this.echoResponse = status.value;
+    //   } catch (error) {
+    //     console.log(error)
+    //     this.echoResponse = 'Implementation not available.'
+    //     this.err = error
+    //   }
   }
 
   login() {

@@ -21,7 +21,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 repositories {
@@ -34,12 +33,11 @@ dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     implementation project(':capacitor-android')
-  implementation files('C:\\Users\\Mark\\source\\repos\\CCSApp\\android\\app\\libs\\dsiEMVAndroid.aar')
-  //    implementation files('C:\\Users\\Mark\\source\\DSIEMVAndroidDemo\\dsiEMVAndroid\\DSIEMVAndroid.aar')
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
+    implementation 'com.android.support:design:27.1.1'
 }
 
 apply from: 'capacitor.build.gradle'

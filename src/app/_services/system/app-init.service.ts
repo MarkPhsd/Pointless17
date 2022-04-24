@@ -67,7 +67,9 @@ export class AppInitService  {
       if (data) {
         this.apiUrl     = data.apiUrl
         if (!data.apiUrl) {
-          this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+          if (!this.platformService.androidApp && !this.platformService.isAppElectron){
+            // this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+          }
           this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
           data.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
           this.setAPIUrl(this.apiUrl)
@@ -81,7 +83,9 @@ export class AppInitService  {
 
     if ( this.platFormService.isApp()  ) {
       if (!data ) {
-        this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+        if (!this.platformService.androidApp && !this.platformService.isAppElectron){
+          this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+        }
         this.apiUrl           = "https://ccsposdemo.ddns.net:4443/api"
         this.useAppGate       = false;
         this.logo             = "http://cafecartel.com/temp/logo.png";
@@ -125,7 +129,9 @@ export class AppInitService  {
     }
 
     if (this.isApp() && !result ) {
-       this._snackbar.open('Using demo data  - getLocalApiUrl', 'Alert', {duration: 3000} )
+      if (! this.platformService.androidApp){
+         this._snackbar.open('Using demo data  - getLocalApiUrl', 'Alert', {duration: 3000} )
+      }
       localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
       return localStorage.getItem('storedApiUrl')
     }

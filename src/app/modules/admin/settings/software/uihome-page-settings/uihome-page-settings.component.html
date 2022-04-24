@@ -8,137 +8,135 @@
   </ng-template>
 
   <mat-card-content>
-
     <div  *ngIf="inputForm && uiHomePage; else loading"
           [formGroup]="inputForm">
 
+      <div class="grid-item">
+        <app-value-fields
+            [fieldType]     ="'text'"
+            [inputForm]     ="inputForm"
+            [fieldName]     ="'displayCompanyName'">
+            Company Name Display
+        </app-value-fields>
+      </div>
+
       <div class="grid-view-sections">
+
         <div class="grid-views">
-          <div>
-            <div>Customer View </div>
-            <mat-divider></mat-divider>
+          <div>Customer View </div>
 
-            <div class="grid-item">
-              <app-value-fields
-                  [fieldType]     ="'text'"
-                  [inputForm]     ="inputForm"
-                  [fieldName]     ="'displayCompanyName'">
-                  Company Name Display
-              </app-value-fields>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="brandsEnabled"
-                      >
-                <mat-label>Brands</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="departmentsEnabled">
-                     
-                <mat-label>Departments</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="categoriesEnabled"
-                        >
-                <mat-label>Categories</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="typesEnabled"
-                        >
-                <mat-label>Types</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="tierMenuEnabled"
-                        >
-                <mat-label>Tier Menu</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-          </div>
-
-          <div>
-         <div>Staff View </div>
-            <mat-divider></mat-divider>
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="staffBrandsEnabled"
-                        >
-                <mat-label>Brands</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="staffDepartmentsEnabled"
-                        >
-                <mat-label>Departments</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="staffCategoriesEnabled"
-                        >
-                <mat-label>Categories</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="staffTypesEnabled"
-                        >
-                <mat-label>Types</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="staffTierMenuEnabled"
-                        >
-                <mat-label>Tier Menu</mat-label>
-              </mat-slide-toggle>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <div>Paging and Search results </div>
-          <mat-divider></mat-divider>
-          <div class="grid-views">
-            <app-value-fields
-                [fieldType]     ="'number'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'itemsPerPage'">
-                Items Per Page
-            </app-value-fields>
-          </div>
-        </div>
-        <div>
-          <div>Order Settings</div>
-          <mat-divider></mat-divider>
           <div class="toggle-fields">
             <mat-slide-toggle
-                      formControlName="wideOrderBar"
+                      formControlName="brandsEnabled"
+                    >
+              <mat-label>Brands</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="departmentsEnabled">
+
+              <mat-label>Departments</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="categoriesEnabled"
                       >
-              <mat-label>Wide Order Bar</mat-label>
+              <mat-label>Categories</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="typesEnabled"
+                      >
+              <mat-label>Types</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="tierMenuEnabled"
+                      >
+              <mat-label>Tier Menu</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+        </div>
+
+        <div class="grid-views">
+          <div>Staff View </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffBrandsEnabled"
+                      >
+              <mat-label>Brands</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffDepartmentsEnabled"
+                      >
+              <mat-label>Departments</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffCategoriesEnabled"
+                      >
+              <mat-label>Categories</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffTypesEnabled"
+                      >
+              <mat-label>Types</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="staffTierMenuEnabled"
+                      >
+              <mat-label>Tier Menu</mat-label>
             </mat-slide-toggle>
           </div>
         </div>
-
       </div>
+
+      <div class="grid-item">
+        <div>Paging and Search results </div>
+        <mat-divider></mat-divider>
+        <div class="grid-views">
+          <app-value-fields
+              [fieldType]     ="'number'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'itemsPerPage'">
+              Items Per Page
+          </app-value-fields>
+        </div>
+      </div>
+
+      <div>
+        <div>Order Settings</div>
+        <mat-divider></mat-divider>
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="wideOrderBar"
+                    >
+            <mat-label>Wide Order Bar</mat-label>
+          </mat-slide-toggle>
+        </div>
+      </div>
+
     </div>
 
     <div *ngIf="uiHomePage">
@@ -158,7 +156,7 @@
 
         <div class="grid-item">
           <mat-card class="image-container">
-          
+
             <app-widget-uploader
                 [(fileNames)]="logoHomePage"
                 (messageOut) ="received_Logo($event)"
@@ -170,7 +168,7 @@
 
         <div class="grid-item">
           <mat-card class="image-container">
-      
+
             <app-widget-uploader
                 [(fileNames)]="tinyLogo"
                 (messageOut) ="received_TinyLogo($event)"

@@ -14,6 +14,7 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './modules/login/login.component';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from '@angular/cdk/layout';
+
 import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
 import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -110,10 +111,11 @@ export function init_app(appLoadService: AppInitService) {
   ],
 
   imports: [
+    IonicModule.forRoot(),
     AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
-    DashBoardRoutingModule,
     AppRoutingModule,
     AppMaterialModule,
+    DashBoardRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     CommonModule,
@@ -124,7 +126,6 @@ export function init_app(appLoadService: AppInitService) {
     FormsModule,
     HttpClientModule,
     LayoutModule,
-    IonicModule.forRoot(),
     NGXMaterialModule,
     NgxElectronModule,
     ReactiveFormsModule,

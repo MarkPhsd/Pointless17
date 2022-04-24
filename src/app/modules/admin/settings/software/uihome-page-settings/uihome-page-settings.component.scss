@@ -20,18 +20,19 @@ mat-divider {
   }
 
   .grid-view-sections {
-
+    width: 425px;
+    max-width: 425px;
     --gap: 5px;
     margin-top: 2px;
     margin-right: 2px;
     margin-bottom: 5px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(450px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
     overflow-y: visible;
-
   }
 
   grid-item {
     max-width: 175px;
+    width: 175px;
   }
