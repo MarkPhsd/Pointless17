@@ -2,3 +2,15 @@ mat-card {
   height: 100%;
   margin: 5px;
 }
+
+
+.grid {
+  display : grid;
+  grid-template-columns: 100px 259px;
+  margin: 5px;
+  width: 400px;
+  height: 200px;
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

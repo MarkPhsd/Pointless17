@@ -21,6 +21,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   type      : string;
   action    : number ;
   transactiondata: any;
+  voidPayment: IPOSPayment;
   //action = 0 or 1 = sale
   //action = 2 = void
   //action = 3 = refund
@@ -28,7 +29,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   //action = 5 = forceauth
   //action = 6 = EBT
   //action = 7 = WIC
-  
+
     //void =6
     //refund = 5;
     //preauth = 3
@@ -47,6 +48,9 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.amount  = data.amount;
       this.action  = data.action
       this.transactiondata = data;
+      if (data.action ==2) {
+        this.voidPayment = data.voidPayment
+      }
     }
   }
 
@@ -56,14 +60,14 @@ export class DSIEMVTransactionComponent implements OnInit {
      this.processing = false;
      this.displayAction(this.action)
 
-     if (this.action == 0 || this.action == 1) { 
-       this.process(); 
+     if (this.action == 0 || this.action == 1) {
+       this.process();
        return
      }
 
   }
 
-  displayAction(action: number) { 
+  displayAction(action: number) {
       if (this.action == 0 || this.action == 1) {this.type = 'Sale' }
       if (this.action == 2 ) {this.type = 'Void' }
       if (this.action == 3 ) {this.type = 'Refund' }
@@ -87,33 +91,33 @@ export class DSIEMVTransactionComponent implements OnInit {
     },50);
   }
 
-  processTransation() { 
-   
+  processTransation() {
+
     if (this.action == 0 || this.action == 1) {
       this.processSaleCard();
       return
     }
-    if (this.action == 2) { 
+    if (this.action == 2) {
       this.processVoidCard();
       return
     }
-    // if (this.action == 3) { 
+    // if (this.action == 3) {
     //   this.processRefundCard();
     //   return
     // }
-    // if (this.action == 4) { 
+    // if (this.action == 4) {
     //   this.procesPreAuthCard();
     //   return
     // }
-    // if (this.action == 5) { 
+    // if (this.action == 5) {
     //   this.procesPreAuthCard();
     //   return
     // }
-    // if (this.action == 6) { 
+    // if (this.action == 6) {
     //   this.procesPreAuthCard();
     //   return
     // }
-    // if (this.action == 7) { 
+    // if (this.action == 7) {
     //   this.procesPreAuthCard();
     //   return
     // }
@@ -135,14 +139,14 @@ export class DSIEMVTransactionComponent implements OnInit {
 
   async processVoidCard() {
     const amount = this.amount
-    const payment = this.payment
-    const response  = await this.dsiProcess.emvVoid(this.payment);
+    const payment = this.voidPayment
+    const response  = await this.dsiProcess.emvVoid(payment);
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
     }
     if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, payment)
        this.readResult(cmdResponse);
     }
   }
@@ -174,7 +178,7 @@ export class DSIEMVTransactionComponent implements OnInit {
        this.readResult(cmdResponse);
     }
   }
-  
+
   async procesForceAuthCard() {
     const amount = this.amount
     const payment = this.payment

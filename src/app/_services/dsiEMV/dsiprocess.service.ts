@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { IPOSPayment } from 'src/app/_interfaces';
+import { OrderMethodsService } from '../transactions/order-methods.service';
 import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
 @Injectable({
   providedIn: 'root'
 })
 export class DSIProcessService {
 
-  constructor(private dsi : DSIEMVTransactionsService) { }
+  constructor(
+    private orderMethodsService: OrderMethodsService,
+    private dsi : DSIEMVTransactionsService) { }
 
   initTransaction(): Transaction {
     const item = localStorage.getItem('DSIEMVSettings')
@@ -22,7 +25,7 @@ export class DSIProcessService {
     transaction.SecureDevice  =transactiontemp.SecureDevice;
     transaction.ComPort       =transactiontemp.ComPort;
     transaction.SequenceNo    ='0010010010'
-    //if mercury maybe include memo.
+
     return transaction
   }
 
@@ -54,44 +57,73 @@ export class DSIProcessService {
   // }
 
   async emvVoid(posPayment: IPOSPayment ): Promise<RStream> {
-    const reset               = await this.pinPadReset(); //ignore response for now.
-    const item                = localStorage.getItem('DSIEMVSettings')
-    if (!item) { return null }
 
-    let transaction      = this.initTransaction();
-    transaction.TranType = 'Credit';
-    transaction.TranCode = 'VoidSaleByRecordNo';
+    try {
+      const reset               = await this.pinPadReset(); //ignore response for now.
+      const item                = localStorage.getItem('DSIEMVSettings')
+      if (!item) {
+        this.orderMethodsService.notification('Could not initialized DSI Settings', 'Error')
+        return null
+      }
 
-    if (transaction.SecureDevice === 'EMV_VX805_PAYMENTECH') {
-      transaction.TranType = 'Credit';
-      transaction.TranCode = 'EMVVoidSale';
-    }
+      let transaction      = this.initTransaction();
+      if (!transaction) {
+        this.orderMethodsService.notification('Could not Initialize Transaction Settings', 'Error')
+        return null
+      }
 
-    if (transaction.SecureDevice === "EMV_VX805_MERCURY" ||
-        transaction.SecureDevice === "EMV_VX805_VANTIV" ||
-        transaction.SecureDevice === "EMV_VX805_RAPIDCONNECT") {
       transaction.TranType = 'Credit';
       transaction.TranCode = 'VoidSaleByRecordNo';
+
+      if (transaction.SecureDevice === 'EMV_VX805_PAYMENTECH') {
+        transaction.TranType = 'Credit';
+        transaction.TranCode = 'EMVVoidSale';
+      }
+
+      if (transaction.SecureDevice === "EMV_VX805_MERCURY" ||
+          transaction.SecureDevice === "EMV_VX805_VANTIV" ||
+          transaction.SecureDevice === "EMV_VX805_RAPIDCONNECT") {
+        transaction.TranType = 'Credit';
+        transaction.TranCode = 'VoidSaleByRecordNo';
+      }
+
+      if (posPayment.id) {
+        transaction.InvoiceNo   = posPayment.id.toString();
+      }
+      if ( posPayment.refNumber) {
+        transaction.RefNo       = posPayment.refNumber.toString();
+      }
+      if (posPayment.approvalCode) {
+        transaction.AuthCode    = posPayment.approvalCode.toString();
+      }
+      if (posPayment.ccNumber) {
+        transaction.RecordNo    = posPayment.ccNumber;
+      }
+      transaction.Frequency   = 'OneTime'
+      if (posPayment.dlNumber ) {
+        transaction.AcqRefData  = posPayment.dlNumber.toString();
+      }
+      if (posPayment.processData) {
+        transaction.ProcessData = posPayment.processData.toString();
+      }
+
+      transaction.Amount = {} as Amount;
+      if (posPayment.amountReceived) {
+        transaction.Amount.Purchase = posPayment.amountReceived.toString();
+      }
+      if (!posPayment.tipAmount && posPayment.tipAmount != 0) {
+        transaction.Amount.Gratuity = posPayment.tipAmount.toString();
+      }
+
+      console.log(transaction)
+      return this.dsi.emvTransaction(transaction)
+    } catch (error) {
+      console.log('DSIEMVVoid', error)
     }
 
-    transaction.InvoiceNo   = posPayment.id.toString();
-    transaction.RefNo       = posPayment.refNumber.toString();
-    transaction.AuthCode    = posPayment.approvalCode.toString();
-    transaction.RecordNo    = posPayment.ccNumber;
-    transaction.Frequency   = 'OneTime'
-    transaction.AcqRefData  = posPayment.dlNumber.toString();
-    transaction.ProcessData = posPayment.processData.toString();
-
-    transaction.Amount = {} as Amount;
-    transaction.Amount.Purchase = posPayment.amountPaid.toString();
-    if (!posPayment.tipAmount && posPayment.tipAmount != 0) {
-      transaction.Amount.Gratuity = posPayment.tipAmount.toString();
-    }
-
-    return this.dsi.emvTransaction(transaction)
   }
 
-  
+
   // XML = XML & setTag("TranType", opay.TranType) 'CREDIT/DEBIT/EBT
   // XML = XML & setTag("TranCode", opay.TranCode) ''SALE/REFUND/VOUCHERReturn
 
@@ -103,20 +135,25 @@ export class DSIProcessService {
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
     transaction.TranCode      = TranCode;
-    if (TranType) { 
+    if (TranType) {
       transaction.TranType      = TranType;
     }
+
     transaction.InvoiceNo     = paymentID.toString();
     transaction.RefNo         = paymentID.toString();
+
     if (manual) {
       transaction.Account = {} as Account;
       transaction.Account.AcctNo = 'Prompt'
     }
+
     transaction.Amount = {} as Amount
     transaction.Amount.Purchase = amount.toString();
+
     if (tipPrompt) {
       transaction.Amount.Gratuity = 'Prompt'
     }
+
     return await this.dsi.emvTransaction(transaction)
   }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IItemType } from '../_services/menu/item-type.service';
 
 @Injectable({
@@ -12,16 +12,16 @@ export class FbItemTypeService {
   initForm(inputForm: FormGroup) {
     inputForm = this.fb.group( {
       id:                   [''],
-      name:                 [''],
-      type:                 [''],
+      name:                 ['', Validators.required],
+      type:                 ['', Validators.required],
       weightedItem:         [''],
       expirationRequired:   [''],
       labelRequired:        [''],
       ageRequirement:       [''],
       sortOrder:            [''],
       enabled:              [''],
-      useType:              [''],
-      useGroupID:           [''],
+      useType:              ['', Validators.required],
+      useGroupID:           ['', Validators.required],
       icon:                 [''],
       imageName:            [''],
       taxable:              [''],

@@ -19,6 +19,28 @@
         Values changed here will affect all items of this type. Please set all values in this form to what the items should have.
       </div>
       <mat-divider></mat-divider>
+      <div>
+        <div *ngIf="inputForm.controls.useType.errors?.required &&
+                    inputForm.controls.useType.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Use Type required.
+        </div>
+
+        <div *ngIf="inputForm.controls.name.errors?.required &&
+                    inputForm.controls.name.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Name required.
+        </div>
+
+        <div *ngIf="inputForm.controls.type.errors?.required &&
+                  inputForm.controls.type.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Type required.
+        </div>
+
+        <div *ngIf="inputForm.controls.useGroupID.errors?.required &&
+                inputForm.controls.useGroupID.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Use Group required.
+        </div>
+
+      </div>
     </mat-card-subtitle>
 
     <mat-card-content>

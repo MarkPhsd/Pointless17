@@ -10,7 +10,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
+import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
@@ -28,7 +29,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   setting                 : IItemBasic;
   settingID               : number;
   isAuthorized            = false;
-
+  payment                 : IPOSPayment;
+  voidPayment   : IPOSPayment;
   initSubscriptions() {
     this._paymentWithAction = this.pOSPaymentService.paymentWithAction$.subscribe(data=> {
       this.paymentWithAction = data
@@ -36,6 +38,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   constructor( private  pOSPaymentService     : POSPaymentService,
+                private paymentMethodService: PaymentMethodsService,
+                private paymentsMethodsService: PaymentsMethodsProcessService,
                 public  route                 : ActivatedRoute,
                 private siteService           : SitesService,
                 private orderService          : OrdersService,
@@ -53,17 +57,27 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       this.paymentWithAction = data
       this.pOSPaymentService.updateItemWithAction(data);
       this.list$  = this.adjustMentService.getReasonsByFilter(site, 2);
+      this.payment = data.payment;
+      this.pOSPaymentService.getPOSPayment(site,this.payment.id, false).subscribe(data => {
+        this.voidPayment = data;
+      })
       this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     }
   }
 
+  // ngOnInit(): void {
+  //   //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+  //   //Add 'implements OnInit' to the class.
+  //   const i =0
+  // }
+
   closeDialog(payment: IPOSPayment , method: IPaymentMethod ) {
 
-    if (payment) { 
-      if (!method || method.isCreditCard || method.wic || method.ebt ) { 
+    if (payment) {
+      if (!method || method.isCreditCard || method.wic || method.ebt ) {
         const data = { payment: payment, id: payment.id }
         this.productEditButonService.openDSIEMVTransaction(data)
-      } 
+      }
     }
 
     this.dialogRef.close();
@@ -88,6 +102,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       if (this.paymentWithAction) {
         if (method) {
           if (method.isCreditCard) {
+            if (this.isDSIEmvPayment()) {
+              this.voidDSIEmvPayment();
+              return ;
+            }
             this.notifyEvent('Payment Must be Voided by CC Service', 'Result')
             response$ = this.pOSPaymentService.voidPayment(site, this.paymentWithAction)//.pipe().toPromise();
             this.updateResponse(response$)
@@ -99,6 +117,27 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       }
     }
 
+  }
+
+  voidDSIEmvPayment() {
+    if (this.voidPayment) {
+      const voidPayment = this.voidPayment;
+
+      if (voidPayment) {
+        this.paymentsMethodsService.processDSIEMVCreditVoid(this.voidPayment)
+      }
+
+    }
+  }
+  isDSIEmvPayment() {
+    if (this.voidPayment) {
+      const voidPayment = this.voidPayment;
+      if (voidPayment.entryMethod === 'CHIP READ/CONTACT') {
+        if (voidPayment.trancode ===  "EMVSale") {
+          return true
+        }
+      }
+    }
   }
 
   updateResponse(response$: Observable<PaymentWithAction>) {
@@ -125,7 +164,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this._paymentWithAction) { 
+    if (this._paymentWithAction) {
       this._paymentWithAction.unsubscribe();
     }
   }

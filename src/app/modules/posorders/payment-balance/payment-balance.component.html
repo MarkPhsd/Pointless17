@@ -82,17 +82,12 @@
                     (click)="printPaymentReceipt(item)"
                     ><mat-icon>print</mat-icon></button>
           </div>
-          <div *ngIf="isAuthorized && !item.voidReason">
+
+          <div *ngIf="item.voidReason == false">
             <button mat-button
                     class="grid-item-button"
                     (click)="voidPayment(item)"
-                    ><mat-icon>cancel</mat-icon></button>
-          </div>
-          <div *ngIf="!isAuthorized && !item.voidReason">
-            <button mat-button
-                    class="grid-item-button"
-                    (click)="voidPayment(item)"
-                    ><mat-icon>cancel</mat-icon>Void</button>
+                    ><mat-icon>delete</mat-icon>Void</button>
           </div>
           <div *ngIf="item.voidReason" >
             <mat-label class="void-info">
