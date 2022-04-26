@@ -96,8 +96,8 @@ export class DSIProcessService {
       if (posPayment.approvalCode) {
         transaction.AuthCode    = posPayment.approvalCode.toString();
       }
-      if (posPayment.ccNumber) {
-        transaction.RecordNo    = posPayment.ccNumber;
+      if (posPayment.refNumber) {
+        transaction.RecordNo    = posPayment.ccNumber.toString();
       }
       transaction.Frequency   = 'OneTime'
       if (posPayment.dlNumber ) {
@@ -107,14 +107,19 @@ export class DSIProcessService {
         transaction.ProcessData = posPayment.processData.toString();
       }
 
-      transaction.Amount = {} as Amount;
+      let amount = {} as Amount;
       if (posPayment.amountReceived) {
         transaction.Amount.Purchase = posPayment.amountReceived.toString();
       }
       if (!posPayment.tipAmount && posPayment.tipAmount != 0) {
         transaction.Amount.Gratuity = posPayment.tipAmount.toString();
       }
+      if (+amount.Purchase == 0) {
+        amount.Purchase = posPayment.amountPaid.toString();
+      }
+      transaction.ProcessData = '';
 
+      transaction.Amount = amount;
       console.log(transaction)
       return this.dsi.emvTransaction(transaction)
     } catch (error) {
