@@ -1,0 +1,88 @@
+
+<div *ngIf="inputForm && currentManifest as item; else loading">
+<mat-card>
+  <mat-card-title>
+    <div><h3>Item: {{item.name }} </h3></div>
+
+  </mat-card-title>
+
+  <mat-card-subtitle>
+
+    <div class="header-container" >
+      <!-- <div class="subtitle grid-container-headers">
+        <div class="item-label">SKU</div>
+        <div class="item-info"> {{item.sku}} </div>
+        <div class="item-label">Type</div>
+        <div class="item-info"> {{item.packageType}} </div>
+        <div class="item-label">Intake Category </div>
+        <div class="item-info"> {{item.productCategoryName}} </div>
+        <div class="item-label">Vendor Code</div>
+        <div class="item-info"> {{item.facilityLicenseNumber}} </div>
+      </div> -->
+
+      <div>
+        <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateItem($event)"
+              (outputupdateItemExit)  ="updateItemExit($event)"
+              (outputupdatedeleteItem)="deleteItem($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+        ></app-edit-buttons-standard>
+      </div>
+
+      <h4>
+        Warehouse Functions
+      </h4>
+      <div class="functions-grid">
+        <button mat-button (click)="dispatchSendToSite()">
+          Dispatch And Notify
+        </button>
+
+        <button mat-button (click)="cancelRequestDispatchSendToSite()">
+          Cancel Dispatch and Notify
+        </button>
+
+        <button mat-button (click)="cancelRequestDispatchSendToSite()">
+          Review Delivered Inventory (audit)
+        </button>
+
+        <button mat-button (click)="cancelRequestDispatchSendToSite()">
+          Accept Rejected Inventory
+        </button>
+      </div>
+
+      <h4>
+        Retail Functions
+      </h4>
+      <div class="functions-grid">
+        <button mat-button (click)="receiveAll()">
+          Receive All
+        </button>
+
+        <button mat-button (click)="receiveSelected()">
+          Receive Selected
+        </button>
+
+        <button mat-button (click)="rejectManifest()">
+          Reject Manifest
+        </button>
+
+        <button mat-button (click)="assignToInventoryLocation()">
+          Assign all to Assigned Location
+        </button>
+
+      </div>
+
+    </div>
+
+    </mat-card-subtitle>
+
+    <mat-card-content>
+
+    </mat-card-content>
+
+  </mat-card>
+</div>
+
+<ng-template #loading>
+  ...loading <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

@@ -7,7 +7,6 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { FormBuilder, FormGroup } from '@angular/forms';
-
 export interface InventorySearchResultsPaged {
   results     : IInventoryAssignment[];
   paging      : Paging;
@@ -23,6 +22,7 @@ export interface AvalibleInventoryResults {
 
 export interface IInventoryAssignment {
   id:                    number;
+  manifestID            :number;
   packageType:           string;
   productName:           string;
   productCategoryName:   string;
@@ -105,17 +105,29 @@ export interface InventoryFilter {
   notAvalibleForSale:   boolean;
   requiresAttention:    boolean;
   inventoryStatus:      number;
+  manifestID        :   number;
 }
 
+export interface InventoryStatusList {
+  name: string;
+  id:   number;
+}
 @Injectable({
   providedIn: 'root'
 })
 
 export class InventoryAssignmentService {
 
+  inventoryStatusList  = [
+    {id: 1, name: 'In Stock - For Sale'},
+    {id: 2, name: 'In Stock - Not for Sale'},
+    {id: 3, name: 'Sold Out'},
+    {id: 0, name:  'All'}
+ ] as InventoryStatusList[]
+
   private _avalibleInventoryResults = new BehaviorSubject<AvalibleInventoryResults>(null);
-  public avalibleInventoryResults$ = this._avalibleInventoryResults.asObservable()
-  public avalibleInventoryResults: AvalibleInventoryResults;
+  public avalibleInventoryResults$  = this._avalibleInventoryResults.asObservable()
+  public avalibleInventoryResults:   AvalibleInventoryResults;
 
   constructor(
     private http: HttpClient,

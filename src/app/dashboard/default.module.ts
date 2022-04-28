@@ -270,6 +270,10 @@ import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order
 import { MenuItemCardDashboardComponent } from '../modules/menu/menu-item-card/menu-item-card.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { OrderPrepComponent } from '../modules/orders/order-prep/order-prep.component';
+import { MainfestEditorComponent } from '../modules/admin/inventory/manifests/mainfest-editor/mainfest-editor.component';
+import { MainfestFilterComponent } from '../modules/admin/inventory/manifests/mainfest-filter/mainfest-filter.component';
+import { ManifestsComponent } from '../modules/admin/inventory/manifests/manifests.component';
+import { ManifestEditorHeaderComponent } from '../modules/admin/inventory/manifests/mainfest-editor/manifest-editor-header/manifest-editor-header.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -353,7 +357,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ImageCaptureComponent,
     LabelViewSelectorComponent,
     ListPrintersElectronComponent,
+    ManifestsComponent,
+    MainfestFilterComponent,
+    MainfestEditorComponent,
     MenuGroupItemEditComponent,
+    ManifestEditorHeaderComponent,
     MenuitemComponent,
     MenuItemCardComponent,
     MenuItemExtendedPricesComponent,
@@ -533,7 +541,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       RouterModule,
       SharedModule,
       NgxStripeModule.forRoot(),
-   
+
     ],
 
   exports: [

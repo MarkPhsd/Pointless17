@@ -1,9 +1,8 @@
-
 <div fxLayout="column"
      fx-flex
      fx-layout-align="space-between"
      class="grid-container"
-     *ngIf="searchForm"  >
+     *ngIf="searchForm" >
 
   <div  [formGroup]="searchForm"
         (ngSubmit)="refreshSearch()"
@@ -21,7 +20,7 @@
       </search-debounce-input>
     </div>
 
-    <div class="grid-item"  *ngIf="!listOnly">
+    <div class="grid-item">
       <mat-form-field appearance="outline">
         <mat-label>Sites</mat-label>
           <mat-select
@@ -38,49 +37,24 @@
       </mat-form-field>
     </div>
 
-    <div  class="grid-item" *ngIf="!listOnly">
-      <div    *ngIf="(metrcCategory) as list">
-        <div *ngIf="list.length>0">
-          <mat-form-field appearance="outline">
-            <mat-label>METRC Categories</mat-label>
-              <mat-select
-                        type="text"
-                        (selectionChange)="getMetrcCategory($event)"
-                        formControlNamename="metrcCategory"
-                      >
-                <mat-option [value]=0>All</mat-option>
-                <mat-option *ngFor="let item of list"
-                            [value]="item.id">
-                  {{ item.name }}
-                </mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-      </div>
+    <div class="grid-item" *ngIf="(locations$ | async) as list">
+      <mat-form-field appearance="outline">
+        <mat-label>Locations</mat-label>
+          <mat-select
+                    type="text"
+                    (selectionChange)="getLocation($event)"
+                    formControlNamename="inventoryLocations"
+                  >
+          <mat-option [value]=0>All</mat-option>
+          <mat-option *ngFor="let item of list" [value]="item.id">
+            {{ item.name }}
+          </mat-option>
+
+        </mat-select>
+      </mat-form-field>
     </div>
 
-
-    <div class="grid-item" >
-      <div *ngIf="(locations$ | async) as list">
-        <mat-form-field appearance="outline">
-          <mat-label>Locations</mat-label>
-            <mat-select
-                      type="text"
-                      (selectionChange)="getLocation($event)"
-                      formControlNamename="inventoryLocations"
-                    >
-
-            <mat-option [value]=0>All</mat-option>
-            <mat-option *ngFor="let item of list" [value]="item.id">
-              {{ item.name }}
-            </mat-option>
-
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="grid-item" >
+    <div class="grid-item">
       <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
           <mat-select
@@ -89,11 +63,9 @@
                     formControlNamename="inventoryStatusID"
                   >
           <div *ngIf="inventoryStatusList">
-
             <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
               {{ item.name }}
             </mat-option>
-
           </div>
         </mat-select>
       </mat-form-field>
@@ -105,41 +77,19 @@
         </button>
     </div>
 
-    <div  *ngIf="!listOnly">
+    <div>
         <button mat-button
               (click)="listAll()"><mat-icon>list</mat-icon>List All
       </button>
     </div>
 
-    <div  *ngIf="!listOnly">
+    <div>
       <button class="info-buttons"
               mat-button
-              (click)="addInventoryItem()"><mat-icon>add</mat-icon> Add
-      </button>
-    </div>
-
-    <div *ngIf="currentManifest && !listOnly">
-      <button class="info-buttons"
-              mat-button
-              (click)="addSelectedToManifest()"><mat-icon>add</mat-icon>Assign to Manifest
-      </button>
-    </div>
-
-    <div *ngIf="!currentManifest && !listOnly">
-      <button class="info-buttons"
-              mat-button
-              (click)="addToNewManifest()"><mat-icon>add</mat-icon>Make Manifest
-      </button>
-    </div>
-
-    <div *ngIf="currentManifest && !listOnly">
-      <button class="info-buttons"
-              mat-button
-              (click)="clearAssignedManifest()"><mat-icon>remove</mat-icon>Exit Manifest
+              (click)="addManifest()"><mat-icon>add</mat-icon> Add
       </button>
     </div>
   </div>
-
 </div>
 
 <mat-divider></mat-divider>
@@ -171,13 +121,9 @@
 
     </div>
 
-    <div *ngIf="inventoryAssignmentHistory && !listOnly">
-      <app-inventory-history-list class="history-panel"
-                                  [setInventoryAssignment]="inventoryAssignment"
-                                  [inventoryAssignments]="inventoryAssignmentHistory"
-                                  (outputRefresh)="refreshSearchOut($event)"
-                                  [id]="id">
-      </app-inventory-history-list>
+    <div >
+      <app-mainfest-filter class="history-panel">
+      </app-mainfest-filter>
     </div>
 </div>
 

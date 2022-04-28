@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener, OnDestroy, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of, Subject  } from 'rxjs';
+import { Observable, of, Subject, Subscription, switchMap  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -25,6 +25,8 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src/app/_services';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
+import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
+import { MainfestEditorComponent } from '../../manifests/mainfest-editor/mainfest-editor.component';
 
 export interface InventoryStatusList {
   name: string;
@@ -37,7 +39,9 @@ export interface InventoryStatusList {
   styleUrls: ['./inventory-list.component.scss']
 })
 
-export class InventoryListComponent implements OnInit {
+export class InventoryListComponent implements OnInit, OnDestroy {
+
+  @Input() listOnly = false;
 
     InventorySearchResultsPaged: InventorySearchResultsPaged;
     inventoryAssignment        : IInventoryAssignment;
@@ -51,6 +55,8 @@ export class InventoryListComponent implements OnInit {
     searchPhrase:         Subject<any> = new Subject();
     public searchForm: FormGroup;
     inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
+
+    currentManifest: InventoryManifest;
 
     get itemName() {
       if (!this.searchForm) { this.initForm()}
@@ -124,7 +130,7 @@ export class InventoryListComponent implements OnInit {
 
     metrcCategory$:       Observable<METRCItemsCategories[]>;
     metrcCategory:        METRCItemsCategories;
-    metrcCategories      :  METRCItemsCategories[];
+    metrcCategories      :METRCItemsCategories[];
     metrcCategoryID:      number;
 
     locations$:           Observable<IInventoryLocation[]>;
@@ -134,20 +140,24 @@ export class InventoryListComponent implements OnInit {
     inventoryFilter:      InventoryFilter;
     inventoryStatus:      InventoryStatusList
     inventoryStatusID:    number
-    inventoryStatusList  = [
-                            {id: 1, name: 'In Stock - For Sale'},
-                            {id: 2, name: 'In Stock - Not for Sale'},
-                            {id: 3, name: 'Sold Out'},
-                            {id: 0, name:  'All'}
-    ] as InventoryStatusList[]
+    inventoryStatusList  = this.inventoryAssignmentService.inventoryStatusList;
 
   //This is for the search Section//
+
+  currentManifest$: Subscription;
 
   get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
   get selectedSiteValue()   { return this.searchForm.get("selectedSiteID") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
+  initSubscriptions() {
+    this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
+      this.currentManifest = data;
+    })
+  }
+
   constructor(  private _snackBar: MatSnackBar,
+                private manifestService : ManifestInventoryService,
                 private inventoryAssignmentService: InventoryAssignmentService,
                 private router: Router,
                 private agGridService: AgGridService,
@@ -169,9 +179,9 @@ export class InventoryListComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.initSubscriptions();
     this.initClasses();
     this.sites$         = this.siteService.getSites();
-
     this.locations$     = this.locationService.getLocations();
 
     const clientSearchModel       = {} as ClientSearchModel;
@@ -191,18 +201,28 @@ export class InventoryListComponent implements OnInit {
     })
 
     this.metrcCategory$ = this.metrcCategoriesService.getCategories()
-    this.metrcCategory$.subscribe(data => {
+    this.metrcCategory$.subscribe(
+      {next: data => {
         this.metrcCategories = data;
         this.initAgGrid();
-      }, err => {
+      },
+      error: err => {
         console.log('err', err)
         this.initAgGrid();
       }
+    }
     )
 
     if (!this.search) { this.search = ''}
   };
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this.currentManifest$) {
+      this.currentManifest$.unsubscribe()
+    }
+  }
   initClasses()  {
     const platForm      = this.platForm;
     this.gridDimensions = 'width: 100%; height: 100%;'
@@ -316,6 +336,14 @@ export class InventoryListComponent implements OnInit {
               }
     this.columnDefs.push(item)
 
+    item =  {headerName: 'Manifest', field: 'manifestID', sortable: true,
+            width   : 75,
+            minWidth: 75,
+            maxWidth: 275,
+            flex    : 1,
+        }
+    this.columnDefs.push(item)
+
     this.rowSelection = 'single';
 
     this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
@@ -339,6 +367,9 @@ export class InventoryListComponent implements OnInit {
     searchModel.sku             = this.search
     searchModel.inventoryStatus = this.inventoryStatusID
 
+    if (this.listOnly && this.currentManifest) {
+      searchModel.manifestID      = this.currentManifest.id
+    }
     //if location
     if (this.itemName && this.searchForm) {
       if (this.itemName.value)  { searchModel.productName   = this.itemName.value  }
@@ -632,6 +663,78 @@ export class InventoryListComponent implements OnInit {
     if (search) {
       // this.searchPaging = true
       this.searchPhrase.next(search)
+    }
+  }
+
+  addSelectedToManifest() {
+    const items = this.getSelectedItems();
+
+    if (!items) {
+      this.notifyEvent('Please select some items to add to the new manifest', 'Alert')
+      return;
+    }
+
+    const manifest = {} as InventoryManifest
+    manifest.inventoryAssignments = [ ...items, ... manifest.inventoryAssignments]
+
+    this.siteService.getSite(this.selectedSiteID).pipe(
+      switchMap(site => {
+        return   this.manifestService.update(site,manifest.id, manifest)
+        }
+      )).subscribe(data => {
+        console.log(data)
+        this.openManifestEditor(data)
+    })
+
+  }
+
+  addToNewManifest() {
+
+    const items = this.getSelectedItems();
+
+    if (!items) {
+      this.notifyEvent('Please select some items to add to the new manifest', 'Alert')
+      return;
+    }
+
+    const manifest = {} as InventoryManifest
+    manifest.inventoryAssignments = [ ...items, ... manifest.inventoryAssignments]
+
+    this.siteService.getSite(this.selectedSiteID).pipe(
+      switchMap(site => {
+        return   this.manifestService.add(site, manifest)
+        }
+      )).subscribe(data => {
+        console.log(data)
+        this.openManifestEditor(data)
+    })
+
+  }
+
+  clearAssignedManifest() {
+    this.manifestService.updateCurrentInventoryManifest(null)
+  }
+
+  getSelectedItems(): IInventoryAssignment[] {
+
+    return null;
+  }
+
+  openManifestEditor(manifest: InventoryManifest) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (manifest) {
+      dialogRef = this.dialog.open(MainfestEditorComponent,
+        { width:          '800px',
+          minWidth:       '399px',
+          height:         '800px',
+          minHeight:      '650px',
+          data : manifest
+      })
+      return dialogRef
     }
   }
 
