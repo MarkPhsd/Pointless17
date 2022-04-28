@@ -29,49 +29,54 @@
         ></app-edit-buttons-standard>
       </div>
 
-      <h4>
-        Warehouse Functions
-      </h4>
-      <div class="functions-grid">
-        <button mat-button (click)="dispatchSendToSite()">
-          Dispatch And Notify
-        </button>
+      <div>
+        <h4>
+          Warehouse Functions
+        </h4>
 
-        <button mat-button (click)="cancelRequestDispatchSendToSite()">
-          Cancel Dispatch and Notify
-        </button>
+        <div class="functions-grid">
+          <button mat-button  color="primary" (click)="dispatchSendToSite()">
+            Dispatch And Notify
+          </button>
 
-        <button mat-button (click)="cancelRequestDispatchSendToSite()">
-          Review Delivered Inventory (audit)
-        </button>
+          <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
+            Cancel Dispatch and Notify
+          </button>
 
-        <button mat-button (click)="cancelRequestDispatchSendToSite()">
-          Accept Rejected Inventory
-        </button>
-      </div>
+          <button mat-button color="primary" (click)="cancelRequestDispatchSendToSite()">
+            Review Delivered Inventory (audit)
+          </button>
 
-      <h4>
-        Retail Functions
-      </h4>
-      <div class="functions-grid">
-        <button mat-button (click)="receiveAll()">
-          Receive All
-        </button>
-
-        <button mat-button (click)="receiveSelected()">
-          Receive Selected
-        </button>
-
-        <button mat-button (click)="rejectManifest()">
-          Reject Manifest
-        </button>
-
-        <button mat-button (click)="assignToInventoryLocation()">
-          Assign all to Assigned Location
-        </button>
+          <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
+            Accept Rejected Inventory
+          </button>
+        </div>
 
       </div>
 
+      <div>
+        <h4>
+          Retail Functions
+        </h4>
+
+        <div class="functions-grid">
+          <button mat-button color="primary" (click)="receiveAll()">
+            Receive All
+          </button>
+
+          <button mat-button color="primary" (click)="receiveSelected()">
+            Receive Selected
+          </button>
+
+          <button mat-button color="primary" color="warn" (click)="rejectManifest()">
+            Reject Manifest
+          </button>
+
+          <button mat-button color="primary" (click)="assignToInventoryLocation()">
+            Assign all to Assigned Location
+          </button>
+        </div>
+      </div>
     </div>
 
     </mat-card-subtitle>

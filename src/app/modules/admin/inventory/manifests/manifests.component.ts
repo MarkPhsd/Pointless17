@@ -24,7 +24,6 @@ import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { InventoryManifest, ManifestInventoryService, ManifestSearchModel, ManifestSearchResults } from 'src/app/_services/inventory/manifest-inventory.service';
 
-
 @Component({
   selector: 'app-manifests',
   templateUrl: './manifests.component.html',
@@ -149,8 +148,7 @@ export class ManifestsComponent implements OnInit {
     this.initClasses();
     this.sites$         = this.siteService.getSites();
     this.locations$     = this.locationService.getLocations();
-
-
+    this.initForm();
   }
 
 
@@ -315,7 +313,7 @@ export class ManifestsComponent implements OnInit {
 
   addManifest() {
     try {
-      const result =   this.inventoryEditButon.addInventoryDialog(0)
+      const result =   this.inventoryEditButon.addManifest(0)
       if (result) {
         this.refreshSearch();
       }

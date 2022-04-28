@@ -25,6 +25,8 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   inputForm               : FormGroup;
   minimized                  : boolean;
   accordionID             : number;
+  menugroupID: number;
+
   constructor(
     private fbNavService: FbNavMenuService,
     private fb: FormBuilder,
@@ -33,29 +35,33 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
     private menusService           : MenusService,
     private dialogRef              : MatDialogRef<MenuGroupItemEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    // private dialog                 : MatDialog,
   )
+
   {
-    console.log(data)
+    console.log('data in component', data)
     if (data) {
       this.accordionID = data.accordionID;
       this.id = data.id;
+      console.log(this.accordionID)
+      this.menugroupID = data.menuID
+      console.log(data)
     }
   }
 
   ngOnInit() {
+    this.inputForm = this.fbNavService.initSubMenuForm(this.inputForm);
     this.refreshData();
-    this.refreshForm();
   }
+
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
-    this.refreshForm();
+    this.refreshData();
   }
 
   refreshData() {
     const site = this.siteService.getAssignedSite();
-    if (this.id) {
+    if (this.id != 0) {
       const item$ = this.menusService.getSubMenuByID(site, this.id);
       item$.subscribe( data => {
         this.item = data
@@ -68,13 +74,12 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   }
 
   refreshForm() {
+    console.log('refreshForm', this.item)
     if (this.item) {
-      this.inputForm = this.fbNavService.initSubMenuForm(this.inputForm);
       this.inputForm.patchValue(this.item)
       this.minimized = this.item.minimized;
     }
     if (!this.item) {
-      this.inputForm = this.fbNavService.initSubMenuForm(this.inputForm);
       this.minimized = false
     }
   }
@@ -86,29 +91,34 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
       this.item.minimized = this.minimized
       let item$: any;
 
-      if (this.id != 0) {
+      if (this.id != undefined && this.id != 0) {
          item$ = this.menusService.putSubMenuByID(site, this.item.id, this.item)
+         this.savechanges(item$)
       }
 
-      if (this.id == 0) {
+      if (this.id == 0 || this.id == undefined) {
         this.item.menuID = this.accordionID
         item$ = this.menusService.postSubMenuItem(site, this.item)
+        this.savechanges(item$)
       }
 
-      item$.subscribe(
-        {
-            next: data=> {
-            this._snackBar.open('Item saved', 'Success', {duration: 2000})
-          },
-          error : err => {
-            this._snackBar.open('Item not saved', 'Failure', {duration: 2000})
-            console.log(err)
-          }
-        }
-      )
     }
   }
 
+  savechanges(item$: Observable<SubMenu>) {
+    item$.subscribe(
+      {
+          next: data=> {
+          this._snackBar.open('Item saved', 'Success', {duration: 2000})
+        },
+        error : err => {
+          this._snackBar.open('Item not saved', 'Failure', {duration: 2000})
+          console.log(err)
+        }
+      }
+    )
+
+  }
 
 
 }

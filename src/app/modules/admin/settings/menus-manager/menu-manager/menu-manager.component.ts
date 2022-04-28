@@ -51,6 +51,7 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     this.initSubscription();
     this.getMainMenu()
   }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -97,23 +98,36 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   }
 
   addSubMenu() {
-    let id = 0;
-    if (!this.accordionMenu) {return }
-    const accordionID = this.accordionMenu.id;
-    if (this.submenuItem) {
-      id = this.submenuItem.id
-      return
-    }
-    let dialogRef: any;
-    const data = { id: id, accordionID: accordionID}
-    dialogRef = this.dialog.open(MenuGroupItemEditComponent,
-      { width    :    '500px',
-        minWidth :    '500px',
-        height   :    '650px',
-        minHeight:    '650px',
-        data     :    data
-      },
-    )
+
+    const menu = {} as SubMenu;
+    menu.menuID = this.accordionMenu.id;
+
+    const site = this.siteService.getAssignedSite();
+    this.menusService.postSubMenuItem(site, menu).subscribe(data => {
+      this.accordionMenu.submenus.push(data)
+      this.assignSubMenu(this.accordionMenu, this.accordionMenu.submenus)
+    })
+    // let id = 0;
+    // if (!this.accordionMenu) {return }
+    // const accordionID = this.accordionMenu.id;
+    // if (this.submenuItem) {
+    //   id = this.submenuItem.id
+    //   return
+    // }
+
+
+    // let dialogRef: any;
+    // const data = { id: id, accordionID: accordionID, menuID: this.accordionMenu.id}
+
+    // console.log('data', data)
+    // dialogRef = this.dialog.open(MenuGroupItemEditComponent,
+    //   { width    :    '500px',
+    //     minWidth :    '500px',
+    //     height   :    '650px',
+    //     minHeight:    '650px',
+    //     data     :    data
+    //   },
+    // )
   }
 
   assignSubMenu(item: AccordionMenu, submenu: SubMenu[]) {

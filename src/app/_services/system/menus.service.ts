@@ -156,7 +156,7 @@ export class MenusService {
       routerLinkActive: 'inventory-list',
       method: '' ,
       submenus: [
-        { name: 'Manifest',  minimized: false, method: '' , routerLink: '/inventory-list',      routerLinkActive: 'inventory-list',      icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Manifest',  minimized: false, method: '' , routerLink: '/manifests',      routerLinkActive: 'manifests',      icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Inventory',  minimized: false, method: '' , routerLink: '/inventory-list',      routerLinkActive: 'inventory-list',      icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Locations',  minimized: true, method: '' , routerLink: '/inventory-locations', routerLinkActive: 'inventory-locations', icon: 'location', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
@@ -217,6 +217,20 @@ export class MenusService {
         { name: 'Terminals',method: '' ,minimized: true, routerLink: '/pos-list', routerLinkActive: 'pos-list', icon: 'computer', onClick: '', id: 0, sortOrder: 3, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
+    {
+      id:            0,
+      name: 'Dashboard',
+      icon: 'dashboard',
+      active: true,
+      sortOrder:     8,
+      menuGroupID:   0,
+      userType:     this.getManagers(),
+      routerLink:       '/menu-manager',
+      routerLinkActive: 'menu-manager',
+      method: '',
+      submenus: []
+    }
+
   ] ;
 
   user              : IUser;

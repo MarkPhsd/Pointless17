@@ -17,6 +17,10 @@ export class ManifestEditorHeaderComponent implements OnInit {
   initSubscriptions() {
     this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
       this.currentManifest = data;
+      if (!data) {
+        this.currentManifest = {} as InventoryManifest;
+        this.initForm();
+      }
     })
   }
 

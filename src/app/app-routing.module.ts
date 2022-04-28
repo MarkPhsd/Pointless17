@@ -111,10 +111,11 @@ import { UIHomePageSettingsComponent } from './modules/admin/settings/software/u
 import { UITransactionsComponent } from './modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
 import { StripeSettingsComponent } from './modules/admin/settings/stripe-settings/stripe-settings.component';
 import { PreloadAllModules } from '@angular/router';
+import { ManifestsComponent } from './modules/admin/inventory/manifests/manifests.component';
 
 const routes: Routes = [
     // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-  
+
     {path: '', component: DefaultComponent,
       children: [
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
@@ -214,6 +215,7 @@ const routes: Routes = [
         { path: 'metrc-facilities-list', component: FacilitiesListComponent, canActivate: [AuthGuard], data: {title: 'METRC Facilities List', animation:  'isLeft'} },
 
         //inventory InventoryListComponent
+        { path: 'manifests', component: ManifestsComponent, canActivate: [AuthGuard], data: {  title: 'Manifests',  animation: 'isLeft'} },
         { path: 'inventory-list', component: InventoryListComponent, canActivate: [AuthGuard], data: {  title: 'Inventory',  animation: 'isLeft'} },
         { path: 'inventory-locations', component: InventoryLocationsComponent,  canActivate: [AuthGuard], data: { title: 'Inventory Locations', animation: 'isLeft'}},
 
@@ -269,7 +271,7 @@ const routes: Routes = [
 
     // { path: '', pathMatch: 'full', redirectTo: 'dashboard/7' },
     // { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
-   
+
     // { path: 'homepagesettings',   component: UIHomePageSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
     // { path: 'transactionsSettings',   component: UITransactionsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
     // { path: 'stripesettings ',   component: StripeSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -297,7 +299,7 @@ const routes: Routes = [
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
-   
+
     // { path: '/menu-board/grid-menu-layout',  redirectTo: '/menu-board', pathMatch: 'full' },
 
     { path: '**', component: PageNotFoundComponent},

@@ -1,96 +1,99 @@
-<div >
-  <div *ngIf="inputForm">
-    <div [formGroup]="inputForm">
-      <mat-card>
-        <mat-card-title>
-          Edit {{item.name}} <br>
-          Menu Group
-        </mat-card-title>
-        <mat-card-subtitle>
-          <button mat-button (click)="save()">
-            <mat-icon>save</mat-icon>
-          </button>
-        </mat-card-subtitle>
 
-        <mat-card-content>
-            <div class="grid-container">
+<div *ngIf="inputForm" [formGroup]="inputForm">
+  <mat-card>
+    <mat-card-title *ngIf="item">
+       Edit {{item.name}} <br>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Name</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="name"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+      Menu Group
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button mat-button (click)="save()">
+        <mat-icon>save</mat-icon>
+      </button>
+    </mat-card-subtitle>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Icon</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="icon"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+    <mat-card-content>
+        <div class="grid-container">
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Router Link</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="routerLink"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Name</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="name"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Router Link Active</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="routerLinkActive"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Icon</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="icon"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div class="fields">
-                <mat-form-field appearance="outline">
-                  <mat-label >Access</mat-label>
-                  <input matInput
-                        type="text"
-                        formControlName="userType"
-                        class="form-control" >
-                </mat-form-field>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Router Link</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="routerLink"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div  class="fields">
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Router Link Active</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="routerLinkActive"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-                <mat-label >Minimized</mat-label>
-                <mat-slide-toggle
-                        class           ="price-values"
-                        formGroupName   ="minimized"
-                        formControlName ="minimized"
-                        [(ngModel)]     ="minimized"
-                        >
-                </mat-slide-toggle>
-              </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Access</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="userType"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-              <div  class="fields">
-                method:               {{item.method}}
-              </div>
-            </div>
+          <div class="fields">
+            <mat-form-field appearance="outline">
+              <mat-label >Method</mat-label>
+              <input matInput
+                    type="text"
+                    formControlName="method"
+                    class="form-control" >
+            </mat-form-field>
+          </div>
 
-        </mat-card-content>
+          <div  class="fields">
 
-        <!-- <mat-card-actions>
+            <mat-label >Minimized</mat-label>
+            <mat-slide-toggle
+                    class           ="price-values"
+                    formGroupName   ="minimized"
+                    formControlName ="minimized"
+                    [(ngModel)]     ="minimized"
+                    >
+            </mat-slide-toggle>
+          </div>
 
-        </mat-card-actions> -->
+          <div  class="fields"  *ngIf="item">
+            method:               {{item.method}}
+          </div>
+        </div>
 
-
-     </mat-card>
-
-    </div>
-  </div>
+    </mat-card-content>
+  </mat-card>
 </div>
+
+

@@ -9,6 +9,8 @@ import { IInventoryAssignment } from './inventory-assignment.service';
 import { MoveInventoryLocationComponent } from 'src/app/modules/admin/inventory/move-inventory-location/move-inventory-location.component';
 import { InventoryAdjustmentNoteComponent } from 'src/app/shared/widgets/adjustment-notes/adjustment-note/adjustment-note.component';
 import { AddInventoryItemComponent } from 'src/app/modules/admin/inventory/add-inventory-item/add-inventory-item.component';
+import { ManifestEditorHeaderComponent } from 'src/app/modules/admin/inventory/manifests/mainfest-editor/manifest-editor-header/manifest-editor-header.component';
+import { MainfestEditorComponent } from 'src/app/modules/admin/inventory/manifests/mainfest-editor/mainfest-editor.component';
 
 
 @Injectable({
@@ -63,6 +65,28 @@ export class InventoryEditButtonService {
 
   }
 
+  addManifest(id: number): boolean {
+
+    try {
+      const site = this.siteService.getAssignedSite();
+
+      const dialogRef = this.dialog.open(MainfestEditorComponent,
+         {  width:      '850px',
+            minWidth:   '850px',
+            height:     '750px',
+            minHeight:  '750px',
+            data :      {id: id}
+          },
+        )
+        dialogRef.afterClosed().subscribe(result => {
+          return true
+        });
+    } catch (error) {
+
+    }
+    return false
+
+  }
 
   openNoteDialog(id: any) {
       const dialogRef = this.dialog.open(InventoryAdjustmentNoteComponent,
