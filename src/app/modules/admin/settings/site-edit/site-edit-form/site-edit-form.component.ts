@@ -100,11 +100,19 @@ export class SiteEditFormComponent implements OnInit {
 
   updateSite(event) {
     if (this.sitesForm.valid) {
+      this.notifyEvent(`Please complete form.`, `oops!` )
+      return
+    }
+    if (this.sitesForm.valid) {
       this.applyChanges(this.sitesForm.value)
     };
   }
 
   updateExit(event){
+    if (this.sitesForm.valid) {
+      this.notifyEvent(`Please complete form.`, `oops!` )
+      return
+    }
     if (this.sitesForm.valid) {
       this.applyChanges(this.sitesForm.value)
       this.onCancel(null)

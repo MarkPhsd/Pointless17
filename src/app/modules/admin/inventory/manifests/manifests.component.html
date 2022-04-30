@@ -104,9 +104,10 @@
         </mat-progress-bar>
       </div>
 
+      <!-- *ngIf ="columnDefs.length>0; else loading" -->
       <ag-grid-angular
-            *ngIf ="columnDefs.length>0; else loading"
             #agGrid
+            *ngIf ="columnDefs.length>0; else loading"
             [style]              ="gridDimensions"
             id                   ="myGrid"
             [class]              ="agtheme"

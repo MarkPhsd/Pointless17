@@ -1,4 +1,3 @@
-
 <div fxLayout="column"
      fx-flex
      fx-layout-align="space-between"
@@ -132,6 +131,13 @@
       </button>
     </div>
 
+    <div *ngIf="!currentManifest && !listOnly">
+      <button class="info-buttons"
+              mat-button
+              (click)="addItemsToManifest()"><mat-icon>add</mat-icon>Add to Manifest
+      </button>
+    </div>
+
     <div *ngIf="currentManifest && !listOnly">
       <button class="info-buttons"
               mat-button
@@ -169,16 +175,16 @@
             (gridReady)          ="onGridReady($event)">
       </ag-grid-angular>
 
-    </div>
+  </div>
 
-    <div *ngIf="inventoryAssignmentHistory && !listOnly">
-      <app-inventory-history-list class="history-panel"
-                                  [setInventoryAssignment]="inventoryAssignment"
-                                  [inventoryAssignments]="inventoryAssignmentHistory"
-                                  (outputRefresh)="refreshSearchOut($event)"
-                                  [id]="id">
-      </app-inventory-history-list>
-    </div>
+  <div *ngIf="inventoryAssignmentHistory && !listOnly">
+    <app-inventory-history-list class="history-panel"
+                                [setInventoryAssignment]="inventoryAssignment"
+                                [inventoryAssignments]="inventoryAssignmentHistory"
+                                (outputRefresh)="refreshSearchOut($event)"
+                                [id]="id">
+    </app-inventory-history-list>
+  </div>
 </div>
 
 <div style="flex-grow:0">

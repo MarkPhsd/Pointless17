@@ -104,8 +104,16 @@ export class ManifestInventoryService {
 
   site: ISite;
 
+  public inventoryItems: IInventoryAssignment[];
+
+  private _inventoryItems = new BehaviorSubject<IInventoryAssignment[]>(null);
+  public  inventoryItems$  = this._inventoryItems.asObservable()
+
   private _inventoryManifest = new BehaviorSubject<InventoryManifest>(null);
   public currentInventoryManifest$  = this._inventoryManifest.asObservable()
+
+  private _currentManifestSite = new BehaviorSubject<ISite>(null);
+  public currentManifestSite$  = this._currentManifestSite.asObservable()
 
   constructor(
       private http: HttpClient,
@@ -116,6 +124,14 @@ export class ManifestInventoryService {
 
   updateCurrentInventoryManifest(inventoryManifest: InventoryManifest){
     this._inventoryManifest.next(inventoryManifest)
+  }
+
+  updateInventoryItems(items: IInventoryAssignment[]) {
+    this._inventoryItems.next(items)
+  }
+
+  updateSelectedManifestSite(site: ISite) {
+    this._currentManifestSite.next(site)
   }
 
   listAll(site: ISite): Observable<InventoryManifest[]> {
@@ -172,7 +188,7 @@ export class ManifestInventoryService {
 
     const controller =  `/InventoryManifests/`
 
-    const endPoint = `PostManifest`
+    const endPoint = `PostInventoryManifest`
 
     const parameters = ``
 
@@ -188,7 +204,7 @@ export class ManifestInventoryService {
 
     const controller =  `/InventoryManifests/`
 
-    const endPoint = `PutManifest`
+    const endPoint = `PutInventoryManifest`
 
     const parameters = `?id=${id}`
 

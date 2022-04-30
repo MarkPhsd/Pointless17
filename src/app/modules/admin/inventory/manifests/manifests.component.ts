@@ -149,6 +149,8 @@ export class ManifestsComponent implements OnInit {
     this.sites$         = this.siteService.getSites();
     this.locations$     = this.locationService.getLocations();
     this.initForm();
+    this.initAgGrid();
+
   }
 
 
@@ -196,6 +198,7 @@ export class ManifestsComponent implements OnInit {
 
     let item = {headerName: 'id',  sortable: true, field: 'id',  hide: true, } as any;
 
+    this.columnDefs = [];
     this.columnDefs.push(item)
 
     item =  {headerName: 'Name',  sortable: true, field: 'productName',
@@ -205,7 +208,7 @@ export class ManifestsComponent implements OnInit {
                 flex    : 2,} as any;
     this.columnDefs.push(item)
 
-    item =  {headerName: 'Sku', field: 'sku', sortable: true,
+    item =  {headerName: 'Scheduled', field: 'scheduledDate', sortable: true,
               width   : 175,
               minWidth: 175,
               maxWidth: 275,
@@ -213,23 +216,7 @@ export class ManifestsComponent implements OnInit {
               } as any;
     this.columnDefs.push(item)
 
-    item =  {headerName: 'Location', field: 'location', sortable: true,
-              width   : 175,
-              minWidth: 175,
-              maxWidth: 275,
-              flex    : 1,
-              }
-    this.columnDefs.push(item)
-
-    item =  {headerName: 'Count', field: 'packageCountRemaining', sortable: true,
-              width   : 175,
-              minWidth: 175,
-              maxWidth: 275,
-              flex    : 1,
-               }
-    this.columnDefs.push(item)
-
-    item = {headerName: 'PKG Type', field: 'unitConvertedtoName', sortable: true,
+    item = {headerName: 'Sent', field: 'SentDate', sortable: true,
               width   : 150,
               minWidth: 150,
               maxWidth: 275,
@@ -237,16 +224,7 @@ export class ManifestsComponent implements OnInit {
                }
     this.columnDefs.push(item)
 
-    item =  {headerName: 'Retail', field: 'price', sortable: true,
-                            cellRenderer: this.currencyCellRendererUSD,
-                            width   : 150,
-                            minWidth: 150,
-                            maxWidth: 275,
-                            flex    : 1,
-              }
-    this.columnDefs.push(item)
-
-    item =  {headerName: 'Cost', field: 'cost', sortable: true,
+    item =  {headerName: 'Accepted', field: 'acceptedDate', sortable: true,
                             cellRenderer: this.currencyCellRendererUSD,
                             width   : 150,
                             minWidth: 150,
@@ -293,7 +271,8 @@ export class ManifestsComponent implements OnInit {
 
   refreshSearch() {
     const site               = this.siteService.getAssignedSite()
-    const productSearchModel = this.initSearchModel();
+    const searchModel        = this.initSearchModel();
+    console.log(searchModel)
     this.onGridReady(this.params)
   }
 
@@ -408,6 +387,7 @@ export class ManifestsComponent implements OnInit {
 
       items$.subscribe(data =>
         {
+          console.log('on grid ready', data)
           if (data.errorMessage) {
             this.notifyEvent(data.errorMessage, 'Failure')
             return

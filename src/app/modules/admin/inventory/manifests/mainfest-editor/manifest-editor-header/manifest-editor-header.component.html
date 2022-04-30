@@ -2,87 +2,100 @@
 <div *ngIf="inputForm && currentManifest as item; else loading">
 <mat-card>
   <mat-card-title>
-    <div><h3>Item: {{item.name }} </h3></div>
+    <div><h3>Name: {{item.name }} </h3></div>
 
   </mat-card-title>
 
   <mat-card-subtitle>
 
     <div class="header-container" >
-      <!-- <div class="subtitle grid-container-headers">
-        <div class="item-label">SKU</div>
-        <div class="item-info"> {{item.sku}} </div>
-        <div class="item-label">Type</div>
-        <div class="item-info"> {{item.packageType}} </div>
-        <div class="item-label">Intake Category </div>
-        <div class="item-info"> {{item.productCategoryName}} </div>
-        <div class="item-label">Vendor Code</div>
-        <div class="item-info"> {{item.facilityLicenseNumber}} </div>
-      </div> -->
-
-      <div>
-        <app-edit-buttons-standard
-              (outputeupdateItem)     ="updateItem($event)"
-              (outputupdateItemExit)  ="updateItemExit($event)"
-              (outputupdatedeleteItem)="deleteItem($event)"
-              (outputupdateonCancel)  ="onCancel($event)"
-        ></app-edit-buttons-standard>
-      </div>
-
-      <div>
-        <h4>
-          Warehouse Functions
-        </h4>
-
-        <div class="functions-grid">
-          <button mat-button  color="primary" (click)="dispatchSendToSite()">
-            Dispatch And Notify
-          </button>
-
-          <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
-            Cancel Dispatch and Notify
-          </button>
-
-          <button mat-button color="primary" (click)="cancelRequestDispatchSendToSite()">
-            Review Delivered Inventory (audit)
-          </button>
-
-          <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
-            Accept Rejected Inventory
-          </button>
+        <div>
+          <app-edit-buttons-standard
+                (outputeupdateItem)     ="updateItem($event)"
+                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputupdatedeleteItem)="deleteItem($event)"
+                (outputupdateonCancel)  ="onCancel($event)"
+          ></app-edit-buttons-standard>
         </div>
 
-      </div>
+        <h4>Actions</h4>
+        <div class="functions-grid"></div>
+          <div>
 
-      <div>
-        <h4>
-          Retail Functions
-        </h4>
+            <button aria-label="user menu"
+                    mat-button
+                    [matMenuTriggerFor]="menu"
+                    #menuTrigger="matMenuTrigger"
+                    (mouseenter)="menuTrigger.openMenu()"
+                    >
+              <mat-icon>warehouse</mat-icon>Warehouse
+            </button>
 
-        <div class="functions-grid">
-          <button mat-button color="primary" (click)="receiveAll()">
-            Receive All
-          </button>
+            <mat-menu class="mat-menu-panel"
+                      [overlapTrigger]="false"
+                      #menu="matMenu">
+              <span (mouseleave)="menuTrigger.closeMenu()">
 
-          <button mat-button color="primary" (click)="receiveSelected()">
-            Receive Selected
-          </button>
+                  <button mat-button  color="primary" (click)="dispatchSendToSite()">
+                    Dispatch And Notify
+                  </button>
 
-          <button mat-button color="primary" color="warn" (click)="rejectManifest()">
-            Reject Manifest
-          </button>
+                  <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
+                    Cancel Dispatch and Notify
+                  </button>
 
-          <button mat-button color="primary" (click)="assignToInventoryLocation()">
-            Assign all to Assigned Location
-          </button>
-        </div>
-      </div>
-    </div>
+                  <button mat-button color="primary" (click)="cancelRequestDispatchSendToSite()">
+                    Review Delivered Inventory (audit)
+                  </button>
 
+                  <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
+                    Accept Rejected Inventory
+                  </button>
+              </span>
+            </mat-menu>
+
+          </div>
+          <div>
+
+            <button aria-label="user menu"
+                    mat-button
+                    [matMenuTriggerFor]="retailmenu"
+                    #retailTrigger="matMenuTrigger"
+                    (mouseenter)="retailTrigger.openMenu()"
+                    >
+              <mat-icon>storefront</mat-icon>Retail Store
+            </button>
+
+            <mat-menu class="mat-menu-panel"
+                      [overlapTrigger]="false"
+                      #retailmenu="matMenu">
+              <span (mouseleave)="retailTrigger.closeMenu()">
+
+                <button mat-button color="primary" (click)="receiveAll()">
+                  Receive All
+                </button>
+
+                <button mat-button color="primary" (click)="receiveSelected()">
+                  Receive Selected
+                </button>
+
+                <button mat-button color="primary" color="warn" (click)="rejectManifest()">
+                  Reject Manifest
+                </button>
+
+                <button mat-button color="primary" (click)="assignToInventoryLocation()">
+                  Assign all to Assigned Location
+                </button>
+
+            </span>
+            </mat-menu>
+
+          </div>
+       </div>
     </mat-card-subtitle>
 
-    <mat-card-content>
-
+    <mat-card-content *ngIf="inputForm">
+      {{inputForm | json}}
     </mat-card-content>
 
   </mat-card>

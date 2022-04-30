@@ -1,6 +1,6 @@
 import { Component,  EventEmitter,  Inject,  Input,  OnInit, Optional, Output, } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryAdjustmentNoteComponent } from 'src/app/shared/widgets/adjustment-notes/adjustment-note/adjustment-note.component';
@@ -19,6 +19,7 @@ import { InventoryEditButtonService } from 'src/app/_services/inventory/inventor
 import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
 import { switchMap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 
 @Component({
   selector: 'app-inventory-history-list',
@@ -26,6 +27,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./inventory-history-list.component.scss']
 })
 export class InventoryHistoryListComponent implements OnInit {
+
+  manifestList: IInventoryAssignment[];
 
   @Input() inventoryAssignments: IInventoryAssignment[];
   @Input() id                  : number;
@@ -52,7 +55,16 @@ export class InventoryHistoryListComponent implements OnInit {
   lastLabelPrinter = ""
   electronPrinterList : any;
 
+  _manifestList : Subscription;
+
+  initSubscriptions() {
+    this._manifestList = this.manifestService.inventoryItems$.subscribe(data => {
+      this.manifestList = data;
+    })
+  }
+
   constructor(
+      private manifestService   : ManifestInventoryService,
        public route              : ActivatedRoute,
        private dialog            : MatDialog,
        private inventoryAssignmentService: InventoryAssignmentService,
@@ -95,6 +107,7 @@ export class InventoryHistoryListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.initSubscriptions();
     this.toggleLabelEvents = "labels"
 
     const site = this.siteService.getAssignedSite();
@@ -121,7 +134,7 @@ export class InventoryHistoryListComponent implements OnInit {
   }
 
   editWebProduct() {
-   // get the id if there is one
+   // get the tid if there is one
    if (this.id) {
       const id = this.id
       if (this.inventoryAssignment) {

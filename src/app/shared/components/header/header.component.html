@@ -1,6 +1,6 @@
 <mat-toolbar [class]="mattoolbar" [color]="matToolbarColor">
   <mat-toolbar-row>
- 
+
     <div [class]="flexsections">
      <div >
 
@@ -155,7 +155,7 @@
 
 
       <div >
-    
+
         <div class="grid-flow">
           <div *ngIf="!smallDevice">
             <app-toggle-theme></app-toggle-theme>
@@ -191,7 +191,9 @@
                 <mat-icon>person</mat-icon>
               </button>
 
-            <mat-menu class="mat-menu-panel" [overlapTrigger]="false" #menu="matMenu">
+            <mat-menu class="mat-menu-panel"
+                      [overlapTrigger]="false"
+                      #menu="matMenu">
 
               <span (mouseleave)="menuTrigger.closeMenu()">
 

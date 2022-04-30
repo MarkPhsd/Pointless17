@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
   openOrderBar:                      boolean;
-  @HostBinding('class') className = '';
+  @HostBinding('class')      className = '';
   mattoolbar                 ='mat-toolbar'
   isApp                      : boolean;
   company                    = {} as ICompany;
@@ -118,12 +118,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     })
 
 
-    
+
     this._user = this.toolbarUIService.searchSideBar$.subscribe( data => {
-      if (data) { 
+      if (data) {
         this.searchBar = 'search_off'
       }
-      if (!data) { 
+      if (!data) {
         this.searchBar = 'search'
       }
     })
@@ -131,7 +131,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       if (data) {  this.searchBar = 'menu_open'
         this.menuBar = 'menu_open'
       }
-      if (!data) { 
+      if (!data) {
         this.menuBar = 'menu'
       }
     })
@@ -181,11 +181,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   refreshUserBar(user) {
-    if (user) { 
+    if (user) {
       this.flexsections = 'flex-sections'
       return
     }
-    if (!user) { 
+    if (!user) {
       this.flexsections = 'flex-sections-nouser'
       return
     }
@@ -273,7 +273,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.smallDevice = true
     }
 
-    if (this.platFormService.androidApp) { 
+    if (this.platFormService.androidApp) {
       this.mattoolbar = 'mat-toolbar-android'
     }
   }
@@ -286,7 +286,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.user) {
        user = JSON.parse(localStorage.getItem('user')) as IUser;
     }
-    this.refreshUserBar(user) 
+    this.refreshUserBar(user)
     if (!user) {  return null }
 
     this.isAdmin      = false;

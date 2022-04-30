@@ -36,8 +36,9 @@
                             class="toggle-view"
                             [(ngModel)]="toggleLabelEvents"
                             aria-label="Font Style">
-      <mat-button-toggle value="labels" (click)="onToggleLabelEvents('labels')">Labels</mat-button-toggle>
-      <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')">Events</mat-button-toggle>
+      <mat-button-toggle value="labels" (click)="onToggleLabelEvents('labels')"><mat-icon>label</mat-icon>Labels</mat-button-toggle>
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('events')"><mat-icon>event</mat-icon>Events</mat-button-toggle>
+      <mat-button-toggle value="events" (click)="onToggleLabelEvents('manifest')"><mat-icon>list</mat-icon>Manifest</mat-button-toggle>
     </mat-button-toggle-group>
 
     <br>
@@ -99,6 +100,33 @@
       </div>
     </div>
 
+    <div *ngIf="toggleLabelEvents == 'manifest'">
+      <div class="mainfest-container" *ngIf="manifestList as list">
+
+        <div class="manifest-grid">
+          <div class="manifest-header">Item</div>
+          <div class="manifest-header">SKU</div>
+          <div class="manifest-header">#</div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div *ngFor="let item of list">
+
+          <div class="manifest-grid">
+            <div>
+              {{item.productName}}
+            </div>
+            <div>
+              {{item.sku}}
+            </div>
+            <div>
+              {{item.packageCountRemaining}}
+            </div>
+
+          </div>
+        </div>
+    </div>
+    </div>
   </mat-card-content>
 
 </mat-card>

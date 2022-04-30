@@ -121,3 +121,21 @@ mat-card {
   width: 100%;
   min-width: 155px;
 }
+
+.manifest-grid {
+  display: grid;
+  grid-template-columns: 100px 100px 60px;
+  gap: 5px;
+  width: 320px;
+  margin: 10px;
+}
+.manifest-container {
+  height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+}
+.manifest-header {
+  font-size: large;
+  margin: 10xp;
+}

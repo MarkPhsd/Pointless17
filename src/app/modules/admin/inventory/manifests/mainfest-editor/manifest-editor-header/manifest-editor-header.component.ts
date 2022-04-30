@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { ISite } from 'src/app/_interfaces';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 
 @Component({
@@ -10,23 +12,42 @@ import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/i
 })
 export class ManifestEditorHeaderComponent implements OnInit {
 
-  inputForm         : FormGroup;
+  @Input() inputForm         : FormGroup;
   currentManifest   : InventoryManifest;
   currentManifest$  : Subscription;
 
+  manifestID: number;
+  site: ISite;
+
+  currentManifestSite$  : Subscription;
+
   initSubscriptions() {
-    this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
-      this.currentManifest = data;
-      if (!data) {
-        this.currentManifest = {} as InventoryManifest;
-        this.initForm();
-      }
-    })
+
+    try {
+      this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
+        this.currentManifest = data;
+        this.manifestID = data.id;
+      })
+      this.initForm();
+    } catch (error) {
+      console.log('subscription error manifest', error)
+    }
+
+    try {
+      this.currentManifestSite$ = this.manifestService.currentManifestSite$.subscribe(data => {
+        this.site = data;
+      })
+    } catch (error) {
+      console.log('subscription error manifest', error)
+    }
+
   }
 
   constructor(
     private fb: FormBuilder,
-    private manifestService: ManifestInventoryService) { }
+    private manifestService: ManifestInventoryService,
+    private dialogRef: MatDialogRef<ManifestEditorHeaderComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
     const i = 0
@@ -39,11 +60,16 @@ export class ManifestEditorHeaderComponent implements OnInit {
   updateItemExit(event) {
 
   }
+
   deleteItem(event) {
-
+    if (!this.site && this.manifestID == 0 ) { return }
+    this.manifestService.delete(this.site, this.manifestID).subscribe(data => {
+      this.dialogRef.close();
+    })
   }
-  onCancel(event) {
 
+  onCancel(event) {
+    this.dialogRef.close();
   }
   // (outputeupdateItem)     ="updateItem($event)"
   // (outputupdateItemExit)  ="updateItemExit($event)"
@@ -81,6 +107,9 @@ export class ManifestEditorHeaderComponent implements OnInit {
     if (this.currentManifest) {
       this.inputForm.patchValue(this.currentManifest)
     }
+
+
+
   }
 
   dispatchSendToSite(){

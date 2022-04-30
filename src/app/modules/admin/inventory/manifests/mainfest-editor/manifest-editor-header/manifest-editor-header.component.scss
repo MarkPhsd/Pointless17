@@ -1,5 +1,5 @@
 .functions-grid {
   display: grid;
-  grid-template-columns: repeat(2 1fr);
-  max-width: 200px;
+  grid-template-columns: 1fr 1fr;
+  max-width: 250px;
 }
