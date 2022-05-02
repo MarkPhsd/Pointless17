@@ -2,8 +2,10 @@
 <div *ngIf="inputForm && currentManifest as item; else loading">
 <mat-card>
   <mat-card-title>
-    <div><h3>Name: {{item.name }} </h3></div>
-
+    <div *ngIf="item.name"><h3>Name: {{item?.name }} </h3></div>
+    <div *ngIf="item.createdDate">Created: {{item?.createdDate   | date: 'short'}}</div>
+    <div>Scheduled</div><div *ngIf="item.scheduled">: {{item?.createdDate | date: 'short'}}   </div>
+    <div>Sent</div><div *ngIf="item.sentDate">Created: {{item?.createdDate  | date: 'short' }}   </div>
   </mat-card-title>
 
   <mat-card-subtitle>
@@ -95,7 +97,7 @@
     </mat-card-subtitle>
 
     <mat-card-content *ngIf="inputForm">
-      {{inputForm | json}}
+      <!-- {{inputForm | json}} -->
     </mat-card-content>
 
   </mat-card>

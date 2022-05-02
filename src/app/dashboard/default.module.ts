@@ -274,6 +274,8 @@ import { MainfestEditorComponent } from '../modules/admin/inventory/manifests/ma
 import { MainfestFilterComponent } from '../modules/admin/inventory/manifests/mainfest-filter/mainfest-filter.component';
 import { ManifestsComponent } from '../modules/admin/inventory/manifests/manifests.component';
 import { ManifestEditorHeaderComponent } from '../modules/admin/inventory/manifests/mainfest-editor/manifest-editor-header/manifest-editor-header.component';
+import { AgGridImageFormatterComponent } from '../_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -523,7 +525,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
    ],
 
    imports: [
-      AgGridModule.withComponents([ButtonRendererComponent, AgGridToggleComponent]),
+      AgGridModule.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),
       DashBoardRoutingModule,
       AppRoutingModule,
       AppMaterialModule,

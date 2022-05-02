@@ -36,7 +36,7 @@ export class ManifestMethodsService {
 
   }
 
-  get( id: number): Observable<ManifestType> {
+  getManifestTypes( id: number): Observable<ManifestType> {
 
     const site = this.siteService.getAssignedSite()
 
@@ -52,7 +52,7 @@ export class ManifestMethodsService {
 
   }
 
-  add( iInventoryLocation: ManifestType ) {
+  addManifestTypes( iInventoryLocation: ManifestType ) {
 
     const site = this.siteService.getAssignedSite()
 
@@ -68,7 +68,7 @@ export class ManifestMethodsService {
 
   }
 
-  update(id: number, iInventoryLocation: ManifestType) {
+  updateManifestTypes(id: number, iInventoryLocation: ManifestType) {
 
     const site = this.siteService.getAssignedSite()
 
@@ -84,7 +84,7 @@ export class ManifestMethodsService {
 
   }
 
-  delete(id: number): Observable<ManifestType> {
+  deleteManifestTypes(id: number): Observable<ManifestType> {
 
     const site = this.siteService.getAssignedSite()
 

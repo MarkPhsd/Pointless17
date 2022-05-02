@@ -83,6 +83,7 @@ export class ManifestsComponent implements OnInit {
   islastpage              : boolean;
   // pageSize              : number;
   //This is for the filter Section//
+  buttonName       = 'Edit'
   brands           : IUserProfile[];
   categories$      : Observable<IMenuItem[]>;
   departments$     : Observable<IMenuItem[]>;
@@ -177,8 +178,7 @@ export class ManifestsComponent implements OnInit {
       itemName      :     [''],
       searchProducts:     [''],
       selectedSiteID:     [''],
-      inventoryLocations: [''],
-      inventoryStatusID:  [''],
+      statusID      :  [''],
     })
   }
 
@@ -196,12 +196,28 @@ export class ManifestsComponent implements OnInit {
       // minWidth: 100,
     };
 
-    let item = {headerName: 'id',  sortable: true, field: 'id',  hide: true, } as any;
-
     this.columnDefs = [];
-    this.columnDefs.push(item)
 
-    item =  {headerName: 'Name',  sortable: true, field: 'productName',
+
+    // let item = {headerName: 'id',  sortable: true, field: 'id',  hide: true, } as any;
+
+    let button =    {
+      field: 'id',
+      cellRenderer: "btnCellRenderer",
+                    cellRendererParams: {
+                      onClick: this.editItemFromGrid.bind(this),
+                      label: this.buttonName,
+                      getLabelFunction: this.getLabel.bind(this),
+                      btnClass: 'btn btn-primary btn-sm'
+                    },
+                    minWidth: 125,
+                    maxWidth: 125,
+                    flex: 2,
+    }
+
+    this.columnDefs.push(button)
+
+    let item =  {headerName: 'Name',  sortable: true, field: 'name',
                 width   : 175,
                 minWidth: 175,
                 maxWidth: 275,
@@ -216,7 +232,7 @@ export class ManifestsComponent implements OnInit {
               } as any;
     this.columnDefs.push(item)
 
-    item = {headerName: 'Sent', field: 'SentDate', sortable: true,
+    item = {headerName: 'Sent', field: 'sendDate', sortable: true,
               width   : 150,
               minWidth: 150,
               maxWidth: 275,
@@ -225,7 +241,6 @@ export class ManifestsComponent implements OnInit {
     this.columnDefs.push(item)
 
     item =  {headerName: 'Accepted', field: 'acceptedDate', sortable: true,
-                            cellRenderer: this.currencyCellRendererUSD,
                             width   : 150,
                             minWidth: 150,
                             maxWidth: 275,
@@ -457,7 +472,7 @@ export class ManifestsComponent implements OnInit {
 
   editItemFromGrid(e) {
     if (e.rowData.id)  {
-      this.editItemWithId(e.rowData.id);
+      this.inventoryManifestService.openManifestForm(e.rowData.id);
     }
   }
 

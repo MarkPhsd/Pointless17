@@ -27,6 +27,8 @@ import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { MainfestEditorComponent } from '../../manifests/mainfest-editor/mainfest-editor.component';
+import { AgIconFormatterComponent } from 'src/app/_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
+import { ManifestMethodsService } from 'src/app/_services/inventory/manifest-methods.service';
 
 export interface InventoryStatusList {
   name: string;
@@ -174,6 +176,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
                 private contactsService        : ContactsService,
                 private awsService             : AWSBucketService,
                 private agGridFormatingService : AgGridFormatingService,
+                private manifestMethodsService: ManifestMethodsService,
 
               )
   {
@@ -259,7 +262,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   initAgGrid() {
     this.frameworkComponents = {
-      btnCellRenderer: ButtonRendererComponent
+      btnCellRenderer: ButtonRendererComponent,
+      iconCell: AgIconFormatterComponent
     };
 
     this.defaultColDef = {
@@ -338,17 +342,39 @@ export class InventoryListComponent implements OnInit, OnDestroy {
               }
     this.columnDefs.push(item)
 
-    item =  {headerName: 'Manifest', field: 'manifestID', sortable: true,
-            width   : 75,
-            minWidth: 75,
-            maxWidth: 275,
-            flex    : 1,
-        }
-    this.columnDefs.push(item)
+    // item =  {headerName: 'Manifest', field: 'manifestID', sortable: true,
+    //         width   : 75,
+    //         minWidth: 75,
+    //         maxWidth: 275,
+    //         flex    : 1,
+    //     }
+    // this.columnDefs.push(item)
+
+    let button =   { headerName: 'Manifest',
+          field: 'manifestID',
+          width: 75,
+          minWidth: 75,
+          maxWidth: 75,
+          sortable: false,
+          autoHeight: true,
+          cellRendererFramework: AgIconFormatterComponent,
+          cellRendererParams: {
+            onClick: this.editManifest.bind(this),
+          }
+    }
+
+    this.columnDefs.push(button)
 
     this.rowSelection = 'multiple';
 
     this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
+  }
+
+  editManifest(e) {
+    if (!e) {return}
+    if (e.rowData.id)  {
+      this.manifestService.openManifestForm(e.rowData.id);
+    }
   }
 
   listAll(){
@@ -637,8 +663,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   getLabel(rowData)
   {
     if(rowData && rowData.hasIndicator)
-      return 'Edit';
-      else return 'Edit';
+      return 'warehouse';
+      else return '';
   }
 
   onBtnClick1(e) {
@@ -684,23 +710,33 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     }
   }
 
-  validateItemsSelectedForManifest() : boolean {
+  validateSiteSelectedForManifest(): boolean {
+    if (this.selectedSiteID == 0) {
+      this.notifyEvent('Please selecte a site.', 'Alert')
+      return false
+    }
+    return true
+  }
+
+  validateItemsSelectedForManifest(): boolean {
     const items = this.gridAPI.getSelectedRows();
+    let result = true
     items.forEach( item => {
       if (item) {
         if (item.manifestID != 0) {
           this.notifyEvent('You have selected items already assigned to a manifest. Please reselect items.', 'Alert')
-          return false;
+          result = false
         }
       }
     })
-    return true;
+    return result;
   }
+
   addSelectedToManifest() {
 
-    if (!this.validateItemsSelectedForManifest) {
-      return;
-    }
+    if (!this.validateSiteSelectedForManifest())  { return }
+    if (!this.validateItemsSelectedForManifest()) { return }
+
     const items = this.gridAPI.getSelectedRows();
 
     if (!items) {
@@ -722,11 +758,12 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   }
 
+
+
   addItemsToManifest() {
 
-    if (!this.validateItemsSelectedForManifest) {
-      return;
-    }
+    if (!this.validateSiteSelectedForManifest())  { return }
+    if (!this.validateItemsSelectedForManifest()) { return }
 
     const items = this.gridAPI.getSelectedRows();
 
@@ -766,18 +803,11 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   }
 
-  validateSiteSelection() {
-    if (this.selectedSiteID == undefined || this.selectedSiteID ==0) {
-      this.notifyEvent('Please select a site to make this manifest for.', 'Site required.')
-      return false;
-    }
-    return true
-  }
   addToNewManifest() {
+    console.log('addToNewManifest')
 
-    if (!this.validateItemsSelectedForManifest) {
-      return;
-    }
+    if (!this.validateSiteSelectedForManifest())  { return }
+    if (!this.validateItemsSelectedForManifest()) { return }
 
     const items = this.gridAPI.getSelectedRows();
 
@@ -829,15 +859,18 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     //   const productTypeID = data.prodModifierType
     //   this.openProductEditor(id, productTypeID)
     if (manifest) {
-      dialogRef = this.dialog.open(MainfestEditorComponent,
-        { width:          '800px',
-          minWidth:       '399px',
-          height:         '800px',
-          minHeight:      '650px',
-          data : manifest
-      })
-      return dialogRef
+      // dialogRef = this.dialog.open(MainfestEditorComponent,
+      //   { width:          '800px',
+      //     minWidth:       '399px',
+      //     height:         '800px',
+      //     minHeight:      '650px',
+      //     data : manifest
+      // })
+      // return dialogRef
+      this.manifestService.openManifestForm(manifest.id)
     }
+
+
   }
 
   formatToolTip(params: any) {

@@ -145,6 +145,7 @@ import { StrainIndicatorComponent } from '../modules/tv-menu/strain-indicator/st
 import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/card-dashboard.component';
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvpayment.component';
+import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -165,6 +166,7 @@ import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvp
     AutofocusDirective,
     ChangeDueComponent,
     BackgroundCoverComponent,
+    AgIconFormatterComponent,
     ButtonRendererComponent,
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
@@ -323,6 +325,7 @@ import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvp
     UserAuthorizedDirective,
     CashValueCalcComponent,
     ChangeDueComponent,
+    AgIconFormatterComponent,
     ButtonRendererComponent,
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,

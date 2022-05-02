@@ -37,22 +37,6 @@
       </mat-form-field>
     </div>
 
-    <div class="grid-item" *ngIf="(locations$ | async) as list">
-      <mat-form-field appearance="outline">
-        <mat-label>Locations</mat-label>
-          <mat-select
-                    type="text"
-                    (selectionChange)="getLocation($event)"
-                    formControlNamename="inventoryLocations"
-                  >
-          <mat-option [value]=0>All</mat-option>
-          <mat-option *ngFor="let item of list" [value]="item.id">
-            {{ item.name }}
-          </mat-option>
-
-        </mat-select>
-      </mat-form-field>
-    </div>
 
     <div class="grid-item">
       <mat-form-field appearance="outline">
@@ -60,7 +44,7 @@
           <mat-select
                     type="text"
                     (selectionChange)="getInventoryStatus($event)"
-                    formControlNamename="inventoryStatusID"
+                    formControlNamename="statusID"
                   >
           <div *ngIf="inventoryStatusList">
             <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
