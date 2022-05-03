@@ -3,9 +3,11 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-ag-icon-formatter',
-  template:     `<div  >
+  template:     `<div>
+                  <!-- <button mat-button (click)="openManifest(event)"> -->
                     <mat-icon *ngIf="icon"> {{icon}} </mat-icon>
                     {{label}}
+                  <!-- </button> -->
                 </div>
                 `,
   styleUrls: ['./ag-icon-formatter.component.scss']
@@ -26,12 +28,11 @@ export class AgIconFormatterComponent  implements ICellRendererAngularComp {
       this.showHide ='display:none;'
     }
 
-
     this.params = params;
     this.label = this.params.label || null;
     this.btnClass = this.params.btnClass || 'btn btn-primary';
     this.getLabelFunction = this.params.getLabelFunction;
-    console.log(params.value)
+
     if (params.value == 0) {
       this.label = ''
       this.icon  = 'retail'

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MainfestEditorComponent } from './mainfest-editor.component';
+import { ManifestTypeComponent } from './manifest-type.component';
 
-describe('MainfestEditorComponent', () => {
-  let component: MainfestEditorComponent;
-  let fixture: ComponentFixture<MainfestEditorComponent>;
+describe('ManifestTypeComponent', () => {
+  let component: ManifestTypeComponent;
+  let fixture: ComponentFixture<ManifestTypeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MainfestEditorComponent ]
+      declarations: [ ManifestTypeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MainfestEditorComponent);
+    fixture = TestBed.createComponent(ManifestTypeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

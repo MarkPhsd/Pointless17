@@ -8,7 +8,6 @@
     [inputForm]     ="inputForm">
   </app-manifest-editor-header>
 
-
   <mat-tab-group mat-align-tabs="start"
                 md-stretch-tabs
               >
@@ -33,17 +32,17 @@
           </mat-slide-toggle>
         </div>
 
-        <div>
-          <app-mat-select [list$]="status$"
+        <div *ngIf="status$">
+          <app-mat-select  [list$]="status$"
           (outputItem)="applyStatus($event)"  ></app-mat-select>
         </div>
 
-        <div>
+        <div *ngIf="type$">
           <app-mat-select [list$]="type$"
                         (outputItem)="applyType($event)" ></app-mat-select>
         </div>
 
-        <div>
+        <div *ngIf="sites$">
           <app-mat-select [list$]="sites$"
                         (outputItem)="applySite($event)" ></app-mat-select>
         </div>
@@ -148,7 +147,7 @@
         <app-inventory-list
           [manifestID]="manifestID"
           [siteID]    ="site"
-          [gridlist]="'grid-list-nopanel'"
+          [gridlist]  ="'grid-list-nopanel'"
           [listOnly]  ="true">
         </app-inventory-list>
       </mat-card>

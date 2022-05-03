@@ -226,7 +226,7 @@ export class ManifestInventoryService {
 
     const controller =  `/InventoryManifests/`
 
-    const endPoint = `DeleteManifest`
+    const endPoint = `DeleteInventoryManifest`
 
     const parameters = `?id=${id}`
 

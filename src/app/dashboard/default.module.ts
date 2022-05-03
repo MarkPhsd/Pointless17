@@ -276,6 +276,8 @@ import { ManifestsComponent } from '../modules/admin/inventory/manifests/manifes
 import { ManifestEditorHeaderComponent } from '../modules/admin/inventory/manifests/mainfest-editor/manifest-editor-header/manifest-editor-header.component';
 import { AgGridImageFormatterComponent } from '../_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
 import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
+import { ManifestStatusComponent } from '../modules/admin/inventory/manifest-status/manifest-status.component';
+import { ManifestTypeComponent } from '../modules/admin/inventory/manifest-type/manifest-type.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -353,6 +355,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     InventoryHeaderValuesComponent,
     InventoryHistoryItemComponent,
     InventoryCountsViewComponent,
+    ManifestStatusComponent,
+    ManifestTypeComponent,
     SearchInventoryInputComponent,
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,
@@ -362,6 +366,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ManifestsComponent,
     MainfestFilterComponent,
     MainfestEditorComponent,
+    ManifestStatusComponent,
+    ManifestTypeComponent,
     MenuGroupItemEditComponent,
     ManifestEditorHeaderComponent,
     MenuitemComponent,

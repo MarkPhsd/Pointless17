@@ -23,6 +23,7 @@ import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { InventoryManifest, ManifestInventoryService, ManifestSearchModel, ManifestSearchResults } from 'src/app/_services/inventory/manifest-inventory.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-manifests',
@@ -33,10 +34,9 @@ export class ManifestsComponent implements OnInit {
 
   manifestSearchModel:         ManifestSearchModel
   manifestSearchResults:       ManifestSearchResults;
-  inventoryManifest          : InventoryManifest;
-  inventoryAssignments               : IInventoryAssignment[];
-  selectedInventoryAssignments       : IInventoryAssignment[];
-
+  inventoryManifest            : InventoryManifest;
+  inventoryAssignments         : IInventoryAssignment[];
+  selectedInventoryAssignments : IInventoryAssignment[];
 
   id:                   any;
   item:                 string;
@@ -142,6 +142,7 @@ export class ManifestsComponent implements OnInit {
               private itemTypeService        : ItemTypeService,
               private contactsService        : ContactsService,
               private awsService             : AWSBucketService,
+              private datePipe               : DatePipe,
               private agGridFormatingService : AgGridFormatingService,
           ) { }
 
@@ -151,9 +152,7 @@ export class ManifestsComponent implements OnInit {
     this.locations$     = this.locationService.getLocations();
     this.initForm();
     this.initAgGrid();
-
   }
-
 
   initClasses()  {
     const platForm      = this.platForm;
@@ -165,7 +164,7 @@ export class ManifestsComponent implements OnInit {
   }
 
   @HostListener("window:resize", [])
-    updateDeviceSize() {
+  updateDeviceSize() {
     this.smallDevice = false
     if (window.innerWidth < 768) {
       this.smallDevice = true
@@ -197,8 +196,6 @@ export class ManifestsComponent implements OnInit {
     };
 
     this.columnDefs = [];
-
-
     // let item = {headerName: 'id',  sortable: true, field: 'id',  hide: true, } as any;
 
     let button =    {
@@ -224,7 +221,8 @@ export class ManifestsComponent implements OnInit {
                 flex    : 2,} as any;
     this.columnDefs.push(item)
 
-    item =  {headerName: 'Scheduled', field: 'scheduledDate', sortable: true,
+    item =  {headerName: 'Scheduled', field: 'scheduleDate', sortable: true,
+              cellRenderer: this.dateCellRenderer,
               width   : 175,
               minWidth: 175,
               maxWidth: 275,
@@ -233,6 +231,7 @@ export class ManifestsComponent implements OnInit {
     this.columnDefs.push(item)
 
     item = {headerName: 'Sent', field: 'sendDate', sortable: true,
+              cellRenderer: this.dateCellRenderer,
               width   : 150,
               minWidth: 150,
               maxWidth: 275,
@@ -241,11 +240,12 @@ export class ManifestsComponent implements OnInit {
     this.columnDefs.push(item)
 
     item =  {headerName: 'Accepted', field: 'acceptedDate', sortable: true,
-                            width   : 150,
-                            minWidth: 150,
-                            maxWidth: 275,
-                            flex    : 1,
-              }
+              cellRenderer: this.dateCellRenderer,
+              width   : 150,
+              minWidth: 150,
+              maxWidth: 275,
+              flex    : 1,
+          }
     this.columnDefs.push(item)
 
     this.rowSelection = 'single';
@@ -336,7 +336,6 @@ export class ManifestsComponent implements OnInit {
       return  this.siteService.getAssignedSite()
     }
   }
-
 
   getLocation(event) {
     this.inventoryLocationID = event.value
@@ -525,6 +524,21 @@ export class ManifestsComponent implements OnInit {
     if (inrFormat.format(params.value) == '$NaN') { return ''}
     return inrFormat.format(params.value);
   }
+
+  dateCellRenderer(params: any) {
+
+    if (!params.value || params.value == undefined || params.value === '') { return ''}
+    const dateValue = params.value;
+    console.log(dateValue);
+    try {
+      return this.datePipe.transform(dateValue, 'MM/dd/yyyy')
+    } catch (error) {
+      console.log('error', error)
+      return dateValue;
+    }
+    return ;
+  }
+
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

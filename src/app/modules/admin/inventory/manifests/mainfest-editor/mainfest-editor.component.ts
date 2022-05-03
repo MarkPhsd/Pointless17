@@ -18,12 +18,11 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
   inputForm         : FormGroup;
   currentManifest   : InventoryManifest;
   currentManifest$  : Subscription;
-  inventoryItems: IInventoryAssignment[];
-  manifestID: number;
-  site: ISite;
+  inventoryItems    : IInventoryAssignment[];
+  manifestID        : number;
+  site              : ISite;
 
   currentManifestSite$  : Subscription;
-
   sendDate:           string;
   scheduleDate:       string;
   acceptedDate:       string;
@@ -40,11 +39,18 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
          this.manifestID = data.id;
          this.inventoryItems = this.currentManifest.inventoryAssignments;
          this.inputForm.patchValue(this.currentManifest)
+         this.scheduleDate = this.currentManifest.scheduleDate;
+         this.sendDate = this.currentManifest.sendDate;
+         this.acceptedDate = this.currentManifest.acceptedDate;
+
          return
       }
-        this.currentManifest = null;
+         this.currentManifest = null;
          this.manifestID = 0;
          this.inventoryItems = null;
+         this.scheduleDate = null//this.currentManifest.scheduleDate;
+         this.sendDate = null// this.currentManifest.sendDate;
+         this.acceptedDate = null;
       })
     } catch (error) {
       console.log('subscription error manifest', error)
@@ -104,17 +110,15 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     //const site = this.site
     const site = this.siteService.getAssignedSite()
     if (!site) { return }
-
-    console.log('save manifest', this.currentManifest)
-
     if (!this.currentManifest) { return }
 
     const manifest  = this.inputForm.value as InventoryManifest;
-    console.log('manifest', manifest)
+    manifest.scheduleDate = this.scheduleDate;
+    manifest.sendDate = this.sendDate;
+    manifest.acceptedDate = this.acceptedDate;
 
     const manifest$ = this.manifestService.update(site, this.currentManifest.id, manifest )
     manifest$.subscribe(data => {
-      console.log('result ', data)
 
       this.manifestService.updateCurrentInventoryManifest(data)
       if (event) {

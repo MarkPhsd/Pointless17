@@ -6,6 +6,7 @@ import { Subscription } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 
 @Component({
   selector: 'app-manifest-editor-header',
@@ -60,9 +61,10 @@ export class ManifestEditorHeaderComponent implements OnInit {
   }
 
   constructor(
-    private fb: FormBuilder,
-    private manifestService: ManifestInventoryService,
-    private dialogRef: MatDialogRef<ManifestEditorHeaderComponent>,
+    private fb              : FormBuilder,
+    private sitesService    : SitesService,
+    private manifestService : ManifestInventoryService,
+    private dialogRef       : MatDialogRef<ManifestEditorHeaderComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {
@@ -81,8 +83,11 @@ export class ManifestEditorHeaderComponent implements OnInit {
   }
 
   deleteItem(event) {
-    if (!this.site && this.manifestID == 0 ) { return }
-    this.manifestService.delete(this.site, this.manifestID).subscribe(data => {
+
+    const site  = this.sitesService.getAssignedSite();
+
+    if (!site && this.manifestID == 0 ) { return }
+    this.manifestService.delete(site, this.manifestID).subscribe(data => {
       this.dialogRef.close();
     })
   }

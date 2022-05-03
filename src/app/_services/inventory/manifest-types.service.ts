@@ -75,7 +75,7 @@ export class ManifestTypesService {
 
   }
 
-  update(id: number, iInventoryLocation: ManifestType) {
+  update(id: number, manifestType: ManifestType) {
 
     const site = this.siteService.getAssignedSite()
 
@@ -87,7 +87,7 @@ export class ManifestTypesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.put<ManifestType>(url, iInventoryLocation)
+    return  this.http.put<ManifestType>(url, manifestType)
 
   }
 

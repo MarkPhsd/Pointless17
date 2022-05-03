@@ -156,7 +156,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   initSubscriptions() {
     this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
-      this.currentManifest = data;
+      if (data && this.listOnly) {
+        this.currentManifest = data;
+        this.manifestID = data.id
+      }
     })
   }
 
@@ -342,28 +345,19 @@ export class InventoryListComponent implements OnInit, OnDestroy {
               }
     this.columnDefs.push(item)
 
-    // item =  {headerName: 'Manifest', field: 'manifestID', sortable: true,
-    //         width   : 75,
-    //         minWidth: 75,
-    //         maxWidth: 275,
-    //         flex    : 1,
-    //     }
-    // this.columnDefs.push(item)
-
-    let button =   { headerName: 'Manifest',
-          field: 'manifestID',
-          width: 75,
-          minWidth: 75,
-          maxWidth: 75,
-          sortable: false,
-          autoHeight: true,
-          cellRendererFramework: AgIconFormatterComponent,
-          cellRendererParams: {
-            onClick: this.editManifest.bind(this),
-          }
+    item =     {
+      field: 'manifestID',
+      cellRenderer: "btnCellRenderer",
+                    cellRendererParams: {
+                      onClick: this.editManifest.bind(this),
+                      getIconFunction: this.getManifestIcon.bind(this),
+                      btnClass: 'btn btn-primary btn-sm'
+                    },
+                    minWidth: 125,
+                    maxWidth: 125,
+                    flex: 2,
     }
-
-    this.columnDefs.push(button)
+    this.columnDefs.push(item)
 
     this.rowSelection = 'multiple';
 
@@ -371,9 +365,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   editManifest(e) {
+    console.log(e.rowData)
     if (!e) {return}
     if (e.rowData.id)  {
-      this.manifestService.openManifestForm(e.rowData.id);
+      this.manifestService.openManifestForm(e.rowData.manifestID);
     }
   }
 
@@ -662,9 +657,33 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   getLabel(rowData)
   {
-    if(rowData && rowData.hasIndicator)
+    console.log('rowData', rowData)
+    if(rowData && rowData.hasIndicator) {
+      return 'edit';
+    }
+    return '';
+  }
+
+  getManifestIcon(rowData) {
+    // try {
+    //   if (rowData && rowData.manifestID == undefined) { return ''}
+    // } catch (error) {
+    //   return 'warehouse'
+    // }
+
+    if ( rowData && rowData.manifestID != 0 ) {
+      return 'warehouse'
+    }
+    return ''
+  }
+
+
+  getIcon(rowData)
+  {
+    if(rowData && rowData.hasIndicator) {
       return 'warehouse';
-      else return '';
+    }
+    return '';
   }
 
   onBtnClick1(e) {

@@ -7,7 +7,7 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 
 @Component({
   selector: 'app-button-renderer',
-  template:     `<div [style]="showHide" >
+  template:     `<div [style]="showHide" *ngIf="label != 'null'" >
                   <button
                               class="mat-raised-button"
                               type="button"
@@ -39,12 +39,22 @@ export class ButtonRendererComponent implements ICellRendererAngularComp {
     this.label = this.params.label || null;
     this.btnClass = this.params.btnClass || 'btn btn-primary';
     this.getLabelFunction = this.params.getLabelFunction;
+    this.getIconFunction = this.params.getIconFunction;
+
+    if(this.getIconFunction && this.getIconFunction instanceof Function)
+    {
+      this.icon = this.getIconFunction(params.data);
+    }
 
     if(this.getLabelFunction && this.getLabelFunction instanceof Function)
     {
 
       this.label = this.getLabelFunction(params.data);
 
+      if (this.label === 'null') {
+        this.icon = ''
+        return
+      }
       if (this.label ==='Intake') {
         this.icon = 'inventory'
         return
