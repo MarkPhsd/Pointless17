@@ -42,8 +42,6 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
             private _snackBar: MatSnackBar,
             private fb: FormBuilder,
             private inventoryLocationsService: InventoryLocationsService,
-            private siteService: SitesService,
-
   )
   {  }
 
@@ -72,7 +70,6 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
           if (this.dataSource) {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
-
           }
         },
         error => {
@@ -80,7 +77,6 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
           console.log("refreshTable", error)
         }
       );
-      this.ccsSite = {} as ISite;
   };
 
   editItem(id:number) {
@@ -145,8 +141,8 @@ export class InventoryLocationsComponent implements OnInit, AfterViewInit, OnCha
 
     if (this.location) {
       this.initForm()
-      let site$ =  await this.inventoryLocationsService.deleteLocation(this.location.id)
-      site$.subscribe(data=>{
+      let item$ =  await this.inventoryLocationsService.deleteLocation(this.location.id)
+      item$.subscribe(data=>{
         this.refreshTable();
         // this.notifyEvent("site deleted", "Deleted")
       }, err => {

@@ -19,11 +19,16 @@ export interface InventoryManifest {
   id:                 number;
   name:               string;
   originatorID:       number;
+  receiverManifestID: number;
+
   sourceSiteID:       number;
   sourceSiteURL:      string;
-  receiverManifestID: number;
-  desinationID:       number;
-  desinationURL:      string;
+  sourceSiteName    : string;
+
+  destinationID:      number;
+  destinationURL     :string;
+  destinationSiteName:string;
+
   active:             number;
   status:             string;
   type:               string;
@@ -116,6 +121,7 @@ export class ManifestInventoryService {
 
   private _inventoryManifest = new BehaviorSubject<InventoryManifest>(null);
   public currentInventoryManifest$  = this._inventoryManifest.asObservable()
+  private currentInventoryManifest: InventoryManifest;
 
   private _currentManifestSite = new BehaviorSubject<ISite>(null);
   public currentManifestSite$  = this._currentManifestSite.asObservable()
@@ -128,8 +134,26 @@ export class ManifestInventoryService {
   {
   }
 
+  get isWarehouse(): boolean {
+    try {
+      if (this.currentInventoryManifest) {
+        const site = this.siteService.getAssignedSite();
+        if (!this.currentInventoryManifest.sourceSiteURL) { return true}
+
+        if (site.url == this.currentInventoryManifest.sourceSiteURL
+            || !this.currentInventoryManifest.sourceSiteURL) {
+          return true;
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+    return false
+  }
+
   updateCurrentInventoryManifest(inventoryManifest: InventoryManifest){
     this._inventoryManifest.next(inventoryManifest)
+    this.currentInventoryManifest = inventoryManifest;
   }
 
   updateInventoryItems(items: IInventoryAssignment[]) {
@@ -188,6 +212,39 @@ export class ManifestInventoryService {
 
   }
 
+  // /ReceiveTransfer(inventoryManifest)
+  sendTransfer(site: ISite, inventoryManifest: InventoryManifest): Observable<InventoryManifest> {
+
+    // const site = this.siteService.getAssignedSite()
+
+    const controller =  `/InventoryManifests/`
+
+    const endPoint = `ReceiveTransfer`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<InventoryManifest>(url, inventoryManifest )
+
+  }
+
+  getWithProducts(site: ISite,  id: number): Observable<InventoryManifest> {
+
+    // const site = this.siteService.getAssignedSite()
+
+    const controller =  `/InventoryManifests/`
+
+    const endPoint = `GetInventoryManifestWithProducts`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<InventoryManifest>(url)
+
+  }
+
   add(site: ISite,  inventoryManifest: InventoryManifest ): Observable<InventoryManifest> {
 
     // const site = this.siteService.getAssignedSite()
@@ -204,7 +261,7 @@ export class ManifestInventoryService {
 
   }
 
-  update(site: ISite,  id: number, iInventoryLocation: InventoryManifest): Observable<InventoryManifest>  {
+  update(site: ISite,  id: number, inventoryManifest: InventoryManifest): Observable<InventoryManifest>  {
 
     // const site = this.siteService.getAssignedSite()
 
@@ -216,7 +273,7 @@ export class ManifestInventoryService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.put<InventoryManifest>(url, iInventoryLocation)
+    return  this.http.put<InventoryManifest>(url, inventoryManifest)
 
   }
 

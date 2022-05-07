@@ -1,21 +1,21 @@
-
 <div *ngIf="currentManifest && inputForm">
 
   <app-manifest-editor-header
-    (outPutSave)    ="saveManifest($event)"
-    (outPutSave)    ="saveManifest($event)"
-    (outPutDelete)  ="deleteManifest($event)"
-    [inputForm]     ="inputForm">
+    (outPutSave)            ="saveManifest($event)"
+    (outPutSave)            ="saveManifest($event)"
+    (outPutDelete)          ="deleteManifest($event)"
+    (outPutDispatchManifest)="dispatchManifest($event)"
+    [inputForm]             ="inputForm">
   </app-manifest-editor-header>
 
   <mat-tab-group mat-align-tabs="start"
-                md-stretch-tabs
-              >
+                md-stretch-tabs >
 
     Created: {{currentManifest.createdDate}}
 
     <mat-tab label="Properties" *ngIf="inputForm" >
-        <div class="grid-container" >
+      <div class="grid-container" >
+
         <div>
           <app-value-fields
                 [inputForm]="inputForm"
@@ -23,93 +23,122 @@
                 Name
           </app-value-fields>
         </div>
-        <div  class="mat-label">
-          <mat-slide-toggle
-              name="active"
-              class="mat-label"
-              formControlName="active">
-            <mat-label class="mat-label">Active</mat-label>
-          </mat-slide-toggle>
+
+        <div  class="grid-item"
+              [formGroup]="inputForm"
+              *ngIf="isWarehouse && sites">
+          <mat-form-field appearance="outline">
+            <mat-label>Destination </mat-label>
+              <mat-select
+                        type             ="number"
+                        (selectionChange)="setDestinationSite($event)"
+                        formControlName  ="destinationID" >
+                <mat-option *ngFor       ="let item of sites"
+                            [value]      ="item.id">
+                  {{ item.name }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
-        <div *ngIf="status$">
-          <app-mat-select  [list$]="status$"
-          (outputItem)="applyStatus($event)"  ></app-mat-select>
+        <div  class="grid-item"
+              [formGroup]="inputForm"
+              *ngIf="(type$ | async) as type">
+          <mat-form-field appearance="outline" >
+            <mat-label>Type </mat-label>
+              <mat-select
+                        type             ="number"
+                        (selectionChange)="applyType($event)"
+                        formControlName  ="typeID" >
+                <mat-option *ngFor       ="let item of type"
+                            [value]      ="item.id">
+                  {{ item.name }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
 
-        <div *ngIf="type$">
-          <app-mat-select [list$]="type$"
-                        (outputItem)="applyType($event)" ></app-mat-select>
+        <div  class="grid-item"
+              [formGroup]="inputForm"
+              *ngIf="(status$ | async) as status">
+          <mat-form-field appearance="outline" >
+            <mat-label>Status </mat-label>
+              <mat-select
+                        type             ="number"
+                        (selectionChange)="applyStatus($event)"
+                        formControlName  ="statusID" >
+                <mat-option *ngFor="let item of status"
+                            [value]="item.id">
+                  {{ item.name }}
+                </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
+      </div>
 
-        <div *ngIf="sites$">
-          <app-mat-select [list$]="sites$"
-                        (outputItem)="applySite($event)" ></app-mat-select>
+      <div  class="mat-label">
+        <mat-slide-toggle
+            class="mat-label"
+            [(ngModel)] = "active">
+          <mat-label class="mat-label">Active</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+      <mat-divider></mat-divider>
+      <div><h3>Schedule</h3></div>
+
+      <div class="grid-schedule" *ngIf="inputForm">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Schedule Date</mat-label>
+              <input matInput
+                  [matDatepicker]="pickerSchedule"
+                  [(ngModel)]= "scheduleDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerSchedule"></mat-datepicker-toggle>
+            <mat-datepicker #pickerSchedule></mat-datepicker>
+          </mat-form-field>
         </div>
-
-        <!-- <mat-divider></mat-divider> -->
-        </div>
-
-        <mat-divider></mat-divider>
 
         <div>
-          <h3>Schedule</h3>
-        </div>
-        <div class="grid-container" *ngIf="inputForm">
-
-          <div>
-            <mat-form-field appearance="outline">
-              <mat-label>Schedule Date</mat-label>
-                <input matInput
-                    [matDatepicker]="pickerSchedule"
-                    [(ngModel)]= "scheduleDate"
-                    >
-              <mat-datepicker-toggle matSuffix [for]="pickerSchedule"></mat-datepicker-toggle>
-              <mat-datepicker #pickerSchedule></mat-datepicker>
-            </mat-form-field>
-          </div>
-
-          <div>
-            <mat-form-field appearance="outline">
-              <mat-label>Send Date</mat-label>
-                <input matInput
-                    [matDatepicker]="pickerSend"
-                    [(ngModel)]= "sendDate"
-                    >
-              <mat-datepicker-toggle matSuffix [for]="pickerSend"></mat-datepicker-toggle>
-              <mat-datepicker #pickerSend></mat-datepicker>
-            </mat-form-field>
-          </div>
-
-          <div>
-            <mat-form-field appearance="outline">
-              <mat-label>Accepted Date</mat-label>
-                <input matInput
-                    [matDatepicker]="pickerAccepted"
-                    [(ngModel)]= "acceptedDate"
-                    >
-              <mat-datepicker-toggle matSuffix [for]="pickerAccepted"></mat-datepicker-toggle>
-              <mat-datepicker #pickerAccepted></mat-datepicker>
-            </mat-form-field>
-          </div>
-
+          <mat-form-field appearance="outline">
+            <mat-label>Send Date</mat-label>
+              <input matInput
+                  [matDatepicker]="pickerSend"
+                  [(ngModel)]= "sendDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerSend"></mat-datepicker-toggle>
+            <mat-datepicker #pickerSend></mat-datepicker>
+          </mat-form-field>
         </div>
 
-        <mat-divider></mat-divider>
-
-        <div class="grid-container" *ngIf="inputForm">
-          <div>
-            <mat-form-field appearance="outline"
-                >
-              <mat-label>Notes</mat-label>
-                <textarea matInput
-                          rows="10"
-                          columns="100"
-                          formControlName="description"
-                ></textarea>
-            </mat-form-field>
-          </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Accepted Date</mat-label>
+              <input matInput
+                  [matDatepicker]="pickerAccepted"
+                  [(ngModel)]= "acceptedDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerAccepted"></mat-datepicker-toggle>
+            <mat-datepicker #pickerAccepted></mat-datepicker>
+          </mat-form-field>
         </div>
+
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="grid-container"
+          [formGroup]="inputForm"
+           *ngIf="inputForm">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Notes</mat-label>
+              <textarea matInput
+                        rows="10"
+                        columns="100"
+                        formControlName="description"
+              ></textarea>
+          </mat-form-field>
+        </div>
+      </div>
       <!-- sendDate:           string;
       scheduleDate:       string;
       acceptedDate:       string; -->
@@ -140,6 +169,7 @@
       <!-- statusID:           number;
       typeID:             number; -->
 
+      <!-- {{inputForm.value | json}} -->
     </mat-tab>
 
     <mat-tab label="Items" >

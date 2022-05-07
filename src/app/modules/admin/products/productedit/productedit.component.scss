@@ -22,17 +22,14 @@
     overflow-y: auto;
     overflow-x: hidden;
   };
-
 }
 
 .grid-order-header {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  // grid-template-columns: repeat(2, 1fr);
   grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
   grid-auto-flow:dense;
-
 }
 
 .header-container {
@@ -135,23 +132,8 @@ h1 {
   background: lightblue;
 }
 
-// .alert {
-//   // color: darkred;
-// }
 
-// .ng-invalid:not(form)  {
-//   // border-left: 3px solid darkred;
-// }
-
-// .ng-valid:not(form) {
-//   border-left: 3px solid greenyellow;
-// }
-
-// img {
-//   width: 150px;
-//   height: 150px;
-//   align-content: center;
-// }
+body{ overflow-x: hidden }
 
 .custom-card {
   background-color: gray;
@@ -163,45 +145,11 @@ h1 {
   padding: 5px;
 }
 
-// :host {
-//   display: flex;
-//   flex-direction: column;
-//   height: 100%;
-// }
-
-body{ overflow-x: hidden;}
-
-// .grid-container {
-//   display: flex;
-//   flex-wrap: wrap;
-// }
-
-// .document-content {
-//   display: block;
-
-//   @media (max-width: 425px)  {
-//     display: none;
-//     background-color: antiquewhite;
-//   }
-//   @media (max-width: 599px)  {
-//     display: none;
-//     background-color: antiquewhite;
-//   }
-//   // @media (max-width: 600px)   {
-//   //   display: none;
-//   //   background-color: antiquewhite;
-//   // }
-//   @media (max-width: 900px) {
-//     display: none;
-//     background-color: antiquewhite;
-//   }
-// }
-
 .grid-container {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
 }
 
 .mat-form-field {

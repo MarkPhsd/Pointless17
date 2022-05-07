@@ -355,8 +355,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     InventoryHeaderValuesComponent,
     InventoryHistoryItemComponent,
     InventoryCountsViewComponent,
-    ManifestStatusComponent,
-    ManifestTypeComponent,
     SearchInventoryInputComponent,
     ItemCategoriesListComponent,
     ItemCategoriesEditComponent,

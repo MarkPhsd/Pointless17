@@ -3,31 +3,40 @@
 <div *ngIf="dataSource">
   <div  class="table-container">
     <div class="table-container mat-elevation-z2">
-
       <div *ngIf="dataSource">
 
-        <table mat-table #outerSort="matSort" [dataSource]="dataSource"
+        <table mat-table
+               #outerSort="matSort"
+               [dataSource]="dataSource"
                multiTemplateDataRows matSort>
 
           <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef> ID </th>
-              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+              <th mat-header-cell
+                  *matHeaderCellDef> ID </th>
+              <td mat-cell
+                  *matCellDef="let element"> {{element.id}} </td>
           </ng-container>
+
           <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              <th mat-header-cell
+                  *matHeaderCellDef> Name </th>
+              <td mat-cell
+                  *matCellDef="let element"> {{element.name}} </td>
           </ng-container>
 
           <ng-container matColumnDef="activeLocation">
-            <th mat-header-cell *matHeaderCellDef> Active </th>
-            <td mat-cell *matCellDef="let element"> {{element.activeLocation}} </td>
+            <th mat-header-cell
+                *matHeaderCellDef> Active </th>
+            <td mat-cell
+                *matCellDef="let element"> {{element.activeLocation}} </td>
           </ng-container>
-
 
           <ng-container matColumnDef="edit">
               <th mat-header-cell *matHeaderCellDef> Edit </th>
               <td mat-cell *matCellDef="let element">
-              <button mat-raised-button color="primary" (click)="editItem(element.id)">Edit</button>
+              <button mat-raised-button
+                     color="primary"
+                     (click)="editItem(element.id)">Edit</button>
               </td>
           </ng-container>
 

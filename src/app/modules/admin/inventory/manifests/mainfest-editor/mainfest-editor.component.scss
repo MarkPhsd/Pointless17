@@ -10,15 +10,16 @@ mat-card {
   grid-gap: var(--gap);
   gap: var(--gap);
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  width: 425px;
-  // @include for-phone-only  {
-  //   display: flex;
-  //   flex-direction: row;
-  //   flex-wrap: wrap;
-  //   justify-content: center;
-  //   align-content: center;
-  //   justify-content: space-between;
-  // }
+  width: 95%;
+}
+
+.grid-schedule {
+  --gap: 5px;
+  display: grid;
+  grid-gap: var(--gap);
+  gap: var(--gap);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  width: 550px;
 }
 
 mat-form-field {

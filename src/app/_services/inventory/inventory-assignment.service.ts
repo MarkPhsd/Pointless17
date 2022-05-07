@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { ISite, IUser, Paging}  from 'src/app/_interfaces';
+import { IProduct, ISite, IUser, Paging}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
@@ -19,7 +19,6 @@ export interface AvalibleInventoryResults {
   total       : number;
   errorMessage: string;
 }
-
 export interface IInventoryAssignment {
   id:                    number;
   manifestID            :number;
@@ -74,7 +73,16 @@ export interface IInventoryAssignment {
   invoiceCode:           string;
   thcContent:            number;
   productionBatchNumber: string;
-  serials:               Serial[];
+
+  sourceSiteID        : number;
+  sourceSiteURL       : string;
+  sourceSiteName      : string;
+  destinationSiteID   : number;
+  destinationSiteURL  : string;
+  destinationSiteName : string;
+
+  product             : IProduct;
+  serials:              Serial[];
 }
 
 export interface Serial {

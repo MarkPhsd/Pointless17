@@ -28,7 +28,8 @@ export interface TransactionUISettings {
   buyerAmountDiscount: string;
   idleTime: string;
   highTipInputPercentage: string;
-  
+  showOrderName: boolean;
+
 }
 
 export interface StripeAPISettings {
@@ -166,26 +167,26 @@ export class UISettingsService {
     this.getUIHomePageSettings();
   }
 
-  getTransactionUISettings() { 
-    this.settingsService.getUITransactionSetting().subscribe(data => { 
+  getTransactionUISettings() {
+    this.settingsService.getUITransactionSetting().subscribe(data => {
       this._transactionUISettings.next(data)
     })
   }
 
-  getUIHomePageSettings() { 
-    this.settingsService.getUIHomePageSettings().subscribe(data => { 
+  getUIHomePageSettings() {
+    this.settingsService.getUIHomePageSettings().subscribe(data => {
       this._homePageSetting.next(data)
     })
   }
 
-  getDSSIEmvSettings() { 
-     this.settingsService.getDSIEMVSettings().subscribe(data => { 
+  getDSSIEmvSettings() {
+     this.settingsService.getDSIEMVSettings().subscribe(data => {
       this._DSIEMVSettings.next(data)
     })
   }
   ////////////// subscribeToStripedCachedConfig
   subscribeToStripedCachedConfig()  {
-   this.settingsService.getStripeAPISetting().subscribe(data => { 
+   this.settingsService.getStripeAPISetting().subscribe(data => {
       this.updateStripeAPISettings(data);
    });
   }
@@ -206,7 +207,7 @@ export class UISettingsService {
   }
 
   getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
-    this.settingsService.getDSIEMVSettings().subscribe(data => { 
+    this.settingsService.getDSIEMVSettings().subscribe(data => {
       this.updateDSIEMVSettings(data);
    });
     return this.settingsService.getDSIEMVSettings()
@@ -354,7 +355,7 @@ export class UISettingsService {
       defaultClientTypeID         : [''],
       enablMEDClients             : [''],
       enableLimitsView            : [''],
-      
+
       prefixBarcodeLabel          : [''],
       maxOrdersOpen               : [''],
       lotPreBarCode               : [''],
@@ -362,6 +363,7 @@ export class UISettingsService {
       idleTime                    : [''],
       creditRecieptMinimum        : [''],
       highTipInputPercentage      : [''],
+      showOrderName: [''],
      })
     return fb
   }

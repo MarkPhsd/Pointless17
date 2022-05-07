@@ -18,6 +18,7 @@ export class ManifestEditorHeaderComponent implements OnInit {
   @Input()  inputForm         : FormGroup;
   @Output() outPutSave      = new EventEmitter<any>();
   @Output() outPutSaveExit  = new EventEmitter<any>();
+  @Output() outPutDispatchManifest  = new EventEmitter<any>();
 
   currentManifest   : InventoryManifest;
   currentManifest$  : Subscription;
@@ -26,6 +27,10 @@ export class ManifestEditorHeaderComponent implements OnInit {
   site: ISite;
 
   currentManifestSite$  : Subscription;
+
+  get isWarehouse(): boolean {
+    return this.manifestService.isWarehouse;
+  }
 
   initManifestSubscriber() {
     try {
@@ -47,9 +52,7 @@ export class ManifestEditorHeaderComponent implements OnInit {
   }
 
   initSubscriptions() {
-
     this.initManifestSubscriber()
-
     try {
       this.currentManifestSite$ = this.manifestService.currentManifestSite$.subscribe(data => {
         this.site = data;
@@ -73,18 +76,22 @@ export class ManifestEditorHeaderComponent implements OnInit {
   }
 
   updateItem(event) {
-    console.log('event')
     this.outPutSave.emit('false')
   }
 
   updateItemExit(event) {
-    console.log('event 2')
     this.outPutSave.emit('true')
   }
 
-  deleteItem(event) {
+  validateDelete() {
+    //rules for allowing manifest to be deleted.
+  }
 
+  deleteItem(event) {
     const site  = this.sitesService.getAssignedSite();
+
+    const result = window.confirm('Are you sure you want to delete this manifest?')
+    if (!result) { return };
 
     if (!site && this.manifestID == 0 ) { return }
     this.manifestService.delete(site, this.manifestID).subscribe(data => {
@@ -97,12 +104,14 @@ export class ManifestEditorHeaderComponent implements OnInit {
   }
 
   // (outputeupdateItem)     ="updateItem($event)"
-  // (outputupdateItemExit)  ="updateItemExit($event)"
+  // (outputupdateItemExit)E  ="updateItemExit($event)"
   // (outputupdatedeleteItem)="deleteItem($event)"
   // (outputupdateonCancel)  ="onCancel($event)"
 
   dispatchSendToSite(){
-
+    //getManifestWithProducts(id);
+    //ReceiveTransfer
+    this.outPutDispatchManifest.emit(true)
   }
 
   cancelRequestDispatchSendToSite(){

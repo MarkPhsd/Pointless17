@@ -4,7 +4,6 @@
   </mat-card-title>
   <mat-card-subtitle>
 
-
     <div *ngIf="errorMessage">
       <mat-icon>alert</mat-icon>  {{errorMessage}}
     </div>
@@ -22,7 +21,6 @@
 
   <mat-card-content>
     <mat-tab-group  mat-align-tabs="start"
-
                     [(selectedIndex)]="selectedIndex"
                     (selectedIndexChange)="selectChange()">
 

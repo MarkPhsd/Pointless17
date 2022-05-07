@@ -31,7 +31,7 @@ export class ManifestTypesService {
 
       const site = this.siteService.getAssignedSite()
 
-      const controller =  `/ManifestType/`
+      const controller =  `/ManifestTypes/`
 
       const endPoint = `GetManifestTypes`
 
@@ -47,7 +47,7 @@ export class ManifestTypesService {
 
     const site = this.siteService.getAssignedSite()
 
-    const controller =  `/ManifestType/`
+    const controller =  `/ManifestTypes/`
 
     const endPoint = `GetManifestType`
 
@@ -63,7 +63,7 @@ export class ManifestTypesService {
 
     const site = this.siteService.getAssignedSite()
 
-    const controller =  `/ManifestType/`
+    const controller =  `/ManifestTypes/`
 
     const endPoint = `PostManifestType`
 
@@ -79,7 +79,7 @@ export class ManifestTypesService {
 
     const site = this.siteService.getAssignedSite()
 
-    const controller =  `/ManifestType/`
+    const controller =  `/ManifestTypes/`
 
     const endPoint = `PutManifestType`
 
@@ -95,7 +95,7 @@ export class ManifestTypesService {
 
     const site = this.siteService.getAssignedSite()
 
-    const controller =  `/ManifestType/`
+    const controller =  `/ManifestTypes/`
 
     const endPoint = `DeleteManifestType`
 

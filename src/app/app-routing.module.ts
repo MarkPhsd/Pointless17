@@ -112,6 +112,8 @@ import { UITransactionsComponent } from './modules/admin/settings/software/UISet
 import { StripeSettingsComponent } from './modules/admin/settings/stripe-settings/stripe-settings.component';
 import { PreloadAllModules } from '@angular/router';
 import { ManifestsComponent } from './modules/admin/inventory/manifests/manifests.component';
+import { ManifestStatusComponent } from './modules/admin/inventory/manifest-status/manifest-status.component';
+import { ManifestTypeComponent } from './modules/admin/inventory/manifest-type/manifest-type.component';
 
 const routes: Routes = [
     // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -218,6 +220,8 @@ const routes: Routes = [
         { path: 'manifests', component: ManifestsComponent, canActivate: [AuthGuard], data: {  title: 'Manifests',  animation: 'isLeft'} },
         { path: 'inventory-list', component: InventoryListComponent, canActivate: [AuthGuard], data: {  title: 'Inventory',  animation: 'isLeft'} },
         { path: 'inventory-locations', component: InventoryLocationsComponent,  canActivate: [AuthGuard], data: { title: 'Inventory Locations', animation: 'isLeft'}},
+        { path: 'manifest-status', component: ManifestStatusComponent,  canActivate: [AuthGuard], data: { title: 'Manifest Status List', animation: 'isLeft'}},
+        { path: 'manifest-types', component: ManifestTypeComponent,  canActivate: [AuthGuard], data: { title: 'Manifest Type List', animation: 'isLeft'}},
 
         //profile look up editing
         { path: 'profileEditor', component: ProfileEditorComponent, canActivate: [AuthGuard], data: { title: 'Profile',  animation: 'isLeft'}},

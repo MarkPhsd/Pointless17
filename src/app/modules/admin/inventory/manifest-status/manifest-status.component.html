@@ -1,65 +1,45 @@
-<h2>Inventory Locations</h2>
+<div class="header">
+  <div>
+    <h2>Manifest Status</h2>
+  </div>
+  <div>
+    <span><button mat-button
+        (click)="refreshSearch()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </span>
+  </div>
 
-<div *ngIf="dataSource">
-  <div  class="table-container">
-    <div class="table-container mat-elevation-z2">
+</div>
 
-      <div *ngIf="dataSource">
-
-        <table mat-table #outerSort="matSort" [dataSource]="dataSource"
-               multiTemplateDataRows matSort>
-
-          <ng-container matColumnDef="id">
-              <th mat-header-cell *matHeaderCellDef> ID </th>
-              <td mat-cell *matCellDef="let element"> {{element.id}} </td>
-          </ng-container>
-          <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef> Name </th>
-              <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-          </ng-container>
-
-          <ng-container matColumnDef="activeLocation">
-            <th mat-header-cell *matHeaderCellDef> Active </th>
-            <td mat-cell *matCellDef="let element"> {{element.activeLocation}} </td>
-          </ng-container>
-
-
-          <ng-container matColumnDef="edit">
-              <th mat-header-cell *matHeaderCellDef> Edit </th>
-              <td mat-cell *matCellDef="let element">
-              <button mat-raised-button color="primary" (click)="editItem(element.id)">Edit</button>
-              </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="columnsToDisplay; sticky: true"></tr>
-          <tr mat-row *matRowDef="let row; columns: columnsToDisplay;"></tr>
-
-        </table>
-      </div>
-
-      <ng-template #loading >
-          <mat-spinner></mat-spinner>
-      </ng-template>
-
-
-      <mat-paginator  #paginator
-                      [pageSize]="pageSize"
-                      [length]="length"
-                      [pageSizeOptions]="pageSizeOptions"
-                    ></mat-paginator>
-    </div>
+<div class="grid-list">
+  <div *ngIf="gridOptions">
+    <ag-grid-angular
+        #agGrid
+        style                ="width: 100%; height: 100%;"
+        id                   ="myGrid"
+        [class]              ="agtheme"
+        [columnDefs]         ="columnDefs"
+        [defaultColDef]      ="defaultColDef"
+        [gridOptions]        ="gridOptions"
+        [rowSelection]       ="rowSelection"
+        [frameworkComponents]="frameworkComponents"
+        (selectionChanged)   ="onSelectionChanged($event)"
+        (gridReady)          ="onGridReady($event)">
+    </ag-grid-angular>
   </div>
 </div>
 
-<form [formGroup]="locationForm" >
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>
 
-  <div fxLayout="row" fxLayoutAlign="space-around center" >
-
-    <div  fxLayout="column">
-
-        <div  fxLayout="row">
+<div [formGroup]="inputForm" >
+    <div fxLayout="row" fxLayoutAlign="space-around center" >
+      <div  fxLayout="column">
+          <div  fxLayout="row">
           <div  fxLayout="column">
-            <h2>Edit Add</h2>
+          <h2>Edit Add</h2>
             <div>
               <mat-form-field appearance="outline">
                 <mat-label >Name</mat-label>
@@ -69,23 +49,27 @@
                       class="form-control" >
               </mat-form-field>
             </div>
-
-            <div>
-              <mat-checkbox
-                            formControlName="activeLocation">
-                  Active Inventory</mat-checkbox>
-            </div>
-
-          </div>
+          <div>
+          <mat-form-field appearance="outline">
+            <mat-label >Icon</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="icon"
+                  class="form-control" >
+          </mat-form-field>
         </div>
-        <mat-divider></mat-divider>
-        <div  fxLayout="row"  fxLayoutAlign="space-around center" >
-            <button mat-raised-button class="form-button" color="primary" (click)="update()">Add / Edit</button>
-            <button mat-raised-button class="form-button" color="primary" (click)="delete()">Delete</button>
-        </div>
-
+      </div>
     </div>
-
+      <mat-divider></mat-divider>
+      <div  fxLayout="row"  fxLayoutAlign="space-around center" >
+        <button mat-raised-button class="form-button"
+              color="primary"
+              (click)="update()">Add / Edit</button>
+        <button mat-raised-button
+              class="form-button"
+              color="primary"
+              (click)="delete()">Delete</button>
+      </div>
+    </div>
   </div>
-
-</form>
+</div>

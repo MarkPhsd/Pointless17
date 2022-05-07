@@ -27,23 +27,23 @@
   display: grid;
   grid-template-columns: 1fr 20vw;
   gap: 7px;
+  height: 500px;
+  // @media (max-width: 599px)  {
+  //   height: 70vh;
+  // }
+  // @media (min-width: 600px)   {
+  //   height: 75vh;
+  // }
+  // @media (min-width: 900px) {
+  //   height: 75vh;
+  // }
+  // @media (min-width: 1200px)  {
+  //   height: 83vh;
+  // }
 
-  @media (max-width: 599px)  {
-    height: 70vh;
-  }
-  @media (min-width: 600px)   {
-    height: 75vh;
-  }
-  @media (min-width: 900px) {
-    height: 75vh;
-  }
-  @media (min-width: 1200px)  {
-    height: 83vh;
-  }
-
-  @media (min-width: 1800px)  {
-    height: 83vh;
-  }
+  // @media (min-width: 1800px)  {
+  //   height: 83vh;
+  // }
 
 }
 

@@ -17,7 +17,7 @@
         <div > Age </div>
         <div> {{order?.clients_POSOrders?.age}} | DOB ({{order?.clients_POSOrders?.dob | date : 'shortDate' }}) </div>
       </div>
-  
+
       <div>
         <div *ngIf="!disableActions && canRemoveClient" >
           <button mat-button
@@ -25,7 +25,7 @@
               <mat-icon>clear</mat-icon>Clear
           </button>
         </div>
-     
+
         <div *ngIf="!disableActions && order.clientID !=0">
           <button mat-button
                   (click)="openClient()">
@@ -45,7 +45,7 @@
         (itemSelect)="assignCustomer($event)">
       </app-client-search-selector>
     </div>
-    
+
     <div class="new-button float-left" >
       <button mat-button
               (click)="gotoAddClient()">
@@ -54,7 +54,7 @@
     </div>
   </div>
 
-  <div class="grid-demo">
+  <div class="grid-demo" *ngIf="transactionSettings?.showOrderName">
     <div>
       <app-value-fields
         [inputForm]="orderNameForm"

@@ -144,22 +144,28 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
+    console.log(show)
     if (show === 'false') {
       this.hidePanel = true
       this.gridcontainer = 'grid-container-full'
+      localStorage.setItem('OrderFilterPanelVisible', 'true')
       return
     }
+
     this.hidePanel = false
     this.gridcontainer = 'grid-container'
+    localStorage.setItem('OrderFilterPanelVisible', 'false')
   }
 
   hideFilterPanel(event) {
     this.hidePanel = event
     console.log(this.hidePanel, event)
     if (event) {
+      this.gridcontainer = 'grid-container-full'
       localStorage.setItem('OrderFilterPanelVisible', 'true')
     }
     if (!event) {
+      this.gridcontainer = 'grid-container'
       localStorage.setItem('OrderFilterPanelVisible', 'false')
     }
     this.displayPanel(event)

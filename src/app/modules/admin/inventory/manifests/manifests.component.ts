@@ -215,17 +215,17 @@ export class ManifestsComponent implements OnInit {
     this.columnDefs.push(button)
 
     let item =  {headerName: 'Name',  sortable: true, field: 'name',
-                width   : 175,
-                minWidth: 175,
-                maxWidth: 275,
+                width   : 150,
+                minWidth: 150,
+                maxWidth: 150,
                 flex    : 2,} as any;
     this.columnDefs.push(item)
 
     item =  {headerName: 'Scheduled', field: 'scheduleDate', sortable: true,
               cellRenderer: this.dateCellRenderer,
-              width   : 175,
-              minWidth: 175,
-              maxWidth: 275,
+              width   : 150,
+              minWidth: 150,
+              maxWidth: 150,
               flex    : 1,
               } as any;
     this.columnDefs.push(item)
@@ -234,18 +234,41 @@ export class ManifestsComponent implements OnInit {
               cellRenderer: this.dateCellRenderer,
               width   : 150,
               minWidth: 150,
-              maxWidth: 275,
+              maxWidth: 150,
               flex    : 1,
                }
     this.columnDefs.push(item)
 
     item =  {headerName: 'Accepted', field: 'acceptedDate', sortable: true,
               cellRenderer: this.dateCellRenderer,
-              width   : 150,
-              minWidth: 150,
-              maxWidth: 275,
+              width   : 125,
+              minWidth: 125,
+              maxWidth: 125,
               flex    : 1,
           }
+
+
+    this.columnDefs.push(item)
+
+    item =   {
+      headerName: "active",
+      width:    100,
+      minWidth: 100,
+      maxWidth: 100,
+      flex: 1,
+      field: "active",
+      cellRenderer: function(params) {
+          var input = document.createElement('input');
+          input.type="checkbox";
+          input.checked=params.value;
+          input.disabled = true;
+          input.addEventListener('click', function (event) {
+              params.value=!params.value;
+              params.node.data.fieldName = params.value;
+          });
+          return input;
+    }}
+
     this.columnDefs.push(item)
 
     this.rowSelection = 'single';
@@ -529,6 +552,7 @@ export class ManifestsComponent implements OnInit {
 
     if (!params.value || params.value == undefined || params.value === '') { return ''}
     const dateValue = params.value;
+    // console.log('date pipe', this.datePipe.transform(dateValue, 'MM/dd/yyyy'))
     console.log(dateValue);
     try {
       return this.datePipe.transform(dateValue, 'MM/dd/yyyy')

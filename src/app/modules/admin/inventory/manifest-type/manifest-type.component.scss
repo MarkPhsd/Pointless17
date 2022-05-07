@@ -1,96 +1,126 @@
-table {
-    width: 100%;
-  }
 
-  .form-button {
-    margin: 2px;
-  }
+.header {
+  display: flex;
+  flex-direction: row;
+ }
+ .grid-list-container {
+   display: grid;
+   grid-template-columns: 1fr 200px;
+   gap: 7px;
+   // overflow: hidden;
+   height: 50vh;
 
-  .table-container {
-    width: 100%;
-    height: 35vh;
-    overflow: auto !important;
-  }
+ }
 
-  tr.example-detail-row {
-    height: 0;
-  }
+ .grid-list-item {
+   height: 95%;
+   overflow: hidden;
+ }
 
-  tr.example-element-row:not(.example-expanded-row):hover {
-    background: #777;
-  }
+ .grid-container {
+   display: flex;
+   flex-wrap: wrap;
+   margin: 0;
 
-  tr.example-element-row:not(.example-expanded-row):active {
-    background: #efefef;
-  }
+   padding: 0;
+ }
 
-  .example-element-row td {
-    border-bottom-width: 0;
-  }
+ .grid-list {
 
-  .example-element-detail {
-    overflow: hidden;
-    display: flex;
-  }
+   display: grid;
+   grid-template-columns: 1fr 20vw;
+   gap: 7px;
 
-  button {
-    margin: 5px 5px 5px 5px;
-    float: left;
-  }
+   @media (max-width: 599px)  {
+     height: 50vh;
+   }
+   @media (min-width: 600px)   {
+     height: 50vh;
+   }
+   @media (min-width: 900px) {
+     height: 50vh;
+   }
+   @media (min-width: 1200px)  {
+     height: 50vh;
+   }
 
-  mat-form-field {
-    margin: 2px 2px 2px 2px;
-    appearance: outline;
-    font-size: .8em;
-  }
+   @media (min-width: 1800px)  {
+     height: 50vh;
+   }
 
-  app-widget-uploader {
-    margin: 10px 2px 2px 2px;
-  }
+ }
 
-  .example-element-diagram {
-    min-width: 80px;
-    border: 2px solid black;
-    padding: 8px;
-    font-weight: lighter;
-    margin: 8px 0;
-    height: 104px;
-  }
+ .mat-card {
+   margin-bottom: 5px;
+ }
 
-  .example-element-symbol {
-    font-weight: bold;
-    font-size: 40px;
-    line-height: normal;
-  }
+ .form-fields {
+   margin: 0;
+   padding: 0;
+ }
 
-  app-widget-uploader {
-    width: 25vw;
-    float: left;
-  }
+ table
+ {
+   width: 100%;
+ }
 
-  .example-element-description {
-    padding: 16px;
-  }
+ .agGridButton {
+   font-size: 1em;
+   padding: -1px 1px;
+   margin: -1px 1px;
+   line-height: 1.2
+ }
 
-  .example-element-description-attribution {
-    opacity: 0.5;
-  }
+ button {
+   padding: 3px 3px 3px 3px;
+   margin: 3px 3px 3px 3px;
+   // height: 38px;
+ }
 
-  .inner-table {
-    width: 100%;
-  }
+ .header-items {
+   float: left;
+ }
 
-  .inner-table mat-form-field {
-    margin-top: 15px;
-    width: 100%;
-  }
+ ::ng-deep .mat-form-field .mat-form-field-wrapper {
+   font-size: .8em;
+   padding: -3px -3px;
+   margin: 4px 4px 4px 4px;
+ }
+
+ .form-controls {
+   font-size: .8em;
+ }
+
+ mat-form-field {
+   font-size: .9em;
+   margin: 3px 3px 3px 3px;
+ }
+
+ .view-items {
+   float: left;
+   margin-top: 13px;
+ }
+ .view-button {
+   // float: right;
+   margin-top: 9px;
+ }
+
+ .grid-nav {
+   display: grid;
+   grid-template-columns: 150px 1fr;
+   gap: 5px;
+ }
+
+ .mini-nav {
+   display: grid;
+   grid-template-columns: 1fr 1fr 1fr;
+   gap: 3px;
+ }
 
 
-  tr.mat-footer-row {
-    font-weight: bold;
-  }
-
-  .mat-table-sticky {
-    border-top: 1px solid #e0e0e0;
-  }
+ mat-form-field {
+   margin: 2px 2px 2px 2px;
+   appearance: outline;
+   font-size: .8em;
+ }
 

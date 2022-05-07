@@ -1,41 +1,39 @@
-
-
-  <div [formGroup]="inputForm"
-       *ngIf="inputForm"
-       class="grid-container">
+<div [formGroup]="inputForm"
+      *ngIf="inputForm"
+      class="grid-container">
 
     <mat-form-field
-      [class]="class"
-      appearance="outline">
+        [class]="class"
+        appearance="outline">
 
-      <mat-label> <ng-content></ng-content>   </mat-label>
-      <mat-select
-            type="number"
-            [formControlName] ="fieldName"
-            (selectionChange)="setItemOutPut($event.value)"
-        >
-        <mat-option value="" *ngIf="!hideClear">
-           Clear
-        </mat-option>
+        <mat-label> <ng-content></ng-content> </mat-label>
 
-        <span *ngIf="!list">
-          <div *ngIf="(list$ | async) as list" >
-            <mat-option
-                *ngFor="let item of list"
-                  [value]="item">
-                {{item.name}}
-            </mat-option>
-          </div>
-        </span>
-
-        <span *ngIf="list" >
-          <mat-option
-              *ngFor="let item of list"
-                [value]="item">
-              {{item.name}}
+        <mat-select
+              type="number"
+              [formControlName] ="fieldName"
+              (selectionChange)="setItemOutPut($event.value)" >
+          <mat-option value="" *ngIf="!hideClear">
+            Clear
           </mat-option>
-        </span>
-      </mat-select>
+
+          <span *ngIf="!list">
+            <div *ngIf="(list$ | async) as list" >
+              <mat-option
+                    *ngFor="let item of list"
+                    [value]="item">
+                {{item.name}}
+              </mat-option>
+            </div>
+          </span>
+
+          <span *ngIf="list">
+            <mat-option
+                  *ngFor="let item of list"
+                  [value]="item">
+              {{item.name}}
+            </mat-option>
+          </span>
+        </mat-select>
     </mat-form-field>
 
   </div>

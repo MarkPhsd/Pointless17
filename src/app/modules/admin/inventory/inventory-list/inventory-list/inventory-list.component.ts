@@ -730,7 +730,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   validateSiteSelectedForManifest(): boolean {
-    if (this.selectedSiteID == 0) {
+    if (this.selectedSiteID == 0 || this.selectedSiteID == undefined)  {
       this.notifyEvent('Please selecte a site.', 'Alert')
       return false
     }
@@ -740,9 +740,11 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   validateItemsSelectedForManifest(): boolean {
     const items = this.gridAPI.getSelectedRows();
     let result = true
-    items.forEach( item => {
+    items.forEach( inv => {
+      const item = inv  as IInventoryAssignment;
       if (item) {
-        if (item.manifestID != 0) {
+        console.log(item?.manifestID, item.manifestID)
+        if (item.manifestID != null && item.manifestID != 0) {
           this.notifyEvent('You have selected items already assigned to a manifest. Please reselect items.', 'Alert')
           result = false
         }
@@ -777,8 +779,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   }
 
-
-
   addItemsToManifest() {
 
     if (!this.validateSiteSelectedForManifest())  { return }
@@ -807,10 +807,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       const site = this.siteService.getAssignedSite()
       this.siteService.getSite(site.id).pipe(
         switchMap(site => {
-
            this.manifestService.updateSelectedManifestSite(site)
            return   this.manifestService.add(site, manifest)
-
           }
         )).subscribe(data => {
           console.log(data)
@@ -818,8 +816,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
           this.openManifestEditor(data)
       })
     })
-
-
   }
 
   addToNewManifest() {
@@ -851,8 +847,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
     this.siteService.getSite(this.selectedSiteID).pipe(
       switchMap(site => {
+        manifest.sourceSiteID = site.id;
+        manifest.sourceSiteName = site.name;
+        manifest.sourceSiteURL = site.url;
         return   this.manifestService.add(site, manifest)
-        this.manifestService.updateSelectedManifestSite(site)
         }
       )).subscribe(data => {
         this.manifestService.updateCurrentInventoryManifest(data)

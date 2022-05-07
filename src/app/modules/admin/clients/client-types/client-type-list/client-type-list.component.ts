@@ -256,7 +256,7 @@ ngAfterViewInit() {
   refreshSearch(): Observable<clientType[]> {
     this.currentPage         = 1
     const site               = this.siteService.getAssignedSite()
-    const searchModel = this.initSearchModel();
+    const searchModel        = this.initSearchModel();
     this.params.startRow     = 1;
     this.params.endRow       = this.pageSize;
     this.onGridReady(this.params)

@@ -158,7 +158,9 @@ export class MenusService {
       submenus: [
         { name: 'Manifest',  minimized: false, method: '' , routerLink: '/manifests',      routerLinkActive: 'manifests',      icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Inventory',  minimized: false, method: '' , routerLink: '/inventory-list',      routerLinkActive: 'inventory-list',      icon: 'list', onClick: '', id: 0, sortOrder: 1, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Locations',  minimized: true, method: '' , routerLink: '/inventory-locations', routerLinkActive: 'inventory-locations', icon: 'location', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Locations List',  minimized: true, method: '' , routerLink: '/inventory-locations', routerLinkActive: 'inventory-locations', icon: 'location', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Manifest Status List',  minimized: true, method: '' , routerLink: '/manifest-status', routerLinkActive: 'manifest-status', icon: 'location', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Manifest Types List',  minimized: true, method: '' , routerLink: '/manifest-types', routerLinkActive: 'manifest-types', icon: 'location', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {
