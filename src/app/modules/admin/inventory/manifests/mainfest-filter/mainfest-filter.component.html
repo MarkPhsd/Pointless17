@@ -1,3 +1,116 @@
-<mat-card>
+<mat-card >
+  <mat-card-content>
+    <div class="button-grid">
 
+      <div>
+        <button class="button"
+                mat-button
+                (click)="resetSearch()">
+                <mat-icon>refresh</mat-icon>
+          <span>Reset</span>
+        </button>
+      </div>
+
+      <div >
+        <button class="button"
+                mat-button
+                (click)="refreshSearch()">
+                <mat-icon>refresh</mat-icon>
+          <span>Refresh</span>
+        </button>
+      </div>
+
+      <div *ngIf="isAuthorized">
+        <mat-date-range
+            [inputForm]      ="scheduleDateForm"
+            (outputDateRange)="emitDatePickerData($event, 'schedule')">
+            Schedule Date
+        </mat-date-range>
+      </div>
+
+      <div *ngIf="isAuthorized">
+        <mat-date-range
+            [inputForm]      ="acceptedDateForm"
+            (outputDateRange)="emitDatePickerData($event, 'accepted')">
+            Schedule Date
+        </mat-date-range>
+      </div>
+
+
+      <div *ngIf="isAuthorized">
+        <mat-date-range
+            [inputForm]      ="sendDateForm"
+            (outputDateRange)="emitDatePickerData($event, 'send')">
+            Schedule Date
+        </mat-date-range>
+      </div>
+
+      <div></div>
+
+      <div>
+        <mat-slide-toggle
+            [(ngModel)] = "active">
+          <mat-label class="mat-label">Active</mat-label>
+        </mat-slide-toggle>
+      </div>
+
+    </div>
+  </mat-card-content>
 </mat-card>
+
+<ng-template #loading >
+  <mat-spinner></mat-spinner>
+</ng-template>
+
+
+    <!-- <mat-button-toggle-group
+          *ngIf       ="searchModel"
+          name        ="toggleOpenClosedAll"
+          class       ="toggle-view"
+          [(ngModel)] ="toggleOpenClosedAll"
+          (change)    ="refreshSearch()"
+      >
+      <mat-button-toggle value="1" >Open </mat-button-toggle>
+      <mat-button-toggle value="2">Closed</mat-button-toggle>
+      <mat-button-toggle value="0">All</mat-button-toggle>
+    </mat-button-toggle-group> -->
+<!--
+    <mat-button-toggle-group
+          *ngIf="isStaff"
+          name        = "toggleTypeEmployee"
+          class       ="toggle-view"
+          [(ngModel)] ="toggleTypeEmployee"
+          (change)    ="changeToggleTypeEmployee()" >
+      <mat-button-toggle value="1"
+                        matTooltip="User filter."
+                        matTooltipPosition="above"
+                        matTooltipHideDelay="1000" > <mat-icon>badge</mat-icon> </mat-button-toggle>
+      <mat-button-toggle value="0"
+                        matTooltip="Transaction filter."
+                        matTooltipPosition="above"
+                        matTooltipHideDelay="1000">
+          <mat-icon>receipt</mat-icon> </mat-button-toggle>
+    </mat-button-toggle-group> -->
+
+
+    <!-- <div *ngIf="isStaff" [hidden]="toggleTypeEmployee  === '0' && searchModel"
+          class="toggle-selector">
+      <app-mat-toggle-selector
+              [id]      ="searchModel.employeeID"
+              [list$]   ="employees$"
+              (outPutID)="setEmployee($event)">
+              Employee
+      </app-mat-toggle-selector>
+    </div>
+
+    <div *ngIf="isStaff"
+          [hidden]="toggleTypeEmployee === '1' && searchModel"
+          class="toggle-selector">
+      <app-mat-toggle-selector
+            *ngIf     ="searchModel"
+            [id]      ="searchModel.serviceTypeID"
+            [list$]   ="serviceTypes$"
+            (outPutID)="setServiceType($event)">
+            Sale Type
+      </app-mat-toggle-selector>
+    </div> -->

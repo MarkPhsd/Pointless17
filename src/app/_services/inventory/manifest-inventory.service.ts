@@ -58,12 +58,18 @@ export interface InventoryManifest {
 export interface ManifestSearchModel {
   scheduleDate_From:  string;
   scheduleDate_To:    string;
+  created_From:       string;
+  created_To:         string;
+  accepted_From:      string;
+  accepted_To:        string;
+
+  send_From:          string;
+  send_To:            string;
+
   status:             string;
   active:             boolean;
   type:               string;
   name:               string;
-  created_From:       string;
-  created_To:         string;
   carrierName:        string;
   sourceSiteID:       number;
   desinationID:       number;
@@ -116,15 +122,24 @@ export class ManifestInventoryService {
 
   public inventoryItems: IInventoryAssignment[];
 
-  private _inventoryItems = new BehaviorSubject<IInventoryAssignment[]>(null);
-  public  inventoryItems$  = this._inventoryItems.asObservable()
+  private _inventoryItems    = new BehaviorSubject<IInventoryAssignment[]>(null);
+  public  inventoryItems$    = this._inventoryItems.asObservable()
 
-  private _inventoryManifest = new BehaviorSubject<InventoryManifest>(null);
-  public currentInventoryManifest$  = this._inventoryManifest.asObservable()
+  private _inventoryManifest = new BehaviorSubject<InventoryManifest>(null)
+  public  currentInventoryManifest$  = this._inventoryManifest.asObservable()
   private currentInventoryManifest: InventoryManifest;
 
   private _currentManifestSite = new BehaviorSubject<ISite>(null);
   public currentManifestSite$  = this._currentManifestSite.asObservable()
+
+  private _manifestStatus      = new BehaviorSubject<ManifestStatus>(null);
+  public manifestStatus$       = this._manifestStatus.asObservable()
+
+  private _manifestTypes       = new BehaviorSubject<ManifestType>(null);
+  public manifestTypes$        = this._manifestTypes.asObservable()
+
+  private _searchModel       = new BehaviorSubject<ManifestSearchModel>(null);
+  public searchModel$        = this._searchModel.asObservable()
 
   constructor(
       private http       : HttpClient,
@@ -154,6 +169,10 @@ export class ManifestInventoryService {
   updateCurrentInventoryManifest(inventoryManifest: InventoryManifest){
     this._inventoryManifest.next(inventoryManifest)
     this.currentInventoryManifest = inventoryManifest;
+  }
+
+  updateSearchModel(item: ManifestSearchModel) {
+    this._searchModel.next(item)
   }
 
   updateInventoryItems(items: IInventoryAssignment[]) {

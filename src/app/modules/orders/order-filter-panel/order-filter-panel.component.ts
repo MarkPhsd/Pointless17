@@ -18,15 +18,14 @@ import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/o
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
-import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
-import { PrinterLocations } from 'src/app/_services/menu/item-type.service';
+import { IPrinterLocation } from 'src/app/_services/menu/printer-locations.service';
 
 const { Keyboard } = Plugins;
 
 @Component({
-selector: 'app-order-filter-panel',
-templateUrl: './order-filter-panel.component.html',
-styleUrls: ['./order-filter-panel.component.scss']
+  selector: 'app-order-filter-panel',
+  templateUrl: './order-filter-panel.component.html',
+  styleUrls: ['./order-filter-panel.component.scss']
 })
 export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewInit {
 
@@ -211,6 +210,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   exitBottomSheet() {
     this._bottomSheet.dismiss()
   }
+
   ngAfterViewInit() {
     this.initSearchOption();
   }
@@ -296,14 +296,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
       this.searchModel = search;
     }
 
-    if (search.suspendedOrder) { 
+    if (search.suspendedOrder) {
       this.toggleSuspendedOrders       =  search.suspendedOrder.toString()      //= parseInt(this.toggleSuspendedOrders)
     }
     if (search.greaterThanZero) {
       this.toggleOrdersGreaterThanZero =  search.greaterThanZero.toString()
     }      //= parseInt(this.toggleOrdersGreaterThanZero)
     if (search.closedOpenAllOrders) {
-      this.toggleOpenClosedAll         =  search.closedOpenAllOrders.toString() 
+      this.toggleOpenClosedAll         =  search.closedOpenAllOrders.toString()
     }//= parseInt(this.toggleOpenClosedAll)
   }
 
@@ -326,8 +326,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
 
   refreshSearch() {
     if (! this.searchModel) {  this.searchModel = {} as IPOSOrderSearchModel
-    this.searchModel.serviceTypeID = 0
-    this.searchModel.employeeID    = 0
+      this.searchModel.serviceTypeID = 0
+      this.searchModel.employeeID    = 0
     }
 
     const search               = this.searchModel;
@@ -361,7 +361,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
   }
 
   setServiceType(event) {
-    if (!event) { return}
+    if (!event) { return }
     this.searchModel.serviceTypeID = event.id
     this.refreshSearch()
   }

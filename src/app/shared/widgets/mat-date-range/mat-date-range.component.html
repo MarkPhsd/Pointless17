@@ -1,31 +1,35 @@
-<button mat-button (click)="emitDatePickerData()"><mat-icon>refresh</mat-icon></button>
+<div class="container">
 
-<mat-form-field
-      class="dates-field"
-      appearance="outline"
-      *ngIf="inputForm">
+  <button mat-button (click)="emitDatePickerData()"><mat-icon>refresh</mat-icon></button>
 
-  <mat-label>Date Range (Start Time)</mat-label>
+  <mat-form-field
+    class="dates-field"
+    appearance="outline"
+    *ngIf="inputForm">
 
-  <mat-date-range-input [formGroup]   ="inputForm"
-                        [rangePicker] ="reportRangePicker"
-                        >
-    <input matStartDate
-            formControlName="start"
-            placeholder    ="Start date"
-            (click)        = "emitDatePickerData()">
-    <input matEndDate
-            formControlName="end"
-            placeholder    ="End date"
-            (click)        = "emitDatePickerData()">
+    <mat-label><ng-content></ng-content></mat-label>
 
-  </mat-date-range-input>
+      <mat-date-range-input [formGroup]   ="inputForm"
+                            [rangePicker] ="reportRangePicker"
+                            >
+        <input matStartDate
+                formControlName="start"
+                placeholder    ="Start date"
+                (click)        = "emitDatePickerData()">
+        <input matEndDate
+                formControlName="end"
+                placeholder    ="End date"
+                (click)        = "emitDatePickerData()">
 
-  <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
-                          ></mat-datepicker-toggle>
-  <mat-date-range-picker touchUi #reportRangePicker
-                          ></mat-date-range-picker>
+      </mat-date-range-input>
 
-  <mat-error *ngIf="inputForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-  <mat-error *ngIf="inputForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-</mat-form-field>
+      <mat-datepicker-toggle matSuffix [for]="reportRangePicker"
+                              ></mat-datepicker-toggle>
+      <mat-date-range-picker touchUi #reportRangePicker
+                              ></mat-date-range-picker>
+
+                              <mat-error *ngIf="inputForm.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+                              <mat-error *ngIf="inputForm.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+  </mat-form-field>
+
+</div>

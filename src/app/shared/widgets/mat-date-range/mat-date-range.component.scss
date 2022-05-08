@@ -4,3 +4,10 @@
   margin-left : 0px;
   margin-top: 5p;
 }
+
+.container {
+  display: grid;
+  grid-template-columns: 50px 150px;
+  width: 210px;
+  gap: 5px;
+}
