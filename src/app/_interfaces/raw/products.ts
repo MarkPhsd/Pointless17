@@ -195,5 +195,10 @@ export interface IProduct {
   active                      : boolean;
   glutenFree                  : boolean;
   icon                        : string;
+
+  childProof  : string;
+  terpenes    : string;
+  mGCBD       : number;
+  mGTCH       : number;
 }
 

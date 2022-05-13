@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
+import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import { SitesService } from '../reporting/sites.service';
 import { ItemWithAction } from './posorder-item-service.service';
 import { AuthenticationService } from '../system/authentication.service';
+import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
 
 export interface POSOrdersPaged {
   paging : IPagedList
@@ -177,7 +178,45 @@ export class OrdersService {
     }
   }
 
-  get posName(): string { return localStorage.getItem("POSName") }
+  get posName(): string { return localStorage.getItem("POSName") };
+
+  applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  { 
+    const controller = "/POSOrders/"
+
+    const endPoint  = "applyItemsToGroup"
+
+    const parameters = `?groupID=${groupID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, selectedItems);
+  }
+
+  getPOSOrderGroupTotal(site: ISite, id: number, groupID: number) :  Observable<IPOSOrder>  { 
+    const controller = "/POSOrders/"
+
+    const endPoint  = "getPOSOrderGroupTotal"
+
+    const parameters = `?id=${id}&groupID=${groupID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<any>(url);
+  }
+
+
+  getSplitItemsList(site: ISite, orderID: number, groupID: number) :  Observable<IListBoxItem[]>  { 
+    const controller = "/POSOrders/"
+
+    const endPoint  = "GetSplitItemsList"
+
+    const parameters = `?orderID=${orderID}&groupID=${groupID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IListBoxItem[]>(url);
+  }
+
 
   getTodaysOpenOrders(site: ISite):  Observable<IPOSOrder[]> {
     const controller = "/POSOrders/"

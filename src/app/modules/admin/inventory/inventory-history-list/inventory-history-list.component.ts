@@ -256,8 +256,8 @@ export class InventoryHistoryListComponent implements OnInit {
 
   }
 
+  ///move to inventoryAssignemtnService
   openInventoryDialog(id: number) {
-
     const dialogRef = this.dialog.open(NewInventoryItemComponent,
       { width:        '800px',
         minWidth:     '800px',

@@ -53,9 +53,11 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges {
     const items = order.posOrderItems;
 
     const scheduleAry = []
-    items.forEach(data => {
-      scheduleAry.push(data.scheduleID)
-    })
+    if (items) { 
+      items.forEach(data => {
+        scheduleAry.push(data.scheduleID)
+      })
+    }
     if (!scheduleAry) { return }
 
     const schedules = [... new Set(scheduleAry)]

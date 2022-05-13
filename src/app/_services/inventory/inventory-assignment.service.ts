@@ -73,13 +73,13 @@ export interface IInventoryAssignment {
   invoiceCode:           string;
   thcContent:            number;
   productionBatchNumber: string;
-
   sourceSiteID        : number;
   sourceSiteURL       : string;
   sourceSiteName      : string;
   destinationSiteID   : number;
   destinationSiteURL  : string;
   destinationSiteName : string;
+  rejected:             string;
 
   product             : IProduct;
   serials:              Serial[];
@@ -114,6 +114,7 @@ export interface InventoryFilter {
   requiresAttention:    boolean;
   inventoryStatus:      number;
   manifestID        :   number;
+  manifestAssigned    : number;
 }
 
 export interface InventoryStatusList {
@@ -125,13 +126,18 @@ export interface InventoryStatusList {
 })
 
 export class InventoryAssignmentService {
-
   inventoryStatusList  = [
     {id: 1, name: 'In Stock - For Sale'},
     {id: 2, name: 'In Stock - Not for Sale'},
     {id: 3, name: 'Sold Out'},
     {id: 0, name:  'All'}
  ] as InventoryStatusList[]
+
+ inventoryActiveList  = [
+  {id: 1, name: 'Active'},
+  {id: 2, name: 'All'},
+  {id: 0, name: 'Inactive'}
+] as InventoryStatusList[]
 
   private _avalibleInventoryResults = new BehaviorSubject<AvalibleInventoryResults>(null);
   public avalibleInventoryResults$  = this._avalibleInventoryResults.asObservable()
@@ -143,6 +149,20 @@ export class InventoryAssignmentService {
     private fb  : FormBuilder,
     private siteService: SitesService)
   {
+  }
+
+
+  rejectItemsInManifest(site: ISite, id: number, items: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `rejectItemsInManifest`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IInventoryAssignment[]>(url)
   }
 
   updateAvalibleInventoryResults(results) {
@@ -183,45 +203,45 @@ export class InventoryAssignmentService {
     }
   }
 
- getInventoryAssignment(site: ISite, id: number): Observable<IInventoryAssignment> {
-
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `GetInventoryAssignment`
-
-  const parameters = `?id=${id}`
-
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.get<IInventoryAssignment>(url)
-
- }
-
- getInventoryAssignmentHistory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
-
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `getInventoryHistoryList`
-
-  const parameters = `?id=${id}`
-
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.get<IInventoryAssignment[]>(url)
-
- }
-
- getInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<InventorySearchResultsPaged> {
+  getInventoryAssignment(site: ISite, id: number): Observable<IInventoryAssignment> {
 
     const controller =  `/InventoryAssignments/`
 
-    const endPoint = `getInventoryList`
+    const endPoint = `GetInventoryAssignment`
 
-    const parameters = ``
+    const parameters = `?id=${id}`
 
-    const url = `${site.url}${controller}${endPoint}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter)
+    return  this.http.get<IInventoryAssignment>(url)
+
+  }
+
+  getInventoryAssignmentHistory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `getInventoryHistoryList`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IInventoryAssignment[]>(url)
+
+  }
+
+  getInventory(site: ISite, inventoryFilter: InventoryFilter): Observable<InventorySearchResultsPaged> {
+
+      const controller =  `/InventoryAssignments/`
+
+      const endPoint = `getInventoryList`
+
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}`
+
+      return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter)
 
   }
 
@@ -242,10 +262,31 @@ export class InventoryAssignmentService {
   }
 
 
-  getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable<InventorySearchResultsPaged> {
+    getInActiveInventory(site: ISite, pageNumber: number, pageSize: number): Observable<InventorySearchResultsPaged> {
+
+      const inventoryFilter = {}  as InventoryFilter;
+
+      inventoryFilter.pageNumber = pageNumber
+      inventoryFilter.pageSize = pageSize
+      inventoryFilter.noActiveCount = true
+
+      const controller =  `/InventoryAssignments/`
+
+      const endPoint = `getInventoryList`
+
+      const parameters = ``
+
+      const url = `${site.url}${controller}${endPoint}${parameters}`
+
+      return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter )
+
+  }
+
+  getInventoryByType(site: ISite,pageNumber: number, pageSize: number, type: string): Observable<InventorySearchResultsPaged> {
 
     const inventoryFilter = {}  as InventoryFilter;
 
+    inventoryFilter.packageType = type
     inventoryFilter.pageNumber = pageNumber
     inventoryFilter.pageSize = pageSize
     inventoryFilter.noActiveCount = true
@@ -258,102 +299,109 @@ export class InventoryAssignmentService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<InventorySearchResultsPaged>(url, inventoryFilter )
+    return  this.http.post<any>(url, inventoryFilter )
+
+  }
+
+  assignItemsToManifest(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]) {
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `AssignToManifest`
+
+    const parameters = `?manifestID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
+  }
+    // https://localhost:44309/api/InventoryAssignments/PutInventoryAssignment?id=8
+  editInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable<IInventoryAssignment> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `PutInventoryAssignment`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<IInventoryAssignment>(url, iInventoryAssignment)
+
+  }
+
+  postInventoryAssignmentList(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
+
+    if (id == null) { return null}
+    if (iInventoryAssignment == null) { return null}
+    if (site == null) { return null}
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `postInventoryAssignmentList`
+
+    const parameters = `?manifestID=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
+
+  }
+
+  moveInventory(site: ISite, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `moveInventory`
+
+    const url = `${site.url}${controller}${endPoint}`
+
+    return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
+
+  }
+
+  addInventoryList(site: ISite, label: string, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
+
+    console.log(iInventoryAssignment)
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `PostInventoryAssignments`
+
+    const parameters = `?label=${label}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
+
+  }
+
+  addInventoryItem(site: ISite,  iInventoryAssignment: IInventoryAssignment): Observable<IInventoryAssignment> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `PostInventoryAssignment`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IInventoryAssignment>(url, iInventoryAssignment)
 
 
- }
+  }
 
- getInventoryByType(site: ISite,pageNumber: number, pageSize: number, type: string): Observable<InventorySearchResultsPaged> {
+  deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
 
-  const inventoryFilter = {}  as InventoryFilter;
+    const controller =  `/InventoryAssignments/`
 
-  inventoryFilter.packageType = type
-  inventoryFilter.pageNumber = pageNumber
-  inventoryFilter.pageSize = pageSize
-  inventoryFilter.noActiveCount = true
+    const endPoint = `DeleteInventoryAssignment`
 
-  const controller =  `/InventoryAssignments/`
+    const parameters = `?id=${id}`
 
-  const endPoint = `getInventoryList`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
 
-  const parameters = ``
+    return  this.http.delete<IInventoryAssignment[]>(url)
 
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.post<any>(url, inventoryFilter )
-
-}
-
-  // https://localhost:44309/api/InventoryAssignments/PutInventoryAssignment?id=8
-editInventory(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment): Observable<IInventoryAssignment> {
-
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `PutInventoryAssignment`
-
-  const parameters = `?id=${id}`
-
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.put<IInventoryAssignment>(url, iInventoryAssignment)
-
-}
-
-moveInventory(site: ISite, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
-
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `moveInventory`
-
-  const url = `${site.url}${controller}${endPoint}`
-
-  return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
-
-}
-
-addInventoryList(site: ISite, label: string, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
-
-  console.log(iInventoryAssignment)
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `PostInventoryAssignments`
-
-  const parameters = `?label=${label}`
-
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.post<IInventoryAssignment[]>(url, iInventoryAssignment)
-
-}
-
-addInventoryItem(site: ISite,  iInventoryAssignment: IInventoryAssignment): Observable<IInventoryAssignment> {
-
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `PostInventoryAssignment`
-
-  const parameters = ``
-
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.post<IInventoryAssignment>(url, iInventoryAssignment)
-
-
-}
-
-deleteInventory(site: ISite, id: number): Observable<IInventoryAssignment[]> {
-
-  const controller =  `/InventoryAssignments/`
-
-  const endPoint = `DeleteInventoryAssignment`
-
-  const parameters = `?id=${id}`
-
-  const url = `${site.url}${controller}${endPoint}${parameters}`
-
-  return  this.http.delete<IInventoryAssignment[]>(url)
-
-}
+  }
 
   setNonConvertingFieldValues(inventoryAssignment: IInventoryAssignment,
                                         facility, inventoryLocation , intakeConversion, menuItem: IMenuItem, metrcPackage: METRCPackage ): IInventoryAssignment {

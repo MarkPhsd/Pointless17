@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InventoryListComponent } from './inventory-list.component';
+import { CsvImportComponent } from './csv-import.component';
 
-describe('InventoryListComponent', () => {
-  let component: InventoryListComponent;
-  let fixture: ComponentFixture<InventoryListComponent>;
+describe('CsvImportComponent', () => {
+  let component: CsvImportComponent;
+  let fixture: ComponentFixture<CsvImportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ InventoryListComponent ]
+      declarations: [ CsvImportComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(InventoryListComponent);
+    fixture = TestBed.createComponent(CsvImportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

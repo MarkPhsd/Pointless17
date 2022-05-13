@@ -28,6 +28,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  materialIcons     = false;
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   @Input()  useMatMenu        : boolean;
+  @Input()  toggleVertical    = true;
 
   departmentID: number;
   subscribed : boolean;

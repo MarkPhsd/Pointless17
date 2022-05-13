@@ -36,6 +36,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
     this.availableItems = [...(items || []).map((item: {}, index: number) => ({
       value: item[this.valueField].toString(),
       text: item[this.textField],
+      groupID: 0,
     }))];
   }
   // array of items to display in right box
@@ -43,6 +44,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
     this.selectedItems = [...(items || []).map((item: {}, index: number) => ({
       value: item[this.valueField].toString(),
       text: item[this.textField],
+      groupID: 0,
     }))];
   }
 
@@ -100,7 +102,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
       //Also we assign the in useGroupTaxes to the assigned list. //selected
       this.selectedItems = []
       groups.forEach(data => {
-        this.selectedItems.push({value: data.useGroup.id.toString(), text: data.useGroup.name})
+        this.selectedItems.push({groupID: 0,value: data.useGroup.id.toString(), text: data.useGroup.name})
       })
       this.removeSelectedFromAvailable(allGroups, groups)
       return
@@ -110,9 +112,9 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   }
 
   removeSelectedFromAvailable( xallGroups: UseGroups[], xallAssignedGroups: UseGroupTaxAssigned[]): IListBoxItem[]   {
-    let allGroups           = xallGroups.map( item =>          ({ value: item.id.toString(), text: item.name }));
+    let allGroups           = xallGroups.map( item =>          ({ groupID: 0,value: item.id.toString(), text: item.name }));
     if (xallAssignedGroups  != undefined) {
-      let allAssignedGroups   = xallAssignedGroups.map( item =>  ({ value: item.useGroupID.toString(), text: item.useGroup.name }));
+      let allAssignedGroups   = xallAssignedGroups.map( item =>  ({ groupID: 0,value: item.useGroupID.toString(), text: item.useGroup.name }));
       allAssignedGroups.forEach(item => {
         const value = allGroups.find( x => x.text.toLowerCase() === item.text.toLowerCase() )
         if (value) {
@@ -154,7 +156,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   }
 
   convertToIlistBoxItem(listSource: any[]): IListBoxItem[] {
-    var result = listSource.map(item => ({ value: item.id.toString(), text: item.name }));
+    var result = listSource.map(item => ({ groupID: 0,value: item.id.toString(), text: item.name }));
     return result
   }
 

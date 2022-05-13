@@ -22,8 +22,15 @@ export class SitesService {
   private _sites    = new BehaviorSubject<ISite[]>(null);
   public  sites$    = this._sites.asObservable();
 
+  private _site    = new BehaviorSubject<ISite>(null);
+  public  site$    = this._site.asObservable();
+
   updateSitesSubscriber(site: ISite[]) {
     this._sites.next(site)
+  }
+
+  updateSiteSubscriber(site: ISite) {
+    this._site.next(site)
   }
 
   constructor( private http            : HttpClient,
@@ -144,6 +151,7 @@ export class SitesService {
       site.url    = data.apiUrl
       localStorage.setItem("site.url"    ,  site.url)
       localStorage.setItem("storedApiUrl",  site.url)
+      localStorage.setItem("site.name",  site.name)
       return site;
     }
 
@@ -168,7 +176,8 @@ export class SitesService {
       localStorage.setItem("site.city", site.city)
       localStorage.setItem("site.state", site.state)
       localStorage.setItem("site.zip", site.zip)
-      localStorage.setItem("site.phone", site.phone)
+      localStorage.setItem("site.phone", site.phone);
+      this.updateSiteSubscriber(site)
     }
   }
 
@@ -185,8 +194,6 @@ export class SitesService {
     localStorage.removeItem("site.zip") //, site.phone), site.zip)
     localStorage.removeItem("site.phone") //, site.phone)
     localStorage.removeItem('awsbucket')
-
-
   }
 
   //matching code in app-init-service.

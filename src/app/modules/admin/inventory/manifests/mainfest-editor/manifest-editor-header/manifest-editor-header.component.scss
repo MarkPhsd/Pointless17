@@ -5,6 +5,13 @@
   font-size: medium;
 }
 
+.functions-grid-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  font-size: medium;
+  max-width: 650px;
+}
+
 .mat-menu-panel {
   width: 350px;
 }

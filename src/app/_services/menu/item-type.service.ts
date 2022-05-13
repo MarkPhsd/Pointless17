@@ -57,6 +57,7 @@ export interface ItemType_Categories_Reference {
   categoryID  : number;
   name        : string;
   itemTypeName: string;
+  groupID     : number;
 }
 
 export interface itemType_Categories

@@ -28,8 +28,19 @@
     {{schemaResults  | json }}
     </div>
   </div>
+  <mat-divider></mat-divider>
 
  <app-cache-settings></app-cache-settings>
+
+ <mat-divider></mat-divider>
+ <div class="grid-views">
+   <div>
+     <app-csv-import></app-csv-import>
+   </div>
+   <div>
+     <app-export-data></app-export-data>
+   </div>
+ </div>
 
 </div>
 

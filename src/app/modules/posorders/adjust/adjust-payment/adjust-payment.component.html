@@ -1,6 +1,6 @@
 
 <!-- Adjusts Item Container -->
-<div *ngIf="paymentWithAction && voidPayment">
+<div *ngIf="resultAction && (voidPayment || manifest)">
   <mat-card>
     <mat-card-title>
     </mat-card-title>
@@ -21,9 +21,3 @@
     </mat-card-actions>
   </mat-card>
 </div>
-
-<!-- <div class="grid" *ngIf="voidPayment">
-  <div>Amount</div>  <div>{{voidPayment.amountReceived}}</div>
-
-  {{voidPayment | json}}
-</div> -->

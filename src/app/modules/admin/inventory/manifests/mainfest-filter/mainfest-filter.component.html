@@ -2,16 +2,16 @@
   <mat-card-content>
     <div class="button-grid">
 
-      <div>
+      <div class="span-column">
         <button class="button"
                 mat-button
                 (click)="resetSearch()">
-                <mat-icon>refresh</mat-icon>
+                <mat-icon>restart_alt</mat-icon>
           <span>Reset</span>
         </button>
       </div>
 
-      <div >
+      <div class="span-column">
         <button class="button"
                 mat-button
                 (click)="refreshSearch()">
@@ -20,7 +20,7 @@
         </button>
       </div>
 
-      <div *ngIf="isAuthorized">
+      <div class="span-column" *ngIf="isAuthorized">
         <mat-date-range
             [inputForm]      ="scheduleDateForm"
             (outputDateRange)="emitDatePickerData($event, 'schedule')">
@@ -28,30 +28,99 @@
         </mat-date-range>
       </div>
 
-      <div *ngIf="isAuthorized">
-        <mat-date-range
-            [inputForm]      ="acceptedDateForm"
-            (outputDateRange)="emitDatePickerData($event, 'accepted')">
-            Schedule Date
-        </mat-date-range>
-      </div>
-
-
-      <div *ngIf="isAuthorized">
+      <div class="span-column"  *ngIf="isAuthorized">
         <mat-date-range
             [inputForm]      ="sendDateForm"
             (outputDateRange)="emitDatePickerData($event, 'send')">
-            Schedule Date
+            Send Date
         </mat-date-range>
       </div>
 
-      <div></div>
+      <div class="span-column"  *ngIf="isAuthorized">
+        <mat-date-range
+            [inputForm]      ="acceptedDateForm"
+            (outputDateRange)="emitDatePickerData($event, 'accepted')">
+            Accepted Date
+        </mat-date-range>
+      </div>
 
-      <div>
-        <mat-slide-toggle
-            [(ngModel)] = "active">
-          <mat-label class="mat-label">Active</mat-label>
-        </mat-slide-toggle>
+
+      <div class="span-column"  *ngIf="isAuthorized">
+        <mat-date-range
+            [inputForm]      ="paidDateForm"
+            (outputDateRange)="emitDatePickerData($event, 'paid')">
+            Paid Date
+        </mat-date-range>
+      </div>
+
+      <div  class="span-column"
+            [formGroup]="inputForm"
+            *ngIf="(sites$  | async) as sites">
+
+        <mat-form-field appearance="outline">
+            <mat-label>Destination </mat-label>
+              <mat-select
+                        type             ="number"
+                        (selectionChange)="setDestinationSite($event)"
+                        formControlName  ="destinationID" >
+                <mat-option *ngFor       ="let item of sites"
+                            [value]      ="item.id">
+                  {{ item.name }}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div  class="span-column"
+            [formGroup]="inputForm"
+            *ngIf="(type$ | async) as type">
+        <mat-form-field appearance="outline" >
+          <mat-label>Type </mat-label>
+            <mat-select
+                         formControlName  ="type">
+              <mat-option  [value]="''">
+                All
+              </mat-option>
+              <mat-option *ngFor       ="let item of type"
+                          [value]      ="item.name">
+                {{ item.name }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div  class="span-column"
+            [formGroup]="inputForm"
+            *ngIf="(status$ | async) as status">
+        <mat-form-field appearance="outline" >
+          <mat-label>Status </mat-label>
+            <mat-select
+                      formControlName  ="status">
+              <mat-option  [value]="''">
+                All
+              </mat-option>
+              <mat-option *ngFor       ="let item of status"
+                      [value]="item.name">
+                {{ item.name }}
+              </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div class="grid-item"  [formGroup]="inputForm"  *ngIf="inventoryStatusList" >
+        <mat-form-field appearance="outline">
+          <mat-label>Active</mat-label>
+            <mat-select
+                      type="number"
+                      formControlName="activeStatus"
+                    >
+            <div>
+              <mat-option *ngFor="let item of inventoryStatusList" [value]="item.id">
+                {{ item.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
       </div>
 
     </div>
@@ -63,54 +132,3 @@
 </ng-template>
 
 
-    <!-- <mat-button-toggle-group
-          *ngIf       ="searchModel"
-          name        ="toggleOpenClosedAll"
-          class       ="toggle-view"
-          [(ngModel)] ="toggleOpenClosedAll"
-          (change)    ="refreshSearch()"
-      >
-      <mat-button-toggle value="1" >Open </mat-button-toggle>
-      <mat-button-toggle value="2">Closed</mat-button-toggle>
-      <mat-button-toggle value="0">All</mat-button-toggle>
-    </mat-button-toggle-group> -->
-<!--
-    <mat-button-toggle-group
-          *ngIf="isStaff"
-          name        = "toggleTypeEmployee"
-          class       ="toggle-view"
-          [(ngModel)] ="toggleTypeEmployee"
-          (change)    ="changeToggleTypeEmployee()" >
-      <mat-button-toggle value="1"
-                        matTooltip="User filter."
-                        matTooltipPosition="above"
-                        matTooltipHideDelay="1000" > <mat-icon>badge</mat-icon> </mat-button-toggle>
-      <mat-button-toggle value="0"
-                        matTooltip="Transaction filter."
-                        matTooltipPosition="above"
-                        matTooltipHideDelay="1000">
-          <mat-icon>receipt</mat-icon> </mat-button-toggle>
-    </mat-button-toggle-group> -->
-
-
-    <!-- <div *ngIf="isStaff" [hidden]="toggleTypeEmployee  === '0' && searchModel"
-          class="toggle-selector">
-      <app-mat-toggle-selector
-              [id]      ="searchModel.employeeID"
-              [list$]   ="employees$"
-              (outPutID)="setEmployee($event)">
-              Employee
-      </app-mat-toggle-selector>
-    </div>
-
-    <div *ngIf="isStaff"
-          [hidden]="toggleTypeEmployee === '1' && searchModel"
-          class="toggle-selector">
-      <app-mat-toggle-selector
-            *ngIf     ="searchModel"
-            [id]      ="searchModel.serviceTypeID"
-            [list$]   ="serviceTypes$"
-            (outPutID)="setServiceType($event)">
-            Sale Type
-      </app-mat-toggle-selector>
-    </div> -->

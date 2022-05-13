@@ -83,7 +83,7 @@ export class SettingsComponent implements OnInit {
       })
     }
 
-    openProductDialog(id: any) {
+    openAdjustmentDialog(id: any) {
       const dialogConfig = [
         { data: { id: 1 } }
       ]

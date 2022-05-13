@@ -121,8 +121,8 @@ export class ProducteditComponent implements  OnInit  {
       this.product$ = this.menuService.getProduct(site, this.id).pipe(
           tap(data => {
             this.product         = data
-            this.priceCategoryID = this.product.priceCategory
-            this.itemTags        = this.product.metaTags;
+            this.priceCategoryID = this.product?.priceCategory
+            this.itemTags        = this.product?.metaTags;
             this.productForm.patchValue(this.product)
           }
         )

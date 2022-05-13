@@ -48,6 +48,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
     this.availableItems = [...(items || []).map((item: {}, index: number) => ({
       value: item[this.valueField].toString(),
       text: item[this.textField],
+      groupID: 0,
     }))];
   }
   // array of items to display in right box
@@ -55,6 +56,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
     this.selectedItems = [...(items || []).map((item: {}, index: number) => ({
       value: item[this.valueField].toString(),
       text: item[this.textField],
+      groupID: 0,
     }))];
   }
 
@@ -153,7 +155,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
       this.selectedItems = []
       groups.forEach(data => {
         if (data && data.promptSubGroups) {
-          this.selectedItems.push({value: data.promptSubGroupsID.toString(), text: data.promptSubGroups.name})
+          this.selectedItems.push({groupID: 0,value: data.promptSubGroupsID.toString(), text: data.promptSubGroups.name})
         }
       })
       this.removeSelectedFromAvailable(allGroups, groups)
@@ -185,7 +187,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
                 this.selectedItems = []
                 groups.forEach(data => {
                   if (data && data.promptSubGroups) {
-                    this.selectedItems.push({value: data.promptSubGroupsID.toString(), text: data.promptSubGroups.name})
+                    this.selectedItems.push({groupID: 0,value: data.promptSubGroupsID.toString(), text: data.promptSubGroups.name})
                   }
                 })
                 this.removeSelectedFromAvailable(allGroups, groups)
@@ -212,11 +214,11 @@ export class PromptSubGroupAssociationComponent implements OnInit {
 
     if ( !xallGroups ) { return }
 
-    let allGroups  = xallGroups.map( item =>  ({ value: item.id.toString(), text: item.name }));
+    let allGroups  = xallGroups.map( item =>  ({ groupID: 0,value: item.id.toString(), text: item.name }));
 
     if (xallAssignedGroups != undefined) {
       let allAssignedGroups   = xallAssignedGroups.map( item =>
-         ({ value: item.promptSubGroupsID.toString(), text: item.promptSubGroups?.name.toString() })
+         ({groupID: 0, value: item.promptSubGroupsID.toString(), text: item.promptSubGroups?.name.toString() })
       );
 
       if (allAssignedGroups) {
@@ -278,7 +280,7 @@ export class PromptSubGroupAssociationComponent implements OnInit {
   // id:                number;
   // promptSubGroups:   PromptSubGroups;
   convertToIlistBoxItem(listSource: any[]): IListBoxItem[] {
-    var result = listSource.map(item => ({ value: item.id.toString(), text: item.name }));
+    var result = listSource.map(item => ({groupID: 0, value: item.id.toString(), text: item.name }));
     return result
   }
 

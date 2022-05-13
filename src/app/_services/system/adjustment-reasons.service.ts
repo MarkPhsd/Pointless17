@@ -4,14 +4,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { ISite } from 'src/app/_interfaces';
-
 export interface AdjustmentReason {
   id:   number;
   name: string;
   filter: number;
-
 }
-
 @Injectable({
   providedIn: 'root'
 })

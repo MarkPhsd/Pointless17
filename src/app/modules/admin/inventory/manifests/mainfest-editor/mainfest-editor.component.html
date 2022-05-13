@@ -1,4 +1,4 @@
-<div *ngIf="currentManifest && inputForm">
+<div *ngIf="currentManifest && inputForm; else loading">
 
   <app-manifest-editor-header
     (outPutSave)            ="saveManifest($event)"
@@ -11,7 +11,7 @@
   <mat-tab-group mat-align-tabs="start"
                 md-stretch-tabs >
 
-    Created: {{currentManifest.createdDate}}
+    <!-- Created: {{currentManifest.createdDate}} -->
 
     <mat-tab label="Properties" *ngIf="inputForm" >
       <div class="grid-container" >
@@ -47,11 +47,11 @@
           <mat-form-field appearance="outline" >
             <mat-label>Type </mat-label>
               <mat-select
-                        type             ="number"
+                        type             ="text"
                         (selectionChange)="applyType($event)"
-                        formControlName  ="typeID" >
+                        formControlName  ="type" >
                 <mat-option *ngFor       ="let item of type"
-                            [value]      ="item.id">
+                            [value]      ="item.name">
                   {{ item.name }}
                 </mat-option>
             </mat-select>
@@ -64,11 +64,11 @@
           <mat-form-field appearance="outline" >
             <mat-label>Status </mat-label>
               <mat-select
-                        type             ="number"
+                        type             ="text"
                         (selectionChange)="applyStatus($event)"
-                        formControlName  ="statusID" >
+                        formControlName  ="status" >
                 <mat-option *ngFor="let item of status"
-                            [value]="item.id">
+                            [value]="item.name">
                   {{ item.name }}
                 </mat-option>
             </mat-select>
@@ -121,6 +121,17 @@
           </mat-form-field>
         </div>
 
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Paid Date</mat-label>
+              <input matInput
+                  [matDatepicker]="pickerPaid"
+                  [(ngModel)]= "paidDate">
+            <mat-datepicker-toggle matSuffix [for]="pickerPaid"></mat-datepicker-toggle>
+            <mat-datepicker #pickerPaid></mat-datepicker>
+          </mat-form-field>
+        </div>
+
       </div>
 
       <mat-divider></mat-divider>
@@ -139,37 +150,7 @@
           </mat-form-field>
         </div>
       </div>
-      <!-- sendDate:           string;
-      scheduleDate:       string;
-      acceptedDate:       string; -->
 
-      <!-- id:                 number;
-      name:               string;
-      originatorID:       number; -->
-      <!-- sourceSiteID:       number;
-      sourceSiteURL:      string; -->
-      <!-- receiverManifestID: number;
-      desinationID:       number;
-      desinationURL:      string; -->
-      <!-- active:             number; -->
-      <!-- status:             string;
-      type:               string; -->
-      <!-- entryUser:          string;
-      entryUserID:        number; -->
-      <!-- requestedBy:        string;
-      requestedByID:      number; -->
-      <!-- createdDate:        string; -->
-
-<!--
-      receiverName:       string;
-      carrierName:        string;
-      carrierEmployee:    string;
-      description:        string;
-      recieverID:         number; -->
-      <!-- statusID:           number;
-      typeID:             number; -->
-
-      <!-- {{inputForm.value | json}}  -->
     </mat-tab>
 
     <mat-tab label="Items" >
@@ -185,3 +166,8 @@
 
   </mat-tab-group>
 </div>
+
+<ng-template #loading>
+  ...loading
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>

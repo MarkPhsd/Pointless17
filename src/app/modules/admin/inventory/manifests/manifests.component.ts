@@ -1,16 +1,12 @@
 import { Component, ElementRef, EventEmitter, OnInit, ViewChild, Output, HostListener } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, of, Subject  } from 'rxjs';
+import { Observable, of, Subject, Subscription  } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged, InventoryStatusList } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite, IUserProfile } from 'src/app/_interfaces';
-import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
-import { MatDialog } from '@angular/material/dialog';
 import { IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
-import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import { IGetRowsParams,  GridApi,  } from '@ag-grid-community/all-modules';
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -19,8 +15,7 @@ import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { InventoryEditButtonService } from 'src/app/_services/inventory/inventory-edit-button.service';
 import { Capacitor,  } from '@capacitor/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { AWSBucketService, ContactsService, IItemBasicB, MenuService } from 'src/app/_services';
-import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
+import { IItemBasicB } from 'src/app/_services';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 import { InventoryManifest, ManifestInventoryService, ManifestSearchModel, ManifestSearchResults } from 'src/app/_services/inventory/manifest-inventory.service';
 import { DatePipe } from '@angular/common';
@@ -32,8 +27,9 @@ import { DatePipe } from '@angular/common';
 })
 export class ManifestsComponent implements OnInit {
 
-  manifestSearchModel:         ManifestSearchModel
-  manifestSearchResults:       ManifestSearchResults;
+  searchModel:                  ManifestSearchModel
+  _searchModel                 : Subscription;
+  manifestSearchResults:        ManifestSearchResults;
   inventoryManifest            : InventoryManifest;
   inventoryAssignments         : IInventoryAssignment[];
   selectedInventoryAssignments : IInventoryAssignment[];
@@ -90,9 +86,9 @@ export class ManifestsComponent implements OnInit {
   productTypes$    : Observable<IItemBasicB[]>;
   viewOptions$     = of(
     [
-      {name: 'Active', id: 0},
-      {name: 'All', id: 1},
-      {name: 'Inactive', id: 2}
+      {name: 'Active', id: 1},
+      {name: 'All', id: 2},
+      {name: 'Inactive', id: 0}
     ]
   )
 
@@ -117,8 +113,8 @@ export class ManifestsComponent implements OnInit {
   site:                 ISite;
   selectedSiteID:       number;
 
-  inventoryStatusList  = this.inventoryAssignmentService.inventoryStatusList;
-  inventoryStatus:      InventoryStatusList
+  inventoryActiveList  = this.inventoryAssignmentService.inventoryActiveList;
+  inventoryActive      : any;
   locations$:           Observable<IInventoryLocation[]>;
   inventoryLocation:    IInventoryLocation;
   inventoryLocationID:  number;
@@ -130,18 +126,10 @@ export class ManifestsComponent implements OnInit {
   constructor(private _snackBar: MatSnackBar,
               private inventoryAssignmentService: InventoryAssignmentService,
               private inventoryManifestService: ManifestInventoryService,
-              private router: Router,
-              private agGridService: AgGridService,
               private fb: FormBuilder,
               private siteService: SitesService,
-              private metrcCategoriesService: MetrcItemsCategoriesService,
               private locationService: InventoryLocationsService,
-              private dialog                  : MatDialog,
               private inventoryEditButon     : InventoryEditButtonService,
-              private menuService            : MenuService,
-              private itemTypeService        : ItemTypeService,
-              private contactsService        : ContactsService,
-              private awsService             : AWSBucketService,
               private datePipe               : DatePipe,
               private agGridFormatingService : AgGridFormatingService,
           ) { }
@@ -152,6 +140,7 @@ export class ManifestsComponent implements OnInit {
     this.locations$     = this.locationService.getLocations();
     this.initForm();
     this.initAgGrid();
+    this.initSearchSubscription();
   }
 
   initClasses()  {
@@ -177,7 +166,8 @@ export class ManifestsComponent implements OnInit {
       itemName      :     [''],
       searchProducts:     [''],
       selectedSiteID:     [''],
-      statusID      :  [''],
+      statusID      :     [''],
+      activeStatus  :     [''],
     })
   }
 
@@ -246,8 +236,22 @@ export class ManifestsComponent implements OnInit {
               maxWidth: 125,
               flex    : 1,
           }
+    this.columnDefs.push(item)
 
+    item = {headerName: 'Destination', field: 'destinationSiteName', sortable: true,
+              width   : 150,
+              minWidth: 150,
+              maxWidth: 150,
+              flex    : 1,
+              }
+    this.columnDefs.push(item)
 
+    item = {headerName: 'Source', field: 'sourceSiteName', sortable: true,
+        width   : 150,
+        minWidth: 150,
+        maxWidth: 150,
+        flex    : 1,
+        }
     this.columnDefs.push(item)
 
     item =   {
@@ -285,12 +289,19 @@ export class ManifestsComponent implements OnInit {
   }
 
   initSearchModel(): ManifestSearchModel {
-    let searchModel         = {} as ManifestSearchModel;
-    searchModel.name        = this.search
-    searchModel.pageSize    = this.pageSize
-    searchModel.pageNumber  = this.pageNumber
-    this.id                 = 0
-    return searchModel
+    if (!this.searchModel) {
+      this.searchModel = {} as ManifestSearchModel
+    }
+    this.searchModel.name        = this.search
+    this.searchModel.pageSize    = this.pageSize
+    this.searchModel.pageNumber  = this.currentPage;
+
+    if (this.inventoryActive) {
+      this.searchModel.activeStatus = this.inventoryActive.id;
+    }
+    console.log(this.searchModel)
+    this.id                      = 0
+    return this.searchModel
   }
 
   refreshSearchPhrase(event) {
@@ -302,15 +313,32 @@ export class ManifestsComponent implements OnInit {
     }
   }
 
+  initSearchSubscription() {
+    this._searchModel = this.inventoryManifestService.searchModel$.subscribe( data => {
+        this.searchModel          = data;
+
+        if (!this.searchModel) {
+          const searchModel       = {} as ManifestSearchModel;
+          this.currentPage        = 1
+          searchModel.pageNumber  = 1;
+          searchModel.pageSize    = 25;
+          this.searchModel        = searchModel
+          console.log('data initSearchSubscription',  this.searchModel )
+        }
+
+        this.refreshSearch();
+
+      }
+    )
+  }
+
   refreshActiveChange(event) {
     this.viewAll = event;
     this.refreshSearch();
   }
 
   refreshSearch() {
-    const site               = this.siteService.getAssignedSite()
-    const searchModel        = this.initSearchModel();
-    console.log(searchModel)
+    this.initSearchModel();
     this.onGridReady(this.params)
   }
 
@@ -349,6 +377,7 @@ export class ManifestsComponent implements OnInit {
   assignSite(id: number){
     this.siteService.getSite(id).subscribe( data => {
       this.site = data
+      this.refreshGrid();
     })
   }
 
@@ -375,25 +404,29 @@ export class ManifestsComponent implements OnInit {
   assignLocation(id: number){
     this.locationService.getLocation(id).subscribe( data => {
       this.inventoryLocation = data
-      console.log(data)
+      this.refreshGrid();
     })
   }
 
   getInventoryStatus(event) {
     if (event.value) {
-      this.assignInventoryStatus(event.value);
+      console.log(event.value)
+      const item = this.assignInventoryStatus(event.value);
+      console.log(item)
+      console.log( this.inventoryActive)
+      this.refreshSearch();
     } else {
-      this.inventoryStatus.id = 0
-      // this.searchItems()
+      this.inventoryActive.id = 0
     }
   }
 
   assignInventoryStatus(name: string): InventoryStatusList {
-    return  this.inventoryStatus = this.inventoryStatusList.find(data =>
+    console.log(name)
+    return  this.inventoryActive = this.inventoryActiveList.find(data =>
       {
         if ( data.name === name ) {
-          this.inventoryStatus = data;
-          return
+          this.inventoryActive = data;
+          return data
         }
       }
     )
@@ -403,7 +436,10 @@ export class ManifestsComponent implements OnInit {
   getRowData(params, startRow: number, endRow: number):  Observable<ManifestSearchResults>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
-    const site                = this.siteService.getAssignedSite()
+    let site = this.site ;
+    if (!site) {
+      site = this.siteService.getAssignedSite();
+    }
     return this.inventoryManifestService.searchManifest(site, searchModel)
   }
 
@@ -412,7 +448,6 @@ export class ManifestsComponent implements OnInit {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
 
@@ -424,7 +459,6 @@ export class ManifestsComponent implements OnInit {
 
       items$.subscribe(data =>
         {
-          console.log('on grid ready', data)
           if (data.errorMessage) {
             this.notifyEvent(data.errorMessage, 'Failure')
             return
@@ -473,9 +507,7 @@ export class ManifestsComponent implements OnInit {
 
     this.selected = selected
     this.id = selectedRows[0].id;
-    // this.getInventoryHistory(this.id)
   }
-
 
   getLabel(rowData)
   {
@@ -513,7 +545,6 @@ export class ManifestsComponent implements OnInit {
   }
 
   displayFn(search) {
-    // this.searchPaging = true
     this.selectItem(search)
     this.item = search
     this.search = search
@@ -522,7 +553,6 @@ export class ManifestsComponent implements OnInit {
 
   selectItem(search){
     if (search) {
-      // this.searchPaging = true
       this.searchPhrase.next(search)
     }
   }
@@ -549,20 +579,18 @@ export class ManifestsComponent implements OnInit {
   }
 
   dateCellRenderer(params: any) {
-
     if (!params.value || params.value == undefined || params.value === '') { return ''}
     const dateValue = params.value;
-    // console.log('date pipe', this.datePipe.transform(dateValue, 'MM/dd/yyyy'))
-    console.log(dateValue);
     try {
-      return this.datePipe.transform(dateValue, 'MM/dd/yyyy')
+      if (this.datePipe) {
+        return this.datePipe.transform(dateValue, 'MM/dd/yyyy')
+      }
     } catch (error) {
-      console.log('error', error)
+      // console.log('error', error)
       return dateValue;
     }
     return ;
   }
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

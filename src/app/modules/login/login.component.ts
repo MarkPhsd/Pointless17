@@ -319,12 +319,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.spinnerLoading = true;
   }
 
- async onSubmit() {
-    this.submitted      = true;
-    this.statusMessage  = "...loggining in"
-    this.spinnerLoading = true;
-    this.startProcessing()
-
+  onSubmit() {
+    setTimeout(this.startProcessing,100)
+    console.log('processing')
     if (!this.validateForm(this.loginForm)) { return }
 
     const userName = this.f.username.value;
@@ -335,7 +332,7 @@ export class LoginComponent implements OnInit, OnDestroy {
        next: user =>
         {
           if (user) {
-            console.log ('login user', user)
+
             if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
               this.updateLoginStatus(1)
               this.authenticationService.updateUser(null);
@@ -350,6 +347,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               this.updateLoginStatus(6) //clearn login settings
               return
             }
+
           }
         },
        error: error => {

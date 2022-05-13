@@ -1,0 +1,66 @@
+<mat-card>
+
+  <mat-card-title>
+    Import
+  </mat-card-title>
+
+  <mat-card-subtitle>
+    <button *ngIf="schemaValue" 
+            mat-raised-button
+            color="primary"
+            (click)="downloadExample()"><mat-icon>download</mat-icon>
+        Download example {{schemaValue}}
+    </button>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div class="grid-item"
+          *ngIf="exportDataService.schemas$ && inputForm">
+        <form-select-list [searchForm]      = "inputForm"
+                          [formFieldName]   ="'name'"
+                          [list$]           = "exportDataService.schemas$"
+                          [showActiveInactive]="false"
+                          (selectionChange) = "selectScheme($event)">
+        <div fieldSearchDescription>Schema Type Selection</div>
+        </form-select-list>
+    </div>
+  
+    <div class="fields">
+      <mat-slide-toggle
+                [(ngModel)]="headerValues"
+              >
+      <mat-label>Ignore Headers in CSV</mat-label>
+      </mat-slide-toggle>
+    </div>
+
+
+    <div class="container"
+         appDnd
+        (fileDropped)="onFileDropped($event)" >
+    
+      <input type="file" 
+             #fileDropRef
+             id="fileDropRef"
+             accept=".csv" 
+             (change)="fileChangeListener($event)"/>
+    
+      <div class="file-drop"></div>
+    
+      <button mat-raised-button
+              color="primary"
+              (click)="fileChangeListener($event)"><mat-icon>upload</mat-icon>
+      </button>
+    
+    </div>
+  </mat-card-content>
+
+</mat-card>
+
+  <!-- <div class="csv-file-chooser-section">
+    <input type="file" 
+           #fileImportInput 
+           name="File Upload" 
+           id="csvFileUpload" 
+           (change)="fileChangeListener($event)"
+      accept=".csv" />
+  </div> -->

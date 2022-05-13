@@ -1,25 +1,25 @@
 import {Component, OnDestroy,
-  HostListener, OnInit, AfterViewInit,
+  HostListener, OnInit,
   EventEmitter, Output,
   ViewChild, ElementRef,
   }  from '@angular/core';
-import { IServiceType, IUser,  } from 'src/app/_interfaces';
+import { ISite, IUser,  } from 'src/app/_interfaces';
 import { IPOSOrderSearchModel,  } from 'src/app/_interfaces/transactions/posorder';
-import { IItemBasic,} from 'src/app/_services';
-import { OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router} from '@angular/router';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ManifestStatus, ManifestStatusService } from 'src/app/_services/inventory/manifest-status.service';
 import { ManifestType, ManifestTypesService } from 'src/app/_services/inventory/manifest-types.service';
 import { ManifestInventoryService, ManifestSearchModel } from 'src/app/_services/inventory/manifest-inventory.service';
+import { InventoryStatusList } from '../../inventory-list/inventory-list/inventory-list.component';
+import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
 const { Keyboard } = Plugins;
 
@@ -36,7 +36,8 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
 
   selectedType       : number;
   user               = {} as IUser;
-
+  paidDateForm      : FormGroup;
+  inputForm         : FormGroup;
   dateRangeForm     : FormGroup;
   dateFrom          : any;
   dateTo            : any;
@@ -78,8 +79,13 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
 
   type$          : Observable<ManifestType[]>;
   status$        : Observable<ManifestStatus[]>;
-
+  sites$         : Observable<ISite[]>;
   active         : boolean;
+
+
+  inventoryStatus:      InventoryStatusList;
+  inventoryStatusID:    number;
+  inventoryStatusList  = this.inventoryAssignmentService.inventoryActiveList;
 
   @Output() outPutHidePanel = new EventEmitter();
 
@@ -123,6 +129,7 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
   }
 
   initSubscriptions() {
+    this.subscribeToDatePicker();
     this.initStatusSubscriber();
     this.initViewTypeSubscriber();
     this.initSearchSubscriber();
@@ -132,43 +139,36 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
       private inventoryManifestService: ManifestInventoryService,
       private manifestTypeService     : ManifestTypesService,
       private manifestStatusService   : ManifestStatusService,
+      private sitesService: SitesService,
       public  route              : ActivatedRoute,
       private siteService        : SitesService,
       private matSnack           : MatSnackBar,
       private fb                 : FormBuilder,
       private userAuthorization  : UserAuthorizationService,
-      private _bottomSheet       : MatBottomSheet
+      private _bottomSheet       : MatBottomSheet,
+      private dateHelperService  : DateHelperService,
+      private inventoryAssignmentService: InventoryAssignmentService,
   )
   {
   }
 
   ngOnInit() {
-    const site           = this.siteService.getAssignedSite();
+    const site   = this.siteService.getAssignedSite();
     this.status$ = this.manifestStatusService.listAll();
     this.type$   = this.manifestTypeService.listAll();
+    this.sites$  = this.sitesService.getSites();
     this.initAuthorization();
-    this.initScheduledDateForm();
     this.updateItemsPerPage();
-    this.initSubscriptions();
+    this.initDateForm();
     this.initForm();
+    this.initSubscriptions();
     this.refreshSearch();
     this.initSearchOption();
     return
   }
 
   displayPanel()  {
-    // const show =  localStorage.getItem('OrderFilterPanelVisible')
-    // console.log(show)
-    // if (!show || show === 'true') {
-    //   localStorage.setItem('OrderFilterPanelVisible', 'false')
-    //   this.outPutHidePanel.emit(false)
-    //   return
-    // }
-    // if (show === 'false') {
-    //   localStorage.setItem('OrderFilterPanelVisible', 'true')
-    //   this.outPutHidePanel.emit(true)
-    //   return
-    // }
+
   }
 
   initAuthorization() {
@@ -181,8 +181,32 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
   }
 
   initForm() {
+
     this.searchForm   = this.fb.group( {
       itemName          : [''],
+    })
+
+    this.inputForm = this.fb.group({
+      typeID          : [],
+      statusID        : [],
+      destinationID   : [],
+      status          : [],
+      type            : [],
+      destinationName : [],
+      destinationURL  : [],
+      activeStatus    : [2],
+    })
+
+    this.inputForm.valueChanges.subscribe( data => {
+      this.searchModel = this.inputForm.value as ManifestSearchModel;
+      if (this.manifestStatus) {
+        this.searchModel.status = this.manifestStatus.name
+      }
+      if (this.manifestType) {
+        this.searchModel.type = this.manifestType.name
+      }
+      this.refreshDateSearch();
+      this.refreshSearch();
     })
   }
 
@@ -196,6 +220,27 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
 
   exitBottomSheet() {
     this._bottomSheet.dismiss()
+  }
+
+  getInventoryStatus(event) {
+    // if (event.value) {
+    //   this.assignInventoryStatus(event.value);
+    // } else {
+    //   this.inventoryStatus.id = 0
+    // }
+  }
+
+
+  assignInventoryStatus(name: string): InventoryStatusList {
+    return  this.inventoryStatus = this.inventoryStatusList.find(data =>
+      {
+        if ( data.name === name ) {
+          this.inventoryStatus = data;
+          this.inventoryStatusID  = this.inventoryStatus.id
+          return
+        }
+      }
+    )
   }
 
   initSearchOption() {
@@ -220,7 +265,7 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
   }
 
   resetSearch() {
-    this.searchModel = {} as ManifestSearchModel;
+    this.initSearchModel();
     this.initForm();
     this.refreshSearch();
   }
@@ -234,92 +279,89 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
     }
   }
 
-  initSearch(searchModel: ManifestSearchModel) {
+  updateSearchModel(searchModel: ManifestSearchModel) {
     this.inventoryManifestService.updateSearchModel( searchModel )
   }
 
-  //check
   initFilter(search: ManifestSearchModel) {
     if (!search) {
       search = {} as ManifestSearchModel
       this.searchModel = search;
+      this.searchModel.activeStatus = 1;
     }
   }
 
+  initSearchModel() {
+    if (! this.searchModel) {
+      this.searchModel = {} as ManifestSearchModel
+      this.searchModel.activeStatus = 1;
+    }
+  }
   refreshSearch() {
-    if (! this.searchModel) {  this.searchModel = {} as ManifestSearchModel }
+    this.initSearchModel();
     let search      = this.searchModel;
-    search.active   = this.active;
-
-    this.initSearch(search)
+    console.log(this.searchModel)
+    this.updateSearchModel(search)
     return this._searchItems$
   }
 
   refreshSearchPhrase(searchPhrase: string) {
-    if (! this.searchModel) {  this.searchModel = {} as ManifestSearchModel }
-    let search              = this.searchModel;
-    search.active           = this.active;
+    this.initSearchModel();
     this.searchModel.name   = searchPhrase
-    this.initSearch(search)
-    return this._searchItems$
+    this.inventoryManifestService.updateSearchModel( this.searchModel )
   }
 
   notifyEvent(message: string, title: string) {
     this.matSnack.open(message, title, {duration: 2000, verticalPosition: 'bottom'})
   }
 
-
-  initScheduledDateForm() {
-
+  initDateForm() {
     this.scheduleDateForm = new FormGroup({
       start: new FormControl(),
       end: new FormControl()
     });
-
-    const today = new Date();
-    const month = today.getMonth();
-    const year = today.getFullYear();
-
-    this.dateRangeForm =  this.fb.group({
-      start: new Date(year, month, 1),
-      end: new Date()
-    })
-
-    this.searchModel.scheduleDate_From = this.scheduleDateForm.get("start").value;
-    this.searchModel.scheduleDate_To   = this.scheduleDateForm.get("end").value;
-
-    if (!this.showScheduleFilter) {
-      if (this.searchModel) {
-        this.searchModel.scheduleDate_From = null;
-        this.searchModel.scheduleDate_To = null;
-      }
-      return
-    }
-
+    this.sendDateForm = new FormGroup({
+      start: new FormControl(),
+      end: new FormControl()
+    });
+    this.acceptedDateForm = new FormGroup({
+      start: new FormControl(),
+      end: new FormControl()
+    });
+    this.paidDateForm = new FormGroup({
+      start: new FormControl(),
+      end: new FormControl()
+    });
   }
 
-  subscribeToScheduledDatePicker()
-  {
-    if (this.scheduleDateForm) {
-      this.scheduleDateForm.get('start').valueChanges.subscribe(res=>{
-        if (!res) {return}
-        this.dateFrom = res //this.dateRangeForm.get("start").value
-      }
-    )
-
-    this.scheduleDateForm.get('end').valueChanges.subscribe(res=>{
-      if (!res) {return}
-      this.dateTo = res
-      }
-    )
-
+  subscribeToDatePicker() {
     this.scheduleDateForm.valueChanges.subscribe(res=>{
-        if (this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("start").value) {
+      if (this.scheduleDateForm.get("start").value && this.scheduleDateForm.get("end").value) {
           this.refreshDateSearch()
         }
+      }
+    )
+
+    this.sendDateForm.valueChanges.subscribe(res=>{
+    if (this.sendDateForm.get("start").value && this.sendDateForm.get("end").value) {
+        this.refreshDateSearch()
         }
-      )
-    }
+      }
+    )
+
+    this.acceptedDateForm.valueChanges.subscribe(res=>{
+      if (this.acceptedDateForm.get("start").value && this.acceptedDateForm.get("end").value) {
+          this.refreshDateSearch()
+        }
+      }
+    )
+
+    this.paidDateForm.valueChanges.subscribe(res=>{
+      if (this.paidDateForm.get("start").value && this.paidDateForm.get("end").value) {
+          this.refreshDateSearch()
+        }
+      }
+    )
   }
 
   emitDatePickerData(event, type: string) {
@@ -349,52 +391,101 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
         this.refreshDateSearch()
       }
     }
+
+    if (this.paidDateForm && type === 'paid') {
+      const form = this.paidDateForm
+      if (!form.get("start").value || !form.get("end").value) {
+        this.refreshDateSearch()
+      }
+    }
   }
 
-
   refreshDateSearch() {
-    if (! this.searchModel) {  this.searchModel = {} as ManifestSearchModel  }
+    this.initSearchModel();
+
+    this.searchModel.scheduleDate_From = '';
+    this.searchModel.scheduleDate_To   = '';
+    this.searchModel.accepted_From = '';
+    this.searchModel.accepted_To   = '';
+    this.searchModel.send_From = '';
+    this.searchModel.send_To   = '';
+    this.searchModel.paid_From = '';
+    this.searchModel.paid_To   = '';
+
+    if (!this.scheduleDateForm || !this.scheduleDateForm.get("start").value  || !this.scheduleDateForm.get("end").value) {
+    } else {
+      const to    = this.scheduleDateForm.get("end").value
+      const from  = this.scheduleDateForm.get("start").value
+
+      this.searchModel.scheduleDate_From = this.dateHelperService.format(from, 'MM/dd/yyyy')
+      this.searchModel.scheduleDate_To   = this.dateHelperService.format(to, 'MM/dd/yyyy')
+      console.log(this.searchModel)
+    }
+
+    if (!this.scheduleDateForm || !this.scheduleDateForm.get("start").value  || !this.scheduleDateForm.get("end").value) {
+    } else {
+      const to    = this.scheduleDateForm.get("end").value
+      const from  = this.scheduleDateForm.get("start").value
+
+      this.searchModel.accepted_From = this.dateHelperService.format(from, 'MM/dd/yyyy')
+      this.searchModel.accepted_To   = this.dateHelperService.format(to, 'MM/dd/yyyy')
+    }
+
+    if (!this.sendDateForm || !this.sendDateForm.get("end").value  || !this.sendDateForm.get("start").value) {
+    } else {
+      const to    = this.scheduleDateForm.get("end").value
+      const from  = this.scheduleDateForm.get("start").value
+
+      this.searchModel.send_From   =  this.dateHelperService.format(from, 'MM/dd/yyyy')
+      this.searchModel.send_To     =  this.dateHelperService.format(to, 'MM/dd/yyyy')
+    }
+
+    if (!this.paidDateForm || !this.paidDateForm.get("end").value  || !this.paidDateForm.get("start").value) {
+    } else {
+      const to    = this.paidDateForm.get("end").value
+      const from  = this.paidDateForm.get("start").value
+
+      this.searchModel.paid_From   =  this.dateHelperService.format(from, 'MM/dd/yyyy')
+      this.searchModel.paid_To     =  this.dateHelperService.format(to, 'MM/dd/yyyy')
+    }
+
+    console.log( this.searchModel)
     this.refreshSearch()
   }
 
+  setDestinationSite(event) {
+    const id = event.value;
 
-  refreshScheduledDateSearch() {
-    if (! this.searchModel) {  this.searchModel = {} as ManifestSearchModel  }
+    if (event && this.inputForm) {
+      this.siteService.getSite(id).subscribe(data => {
+        this.inputForm.controls['destinationID'].setValue(data.id);
+        this.inputForm.controls['destinationURL'].setValue(data.url);
+        this.inputForm.controls['destinationSiteName'].setValue(data.name);
+        this.refreshSearch()
+      })
+    }
 
-      if (!this.scheduleDateForm || !this.scheduleDateFrom  || !this.scheduleDateTo) {
-        this.searchModel.scheduleDate_From = '';
-        this.searchModel.scheduleDate_To   = '';
-      } else {
-        const to    = this.scheduleDateForm.get("start").value
-        const from  = this.scheduleDateForm.get("end").value
-
-        this.searchModel.scheduleDate_From = from.toISOString()
-        this.searchModel.scheduleDate_To   = to.toISOString()
-      }
-
-      if (!this.scheduleDateForm || !this.acceptedDateFrom  || !this.acceptedDateTo) {
-        this.searchModel.accepted_From = '';
-        this.searchModel.accepted_To   = '';
-      } else {
-        const to    = this.scheduleDateForm.get("start").value
-        const from  = this.scheduleDateForm.get("end").value
-
-        this.searchModel.accepted_From = from.toISOString()
-        this.searchModel.accepted_To   = to.toISOString()
-      }
-
-      if (!this.sendDateForm || !this.sendDateFrom  || !this.sendDateTo) {
-        this.searchModel.send_From = '';
-        this.searchModel.send_To   = '';
-      } else {
-        const to    = this.sendDateForm.get("start").value
-        const from  = this.sendDateForm.get("end").value
-
-        this.searchModel.send_To = to.toISOString()
-        this.searchModel.send_From   = from.toISOString()
-      }
-
-      this.refreshSearch()
   }
 
+  applyType(event) {
+    if (event && this.inputForm) {
+      this.manifestType = event;
+       this.refreshSearch()
+    }
+  }
+
+  applyStatus(event) {
+    if (event && this.inputForm) {
+      this.manifestStatus = event;
+      this.refreshSearch()
+    }
+  }
+
+  applyActiveStatus(event) {
+    if (event && this.inputForm) {
+
+      this.inputForm.controls['activeStatus'].setValue(event.value.id)
+      this.refreshSearch()
+    }
+  }
 }

@@ -83,7 +83,7 @@
                     ><mat-icon>print</mat-icon></button>
           </div>
 
-          <div *ngIf="item.voidReason == false">
+          <div *ngIf="!item.voidReason">
             <button mat-button
                     class="grid-item-button"
                     (click)="voidPayment(item)"

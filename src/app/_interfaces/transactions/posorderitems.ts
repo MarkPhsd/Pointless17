@@ -55,6 +55,8 @@ export interface IPOSOrderItem {
   packagingMaterial             :string;
   portionValue                  :string;
   itemsPrepped                  : string;
+  splitGroupID                : number;
+  printLocation               :  number;
 }
 
 export interface PosOrderMenuItem {

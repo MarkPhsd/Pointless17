@@ -8,7 +8,9 @@ import { ButtonRendererComponent } from '../btn-renderer.component';
 })
 export class AgGridFormatingService {
 
-  constructor(private _snackbar: MatSnackBar) { }
+
+
+constructor(private _snackbar: MatSnackBar) { }
 
 initFrameworkComponents() {
   return {
@@ -33,8 +35,80 @@ initGridOptions(pageSize: number, columnDefs: any)  {
     infiniteInitialRowCount: 0,
     columnDefs: columnDefs,
     rowSelection: 'multiple',
+    rowClassRules: {
+
+      "" :  (params) => {
+        if (params.node.selected) {
+          console.log('selected')
+          return true;
+        }
+      },
+
+      "row-not-forsale" :  (params) => {
+        const value = params.api.getValue("notAvalibleForSale", params.node) == true;
+        if (value) {
+          return true
+        }
+      },
+
+      "row-manifest-rejected" :  (params) => {
+        const value = params.api.getValue("rejected", params.node) != null;
+        if (value) {
+          return true
+        }
+      },
+
+      "row-not-active" :  (params) => {
+        const value = params.api.getValue("active", params.node) == false;
+        if (value) {
+          return true
+        }
+      },
+
+      "row-unassigned": (params) => {
+        return params.api.getValue("manifestID", params.node) == 0
+      },
+
+      "row-manifest": (params) => {
+        return params.api.getValue("manifestID", params.node) >= 1
+      },
+
+    },
   }
+
 }
+
+initGridOptionsFormated(pageSize: number, columnDefs: any) {
+
+  if (!columnDefs) { return null };
+
+  const grid = {
+    // rowClassRules: this.getRowCalassRules(),
+    pagination: true,
+    paginationPageSize: pageSize,
+    cacheBlockSize: 20,
+    maxBlocksInCache: 50,
+    rowModelType: 'infinite',
+    infiniteInitialRowCount: 0,
+    columnDefs: columnDefs,
+    rowSelection: 'multiple',
+    rowClassRules: {
+      "row-fail": params => params.api.getValue("packageCountRemaining", params.node) < 10,
+      "row-pass": params => params.api.getValue("packageCountRemaining", params.node) >= 10,
+      "row-unassigned": params => params.api.getValue("manifestID", params.node) == 0,
+      "row-manifest": params => params.api.getValue("manifestID", params.node) >= 1
+    },
+  }
+
+  return grid
+
+}
+// getRowCalassRules() {
+//   return {
+//     'row-unassigned' : function(params) { return params.data.manifestID == 0  },
+//     'row-manifest'   : function(params) { return params.data.manifestID >= 0  },
+//   }
+// }
 
   initProductSearchModel(categoryID: number, search: string, pageSize: number,
                          currentPage: number, itemTypeID: number, brandID: number): ProductSearchModel {

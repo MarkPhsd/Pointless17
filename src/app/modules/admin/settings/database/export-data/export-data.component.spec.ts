@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UITransactionsComponent } from './uitransactions.component';
+import { ExportDataComponent } from './export-data.component';
 
-describe('UITransactionsComponent', () => {
-  let component: UITransactionsComponent;
-  let fixture: ComponentFixture<UITransactionsComponent>;
+describe('ExportDataComponent', () => {
+  let component: ExportDataComponent;
+  let fixture: ComponentFixture<ExportDataComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UITransactionsComponent ]
+      declarations: [ ExportDataComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UITransactionsComponent);
+    fixture = TestBed.createComponent(ExportDataComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

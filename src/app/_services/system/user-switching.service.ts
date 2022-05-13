@@ -103,7 +103,6 @@ export class UserSwitchingService {
     const iUser = {} as IUser;
     iUser.username  = this.encryptionService.decrypt(appUser.height, appUser.depth)
     iUser.password = this.encryptionService.decrypt(appUser.width, appUser.depth)
-
   }
 
   saveAppUser(appUser: ElectronDimensions) {
@@ -190,9 +189,9 @@ export class UserSwitchingService {
   setUserInfo(user: IUser, password) {
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }
-    if (!user.firstName) { user.firstName= user.username }
+    if (!user.firstName) { user.firstName = user.username }
     localStorage.setItem("ami21", 'true')
-    // currentUser.password     = password;
+    currentUser.password     = password;
     currentUser.roles        = user.roles
     currentUser.roles        = currentUser.roles.toLowerCase()
     currentUser.id           = user.id
@@ -203,10 +202,12 @@ export class UserSwitchingService {
     currentUser.token        = user.token;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
-    user.authdata = window.btoa(user.username + ':' + user.token);
+    user.authdata = window.btoa(user.username + ':' + user.password);
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
+    // console.log('currentUser', currentUser)
     this.authenticationService.updateUser(currentUser)
+
     return currentUser
   }
 

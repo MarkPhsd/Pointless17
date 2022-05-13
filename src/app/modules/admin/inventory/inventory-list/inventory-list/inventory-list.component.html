@@ -2,13 +2,15 @@
      fx-flex
      fx-layout-align="space-between"
      class="grid-container"
-     *ngIf="searchForm"  >
+     *ngIf="searchForm"   >
 
-  <div  [formGroup]="searchForm"
+  <mat-label *ngIf="resultMessage"><mat-icon>alert</mat-icon>al{{resultMessage}}</mat-label>
+
+  <div  *ngIf="searchForm"  [formGroup]="searchForm"
         (ngSubmit)="refreshSearch()"
         class="grid-container-selectors">
 
-    <div class="grid-item margin-2">
+    <div class="grid-item margin-2" *ngIf="searchForm"  >
       <search-debounce-input
                 [itemNameControl] = "'itemName'"
                 [searchForm]      = "searchForm"
@@ -19,14 +21,13 @@
         </div>
       </search-debounce-input>
     </div>
-
     <div class="grid-item"  *ngIf="!listOnly">
       <mat-form-field appearance="outline">
         <mat-label>Sites</mat-label>
           <mat-select
                     type="text"
                     (selectionChange)="getAssignedSiteSelection($event)"
-                    formControlNamename="selectedSiteID"
+                    formControlName="selectedSiteID"
                   >
           <div *ngIf="(sites$ | async) as list">
             <mat-option *ngFor="let item of list" [value]="item.id">
@@ -45,7 +46,7 @@
               <mat-select
                         type="text"
                         (selectionChange)="getMetrcCategory($event)"
-                        formControlNamename="metrcCategory"
+                        formControlName="metrcCategory"
                       >
                 <mat-option [value]=0>All</mat-option>
                 <mat-option *ngFor="let item of list"
@@ -65,9 +66,7 @@
             <mat-select
                       type="text"
                       (selectionChange)="getLocation($event)"
-                      formControlNamename="inventoryLocations"
-                    >
-
+                      formControlName="inventoryLocations">
             <mat-option [value]=0>All</mat-option>
             <mat-option *ngFor="let item of list" [value]="item.id">
               {{ item.name }}
@@ -78,34 +77,51 @@
       </div>
     </div>
 
-    <div class="grid-item" *ngIf="!listOnly">
+    <div class="grid-item"  *ngIf="searchForm" [formGroup]="searchForm">
       <mat-form-field appearance="outline">
         <mat-label>Status</mat-label>
           <mat-select
                     type="text"
                     (selectionChange)="getInventoryStatus($event)"
-                    formControlNamename="inventoryStatusID"
+                    formControlName="inventoryStatusID"
                   >
           <div *ngIf="inventoryStatusList">
-
             <mat-option *ngFor="let item of inventoryStatusList" [value]="item.name">
               {{ item.name }}
             </mat-option>
-
           </div>
         </mat-select>
       </mat-form-field>
     </div>
 
-    <div>
-        <button mat-button
-          (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
-        </button>
+    <div class="grid-item"
+         *ngIf="!listOnly && searchForm && manifestAssignedList"
+         [formGroup]="searchForm">
+      <mat-form-field appearance="outline">
+        <mat-label>Manifest Assigned</mat-label>
+          <mat-select
+                    type="number"
+                    (selectionChange)="getManifestStatus($event)"
+                    formControlName="manifestAssigned"
+                  >
+          <div>
+            <mat-option *ngFor="let item of manifestAssignedList" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </div>
+        </mat-select>
+      </mat-form-field>
     </div>
 
     <div  *ngIf="!listOnly">
         <button mat-button
               (click)="listAll()"><mat-icon>list</mat-icon>List All
+      </button>
+    </div>
+
+    <div  *ngIf="listOnly">
+      <button mat-button
+            (click)="refreshSearch()"><mat-icon>refresh</mat-icon>Refresh
       </button>
     </div>
 
@@ -119,7 +135,7 @@
     <div *ngIf="currentManifest && !listOnly">
       <button class="info-buttons"
               mat-button
-              (click)="addSelectedToManifest()"><mat-icon>add</mat-icon>Assign to Manifest
+              (click)="addItemsToManifest()"><mat-icon>add</mat-icon>Assign to Manifest
       </button>
     </div>
 
@@ -128,6 +144,12 @@
               mat-button
               (click)="addToNewManifest()"><mat-icon>add</mat-icon>Make Manifest
       </button>
+    </div>
+
+    <div *ngIf="listOnly">
+        <button color="warn" mat-button
+          (click)="removeSelectedFromManifest()"><mat-icon>delete</mat-icon>Remove Selected
+        </button>
     </div>
 
     <div *ngIf="!currentManifest && !listOnly">
@@ -143,8 +165,38 @@
               (click)="clearAssignedManifest()"><mat-icon>remove</mat-icon>Exit Manifest
       </button>
     </div>
-  </div>
 
+    <div *ngIf="listOnly && isDistributor">
+      <button mat-button color="warn"
+        (click)="removeSelectedFromManifest()"><mat-icon>refresh</mat-icon>Remove Selected
+      </button>
+    </div>
+
+    <div *ngIf="listOnly && isSiteSatellite">
+      <button mat-button color="warn"
+        (click)="rejectFromManifest()"><mat-icon>thumb_down_alt</mat-icon>Reject Selected
+      </button>
+    </div>
+
+    <div *ngIf="listOnly && isSiteSatellite">
+      <button mat-button color="warn"
+        (click)="rejectAllFromManifest()"><mat-icon>thumb_down_alt</mat-icon>Reject All
+      </button>
+    </div>
+
+    <div *ngIf="listOnly && isSiteSatellite">
+      <button mat-button color="primary"
+        (click)="setAcceptedAll()"><mat-icon>thumb_up</mat-icon>Set all Active
+      </button>
+    </div>
+
+    <div *ngIf="listOnly && isSiteSatellite">
+      <button mat-button color="primary"
+        (click)="setAcceptedSelected()"><mat-icon>thumb_up</mat-icon>Set Selected Active
+      </button>
+    </div>
+
+  </div>
 </div>
 
 <mat-divider></mat-divider>

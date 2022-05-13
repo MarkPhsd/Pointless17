@@ -2,13 +2,11 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { Observable, Subject ,fromEvent } from 'rxjs';
-import { of } from 'rxjs';
-import { IItemBasic, IItemBasicB, IProductSearchResults, MenuService } from 'src/app/_services/menu/menu.service';
+import { Observable} from 'rxjs';
+
+import {  IItemBasicB } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IItemType, ItemTypeService, itemType_Categories, ItemType_Categories_Reference } from 'src/app/_services/menu/item-type.service';
-import { IProductCategory } from 'src/app/_interfaces';
-import { AutoWidthCalculator } from 'ag-grid-community';
+import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { IDisplayAssignment, ItemTypeDisplayAssignmentService } from 'src/app/_services/menu/item-type-display-assignment.service';
 
 @Component({
@@ -32,6 +30,7 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
     this.availableItems = [...(items || []).map((item: {}, index: number) => ({
       value: item[this.valueField].toString(),
       text: item[this.textField],
+      groupID: 0,
     }))];
   }
   // array of items to display in right box
@@ -39,6 +38,7 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
     this.selectedItems = [...(items || []).map((item: {}, index: number) => ({
       value: item[this.valueField].toString(),
       text: item[this.textField],
+      groupID: 0,
     }))];
   }
 
@@ -95,8 +95,8 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
   }
 
   removeSelectedFromAvailable( itemTypeBasic: IItemBasicB[], allAssignedCategories: IDisplayAssignment[]): IListBoxItem[]   {
-    let allIemTypes          = itemTypeBasic.map( item => ({ value: item.id.toString(), text: item.name }));
-    let assignedItems        = allAssignedCategories.map( item =>  ({ value: item.itemTypeID.toString(), text: item.name }));
+    let allIemTypes          = itemTypeBasic.map( item => ({ groupID: 0,value: item.id.toString(), text: item.name }));
+    let assignedItems        = allAssignedCategories.map( item =>  ({ groupID: 0,value: item.itemTypeID.toString(), text: item.name }));
 
     assignedItems.forEach(item => {
       const value = allIemTypes.find( x => x.value.toLowerCase() === item.value.toLowerCase() )
@@ -109,7 +109,7 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
   }
 
   convertToIlistBoxItem(listSource: any[]): IListBoxItem[] {
-    var result = listSource.map(item => ({ value: item.id.toString(), text: item.name }));
+    var result = listSource.map(item => ({ groupID: 0,value: item.id.toString(), text: item.name }));
     return result
   }
 
@@ -122,7 +122,7 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
         if (data) {
           this.selectedItems = []
           data.forEach(data => {
-            this.selectedItems.push({value: data.itemTypeID.toString(), text: data.name})
+            this.selectedItems.push({groupID: 0,value: data.itemTypeID.toString(), text: data.name})
             //then we remove items from avalible categories that exist in Selected items.
             //this.removeSelectedFromAvailable( this.availables , this.selectedItems)
           })
@@ -162,6 +162,7 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
   }
 
   drop(event: CdkDragDrop<IListBoxItem[]>) {
+
     if (event.previousContainer === event.container) {
       moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
     } else {
@@ -171,7 +172,6 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
 
     //assign the selected items to the current itemType selected.
     this.assignArrayToItemType(this.selectedItems)
-    console.log(this.selectedItems)
 
     this.itemsMoved.emit({
       available: this.availableItems,
@@ -180,6 +180,7 @@ export class ItemTypeDisplayAssignmentComponent implements OnInit {
       from: 'available',
       to  : 'selected',
     });
+    console.log(this.selectedItems)
   }
 
   searchItemsReset() {

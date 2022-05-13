@@ -4,7 +4,6 @@
   display: grid;
   grid-template-columns: 1fr 200px;
   gap: 7px;
-  // overflow: hidden;
   height: 90vh;
 }
 .grid-container-selectors {
@@ -35,12 +34,16 @@
 .grid-container-selectors {
   display: flex;
   flex-wrap: wrap;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .grid-container {
   display: grid;
   gap: 5px;
   grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .grid-buttons {
@@ -64,7 +67,7 @@
 .grid-list {
 
   display: grid;
-  grid-template-columns: 1fr 20vw;
+  grid-template-columns: 1fr 250px;
   gap: 7px;
 
   @media (max-width: 599px)  {

@@ -5,7 +5,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { InventoryAssignmentService, IInventoryAssignment, InventoryFilter, InventorySearchResultsPaged } from 'src/app/_services/inventory/inventory-assignment.service';
-import { ClientSearchModel, ISite, IUserProfile } from 'src/app/_interfaces';
+import { ClientSearchModel, ISite, IUserProfile, OperationWithAction } from 'src/app/_interfaces';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { InventoryLocationsService } from 'src/app/_services/inventory/inventory-locations.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -29,7 +29,10 @@ import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/i
 import { MainfestEditorComponent } from '../../manifests/mainfest-editor/mainfest-editor.component';
 import { AgIconFormatterComponent } from 'src/app/_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 import { ManifestMethodsService } from 'src/app/_services/inventory/manifest-methods.service';
-
+import { AdjustPaymentComponent } from 'src/app/modules/posorders/adjust/adjust-payment/adjust-payment.component';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
+import { NewInventoryItemComponent } from '../../new-inventory-item/new-inventory-item.component';
 export interface InventoryStatusList {
   name: string;
   id:   number;
@@ -47,107 +50,118 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   @Input()  manifestID  : number;
   @Input()  siteID : ISite;
 
-    InventorySearchResultsPaged: InventorySearchResultsPaged;
-    inventoryAssignment        : IInventoryAssignment;
-    inventoryAssignmentHistory : IInventoryAssignment[];
-    @ViewChild('input', {static: true}) input: ElementRef;
-    @Output() itemSelect  = new EventEmitter();
+  resultMessage: string;
+  InventorySearchResultsPaged: InventorySearchResultsPaged;
+  inventoryAssignment        : IInventoryAssignment;
+  inventoryAssignmentHistory : IInventoryAssignment[];
+  @ViewChild('input', {static: true}) input: ElementRef;
+  @Output() itemSelect  = new EventEmitter();
 
-    id:                   any;
-    item:                 string;
-    search:               string;
-    searchPhrase:         Subject<any> = new Subject();
-    public searchForm: FormGroup;
-    inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
+  id:                   any;
+  item:                 string;
+  search:               string;
+  searchPhrase:         Subject<any> = new Subject();
+  public searchForm: FormGroup;
+  inventoryAssignment$             : Subject<IInventoryAssignment[]> = new Subject();
 
-    currentManifest: InventoryManifest;
+  currentManifest: InventoryManifest;
 
-    get itemName() {
-      if (!this.searchForm) { this.initForm()}
-      if (this.searchForm) {
-        return this.searchForm.get("itemName") as FormControl;
-      }
+  get itemName() {
+    if (!this.searchForm) { this.initForm()}
+    if (this.searchForm) {
+      return this.searchForm.get("itemName") as FormControl;
     }
+  }
 
-    get platForm()         {  return Capacitor.getPlatform(); }
-    get PaginationPageSize(): number {return this.pageSize;  }
-    get gridAPI(): GridApi {  return this.gridApi;  }
+  get platForm()         {  return Capacitor.getPlatform(); }
+  get PaginationPageSize(): number {return this.pageSize;  }
+  get gridAPI(): GridApi {  return this.gridApi;  }
 
-    //AgGrid
-    params               : any;
-    private gridApi      : GridApi;
-    // private gridColumnApi: GridAlignColumnsDirective;
-    gridOptions          : any
-    columnDefs           = [];
-    defaultColDef        ;
-    frameworkComponents  : any;
-    rowSelection         : any;
-    rowDataClicked1      = {};
-    rowDataClicked2      = {};
-    rowData:             any[];
-    pageSize                = 20
-    pageNumber          : number;
-    currentRow              = 1;
-    currentPage             = 1
-    numberOfPages           = 1
-    startRow                = 0;
-    endRow                  = 0;
-    recordCount             = 0;
-    isfirstpage             : boolean;
-    islastpage              : boolean;
-    // pageSize              : number;
-    //This is for the filter Section//
-    brands           : IUserProfile[];
-    categories$      : Observable<IMenuItem[]>;
-    departments$     : Observable<IMenuItem[]>;
-    productTypes$    : Observable<IItemBasicB[]>;
-    viewOptions$     = of(
-      [
-        {name: 'Active', id: 0},
-        {name: 'All', id: 1},
-        {name: 'Inactive', id: 2}
-      ]
-    )
+  //AgGrid
+  params               : any;
+  private gridApi      : GridApi;
+  // private gridColumnApi: GridAlignColumnsDirective;
+  gridOptions          : any
+  columnDefs           = [];
+  defaultColDef        ;
+  frameworkComponents  : any;
+  rowSelection         : any;
+  rowDataClicked1      = {};
+  rowDataClicked2      = {};
+  rowData:             any[];
+  pageSize                = 20
+  pageNumber          : number;
+  currentRow              = 1;
+  currentPage             = 1
+  numberOfPages           = 1
+  startRow                = 0;
+  endRow                  = 0;
+  recordCount             = 0;
+  isfirstpage             : boolean;
+  islastpage              : boolean;
+  // pageSize              : number;
+  //This is for the filter Section//
+  brands           : IUserProfile[];
+  categories$      : Observable<IMenuItem[]>;
+  departments$     : Observable<IMenuItem[]>;
+  productTypes$    : Observable<IItemBasicB[]>;
+  viewOptions$     = of(
+    [
+      {name: 'Active', id: 0},
+      {name: 'All', id: 1},
+      {name: 'Inactive', id: 2}
+    ]
+  )
 
-    //search form filters
-    inputForm        : FormGroup;
-    categoryID       : number;
-    productTypeSearch: number;
-    productTypeID    : number;
-    typeID           : number;
-    brandID          : number;
-    active           : boolean;
-    viewAll           = 1;
+  manifestAssignedList     =
+    [
+      {name: 'Any',         id: 0},
+      {name: 'Assigned'  ,  id: 1},
+      {name: 'Un Assigned', id: 2},
+    ]
 
-    selected        : any[];
-    selectedRows    : any;
-    agtheme         = 'ag-theme-material';
-    gridDimensions
-    urlPath:        string;
-    value           : any;
 
-    smallDevice    : boolean;
-    @Input() gridlist       = "grid-list"
-    sites$:               Observable<ISite[]>;
-    site:                 ISite;
-    selectedSiteID:       number;
+  //search form filters
+  inputForm        : FormGroup;
+  categoryID       : number;
+  productTypeSearch: number;
+  productTypeID    : number;
+  typeID           : number;
+  brandID          : number;
+  active           : boolean;
+  viewAll           = 1;
 
-    metrcCategory$:       Observable<METRCItemsCategories[]>;
-    metrcCategory:        METRCItemsCategories;
-    metrcCategories      :METRCItemsCategories[];
-    metrcCategoryID:      number;
+  selected        : any[];
+  selectedRows    : any;
+  agtheme         = 'ag-theme-material';
+  gridDimensions
+  urlPath:        string;
+  value           : any;
 
-    locations$:           Observable<IInventoryLocation[]>;
-    inventoryLocation:    IInventoryLocation;
-    inventoryLocationID:  number;
+  smallDevice    : boolean;
+  @Input() gridlist       = "grid-list"
+  sites$:               Observable<ISite[]>;
+  site:                 ISite;
+  selectedSiteID:       number;
 
-    inventoryFilter:      InventoryFilter;
-    inventoryStatus:      InventoryStatusList
-    inventoryStatusID:    number
-    inventoryStatusList  = this.inventoryAssignmentService.inventoryStatusList;
+  metrcCategory$:       Observable<METRCItemsCategories[]>;
+  metrcCategory:        METRCItemsCategories;
+  metrcCategories      :METRCItemsCategories[];
+  metrcCategoryID:      number;
 
+  locations$:           Observable<IInventoryLocation[]>;
+  inventoryLocation:    IInventoryLocation;
+  inventoryLocationID:  number;
+
+  inventoryFilter:      InventoryFilter;
+  inventoryStatus:      InventoryStatusList
+  inventoryStatusID:    number
+  inventoryStatusList  = this.inventoryAssignmentService.inventoryStatusList;
+
+  manifestAssigned: number;
+
+  isAuthorized: boolean;
   //This is for the search Section//
-
   currentManifest$: Subscription;
 
   get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
@@ -156,9 +170,12 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   initSubscriptions() {
     this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
-      if (data && this.listOnly) {
+      if (data ) {
         this.currentManifest = data;
         this.manifestID = data.id
+      }
+      if (!data ) {
+        this.currentManifest = null;
       }
     })
   }
@@ -166,27 +183,26 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   constructor(  private _snackBar: MatSnackBar,
                 private manifestService : ManifestInventoryService,
                 private inventoryAssignmentService: InventoryAssignmentService,
-                private router: Router,
-                private agGridService: AgGridService,
                 private fb: FormBuilder,
                 private siteService: SitesService,
                 private metrcCategoriesService: MetrcItemsCategoriesService,
-                private locationService: InventoryLocationsService,
-                private dialog                  : MatDialog,
+                private locationService        : InventoryLocationsService,
                 private inventoryEditButon     : InventoryEditButtonService,
                 private menuService            : MenuService,
                 private itemTypeService        : ItemTypeService,
                 private contactsService        : ContactsService,
                 private awsService             : AWSBucketService,
                 private agGridFormatingService : AgGridFormatingService,
-                private manifestMethodsService: ManifestMethodsService,
-
+                private userAuthorization      : UserAuthorizationService,
+                private dialog                 : MatDialog,
               )
   {
     this.initForm()
   }
 
   async ngOnInit() {
+
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     this.initSubscriptions();
     this.initClasses();
     this.sites$         = this.siteService.getSites();
@@ -210,27 +226,53 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
     this.metrcCategory$ = this.metrcCategoriesService.getCategories()
     this.metrcCategory$.subscribe(
-      {next: data => {
-        this.metrcCategories = data;
-        this.initAgGrid();
-      },
-      error: err => {
-        console.log('err', err)
-        this.initAgGrid();
+        {next: data => {
+          this.metrcCategories = data;
+          this.initAgGrid();
+        },
+        error: err => {
+          console.log('err', err)
+          this.initAgGrid();
+        }
       }
-    }
     )
-
     if (!this.search) { this.search = ''}
   };
+
+  setRefreshAgGrid(value: number) {
+    this.columnDefs = this.initAgGrid();
+  }
+
+  agColumnApiRefresh() {
+    if (this.columnDefs) {
+      this.agGridFormatingService.initGridOptionsFormated(this.pageSize, this.columnDefs)
+    }
+  }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    if (this.currentManifest$) {
-      this.currentManifest$.unsubscribe()
-    }
+    // if (this.currentManifest$) {
+    //   this.currentManifest$.unsubscribe()
+    // }
+    const i = 0;
   }
+
+  openAdjustmentDialog() {
+    const dialogConfig = [
+      { data: { id: 4 } }
+    ]
+    const dialogRef = this.dialog.open(AdjustmentReasonsComponent,
+      { width:  '600px',
+        height: '800px',
+        data : {id: 4}
+      },
+    )
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
+
   initClasses()  {
     const platForm      = this.platForm;
     this.gridDimensions = 'width: 100%; height: 100%;'
@@ -256,6 +298,9 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       selectedSiteID:     [''],
       inventoryLocations: [''],
       inventoryStatusID:  [''],
+      manifestAssigned  : [''],
+      metrcCategory     : [''],
+
     })
   }
 
@@ -269,13 +314,43 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       iconCell: AgIconFormatterComponent
     };
 
+    // this.gridOptions.push(rowClassRules)
     this.defaultColDef = {
       flex: 2,
       // minWidth: 100,
     };
 
     let item = {headerName: 'id',  sortable: true, field: 'id',  hide: true, } as any;
+    this.columnDefs.push(item)
 
+    item =     {
+      field: "selected",
+      minWidth: 50,
+      maxWidth: 50,
+      checkboxSelection: true
+    }
+    this.columnDefs.push(item)
+
+    item =     {
+      field: 'id',
+      cellRenderer: "btnCellRenderer",
+                    cellRendererParams: {
+                      onClick: this.editItemFromGrid.bind(this),
+                      getIconFunction: this.getLabel.bind(this),
+                      btnClass: 'btn btn-primary btn-sm'
+                    },
+                    minWidth: 75,
+                    maxWidth: 75,
+                    flex: 2,
+    }
+    if (this.listOnly) {
+      this.columnDefs.push(item)
+    }
+
+    //notAvalibleForSale
+    item = {headerName: 'notAvalibleForSale',  sortable: true, field: 'notAvalibleForSale',  hide: true, } as any;
+    this.columnDefs.push(item)
+    item = {headerName: 'active',  sortable: true, field: 'active',  hide: true, } as any;
     this.columnDefs.push(item)
 
     item =  {headerName: 'Name',  sortable: true, field: 'productName',
@@ -357,15 +432,28 @@ export class InventoryListComponent implements OnInit, OnDestroy {
                     maxWidth: 125,
                     flex: 2,
     }
-    this.columnDefs.push(item)
+    if (!this.listOnly) {
+      this.columnDefs.push(item)
+    }
 
+    item =  {headerName: 'Rejected', field: 'rejected', sortable: true,
+                            width   : 150,
+                            minWidth: 150,
+                            maxWidth: 275,
+                            flex    : 1,
+              }
+    if (this.listOnly) {
+      this.columnDefs.push(item)
+    }
+
+    const columnDefs = this.columnDefs
     this.rowSelection = 'multiple';
-
     this.gridOptions = this.agGridFormatingService.initGridOptions(this.pageSize, this.columnDefs);
+    return columnDefs
   }
 
   editManifest(e) {
-    console.log(e.rowData)
+
     if (!e) {return}
     if (e.rowData.id)  {
       this.manifestService.openManifestForm(e.rowData.manifestID);
@@ -397,6 +485,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       searchModel.manifestID      = this.currentManifest.id
     }
 
+    if (this.manifestAssigned) {
+      searchModel.manifestAssigned = this.manifestAssigned;
+    }
+
     //if location
     if (this.itemName && this.searchForm) {
       if (this.itemName.value)  { searchModel.productName   = this.itemName.value  }
@@ -405,7 +497,8 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     if (this.inventoryLocation) {searchModel.location = this.inventoryLocation.name }
     if (this.metrcCategory)     {searchModel.productCategoryName = this.metrcCategory.name}
     searchModel.pageSize    = this.pageSize
-    searchModel.pageNumber  = this.pageNumber
+    searchModel.pageNumber = this.currentPage;
+
     this.id = 0
     return searchModel
   }
@@ -482,6 +575,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   assignSite(id: number){
     this.siteService.getSite(id).subscribe( data => {
       this.site = data
+      this.siteService.setAssignedSite(data);
+      this.siteService.updateSiteSubscriber(data);
+      this.refreshSearch();
+      this.manifestService.updateCurrentInventoryManifest(null)
     })
   }
 
@@ -499,7 +596,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.metrcCategoryID = event.value
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
-      // this.searchItems()
+      this.refreshSearch();
       return
     }
     if (event.value) {
@@ -511,7 +608,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   assignMetrcCategory(id: number) {
     this.metrcCategoriesService.getCategory(id).subscribe( data => {
       this.metrcCategory = data
-      // this.searchItems()
+    
     })
   }
 
@@ -519,7 +616,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.inventoryLocationID = event.value
     if (this.inventoryLocationID == 0) {
       this.inventoryLocation = null
-      // this.searchItems()
+      this.refreshSearch();
       return
     }
     if (event.value) {
@@ -530,16 +627,26 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   assignLocation(id: number){
     this.locationService.getLocation(id).subscribe( data => {
       this.inventoryLocation = data
-      console.log(data)
+      this.refreshSearch();
     })
   }
 
   getInventoryStatus(event) {
     if (event.value) {
       this.assignInventoryStatus(event.value);
+      this.refreshSearch();
     } else {
       this.inventoryStatus.id = 0
-      // this.searchItems()
+    }
+  }
+
+  getManifestStatus(event) {
+    if (event.value) {
+      this.manifestAssigned = event.value;
+      this.refreshSearch();
+    } else {
+      this.manifestAssigned = 0;
+      this.refreshSearch();
     }
   }
 
@@ -594,6 +701,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
             if (this.numberOfPages !=0 && this.numberOfPages) {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
+
             params.successCallback(data.results)
           }
         );
@@ -603,7 +711,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     if (!datasource)   { return }
     if (!this.gridApi) { return }
     this.gridApi.setDatasource(datasource);
+
+    // this.setRefreshAgGrid(2000)
   }
+
 
     //mutli select method for selection change.
   onSelectionChanged(event) {
@@ -620,14 +731,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       selected.push(selectedRow.id)
       selectedRowsString += selectedRow.name;
     });
-
-    // const selectedItems  = this.gridApi.getSelectedRows();
-    // selectedRows.forEach(function (selectedRow, index) {
-    //   if (index >= maxToShow) { return; }
-    //   if (index > 0) {  selectedRowsString += ', ';  }
-    //     selected.push(selectedRow.id)
-    //     selectedRowsString += selectedRow.name;
-    // });
 
     if (selectedRows.length > maxToShow) {
     let othersCount = selectedRows.length - maxToShow;
@@ -657,26 +760,19 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   getLabel(rowData)
   {
-    console.log('rowData', rowData)
-    if(rowData && rowData.hasIndicator) {
+
+    // if(rowData && rowData.hasIndicator) {
       return 'edit';
-    }
+    // }
     return '';
   }
 
   getManifestIcon(rowData) {
-    // try {
-    //   if (rowData && rowData.manifestID == undefined) { return ''}
-    // } catch (error) {
-    //   return 'warehouse'
-    // }
-
     if ( rowData && rowData.manifestID != 0 ) {
       return 'warehouse'
     }
     return ''
   }
-
 
   getIcon(rowData)
   {
@@ -700,9 +796,36 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     }
   }
 
-  editItemWithId(id:any) {
-    return
+  editItemWithId(id: any) {
+    this.openInventoryDialog(id);
   }
+
+  ///move to inventoryAssignemtnService
+  openInventoryDialog(id: number) {
+
+    const dialogRef = this.dialog.open(NewInventoryItemComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '750px',
+        minHeight:    '750px',
+        data : {id: id}
+      },
+    )
+
+    if (dialogRef) {
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result && result != 'false') {
+        // this.outputRefresh.emit('true')
+        this.id = 0;
+        this.inventoryAssignment = null;
+      }
+
+      });
+    }
+
+  }
+
 
   onDeselectAll() {
   }
@@ -729,6 +852,26 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     }
   }
 
+  get isDistributor(): boolean {
+    const site = this.siteService.getAssignedSite();
+    if (this.currentManifest) {
+      if (this.currentManifest.originatorID == undefined || this.currentManifest.sourceSiteID == site.id) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  get isSiteSatellite(): boolean {
+    const site = this.siteService.getAssignedSite();
+    if (this.currentManifest) {
+      if (this.currentManifest.originatorID != undefined || this.currentManifest.originatorID != 0) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   validateSiteSelectedForManifest(): boolean {
     if (this.selectedSiteID == 0 || this.selectedSiteID == undefined)  {
       this.notifyEvent('Please selecte a site.', 'Alert')
@@ -753,35 +896,23 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  addSelectedToManifest() {
-
-    if (!this.validateSiteSelectedForManifest())  { return }
-    if (!this.validateItemsSelectedForManifest()) { return }
-
-    const items = this.gridAPI.getSelectedRows();
-
-    if (!items) {
-      this.notifyEvent('Please select some items to add to the new manifest', 'Alert')
-      return;
-    }
-
-    const manifest = {} as InventoryManifest
-    manifest.inventoryAssignments = [ ...items, ... manifest.inventoryAssignments]
-
-    this.siteService.getSite(this.selectedSiteID).pipe(
-      switchMap(site => {
-        return   this.manifestService.update(site,manifest.id, manifest)
+  validateRevoval() {
+    const result = window.confirm("Are you sure you want to remove these from the manifest?")
+    const site = this.siteService.getAssignedSite();
+    if (!result) { return false }
+    if (this.isAuthorized) { return true }
+    if (this.currentManifest) {
+        if (this.isSiteSatellite) { return false }
+        if (this.currentManifest.acceptedDate) { return false }
+        if (this.isDistributor)   {
+          return false
         }
-      )).subscribe(data => {
-        console.log(data)
-        this.openManifestEditor(data)
-    })
-
+    }
+    return true;
   }
 
   addItemsToManifest() {
 
-    if (!this.validateSiteSelectedForManifest())  { return }
     if (!this.validateItemsSelectedForManifest()) { return }
 
     const items = this.gridAPI.getSelectedRows();
@@ -801,29 +932,241 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
     this.manifestService.inventoryItems$.subscribe(data => {
       const items  = data;
-      console.log(data)
       manifest.inventoryAssignments = items;
-
       const site = this.siteService.getAssignedSite()
-      this.siteService.getSite(site.id).pipe(
-        switchMap(site => {
-           this.manifestService.updateSelectedManifestSite(site)
-           return   this.manifestService.add(site, manifest)
+      if (site) {
+          manifest.sourceSiteID = site.id;
+          manifest.sourceSiteName = site.name;
+          manifest.sourceSiteURL = site.url;
+          this.manifestService.add(site, manifest).subscribe(data => {
+            this.manifestService.updateSelectedManifestSite(site)
+            this.openManifestEditor(data)
           }
-        )).subscribe(data => {
-          console.log(data)
-          this.manifestService.updateCurrentInventoryManifest(data)
-          this.openManifestEditor(data)
-      })
+        )
+      }
     })
+
+  }
+
+
+
+  rejectFromManifest(){
+    let selectedRows = this.gridApi.getSelectedRows();
+    const selected   = selectedRows as IInventoryAssignment[]
+    this.rejectManifest(selected);
+  }
+
+  rejectAllFromManifest() {
+    if (!this.currentManifest) {
+      this.notifyEvent('No Current Manifest', 'Alert')
+      return }
+    this.rejectManifest(this.currentManifest.inventoryAssignments)
+  }
+
+  setAcceptedSelected() {
+    if (!this.currentManifest) { return  }
+
+    let  selectedRows = this.gridApi.getSelectedRows();
+    let  selected     = selectedRows as IInventoryAssignment[];
+
+    this.acceptItemsFromManifest(selected);
+  }
+
+  setAcceptedAll() {
+    if (!this.currentManifest) { return }
+    this.acceptItemsFromManifest(this.currentManifest.inventoryAssignments)
+  }
+
+  //reject manifest
+  //takes list of items, prompts for rejection note
+  //applies rejection note to items selected
+  //sets items to not be sold (disabled)
+  //sets items not to be active.
+  //to determine the difference between the source site notification and the detination it it uses the originatorID (source)
+  //
+
+  validateRejection(source, originatorID, selected): boolean {
+    if (!source || !source.url) {
+      this.notifyEvent('No Source', 'Failed')
+      return false
+    }
+    if (!originatorID || originatorID == null) {
+      this.notifyEvent('No Originator', 'Failed')
+      return false
+    }
+    if (!selected) {
+      this.notifyEvent('No selected', 'Failed')
+      return false
+    }
+    return true;
+  }
+
+  rejectManifest(selected: IInventoryAssignment[]) {
+    const result = this.validateRevoval()
+    if (!this.currentManifest) {
+      this.notifyEvent('No Current Manifest', 'Alert')
+      return }
+    if (!result)        { return false }
+    if (!this.listOnly) { return }
+
+    let destination = {} as ISite;
+    destination.url = this.currentManifest.destinationURL;
+
+    let source = {} as ISite;
+    source.url = this.currentManifest.sourceSiteURL;
+
+    const data = this.openRejection(this.currentManifest)
+      let originatorID = this.currentManifest.originatorID;
+
+      if (originatorID == 0 || originatorID == null || !originatorID) {
+        originatorID   = this.currentManifest.id;
+      }
+
+      // const dest$         = this.inventoryAssignmentService.putInventoryAssignmentList(destinationSite, this.currentManifest.id,  selected);
+      data.afterClosed().subscribe(
+        message => {
+          const items = this.assignRejectionMessage(message.toString(), selected);
+          this.currentManifest.inventoryAssignments  = items;
+
+          if (!this.validateRejection) { return }
+
+          const assignMent$ =    this.inventoryAssignmentService.postInventoryAssignmentList(source, originatorID, items);
+          assignMent$.pipe(
+            switchMap(data => {
+              if (originatorID != this.currentManifest.id) {
+                return  this.inventoryAssignmentService.postInventoryAssignmentList(destination, this.currentManifest.id, items)
+              }
+              return of('success')
+            })).subscribe(
+              {next: data => {
+                this.notifyEvent('Items Rejected', 'Completed')
+                this.refreshGrid();
+              },
+              error: error => {
+                this.notifyEvent(`Error ${error}`, 'Error Occured')
+              }
+          });
+        })
+
+  }
+
+
+  assignRejectionMessage(message: string, selected:IInventoryAssignment[]): IInventoryAssignment[] {
+    const allItems =  this.getItemsFromManifest(selected)
+
+    if (allItems){
+      allItems.forEach( data => {
+        data.rejected = message;
+      })
+    }
+
+    return allItems
+  }
+
+  getItemsFromManifest(selected: IInventoryAssignment[]) {
+    const allItems =  this.currentManifest.inventoryAssignments;
+    let newList = [] as  IInventoryAssignment[];
+    selected.forEach( data => {
+      allItems.find( item => {
+          if ( item.id == data.id ) {
+            newList.push(item)
+          }
+        })
+      }
+    );
+    return newList
+  }
+
+  acceptItemsFromManifest(selected: IInventoryAssignment[]) {
+    // const result = this.validateRevoval()
+    if (!this.currentManifest) {
+      this.notifyEvent('No Current Manifest', 'Alert')
+      return
+    }
+
+    let destination = {} as ISite;
+    destination.url = this.currentManifest.destinationURL;
+
+    let source = {} as ISite;
+    source.url = this.currentManifest.sourceSiteURL;
+
+    let originatorID = this.currentManifest.id;
+
+    selected  = this.getItemsFromManifest(selected);
+
+    selected.forEach(data => {
+      if (!data.rejected) {
+        data.notAvalibleForSale = false;
+        data.requiresAttention = false;
+      }
+    })
+
+    const assignMent$ =    this.inventoryAssignmentService.postInventoryAssignmentList(destination, originatorID, selected);
+      assignMent$.subscribe(
+          {next: data => {
+            this.notifyEvent('Items Accepted', 'Completed')
+            this.refreshGrid();
+          },
+          error: error => {
+            this.notifyEvent(`Error ${error}`, 'Error Occured')
+          }
+      });
+
+  }
+
+
+  openRejection(manifest: InventoryManifest ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+      const site = this.siteService.getAssignedSite();
+      if (manifest) {
+        let action      = {}  as OperationWithAction;
+        action.action   = 4;
+        action.manifest  = manifest;
+        action.id        = manifest.id
+        console.log('adjust payment component')
+        dialogRef = this.dialog.open(AdjustPaymentComponent,
+          { width:        '450px',
+            minWidth:     '450px',
+            height:       '400px',
+            minHeight:    '400px',
+            data     : action
+        })
+        return dialogRef
+      }
+
+  }
+
+  removeSelectedFromManifest() {
+
+    const result = this.validateRevoval()
+    if (!result)       { return false }
+    if (!this.listOnly){ return }
+
+    const site = this.siteService.getAssignedSite()
+    let selectedRows = this.gridApi.getSelectedRows();
+    const selected   = selectedRows as IInventoryAssignment[];
+    site.url = this.currentManifest.sourceSiteURL;
+
+    const item$ =  this.inventoryAssignmentService.assignItemsToManifest(site, 0, selected)
+    item$.pipe(
+      switchMap(data => {
+        return this.manifestService.get(site, this.currentManifest.id)
+      })
+    )
+    .subscribe( data => {
+      this.manifestService.updateCurrentInventoryManifest(data)
+      this.refreshGrid()
+    })
+
   }
 
   addToNewManifest() {
-    console.log('addToNewManifest')
 
-    if (!this.validateSiteSelectedForManifest())  { return }
     if (!this.validateItemsSelectedForManifest()) { return }
-
     const items = this.gridAPI.getSelectedRows();
 
     if (!items) {
@@ -832,7 +1175,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     }
 
     const manifest = {} as InventoryManifest
-
     try {
       if (!manifest.inventoryAssignments) { manifest.inventoryAssignments = [] as IInventoryAssignment[]}
     } catch (error) {
@@ -844,19 +1186,17 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     } catch (error) {
       console.log('error', error)
     }
+    const site = this.siteService.getAssignedSite()
 
-    this.siteService.getSite(this.selectedSiteID).pipe(
-      switchMap(site => {
-        manifest.sourceSiteID = site.id;
+    if (site) {
+        manifest.sourceSiteID   = site.id;
         manifest.sourceSiteName = site.name;
-        manifest.sourceSiteURL = site.url;
-        return   this.manifestService.add(site, manifest)
-        }
-      )).subscribe(data => {
-        this.manifestService.updateCurrentInventoryManifest(data)
-        console.log('result', data)
-        this.openManifestEditor(data)
-    })
+        manifest.sourceSiteURL  = site.url;
+        this.manifestService.add(site, manifest).subscribe(data => {
+          this.manifestService.updateCurrentInventoryManifest(data)
+          this.openManifestEditor(data)
+        })
+    }
 
   }
 

@@ -1,10 +1,7 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, QueryList, ViewChildren } from '@angular/core';
-import { SettingsService } from 'src/app/_services/system/settings.service';
+import { AfterViewInit,Component, QueryList, ViewChildren } from '@angular/core';
 import { SchemaUpdateResults, SystemService } from 'src/app/_services/system/system.service';
 import { forkJoin, Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { FormBuilder } from '@angular/forms';
-import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
 
 @Component({
   selector: 'app-database-schema',
@@ -38,7 +35,6 @@ export class DatabaseSchemaComponent implements AfterViewInit {
     })
   }
 
-
   ngForRendred() {
     this.processingVisible   =  false
     if (this.schema){
@@ -58,21 +54,17 @@ export class DatabaseSchemaComponent implements AfterViewInit {
     } catch (error) {
       console.log(error)
     }
-
   }
 
   updateSchemArray() {
     this.processingVisible = true
     const site = this.sitesService.getAssignedSite();
     let observables  = this.updateSections.map( section =>  this.systemService.updateDatabase(site, section) )
-
     let source = forkJoin(observables);
-
     source.subscribe(data => {
       console.log(data)
       this.schemaResults.push(data)
     });
-
   }
 
   //   let carNumbers = [1, 2, 3];

@@ -1,0 +1,51 @@
+<mat-card>
+  <mat-card-title>Export</mat-card-title>
+
+  <mat-card-content>
+    <div class="grid-item"
+          *ngIf="exportDataService.schemas$ && inputForm">
+        <form-select-list [searchForm]      = "inputForm"
+                          [formFieldName]   ="'name'"
+                          [list$]           = "exportDataService.schemas$"
+                          [showActiveInactive]="false"
+                          (selectionChange) = "selectSchema($event)">
+        <div fieldSearchDescription>Schema Type Selection</div>
+        </form-select-list>
+    </div>
+  
+    <!-- <mat-card-subtitle>
+      <button *ngIf="schemaValue" 
+              mat-raised-button
+              color="primary"
+              (click)="selectSchema()"><mat-icon>download</mat-icon>
+          Data Export Type {{schemaValue}}
+      </button>
+    </mat-card-subtitle> -->
+
+    <div *ngIf="schemaValue==1">
+      <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
+    </div>
+
+    <div *ngIf="schemaValue==2">
+      <div *ngIf="schemaValue==1">
+        <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
+      </div>
+  
+    </div>
+
+    <div *ngIf="schemaValue==3">
+      <div *ngIf="schemaValue==1">
+        <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
+      </div>
+  
+    </div>
+
+    <div *ngIf="schemaValue==4">
+      <div *ngIf="schemaValue==1">
+        <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
+      </div>
+  
+    </div>
+  </mat-card-content>
+
+</mat-card>

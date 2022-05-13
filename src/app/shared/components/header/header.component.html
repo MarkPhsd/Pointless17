@@ -41,8 +41,8 @@
           </div>
 
           <div *ngIf="!smallDevice" id="location" >
-            <div class="site-name" *ngIf="site && site.name">
-              <h2 > {{ site.name.toUpperCase()  }} </h2>
+            <div class="site-name" *ngIf="site && site.name && site.name != undefined">
+              <h2 > {{ site?.name.toUpperCase()  }} </h2>
             </div>
           </div>
 

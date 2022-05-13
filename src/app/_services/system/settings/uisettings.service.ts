@@ -6,29 +6,29 @@ import { SitesService } from '../../reporting/sites.service';
 import { SettingsService } from '../settings.service';
 
 export interface TransactionUISettings {
-  id:             number;
-  displayNotes   : boolean;
-  displayView    : boolean;
-  displayAdd     : boolean;
-  displayQuantity: boolean;
-  lockOrders    : boolean;
+  id                     : number;
+  displayNotes           : boolean;
+  displayView            : boolean;
+  displayAdd             : boolean;
+  displayQuantity        : boolean;
+  lockOrders             : boolean;
   deleteUnClosedPrintedOrders: boolean;
-  closeOrderTimeCutOff       : string;
-  ordersRequireCustomer: boolean;
+  closeOrderTimeCutOff   : string;
+  ordersRequireCustomer  : boolean;
   validateCustomerLicenseID: boolean;
-  defaultClientTypeID: number;
-  enablMEDClients: boolean;
-  enableLimitsView: boolean;
-
-  prefixBarcodeLabel : string;
-  mAXOrdersOpen: string;
+  defaultClientTypeID    : number;
+  enablMEDClients        : boolean;
+  enableLimitsView       : boolean;
+  splitCheckByItem       : boolean;
+  prefixBarcodeLabel     : string;
+  mAXOrdersOpen          : string;
   loyaltyPointSystemValue: string;
-  lotPreBarCode: string;
-  creditRecieptMinimum: string;
-  buyerAmountDiscount: string;
-  idleTime: string;
-  highTipInputPercentage: string;
-  showOrderName: boolean;
+  lotPreBarCode          : string;
+  creditRecieptMinimum   : string;
+  buyerAmountDiscount    : string;
+  idleTime               : string;
+  highTipInputPercentage : string;
+  showOrderName          : boolean;
 
 }
 
@@ -355,7 +355,7 @@ export class UISettingsService {
       defaultClientTypeID         : [''],
       enablMEDClients             : [''],
       enableLimitsView            : [''],
-
+      splitCheckByItem            : [''],
       prefixBarcodeLabel          : [''],
       maxOrdersOpen               : [''],
       lotPreBarCode               : [''],

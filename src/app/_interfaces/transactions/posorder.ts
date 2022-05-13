@@ -1,3 +1,4 @@
+import { InventoryManifest } from "src/app/_services/inventory/manifest-inventory.service";
 import { IPaymentMethod } from "src/app/_services/transactions/payment-methods.service";
 import { ItemType } from "../menu/menu-products";
 import { PosOrderMenuItem } from "./posorderitems";
@@ -235,6 +236,7 @@ export interface PosOrderItem {
   portionValue                :  string;
   itemPrepped                 :  string;
   printLocation               :  number;
+  splitGroupID                : number;
 }
 
 export interface PosPayment {
@@ -396,13 +398,14 @@ enum actions {
 }
 
 
-export interface PaymentWithAction {
+export interface OperationWithAction {
   payment           : IPOSPayment;
   action            : actions;
   voidReasonID      : number;
   voidReason        : string;
   id                : number;
   paymentMethod     : IPaymentMethod;
+  manifest          : InventoryManifest;
   result            : boolean;
 }
 

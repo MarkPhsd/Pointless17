@@ -29,7 +29,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
   sendDate:              string;
   scheduleDate:          string;
   acceptedDate:          string;
-
+  paidDate    :          string;
   type$             : Observable<ManifestType[]>;
   status$           : Observable<ManifestStatus[]>;
   sites: ISite[];
@@ -48,6 +48,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
          this.scheduleDate = this.currentManifest.scheduleDate;
          this.sendDate = this.currentManifest.sendDate;
          this.acceptedDate = this.currentManifest.acceptedDate;
+         this.paidDate = this.currentManifest.paidDate;
          if (this.currentManifest.active == 0) {
           this.active = false
          }
@@ -63,7 +64,8 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
          this.manifestID = 0;
          this.inventoryItems = null;
          this.scheduleDate = null//this.currentManifest.scheduleDate;
-         this.sendDate = null// this.currentManifest.sendDate;
+         this.sendDate = null;// this.currentManifest.sendDate;
+         this.paidDate = null;
          this.acceptedDate = null;
       })
     } catch (error) {
@@ -104,11 +106,12 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    if (this.currentManifest$) { this.currentManifest$.unsubscribe()}
-    if (this.currentManifestSite$) {
-      this.manifestService.updateSelectedManifestSite(null)
-      this.currentManifestSite$.unsubscribe()
-    }
+    // if (this.currentManifest$) { this.currentManifest$.unsubscribe()}
+    // if (this.currentManifestSite$) {
+    //   this.manifestService.updateSelectedManifestSite(null)
+    //   // this.currentManifestSite$.unsubscribe()
+    // }\
+    const i = 0;
   }
 
   setDestinationSite(event) {
@@ -124,7 +127,6 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
             this.inputForm.controls['destinationURL'].setValue(data.url);
             this.inputForm.controls['destinationSiteName'].setValue(data.name);
           })
-
           const manifest         = this.inputForm.value as InventoryManifest;
         }
       }
@@ -135,10 +137,8 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     console.log(event);
     if (event) {
       if (this.currentManifest) {
-        // this.currentManifest.type = event.name;
-        // this.currentManifest.typeID = event.id;
-        this.inputForm.controls['type'].setValue(event.name)
-        // this.inputForm.controls['typeID'].setValue(event.id)
+        // this.inputForm.controls['type'].setValue(event.name)
+        this.currentManifest.type = event.value;
       }
     }
   }
@@ -147,10 +147,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     console.log(event);
     if (event) {
       if (this.currentManifest) {
-        // this.currentManifest.status = event.name;
-        // this.currentManifest.statusID = event.id;
-        this.inputForm.controls['status'].setValue(event.name)
-        // this.inputForm.controls['statusID'].setValue(event.id)
+        this.currentManifest.type = event.value.name;
       }
     }
   }
@@ -201,6 +198,10 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
       })).subscribe(
         {
         next: data => {
+          if (data.errorMessage) {
+            this.matSnack.open(data.errorMessage, 'Result');
+            return
+          }
           this.matSnack.open('Dispatch Sent', 'Succes');
         },
         error: err => {
@@ -223,8 +224,12 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     manifest.active        = +this.active;
     const manifest$ = this.manifestService.update(site, this.currentManifest.id, manifest )
     manifest$.subscribe(data => {
-      this.manifestService.updateCurrentInventoryManifest(data)
-        if (event) {
+        this.manifestService.updateCurrentInventoryManifest(data)
+        if (data.errorMessage) {
+          this.matSnack.open(data.errorMessage, 'Result');
+          return
+        }
+        if (event == 'true') {
           this.dialogRef.close();
         }
       }
@@ -238,7 +243,6 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     if (!this.currentManifest) { return }
     const manifest$ = this.manifestService.update(site, this.currentManifest.id, this.currentManifest )
     manifest$.subscribe(data => {
-      // this.manifestService.updateCurrentInventoryManifest(data)
       this.dialogRef.close()
     })
 
@@ -277,10 +281,6 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
       recieverID:         [],
       statusID:           [],
       typeID:             [],
-      // inventoryAssignments:any[];
-      // manifestTypes	      :any;
-      // manifestStatus	    :any;
-      // site                :any;
     })
     return this.inputForm
   }

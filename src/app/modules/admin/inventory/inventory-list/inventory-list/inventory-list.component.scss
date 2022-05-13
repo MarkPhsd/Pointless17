@@ -186,3 +186,15 @@ table
     grid-template-columns: 1fr 1fr 1fr;
     gap: 3px;
   }
+
+  .row-manifest {
+    font-weight: bold;
+    background-color: #2568aa !important;
+  }
+
+  .row-unassigned {
+    // font-weight: bold;
+    // background-color: #357a38 !important;
+    // font-weight: bold;
+    // background-color: #a6b5c4 !important;
+  }

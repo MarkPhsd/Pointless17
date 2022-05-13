@@ -70,3 +70,16 @@ mat-form-field {
 mat-raised-button, button {
   margin: 3px 3px 3px 3px
 }
+
+.grid-views {
+
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+  overflow-y: visible;
+
+}

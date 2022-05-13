@@ -97,6 +97,7 @@ import { TaxRateListComponent } from '../modules/admin/products/item-type/tax-ra
 import { TaxEditComponent } from '../modules/admin/products/taxes/tax-edit/tax-edit.component';
 import { TaxListComponent } from '../modules/admin/products/taxes/tax-list/tax-list.component';
 import { DatabaseSchemaComponent } from '../modules/admin/settings/database/database-schema/database-schema.component';
+import { CSVImportComponent } from '../modules/admin/settings/database/csv-import/csv-import.component';
 import { InstalledPrintersComponent } from '../modules/admin/settings/printing/installed-printers/installed-printers.component';
 import { MenuItemsInfiniteComponent } from '../modules/menu/menuitems/menu-items-infinite/menu-items-infinite.component';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
@@ -278,7 +279,9 @@ import { AgGridImageFormatterComponent } from '../_components/_aggrid/ag-grid-im
 import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 import { ManifestStatusComponent } from '../modules/admin/inventory/manifest-status/manifest-status.component';
 import { ManifestTypeComponent } from '../modules/admin/inventory/manifest-type/manifest-type.component';
-
+import { POSSplitItemsComponent } from '../modules/posorders/pos-payment/possplit-items/possplit-items.component';
+import { NgxCsvParserModule } from 'ngx-csv-parser';
+import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -314,6 +317,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ClientTypeSelectionComponent,
     ClientTypeListComponent,
     ClientTypeEditComponent,
+    CSVImportComponent,
     CompanyEditComponent,
     DatabaseSchemaComponent,
     DateScheduleComponent,
@@ -323,7 +327,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DemographicsComponent,
     DiscountTypeSelectionComponent,
     DndDirective,
-
     DSIEMVTransactionComponent,
     EditSelectedItemsComponent,
     EditCSSStylesComponent,
@@ -334,6 +337,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EmployeeFilterPanelComponent,
     EmployeeListComponent,
     EmployeeMetrcKeyEntryComponent,
+    ExportDataComponent,
     FacilitiesListComponent,
     FlatRateEditComponent,
     FlatRateListComponent,
@@ -401,6 +405,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodListComponent,
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
+    POSSplitItemsComponent,
     PrepOrderComponent,
     PrepContainerComponent,
     PrepOrderFilterComponent,
@@ -547,7 +552,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       RouterModule,
       SharedModule,
       NgxStripeModule.forRoot(),
-
+      NgxCsvParserModule,
     ],
 
   exports: [
@@ -567,7 +572,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     AWSBucketService,
     ClientTypeService,
     ContactsService,
-    DatabaseSchemaComponent,
     DashboardService,
     DatePipe,
     DevService,

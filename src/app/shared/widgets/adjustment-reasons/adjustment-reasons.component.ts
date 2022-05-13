@@ -80,6 +80,10 @@ export class AdjustmentReasonsComponent implements OnInit {
       this.filterDescription = 'Orders'
       this.filter = 3
     }
+    if (filter == 4) {
+      this.filterDescription = 'Manifest Rejections'
+      this.filter = 4
+    }
     this.refreshTable(filter)
   }
 

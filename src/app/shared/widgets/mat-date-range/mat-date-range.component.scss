@@ -1,13 +1,18 @@
 .dates-field {
-  width       : 215px;
-  max-width   : 215px;
   margin-left : 0px;
-  margin-top: 5p;
+  margin-top  : 5px;
 }
 
 .container {
   display: grid;
-  grid-template-columns: 50px 150px;
-  width: 210px;
+  grid-template-columns: 50px 175px;
+  width: 235px;
   gap: 5px;
+}
+
+button {
+  margin: 0px;
+  padding: 0px;
+  width: 45px;
+  min-width: 45px;
 }

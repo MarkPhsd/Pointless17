@@ -19,6 +19,11 @@ mat-card {
 .order-layout-empty {
 }
 
+.split-item-button { 
+  margin: 10px;
+  width: 150px;
+  height: 50px;
+}
 .order-layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -252,4 +257,8 @@ mat-card {
 .order-completed {
   font-size: larger;
   font-style: italic;
+}
+.splitbutton{
+  width: 150px;
+  height: 50px;
 }

@@ -47,7 +47,7 @@ mat-card-content {
 mat-card {
   font-size :  1em;
   width     :  100%;
-  min-width :  350px;
+  min-width :  375px;
   height    :  100%;
   overflow-y:  auto;
   overflow-x:  hidden;
@@ -142,4 +142,8 @@ mat-card {
   display        : flex;
   justify-content: center;
   align-content  : center;
+}
+
+.span-column {
+  grid-column: 1 / span 2;
 }

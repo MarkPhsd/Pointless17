@@ -56,11 +56,14 @@ export class PosPaymentComponent implements OnInit {
 
   orderlayout = 'order-layout'
   smallDevice = false;
-  orderItemsPanel = ''
+  orderItemsPanel     = ''
 
-  orderDefaultType = false;
-  paymentIsReady: boolean;
+  orderDefaultType    = false;
+  paymentIsReady      : boolean;
+  splitByItem         : boolean;
 
+  groupPaymentAmount  = 0;
+  groupPaymentGroupID = 0;
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
 
   message: string;
@@ -306,37 +309,59 @@ export class PosPaymentComponent implements OnInit {
 
   applyPaymentAmount(event) {
 
-    if (!event) {  this.initPaymentForm(); return }
+    if (!event && this.groupPaymentAmount != 0) {  
+      this.initPaymentForm(); return
+    }
+
+    console.log('applyPaymentAmount', this.groupPaymentAmount);
+
     if (this.order &&  this.paymentMethod) {
 
-        const amount = this.formatValueEntered(event)
-
+        let amount = this.groupPaymentAmount
+        if (amount == 0) { 
+          amount   = this.formatValueEntered(event)
+          this.posPayment.groupID = this.groupPaymentGroupID;
+        }
+        
         const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
                                   this.paymentMethod.isCash,
                                   this.order.balanceRemaining);
-
+        
         if (!isValidAmount) { return }
-
+        
         const processResults$ = this.processGetResults(amount, this.posPayment)
+        
         processResults$.subscribe( {
           next: (data) => {
             if (!data) {
+       
               this.notify('Payment not processed', 'failure', 1000)
             }
             this.processResults(data)
+            this.groupPaymentAmount  = 0;
+            this.groupPaymentGroupID = 0;
           },
           error: (e) => console.error(e)
         }
       )
     }
-
     //if order or payment method don't exist, we have a bigger problem, but we can ignore for now.
     this.initPaymentForm();
   }
 
+
+  applyGroupPayment(event) { 
+    if (!event || event.amount == 0) { 
+      return
+    } 
+    this.splitByItem = false;
+    this.groupPaymentAmount = event.amount;
+    this.groupPaymentGroupID = event.groupID
+  }
+
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
-    // if (paymentResponse) { console.log(paymentResponse) }
+    
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
          result =  this.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
@@ -475,7 +500,6 @@ export class PosPaymentComponent implements OnInit {
       }
     )
 
-
   }
 
   processGetResults(amount, posPayment: IPOSPayment): Observable<IPaymentResponse> {
@@ -500,7 +524,6 @@ export class PosPaymentComponent implements OnInit {
     return  this.paymentsMethodsService.enterPointCashValue(
         event, this.paymentMethod, this.posPayment, this.order)
 
-
   }
 
   applyBalance() {
@@ -513,7 +536,15 @@ export class PosPaymentComponent implements OnInit {
 
   getPaymentMethod(paymentMethod) {
     this.paymentMethod = paymentMethod;
+    console.log('apply Payment Method',this.paymentMethod.name, this.groupPaymentAmount)
+
     if (this.paymentMethod) {
+
+      if (this.groupPaymentAmount != 0) { 
+        this.applyPaymentAmount(this.groupPaymentAmount)
+        return 
+      }
+
       if (this.paymentMethod.name.toLowerCase() === 'check') {
         this.stepSelection = 2;
         return
@@ -524,7 +555,9 @@ export class PosPaymentComponent implements OnInit {
       }
       this.stepSelection = 3;
     }
+
     return
+
   }
 
   goToPaymentMethod(){

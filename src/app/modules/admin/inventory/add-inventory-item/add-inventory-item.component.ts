@@ -134,12 +134,10 @@ export class AddInventoryItemComponent implements OnInit {
   }
 
   private updateInventory(item$: Observable<IInventoryAssignment>) {
-
     item$.subscribe(data => {
       this.notifySave(data)
       return
     })
-
   }
 
   notifySave(item) {

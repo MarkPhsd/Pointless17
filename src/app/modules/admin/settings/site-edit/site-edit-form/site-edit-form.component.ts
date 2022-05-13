@@ -99,7 +99,7 @@ export class SiteEditFormComponent implements OnInit {
    };
 
   updateSite(event) {
-    if (this.sitesForm.valid) {
+    if (!this.sitesForm.valid) {
       this.notifyEvent(`Please complete form.`, `oops!` )
       return
     }
@@ -109,7 +109,7 @@ export class SiteEditFormComponent implements OnInit {
   }
 
   updateExit(event){
-    if (this.sitesForm.valid) {
+    if (!this.sitesForm.valid) {
       this.notifyEvent(`Please complete form.`, `oops!` )
       return
     }

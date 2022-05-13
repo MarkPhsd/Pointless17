@@ -206,7 +206,9 @@
             </div>
 
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
-              <retail-product-edit [inputForm]="productForm"></retail-product-edit>
+              <retail-product-edit 
+                [inputForm]="productForm">
+              </retail-product-edit>
               <app-value-fields
                 [inputForm]="productForm"
                 [fieldName]="'countryOfOrigin'"

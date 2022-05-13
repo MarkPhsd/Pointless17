@@ -6,6 +6,7 @@
   // name: string;
   value: string;
   text: string;
+  groupID: number;
 }
 /**
 * Helper interface to emit event when

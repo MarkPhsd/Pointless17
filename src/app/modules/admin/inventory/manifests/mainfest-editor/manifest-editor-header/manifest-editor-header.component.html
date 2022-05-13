@@ -2,111 +2,136 @@
 
   <mat-card>
     <mat-card-title>
-      <div class="functions-grid">
-        <div>Name:</div><div>{{item?.name }}</div>
-        <div>Created:</div> <div>{{item?.createdDate   | date: 'shortDate'}}  </div>
-        <div>Scheduled:</div><div > {{item?.scheduleDate | date: 'shortDate'}}</div>
-        <div>Sent:</div><div> {{item?.sendDate  | date: 'shortDate' }}   </div>
-        <div>Accepted:</div><div>{{item?.acceptedDate  | date: 'shortDate' }}</div>
+
+      <div class="functions-grid-section">
+
+        <div class="functions-grid">
+          <div>ID:</div><div>{{item?.id }}</div>
+          <div>Name:</div><div>{{item?.name }}</div>
+          <div>Created:</div> <div>{{item?.createdDate   | date: 'shortDate'}}  </div>
+          <div>Scheduled:</div><div > {{item?.scheduleDate | date: 'shortDate'}}</div>
+          <div>Sent:</div><div> {{item?.sendDate  | date: 'shortDate' }}   </div>
+          <div>Accepted:</div><div>{{item?.acceptedDate  | date: 'shortDate' }}</div>
+        </div>
+
+        <div class="functions-grid">
+          <div>Source:</div><div> {{item?.sourceSiteName     }}</div>
+          <div>Destination:</div><div> {{item?.destinationSiteName   }}</div>
+
+          <div>Source URL</div><div> {{item?.sourceSiteURL    }}</div>
+          <div>Destination URL</div><div> {{item?.destinationURL    }}</div>
+
+          <div>Item Count:</div><div> {{item?.itemCount    | number }}</div>
+          <div>Total Cost:</div><div>{{item?.totalValue  | currency }}</div>
+
+          <div>Estimated Retail :</div><div>{{item?.estimatedTotalRetail  | currency }}</div>
+        </div>
       </div>
     </mat-card-title>
 
     <mat-card-subtitle>
-      <div class="header-container" >
-        <div>
+
+        <div  class="header-container">
           <app-edit-buttons-standard
                 (outputeupdateItem)     ="updateItem($event)"
                 (outputupdateItemExit)  ="updateItemExit($event)"
                 (outputupdatedeleteItem)="deleteItem($event)"
                 (outputupdateonCancel)  ="onCancel($event)"
           ></app-edit-buttons-standard>
+          <div>
+            <button mat-button (click)="openAdjustmentDialog()"><mat-icon>settings</mat-icon></button>
+          </div>
         </div>
 
-        <h4>Actions</h4>
-        <div class="functions-grid">
-          <div *ngIf="isWarehouse">
-            <button aria-label="user menu"
-                    mat-button
-                    color="primary"
-                    [matMenuTriggerFor]="menu"
-                    #menuTrigger="matMenuTrigger"
-                    (mouseenter)="menuTrigger.openMenu()"
-                    >
-              <mat-icon>warehouse</mat-icon>Warehouse
-            </button>
+      <div>
+        <div>
+          <h4>Actions</h4>
+          <div class="functions-grid">
+            <div *ngIf="isWarehouse">
+              <button aria-label="user menu"
+                      mat-button
+                      color="primary"
+                      [matMenuTriggerFor]="menu"
+                      #menuTrigger="matMenuTrigger"
+                      (mouseenter)="menuTrigger.openMenu()"
+                      >
+                <mat-icon>warehouse</mat-icon>Warehouse
+              </button>
 
-            <mat-menu class="mat-menu-panel"
-                      [overlapTrigger]="false"
-                      #menu="matMenu">
-              <span (mouseleave)="menuTrigger.closeMenu()">
+              <mat-menu class="mat-menu-panel"
+                        [overlapTrigger]="false"
+                        #menu="matMenu">
+                <span (mouseleave)="menuTrigger.closeMenu()">
+                  <div>
+                    <button mat-button  color="primary" (click)="dispatchSendToSite()">
+                      <mat-icon>send</mat-icon> Dispatch And Notify
+                    </button>
+                  </div>
+                  <div>
+                    <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
+                      <mat-icon>cancel</mat-icon>   Cancel Dispatch and Notify
+                    </button>
+                  </div>
+                  <div>
+                    <button mat-button color="primary" (click)="cancelRequestDispatchSendToSite()">
+                      <mat-icon>review</mat-icon>  Review Delivered Inventory (audit)
+                    </button>
+                  </div>
+                  <div>
+                    <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
+                      <mat-icon>accept</mat-icon>  Accept Rejected Inventory
+                    </button>
+                  </div>
+                </span>
+              </mat-menu>
+
+            </div>
+            <!-- <div *ngIf="!isWarehouse">
+
+              <button aria-label="user menu"
+                      mat-button
+                      color="primary"
+                      [matMenuTriggerFor]="retailmenu"
+                      #retailTrigger="matMenuTrigger"
+                      (mouseenter)="retailTrigger.openMenu()"
+                      >
+                <mat-icon>storefront</mat-icon>Retail Store
+              </button>
+
+              <mat-menu class="mat-menu-panel"
+                        [overlapTrigger]="false"
+                        #retailmenu="matMenu">
+                <span (mouseleave)="retailTrigger.closeMenu()">
+
                 <div>
-                  <button mat-button  color="primary" (click)="dispatchSendToSite()">
-                    <mat-icon>send</mat-icon> Dispatch And Notify
+                  <button mat-button color="primary" (click)="receiveAll()">
+                    <mat-icon>intake</mat-icon> Receive All
                   </button>
                 </div>
                 <div>
-                  <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
-                    <mat-icon>cancel</mat-icon>   Cancel Dispatch and Notify
+                  <button mat-button color="primary" (click)="receiveSelected()">
+                    <mat-icon>intake</mat-icon> Receive Selected
                   </button>
                 </div>
                 <div>
-                  <button mat-button color="primary" (click)="cancelRequestDispatchSendToSite()">
-                    <mat-icon>review</mat-icon>  Review Delivered Inventory (audit)
+                  <button mat-button color="primary" color="warn" (click)="rejectManifest()">
+                    <mat-icon>reject</mat-icon> Reject Manifest
                   </button>
                 </div>
                 <div>
-                  <button mat-button color="warn" (click)="cancelRequestDispatchSendToSite()">
-                    <mat-icon>accept</mat-icon>  Accept Rejected Inventory
+                  <button mat-button color="primary" (click)="assignToInventoryLocation()">
+                    <mat-icon>label</mat-icon> Assign all to Assigned Location
                   </button>
                 </div>
+
               </span>
-            </mat-menu>
+              </mat-menu>
 
+            </div> -->
           </div>
-          <div *ngIf="!isWarehouse">
-
-            <button aria-label="user menu"
-                    mat-button
-                    color="primary"
-                    [matMenuTriggerFor]="retailmenu"
-                    #retailTrigger="matMenuTrigger"
-                    (mouseenter)="retailTrigger.openMenu()"
-                    >
-              <mat-icon>storefront</mat-icon>Retail Store
-            </button>
-
-            <mat-menu class="mat-menu-panel"
-                      [overlapTrigger]="false"
-                      #retailmenu="matMenu">
-              <span (mouseleave)="retailTrigger.closeMenu()">
-
-              <div>
-                <button mat-button color="primary" (click)="receiveAll()">
-                  <mat-icon>intake</mat-icon> Receive All
-                </button>
-              </div>
-              <div>
-                <button mat-button color="primary" (click)="receiveSelected()">
-                  <mat-icon>intake</mat-icon> Receive Selected
-                </button>
-              </div>
-              <div>
-                <button mat-button color="primary" color="warn" (click)="rejectManifest()">
-                  <mat-icon>reject</mat-icon> Reject Manifest
-                </button>
-              </div>
-              <div>
-                <button mat-button color="primary" (click)="assignToInventoryLocation()">
-                  <mat-icon>label</mat-icon> Assign all to Assigned Location
-                </button>
-              </div>
-
-            </span>
-            </mat-menu>
-
-          </div>
-        </div>
+         </div>
       </div>
+
     </mat-card-subtitle>
 
     <mat-card-content *ngIf="inputForm">

@@ -119,7 +119,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    voidPayment(payment) {
     //run void method.
     if (payment) {
-      //only manager can void. but should be voided.
+      //only manager can void. 
       this.productEditButtonService.openVoidPaymentDialog(payment)
       return
     }
@@ -129,7 +129,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    requestVoidPayment(payment) {
     //run void method.
     if (payment) {
-      //only manager can void. but should be voided.
+      //only manager can void. 
       this.productEditButtonService.openVoidPaymentDialog(payment)
       return
     }

@@ -89,6 +89,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   user                : IUser;
   _user               : Subscription;
 
+  searchSideBar       : any;
+  _searchSideBar      : Subscription;
+
+  _mainMenuSideBar:   Subscription;
+
   message: string;
   menuBar    = 'menu'
   searchBar  = 'search';
@@ -99,27 +104,35 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   siteName: string;
   bucket = '';
 
-  initSubscriptions() {
+  _site: Subscription;
+  initSiteSubscriber() {
+    this._site = this.siteService.site$.subscribe( data => {
+      this.site = data
+    })
+  }
+  initOrderSubscriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
     })
-
+  }
+  initScaleSubscriber() {
     this._scaleInfo = this.scaleService.scaleInfo$.subscribe( data => {
       this.scaleInfo = data
     })
-
+  }
+  initOrderBarSubscriber() { 
     this._openOrderBar = this.toolbarUIService.orderBar$.subscribe( data => {
       this.openOrderBar = data;
     })
-
+  }
+  initUserSubscriber() { 
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
       this.getUserInfo()
     })
-
-
-
-    this._user = this.toolbarUIService.searchSideBar$.subscribe( data => {
+  }
+  initToobarServiceUI() {
+    this._searchSideBar = this.toolbarUIService.searchSideBar$.subscribe( data => {
       if (data) {
         this.searchBar = 'search_off'
       }
@@ -127,7 +140,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         this.searchBar = 'search'
       }
     })
-    this._user = this.toolbarUIService.mainMenuSideBar$.subscribe( data => {
+  }
+  initMainToolbarUI() {
+    this._mainMenuSideBar = this.toolbarUIService.mainMenuSideBar$.subscribe( data => {
       if (data) {  this.searchBar = 'menu_open'
         this.menuBar = 'menu_open'
       }
@@ -135,6 +150,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         this.menuBar = 'menu'
       }
     })
+  }
+
+  initSubscriptions() {
+    this.initOrderSubscriber()
+    this.initScaleSubscriber();
+    this.initOrderBarSubscriber();
+    this.initUserSubscriber();
+    this.initToobarServiceUI() ;
+    this.initMainToolbarUI();
+    this.initSiteSubscriber();
   }
 
   constructor(private authenticationService : AuthenticationService,
@@ -324,6 +349,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   initSite() {
     this.site = this.siteService.getAssignedSite();
     if (this.site.name) {
+      if (this.site.name == undefined || this.site.name === 'undefined') {
+        this.site.name = ''
+        return
+      }
       this.site.name = this.site.name.trim()
       this.siteName = this.site.name.trim()
     }

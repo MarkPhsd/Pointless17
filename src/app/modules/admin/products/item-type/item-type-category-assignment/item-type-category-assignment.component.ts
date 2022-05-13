@@ -2,13 +2,12 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable,  } from 'rxjs';
 import { of } from 'rxjs';
-import { IItemBasic, IItemBasicB, IProductSearchResults, MenuService } from 'src/app/_services/menu/menu.service';
+import { IItemBasic, IItemBasicB, MenuService } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IItemType, ItemTypeService, itemType_Categories, ItemType_Categories_Reference,ItemCounts } from 'src/app/_services/menu/item-type.service';
+import { IItemType, ItemTypeService,ItemType_Categories_Reference,ItemCounts } from 'src/app/_services/menu/item-type.service';
 import { IProductCategory } from 'src/app/_interfaces';
-import { AutoWidthCalculator } from 'ag-grid-community';
 
 @Component({
   selector: 'app-item-type-category-assignment',
@@ -33,6 +32,7 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
       this.availableItems = [...(items || []).map((item: {}, index: number) => ({
         value: item[this.valueField].toString(),
         text: item[this.textField],
+        groupID: 0,
       }))];
     }
     // array of items to display in right box
@@ -40,6 +40,7 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
       this.selectedItems = [...(items || []).map((item: {}, index: number) => ({
         value: item[this.valueField].toString(),
         text: item[this.textField],
+        groupID: 0,
       }))];
     }
 
@@ -103,8 +104,8 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
     }
 
     removeSelectedFromAvailable( categories: IProductCategory[], allAssignedCategories: ItemType_Categories_Reference[]): IListBoxItem[]   {
-      let allCategories        = categories.map( item => ({ value: item.id.toString(), text: item.name }));
-      let assignedCategories   = allAssignedCategories.map( item =>  ({ value: item.categoryID.toString(), text: item.name }));
+      let allCategories        = categories.map( item => ({ groupID: 0,  value: item.id.toString(), text: item.name }));
+      let assignedCategories   = allAssignedCategories.map( item =>  ({ groupID: 0,value: item.categoryID.toString(), text: item.name }));
 
       assignedCategories.forEach(item => {
         const value = allCategories.find( x => x.value.toLowerCase() === item.value.toLowerCase() )
@@ -117,7 +118,7 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
     }
 
     convertToIlistBoxItem(listSource: any[]): IListBoxItem[] {
-      var result = listSource.map(item => ({ value: item.id.toString(), text: item.name }));
+      var result = listSource.map(item => ({ groupID: 0, value: item.id.toString(), text: item.name }));
       return result
     }
 
@@ -134,7 +135,7 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
             this.selectedItems = []
 
             data.forEach(data => {
-              this.selectedItems.push({value: data.categoryID.toString(), text: data.name})
+              this.selectedItems.push({groupID: 0, value: data.categoryID.toString(), text: data.name})
               //then we remove items from avalible categories that exist in Selected items.
               //this.removeSelectedFromAvailable( this.availables , this.selectedItems)
             })
@@ -179,6 +180,7 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
     }
 
     assignArrayToItemType(selected: IListBoxItem[]) {
+      console.log('selected', selected)
       if (this.itemType) {
         this.itemType.itemType_Categories = [];
         const itemCounts = {} as ItemCounts;

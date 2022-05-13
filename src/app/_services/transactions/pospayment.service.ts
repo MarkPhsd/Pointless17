@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable,  } from 'rxjs';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder, IPOSPayment,
-         IPOSPaymentsOptimzed, ISite, PaymentWithAction }   from 'src/app/_interfaces';
+         IPOSPaymentsOptimzed, ISite, OperationWithAction }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IPaymentMethod } from './payment-methods.service';
@@ -22,7 +22,7 @@ export class POSPaymentService {
 
   isApp                         = false;
 
-  private _paymentWithAction       = new BehaviorSubject<PaymentWithAction>(null);
+  private _paymentWithAction       = new BehaviorSubject<OperationWithAction>(null);
   public paymentWithAction$        = this._paymentWithAction.asObservable();
 
 
@@ -34,7 +34,7 @@ export class POSPaymentService {
     this._currentPayment.next(order);
   }
 
-  updateItemWithAction(item: PaymentWithAction ) {
+  updateItemWithAction(item: OperationWithAction ) {
     this._paymentWithAction.next(item);
   }
 
@@ -127,7 +127,7 @@ export class POSPaymentService {
     return this.http.delete<IPOSPayment>(url);
   }
 
-  voidPayment(site: ISite, paymentWithAction: PaymentWithAction): Observable<PaymentWithAction> {
+  voidPayment(site: ISite, paymentWithAction: OperationWithAction): Observable<OperationWithAction> {
 
     if (paymentWithAction.payment.voidReason)  {
       this.notificationEvent(`Payment already voided: ${paymentWithAction.voidReason}`, 'Payment Voided')
@@ -142,7 +142,7 @@ export class POSPaymentService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<PaymentWithAction>(url, paymentWithAction)
+    return  this.http.post<OperationWithAction>(url, paymentWithAction)
 
   }
 

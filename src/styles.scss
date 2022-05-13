@@ -430,3 +430,46 @@ mat-dialog-container {
 
 // /* Importing Bootstrap SCSS file. */
 // @import '~bootstrap/scss/bootstrap';
+.row-manifest {
+  // font-weight: bold;
+  background-color: #cddaf9 !important;
+}
+
+.row-unassigned {
+  // font-weight: bold;
+  // background-color: #357a38 !important;
+  // font-weight: bold;
+  // background-color: #2568aa !important;
+}
+
+.row-manifest-rejected {
+  background-color: #f09b7e !important;
+}
+
+.row-manifest-rejected:hover {
+  font-weight: bold;
+  background-color: #f09b7e !important;
+}
+
+.row-not-active {
+  background-color: #b2c861 !important;
+}
+
+.row-not-active:hover {
+  font-weight: bold;
+  background-color: #b2c861 !important;
+}
+
+.row-not-forsale {
+  background-color: #f3f399 !important;
+}
+
+.row-fail {
+  background-color: #aa2e25 !important;
+}
+
+.row-pass {
+  font-weight: bold;
+  background-blend-mode: lighten;
+  background-color: #357a38 !important;
+}

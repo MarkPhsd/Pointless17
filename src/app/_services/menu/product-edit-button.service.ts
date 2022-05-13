@@ -10,7 +10,7 @@ import { AddItemByTypeComponent } from 'src/app/modules/admin/products/producted
 import { IPriceCategories, PriceTiers, ProductPrice, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { UnitTypeEditComponent } from 'src/app/modules/admin/products/unit-type-list/unit-type-edit/unit-type-edit.component';
-import { employee, IPOSOrder, IPOSPayment, ISite, PaymentWithAction, PosOrderItem } from 'src/app/_interfaces';
+import { employee, IPOSOrder, IPOSPayment, ISite, OperationWithAction, PosOrderItem } from 'src/app/_interfaces';
 import { ClientTypeEditComponent } from 'src/app/modules/admin/clients/client-types/client-type-edit/client-type-edit.component';
 import { ServiceTypeEditComponent } from 'src/app/modules/admin/transactions/serviceTypes/service-type-edit/service-type-edit.component';
 import { AdjustItemComponent } from 'src/app/modules/posorders/adjust/adjust-item/adjust-item.component';
@@ -44,7 +44,6 @@ import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/
 })
 export class ProductEditButtonService {
 
-
   constructor
             (private dialog             : MatDialog,
             private siteService         : SitesService,
@@ -53,9 +52,6 @@ export class ProductEditButtonService {
             private itemTypeService     : ItemTypeService,
             ) { }
 
-  // ngOnInit(): void {
-  //   console.log('')
-  // }
 
   addItem(productTypeID: number) {
     if (productTypeID) {
@@ -467,8 +463,8 @@ export class ProductEditButtonService {
     //   this.openProductEditor(id, productTypeID)
       const site = this.siteService.getAssignedSite();
       if (payment) {
-        let action      = {}  as PaymentWithAction;
-        action.action   = 1;
+        let action      = {}  as OperationWithAction;
+        action.action   = 2;
         action.payment  = payment;
         action.id       = payment.id
         let method = {} as IPaymentMethod
@@ -484,8 +480,9 @@ export class ProductEditButtonService {
           })
         })
       }
-
   }
+
+
 
   openDSIEMVTransaction(options: any ) {
     let dialogRef: any;

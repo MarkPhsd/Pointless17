@@ -19,7 +19,6 @@ export class DndDirective {
     evt.preventDefault();
     evt.stopPropagation();
     this.fileOver = true;
-    //console.log("dragover");
   }
 
   // Dragleave listener

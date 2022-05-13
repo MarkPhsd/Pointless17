@@ -118,21 +118,18 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.printerLocations$ = this.printerService.getLocations()
   }
 
-
   updatePrinterLocation() {
     this.searchModel.printLocation = this.printLocation;
     this.searchModel.prepStatus    = this.prepStatus
     this.orderService.updateOrderPrinterLocation(this.printLocation)
     this.orderService.updatePrepStatus(this.prepStatus)
     this.orderService.updateOrderSearchModel(this.searchModel)
-    console.log(this.searchModel)
   }
 
   updatePreptStatus(value:number) {
     if (value) {
       this.searchModel.printLocation = this.printLocation;
       this.searchModel.prepStatus = this.prepStatus
-      // this.orderService.updateOrderPrinterLocation(this.printLocation)
       this.orderService.updatePrepStatus(this.prepStatus)
       this.orderService.updateOrderSearchModel(this.searchModel)
     }

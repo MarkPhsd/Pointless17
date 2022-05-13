@@ -24,9 +24,14 @@
     </div>
 
     <div>
+      <div class="split-item-button">
+        <button class="splitbutton" mat-raised-button color="primary" (click)="splitByItem = !splitByItem">
+          <mat-icon>split</mat-icon>Split By Items
+        </button>
+      </div>
 
       <div class="order-completed"
-          *ngIf="paymentsEqualTotal">
+           *ngIf="paymentsEqualTotal">
         <mat-card class="card-dimensions">
           <mat-card-content>
             <div *ngIf="order.itemCount == 0 || !order.itemCount">
@@ -39,13 +44,15 @@
               <div>
                 Thank you for your order. Please review the instructions on your receipt.
               </div>
-              <button mat-raised-button color="primary" (click)="closeCart()"><mat-icon>menu</mat-icon> Continue Shopping </button>
+              <button mat-raised-button color="primary" (click)="closeCart()">
+                <mat-icon>menu</mat-icon> Continue Shopping 
+              </button>
             </div>
           </mat-card-content>
         </mat-card>
       </div>
 
-      <div *ngIf="!paymentsEqualTotal && paymentIsReady">
+      <div *ngIf="!splitByItem && !paymentsEqualTotal && paymentIsReady">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
           <div>
             <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0 " >
@@ -87,6 +94,7 @@
               </mat-card-content>
             </mat-card>
           </div>
+
           <div>
             <mat-card class="payment-dimensions">
               <app-mat-toggle-selector
@@ -253,11 +261,16 @@
                 </div>
               </div>
             </div>
-
       </div>
 
+      <div *ngIf="splitByItem">
+        <app-possplit-items
+          (outPutPaymentAmount)="applyGroupPayment($event)"
+          [order]="order">
+        </app-possplit-items>
+      </div>
 
-      <div *ngIf="!paymentsEqualTotal && !platFormService.isApp() && !paymentIsReady">
+      <div *ngIf="!splitByItem && !paymentsEqualTotal && !platFormService.isApp() && !paymentIsReady">
         <div *ngIf="message">
         <mat-icon>alert</mat-icon>{{message}}
         </div>

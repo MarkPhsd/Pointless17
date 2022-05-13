@@ -1,8 +1,8 @@
-import { C } from '@angular/cdk/keycodes';
 import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { ISite } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
@@ -51,6 +51,21 @@ export class ManifestEditorHeaderComponent implements OnInit {
     }
   }
 
+  openAdjustmentDialog() {
+    const dialogConfig = [
+      { data: { id: 4 } }
+    ]
+    const dialogRef = this.dialog.open(AdjustmentReasonsComponent,
+      { width:  '600px',
+        height: '800px',
+        data : {id: 4}
+      },
+    )
+    dialogRef.afterClosed().subscribe(result => {
+
+    });
+  }
+
   initSubscriptions() {
     this.initManifestSubscriber()
     try {
@@ -60,7 +75,6 @@ export class ManifestEditorHeaderComponent implements OnInit {
     } catch (error) {
       console.log('subscription error manifest', error)
     }
-
   }
 
   constructor(
@@ -68,6 +82,7 @@ export class ManifestEditorHeaderComponent implements OnInit {
     private sitesService    : SitesService,
     private manifestService : ManifestInventoryService,
     private dialogRef       : MatDialogRef<ManifestEditorHeaderComponent>,
+    private dialog          : MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit(): void {

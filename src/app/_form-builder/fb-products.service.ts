@@ -225,6 +225,10 @@ export class FbProductsService {
         promptGroupID:                [''],
         active:                       [''],
         glutenFree                :   [''],
+        terpenes              :   [''],
+        childProof            :   [''],
+        mGCBD                 :   [''],
+        mGTHC                 :   [''],
       })
       return fb;
     }
