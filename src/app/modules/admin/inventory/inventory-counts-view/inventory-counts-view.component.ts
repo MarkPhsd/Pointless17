@@ -48,7 +48,7 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
     })
   }
 
-  constructor(private InventoryAssignmentService: InventoryAssignmentService,
+  constructor(private inventoryAssignmentService: InventoryAssignmentService,
               private userAuthService           : UserAuthorizationService,
               private inventoryEditButon        : InventoryEditButtonService,
               private orderService              :  OrdersService,
@@ -74,13 +74,12 @@ export class InventoryCountsViewComponent implements OnInit, OnDestroy {
     this.refresh = true
 
     if (this.productID && this.active) {
-      this.results$ = this.InventoryAssignmentService.getAvalibleInventory(site, this.productID, this.active)
+      this.results$ = this.inventoryAssignmentService.getAvalibleInventory(site, this.productID, this.active)
       this.results$.subscribe(data => {
         if (data) {
           this.results = data;
           this.refresh = false
-          this.InventoryAssignmentService.updateAvalibleInventoryResults(this.results)
-          console.log('this.results', this.results)
+          this.inventoryAssignmentService.updateAvalibleInventoryResults(this.results)
         }
       })
     }

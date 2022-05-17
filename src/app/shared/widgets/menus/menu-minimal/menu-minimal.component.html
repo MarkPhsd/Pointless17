@@ -3,6 +3,7 @@
      class="row-class"
      *ngIf="isStaff && !displayCategories && menus">
 
+
   <ul id="accordion"
       class="accordion">
 
@@ -41,8 +42,10 @@
         {{menus[index].name  | truncateText : 20}}
       </div>
     </div>
+    <div *ngIf="!tinyMenu">
+       <mat-divider></mat-divider>
+    </div>
 
-    <mat-divider></mat-divider>
     <div class="menu-header-footer"></div>
   </div>
 

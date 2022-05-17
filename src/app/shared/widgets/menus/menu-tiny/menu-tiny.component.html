@@ -37,6 +37,7 @@
   <div fxLayout="row"
        class="submenu-sections"
        *ngIf="displayCategories" >
+        
     <div *ngIf="submenu">
       <ul id="accordion"
           class="accordion">
@@ -52,7 +53,7 @@
                     routerLinkActive={{item.routerLinkActive}}
                     routerLink=      {{item.routerLink}}>
 
-                    <div class="grid-toggle-tiny">
+                    <div [class]="gridtoggletiny">
                       <div class="item-font" *ngIf="item.icon">
                         <mat-icon>{{item.icon}}</mat-icon>
                       </div>
@@ -65,10 +66,8 @@
               </div>
             </div>
           </div>
-
         </li>
       </ul>
-
 
       <button mat-icon-button
               [matMenuTriggerFor]="menu"
@@ -77,7 +76,6 @@
       </button>
 
   </div>
-
 
   <div class="submenu-position" *ngIf="submenu"></div>
     <ul id="accordion"
@@ -115,9 +113,5 @@
       aria-label=" toggle">
     <mat-icon>view_compact</mat-icon>
   </button>
-  <!-- <button *ngIf="user && user?.roles === 'admin'" mat-icon-button
-      (click)="initMenu()"
-      aria-label=" toggle">
-    <mat-icon>refresh</mat-icon>
-  </button> -->
+
 </div>

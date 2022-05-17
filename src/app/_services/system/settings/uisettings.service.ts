@@ -28,6 +28,7 @@ export interface TransactionUISettings {
   buyerAmountDiscount    : string;
   idleTime               : string;
   highTipInputPercentage : string;
+  onlyAllowInventory     : boolean;
   showOrderName          : boolean;
 
 }
@@ -363,7 +364,8 @@ export class UISettingsService {
       idleTime                    : [''],
       creditRecieptMinimum        : [''],
       highTipInputPercentage      : [''],
-      showOrderName: [''],
+      onlyAllowInventory          : [''],
+      showOrderName               : [''],
      })
     return fb
   }

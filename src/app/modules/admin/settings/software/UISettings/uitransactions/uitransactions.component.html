@@ -90,6 +90,15 @@
             </mat-slide-toggle>
           </div>
 
+          <div class="toggle-fields">
+            <mat-slide-toggle
+                      formControlName="onlyAllowInventory"
+                      >
+              <mat-label>Allow sales of inventoried items only</mat-label>
+            </mat-slide-toggle>
+          </div>
+
+          
           <div class="client-selector">
             <app-client-types-lookup
                   [formControlName]="'defaultClientTypeID'"
@@ -150,6 +159,9 @@
               Credit Payment Min.
           </app-value-fields>
         </div>
+
+
+
         <div>
           <mat-label>High tip warning on percentage compared of payment.</mat-label>
           <app-value-fields

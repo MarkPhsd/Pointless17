@@ -1,6 +1,7 @@
 
 <div fxLayout="row" class="row-class">
   {{err}}
+  
   <div fxLayout="column" class="row-class"
        *ngIf="!displayCategories">
 
@@ -40,7 +41,10 @@
           {{menus[index].name  | truncateText : 20}}
         </div>
       </div>
-      <mat-divider></mat-divider>
+      <div *ngIf="!tinyMenu">
+        <mat-divider></mat-divider>
+      </div>
+ 
       <div class="menu-header-footer"></div>
     </div>
 
