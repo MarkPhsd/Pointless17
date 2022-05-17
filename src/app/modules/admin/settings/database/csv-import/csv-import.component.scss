@@ -1,5 +1,30 @@
 .container{ 
-  width: 150px;
-  height: 150px;
-  margin: 25px;
+  // width:  250px;
+  // height: 150px;
+  margin: 10px;
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+.import-file { 
+  // height: 250px;
+  width : 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 10px;
+}
+
+.grid-container { 
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  margin-bottom: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 650px;
+  overflow-y: visible;
+}
+
+button {
+  margin: 10px;
 }

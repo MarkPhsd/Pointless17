@@ -13,7 +13,7 @@ import { ActivatedRoute} from '@angular/router';
   templateUrl: './brand-type-select.component.html',
   styleUrls: ['./brand-type-select.component.scss'],
 })
-export class BrandTypeSelectComponent implements  AfterViewInit {
+export class BrandTypeSelectComponent implements  OnInit,AfterViewInit {
 // , AfterViewInit, OnChanges
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
@@ -23,7 +23,7 @@ export class BrandTypeSelectComponent implements  AfterViewInit {
   @Input() inputForm:         FormGroup;
   @Input() searchForm:        FormGroup;
   @Input() searchField:       FormControl;
-  @Input() id               : number;
+  @Input() id               : any;
   @Input() name:              string;
   searchPhrase:               Subject<any> = new Subject();
   item:                       IUserProfile;
@@ -43,7 +43,7 @@ export class BrandTypeSelectComponent implements  AfterViewInit {
   )
 
   searchList(searchPhrase):  Observable<ClientSearchResults> {
-    const site = this.siteService.getAssignedSite();
+    const site  = this.siteService.getAssignedSite();
     const model = this.initSearchModel(searchPhrase)
     return this.contactsService.getLiveBrands(site, model)
   }
@@ -68,16 +68,23 @@ export class BrandTypeSelectComponent implements  AfterViewInit {
                 private siteService    : SitesService,
                ) {
 
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    console.log('brandID', this.id)
     this.site = this.siteService.getAssignedSite();
 
     if (this.inputForm) {
-      this.id = this.inputForm.controls['brandID'].value;
+      if (this.id != 0) { 
+        this.id = this.inputForm.controls['brandID'].value;
+      }
     }
+
     this.initForm();
     this.getName(this.id)
-
   }
-
   initForm(){
     this.searchForm = this.fb.group({
       brandIDLookup: [],
@@ -89,11 +96,10 @@ export class BrandTypeSelectComponent implements  AfterViewInit {
     const site  = this.siteService.getAssignedSite();
     if(site) {
       let model = this.initModel(this.id)
-      this.contactsService.getLiveBrands(site, model).subscribe(data => {
+      this.contactsService.getLiveBrands(site, model).subscribe( data => {
         if (data && data.results) {
-          const price =  { priceCategoryLookup: data.results[0].company  }
-          console.log(price)
-          this.searchForm.patchValue( price )
+          const item =  { brandIDLookup: data.results[0].company  }
+          this.searchForm.patchValue( item )
         }
       })
     }
@@ -118,7 +124,6 @@ export class BrandTypeSelectComponent implements  AfterViewInit {
     this.inputForm.patchValue( lookup )
 
     const brand =  { brandIDLookup: item.company }
-    console.log('brand', brand)
     this.searchForm.patchValue( brand )
   }
 

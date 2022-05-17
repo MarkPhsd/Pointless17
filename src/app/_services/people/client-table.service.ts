@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { EMPTY, Observable, } from 'rxjs';
-import { IClientTable, ISite, IUserProfile,employee }   from  'src/app/_interfaces';
+import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults }   from  'src/app/_interfaces';
 import { environment } from 'src/environments/environment';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
@@ -134,6 +134,20 @@ export class ClientTableService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.post<any>(url , driversLicense)
+
+  };
+
+  importFlowVendors(site: ISite, list: FlowVendor[]): Observable<ImportFlowVendorResults> {
+
+    const controller ="/ClientTable/"
+
+    const endPoint = `ImportFlowVendors`
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<any>(url, list)
 
   };
 

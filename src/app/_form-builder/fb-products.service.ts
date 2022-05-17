@@ -224,11 +224,12 @@ export class FbProductsService {
         abv:                          [''],
         promptGroupID:                [''],
         active:                       [''],
-        glutenFree                :   [''],
-        terpenes              :   [''],
-        childProof            :   [''],
-        mGCBD                 :   [''],
-        mGTHC                 :   [''],
+        glutenFree                 :  [''],
+        terpenes                   :  [''],
+        childProof             :   [''],
+        mGCBD                  :   [''],
+        mGTHC                  :   [''],
+        parLevel               :   [''],
       })
       return fb;
     }

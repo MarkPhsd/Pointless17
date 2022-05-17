@@ -1,5 +1,4 @@
 <mat-card>
-
   <mat-card-title>
     Import
   </mat-card-title>
@@ -8,8 +7,16 @@
     <button *ngIf="schemaValue" 
             mat-raised-button
             color="primary"
-            (click)="downloadExample()"><mat-icon>download</mat-icon>
-        Download example {{schemaValue}}
+            (click)="downloadExample()">
+        <mat-icon>download</mat-icon>
+        Download example {{schemaName}}
+    </button>
+    <button *ngIf="schemaValue" 
+            mat-raised-button
+            color="primary"
+            (click)="reset()">
+        <mat-icon>refresh</mat-icon>
+          Reset
     </button>
   </mat-card-subtitle>
 
@@ -21,7 +28,7 @@
                           [list$]           = "exportDataService.schemas$"
                           [showActiveInactive]="false"
                           (selectionChange) = "selectScheme($event)">
-        <div fieldSearchDescription>Schema Type Selection</div>
+        <div>Schema Type Selection</div>
         </form-select-list>
     </div>
   
@@ -33,34 +40,55 @@
       </mat-slide-toggle>
     </div>
 
+    <div class="grid-container">
+      <div  class="container"
+            appDnd
+            (fileDropped)="onFileDropped($event)" >
+          <div>     
+            <input type="file" 
+                   #fileDropRef
+                   id="fileDropRef"
+                   accept=".csv" 
+                   (change)="fileChangeListener($event)"/>
 
-    <div class="container"
-         appDnd
-        (fileDropped)="onFileDropped($event)" >
-    
-      <input type="file" 
-             #fileDropRef
-             id="fileDropRef"
-             accept=".csv" 
-             (change)="fileChangeListener($event)"/>
-    
-      <div class="file-drop"></div>
-    
-      <button mat-raised-button
+            <div class="file-drop">
+              <button mat-button
+                      color="primary"
+                      (click)="fileDropRef"><mat-icon>upload</mat-icon>
+              </button>
+            </div>
+          </div>
+      </div>
+
+      <div class="import-file">
+   
+        <button *ngIf="!resultsMessage &&
+                       (schemaValue !=0 && schemaValue != undefined) && 
+                       itemCount>0" 
+              mat-raised-button
               color="primary"
-              (click)="fileChangeListener($event)"><mat-icon>upload</mat-icon>
-      </button>
-    
+              (click)="importFiles()"><mat-icon>file_upload</mat-icon>
+          Import {{schemaName}}
+        </button>
+
+        <div *ngIf="resultsMessage">
+          <mat-label>Results:</mat-label>
+          <br>
+          {{resultsMessage | json}}
+          <div *ngIf="resultsMessage === 'processing'"><mat-spinner [diameter]="50" > </mat-spinner></div>
+        </div>
+        <div *ngIf="csvRecords">
+          <mat-label>Records: {{itemCount}}</mat-label>
+          <br>
+        </div>
+        <div class="import-file" *ngIf="progress">
+          {{ progressValue }} % Complete. {{progress.progress}} of {{progress.total}}.
+          <mat-progress-bar mode="determinate" [value]="progressValue"></mat-progress-bar>
+        </div>
+      </div>
     </div>
+
   </mat-card-content>
 
 </mat-card>
 
-  <!-- <div class="csv-file-chooser-section">
-    <input type="file" 
-           #fileImportInput 
-           name="File Upload" 
-           id="csvFileUpload" 
-           (change)="fileChangeListener($event)"
-      accept=".csv" />
-  </div> -->

@@ -3,9 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { ISite, PriceTierPrice } from 'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
 import { AuthenticationService } from '..';
-import { SitesService } from '../reporting/sites.service';
 import { SettingsService } from '../system/settings.service';
 
 @Injectable({
@@ -20,8 +18,6 @@ export class MenuProductPriceTierService {
               private httpCache: HttpClientCacheService,
               ) {
                 }
-
-
 
   getPriceTierPrices(site: ISite):  Observable<PriceTierPrice[]>  {
 

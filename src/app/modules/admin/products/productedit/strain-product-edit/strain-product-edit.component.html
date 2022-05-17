@@ -63,6 +63,8 @@
               <app-department-select [inputForm]="productForm" ></app-department-select>
               <product-type-select   [inputForm]="productForm"></product-type-select>
 
+               <!-- brandID value {{brandID | json}} <br>-->
+               <!-- brandID {{brandID.value}}  -->
               <app-brand-type-select
                       [formFieldClass]="'formFieldClass-standard'"
                       [id] = "brandID.value"
@@ -84,7 +86,7 @@
           </div>
 
           <div class="grid-item" >
-              <div *ngIf="itemType &&  (itemType.useType && itemType.useType?.toLowerCase() === 'product')">
+            <div *ngIf="itemType &&  (itemType.useType && itemType.useType?.toLowerCase() === 'product')">
                 <div class="header">
                   <h4><mat-icon>price_change</mat-icon>Prices</h4>
                 </div>
@@ -97,7 +99,7 @@
                     </app-price-category-select>
                   </div>
                </div>
-             </div>
+            </div>
 
             <div>
                 <div class="grid-item">
@@ -164,6 +166,7 @@
                                                          itemType.type?.toLowerCase() === 'restaurant')">
 
               <!-- <food-product-edit [inputForm]="productForm"></food-product-edit> -->
+           
 
               <app-value-fields
                 [inputForm]="productForm"

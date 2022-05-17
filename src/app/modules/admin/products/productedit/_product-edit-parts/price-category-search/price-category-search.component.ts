@@ -59,8 +59,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
     private siteService    : SitesService,
     )
   {
-    this.site = this.siteService.getAssignedSite();
-    this.initForm();
+
   }
 
   async init() {
@@ -76,6 +75,9 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
   }
 
   ngOnInit() {
+    this.site = this.siteService.getAssignedSite();
+    this.initForm();
+    
     this.init();
     if (this.id) { this.getName(this.id)  }
   }

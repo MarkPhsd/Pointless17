@@ -106,8 +106,9 @@ export class StrainProductEditComponent implements OnInit {
     this.initFormFields();
 
     if (this.productForm && this.product) {
-        this.productForm.patchValue(this.product)
-        this.urlImageMain = this.product.urlImageMain;
+      this.productForm.patchValue(this.product)
+      // this.productForm.controls['brandID'].setValue(this.product.brandID);
+      this.urlImageMain = this.product.urlImageMain;
     }
 
   };

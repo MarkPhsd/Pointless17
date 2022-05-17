@@ -200,5 +200,10 @@ export interface IProduct {
   terpenes    : string;
   mGCBD       : number;
   mGTCH       : number;
+  message     : string;
+  categoryName: string;
+  typeName: string;
+  brandName: string;
+  departmentName: string;
 }
 

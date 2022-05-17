@@ -185,3 +185,26 @@ export interface jobTypes {
   revenueCenter: number;
   upsize_ts:     string;
 }
+export interface FlowVendor {
+  name	:     string;
+  organization	:     string;
+  licenses	:     string;
+  streetAddress1	:     string;
+  streetAddress2	:     string;
+  city  :     string;
+  state	:     string;
+  zip	:     string;
+  email	:     string;
+  phone	:     string;
+  repName	:     string;
+  repLicense:     string;	
+  repPhone	:     string;
+  repEmail	:     string;
+  nutrients	:     string;
+  veriticallyIntegrated	:   boolean;
+}
+
+export interface ImportFlowVendorResults { 
+  listAdded: FlowVendor[];
+  listNotAdded: FlowVendor[];
+}

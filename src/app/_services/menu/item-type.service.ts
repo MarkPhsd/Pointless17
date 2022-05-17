@@ -850,7 +850,19 @@ constructor(private http: HttpClient,
                   useGroups          : useGroup,
                   printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
                   requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Meat Weighted",        itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'product',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
-      ]
+        {id: 65,  portionValue       : '',
+                  packagingMaterial: '',
+                  useGroups          : useGroup,
+                  printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
+                  requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Produce",        itemType_Categories: categories, imageName: '',       icon: 'vegetabl', useType:'product',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'grocery', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+
+        {id: 58,  portionValue       : '',
+                  packagingMaterial: '',
+                  useGroups          : useGroup,
+                  printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
+                  requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false, printerName: '',   name : "Concentrate",        itemType_Categories: categories, imageName: '',       icon: 'chicken', useType:'concentrate',  sortOrder: 39, ageRequirement: 0, enabled: true, type:  'cannabis', useGroupID: 10, weightedItem: false, expirationRequired: false, labelRequired: false, },
+
+    ]
     return productType;
 
   }

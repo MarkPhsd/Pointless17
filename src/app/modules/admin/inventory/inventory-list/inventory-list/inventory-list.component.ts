@@ -471,6 +471,10 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.categoryID        = 0;
     this.productTypeSearch = 0;
     this.brandID           = 0
+    this.currentPage       = 1;
+    this.inventoryStatusID = 0;
+    // this.currentManifest = null;
+    this.metrcCategory = null;
     this.refreshSearch()
   }
 
@@ -508,28 +512,33 @@ export class InventoryListComponent implements OnInit, OnDestroy {
       const item = { itemName: event }
       this.searchForm.patchValue(item)
       this.search = event;
+      this.currentPage = 1;
       this.refreshSearch();
     }
   }
 
   refreshCategoryChange(event) {
     this.categoryID = event;
+    this.currentPage = 1;
     this.refreshSearch();
   }
 
   refreshProductTypeChange(event) {
     this.productTypeSearch = event;
+    this.currentPage = 1;
     this.refreshSearch();
   }
 
   refreshActiveChange(event) {
     this.viewAll = event;
+    this.currentPage = 1;
     this.refreshSearch();
   }
 
   setBrandID(event) {
     if (event && event.id) {
       this.brandID = event.id
+      this.currentPage = 1;
       this.refreshSearch();
     }
   }
