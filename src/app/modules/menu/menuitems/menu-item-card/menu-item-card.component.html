@@ -26,7 +26,13 @@
         </button>
       </div>
 
-      <div *ngIf="!isDiscountItem && imageUrl">
+      <div *ngIf="!isDiscountItem && !imageUrl" >
+        <div class="description-text"  (click)="menuItemAction(true)">
+           {{ menuItem.name  }}
+        </div>
+      </div>
+
+      <div *ngIf="!isDiscountItem && imageUrl" >
 
         <img *ngIf="isApp && !isCategory"
               [src]="imageUrl"
@@ -44,7 +50,7 @@
           <img  *ngIf="isCategory"
             [src]="imageUrl"
             onerror   = "this.src='../assets/images/placeholderimage.png'"
-            class="category-img"
+            class="product-image"
             (click)="menuItemAction(true)"/>
         </div>
 
@@ -53,7 +59,7 @@
     </div>
   </div>
 
-  <div *ngIf="(isApp && imageUrl) || !isApp" class="product-name">
+  <div *ngIf="((isApp && imageUrl) || !isApp) || !imageUrl" class="product-name">
     {{ menuItem.name  | truncateText: 30   }}
   </div>
   <div  class="product-name" *ngIf="!menuItem.itemType" >

@@ -117,6 +117,14 @@
                         >
               </mat-form-field>
 
+              <!-- <div>
+                <app-price-category-select
+                    [itemType]        ="itemType"
+                    [priceCategoryID] ="item.priceCategoryID"
+                    [inputForm]       ="inputForm" >
+                  </app-price-category-select>
+              </div> -->
+
               <div>
                 <div  class="header-column">Features</div>
                 <app-value-fields
@@ -132,7 +140,10 @@
             <div *ngIf="menuItem && menuItem.itemType.type == 'cannabis' ||
                         menuItem && menuItem.itemType.type == 'med-cannabis'"
                   [formGroup]="inputForm">
-              <app-chemical-values [inputForm]="inputForm">
+              <app-chemical-values 
+                [inputForm]="inputForm"
+                [inventoryItem]="true"
+              >
               </app-chemical-values>
             </div>
           </div>

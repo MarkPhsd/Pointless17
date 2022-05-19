@@ -165,20 +165,20 @@ export class OrdersService {
     if (name.length) {
       if (name.length >= 5) {
         const realName = name.substring(0, name.length - 4)
-        localStorage.setItem(`POSName`, realName)
-        if (localStorage.getItem(`POSName`) === realName  ) {
+        localStorage.setItem(`devicename`, realName)
+        if (localStorage.getItem(`devicename`) === realName  ) {
           return true
         } else {
           return false
         }
       }
     } else {
-      localStorage.removeItem('POSName');
+      localStorage.removeItem('devicename');
       return false
     }
   }
 
-  get posName(): string { return localStorage.getItem("POSName") };
+  get posName(): string { return localStorage.getItem("devicename") };
 
   applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  { 
     const controller = "/POSOrders/"
@@ -593,13 +593,9 @@ export class OrdersService {
   }
 
   newOrderWithPayload(site: ISite, serviceType: IServiceType) {
-    if (!site) { return }
-    const orderPayload = this.getPayLoadDefaults(serviceType)
-    const order$       = this.postOrderWithPayload(site, orderPayload)
-    console.log('orderPayload', orderPayload)
+    const order$ = this.newOrderWithPayloadMethod(site, serviceType )
     order$.subscribe( {
         next:  order => {
-          console.log('order', order)
           if (order.resultMessage) {
             this.notificationEvent(`Error submitting Order ${order.resultMessage}`, "Posted")
             return
@@ -612,6 +608,12 @@ export class OrdersService {
         }
       }
     )
+  }
+
+  newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<IPOSOrder> {
+    if (!site) { return }
+    const orderPayload = this.getPayLoadDefaults(serviceType)
+    return  this.postOrderWithPayload(site, orderPayload)
   }
 
   navToMenu() {

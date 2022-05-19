@@ -117,9 +117,7 @@
           </mat-form-field>
       </div>
 
-  
-
-      <div class="grid-item">
+      <div *ngIf="!inventoryItem"class="grid-item">
         <mat-form-field  appearance="outline" class="select-conversion fields"  >
           <mat-label >MG CBD</mat-label>
           <input  matInput
@@ -129,7 +127,7 @@
                 >
           </mat-form-field>
       </div>
-      <div class="grid-item">
+      <div *ngIf="!inventoryItem" class="grid-item">
         <mat-form-field  appearance="outline" class="select-conversion fields"  >
           <mat-label >MG THC</mat-label>
           <input  matInput
@@ -141,7 +139,7 @@
       </div>
 
 
-      <div class="grid-item">
+      <div *ngIf="!inventoryItem" class="grid-item">
         <mat-form-field  appearance="outline" class="select-conversion fields"  >
           <mat-label >Terpenes</mat-label>
           <input  matInput
@@ -153,7 +151,7 @@
       </div>
 
     </div>
-    <div class="grid-item">
+    <div *ngIf="!inventoryItem" class="grid-item">
       <mat-slide-toggle
            formControlName="childProof"
               >

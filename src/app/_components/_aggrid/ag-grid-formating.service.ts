@@ -58,6 +58,13 @@ initGridOptions(pageSize: number, columnDefs: any)  {
         }
       },
 
+      "row-active" :  (params) => {
+        const value = params.api.getValue("active", params.node) != false;
+        if (value) {
+          return true
+        }
+      },
+
       "row-not-active" :  (params) => {
         const value = params.api.getValue("active", params.node) == false;
         if (value) {

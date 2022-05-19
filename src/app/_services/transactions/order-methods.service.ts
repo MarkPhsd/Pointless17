@@ -95,10 +95,18 @@ export class OrderMethodsService {
 
   }
 
-  doesOrderExist(site: ISite) {
+  async doesOrderExist(site: ISite) {
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
     if (!this.order || (this.order.id === undefined)) {
-      this.orderService.newDefaultOrder(site);
+
+      const order$ = this.orderService.newOrderWithPayloadMethod(site, null);
+      const order  = await order$.pipe().toPromise();
+      if (order) { 
+        this.order = order;
+        this.orderService.updateOrderSubscription(this.order);
+        return true;
+      }
+      // this.orderService.newDefaultOrder(site);
     }
     return true;
   }
@@ -115,7 +123,6 @@ export class OrderMethodsService {
     if (!result) { return }
     if (order) {
       const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price };
-
       const itemResult$ = this.posOrderItemService.putItem(site, newItem)
       itemResult$.subscribe(data => {
           if (data.order) {
@@ -134,9 +141,6 @@ export class OrderMethodsService {
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const searchResults = this.updateMenuSearchModel(item)
     if (searchResults) { return }
-
-    console.log('item.itemType', item.itemType)
-    console.log('item.itemType.name', item.itemType.name)
 
     if (add) {
       if (item && item.itemType.requireInStock) {
@@ -163,8 +167,6 @@ export class OrderMethodsService {
 
   updateMenuSearchModel(item: IMenuItem) : boolean {
     if (!item) {   return false }
-
-
     const model =  {} as ProductSearchModel;
     if (item.itemType.name.toLowerCase() == 'category') {
       model.categoryID   = item.categoryID.toString()
@@ -236,8 +238,10 @@ export class OrderMethodsService {
   }
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number, portionValue: string, packaging: string): Observable<ItemPostResults> {
-    if (!order || !barcode) {return null;}
-    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue  } as NewItem
+    if (!barcode) {return null;}
+    if (!order) {const order = {} as IPOSOrder}
+    const deviceName = localStorage.getItem('devicename')
+    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue, deviceName: deviceName  } as NewItem
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
@@ -272,23 +276,28 @@ export class OrderMethodsService {
 
     if (!order)         { order = this.order };
     const site          = this.siteService.getAssignedSite();
-    const result        = await this.doesOrderExist(site);
+    // const result        = await this.doesOrderExist(site);
 
-    if (!result) { return false };
+    // if (!result) { return false };
     let passAlongItem;
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
-    if (!result) { return false };
+    // if (!result) { return false };
 
     order = this.orderService.getCurrentOrder();
 
-    if (!order || order.id === undefined) {
-      this.order = null;
-      this.orderService.updateOrderSubscription(null);
-      this.notifyEvent(`Order not started, please try adding item again.`, 'Alert');
-      return false;
+    if (!order || order == null) {
+      order = {} as IPOSOrder
+      order.id    = 0;
     }
 
-    if (order && order.id) {
+    console.log('Process add item', order)
+    
+    if (order) {
+
+      console.log('Process add item', order, item, barcode)
+
+      console.log('Process add item', order)
+
       if (!item && !barcode) {
         if (!item.itemType) {
           this.notifyEvent(`Item not configured properly. Item type is not assigned.`, 'Alert');
@@ -302,6 +311,8 @@ export class OrderMethodsService {
         return false;
       }
 
+      console.log('Process add item', order, item, barcode)
+
       let packaging     = '';
       let portionValue  = '';
       let itemNote      = '';
@@ -311,9 +322,12 @@ export class OrderMethodsService {
         itemNote         = input?.itemNote;
       }
 
+  
       if (item) {
+        console.log('posting item from processAddItem')
+        const deviceName  = localStorage.getItem('devicename')
         const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
-                              packaging: packaging, portionValue: portionValue, barcode: '', weight: 1, itemNote: itemNote } as NewItem
+                              packaging: packaging, portionValue: portionValue, barcode: '', weight: 1, itemNote: itemNote, deviceName: deviceName } as NewItem
         const addItem$    = this.posOrderItemService.postItem(site, newItem)
         this.processItemPostResults(addItem$)
         return true
@@ -325,7 +339,6 @@ export class OrderMethodsService {
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
     addItem$.subscribe(data => {
 
-      console.log('processItemPostResults')
       if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
 
       if (data && data.resultErrorDescription) {
@@ -515,7 +528,11 @@ export class OrderMethodsService {
   }
 
   clearOrder() {
+
+    // localStorage.setItem('orderSubscription', null);
+    localStorage.removeItem('orderSubscription')
     this.orderService.updateOrderSubscription(null);
+
     const url = this.router.url;
     if (url === '/currentorder' || url === '/currentorder;mainPanel=true'
         || url === '/pos-payment' || url === '/pos-order-schedule') {

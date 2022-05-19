@@ -451,13 +451,22 @@ mat-dialog-container {
   background-color: #f09b7e !important;
 }
 
+.row-active {
+  // background-color: #ed8c69 !important;
+}
+
+.row-active:hover {
+  font-weight: bold;
+  // background-color: #f08963 !important;
+}
+
 .row-not-active {
-  background-color: #b2c861 !important;
+  background-color: #ed8c69 !important;
 }
 
 .row-not-active:hover {
   font-weight: bold;
-  background-color: #b2c861 !important;
+  background-color: #f08963 !important;
 }
 
 .row-not-forsale {

@@ -29,7 +29,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   initSubscriptions() {
     this._ItemWithAction = this.itemService.itemWithAction$.subscribe(data=> {
       this.itemWithAction = data
-
     })
   }
 
@@ -45,23 +44,42 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           )
   {
     if (data) {
-
       this.inventoryReturnDiscard = true;
       this.itemWithAction = data
+      console.log(data)
       this.itemService.updateItemWithAction(data);
-
-
+      this.getVoidReasons();
     }
+  }
+
+  ngOnInit(): void {
+    this.initSubscriptions();
+  }
+
+  ngOnDestroy() {
+    this._ItemWithAction.unsubscribe();
   }
 
   getVoidReasons() {
     const site = this.siteService.getAssignedSite();
+
     if (this.itemWithAction.typeOfAction === 'VoidOrder') {
       this.list$  = this.settingsService.getVoidReasons(site, 1);
       return
     }
+
     if (this.itemWithAction.typeOfAction === 'VoidPayments') {
       this.list$  = this.settingsService.getVoidReasons(site, 2);
+      return
+    }
+
+    if (this.itemWithAction.typeOfAction === 'VoidItem') {
+      this.list$  = this.settingsService.getVoidReasons(site, 3);
+      return
+    }
+
+    if (this.itemWithAction.typeOfAction === 'VoidMainFest') {
+      this.list$  = this.settingsService.getVoidReasons(site, 4);
       return
     }
 
@@ -90,7 +108,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
               response$ = this.orderService.voidOrder(site, this.itemWithAction)
               break;
           case 2: //priceAdjust
-
+           
               break;
           case 2: //note
 
@@ -117,22 +135,22 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     if (setting) {
       const site = this.siteService.getAssignedSite();
 
-      this.itemWithAction.returnToInventory  = this.inventoryReturnDiscard
-      this.itemWithAction.voidReason = setting.name
-      this.itemWithAction.voidReasonID = setting.id
+      this.itemWithAction.returnToInventory   = this.inventoryReturnDiscard
+      this.itemWithAction.voidReason          = setting.name
+      this.itemWithAction.voidReasonID        = setting.id
       let response$
 
       if (this.itemWithAction) {
         switch (this.itemWithAction.action) {
           case 1: //void
-              response$ = await this.itemService.voidPOSOrderItem(site, this.itemWithAction)
+            
               break;
           case 2: //priceAdjust
-
+            
               break;
-          case 2: //note
-
-              break;
+          case 3: //note
+            response$ = await this.itemService.voidPOSOrderItem(site, this.itemWithAction)
+            break;
         }
         response$.subscribe(data => {
           if (data === 'Item voided') {
@@ -156,13 +174,9 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     )
   }
 
-  ngOnInit(): void {
-    this.initSubscriptions();
-  }
 
-  ngOnDestroy() {
-    this._ItemWithAction.unsubscribe();
-  }
+
+
 
   notifyEvent(message: string, title: string) {
     this.matSnackBar.open(message, title,{

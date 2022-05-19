@@ -17,6 +17,7 @@ import { PriceCategories } from 'src/app/_interfaces/menu/menu-products';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
+import { TransactionUISettings,UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-price-categories-edit',
@@ -46,6 +47,10 @@ export class PriceCategoriesEditComponent implements OnInit {
   unitTypes :  IItemBasic[]
   fieldOptions = { prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }
 
+  uiTransactions = {} as TransactionUISettings;
+
+  recOption = this.uiSettingsService.pricingRecMed;
+
   constructor(  private _snackBar   : MatSnackBar,
     private fb                      : FormBuilder,
     private siteService             : SitesService,
@@ -54,7 +59,8 @@ export class PriceCategoriesEditComponent implements OnInit {
     private fbPriceCategory         : FbPriceCategoriesService,
     private priceTiersService       : PriceTierService,
     private priceTierMethods        : PriceTierMethodsService,
-    private dialogRef: MatDialogRef<PriceCategoriesEditComponent>,
+    private uiSettingsService       : UISettingsService,
+    private dialogRef               : MatDialogRef<PriceCategoriesEditComponent>,
     private unitTypeService: UnitTypesService,
     @Inject(MAT_DIALOG_DATA) public data: IPriceCategories
     )
@@ -109,6 +115,13 @@ export class PriceCategoriesEditComponent implements OnInit {
       if (!priceCategory.productPrices) { return }
       this.addItems(this.inputForm, this.priceCategory.productPrices, 'productPrices')
     }
+  }
+
+  selectRecMedOption(event) { 
+    if (!event) { return }
+    const id = event.id
+    console.log(event)
+    this.inputForm.patchValue(this.priceCategory)
   }
 
   openPriceTier(id) {

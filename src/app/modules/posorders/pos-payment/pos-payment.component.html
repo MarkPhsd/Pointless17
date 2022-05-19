@@ -24,30 +24,23 @@
     </div>
 
     <div>
-      <div class="split-item-button">
-        <button class="splitbutton" mat-raised-button color="primary" (click)="splitByItem = !splitByItem">
+      <div   *ngIf="!paymentsEqualTotal" 
+             class="split-item-button">
+        <button class="splitbutton" 
+                mat-raised-button
+                color="primary" 
+                (click)="splitByItem = !splitByItem">
           <mat-icon>split</mat-icon>Split By Items
         </button>
       </div>
 
       <div class="order-completed"
-           *ngIf="paymentsEqualTotal">
+           *ngIf="paymentsEqualTotal || order.completionDate">
         <mat-card class="card-dimensions">
           <mat-card-content>
-            <div *ngIf="order.itemCount == 0 || !order.itemCount">
-              <h1>Nothing to see here, place some items in the cart!</h1>
-            </div>
-            <div *ngIf="order.itemCount>0 ">
-              <h1>
-                Order paid for and completed!
-              </h1>
-              <div>
-                Thank you for your order. Please review the instructions on your receipt.
-              </div>
-              <button mat-raised-button color="primary" (click)="closeCart()">
-                <mat-icon>menu</mat-icon> Continue Shopping 
-              </button>
-            </div>
+            
+            <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
+
           </mat-card-content>
         </mat-card>
       </div>
@@ -82,7 +75,15 @@
                         (click)="processDSICreditCardPayment()">
                       <mat-icon color="warn">credit_card</mat-icon>Chip Payment
                     </button>
+                    <button class="payment-buttons"
+                           mat-raised-button
+                           (click)="dsiResetDevice()">
+                      <mat-icon color="warn">credit_card</mat-icon>Chip Payment
+                    </button>
+
                   </div>
+
+
                   <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
                     <button class="payment-buttons"
                         mat-raised-button
@@ -244,7 +245,6 @@
                           Enter Payment
                       </app-key-pad>
                     </div>
-
                   </div>
                 </mat-card-content>
               </mat-card>

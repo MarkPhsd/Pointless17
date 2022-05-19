@@ -8,17 +8,13 @@
       <mat-icon>exposure_plus_1</mat-icon></button>
     </div>
 
-    <div class='quantity-input' >
-      <mat-form-field
-                      appearance="outline"
-                      class="quantity-input"
-                      >
-        <mat-label >quantity</mat-label>
-        <input matInput
-               type             ="text"
-               formControlName ="quantity"
-               [(ngModel)]     ="quantity">
-      </mat-form-field>
+    <div class="quantity-input">
+      <app-value-fields
+              [fieldsClass]="'fields'"
+              [fieldType]="'text'"
+              [inputForm]="inputForm"
+              [fieldName]="'quantity'">
+      </app-value-fields>
     </div>
 
     <div id="addItemToOrder">

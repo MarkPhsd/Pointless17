@@ -22,6 +22,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
+import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -106,7 +107,8 @@ export class PosPaymentComponent implements OnInit {
               private printingService :PrintingService,
               public  platFormService : PlatformService,
               private uISettingsService: UISettingsService,
-              private dialog: MatDialog,
+              private dialog          : MatDialog,
+              private dsiProcess      : DSIProcessService,
               private router          : Router,
               private fb              : FormBuilder) { }
 
@@ -288,10 +290,14 @@ export class PosPaymentComponent implements OnInit {
     }
   }
 
+  async dsiResetDevice() {
+    const response  = await this.dsiProcess.pinPadReset( );
+    this.notify('PIN Pad Reset', 'Success', 1000)
+  }
+
   openStripePayment(data: any){
     let dialogRef: any;
     const site = this.sitesService.getAssignedSite();
-
     dialogRef = this.dialog.open(StripeCheckOutComponent,
       { width:        '450px',
         minWidth:     '450px',
@@ -450,13 +456,13 @@ export class PosPaymentComponent implements OnInit {
     return
   }
 
-   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
       // const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
       // const results =  await payment$.pipe().toPromise();
       return this.paymentsMethodsService.processCashPayment(site, posPayment, order, amount, paymentMethod )
   }
 
-   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
       // const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
       // const results =  await payment$.pipe().toPromise();
       const enabled = this.paymentsMethodsService.DSIEmvSettings.enabled
@@ -499,13 +505,11 @@ export class PosPaymentComponent implements OnInit {
         error: (e) => console.error(e)
       }
     )
-
   }
 
   processGetResults(amount, posPayment: IPOSPayment): Observable<IPaymentResponse> {
     posPayment.amountReceived = amount;
     return  this.paymentsMethodsService.getResults(amount, this.paymentMethod, this.posPayment, this.order)
-
   }
 
   enterPointCashValue(event) {
@@ -555,9 +559,7 @@ export class PosPaymentComponent implements OnInit {
       }
       this.stepSelection = 3;
     }
-
     return
-
   }
 
   goToPaymentMethod(){

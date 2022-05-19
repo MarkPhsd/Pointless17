@@ -43,8 +43,10 @@
 
       <ion-item-options *ngIf="item.printed && !prepScreen">
         <ion-item-option color="accent">
-          <mat-icon>remove_shopping_cart</mat-icon>
-          Void
+          <button mat-button color="primary" (click)="removeItemFromList(i)" >
+            <mat-icon>remove_shopping_cart</mat-icon>
+            Void
+          </button>
         </ion-item-option>
       </ion-item-options>
 

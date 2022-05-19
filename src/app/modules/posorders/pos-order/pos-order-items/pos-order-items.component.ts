@@ -141,6 +141,7 @@ export class PosOrderItemsComponent implements OnInit {
   }
 
   async removeItemFromList(payload: any) {
+    console.log(payload)
     const index = payload.index;
     const orderItem = payload.item
     this.orderMethodService.removeItemFromList(index, orderItem)

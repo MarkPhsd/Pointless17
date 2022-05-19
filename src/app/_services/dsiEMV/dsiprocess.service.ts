@@ -14,7 +14,7 @@ export class DSIProcessService {
   initTransaction(): Transaction {
     const item = localStorage.getItem('DSIEMVSettings')
     if (!item) { return null }
-    const transactiontemp = JSON.parse(item) as Transaction;
+    const transactiontemp     = JSON.parse(item) as Transaction;
     const transaction         ={} as Transaction // {...transactiontemp, id: undefined}
     transaction.MerchantID    =transactiontemp.MerchantID;
     transaction.TerminalID    =transactiontemp.TerminalID;;
@@ -41,7 +41,6 @@ export class DSIProcessService {
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
     const commandResponse = this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '')
-    console.log('emvSale response', commandResponse)
     return commandResponse;
   }
 
@@ -128,7 +127,11 @@ export class DSIProcessService {
 
   }
 
-
+  async emvReset(): Promise<RStream>  {
+    let item = this.initTransaction()
+    const commandResponse = this.emvReset()
+    return commandResponse;
+  }
   // XML = XML & setTag("TranType", opay.TranType) 'CREDIT/DEBIT/EBT
   // XML = XML & setTag("TranCode", opay.TranCode) ''SALE/REFUND/VOUCHERReturn
 

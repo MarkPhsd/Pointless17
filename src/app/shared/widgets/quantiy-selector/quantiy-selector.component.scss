@@ -1,16 +1,19 @@
 .quantity-input {
   width    : 55px;
-  height   : 50px;
-  font-size: 1.2em;
+  height   : 35px;
+  font-size: medium;
   padding  : 0;
   margin   : 0;
-  font-size: smaller;
+  top      : -10px;
+  position: relative;
 }
 
 .buttons-quantity {
-  display        : flex;
-  flex-direction : row;
-  justify-content :flex-start;
+  display         : flex;
+  flex-direction  : row;
+  justify-content : flex-start;
+  align-content   : center;
+  
 }
 
 .button {
@@ -18,4 +21,9 @@
   margin-right: 5px;
   height: 50px;
   font-size: smaller;
+}
+
+
+mat-form-field-appearance-outline mat-form-field-wrapper {
+  margin: 0;
 }

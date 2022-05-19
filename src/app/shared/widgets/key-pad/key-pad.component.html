@@ -2,7 +2,7 @@
   <div class="item-container"
        *ngIf="inputForm">
     <div> <ng-content select="[info]"></ng-content> </div>
-
+  <!-- {{fieldName}} + {{formatted}} / {{formattedValue}} -->
     <div class="header-info"
          [formGroup]="inputForm">
       <div>
@@ -13,7 +13,7 @@
             <input   matInput
                     #input
                     appAutoFocusInput
-                    [(ngModel)]="cashValue"
+                    [(ngModel)]        ="cashValue"
                     [type]             ="inputType"
                     [formControlName]  ="fieldName"
                     class="form-control" >
@@ -27,15 +27,6 @@
       </button>
     </div>
   </div>
-
-  <!-- <div class="checkbox" *ngIf="inputTypeValue === 'password'" >
-    <mat-checkbox
-        class="example-margin"
-        [(ngModel)]="showPassword"
-        (change)="refreshDisplay()">
-      Show Password
-    </mat-checkbox>
-  </div> -->
 
   <mat-card class="mat-card-floater"
             *ngIf="showInput">

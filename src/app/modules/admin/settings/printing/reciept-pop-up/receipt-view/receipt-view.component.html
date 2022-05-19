@@ -1,18 +1,18 @@
-<app-receipt-view
-    (outPutExit)="exit($event)"
-    [options]   ="options"
-    [order]     ="order"
-  ></app-receipt-view>
-
-<!-- <div class="buttons-grid">
+<div class="buttons-grid">
   <div>
     <button mat-button (click)="print()">
-      <mat-icon>print</mat-icon>
-      Print
+      <div *ngIf="printerName">
+        <mat-icon>print</mat-icon>
+        Print to  {{printerName}} 
+      </div>
+      <div *ngIf="!printerName">
+        <mat-icon>save</mat-icon>
+        Save
+      </div>
     </button>
   </div>
 
-  <div>
+  <div *ngIf="!hideExit">
     <button mat-button (click)="exit()">
       <mat-icon>close</mat-icon>
       Exit
@@ -20,11 +20,8 @@
   </div>
 </div>
 
-<div>Printer: {{printerName}} </div>
-
 <div class="mat-card-white" *ngIf="receiptLayoutSetting">
 
-  <mat-card>
     <div *ngIf="headerText &&  itemsText"
           class="border-section">
        <app-receipt-layout #printsection id="printsection"
@@ -43,5 +40,4 @@
                           [styles]="receiptStyles">
        </app-receipt-layout>
     </div>
-  </mat-card>
-</div> -->
+</div>

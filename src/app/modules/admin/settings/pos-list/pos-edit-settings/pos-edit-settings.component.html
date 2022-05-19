@@ -1,0 +1,117 @@
+<mat-card >
+
+  <mat-card-title>
+    <div class="header-container">
+      <div *ngIf='!terminal  && inputForm'>
+        New Terminal.
+      </div>
+      <div>
+        <div  *ngIf='terminal'>
+          {{terminal.name}}
+        </div>
+      </div>
+    </div>
+  </mat-card-title>
+
+  <mat-card-subtitle>
+
+    <div class="edit-buttons" >
+      <app-edit-buttons-standard
+      (outputeupdateItem)     ="saveSetting($event)"
+      (outputupdateItemExit)  ="updateExit($event)"
+      (outputupdatedeleteItem)="delete($event)"
+      (outputupdateonCancel)  ="onCancel($event)"
+      ></app-edit-buttons-standard>
+    </div>
+
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    <div *ngIf="inputForm && terminal" [formGroup]="inputForm" >
+      <div class='grid-container'>
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >Name</mat-label>
+            <input matInput type="text"
+                    formControlName="name"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >Device Name</mat-label>
+            <input matInput type="text"
+                    formControlName="deviceName"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+
+        <div class="filterItem"
+            *ngIf="medOrRecStoreList"  >
+          <mat-form-field appearance="outline">
+            <mat-label>Device Sales Type</mat-label>
+            <mat-select
+                        type             ="number"
+                        formControlName  ="medicalRecSales"
+                        name             ="medicalRecSales"
+              >
+              <mat-option value= "">Clear</mat-option>
+              <mat-option *ngFor="let item of medOrRecStoreList"
+                          [value]="item.id">
+                {{item.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+          
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="enabled">
+            <mat-label>Enabled</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+      </div>
+
+      <mat-divider></mat-divider>
+      <h2>Optional Settings</h2>
+      <mat-label>Printer assignment can be used here when not the default printer names assigned.</mat-label>
+      <div>
+        <mat-form-field appearance="standard">
+          <mat-label >Receipt Printer Name</mat-label>
+          <input matInput type="text"
+                  formControlName="receiptPrinter"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="standard">
+          <mat-label >Label Printer</mat-label>
+          <input matInput type="text"
+                  formControlName="labelPrinter"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="standard">
+          <mat-label >Label Printer 2</mat-label>
+          <input matInput type="text"
+                  formControlName="labelPrinter2"
+                  class="form-control" >
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+<!-- <mat-card>
+  <mat-card-subtitle>
+    Device Info
+  </mat-card-subtitle>
+  <mat-card-content>
+      {{this.deviceService.getDeviceInfo() | json}}
+  </mat-card-content>
+</mat-card> -->

@@ -64,6 +64,15 @@
         </mat-form-field>
       </div>
 
+      <form-select-list [searchForm]      = "inputForm"
+                        [formFieldName]   ="'recmedOption'"
+                        [list]            = "recOption"
+                        [showActiveInactive]="true"
+                        (selectionChange) = "selectRecMedOption($event)">
+        <div>Med Rec Option</div>
+      </form-select-list>
+
+
       <div class="grid-header-container">
         <div *ngIf="productPrices">
           <div formArrayName="productPrices"

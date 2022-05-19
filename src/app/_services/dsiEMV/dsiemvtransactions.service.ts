@@ -241,7 +241,6 @@ export class DSIEMVTransactionsService {
       tstream.Transaction = transaction
       const builder = new XMLBuilder(this.options)
       const xml = builder.build(tstream);
-      console.log(xml)
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       const response = await emvTransactions.MercuryPinPadTest(xml)
       console.log('response', response)
@@ -261,7 +260,6 @@ export class DSIEMVTransactionsService {
     try {
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       response              = await emvTransactions.EMVTransaction(xml)
-
     } catch (error) {
       console.log('error', error)
       return  error

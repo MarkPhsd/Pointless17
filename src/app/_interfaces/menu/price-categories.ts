@@ -10,6 +10,7 @@ export interface IPriceCategories {
   id:            number;
   name:          string;
   uid:           string;
+  recMedOption:  number;
   productPrices: ProductPrice[];
 }
 
@@ -17,6 +18,7 @@ export interface IPriceCategory2 {
   id:            number;
   name:          string;
   uid:           string;
+  recMedOption:  number;
 }
 
 export interface ProductPrice {

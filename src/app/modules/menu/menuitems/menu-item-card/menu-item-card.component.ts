@@ -108,6 +108,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
         //do text only.
         return
       }
+      return;
       return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
     } else {
       return this.awsBucket.getImageURLFromNameArray(this.bucketName, item.urlImageMain)

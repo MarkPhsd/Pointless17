@@ -11,7 +11,7 @@ export class ValueFieldsComponent  {
   @Input() formArray: FormArrayName
   @Input() fieldName: string;
   @Input() fieldDescription: string;
-  @Input() fieldType   = 'string';
+  @Input() fieldType   = 'text';
   @Input() passwordMask: boolean;
   @Input() fieldsClass = "fields"
   @Input() type        = 'input'

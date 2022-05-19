@@ -612,7 +612,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         }
         this.electronSetting.text   = data.text
         this.electronReceiptPrinter = data.text;
-        console.log('set Electron PrinterName', this.electronReceiptPrinter)
         this.setElectronReceipt(this.electronSetting);
     })
   }
@@ -621,7 +620,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.electronLabelPrinter = event
     if (!this.electronLabelPrinter) { return }
     if (!this.electronLabelPrinterSetting) { this.electronLabelPrinterSetting = {} as ISetting}
-    this.electronLabelPrinterSetting.name   = 'defaultElectronReceiptPrinter'
+    this.electronLabelPrinterSetting.name   = 'defaultElectronLabelPrinter'
     this.electronLabelPrinterSetting.text   = event
     this.electronLabelPrinter               = event;
     this.setElectronLabel(this.electronLabelPrinterSetting);

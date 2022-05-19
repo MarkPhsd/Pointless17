@@ -9,7 +9,8 @@ import { FormGroup } from '@angular/forms';
 export class ChemicalValuesComponent implements OnInit {
 
   @Input() inputForm: FormGroup
-
+  @Input() inventoryItem: boolean;
+  
   thc:   any;
   thc2:  any;
   thca:  any;

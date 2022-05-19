@@ -39,8 +39,6 @@ export class PaymentsMethodsProcessService {
     private sitesService     : SitesService,
     private paymentService : POSPaymentService,
     private paymentMethodService: PaymentMethodsService,
-    private dsiProcess      : DSIProcessService,
-    private orderMethodsService: OrderMethodsService,
     private orderService    : OrdersService,
     private dialogOptions   : ProductEditButtonService,
     private matSnackBar     : MatSnackBar,) {

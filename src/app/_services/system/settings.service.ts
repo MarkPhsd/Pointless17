@@ -14,6 +14,16 @@ interface IIsOnline {
   result: string;
 }
 
+export interface ITerminalSettings { 
+  medicalRecSales : number;
+  receiptPrinter  : string;
+  labelPrinter    : string;
+  labelPrinter2   : string;
+  enabled         : boolean;
+  name            : string;
+  deviceName      : string;
+} 
+
 @Injectable({
   providedIn: 'root'
 })

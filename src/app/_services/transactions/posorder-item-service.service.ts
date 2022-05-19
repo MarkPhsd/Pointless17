@@ -44,7 +44,17 @@ export interface ItemPostResults {
    overRide  : boolean;
  }
 
-export interface NewItem            { orderID: number, quantity: number, menuItem: IMenuItem, barcode: string,  weight: number, portionValue: string, packaging: string, itemNote: string}
+export interface NewItem            {
+  orderID: number,
+  quantity: number, 
+  menuItem: IMenuItem, 
+  barcode: string,  
+  weight: number, 
+  portionValue: string, 
+  packaging: string, 
+  itemNote: string, 
+  deviceName: string,
+}
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
 
@@ -155,7 +165,7 @@ export class POSOrderItemServiceService {
     if (!newItem ) { return }
 
     newItem = this.getNewItemWeight(newItem);
-    console.log('new weighted item', newItem)
+
     const controller = "/POSOrderItems/"
 
     const endPoint  = "PostUniqueBarcodeItem"

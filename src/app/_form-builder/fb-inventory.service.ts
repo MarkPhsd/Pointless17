@@ -71,7 +71,6 @@ export class FbInventoryService {
       destinationSiteURL  : [],
       destinationSiteName : [],
       rejected:             [],
-
     })
 
     return fb;

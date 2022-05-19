@@ -282,6 +282,8 @@ import { ManifestTypeComponent } from '../modules/admin/inventory/manifest-type/
 import { POSSplitItemsComponent } from '../modules/posorders/pos-payment/possplit-items/possplit-items.component';
 import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
+import { PosEditSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
+import { ReceiptViewComponent } from '../modules/admin/settings/printing/reciept-pop-up/receipt-view/receipt-view.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -415,6 +417,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceTiersComponent,
     TVPriceTiersComponent,
     PosListComponent,
+    PosEditSettingsComponent,
     PosOrderComponent,
     PosOrderItemEditComponent,
     PosOrderListComponent,
@@ -505,7 +508,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StrainProductEditComponent,
     StrainBoardComponent,
     StrainCardComponent,
-
+    ReceiptViewComponent,
     MenuItemCardDashboardComponent,
     StripeSettingsComponent,
     StripeCheckOutComponent,

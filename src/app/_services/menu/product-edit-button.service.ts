@@ -438,10 +438,10 @@ export class ProductEditButtonService {
       if (posOrderItem) {
 
         let itemWithAction      = {}  as ItemWithAction;
-        itemWithAction.action   = 1;
+        itemWithAction.action   = 3;
         itemWithAction.posItem  = posOrderItem;
         itemWithAction.id       = posOrderItem.id
-        itemWithAction.typeOfAction = 'VoidOrder'
+        itemWithAction.typeOfAction = 'VoidItem'
         const id = posOrderItem.id;
         dialogRef = this.dialog.open(AdjustItemComponent,
           { width:        '450px',

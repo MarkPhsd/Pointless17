@@ -30,7 +30,7 @@ export interface TransactionUISettings {
   highTipInputPercentage : string;
   onlyAllowInventory     : boolean;
   showOrderName          : boolean;
-
+  recmedPricing          : boolean;
 }
 
 export interface StripeAPISettings {
@@ -119,6 +119,10 @@ export interface UIHomePageSettings {
 
 export class UISettingsService {
 
+  pricingRecMed = [
+    {id: 0, name: 'Both'}, {id: 1, name: 'Rec'}, {id: 2, name: 'Med'}
+  ]
+  
   private _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
   public  transactionUISettings$  = this._transactionUISettings.asObservable();
 
@@ -366,6 +370,7 @@ export class UISettingsService {
       highTipInputPercentage      : [''],
       onlyAllowInventory          : [''],
       showOrderName               : [''],
+      loyaltyPointSystemValue     : [''],
      })
     return fb
   }

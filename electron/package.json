@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.1.59",
+  "version": "1.1.67",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -10,6 +10,7 @@
     "electron:start": "electron ./",
     "postinstall": "electron-builder install-app-deps",
     "start": "npm install && electron ./app",
+    "deploy 32 Platform": "build --win --ia32 --p always",
     "deploy Multi Platform": "build --win --x64 --ia32 --p always",
     "deploy 64Multi Platform": "build --win --x64 --p always"
   },

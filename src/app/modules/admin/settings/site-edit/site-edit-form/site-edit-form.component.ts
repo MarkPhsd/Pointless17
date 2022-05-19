@@ -28,13 +28,13 @@ export class SiteEditFormComponent implements OnInit {
     private dialogRef   : MatDialogRef<SiteEditFormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
-{
-  if (data) {
-    this.id = data
-    const site = this.sitesService.getAssignedSite();
-    this.initFormData(data)
+  {
+    if (data) {
+      this.id = data
+      const site = this.sitesService.getAssignedSite();
+      this.initFormData(data)
+    }
   }
-}
 
   ngOnInit(): void {
     this.initForm()
@@ -62,7 +62,6 @@ export class SiteEditFormComponent implements OnInit {
     this.sitesService.getSite(id).subscribe(
       data=> {
         this.sitesForm.patchValue(data)
-        console.log('data', data)
         this.ccsSite = data
         this.imgName = data.imgName
       }, err => {
@@ -82,11 +81,14 @@ export class SiteEditFormComponent implements OnInit {
         const id = this.ccsSite.id
         this.initForm()
         const site$ =  this.sitesService.deleteSite(id)
-        site$.subscribe(data=>{
-          this.notifyEvent("site deleted", "Deleted")
-        }, err => {
-          this.notifyEvent("Error deleting: " + err, "Error")
-        })
+        site$.subscribe(
+          {next: data => {
+              this.notifyEvent("site deleted", "Deleted")
+            }, error : err => {
+              this.notifyEvent("Error deleting: " + err, "Error")
+            }
+          }
+        )
       }
     }
   }
@@ -94,9 +96,8 @@ export class SiteEditFormComponent implements OnInit {
   //image data
   received_URLMainImage(event) {
     this.imgName =  event
-    console.log(event)
     this.updateSite(null);
-   };
+  };
 
   updateSite(event) {
     if (!this.sitesForm.valid) {
@@ -127,7 +128,6 @@ export class SiteEditFormComponent implements OnInit {
       }, error => {
         this.notifyEvent(`update ${error}`, `failure` )
       })
-
     } else {
       this.sitesService.addSite(data).subscribe(data => {
         this.notifyEvent(`${data.name} Added`, `Success` )

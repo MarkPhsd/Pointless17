@@ -27,8 +27,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() inputTypeValue = 'password';
   @Input() inputForm      : FormGroup;
   @Input() showInput      = false;
-  @Input() formatted      : string;
+  @Input() formatted      : any;
   @Input() fieldName      : string;
+  formattedValue          : any;
   inputType               = 'text';
   showPassword            : boolean;
   showDoubleZero          = false // for faster entry.
@@ -56,9 +57,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
   initForm() {
 
     this.inputForm = this.fb.group({
-      itemName: ['']
+      itemName: [],
     })
-
+    
     if (this.inputForm) {
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
         if (data == '' || data == undefined) {
@@ -80,7 +81,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   ngOnChanges(changes: { [property: string]: SimpleChange }) {
     // Extract changes to the input property by its name
     let change: SimpleChange = changes['data'];
-    this.value = ''
+    this.value     = ''
     this.formatted = ''
   }
 
@@ -124,18 +125,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.updateDisplayOutput()
   }
 
-  returnEnterPress(){
-
-    if (!this.value && this.cashValue) {
-      console.log('emit', this.cashValue)
-      this.outPutReturnEnter.emit(this.cashValue)
-      return;
-    }
-
-    this.refreshDisplay()
-    this.outPutReturnEnter.emit(this.formatted)
-
-  }
 
   returnEnter(value) {
     if (value){
@@ -160,8 +149,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
     if (this.value)
     {
-      //formating of input box
-      console.log('this.inputTypeValue ', this.inputTypeValue )
+
       if (this.inputTypeValue === 'password') {
         if (this.showPassword) {
           this.inputType = 'password'
@@ -169,6 +157,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
           this.inputType = 'text'
         }
       }
+
       if (this.inputTypeValue != 'password') {
         this.inputType = this.inputTypeValue
       }
@@ -188,11 +177,11 @@ export class KeyPadComponent implements OnInit, OnChanges {
       if (this.decimals = 0) {
         divider = 1
       }
+      
       if ( (this.inputTypeValue == 'number' &&  this.requireWholeNumber) || this.inputTypeValue == 'decimal' ) {
         if (this.requireWholeNumber) {
           const numVal = parseInt( this.value)
           this.formatted = Number(numVal).toLocaleString('en', this.options);
-          console.log(numVal)
         }
         if (!this.requireWholeNumber) {
           const numVal = parseInt( this.value) / divider
@@ -205,7 +194,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
         if (this.requireWholeNumber) {
           const numVal = parseInt( this.value)
           this.formatted = Number(numVal).toLocaleString('en', this.options);
-          console.log(numVal)
         }
         if (!this.requireWholeNumber) {
           const numVal = parseInt( this.value) / 1 * this.decimals
@@ -234,33 +222,57 @@ export class KeyPadComponent implements OnInit, OnChanges {
       if (this.inputTypeValue == 'text' ) {
         // const numVal = parseInt( this.value)
         this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
+    
       } else {
         this.formatted = Number(0).toLocaleString('en', this.options);
-      }
 
+      }
     }
 
-    console.log('refreshdisplay formatted', this.value, this.formatted)
-    if (this.formatted) {
+    if (this.formatted == undefined || !this.formatted) {
+      const item      = { itemName:  this.value } 
+      this.inputForm.patchValue(item)
+      return
+    }
 
+    if (this.formatted != undefined) {
+    
       //{this.fieldName: this.formatted }
       const fieldName = this.fieldName
-      const value  = this.formatted
-      // const item = {fieldName : value}
-      // console.log('item', item)
-      // this.inputForm.patchValue(item)
-      this.inputForm.controls[fieldName].setValue(value)
+      const value     = this.formatted
+      console.log('value',  this.formatted)
+      const item      = { itemName:  this.formatted } 
+      console.log(item)
+      this.inputForm.patchValue(item)
+
     } else {
       this.initForm();
     }
 
   }
 
+  returnEnterPress(){
+
+    if (!this.value && this.cashValue) {
+      console.log('emit', this.cashValue)
+      this.outPutReturnEnter.emit(this.cashValue)
+      return;
+    }
+
+    if (!this.formatted) { 
+      this.outPutReturnEnter.emit(this.value)
+      return
+    }
+
+    this.refreshDisplay()
+    this.outPutReturnEnter.emit(this.formatted)
+
+  }
+
+
   updateDisplayOutput() {
     //user choice on what they want to update
     this.refreshDisplay();
-
-
     if (this.formatted && this.formatted.length > 1) {
       this.outPutValue.emit(this.formatted)
     }
