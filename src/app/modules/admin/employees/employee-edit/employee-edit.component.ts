@@ -78,33 +78,46 @@ export class EmployeeEditComponent implements OnInit {
     let employee    = {} as employee;
     const site      = this.siteService.getAssignedSite();
     const employee$ = this.employeeService.getEmployee(site, this.id)
-    employee        = await employee$.pipe().toPromise();
 
-    if (!employee) {return }
-    const client      = {} as IClientTable
-    client.firstName  = employee.firstName;
-    client.lastName   = employee.lastName;
-    client.phone      = employee.phone;
-    client.email      = employee.email
-    client.employeeID = employee.id;
-    client.id         = employee.clientID;
-    this.client       = client;
+    employee$.pipe(
+      switchMap( employee => {
+        const client      = {} as IClientTable
+        client.firstName  = employee.firstName;
+        client.lastName   = employee.lastName;
+        client.phone      = employee.phone;
+        client.email      = employee.email
+        client.employeeID = employee.id;
+        client.id         = employee.clientID;
+        this.client       = client;
+        
+        return  this.clientTableService.postClientWithEmployee(site, employee)
+      }
 
-    this.clientTableService.postClientWithEmployee(site, employee).subscribe(employeeClient => {
-          console.log(employeeClient)
-          employee = employeeClient.employee
-          //now we have the id and can assign to the employee.
-          employee.clientID = employeeClient.client.id;
-          this.client = employeeClient.client;
-          this.initClientForm(employeeClient.client)
-          this.clientForm.patchValue(this.client)
-          this.employee = employeeClient.employee
-          this.client.employeeID = employee.id;
-          this.employee.clientID = this.client.id;
-          this.inputForm.patchValue(employeeClient.employee)
-          return EMPTY
+    )).subscribe(employeeClient => {
+
+        if (!employeeClient.client) { 
+          if (employeeClient.message) { 
+            this._snackBar.open(employeeClient.message, 'Error', {verticalPosition: 'bottom', duration:2000})
+            return;
+          }
+          this._snackBar.open('Associated client not made. See Admin', 'Error', {verticalPosition: 'bottom', duration:2000})
+          return;
         }
-      )
+
+        employee = employeeClient.employee
+        //now we have the id and can assign to the employee.
+        employee.clientID = employeeClient.client.id;
+        this.client = employeeClient.client;
+        this.initClientForm(employeeClient.client)
+        this.clientForm.patchValue(this.client)
+        this.employee = employeeClient.employee
+        this.client.employeeID = employee.id;
+        this.employee.clientID = this.client.id;
+        this.inputForm.patchValue(employeeClient.employee)
+        return EMPTY
+      }
+    )
+
   }
 
   initClientForm(client: IClientTable) {
@@ -208,11 +221,11 @@ export class EmployeeEditComponent implements OnInit {
         const newEmployee$ = this.employeeService.postEmployee(site, employee)
         return  newEmployee$.pipe(
             switchMap(data => {
-              return  this.employeeService.saveEmployeeClient(site, { employee:  data, client: client })
+              return  this.employeeService.saveEmployeeClient(site, { message: '', employee:  data, client: client })
         }))
       }
       if (employee.id != 0) {
-        return  this.employeeService.saveEmployeeClient(site, { employee:  employee, client: client })
+        return  this.employeeService.saveEmployeeClient(site, { message: '',  employee:  employee, client: client })
       }
     }
     return EMPTY

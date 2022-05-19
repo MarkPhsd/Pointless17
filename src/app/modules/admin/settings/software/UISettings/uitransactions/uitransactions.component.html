@@ -2,201 +2,203 @@
 <div  *ngIf="inputForm"
       [formGroup]="inputForm">
 
-<mat-card>
-  <mat-card-subtitle>
-    <ng-content></ng-content>
-  </mat-card-subtitle>
+  <mat-card>
+    <mat-card-subtitle>
+      <ng-content></ng-content>
+    </mat-card-subtitle>
 
-  <mat-card-content>
-       <div class="grid-items">
+    <mat-card-content>
+        <div class="grid-items" >
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="displayNotes"
                       >
               <mat-label>Display Notes</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="displayQuantity"
                       >
               <mat-label>Display Quantity</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="displayAdd"
                     >
               <mat-label>Display Add Button</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="displayView"
                       >
               <mat-label>Display View</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="enablMEDClients"
                       >
               <mat-label>Enable MED Patients</mat-label>
             </mat-slide-toggle>
-          </div>
-
+          </div> -->
+<!-- 
           <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="validateCustomerLicenseID"
                       >
               <mat-label>Validate Customer License/ID</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="ordersRequireCustomer"
                       >
               <mat-label>Orders require a customer</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="showOrderName"
                       >
               <mat-label>Show Order Name Option</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="enableLimitsView"
                       >
               <mat-label>Enable Limits View</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="splitCheckByItem"
                       >
               <mat-label>Enable Split Check By Item</mat-label>
             </mat-slide-toggle>
-          </div>
+          </div> -->
 
-          <div class="toggle-fields">
+          <!-- <div class="toggle-fields">
             <mat-slide-toggle
                       formControlName="onlyAllowInventory"
                       >
               <mat-label>Allow sales of inventoried items only</mat-label>
             </mat-slide-toggle>
           </div>
-
-          
-          <div class="client-selector">
+         -->
+          <!-- <div class="client-selector">
             <app-client-types-lookup
                   [formControlName]="'defaultClientTypeID'"
                   [inputForm]="inputForm">
               Default client Type
             </app-client-types-lookup>
+          </div>  -->
+              
+        </div>
+
+        <mat-divider></mat-divider>
+        <h3>Operation Settings:</h3>
+
+        <div class="grid-small">
+          
+          <div>
+           <mat-label>Max Orders allowed open by user.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'mAXOrdersOpen'">
+              Max Orders
+            </app-value-fields>
           </div>
+          <div>
+            <mat-label>Prefix for Order Prep Labels.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'prefixBarcodeLabel'">
+                POS Pre Prefix Label
+            </app-value-fields>
+          </div>
+          <div>
+            <mat-label>Pre fix for intaken inventory items.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'lotPreBarCode'">
+                Lot Pre code prefix.
+            </app-value-fields>
+          </div> 
+          <div>
+            <mat-label>Percentage of Buyer Amount.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'buyerAmountDiscount'">
+                Buyer Amount
+            </app-value-fields>
+          </div>
+          <div>
+            <mat-label>Log out time in minutes of inactivity.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'idleTime'">
+                Idle Log Out Time
+            </app-value-fields>
+          </div>
+
+          <div>
+            <mat-label>Minimum value of credit card payment.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'creditRecieptMinimum'">
+                Credit Payment Min.
+            </app-value-fields>
+          </div>
+
+          <div>
+            <mat-label>High tip warning on percentage compared of payment.</mat-label>
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'highTipInputPercentage'">
+                High Tip %
+            </app-value-fields>
+          </div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <h3>End of Day</h3>
+        <div class="toggle-fields" [formGroup]="inputForm">
+          <mat-slide-toggle
+                    formControlName="deleteUnClosedPrintedOrders" >
+            <mat-label>Delete Unclosed Un Printed Orders</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div>
+          <app-value-fields
+              [fieldType]     ="'number'"
+              [inputForm]     ="inputForm"
+              [fieldName]     ="'closeOrderTimeCutOff'">
+              Last time to close order
+          </app-value-fields>
+        </div>
+
+      <div>
+        <button mat-raised-button
+                color="primary"
+                (click)="updateSetting()">
+          <mat-icon>save</mat-icon>Save</button>
       </div>
 
-      <mat-divider></mat-divider>
-      <h3>Operation Settings:</h3>
-      <div class="grid-small">
-        <div>
-          <mat-label>Max Orders allowed open by user.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'mAXOrdersOpen'">
-             Max Orders
-          </app-value-fields>
-        </div>
-        <div>
-          <mat-label>Prefix for Order Prep Labels.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'prefixBarcodeLabel'">
-              POS Pre Prefix Label
-          </app-value-fields>
-        </div>
-        <div>
-          <mat-label>Pre fix for intaken inventory items.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'lotPreBarCode'">
-              Lot Pre code prefix.
-          </app-value-fields>
-        </div>
-        <div>
-          <mat-label>Percentage of Buyer Amount.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'buyerAmountDiscount'">
-              Buyer Amount
-          </app-value-fields>
-        </div>
-        <div>
-          <mat-label>Log out time in minutes of inactivity.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'idleTime'">
-              Idle Log Out Time
-          </app-value-fields>
-        </div>
-        <div>
-          <mat-label>Minimum value of credit card payment.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'creditRecieptMinimum'">
-              Credit Payment Min.
-          </app-value-fields>
-        </div>
-
-
-
-        <div>
-          <mat-label>High tip warning on percentage compared of payment.</mat-label>
-          <app-value-fields
-              [inputForm]="inputForm"
-              [fieldName]="'highTipInputPercentage'">
-              High Tip %
-          </app-value-fields>
-        </div>
-      </div>
-
-      <mat-divider></mat-divider>
-      <h3>End of Day</h3>
-      <div class="toggle-fields">
-        <mat-slide-toggle
-                  formControlName="deleteUnClosedPrintedOrders" >
-          <mat-label>Delete Unclosed Un Printed Orders</mat-label>
-        </mat-slide-toggle>
-      </div>
-
-    <div>
-      <app-value-fields
-        [fieldType]     ="'number'"
-        [inputForm]     ="inputForm"
-        [fieldName]     ="'closeOrderTimeCutOff'">
-        Last time to close order
-        </app-value-fields>
-    </div>
-
-    <div>
-      <button mat-raised-button
-              color="primary"
-              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
-    </div>
-
-  </mat-card-content>
-</mat-card>
+    </mat-card-content>
+  </mat-card>
 
 </div>

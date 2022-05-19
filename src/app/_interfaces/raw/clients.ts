@@ -124,4 +124,5 @@ export interface IClientTable {
   medPrescriptionExpiration :string;
   medConcentrateLimit     :  string;
   patientRecOption: boolean;
+  message: string;
 }

@@ -70,15 +70,17 @@
               <mat-card-content>
                 <div class="item-container" >
                   <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining >0">
+               
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="processDSICreditCardPayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Chip Payment
+                      <mat-icon color="warn">credit_card</mat-icon>Credit / Debit 
                     </button>
+
                     <button class="payment-buttons"
                            mat-raised-button
                            (click)="dsiResetDevice()">
-                      <mat-icon color="warn">credit_card</mat-icon>Chip Payment
+                      <mat-icon color="warn">reset</mat-icon>Reset
                     </button>
 
                   </div>

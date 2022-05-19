@@ -15,6 +15,7 @@ export interface EmployeeSearchResults {
 export interface IEmployeeClient {
   employee: employee;
   client  : IClientTable;
+  message : string;
 }
 
 export interface EmployeePinResults {

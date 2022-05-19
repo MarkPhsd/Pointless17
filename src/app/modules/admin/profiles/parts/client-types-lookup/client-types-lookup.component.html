@@ -1,10 +1,10 @@
-<div *ngIf="inputForm" [formGroup]="inputForm">
+<div *ngIf="inputForm" [formGroup]="inputForm && formControlName">
   <div *ngIf="clientTypes" >
     <mat-form-field class="fields" appearance="outline">
       <mat-label>Client Type</mat-label>
       <mat-select
-                  type            = "number"
-                  name            = "clientTypeID"
+                  type              = "number"
+                  name              = "clientTypeID"
                   [formControlName] = "formControlName"
                 >
 
