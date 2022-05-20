@@ -119,15 +119,24 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
       // console.log('refresh receipt')
       receipt$.subscribe( receipt => {
         if (this.initSubComponent( receipt, styles )) {
-          // console.log('refresh sub')
+         
         }
       })
     }
+
+
   }
 
   async applyStyles(): Promise<ISetting> {
+    this.receiptStyles        = await this.getStyles().toPromise()
+  }
+
+  getStyles() : Observable<ISetting>{ 
     const site                = this.siteService.getAssignedSite();
-    this.receiptStyles        = await this.printingService.appyStylesCached(site)
+    return this.printingService.appyStylesCached(site)
+  }
+
+  applyStyle(receiptStyles) {
     if (this.receiptStyles) {
       const style             = document.createElement('style');
       style.innerHTML         = this.receiptStyles.text;
