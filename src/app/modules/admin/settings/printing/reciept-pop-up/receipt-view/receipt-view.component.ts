@@ -3,12 +3,13 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, switchMap } from 'rxjs';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { ReturnStatement } from '@angular/compiler';
 
 
 @Component({
@@ -17,10 +18,13 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
   styleUrls: ['./receipt-view.component.scss']
 })
 export class ReceiptViewComponent implements OnInit , AfterViewInit{
+
+
   @Input() hideExit = false;
   @Output() outPutExit      = new EventEmitter();
   @ViewChild('printsection') printsection: ElementRef;
   @Input() printerName      : string;
+
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
   zplText                   : string;
@@ -43,7 +47,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   orderTypes        : any;
   platForm          = '';
 
-
+  printOptions    : printOptions;
   result            : any;
   isElectronServiceInitiated = false;
 
@@ -61,6 +65,17 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
 
   orderCheck        = 0;
   @Input() options           : printOptions;
+
+  isElectronApp         : boolean;
+  electronSetting       : ISetting;
+  electronReceiptPrinter: string;
+  electronReceipt       : string;
+  electronReceiptID     : number;
+
+  electronLabelPrinter: string;
+  electronLabelPrinterSetting: ISetting;
+  electrongLabelID     : number;
+  electronLabel        : string;
 
   autoPrinted       = false;
 
@@ -97,49 +112,66 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     private platFormService       : PlatformService,
     private printingService       : PrintingService,
     private printingAndroidService: PrintingAndroidService,
+    private btPrinterService      : BtPrintingService,
     )
   {
- 
   }
 
   async ngOnInit() {
     console.log('')
+    this.getPrinterAssignment();
+    this.intSubscriptions();
+    await this.refreshView()
   }
 
   async ngAfterViewInit() {
-    //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-    //Add 'implements AfterViewInit' to the class.
-    this.intSubscriptions();
+    this.initDefaultLayouts()
+  }
+
+  async refreshView(){ 
     const styles     = await this.applyStyles();
-    // console.log('styles')
     const receiptID  = await this.getDefaultPrinter();
-    // console.log('default printer')
     if (receiptID && styles ) {
-      const receipt$ =  this.refreshReceipt(receiptID);
-      // console.log('refresh receipt')
-      receipt$.subscribe( receipt => {
-        if (this.initSubComponent( receipt, styles )) {
-         
-        }
-      })
+      this.initDefaultLayouts()
     }
+  }
 
+  async  initDefaultLayouts() {
+    try {
+      const site = this.siteService.getAssignedSite();
+      await this.printingService.initDefaultLayouts();
+      this.receiptStyles  = await this.applyStyles();
 
+      const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
+      receipt$.subscribe(data => { 
+          this.receiptID = data.id
+          this.initSubComponent(data)
+      })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  refreshViewOB() {
+    const site  = this.siteService.getAssignedSite();
+    const style$ =  this.printingService.getStylesCached(site);
+    style$.pipe(
+      switchMap( style => { 
+        return this.printingService.setHTMLReceiptStyle(style)
+      })).subscribe()
   }
 
   async applyStyles(): Promise<ISetting> {
-    this.receiptStyles        = await this.getStyles().toPromise()
-  }
-
-  getStyles() : Observable<ISetting>{ 
-    const site                = this.siteService.getAssignedSite();
-    return this.printingService.appyStylesCached(site)
+    const site  = this.siteService.getAssignedSite();
+    this.receiptStyles  = await  this.printingService.appyStylesCached(site)
+    this.applyStyle(this.receiptStyles)
+    return  this.receiptStyles
   }
 
   applyStyle(receiptStyles) {
-    if (this.receiptStyles) {
+    if (receiptStyles && receiptStyles.text) {
       const style             = document.createElement('style');
-      style.innerHTML         = this.receiptStyles.text;
+      style.innerHTML         =  receiptStyles.text;
       document.head.appendChild(style);
       return this.receiptStyles
     }
@@ -154,14 +186,22 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     return this.receiptID;
   }
 
-  refreshReceipt(id: any): Observable<ISetting> {
-      const site          = this.siteService.getAssignedSite();
-      const receipt$      = this.settingService.getSetting(site, id)
-      return receipt$
+  getDefaultPrinterOb(): Observable<any> {
+    return this.printingService.getElectronReceiptPrinterCached()
   }
 
-  initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting): boolean {
-    if (receiptPromise && receiptStylePromise) {
+  setDefaultPrinter(electronPrinter: ISetting) {
+    if (!electronPrinter) { return}
+    this.electronReceiptSetting = electronPrinter;
+    this.receiptID   =  +electronPrinter.option1;
+    this.printerName =  electronPrinter.text;
+    return this.receiptID;
+  }
+
+  initSubComponent(receiptPromise: ISetting): boolean {
+    console.log("receiptPromise", receiptPromise)
+
+    if (receiptPromise ) {
       this.receiptLayoutSetting =  receiptPromise
       this.headerText           =  this.receiptLayoutSetting.option6
       this.footerText           =  this.receiptLayoutSetting.option5
@@ -250,9 +290,44 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
   }
 
+  
+  async getPrinterAssignment(){
+    this.getElectronPrinterAssignent()
+    await this.getAndroidPrinterAssignment()
+  }
+
   exit() {
     this.outPutExit.emit('true')
     // this.dialogRef.close();
+  }
+
+  
+  getElectronPrinterAssignent() {
+    if (this.platFormService.isAppElectron) {
+      this.printingService.getElectronReceiptPrinter().subscribe( data => {
+        this.electronSetting        = data;
+        this.electronReceiptPrinter = data.text;
+        this.electronReceipt        = data.value ;
+        this.electronReceiptID      = +data.option1
+        if (this.printOptions) {
+          this.printOptions.deviceName = data.text
+        }
+      })
+
+      this.printingService.getElectronLabelPrinter().subscribe( data => {
+          this.electronLabelPrinterSetting        = data;
+          this.electronLabelPrinter               = data.text;
+          this.electrongLabelID                   = +data.option1
+      })
+    }
+  }
+
+    async  getAndroidPrinterAssignment() {
+
+    if (this.platFormService.androidApp) {
+      this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+      this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+    }
   }
 
 

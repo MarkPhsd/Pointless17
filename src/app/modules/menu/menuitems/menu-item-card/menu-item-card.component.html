@@ -16,7 +16,7 @@
         </div>
       </div>
 
-      <div *ngIf="isApp && !imageUrl"
+      <div *ngIf="(isApp && !imageUrl) || !imageUrl"
            class="product-name-only">
         <button mat-raised-button
                 class="image-button"
@@ -26,11 +26,11 @@
         </button>
       </div>
 
-      <div *ngIf="!isDiscountItem && !imageUrl" >
+      <!-- <div *ngIf="!isDiscountItem && !imageUrl" >
         <div class="description-text"  (click)="menuItemAction(true)">
            {{ menuItem.name  }}
         </div>
-      </div>
+      </div> -->
 
       <div *ngIf="!isDiscountItem && imageUrl" >
 
@@ -59,9 +59,13 @@
     </div>
   </div>
 
-  <div *ngIf="((isApp && imageUrl) || !isApp) || !imageUrl" class="product-name">
+  <!-- <div *ngIf="((isApp && imageUrl) || !isApp) || !imageUrl" class="product-name">
+    {{ menuItem.name  | truncateText: 30   }}
+  </div> -->
+  <div *ngIf="!isDiscountItem && imageUrl" >
     {{ menuItem.name  | truncateText: 30   }}
   </div>
+  
   <div  class="product-name" *ngIf="!menuItem.itemType" >
     Type Required.
   </div>

@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.1.63",
+  "version": "1.1.74",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -18,7 +18,7 @@
     "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4200",
     "build": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all ",
     "buildNoSourceMap": "ng build   --configuration production --buildOptimizer=true --outputHashing=all",
-    "buildHighMem": "node   --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --buildOptimizer=true --outputHashing=all",
+    "buildHighMem": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --buildOptimizer=true --outputHashing=all",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",

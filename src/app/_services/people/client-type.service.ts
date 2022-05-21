@@ -119,7 +119,7 @@ export class ClientTypeService {
 
   postClientType(site: ISite, clientType: clientType): Observable<clientType> {
 
-    const controller = '/clientTypes/'
+    const controller = '/ClientTypes/'
 
     const endPoint = 'postClientType'
 
@@ -127,6 +127,7 @@ export class ClientTypeService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    console.log(url)
     return this.http.post<clientType>(url, clientType)
 
   }

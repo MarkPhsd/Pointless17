@@ -16,7 +16,6 @@ import { SitesService } from '../reporting/sites.service';
 import { ItemWithAction } from './posorder-item-service.service';
 import { AuthenticationService } from '../system/authentication.service';
 import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
-
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -124,9 +123,15 @@ export class OrdersService {
 
     const site = this.siteService.getAssignedSite();
     if (order && order.id) {
-      this.claimOrder(site, order.id.toString(), order.history).subscribe(result => {
+      const order$ = this.claimOrder(site, order.id.toString(), order.history)
+      if (!order$) { 
+        this.orderClaimed = false;
+        return
+      }
+      order$.subscribe(result => {
         this.orderClaimed = true;
       });
+
     }
   }
 

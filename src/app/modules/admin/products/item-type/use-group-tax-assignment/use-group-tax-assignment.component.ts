@@ -83,19 +83,20 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   //Group Types that have been assigned on the right, and the taxes that
   //can be assigned on the left.
   //the groups that are assigned will be used to remove from the groups that are avalible.
-  async refreshTaxAssignment(taxID: number) {
+  refreshTaxAssignment(taxID: number) {
     const site   = this.siteService.getAssignedSite()
     const taxes$ = this.taxService.getTaxRateWithGroups(site, taxID)
-    const taxes  = await taxes$.pipe().toPromise();
-    if (taxes) {
-      //then we have each group assisnged from the taxes.
-      this.assignSelectedAndAvalible(taxes.useGroupTaxes)
-    }
+    taxes$.subscribe(data => { 
+      if (data) {
+        //then we have each group assisnged from the taxes.
+        this.assignSelectedAndAvalible(data.useGroupTaxes)
+      }
+    });
+
   }
 
   assignSelectedAndAvalible(selectedGroups: UseGroupTaxAssigned[]) {
     const allGroups = this.useGroupService.getDefaultGroups();
-    console.log('assignSelectedAndAvalible', selectedGroups)
     if (selectedGroups.length > 0) {
       const groups = selectedGroups
       //for each of these, we can remove matching item from the avalble list.  //avalible

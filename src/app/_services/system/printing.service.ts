@@ -18,7 +18,7 @@ import { BehaviorSubject, EMPTY, Observable, switchMap } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { UserAuthorizationService } from './user-authorization.service';
-import { AuthenticationService, AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { MenuService, OrdersService } from 'src/app/_services';
 import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
 
@@ -132,39 +132,44 @@ export class PrintingService {
     }
   }
 
-  getDomToImage(node: any) {
-      domtoimage.toPng(node)
-    .then(function (dataUrl) {
-        var img = new Image();
-        img.src = dataUrl;
-        document.body.appendChild(img);
-    })
-    .catch(function (error) {
-        console.error('oops, something went wrong!', error);
-    });
-  }
 
   async applyStyles(site: ISite): Promise<ISetting> {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-    const receiptStylePromise = await receiptStyle$.pipe().toPromise()
-    if (receiptStylePromise) {
-      const style = document.createElement('style');
-      style.innerHTML = receiptStylePromise.text;
-      document.head.appendChild(style);
-      return receiptStylePromise
-    }
+    const receiptStyle = await receiptStyle$.pipe().toPromise()
+    return this.setHTMLReceiptStyle(receiptStyle)
   }
 
   async  appyStylesCached(site: ISite): Promise<ISetting> {
     const receiptStyle$       = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
-    const receiptStylePromise = await receiptStyle$.pipe().toPromise()
-    if (receiptStylePromise) {
+    const receiptStyle = await receiptStyle$.pipe().toPromise()
+    return this.setHTMLReceiptStyle(receiptStyle)
+  }
+
+  getStylesCached(site){ 
+    return this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+  }
+
+  setHTMLReceiptStyle(receiptStyle) { 
+    if (receiptStyle) {
       const style = document.createElement('style');
-      style.innerHTML = receiptStylePromise.text;
+      style.innerHTML = receiptStyle.text;
       document.head.appendChild(style);
-      return receiptStylePromise
+      return receiptStyle
     }
   }
+
+  
+getDomToImage(node: any) {
+    domtoimage.toPng(node)
+  .then(function (dataUrl) {
+      var img = new Image();
+      img.src = dataUrl;
+      document.body.appendChild(img);
+  })
+  .catch(function (error) {
+      console.error('oops, something went wrong!', error);
+  });
+}
 
   listPrinters(): any {
     try {
@@ -282,6 +287,8 @@ export class PrintingService {
   }
 
   savePDF(nativeElement: any, _this) {
+    if (!nativeElement) { return }
+
     {
        try {
          html2canvas(nativeElement).then(canvas => {
@@ -348,44 +355,50 @@ export class PrintingService {
     const site = this.siteService.getAssignedSite();
 
       //get cached label printer name
-      const printer = await this.getElectronLabelPrinterCached().pipe().toPromise();
-      if (!printer || !printer.text) {
-        // console.log('printer', printer)
-        return;
-      }
-      const printerName = printer.text
+      const printer$ =  this.getElectronLabelPrinterCached()
+      // const printerName = printer.text
+      let printer = {} as any;
 
-      this.menuItemService.getMenuItemByID(site, item.productID).pipe(
-        switchMap(data => {
-          if ( !data  || data == "No Records" || !data.itemType) {
-            // console.log('no data')
+      const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
+      printer$.pipe(data => { 
+        printer = data;
+          if (!printer || !printer.text) {
+            return EMPTY;
+          }
+          return  menuItem$ 
+        }).pipe(
+          switchMap(data => {
+            if ( !data  || data == "No Records" || !data.itemType) {
+              // console.log('no data')
+              return EMPTY
+            }
+
+            // console.log('data.itemType', data.itemType)
+            if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
+                if (data.itemType.labelTypeID !=0 ) {
+                  return   this.settingService.getSetting(site, data.itemType.labelTypeID)
+                }
+            } else {
+              // console.log('No print option')
+              return this.orderItemService.setItemAsPrinted(site, item )
+            }
+
+        })).pipe(
+          switchMap( data => {
+            // //get the PrintString Format
+            // console.log('getting Text From label setting',  data)
+            const content = this.renderingService.interpolateText(item, data.text)
+            if (printer.text) {
+              const result  = this.printLabelElectron(content, printer.text)
+            }
+
+            if (!item.printed || (data && !data.printed)) {
+              return this.orderItemService.setItemAsPrinted(site, item )
+            }
+
             return EMPTY
-          }
-
-          // console.log('data.itemType', data.itemType)
-          if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printerName ) ) {
-              if (data.itemType.labelTypeID !=0 ) {
-                return   this.settingService.getSetting(site, data.itemType.labelTypeID)
-              }
-          } else {
-            // console.log('No print option')
-            return this.orderItemService.setItemAsPrinted(site, item )
-          }
-
-      })).pipe(
-        switchMap( data => {
-          // //get the PrintString Format
-          // console.log('getting Text From label setting',  data)
-          const content = this.renderingService.interpolateText(item, data.text)
-          const result  = this.printLabelElectron(content, printerName)
-
-          if (!item.printed || (data && !data.printed)) {
-            return this.orderItemService.setItemAsPrinted(site, item )
-          }
-
-          return EMPTY
-      })).subscribe( data => {
-        this.orderMethodsService.refreshOrder(item.orderID);
+        })).subscribe( data => {
+          this.orderMethodsService.refreshOrder(item.orderID);
       })
   }
 

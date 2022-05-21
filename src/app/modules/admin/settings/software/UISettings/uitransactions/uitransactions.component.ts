@@ -36,7 +36,7 @@ export class UITransactionsComponent implements OnInit {
      data => {
       if (data) {
         const config = JSON.parse(data.text)
-        this.inputForm = this.uISettingsService.initForms_Sub(form, data.name, config)
+        this.inputForm = this.uISettingsService.initForms_Sub(form, 'UITransactionSetting', config)
       }
     })
   }

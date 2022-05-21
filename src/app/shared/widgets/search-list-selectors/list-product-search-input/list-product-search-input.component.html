@@ -1,4 +1,4 @@
-<!-- <div *ngIf="searchForm"> -->
+
   <div  [formGroup]="searchForm">
     <mat-form-field
                     [style.width.px]="100"
@@ -7,7 +7,9 @@
       <input  class="form-controls"
               #input
               matInput
-              appAutoFocusInput
+              
+              cdkTrapFocus 
+              cdkTrapFocusAutoCapture
               type           ="text"
               id             ="name"
               formControlName="itemName">

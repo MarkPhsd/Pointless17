@@ -146,7 +146,7 @@
       
       <div class="grid-views">
         <div class="grid-item">
-          <mat-card class="image-container">
+          <mat-card >
             <app-widget-uploader
                 [(fileNames)]="backgroundImage"
                 (messageOut) ="received_Image($event)"
@@ -157,8 +157,7 @@
         </div>
 
         <div class="grid-item">
-          <mat-card class="image-container">
-
+          <mat-card >
             <app-widget-uploader
                 [(fileNames)]="logoHomePage"
                 (messageOut) ="received_Logo($event)"
@@ -169,8 +168,7 @@
         </div>
 
         <div class="grid-item">
-          <mat-card class="image-container">
-
+          <mat-card >
             <app-widget-uploader
                 [(fileNames)]="tinyLogo"
                 (messageOut) ="received_TinyLogo($event)"

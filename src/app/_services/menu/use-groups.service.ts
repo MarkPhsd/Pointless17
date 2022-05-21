@@ -66,20 +66,21 @@ export class UseGroupsService {
     const groupsTaxes = {} as UseGroupTax[]
 
     useGroup =  [
-      { name: 'Product',       id: 1, useGroupTaxes: groupsTaxes},
       { name: 'Adjustment',    id: 2, useGroupTaxes: groupsTaxes},
-      { name: 'Grouping',      id: 3, useGroupTaxes: groupsTaxes},
-      { name: 'Discounts',     id: 4, useGroupTaxes: groupsTaxes},
-      { name: 'Retail',        id: 5, useGroupTaxes: groupsTaxes},
-      { name: 'Tobacco',       id: 6, useGroupTaxes: groupsTaxes},
       { name: 'Cannabis',      id: 7, useGroupTaxes: groupsTaxes},
-      { name: 'Med-Cannabis',  id: 8, useGroupTaxes: groupsTaxes},
-      { name: 'Retail Liquor', id: 9, useGroupTaxes: groupsTaxes},
+      { name: 'Discounts',     id: 4, useGroupTaxes: groupsTaxes},
+      { name: 'Food',          id: 12,useGroupTaxes: groupsTaxes},
+      { name: 'Grouping',      id: 3, useGroupTaxes: groupsTaxes},
       { name: 'Grocery',       id: 10,useGroupTaxes: groupsTaxes},
       { name: 'Generic',       id: 11,useGroupTaxes: groupsTaxes},
-      { name: 'Food',          id: 12,useGroupTaxes: groupsTaxes},
-   ]
+      { name: 'Med-Cannabis',  id: 8, useGroupTaxes: groupsTaxes},
+      { name: 'Product',       id: 1, useGroupTaxes: groupsTaxes},
+      { name: 'Retail Liquor', id: 9, useGroupTaxes: groupsTaxes},
+      { name: 'Restaurant',    id: 12,useGroupTaxes: groupsTaxes},
+      { name: 'Retail',        id: 5, useGroupTaxes: groupsTaxes},
+      { name: 'Tobacco',       id: 6, useGroupTaxes: groupsTaxes},
 
+   ]
    return useGroup
 
   }

@@ -28,7 +28,7 @@ export class RecieptPopUpComponent implements OnInit {
   // receiptLayoutSetting      : ISetting;
   // receiptStyles             : ISetting;
   // zplText                   : string;
-
+  printOptions = {} as printOptions;
   // imageToShow       : any;
   // headerText        : string;
   // itemsText         : string;
@@ -41,9 +41,9 @@ export class RecieptPopUpComponent implements OnInit {
   // prepReceiptList$  : Observable<ISetting[]>;
   // receiptID         : number;
 
-  // items             : any[];
-  // orders            : any;
-  // payments          : any[];
+  items             : any[];
+  orders            : any;
+  payments          : any[];
   // orderTypes        : any;
   // platForm          = '';
 
@@ -56,41 +56,17 @@ export class RecieptPopUpComponent implements OnInit {
   // imageConversion   : any;
 
   @Input() order    : IPOSOrder;
-  // _order            : Subscription;
+  _order            : Subscription;
   // subscriptionInitialized: boolean;
   // electronReceiptSetting: ISetting;
-  // _printReady       : Subscription;
-  // printReady        : boolean
+  _printReady       : Subscription;
+  printReady        : boolean
 
   // orderCheck        = 0;
   options           : printOptions;
   autoPrinted       = false;
 
-  // intSubscriptions() {
-  //   this._order       = this.orderService.currentOrder$.subscribe(data => {
-  //     this.order      = data;
-  //     this.orders     = [];
-  //     if (!data) {return}
-  //     this.orders.push(data)
-  //     if (data.posPayments) {
-  //       this.payments   = data.posPayments
-  //     }
-  //     if (data.posOrderItems) {
-  //       this.items      = data.posOrderItems
-  //     }
-  //   })
-
-  //   this._printReady = this.printingService.printReady$.subscribe(status => {
-  //     if (status) {
-  //         if (this.options && this.options.silent) {
-  //           this.print();
-  //           this.autoPrinted = true;
-  //         }
-  //       }
-  //     }
-  //   )
-
-  // }
+ 
 
   constructor(
     private orderService          : OrdersService,
@@ -108,7 +84,8 @@ export class RecieptPopUpComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
+  ngOnInit() {
+ 
     console.log('')
   }
 
