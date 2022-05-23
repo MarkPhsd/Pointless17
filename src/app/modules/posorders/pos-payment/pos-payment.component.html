@@ -78,13 +78,20 @@
                     </button>
 
                     <button class="payment-buttons"
+                        mat-raised-button
+                        (click)="processDSICreditCardPayment()">
+                      <mat-icon color="warn">credit_card</mat-icon>Manual Input 
+                    </button>
+
+                    <button class="payment-buttons"
                            mat-raised-button
                            (click)="dsiResetDevice()">
-                      <mat-icon color="warn">reset</mat-icon>Reset
+                      <mat-icon color="warn">refresh</mat-icon>Reset
                     </button>
 
                   </div>
 
+             
 
                   <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
                     <button class="payment-buttons"

@@ -22,6 +22,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   action    : number ;
   transactiondata: any;
   voidPayment: IPOSPayment;
+  manualPrompt: boolean;
   //action = 0 or 1 = sale
   //action = 2 = void
   //action = 3 = refund
@@ -29,12 +30,11 @@ export class DSIEMVTransactionComponent implements OnInit {
   //action = 5 = forceauth
   //action = 6 = EBT
   //action = 7 = WIC
-
-    //void =6
-    //refund = 5;
-    //preauth = 3
-    //preauth capture = 7
-    //force = 4;
+  //void =6
+  //refund = 5;
+  //preauth = 3
+  //preauth capture = 7
+  //force = 4;
 
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
@@ -48,6 +48,7 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.amount  = data.amount;
       this.action  = data.action
       this.transactiondata = data;
+      this.manualPrompt = data.manualPrompt
       if (data.action ==2) {
         this.voidPayment = data.voidPayment
       }
@@ -126,7 +127,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   async processSaleCard() {
     const amount = this.amount
     const payment = this.payment
-    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
@@ -154,7 +155,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   async processRefundCard() {
     const amount = this.amount
     const payment = this.payment
-    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
@@ -168,7 +169,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   async procesPreAuthCard() {
     const amount = this.amount
     const payment = this.payment
-    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
@@ -182,7 +183,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   async procesForceAuthCard() {
     const amount = this.amount
     const payment = this.payment
-    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
@@ -196,21 +197,21 @@ export class DSIEMVTransactionComponent implements OnInit {
   async procesWIC() {
     const amount = this.amount
     const payment = this.payment
-    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
     }
     if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-       this.readResult(cmdResponse);
+      const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+      this.readResult(cmdResponse);
     }
   }
 
   async procesEBT() {
     const amount = this.amount
     const payment = this.payment
-    const response  = await this.dsiProcess.emvSale(amount, payment.id, false, false );
+    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;

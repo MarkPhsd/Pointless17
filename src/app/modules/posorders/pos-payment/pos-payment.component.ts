@@ -290,6 +290,13 @@ export class PosPaymentComponent implements OnInit {
     }
   }
 
+  processDSIManualCreditCardPayment() {
+    const order = this.order;
+    if (order) {
+      this.paymentsMethodsService.processDSIEMVManualCreditPayment(this.order, order.balanceRemaining)
+    }
+  }
+
   async dsiResetDevice() {
     const response  = await this.dsiProcess.pinPadReset( );
     this.notify('PIN Pad Reset', 'Success', 1000)

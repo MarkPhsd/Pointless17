@@ -346,8 +346,6 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
       let searchModel        = {} as IPriceSearchModel;
       let search             = ''
 
-      console.log('input',  this.input.nativeElement.value)
-
       searchModel.name            = this.input.nativeElement.value
       if (this.allDates )                   { searchModel.allDates        = this.allDates; }
       if (this.allEligible)                 { searchModel.allEligible     = this.allEligible; }
@@ -359,7 +357,6 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
       searchModel.pageSize   = this.pageSize
       searchModel.pageNumber = this.currentPage
-      console.log(searchModel)
       return searchModel
 
     } catch (error) {
@@ -468,7 +465,6 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
   //search method for debounce on form field
   displayFn(search) {
-    console.log('search', search)
     this.selectItem(search)
     return search;
   }
@@ -521,7 +517,6 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
         this.priceScheduleService.getPriceSchedule(site, this.id).subscribe( data =>
           {
             this.inputForm = this.fbPriceSchedule.initForm(this.inputForm)
-            console.log('update subscription', data)
             this.priceScheduleDataService.updatePriceSchedule(data)
             this.fbPriceSchedule.updateDiscountInfos(this.inputForm, data);
           }

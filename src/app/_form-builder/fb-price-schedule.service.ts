@@ -69,7 +69,7 @@ export class FbPriceScheduleService {
   // ClientType, IPriceSchedule, WeekDay , DateFrame, TimeFrame, OrderType, DiscountOption
   initForm(inputForm: FormGroup): FormGroup {
     inputForm = this.fb.group({
-      id:              [''],
+      id             : [''],
       allEligible:     [true],
       allOrderTypes:   [true],
       allWeekdaysDays: [true],
@@ -161,7 +161,7 @@ export class FbPriceScheduleService {
   }
 
   initFormData(inputForm: FormGroup, priceSchedule: IPriceSchedule) {
-
+ 
     inputForm.patchValue(priceSchedule)
     this.updateDiscountInfos(inputForm, priceSchedule)
     this.addDateRanges(inputForm, priceSchedule.dateFrames)

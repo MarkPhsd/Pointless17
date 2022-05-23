@@ -93,6 +93,12 @@
           <div  class="item-name" *ngIf="priceSchedule.allWeekdaysDays">
             All days of week.
           </div>
+<!-- 
+          <div *ngIf="!priceSchedule.allWeekdaysDays">
+            <div *ngFor="let item of priceSchedule.weekDays" class="slidein item-name">
+                {{item.name  }}
+            </div>
+          </div> -->
 
           <div class="icons-headers" >
             <mat-icon  class="icon">date_range</mat-icon>

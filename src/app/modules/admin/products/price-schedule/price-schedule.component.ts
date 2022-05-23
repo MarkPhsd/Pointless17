@@ -55,10 +55,11 @@ export class PriceScheduleComponent {
   isMenuList                   : boolean;
   description         : string;
 
-  initPriceScheduleService() {
+  initSubscriptions() {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       if (data) {
           this.priceSchedule = data
+          console.log('price schedule data scheudle service', data)
           this.isMenuList = false
           if (data.type == 'Menu List') {
           this.isMenuList = true
@@ -101,18 +102,31 @@ export class PriceScheduleComponent {
     )
 
   {
-    this.devMode = true ; // this.devModeService.getdevMode();
+    // this.devMode = true ; // this.devModeService.getdevMode();
     this.initForm()
     this.toggleSideBar()
     const id = this.route.snapshot.paramMap.get('id');
-    this.getItem( parseInt( id ))
-    this.initPriceScheduleService();
+    this.id = +id;
+    this.getItem(+id)
+  }
+
+    getItem(id: number) {
+    if (id) {
+        const site = this.siteService.getAssignedSite();
+        const item$ = this.priceScheduleService.getPriceSchedule(site, id)
+        item$.subscribe(data => {
+          this.priceSchedule = data
+          this.description   = data.description;
+          this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
+          this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
+
+        }
+      )
+    }
   }
 
   ngDestroy() {
-    if (this._priceSchedule) {
-      this._priceSchedule.unsubscribe();
-    }
+    if (this._priceSchedule) { this._priceSchedule.unsubscribe();}
   }
 
   toggleSideBar() {
@@ -130,20 +144,6 @@ export class PriceScheduleComponent {
 
   initForm(){
     this.inputForm = this.fbPriceScheduleService.initForm(this.inputForm)
-  }
-
-  getItem(id: number) {
-    if (id) {
-        const site = this.siteService.getAssignedSite();
-        const item$ = this.priceScheduleService.getPriceSchedule(site, id)
-        item$.subscribe(data => {
-          this.priceSchedule = data
-          this.description = data.description;
-          this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
-          this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
-        }
-      )
-    }
   }
 
   initFormArray() {
@@ -185,17 +185,10 @@ export class PriceScheduleComponent {
   getItemValueFromForm(value: any): IPriceSchedule {
 
     const newSchedule = {} as IPriceSchedule;
-
     const orderTypes = newSchedule.orderTypes as OrderType[]
-    console.log('orderTypes', newSchedule.orderTypes)
-    console.log('orderTypes', orderTypes)
-
     const clientTypes = newSchedule.clientTypes as ClientType[]
-    console.log('clientTypes', clientTypes)
-
     const itemDiscounts = newSchedule.itemDiscounts as DiscountInfo[]
-    console.log('itemDiscounts', itemDiscounts)
-
+ 
     return value
   }
 
@@ -203,9 +196,8 @@ export class PriceScheduleComponent {
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
 
-      const item = this.inputForm.value as IPriceSchedule
-      this.priceScheduleDataService.updatePriceSchedule(item)
-
+      const item = this.inputForm.value as IPriceSchedule;
+      item.id = this.id;
       const item$ = this.priceScheduleService.save(site, item)
       this.saveNotification = true
 
@@ -213,6 +205,7 @@ export class PriceScheduleComponent {
         next:  data => {
           this.saveNotification = false
             this.snack.open('Item Saved', 'Success', {duration: 2000, verticalPosition: 'top'})
+            this.priceScheduleDataService.updatePriceSchedule(data)
           },
         error:  err => {
             this.snack.open(err, 'Error', {duration: 4000, verticalPosition: 'top'})
@@ -229,16 +222,11 @@ export class PriceScheduleComponent {
     const result = window.confirm('Are you sure you want to delete this item?')
     if (!result) { return }
     const site = this.siteService.getAssignedSite();
-    if (this.inputForm.valid) {
-      const priceSchedule = this.getPriceSchedule(this.inputForm)
-      const item$ = this.priceScheduleService.delete(site, priceSchedule.id)
-      item$.subscribe(data => {
-        this.router.navigate(['/price-schedule-list'])
-        this.snack.open('Item Deleted', 'Success', {duration: 2000})
-      })
-    }
-    if (!this.inputForm.valid) {
-      this.snack.open('Missing values', 'Alert', {duration: 2000})
-    }
+    const item$ = this.priceScheduleService.delete(site, this.id)
+    item$.subscribe(data => {
+      this.router.navigate(['/price-schedule'])
+      this.snack.open('Item Deleted', 'Success', {duration: 2000})
+    })
   }
+   
 }

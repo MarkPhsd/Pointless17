@@ -35,11 +35,11 @@ export class PriceScheduleService {
 
   delete(site: ISite, id: number): Observable<IPriceSchedule> {
 
-    const controller ="/PriceSchedules/"
+    const controller = "/PriceSchedules/"
 
-    const endPoint = `DeletePriceSchedule`
+    const endPoint   = `DeletePriceSchedule`
 
-    const parameters = `id=${id}`
+    const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -49,7 +49,7 @@ export class PriceScheduleService {
 
   deleteItemDiscountSelected(site: ISite, id: number): Observable<DiscountInfo> {
 
-    const controller = "/PriceSchedules/"
+    const controller = "/PriceSchedules/";
 
     const endPoint = `deleteItemDiscount`;
 

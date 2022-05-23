@@ -259,7 +259,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 0};
+    const options = { url: url, cacheMins: 30};
 
     return this.httpCache.get<UIHomePageSettings>(options);
 
@@ -277,7 +277,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 0};
+    const options = { url: url, cacheMins: 30};
 
     return this.httpCache.get<TransactionUISettings>(options);
 

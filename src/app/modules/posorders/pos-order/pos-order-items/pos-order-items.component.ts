@@ -46,19 +46,28 @@ export class PosOrderItemsComponent implements OnInit {
   posName: string;
 
   initSubscriptions() {
-    console.log('initSubscriptions');
-    this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
-      this.uiConfig = data;
-      console.log('initSubscriptions',data);
-      if (!data) { 
-        this.uiSettingsService.getTransactionUISettings();
-        console.log('getTransactionUISettings');
-      }
-    })
 
-    this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
-      this.bottomSheetOpen = data
-    })
+    try {
+      this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
+          if (data) { 
+            this.uiConfig = data;
+          }
+        }
+      )
+    } catch (error) {
+      
+    }
+   
+
+    try {
+      this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
+        if (data) { 
+         this.bottomSheetOpen = data
+        }
+      })
+    } catch (error) {
+    
+    }
 
     if (this.disableActions) {
       // this.refreshOrderFromPOSDevice()
@@ -92,32 +101,47 @@ export class PosOrderItemsComponent implements OnInit {
                 private uiSettingService   : UISettingsService,
                 private settingService: SettingsService,
               )
- {
-    this.orderItemsPanel = 'item-list';
- }
+  {
+      this.orderItemsPanel = 'item-list';
+  }
 
-  async ngOnInit() {
-    this.initSubscriptions();
-    let uiHomePage =  this.uiSettingService.homePageSetting
+  ngOnInit() {
+
+    let uiHomePage =  this.uiSettingService.homePageSetting;
 
     if (!uiHomePage) {
       this.settingService.getUIHomePageSettings().subscribe(data => { 
         uiHomePage = data;
-      }) //('UIHomePageSettings');
+      })
     }
 
-    if (uiHomePage) {this.wideBar = uiHomePage.wideOrderBar}
-   
+    if (uiHomePage) {
+      this.wideBar = uiHomePage.wideOrderBar
+    }
+
+    this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
+      this.uiConfig = data;
+      if (!data) { 
+        this.getTransactionUI()
+      }
+    })
 
     if (this.prepScreen) {
       this.orderItemsPanel = 'item-list-prep';
-
     }
     if (!this.prepScreen) {
       this.orderItemsPanel = 'item-list';
     }
   }
 
+  getTransactionUI() {
+    this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
+      if (data) { 
+        const config = JSON.parse(data.text)
+        this.uiSettingService.updateUITransactionSubscription(config)
+      }
+    }) 
+  }
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
@@ -125,7 +149,6 @@ export class PosOrderItemsComponent implements OnInit {
 
     if (this.prepScreen) { return }
     this.orderItemsPanel = 'item-list';
-
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
@@ -141,7 +164,6 @@ export class PosOrderItemsComponent implements OnInit {
   }
 
   async removeItemFromList(payload: any) {
-    console.log(payload)
     const index = payload.index;
     const orderItem = payload.item
     this.orderMethodService.removeItemFromList(index, orderItem)
@@ -169,7 +191,7 @@ export class PosOrderItemsComponent implements OnInit {
     this.orderMethodService.removeItemFromList(index, item)
   }
 
-  async updateSubscription(orderID: number) {
+   updateSubscription(orderID: number) {
     const site = this.siteService.getAssignedSite();
     this.orderService.getOrder(site, orderID.toString(), false).subscribe(order => {
       this.orderService.updateOrderSubscription(order)

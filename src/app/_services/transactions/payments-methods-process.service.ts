@@ -93,6 +93,22 @@ export class PaymentsMethodsProcessService {
     //lookup the payment method.
     //we can't get the type of payment before we get the PaymentID.
     //so we just have to request the ID, and then we can establish everything after that.
+    this.processSubDSIEMVCreditPayment(order, amount, false)
+  }
+
+  processDSIEMVManualCreditPayment( order: IPOSOrder, amount: number) {
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    this.processSubDSIEMVCreditPayment(order, amount, true)
+  }
+  
+  processSubDSIEMVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean) {
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
     const site = this.sitesService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.orderID = order.id;
@@ -100,13 +116,11 @@ export class PaymentsMethodsProcessService {
     payment$.subscribe(data =>
       {
         data.amountPaid = amount;
-        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: 1});
+        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: 1, manualPrompt: manualPrompt});
         this._dialog.next(this.dialogRef)
         return of(data)
       }
     )
-    // return of(posPayment)
-
   }
 
   processDSIEMVCreditVoid( payment: IPOSPayment) {

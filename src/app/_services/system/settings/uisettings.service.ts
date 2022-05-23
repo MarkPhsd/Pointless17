@@ -145,6 +145,10 @@ export class UISettingsService {
     this.uihomePageSetting = ui;
   }
 
+  updateUITransactionSubscription(ui: TransactionUISettings) {
+    this._transactionUISettings.next(ui);
+  }
+
   updateUISubscription(ui: TransactionUISettings) {
     this._transactionUISettings.next(ui);
   }

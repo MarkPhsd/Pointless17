@@ -206,19 +206,28 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   }
 
   changeView() {
+    // if (!this.viewType) { this.viewType = 1}
+
     if (this.viewType == 1) {
       this.viewType = 0
       this.orderService.updateViewOrderType(this.viewType)
+      return
     }
-    if (this.viewType == 0) {
+
+    if (this.viewType == 0 || this.viewType == 3) {
       this.viewType = 1
       this.orderService.updateViewOrderType(this.viewType)
+      return
     }
+
     if (this.viewType == 3) {
       this.viewType = 0
+        // this.searchModel.prepStatus  = this.viewType;
       this.orderService.updateViewOrderType(this.viewType)
+      return
     }
-    this.searchModel.prepStatus  = this.viewType;
+
+  
   }
 
   setViewType(value) {
