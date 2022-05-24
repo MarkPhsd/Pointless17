@@ -30,6 +30,7 @@ export class StrainPackagesComponent implements OnInit {
   @Input() package               : METRCPackage;
   @Input() menuItem              : IMenuItem;
   @Input() packageForm           : FormGroup;
+  @Input() priceForm     :         FormGroup;
   @Input() facility              = {} as IItemFacilitiyBasic
   @Input() facilityLicenseNumber : string;
   inventoryLocationID            : number ;
@@ -305,6 +306,9 @@ export class StrainPackagesComponent implements OnInit {
       this.cost   = cost
       const price = numeral(+f.get('price').value).format('0,0');
       this.price  = price
+
+
+
       try { inventoryAssignment.cost  = this.costValue   } catch (error) { }
       try { inventoryAssignment.price = this.priceValue  } catch (error) { }
       inventoryAssignment = this.inventoryAssignmentService.setNonConvertingFieldValues( inventoryAssignment ,this.facility, this.inventoryLocation,
@@ -315,14 +319,28 @@ export class StrainPackagesComponent implements OnInit {
     }
   }
 
+  getPriceValues(item: IInventoryAssignment) { 
+    if (this.priceForm && item) { 
+      const priceCategoryID = this.priceForm.controls['priceCategoryID'].value;
+      const cost = this.priceForm.controls['cost'].value;
+      const price  = this.priceForm.controls['price'].value;
+      item.priceCategoryID = priceCategoryID;
+      item.cost = cost;
+      item.price = price
+    }
+    return item;
+  }
+
   addInventoryAssignmentGroup() {
     let inventoryAssignment = {} as IInventoryAssignment
     if ( ! this.isValidEntry() )  { return }
     try {
+      inventoryAssignment                       = this.getPriceValues(inventoryAssignment)
       inventoryAssignment                       = this.setNonConvertingFieldValues(inventoryAssignment)
       const unitConversion                      = this.conversionService.getConversionItemByName(this.conversionName)
       inventoryAssignment.unitConvertedtoName   = unitConversion.name
       inventoryAssignment.unitMulitplier        = unitConversion.value
+
       if (this.unitsConverted.unitConvertTo) {
         inventoryAssignment = this.conversionService.getConversionQuantities(inventoryAssignment, this.unitsConverted, this.inputQuantity, this.jointWeight)
         if (!this.inventoryAssignments) { this.inventoryAssignments = {} as IInventoryAssignment[]}
