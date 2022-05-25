@@ -26,6 +26,9 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
   @Input()  doNotPassName     :string;
   @Input()  formControlName = 'productName';
 
+  @Input() filter: ProductSearchModel; //productsearchModel;
+
+
   searchPhrase:               Subject<any> = new Subject();
   searchModel                 =  {} as ProductSearchModel;
   item:                       IItemBasic;
@@ -35,8 +38,8 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
     debounceTime(250),
     distinctUntilChanged(),
     switchMap(searchPhrase => {
+      if (this.filter) { this.searchModel = this.filter }
       this.searchModel.name = searchPhrase;
-      console.log(searchPhrase)
       return this.menuService.getItemBasicBySearch(this.site,  this.searchModel)
      }
     )
@@ -63,9 +66,6 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
     private siteService: SitesService,
     )
   {
-    // if (this.searchModel &&  this.metrcCategoryName) {
-    //   this.searchModel.metrcCategory = this.metrcCategoryName
-    // }
     this.site = this.siteService.getAssignedSite();
   }
 
@@ -90,7 +90,7 @@ export class ProductSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   onChange(item: any) {
     const menuItem = item.option.value as IItemBasic;
-    const menuItemName =`${menuItem.name}`
+    const menuItemName =`${menuItem.name}`;
     if (item) {
       this.selectItem(menuItem)
       this.item = item

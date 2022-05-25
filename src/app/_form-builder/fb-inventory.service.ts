@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { IInventoryAssignment } from '../_services/inventory/inventory-assignment.service';
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -70,6 +68,7 @@ export class FbInventoryService {
       destinationSiteID   : [],
       destinationSiteURL  : [],
       destinationSiteName : [],
+      priceCategoryID     : [],
       rejected:             [],
     })
 

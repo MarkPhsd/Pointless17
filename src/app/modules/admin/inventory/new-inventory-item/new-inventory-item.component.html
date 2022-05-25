@@ -97,33 +97,12 @@
           <div>
           <div [formGroup]="inputForm">
             <div  class="header-column">Price</div>
-              <mat-form-field  appearance="outline" class=" price-values fields">
-                <mat-label >Cost</mat-label>
-                <input  matInput
-                        type           ="text"
-                        formControlName="cost"
-                        name           ="cost"
-                        class          ="price-values"
-                        >
-              </mat-form-field>
 
-              <mat-form-field  appearance="outline" class="price-values fields">
-                <mat-label >Price</mat-label>
-                <input  matInput
-                        type           ="text"
-                        formControlName="price"
-                        name           ="price"
-                        class          ="price-values"
-                        >
-              </mat-form-field>
-
-              <!-- <div>
-                <app-price-category-select
-                    [itemType]        ="itemType"
-                    [priceCategoryID] ="item.priceCategoryID"
-                    [inputForm]       ="inputForm" >
-                  </app-price-category-select>
-              </div> -->
+              <app-price-category-select
+                  [isInventory]     ="true"
+                  [priceCategoryID] ="item.priceCategoryID"
+                  [inputForm]       ="inputForm" >
+              </app-price-category-select>
 
               <div>
                 <div  class="header-column">Features</div>

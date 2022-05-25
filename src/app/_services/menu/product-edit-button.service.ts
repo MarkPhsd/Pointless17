@@ -7,7 +7,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { StrainProductEditComponent } from 'src/app/modules/admin/products/productedit/strain-product-edit/strain-product-edit.component';
 import { EditSelectedItemsComponent } from 'src/app/modules/admin/products/productedit/edit-selected-items/edit-selected-items.component';
 import { AddItemByTypeComponent } from 'src/app/modules/admin/products/productedit/add-item-by-type/add-item-by-type.component';
-import { IPriceCategories, PriceTiers, ProductPrice, UnitType } from 'src/app/_interfaces/menu/price-categories';
+import { PriceCategories, PriceTiers, ProductPrice, UnitType } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesEditComponent } from 'src/app/modules/admin/products/pricing/price-categories-edit/price-categories-edit.component';
 import { UnitTypeEditComponent } from 'src/app/modules/admin/products/unit-type-list/unit-type-edit/unit-type-edit.component';
 import { employee, IPOSOrder, IPOSPayment, ISite, OperationWithAction, PosOrderItem } from 'src/app/_interfaces';
@@ -145,7 +145,7 @@ export class ProductEditButtonService {
     )
   }
 
-  openPriceEditor(data: IPriceCategories) {
+  openPriceEditor(data: PriceCategories) {
     let dialogRef: any;
     dialogRef = this.dialog.open(PriceCategoriesEditComponent,
       { width:        '800px',

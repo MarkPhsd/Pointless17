@@ -13,7 +13,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { IPriceCategories } from 'src/app/_interfaces/menu/price-categories';
+import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { employee } from 'src/app/_interfaces';
 
@@ -49,7 +49,7 @@ export class ProducteditComponent implements  OnInit  {
   get prodModifierType()  { return this.productForm.get("prodModifierType") as FormControl;}
   // get urlImageOther_ctl() { return this.productForm.get("departmentID") as FormControl;}
   // get urlImageMain_ctl()  { return this.productForm.get("departmentID") as FormControl;}
-  priceCategories: IPriceCategories;
+  priceCategories:        PriceCategories;
   displayContent        : boolean;
   bucketName:             string;
   awsBucketURL:           string;

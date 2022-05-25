@@ -440,16 +440,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     // http://localhost:4200/pos-order-schedule
     let url = 'pos-order-schedule'
-    if (this.isStaff) {
+    if (!this.isStaff) {
       url = 'pos-order-schedule'
       this.router.navigateByUrl(url)
+      return
     }
 
     if (this.isStaff) {
        url = 'pos-payment'
        this.router.navigateByUrl(url)
+       return
     }
-
 
     this.toolbarUIService.updateOrderBar(false)
   }

@@ -19,28 +19,23 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
 
   @Input() inputForm   :      FormGroup;
   @Input() package     :      METRCPackage;
-  // @Input() facility           = {} as IItemFacilitiyBasic;
   @Output() outputMenuItem    = new EventEmitter<any>();
   @Output() outputVendor      = new EventEmitter<any>();
-
-  // (outputMenuItem)="getSelectedMenuItem($event)"
-  // (outputVender)  ="getSelectedVendorItem($event)"
+  @Input() filter: ProductSearchModel; //productsearchModel;
 
   facilityLicenseNumber: string;
   productionBatchNumber: string;
-
   menuItem             : any ;
   site                 : ISite;
 
   constructor(
-    private siteService: SitesService,
-    private menuService: MenuService,
+    private siteService           : SitesService,
+    private menuService           : MenuService,
     private metrcFacilitiesService: MetrcFacilitiesService,
-    // private menutServiceMethods: MenuServiceMethodsService,
   ) { }
 
   ngOnInit(): void {
-    this.site=   this.siteService.getAssignedSite()
+    this.site = this.siteService.getAssignedSite()
     this.assignDefaultFacility(this.package);
     this.assignDefaultCatalogItem(this.package)
   }
@@ -94,9 +89,9 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
           }
         ))
 
-      console.log( list$ , list$ === EMPTY )
-      list$.subscribe((data) => {
-          console.log('data', data )
+      list$.subscribe(
+          {next: data => {
+          console.log(' get item from basic search ',searchModel,  data )
           if (data) {
               const item = {} as IMenuItem;
               if (this.dataIsMenuItem(data)) {
@@ -109,9 +104,11 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
                 return
               }
           }
-        }, err => {
+        },
+        error: err => {
           console.log(err)
         }
+      }
       )
       this.setProductNameEmpty(this.inputForm);
     }

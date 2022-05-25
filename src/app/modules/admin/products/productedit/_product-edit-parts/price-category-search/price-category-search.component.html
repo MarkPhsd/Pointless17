@@ -32,7 +32,13 @@
 </div>
 
 <div hidden="true"
-     *ngIf="inputForm"
+     *ngIf="inputForm && !isInventory"
      [formGroup]="inputForm">
   <input  formControlName="priceCategory">
 </div>
+
+<div hidden="true"
+     *ngIf="inputForm && isInventory"
+     [formGroup]="inputForm">
+  <input  formControlName="priceCategoryID">
+  </div>

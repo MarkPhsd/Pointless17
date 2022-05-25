@@ -111,34 +111,32 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.user  = user;
 
     if (!user || !user.token) {return}
-
+    if (!user.roles) {return}
     const site       = this.siteService.getAssignedSite();
     const menuCheck$ = this.menusService.mainMenuExists(site);
 
     try {
       menuCheck$.pipe(
         switchMap( data => {
-
             if (user.roles === 'admin' || (!data ||  !data.result)) {
               return  this.menusService.createMainMenu(user , site)
             }
-
             if (user) {
               return  this.menusService.getMainMenu(site)
             }
-
           }
         )
 
       ).subscribe(
         {next: data => {
-
+        if (!user.roles) {return}
         if (user.roles === 'admin' ) {
           if (!data) {  return }
           const menuGroup = data as MenuGroup;
           this.refreshMenuFromAccordion(menuGroup.accordionMenus)
           return
         }
+
         if (user.roles && user.roles != 'admin' ) {
           if (!data) {  return }
           this.refreshMenuFromAccordion(data)

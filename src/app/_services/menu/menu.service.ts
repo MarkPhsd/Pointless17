@@ -686,7 +686,7 @@ export class MenuService {
   };
 
    saveProduct(site: ISite, product:IProduct): Observable<IProduct> {
-
+    
     if (product.id && product.id != 0) {
       return  this.putProduct(site, product.id, product);
 

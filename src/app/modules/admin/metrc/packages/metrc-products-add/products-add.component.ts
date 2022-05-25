@@ -1,4 +1,4 @@
-import { Component, Inject,  OnInit, } from '@angular/core';
+import { Component, Inject,  Input,  OnInit, } from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -55,6 +55,7 @@ export class METRCProductsAddComponent implements OnInit {
   bucketName:             string;
   awsBucketURL:           string;
 
+  @Input() priceForm   :  FormGroup;
   packageForm:            FormGroup;
   locationFormArray:      FormGroup;
   id:                     any;
@@ -154,7 +155,7 @@ export class METRCProductsAddComponent implements OnInit {
         this.setProductNameEmpty(this.packageForm);
 
         let active = true
-        if (this.package.active == 0)  {   active = false;   }
+        if (!this.package.active)  {   active = false;   }
 
         const facility = `${data.itemFromFacilityLicenseNumber}-${data.itemFromFacilityName}`
 
@@ -203,11 +204,8 @@ export class METRCProductsAddComponent implements OnInit {
     }
 
     if (this.activeControl) {
-      if (this.activeControl.value) {
-        this.package.active = 1
-      } else {
-        this.package.active = 0
-      }
+      if (this.activeControl.value) {   this.package.active = true  }
+      if (!this.activeControl.value) {  this.package.active = false  }
     }
 
     package$.subscribe(data => {
@@ -358,7 +356,7 @@ export class METRCProductsAddComponent implements OnInit {
 
     const d = new Date();
     inventoryAssignment.dateCreated =           d.toISOString()
-
+    // inventoryAssignment =  this.getPriceValues(inventoryAssignment)
     try {
       inventoryAssignment.packageType =         this.getStringValue('packageType')
       inventoryAssignment.productCategoryName = this.package.productCategoryName;
@@ -395,6 +393,18 @@ export class METRCProductsAddComponent implements OnInit {
     this.inventoryAssigments.push(inventoryAssignment)
     this.unitOfMeasure = {} as IUnitConversion
     this.resetInventoryFormAssignmentValues();
+  }
+
+  getPriceValues(item: IInventoryAssignment) { 
+    if (this.priceForm && item) { 
+      const priceCategoryID = this.priceForm.controls['priceCategoryID'].value;
+      const cost = this.priceForm.controls['cost'].value;
+      const price  = this.priceForm.controls['price'].value;
+      item.priceCategoryID = priceCategoryID;
+      item.cost = cost;
+      item.price = price
+    }
+    return item;
   }
 
   getStringValue(item: string): string {
@@ -498,12 +508,36 @@ export class METRCProductsAddComponent implements OnInit {
         this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
       }
     )
-
   }
-  getSelectedMenuItem(event) {
-    if (event) {
-      this.menuItem = event;
+
+  // getSelectedMenuItem(event) {
+  //   if (event) {
+  //     this.menuItem = event;
+  //   }
+  // }
+
+  getCatalogItem(event) {
+    const itemStrain = event
+    if (itemStrain) {
+      if (itemStrain.id) {
+        const id = itemStrain.id
+        this.assignMenItem(id)
+      }
     }
+  }
+
+  assignMenItem(id: number) { 
+    if (id == 0) { return}
+    this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
+      if (data) {
+        this.menuItem = data
+        console.log( 'results', this.menuItem, this.packageForm.value)
+        const item = {productName: data.name, productID: data.id}
+        this.packageForm.patchValue(item)
+        return;
+      }
+      this.setProductNameEmpty(this.packageForm)
+    })
   }
 
   getSelectedVendorItem(event) {

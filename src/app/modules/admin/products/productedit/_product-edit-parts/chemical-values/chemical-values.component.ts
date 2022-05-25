@@ -11,17 +11,17 @@ export class ChemicalValuesComponent implements OnInit {
   @Input() inputForm: FormGroup
   @Input() inventoryItem: boolean;
   
-  thc:   any;
-  thc2:  any;
-  thca:  any;
-  thca2: any;
-  cbd:   any;
-  cbd2:  any;
-  cbn:   any;
-  cbn2:  any;
+  // thc:   any;
+  // thc2:  any;
+  // thca:  any;
+  // thca2: any;
+  // cbd:   any;
+  // cbd2:  any;
+  // cbn:   any;
+  // cbn2:  any;
 
-  cbda:   any;
-  cbda2:  any;
+  // cbda:   any;
+  // cbda2:  any;
 
   constructor() { }
 

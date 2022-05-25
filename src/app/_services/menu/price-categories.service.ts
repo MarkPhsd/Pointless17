@@ -3,7 +3,7 @@ import { AuthenticationService } from '../system/authentication.service';
 import { Observable  } from 'rxjs';
 import { ISite,  }  from 'src/app/_interfaces';
 import { HttpClient } from '@angular/common/http';
-import { IPriceCategories, IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
+import { PriceCategories, IPriceCategoryPaged, IPriceCategory2 } from 'src/app/_interfaces/menu/price-categories';
 import { SearchModel } from '../system/paging.service';
 import { ProductEditButtonService } from './product-edit-button.service';
 import { SitesService } from '../reporting/sites.service';
@@ -33,7 +33,7 @@ export class PriceCategoriesService {
               )
   { }
 
-  delete(site: ISite, id: number): Observable<IPriceCategories> {
+  delete(site: ISite, id: number): Observable<PriceCategories> {
 
     const controller = "/pricecategories/"
 
@@ -79,7 +79,7 @@ export class PriceCategoriesService {
 
   }
 
-  getPriceCategory(site: ISite, id: any) : Observable<IPriceCategories> {
+  getPriceCategory(site: ISite, id: any) : Observable<PriceCategories> {
 
     const controller = "/pricecategories/"
 
@@ -89,7 +89,7 @@ export class PriceCategoriesService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.get<IPriceCategories>(url)
+    return  this.http.get<PriceCategories>(url)
 
   }
 
@@ -108,7 +108,7 @@ export class PriceCategoriesService {
     return  this.http.post<IPriceCategoryPaged>(url,searchModel)
   };
 
-  save(site: ISite,  price: IPriceCategory2): Observable<IPriceCategories> {
+  save(site: ISite,  price: IPriceCategory2): Observable<PriceCategories> {
 
     console.log('save', price)
     if (price.id) {
@@ -120,7 +120,7 @@ export class PriceCategoriesService {
     }
   }
 
-   post(site: ISite,  price: IPriceCategory2): Observable<IPriceCategories> {
+   post(site: ISite,  price: IPriceCategory2): Observable<PriceCategories> {
 
     const controller ="/PriceCategories/"
 
@@ -134,7 +134,7 @@ export class PriceCategoriesService {
 
   }
 
-   put(site: ISite, id: number, price: IPriceCategory2): Observable<IPriceCategories> {
+   put(site: ISite, id: number, price: IPriceCategory2): Observable<PriceCategories> {
 
     if (id && price) {
 

@@ -1,8 +1,8 @@
 import { Component, OnInit, Input , EventEmitter, Output, ViewChild, ElementRef, AfterViewInit, OnChanges} from '@angular/core';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISite } from 'src/app/_interfaces';
-import { IItemBasic, PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { IPriceCategories } from 'src/app/_interfaces/menu/price-categories';
+import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
+import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { FormBuilder, FormControl, FormGroup,  } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { Subject ,fromEvent } from 'rxjs';
@@ -17,7 +17,7 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect       = new EventEmitter();
-
+  @Input() isInventory      : boolean;
   @Input() inputForm        : FormGroup;
   @Input() searchForm:        FormGroup;
   @Input() searchField:       FormControl;
@@ -25,16 +25,14 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
   @Input() name:              string;
   @Input() doNotPassName      :string;
   searchPhrase:               Subject<any> = new Subject();
-  item:                       IPriceCategories;
+  item:                       PriceCategories;
   site:                       ISite;
-
-  get priceCategoryControl()  { return this.inputForm.get("priceCategory") as FormControl};
 
   results$ = this.searchPhrase.pipe(
     debounceTime(225),
     distinctUntilChanged(),
     switchMap(searchPhrase =>
-        this.priceCategories.searchPriceCategories(this.site,  searchPhrase)
+      this.priceCategories.searchPriceCategories(this.site,  searchPhrase)
     )
   )
 
@@ -52,6 +50,18 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
     .subscribe();
   }
 
+  get priceCategoryControl()  { 
+    const field = this.getField()
+    return this.inputForm.get(field) as FormControl
+  };
+
+  getField() { 
+    let field = ""
+    if (this.isInventory) { field ="priceCategoryID"  }
+    if (!this.isInventory) { field ="priceCategory"  }
+    return field;
+  }
+
   constructor(
     public route           : ActivatedRoute,
     private priceCategories: PriceCategoriesService,
@@ -64,7 +74,8 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
 
   async init() {
     if (this.inputForm) {
-      this.id = this.inputForm.controls['priceCategory'].value;
+      const field = this.getField()
+      this.id = this.inputForm.controls[field].value;
     }
   }
 
@@ -94,11 +105,19 @@ export class PriceCategorySearchComponent implements OnInit,  AfterViewInit {
     if (!item) {return}
     this.itemSelect.emit(item)
 
-    const price = { priceCategory : item.id }
-    this.inputForm.patchValue(    price  )
+    let price = {} as any;
+    if (this.isInventory) { 
+       price = { priceCategoryID : item.id }
+    }
+    if (!this.isInventory) { 
+       price = { priceCategory : item.id }
+    }
+
+    this.inputForm.patchValue(  price  )
 
     const priceCat =  { priceCategoryLookup: item.name  }
     this.searchForm.patchValue( priceCat )
+
   }
 
   onChange(selected: any) {

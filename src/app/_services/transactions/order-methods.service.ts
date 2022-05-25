@@ -8,7 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
 import { ISite }   from 'src/app/_interfaces';
@@ -23,6 +23,8 @@ import { UserAuthorizationService } from '../system/user-authorization.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { DateHelperService } from '../reporting/date-helper.service';
 import { DatePipe } from '@angular/common';
+import { PriceCategoriesService } from '../menu/price-categories.service';
+import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 // import { T } from '@angular/cdk/keycodes';
 
 export interface ProcessItem {
@@ -52,6 +54,8 @@ export class OrderMethodsService {
 
   public get assignedPOSItem() {return this.assignPOSItem }
 
+  priceCategoryID: number;
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
@@ -72,7 +76,7 @@ export class OrderMethodsService {
 
   updateAssignedItem(item: PosOrderItem) {
     this.assignPOSItem = item;
-    this._assingedPOSItem.next(item)
+   this._assingedPOSItem.next(item)
   }
 
   constructor(public route                    : ActivatedRoute,
@@ -86,8 +90,7 @@ export class OrderMethodsService {
               private printingService         : PrintingService,
               private userAuthorization       : UserAuthorizationService,
               private menuService             : MenuService,
-              private dateHelper              : DateHelperService,
-              private datePipe                : DatePipe,
+              private priceCategoriesService:  PriceCategoriesService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -247,7 +250,7 @@ export class OrderMethodsService {
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
-   await   this.processAddItem(order, null, item, quantity, null);
+   await this.processAddItem(order, null, item, quantity, null);
   }
 
   validateUser(): boolean {
@@ -289,8 +292,6 @@ export class OrderMethodsService {
                        quantity: number,
                        input: any) {
 
-    console.log('processAddItem quantity', quantity)
-    
     const valid = this.validateUser();
     if (!valid) { return };
 
@@ -305,8 +306,7 @@ export class OrderMethodsService {
     order = this.validateOrder();
 
     if (order) {
-   
-      const site    = this.siteService.getAssignedSite();
+      const site       = this.siteService.getAssignedSite();
 
       if (barcode)  {
         const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
@@ -315,25 +315,25 @@ export class OrderMethodsService {
       }
 
       try {
-        let packaging     = '';
-        let portionValue  = '';
-        let itemNote      = '';
+        let packaging      = '';
+        let portionValue   = '';
+        let itemNote       = '';
         if (input) {
           packaging        = input?.packaging;
           portionValue     = input?.portionValue;
           itemNote         = input?.itemNote;
         }
 
-        console.log('Not Scanning item from processAddItem', item)
-
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
-                                packaging: packaging, portionValue: portionValue, barcode: '', weight: 1, itemNote: itemNote, deviceName: deviceName } as NewItem
+                                packaging: packaging, portionValue: portionValue, barcode: '',
+                                weight: 1, itemNote: itemNote, deviceName: deviceName } as NewItem
           const addItem$    = this.posOrderItemService.postItem(site, newItem)
           this.processItemPostResults(addItem$)
           return true
         }
+
       } catch (error) {
         console.log('error', error)
       }
@@ -342,28 +342,35 @@ export class OrderMethodsService {
 
   // tslint:disable-next-line: typedef
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
+    
+    this.priceCategoryID = 0;
+
     addItem$.subscribe(data => {
-      console.log('process results', data.order.id);
-      console.log('process results', data.message);
-      console.log('process results', data.order);
+      if (data) { 
+        // console.log('process results', data);
+        // console.log('process results', data?.order?.id);
+        // console.log('process results', data?.message, data.resultErrorDescription);
+        // console.log('process results', data?.order);
+      }
+  
+        if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
 
-      if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
-
-      if (data && data.resultErrorDescription) {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
-          return;
+        if (data && data.resultErrorDescription) {
+            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
+            return;
         }
 
-      if (data.order) {
+        if (data.order) {
           this.orderService.updateOrderSubscription(data.order);
-          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem);
+          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
         } else {
           this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
         }
 
-      if (this.openDialogsExist) {
+        if (this.openDialogsExist) {
           this.notification('Item added to cart.', 'Check Cart');
         }
+
       }
     )
   }
@@ -432,6 +439,7 @@ export class OrderMethodsService {
     //the webapi will return what price options are avalible for the item.
     //the pop up will occur and prompt with options.
     //the function will return true once complete.
+  
     if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
       // remove unused prices if they exist?
       const  newItem = {order: order, item: item, posItem: posItem}
@@ -574,8 +582,19 @@ export class OrderMethodsService {
     })
   }
 
+  processInventoryPrice(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
+    const site = this.siteService.getAssignedSite()
+    const price$ = this.priceCategoriesService.getPriceCategory(site,priceCategoryID);
+    price$.subscribe(data => { 
+      // const priceCategory                   = this.shapePriceCategory(data)
+      this.processItem.item.priceCategories = data;
+      this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
+      return
+    })
+  }
+
   //, pricing:  priceList[]
-  async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
+  async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
     const processItem   = {} as ProcessItem;
     processItem.item    = item;
     processItem.order   = order;
@@ -584,22 +603,27 @@ export class OrderMethodsService {
     this._itemProcessSection.next(0)
     this.itemProcessSection = 0;
     this.order = order;
+    this.priceCategoryID = priceCategoryID;
     this.handleProcessItem();
   }
 
   async handleProcessItem() {
     const process = this.itemProcessSection;
-
-    console.log('handleProcessItems', process)
+   
     if (!this.processItem) {
-      // console.log('no processItem')
       this.orderService.updateOrderSubscription(this.order)
       return
     }
 
     switch(process) {
       case  0: {
-          this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
+         
+          if (this.priceCategoryID == 0) { 
+            this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
+            return
+          }
+
+          this.processInventoryPrice(this.order,this.processItem.item,this.processItem.posItem, this.priceCategoryID)
           // console.log('Handle Process Item openPriceOptionPrompt', 0)
           break;
       }
@@ -843,7 +867,6 @@ export class OrderMethodsService {
   }
 
 
-
   notifyWithOption(message: string, title: string, notifyEnabled: boolean) {
     if (notifyEnabled) {
       this.notifyEvent(message, title)
@@ -852,7 +875,7 @@ export class OrderMethodsService {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 1000,
+      duration: 2000,
       verticalPosition: 'bottom'
     });
   }

@@ -27,6 +27,7 @@ export interface ItemPostResults {
   resultErrorDescription: string;
   menuItemWithPrice: IMenuItem
   message:           string;
+  priceCategoryID   : number;
  }
 
  export interface  InventoryResults {

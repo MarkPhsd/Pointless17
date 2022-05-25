@@ -127,6 +127,9 @@
                 >
           </mat-form-field>
       </div>
+
+      <div class="grid-item range-description fields"></div>
+
       <div *ngIf="!inventoryItem" class="grid-item">
         <mat-form-field  appearance="outline" class="select-conversion fields"  >
           <mat-label >MG THC</mat-label>
@@ -138,7 +141,6 @@
         </mat-form-field>
       </div>
 
-
       <div *ngIf="!inventoryItem" class="grid-item">
         <mat-form-field  appearance="outline" class="select-conversion fields"  >
           <mat-label >Terpenes</mat-label>
@@ -149,11 +151,12 @@
                 >
         </mat-form-field>
       </div>
-
+      
     </div>
+
     <div *ngIf="!inventoryItem" class="grid-item">
       <mat-slide-toggle
-           formControlName="childProof"
+          formControlName="childProof"
               >
       <mat-label>Child Proof</mat-label>
       </mat-slide-toggle>

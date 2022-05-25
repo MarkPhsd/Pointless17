@@ -20,7 +20,7 @@ mat-label  {
 
 .grid-container {
   display: grid;
-  grid-template-columns: .5fr 1fr 1fr ;
+  grid-template-columns: 45px 75px 75px ;
   gap: 2px;
 }
 
@@ -44,10 +44,14 @@ mat-label  {
 
 .location-assignment {
   float: left;
-  width: 100px !important;
+  width: 75px !important;
 }
 
 .select-conversion{
   // float: left;
-  width: 100px !important;
+  width: 75px !important;
 }
+
+.span-column {
+  column-span: 2;
+} 

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { IItemType } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
-import { IPriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
+import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
 
 @Component({
   selector: 'app-price-category-select',
@@ -18,9 +18,10 @@ export class PriceCategorySelectComponent implements OnInit {
   @Output() itemSelect  = new EventEmitter();
   @Input() inputForm:      FormGroup;
   @Input() priceCategoryID: number;
-  @Input() itemType    = {} as IItemType;
-  priceCategory        :   IPriceCategories;
-  priceCategoriesPaged$:   Observable<IPriceCategoryPaged>;
+  @Input() itemType     = {} as IItemType;
+  priceCategory         :   PriceCategories;
+  @Input()  isInventory : boolean;
+  priceCategoriesPaged$ :   Observable<IPriceCategoryPaged>;
 
   constructor(
                private sitesService: SitesService,

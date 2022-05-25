@@ -1,11 +1,8 @@
  <div [formGroup]="searchForm">
-
   <mat-form-field
                     appearance="outline"
                     fxFlexFill>
-
       <mat-label>Search Items</mat-label>
-
       <input
             #input
             type="text"
@@ -13,16 +10,13 @@
             matInput
             [formControlName]="formControlName"
             [matAutocomplete]="auto">
-
       <mat-autocomplete panelWidth="auto"
                         #auto="matAutocomplete"
                         (optionSelected)="onChange($event)">
-
         <mat-option *ngFor="let item of results$ | async"
                     [value]="item">
               {{item.name}}
         </mat-option>
-
       </mat-autocomplete>
   </mat-form-field>
 </div>

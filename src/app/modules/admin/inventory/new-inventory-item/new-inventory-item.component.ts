@@ -18,6 +18,7 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './new-inventory-item.component.html',
   styleUrls: ['./new-inventory-item.component.scss']
 })
+
 export class NewInventoryItemComponent implements OnInit {
 
   inputForm:                 FormGroup;
@@ -34,15 +35,15 @@ export class NewInventoryItemComponent implements OnInit {
   menuItem                   :IMenuItem;
 
   constructor(
-    private _snackBar: MatSnackBar,
-    private siteService: SitesService,
-    public  route: ActivatedRoute,
-    private fb: FormBuilder,
-    private fbInventory: FbInventoryService,
+    private _snackBar    : MatSnackBar,
+    private siteService  : SitesService,
+    public  route        : ActivatedRoute,
+    private fb           : FormBuilder,
+    private fbInventory  : FbInventoryService,
     private inventoryAssignmentService: InventoryAssignmentService,
-    private menuService: MenuService,
+    private menuService  : MenuService,
     private inventoryLocationsService: InventoryLocationsService,
-    private dialogRef: MatDialogRef<NewInventoryItemComponent>,
+    private dialogRef    : MatDialogRef<NewInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
     if (data) {
@@ -57,8 +58,8 @@ export class NewInventoryItemComponent implements OnInit {
     this.site =  this.siteService.getAssignedSite();
     this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
     this.inventoryAssignment$.pipe(
-      switchMap( data=> {
-        this.item = data
+      switchMap( data => {
+        this.item      = data
         this.inputForm = this.fbInventory.initForm(this.inputForm)
         this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
         return  this.menuService.getMenuItemByID(this.site, data.productID)
@@ -68,7 +69,7 @@ export class NewInventoryItemComponent implements OnInit {
     })
   }
 
-  async  getItem(event) {
+  getItem(event) {
     const product = event
     if (product && this.item) {
       if (product.id) {
@@ -82,9 +83,7 @@ export class NewInventoryItemComponent implements OnInit {
   }
 
   updateItem(event) {
-
     const item$ = this.updateWithoutNotification()
-
     item$.subscribe(data => {
       if (data) {
         this.notifyEvent('Inventory info updated.', 'Success')
@@ -92,7 +91,6 @@ export class NewInventoryItemComponent implements OnInit {
       }
       this.notifyEvent('Inventory info not  updated.', 'failed')
     })
-
   }
 
   updateWithoutNotification(): Observable<IInventoryAssignment> {
@@ -104,7 +102,7 @@ export class NewInventoryItemComponent implements OnInit {
     return this.inventoryAssignmentService.editInventory(this.site,this.item.id, this.item)
   }
 
-  async updateItemExit(event) {
+  updateItemExit(event) {
     const item$ = this.updateWithoutNotification()
     item$.subscribe(data => {
       if (data) {
@@ -116,15 +114,18 @@ export class NewInventoryItemComponent implements OnInit {
   deleteItem(event) {
     const result = window.confirm('Are you sure you want to delete this item?')
     if (!result) { return }
-
     const site = this.siteService.getAssignedSite();
     const delete$ = this.inventoryAssignmentService.deleteInventory(site, this.item.id)
-    delete$.subscribe(data => {
-        this.notifyEvent('Item Deleted. ', 'Success')
-        return
-      }, catchError => {
-        this.notifyEvent('Item did not delete. ', 'Failed')
-        return
+    delete$.subscribe(
+      {
+        next: data => {
+          this.notifyEvent('Item Deleted. ', 'Success')
+          return
+        },
+        error: catchError => {
+          this.notifyEvent('Item did not delete. ', 'Failed')
+          return
+        }
       }
     )
   }

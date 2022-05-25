@@ -73,7 +73,7 @@ export interface METRCPackage {
   productName:                       string;
   productCategoryName:               string;
   item:                              Item;
-  active                            : number;
+  active                            : boolean;
 }
 
 export interface Item {

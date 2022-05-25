@@ -2,17 +2,17 @@
 import { IPagedList } from "src/app/_services/system/paging.service";
 
 export interface IPriceCategoryPaged {
-  results      : IPriceCategories[]
+  results      : PriceCategories[]
   paging       : IPagedList
 }
 
-export interface IPriceCategories {
-  id:            number;
-  name:          string;
-  uid:           string;
-  recMedOption:  number;
-  productPrices: ProductPrice[];
-}
+// export interface IPriceCategories {
+//   id:            number;
+//   name:          string;
+//   uid:           string;
+//   recMedOption:  number;
+//   productPrices: ProductPrice[];
+// }
 
 export interface IPriceCategory2 {
   id:            number;
@@ -21,13 +21,67 @@ export interface IPriceCategory2 {
   recMedOption:  number;
 }
 
+// export interface ProductPrice {
+//   id:               number;
+//   priceCategoryID:  number;
+//   retail:           number;
+//   wholeSale:        number;
+//   unitTypeID:       number;
+//   unitType:         string;
+//   price1:           number;
+//   price2:           number;
+//   price3:           number;
+//   price4:           number;
+//   price5:           number;
+//   price6:           number;
+//   price7:           number;
+//   price8:           number;
+//   price9:           number;
+//   price10:          number;
+//   hideFromMenu:     number;
+//   tierPriceGroup:   number;
+//   useforInventory:  number;
+//   pizzaMultiplier:  number;
+//   unitPartRatio:    number;
+//   partMultiplyer:   number;
+//   doNotDelete:      number;
+//   pizzaSize:        number;
+//   priceType:        number;
+//   barcode:          string;
+//   itemQuantity:     number;
+//   productID:        number;
+//   timeBasedPrice:   number;
+//   uid:              string;
+//   weekDays:         string;
+//   endTime:          string;
+//   startTime:        string;
+//   webEnabled:       number;
+//   specialDatePrice: number;
+//   startDate:        string;
+//   endDate:          string;
+//   priceTiers:       PriceTiers;
+//   gramPrice:        number;
+//   eightPrice:       number;
+//   quarterPrice:     number;
+//   halfOuncePrice:   number;
+//   ouncePrice:       number;
+// }
+
+export interface PriceCategories {
+  id:            number;
+  name:          string;
+  uid:           string;
+  recMedOption:  number;
+  productPrices: ProductPrice[];
+}
+
 export interface ProductPrice {
   id:               number;
   priceCategoryID:  number;
   retail:           number;
   wholeSale:        number;
   unitTypeID:       number;
-  unitType:         string;
+  unitType:         UnitType;
   price1:           number;
   price2:           number;
   price3:           number;
@@ -39,7 +93,6 @@ export interface ProductPrice {
   price9:           number;
   price10:          number;
   hideFromMenu:     number;
-  tierPriceGroup:   number;
   useforInventory:  number;
   pizzaMultiplier:  number;
   unitPartRatio:    number;
@@ -50,6 +103,7 @@ export interface ProductPrice {
   barcode:          string;
   itemQuantity:     number;
   productID:        number;
+  tierPriceGroup:   number;
   timeBasedPrice:   number;
   uid:              string;
   weekDays:         string;
@@ -60,11 +114,11 @@ export interface ProductPrice {
   startDate:        string;
   endDate:          string;
   priceTiers:       PriceTiers;
-  gramPrice:        number;
-  eightPrice:       number;
-  quarterPrice:     number;
-  halfOuncePrice:   number;
-  ouncePrice:       number;
+  gramPrice       : number;
+  halfPrice       : number;
+  quarterPrice    : number;
+  ouncePrice      : number;
+  eightPrice      : number;
 }
 
 export interface IPriceTierPaged {

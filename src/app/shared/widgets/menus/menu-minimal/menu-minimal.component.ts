@@ -144,7 +144,8 @@ export class MenuMinimalComponent implements OnInit, OnDestroy {
     const site       = this.siteService.getAssignedSite();
 
     if (!this.user || !this.user.token) {return}
-
+    if (!this.user.roles) {return};
+    
     const menuCheck$ = this.menusService.mainMenuExists(site);
     // console.log('menu minimal init')
     menuCheck$.pipe(

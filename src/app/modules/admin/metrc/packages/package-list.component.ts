@@ -579,8 +579,8 @@ export class PackageListComponent implements OnInit {
       { data: { id: id } }
     ]
     const dialogRef = this.dialog.open(StrainsAddComponent,
-      { width:      '900px',
-        minWidth:   '900px',
+      { width:      '1000px',
+        minWidth:   '1000px',
         height:     '800px',
         minHeight:  '800px',
         data : {id: id}

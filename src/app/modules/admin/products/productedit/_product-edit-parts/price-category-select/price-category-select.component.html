@@ -4,26 +4,41 @@
 
   <div>
     <app-value-fields
+      *ngIf="!isInventory"
+      [fieldsClass]="'font-smaller'"
       [inputForm]= "inputForm"
       [fieldName]="'retail'">
       Price
     </app-value-fields>
 
-  <!-- <app-value-fields
-      [inputForm]= "inputForm"
-      [fieldName]="'wholesale'">
-    MSRP
-  </app-value-fields> -->
+    <app-value-fields
+        *ngIf="!isInventory"
+        [fieldsClass]="'font-smaller'"
+        [inputForm]= "inputForm"
+        [fieldName]="'wholesale'">
+      Cost
+    </app-value-fields>
 
-   <app-value-fields
+    <app-value-fields
+      *ngIf="isInventory"
+      [fieldsClass]="'font-smaller'"
       [inputForm]= "inputForm"
-      [fieldName]="'wholesale'">
-    Cost
-  </app-value-fields>
+      [fieldName]="'price'">
+      Price
+    </app-value-fields>
+
+    <app-value-fields
+        *ngIf="isInventory"
+        [fieldsClass]="'font-smaller'"
+        [inputForm]= "inputForm"
+        [fieldName]="'cost'">
+      Cost
+    </app-value-fields>
 
   <div class="grid-container-2col" >
     <div>
       <app-price-category-search
+          [isInventory]="isInventory"
           [id]         ="priceCategoryID"
           [inputForm]  ="inputForm"  >
       </app-price-category-search>
@@ -38,7 +53,7 @@
     </div>
   </div>
 
-  <div *ngIf="itemType && itemType.type">
+  <div *ngIf="!isInventory && itemType && itemType.type">
     <div *ngIf=" (
                itemType.type.toLowerCase() === 'retail liquor'
             || itemType.type.toLowerCase() === 'service liquor'
@@ -56,17 +71,19 @@
 
       <app-value-fields
         [inputForm]="inputForm"
+        [fieldsClass]="'font-smaller'"
         [fieldName]="'caseRetail'"
         >
         Case Price
       </app-value-fields>
       <app-value-fields
         [inputForm]="inputForm"
+        [fieldsClass]="'font-smaller'"
         [fieldName]="'caseQty'"
         >
         Case Quantity
       </app-value-fields>
-  </div>
+     </div>
   </div>
 
 </div>

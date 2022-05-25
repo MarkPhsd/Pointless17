@@ -39,6 +39,7 @@ export interface ProductSearchModel {
   web                       : boolean;
   exactNameMatch            : boolean;
   sku                       : string;
+  itemTypeIDList            : number[];
 }
 
 

@@ -128,6 +128,10 @@ export class StrainProductEditComponent implements OnInit {
   async  updateItem(event): Promise<boolean> {
     const site = this.siteService.getAssignedSite()
     if (this.setValues())  {
+
+      if (this.product.webProduct) { this.product.webProduct = -1     }
+      if (!this.product.webProduct) {  this.product.webProduct = 0    }
+
       const product$ = this.menuService.saveProduct(site, this.product);
       product$.pipe(switchMap(
           data => {

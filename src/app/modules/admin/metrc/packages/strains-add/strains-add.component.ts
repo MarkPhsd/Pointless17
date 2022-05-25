@@ -1,4 +1,4 @@
-import { Component,  Inject,   OnInit,} from '@angular/core';
+import { Component,  Inject,   Input,   OnInit,} from '@angular/core';
 import { ActivatedRoute,  } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormControl} from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +12,7 @@ import { MetrcPackagesService } from 'src/app/_services/metrc/metrc-packages.ser
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ConversionsService, IUnitConversion } from 'src/app/_services/measurement/conversions.service';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 
 @Component({
   selector: 'app-strains-add',
@@ -25,10 +26,10 @@ export class StrainsAddComponent implements OnInit {
   facilityLicenseNumber:  string;
 
   get f():                FormGroup  { return this.packageForm as FormGroup};
-
   get hasImportedControl(){ return this.packageForm.get("hasImported") as FormControl;}
   get activeControl()     { return this.packageForm.get("active") as FormControl;}
 
+  priceForm     :         FormGroup;
   packageForm:            FormGroup;
   bucketName:             string;
   awsBucketURL:           string;
@@ -40,12 +41,15 @@ export class StrainsAddComponent implements OnInit {
   facility = {} as        IItemFacilitiyBasic
   site:                   ISite;
   menuItem:               any ;
+ 
 
   //remove
-  intakeConversion        = {}  as IUnitConversion;
+  intakeConversion         = {}  as IUnitConversion;
   intakeconversionQuantity : number;  // this.intakeConversion.value * this.package.quantity
   baseUnitsRemaining       : number; //= this.intakeconversionQuantity
   initialQuantity          : number; // this.intakeconversionQuantity
+
+  filter : ProductSearchModel;
 
   constructor(
           private conversionService: ConversionsService,
@@ -73,18 +77,44 @@ export class StrainsAddComponent implements OnInit {
    }
 
   async ngOnInit() {
-    try {
-      const site = this.siteService.getAssignedSite();
-      this.package = await this.metrcPackagesService.getPackagesByID(this.id, site).pipe().toPromise();
-      if (this.package) {
-        this.bucketName   =  await this.awsBucket.awsBucket();
-        this.awsBucketURL =  await this.awsBucket.awsBucketURL();
-        this.site         =  this.siteService.getAssignedSite();
-        this.initForm();
-      }
-    } catch (error) {
-      console.log(error)
-    }
+
+      this.initProductSearchModel();
+      
+      const site        = this.siteService.getAssignedSite();
+
+      const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
+      this.bucketName   =  await this.awsBucket.awsBucket();
+      this.awsBucketURL =  await this.awsBucket.awsBucketURL();
+
+      item$.subscribe(
+        {
+          next: data => { 
+            this.package = data;
+            if (this.package) {
+              this.site         =  this.siteService.getAssignedSite();
+              this.assignMenItem(+this.package.productID)
+              this.initForm();
+              this.initPriceForm();
+            }
+         },
+          error: err => { 
+            console.log('error', err)
+          }
+        }
+      )
+  }
+
+  initProductSearchModel() { 
+    const model = {} as ProductSearchModel;
+    const list  = []
+    list.push(30)
+    list.push(36)
+    list.push(37)
+    list.push(38)
+    list.push(44)
+    list.push(45)
+    this.filter = model;
+    this.filter.itemTypeIDList = list;
   }
 
   updateItem(event) {
@@ -96,18 +126,28 @@ export class StrainsAddComponent implements OnInit {
   }
 
   update(event) {
-    if (!this.package) { return }
+    if (!this.package) { 
+      this.notifyEvent('Item not saved, package is null.', 'Failure')
+      return 
+    }
+    let metrcPackage = this.packageForm.value as METRCPackage;
+
     const site = this.siteService.getAssignedSite();
-    const package$ =this.metrcPackagesService.putPackage(site,this.id, this.package)
 
-    if (this.hasImportedControl) { this.package.inventoryImported = this.hasImportedControl.value }
-    if (this.activeControl)      { this.package.active = this.activeControl.value }
+    if (this.hasImportedControl) { 
+      //  package.inventoryImported = this.hasImportedControl.value as boolean;
+      if (this.hasImportedControl.value)  {   metrcPackage.inventoryImported = true  }
+      if (!this.hasImportedControl.value) {   metrcPackage.inventoryImported = false  }
+    }
+    if (this.activeControl) {
+      if (this.activeControl.value) {   metrcPackage.active = true  }
+      if (!this.activeControl.value) {  metrcPackage.active = false  }
+    }
 
-    package$.subscribe(data => {
+    const package$       = this.metrcPackagesService.putPackage(site, this.id, metrcPackage)
+    package$.subscribe( data => {
       this.notifyEvent('Item saved', 'Success')
-      if (event) {
-        this.onCancel(null)
-      }
+      if (event) { this.onCancel(null) }
     })
   }
 
@@ -116,14 +156,13 @@ export class StrainsAddComponent implements OnInit {
     if (!alert) {return}
     const site     = this.siteService.getAssignedSite();
     const package$ = this.metrcPackagesService.deletePackage(site,this.id)
-    package$.subscribe(data => {
+    package$.subscribe( data => {
       this.notifyEvent('Item deleted', 'Success')
       this.onCancel(null)
     })
   }
 
   closePackage(event) {
-    console.log('close package', event)
     if (event) {
       const data = { completed: true}
       this.dialogRef.close(data)
@@ -147,26 +186,36 @@ export class StrainsAddComponent implements OnInit {
     const itemStrain = event
     if (itemStrain) {
       if (itemStrain.id) {
-        this.menuService.getMenuItemByID(this.site, itemStrain.id).subscribe(data => {
-          if (data){
-            this.menuItem = data
-            this.packageForm.patchValue({
-              productName: [data.name],
-              productID  : [data.id],
-            })
-            return;
-          }
-          this.setProductNameEmpty(this.packageForm)
-        }
-        )
+        const id = itemStrain.id
+        this.assignMenItem(id)
       }
     }
   }
 
+  assignMenItem(id: number) { 
+    if (id == 0) { return}
+    this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
+      if (data) {
+        this.menuItem = data
+        console.log( 'results', this.menuItem, this.packageForm.value)
+        const item = {productName: data.name, productID: data.id}
+        this.packageForm.patchValue(item)
+        return;
+      }
+      this.setProductNameEmpty(this.packageForm)
+    })
+  }
+
   setProductNameEmpty(inputForm: FormGroup) {
-    inputForm.patchValue({
-      productName: [''],
-      productID:  ['']
+    const item = {productName: '', productID: 0}
+    inputForm.patchValue(item)
+  }
+
+  initPriceForm(){ 
+    this.priceForm = this.fb.group({
+      cost           : [0],
+      price          : [0],
+      priceCategoryID: [0],
     })
   }
 
@@ -189,45 +238,51 @@ export class StrainsAddComponent implements OnInit {
       try {
         this.package = data
         this.package.labTestingState =          this.package.labTestingState.match(/[A-Z][a-z]+|[0-9]+/g).join(" ")
-        this.facility = {} as                   IItemFacilitiyBasic
-        this.facility.displayName =             this.package.itemFromFacilityName
-        this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber
+        this.facility = {} as                   IItemFacilitiyBasic;
+        this.facility.displayName =             this.package.itemFromFacilityName;
+        this.facility.metrcLicense =            this.package.itemFromFacilityLicenseNumber;
 
         if (this.package.unitOfMeasureName) {
-          this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName)
+          this.intakeConversion = this.conversionService.getConversionItemByName(this.package.unitOfMeasureName);
           //convert the package quantity to the grams quantity
-          if (!this.intakeConversion.value) {this.intakeConversion.value = 1}
+          if (!this.intakeConversion.value) {this.intakeConversion.value = 1};
           if (this.intakeConversion) {
-            this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity
+            this.intakeconversionQuantity = this.intakeConversion.value * this.package.quantity;
           } else {
-            this.notifyEvent('Intake conversion not initialized', 'Alert')
+            this.notifyEvent('Intake conversion not initialized', 'Alert');
           }
-          this.baseUnitsRemaining = this.intakeconversionQuantity
-          this.initialQuantity    = this.intakeconversionQuantity
+          this.baseUnitsRemaining = this.intakeconversionQuantity;
+          this.initialQuantity    = this.intakeconversionQuantity;
         }
 
-        this.packageForm.patchValue(data)
+        this.packageForm.patchValue(data);
         this.setProductNameEmpty(this.packageForm);
 
-        let active = true
-        if (this.package.active != 0)  { active = false; }
+        let active = true;
+        if (!this.package.active)  { active = false };
 
         // this can use to assign the item to the form.
         const facility = `${data.itemFromFacilityLicenseNumber}-${data.itemFromFacilityName}`
 
         this.packageForm.patchValue({
-            productCategoryName:              [data.item.productCategoryName],
-            productCategoryType:              [data.item.productCategoryType],
-            quantityType:                     [data.item.quantityType],
-            productname                    :  [''],
-            inputQuantity:                    [0],
-            inventoryLocationID:              [0],
-            cost:                             [0],
-            price:                            [0],
-            jointWeight:                      [1],
-            facilityLicenseNumber:            [facility],
-            active                      :     [active],
+            productCategoryName:              data.item.productCategoryName,
+            productCategoryType:              data.item.productCategoryType,
+            quantityType:                     data.item.quantityType,
+            productname                    :  0,
+            inputQuantity:                    0,
+            inventoryLocationID:              0,
+            priceCategoryID                :  0,
+            cost:                             0,
+            price:                            0,
+            jointWeight:                      1,
+            facilityLicenseNumber:            facility,
+            active                      :     active,
         })
+
+        const item = {productName :     data.productName,
+                      productID   :     data.productID,}
+        this.packageForm.patchValue(item);
+
       } catch (error) {
         console.log(error)
       }
@@ -262,7 +317,7 @@ export class StrainsAddComponent implements OnInit {
   getValue(item: string): number {
     try {
       const f = this.f
-      if (f.get(item).value === undefined || f.get(item).value === null) { return 0} else {
+      if (f.get(item).value === undefined || f.get(item).value === null) { return 0 } else {
         return  f.get(item).value
       }
     } catch (error) {

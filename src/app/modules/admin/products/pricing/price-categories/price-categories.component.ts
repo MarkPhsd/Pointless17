@@ -1,4 +1,4 @@
-import { Component,  Inject,  Input, Output, OnInit, Optional,
+import { Component, Output, OnInit, 
   ViewChild ,ElementRef, AfterViewInit, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { IPriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
+import { PriceCategories, IPriceCategoryPaged } from 'src/app/_interfaces/menu/price-categories';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
@@ -37,7 +37,7 @@ export class PriceCategoriesComponent implements OnInit, AfterViewInit {
   priceCategoryid: number;
   productPriceID : number;
   //search with debounce
-  priceCategories$              : Subject<IPriceCategories[]> = new Subject();
+  priceCategories$              : Subject<PriceCategories[]> = new Subject();
   _priceCategories$ = this.searchPhrase.pipe(
     debounceTime(250),
     distinctUntilChanged(),
@@ -46,7 +46,7 @@ export class PriceCategoriesComponent implements OnInit, AfterViewInit {
     )
   )
 
-  priceCategory: IPriceCategories;
+  priceCategory: PriceCategories;
 
   get PaginationPageSize(): number {
     return this.pageSize;
@@ -171,7 +171,7 @@ export class PriceCategoriesComponent implements OnInit, AfterViewInit {
     addCategory() {
       //add then edit.
       const site   = this.siteService.getAssignedSite();
-      const price  = {} as IPriceCategories
+      const price  = {} as PriceCategories
       const price$ = this.priceCategoryService.save(site, price)
       price$.subscribe( data => {
         this.productEditButtonService.openPriceEditor(data)

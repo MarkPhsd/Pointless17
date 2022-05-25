@@ -39,7 +39,7 @@
             <metrc-inventory-properties
                   [inputForm]     ="packageForm"
                   [package]       ="package"
-                  (outputMenuItem)="getSelectedMenuItem($event)"
+                  (outputMenuItem)="getCatalogItem($event)"
                   (outputVendor)  ="getVendor($event)"
                   >
             </metrc-inventory-properties>
@@ -102,7 +102,6 @@
                               formControlName="conversionName"
                               (selectionChange)="getAvailableUnits($event.value)"
                               >
-
                     <div *ngIf="(conversions) as list" >
                       <mat-option *ngFor="let item of list" [value]="item.name">
                         {{item.name}} ({{item.value}})
@@ -157,7 +156,7 @@
                   </mat-form-field>
                 </div>
               </div>
-
+           
               <br>
 
               <div class="button-assign" *ngIf="baseUnitsRemaining != 0">
@@ -198,11 +197,12 @@
             <mat-card class="package-list" >
               <div *ngFor="let item of inventoryAssigments ;let i = index">
                 <app-metrc-individual-package
-                                            (outputEditAssignment)  ="editAssignment($event)"
-                                            (outputdeleteAssignment)="deleteAssignment($event)"
-                                            [item]                  ="item"
-                                            [i]                     ="i"
-                                            >
+                        
+                        (outputEditAssignment)  ="editAssignment($event)"
+                        (outputdeleteAssignment)="deleteAssignment($event)"
+                        [item]                  ="item"
+                        [i]                     ="i"
+                      >
                 </app-metrc-individual-package>
 
               </div>

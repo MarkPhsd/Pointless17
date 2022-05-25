@@ -1,22 +1,13 @@
 <div *ngIf="inputForm && package"
      [formGroup]="inputForm">
 
-    <!-- <div>
-      <app-product-search-selector
-        [doNotPassName]     = 'true'
-        [metrcCategoryName] = "package.productCategoryName"
-        [searchForm]        = "inputForm"
-        (itemSelect)        = "getCatalogItem($event)">
-      </app-product-search-selector>
-    </div> -->
-
-    <!-- [metrcCategoryName] = "package.productCategoryName" -->
     <div class="grid-item">
       <app-product-search-selector
-                [formControlName]   ="'productName'"
-                [searchForm]        ="inputForm"
+                [formControlName]   = "'productName'"
+                [searchForm]        = "inputForm"
                 [doNotPassName]     = 'true'
-                (itemSelect)        ="getCatalogItem($event)">
+                [filter]            = 'filter'
+                (itemSelect)        = "getCatalogItem($event)">
         <div fieldDescription>
         <mat-icon>search</mat-icon>
           Search

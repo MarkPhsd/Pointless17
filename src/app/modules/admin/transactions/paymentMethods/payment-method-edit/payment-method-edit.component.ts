@@ -8,6 +8,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { tap } from 'rxjs/operators';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { update } from 'lodash';
+import { EMPTY, Observable } from 'rxjs';
 
 @Component({
   selector: 'app-payment-method-edit',
@@ -81,31 +83,37 @@ export class PaymentMethodEditComponent  implements OnInit {
       this.inputForm  = this.paymentMethodService.initForm(this.inputForm)
     }
 
-    async updateItem(event): Promise<boolean> {
-      let result: boolean;
-
-      return new Promise(resolve => {
-         if (this.inputForm.valid) {
+    updateItem(event): Observable<IPaymentMethod> {
+        if (this.inputForm.valid) {
           const site = this.siteService.getAssignedSite()
-          const item$ = this.paymentMethodService.saveItem(site, this.inputForm.value)
-          item$.subscribe( data => {
-            this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'bottom'})
-            resolve(true)
-          }, error => {
-            this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'bottom'})
-            resolve(false)
-          })
-         }
+          return this.paymentMethodService.saveItem(site, this.inputForm.value)
         }
-      )
-
+        return EMPTY;
     };
 
-    async updateItemExit(event) {
-      const result = await this.updateItem(event)
-      if (result) {
-        this.onCancel(event);
-      }
+    update(item$: Observable<IPaymentMethod>, close: boolean){ 
+      item$.subscribe( 
+        {
+          next: data => {
+          this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'bottom'})
+          if (close) { 
+            this.onCancel(true)
+          }
+        }, error: error => {
+          this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'bottom'})
+        }
+        }
+      )
+    }
+
+    save(event) { 
+      const item$ = this.updateItem(event);
+      this.update(item$, false)
+    }
+
+    updateItemExit(event) {
+      const item$ = this.updateItem(event);
+      this.update(item$, true)
     }
 
     onCancel(event) {

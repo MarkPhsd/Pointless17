@@ -161,30 +161,45 @@ export class UserSwitchingService {
 
   login(username: string, password: string): Observable<any> {
     const apiUrl =  this.appInitService.apiBaseUrl()
+
     let url = `${apiUrl}/users/authenticate`
+
     this.clearSubscriptions();
     this.authenticationService.clearUserSettings();
     const userLogin = { username, password };
     const timeOut    = 3 * 1000;
+
     return  this.http.post<any>(url, userLogin)
       .pipe(
-        switchMap( user => {
-        if (user) {
-          if (user.message.toLowerCase() === 'failed') {
+        switchMap(
+           user => {
+        
+          console.log(user)
+          if (user) {
+
+            if (user.message.toLowerCase() === 'failed') {
+              const user = {message: 'failed'}
+              return of(user)
+            }
+
+            user.message = 'success'
+
+            const currentUser = this.setUserInfo(user, password)
+
+            if ( this.platformService.isApp()  )  { return this.changeUser(user) }
+            if ( !this.platformService.isApp() )  { return of(user)              }
+
+          } else {
             const user = {message: 'failed'}
             return of(user)
           }
-          user.message = 'success'
-          const currentUser = this.setUserInfo(user, password)
-          if ( this.platformService.isApp()  )  { return this.changeUser(user) }
-          if ( !this.platformService.isApp() )  { return of(user)              }
-        } else {
-          const user = {message: 'failed'}
-          return of(user)
-        }
       })
     )
   }
+
+
+
+  // getAuthorization()
 
   setUserInfo(user: IUser, password) {
     const currentUser = {} as IUser;

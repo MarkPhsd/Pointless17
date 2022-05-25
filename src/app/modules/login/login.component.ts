@@ -321,9 +321,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // setTimeout(this.startProcessing,100)
  
     if (!this.validateForm(this.loginForm)) { return }
+
     this.spinnerLoading = true;
     const userName = this.f.username.value;
     const password = this.f.password.value;
@@ -332,23 +332,19 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
        next: user =>
         {
-         
+          console.log('user', user)
           if (user) {
             this.spinnerLoading = false;
             if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
-              // this.updateLoginStatus(1)
               this.authenticationService.updateUser(null);
               return
             }
 
             if (this.platformService.isApp()) {  if (this.loginApp(user)) { return } }
 
-           
-
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)
-              // this.updateLoginStatus(6) //clearn login settings
               return
             }
 
@@ -356,9 +352,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         },
        error: error => {
           this.updateLoginStatus(6)
-          const message = `Login failed. ${error.message}. Service is not accesible. Check Internet.`
+          const message = `Login failed. ${error.errorMessage}. Service is not accesible. Check Internet.`
           this.statusMessage = message
-          // this.spinnerLoading = false;
           this.notifyEvent(message, 'error')
           return
         }

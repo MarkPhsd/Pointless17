@@ -33,7 +33,6 @@ export class EditSelectedItemsComponent implements OnInit {
       public fb: FormBuilder,
       private snack: MatSnackBar,
       private siteService: SitesService,
-      private fbProductsService: FbProductsService,
       private dialogRef: MatDialogRef<ProducteditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     )
@@ -129,8 +128,6 @@ export class EditSelectedItemsComponent implements OnInit {
   }
 
 }
-
-
 
 // updateActive(id: number, listOfItems: any) {
 //   const site   =  this.siteService.getAssignedSite();

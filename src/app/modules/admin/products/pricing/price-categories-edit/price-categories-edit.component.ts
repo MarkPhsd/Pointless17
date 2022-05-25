@@ -5,7 +5,7 @@ import { IItemBasic } from 'src/app/_services';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IPriceCategories, IPriceCategory2,
+import { PriceCategories, IPriceCategory2,
           IUnitTypePaged,
           PriceTiers,
           ProductPrice, ProductPrice2, UnitType } from 'src/app/_interfaces/menu/price-categories';
@@ -13,7 +13,6 @@ import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.
 import { FbPriceCategoriesService } from 'src/app/_form-builder/fb-price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { PriceCategoryItemService } from 'src/app/_services/menu/price-category-item.service';
-import { PriceCategories } from 'src/app/_interfaces/menu/menu-products';
 import { SearchModel } from 'src/app/_services/system/paging.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
@@ -26,8 +25,8 @@ import { TransactionUISettings,UISettingsService } from 'src/app/_services/syste
 })
 export class PriceCategoriesEditComponent implements OnInit {
 
-  @Input() priceCategory  : IPriceCategories;
-  inputForm               : FormGroup;
+  @Input() priceCategory  :  PriceCategories;
+  inputForm               :  FormGroup;
   showMore                :  boolean;
   showTime                :  boolean;
   showWeightPrices        :  boolean;
@@ -62,7 +61,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     private uiSettingsService       : UISettingsService,
     private dialogRef               : MatDialogRef<PriceCategoriesEditComponent>,
     private unitTypeService: UnitTypesService,
-    @Inject(MAT_DIALOG_DATA) public data: IPriceCategories
+    @Inject(MAT_DIALOG_DATA) public data: PriceCategories
     )
   {
     if (data) {
@@ -107,7 +106,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     }
   }
 
-  refreshData_Sub(priceCategory: IPriceCategories) {
+  refreshData_Sub(priceCategory: PriceCategories) {
     if (priceCategory) {
       this.priceCategory = priceCategory;
       this.inputForm = this.fbPriceCategory.initForm(this.inputForm);

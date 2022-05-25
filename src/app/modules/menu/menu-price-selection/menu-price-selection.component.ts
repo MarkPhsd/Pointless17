@@ -2,13 +2,11 @@ import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription,Observable, of, scheduled } from 'rxjs';
-import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
-import { IMenuItem, ProductPrice } from 'src/app/_interfaces/menu/menu-products';
-import { IItemBasic, OrdersService } from 'src/app/_services';
+import { Subscription,Observable, of } from 'rxjs';
+import { IPOSOrder,  ProductPrice } from 'src/app/_interfaces';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-import { ItemWithAction, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
   selector: 'app-menu-price-selection',
@@ -23,7 +21,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
   private id        : string;
 
   list$                   : Observable<ProductPrice[]>;
-  list                   : ProductPrice[];
+  list                    : ProductPrice[];
   productPrice            : ProductPrice;
 
   constructor(
@@ -57,7 +55,6 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
     //item is productPrice
     if (item) {
       const site = this.siteService.getAssignedSite();
-
     }
   }
 
@@ -76,7 +73,6 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
       this.orderService.updateOrderSubscription(order)
     }
   }
-
 
   notifyEvent(message: string, title: string) {
     this.matSnackBar.open(message, title,{
