@@ -5,7 +5,6 @@ import { IUser }  from 'src/app/_interfaces';
 import { fadeInAnimation } from './_animations';
 import { FormControl } from '@angular/forms';
 import { Platform, IonRouterOutlet, ToastController } from '@ionic/angular';
-
 import { LicenseManager} from "ag-grid-enterprise";
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Subscription } from 'rxjs';
@@ -32,12 +31,16 @@ export class AppComponent {
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
 
   initSubscription() {
-    if (this.authenticationService.userValue) {
-      this.user = this.authenticationService.userValue;
+    try {
+      if (this.authenticationService.userValue) {
+        this.user = this.authenticationService.userValue;
+      }
+      this._user = this.authenticationService.user$.subscribe( data => {
+        this.user  = data
+      })
+    } catch (error) {
+      
     }
-    this._user = this.authenticationService.user$.subscribe( data => {
-      this.user  = data
-    })
   }
 
   constructor(
@@ -46,12 +49,13 @@ export class AppComponent {
       private titleService          :Title,
       private authenticationService: AuthenticationService,
       private statusBar:             StatusBar,
-      private toastController:       ToastController,
+
       private awsService:            AWSBucketService,
       private electronService      :  ElectronService,
       // private ipcService          :  IPCService,
 
   ) {
+
       this.initSubscription();
       this.initializeApp();
       this.backButtonEvent();
@@ -102,9 +106,13 @@ export class AppComponent {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
-      this.statusBar.styleLightContent();
-    });
+    try {
+      this.platform.ready().then(() => {
+        this.statusBar.styleLightContent();
+      });
+    } catch (error) {
+      
+    }
   }
 
   logout() {
@@ -121,14 +129,13 @@ export class AppComponent {
           if (new Date().getTime() - this.lastTimeBackPress < this.timePeriodToExit) {
             // this.platform.exitApp(); // Exit from app
             navigator['app'].exitApp(); // work in ionic 4
-
           } else {
-            const toast = await this.toastController.create({
-              message: 'Press back again to exit App.',
-              duration: 2000,
-              position: 'middle'
-            });
-            toast.present();
+            // const toast = await this.toastController.create({
+            //   message: 'Press back again to exit App.',
+            //   duration: 2000,
+            //   position: 'middle'
+            // });
+            // toast.present();
             this.lastTimeBackPress = new Date().getTime();
           }
         }

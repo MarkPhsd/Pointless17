@@ -34,8 +34,7 @@ export class PromptSubGroupsComponent implements OnInit, AfterViewInit {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
-  searchModel: MenuPromptSearchModel;
-
+  searchModel : MenuPromptSearchModel;
   searchPhrase:         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -138,14 +137,12 @@ async initForm() {
 
 ngAfterViewInit() {
   if (this.input) {
-    console.log('ngAfterViewInit refreshInputHook')
     fromEvent(this.input.nativeElement,'keyup')
     .pipe(
       filter(Boolean),
       debounceTime(500),
       distinctUntilChanged(),
       tap((event:KeyboardEvent) => {
-        console.log('ngAfterViewInit', this.input.nativeElement.value)
         const search  = this.input.nativeElement.value
         this.refreshSearch();
       })
@@ -227,15 +224,15 @@ initAgGrid(pageSize: number) {
         flex    : 1,
     },
 
-  ]
-  this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
-}
+    ]
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
+  }
 
-listAll(){
-  const control = this.itemName
-  control.setValue('')
-  this.refreshSearch()
-}
+  listAll(){
+    const control = this.itemName
+    control.setValue('')
+    this.refreshSearch()
+  }
 
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
@@ -275,7 +272,8 @@ listAll(){
     return {
     getRows: (params: IGetRowsParams) => {
       const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
+      items$.subscribe(
+        {next: data =>
         {
             const resp              = data.paging
             this.isfirstpage        = resp.isFirstPage
@@ -288,9 +286,11 @@ listAll(){
             }
             params.successCallback(data.results)
             this.rowData = data.results
-          }, err => {
+          },
+          error: err => {
             console.log(err)
           }
+        }
       );
       }
     };
@@ -452,48 +452,53 @@ listAll(){
   }
 
   editProductFromGrid(e) {
-    console.log(e)
     if (e.rowData.id)  {
       this.editItemWithId(e.rowData.id);
-      console.log(e.rowData)
     }
   }
 
- async assignItems(e) {
-    console.log(e)
+  assignItems(e) {
     if (e.rowData.id)  {
-      const id    = e.rowData.id;
-      const site  = this.siteService.getAssignedSite();
-      const group = await this.promptService.getPromptSub(site, id).pipe().toPromise();
-      this.promptService.updatePromptSubGroup(group)
-      this.router.navigate(["/prompt-item-selection/", {id: id}]);
+      const id     =  e.rowData.id;
+      const site   =  this.siteService.getAssignedSite();
+      const group$ =  this.promptService.getPromptSub(site, id)
+      group$.subscribe(group => {
+        this.promptService.updatePromptSubGroup(group)
+        this.router.navigate(["/prompt-item-selection/", {id: id}]);
+      })
     }
   }
 
   editItemWithId(id:any) {
-    if(!id) {
-      console.log(id)
-      return
-    }
-    console.log(id)
-    this.productEditButtonService.openPromptSubEditor(id);
+    if(!id) { return }
+    const dialogRef = this.productEditButtonService.openPromptSubEditor(id);
+
+    dialogRef.afterClosed().subscribe(result=>{
+      this.refreshSearch()
+    })
   }
 
   editProduct(e){
-    console.log(e.row.data)
-    this.productEditButtonService.openPromptSubEditor(e.id)
+    const dialogRef = this.productEditButtonService.openPromptSubEditor(e.id)
+    dialogRef.afterClosed().subscribe(result=>{
+      this.refreshSearch()
+    })
   }
 
   onSortByNameAndPrice(sort: string) { }
 
   addNew()  {
-    this.productEditButtonService.openPromptSubEditor(0)
+    const dialogRef = this.productEditButtonService.openPromptSubEditor(0)
+
+    dialogRef.afterClosed().subscribe(result=>{
+      this.refreshSearch()
+    })
   }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-    duration: 2000,
-    verticalPosition: 'top'
+      duration: 2000,
+      verticalPosition: 'top'
     });
   }
 

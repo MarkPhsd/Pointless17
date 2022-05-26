@@ -9,7 +9,7 @@
   <mat-card-content>
     <div class="grid-items">
       <div *ngIf="orderItem">
-    
+
         <div >
           <span *ngIf="!isModifier  && !prepScreen">
             {{index+1}}:
@@ -22,20 +22,44 @@
             ( {{orderItem?.itemType?.name}} )
           </span>
           <span  *ngIf="quantity && !prepScreen">
-            {{ quantity }}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+            {{ quantity }} {{orderItem.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
           </span>
           <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode && !prepScreen">
-            {{ orderItem.serialCode }}
+            SN#/({{ orderItem.serialCode }})
           </span>
 
-          <span  *ngIf="( mainPanel || wideBar )
+          <span class="notes"  *ngIf="( mainPanel || wideBar )
                         && orderItem
                         && orderItem.modifierNote
                         && (orderItem.modifierNote != orderItem.serialCode)
                         && orderItem.modifierNote != ''">
-            {{ orderItem.modifierNote }}
+            {{ orderItem.modifierNote }} |
           </span>
-          
+
+          <span class="discount-description" *ngIf="orderItem.itemCashDiscount>0">
+            Cash Savings $ {{orderItem.itemCashDiscount}},
+          </span>
+         <span class="discount-description"  *ngIf="orderItem.itemOrderCashDiscount>0">
+            Cash Savings $ {{orderItem.itemOrderCashDiscount}},
+          </span>
+          <span class="discount-description"  *ngIf="orderItem.itemPercentageDiscountValue>0">
+            % Off Savings $ {{orderItem.itemPercentageDiscountValue}},
+          </span>
+          <span class="discount-description"  *ngIf="orderItem.itemOrderPercentageDiscount>0">
+            % Off Savings $ {{orderItem.itemOrderPercentageDiscount}},
+          </span>
+          <!-- itemCashDiscount:              number;
+          itemOrderCashDiscount:         number;
+          itemOrderPercentageDiscount:   number;
+          itemLoyaltyPointCount:         number;
+          itemLoyaltyPointDiscount:      number;
+          itemPercentageDiscountValue:   number;
+          itemOrderPercentageDiscountID: number;
+          itemOrderCashDiscountID:       number;
+          itemCashDiscountID:            number;
+          itemPercentageDiscountValueID: number;
+          itemLoyaltyPointDiscountID:    number; -->
+
           <span class='status-icon' *ngIf="orderItem.printed && prepScreen && !isModifier">
             <mat-icon color="warn" *ngIf="orderItem.printed && !prepScreen" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>

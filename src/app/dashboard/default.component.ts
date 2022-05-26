@@ -12,6 +12,7 @@ import { AuthenticationService, IDepartmentList, ThemesService } from '../_servi
 import { IUser } from '../_interfaces';
 import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 import { isDevMode } from '@angular/core';
+
 @Component({
   selector: 'app-default',
   templateUrl: './default.component.html',
@@ -207,11 +208,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   constructor(
                private toolBarUIService: ToolBarUIService,
                private _renderer       : Renderer2,
-               private router          : Router,
                private cd              : ChangeDetectorRef,
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
-               public toolbarUIService        : ToolBarUIService,
+               public toolbarUIService         : ToolBarUIService,
                private uiSettingsService       : UISettingsService,
               //  private themesService           : ThemesService,
                ) {
@@ -232,7 +232,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.uiSettingsService.getSetting('UIHomePageSettings').subscribe(
       { next: data => {
           const ui = {} as UIHomePageSettings
-          if (data.text) {
+          if (data && data.text) {
             const ui = JSON.parse(data.text)
             this.uiSettingsService.updateHomePageSetting(ui);
             this.initUI();
@@ -240,6 +240,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           }
       },
         error : err => {
+          this.initUI();
           console.log('error', err)
       }
     })

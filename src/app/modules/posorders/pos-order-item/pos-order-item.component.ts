@@ -238,10 +238,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
 
     this.menuService.getMenuItemByID(site, this.orderItem.productID).subscribe(data => {
         this.menuItem = data;
+        if (!this.menuItem.itemType) {
+          this.notifyEvent('Item type not defined', 'Alert')
+          return;
+        }
+        const requireWholeNumber = this.menuItem.itemType.requireWholeNumber
         console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
+                      requireWholeNumber: requireWholeNumber,
                       instructions: instructions}
 
         //a little formating
@@ -381,7 +387,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
       this.customcard ='custom-card-side';
     }
   }
-  
+
   openDialog() {
     const item = this.orderItem
     const data = { id: item.productID }
@@ -454,10 +460,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
     if (this.orderItem) {
       const item$ =  this.posOrderItemService.getPurchaseOrderItem(site, this.orderItem.id)
       item$.pipe(
-        switchMap(poitem => { 
+        switchMap(poitem => {
           item = poitem;
           return this.promptGroupservice.getPrompt(site, item.promptGroupID)
-        })).subscribe( prompt =>{ 
+        })).subscribe( prompt =>{
           this.orderMethodsService.openPromptWalkThroughWithItem(prompt, item)
       })
     }

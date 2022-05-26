@@ -143,6 +143,7 @@ export class ProductEditButtonService {
         data : id
       },
     )
+    return dialogRef
   }
 
   openPriceEditor(data: PriceCategories) {

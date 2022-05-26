@@ -24,12 +24,13 @@
       <div *ngIf="menuItem && editField === 'quantity'">
         <app-key-pad
                 [inputForm]           = "inputForm"
-                [inputTypeValue]      = "'number'"
+                [inputTypeValue]      = "inputTypeValue"
                 [decimals]            = decimals
                 [showInput]           = "true"
                 [requireWholeNumber]  = "menuItem.itemType?.requireWholeNumber"
-                (outPutReturnEnter)   = "saveChange($event)">
-                Enter Quantity
+                (outPutReturnEnter)   = "saveChange($event)"
+                (closeOnEnterPress)   = "onClose($event)">
+          Enter Quantity
         </app-key-pad>
       </div>
 

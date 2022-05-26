@@ -18,7 +18,7 @@
            <mat-label>Display Notes</mat-label>
          </mat-slide-toggle>
         </div>
-       
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="displayQuantity"
@@ -27,7 +27,7 @@
           </mat-slide-toggle>
         </div>
 
-        
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="displayAdd"
@@ -52,7 +52,7 @@
           </mat-slide-toggle>
         </div>
 
-        
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="validateCustomerLicenseID"
@@ -77,7 +77,7 @@
           </mat-slide-toggle>
         </div>
 
-        
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="enableLimitsView"
@@ -101,7 +101,15 @@
             <mat-label>Allow sales of inventoried items only</mat-label>
           </mat-slide-toggle>
         </div>
- 
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="applyTaxChangesToDiscountedItems"
+                    >
+            <mat-label>Update tax on Discounted Items</mat-label>
+          </mat-slide-toggle>
+        </div>
+
         <div class="client-selector">
           <app-client-types-lookup
                 [formControlName]="'defaultClientTypeID'"
@@ -109,7 +117,7 @@
             Default client Type
           </app-client-types-lookup>
         </div>
-        
+
       </div>
       <div>
         <button mat-raised-button

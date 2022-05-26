@@ -1,7 +1,7 @@
 import { Component, Inject, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
-import { FormBuilder, FormGroup,} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
 import { ActivatedRoute,  } from '@angular/router';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { Observable,  } from 'rxjs';
@@ -56,7 +56,7 @@ export class ItemTypeEditorComponent   {
       private fb: FormBuilder,
       private fbItemTypeService: FbItemTypeService,
       private itemTypeService: ItemTypeService,
-      public route: ActivatedRoute,
+      public  route: ActivatedRoute,
       private _snackBar: MatSnackBar,
       private settingService: SettingsService,
       private siteService: SitesService,
@@ -111,7 +111,6 @@ export class ItemTypeEditorComponent   {
   };
 
   initFormData(itemType: IItemType) {
-
     this.itemType = itemType;
     if (this.itemType) {
       try {
@@ -129,10 +128,19 @@ export class ItemTypeEditorComponent   {
       } catch (error) {
         console.log(error)
       }
-
     }
   }
 
+  validateAllFormFields(formGroup: FormGroup) {         //{1}
+    Object.keys(formGroup.controls).forEach(field => {  //{2}
+      const control = formGroup.get(field);             //{3}
+      if (control instanceof FormControl) {             //{4}
+        control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {        //{5}
+        this.validateAllFormFields(control);            //{6}
+      }
+    });
+  }
 
   initFormFields(): FormGroup {
     this.inputForm  = this.fbItemTypeService.initForm(this.inputForm);
@@ -140,50 +148,47 @@ export class ItemTypeEditorComponent   {
   }
 
   save(event){
-    this.update(null);
+    this.update(false);
   }
 
   saveExit(event) {
     this.update(true);
   }
 
-  async update(optionClose: any): Promise<boolean> {
+  update(optionClose: boolean) {
     let result: boolean;
-    return new Promise(resolve => {
-      const site = this.siteService.getAssignedSite()
+    const site = this.siteService.getAssignedSite();
 
-      if (this.inputForm.valid) {
-        this.setNonFormValues()
+    if (!this.inputForm.valid) {
+      this._snackBar.open(`Form not valid, please address issues.`, 'Oops', { duration: 2000} )
+      this.validateAllFormFields(this.inputForm)
+      return
+    }
 
-        try {
-            if (this.itemTypes) {
-              this.itemTypes.forEach( item => {
-                const id = item.id;
-                item = this.inputForm.value;
-                item.id = id;
-                item.labelTypeID = this.labelTypeID;
-                return  this.updateItem(site, item)
-              })
-              if (optionClose) { this.onCancel(null) }
-            }
-            if (this.itemType) {   return  this.updateItem(site, this.itemType) }
-            if (optionClose) { this.onCancel(null) }
-          } catch (error) {
-            console.log(error)
-          }
-        }
+
+    if (this.inputForm.valid) {
+      const itemType =  this.setNonFormValues();
+
+      if (this.itemTypes) {
+        this.itemTypes.forEach( item => {
+          const id = item.id;
+          item = this.inputForm.value;
+          item.id = id;
+          item.labelTypeID = this.labelTypeID;
+          return  this.updateItem(site, item, optionClose)
+        })
       }
-    )
+
+      if (itemType) {
+        this._snackBar.open(itemType.name, 'Oops', { duration: 2000} )
+        return  this.updateItem(site, itemType, optionClose)
+      }
+    }
+
   };
 
-  async updateItem(site, item: IItemType) {
+  updateItem(site, item: IItemType, optionClose: boolean) {
     try {
-      const id = item.id;
-      item = this.inputForm.value;
-      item.id = id;
-      item.labelTypeID = this.labelTypeID;
-      item.printerName = this.printerName;
-      item.prepTicketID =this.prepTicketID;
 
       if (!item) {
         this._snackBar.open(`Update item problem`, 'Succcess', { duration: 2000} )
@@ -191,28 +196,33 @@ export class ItemTypeEditorComponent   {
       }
 
       if (this.itemType) {  item.imageName = this.itemType.imageName  }
-      const product$ = this.itemTypeService.putItemTypeNoChildren(site, item)
-      product$.subscribe(
-         data => {
+
+      const item$ = this.itemTypeService.putItemTypeNoChildren(site, item)
+
+      item$.subscribe(
+        {
+          next: data => {
             this._snackBar.open(`Update item`, "Succcess", { duration: 2000} )
+            if (optionClose) { this.onCancel(optionClose) }
             return true
          },
-         error => {
-            this._snackBar.open(`Update item ${error}`, "Failure", { duration: 2000} )
-            return false
-          }
-        )
+          error: error => {
+              this._snackBar.open(`Update item ${error}`, "Failure", { duration: 2000} )
+              return false
+            }
+        }
+      )
     } catch (error) {
       console.log(error)
     }
   }
 
-  async updateExit() {
-    const result = await this.update(true)
-    if (result) {
-      this.onCancel(true);
-    }
-  }
+  // async updateExit() {
+  //   const result =  this.update(true)
+  //   if (result) {
+  //     this.onCancel(true);
+  //   }
+  // }
 
   setPrepTicketID(event) {
     this.itemType.prepTicketID = parseInt(event)
@@ -230,7 +240,15 @@ export class ItemTypeEditorComponent   {
 
   setNonFormValues() {
     if (this.itemType && this.inputForm) {
-
+      let item          = this.itemType;
+      const id          = item.id;
+      item              = this.inputForm.value;
+      item.id           = id;
+      item.labelTypeID  = this.labelTypeID;
+      item.printerName  = this.printerName;
+      item.prepTicketID = this.prepTicketID;
+      this.itemType     = item;
+      return item;
     }
   }
 

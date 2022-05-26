@@ -31,17 +31,22 @@
         </div>
 
         <div *ngIf="inputForm.controls.type.errors?.required &&
-                  inputForm.controls.type.touched" class="error">
+                    inputForm.controls.type.touched" class="error">
           <mat-icon color="warn">warning</mat-icon> Type required.
         </div>
 
-        <div *ngIf="inputForm.controls.useGroupID.errors?.required &&
-                inputForm.controls.useGroupID.touched" class="error">
+        <!-- <div *ngIf="inputForm.controls.useGroupID.errors?.required &&
+                    inputForm.controls.useGroupID.touched" class="error">
           <mat-icon color="warn">warning</mat-icon> Use Group required.
-        </div>
+        </div> -->
 
       </div>
     </mat-card-subtitle>
+
+ <!-- name:                 ['', Validators.required],
+      type:                 ['', Validators.required],
+      useType:              ['', Validators.required],
+      useGroupID:           ['', Validators.required], -->
 
     <mat-card-content>
       <div class="content-container"
@@ -107,10 +112,10 @@
                     <br>
                 </div>
 
-                <div *ngIf="inputForm && (itemType && itemType.type === 'adjustment')">
+                <div >
                   <div>
                     <mat-form-field appearance="outline">
-                      <mat-label>Age Requirement</mat-label>
+                      <mat-label>Minumum Age Required</mat-label>
                           <input matInput
                           type             ="number"
                           name             ="ageRequirement"

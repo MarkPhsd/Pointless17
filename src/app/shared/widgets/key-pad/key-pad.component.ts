@@ -29,14 +29,16 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() showInput      = false;
   @Input() formatted      : any;
   @Input() fieldName      : string;
+
   formattedValue          : any;
   inputType               = 'text';
   showPassword            : boolean;
   showDoubleZero          = false // for faster entry.
   cashValue: any;
+
   @Input() numberbuttons  = 'number-buttons button-sized-1';
   @Input() alternateClass = 'grid-keypad'
-  @Input() decimals = 0;
+  @Input() decimals       = 0;
   @Input() requireWholeNumber: boolean;
 
   constructor(  private fb: FormBuilder) {
@@ -55,11 +57,10 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   initForm() {
-
     this.inputForm = this.fb.group({
       itemName: [],
     })
-    
+
     if (this.inputForm) {
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
         if (data == '' || data == undefined) {
@@ -88,7 +89,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   initSearchOption() {
     // const input$ = fromEvent(this.input.nativeElement, 'onSelectionChange');
     if (this.input) {
-      console.log('input initSearch' )
       fromEvent(this.input.nativeElement,'keyup')
       .pipe(
         filter(Boolean),
@@ -109,9 +109,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   enterValue(event) {
-    console.log('enterValue', this.value)
     this.value =  this.value + event
-    console.log('value composed', this.value)
     this.updateDisplayOutput()
   }
 
@@ -124,7 +122,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.value =  this.value + '000'
     this.updateDisplayOutput()
   }
-
 
   returnEnter(value) {
     if (value){
@@ -177,7 +174,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       if (this.decimals = 0) {
         divider = 1
       }
-      
+
       if ( (this.inputTypeValue == 'number' &&  this.requireWholeNumber) || this.inputTypeValue == 'decimal' ) {
         if (this.requireWholeNumber) {
           const numVal = parseInt( this.value)
@@ -222,7 +219,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       if (this.inputTypeValue == 'text' ) {
         // const numVal = parseInt( this.value)
         this.formatted = this.value //Number(numVal).toLocaleString('en', this.options);
-    
+
       } else {
         this.formatted = Number(0).toLocaleString('en', this.options);
 
@@ -230,19 +227,17 @@ export class KeyPadComponent implements OnInit, OnChanges {
     }
 
     if (this.formatted == undefined || !this.formatted) {
-      const item      = { itemName:  this.value } 
+      const item      = { itemName:  this.value }
       this.inputForm.patchValue(item)
       return
     }
 
     if (this.formatted != undefined) {
-    
+
       //{this.fieldName: this.formatted }
       const fieldName = this.fieldName
       const value     = this.formatted
-      console.log('value',  this.formatted)
-      const item      = { itemName:  this.formatted } 
-      console.log(item)
+      const item      = { itemName:  this.formatted }
       this.inputForm.patchValue(item)
 
     } else {
@@ -254,12 +249,11 @@ export class KeyPadComponent implements OnInit, OnChanges {
   returnEnterPress(){
 
     if (!this.value && this.cashValue) {
-      console.log('emit', this.cashValue)
       this.outPutReturnEnter.emit(this.cashValue)
       return;
     }
 
-    if (!this.formatted) { 
+    if (!this.formatted) {
       this.outPutReturnEnter.emit(this.value)
       return
     }
@@ -268,7 +262,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.outPutReturnEnter.emit(this.formatted)
 
   }
-
 
   updateDisplayOutput() {
     //user choice on what they want to update

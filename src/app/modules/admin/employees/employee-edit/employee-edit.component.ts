@@ -89,14 +89,14 @@ export class EmployeeEditComponent implements OnInit {
         client.employeeID = employee.id;
         client.id         = employee.clientID;
         this.client       = client;
-        
+
         return  this.clientTableService.postClientWithEmployee(site, employee)
       }
 
     )).subscribe(employeeClient => {
 
-        if (!employeeClient.client) { 
-          if (employeeClient.message) { 
+        if (!employeeClient.client) {
+          if (employeeClient.message) {
             this._snackBar.open(employeeClient.message, 'Error', {verticalPosition: 'bottom', duration:2000})
             return;
           }
@@ -281,14 +281,16 @@ export class EmployeeEditComponent implements OnInit {
 
   delete(event) {
     const result =  window.confirm('Are you sure you want to delete this profile?')
-    if (result == true && this.id) {
+
+    if (result && this.employee) {
       const site = this.siteService.getAssignedSite();
-      const client$ = this.employeeService.delete(site, this.id)
-      client$.subscribe( data => {
+      const employe$ = this.employeeService.delete(site, this.employee.id)
+      employe$.subscribe( data => {
         this.notifyEvent('This profile has been removed.', 'Success')
         this.router.navigateByUrl('/employee-list')
       })
     }
+
   }
 
   sanitize(html) {

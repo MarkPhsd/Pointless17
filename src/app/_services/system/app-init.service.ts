@@ -121,8 +121,8 @@ export class AppInitService  {
   //matching code in app-init-service.
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
-
     const site = {} as ISite;
+
     site.url = result
     if (result != null && result != '' ) {
       return result;
@@ -130,7 +130,11 @@ export class AppInitService  {
 
     if (this.isApp() && !result ) {
       if (! this.platformService.androidApp){
-         this._snackbar.open('Using demo data  - getLocalApiUrl', 'Alert', {duration: 3000} )
+        try {
+          // this._snackbar.open(`Using demo data  - getLocalApiUrl`, 'Alert', {duration: 3000} )
+        } catch (error) {
+          console.log('snack bar open error', error)
+        }
       }
       localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
       return localStorage.getItem('storedApiUrl')

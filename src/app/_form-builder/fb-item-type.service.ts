@@ -21,7 +21,7 @@ export class FbItemTypeService {
       sortOrder:            [''],
       enabled:              [''],
       useType:              ['', Validators.required],
-      useGroupID:           ['', Validators.required],
+      useGroupID:           [''],
       icon:                 [''],
       imageName:            [''],
       taxable:              [''],

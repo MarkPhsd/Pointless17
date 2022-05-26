@@ -4,6 +4,14 @@
   margin: 5px;
 }
 
+.header {
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+
+  // position       :relative;
+}
+
 mat-button  {
   border-radius: 5px;
 }
@@ -44,7 +52,6 @@ mat-form-field {
   grid-gap        : 0px;
   grid-column-gap : 0px;
 }
-
 
 .button-sized-1 {
   width       : 75px;

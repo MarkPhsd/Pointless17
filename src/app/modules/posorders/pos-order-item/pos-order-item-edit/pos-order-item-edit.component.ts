@@ -1,4 +1,4 @@
-import { Component, Inject, } from '@angular/core';
+import { Component, EventEmitter, Inject, Output, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -14,6 +14,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 })
 export class PosOrderItemEditComponent  {
 
+  @Output() closeOnEnterPress = new EventEmitter();
   inputForm   : FormGroup;
   posOrderItem: PosOrderItem;
   editField   = 'modifierNote'
@@ -22,7 +23,7 @@ export class PosOrderItemEditComponent  {
   decimals    = 2;
   requireWholeNumber: boolean;
 
-  inputValueType = 'decimal'
+  inputTypeValue = 'decimal'
   constructor(
       private posOrderItemService : POSOrderItemServiceService,
       private orderService        : OrdersService,
@@ -40,15 +41,12 @@ export class PosOrderItemEditComponent  {
       this.posOrderItem = data.orderItem;
       this.menuItem     = data.menuItem
 
-      if (this.menuItem) {
-        this.requireWholeNumber = this.menuItem.itemType?.requireWholeNumber
+      if (this.menuItem && this.menuItem.itemType) {
+        this.requireWholeNumber = this.menuItem.itemType?.requireWholeNumber;
       }
-      // if (this.posOrderItem) {
-      //   if (this.posOrderItem.productID) {
-      //     const site = this.siteService.getAssignedSite();
-
-      //   }
-      // }
+      if (!this.requireWholeNumber) {
+        this.decimals = 2
+      }
     }
     this.initForm();
 
@@ -80,19 +78,21 @@ export class PosOrderItemEditComponent  {
       this.decimals = 2
       return
     }
+
     if (this.menuItem?.itemType?.requireWholeNumber) {
-      this.inputValueType = 'number'
+      this.inputTypeValue = 'number'
       this.decimals = 0
       return
     }
+
     if (!this.menuItem?.itemType?.requireWholeNumber) {
-      this.inputValueType = 'decimal'
+      this.inputTypeValue = 'decimal'
       this.decimals = 2
       return
     }
+
   }
   saveChange(event) {
-    console.log('event', event)
     const item = this.getItemValue();
     item.quantity = event;
     this.updateQuantity(item)
@@ -145,7 +145,14 @@ export class PosOrderItemEditComponent  {
 
 
   onCancel() {
+    this.closeOnEnterPress.emit('true')
     this.dialogRef.close();
   }
 
+  onClose(event) {
+    this.closeOnEnterPress.emit('true')
+    this.dialogRef.close();
+  }
 }
+
+

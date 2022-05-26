@@ -299,14 +299,14 @@ export class METRCProductsAddComponent implements OnInit {
       this.notifyEvent('Input a batch #.', 'Alert')
       return false
     }
+
     return true
   }
 
-  async addInventoryAssignmentGroup() {
+  addInventoryAssignmentGroup() {
     const result =  this.isValidEntry()
     //validate entry first:
-     if (  !result ) { return  }
-    // console.log("Valid ", !this.isValidEntry())
+     if ( !result ) { return  }
 
     const f = this.f
     this.unitsRemaining = 0
@@ -325,7 +325,6 @@ export class METRCProductsAddComponent implements OnInit {
     inventoryAssignment.intakeUOM                  = this.intakeConversion.name
     inventoryAssignment.intakeConversionValue      = this.intakeConversion.value
 
-
     if (!this.inventoryLocation.activeLocation) {
       inventoryAssignment.notAvalibleForSale  = true
     } else {
@@ -335,7 +334,7 @@ export class METRCProductsAddComponent implements OnInit {
     inventoryAssignment.requiresAttention     = false
 
     //unit of measure being sold or stored in.
-    const unitConversion = await this.conversionService.getConversionItemByName('Each')
+    const unitConversion = this.conversionService.getConversionItemByName('Each')
     inventoryAssignment.unitConvertedtoName =   unitConversion.name
     inventoryAssignment.unitOfMeasureName =     this.package.unitOfMeasureName
     inventoryAssignment.unitMulitplier =        unitConversion.value
@@ -388,21 +387,21 @@ export class METRCProductsAddComponent implements OnInit {
       inventoryAssignment.cost = this.costValue
       inventoryAssignment.price = this.priceValue
     } catch (error) {
-
     }
+
     this.inventoryAssigments.push(inventoryAssignment)
     this.unitOfMeasure = {} as IUnitConversion
     this.resetInventoryFormAssignmentValues();
   }
 
-  getPriceValues(item: IInventoryAssignment) { 
-    if (this.priceForm && item) { 
+  getPriceValues(item: IInventoryAssignment) {
+    if (this.priceForm && item) {
       const priceCategoryID = this.priceForm.controls['priceCategoryID'].value;
-      const cost = this.priceForm.controls['cost'].value;
+      const cost   = this.priceForm.controls['cost'].value;
       const price  = this.priceForm.controls['price'].value;
       item.priceCategoryID = priceCategoryID;
-      item.cost = cost;
-      item.price = price
+      item.cost    = cost;
+      item.price   = price
     }
     return item;
   }
@@ -501,12 +500,16 @@ export class METRCProductsAddComponent implements OnInit {
     // okay so we have to add the list of inventory assignments to a list.
     const inv$=  this.inventoryAssignmentService.addInventoryList(site, this.inventoryAssigments[0].label,
                                                                   this.inventoryAssigments)
-    inv$.subscribe( data => {
-      this.onCancel(null);
-      this.notifyEvent('Inventory Packages Imported', 'Success');
-      }, error => {
-        this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
+    inv$.subscribe(
+      {
+        next: data => {
+          this.onCancel(null);
+          this.notifyEvent('Inventory Packages Imported', 'Success');
+          },
+        error: error => {
+          this.notifyEvent(`Inventory Packages failed: ${error}`, 'Failed');
       }
+    }
     )
   }
 
@@ -526,7 +529,7 @@ export class METRCProductsAddComponent implements OnInit {
     }
   }
 
-  assignMenItem(id: number) { 
+  assignMenItem(id: number) {
     if (id == 0) { return}
     this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
       if (data) {

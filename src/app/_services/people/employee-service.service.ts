@@ -66,17 +66,17 @@ export class EmployeeService {
                private _fb:   FormBuilder ) { }
 
 
-  delete(site: ISite, id: number[]) : Observable<employee> {
+  delete(site: ISite, id: number) : Observable<employee> {
 
     const controller =  "/employees/"
 
-    const endPoint = `?id=${id}`
+    const endPoint = `deleteEmployee`
 
-    const parameters = ``
+    const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.http.post<employee>(url, id)
+    return  this.http.delete<employee>(url)
 
   }
 
@@ -204,7 +204,7 @@ export class EmployeeService {
 
     const controller = `/employees/`
 
-    const endPoint = 'PutEmployeeMetrcKey'
+    const endPoint = 'putEmployeeMetrcKey'
 
     const parameters = ``;
 

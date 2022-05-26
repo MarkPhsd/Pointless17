@@ -1,8 +1,9 @@
+  <div class="header">
+    <ng-content select="[info]"> </ng-content>
+  </div>
 
   <div class="item-container"
        *ngIf="inputForm">
-    <div> <ng-content select="[info]"></ng-content> </div>
-  <!-- {{fieldName}} + {{formatted}} / {{formattedValue}} -->
     <div class="header-info"
          [formGroup]="inputForm">
       <div>
@@ -104,8 +105,13 @@
           <button mat-button  (click)="returnEnterPress()">Enter
           </button>
         </div>
-
-
       </div>
     </mat-card-content>
   </mat-card>
+
+<!--
+ Field {{fieldName}} + formatted {{formatted}} / formattedValue {{formattedValue}}<br>
+ decimals  {{decimals}}<br>
+ requireWholeNumber {{requireWholeNumber}}<br>
+ value{{value}}<br>
+ inputValueType {{inputTypeValue}}<br> -->
