@@ -1,4 +1,4 @@
-import { Component, OnInit,OnChanges } from '@angular/core';
+import { Component, OnInit,OnChanges, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
@@ -9,7 +9,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
   templateUrl: './pos-order-price-schedule-info.component.html',
   styleUrls: ['./pos-order-price-schedule-info.component.scss']
 })
-export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges {
+export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDestroy {
   //subscribe to the current order
 
   //get the unique scheduleID's from the order ITems
@@ -35,6 +35,12 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges {
   ngOnInit(): void {
     this.initSubscriptions();
     const i = 0;
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._order) { this._order.unsubscribe()}
   }
 
   expand() { 

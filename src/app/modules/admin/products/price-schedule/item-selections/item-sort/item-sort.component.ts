@@ -23,20 +23,6 @@ export class ItemSortComponent  {
   // _priceSchedule           : Subscription;
   index                    : number;
 
-  // _priceSchedule = this.priceScheduleService.priceSchedule$.subscribe(data => {
-  //   console.log('received datea for item sort', data)
-  //   if (data) {
-  //    this.priceSchedule = data;
-  //    if (data.itemDiscounts) {
-  //      this.initList(data.itemDiscounts);
-  //    }
-  //   }
-  // })
-
-  // initSubscriptions() {
-
-  // }
-
   _priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
     this.priceSchedule = data
     console.log('received datea for item sort', data)
@@ -56,16 +42,6 @@ export class ItemSortComponent  {
     private _snackBar                 : MatSnackBar,
   ) {
   }
-
-  // ngOnInit() {
-  //   this.initSubscriptions();
-  // }
-
-  // ngAfterViewInit(): void {
-  //   //Called after ngAfterContentInit when the component's view has been initialized. Applies to components only.
-  //   //Add 'implements AfterViewInit' to the class.
-  //   this.initSubscriptions();
-  // }
 
   ngDestroy() {
     if (this._priceSchedule) {

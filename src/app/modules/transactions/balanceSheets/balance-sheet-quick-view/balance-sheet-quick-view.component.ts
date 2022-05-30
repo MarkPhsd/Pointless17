@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -10,7 +10,7 @@ import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactio
   templateUrl: './balance-sheet-quick-view.component.html',
   styleUrls: ['./balance-sheet-quick-view.component.scss']
 })
-export class BalanceSheetQuickViewComponent implements OnInit {
+export class BalanceSheetQuickViewComponent implements OnInit, OnDestroy {
 
   sheet : IBalanceSheet;
   _sheet: Subscription;
@@ -41,6 +41,10 @@ export class BalanceSheetQuickViewComponent implements OnInit {
 
   async ngOnInit() {
     this.initSubscriptions()
+  }
+
+  ngOnDestroy(): void {
+    if (this._sheet) { this._sheet.unsubscribe()}  
   }
 
   view() {

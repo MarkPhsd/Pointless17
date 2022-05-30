@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
@@ -12,7 +12,7 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
   templateUrl: './posorder-service-type.component.html',
   styleUrls: ['./posorder-service-type.component.scss']
 })
-export class POSOrderServiceTypeComponent  {
+export class POSOrderServiceTypeComponent implements OnDestroy  {
 
   inputForm            : FormGroup;
   serviceTypes$        : Observable<IServiceType[]>;
@@ -37,6 +37,12 @@ export class POSOrderServiceTypeComponent  {
     this.initSubscriptions();
     const site = this.sitesService.getAssignedSite();
     this.getPaymentMethods(site);
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if ( this._order) { this._order.unsubscribe()}
   }
 
   getPaymentMethods(site: ISite) {

@@ -1,6 +1,7 @@
 import { Component,   Input, Output, OnInit,
   EventEmitter,
-  HostListener} from '@angular/core';
+  HostListener,
+  OnDestroy} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, ContactsService, MenuService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -39,7 +40,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./productlistview.component.scss'],
   // animations:  [ fadeInAnimation ],
 })
-export class ProductlistviewComponent  implements OnInit  {
+export class ProductlistviewComponent  implements OnInit, OnDestroy  {
 
 //for list selecting.
 @Input() hideAdd         : boolean;
@@ -148,7 +149,6 @@ constructor(  private _snackBar              : MatSnackBar,
   async ngOnInit() {
     this.updateScreenSize();
 
-
     const clientSearchModel       = {} as ClientSearchModel;
     clientSearchModel.pageNumber  = 1
     clientSearchModel.pageSize    = 1000;
@@ -179,6 +179,10 @@ constructor(  private _snackBar              : MatSnackBar,
       this.brandID = event.id
       this.refreshSearch(1);
     }
+  }
+  
+  ngOnDestroy(): void {
+    if(this._promptSubGroup){this._promptSubGroup.unsubscribe()}
   }
 
   @HostListener("window:resize", [])

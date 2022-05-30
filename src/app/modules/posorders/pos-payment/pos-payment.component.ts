@@ -23,13 +23,14 @@ import { ServiceTypeService } from 'src/app/_services/transactions/service-type-
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
+import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 
 @Component({
   selector: 'app-pos-payment',
   templateUrl: './pos-payment.component.html',
   styleUrls: ['./pos-payment.component.scss']
 })
-export class PosPaymentComponent implements OnInit {
+export class PosPaymentComponent implements OnInit, OnDestroy {
 
   @Input() order  :   IPOSOrder;
   id              :   number;
@@ -55,8 +56,8 @@ export class PosPaymentComponent implements OnInit {
   paymentSummary     : IPOSPaymentsOptimzed;
   paymentsEqualTotal : boolean;
 
-  orderlayout = 'order-layout'
-  smallDevice = false;
+  orderlayout         = 'order-layout'
+  smallDevice         = false;
   orderItemsPanel     = ''
 
   orderDefaultType    = false;
@@ -109,6 +110,7 @@ export class PosPaymentComponent implements OnInit {
               private uISettingsService: UISettingsService,
               private dialog          : MatDialog,
               private dsiProcess      : DSIProcessService,
+              private storeCreditMethodsService: StoreCreditMethodsService,
               private router          : Router,
               private fb              : FormBuilder) { }
 
@@ -133,7 +135,13 @@ export class PosPaymentComponent implements OnInit {
     this.updateItemsPerPage();
     this.initStripe();
   }
-
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._order) { this._order.unsubscribe()}
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+    if (this._currentPayment) { this._currentPayment.unsubscribe()}
+  }
   initStripe() {
     this.uISettingsService.getSetting('StripeAPISettings').subscribe(data => {
       if (data) {
@@ -322,7 +330,7 @@ export class PosPaymentComponent implements OnInit {
 
   applyPaymentAmount(event) {
 
-    if (!event && this.groupPaymentAmount != 0) {  
+    if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm(); return
     }
 
@@ -331,23 +339,23 @@ export class PosPaymentComponent implements OnInit {
     if (this.order &&  this.paymentMethod) {
 
         let amount = this.groupPaymentAmount
-        if (amount == 0) { 
+        if (amount == 0) {
           amount   = this.formatValueEntered(event)
           this.posPayment.groupID = this.groupPaymentGroupID;
         }
-        
+
         const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
                                   this.paymentMethod.isCash,
                                   this.order.balanceRemaining);
-        
+
         if (!isValidAmount) { return }
-        
+
         const processResults$ = this.processGetResults(amount, this.posPayment)
-        
+
         processResults$.subscribe( {
           next: (data) => {
             if (!data) {
-       
+
               this.notify('Payment not processed', 'failure', 1000)
             }
             this.processResults(data)
@@ -363,10 +371,10 @@ export class PosPaymentComponent implements OnInit {
   }
 
 
-  applyGroupPayment(event) { 
-    if (!event || event.amount == 0) { 
+  applyGroupPayment(event) {
+    if (!event || event.amount == 0) {
       return
-    } 
+    }
     this.splitByItem = false;
     this.groupPaymentAmount = event.amount;
     this.groupPaymentGroupID = event.groupID
@@ -374,7 +382,7 @@ export class PosPaymentComponent implements OnInit {
 
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
-    
+
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
          result =  this.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
@@ -537,6 +545,12 @@ export class PosPaymentComponent implements OnInit {
 
   }
 
+  storeCredit() {
+    if (this.order) {
+      this.storeCreditMethodsService.openStoreCreditPopUp(0, this.order.clientID)
+    }
+  }
+
   applyBalance() {
     this.applyPaymentAmount(this.order.balanceRemaining)
   }
@@ -551,9 +565,9 @@ export class PosPaymentComponent implements OnInit {
 
     if (this.paymentMethod) {
 
-      if (this.groupPaymentAmount != 0) { 
+      if (this.groupPaymentAmount != 0) {
         this.applyPaymentAmount(this.groupPaymentAmount)
-        return 
+        return
       }
 
       if (this.paymentMethod.name.toLowerCase() === 'check') {

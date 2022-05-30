@@ -151,7 +151,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
   }
-
   initSubscriptions() {
     this.initOrderSubscriber()
     this.initScaleSubscriber();
@@ -205,6 +204,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.updateScreenSize();
   }
 
+  ngOnDestroy() {
+    if (this._searchSideBar) { this._searchSideBar.unsubscribe()}
+    if (this._openOrderBar) {  this._openOrderBar.unsubscribe(); }
+    if (this._scaleInfo) {this._scaleInfo.unsubscribe(); }
+    if (this._order) { this._order.unsubscribe(); }
+    if (this._user) {this._user.unsubscribe();}
+    if ( this._mainMenuSideBar) { this._mainMenuSideBar.unsubscribe()}
+    if (this._site) {this._site.unsubscribe()}
+  }
+
   refreshUserBar(user) {
     if (user) {
       this.flexsections = 'flex-sections'
@@ -226,21 +235,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnDestroy(): void {
-
-    if (this._openOrderBar) {
-      this._openOrderBar.unsubscribe();
-    }
-    if (this._scaleInfo) {
-      this._scaleInfo.unsubscribe();
-    }
-    if (this._order) {
-      this._order.unsubscribe();
-    }
-    if (this._user) {
-      this._user.unsubscribe();
-    }
-  }
 
   refreshScannerOption() {
     this.scannerEnabled = false

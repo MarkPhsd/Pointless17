@@ -159,9 +159,7 @@ constructor(
   };
 
   ngOnDestroy() {
-    if (this._order) {
-      this._order.unsubscribe();
-    }
+    if (this._order) { this._order.unsubscribe(); }
   }
 
   @HostListener("window:resize", [])

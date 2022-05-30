@@ -1,4 +1,4 @@
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AWSBucketService } from 'src/app/_services';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -8,7 +8,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
   templateUrl: './logo.component.html',
   styleUrls: ['./logo.component.scss']
 })
-export class LogoComponent implements OnInit {
+export class LogoComponent implements OnInit, OnDestroy {
   _uISettings      : Subscription;
   @Input() uiHomePageSetting: UIHomePageSettings;
   @Input() logo   = '';
@@ -39,6 +39,10 @@ export class LogoComponent implements OnInit {
     }
     this.initSubscriptions();
     this.refreshUIHomePageSettings();
+  }
+
+  ngOnDestroy(): void {
+      if (this._uISettings) { this._uISettings.unsubscribe()}
   }
 
   async refreshUIHomePageSettings() {

@@ -47,13 +47,13 @@ export interface ItemPostResults {
 
 export interface NewItem            {
   orderID: number,
-  quantity: number, 
-  menuItem: IMenuItem, 
-  barcode: string,  
-  weight: number, 
-  portionValue: string, 
-  packaging: string, 
-  itemNote: string, 
+  quantity: number,
+  menuItem: IMenuItem,
+  barcode: string,
+  weight: number,
+  portionValue: string,
+  packaging: string,
+  itemNote: string,
   deviceName: string,
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
@@ -164,6 +164,8 @@ export class POSOrderItemServiceService {
   addItemToOrderWithBarcode(site: ISite, newItem: NewItem):  Observable<ItemPostResults> {
 
     if (!newItem ) { return }
+    // console.log('menuItem', newItem.menuItem)
+    // console.log('menuItem itemType', newItem.menuItem.itemType)
 
     newItem = this.getNewItemWeight(newItem);
 
@@ -232,8 +234,6 @@ export class POSOrderItemServiceService {
   putItem(site: ISite, newItem: any): Observable<ItemPostResults> {
 
     newItem = this.getNewItemWeight(newItem);
-
-    console.log(newItem)
 
     const controller = "/POSOrderItems/";
 
@@ -344,6 +344,20 @@ export class POSOrderItemServiceService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.post<IPOSOrder>(url , posOrderItem)
+
+  }
+
+  setItemStoreCreditInfo(site: ISite, item: IPurchaseOrderItem): Observable<IPurchaseOrderItem> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "setItemStoreCreditInfo";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IPurchaseOrderItem>(url , item)
 
   }
 

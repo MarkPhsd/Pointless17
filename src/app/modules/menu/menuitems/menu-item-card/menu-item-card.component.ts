@@ -84,7 +84,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this._order.unsubscribe();
+    if (this._order)  this._order.unsubscribe();
   }
 
   initSubscriptions() {

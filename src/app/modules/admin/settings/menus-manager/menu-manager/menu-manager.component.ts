@@ -22,15 +22,15 @@ import { MenuGroupItemEditComponent } from '../menu-group-item-edit/menu-group-i
 })
 export class MenuManagerComponent implements OnInit,OnDestroy  {
 
-  menu$:           Observable<MenuGroup[]>;
-  accordionMenu$:  Observable<AccordionMenu[]>;
+  menu$              :  Observable<MenuGroup[]>;
+  accordionMenu$     :  Observable<AccordionMenu[]>;
   accordionMenuItem$ :  Observable<AccordionMenu>;
-  accordionMenus:  AccordionMenu[];
-  submenu       :  SubMenu[];
-  accordionMenu :  AccordionMenu;
-  submenuItem   :  SubMenu;
-  user          :  IUser;
-  _user         :  Subscription;
+  accordionMenus     :  AccordionMenu[];
+  submenu            :  SubMenu[];
+  accordionMenu      :  AccordionMenu;
+  submenuItem        :  SubMenu;
+  user               :  IUser;
+  _user              :  Subscription;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
@@ -69,8 +69,12 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     })
   }
 
+  refreshMenu() {
+    this.getMainMenu();
+  }
+
   assignSubMenuItem(event) {
-    this.submenuItem       = event
+    this.submenuItem = event
   }
 
   addAccordionMenu() {
@@ -98,49 +102,28 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   }
 
   addSubMenu() {
-
-    const menu = {} as SubMenu;
+    const menu  = {} as SubMenu;
     menu.menuID = this.accordionMenu.id;
-
-    const site = this.siteService.getAssignedSite();
+    const site  = this.siteService.getAssignedSite();
     this.menusService.postSubMenuItem(site, menu).subscribe(data => {
       this.accordionMenu.submenus.push(data)
       this.assignSubMenu(this.accordionMenu, this.accordionMenu.submenus)
     })
-    // let id = 0;
-    // if (!this.accordionMenu) {return }
-    // const accordionID = this.accordionMenu.id;
-    // if (this.submenuItem) {
-    //   id = this.submenuItem.id
-    //   return
-    // }
-
-
-    // let dialogRef: any;
-    // const data = { id: id, accordionID: accordionID, menuID: this.accordionMenu.id}
-
-    // console.log('data', data)
-    // dialogRef = this.dialog.open(MenuGroupItemEditComponent,
-    //   { width    :    '500px',
-    //     minWidth :    '500px',
-    //     height   :    '650px',
-    //     minHeight:    '650px',
-    //     data     :    data
-    //   },
-    // )
   }
 
   assignSubMenu(item: AccordionMenu, submenu: SubMenu[]) {
-    const site       =  this.siteService.getAssignedSite();
+    const site         =  this.siteService.getAssignedSite();
     this.submenu       = submenu;
+    if (!item) { return }
     this.accordionMenu = item;
-    this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id)
-    this.submenuItem   = null;
+    if (item && item.id) {
+      this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id)
+    }
   }
 
-  async initMenu() {
-    const site       =  this.siteService.getAssignedSite();
-    const result = window.confirm('Do you want to reset the menu?')
+  initMenu() {
+    const site          =  this.siteService.getAssignedSite();
+    const result        = window.confirm('Do you want to reset the menu?')
     if (!result) {return}
     if (this.user) {
       const deleteMenu$ =  this.menusService.deleteMenu(site);

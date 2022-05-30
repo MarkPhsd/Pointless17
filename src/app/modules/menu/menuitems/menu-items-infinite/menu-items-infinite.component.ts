@@ -28,16 +28,16 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   isNearBottom   :   any;
 
   productSearchModel
-  array = [];
-  sum = 15;
-  throttle = 300;
-  scrollDistance = 1;
+  array            = [];
+  sum              = 15;
+  throttle         = 300;
+  scrollDistance   = 1;
   scrollUpDistance = 1.5;
-  direction    = "";
-  modalOpen    = false;
-  endOfRecords = false;
-  pagingInfo: any;
-  p: any //html page
+  direction        = "";
+  modalOpen        = false;
+  endOfRecords     = false;
+  pagingInfo        : any;
+  p                 : any //html page
   items             = [];
   pageOfItems:      Array<any>;
   lengthOfArray:    number
@@ -49,15 +49,15 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   menuItems:        IMenuItem[];
   value             : any;
   currentPage       = 1 //paging component
-  pageSize          = 25;
-  itemsPerPage      = 25
+  pageSize          = 35;
+  itemsPerPage      = 35
 
-  @Input() departmentID : string;
-  @Input() categoryID:       string;
-  @Input() subCategoryID : string;
-  @Input() brandID  :          string;
-  @Input() typeID   :          string;
-  @Input() productName:      string;
+  @Input() departmentID :   string;
+  @Input() categoryID:      string;
+  @Input() subCategoryID :  string;
+  @Input() brandID       :  string;
+  @Input() typeID        :  string;
+  @Input() productName   :  string;
 
   bucketName        :   string;
   scrollingInfo     :   string;
@@ -73,10 +73,10 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   grid              = "grid"
   _orderBar         : Subscription;
   orderBar          : boolean;
-  platForm          =  this.getPlatForm()
+  platForm          = this.getPlatForm()
   isApp             = false;
 
-  getPlatForm() {  return Capacitor.getPlatform(); }
+  getPlatForm() { return Capacitor.getPlatform(); }
 
   initOrderBarSubscription() {
     this.toolbarServiceUI.orderBar$.subscribe(data => {
@@ -90,7 +90,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     })
   }
 
-  constructor(private menuService      : MenuService,
+constructor(private menuService      : MenuService,
               private awsBucketService : AWSBucketService,
               private router           : Router,
               public  route            : ActivatedRoute,
@@ -99,9 +99,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
               private titleService     : Title,
               private platFormService  : PlatformService,
       )
-  {
-    this.isApp = this.platFormService.isApp()
-  }
+{
+  this.isApp = this.platFormService.isApp()
+}
 
 async ngOnInit()  {
   //this is called on page refresh, or sending the person the link to this page.
@@ -128,7 +128,7 @@ async ngOnInit()  {
   this.initSearchFromModel();
   this.setItemsPerPage();
 
-  this.pageSize = 25;
+  this.pageSize = 35;
   this.currentPage = 1;
 
   await this.nextPage();
@@ -137,9 +137,11 @@ async ngOnInit()  {
 
   this.setTitle()
 }
+
 ngAfterViewInit() {
   this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
 }
+
 ngOnDestroy(): void {
   if (this._orderBar) { this._orderBar.unsubscribe(); }
   if (this._productSearchModel) {this._productSearchModel.unsubscribe();}
@@ -198,7 +200,16 @@ initSearchFromModel() {
         itemTypeName = 'types ' + model.itemTypeName;
         let reRoute = false
       }
-      // console.log('search Model Updated', model )
+
+      if (this.isApp) {
+        model.webMode = false
+      }
+      if (!this.isApp) {
+        model.webMode = true
+      }
+
+      model.active = true;
+
       this.productSearchModelData = model;
       this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
       return
@@ -228,7 +239,7 @@ async addToList(pageSize: number, pageNumber: number)  {
     }
 
     if (!pageNumber || pageNumber == null) {pageNumber = 1 }
-    if (!pageSize   || pageSize   == null) {pageSize   = 25}
+    if (!pageSize   || pageSize   == null) {pageSize   = 35}
 
     model.pageNumber  = pageNumber
     model.pageSize    = pageSize

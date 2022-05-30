@@ -1,6 +1,6 @@
 // import { Route } from '@angular/router';
 import { Observable, Subscription, } from 'rxjs';
-import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
+import {  Component, ElementRef, HostListener, Input, OnInit, Output, ViewChild,EventEmitter, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
@@ -16,7 +16,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
   templateUrl: './pos-order-items.component.html',
   styleUrls: ['./pos-order-items.component.scss'],
 })
-export class PosOrderItemsComponent implements OnInit {
+export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   @Input()  order          : IPOSOrder;
@@ -49,45 +49,51 @@ export class PosOrderItemsComponent implements OnInit {
 
     try {
       this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
-          if (data) { 
+          if (data) {
             this.uiConfig = data;
           }
         }
       )
     } catch (error) {
-      
     }
-   
 
     try {
       this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
-        if (data) { 
+        if (data) {
          this.bottomSheetOpen = data
         }
       })
     } catch (error) {
-    
     }
 
     if (this.disableActions) {
       // this.refreshOrderFromPOSDevice()
     }
 
-    if (!this.prepScreen) {
-      if (!this.disableActions) {
-        this._order = this.orderService.currentOrder$.subscribe( order => {
-          this.order = order
-          setTimeout(() => {
-            this.scrollToBottom();
-          }, 200);
-        })
+    try {
+      if (!this.prepScreen) {
+        if (!this.disableActions) {
+          this._order = this.orderService.currentOrder$.subscribe( order => {
+            this.order = order
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 200);
+          })
+        }
       }
+    } catch (error) {
     }
+
     setTimeout(() => {
       this.scrollToBottom();
     }, 200);
 
-  
+  }
+
+  ngOnDestroy(): void {
+      if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
+      if (this._order) { this._order.unsubscribe()}
+      if (this._uiConfig) { this._uiConfig.unsubscribe()}
   }
 
   constructor(
@@ -110,7 +116,7 @@ export class PosOrderItemsComponent implements OnInit {
     let uiHomePage =  this.uiSettingService.homePageSetting;
 
     if (!uiHomePage) {
-      this.settingService.getUIHomePageSettings().subscribe(data => { 
+      this.settingService.getUIHomePageSettings().subscribe(data => {
         uiHomePage = data;
       })
     }
@@ -121,7 +127,7 @@ export class PosOrderItemsComponent implements OnInit {
 
     this._uiConfig = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.uiConfig = data;
-      if (!data) { 
+      if (!data) {
         this.getTransactionUI()
       }
     })
@@ -132,15 +138,16 @@ export class PosOrderItemsComponent implements OnInit {
     if (!this.prepScreen) {
       this.orderItemsPanel = 'item-list';
     }
+    this.initSubscriptions();
   }
 
   getTransactionUI() {
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
-      if (data) { 
+      if (data) {
         const config = JSON.parse(data.text)
         this.uiSettingService.updateUITransactionSubscription(config)
       }
-    }) 
+    })
   }
 
   @HostListener("window:resize", [])
@@ -159,7 +166,7 @@ export class PosOrderItemsComponent implements OnInit {
     }
 
     if (this.mainPanel) {
-      this.gridScroller = ""
+      this.gridScroller = ''
     }
   }
 

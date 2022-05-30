@@ -38,6 +38,7 @@ export interface IBalanceDuePayload {
 }
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
+import { StoreCreditEditorComponent } from 'src/app/modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
 
 @Injectable({
   providedIn: 'root'
@@ -117,6 +118,8 @@ export class ProductEditButtonService {
 
     this.openProductEditor(product.id,  product.prodModifierType)
   }
+
+
 
   openPromptEditor(id: any) {
     let dialogRef: any;

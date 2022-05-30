@@ -1,4 +1,4 @@
-import { Component,  Inject,  Input,  OnInit, Optional, } from '@angular/core';
+import { Component,  Inject,  Input,  OnDestroy,  OnInit, Optional, } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
@@ -18,7 +18,7 @@ import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/sc
   templateUrl: './add-inventory-item.component.html',
   styleUrls: ['./add-inventory-item.component.scss']
 })
-export class AddInventoryItemComponent implements OnInit {
+export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   inputForm:                 FormGroup;
   id:                        any;
@@ -98,6 +98,11 @@ export class AddInventoryItemComponent implements OnInit {
     } catch (error) {
       console.log(error)
     }
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if( this._scaleInfo) { this._scaleInfo.unsubscribe()}
   }
 
   applyWeightQuantity() {

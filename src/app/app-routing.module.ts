@@ -107,13 +107,10 @@ import { OverLayComponent } from './shared/widgets/over-lay/over-lay.component';
 import { LogoComponent } from './shared/widgets/logo/logo.component';
 import { FunctionGroupListComponent } from './modules/admin/settings/function-groups/function-group-list/function-group-list.component';
 import { FunctionGroupEditComponent } from './modules/admin/settings/function-groups/function-group-edit/function-group-edit.component';
-import { UIHomePageSettingsComponent } from './modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
-import { UITransactionsComponent } from './modules/admin/settings/software/UISettings/uitransactions/uitransactions.component';
-import { StripeSettingsComponent } from './modules/admin/settings/stripe-settings/stripe-settings.component';
-import { PreloadAllModules } from '@angular/router';
 import { ManifestsComponent } from './modules/admin/inventory/manifests/manifests.component';
 import { ManifestStatusComponent } from './modules/admin/inventory/manifest-status/manifest-status.component';
 import { ManifestTypeComponent } from './modules/admin/inventory/manifest-type/manifest-type.component';
+import { StoreCreditListComponent } from './modules/admin/store-credit/store-credit-list/store-credit-list.component';
 
 const routes: Routes = [
     // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -143,6 +140,7 @@ const routes: Routes = [
         { path: 'sites',      component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
         { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
+        { path: 'store-credit', component: StoreCreditListComponent, canActivate: [AuthGuard], data: {  title: 'Store Credit Search',  animation:  'isLeft'} },
         { path: 'pos-orders', component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
         { path: 'pos-payment', component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },

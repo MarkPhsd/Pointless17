@@ -14,7 +14,7 @@ import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-
   templateUrl: './prompt-selected-items.component.html',
   styleUrls: ['./prompt-selected-items.component.scss']
 })
-export class PromptSelectedItemsComponent implements OnInit {
+export class PromptSelectedItemsComponent implements OnInit,OnDestroy {
 
   promptSubGroup    : PromptSubGroups;
   promptMenuItems   :  PromptMenuItem[];
@@ -43,6 +43,11 @@ export class PromptSelectedItemsComponent implements OnInit {
   ngOnInit() {
     this.initSubscriptions();
     this.initList();
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._promptSubGroup){this._promptSubGroup.unsubscribe()}
   }
 
   assignItem(item,index) {

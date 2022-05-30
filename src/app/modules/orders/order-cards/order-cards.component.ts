@@ -135,7 +135,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy() {
-
     this.destroySubscriptions()
   }
 

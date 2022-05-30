@@ -152,7 +152,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-      this._order.unsubscribe();
+      if (this._order) {  this._order.unsubscribe(); }
       this.menuService.updateCurrentMenuItem(null);
       this.inventoryAssignmentService.updateAvalibleInventoryResults(null)
       this.tierPriceService.updateTierFlowerMenu(null);

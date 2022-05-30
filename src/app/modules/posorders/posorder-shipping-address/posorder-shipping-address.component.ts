@@ -41,6 +41,11 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     this.initForm();
     this.initServiceTypeInfo();
    }
+   ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if ( this._order) { this._order.unsubscribe()}
+   }
 
   initServiceTypeInfo() {
     const site = this.sitesService.getAssignedSite();
@@ -48,13 +53,7 @@ export class POSOrderShippingAddressComponent implements OnInit, OnDestroy {
     this.serviceType$ = this.serviceTypeService.getTypeCached(site, this.order.serviceTypeID)
   }
 
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    if (this._order) {
-      this._order.unsubscribe()
-    }
-  }
+
 
   initForm() {
     if (this.order && this.order.clients_POSOrders) {

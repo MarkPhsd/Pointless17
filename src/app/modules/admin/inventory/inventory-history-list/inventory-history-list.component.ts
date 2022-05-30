@@ -90,8 +90,6 @@ export class InventoryHistoryListComponent implements OnInit {
     // { this.toggleLabelEvents  = 'events'}
     this.toggleLabelEvents  = option;
 
-    // return
-
   }
 
   listPrinters(): any {
@@ -122,7 +120,12 @@ export class InventoryHistoryListComponent implements OnInit {
     this.printerName = this.getLastPrinterName();
     this.labelID = this.printingService.getLastLabelUsed();
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._manifestList) { this._manifestList.unsubscribe()}
 
+  }
   initForm() {
 
     if (this.inventoryAssignment) {

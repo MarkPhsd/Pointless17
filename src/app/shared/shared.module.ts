@@ -146,6 +146,8 @@ import { CardDashboardComponent } from '../modules/admin/reports/card-dashboard/
 import { DashBoardRoutingModule } from '../dash-board-routing.module';
 import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvpayment.component';
 import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
+import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
+import { StoreCreditSearchComponent } from './widgets/search-list-selectors/store-credit-search/store-credit-search.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 
 // export class MyHammerConfig extends HammerGestureConfig {
@@ -233,6 +235,7 @@ import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatt
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
     OrderHeaderComponent,
+
     PagerBlobComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
@@ -266,7 +269,9 @@ import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatt
     SiteSelectorComponent,
     SpeciesListComponent,
     StatusLookupComponent,
+    StoreCreditInfoComponent,
     StrainIndicatorComponent,
+    StoreCreditSearchComponent,
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,
@@ -420,6 +425,8 @@ import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatt
     SpeciesListComponent,
     StatusLookupComponent,
     StrainIndicatorComponent,
+    StoreCreditInfoComponent,
+    StoreCreditSearchComponent,
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,

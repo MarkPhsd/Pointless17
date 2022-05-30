@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef,  HostListener,
-         Input, OnInit, Output, EventEmitter } from '@angular/core';
+         Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -33,7 +33,7 @@ export interface payload{
   styleUrls: ['./pos-order-item.component.scss'],
   providers: [ TruncateTextPipe ],
 })
-export class PosOrderItemComponent implements OnInit, AfterViewInit {
+export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   interface = {}
   payload: payload;
@@ -135,6 +135,14 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit {
         }
       }
     })
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
+    if (this._assignedPOSItem) { this._assignedPOSItem.unsubscribe()}
+    
   }
 
   constructor(  private orderService: OrdersService,

@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'gridcomponent-properties-design',
   templateUrl: './gridcomponent-properties-design.component.html',
   styleUrls: ['./gridcomponent-properties-design.component.scss']
 })
-export class GridcomponentPropertiesDesignComponent implements OnInit {
+export class GridcomponentPropertiesDesignComponent implements OnInit, OnDestroy {
   @Input() opacity
   @Input() border;
   @Input() borderRadius;
@@ -32,13 +32,21 @@ export class GridcomponentPropertiesDesignComponent implements OnInit {
     })
   }
 
+  ngOnDestroy(): void {
+    try {
+      if(this.opacity) { this.opacity.unsubscribe()}
+      
+    } catch (error) {
+      
+    }
+  }
+
   formatOpacity(value: number) {
     if (value >= 1000) {
       return Math.round(value / 1000) + 'k';
     }
     this.opacity = value;
     this.outPutOpacity = new EventEmitter<any>();
-    console.log('this happened')
     if (this.outPutOpacity) {this.outPutOpacity.emit(value)}
     return value;
   }
@@ -49,7 +57,6 @@ export class GridcomponentPropertiesDesignComponent implements OnInit {
     }
     this.border = value;
     this._border  = `${value}px`
-    console.log('this happened', value)
     if (this.outPutBorder) { this.outPutBorder.emit(value) }
 
     return value;
@@ -60,7 +67,6 @@ export class GridcomponentPropertiesDesignComponent implements OnInit {
     }
     this.borderRadius = value;
     this._borderRadius  = `${value}px`
-    console.log('this happened', value)
     if (this.outPutBorderRadius) { this.outPutBorderRadius.emit(value) }
     return value;
   }
@@ -70,7 +76,6 @@ export class GridcomponentPropertiesDesignComponent implements OnInit {
     }
     this.layerIndex = value;
     this._layer  = `${value}px`
-    console.log('this happened', value)
     if (this.outPutLayerIndex) { this.outPutLayerIndex.emit(value) }
     return value;
   }

@@ -111,6 +111,7 @@ export class MainfestEditorComponent implements OnInit,OnDestroy {
     //   this.manifestService.updateSelectedManifestSite(null)
     //   // this.currentManifestSite$.unsubscribe()
     // }\
+    if (this.currentManifestSite$) { this.currentManifestSite$.unsubscribe()}
     const i = 0;
   }
 

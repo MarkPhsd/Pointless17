@@ -66,6 +66,12 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     }
     this.initForm();
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._payment) { this._payment.unsubscribe()}
+    this.paymentService.updatePaymentSubscription(null)
+  }
 
   initForm() {
     this.inputForm = this.paymentService.initForm(this.inputForm)
@@ -101,12 +107,7 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     this.paymentMethod = await  this.paymentMethodService.getPaymentMethod(site, methodID).pipe().toPromise()
   }
 
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.paymentService.updatePaymentSubscription(null)
-  }
-
+ 
   async getItem(id: number) {
     console.log('payment id', this.id)
     const site      = this.siteService.getAssignedSite()

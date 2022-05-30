@@ -119,6 +119,12 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     this.initAuthorization();
   };
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+  }
+
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
   }
@@ -148,11 +154,6 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
     })
   }
 
-  ngOnDestroy(): void {
-    if (this._searchModel) {
-      this._searchModel.unsubscribe()
-    }
-  }
 
   initSubscriptions() {
     try {

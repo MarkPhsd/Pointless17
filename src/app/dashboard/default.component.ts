@@ -286,32 +286,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostListener('window:beforeunload')
   ngOnDestroy() {
     this.orderBarOpen = false;
-    if (this.id) {
-      clearInterval(this.id);
-    }
-
+    if (this.id) { clearInterval(this.id);   }
     this.toolbarTiny = true
-    if (this._mainMenuBar) {
-      this._mainMenuBar.unsubscribe();
-    }
-
-    if (this._mainMenuBar) {
-      this._mainMenuBar.unsubscribe();
-    }
-
-    if (this._leftSideBarToggle) {
-      this._leftSideBarToggle.unsubscribe();
-    }
-
-    if (this._user) {
-      this._user.unsubscribe();
-    }
-
-    if (this._barSize) {
-      this._barSize.unsubscribe();
-    }
-
-    if(this._uiSettings) { this._uiSettings.unsubscribe()};
+    if (this._department)    { this._department.unsubscribe()}
+    if (this._mainMenuBar)   { this._mainMenuBar.unsubscribe()}
+    if (this._leftSideBarToggle) {this._leftSideBarToggle.unsubscribe()}
+    if (this._user)          { this._user.unsubscribe();  }
+    if (this._searchSideBar) { this._searchSideBar.unsubscribe();    }
+    if (this._orderBar)      { this._orderBar.unsubscribe();   }
+    if (this._barSize)       { this._barSize.unsubscribe();  }
+    if(this._uiSettings)     { this._uiSettings.unsubscribe() }
   }
 
   @HostListener("window:resize", [])

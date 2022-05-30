@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder, IPOSPayment,  ISite }   from 'src/app/_interfaces';
@@ -18,7 +18,7 @@ import { DSIEMVSettings } from '../system/settings/uisettings.service';
   providedIn: 'root'
 })
 
-export class PaymentsMethodsProcessService {
+export class PaymentsMethodsProcessService implements OnDestroy {
 
   dialogSubject: Subscription;
   dialogRef: any;
@@ -27,13 +27,15 @@ export class PaymentsMethodsProcessService {
   public  dialog$      = this._dialog.asObservable();
 
   initSubscriptions() {
-    this.dialogRef.afterClosed().subscribe(result => {
+     this.dialogSubject = this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
-
       }
     });
   }
 
+  ngOnDestroy(): void {
+      if (this.dialogSubject){ this.dialogSubject.unsubscribe()}
+   }
 
   constructor(
     private sitesService     : SitesService,

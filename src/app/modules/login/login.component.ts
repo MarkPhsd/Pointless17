@@ -140,7 +140,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.statusMessage = ''
-    if (this._user) { this._user.unsubscribe() }
+    try {
+      if (this._user) { this._user.unsubscribe() }
+      if (this._loginStatus) { this._loginStatus.unsubscribe()}
+      if (this._uISettings) { this._uISettings.unsubscribe()}
+      if (this._user) { this._user.unsubscribe()}
+    } catch (error) {
+       console.log('on Destroy Error')      
+    }
   }
 
   initForm() {

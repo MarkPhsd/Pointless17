@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -25,6 +25,7 @@ import { DateHelperService } from '../reporting/date-helper.service';
 import { DatePipe } from '@angular/common';
 import { PriceCategoriesService } from '../menu/price-categories.service';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
+import { StoreCreditIssueComponent } from 'src/app/modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 // import { T } from '@angular/cdk/keycodes';
 
 export interface ProcessItem {
@@ -36,7 +37,7 @@ export interface ProcessItem {
 @Injectable({
   providedIn: 'root'
 })
-export class OrderMethodsService {
+export class OrderMethodsService implements OnDestroy {
 
   order                           : IPOSOrder;
   _order                          : Subscription;
@@ -52,10 +53,17 @@ export class OrderMethodsService {
   public  assignedPOSItem$ = this._assingedPOSItem.asObservable();
   private assignPOSItem    : PosOrderItem;
 
+  private _posIssuePurchaseItem   = new BehaviorSubject<IPurchaseOrderItem>(null);
+  public  posIssuePurchaseItem$ = this._posIssuePurchaseItem.asObservable();
+
+  private _posIssueItem = new BehaviorSubject<PosOrderItem>(null);
+  public  posIssueItem$ = this._posIssueItem.asObservable();
+
   public get assignedPOSItem() {return this.assignPOSItem }
 
   priceCategoryID: number;
 
+ 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
@@ -66,6 +74,13 @@ export class OrderMethodsService {
     this.orderService.updateOrderSubscription(this.order);
     this.processItem = null;
     this._itemProcessSection.next(0)
+  }
+
+  updatePOSIssueItem(item: PosOrderItem) {
+    this._posIssueItem.next(item)
+  }
+  updatePOSIssuePurchaseItem(item: IPurchaseOrderItem) {
+    this._posIssuePurchaseItem.next(item)
   }
 
   updateProcess()  {
@@ -98,13 +113,17 @@ export class OrderMethodsService {
 
   }
 
+  ngOnDestroy(): void {
+    if (this._order){ this._order.unsubscribe()}
+  }
+
   async doesOrderExist(site: ISite) {
     if (!this.subscriptionInitialized) { this.initSubscriptions(); }
     if (!this.order || (this.order.id === undefined)) {
 
       const order$ = this.orderService.newOrderWithPayloadMethod(site, null);
       const order  = await order$.pipe().toPromise();
-      if (order) { 
+      if (order) {
         this.order = order;
         this.orderService.updateOrderSubscription(this.order);
         return true;
@@ -263,7 +282,7 @@ export class OrderMethodsService {
     }
   }
 
-  validateItem(item, barcode) { 
+  validateItem(item, barcode) {
     if (!item && !barcode) {
       this.notifyEvent(`Item not found`, 'Alert');
       return false;
@@ -299,10 +318,10 @@ export class OrderMethodsService {
     if (quantity === 0 ) { quantity = 1};
 
     if (!this.validateItem(item, barcode)) { return }
-  
+
     let passAlongItem;
     if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
- 
+
     order = this.validateOrder();
 
     if (order) {
@@ -324,6 +343,7 @@ export class OrderMethodsService {
           itemNote         = input?.itemNote;
         }
 
+
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
@@ -342,17 +362,17 @@ export class OrderMethodsService {
 
   // tslint:disable-next-line: typedef
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
-    
+
     this.priceCategoryID = 0;
 
     addItem$.subscribe(data => {
-      if (data) { 
+      if (data) {
         // console.log('process results', data);
         // console.log('process results', data?.order?.id);
         // console.log('process results', data?.message, data.resultErrorDescription);
         // console.log('process results', data?.order);
       }
-  
+
         if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
 
         if (data && data.resultErrorDescription) {
@@ -439,7 +459,7 @@ export class OrderMethodsService {
     //the webapi will return what price options are avalible for the item.
     //the pop up will occur and prompt with options.
     //the function will return true once complete.
-  
+
     if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
       // remove unused prices if they exist?
       const  newItem = {order: order, item: item, posItem: posItem}
@@ -476,19 +496,20 @@ export class OrderMethodsService {
     return true;
   }
 
-  async cancelItem(id: number, notify : boolean ) {
+  cancelItem(id: number, notify : boolean ) {
     const site = this.siteService.getAssignedSite();
     if (id) {
-      let result = await this.posOrderItemService.deletePOSOrderItem(site, id).pipe().toPromise();
-      if (result.scanResult) {
-        this.notifyWithOption('Item Deleted', 'Notice', notify)
-      } else  {
-        this.notifyWithOption('Item must be voided', 'Notice', notify)
-      }
-      if (result && result.order) {
-        this.orderService.updateOrderSubscription(result.order);
-        this.initItemProcess();
-      }
+      this.posOrderItemService.deletePOSOrderItem(site, id).subscribe(result => {
+        if (result.scanResult) {
+          this.notifyWithOption('Item Deleted', 'Notice', notify)
+        } else  {
+          this.notifyWithOption('Item must be voided', 'Notice', notify)
+        }
+        if (result && result.order) {
+          this.orderService.updateOrderSubscription(result.order);
+          this.initItemProcess();
+        }
+      })
     } else {
       this.initItemProcess();
     }
@@ -585,7 +606,7 @@ export class OrderMethodsService {
   processInventoryPrice(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
     const site = this.siteService.getAssignedSite()
     const price$ = this.priceCategoriesService.getPriceCategory(site,priceCategoryID);
-    price$.subscribe(data => { 
+    price$.subscribe(data => {
       // const priceCategory                   = this.shapePriceCategory(data)
       this.processItem.item.priceCategories = data;
       this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
@@ -595,34 +616,37 @@ export class OrderMethodsService {
 
   //, pricing:  priceList[]
   async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
-    const processItem   = {} as ProcessItem;
-    processItem.item    = item;
-    processItem.order   = order;
-    processItem.posItem = posItem;
-    this.processItem    = processItem;
+    const processItem    = {} as ProcessItem;
+    processItem.item     = item;
+    processItem.order    = order;
+    processItem.posItem  = posItem;
+    this.processItem     = processItem;
     this._itemProcessSection.next(0)
     this.itemProcessSection = 0;
-    this.order = order;
+    this.order           = order;
     this.priceCategoryID = priceCategoryID;
     this.handleProcessItem();
   }
 
   async handleProcessItem() {
-    const process = this.itemProcessSection;
-   
+    let process = this.itemProcessSection;
+
     if (!this.processItem) {
       this.orderService.updateOrderSubscription(this.order)
       return
     }
 
+    if ( !this.itemProcessSection && this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase()) {
+      process = 4;
+      this.itemProcessSection = 4;
+    }
+
     switch(process) {
       case  0: {
-         
-          if (this.priceCategoryID == 0) { 
+          if (this.priceCategoryID == 0) {
             this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
             return
           }
-
           this.processInventoryPrice(this.order,this.processItem.item,this.processItem.posItem, this.priceCategoryID)
           // console.log('Handle Process Item openPriceOptionPrompt', 0)
           break;
@@ -666,6 +690,13 @@ export class OrderMethodsService {
         // this.initItemProcess();
         break;
       }
+      case 7: {
+
+        // this.orderService.updateOrderSubscription(this.order);
+        // console.log('Handle Process Item updateOrderSubscription', 6)
+        // this.initItemProcess();
+        break;
+      }
       default: {
         break;
       }
@@ -679,7 +710,31 @@ export class OrderMethodsService {
 
   openGiftCardPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {
     const site = this.siteService.getAssignedSite()
+    // encapsulation: ViewEncapsulation.None
+    this.updatePOSIssuePurchaseItem(posItem);
+
+    const dialogRef = this.dialog.open(StoreCreditIssueComponent,
+      {
+        width:     '500px',
+        maxWidth:  '500px',
+        height:    '500px',
+        maxHeight: '500px',
+      }
+    )
+    dialogRef.afterClosed().subscribe(result => {
+      // this.promptGroupService.updatePromptGroup(null)
+      // this.promptWalkService.updatePromptGroup(null)
+      // if (result) {
+      //   this.updateProcess();
+      // }
+      if (!result) { this.initItemProcess(); }
+      return;
+    });
+
     this.updateProcess() //
+
+    return;
+
   }
 
   openQuantityPrompt(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem) {

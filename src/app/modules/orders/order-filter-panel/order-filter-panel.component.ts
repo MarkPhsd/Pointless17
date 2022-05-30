@@ -27,7 +27,7 @@ const { Keyboard } = Plugins;
   templateUrl: './order-filter-panel.component.html',
   styleUrls: ['./order-filter-panel.component.scss']
 })
-export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewInit {
+export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewInit {
 
   //auth - suspended orders, employee selection
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -140,6 +140,16 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.initSearchSubscriber();
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._prepStatus) { this._prepStatus.unsubscribe()}
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+    if (this._printLocation) { this._printLocation.unsubscribe()}
+    if (this._prepStatus) { this._prepStatus.unsubscribe()}
+    if (this._viewType) { this._viewType.unsubscribe(); }
+  }
+  
   constructor(
       private orderService    : OrdersService,
       private router          : Router,
@@ -273,14 +283,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit,AfterViewIni
     this.employees$      = this.orderService.getActiveEmployees(site)
   }
 
-  ngOnDestroy() {
-    if (this._searchModel) {
-      this._searchModel.unsubscribe();
-    }
-    if (this._viewType) {
-      this._viewType.unsubscribe();
-    }
-  }
 
   initOrderSearch(searchModel: IPOSOrderSearchModel) {
     this.orderService.updateOrderSearchModel( searchModel )

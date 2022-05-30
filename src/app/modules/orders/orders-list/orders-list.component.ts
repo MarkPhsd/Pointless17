@@ -93,7 +93,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   _searchModel   : Subscription;
   searchModel    : IPOSOrderSearchModel;
 
-  _posOrders     : Subscription;
+  // _posOrders     : Subscription;
   posOrders      : IPOSOrder[];
   posOrder       : IPOSOrder;
   id             : number;
@@ -102,7 +102,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   _orderBar      : Subscription;
   orderBar       : boolean;
 
-  _menutBar      : Subscription;
+  _menuBar       : Subscription;
   menuBar        : boolean;
 
   _searchBar     : Subscription;
@@ -140,17 +140,26 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 private orderService            : OrdersService,
               )
   {
-    this.initSubscriptions();
-    this.initAgGrid(this.pageSize);
-    this.initClasses();
   }
 
   async ngOnInit() {
+    this.initSubscriptions();
+    this.initAgGrid(this.pageSize);
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
     this.initAuthorization();
     this.initClasses();
   };
+
+  ngOnDestroy(): void {
+    if (this._searchModel) {
+      this._searchModel.unsubscribe()
+    }
+    if (this._menuBar) { 
+      this._menuBar.unsubscribe()
+    }
+    if (this._orderBar) { this._orderBar.unsubscribe()}
+  }
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
@@ -178,11 +187,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       this.initClasses();
   }
 
-  ngOnDestroy(): void {
-    if (this._searchModel) {
-      this._searchModel.unsubscribe()
-    }
-  }
 
   //ag-grid
   //standard formating for ag-grid.

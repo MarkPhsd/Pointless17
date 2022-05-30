@@ -118,6 +118,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       this.searchModel.completionDate_To = ''
       this.orderService.updateOrderSearchModel(this.searchModel)
     }
+    if (this._currentOrder) {this._currentOrder.unsubscribe()}
+    if (this._searchModel) { this._searchModel.unsubscribe()}
   }
 
   emitDatePickerData(event) {

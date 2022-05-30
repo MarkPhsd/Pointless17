@@ -1,4 +1,4 @@
-import {  Component, OnInit } from '@angular/core';
+import {  Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { IUser } from 'src/app/_interfaces';
@@ -14,7 +14,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss']
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnDestroy {
 
   get platForm() {  return Capacitor.getPlatform(); }
 
@@ -30,20 +30,25 @@ export class SettingsComponent implements OnInit {
     })
   }
 
-  constructor(
-      private AuthenticationService: AuthenticationService,
-      private dialog               : MatDialog,
-      private systemManagerService : SystemManagerService,
-      private router               : Router)
-  {
-    this.accordionStep = -1;
-    this.initSubscriptions();
-  }
+    constructor(
+        private AuthenticationService: AuthenticationService,
+        private dialog               : MatDialog,
+        private systemManagerService : SystemManagerService,
+        private router               : Router)
+    {
+      this.accordionStep = -1;
+      this.initSubscriptions();
+    }
 
     ngOnInit() {
       this.getCurrentUser();
     }
 
+    ngOnDestroy(): void {
+      //Called once, before the instance is destroyed.
+      //Add 'implements OnDestroy' to the class.
+      if (this._accordionStep) { this._accordionStep.unsubscribe()}
+    }
     routerNavigation(url: string) {
       this.router.navigate([url]);
     }

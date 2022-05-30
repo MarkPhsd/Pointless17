@@ -41,6 +41,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   _printLocation      : Subscription;
 
   searchModel: IPOSOrderSearchModel;
+  _order: Subscription;
 
   initStatusSubscriber() {
     this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
@@ -60,7 +61,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   }
 
   initSearchModelSubscriber() {
-    this.orderService.posSearchModel$.subscribe(data => {
+    this._order =  this.orderService.posSearchModel$.subscribe(data => {
       if (!data) {
         this.searchModel = {} as IPOSOrderSearchModel
       }
@@ -91,6 +92,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     if (this._viewType) {
       this._viewType.unsubscribe()
     }
+    if (this._order) { this._order.unsubscribe()}
   }
 
   constructor (

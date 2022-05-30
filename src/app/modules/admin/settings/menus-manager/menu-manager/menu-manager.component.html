@@ -53,6 +53,7 @@
       <div class="cards">
         <div *ngIf="(accordionMenuItem$ | async) as accordionMenu">
           <app-accordion-menu-item-edit
+              (outPutRefreshMenu)="refreshMenu()"
               [id]  ="accordionMenu.id"
               [item]="accordionMenu">
           </app-accordion-menu-item-edit>
@@ -60,6 +61,8 @@
 
         <div *ngIf="submenuItem">
           <app-menu-group-item-edit
+              (outPutRefreshMenu)="refreshMenu()"
+              [accordionMenu]="accordionMenu"
               [item]="submenuItem">
           </app-menu-group-item-edit>
         </div>

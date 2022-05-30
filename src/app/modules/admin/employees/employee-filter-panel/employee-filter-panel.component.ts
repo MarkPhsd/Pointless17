@@ -1,4 +1,4 @@
-import { Component, OnInit , ViewChild, EventEmitter,Output, ElementRef} from '@angular/core';
+import { Component, OnInit , ViewChild, EventEmitter,Output, ElementRef, OnDestroy} from '@angular/core';
 import { employee, IUser, jobTypes } from 'src/app/_interfaces';
 import {IItemBasic } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -16,7 +16,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
   templateUrl: './employee-filter-panel.component.html',
   styleUrls: ['./employee-filter-panel.component.scss']
 })
-export class EmployeeFilterPanelComponent implements OnInit {
+export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
 
   @ViewChild('input', {static: true}) input: ElementRef;
 
@@ -67,6 +67,13 @@ export class EmployeeFilterPanelComponent implements OnInit {
     this._currentEmployee = this.employeeService.currentEditEmployee$.subscribe( data => {
       this.currentEmployee = data;
     })
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._searchModel)     {this._searchModel.unsubscribe()}
+    if (this._currentEmployee) {this._currentEmployee.unsubscribe()}
+    
   }
 
   constructor(

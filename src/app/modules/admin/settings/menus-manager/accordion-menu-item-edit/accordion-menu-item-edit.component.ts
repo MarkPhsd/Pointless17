@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Inject, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, Inject, OnDestroy, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbNavMenuService } from 'src/app/_form-builder/fb-nav-menu.service';
@@ -22,7 +22,7 @@ export interface data {
   ]
 })
 export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, OnChanges {
-
+  @Output() outPutRefreshMenu = new EventEmitter()
   @Input() item$          : Observable<AccordionMenu>;
   @Input() id             : number;
   @Input() item           : AccordionMenu;
@@ -45,11 +45,7 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
    )
   }
 
-  ngOnDestroy(): void {
-    if (this._accordionMenu ) {
-      this._accordionMenu.unsubscribe()
-    }
-  }
+
 
   constructor(
     private fbNavService    : FbNavMenuService,
@@ -74,6 +70,12 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
     this.refreshData();
   }
 
+  ngOnDestroy(): void {
+    if (this._accordionMenu ) {
+      this._accordionMenu.unsubscribe()
+    }
+  }
+
   refreshData() {
     const site = this.siteService.getAssignedSite()
     if (this.item) {
@@ -81,6 +83,7 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
       return
     }
     if (this.id) {
+      console.log('get accordion data, refreshdata')
       const item$ = this.menusService.getAccordionMenuByID(site, this.id);
       item$.subscribe( data => {
         this.item = data
@@ -122,26 +125,35 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
       if (this.item.id == 0) {
          item$ = this.menusService.postAccordionMenu(site , this.item)
       }
-      this.saveSub(item$)
+      this.saveSub(item$, 'Item Saved')
     }
   }
 
-  saveSub(item$: Observable<AccordionMenu>) {
+  saveSub(item$: Observable<AccordionMenu>, saveMessage: string) {
     item$.subscribe(
       {
         next: data=> {
             this.item = data;
             this.menusService.updateAccordionMenuSubscription(data)
-            this._snackBar.open('Item saved', 'Success', {duration: 2000})
+            this._snackBar.open(saveMessage, 'Success', {duration: 2000})
+            this.outPutRefreshMenu.emit(true)
         },
         error : err => {
-          this._snackBar.open('Item not saved', 'Failure', {duration: 2000})
+          this._snackBar.open('Item not changed', 'Failure', {duration: 2000})
           console.log(err)
         }
       }
     )
   }
 
+  deleteItem() {
+    const site = this.siteService.getAssignedSite()
+    let item$: any;
+    if (this.item.id != 0) {
+      item$ = this.menusService.deleteAccordionMenu(site , this.item.id)
+      this.saveSub(item$, 'Item deleted')
+    }
+  }
 
 
 }

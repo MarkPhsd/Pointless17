@@ -37,6 +37,7 @@ export interface ProductSearchModel {
   metrcCategory             : string;
   species                   : string;
   web                       : boolean;
+  webMode                    : boolean;
   exactNameMatch            : boolean;
   sku                       : string;
   itemTypeIDList            : number[];

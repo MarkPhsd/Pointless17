@@ -1,0 +1,113 @@
+<ng-template #loading>
+  <mat-card>
+    <mat-spinner [diameter]="50"></mat-spinner>
+    ...loading
+  </mat-card>
+</ng-template>
+
+<div  class="container" *ngIf="storeCredit;else loading">
+
+  <mat-card class="mat-card">
+    <mat-card-title>
+      <div class="header-container" >
+        <div>
+          <h4>
+            Edit Store Credit
+          </h4>
+        </div>
+        <div>
+          <app-edit-buttons-standard
+              (outputeupdateItem)     ="updateItemExit(false)"
+              (outputupdateItemExit)  ="updateItemExit(true)"
+              (outputupdatedeleteItem)="deleteItem($event)"
+              (outputupdateonCancel)  ="onCancel($event)"
+              (outputCopy)            ="copyItem($event)"
+          ></app-edit-buttons-standard>
+          <mat-divider></mat-divider>
+        </div>
+      </div>
+
+    </mat-card-title>
+    <mat-card-subtitle>
+
+      <div class="grid-headers">
+        <div>Purchase Date</div><div>{{storeCredit.purchaseDate}} </div>
+        <div>Order ID</div>     <div>{{storeCredit.orderID}} </div>
+        <div>Card Num </div>    <div>{{storeCredit.cardNum}}</div>
+        <div>Type </div>
+            <div *ngIf="storeCredit.type==3">Store Credit</div>
+            <div *ngIf="storeCredit.type==1">Gift Card</div>
+            <div *ngIf="storeCredit.type==2">Gift Cert</div>
+      </div>
+
+      <div  class="grid-headers spacer" *ngIf="(client$ | async) as client; else clientSearch">
+        <div>Client</div> <div> {{client.accountNumber}} , {{client.lastName}}</div>
+      </div>
+
+      <div class="search-selector">
+        <ng-template #clientSearch>
+          <app-client-search-selector
+            (itemSelect)="assignCustomer($event)">
+          </app-client-search-selector>
+        </ng-template>
+      </div>
+
+    </mat-card-subtitle>
+
+    <mat-card-content>
+      <div *ngIf="inputForm"
+            [formGroup]="inputForm"
+            class="grid-fields" >
+
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'userName'">
+          Name
+        </app-value-fields>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'cardNum'">
+          Card Num
+        </app-value-fields>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'number'">
+          Data
+        </app-value-fields>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'accountNumber'">
+          Account Number
+        </app-value-fields>
+        <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'value'">
+          Value
+        </app-value-fields>
+
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Public Property ID As Integer
+Public Property Number As String
+Public Property ClientID As Nullable(Of Integer)
+Public Property Value As Nullable(Of Decimal)
+Public Property PurchaseDate As Nullable(Of Date)
+Public Property CardData As String
+Public Property Track1 As String
+Public Property Track2 As String
+Public Property CardNum As String
+Public Property OrderID As Nullable(Of Integer)
+Public Property Type As Nullable(Of Byte)
+Public Property Identifier As String
+Public Property KeyData As String
+Public Property TrackData As String
+Public Property SiteID As Nullable(Of Integer)
+Public Property RawTrackData As String
+Public Property RawKeyData As String
+Public Property UserName As String
+Public Property BeginDate As Date
+Public Property EndDate As Date
+Public Property UserNameSecret As String -->

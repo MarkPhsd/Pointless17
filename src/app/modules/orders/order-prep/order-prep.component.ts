@@ -97,7 +97,6 @@ export class OrderPrepComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.initSubscriptions();
-
     this.refreshOrder()
   }
 

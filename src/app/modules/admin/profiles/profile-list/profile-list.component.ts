@@ -1,5 +1,5 @@
 import { Component, ViewChild, ChangeDetectorRef, OnInit, Input,
-         AfterViewInit,ElementRef, HostListener } from '@angular/core';
+         AfterViewInit,ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 'src/app/_interfaces';
 import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,7 +24,7 @@ import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-gr
   styleUrls: ['./profile-list.component.scss']
 })
 
-export class ProfileListComponent implements OnInit, AfterViewInit {
+export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     //for list selecting.
     @Input() hideAdd         : boolean;
@@ -151,6 +151,11 @@ export class ProfileListComponent implements OnInit, AfterViewInit {
       }
     };
 
+    ngOnDestroy(): void {
+      //Called once, before the instance is destroyed.
+      //Add 'implements OnDestroy' to the class.
+      if (this._searchModel){this._searchModel.unsubscribe()}
+    }
         // sort(users, 'name', '-age', 'id')
     @HostListener("window:resize", [])
     updateScreenSize() {

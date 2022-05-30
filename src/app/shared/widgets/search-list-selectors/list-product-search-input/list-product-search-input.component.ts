@@ -42,6 +42,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
       distinctUntilChanged(),
       switchMap(searchPhrase =>
         {
+          console.log('search header')
           this.refreshSearch()
           return null
         }
@@ -62,12 +63,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   {   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.initForm();
-    if (!this.input ) {
-      return
-    }
+    if (!this.input ) {return}
     this.initSearchSubscription()
     this.hideKeyboardTimeOut();
     if ( this.platForm != 'android' ) {return}
@@ -75,6 +72,10 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     if (this.platForm != 'android') {
       // Keyboard.hide()
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this._order) { this._order.unsubscribe()}
   }
 
   initSearchSubscription() {
@@ -106,11 +107,8 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     }
   }
 
-  ngOnDestroy() {
-    if (!this._order) {return}
-    this._order.unsubscribe();
-  }
 
+  
   async refreshSearch() {
     const barcode =  this.input.nativeElement.value
     await this.addItemToOrder(barcode)

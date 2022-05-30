@@ -1,5 +1,5 @@
 import { Component, Inject, Input, Output, OnInit, Optional,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter, OnChanges } from '@angular/core';
+  ViewChild ,ElementRef, AfterViewInit, EventEmitter, OnChanges, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService} from 'src/app/_services';
@@ -24,7 +24,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
   templateUrl: './psmenu-group-list.component.html',
   styleUrls: ['./psmenu-group-list.component.scss']
 })
-export class PSMenuGroupListComponent implements OnInit, AfterViewInit {
+export class PSMenuGroupListComponent implements OnInit, AfterViewInit, OnDestroy {
 
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -113,7 +113,12 @@ export class PSMenuGroupListComponent implements OnInit, AfterViewInit {
     const site          = this.siteService.getAssignedSite()
     this.rowSelection   = 'multiple'
   };
-
+  
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._psMenuGroup) { this._psMenuGroup.unsubscribe()}
+  }
   async initForm() {
     this.fieldsForm = this.fbPriceSchedule.initSearchForm(this.fieldsForm)
     this.searchForm = this.fb.group( { itemName: '' } );

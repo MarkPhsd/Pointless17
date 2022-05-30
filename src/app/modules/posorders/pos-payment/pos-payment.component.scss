@@ -19,11 +19,12 @@ mat-card {
 .order-layout-empty {
 }
 
-.split-item-button { 
+.split-item-button {
   margin: 10px;
   width: 150px;
   height: 50px;
 }
+
 .order-layout {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -67,23 +68,23 @@ mat-card {
 
 //delete
 .transaction-data {
-  // display               : grid;
-  // gap                   : 5px;
-  // grid-template-columns : repeat( auto-fit, minmax(355px, 1fr) );
+
   border-radius         : 3px;
-  // grid-auto-flow        : dense;
   margin-right          : 50px;
   margin-top: 5px;
   margin-left: 10px;
   margin-bottom: 10px;
   @include for-phone-only  {
-    // --gap                : 5px;
-    // display              : grid;
-    // gap                  : var(--gap);
-    // grid-template-columns: repeat( auto-fit, minmax(355px, 1fr) );
     margin               : 5px ;
-    // grid-auto-flow       : dense;
   }
+}
+
+.grid-items {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  gap: 10px;
+  margin: 10px;
+
 }
 
 .grid-header-item {

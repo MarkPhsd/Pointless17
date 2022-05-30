@@ -162,14 +162,14 @@ export class InventoryListComponent implements OnInit, OnDestroy {
 
   isAuthorized: boolean;
   //This is for the search Section//
-  currentManifest$: Subscription;
+  _currentManifest: Subscription;
 
   get searchProductsValue() { return this.searchForm.get("searchProducts") as FormControl;}
   get selectedSiteValue()   { return this.searchForm.get("selectedSiteID") as FormControl;}
   private readonly onDestroy = new Subject<void>();
 
   initSubscriptions() {
-    this.currentManifest$ = this.manifestService.currentInventoryManifest$.subscribe(data => {
+    this._currentManifest = this.manifestService.currentInventoryManifest$.subscribe(data => {
       if (data ) {
         this.currentManifest = data;
         this.manifestID = data.id
@@ -255,6 +255,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     // if (this.currentManifest$) {
     //   this.currentManifest$.unsubscribe()
     // }
+    if (this._currentManifest) {this._currentManifest.unsubscribe()}
     const i = 0;
   }
 

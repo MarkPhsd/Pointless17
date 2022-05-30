@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services';
 import { GridsterLayoutService } from 'src/app/_services/system/gridster-layout.service';
@@ -9,7 +9,7 @@ import { DashboardModel } from '../grid-models';
   templateUrl: './dashboard-menu.component.html',
   styleUrls: ['./dashboard-menu.component.scss']
 })
-export class DashboardMenuComponent implements OnInit {
+export class DashboardMenuComponent implements OnInit, OnDestroy {
 
   _dashboardModel: Subscription;
   collection: DashboardModel[];
@@ -43,6 +43,10 @@ export class DashboardMenuComponent implements OnInit {
     )
   }
 
+  ngOnDestroy(): void {
+    if(this._dashboardModel) { this._dashboardModel.unsubscribe()}
+  }
+
   filterCollection(dashBoardModels: DashboardModel[]) {
     if (!dashBoardModels) { return }
     this.collection = null;
@@ -61,9 +65,7 @@ export class DashboardMenuComponent implements OnInit {
   forceRefresh(item) {
     // console.log(item)
     if (!item.id) {return }
-    
     this.layoutService.forceRefresh(item.id)
-
   }
 
 

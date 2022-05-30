@@ -30,7 +30,7 @@ import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balan
   templateUrl: './balance-sheets.component.html',
   styleUrls: ['./balance-sheets.component.scss']
 })
-export class BalanceSheetsComponent implements OnInit, AfterViewInit {
+export class BalanceSheetsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
@@ -126,6 +126,12 @@ export class BalanceSheetsComponent implements OnInit, AfterViewInit {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
     this.updateItemsPerPage(); //run last in this process!
   };
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+  }
 
   initClasses()  {
     const platForm      = this.platForm;

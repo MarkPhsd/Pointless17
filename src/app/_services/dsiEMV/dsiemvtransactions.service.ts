@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
 import { DSIEMVSettings, UISettingsService } from '../system/settings/uisettings.service';
@@ -139,7 +139,7 @@ export interface PrintData {
 @Injectable({
   providedIn: 'root'
 })
-export class DSIEMVTransactionsService {
+export class DSIEMVTransactionsService implements OnDestroy {
 
   options = {
       attributeNamePrefix : "@_",
@@ -160,12 +160,12 @@ export class DSIEMVTransactionsService {
       //supressEmptyNode: false,
   };
 
-  private dsiResponse         : any;
-  private dsiEMVSettings      : DSIEMVSettings;
-  private dsiEMVSubscriptions$: Subscription;
+  private dsiResponse          : any;
+  private dsiEMVSettings       : DSIEMVSettings;
+  private _dsiEMVSubscriptions : Subscription;
 
   initSubscriptions() {
-    this.uiSettingService.dsiEMVSettings$.subscribe(data => {
+    this._dsiEMVSubscriptions = this.uiSettingService.dsiEMVSettings$.subscribe(data => {
       this.dsiEMVSettings = data
     })
   }
@@ -177,6 +177,11 @@ export class DSIEMVTransactionsService {
       this.initSubscriptions();
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._dsiEMVSubscriptions) {this._dsiEMVSubscriptions.unsubscribe()}
+  }
   async mercuryPinPadReset(transaction: Transaction): Promise<RStream> {
     if (!transaction) { return }
     const tstream       = {} as TStream;

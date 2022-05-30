@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit,Input } from '@angular/core';
+import { Component, OnInit,Input, OnDestroy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, Subscription, switchMap } from 'rxjs';
@@ -16,7 +16,7 @@ import { BalanceSheetService } from 'src/app/_services/transactions/balance-shee
   templateUrl: './card-dashboard.component.html',
   styleUrls: ['./card-dashboard.component.scss']
 })
-export class CardDashboardComponent implements OnInit {
+export class CardDashboardComponent implements OnInit, OnDestroy {
 
   site    : ISite;
   posName : string;
@@ -89,6 +89,10 @@ export class CardDashboardComponent implements OnInit {
 
   ngOnInit(): void {
    this.getReportType()
+  }
+
+  ngOnDestroy(): void {
+      if ( this._sites) { this._sites.unsubscribe()}
   }
 
   refreshProductSalesGroup() {

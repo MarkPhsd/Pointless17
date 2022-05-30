@@ -1,5 +1,5 @@
 import { Component,   OnInit,
-  ViewChild ,ElementRef, AfterViewInit, HostListener } from '@angular/core';
+  ViewChild ,ElementRef, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService,  } from 'src/app/_services';
@@ -39,7 +39,7 @@ export interface rowItem {
   templateUrl: './employee-list.component.html',
   styleUrls: ['./employee-list.component.scss']
 })
-export class EmployeeListComponent implements OnInit , AfterViewInit{
+export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
 
   toggleListGrid = true // displays list of payments or grid
   //search with debounce: also requires AfterViewInit()
@@ -129,6 +129,9 @@ export class EmployeeListComponent implements OnInit , AfterViewInit{
     this.initAgGrid(this.pageSize);
   }
 
+  ngOnDestroy(): void {
+      if (this._searchModel) {this._searchModel.unsubscribe()}
+  }
   async ngOnInit() {
     this.initClasses()
     this.urlPath            = await this.awsService.awsBucketURL();

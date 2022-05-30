@@ -49,7 +49,6 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   errorMessage     : string;
 
   elements:  Element;
-  // card: StripeElement;
   paymentStatus: any;
   submitted: any;
   paymentIntent$ : Observable<IStripePaymentIntent>;
@@ -82,7 +81,6 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   };
 
   initSubscriptions(){
-
     this._posPayment = this.posPaymentService.currentPayment$.subscribe( data => {
       this.posPayment = data;
       if (!this.testMode) {
@@ -91,21 +89,14 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         }
       }
     })
-
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data;
     })
-
-
-
-
-
   }
 
   initStripeIntent() {
     this.uISettingsService.stripeAPISettings$.pipe(
       switchMap(data => {
-
         if (data) {
           if (!this.amount) { this.amount = 1 }
           this.stripeAPISetting  = data;
@@ -115,7 +106,6 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         return  this.createPaymentIntent(this.amount)
       }
     )).subscribe(data => {
-      console.log('initStripeIntent', data)
       this.elementsOptions.clientSecret =  data.clientSecret;
       this.errorMessage = data.errorMessage;
     })
@@ -159,6 +149,15 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     this.initForm();
     this.initStripeIntent();
   }
+  
+  ngOnDestroy() {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+    if (this._apiSetting) {this._apiSetting.unsubscribe()}
+    if (this._order) {this._order.unsubscribe()}
+    if (this._posPayment) { this._posPayment.unsubscribe()}
+  }
+
 
   private createPaymentIntent(amount: number): Observable<IStripePaymentIntent> {
     if (!this.testMode) {
@@ -180,9 +179,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     })
   }
 
-  ngOnDestroy() {
-    if(this._apiSetting){ this._apiSetting.unsubscribe()}
-  }
+
 
   onChange({ type, event }) {
     console.log('type', type)

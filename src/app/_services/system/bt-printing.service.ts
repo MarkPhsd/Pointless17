@@ -3,7 +3,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { BluetoothSerial } from '@ionic-native/bluetooth-serial/ngx';
 // import { esc-pos-encoder} from 'esc-pos-encoder';
 // import 'esc-pos-encoder'
-
 @Injectable({
   providedIn: 'root'
 })
@@ -35,11 +34,10 @@ export class BtPrintingService {
   //   return this.btSerial.write(data);
   // }
   sendToBluetoothPrinter(macAddress, data_string)  {
-
-   //1. Try connecting to bluetooth printer
+    //1. Try connecting to bluetooth printer
     const printer$ = this.connectToBluetoothPrinter(macAddress)
-
-    printer$.subscribe( data =>{
+    printer$.subscribe(
+       data =>{
         //2. Connected successfully
       this.btSerial.write(data_string)
 
@@ -48,9 +46,8 @@ export class BtPrintingService {
           //If you want to tell user print is successful,
           //handle it here
           //4. IMPORTANT! Disconnect bluetooth after printing
-
-            this.disconnectBluetoothPrinter()
-            // this.snackBar.open('disconnected', 'Printing')
+          this.disconnectBluetoothPrinter()
+          // this.snackBar.open('disconnected', 'Printing')
         },
         err=>{
           //If there is an error printing to bluetooth printer

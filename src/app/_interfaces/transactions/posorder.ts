@@ -407,6 +407,7 @@ export interface OperationWithAction {
   paymentMethod     : IPaymentMethod;
   manifest          : InventoryManifest;
   result            : boolean;
+  purchaseOrderPayment: IPOSPayment;
 }
 
 export interface IPaymentSearchModel {

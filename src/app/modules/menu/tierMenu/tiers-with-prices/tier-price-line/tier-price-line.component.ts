@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { IMenuItem,  } from 'src/app/_interfaces/menu/menu-products';
 import { MenuService } from 'src/app/_services';
 import { ITVMenuPriceTiers } from 'src/app/_services/menu/tv-menu-price-tier.service';
@@ -8,13 +8,14 @@ import { NewItem } from 'src/app/_services/transactions/posorder-item-service.se
 import { PriceTiers,PriceTierPrice, } from 'src/app/_interfaces/menu/price-categories';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tier-price-line',
   templateUrl: './tier-price-line.component.html',
   styleUrls: ['./tier-price-line.component.scss']
 })
-export class TierPriceLineComponent {
+export class TierPriceLineComponent  implements OnDestroy{
 
   @Output() outputNewItem = new EventEmitter();
   @Input() priceTiers: PriceTiers;
@@ -22,9 +23,10 @@ export class TierPriceLineComponent {
   @Input() tier : ITVMenuPriceTiers;
   @Input() menuPopup: boolean;
   @Input() menuItem: IMenuItem
+  _menuService: Subscription;
 
   initSubscriptions() {
-    this.menuService.currentMeuItem$.subscribe(data => {
+    this._menuService =  this.menuService.currentMeuItem$.subscribe(data => {
       if (data) {
         this.menuItem = data;
       }
@@ -40,6 +42,10 @@ export class TierPriceLineComponent {
 
   ) {
     this.initSubscriptions();
+  }
+  
+  ngOnDestroy(): void {
+      if(this._menuService) { this._menuService.unsubscribe()}
   }
 
   validateUser() {

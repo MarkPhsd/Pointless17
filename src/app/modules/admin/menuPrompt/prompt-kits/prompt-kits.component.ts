@@ -7,7 +7,7 @@ import { editWindowState, PromptGroupService } from 'src/app/_services/menuPromp
     templateUrl: './prompt-kits.component.html',
   styleUrls: ['./prompt-kits.component.scss']
 })
-export class PromptKitsComponent implements OnInit {
+export class PromptKitsComponent implements OnInit ,OnDestroy{
 
   accordionStep :  number;
   role          = 'admin';
@@ -35,7 +35,11 @@ export class PromptKitsComponent implements OnInit {
       this.initWindowState()
     }
   }
-
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this.windowState) { this.windowState.unsubscribe()}
+  }
   nextStep() {
     this.accordionStep++;
     if (this.editWindowState) {

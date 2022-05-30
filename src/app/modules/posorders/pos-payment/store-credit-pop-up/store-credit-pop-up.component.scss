@@ -1,0 +1,14 @@
+
+.grid-items {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+  gap: 10px;
+  margin: 10px;
+  width: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+button {
+  height: 50px;
+}

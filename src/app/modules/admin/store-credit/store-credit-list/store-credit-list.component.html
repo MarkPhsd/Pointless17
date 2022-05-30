@@ -1,0 +1,89 @@
+<div fxLayout="column"
+     fx-flex
+     fx-layout-align="space-between"
+     class="grid-container"
+     *ngIf="searchForm" >
+
+  <div class="grid-container-selectors">
+
+    <div class="grid-item">
+      <search-debounce-input
+                            [itemNameControl] = "'itemName'"
+                            [searchForm]      = "searchForm"
+                            (outPutMethod)    = "refreshSearchPhrase($event)">
+        <div fieldDescription>
+            <mat-icon>search</mat-icon>
+            Search
+        </div>
+      </search-debounce-input>
+    </div>
+
+    <div class="grid-item">
+      <button mat-button
+              class="assign-button"
+              (click)="listAll()">
+        <mat-icon>list</mat-icon>
+        List All
+      </button>
+    </div>
+
+    <div class="grid-item">
+      <button mat-button
+              class="assign-button"
+              (click)="refreshGrid()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+
+    <div *ngIf="!hideAdd" class="header-items">
+      <button mat-button
+              (click)="childAddItem()">
+        <mat-icon>add_box</mat-icon>Add</button>
+    </div>
+
+    <div *ngIf="!hideEditSelected"  class="header-items">
+      <button mat-button
+              (click)="editSelectedItems()">
+        <mat-icon>edit</mat-icon>
+        Edit Selected
+      </button>
+    </div>
+
+  </div>
+</div>
+
+<mat-divider></mat-divider>
+
+<div [class]="gridlist">
+  <div>
+    <div *ngIf="value" class="loader">
+      <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+    </div>
+    <ag-grid-angular
+          #agGrid
+          [style]              ="gridDimensions"
+          id                   ="myGrid"
+          [class]              ="agtheme"
+          [columnDefs]         ="columnDefs"
+          [defaultColDef]      ="defaultColDef"
+          [gridOptions]        ="gridOptions"
+          [rowSelection]       ="rowSelection"
+          [frameworkComponents]="frameworkComponents"
+          (selectionChanged)   ="onSelectionChanged($event)"
+          (gridReady)          ="onGridReady($event)">
+    </ag-grid-angular>
+  </div>
+
+  <div *ngIf="!hideAdd" >
+    <app-product-info-panel *ngIf="storeCredit"
+                            class="grid-list-item"
+                            [setProduct]="storeCredit"
+                            [id]="id">
+    </app-product-info-panel>
+  </div>
+</div>
+
+<div style="flex-grow:0">
+  <span id="selectedRows"> </span>
+</div>

@@ -1,6 +1,6 @@
 import { T } from '@angular/cdk/keycodes';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, Input, OnChanges,  SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges,  SimpleChanges, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as Highcharts from 'highcharts';
 import HC_exporting from 'highcharts/modules/exporting';
@@ -27,7 +27,7 @@ export interface ProductSale {
 
 //reference for code example of charts
 //https://stackblitz.com/edit/angular-highchart-add-series?file=src%2Fapp%2Fapp.component.ts
-export class CardComponent  implements OnInit , OnChanges{
+export class CardComponent  implements OnInit , OnChanges, OnDestroy{
   // export class CardComponent  implements OnInit  {
   @Input() notifier   : Subject<boolean>
   value               : boolean;
@@ -179,6 +179,11 @@ export class CardComponent  implements OnInit , OnChanges{
   ngOnChanges() {
     this.refresh();
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._sites) { this._sites.unsubscribe()}
+  }
 
   refreshChart() {
     this.reportType = this.cardValueType;
@@ -198,7 +203,6 @@ export class CardComponent  implements OnInit , OnChanges{
       if (!this.sites) { 
         this.sites = []
         this.sites.push(this.site)
-        console.log('refreshSitesData 1', this.sites)
       }
       this.refresh();
       return;

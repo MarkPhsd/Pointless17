@@ -284,6 +284,11 @@ import { NgxCsvParserModule } from 'ngx-csv-parser';
 import { ExportDataComponent } from '../modules/admin/settings/database/export-data/export-data.component';
 import { PosEditSettingsComponent } from '../modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { ReceiptViewComponent } from '../modules/admin/settings/printing/reciept-pop-up/receipt-view/receipt-view.component';
+import { StoreCreditEditorComponent } from '../modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
+import { StoreCreditListComponent } from '../modules/admin/store-credit/store-credit-list/store-credit-list.component';
+import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
+import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
+import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -508,6 +513,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     StrainProductEditComponent,
     StrainBoardComponent,
     StrainCardComponent,
+    StoreCreditListComponent,
+    StoreCreditEditorComponent,
+    StoreCreditIssueComponent,
+    StoreCreditPopUpComponent,
     ReceiptViewComponent,
     MenuItemCardDashboardComponent,
     StripeSettingsComponent,

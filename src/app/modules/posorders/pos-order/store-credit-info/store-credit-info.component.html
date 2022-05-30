@@ -1,0 +1,50 @@
+<div *ngIf="(storeCreditSearch$ | async) as storeCreditSearch">
+  <div class=""
+       *ngFor="let item of storeCreditSearch.results">
+
+    <div *ngIf="item && item.cardNum != ''">Card Number</div>
+        <div *ngIf="item && item.cardNum != ''">{{item?.cardNum}} </div>
+    <div *ngIf="item && item.value">   Credit Avalible</div>
+        <div *ngIf="item">{{item?.value | currency}} </div>
+
+    <div *ngIf="order && order.balanceRemaining != 0 && showPayment && !showIssueMoney && item?.value>0">
+      <button  mat-raised-button (click)="applyAsPayment(item)">
+          Apply Credit <mat-icon>credit_card</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="order && order.balanceRemaining != 0 && showPayment && !showIssueMoney && item?.value<=0">
+        No credit available.
+    </div>
+
+    <div *ngIf="showIssueMoney && search">
+      Issuing for Card: {{search.cardNumber | json}}
+
+      <div *ngIf="posIssuePurchaseItem && !posIssuePurchaseItem.gcid && showIssueMoney">
+        <button  mat-raised-button
+                (click)="issueMoney(item)">
+          Add Credit <mat-icon>credit_card</mat-icon>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="posIssuePurchaseItem && showIssueMoney">
+  <button  mat-raised-button
+          (click)="cancel(posIssuePurchaseItem)">
+    Close
+  </button>
+</div>
+
+<!-- <ng-template #statement>
+  <div *ngIf=" posIssuePurchaseItem && showIssueMoney">
+    <button  mat-raised-button
+             (click)="issueMoney(null)">
+        Add Credit <mat-icon>credit_card</mat-icon>
+    </button>
+  </div>
+  No credit available.
+</ng-template> -->

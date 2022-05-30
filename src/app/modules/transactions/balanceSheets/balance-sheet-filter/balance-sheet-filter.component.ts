@@ -1,5 +1,5 @@
 import {Component,  Output,
-  OnInit,  ViewChild, ElementRef, EventEmitter}  from '@angular/core';
+  OnInit,  ViewChild, ElementRef, EventEmitter, OnDestroy}  from '@angular/core';
 import { IUser } from 'src/app/_interfaces';
 import {AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -18,7 +18,7 @@ import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balan
   templateUrl: './balance-sheet-filter.component.html',
   styleUrls: ['./balance-sheet-filter.component.scss']
 })
-export class BalanceSheetFilterComponent implements  OnInit {
+export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
@@ -81,6 +81,10 @@ export class BalanceSheetFilterComponent implements  OnInit {
     this.initSearchForm();
     this.initFormFromSearchModel();
     this.initEmployeeList();
+  }
+
+  ngOnDestroy( ) {
+    if (this._searchModel) { this._searchModel.unsubscribe()}
   }
 
   initAuthorization() {

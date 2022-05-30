@@ -24,24 +24,56 @@
     </div>
 
     <div>
-      <div   *ngIf="!paymentsEqualTotal" 
-             class="split-item-button">
-        <button class="splitbutton" 
+      <div class="grid-items">
+
+        <div>
+          <button class="splitbutton"
                 mat-raised-button
-                color="primary" 
-                (click)="splitByItem = !splitByItem">
-          <mat-icon>split</mat-icon>Split By Items
-        </button>
+                color="primary"
+                (click)="storeCredit()">
+
+                <div *ngIf="!paymentsEqualTotal">
+                  <mat-icon>credit_card</mat-icon>Gift Card
+                </div>
+                <div *ngIf="paymentsEqualTotal">
+                  <mat-icon>balance</mat-icon>Gift Card Balance
+                </div>
+
+          </button>
+        </div>
+
+
+
+
+        <div  *ngIf="!paymentsEqualTotal">
+          <button class="splitbutton"
+                  mat-raised-button
+                  color="primary"
+                  (click)="splitByItem = !splitByItem">
+            <mat-icon>split</mat-icon>Split By Items
+          </button>
+        </div>
+
+        <div>
+          <store-credit-info
+              [order]        ="order"
+              [clientID]     ="order?.clientID"
+              [accountNumber]="order?.clients_POSOrders?.accountNumber"
+              [userName]     ="order?.clients_POSOrders?.userName"
+              [showPayment]  ="true"
+           ></store-credit-info>
+          </div>
       </div>
 
       <div class="order-completed"
-           *ngIf="paymentsEqualTotal || order.completionDate">
+            *ngIf="paymentsEqualTotal || order.completionDate">
         <mat-card class="card-dimensions">
           <mat-card-content>
             <app-receipt-view [hideExit]="true" [order]="order"></app-receipt-view>
           </mat-card-content>
         </mat-card>
       </div>
+
 
       <div *ngIf="!splitByItem && !paymentsEqualTotal && paymentIsReady">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
@@ -68,17 +100,17 @@
               <mat-card-content>
                 <div class="item-container" >
                   <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining >0">
-               
+
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="processDSICreditCardPayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Credit / Debit 
+                      <mat-icon color="warn">credit_card</mat-icon>Credit / Debit
                     </button>
 
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="processDSIManualCreditCardPayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Manual Input 
+                      <mat-icon color="warn">credit_card</mat-icon>Manual Input
                     </button>
 
                     <button class="payment-buttons"
@@ -88,8 +120,6 @@
                     </button>
 
                   </div>
-
-             
 
                   <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
                     <button class="payment-buttons"

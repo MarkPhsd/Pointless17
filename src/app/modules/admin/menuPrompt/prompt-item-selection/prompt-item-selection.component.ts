@@ -1,4 +1,4 @@
-import { Component, OnInit, Input  } from '@angular/core';
+import { Component, OnInit, Input ,OnDestroy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { PromptSubGroups, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
@@ -12,7 +12,7 @@ import { Location } from '@angular/common';
   templateUrl: './prompt-item-selection.component.html',
   styleUrls: ['./prompt-item-selection.component.scss']
 })
-export class PromptItemSelectionComponent implements OnInit {
+export class PromptItemSelectionComponent implements OnInit,OnDestroy {
 
   inputForm         : FormGroup;
   @Input()   prompt : PromptSubGroups;
@@ -40,6 +40,11 @@ export class PromptItemSelectionComponent implements OnInit {
 
   ngOnInit() {
     console.log('')
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._promptSubGroup) { this._promptSubGroup.unsubscribe()}
   }
 
   goBack() {

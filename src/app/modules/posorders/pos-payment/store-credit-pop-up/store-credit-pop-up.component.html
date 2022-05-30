@@ -1,0 +1,48 @@
+<mat-card>
+
+  <mat-card-title>
+      Store Credit and Gift Card
+  </mat-card-title>
+  <mat-card-subtitle *ngIf="order">
+    <div class="grid-items">
+      <div>
+        Balance Remaining
+      </div>
+      <div>
+        {{order?.balanceRemaining | currency}}
+      </div>
+    </div>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+
+    <div *ngIf="clientID != 0">
+      <store-credit-search
+        (outPutResults)="setResults($event)">
+      </store-credit-search>
+    </div>
+
+    <ng-container
+      [ngTemplateOutlet]="templateOption">
+    </ng-container>
+
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button mat-raised-button (click)="cancel()">Close</button>
+  </mat-card-actions>
+
+</mat-card>
+
+<ng-template #storeCreditItems>
+  <store-credit-info>
+    [clientID]   = "clientID"
+    [showPayment]= "true"
+    [order]      = "order"
+    (closeDialog)= "onCancel($event)"
+  </store-credit-info>
+</ng-template>
+
+<ng-template #noItems>
+  ..waiting for input or scan.
+</ng-template>

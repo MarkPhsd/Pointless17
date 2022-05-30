@@ -87,7 +87,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   _ordersCount : Subscription;
 
   initSubscriptions() {
-
     this.loading = true
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
@@ -97,18 +96,14 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       }
       this.getSheetType(this.sheet)
     })
-
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user = data;
     })
-
     this._ordersCount = this.sheetMethodsService.ordersOpen$.subscribe( data => {
-
       if (!data) { return }
       this.ordersCount = data
     })
     this._openOrders  =  this.sheetMethodsService.ordersOpen$.subscribe( data => {
-
       if (!data) { return }
       this.ordersOpen       = data
     })
@@ -143,6 +138,15 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.newBalanceSheet();
     }
   };
+  
+  ngOnDestroy() {
+    this.sheetMethodsService.updateBalanceSheet(null)
+    if (this._openOrders)  { this._openOrders.unsubscribe()}
+    if (this._ordersCount) { this._ordersCount.unsubscribe()}
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+    if (this._user)        { this._user.unsubscribe()}
+    if (this._sheet)       { this._sheet.unsubscribe()}
+  }
 
   newBalanceSheet() {
     //we have to initialize the balance sheet.
@@ -158,9 +162,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.toolbarUIService.switchSearchBarSideBar()
   }
 
-  ngOnDestroy() {
-    this.sheetMethodsService.updateBalanceSheet(null)
-  }
 
   getCurrentSheet() {
     this.getSheet(this.id)

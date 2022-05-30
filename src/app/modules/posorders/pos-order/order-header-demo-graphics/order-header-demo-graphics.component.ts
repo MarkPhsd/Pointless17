@@ -63,6 +63,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     if (this.disableActions) { return }
     if (this.order) {
       if (this.order.clients_POSOrders) {
+
         this.router.navigate(["/profileEditor", {id: this.order.clientID}]);
         return;
       }

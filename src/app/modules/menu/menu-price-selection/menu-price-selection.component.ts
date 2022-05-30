@@ -47,8 +47,7 @@ export class MenuPriceSelectionComponent  implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('')
-    // this._ItemWithAction.unsubscribe();
+    if (this._order) { this._order.unsubscribe()}
   }
 
   async selectItem(item) {

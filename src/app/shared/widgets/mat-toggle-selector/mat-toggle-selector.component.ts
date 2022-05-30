@@ -69,6 +69,7 @@ export class MatToggleSelectorComponent implements OnChanges {
 
     this.updateScreenSize();
   }
+
   sortList(list) {
     try {
       return list.sort((a, b) => a.name.localeCompare(b.name));
@@ -121,9 +122,8 @@ export class MatToggleSelectorComponent implements OnChanges {
 
   setItemNull() {
     if (this.mouseOver != true) {
-      console.log(this.mouseOver   )
-      return }
-    console.log(this.mouseOver)
+      return
+    }
     this.outPutItem.emit(null)
   }
 

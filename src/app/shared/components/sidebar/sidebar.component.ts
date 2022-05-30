@@ -53,7 +53,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._user.unsubscribe();
+    if (this._user)  {this._user.unsubscribe()}
   }
 
   async getMenu(site: ISite) {

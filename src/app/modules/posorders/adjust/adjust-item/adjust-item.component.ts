@@ -57,7 +57,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this._ItemWithAction.unsubscribe();
+   if (this._ItemWithAction)  this._ItemWithAction.unsubscribe();
   }
 
   getVoidReasons() {

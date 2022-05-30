@@ -71,8 +71,8 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
   }
 
   ngOnDestroy() {
-    this._ordersCount.unsubscribe()
-    this._openOrders.unsubscribe()
+    if (this._ordersCount) {this._ordersCount.unsubscribe()}
+    if (this._openOrders) {  this._openOrders.unsubscribe() }
   }
 
   getOrderCount() {

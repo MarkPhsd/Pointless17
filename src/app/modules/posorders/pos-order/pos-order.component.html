@@ -8,6 +8,11 @@
               [mainPanel]="mainPanel"
               [order]="order">
           </pos-order-transaction-data>
+          <store-credit-info
+            [clientID]     ="order?.clientID"
+            [accountNumber]="order?.clients_POSOrders?.accountNumber"
+            [userName]     ="order?.clients_POSOrders?.userName"
+          ></store-credit-info>
         </div>
 
         <div class="grid-header-item"
@@ -27,7 +32,7 @@
             (outPutAssignCustomer)="assignCustomer($event)" >
           </app-order-header-demo-graphics>
         </div>
-        
+
         <div class="specials">
           <pos-order-price-schedule-info></pos-order-price-schedule-info>
         </div>
@@ -87,7 +92,7 @@
               color="primary"
               (click)="makePayment()">
               <mat-icon>credit_card</mat-icon>
-              Check Out
+               Check Out
             </button>
           </div>
 

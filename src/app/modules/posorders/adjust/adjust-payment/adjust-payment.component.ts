@@ -2,13 +2,15 @@ import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription,Observable } from 'rxjs';
+import { Subscription,Observable, switchMap, EMPTY } from 'rxjs';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
+import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { AdjustmentReasonsService } from 'src/app/_services/system/adjustment-reasons.service';
 import { RequestMessageService } from 'src/app/_services/system/request-message.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -45,16 +47,18 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   constructor( private  pOSPaymentService     : POSPaymentService,
                 private paymentsMethodsService: PaymentsMethodsProcessService,
                 private inventoryAssignmentService:InventoryAssignmentService,
+                private storeCreditMethodService : StoreCreditMethodsService,
                 public  route                 : ActivatedRoute,
                 private siteService           : SitesService,
                 private orderService          : OrdersService,
                 private matSnackBar           : MatSnackBar,
+                private storeCreditService: StoreCreditService,
                 private userAuthorization     : UserAuthorizationService,
                 private adjustMentService     : AdjustmentReasonsService,
                 private productEditButonService: ProductEditButtonService,
                 private requestMessageService : RequestMessageService,
-                private manifestService : ManifestInventoryService,
-                private dialogRef: MatDialogRef<AdjustPaymentComponent>,
+                private manifestService       : ManifestInventoryService,
+                private dialogRef             : MatDialogRef<AdjustPaymentComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
                 )
   {
@@ -87,7 +91,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (payment) {
       if (method && (method.isCreditCard || method.wic || method.ebt )) {
         const data = { payment: payment, id: payment.id }
-        if (method.isCreditCard) { 
+        if (method.isCreditCard) {
           this.productEditButonService.openDSIEMVTransaction(data)
         }
       }
@@ -98,6 +102,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   closeManifestDialog(message: string ) {
     this.dialogRef.close(message);
   }
+
   // void = 1,
   // priceAdjust = 2,
   // note = 3
@@ -156,10 +161,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
               return ;
             }
 
-            this.notifyEvent('Payment Must be Voided by CC Service', 'Result')
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)//.pipe().toPromise();
             this.updateVoidPaymentResponse(response$)
+
           } else {
+
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)//.pipe().toPromise();
             this.updateVoidPaymentResponse(response$)
           }
@@ -189,7 +195,22 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   updateVoidPaymentResponse(response$: Observable<OperationWithAction>) {
-    response$.subscribe( response => {
+    const site = this.siteService.getAssignedSite();
+    // response$.subscribe( response => {
+    //     if (response && response.result) {
+    //       const item$ = this.updateOrderSubscription()
+    //       item$.subscribe( order => {
+    //         this.orderService.updateOrderSubscription(order)
+    //         this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
+    //         this.closeDialog(response.payment, response.paymentMethod);
+    //       });
+    //     }
+    //   }
+    // )
+    console.log('updateVoidPaymentResponse')
+    response$.pipe(
+      switchMap(response => {
+
         if (response && response.result) {
           const item$ = this.updateOrderSubscription()
           item$.subscribe( order => {
@@ -198,8 +219,19 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             this.closeDialog(response.payment, response.paymentMethod);
           });
         }
+
+        if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
+          const valueToReduce = response.payment.amountPaid
+          this.closeDialog(response.payment, response.paymentMethod);
+          return this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce)
+        }
+        return EMPTY
       }
-    )
+    )).subscribe(data => {
+      this.storeCreditMethodService.updateSearchModel(null)
+      console.log('data',data)
+    })
+
   }
 
   updateManifestResponse(response$: Observable<OperationWithAction>) {

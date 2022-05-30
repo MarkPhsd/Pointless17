@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Subscription, } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
@@ -21,7 +21,7 @@ export interface ClientType {
   templateUrl: './client-type-selection.component.html',
   styleUrls: ['./client-type-selection.component.scss']
 })
-export class ClientTypeSelectionComponent implements OnInit {
+export class ClientTypeSelectionComponent implements OnInit, OnDestroy {
 
   @Output() outputClientTypesJSON:      EventEmitter<any> = new EventEmitter();
   @Output() outputClientTypes    :      EventEmitter<any> = new EventEmitter();
@@ -52,18 +52,16 @@ export class ClientTypeSelectionComponent implements OnInit {
             private fbPriceScheduleService: FbPriceScheduleService,
   ) { }
 
-   ngOnInit() {
-
+  ngOnInit() {
     if (this.dashboardModel && this.dashboardModel.widgetRolesJSON) { 
       this.savedClientTypes = JSON.parse(this.dashboardModel.widgetRolesJSON);
       if (this.savedClientTypes ) { 
         this.initForm()
       }
     }
-  
   }
 
-  ngDestroy() {
+  ngOnDestroy() {
     if (this._dashboardModel) {
       this._dashboardModel.unsubscribe();
     }
@@ -94,8 +92,6 @@ export class ClientTypeSelectionComponent implements OnInit {
     const list = this.savedClientTypes;
     if (list.length == 0) { this.dashboardModel.widgetRoles  = [] }
     this.addToList(list, this.clientTypeList, this.dashboardModel)
-    // this.fbPriceScheduleService.addClientTypes(this.inputForm, this.dashboardModel.widgetRoles);
-    // this.dashboardModel.widgetRolesJSON = JSON.stringify(this.dashboardModel.widgetRoles)
   }
 
   addToList(list: any[], typeList: IItemBasic[], dashboardModel: DashboardModel  ) {

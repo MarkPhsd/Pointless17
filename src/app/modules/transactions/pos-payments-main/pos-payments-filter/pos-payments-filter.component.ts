@@ -113,6 +113,11 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
       return
     }
 
+    ngOnDestroy() {
+      if (this._posPayment) { this._posPayment.unsubscribe()}
+      if (this._searchModel) {this._searchModel.unsubscribe();}
+    }
+
     initAuthorization() {
 
       this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
@@ -192,11 +197,7 @@ export class PosPaymentsFilterComponent implements OnDestroy, OnInit, AfterViewI
         this.employees$      = this.orderService.getActiveEmployees(site)
      }
 
-     ngOnDestroy() {
-      if (this._searchModel) {
-        this._searchModel.unsubscribe();
-      }
-    }
+   
 
     refreshPaymentSearch(id: string) {
       if (! this.searchModel) {  this.searchModel = {} as IPaymentSearchModel }

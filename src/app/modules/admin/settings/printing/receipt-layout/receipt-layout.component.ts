@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
 import { lte } from 'lodash';
 import { EMPTY, Subscription } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
@@ -18,7 +18,7 @@ import { switchMap } from 'rxjs/operators';
   templateUrl: './receipt-layout.component.html',
   styleUrls: ['./receipt-layout.component.scss']
 })
-export class ReceiptLayoutComponent implements OnInit {
+export class ReceiptLayoutComponent implements OnInit,OnDestroy {
 
   //we use these because it makes formating easier
   //during design process. so don't use saved seettings.
@@ -69,12 +69,10 @@ export class ReceiptLayoutComponent implements OnInit {
           this.payments   = this.order.posPayments
           this.orders=[]
           if (this.order) { this.orders.push(this.order)}
-          console.log('order', this.order)
           const datepipe: DatePipe = new DatePipe('en-US')
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
           if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
           if ( this.payments) { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
-
           return this.serviceTypeService.getType(this.site, data.serviceTypeID)
         }
       )
@@ -108,6 +106,12 @@ export class ReceiptLayoutComponent implements OnInit {
     await this.refreshData();
   }
 
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if ( this._order) {    this._order.unsubscribe()}
+
+  }
   async refreshData() {
     this.site = this.siteService.getAssignedSite();
     await this.initSubscriptions();

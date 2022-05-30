@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
@@ -27,7 +27,7 @@ export interface ElectronDimensions {
 @Injectable({
   providedIn: 'root'
 })
-export class UserSwitchingService {
+export class UserSwitchingService implements OnInit,OnDestroy {
 
   user  : IUser;
   _user : Subscription
@@ -71,8 +71,18 @@ export class UserSwitchingService {
     private toolbarUIService : ToolBarUIService,
     private electronService  : ElectronService
   ) {
+   
+  }
+
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
     this.initSubscriptions();
     this.initializeAppUser();
+  }
+
+  ngOnDestroy(): void {
+    if (this._user) { this._user.unsubscribe()}
   }
 
   initializeAppUser() {

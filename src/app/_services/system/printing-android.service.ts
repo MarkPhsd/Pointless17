@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import * as _ from "lodash";
-import { ISetting,  } from 'src/app/_interfaces';
+import { ICompany, ISetting,  } from 'src/app/_interfaces';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { BtPrintingService } from './bt-printing.service';
 import  EscPosEncoder  from 'esc-pos-encoder-ionic';
+import { CompanyService } from './company.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class PrintingAndroidService {
 
   constructor(  private electronService: ElectronService,
                 private snack: MatSnackBar,
+                private companyService: CompanyService,
                 private btPrintingService: BtPrintingService,
               ) {
     // if (this.electronService.remote != null) {
@@ -103,9 +105,34 @@ export class PrintingAndroidService {
     return result
   }
 
-  printAndroidOrder(order: IPOSOrder) {
+  printAndroidOrder(item: ICompany) {
+    const encoder = new EscPosEncoder();
+    let result = encoder
+
+
 
   }
+
+  getReceiptHeader(result: any, item: ICompany){
+
+    const encoder = new EscPosEncoder();
+    result
+    .align('center')
+    .line(item.compName)
+    .align('center')
+    .line(item.compBillingAddress)
+    .align('center')
+    .line(`${item.compBillingCity} , ${item.compBillingState} ${item.compBillingZip}`)
+    .align('center')
+    .line(`${item.phone}`)
+
+    return result
+  }
+  getReceiptOrderHeader(order :  IPOSOrder) { }
+  getItems(order : IPOSOrder) {}
+  getSubtotal(order :  IPOSOrder) {}
+  getPayments(order :  IPOSOrder) {}
+  getReceiptFooter(order :  IPOSOrder) {}
 
   getLastAndroidPOSPrinterName(): string {
     return  localStorage.getItem('androidPOSPrinter')
