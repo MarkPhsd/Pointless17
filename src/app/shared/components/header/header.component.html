@@ -20,7 +20,7 @@
             <button aria-label="menu"
                     mat-button
                     (click)="toggleSideBar()">
-              <mat-icon >{{menuBar}}</mat-icon>
+              <mat-icon>{{menuBar}}</mat-icon>
             </button>
           </div>
 
@@ -28,7 +28,7 @@
             <button aria-label="search"
                     mat-button
                     (click)="toggleSearchMenu()">
-              <mat-icon >{{searchBar}}</mat-icon>
+              <mat-icon>{{searchBar}}</mat-icon>
             </button>
           </div>
 
@@ -40,14 +40,14 @@
             </button>
           </div>
 
-          <div *ngIf="!smallDevice" id="location" >
+          <div *ngIf="!smallDevice" >
             <div class="site-name" *ngIf="site && site.name && site.name != undefined">
               <h2 > {{ site?.name.toUpperCase()  }} </h2>
             </div>
           </div>
 
           <div  *ngIf="!smallDevice" >
-            <button  aria-label="location_on"
+            <button aria-label="location_on"
                     mat-button
                     (click)="siteSelector()">
               <mat-icon>location_on</mat-icon>
@@ -211,8 +211,9 @@
                 </div>
 
                 <div *ngIf="smallDevice">
-                    <app-cart-button> </app-cart-button>
-                    <!-- <mat-divider class="mat-divider"></mat-divider> -->
+                    <app-cart-button
+                      [smallDevice]="smallDevice"
+                    > </app-cart-button>
                 </div>
 
                 <div  class="mat-item">
@@ -231,7 +232,6 @@
                 <div class="mat-item"
                       *ngIf="smallDevice">
                     <app-toggle-theme></app-toggle-theme>
-                    <!-- <mat-divider class="mat-divider"></mat-divider> -->
                 </div>
 
                 <div  mat-menu-item

@@ -19,6 +19,13 @@ mat-card {
 .order-layout-empty {
 }
 
+.center-items { 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
 .split-item-button {
   margin: 10px;
   width: 150px;
@@ -81,10 +88,9 @@ mat-card {
 
 .grid-items {
   display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
   gap: 10px;
   margin: 10px;
-
 }
 
 .grid-header-item {

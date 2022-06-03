@@ -11,8 +11,9 @@
   font-size: small;
 }
 
+
 :host .mat-menu-panel {
-  padding   : 10px   !important;
+  // padding   : 25px   !important;
   margin-top: 15px  !important;
   width     : 100%!important;
   min-width : 300px;
@@ -20,23 +21,18 @@
 }
 
 .mat-toolbar-android { 
-  padding-top   : 10px  !important;
-  padding-left  : 5px !important;
-  margin-top: 15px  !important;
-  width     : 100%  !important;
-  min-width : 300px;
-  height    : 65px !important;
-  overflow: hidden;
+  margin-top    : 15px  ;
+  width         : 100%  ;
+  min-width     : 300px ;
+  height        : 45px  ;
+  overflow      : hidden;
 }
 
 .mat-toolbar {
-  padding-top   : 10px  !important;
-  padding-left  : 5px !important;
-  // margin-top: 15px  !important;
-  width     : 100%  !important;
-  min-width : 300px;
-  height    : 65px !important;
-  overflow: hidden;
+  width         : 100%  !important;
+  min-width     : 300px;
+  height        : 45px !important;
+  overflow       : hidden;
 }
 
 .more-button {
@@ -59,10 +55,10 @@ mat-card  {
   padding:0px;
 }
 
-form {
-  margin-top: 1em;
-  font-size: .8em;
-}
+// form {
+//   margin-top: 1em;
+//   font-size: .8em;
+// }
 
 ul li{
   list-style: none;
@@ -113,30 +109,32 @@ button {
 
 .logo {
   margin-top: 3px;
-  width: 50px;
+  width     : 50px;
 }
 
 .flex-sections-nouser {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-basis: auto;
-  // margin-top: 35px;
-  
+  display         : flex;
+  justify-content : space-between;
+  flex-direction  : row;
+  flex-basis      : auto;
+  // margin-top      : 35px;
+  padding-top     : 10px;
   @include for-phone-only  {
     margin-top: 5px;
+    padding-top     : 5px;
   }
-
 }
+
 .flex-sections {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: row;
-  flex-basis: auto;
-  margin-top: 35px;
-  
+  display         : flex;
+  justify-content : space-between;
+  flex-direction  : row;
+  flex-basis      : auto;
+  margin-top      : 35px;
+  padding-top     : 10px;
   @include for-phone-only  {
     margin-top: 5px;
+        padding-top     : 5px;
   }
 
 }
@@ -156,7 +154,6 @@ button {
        -moz-user-select:none;
        -ms-user-select:none;
        user-select:none;
-  // margin-left: .5em;
   font-style: italic;
 }
 

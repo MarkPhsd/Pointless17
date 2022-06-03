@@ -21,9 +21,9 @@
       </div>
 
       <div>
-        <div *ngIf="!disableActions && canRemoveClient" >
+        <div *ngIf="!disableActions || canRemoveClient" >
           <button mat-button
-                  (click)="removeClient()">
+                  (click)="clearClient()">
               <mat-icon>clear</mat-icon>Clear
           </button>
         </div>
@@ -50,7 +50,7 @@
 
     <div class="new-button float-left" >
       <button mat-button
-              (click)="gotoAddClient()">
+              (click)="addClient()">
               <mat-icon>add</mat-icon>New
       </button>
     </div>

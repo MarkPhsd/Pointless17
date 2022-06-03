@@ -10,6 +10,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-menu-items-infinite',
@@ -26,7 +27,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
 
   scrollContainer:   any;
   isNearBottom   :   any;
-
+  webMode        :  boolean;
   productSearchModel
   array            = [];
   sum              = 15;
@@ -90,7 +91,7 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
     })
   }
 
-constructor(private menuService      : MenuService,
+constructor(private menuService        : MenuService,
               private awsBucketService : AWSBucketService,
               private router           : Router,
               public  route            : ActivatedRoute,
@@ -98,6 +99,7 @@ constructor(private menuService      : MenuService,
               private toolbarServiceUI : ToolBarUIService,
               private titleService     : Title,
               private platFormService  : PlatformService,
+       
       )
 {
   this.isApp = this.platFormService.isApp()
@@ -122,6 +124,7 @@ async ngOnInit()  {
   //but if we move back, and have a category assigned but no department, we can't be
   //sure if we should accept the model, or the parameter from the page.
 
+
   this.value      = 1;
   this.bucketName =   await this.awsBucketService.awsBucket();
   this.initSearchProcess();
@@ -134,7 +137,6 @@ async ngOnInit()  {
   await this.nextPage();
 
   this.initOrderBarSubscription()
-
   this.setTitle()
 }
 
@@ -161,6 +163,7 @@ initSearchProcess() {
       this.brandID      = this.route.snapshot.paramMap.get('brandID');
       this.typeID       = this.route.snapshot.paramMap.get('typeID');
       this.productName  = this.route.snapshot.paramMap.get('productName');
+   
   } catch (error) {
     console.log('initSearchProcess Error', error)
   }
@@ -178,7 +181,8 @@ initSearchFromModel() {
       this.brandID      = model.brandID;
       this.typeID       = model.itemTypeID
       this.productName  = model.name
-
+      model.web         = this.webMode
+      model.webMode     = this.webMode;
       if (!model.pageNumber) { model.pageNumber = 1}
       this.currentPage = model.pageNumber
 
@@ -200,15 +204,8 @@ initSearchFromModel() {
         itemTypeName = 'types ' + model.itemTypeName;
         let reRoute = false
       }
-
-      if (this.isApp) {
-        model.webMode = false
-      }
-      if (!this.isApp) {
-        model.webMode = true
-      }
-
-      model.active = true;
+      model.webMode = this.menuService.isWebModeMenu
+      model.active  = true;
 
       this.productSearchModelData = model;
       this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`

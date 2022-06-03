@@ -122,7 +122,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   currentOrderSusbcriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-      console.log(data)
+      // console.log(data)
       this.canRemoveClient = true
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
         this.canRemoveClient = false
@@ -248,8 +248,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
-      // this.showScheduleFilter = true;
-      // this.showDateFilter = true;
+   
     }
   }
 
@@ -438,7 +437,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.toolbarUIService.resetOrderBar(false)
     }
 
-    // http://localhost:4200/pos-order-schedule
     let url = 'pos-order-schedule'
     if (!this.isStaff) {
       url = 'pos-order-schedule'

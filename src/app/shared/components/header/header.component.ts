@@ -98,7 +98,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   menuBar    = 'menu'
   searchBar  = 'search';
   flexsections = 'flex-sections'
-  //themes
   matToolbarColor = 'primary';
 
   siteName: string;

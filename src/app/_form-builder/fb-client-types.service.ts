@@ -37,6 +37,7 @@ export class FbClientTypesService {
       addEmployee : [''],
       changeClientType : [''],
       changeAuths : [''],
+      deleteClientType : [''],
     })
     return fb
 

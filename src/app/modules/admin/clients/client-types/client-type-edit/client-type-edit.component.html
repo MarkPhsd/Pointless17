@@ -11,7 +11,7 @@
 
         <div>
           <app-edit-buttons-standard
-              (outputeupdateItem)     ="updateItem($event)"
+              (outputeupdateItem)     ="updateItem($event, false)"
               (outputupdateItemExit)  ="updateItemExit($event)"
               (outputupdatedeleteItem)="deleteItem($event)"
               (outputupdateonCancel)  ="onCancel($event)"
@@ -24,7 +24,6 @@
     </mat-card-title>
 
     <mat-card-subtitle>
-
 
     </mat-card-subtitle>
 
@@ -45,11 +44,8 @@
               </div>
             </div>
 
-
             <div class="grid-headers">
-
               <div  class="grid-fields name-height ">
-
                   <div>
                     <mat-form-field appearance="outline">
                       <mat-label >Display Name</mat-label>
@@ -79,7 +75,6 @@
                             class="form-control" >
                     </mat-form-field>
                   </div>
-
               </div>
 
               <!-- <mat-divider [vertical]="true"></mat-divider> -->
@@ -123,6 +118,7 @@
                           class="form-control" >
                   </mat-form-field>
                 </div>
+
                 <div>
                   <mat-form-field appearance="outline">
                     <mat-label >Concentrate</mat-label>
@@ -142,6 +138,7 @@
                           class="form-control" >
                   </mat-form-field>
                 </div>
+
               </div>
             </div>
         </mat-tab>
@@ -307,15 +304,21 @@
                   <mat-label>Change Auths</mat-label>
                 </mat-slide-toggle>
               </div>
+
+            </div>
+            <div>
+              <h4>Delete</h4>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="deleteClientType" >
+                  <mat-label>Delete Client Types</mat-label>
+                </mat-slide-toggle>
+              </div>
             </div>
 
           </div>
-
-
         </mat-tab>
-
       </mat-tab-group>
-
       </div>
     </mat-card-content>
   </mat-card>

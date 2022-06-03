@@ -1,6 +1,5 @@
 <div class="grid-container">
-
-    <div cass="toggle-group" *ngIf="values && !savingChanges">
+    <div class="toggle-group" *ngIf="!smallDevice &&  values && !savingChanges">
       <mat-button-toggle-group
             name         = "type"
             [(ngModel)]  = "currentGroup"
@@ -17,7 +16,23 @@
       </mat-button-toggle-group>
     </div>
 
-    <div class="grid-dual-list">
+    <div cass="toggle-group" *ngIf="smallDevice && values && !savingChanges">
+      <mat-button-toggle-group
+            name         = "type"
+            [(ngModel)]  = "currentGroup"
+            horizontal>
+        <mat-button-toggle
+              *ngFor      ="let item of values"
+              class       ="toggle-button-wide"
+              type        ="button"
+              [value]     ="item"
+              (click)     ="applyGroupID(item)"
+              id          ="item.id">
+          {{item.name}}
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div>
       <mat-card>
         <mat-card-subtitle>
           <div class="span-column">
@@ -47,7 +62,7 @@
                     </button>
                   </div>
                 </div>
-           
+            
               </mat-card-actions>
             </mat-card>
             <ng-template #calculating>
@@ -65,7 +80,7 @@
           
           <div class="span-column" *ngIf="!savingChanges; else savingChangesOn">
             <div class="grid-dual-list">
-  
+
               <div class="col-md-6 col-lg-6 col-sm-12 dualListLeft">
                 
                 <div class="primary-container drag-drop-container">
@@ -116,13 +131,13 @@
                   </div>
                 </div>
               </div>
-  
+
             </div>
           </div>
 
         </mat-card-content>
 
- 
+
     
         
 

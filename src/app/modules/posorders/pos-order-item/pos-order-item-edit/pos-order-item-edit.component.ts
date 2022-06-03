@@ -6,6 +6,7 @@ import { POSOrderItemServiceService } from 'src/app/_services/transactions/posor
 import { PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { IonItem } from '@ionic/angular';
 
 @Component({
   selector: 'app-pos-order-item-edit',
@@ -34,6 +35,7 @@ export class PosOrderItemEditComponent  {
       @Inject(MAT_DIALOG_DATA) public data: any
   ) {
 
+    this.decimals = 2
     if (data) {
 
       this.instructions = data.instructions
@@ -41,8 +43,10 @@ export class PosOrderItemEditComponent  {
       this.posOrderItem = data.orderItem;
       this.menuItem     = data.menuItem
 
-      if (this.menuItem && this.menuItem.itemType) {
-        this.requireWholeNumber = this.menuItem.itemType?.requireWholeNumber;
+      if (this.editField == 'quantity') {
+        if (this.menuItem && this.menuItem.itemType) {
+          this.requireWholeNumber = this.menuItem.itemType?.requireWholeNumber;
+        }
       }
       if (!this.requireWholeNumber) {
         this.decimals = 2
@@ -69,33 +73,49 @@ export class PosOrderItemEditComponent  {
           itemName: [],
         })
       }
+      if (this.editField == 'price') {
+        this.inputForm = this._fb.group({
+          quantity: [this.posOrderItem.quantity],
+          itemName: [],
+          price   : [this.posOrderItem.unitPrice]
+        })
+      }
 
     }
   }
+
 
   initValueType() {
     if (!this.menuItem) {
       this.decimals = 2
       return
     }
-
-    if (this.menuItem?.itemType?.requireWholeNumber) {
-      this.inputTypeValue = 'number'
-      this.decimals = 0
-      return
+  
+    if (this.editField == 'quantity') {
+      if (this.menuItem?.itemType?.requireWholeNumber) {
+        this.inputTypeValue = 'number'
+        this.decimals = 0
+        return
+      }
+      
+      if (!this.menuItem?.itemType?.requireWholeNumber) {
+        this.inputTypeValue = 'decimal'
+        this.decimals = 2
+        return
+      }
     }
-
-    if (!this.menuItem?.itemType?.requireWholeNumber) {
-      this.inputTypeValue = 'decimal'
-      this.decimals = 2
-      return
-    }
-
   }
+
   saveChange(event) {
     const item = this.getItemValue();
     item.quantity = event;
     this.updateQuantity(item)
+  }
+
+  savePriceChange(event) {
+    const item = this.getItemValue();
+    item.unitPrice = event;
+    this.save()
   }
 
   save() {
@@ -104,8 +124,23 @@ export class PosOrderItemEditComponent  {
       const item = this.getItemValue();
       if (item && site) {
 
-        if (this.editField == 'quantity'  ) {
+        if (this.editField == 'quantity') {
           this.updateQuantity(item)
+          return
+        }
+
+       if (this.editField == 'price') {
+          if (item) {
+            this.posOrderItemService.changeItemPrice(site, item).subscribe( data => {
+              if (data) { 
+                if (data.resultMessage) { 
+                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
+                }
+              }
+              this.orderService.updateOrderSubscription(data)
+              this.onCancel();
+            })
+          }
           return
         }
 
@@ -120,6 +155,7 @@ export class PosOrderItemEditComponent  {
     }
   }
 
+
   updateQuantity(item: PosOrderItem) {
     const site = this.siteService.getAssignedSite();
     this.posOrderItemService.changeItemQuantity(site, item ).subscribe( data => {
@@ -130,19 +166,28 @@ export class PosOrderItemEditComponent  {
 
   getItemValue() {
     let item = this.posOrderItem;
-    if (this.editField == 'modifierNote') {
+
+    if (this.editField === 'modifierNote') {
       const value = this.inputForm.controls['modifierNote'].value;
       item.modifierNote = value;
     }
 
-    if (this.editField == 'quantity') {
+    if (this.editField === 'quantity') {
       const value = this.inputForm.controls['quantity'].value;
       item.quantity = value;
     }
 
+    if (this.editField === 'price') {
+      const value = this.inputForm.controls['price'].value;
+      // item.unitPrice = value;
+      // console.log('value', value)
+    }
+  
     return item
   }
 
+  // 
+ 
 
   onCancel() {
     this.closeOnEnterPress.emit('true')

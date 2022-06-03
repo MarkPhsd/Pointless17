@@ -234,12 +234,15 @@ export class EmployeeEditComponent implements OnInit {
   update(event): void {
     const empClient$ = this.getEmployeeClientObservable();
     if (empClient$) {
-        empClient$.subscribe(data => {
-          this.notifyEvent('Saved', "Saved")
-        },
-        err => {
-          const message = 'Adding employee failed, please input a unique PIN Code. It may need to be a be a long number';
-          this.notifyEvent(message, "Failure")
+        empClient$.subscribe(
+          {
+            next: data => {
+            this.notifyEvent('Saved', "Saved")
+          },
+            error: err => {
+            const message = 'Adding employee failed, please input a unique PIN Code. It may need to be a be a long number';
+            this.notifyEvent(message, "Failure")
+          }
         }
       )
     }

@@ -183,12 +183,12 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     console.log(show)
     if (!show || show === 'true') {
       localStorage.setItem('OrderFilterPanelVisible', 'false')
-      this.outPutHidePanel.emit(false)
+      this.outPutHidePanel.emit(true)
       return
     }
     if (show === 'false') {
       localStorage.setItem('OrderFilterPanelVisible', 'true')
-      this.outPutHidePanel.emit(true)
+      this.outPutHidePanel.emit(false)
       return
     }
   }

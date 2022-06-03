@@ -22,7 +22,7 @@ export class PosOrderTransactionDataComponent{
     // this.roles = localStorage.getItem(`roles`)
     this.isUserStaff = this.userAuthorization.isCurrentUserStaff()
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin');
-    console.log('roles', this.userAuthorization.isUserAuthorized('admin'));
+    // console.log('roles', this.userAuthorization.isUserAuthorized('admin'));
    }
 
    notify(message: string, title: string, duration: number) {

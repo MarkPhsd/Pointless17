@@ -1,3 +1,5 @@
+@import "/src/mixins.scss";
+
 mat-card { 
   width: 100%;
   min-width: 500px;
@@ -12,7 +14,7 @@ mat-card {
 
 .drag-drop-list {
   border: solid 1px;
-  min-height: 60px;
+  min-height: 300px;
   overflow: hidden;
   display: block;
   margin-top: 10px;
@@ -70,10 +72,23 @@ mat-card {
   overflow-y: scroll;
 }
 
+.grid-container {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 10px;
+  @include for-phone-only  {
+    grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  }
+}
+
 .grid-dual-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
   gap: 10px;
+  @include for-phone-only  {
+    width: 310px;
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  }
 }
 
 .span-column { 
@@ -83,62 +98,20 @@ mat-card {
   overflow-x: hidden;
 }
 
-@media (min-width: 768px) {
-  .drag-drop-container {
-    margin: 0;
-  }
-
-  .dualListLeft, .dualListRight {
-    display: flex;
-  }
-
-  .listboxform-wrap {
-    padding-top: 3em;
-    padding-bottom: 3em;
-  }
-
-  .grid-container {
-    display: grid;
-    grid-template-columns: 150px 1fr;
-  }
-
-  .grid-dual-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 10px;
-  }
+.dualListLeft, .dualListRight {
+  display: flex;
 }
 
-@media (min-width: 480px) {
-  .grid-container {
-    display: grid;
-    grid-template-columns: 250px 1fr;
-
-  }
-  .grid-dual-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 10px;
-  }
+.drag-drop-container {
+  margin: 0;
 }
 
-@media (max-width: 768px) {
-  .listbox-title {
-    font-size: 1.3rem;
-  }
-  .grid-container {
-    display: grid;
-    grid-template-columns: .25fr 1fr;
-  }
-  .grid-dual-list {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    margin: 10px;
-  }
+.listboxform-wrap {
+  padding-top: 3em;
+  padding-bottom: 3em;
 }
 
 .toggle-buttons-wide {
-  // width: 95%;
   width: 100px;
   margin-left: 5px;
   text-align: left;
@@ -152,12 +125,18 @@ mat-button-toggle {
   width: 150px;
   margin-left: 5px;
   text-align: left;
+  @include for-phone-only  {
+    width: 99%;
+  }
 }
 
 mat-button-toggle-group {
   width: 150px;
   margin-left: 5px;
-  text-align: left ;
+  text-align: left ; 
+  @include for-phone-only  {
+    width: 99%;
+  }
 }
 
 button { 
@@ -171,3 +150,4 @@ button {
   gap: 5px;
   margin: 10px;
 }
+

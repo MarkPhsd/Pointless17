@@ -32,6 +32,7 @@ export interface TransactionUISettings {
   showOrderName          : boolean;
   recmedPricing          : boolean;
   applyTaxChangesToDiscountedItems  : boolean;
+  fuzzyMatchBarcodeLookup: boolean;
 }
 
 export interface StripeAPISettings {
@@ -39,23 +40,24 @@ export interface StripeAPISettings {
   apiKey     : string;
   apiSecret: string;
   enabled: boolean;
+  paymentAgreement: string;
 }
 
 export interface DSIEMVSettings {
   id        : number;
-  HostOrIP  : string;
-  IpPort    : string;
-  MerchantID: string;
-  TerminalID: string;
-  OperatorID: string;
-  UserTrace : string;
-  TranCode  : string;
-  SecureDevice: string;
-  ComPort   : string;
-  PinPadIpAddress: string;
-  PinPadIpPort: string;
-  SequenceNo: string;
-  DisplayTextHandle: string;
+  hostOrIP  : string;
+  ipPort    : string;
+  merchantID: string;
+  terminalID: string;
+  operatorID: string;
+  userTrace : string;
+  tranCode  : string;
+  secureDevice: string;
+  comPort   : string;
+  pinPadIpAddress: string;
+  pinPadIpPort: string;
+  sequenceNo: string;
+  displayTextHandle: string;
   enabled: boolean;
 }
 
@@ -292,20 +294,21 @@ export class UISettingsService {
 
   initDSIEMVForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      HostOrIP         : [''],
-      IpPort           : [''],
-      MerchantID       : [''],
-      TerminalID       : [''],
-      OperatorID       : [''],
-      UserTrace        : [''],
-      TranCode         : [''],
-      SecureDevice     : [''],
-      ComPort          : [''],
-      PinPadIpAddress  : [''],
-      PinPadIpPort     : [''],
-      SequenceNo       : [''],
-      DisplayTextHandle: [''],
-      enabled          : [''],
+      id        : [''],
+      hostOrIP  : [''],
+      ipPort    : [''],
+      merchantID: [''],
+      terminalID: [''],
+      operatorID: [''],
+      userTrace : [''],
+      tranCode  : [''],
+      secureDevice: [''],
+      comPort   : [''],
+      pinPadIpAddress: [''],
+      pinPadIpPort:[''],
+      sequenceNo:  [''],
+      displayTextHandle: [''],
+      enabled:     [''],
     })
     return fb
   }
@@ -316,6 +319,7 @@ export class UISettingsService {
       apiSecret        : [''],
       apiKey           : [''],
       enabled          : [''],
+      paymentAgreement : [''],
     })
     if (!config) { return fb}
     fb.patchValue(config)
@@ -379,6 +383,7 @@ export class UISettingsService {
       showOrderName          : [],
       recmedPricing          : [],
       applyTaxChangesToDiscountedItems : [],
+      fuzzyMatchBarcodeLookup: [''],
      })
     return fb
   }

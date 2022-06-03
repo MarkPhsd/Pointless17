@@ -114,9 +114,21 @@
 
   .companyName {
     text-align: center;
-    font-size: .8em;
+    font-size: 1.2em;
+    font-weight: bold;
     @media : print {
-      font-size: 10pt;
+      font-size: 14pt;
+     font-weight: bold;
+    }
+  }
+
+  .med-license{
+    text-align: center;
+    font-size: .9em;
+    font-weight: bold;
+    @media : print {
+      font-size: 11pt;
+      font-weight: bold;
     }
   }
 
@@ -191,14 +203,6 @@
 
   .items-span-columns-2{
     grid-column-end: span 2;
-  }
-
-  .items-span-columns-start-2 {
-    grid-column-start: span 2;
-  }
-
-  .items-span-columns-start-3 {
-    grid-column-start: span 3;
   }
 
   .items-span-columns-3 {

@@ -34,14 +34,29 @@
         </app-key-pad>
       </div>
 
+      <div *ngIf="menuItem && editField === 'price'">
+        <app-key-pad
+                [inputForm]           = "inputForm"
+                [inputTypeValue]      = "inputTypeValue"
+                [decimals]            = decimals
+                [showInput]           = "true"
+                [requireWholeNumber]  = "false"
+                (outPutReturnEnter)   = "savePriceChange($event)"
+                (closeOnEnterPress)   = "onClose($event)">
+          Enter Value
+        </app-key-pad>
+      </div>
+
     </div>
   </mat-card-content>
   <mat-card-actions >
     <div class="button-container" fxFlexFill flex>
-      <button *ngIf="editField != 'quantity'"
+      <button *ngIf="editField != 'quantity' && editField != 'price'"
               mat-raised-button color='primary' (click)="save()">
               <mat-icon>save</mat-icon>Save
       </button>
+
+
       <button mat-raised-button
               color="primary"
               (click)="onCancel()"><mat-icon>close</mat-icon>Cancel

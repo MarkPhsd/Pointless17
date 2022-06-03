@@ -1,12 +1,10 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
-import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -16,6 +14,10 @@ import { UserSwitchingService } from 'src/app/_services/system/user-switching.se
   // changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainMenuComponent implements OnInit  {
+  @ViewChild('brandView') brandView: TemplateRef<any>;
+  @ViewChild('categoryView') categoryView: TemplateRef<any>;
+  @ViewChild('departmentView') departmentView: TemplateRef<any>;
+  @ViewChild('tierMenuView') tierMenuView: TemplateRef<any>;
 
   homePageSetings: UIHomePageSettings;
   smoke  = "./assets/video/smoke.mp4"
@@ -26,11 +28,9 @@ export class MainMenuComponent implements OnInit  {
   _site: Subscription;
   initSiteSubscriber() {
     this._site = this.siteService.site$.subscribe( data => {
-      console.log('site')
       if (!data) { return }
       if (!this.site) { this.site = data }
       if (this.site.id != data.id) { 
-        console.log('resload page')
         this.reloadComponent();
       }
     })
@@ -39,7 +39,6 @@ export class MainMenuComponent implements OnInit  {
   constructor(
     private uiSettings: UISettingsService,
     private userAuthorizationService: UserAuthorizationService,
-    private authentication: AuthenticationService,
     private siteService: SitesService,
     private router: Router,
   ) {
@@ -64,13 +63,49 @@ export class MainMenuComponent implements OnInit  {
       })
   }
 
-    reloadComponent() {
-      let currentUrl = this.router.url;
-          this.router.routeReuseStrategy.shouldReuseRoute = () => false;
-          this.router.onSameUrlNavigation = 'reload';
-          this.router.navigate([currentUrl]);
-      }
-
+  reloadComponent() {
+    let currentUrl = this.router.url;
+    this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+    this.router.onSameUrlNavigation = 'reload';
+    this.router.navigate([currentUrl]);
   }
+
+  get isBrandListViewOn() { 
+  
+    if ((this.isStaff && this.homePageSetings.staffBrandsEnabled) ||
+                  (!this.isStaff && this.homePageSetings.brandsEnabled)){
+      return this.brandView
+    }
+    return null;
+  }
+
+  get isTierMenuViewOn() {
+  
+    if ((this.isStaff && this.homePageSetings.staffTierMenuEnabled) ||
+        (!this.isStaff && this.homePageSetings.tierMenuEnabled)) {
+      return this.tierMenuView
+    }
+    return null;
+  }
+
+  get isCategoryViewOn() {
+   
+    if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
+        (!this.isStaff && this.homePageSetings.categoriesEnabled)) {
+      return this.categoryView
+    }
+    return null;
+  }
+
+  get isDepartmentViewOn() {
+  
+    if ((this.isStaff && this.homePageSetings.staffDepartmentsEnabled) ||
+        (!this.isStaff && this.homePageSetings.departmentsEnabled)) {
+      return this.departmentView
+    }
+    return null;
+  }
+      
+}
 
 

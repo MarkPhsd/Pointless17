@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject} from '@angular/core';
+import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StripeService, StripeCardComponent, StripeInstance, StripeFactoryService, StripePaymentElementComponent } from 'ngx-stripe';
 import {
@@ -14,9 +14,7 @@ import { IStripePaymentIntent, StripePaymentService } from 'src/app/_services/st
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { OrdersService } from 'src/app/_services';
-import { DialogData } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-card.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -27,6 +25,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class StripeCheckOutComponent implements OnInit, OnDestroy  {
 
   @ViewChild(StripePaymentElementComponent) paymentElement: StripePaymentElementComponent;
+
+  @ViewChild('paymentTemplateRef') paymentTemplateRef: TemplateRef<any>;
+  outletTemplate: TemplateRef<any>;
+  
   @Input() amount  : number;
   @Input() testMode: boolean;
   @Input() maxAmount: number;
@@ -95,22 +97,39 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   }
 
   initStripeIntent() {
-    this.uISettingsService.stripeAPISettings$.pipe(
+
+    const stripeSettings$ = this.uISettingsService.getSetting('StripeAPISettings')
+    // this.uiSettings = data;
+    // this.stripeAPISettings   = JSON.parse(data.text) as StripeAPISettings
+    this.errorMessage = '';
+
+    stripeSettings$.pipe(
       switchMap(data => {
         if (data) {
+          this.stripeAPISetting  = JSON.parse(data.text) as StripeAPISettings
+          this.stripeInstance    = this.stripeService.setKey(this.stripeAPISetting.apiKey);
           if (!this.amount) { this.amount = 1 }
-          this.stripeAPISetting  = data;
-          this.stripeInstance    = this.stripeService.setKey(data.apiKey);
         }
         this.validateAmount()
         return  this.createPaymentIntent(this.amount)
       }
-    )).subscribe(data => {
-      this.elementsOptions.clientSecret =  data.clientSecret;
-      this.errorMessage = data.errorMessage;
+    )).subscribe(
+      {next: data => {
+        this.outletTemplate = this.paymentTemplateRef;
+        this.elementsOptions.clientSecret =  data.clientSecret;
+        this.errorMessage   = data.errorMessage;
+      }, 
+      error : err => { 
+        this.errorMessage   = err.toString()
+        this.outletTemplate = null;
+      }
     })
 
-    this.stripeInstance.confirmPayment
+    if (!this.stripeInstance || !this.stripeInstance.confirmPayment) { 
+      this.errorMessage = 'Stripe not initiated. Please contact staff for assistance.'
+      return;
+    }
+    this.stripeInstance.confirmPayment;
   }
 
   cancel() {
@@ -153,11 +172,11 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   ngOnDestroy() {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
-    if (this._apiSetting) {this._apiSetting.unsubscribe()}
-    if (this._order) {this._order.unsubscribe()}
+    if (this._apiSetting)  {this._apiSetting.unsubscribe()}
+    if (this._order)      { this._order.unsubscribe()}
     if (this._posPayment) { this._posPayment.unsubscribe()}
+    
   }
-
 
   private createPaymentIntent(amount: number): Observable<IStripePaymentIntent> {
     if (!this.testMode) {
@@ -179,12 +198,8 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     })
   }
 
-
-
   onChange({ type, event }) {
-    console.log('type', type)
-    console.log('event', event)
-    if (type === 'change') {
+     if (type === 'change') {
       this.stripeCardValid = event.complete;
     }
   }
@@ -196,7 +211,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     this.validateAmount()
 
     if (!this.amount || this.amount == 0) {return}
-
+    this.errorMessage = ''
     this.createPaymentIntent(this.amount).subscribe(data => {
       this.elementsOptions.clientSecret =  data.clientSecret;
       this.errorMessage = data.errorMessage;
@@ -219,12 +234,12 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
       }).pipe(
         switchMap( result => {
         this.paying = false;
-
         this.result = result;
 
         if (result.error) {
           // Show error to your customer (e.g., insufficient funds)
           // alert({ success: false, error: result.error.message });
+          this.errorMessage = result?.error?.message;
           this.matSnack.open('Process failed ' + result.error.message, 'Sorry')
           return
         } else {

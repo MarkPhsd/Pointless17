@@ -17,6 +17,7 @@ export class StripeSettingsComponent implements OnInit {
   uiSettings : ISetting;
   uiSettings$: Observable<ISetting>;
   stripeAPISettings = {} as StripeAPISettings;
+  paymentAgreement: string;
 
   constructor(private uISettingsService: UISettingsService,
               private matSnack         : MatSnackBar) { }
@@ -31,10 +32,12 @@ export class StripeSettingsComponent implements OnInit {
           this.stripeAPISettings.apiKey = 'please fill to use';
           this.stripeAPISettings.apiSecret = 'please fill to use';
           this.stripeAPISettings.enabled = false;
+          this.paymentAgreement = 'Please complete these, they will instruct your client about the payment and refund policy.'
         }
         this.stripeEnabled = this.stripeAPISettings.enabled;
         this.stripeAPISettings.id = data.id;
         this.initForm(this.stripeAPISettings);
+        this.paymentAgreement = this.stripeAPISettings.paymentAgreement;
       }
     });
   }
@@ -50,6 +53,7 @@ export class StripeSettingsComponent implements OnInit {
       return
     }
 
+    // this.inputForm.patchValue({paymentAgreement: this.paymentAgreement})
     this.uISettingsService.setSetting(this.inputForm.value, 'StripeAPISettings').subscribe(
       {
         next: data => {

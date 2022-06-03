@@ -21,6 +21,10 @@ export class DeviceInfoComponent implements OnInit {
     this.deviceName = localStorage.getItem('devicename')
   }
 
+  // get deviceName() { 
+  //   return localStorage.getItem('devicename')
+  // }
+
   getDeviceInfo() {
     this.deviceInfo = this.deviceService.getDeviceInfo();
     this.isMobile = this.deviceService.isMobile();
@@ -31,6 +35,5 @@ export class DeviceInfoComponent implements OnInit {
   saveDeviceName() {
     localStorage.setItem('devicename', this.deviceName)
   }
-
 
 }

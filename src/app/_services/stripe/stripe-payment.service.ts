@@ -1,13 +1,10 @@
 import { Injectable } from '@angular/core';
-
 import { FormBuilder, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import { StripeService, StripePaymentElementComponent } from 'ngx-stripe';
+import { StripeService } from 'ngx-stripe';
 import {
   StripeElementsOptions,
-  PaymentIntent
 } from '@stripe/stripe-js';
 import { SitesService } from '../reporting/sites.service';
 

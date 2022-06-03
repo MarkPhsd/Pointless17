@@ -2,28 +2,17 @@
   <mat-card-title>
     <div>Transaction Type: {{type}} ( {{ action}} ) </div>
     <div class="grid-totals">
-      <div>
-        Payment #
-      </div>
-      <div>
-        {{payment?.id}}
-      </div>
-      <div>
-        Order #
-      </div>
-      <div>
-        {{payment?.orderID}}
-      </div>
+      <div>Payment # </div>
+      <div>{{payment?.id}}</div>
+      <div>  Order # </div>
+      <div>{{payment?.orderID}} </div>
+      <div>Amount</div>
+      <div>{{amount | currency}}</div>
     </div>
   
   </mat-card-title>
 
   <mat-card-content>
-    <div class="grid-items">
-      <div>Amount</div>
-      <div>{{amount | currency}}</div>
-    </div>
-
     <div *ngIf="processing">
       <div>
         <h2>{{message}}</h2>

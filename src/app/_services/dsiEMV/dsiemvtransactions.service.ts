@@ -324,16 +324,16 @@ export class DSIEMVTransactionsService implements OnDestroy {
 
   private getPadSettings(transaction: Transaction): Transaction {
     if (this.dsiEMVSettings && transaction) {
-      transaction.IpPort        = this.dsiEMVSettings.IpPort
-      transaction.TerminalID    = this.dsiEMVSettings.TerminalID
-      transaction.OperatorID    = this.dsiEMVSettings.OperatorID
-      transaction.UserTrace     = this.dsiEMVSettings.UserTrace
-      transaction.TranCode      = this.dsiEMVSettings.TranCode
-      transaction.SecureDevice  = this.dsiEMVSettings.SecureDevice
-      transaction.ComPort       = this.dsiEMVSettings.ComPort
-      transaction.PinPadIpPort  = this.dsiEMVSettings.PinPadIpPort
+      transaction.IpPort        = this.dsiEMVSettings.ipPort
+      transaction.TerminalID    = this.dsiEMVSettings.terminalID
+      transaction.OperatorID    = this.dsiEMVSettings.operatorID
+      transaction.UserTrace     = this.dsiEMVSettings.userTrace
+      transaction.TranCode      = this.dsiEMVSettings.tranCode
+      transaction.SecureDevice  = this.dsiEMVSettings.secureDevice
+      transaction.ComPort       = this.dsiEMVSettings.comPort
+      transaction.PinPadIpPort  = this.dsiEMVSettings.pinPadIpPort
       transaction.SequenceNo    = '0010010010'
-      transaction.HostOrIP      = this.dsiEMVSettings.HostOrIP;
+      transaction.HostOrIP      = this.dsiEMVSettings.hostOrIP;
       return transaction
     }
     return null

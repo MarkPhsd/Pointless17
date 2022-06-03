@@ -3,7 +3,6 @@ import { FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-
 @Component({
   selector: 'app-uitransactions',
   templateUrl: './uitransactions.component.html',
@@ -11,11 +10,10 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 })
 export class UITransactionsComponent implements OnInit {
 
-  inputForm  : FormGroup;
-
-  uiSettings :  ISetting
-  uiSettings$: Observable<ISetting>;
-  uiTransactions = {} as TransactionUISettings;
+  inputForm       : FormGroup;
+  uiSettings      :  ISetting
+  uiSettings$     : Observable<ISetting>;
+  uiTransactions  = {} as TransactionUISettings;
 
   constructor(
       private uISettingsService: UISettingsService,

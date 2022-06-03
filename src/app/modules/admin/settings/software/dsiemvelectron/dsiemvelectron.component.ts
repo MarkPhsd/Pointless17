@@ -5,8 +5,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { CmdResponse, RStream, DSIEMVTransactionsService, TranResponse, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { RStream, DSIEMVTransactionsService, TranResponse, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 import { DSIEMVSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -30,17 +32,18 @@ export class DSIEMVElectronComponent implements OnInit {
   pathName = 'default'
   get f() {return this.pathForm.controls}
   constructor(private uISettingsService: UISettingsService,
-              private dsiEMVService: DSIEMVTransactionsService,
-              private dsiProcess: DSIProcessService,
-              private fb: FormBuilder,
-              private matSnack: MatSnackBar,
-              private electronService : ElectronService) { }
+              private dsiEMVService:     DSIEMVTransactionsService,
+              private dsiProcess        : DSIProcessService,
+              private fb                : FormBuilder,
+              private matSnack          : MatSnackBar,
+              private settingsService   : SettingsService,
+              private siteService       : SitesService,
+              private electronService   : ElectronService) { }
 
-  ngOnInit(): void {
-    if (this.electronService.remote) {
-      this.isElectron = true;
-    }
-    this.initForm();
+  ngOnInit(): void { 
+    if (this.electronService.remote) {this.isElectron = true  }
+
+    this.initializeDeviceSettings()
     this.pathForm = this.fb.group({
       pathName: ['']
     })
@@ -50,7 +53,9 @@ export class DSIEMVElectronComponent implements OnInit {
     })
   }
 
-
+  initializeDeviceSettings() { 
+    this.initForm();
+  }
 
   initForm() {
     this.inputForm = this.uISettingsService.initDSIEMVForm(this.inputForm)
@@ -59,18 +64,44 @@ export class DSIEMVElectronComponent implements OnInit {
 
   loadSettings() {
     if (!this.inputForm) { return }
-    const item = localStorage.getItem('DSIEMVSettings');
-    if (!item) { return }
-    const obj = JSON.parse(item) as DSIEMVSettings;
-    this.inputForm.patchValue(obj)
+    const dsiDevice = `DSIEMVSettings/${this.settingsService.deviceName}`
+    const dsiSettings$ =  this.settingsService.getDSIEMVSettings()
+    dsiSettings$.subscribe(data =>
+       {
+        if (data) { 
+          this.inputForm.patchValue(data)
+          const json = JSON.stringify(data);
+          localStorage.setItem('DSIEMVSettings', json)
+          
+        }
+      }
+    )
+
   }
 
-    saveSettings() {
-    console.log(this.inputForm.value)
+  saveSettings() {
+   
     if (!this.inputForm) { return }
-    const item = this.inputForm.value;
+    const site    = this.siteService.getAssignedSite();
+    const item = this.inputForm.value as DSIEMVSettings;
     const json = JSON.stringify(item);
     localStorage.setItem('DSIEMVSettings', json)
+
+    const setting = {} as ISetting;
+    
+    setting.text = json;
+    setting.name = `dSIEMVSettings/${this.settingsService.deviceName}`;
+    setting.id   = item.id;
+
+    this.settingsService.saveSettingObservable(site, setting).subscribe(
+      {next: data => { 
+        this.siteService.notify('Saved', 'Success', 2000)
+      }, 
+      error : err => { 
+        this.siteService.notify('Error ' + err.toString(), 'Alert', 2000)
+      }
+    })
+
   }
 
   initParamDownload_Transaction() {
@@ -111,16 +142,17 @@ export class DSIEMVElectronComponent implements OnInit {
   }
 
   deleteSettings() {
-    localStorage.removeItem('DSIEMVSettings') //, json)
+    const device = `DSIEMVSettings/${this.settingsService.deviceName}`
+    localStorage.removeItem(device) //, json)
     this.initForm();
   }
 
   updateSetting(){
     this.saveSettings();
-    // this.uISettingsService.saveConfig(this.inputForm, 'DSIEMVSettings').subscribe(data => {
-    //   console.log('save', data)
-    //   this.matSnack.open('Saved', 'success', {duration: 2000})
-    // })
+    const device = `DSIEMVSettings/${this.settingsService.deviceName}`
+    this.uISettingsService.saveConfig(this.inputForm, device).subscribe(data => {
+      this.matSnack.open('Saved', 'success', {duration: 2000})
+    })
   }
 
   async pinPadReset(){

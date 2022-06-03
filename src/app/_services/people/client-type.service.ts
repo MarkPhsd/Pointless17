@@ -6,37 +6,38 @@ import {clientType, ISite }   from 'src/app/_interfaces';
 
 export interface IUserAuth_Properties {
   // 'pos section
-   voidOrder : boolean;
-   voidItem : boolean;
-   voidPayment : boolean;
-   changeItemPrice : boolean;
+   voidOrder            : boolean;
+   voidItem             : boolean;
+   voidPayment          : boolean;
+   changeItemPrice      : boolean;
    changeInventoryValue : boolean;
-   blindBalanceSheet : boolean;
-   blindClose : boolean;
+   blindBalanceSheet    : boolean;
+   blindClose           : boolean;
 
   // 'admin section
-   closeDay : boolean;
-   sendTextBlast : boolean;
-   sendEmailBlast : boolean;
+   closeDay             : boolean;
+   sendTextBlast        : boolean;
+   sendEmailBlast       : boolean;
+   deleteClientType     : boolean;
 
    accessHistoryReports : boolean;
-   accessDailyReport : boolean;
+   accessDailyReport    : boolean;
 
   // 'metrc work
    importMETRCPackages : boolean;
 
   // 'inventory work
-   adjustInventory : boolean;
+   adjustInventory     : boolean;
 
   // 'product work
-   adjustProductCount : boolean;
+   adjustProductCount  : boolean;
 
   // 'add non customer types
-   addEmployee : boolean;
-   changeClientType : boolean;
+   addEmployee         : boolean;
+   changeClientType    : boolean;
 
-   changeAuths : boolean;
-
+   changeAuths         : boolean;
+  
 }
 
 @Injectable({

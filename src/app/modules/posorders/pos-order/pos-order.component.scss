@@ -7,6 +7,10 @@
   .container {
     overflow-x: hidden;
     overflow-y: hidden;
+    height: calc(100vh - 55px);
+    @include for-phone-only  {
+      height: calc(100vh - 120px);
+    }
   }
 
   h3, .h3 {
@@ -99,7 +103,6 @@
   --gap: 10px;
   display: grid;
   gap: var(--gap);
-  // grid-template-columns: repeat(2, 1fr);
   grid-template-columns: repeat( auto-fit, minmax(355px, 1fr) );
   grid-auto-flow:dense;
   width: 100%;
@@ -150,15 +153,14 @@
   grid-template-columns: auto;
   gap: 5px;
   // grid-auto-flow:dense;
-
 }
 
 .order-layout {
 
-  display: grid;
+  display         : grid;
   grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
-  gap: 5px;
-  grid-auto-flow:dense;
+  gap             : 5px;
+  grid-auto-flow  : dense;
 
   @include for-phone-only  {
     display: grid;
@@ -172,7 +174,7 @@
   margin-bottom: 25px;
   margin-top   : 2px;
   margin-left  : 2px;
-  max-height:   99%;
+  // max-height:   99%;
   overflow-y: auto;
   overflow-x: hidden;
 
@@ -183,18 +185,21 @@
 
   //1024 x768
   @include for-tablet-landscape-up  {
-    max-height:   550px;
-    height:   99%;
+    // max-height:   550px;
+    // height:   99%;
+    height:  calc(100vh - 150px);
   }
 
   @include for-desktop-up {
-    max-height:  600px;
-    height:   99%;
+    // max-height:  600px;
+    // height:   99%;
+    height:  calc(100vh - 150px);
   }
 
   @include for-big-desktop-up {
-    max-height:   800px;
-    height:   99%;
+    // max-height:   800px;
+    // height:   99%;
+    height:  calc(100vh - 150px);
   }
 
 }
@@ -203,9 +208,9 @@
   margin-bottom: 25px;
   margin-top   : 2px;
   margin-left  : 2px;
-  // max-height:   300px;
+
   height:   99%;
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 
   @include for-phone-only  {
@@ -214,18 +219,18 @@
   }
 
   @include for-tablet-landscape-up  {
-    max-height: 700px;
-    height:   99%;
+    // max-height: 700px;
+    height:  calc(100vh - 150px);
   }
 
   @include for-desktop-up {
-    max-height:  600px;
-    height:   99%;
+    // max-height:  600px;
+    height:  calc(100vh - 150px);
   }
 
   @include for-big-desktop-up {
-    max-height:   800px;
-    height:   99%;
+    // max-height:   800px;
+    height:  calc(100vh - 150px);
   }
 
 }
@@ -313,13 +318,13 @@
   margin-bottom: 25px;
   overflow-y: auto;
   overflow-x: hidden;
-  height: 85vh;
+  height: 100%;
 
   @include for-phone-only  {
     margin-bottom: 25px;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 65vh;
+    height: 100%;
   }
 
 }

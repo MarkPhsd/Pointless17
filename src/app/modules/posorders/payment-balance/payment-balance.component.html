@@ -72,7 +72,7 @@
             </div>
             <div class="totals" *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
               <span  *ngIf="item.amountPaid - item.amountReceived !=0">
-                {{  (item.amountReceived - item.amountPaid)  | currency }}
+                   {{  (item.amountReceived - item.amountPaid)  | currency }}
               </span>
             </div>
           </div>

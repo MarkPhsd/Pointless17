@@ -1,4 +1,4 @@
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, of, Subscription } from 'rxjs';
@@ -27,7 +27,7 @@ export interface ElectronDimensions {
 @Injectable({
   providedIn: 'root'
 })
-export class UserSwitchingService implements OnInit,OnDestroy {
+export class UserSwitchingService implements  OnDestroy {
 
   user  : IUser;
   _user : Subscription
@@ -71,15 +71,15 @@ export class UserSwitchingService implements OnInit,OnDestroy {
     private toolbarUIService : ToolBarUIService,
     private electronService  : ElectronService
   ) {
-   
-  }
-
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.initSubscriptions();
     this.initializeAppUser();
   }
+
+  // ngOnInit() {
+  //   //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+  //   //Add 'implements OnInit' to the class.
+
+  // }
 
   ngOnDestroy(): void {
     if (this._user) { this._user.unsubscribe()}
@@ -184,7 +184,13 @@ export class UserSwitchingService implements OnInit,OnDestroy {
         switchMap(
            user => {
         
-          console.log(user)
+           if (user && user.errorMessage) { 
+            const message = user?.errorMessage;
+            this.snackBar.open(message, 'Failed Login', {duration: 1500})
+            const item = {message: 'failed'}
+            return of(item)
+          }
+
           if (user) {
 
             if (user.message.toLowerCase() === 'failed') {
@@ -207,10 +213,7 @@ export class UserSwitchingService implements OnInit,OnDestroy {
     )
   }
 
-
-
   // getAuthorization()
-
   setUserInfo(user: IUser, password) {
     const currentUser = {} as IUser;
     if (!user.roles)     { user.roles = 'user' }
@@ -230,9 +233,7 @@ export class UserSwitchingService implements OnInit,OnDestroy {
     user.authdata = window.btoa(user.username + ':' + user.password);
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
-    // console.log('currentUser', currentUser)
     this.authenticationService.updateUser(currentUser)
-
     return currentUser
   }
 

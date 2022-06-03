@@ -10,6 +10,7 @@
           </pos-order-transaction-data>
           <store-credit-info
             [clientID]     ="order?.clientID"
+            [showPayment]  = "true"
             [accountNumber]="order?.clients_POSOrders?.accountNumber"
             [userName]     ="order?.clients_POSOrders?.userName"
           ></store-credit-info>
@@ -86,6 +87,7 @@
           </div>
 
           <div>
+         
             <button  mat-raised-button
               fxFill
               class="button"

@@ -41,7 +41,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   _printLocation      : Subscription;
 
   searchModel: IPOSOrderSearchModel;
-  _order: Subscription;
+  _searchModel: Subscription;
 
   initStatusSubscriber() {
     this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
@@ -61,7 +61,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
   }
 
   initSearchModelSubscriber() {
-    this._order =  this.orderService.posSearchModel$.subscribe(data => {
+    this._searchModel =  this.orderService.posSearchModel$.subscribe(data => {
       if (!data) {
         this.searchModel = {} as IPOSOrderSearchModel
       }
@@ -71,28 +71,24 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     })
   }
 
+  initViewTypeSubscriber() {
+    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
+      this.viewType = data;
+    })
+  }
   initSubscriptions(){
     this.initStatusSubscriber();
     this.initPrintLocationSubscriber();
     this.initSearchModelSubscriber();
-
-    this._viewType = this.orderService.viewOrderType$.subscribe(data => {
-      this.viewType = data;
-    })
-
+    this.initViewTypeSubscriber();
   }
 
   destroySubscriptions() {
-    if (this._prepStatus) {
-      this._prepStatus.unsubscribe()
-    }
-    if (this._printLocation) {
-      this._printLocation.unsubscribe()
-    }
-    if (this._viewType) {
-      this._viewType.unsubscribe()
-    }
-    if (this._order) { this._order.unsubscribe()}
+    if (this._prepStatus) { this._prepStatus.unsubscribe()}
+    if (this._printLocation) {this._printLocation.unsubscribe()}
+    if (this._viewType) {this._viewType.unsubscribe()}
+    if (this._searchModel) { this._searchModel.unsubscribe()}
+    if (this._user) {this._user.unsubscribe()}
   }
 
   constructor (
@@ -119,6 +115,11 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.printerLocations$ = this.printerService.getLocations()
   }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    this.destroySubscriptions()
+  }
 
   updatePrinterLocation() {
     this.searchModel.printLocation = this.printLocation;
@@ -143,7 +144,7 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
 
   displayPanel(event)  {
     const show =  localStorage.getItem('OrderFilterPanelVisible')
-    console.log(show)
+    // console.log(show)
     if (show === 'false') {
       this.hidePanel = true
       this.gridcontainer = 'grid-container-full'
@@ -170,12 +171,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
     this.displayPanel(event)
   }
 
-  ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
-    this.destroySubscriptions()
-    if (this._user) {this._user.unsubscribe()}
-  }
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isManagement;

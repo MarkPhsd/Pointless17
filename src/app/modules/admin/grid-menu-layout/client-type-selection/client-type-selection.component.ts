@@ -2,8 +2,6 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormGroup } from '@angular/forms';
 import { Subscription, } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
-// import { ClientType } from 'src/app/_interfaces';
-import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { IItemBasic } from 'src/app/_services';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';

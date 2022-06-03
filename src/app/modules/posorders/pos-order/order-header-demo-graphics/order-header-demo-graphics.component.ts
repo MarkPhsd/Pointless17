@@ -5,6 +5,7 @@ import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-order-header-demo-graphics',
@@ -30,6 +31,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
               private contactService: ContactsService,
               private fb: FormBuilder,
               private uiSettingsService: UISettingsService,
+              private userAuthorization: UserAuthorizationService,
               private orderService: OrdersService)
                { }
 
@@ -40,6 +42,9 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.transactionSettings = data;
     })
+    if (this.userAuthorization.isManagement) { 
+      this.canRemoveClient = true;
+    }
   }
 
   ngOnChanges(): void {
@@ -56,14 +61,14 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
 
   }
   removeClient() {
-    this.outPutRemoveClient.emit(true)
+    // this.outPutRemoveClient.emit(true)
+
   }
 
   openClient() {
     if (this.disableActions) { return }
     if (this.order) {
       if (this.order.clients_POSOrders) {
-
         this.router.navigate(["/profileEditor", {id: this.order.clientID}]);
         return;
       }
@@ -74,15 +79,14 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     const orderName = this.orderNameForm.controls['name'].value;
     if (this.order) {
       this.orderService.setOrderName(this.order.id, orderName).subscribe( data=> {
-
       })
     }
   }
 
-  gotoAddClient(){
+  addClient(){
     const site = this.siteService.getAssignedSite();
     const user = {} as IUserProfile;
-    const client$ = this.contactService.addClient(site,user)
+    const client$ = this.contactService.addClient(site, user)
     client$.subscribe( {
         next: (data) => {
           this.editItem(data.id)
@@ -98,21 +102,34 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     this.router.navigate(["/profileEditor/", {id:clientID}]);
   }
 
-  async assignCustomer(client) {
+  assignCustomer(client) {
     if (client) {
-      await this.assignClientID(client)
+      this.assignClientID(client)
     }
   }
 
-  async assignClientID(client) {
+  assignClientID(client) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
       this.order.clientID = client.id;
       this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
-      console.log(this.order)
-      const order = await this.orderService.putOrder(site, this.order).pipe().toPromise()
-      this.orderService.updateOrderSubscription(order)
+      this.orderService.putOrder(site, this.order).subscribe(data => { 
+        this.orderService.updateOrderSubscription(data)
+      })
     }
   }
+
+  clearClient() { 
+    if (this.order) {
+      const site = this.siteService.getAssignedSite();
+      this.order.clientID = 0
+      this.order.customerName = ''
+      this.orderService.putOrder(site, this.order).subscribe(data => { 
+        this.orderService.updateOrderSubscription(data)
+      })
+   }
+  }
+
+
 
 }

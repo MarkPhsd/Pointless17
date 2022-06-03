@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { editWindowState, PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 
@@ -7,7 +7,7 @@ import { editWindowState, PromptGroupService } from 'src/app/_services/menuPromp
     templateUrl: './prompt-kits.component.html',
   styleUrls: ['./prompt-kits.component.scss']
 })
-export class PromptKitsComponent implements OnInit ,OnDestroy{
+export class PromptKitsComponent implements OnInit, OnDestroy{
 
   accordionStep :  number;
   role          = 'admin';
@@ -46,7 +46,6 @@ export class PromptKitsComponent implements OnInit ,OnDestroy{
       this.editWindowState.tabBosition  = this.accordionStep
       this.promptGroupService.updateEditWindowState(this.editWindowState)
     }
-
   }
 
   prevStep() {
@@ -69,7 +68,6 @@ export class PromptKitsComponent implements OnInit ,OnDestroy{
     this.editWindowState.tabBosition = 0
     this.promptGroupService.updateEditWindowState(this.editWindowState)
     this.accordionStep =0
-   
   }
 
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Input, Output, HostListener } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
@@ -22,7 +22,7 @@ export interface   ISelectedItems{
   styleUrls: ['./possplit-items.component.scss']
 })
 export class POSSplitItemsComponent implements OnInit {
-
+    smallDevice         = false;
     @Output() outPutPaymentAmount = new EventEmitter();
     @Input() order   : IPOSOrder;
     productTypes$    : Observable<IItemBasicB[]>;
@@ -103,7 +103,21 @@ export class POSSplitItemsComponent implements OnInit {
       });
     }
 
+    @HostListener("window:resize", [])
+    updateItemsPerPage() {
+      this.smallDevice = false
+      if (window.innerWidth < 768) {
+        this.smallDevice = true
+      }
+  
+      if (!this.smallDevice) {
+     
+      }
+    }
+
+    
     ngOnInit() {
+      this.updateItemsPerPage()
       const site          = this.siteService.getAssignedSite()
       this.initGroupList();
       this.refreshAssignedItems();

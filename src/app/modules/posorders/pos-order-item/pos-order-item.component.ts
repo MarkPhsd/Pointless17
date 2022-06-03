@@ -17,6 +17,7 @@ import { PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.se
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { MenuItemModalComponent } from '../../menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
@@ -160,6 +161,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private posOrderItemService: POSOrderItemServiceService,
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
+                public  userAuthService    : UserAuthorizationService,
               )
   {
   }
@@ -228,6 +230,10 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.editProperties('quantity' , 'Change Quantity')
   }
 
+  editPrice() { 
+    this.editProperties('price' , 'Change Price')
+  }
+
   selectItem() {
     if (this.productnameClass != 'product-name-alt') {
       this.productnameClass == 'product-name-alt'
@@ -250,8 +256,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           this.notifyEvent('Item type not defined', 'Alert')
           return;
         }
-        const requireWholeNumber = this.menuItem.itemType.requireWholeNumber
+        
+        let requireWholeNumber = false;
+        if (editField == 'quantity') {
+          requireWholeNumber = this.menuItem.itemType.requireWholeNumber
+        }
         console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
+        
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
@@ -259,11 +270,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                       instructions: instructions}
 
         //a little formating
-        let height  = '455px';
-        let width   = '300px'
+        let height  = '600px';
+        let width   = '455px'
         if (editField == 'quantity') {
-          height  = '555px';
-          width  = '425px'
+          height  = '600px';
+          width   = '455px'
         }
 
         dialogRef = this.dialog.open(PosOrderItemEditComponent,

@@ -23,6 +23,13 @@
           </mat-slide-toggle>
         </div>
 
+        <simple-tinymce cols="50"
+                rows="25"
+                style="height: 400px;"
+                name="paymentAgreement"
+                formControlName="paymentAgreement"
+                [ngModel]="paymentAgreement">
+        </simple-tinymce>
     </div>
 
     <div class="grid-item">

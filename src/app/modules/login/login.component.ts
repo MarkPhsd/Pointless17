@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
           if (data.logoHomePage) {
             this.logo = `${this.bucket}${data.logoHomePage}`;
-            console.log(this.logo)
           }
         }
       }
@@ -116,10 +115,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.initForm();
     this.initSubscriptions()
-    // this.uiSettingService.subscribeToCachedHomePageSetting('UIHomePageSettings').subscribe(data =>  {
 
-    if (!this.platformService.isApp()) { this.amI21 = true  }
-    if (this.platformService.isApp())  { this.amI21 = false }
+    if (!this.platformService.isApp())  { this.amI21 = true  }
+    if ( this.platformService.isApp())  { this.amI21 = false }
 
     this.refreshTheme()
     this.statusMessage = ''
@@ -127,10 +125,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.refreshUIHomePageSettings();
   }
 
-  async refreshUIHomePageSettings() {
-    if (!this.bucket) {
-      this.bucket = await this.awsBucketService.awsBucketURL()
-    }
+  refreshUIHomePageSettings() {
     this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
       this.uiHomePageSetting = JSON.parse(data.text) as UIHomePageSettings
       this.initCompanyInfo();
@@ -181,7 +176,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   initLogo() {
-    if (this.bucket) {
+    if (this.bucket && this.uiHomePageSetting) {
       if (this.uiHomePageSetting && this.uiHomePageSetting.logoHomePage) {
         this.logo = `${this.bucket}${this.uiHomePageSetting.logoHomePage}`
       }
@@ -222,12 +217,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   async  forgetMe() {
+    this.initForm();
     await this.clearUserSettings();
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''
   }
 
   async  browseMenu() {
+    this.initForm();
     this.userSwitchingService.browseMenu();
     this.statusMessage = ''
   }
@@ -340,6 +337,12 @@ export class LoginComponent implements OnInit, OnDestroy {
        next: user =>
         {
           console.log('user', user)
+          this.initForm();
+          if (user && user.errorMessage) { 
+            this.notifyEvent(user.errorMessage, 'Failed Login')
+            return;
+          }
+
           if (user) {
             this.spinnerLoading = false;
             if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
@@ -347,7 +350,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               return
             }
 
-            if (this.platformService.isApp()) {  if (this.loginApp(user)) { return } }
+            if (this.platformService.isApp()) { if (this.loginApp(user)) { return } }
 
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
@@ -362,6 +365,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           const message = `Login failed. ${error.errorMessage}. Service is not accesible. Check Internet.`
           this.statusMessage = message
           this.notifyEvent(message, 'error')
+          this.initForm();
           return
         }
       })

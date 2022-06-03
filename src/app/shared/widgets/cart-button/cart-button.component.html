@@ -1,4 +1,4 @@
-  <div class="grid-flow"
+  <div [class]="gridflow"
        *ngIf="order" >
 
     <div *ngIf="!isUserStaff">
@@ -6,7 +6,7 @@
             mat-raised-button
             color="primary"
             (click)="toggleOpenOrderBar()" >
-        <mat-icon  matBadge="{{ order.itemCount > 0 }}"
+        <mat-icon 
           matBadge="{{ order.itemCount }}"
           matBadgeColor="accent"
           matBadgePosition="before">
@@ -20,7 +20,7 @@
               mat-raised-button
               color="primary"
               (click)="toggleOpenOrderBar()" >
-          <mat-icon  matBadge="{{ order.itemCount > 0 }}"
+          <mat-icon  
             matBadge="{{ order.itemCount }}"
             matBadgeColor="accent"
             matBadgePosition="before">
@@ -30,7 +30,7 @@
     </div>
 
     <div  *ngIf="(order && order.history == true
-                || (order.completionDate)) || isUserStaff">
+                || (order.completionDate)) || isUserStaff && !hideAddNewOrder">
       <button
               mat-raised-button
               color="primary"

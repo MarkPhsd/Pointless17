@@ -38,8 +38,8 @@ export class DSIEMVTransactionComponent implements OnInit {
 
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
-    private dsiProcess      : DSIProcessService,
-    private dialogRef   : MatDialogRef<DSIEMVTransactionComponent>,
+    private dsiProcess            : DSIProcessService,
+    private dialogRef             : MatDialogRef<DSIEMVTransactionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {

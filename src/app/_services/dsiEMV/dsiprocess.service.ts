@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IPOSPayment } from 'src/app/_interfaces';
+import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
 import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
 @Injectable({
@@ -12,18 +13,18 @@ export class DSIProcessService {
     private dsi : DSIEMVTransactionsService) { }
 
   initTransaction(): Transaction {
-    const item = localStorage.getItem('DSIEMVSettings')
+    const item = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }
-    const transactiontemp     = JSON.parse(item) as Transaction;
+    const dsiSettings     = JSON.parse(item) as DSIEMVSettings;
     const transaction         ={} as Transaction // {...transactiontemp, id: undefined}
-    transaction.MerchantID    =transactiontemp.MerchantID;
-    transaction.TerminalID    =transactiontemp.TerminalID;;
-    transaction.OperatorID    =transactiontemp.OperatorID;
-    transaction.HostOrIP      = transactiontemp.HostOrIP;
-    transaction.IpPort        =transactiontemp.IpPort;
+    transaction.MerchantID    =dsiSettings.merchantID;
+    transaction.TerminalID    =dsiSettings.terminalID;;
+    transaction.OperatorID    =dsiSettings.operatorID;
+    transaction.HostOrIP      =dsiSettings.hostOrIP;
+    transaction.IpPort        =dsiSettings.ipPort;
     transaction.UserTrace     ='PointlessPOS1.0';
-    transaction.SecureDevice  =transactiontemp.SecureDevice;
-    transaction.ComPort       =transactiontemp.ComPort;
+    transaction.SecureDevice  =dsiSettings.secureDevice;
+    transaction.ComPort       =dsiSettings.comPort;
     transaction.SequenceNo    ='0010010010'
 
     return transaction

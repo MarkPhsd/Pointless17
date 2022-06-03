@@ -1,21 +1,23 @@
+
 <div>
   <span class="mat-divider"></span>
 </div>
 
-<div class="items-span-columns-start-3 name">
+<div class="items-span-columns-3">
   <div> ${item.productOrderMemo}</div>
 </div>
 
-<div><span class="mat-divider"></span></div>
+<div>
+<span class="mat-divider"></span>
+</div>
 
 <div class="grid-totals-58 spacing-58 ">
 <div>
-
 </div><div class="total">Sub Total:</div>
 <div  class="total"> $ ${ item.subTotal.toFixed(2) } </div>
 <div></div>
-<div class="total">Sales Tax:</div>
-<div  class="total">$ ${ item.taxTotal.toFixed(2)}</div>
+<div class="total">${ item.taxColumn1Description}:</div>
+<div  class="total">$ ${ item.tax1.toFixed(2)}</div>
 <div></div>
 <div class="total">Total:</div>
 <div  class="total"> $ ${ item.total.toFixed(2) }</div>

@@ -7,6 +7,9 @@
     <div *ngIf="item && item.value">   Credit Avalible</div>
         <div *ngIf="item">{{item?.value | currency}} </div>
 
+    <!-- balance {{ order.balanceRemaining}} <br>
+    showIssueMoney {{showIssueMoney}}
+    value {{ item?.value}} -->
     <div *ngIf="order && order.balanceRemaining != 0 && showPayment && !showIssueMoney && item?.value>0">
       <button  mat-raised-button (click)="applyAsPayment(item)">
           Apply Credit <mat-icon>credit_card</mat-icon>
@@ -38,13 +41,3 @@
     Close
   </button>
 </div>
-
-<!-- <ng-template #statement>
-  <div *ngIf=" posIssuePurchaseItem && showIssueMoney">
-    <button  mat-raised-button
-             (click)="issueMoney(null)">
-        Add Credit <mat-icon>credit_card</mat-icon>
-    </button>
-  </div>
-  No credit available.
-</ng-template> -->

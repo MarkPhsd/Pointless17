@@ -56,8 +56,7 @@ export class StoreCreditPopUpComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy() {
-    if (!this._order) {return}
-    this._order.unsubscribe();
+    if (this._order) {  this._order.unsubscribe();}
   }
 
   setResults(event) {

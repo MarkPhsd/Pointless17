@@ -97,6 +97,7 @@
       </div>
 
       <div *ngIf="!disableActions && !prepScreen" >
+        
         <button aria-label="user menu"
                   mat-button
                   class="more-button"
@@ -136,9 +137,13 @@
               <div *ngIf="!showEdit  && (uiConfig.displayNotes)">
                 <button mat-button color="accent" (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
               </div>
-
+            
               <div *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode">
                 <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
+              </div>
+
+              <div *ngIf="userAuthService.isManagement">
+                <button mat-button  color="accent"  (click)="editPrice()"><mat-icon>edit</mat-icon>Price</button>
               </div>
 
               <div *ngIf="(quantity && !orderItem.voidReason)">

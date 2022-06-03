@@ -1,20 +1,27 @@
 .container {
-  width: 400px;
-  max-width: 400px;
+  width: 100%;
+  max-width: 375px;
+  margin: 5px;
+  padding: 5px;
 }
 
+.grid-header {
+  --gap: 5px;
+  display: flex;
+  gap: var(--gap);
+  flex-direction: row;
+  justify-content: space-between;
+  overflow-y: visible;
+  width: 100%;
+  max-width: 375px;
+  margin: 5px;
+}
 button  {
   margin-top: 5px;
   margin-bottom: 5px;
 }
 
 .card-results-grid {
-  // display: grid;
-  // grid-template-columns: 50px 100px;
-  // gap: 5px;
-  // margin-top: 5px;
-  // margin-bottom: 5px;
-
   --gap: 5px;
   margin-top: 2px;
   margin-right: 2px;
@@ -23,7 +30,6 @@ button  {
   grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
   overflow-y: visible;
   max-width: 210px;
-
 }
 
 mat-input {
@@ -31,7 +37,7 @@ mat-input {
 }
 
 .pay-button {
-  margin-top: 15px;
+  margin: 15px;
   float: right;
   height: 60px;
 }
@@ -40,15 +46,4 @@ mat-input {
   height: 60px;
 }
 
-.grid-header {
 
-  --gap: 5px;
-  display: flex;
-  gap: var(--gap);
-  flex-direction: row;
-  justify-content: space-between;
-  // grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
-  overflow-y: visible;
-  max-width: 420px;
-
-}

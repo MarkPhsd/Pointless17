@@ -1,6 +1,8 @@
 import { Component, HostBinding, OnInit, AfterViewInit,
          Renderer2, OnDestroy, HostListener,
-         ChangeDetectorRef } from '@angular/core';
+         ChangeDetectorRef, 
+         ElementRef,
+         ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router, RouterOutlet } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -21,7 +23,7 @@ import { isDevMode } from '@angular/core';
 })
 
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
-
+  @ViewChild("footer") footer: ElementRef;
   departmentID     =0
   get platForm() {  return Capacitor.getPlatform(); }
   toggleControl     = new FormControl(false);

@@ -50,16 +50,15 @@ export class ClientTypeEditComponent implements OnInit {
   async initializeForm()  {
 
     this.initFormFields()
-
     if (this.inputForm && this.id) {
       const site = this.siteService.getAssignedSite();
       this.clientTypeService.getClientType(site, this.id).subscribe(data =>
         {
-            this.clientType = data
-            this.id         = data.id
-            this.initJSONObjectForm(data.jsonObject)
-            this.inputForm.patchValue(data)
-          }
+          this.clientType = data
+          this.id         = data.id
+          this.initJSONObjectForm(data.jsonObject)
+          this.inputForm.patchValue(data)
+        }
       )
     } else {
       this.clientType = {} as clientType
@@ -71,7 +70,12 @@ export class ClientTypeEditComponent implements OnInit {
   initJSONObjectForm(jsonObject: string) {
     this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
     if (jsonObject) {
-      const object = JSON.parse(jsonObject) as IUserAuth_Properties
+      const object = JSON.parse(jsonObject) as IUserAuth_Properties;
+      this.jsonObjectForm.patchValue(object);
+    }
+
+    if (!jsonObject) { 
+      const object = {} as IUserAuth_Properties;
       this.jsonObjectForm.patchValue(object);
     }
   }
@@ -80,42 +84,55 @@ export class ClientTypeEditComponent implements OnInit {
     this.inputForm  = this.fbClientTypesService.initForm(this.inputForm)
   }
 
-  async updateItem(event): Promise<boolean> {
+  async updateItem(event, close: boolean) {
     let result: boolean;
-
-    return new Promise(resolve => {
-        if (this.inputForm.valid) {
-        const site = this.siteService.getAssignedSite()
-        let jsonObject = {} as IUserAuth_Properties
-        if (this.jsonObjectForm) {
-          jsonObject = this.jsonObjectForm.value as IUserAuth_Properties;
-        }
-        let clientType = this.inputForm.value as clientType;
-        clientType.jsonObject = JSON.stringify(jsonObject);
-
-        const product$ = this.clientTypeService.saveClientType(site, clientType)
-        product$.subscribe( {
-            next: data => {
-                  this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
-                  resolve(true)
-                  },
-            error: error => {
-              this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-              resolve(false)
-              }
-            }
-          )
-        }
+    if (this.inputForm.valid) {
+      const site = this.siteService.getAssignedSite()
+      let item = {} as IUserAuth_Properties
+      if (this.jsonObjectForm) {
+        item = this.jsonObjectForm.value as IUserAuth_Properties;
+        if (!item.accessDailyReport) {item.accessDailyReport = false};
+        if (!item.accessHistoryReports) {item.accessHistoryReports = false}
+        if (!item.addEmployee) {item.addEmployee = false}
+        if (!item.adjustInventory) {item.adjustInventory = false}
+        if (!item.adjustProductCount) {item.adjustProductCount = false}
+        if (!item.blindBalanceSheet) {item.blindBalanceSheet = false}
+        if (!item.blindClose) {item.blindClose = false}
+        if (!item.changeAuths) {item.changeAuths = false}
+        if (!item.changeClientType) {item.changeClientType = false}
+        if (!item.changeInventoryValue) {item.changeInventoryValue = false}
+        if (!item.changeItemPrice) {item.changeItemPrice = false}
+        if (!item.closeDay) {item.closeDay = false}
+        if (!item.importMETRCPackages) {item.importMETRCPackages = false}
+        if (!item.sendEmailBlast) {item.sendEmailBlast = false}
+        if (!item.sendTextBlast) {item.sendTextBlast = false}
+        if (!item.voidItem) {item.voidItem = false}
+        if (!item.voidOrder) {item.voidOrder = false}
+        if (!item.voidPayment) {item.voidPayment = false}
+        if (!item.deleteClientType) { item.deleteClientType = false }
       }
-    )
+      let clientType = this.inputForm.value as clientType;
+      clientType.jsonObject = JSON.stringify(item);
 
+      const item$ = this.clientTypeService.saveClientType(site, clientType)
+      item$.subscribe( {
+          next: data => {
+            this.clientType = data;
+            // this.initJSONObjectForm(data.jsonObject)
+            this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
+              if (close) {this.onCancel(null); }
+            },
+          error: error => {
+            this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+            
+            }
+          }
+        )
+      }
   };
 
-  async updateItemExit(event) {
-    const result = await this.updateItem(event)
-    if (result) {
-      this.onCancel(event);
-    }
+  updateItemExit(event) {
+    this.updateItem(event, true)
   }
 
   onCancel(event) {
@@ -123,14 +140,22 @@ export class ClientTypeEditComponent implements OnInit {
   }
 
   deleteItem(event) {
+    const warn = window.confirm('Are you sure you want to delete this item?')
+    if (!warn) { return }
+
     const site = this.siteService.getAssignedSite()
     if (!this.clientType) {
       this.snack.open("Item note initiated", "Success", {duration:2000, verticalPosition: 'top'})
       return
     }
-    this.clientTypeService.delete(site,this.clientType.id).subscribe( data =>{
-        this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
-        this.onCancel(event)
+
+    this.clientTypeService.delete(site,this.clientType.id).subscribe( data => {
+      if (!data.id) {
+        this.snack.open(`Delete failed. ${data}`, "Failed", {duration:2000, verticalPosition: 'top'})
+        return
+      }
+      this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
+      this.onCancel(event)
     })
   }
 

@@ -1,4 +1,10 @@
-import { Component, OnInit , Input, HostListener} from '@angular/core';
+import { Component, 
+         OnInit , 
+         Input, 
+         HostListener,
+         OnDestroy, 
+         ViewChild,
+         TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
@@ -13,14 +19,14 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { DSIEMVSettings, StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog,} from '@angular/material/dialog';
 import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
@@ -32,14 +38,18 @@ import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-c
 })
 export class PosPaymentComponent implements OnInit, OnDestroy {
 
+  @ViewChild('receiptView') receiptView: TemplateRef<any>;
+  @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
+
   @Input() order  :   IPOSOrder;
+
   id              :   number;
   _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
   currentPayment$ :   Observable<IPOSPayment>;//     = this._currentPayment.asObservable();
-  posPayment      =      {} as IPOSPayment;
+  posPayment      =   {} as IPOSPayment;
   employees$      :   Observable<IItemBasic[]>;
   paymentMethods$ :   Observable<IPaymentMethod[]>;
-  paymentMethod   = {} as  IPaymentMethod;
+  paymentMethod   =   {} as IPaymentMethod;
   serviceTypes$   :   Observable<IServiceType[]>;
   serviceType     :   IServiceType;
   _searchModel    :   Subscription;
@@ -135,6 +145,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.updateItemsPerPage();
     this.initStripe();
   }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -142,6 +153,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this._searchModel) { this._searchModel.unsubscribe()}
     if (this._currentPayment) { this._currentPayment.unsubscribe()}
   }
+
   initStripe() {
     this.uISettingsService.getSetting('StripeAPISettings').subscribe(data => {
       if (data) {
@@ -181,6 +193,23 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   refreshIsOrderPaid() {
     this.paymentsEqualTotal  = this.paymentsMethodsService.isOrderBalanceZero(this.order)
+    if (this.order.completionDate) { 
+      return true;
+    }
+  }
+
+  get receiptShowTemplate() {
+    if (this.refreshIsOrderPaid()) {
+      return this.receiptView
+    }
+    return null;
+  }
+
+  get splitItemsTemplate() {
+    if (this.splitByItem) {
+      return this.splitItemsView
+    }
+    return null;
   }
 
   initForms() {
@@ -229,7 +258,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         this.processPaymentReady(data)
       }
     )
-
   }
 
   processPaymentReady(serviceType: IServiceType) {
@@ -314,8 +342,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     let dialogRef: any;
     const site = this.sitesService.getAssignedSite();
     dialogRef = this.dialog.open(StripeCheckOutComponent,
-      { width:        '450px',
-        minWidth:     '450px',
+      { width:        '75vw',
+        minWidth:     '375px',
+        maxWidth:     '450px',
         height:       '675px',
         minHeight:    '675px',
         data: data,
@@ -326,7 +355,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.processResults(result)
     });
   }
-
 
   applyPaymentAmount(event) {
 
@@ -369,7 +397,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     //if order or payment method don't exist, we have a bigger problem, but we can ignore for now.
     this.initPaymentForm();
   }
-
 
   applyGroupPayment(event) {
     if (!event || event.amount == 0) {

@@ -1,5 +1,41 @@
+<mat-toolbar *ngIf="smallDevice" color="primary">
+  <div class="row-align">
+    <ng-container [ngTemplateOutlet]="outlet"></ng-container>
+  </div>
+</mat-toolbar>
 
-<mat-divider></mat-divider>
-<footer>
-    &copy; Coast to Coast Business Solutions, All rights reserved 2020
-</footer>
+<ng-template #footerMenu>
+ 
+    <div class="grid-items">
+      <div class="theme-spacer">
+        <app-toggle-theme></app-toggle-theme>
+      </div>
+  
+      <div>
+        <app-cart-button 
+            [hideAddNewOrder]="true"
+            [smallDevice]="true">
+        </app-cart-button>
+      </div>
+  
+      <div>
+          <button
+                mat-raised-button
+                color="primary"
+                aria-label="Order history"
+                class="mat-item"
+                (click)="navPOSOrders()">
+             My Orders
+             <!-- <mat-icon>list</mat-icon> -->
+             <mat-icon  
+                matBadgeColor="accent"
+                matBadgePosition="before">
+                list
+             </mat-icon>
+
+          </button>
+      </div>
+
+    </div>
+
+</ng-template>

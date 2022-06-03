@@ -193,7 +193,6 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   getPlaceHolder() {
-    console.log(this.placeHolderImage)
     return this.placeHolderImage // this.placeHolderImage
   }
 
@@ -204,6 +203,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     searchModel.pageSize    = 25;
     searchModel.currentPage = 1;
     searchModel.pageSize    = 1;
+    searchModel.webMode     = this.menuService.isWebModeMenu;
     this.searchModel        = searchModel;
     this.addToList(searchModel.pageNumber, searchModel.pageSize)
   }

@@ -7,7 +7,7 @@
               [mode]   ="sidebarMode"
               [opened] ="leftSideBarToggle">
 
-    <div    [hidden]="searchSideBar" >
+    <div    [hidden]="searchSideBar">
       <div  [hidden]="toolbarTiny">
         <app-menu-minimal>
         </app-menu-minimal>
@@ -23,7 +23,6 @@
       <app-menu-search-bar>
       </app-menu-search-bar>
     </div>
-
   </mat-drawer>
 
   <mat-drawer-content>
@@ -36,7 +35,7 @@
     </div>
 
     <div class="animations"
-          [@routeAnimations]="prepareRoute(outlet)" >
+         [@routeAnimations]="prepareRoute(outlet)" >
         <router-outlet #outlet="outlet"></router-outlet>
     </div>
 
@@ -53,6 +52,4 @@
 
 </mat-drawer-container>
 
-
-
-
+<app-footer></app-footer>

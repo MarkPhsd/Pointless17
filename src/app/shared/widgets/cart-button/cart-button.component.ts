@@ -1,4 +1,4 @@
-import { Component, OnInit, Output,OnDestroy, EventEmitter, HostListener  } from '@angular/core';
+import { Component, OnInit, Output,OnDestroy, EventEmitter, HostListener, Input  } from '@angular/core';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { AuthenticationService, OrdersService} from 'src/app/_services';
 import { catchError, delay, delayWhen, finalize,  repeatWhen, retryWhen, tap } from 'rxjs/operators';
@@ -20,7 +20,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
   @Output() toggleOpenOrderBarForMe: EventEmitter<any> = new EventEmitter();
   id:           number
-
+  @Input() smallDevice: boolean;
   refreshCurrentOrderCheck:  boolean; //checks if there is an order to refresh from the assigned POSName.
   orderItemCount      = null;
   openOrderBar        = false;
@@ -41,7 +41,8 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   _user               : Subscription;
   user                : IUser;
 
-  smallDevice: boolean;
+  gridflow            = 'grid-flow';
+  @Input() hideAddNewOrder     = false
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -110,6 +111,13 @@ export class CartButtonComponent implements OnInit, OnDestroy {
 
     } else if (window.innerWidth < 768) {
       this.smallDevice = true
+    }
+
+    if (!this.smallDevice) { 
+      this.gridflow = "grid-flow"
+    }
+    if (this.smallDevice) { 
+      this.gridflow = "grid-flow-small"
     }
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
+import { Observable, of, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -29,11 +29,14 @@ export interface ITerminalSettings {
 })
 
 export class SettingsService {
+
+  get deviceName() { 
+    return localStorage.getItem('devicename')
+  }
   apiUrl: any;
 
   constructor( private http: HttpClient,
                private httpCache: HttpClientCacheService,
-               private auth: AuthenticationService,
                private siteService: SitesService,
                private appInitService  : AppInitService,
                ) {
@@ -213,19 +216,27 @@ export class SettingsService {
   
   getDSIEMVSettings():  Observable<DSIEMVSettings> {
 
+    //get device name
+    const deviceName = this.deviceName
+
+    if (!deviceName) { 
+      const dSIEMVSettings = {} as DSIEMVSettings;
+      return of(dSIEMVSettings);
+    }
+
     const site =  this.siteService.getAssignedSite()
 
     const controller = "/settings/"
 
     const endPoint = 'getDSIEMVSettings';
 
-    const parameters = ``
+    const parameters = `?deviceName=${deviceName}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 0};
+    const options = { url: url, cacheMins: 60};
 
-    return this.httpCache.get<DSIEMVSettings>(options);
+    return this.http.get<DSIEMVSettings>(url);
 
   }
 
@@ -241,7 +252,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 0};
+    const options = { url: url, cacheMins: 60};
 
     return this.httpCache.get<StripeAPISettings>(options);
 
@@ -259,7 +270,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 30};
+    const options = { url: url, cacheMins: 60};
 
     return this.httpCache.get<UIHomePageSettings>(options);
 
@@ -277,7 +288,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 30};
+    const options = { url: url, cacheMins: 60};
 
     return this.httpCache.get<TransactionUISettings>(options);
 
@@ -335,6 +346,15 @@ export class SettingsService {
     return  this.http.get<ISetting[]>(url);
   }
 
+  saveSettingObservable(site: ISite, setting: ISetting): Observable<ISetting>  {
+    if (setting.id  == 0 || setting.id == undefined)  {
+      return  this.postSetting(site,setting)
+    }
+    if (setting.id) {
+      return  this.putSetting(site, setting.id, setting)
+    }
+  }
+
   async  saveSetting(site: ISite, setting: ISetting): Promise<ISetting>  {
     if (setting.id == undefined)  {
       return await this.postSetting(site,setting).pipe().toPromise()
@@ -353,7 +373,7 @@ export class SettingsService {
     }
     if (_setting) {
       setting.id = _setting.id
-      return _setting// don't need to re-save if it exists.
+      return _setting 
     }
   }
 
