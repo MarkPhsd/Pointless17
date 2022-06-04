@@ -63,6 +63,7 @@ export interface Account {
 }
 
 export interface Amount {
+  Authorize: string;
   Purchase: string;
   Gratuity: string;
   CashBack: number;

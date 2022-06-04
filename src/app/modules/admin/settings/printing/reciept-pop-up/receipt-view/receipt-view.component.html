@@ -3,7 +3,7 @@
     <button mat-button (click)="print()">
       <div *ngIf="printerName">
         <mat-icon>print</mat-icon>
-        Print to  {{printerName}} 
+        Print to  {{printerName}}
       </div>
       <div *ngIf="!printerName">
         <mat-icon>save</mat-icon>
@@ -24,7 +24,7 @@
 
     <div *ngIf="headerText &&  itemsText"
           class="border-section">
-       <app-receipt-layout #printsection id="printsection"
+      <app-receipt-layout #printsection id="printsection"
                           [headerText]="headerText"
                           [footerText]="footerText"
                           [itemText]="itemsText"

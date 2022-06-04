@@ -40,7 +40,7 @@ export class DSIEMVElectronComponent implements OnInit {
               private siteService       : SitesService,
               private electronService   : ElectronService) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     if (this.electronService.remote) {this.isElectron = true  }
 
     this.initializeDeviceSettings()
@@ -53,7 +53,7 @@ export class DSIEMVElectronComponent implements OnInit {
     })
   }
 
-  initializeDeviceSettings() { 
+  initializeDeviceSettings() {
     this.initForm();
   }
 
@@ -68,11 +68,11 @@ export class DSIEMVElectronComponent implements OnInit {
     const dsiSettings$ =  this.settingsService.getDSIEMVSettings()
     dsiSettings$.subscribe(data =>
        {
-        if (data) { 
+        if (data) {
           this.inputForm.patchValue(data)
           const json = JSON.stringify(data);
           localStorage.setItem('DSIEMVSettings', json)
-          
+
         }
       }
     )
@@ -80,24 +80,31 @@ export class DSIEMVElectronComponent implements OnInit {
   }
 
   saveSettings() {
-   
-    if (!this.inputForm) { return }
+
+    if (!this.settingsService.deviceName) {
+      this.siteService.notify('Device name must be set in the device info tab.', 'Alert', 2000)
+      return
+    }
+    if (!this.inputForm) {
+      this.siteService.notify('Information not filled out.', 'Alert', 2000)
+      return
+    }
     const site    = this.siteService.getAssignedSite();
     const item = this.inputForm.value as DSIEMVSettings;
     const json = JSON.stringify(item);
     localStorage.setItem('DSIEMVSettings', json)
 
     const setting = {} as ISetting;
-    
+
     setting.text = json;
     setting.name = `dSIEMVSettings/${this.settingsService.deviceName}`;
     setting.id   = item.id;
 
     this.settingsService.saveSettingObservable(site, setting).subscribe(
-      {next: data => { 
+      {next: data => {
         this.siteService.notify('Saved', 'Success', 2000)
-      }, 
-      error : err => { 
+      },
+      error : err => {
         this.siteService.notify('Error ' + err.toString(), 'Alert', 2000)
       }
     })

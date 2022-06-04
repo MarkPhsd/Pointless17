@@ -134,8 +134,13 @@ export class DSIEMVTransactionComponent implements OnInit {
     }
     if (response) {
        const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
+       console.log('cmdResponse', cmdResponse)
        this.readResult(cmdResponse);
     }
+  }
+
+  processTestResponse(){
+    //testDevice
   }
 
   async processVoidCard() {
@@ -223,9 +228,21 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   readResult(cmdResponse: CmdResponse) {
-    this.message = cmdResponse.TextResponse;
+    if (!cmdResponse) {
+      this.message = 'Processing failed, no command response.'
+      return;
+    }
+    if (!cmdResponse.TextResponse) {
+      this.message = 'Processing failed, no text ressponse.'
+      return;
+    }
+    if (!cmdResponse.CmdStatus) {
+      this.message = 'Processing failed, not cmdStatus.'
+      return;
+    }
+    this.message        = cmdResponse.TextResponse;
     this.resultMessage  = cmdResponse.CmdStatus;
-    this.processing = false;
+    this.processing     = false;
   }
 
   cancel() {

@@ -3,7 +3,6 @@ import { lte } from 'lodash';
 import { EMPTY, Subscription } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
@@ -65,9 +64,10 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
         data => {
           if (!data)  {return EMPTY   }
           this.order      = data
+
           this.items      = this.order.posOrderItems
           this.payments   = this.order.posPayments
-          this.orders=[]
+          this.orders     = []
           if (this.order) { this.orders.push(this.order)}
           const datepipe: DatePipe = new DatePipe('en-US')
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
@@ -144,6 +144,8 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
       }
       this.orders[0] = order;
     }
+    // order.clients_POSOrders.accountNumber
+
   }
 
   async getInterpolatedData() {

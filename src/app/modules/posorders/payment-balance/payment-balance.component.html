@@ -42,7 +42,6 @@
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="order.posPayments">
-
     <div
         *ngFor="let item of order.posPayments">
         <div class="payment-grid" *ngIf="item.completionDate && item.amountPaid>0">

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
-import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction } from './dsiemvtransactions.service';
+import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction, CmdResponse, TranResponse } from './dsiemvtransactions.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -33,7 +33,7 @@ export class DSIProcessService {
   pinPadReset(): Promise<RStream> {
     const item = localStorage.getItem('DSIEMVSettings')
     if (!item) { return }
-    const transactiontemp = JSON.parse(item) as Transaction;
+    const transactiontemp     = JSON.parse(item) as Transaction;
     let transaction           ={} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
     transaction.TranCode      =transactiontemp.TranCode;
@@ -41,12 +41,12 @@ export class DSIProcessService {
   }
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
-    const commandResponse = this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '')
+    const commandResponse = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '')
     return commandResponse;
   }
 
-  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
-    const commandResponse = this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit')
+  async  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
+    const commandResponse = await this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit')
     return commandResponse;
   }
 
@@ -136,14 +136,52 @@ export class DSIProcessService {
   // XML = XML & setTag("TranType", opay.TranType) 'CREDIT/DEBIT/EBT
   // XML = XML & setTag("TranCode", opay.TranCode) ''SALE/REFUND/VOUCHERReturn
 
-  async emvTransaction(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
-    const reset               = await this.pinPadReset(); //ignore response for now.
-    const item                = localStorage.getItem('DSIEMVSettings')
+  testSale(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {
+    const stream = {} as RStream;
+    stream.CmdResponse = {} as CmdResponse
+    stream.TranResponse = {} as TranResponse
+    stream.TranResponse.Amount = {} as Amount
+
+    stream.CmdResponse.CmdStatus = "Approved"
+    stream.CmdResponse.TextResponse = "APPROVED"
+
+    stream.TranResponse.CardType = "VISA"
+
+    stream.TranResponse.AuthCode     = "00421D" //</AuthCode>
+		stream.TranResponse.CaptureStatus= "Captured" //</CaptureStatus>
+		stream.TranResponse.RefNo        = "212442535014"//</RefNo>
+    stream.TranResponse.InvoiceNo    = "249571"//</InvoiceNo>
+		stream.TranResponse.OperatorID   =" Wolf Wolverson"//</OperatorID>
+
+    stream.TranResponse.Amount.Authorize = amount.toString();
+    stream.TranResponse.Amount.Purchase = amount.toString();
+
+    stream.TranResponse.AcqRefData  ="|1623410529|95985"//</AcqRefData>
+    stream.TranResponse.AVSResult   ="Z"//</AVSResult>
+		stream.TranResponse.CVVResult   ="M"//</CVVResult>
+		stream.TranResponse.RecordNo    ="1623410529"//</RecordNo>
+		stream.TranResponse.EntryMethod ="CHIP READ/MANUAL"//</EntryMethod>
+		stream.TranResponse.Date        ="05/04/2022"//</Date>
+		stream.TranResponse.Time        ="15:00:14"//</Time>
+
+    return stream;
+  }
+
+  async emvTransaction(tranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
+    const item  = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }
     const transactiontemp     = JSON.parse(item) as Transaction;
+
+    if (transactiontemp.SecureDevice = 'testDevice') {
+      const result = this.testSale(tranCode, amount,paymentID, manual, tipPrompt, TranType)
+      return result;
+    }
+
+    const reset               = await this.pinPadReset(); //ignore response for now.
+
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
-    transaction.TranCode      = TranCode;
+    transaction.TranCode      = tranCode;
     if (TranType) {
       transaction.TranType      = TranType;
     }

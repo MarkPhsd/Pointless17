@@ -1,16 +1,13 @@
-import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Inject, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Output, EventEmitter } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { Observable, Subscription, switchMap } from 'rxjs';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { ReturnStatement } from '@angular/compiler';
-
 
 @Component({
   selector: 'app-receipt-view',
@@ -82,6 +79,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   intSubscriptions() {
     this._order       = this.orderService.currentOrder$.subscribe(data => {
       this.order      = data;
+
+
       this.orders     = [];
       if (!data) {return}
       this.orders.push(data)
@@ -128,7 +127,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     this.initDefaultLayouts()
   }
 
-  async refreshView(){ 
+  async refreshView(){
     const styles     = await this.applyStyles();
     const receiptID  = await this.getDefaultPrinter();
     if (receiptID && styles ) {
@@ -143,7 +142,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
       this.receiptStyles  = await this.applyStyles();
 
       const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
-      receipt$.subscribe(data => { 
+      receipt$.subscribe(data => {
           this.receiptID = data.id
           this.initSubComponent(data)
       })
@@ -156,7 +155,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     const site  = this.siteService.getAssignedSite();
     const style$ =  this.printingService.getStylesCached(site);
     style$.pipe(
-      switchMap( style => { 
+      switchMap( style => {
         return this.printingService.setHTMLReceiptStyle(style)
       })).subscribe()
   }
@@ -242,7 +241,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
 
   async print() {
 
-    if (!this.printerName) { 
+    if (!this.printerName) {
       if (this.platFormService.webMode) { this.convertToPDF();}
       return
     }
@@ -290,7 +289,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
   }
 
-  
+
   async getPrinterAssignment(){
     this.getElectronPrinterAssignent()
     await this.getAndroidPrinterAssignment()
@@ -301,7 +300,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     // this.dialogRef.close();
   }
 
-  
+
   getElectronPrinterAssignent() {
     if (this.platFormService.isAppElectron) {
       this.printingService.getElectronReceiptPrinter().subscribe( data => {

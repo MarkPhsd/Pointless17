@@ -233,11 +233,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.initAuthorization();
     this.toolbarUIService.hidetoolBars();
 
-    this.settingService.getUIHomePageSettings().subscribe(data => { 
+    this.settingService.getUIHomePageSettings().subscribe(data => {
       this.uiSettings = data;
     })
-    
-    this.settingService.getUITransactionSetting().subscribe(data => { 
+
+    this.settingService.getUITransactionSetting().subscribe(data => {
       this.uiTransactionSettings = data;
     })
   }
@@ -248,7 +248,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
-   
+
     }
   }
 

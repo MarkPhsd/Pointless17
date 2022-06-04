@@ -105,7 +105,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     //so we just have to request the ID, and then we can establish everything after that.
     this.processSubDSIEMVCreditPayment(order, amount, true)
   }
-  
+
   processSubDSIEMVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
@@ -114,6 +114,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.orderID = order.id;
+    posPayment.zrun = order.zrun;
+    posPayment.reportRunID = order.reportRunID;
     const payment$  = this.paymentService.postPOSPayment(site, posPayment)
     payment$.subscribe(data =>
       {
@@ -139,40 +141,44 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
-  async processCreditCardResponse(response: any, payment: IPOSPayment) {
+  async processCreditCardResponse(response: RStream, payment: IPOSPayment) {
     const site = this.sitesService.getAssignedSite();
 
-    if (response) {
+    if (response && response.CmdResponse && response.TranResponse) {
 
-      const rStream = response.RStream as RStream;
-
+      const rStream = response //.RStream as RStream;
       const cmdResponse       = rStream.CmdResponse;
       const trans             = rStream.TranResponse;
 
-      console.log('processCreditCardResponse response', response)
-      console.log('processCreditCardResponse response', rStream)
-      console.log('processCreditCardResponse cmdResponse', cmdResponse)
-      console.log('processCreditCardResponse trans', trans)
+      // console.log('processCreditCardResponse response', response)
+      // console.log('processCreditCardResponse cmdResponse', cmdResponse)
+      // console.log('processCreditCardResponse trans', trans)
 
       const status = cmdResponse?.TextResponse;
       const cmdStatus = cmdResponse?.CmdStatus;
 
-      if (cmdResponse.CmdStatus === 'TimeOut'.toLowerCase() ) {
+      if (cmdResponse.CmdStatus.toLowerCase() === 'TimeOut'.toLowerCase() ) {
         this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
         return cmdResponse
       }
 
-      if (cmdResponse.CmdStatus === 'Error'.toLowerCase() ) {
+      if (cmdResponse.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
         this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
         return cmdResponse
       }
 
-      payment                 = this.applyEMVResponseToPayment(trans, payment)
       //"AP*", "Approved", "Approved, Partial AP"
       //then we can get the payment Method Type from Card Type.
+      payment   = this.applyEMVResponseToPayment(trans, payment)
 
-      if (cmdResponse.CmdStatus === 'AP*' || cmdResponse.CmdStatus === 'Approved' || cmdResponse.CmdStatus === 'Partial AP') {
+      if (cmdResponse.CmdStatus.toLowerCase() === 'AP*'.toLowerCase() ||
+          cmdResponse.CmdStatus.toLowerCase() === 'Approved'.toLowerCase() ||
+          cmdResponse.CmdStatus.toLowerCase() === 'Partial AP'.toLowerCase()) {
+
         const cardType = trans?.CardType;
+
+
+
         this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
           switchMap( data => {
             payment.paymentMethodID = data.id;
@@ -188,11 +194,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           this.orderService.updateOrderSubscription(data)
           //print receipt prompt
           //print receipt auto
-
+          return cmdResponse;
         })
       }
 
       return cmdResponse;
+
     }
   }
 
@@ -202,15 +209,42 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     //preauth = 3
     //preauth capture = 7
     //force = 4;
-
-    payment.accountNum    = trans?.AcctNo;
-    payment.refNumber     = trans?.RefNo;
-    payment.aid           = trans?.AID;
+    // <MerchantID>93344</MerchantID>
+		// <AcctNo>************3907</AcctNo>
+		// <CardType>VISA</CardType>
+		// <TranCode>EMVSale</TranCode>
+		// <AuthCode>00421D</AuthCode>
+		// <CaptureStatus>Captured</CaptureStatus>
+		// <RefNo>212442535014</RefNo>
+		// <InvoiceNo>249571</InvoiceNo>
+		// <OperatorID>Clive Wolder</OperatorID>
+		// <Amount>
+		// 	<Purchase>220.76</Purchase>
+		// 	<Authorize>220.76</Authorize>
+		// </Amount>
+		// <AcqRefData>|1623410529|95985</AcqRefData>
+		// <AVSResult>Z</AVSResult>
+		// <CVVResult>M</CVVResult>
+		// <RecordNo>1623410529</RecordNo>
+		// <EntryMethod>CHIP READ/MANUAL</EntryMethod>
+		// <Date>05/04/2022</Date>
+		// <Time>15:00:14</Time>
     payment.tranType      = trans?.TranCode;
     payment.approvalCode  = trans?.AuthCode;
+    payment.captureStatus = trans?.CaptureStatus;
+    // payment.refNumber     = trans?.
+    payment.dlNumber      = trans?.AcqRefData;
+
+    payment.amountPaid     = +trans?.Amount?.Authorize;
+    payment.amountReceived = +trans?.Amount?.Authorize;
+    payment.accountNum    = trans?.AcctNo;
+
+
+    payment.aid           = trans?.AID;
     payment.saleType      = 1;
     payment.entryMethod   = trans?.EntryMethod;
     return payment;
+
 
   }
 
