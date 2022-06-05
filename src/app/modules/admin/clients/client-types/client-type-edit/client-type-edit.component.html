@@ -77,7 +77,6 @@
                   </div>
               </div>
 
-              <!-- <mat-divider [vertical]="true"></mat-divider> -->
               <div class="grid-fields">
                 <div>
                   <mat-form-field appearance="outline">
@@ -215,6 +214,13 @@
               </div>
             </div>
 
+            <div class="toggle-fields">
+              <mat-slide-toggle
+                        formControlName="closeDay" >
+                <mat-label>Close Day</mat-label>
+              </mat-slide-toggle>
+            </div>
+
             <div>
               <h4>Marketing</h4>
               <div class="toggle-fields">
@@ -244,6 +250,7 @@
               </div>
 
 
+
               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="accessHistoryReports" >
@@ -257,7 +264,7 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="ImportMETRCPackages" >
+                          formControlName="importMETRCPackages" >
                   <mat-label>Import Metrc</mat-label>
                 </mat-slide-toggle>
               </div>
@@ -308,7 +315,7 @@
             </div>
             <div>
               <h4>Delete</h4>
-              <div class="toggle-fields">
+               <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="deleteClientType" >
                   <mat-label>Delete Client Types</mat-label>

@@ -13,6 +13,7 @@ import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
+import { PrintingService } from '../system/printing.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   initSubscriptions() {
      this.dialogSubject = this.dialogRef.afterClosed().subscribe(result => {
       if (result) {
+
       }
     });
   }
@@ -38,13 +40,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
    }
 
   constructor(
-    private sitesService     : SitesService,
-    private paymentService : POSPaymentService,
+    private sitesService        : SitesService,
+    private paymentService      : POSPaymentService,
     private paymentMethodService: PaymentMethodsService,
-    private orderService    : OrdersService,
-    private dialogOptions   : ProductEditButtonService,
-    private matSnackBar     : MatSnackBar,) {
-
+    private orderService        : OrdersService,
+    private orderMethodsService : OrderMethodsService,
+    public  printingService     : PrintingService,
+    private dialogOptions       : ProductEditButtonService,
+    private matSnackBar         : MatSnackBar) {
   }
 
   get DSIEmvSettings(): DSIEMVSettings {
@@ -69,41 +72,21 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
   }
 
-  processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
+                     amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    // const results =  await payment$.pipe().toPromise();
-    // return results
     return payment$
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
                        order: IPOSOrder, amount: number,
                        paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-
     if (this.DSIEmvSettings.enabled) {
-      this.processDSIEMVCreditPayment(order, amount)
+      this.processSubDSIEMVCreditPayment(order, amount, true)
       return
     }
-
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
     return payment$
-
-  }
-
-  processDSIEMVCreditPayment( order: IPOSOrder, amount: number) {
-    //once we get back the method 'Card Type'
-    //lookup the payment method.
-    //we can't get the type of payment before we get the PaymentID.
-    //so we just have to request the ID, and then we can establish everything after that.
-    this.processSubDSIEMVCreditPayment(order, amount, false)
-  }
-
-  processDSIEMVManualCreditPayment( order: IPOSOrder, amount: number) {
-    //once we get back the method 'Card Type'
-    //lookup the payment method.
-    //we can't get the type of payment before we get the PaymentID.
-    //so we just have to request the ID, and then we can establish everything after that.
-    this.processSubDSIEMVCreditPayment(order, amount, true)
   }
 
   processSubDSIEMVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean) {
@@ -125,7 +108,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
         return of(data)
       }
     )
+    return null
   }
+
 
   processDSIEMVCreditVoid( payment: IPOSPayment) {
     //once we get back the method 'Card Type'
@@ -135,63 +120,84 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.orderID = payment.id;
-
     this.dialogRef = this.dialogOptions.openDSIEMVTransaction({voidPayment: payment, action: 2});
     this._dialog.next(this.dialogRef)
 
   }
 
-  async processCreditCardResponse(response: RStream, payment: IPOSPayment) {
+  validateResponse(response: RStream, payment: IPOSPayment) {
+    const rStream = response //.RStream as RStream;
+    const cmdResponse       = rStream.CmdResponse;
+    const trans             = rStream.TranResponse;
+
+    if (!cmdResponse) {
+      this.notify(`Error no response`, 'Transaction not Complete', 3000);
+      return false
+    }
+    if (!trans) {
+      this.notify(`Error no transaction response`, 'Transaction not Complete', 3000);
+      return false
+    }
+
+    if (cmdResponse.CmdStatus.toLowerCase() === 'TimeOut'.toLowerCase() ) {
+      this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
+      return false
+    }
+
+    if (cmdResponse.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
+      this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
+      return false
+    }
+
+    return true;
+
+  }
+
+  //"AP*", "Approved", "Approved, Partial AP"
+  //then we can get the payment Method Type from Card Type.
+  isApproved(cmdStatus: string) {
+    if (cmdStatus.toLowerCase() === 'AP*'.toLowerCase() ||
+        cmdStatus.toLowerCase() === 'Approved'.toLowerCase() ||
+        cmdStatus.toLowerCase() === 'Partial AP'.toLowerCase()) {
+      return true;
+    }
+    return false;
+  }
+
+  async processCreditCardResponse(response: RStream, payment: IPOSPayment, order: IPOSOrder) {
+
     const site = this.sitesService.getAssignedSite();
 
     if (response && response.CmdResponse && response.TranResponse) {
 
-      const rStream = response //.RStream as RStream;
-      const cmdResponse       = rStream.CmdResponse;
-      const trans             = rStream.TranResponse;
+      const validate = this.validateResponse(response, payment)
+      if (!validate) { return }
 
-      // console.log('processCreditCardResponse response', response)
-      // console.log('processCreditCardResponse cmdResponse', cmdResponse)
-      // console.log('processCreditCardResponse trans', trans)
+      const rStream      = response //.RStream as RStream;
+      const cmdResponse  = rStream.CmdResponse;
+      const trans        = rStream.TranResponse;
+      const status       = cmdResponse?.TextResponse;
+      const cmdStatus    = cmdResponse?.CmdStatus;
 
-      const status = cmdResponse?.TextResponse;
-      const cmdStatus = cmdResponse?.CmdStatus;
-
-      if (cmdResponse.CmdStatus.toLowerCase() === 'TimeOut'.toLowerCase() ) {
-        this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
-        return cmdResponse
-      }
-
-      if (cmdResponse.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
-        this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
-        return cmdResponse
-      }
-
-      //"AP*", "Approved", "Approved, Partial AP"
-      //then we can get the payment Method Type from Card Type.
       payment   = this.applyEMVResponseToPayment(trans, payment)
 
-      if (cmdResponse.CmdStatus.toLowerCase() === 'AP*'.toLowerCase() ||
-          cmdResponse.CmdStatus.toLowerCase() === 'Approved'.toLowerCase() ||
-          cmdResponse.CmdStatus.toLowerCase() === 'Partial AP'.toLowerCase()) {
+      if (this.isApproved(cmdStatus)) {
 
-        const cardType = trans?.CardType;
-
-
+        const cardType       = trans?.CardType;
+        payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
+        let paymentMethod    = {} as IPaymentMethod;
 
         this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
           switchMap( data => {
             payment.paymentMethodID = data.id;
-            return this.paymentService.putPOSPayment(site, payment)
-          }
-        )).pipe(
-          switchMap( data => {
-            payment.paymentMethodID = data.id
-            //then we can get the current order.
-            return this.orderService.getOrder(site, payment.orderID.toString(), false);
+            paymentMethod = data;
+            return this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize,paymentMethod)
           }
         )).subscribe(data => {
-          this.orderService.updateOrderSubscription(data)
+
+          this.orderService.updateOrderSubscription(data.order);
+          this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
+          this.printingService.previewReceipt();
           //print receipt prompt
           //print receipt auto
           return cmdResponse;
@@ -229,31 +235,44 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 		// <EntryMethod>CHIP READ/MANUAL</EntryMethod>
 		// <Date>05/04/2022</Date>
 		// <Time>15:00:14</Time>
-    payment.tranType      = trans?.TranCode;
+    payment.accountNum    = trans?.AcctNo;
+    payment.exp           = trans?.ExpDate;
+    payment.cardHolder    = trans?.CardholderName;
+    payment.trancode      = trans?.TranCode;
+    payment.refNumber     = trans?.RefNo;
+    payment.dlNumber      = trans?.AcqRefData;
+    payment.processData   = trans?.ProcessData;
+    payment.ccNumber      = trans?.RecordNo;
+
     payment.approvalCode  = trans?.AuthCode;
     payment.captureStatus = trans?.CaptureStatus;
-    // payment.refNumber     = trans?.
-    payment.dlNumber      = trans?.AcqRefData;
 
     payment.amountPaid     = +trans?.Amount?.Authorize;
     payment.amountReceived = +trans?.Amount?.Authorize;
-    payment.accountNum    = trans?.AcctNo;
 
+    payment.applicationLabel = trans?.ApplicationLabel;
+
+    payment.entryMethod   = trans?.EntryMethod;
 
     payment.aid           = trans?.AID;
+    payment.tvr           = trans?.TVR;
+    payment.tsi           = trans?.TSI;
+    payment.arc           = trans?.ARC;
+    payment.emvcvm        = trans?.CVM;
+    payment.emvDate       = trans?.Date;
+    payment.emvTime       = trans?.Time;
+
+    payment.captureStatus = trans?.CaptureStatus;
+
     payment.saleType      = 1;
-    payment.entryMethod   = trans?.EntryMethod;
     return payment;
-
-
   }
 
-  processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+  processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
+                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     if (order.clients_POSOrders) {
       if (order.clients_POSOrders.loyaltyPointValue >= amount) {
         const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-        // const results  = await payment$.pipe().toPromise();
-        // return results
         return payment$
       } else  {
         this.notify(`There are not enough points to pay this amount. The client has $${order.clients_POSOrders.loyaltyPointValue} in total.`, 'Try Again',3000)
@@ -263,17 +282,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
   getPointsRequiredToPayBalance(balanceRemaining: number, loyaltyPointValue: number) {
-
     if (!loyaltyPointValue || loyaltyPointValue == 0) { return 0}
-
     let amountPaid = 0
-
     if (loyaltyPointValue >= balanceRemaining) {  amountPaid = balanceRemaining  }
-
     if (balanceRemaining >= loyaltyPointValue) { amountPaid = loyaltyPointValue  }
-
     return amountPaid
-
   }
 
   getResults(amount, paymentMethod: IPaymentMethod,

@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { IPOSOrder, IPOSPayment, IServiceType, ServiceType } from 'src/app/_interfaces';
 import { OrderPayload, OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
@@ -31,9 +31,7 @@ export class ChangeDueComponent   {
   changeDue             : any;
   serviceType           : IServiceType;
 
-  constructor(private printingService: PrintingService,
-              private printingServiceAndroid: PrintingAndroidService,
-              private printingBTService : BtPrintingService,
+  constructor(
               private paymentService: POSPaymentService,
               private siteService: SitesService,
               private orderService:  OrdersService,
@@ -79,18 +77,20 @@ export class ChangeDueComponent   {
   }
 
   customTipAmount(amount) {
+    console.log('customTipAmount',amount)
     if (this.payment) {
-      const value = this.payment.amountPaid * (amount/100);
+      const value = +amount;
       console.log('value', value)
-      this.tip( parseInt( value.toFixed(2) )  )
+      this.tip( ( amount )  )
     }
    }
 
   specifiedTip(amount: number) {
     const payment = this.payment
+    console.log('specifiedTip',amount)
     if (payment) {
       const value = payment.amountPaid * (amount / 100 );
-      this.tip( parseInt( value.toFixed(2) )  )
+      this.tip(  +value.toFixed(2)  )
     }
   }
 
@@ -99,17 +99,19 @@ export class ChangeDueComponent   {
     const payment = this.payment
     if (payment) {
       payment.tipAmount = amount;
+
       const payment$ =  this.paymentService.putPOSPayment(site, payment);
       //process tip via credit card service.
-      payment$.subscribe(data => {
-        this.paymentService.updatePaymentSubscription(data)
-        this.orderService.getOrder(site, data.orderID.toString(), false).subscribe(order => {
-          this.orderService.updateOrderSubscription(order)
+      payment$.pipe(
+        switchMap( data =>  {
+            this.paymentService.updatePaymentSubscription(data)
+            const orderID = data.orderID.toString();
+            return this.orderService.getOrder(site, orderID, false);
+        })).subscribe(data => {
+          this.orderService.updateOrderSubscription(data)
           this.dialogRef.close()
-        })
-      }, err => {
-        this.notify(err, "Failed to update Tip", 3000)
-      })
+        }
+      )
     }
   }
 

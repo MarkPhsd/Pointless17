@@ -10,6 +10,7 @@ import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'pos-operations',
@@ -43,6 +44,7 @@ export class PosOperationsComponent implements OnInit {
     private transferDataService: TransferDataService,
     private balanceSheetService: BalanceSheetService,
     private router             : Router,
+    private orderMethodsService: OrderMethodsService,
     private platFormService       : PlatformService,
     private printingService       : PrintingService,
     private printingAndroidService: PrintingAndroidService,
@@ -105,11 +107,11 @@ export class PosOperationsComponent implements OnInit {
     this.balanceSheetsClosed = ''
     closingCheck$.pipe(
       switchMap( data => {
-        console.log(data)
         //determine if the day can be closed.
         //if it can't then return what is told from the webapi
         if (data){
           if (!data.allowClose) {
+            const result = this.orderMethodsService.notifyEvent(`Data not closed. ${data}`, 'Alert');
             this.canCloseOrderResults = data
             this.runningClose = false
             return

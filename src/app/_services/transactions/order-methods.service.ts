@@ -6,7 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
-import { IClientTable, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
+import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
@@ -21,12 +21,10 @@ import { PrintingService } from '../system/printing.service';
 import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { DateHelperService } from '../reporting/date-helper.service';
-import { DatePipe } from '@angular/common';
 import { PriceCategoriesService } from '../menu/price-categories.service';
-import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { StoreCreditIssueComponent } from 'src/app/modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
-// import { T } from '@angular/cdk/keycodes';
+import { IPaymentMethod } from './payment-methods.service';
+import { PlatformService } from '../system/platform.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -63,7 +61,7 @@ export class OrderMethodsService implements OnDestroy {
 
   priceCategoryID: number;
 
- 
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
@@ -100,12 +98,12 @@ export class OrderMethodsService implements OnDestroy {
               private orderService            : OrdersService,
               private _snackBar               : MatSnackBar,
               private posOrderItemService     : POSOrderItemServiceService,
-              private productEditButtonService: ProductEditButtonService,
+              private editDialog              : ProductEditButtonService,
               private promptGroupService      : PromptGroupService,
-              private printingService         : PrintingService,
               private userAuthorization       : UserAuthorizationService,
               private menuService             : MenuService,
               private priceCategoriesService:  PriceCategoriesService,
+              private platFormService         : PlatformService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -264,12 +262,36 @@ export class OrderMethodsService implements OnDestroy {
     if (!order) {const order = {} as IPOSOrder}
     const deviceName = localStorage.getItem('devicename')
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue, deviceName: deviceName  } as NewItem
-    console.log('newItem', newItem)
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
    await this.processAddItem(order, null, item, quantity, null);
+  }
+
+  finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
+    const payment = paymentResponse.payment
+    if (order.balanceRemaining> 0) { return 0 }
+    if (payment && paymentMethod) {
+
+
+
+      if (paymentMethod.isCreditCard) {
+        if (this.platFormService.isApp()) {
+          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        }
+        return 1
+      }
+
+      if (payment.amountReceived >= payment.amountPaid) {
+        if (this.platFormService.isApp()) {
+          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
+        }
+        return 1
+      }
+
+      return 0
+    }
   }
 
   validateUser(): boolean {
@@ -589,7 +611,7 @@ export class OrderMethodsService implements OnDestroy {
       result$.subscribe(data=>  {
         this.notifyEvent(`Order Paid for`, 'Order Completed')
         this.orderService.updateOrderSubscription(data)
-        this.printingService.previewReceipt()
+        // this.printingService.previewReceipt()
       }
     )
    }
@@ -785,7 +807,7 @@ export class OrderMethodsService implements OnDestroy {
     if (orderItem) {
       const site = this.siteService.getAssignedSite()
       if (orderItem.printed || this.order.completionDate ) {
-        this.productEditButtonService.openVoidItemDialog(orderItem)
+        this.editDialog.openVoidItemDialog(orderItem)
         return
       }
 

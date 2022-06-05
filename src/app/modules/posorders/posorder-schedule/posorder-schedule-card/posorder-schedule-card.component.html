@@ -9,17 +9,21 @@
   <mat-card-content>
 
     <div class="grid-container">
-      <div *ngIf="order.preferredScheduleDate">Schedule</div>
-      <div *ngIf="order.preferredScheduleDate"> {{order?.preferredScheduleDate | date: 'short'}} </div>
+      <div *ngIf="order?.preferredScheduleDate">Schedule</div>
+      <!-- date: {{order?.preferredScheduleDate}},  {{order?.preferredScheduleDate.length}} -->
+      <div>
+        {{ order?.preferredScheduleDate  }}
+      </div>
+      <!-- <div *ngIf="order?.preferredScheduleDate && order?.preferredScheduleDate.length>1"> {{ order?.preferredScheduleDate | date: 'short' }} </div> -->
 
-      <div *ngIf="order.shipAddress"><mat-icon>delivery_dining</mat-icon>Address</div>
-      <div *ngIf="order.shipAddress">{{order?.shipAddress}} - {{order?.shipAddress2}}  </div>
+      <div *ngIf="order?.shipAddress"><mat-icon>delivery_dining</mat-icon>Address</div>
+      <div *ngIf="order?.shipAddress">{{order?.shipAddress}} - {{order?.shipAddress2}}  </div>
 
-      <div *ngIf="order.shipCity">City</div>
-      <div *ngIf="order.shipCity">{{order?.shipCity}}</div>
+      <div *ngIf="order?.shipCity">City</div>
+      <div *ngIf="order?.shipCity">{{order?.shipCity}}</div>
 
-      <div *ngIf="order.shipCity">State/Zip</div>
-      <div *ngIf="order.shipCity">{{order?.shipCity}}, {{order?.shipPostalCode}}  </div>
+      <div *ngIf="order?.shipCity">State/Zip</div>
+      <div *ngIf="order?.shipCity">{{order?.shipCity}}, {{order?.shipPostalCode}}  </div>
 
       <div>Phone</div>
       <div> {{order?.clients_POSOrders?.phone}} </div>

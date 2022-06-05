@@ -198,8 +198,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   }
 
   initSubComponent(receiptPromise: ISetting): boolean {
-    console.log("receiptPromise", receiptPromise)
-
     if (receiptPromise ) {
       this.receiptLayoutSetting =  receiptPromise
       this.headerText           =  this.receiptLayoutSetting.option6

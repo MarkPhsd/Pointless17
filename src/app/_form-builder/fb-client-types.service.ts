@@ -38,6 +38,7 @@ export class FbClientTypesService {
       changeClientType : [''],
       changeAuths : [''],
       deleteClientType : [''],
+      adjustInventoryCount : [''],
     })
     return fb
 

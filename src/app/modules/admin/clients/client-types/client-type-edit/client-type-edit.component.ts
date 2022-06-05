@@ -69,12 +69,14 @@ export class ClientTypeEditComponent implements OnInit {
 
   initJSONObjectForm(jsonObject: string) {
     this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
+
     if (jsonObject) {
       const object = JSON.parse(jsonObject) as IUserAuth_Properties;
+      console.log('object', object)
       this.jsonObjectForm.patchValue(object);
     }
 
-    if (!jsonObject) { 
+    if (!jsonObject) {
       const object = {} as IUserAuth_Properties;
       this.jsonObjectForm.patchValue(object);
     }
@@ -124,7 +126,7 @@ export class ClientTypeEditComponent implements OnInit {
             },
           error: error => {
             this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-            
+
             }
           }
         )

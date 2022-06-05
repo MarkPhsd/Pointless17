@@ -468,9 +468,7 @@ export class POSPaymentsComponent implements  OnInit,  OnDestroy {
   }
 
   async editItemWithId(payment:any) {
-    console.log('edit item')
-    console.log(payment)
-    if(!payment) { return }
+      if(!payment) { return }
     if (payment && payment.rowData) {  payment = payment.rowData;}
     this.pOSPaymentService.updatePaymentSubscription(payment)
     this._bottomSheet.open(PosPaymentEditComponent);

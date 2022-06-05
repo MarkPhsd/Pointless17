@@ -19,7 +19,10 @@ export class KeyPadComponent implements OnInit, OnChanges {
   private el: HTMLInputElement;
   checked: any;
 
+  //returns on number input
   @Output() outPutValue   = new EventEmitter();
+
+  //returns on enter press
   @Output() outPutReturnEnter = new EventEmitter();
 
   @Input() value          = '';

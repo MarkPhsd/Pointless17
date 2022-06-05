@@ -1,8 +1,8 @@
-import { Component, 
-         OnInit , 
-         Input, 
+import { Component,
+         OnInit ,
+         Input,
          HostListener,
-         OnDestroy, 
+         OnDestroy,
          ViewChild,
          TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -113,9 +113,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private paymentMethodService: PaymentMethodsService,
               private matSnackBar     : MatSnackBar,
               private toolbarUI       : ToolBarUIService,
-              private editDialog      : ProductEditButtonService,
               private paymentsMethodsService: PaymentsMethodsProcessService,
-              private printingService :PrintingService,
               public  platFormService : PlatformService,
               private uISettingsService: UISettingsService,
               private dialog          : MatDialog,
@@ -193,7 +191,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   refreshIsOrderPaid() {
     this.paymentsEqualTotal  = this.paymentsMethodsService.isOrderBalanceZero(this.order)
-    if (this.order.completionDate) { 
+    if (this.order.completionDate) {
       return true;
     }
   }
@@ -322,14 +320,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   processDSICreditCardPayment() {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processDSIEMVCreditPayment(this.order, order.balanceRemaining)
+      // this.paymentsMethodsService.processDSIEMVCreditPayment(this.order, order.balanceRemaining);
+      this.paymentsMethodsService.processSubDSIEMVCreditPayment(this.order, order.balanceRemaining, false)
+      //  dialogRef.afterClosed().subscribe(result => {
+      //     if (!result) { return }
+      //     this.processResults(result)
+      //   });
+
     }
   }
 
   processDSIManualCreditCardPayment() {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processDSIEMVManualCreditPayment(this.order, order.balanceRemaining)
+      this.paymentsMethodsService.processSubDSIEMVCreditPayment(this.order, order.balanceRemaining, true)
     }
   }
 
@@ -362,11 +366,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.initPaymentForm(); return
     }
 
-    console.log('applyPaymentAmount', this.groupPaymentAmount);
-
     if (this.order &&  this.paymentMethod) {
 
-        let amount = this.groupPaymentAmount
+        let amount = this.groupPaymentAmount;
+
         if (amount == 0) {
           amount   = this.formatValueEntered(event)
           this.posPayment.groupID = this.groupPaymentGroupID;
@@ -383,14 +386,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         processResults$.subscribe( {
           next: (data) => {
             if (!data) {
-
               this.notify('Payment not processed', 'failure', 1000)
             }
             this.processResults(data)
             this.groupPaymentAmount  = 0;
             this.groupPaymentGroupID = 0;
           },
-          error: (e) => console.error(e)
+          error: err => console.error(err)
         }
       )
     }
@@ -399,9 +401,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   applyGroupPayment(event) {
-    if (!event || event.amount == 0) {
-      return
-    }
+    if (!event || event.amount == 0) { return }
     this.splitByItem = false;
     this.groupPaymentAmount = event.amount;
     this.groupPaymentGroupID = event.groupID
@@ -412,7 +412,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
-         result =  this.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
+        result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
       } else {
       }
     }
@@ -426,28 +426,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
-
-    const payment = paymentResponse.payment
-    if (payment && paymentMethod) {
-      if (paymentMethod.isCreditCard) {
-        //open tip input option - same as cash
-        if (this.platFormService.isApp()) {
-          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
-        }
-        this.printingService.previewReceipt()
-        return 1
-      }
-      if (payment.amountReceived >= payment.amountPaid) {
-        if (this.platFormService.isApp()) {
-          this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
-        }
-        this.printingService.previewReceipt()
-        return 1
-      }
-      return 0
-    }
-  }
 
   closeOrder() {
     const site = this.sitesService.getAssignedSite();
@@ -481,7 +459,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         return  this.processCashPayment(site, this.posPayment, this.order, amount, this.paymentMethod)
       }
 
-      if (this.paymentMethod.name.toLowerCase() === 'rewards points' || this.paymentMethod.name.toLowerCase() === 'loyalty points') {
+      if (this.paymentMethod.name.toLowerCase() === 'rewards points'
+          || this.paymentMethod.name.toLowerCase() === 'loyalty points') {
         return  this.enterPointCashValue(amount)
       }
 
@@ -508,9 +487,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       // const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
       // const results =  await payment$.pipe().toPromise();
       const enabled = this.paymentsMethodsService.DSIEmvSettings.enabled
-
       if (enabled) {
-        this.paymentsMethodsService.processDSIEMVCreditPayment(order, amount)
+        this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, amount, true)
         return
       }
       return this.paymentsMethodsService.processCreditPayment(site, posPayment, order, amount, paymentMethod )
@@ -633,14 +611,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (action === this.SWIPE_ACTION.LEFT) {
       const isLast = selectedIndex === 1;
       selectedIndex = isLast ? 0 : selectedIndex + 1;
-      console.log("Swipe right - INDEX: " +  selectedIndex);
     }
 
     // Swipe right, previous tab
     if (action === this.SWIPE_ACTION.RIGHT) {
       const isFirst = selectedIndex === 0;
       selectedIndex = isFirst ? 1 :  selectedIndex - 1;
-      console.log("Swipe left - INDEX: " + selectedIndex);
     }
   }
 

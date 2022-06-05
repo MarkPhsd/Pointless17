@@ -1,10 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { IPOSPayment } from 'src/app/_interfaces';
-import { CmdResponse } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { OrdersService } from 'src/app/_services';
+import { CmdResponse, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
-
 @Component({
   selector: 'app-dsiemvtransaction',
   templateUrl: './dsiemvtransaction.component.html',
@@ -36,26 +37,37 @@ export class DSIEMVTransactionComponent implements OnInit {
   //preauth capture = 7
   //force = 4;
 
+  order: IPOSOrder;
+
   constructor(
     private paymentsMethodsProcess: PaymentsMethodsProcessService,
     private dsiProcess            : DSIProcessService,
+    private orderService          : OrdersService,
     private dialogRef             : MatDialogRef<DSIEMVTransactionComponent>,
+
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {
+
+
     if (data)  {
       this.payment = data.data;
       this.amount  = data.amount;
       this.action  = data.action
       this.transactiondata = data;
       this.manualPrompt = data.manualPrompt
-      if (data.action ==2) {
+      if (data.action == 2) {
         this.voidPayment = data.voidPayment
       }
     }
   }
 
   ngOnInit(): void {
+
+    this.orderService.currentOrder$.subscribe(data  => {
+      this.order = data;
+    })
+
     const i = 0;
      this.message  = 'Press Process to use Card'
      this.processing = false;
@@ -123,126 +135,103 @@ export class DSIEMVTransactionComponent implements OnInit {
     //   return
     // }
   }
+  processTestResponse(){
+    //testDevice
+  }
 
   async processSaleCard() {
     const amount = this.amount
     const payment = this.payment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-    }
-    if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-       console.log('cmdResponse', cmdResponse)
-       this.readResult(cmdResponse);
-    }
-  }
-
-  processTestResponse(){
-    //testDevice
+    this.processResults(response)
   }
 
   async processVoidCard() {
     const amount = this.amount
     const payment = this.voidPayment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvVoid(payment);
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-    }
-    if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, payment)
-       this.readResult(cmdResponse);
-    }
+    this.processResults(response)
   }
 
   async processRefundCard() {
     const amount = this.amount
     const payment = this.payment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-    }
-    if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-       this.readResult(cmdResponse);
-    }
+    this.processResults(response)
   }
 
   async procesPreAuthCard() {
     const amount = this.amount
     const payment = this.payment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-    }
-    if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-       this.readResult(cmdResponse);
-    }
+    this.processResults(response)
   }
 
   async procesForceAuthCard() {
     const amount = this.amount
     const payment = this.payment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-    }
-    if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-       this.readResult(cmdResponse);
-    }
+    this.processResults(response)
   }
 
   async procesWIC() {
     const amount = this.amount
     const payment = this.payment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-    }
-    if (response) {
-      const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-      this.readResult(cmdResponse);
-    }
+    this.processResults(response)
   }
 
   async procesEBT() {
     const amount = this.amount
     const payment = this.payment
+    if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processResults(response)
+  }
+
+  async processResults(response:RStream) {
     if (!response) {
       this.message = 'Processing failed, reason uknown.'
       this.processing = false;
     }
     if (response) {
-       const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment)
-       this.readResult(cmdResponse);
+      const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment, this.order)
+      this.readResult(cmdResponse);
     }
   }
 
-  readResult(cmdResponse: CmdResponse) {
+  readResult(cmdResponse: CmdResponse): boolean {
     if (!cmdResponse) {
       this.message = 'Processing failed, no command response.'
-      return;
+      return false;
     }
     if (!cmdResponse.TextResponse) {
       this.message = 'Processing failed, no text ressponse.'
-      return;
+      return false;
     }
     if (!cmdResponse.CmdStatus) {
       this.message = 'Processing failed, not cmdStatus.'
-      return;
+      return false;
     }
     this.message        = cmdResponse.TextResponse;
     this.resultMessage  = cmdResponse.CmdStatus;
     this.processing     = false;
+
+    //"AP*", "Approved", "Approved, Partial AP"
+    if (cmdResponse.TextResponse.toLowerCase() === 'Approved'.toLowerCase() || cmdResponse.TextResponse.toLowerCase() === 'AP*'.toLowerCase()
+       ||cmdResponse.TextResponse.toLowerCase() === 'Approved, Partial AP'.toLowerCase()
+    ) {
+      this.cancel();
+      return true;
+    }
+
+    return false;
   }
 
   cancel() {

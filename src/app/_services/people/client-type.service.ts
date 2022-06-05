@@ -30,6 +30,7 @@ export interface IUserAuth_Properties {
    adjustInventory     : boolean;
 
   // 'product work
+   adjustInventoryCount: boolean;
    adjustProductCount  : boolean;
 
   // 'add non customer types
@@ -37,7 +38,7 @@ export interface IUserAuth_Properties {
    changeClientType    : boolean;
 
    changeAuths         : boolean;
-  
+
 }
 
 @Injectable({

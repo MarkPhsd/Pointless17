@@ -1,7 +1,6 @@
 <div *ngIf="order">
   <div [class]="orderlayout">
     <div class="transaction-data">
-
       <div class="grid-header-item">
         <app-payment-balance
           [mainPanel]="true"
@@ -20,7 +19,6 @@
         <posorder-schedule-card>
         </posorder-schedule-card>
       </div>
-
     </div>
 
     <div>
@@ -40,7 +38,7 @@
       <div class="center-items">
         <h4>Select Payment Method</h4>
       </div>
-      
+
       <mat-card>
         <div class="grid-items">
           <div>
@@ -56,7 +54,7 @@
               </div>
             </button>
           </div>
-  
+
           <div  *ngIf="!paymentsEqualTotal">
             <button class="splitbutton"
                     mat-raised-button
@@ -65,7 +63,7 @@
               <mat-icon>split</mat-icon>Split By Items
             </button>
           </div>
-  
+
           <div>
             <store-credit-info
                 [order]        ="order"
@@ -79,13 +77,13 @@
       </mat-card>
 
       <div *ngIf="!splitByItem && !paymentsEqualTotal && paymentIsReady">
-      
         <div class="grid-header-item" *ngIf="stepSelection == 1">
           <div>
-            <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0 " >
+            <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0" >
               <mat-card-content>
 
-                <span class="item-buttons-container" *ngIf="order.wicTotal && order.wicTotal !=0 ">
+                <span class="item-buttons-container"
+                      *ngIf="order.wicTotal && order.wicTotal !=0">
                   <button class="payment-buttons" mat-raised-button (click)="applyWICPayment()">
                     <mat-icon color="warn">credit_card</mat-icon>WIC Payment
                   </button>
@@ -103,7 +101,7 @@
             <mat-card>
               <mat-card-content>
                 <div class="item-container" >
-                  <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining >0">
+                  <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining > 0">
 
                     <button class="payment-buttons"
                         mat-raised-button
@@ -147,7 +145,7 @@
                   [toggleDimensions] = "'toggle-group-tall'"
                   [buttonDimensions] = "'button-dimensions-tall'"
                   (outPutItem)       = "getPaymentMethod($event)"  >
-                Enter  Partial Payments
+                Enter Partial Payments
               </app-mat-toggle-selector>
 
             </mat-card>

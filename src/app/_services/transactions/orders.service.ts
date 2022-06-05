@@ -16,6 +16,7 @@ import { SitesService } from '../reporting/sites.service';
 import { ItemWithAction } from './posorder-item-service.service';
 import { AuthenticationService } from '../system/authentication.service';
 import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
+import { IPaymentMethod } from './payment-methods.service';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -124,7 +125,7 @@ export class OrdersService {
     const site = this.siteService.getAssignedSite();
     if (order && order.id) {
       const order$ = this.claimOrder(site, order.id.toString(), order.history)
-      if (!order$) { 
+      if (!order$) {
         this.orderClaimed = false;
         return
       }
@@ -144,6 +145,7 @@ export class OrdersService {
     const order = localStorage.getItem('orderSubscription');
     return JSON.parse(order) as IPOSOrder;
   }
+
 
   updateOrderSearchModel(searchModel: IPOSOrderSearchModel) {
     this._posSearchModel.next(searchModel);
@@ -185,7 +187,7 @@ export class OrdersService {
 
   get posName(): string { return localStorage.getItem("devicename") };
 
-  applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  { 
+  applyItemsToGroup(site: ISite, groupID: number, selectedItems: any) :  Observable<any>  {
     const controller = "/POSOrders/"
 
     const endPoint  = "applyItemsToGroup"
@@ -197,7 +199,7 @@ export class OrdersService {
     return this.http.post<any>(url, selectedItems);
   }
 
-  getPOSOrderGroupTotal(site: ISite, id: number, groupID: number) :  Observable<IPOSOrder>  { 
+  getPOSOrderGroupTotal(site: ISite, id: number, groupID: number) :  Observable<IPOSOrder>  {
     const controller = "/POSOrders/"
 
     const endPoint  = "getPOSOrderGroupTotal"
@@ -210,7 +212,7 @@ export class OrdersService {
   }
 
 
-  getSplitItemsList(site: ISite, orderID: number, groupID: number) :  Observable<IListBoxItem[]>  { 
+  getSplitItemsList(site: ISite, orderID: number, groupID: number) :  Observable<IListBoxItem[]>  {
     const controller = "/POSOrders/"
 
     const endPoint  = "GetSplitItemsList"
@@ -353,6 +355,7 @@ export class OrdersService {
     const deviceName = localStorage.getItem('devicename')
 
     const controller = "/POSOrders/"
+
     const endPoint  = "GetPOSOrder"
 
     const parameters = `?ID=${id}&history=${history}&deviceName=${deviceName}`
