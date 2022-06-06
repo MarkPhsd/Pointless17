@@ -172,7 +172,7 @@ export class DSIProcessService {
     if (!item) { return null }
     const transactiontemp     = JSON.parse(item) as Transaction;
 
-    if (transactiontemp.SecureDevice = 'testDevice') {
+    if (transactiontemp.SecureDevice === 'testDevice') {
       const result = this.testSale(tranCode, amount,paymentID, manual, tipPrompt, TranType)
       return result;
     }

@@ -194,7 +194,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
             return this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize,paymentMethod)
           }
         )).subscribe(data => {
-
           this.orderService.updateOrderSubscription(data.order);
           this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
           this.printingService.previewReceipt();

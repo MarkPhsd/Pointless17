@@ -54,6 +54,7 @@ export class AuthenticationService {
         private platFormservice : PlatformService,
         private toolbarUIService : ToolBarUIService,
     ) {
+
       this.apiUrl = this.appInitService.apiBaseUrl()
       const userx = JSON.parse(JSON.parse(localStorage.getItem('userx'))) as IUser;
       const user  = JSON.parse(localStorage.getItem('user')) as IUser;

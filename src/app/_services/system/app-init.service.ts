@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { AuthenticationService } from '..';
 
 export interface IAppConfig {
   apiUrl : string
@@ -19,6 +20,8 @@ declare var window: any;
 @Injectable()
 export class AppInitService  {
 
+  initialized       = false;
+
   appConfig         = {} as IAppConfig;
   private apiUrl    : any;
   public  useAppGate: boolean;
@@ -33,6 +36,7 @@ export class AppInitService  {
               private platformService: PlatformService,
               private router: Router,) {
 
+    // this.clearUserSettings();
     this.platFormService.getPlatForm()
     this.httpClient = new HttpClient(handler);
     this.init();
@@ -44,15 +48,23 @@ export class AppInitService  {
     }
     return false
   }
+
   //for distributed apps.
   //also make a setting that can be applied.
   //that setting can be local storage.
   //and it can override this value.
   //this can be assigned in settings after an initial login.
-
   async init() {
     // console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
+    //
+
+    if (!this.initialized && this.isApp()) {
+      this.clearUserSettings();
+      this.initialized = true;
+      this.router.navigate(['/login']);
+    }
+
     const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
 
     if ( !this.platFormService.isApp()  ) {
@@ -97,6 +109,7 @@ export class AppInitService  {
       }
       if (this.apiUrl) {
       }
+
     }
   }
 
@@ -188,4 +201,13 @@ export class AppInitService  {
     return this.appConfig.appGateMessage;
   }
 
+  clearUserSettings(){
+    localStorage.removeItem("ami21");
+    localStorage.removeItem('user');
+    localStorage.removeItem('userx');
+    localStorage.removeItem('site')
+    localStorage.removeItem('orderSubscription')
+  }
+
 }
+

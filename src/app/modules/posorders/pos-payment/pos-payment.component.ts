@@ -320,13 +320,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   processDSICreditCardPayment() {
     const order = this.order;
     if (order) {
-      // this.paymentsMethodsService.processDSIEMVCreditPayment(this.order, order.balanceRemaining);
       this.paymentsMethodsService.processSubDSIEMVCreditPayment(this.order, order.balanceRemaining, false)
-      //  dialogRef.afterClosed().subscribe(result => {
-      //     if (!result) { return }
-      //     this.processResults(result)
-      //   });
-
     }
   }
 
@@ -484,16 +478,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-      // const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-      // const results =  await payment$.pipe().toPromise();
-      const enabled = this.paymentsMethodsService.DSIEmvSettings.enabled
-      if (enabled) {
-        this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, amount, true)
-        return
-      }
-      return this.paymentsMethodsService.processCreditPayment(site, posPayment, order, amount, paymentMethod )
-
-   }
+    const enabled = this.paymentsMethodsService.DSIEmvSettings.enabled
+    if (enabled) {
+      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, amount, true)
+      return
+    }
+    return this.paymentsMethodsService.processCreditPayment(site, posPayment, order, amount, paymentMethod )
+  }
 
   processRewardPoints(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
     // if (order.clients_POSOrders) {
@@ -566,8 +557,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   getPaymentMethod(paymentMethod) {
     this.paymentMethod = paymentMethod;
-    console.log('apply Payment Method',this.paymentMethod.name, this.groupPaymentAmount)
-
     if (this.paymentMethod) {
 
       if (this.groupPaymentAmount != 0) {
