@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { IPromptGroup, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptSubGroupsService } from 'src/app/_services/menuPrompt/prompt-sub-groups.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -66,23 +67,36 @@ export class PromptSubGroupEditComponent implements OnInit {
 
 
   updateItem(event) {
-    let result: boolean;
-
-    if (this.inputForm.valid) { return null}
+    if (!this.inputForm.valid) {
+      this.notifyEvent('Item has no value', 'Alert')
+      return null
+    }
     const site = this.siteService.getAssignedSite()
     this.prompt = this.inputForm.value
     const prompt$ = this.promptService.save(site, this.prompt)
-
+    this.saveItem(prompt$, false)
   };
 
   updateItemExit(event) {
-    const result$ =  this.updateItem(event)
-    const prompt$ = this.updateItem('true')
+    if (!this.inputForm.valid) {
+      this.notifyEvent('Item has no value', 'Alert')
+      return null
+    }
+    const site = this.siteService.getAssignedSite()
+    this.prompt = this.inputForm.value as PromptSubGroups
+    const prompt$ = this.promptService.save(site, this.prompt)
+    this.saveItem(prompt$, event)
+  }
+
+  saveItem(prompt$: Observable<PromptSubGroups>, exit: boolean ) {
+    if (!prompt$) {
+      this.notifyEvent('Item has no value', 'Alert')
+    }
     prompt$.subscribe(
       {
         next: data => {
           this.notifyEvent('Item Updated', 'Success')
-          this.onCancel(event)
+          if (exit) {   this.onCancel(event)  }
         },
         error: error => {
           this.notifyEvent(`Update item. ${error}`, "Failure")
@@ -90,6 +104,7 @@ export class PromptSubGroupEditComponent implements OnInit {
       }
     )
   }
+
 
   onCancel(event) {
     this.dialogRef.close();

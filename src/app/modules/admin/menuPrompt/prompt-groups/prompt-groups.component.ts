@@ -134,7 +134,6 @@ ngAfterViewInit() {
       debounceTime(500),
       distinctUntilChanged(),
       tap((event:KeyboardEvent) => {
-        console.log('ngAfterViewInit', this.input.nativeElement.value)
         const search  = this.input.nativeElement.value
         this.refreshSearch();
       })
@@ -228,32 +227,6 @@ initSearchModel(): MenuSubPromptSearchModel {
     if (tempStartRow < startRow) { return this.currentPage + 1 }
     return this.currentPage
   }
-
-  // //ag-grid standard method.
-  // getDataSource(params) {
-  //   return {
-  //   getRows: (params: IGetRowsParams) => {
-  //     const items$ = this.getRowData(params, params.startRow, params.endRow)
-  //     items$.subscribe(data =>
-  //       {
-  //           const resp              = data.paging
-  //           this.isfirstpage        = resp.isFirstPage
-  //           this.islastpage         = resp.isFirstPage
-  //           this.currentPage        = resp.currentPage
-  //           this.numberOfPages      = resp.pageCount
-  //           this.recordCount        = resp.recordCount
-  //           if (this.numberOfPages !=0 && this.numberOfPages) {
-  //             this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-  //           }
-  //           params.successCallback(data.results)
-  //           this.rowData = data.results
-  //         }, err => {
-  //           console.log(err)
-  //         }
-  //     );
-  //     }
-  //   };
-  // }
 
   //ag-grid standard method
   getRowData(params, startRow: number, endRow: number):  Observable<IPromptResults>  {
@@ -414,11 +387,14 @@ initSearchModel(): MenuSubPromptSearchModel {
       console.log(id)
       return
     }
-    this.productEditButtonService.openPromptEditor(id);
+    const dialog =   this.productEditButtonService.openPromptEditor(id);
+    dialog.afterClosed(data => {
+      this.refreshSearch()
+    })
   }
 
   editProduct(e){
-    this.productEditButtonService.openPromptEditor(e.id)
+    this.editItemWithId(e.id)
   }
 
   editSelectedItems() {
@@ -426,13 +402,13 @@ initSearchModel(): MenuSubPromptSearchModel {
       this._snackBar.open('No items selected. Use Shift + Click or Ctrl + Cick to choose multiple items.', 'oops!', {duration: 2000})
       return
     }
-      this.productEditButtonService.editTypes(this.selected)
+    this.productEditButtonService.editTypes(this.selected)
   }
 
   onSortByNameAndPrice(sort: string) { }
 
   addNew()  {
-    this.productEditButtonService.openPromptEditor(0)
+    this.editItemWithId(0)
   }
 
   notifyEvent(message: string, action: string) {

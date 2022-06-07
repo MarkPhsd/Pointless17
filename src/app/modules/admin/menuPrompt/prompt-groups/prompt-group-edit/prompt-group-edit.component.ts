@@ -42,7 +42,7 @@ export class PromptGroupEditComponent implements OnInit {
   ngOnInit() {
     if (this.id) {
      const site = this.siteService.getAssignedSite();
-      this.promptService.getPrompt(site, this.id).subscribe( data => { 
+      this.promptService.getPrompt(site, this.id).subscribe( data => {
         this.prompt = data ;
         this.getPrompt(data.id)
     })
@@ -59,32 +59,30 @@ export class PromptGroupEditComponent implements OnInit {
     }
   }
 
-  async updateItem(event): Promise<boolean> {
+  updateItem(close: boolean) {
     let result: boolean;
-    return new Promise(resolve => {
-       if (this.inputForm.valid) {
-        const site = this.siteService.getAssignedSite()
-        this.prompt = this.inputForm.value
-        const prompt$ = this.promptService.save(site, this.prompt)
-        prompt$.subscribe( {
-          next: data => {
-            this.notifyEvent('Item Updated', 'Success')
-            resolve(true)
-          }, error: error => {
-            this.notifyEvent(`Update item. ${error}`, "Failure")
-            resolve(false)
-          }}
-        )
-       }
+
+    if (this.inputForm.valid) {
+    const site = this.siteService.getAssignedSite()
+    this.prompt = this.inputForm.value
+    const prompt$ = this.promptService.save(site, this.prompt)
+    prompt$.subscribe( {
+        next: data => {
+          this.notifyEvent('Item Updated', 'Success')
+          if (close) {
+            this.onCancel(true)
+          }
+        }, error: error => {
+          this.notifyEvent(`Update item. ${error}`, "Failure")
+        }
       }
     )
+  }
+
   };
 
-  async updateItemExit(event) {
-    const result = await this.updateItem(event)
-    if (result) {
-      this.onCancel(event);
-    }
+  updateItemExit(event) {
+    this.updateItem(true)
   }
 
   onCancel(event) {

@@ -132,6 +132,7 @@ export class ProductEditButtonService {
         data : id
       },
     )
+    return dialogRef
   }
 
 

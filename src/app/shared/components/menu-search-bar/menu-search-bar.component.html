@@ -1,35 +1,5 @@
 <mat-sidenav-container>
 
-  <!-- <button
-      mat-button
-      [matMenuTriggerFor]="departmentMenu"
-      #departmentMenuTrigger="matMenuTrigger"
-      (mouseover)="openMenu()" >
-      Department View
-    <mat-icon>expand_more</mat-icon>
-  </button>
-
-  <mat-menu class="mat-menu-panel"
-            [overlapTrigger]="false"
-            #departmentMenu="matMenu">
-      <span >
-        <div  *ngIf="(departments$ | async) as list">
-
-          <app-mat-toggle-selector
-            (outPutItem)     = "refreshDepartmentSearch($event)"
-            [mouseOver]      = "true"
-            [showIcon]       ="'true'"
-            [textLength]     = "21"
-            [toggleDimensions]="'toggle-group-tall'"
-            [toggleHeight]   ="'toggle-buttons-height-size-tall'"
-            [useMatMenu]     ='true'
-            [list]           = "list">
-          </app-mat-toggle-selector>
-
-        </div>
-      </span>
-  </mat-menu> -->
-
   <div    class="grid-container">
     <div  class="form-width"
           *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
@@ -77,7 +47,6 @@
               <!-- Reset -->
             </span>
              Reset
-            <!-- <mat-icon>reset</mat-icon> -->
         </button>
       </div>
       <div >
@@ -91,9 +60,9 @@
       </div>
     </div>
 
-    <div *ngIf="multifilter">
+    <div *ngIf="multifilter || (uiHomePage &&  !uiHomePage.sideToolbarDefaultBrand)">
       <mat-accordion multi>
-        <mat-expansion-panel>
+        <mat-expansion-panel  *ngIf="uiHomePage && uiHomePage.sideToolbarEnableCategory">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Categories
@@ -118,7 +87,7 @@
             </div>
         </mat-expansion-panel>
 
-        <mat-expansion-panel >
+        <mat-expansion-panel *ngIf="uiHomePage && uiHomePage.sideToolbarEnableBrand">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Brands
@@ -127,6 +96,7 @@
               <mat-icon>branding_watermark</mat-icon>
             </mat-panel-description>
           </mat-expansion-panel-header>
+
 
           <div  class="grid-item-departments" >
             <app-mat-toggle-selector
@@ -145,7 +115,7 @@
 
         </mat-expansion-panel>
 
-        <mat-expansion-panel>
+        <mat-expansion-panel *ngIf="uiHomePage && uiHomePage.sideToolbarEnableType">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Types
@@ -155,23 +125,8 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <!-- <div   class="grid-item-departments"
-                *ngIf="(productTypes$ | async) as list">
-
+          <div  class="grid-item-departments">
             <app-mat-toggle-selector
-                [mouseOver]      = "false"
-                [showIcon]        = "showIcon"
-                [textLength]      = "21"
-                [toggleDimensions]= "'toggle-group-tall'"
-                [toggleHeight]    = "toggleTypeHeight"
-                (setItem)         = "refreshTypeSearch($event)"
-                [textLength]      = "21"
-                [materialIcons]   = "'true'"
-                [list]            = "list">
-            </app-mat-toggle-selector> -->
-
-            <div  class="grid-item-departments" >
-              <app-mat-toggle-selector
                   *ngIf             = "(productTypes$ | async) as list"
                   [mouseOver]       = "false"
                   [showIcon]        = "showIcon"
@@ -189,7 +144,7 @@
     </div>
 
    <div class="grid-item-departments"
-         *ngIf="!multifilter">
+         *ngIf="!multifilter || (uiHomePage && uiHomePage.sideToolbarDefaultBrand)">
       <ng-container>
         <app-mat-toggle-selector
             *ngIf            = "(departments$ | async) as list"
@@ -198,18 +153,14 @@
             [showIcon]       = "'true'"
             [textLength]     = "21"
             [toggleDimensions] ="'toggle-group-100'"
-            [toggleHeight]     = "'toggle-buttons-height-size-tall'"
-            [list]             = "list"
+            [toggleHeight]   = "'toggle-buttons-height-size-tall'"
+            [list]           = "list"
             [hideAllOption]  = 'true'
           >
         </app-mat-toggle-selector>
       </ng-container>
     </div>
   </div>
-
-
-
-
 
 </mat-sidenav-container>
 

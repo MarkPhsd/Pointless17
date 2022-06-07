@@ -17,6 +17,7 @@ import { isDevMode } from '@angular/core';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -64,23 +65,23 @@ productTypeID    : number;
 typeID           : number;
 brandID          : number;
 name             : any;
-isDevMode  = false
-type    : any;
-category: any;
-brand   : any;
-department  : any;
-departmentID: number;
+isDevMode        = false
+type             : any;
+category         : any;
+brand            : any;
+department       : any;
+departmentID     : number;
 tinyDepartmentFilter= false//for dispaly of icon with text or just icon.
 toggleCatHeight         = 'toggle-buttons-height-size-tall'
 toggleDepartmentHeight  = 'toggle-buttons-height-medium'
 toggleTypeHeight        = 'toggle-buttons-height-short'
 showIcon                = false;
 
-urlPath          :string;
+urlPath          : string;
 id               : number;
 product          : IProduct
 
-rowData:             any[];
+rowData:                any[];
 pageSize                = 20
 currentRow              = 1;
 currentPage             = 1
@@ -114,15 +115,25 @@ itemsPerPage        : number;
 totalRecords        : number;
 pagingInfo          : IPagedList;
 
-itemNameInput: string;
-smallDevice : boolean;
+itemNameInput       : string;
+smallDevice         : boolean;
 
-isDepartmentOpen = false;
+isDepartmentOpen    = false;
+
+_uiHomePage         : Subscription;
+uiHomePage          : any;
 
 initSubscriptions() {
+
   this._order = this.orderService.currentOrder$.subscribe( data => {
     this.order = data
   })
+
+  this._uiHomePage = this.uiSettingsService.homePageSetting$.subscribe(data => {
+    this.uiHomePage = data;
+    if (!data.sideToolbarDefaultBrand) { this.multifilter = false }
+  })
+
 }
 
 constructor(
@@ -133,9 +144,10 @@ constructor(
     private contactsService:        ContactsService,
     private awsService     :        AWSBucketService,
     private router         :        Router,
-    private orderService   :        OrdersService,
-    private toolBarUIService :        ToolBarUIService,
+    private orderService        :  OrdersService,
+    private toolBarUIService    : ToolBarUIService,
     public  platFormService     : PlatformService,
+    public  uiSettingsService   : UISettingsService,
 
   )
   {
@@ -156,10 +168,12 @@ constructor(
     this.departments$   = this.menuService.getListOfDepartments(site)
     this.productTypes$  = this.itemTypeService.getBasicTypesByUseType(site, 'product')
     this.isDevMode      = isDevMode()
+    this.initSubscriptions();
   };
 
   ngOnDestroy() {
-    if (this._order) { this._order.unsubscribe(); }
+    if (this._order)      { this._order.unsubscribe(); }
+    if (this._uiHomePage) { this._uiHomePage.unsubscribe()}
   }
 
   @HostListener("window:resize", [])

@@ -147,10 +147,6 @@ export class ToolBarUIService {
 
   switchSearchBarSideBar() {
 
-    console.log('mainSideBar',this.mainMenuSideBar)
-    console.log('searchBar', this.searchBar)
-    console.log('leftSideBarToggle', this.leftSideBarToggle)
-
     if (!this.leftSideBarToggle ||
          this.leftSideBarToggle == undefined) {
 
@@ -175,13 +171,11 @@ export class ToolBarUIService {
     }
 
     if (!this.mainMenuSideBar && this.searchBar) {
-      console.log('this')
       this.showSearchSideBar();
       return
     }
 
     if (this.mainMenuSideBar && !this.searchBar) {
-      console.log('then')
       this.showSearchSideBar();
       return
     }

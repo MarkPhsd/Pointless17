@@ -145,11 +145,11 @@ export class PrintingService {
     return this.setHTMLReceiptStyle(receiptStyle)
   }
 
-  getStylesCached(site){ 
+  getStylesCached(site){
     return this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
   }
 
-  setHTMLReceiptStyle(receiptStyle) { 
+  setHTMLReceiptStyle(receiptStyle) {
     if (receiptStyle) {
       const style = document.createElement('style');
       style.innerHTML = receiptStyle.text;
@@ -158,7 +158,7 @@ export class PrintingService {
     }
   }
 
-  
+
 getDomToImage(node: any) {
     domtoimage.toPng(node)
   .then(function (dataUrl) {
@@ -360,12 +360,12 @@ getDomToImage(node: any) {
       let printer = {} as any;
 
       const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
-      printer$.pipe(data => { 
+      printer$.pipe(data => {
         printer = data;
           if (!printer || !printer.text) {
             return EMPTY;
           }
-          return  menuItem$ 
+          return  menuItem$
         }).pipe(
           switchMap(data => {
             if ( !data  || data == "No Records" || !data.itemType) {
@@ -512,6 +512,7 @@ getDomToImage(node: any) {
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
       { width: '425px',
         height: '90vh',
+        data: {autoPrint: true}
       },
     )
     dialogRef.afterClosed().subscribe(result => {

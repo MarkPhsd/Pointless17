@@ -48,17 +48,7 @@
           <span class="discount-description"  *ngIf="orderItem.itemOrderPercentageDiscount>0">
             % Off Savings $ {{orderItem.itemOrderPercentageDiscount}},
           </span>
-          <!-- itemCashDiscount:              number;
-          itemOrderCashDiscount:         number;
-          itemOrderPercentageDiscount:   number;
-          itemLoyaltyPointCount:         number;
-          itemLoyaltyPointDiscount:      number;
-          itemPercentageDiscountValue:   number;
-          itemOrderPercentageDiscountID: number;
-          itemOrderCashDiscountID:       number;
-          itemCashDiscountID:            number;
-          itemPercentageDiscountValueID: number;
-          itemLoyaltyPointDiscountID:    number; -->
+
 
           <span class='status-icon' *ngIf="orderItem.printed && prepScreen && !isModifier">
             <mat-icon color="warn" *ngIf="orderItem.printed && !prepScreen" >print</mat-icon>
@@ -97,7 +87,7 @@
       </div>
 
       <div *ngIf="!disableActions && !prepScreen" >
-        
+
         <button aria-label="user menu"
                   mat-button
                   class="more-button"
@@ -137,7 +127,7 @@
               <div *ngIf="!showEdit  && (uiConfig.displayNotes)">
                 <button mat-button color="accent" (click)="openModifierNote()"><mat-icon>note_pad</mat-icon>Notes</button>
               </div>
-            
+
               <div *ngIf="!showEdit  && (uiConfig.displayQuantity) && !orderItem.serialCode">
                 <button mat-button  color="accent"  (click)="editQuantity()"><mat-icon>note_pad</mat-icon>Quantity</button>
               </div>

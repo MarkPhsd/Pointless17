@@ -606,12 +606,13 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   setElectronPrinterName(event) {
     this.electronReceiptPrinter = event
     const site = this.siteService.getAssignedSite();
-    this.settingService.getSettingByName(site, 'defaultElectronReceiptPrinter').subscribe( data=> {
+    const printerSettingName = 'defaultElectronReceiptPrinter'
+    this.settingService.getSettingByName(site, printerSettingName).subscribe( data=> {
         if (!this.electronSetting) {
           this.electronSetting = {} as ISetting;
         }
-        this.electronSetting.text   = data.text
-        this.electronReceiptPrinter = data.text;
+        this.electronSetting.text   = event
+        this.electronReceiptPrinter = event;
         this.setElectronReceipt(this.electronSetting);
     })
   }

@@ -1,45 +1,5 @@
 <app-receipt-view
+    [autoPrint]="autoPrint"
+    [options]  ='options'
     (outPutExit)="exit($event)"
-  ></app-receipt-view>
- 
-<!-- <div class="buttons-grid">
-  <div>
-    <button mat-button (click)="print()">
-      <mat-icon>print</mat-icon>
-      Print
-    </button>
-  </div>
-
-  <div>
-    <button mat-button (click)="exit()">
-      <mat-icon>close</mat-icon>
-      Exit
-    </button>
-  </div>
-</div>
-
-<div>Printer: {{printerName}} </div>
-
-<div class="mat-card-white" *ngIf="receiptLayoutSetting">
-
-  <mat-card>
-    <div *ngIf="headerText &&  itemsText"
-          class="border-section">
-       <app-receipt-layout #printsection id="printsection"
-                          [headerText]="headerText"
-                          [footerText]="footerText"
-                          [itemText]="itemsText"
-                          [printerWidth]="receiptLayoutSetting.option9"
-                          [paymentsText]="paymentsText"
-                          [subFooterText]="subFooterText"
-                          [items]="items"
-                          [order]="orders"
-                          [payments]="payments"
-                          [orderType]="orderTypes"
-                          [testdata]="false"
-                          [liveEdit]="false"
-                          [styles]="receiptStyles">
-       </app-receipt-layout>
-    </div>
-  </mat-card>
-</div> -->
+></app-receipt-view>

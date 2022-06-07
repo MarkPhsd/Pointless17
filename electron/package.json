@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.2.31",
+  "version": "1.2.34",
   "description": "Point of Sale Ecommerce Kiosk",
   "main": "index.js",
   "CompanyName": "Pointless",
@@ -11,7 +11,7 @@
     "postinstall": "electron-builder install-app-deps",
     "start": "npm install && electron ./app",
     "deploy 32 Platform": "build --win --ia32 --p always",
-    "deploy Multi Platform": "build --win --x64 --ia32 --p always",
+      "deploy Multi Platform": "build --win --x64 --ia32 --p always",
     "deploy 64": "build --win --x64 --p always"
   },
   "dependencies": {

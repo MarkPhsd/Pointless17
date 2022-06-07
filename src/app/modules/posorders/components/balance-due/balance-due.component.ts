@@ -12,6 +12,7 @@ import { BtPrintingService } from 'src/app/_services/system/bt-printing.service'
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
@@ -39,7 +40,7 @@ export class ChangeDueComponent   {
               private snackBar : MatSnackBar,
               private fb       : FormBuilder,
               private router   : Router,
-
+              private printingService: PrintingService,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
@@ -67,7 +68,7 @@ export class ChangeDueComponent   {
   }
 
   printReceipt() {
-
+    this.printingService.previewReceipt()
   }
 
   close() {

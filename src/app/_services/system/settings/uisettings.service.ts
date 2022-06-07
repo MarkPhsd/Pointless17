@@ -114,6 +114,14 @@ export interface UIHomePageSettings {
   logoHomePage        : string;  //  : [config.logoHomePage],
   displayCompanyName  : string;  //     : [config.displayCompanyName],
   wideOrderBar        : boolean;
+  sideToolbarDefaultBrand  : boolean;
+  sideToolbarEnableBrand   : boolean;
+  sideToolbarEnableType    : boolean;
+  sideToolbarEnableCategory: boolean;
+        // Public Property sideToolbarDefaultBrand As Nullable(Of Boolean)
+        // Public Property sideToolbarEnableBrand As Nullable(Of Boolean)
+        // Public Property sideToolbarEnableType As Nullable(Of Boolean)
+        // Public Property sideToolbarEnableCategory As Nullable(Of Boolean)
 }
 
 @Injectable({
@@ -229,15 +237,19 @@ export class UISettingsService {
     const setting = fb.value
 
     if (!setting || (!setting.id || setting.id === '')) {
+      console.log('setting', fb.value)
       this.getSetting(name).pipe(
         switchMap(data => {
-        setting.id = data.id;
-        return this.setSetting(setting, name)
+          console.log('setting', data)
+          setting.id = data.id;
+          return this.setSetting(setting, name)
       })).subscribe(data => {
+        console.log('setting', data)
         return this.setSetting(setting, name)
       })
     }
 
+    console.log('save Config', fb.value)
     return this.setSetting(setting, name)
 
   }
@@ -288,6 +300,11 @@ export class UISettingsService {
       displayCompanyName    : [''],
       tinyLogo              : [''],
       wideOrderBar          : [''],
+      sideToolbarDefaultBrand  : [''],
+      sideToolbarEnableBrand   : [''],
+      sideToolbarEnableType    : [''],
+      sideToolbarEnableCategory: [''],
+
      })
     return fb
   }

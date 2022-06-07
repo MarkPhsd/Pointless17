@@ -16,11 +16,12 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 })
 export class ReceiptViewComponent implements OnInit , AfterViewInit{
 
-
+  @Input() autoPrint : boolean;
   @Input() hideExit = false;
   @Output() outPutExit      = new EventEmitter();
   @ViewChild('printsection') printsection: ElementRef;
   @Input() printerName      : string;
+  @Input() options           : printOptions;
 
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
@@ -61,7 +62,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   printReady        : boolean
 
   orderCheck        = 0;
-  @Input() options           : printOptions;
+
 
   isElectronApp         : boolean;
   electronSetting       : ISetting;
@@ -79,8 +80,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   intSubscriptions() {
     this._order       = this.orderService.currentOrder$.subscribe(data => {
       this.order      = data;
-
-
       this.orders     = [];
       if (!data) {return}
       this.orders.push(data)
@@ -94,7 +93,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
       if (status) {
-          if (this.options && this.options.silent) {
+          if ((this.options && this.options.silent) || this.autoPrint) {
             this.print();
             this.autoPrinted = true;
           }
@@ -117,7 +116,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   }
 
   async ngOnInit() {
-    console.log('')
     this.getPrinterAssignment();
     this.intSubscriptions();
     await this.refreshView()

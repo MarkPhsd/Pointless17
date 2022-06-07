@@ -89,7 +89,7 @@ export class OrderMethodsService implements OnDestroy {
 
   updateAssignedItem(item: PosOrderItem) {
     this.assignPOSItem = item;
-   this._assingedPOSItem.next(item)
+    this._assingedPOSItem.next(item)
   }
 
   constructor(public route                    : ActivatedRoute,
@@ -518,6 +518,7 @@ export class OrderMethodsService implements OnDestroy {
     return true;
   }
 
+
   cancelItem(id: number, notify : boolean ) {
     const site = this.siteService.getAssignedSite();
     if (id) {
@@ -685,31 +686,26 @@ export class OrderMethodsService implements OnDestroy {
         }
       case  2: {
         this.openPromptWalkThrough(this.order,this.processItem.item,this.processItem.posItem)
-        //statements;
-        // console.log('Handle Process Item openPromptWalkThrough', 2)
         break;
       }
       case  3: {
         this.openQuantityPrompt(this.order,this.processItem.item,this.processItem.posItem);
-        //statements;
-        // console.log('Handle Process Item openQuantityPrompt', 3)
         break;
       }
       case  4: {
-        this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
-        //statements;
-        // console.log('Handle Process Item openGiftCardPrompt', 4)
+        if ( !this.itemProcessSection && this.processItem?.item?.itemType?.type.toLowerCase() === 'store credit'.toLowerCase()) {
+          this.openGiftCardPrompt(this.order,this.processItem.item,this.processItem.posItem);
+          return
+        }
+        this.updateProcess()
         break;
       }
       case 5: {
         this.openPriceChangePrompt(this.order,this.processItem.item,this.processItem.posItem);
-        // console.log('Handle Process Item openPriceChangePrompt', 5)
         break;
       }
       case 6: {
         this.orderService.updateOrderSubscription(this.order);
-        // console.log('Handle Process Item updateOrderSubscription', 6)
-        // this.initItemProcess();
         break;
       }
       case 7: {
