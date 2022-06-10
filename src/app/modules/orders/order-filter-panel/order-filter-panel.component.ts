@@ -144,12 +144,14 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     if (this._prepStatus) { this._prepStatus.unsubscribe()}
-    if (this._searchModel) { this._searchModel.unsubscribe()}
+    if (this._searchModel) {
+      this._searchModel.unsubscribe()
+    }
     if (this._printLocation) { this._printLocation.unsubscribe()}
     if (this._prepStatus) { this._prepStatus.unsubscribe()}
     if (this._viewType) { this._viewType.unsubscribe(); }
   }
-  
+
   constructor(
       private orderService    : OrdersService,
       private router          : Router,

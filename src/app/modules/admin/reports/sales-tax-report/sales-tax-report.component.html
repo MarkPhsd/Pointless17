@@ -3,7 +3,6 @@
      class="mat-card-container"
      *ngIf="site && (sales$ | async) as sale; else loading">
 
-     <!-- {{sale | json}} -->
      <mat-card>
       <mat-card-title>
         <div class="grid">
@@ -157,3 +156,6 @@
 <ng-template #loading>
   <mat-spinner [diameter]="25" class="spinner"></mat-spinner>
 </ng-template>
+
+
+

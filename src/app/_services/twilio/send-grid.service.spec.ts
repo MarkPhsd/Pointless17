@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PrepOrdersService } from './prep-orders.service';
+import { SendGridService } from './send-grid.service';
 
-describe('PrepOrdersService', () => {
-  let service: PrepOrdersService;
+describe('SendGridService', () => {
+  let service: SendGridService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PrepOrdersService);
+    service = TestBed.inject(SendGridService);
   });
 
   it('should be created', () => {

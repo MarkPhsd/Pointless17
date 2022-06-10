@@ -42,6 +42,7 @@ export class DSIProcessService {
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
     const commandResponse = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '')
+    console.log('emvSale', commandResponse)
     return commandResponse;
   }
 
@@ -49,12 +50,6 @@ export class DSIProcessService {
     const commandResponse = await this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit')
     return commandResponse;
   }
-
-  // async emvVoid(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
-  //   const commandResponse = this.emvTransaction('EMVVoid', amount, paymentID, manual, tipPrompt)
-  //   console.log('emvSale response', commandResponse)
-  //   return commandResponse;
-  // }
 
   async emvVoid(posPayment: IPOSPayment ): Promise<RStream> {
 
@@ -120,8 +115,9 @@ export class DSIProcessService {
       transaction.ProcessData = '';
 
       transaction.Amount = amount;
-      console.log(transaction)
+      console.log('emvVoid transaction' , transaction)
       return this.dsi.emvTransaction(transaction)
+
     } catch (error) {
       console.log('DSIEMVVoid', error)
     }
@@ -167,9 +163,12 @@ export class DSIProcessService {
     return stream;
   }
 
-  async emvTransaction(tranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
+  async emvTransaction(tranCode: string, amount: number,
+                       paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
     const item  = localStorage.getItem('DSIEMVSettings');
+
     if (!item) { return null }
+
     const transactiontemp     = JSON.parse(item) as Transaction;
 
     if (transactiontemp.SecureDevice === 'testDevice') {
@@ -201,7 +200,10 @@ export class DSIProcessService {
       transaction.Amount.Gratuity = 'Prompt'
     }
 
-    return await this.dsi.emvTransaction(transaction)
+    console.log('emv transaction', transaction)
+    const result =  await this.dsi.emvTransaction(transaction)
+    console.log('emv transaction', result)
+    return result
   }
 
   applyAmouunt(amount: number, gratuity: number): Amount {

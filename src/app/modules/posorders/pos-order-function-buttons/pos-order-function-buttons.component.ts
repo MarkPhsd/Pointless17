@@ -24,6 +24,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Output() outPutRemoveSuspension  = new EventEmitter();
   @Output() outPutClearOrder    = new EventEmitter();
   @Output() outPutToggleSuspension = new EventEmitter();
+  @Output() outPutEmailOrder    = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -34,6 +35,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Input() openBar     : boolean;
   @Input() mainPanel   : boolean;
   @Input() order       : IPOSOrder;
+  @Input() emailOption : boolean;
 
   smallDevice    : boolean;
   constructor(private platFormService: PlatformService, ) { }
@@ -51,6 +53,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
      this.order.balanceRemaining
    }
 
+  emailOrder() {
+
+    this.outPutEmailOrder.emit(true)
+  }
   showItems() {
     this.outPutShowItems.emit(true)
   }

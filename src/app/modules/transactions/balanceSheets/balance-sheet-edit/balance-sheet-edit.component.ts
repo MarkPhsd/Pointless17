@@ -13,6 +13,7 @@ import { AuthenticationService } from 'src/app/_services';
 import { IUser } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
+import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -119,7 +120,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private router                  : Router,
                 private toolbarUIService        : ToolBarUIService,
                 private sheetMethodsService     : BalanceSheetMethodsService,
-
+                private sendGridService         :  SendGridService,
               )
   {
     this.inputForm = this.sheetMethodsService.initForm(this.inputForm);
@@ -138,7 +139,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
       this.newBalanceSheet();
     }
   };
-  
+
   ngOnDestroy() {
     this.sheetMethodsService.updateBalanceSheet(null)
     if (this._openOrders)  { this._openOrders.unsubscribe()}
@@ -305,6 +306,10 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   print(event){
     //print
+  }
+
+  email(event) {
+    this.sendGridService.sendBalanceSheet(this.sheet.id)
   }
 
   onCancel(event){

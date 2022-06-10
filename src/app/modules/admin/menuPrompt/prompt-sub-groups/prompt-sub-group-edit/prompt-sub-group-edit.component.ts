@@ -105,7 +105,6 @@ export class PromptSubGroupEditComponent implements OnInit {
     )
   }
 
-
   onCancel(event) {
     this.dialogRef.close();
   }

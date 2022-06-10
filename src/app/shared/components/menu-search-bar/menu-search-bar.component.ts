@@ -131,7 +131,9 @@ initSubscriptions() {
 
   this._uiHomePage = this.uiSettingsService.homePageSetting$.subscribe(data => {
     this.uiHomePage = data;
-    if (!data.sideToolbarDefaultBrand) { this.multifilter = false }
+    if (data) {
+      if (!data.sideToolbarDefaultBrand) { this.multifilter = false }
+    }
   })
 
 }

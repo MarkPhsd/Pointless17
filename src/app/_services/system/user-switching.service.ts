@@ -17,6 +17,7 @@ import { EncryptionService } from '../encryption/encryption.service';
 import { BalanceSheetMethodsService } from '../transactions/balance-sheet-methods.service';
 import { ElectronService } from 'ngx-electron';
 import { ToolBarUIService } from './tool-bar-ui.service';
+import { UISettingsService } from './settings/uisettings.service';
 
 export interface ElectronDimensions {
   height: string;
@@ -69,6 +70,7 @@ export class UserSwitchingService implements  OnDestroy {
     private platformService  : PlatformService,
     private encryptionService: EncryptionService,
     private toolbarUIService : ToolBarUIService,
+    private uiSettingService: UISettingsService,
     private electronService  : ElectronService
   ) {
     this.initSubscriptions();
@@ -126,6 +128,8 @@ export class UserSwitchingService implements  OnDestroy {
     this.toolbarUIService.updateDepartmentMenu(0);
     this.authenticationService.logout();
     this.orderService.updateOrderSubscriptionClearOrder(0)
+    this.orderService.updateOrderSearchModel(null);
+
   }
 
   pinEntryResults(pin: any) {
@@ -183,8 +187,8 @@ export class UserSwitchingService implements  OnDestroy {
       .pipe(
         switchMap(
            user => {
-        
-           if (user && user.errorMessage) { 
+
+           if (user && user.errorMessage) {
             const message = user?.errorMessage;
             this.snackBar.open(message, 'Failed Login', {duration: 1500})
             const item = {message: 'failed'}
@@ -201,6 +205,7 @@ export class UserSwitchingService implements  OnDestroy {
             user.message = 'success'
 
             const currentUser = this.setUserInfo(user, password)
+            this.uiSettingService.initSecureSettings();
 
             if ( this.platformService.isApp()  )  { return this.changeUser(user) }
             if ( !this.platformService.isApp() )  { return of(user)              }
@@ -234,6 +239,7 @@ export class UserSwitchingService implements  OnDestroy {
     currentUser.authdata     = user.authdata
     localStorage.setItem('user', JSON.stringify(currentUser))
     this.authenticationService.updateUser(currentUser)
+
     return currentUser
   }
 
@@ -297,6 +303,10 @@ export class UserSwitchingService implements  OnDestroy {
         this.orderService.updateOrderSubscription(data)
       })
     }
+  }
+
+  initUserFeatures() {
+    this.uiSettingService.initSecureSettings();
   }
 
   async  browseMenu() {

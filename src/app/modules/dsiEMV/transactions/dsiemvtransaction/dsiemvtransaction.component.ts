@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ServerResponse } from 'http';
 import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { CmdResponse, RStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 @Component({
   selector: 'app-dsiemvtransaction',
@@ -13,10 +13,9 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 })
 export class DSIEMVTransactionComponent implements OnInit {
 
-  payment: any;
-  amount : number;
-
-  message: string;
+  payment   : any;
+  amount    : number;
+  message   : string;
   resultMessage: string;
   processing: boolean;
   type      : string;
@@ -44,11 +43,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     private dsiProcess            : DSIProcessService,
     private orderService          : OrdersService,
     private dialogRef             : MatDialogRef<DSIEMVTransactionComponent>,
-
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {
-
 
     if (data)  {
       this.payment = data.data;
@@ -144,6 +141,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const payment = this.payment
     if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    console.log('process sale card', response)
     this.processResults(response)
   }
 
@@ -207,6 +205,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   readResult(cmdResponse: CmdResponse): boolean {
+    console.log(cmdResponse)
     if (!cmdResponse) {
       this.message = 'Processing failed, no command response.'
       return false;

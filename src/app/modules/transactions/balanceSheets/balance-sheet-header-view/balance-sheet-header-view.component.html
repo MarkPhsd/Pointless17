@@ -3,7 +3,7 @@
     <div class="span-col"> {{ sheetType }} ({{sheet.id}})</div>
 
     <div>Employee</div>
-    <div class="span-col" *ngIf="sheet.balanceSheetEmployee" > {{sheet.balanceSheetEmployee.lastName}} </div>
+    <div class="span-col" *ngIf="sheet.balanceSheetEmployee" > {{sheet?.balanceSheetEmployee?.lastName}} </div>
 
     <div *ngIf="sheet.deviceName">Device </div>
     <div class="span-col" *ngIf="sheet.deviceName"> {{sheet.deviceName}} </div>

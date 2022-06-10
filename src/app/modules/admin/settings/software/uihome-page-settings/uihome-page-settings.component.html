@@ -144,19 +144,6 @@
         </div>
       </div>
 
-      <!-- <div class="grid-item">
-        <div>Paging and Search results </div>
-        <mat-divider></mat-divider>
-        <div class="grid-views">
-          <app-value-fields
-              [fieldType]     ="'number'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'itemsPerPage'">
-              Items Per Page
-          </app-value-fields>
-        </div>
-      </div> -->
-
       <div>
         <div>Order Settings</div>
         <mat-divider></mat-divider>
@@ -210,6 +197,10 @@
           </mat-card>
         </div>
       </div>
+    </div>
+
+    <div>
+      <app-email-settings [inputForm]="inputForm"></app-email-settings>
     </div>
 
     <div>

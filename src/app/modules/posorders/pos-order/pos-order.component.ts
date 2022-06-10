@@ -98,6 +98,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
+  emailOption : boolean;
+
   transactionUISettingsSubscriber() {
     this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.enableLimitsView  =false;
@@ -112,6 +114,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
       if (data) {
+        if (data.outGoingCustomerSupportEmail) {
+          this.emailOption = true
+        }
         if (data.wideOrderBar) {
           this.wideBar = true;
         }
@@ -278,6 +283,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
         })
       }
     }
+  }
+
+  emailOrder(event) {
+    console.log('email from buttons', this.order)
+
+    this.orderMethodService.notification('Email about to send', 'Alert')
+
+    this.orderMethodService.emailOrder(this.order).subscribe(data => {
+      this.orderMethodService.notification('Email Sent', 'Alert')
+    })
+
   }
 
   checkIfPaymentsMade() {

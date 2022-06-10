@@ -9,12 +9,14 @@ import { AdjustmentReason } from './adjustment-reasons.service';
 import { AppInitService } from './app-init.service';
 import { IItemBasic } from '..';
 import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
+import { EmailModel } from '../twilio/send-grid.service';
+import { UserAuthorizationService } from './user-authorization.service';
 
 interface IIsOnline {
   result: string;
 }
 
-export interface ITerminalSettings { 
+export interface ITerminalSettings {
   medicalRecSales : number;
   receiptPrinter  : string;
   labelPrinter    : string;
@@ -22,7 +24,7 @@ export interface ITerminalSettings {
   enabled         : boolean;
   name            : string;
   deviceName      : string;
-} 
+}
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +32,7 @@ export interface ITerminalSettings {
 
 export class SettingsService {
 
-  get deviceName() { 
+  get deviceName() {
     return localStorage.getItem('devicename')
   }
   apiUrl: any;
@@ -39,6 +41,7 @@ export class SettingsService {
                private httpCache: HttpClientCacheService,
                private siteService: SitesService,
                private appInitService  : AppInitService,
+               private userAuthorizationService     : UserAuthorizationService,
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()
   }
@@ -213,13 +216,13 @@ export class SettingsService {
     return this.httpCache.get<ISetting>(options);
 
   }
-  
+
   getDSIEMVSettings():  Observable<DSIEMVSettings> {
 
     //get device name
     const deviceName = this.deviceName
 
-    if (!deviceName) { 
+    if (!deviceName) {
       const dSIEMVSettings = {} as DSIEMVSettings;
       return of(dSIEMVSettings);
     }
@@ -234,7 +237,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 60};
+    // const options = { url: url, cacheMins: 60};
 
     return this.http.get<DSIEMVSettings>(url);
 
@@ -254,12 +257,12 @@ export class SettingsService {
 
     const options = { url: url, cacheMins: 60};
 
-    return this.httpCache.get<StripeAPISettings>(options);
+    return this.http.get<StripeAPISettings>(url);
 
   }
 
   getUIHomePageSettings():  Observable<UIHomePageSettings> {
-  
+
     const site =  this.siteService.getAssignedSite();
 
     const controller = "/settings/"
@@ -273,6 +276,42 @@ export class SettingsService {
     const options = { url: url, cacheMins: 60};
 
     return this.httpCache.get<UIHomePageSettings>(options);
+
+  }
+
+  getUIHomePageSettingsNoCache():  Observable<UIHomePageSettings> {
+
+    const site =  this.siteService.getAssignedSite();
+
+    const controller = "/settings/"
+
+    const endPoint = 'getUIHomePageSettings';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: url, cacheMins: 60};
+
+    return this.http.get<UIHomePageSettings>(url);
+
+  }
+
+  getEmailModel():  Observable<EmailModel> {
+
+    const site =  this.siteService.getAssignedSite();
+
+    const controller = "/settings/"
+
+    const endPoint = 'getEmailModel';
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const options = { url: url, cacheMins: 60};
+
+    return this.httpCache.get<EmailModel>(options);
 
   }
 
@@ -373,7 +412,7 @@ export class SettingsService {
     }
     if (_setting) {
       setting.id = _setting.id
-      return _setting 
+      return _setting
     }
   }
 

@@ -72,21 +72,22 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-            <div  class="grid-item-departments">
+            <div  class="mat-toggle-list"  >
               <app-mat-toggle-selector
-                  *ngIf="(categories$ | async) as list"
-                  [mouseOver]      = "false"
-                  [showIcon]       = "showIcon"
-                  [textLength]     = "21"
-                  [toggleDimensions]="'toggle-group-tall'"
-                  [toggleHeight]   = "toggleCatHeight"
-                  (outPutItem)     = "refreshCategorySearch($event)"
-                  [textLength]     = "21"
-                  [list]           = "list">
+                  *ngIf             = "(categories$ | async) as list"
+                  [mouseOver]       = "false"
+                  [showIcon]        = "showIcon"
+                  [textLength]      = "21"
+                  (outPutItem)      = "refreshCategorySearch($event)"
+                  [textLength]      = "21"
+                  [list]            = "list">
               </app-mat-toggle-selector>
             </div>
         </mat-expansion-panel>
-
+<!--
+        [toggleDimensions]= "'toggle-group-tall'"
+        [toggleHeight]    = "toggleCatHeight"
+         -->
         <mat-expansion-panel *ngIf="uiHomePage && uiHomePage.sideToolbarEnableBrand">
           <mat-expansion-panel-header>
             <mat-panel-title>
@@ -98,8 +99,9 @@
           </mat-expansion-panel-header>
 
 
-          <div  class="grid-item-departments" >
+          <div  class="mat-toggle-list" >
             <app-mat-toggle-selector
+
                 *ngIf="(clientSearchResults$ | async) as listbrands"
                 [mouseOver]      = "false"
                 [showIcon]       ="showIcon"
@@ -125,7 +127,7 @@
             </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <div  class="grid-item-departments">
+          <div  class="mat-toggle-list">
             <app-mat-toggle-selector
                   *ngIf             = "(productTypes$ | async) as list"
                   [mouseOver]       = "false"

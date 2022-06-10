@@ -5,7 +5,7 @@
 </div>
 
   <div [class]="toggleDimensions"
-      *ngIf="toggleVertical && list; else loading">
+       *ngIf="toggleVertical && list; else loading">
 
     <mat-button-toggle-group
           name         = "type"
@@ -22,8 +22,8 @@
           All
       </mat-button-toggle>
 
-      <div class="toggle-buttons-height" >
-        <div [class]="toggleHeight" >
+      <div class="toggle-buttons-height">
+        <div [class]="toggleHeight">
 
           <mat-button-toggle
                 *ngFor="let item of list"

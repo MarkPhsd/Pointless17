@@ -141,7 +141,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       if (this._uISettings) { this._uISettings.unsubscribe()}
       if (this._user) { this._user.unsubscribe()}
     } catch (error) {
-       console.log('on Destroy Error')      
+       console.log('on Destroy Error')
     }
   }
 
@@ -325,7 +325,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
- 
+
     if (!this.validateForm(this.loginForm)) { return }
 
     this.spinnerLoading = true;
@@ -336,9 +336,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
        next: user =>
         {
-          console.log('user', user)
+
           this.initForm();
-          if (user && user.errorMessage) { 
+          if (user && user.errorMessage) {
             this.notifyEvent(user.errorMessage, 'Failed Login')
             return;
           }
@@ -350,10 +350,14 @@ export class LoginComponent implements OnInit, OnDestroy {
               return
             }
 
-            if (this.platformService.isApp()) { if (this.loginApp(user)) { return } }
+            if (this.platformService.isApp()) {
+              if (this.loginApp(user)) {
+              return
+            } }
 
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
+
               this.userSwitchingService.assignCurrentOrder(user)
               return
             }
@@ -371,10 +375,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       })
     ;
 
-    // this.updateLoginStatus(6) //clearn login settings
   }
 
   loginApp(user) {
+
     if (this.platformService.isApp()) {
       this.loggedInUser   = user.user
       this.spinnerLoading = false

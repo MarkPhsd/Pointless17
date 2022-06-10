@@ -264,7 +264,7 @@ import { MenuBoardComponent } from '../modules/tv-menu/menu-board/menu-board.com
 import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settings/stripe-settings.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
-// import { NgxStripeModule } from 'ngx-stri../modules/admin/settings/stripe-settings/stripe-settings.component
+
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { NumericDirective } from '../_directives/numeric-directive.directive';
 import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
@@ -286,9 +286,10 @@ import { PosEditSettingsComponent } from '../modules/admin/settings/pos-list/pos
 import { ReceiptViewComponent } from '../modules/admin/settings/printing/reciept-pop-up/receipt-view/receipt-view.component';
 import { StoreCreditEditorComponent } from '../modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
 import { StoreCreditListComponent } from '../modules/admin/store-credit/store-credit-list/store-credit-list.component';
-import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
 import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
+
+
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
   useClass: LoggingInterceptor,
@@ -338,6 +339,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EditSelectedItemsComponent,
     EditCSSStylesComponent,
     EditSettingsComponent,
+
     EmployeeLookupComponent,
     EmployeeDetailsPanelComponent,
     EmployeeEditComponent,

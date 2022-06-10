@@ -29,7 +29,7 @@ export class ErrorInterceptor implements HttpInterceptor {
               errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
             }
             //const error = err.error.message || err.statusText;
-            // console.log("HttpInterceptor error:",  errorMessage )
+            console.log("HttpInterceptor error:",  errorMessage )
             return throwError(errorMessage);
       }))
     }

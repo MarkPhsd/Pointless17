@@ -20,6 +20,18 @@
     </button>
   </div>
 
+  <div>
+    <button *ngIf="(order && order.clients_POSOrders && order.clients_POSOrders.email) "
+            mat-raised-button
+            class="button"
+            color="primary"
+            (click)="emailOrder()">
+      <mat-icon>email</mat-icon>
+      <span *ngIf="!smallDevice">
+         Email
+       </span>
+    </button>
+  </div>
 
   <div *ngIf="(!order.history || !order.completionDate) || isStaff ">
     <button mat-raised-button

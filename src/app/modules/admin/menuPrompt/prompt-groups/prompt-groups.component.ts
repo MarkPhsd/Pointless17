@@ -382,11 +382,7 @@ initSearchModel(): MenuSubPromptSearchModel {
     }
   }
 
-  editItemWithId(id:any) {
-    if(!id) {
-      console.log(id)
-      return
-    }
+  editItemWithId(id:number) {
     const dialog =   this.productEditButtonService.openPromptEditor(id);
     dialog.afterClosed(data => {
       this.refreshSearch()

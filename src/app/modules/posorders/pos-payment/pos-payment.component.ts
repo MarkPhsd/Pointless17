@@ -14,10 +14,8 @@ import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
-import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { PrintingService } from 'src/app/_services/system/printing.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';

@@ -55,6 +55,7 @@
                 (outPutRemoveSuspension)="removeSuspension()"
                 (outPutClearOrder)  ="clearOrder($event)"
                 (outPutDeleteOrder) ="deleteOrder($event)"
+                (outPutEmailOrder)  = 'emailOrder($event)'
                 [itemsPrinted]      ="itemsPrinted"
                 [paymentsMade]      ="paymentsMade"
                 [isAuthorized]      ="isAuthorized"
@@ -63,6 +64,7 @@
                 [openBar]           ="openBar"
                 [mainPanel]         ="mainPanel"
                 [order]             ="order"
+                [emailOption]       ="emailOption"
           ></pos-order-function-buttons>
         </div>
 
@@ -87,7 +89,7 @@
           </div>
 
           <div>
-         
+
             <button  mat-raised-button
               fxFill
               class="button"

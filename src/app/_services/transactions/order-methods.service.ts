@@ -17,7 +17,6 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { RequiresSerialComponent } from 'src/app/modules/posorders/requires-serial/requires-serial.component';
 import { PriceOptionsComponent } from 'src/app/modules/posorders/price-options/price-options.component';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
-import { PrintingService } from '../system/printing.service';
 import { MenuItemModalComponent } from 'src/app/modules/menu/menuitems/menu-item-card/menu-item-modal/menu-item-modal.component';
 import { UserAuthorizationService } from '../system/user-authorization.service';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -25,6 +24,8 @@ import { PriceCategoriesService } from '../menu/price-categories.service';
 import { StoreCreditIssueComponent } from 'src/app/modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 import { IPaymentMethod } from './payment-methods.service';
 import { PlatformService } from '../system/platform.service';
+import { ClientTableService } from '../people/client-table.service';
+import { SendGridService } from '../twilio/send-grid.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -96,6 +97,7 @@ export class OrderMethodsService implements OnDestroy {
               private dialog                  : MatDialog,
               private siteService             : SitesService,
               private orderService            : OrdersService,
+              private clientTableService      : ClientTableService,
               private _snackBar               : MatSnackBar,
               private posOrderItemService     : POSOrderItemServiceService,
               private editDialog              : ProductEditButtonService,
@@ -104,6 +106,7 @@ export class OrderMethodsService implements OnDestroy {
               private menuService             : MenuService,
               private priceCategoriesService:  PriceCategoriesService,
               private platFormService         : PlatformService,
+              private sendGridService         :  SendGridService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
              ) {
@@ -252,6 +255,17 @@ export class OrderMethodsService implements OnDestroy {
     this.router.navigate(["/menuitem/", {id:id}]);
   }
 
+  emailOrder(order: IPOSOrder) : Observable<any> {
+    if (order && order.clientID) {
+      if (order.clients_POSOrders.email) {
+        const clientName = `${order?.clients_POSOrders?.firstName} ${order?.clients_POSOrders?.lastName}`
+        return  this.sendGridService.sendOrder(order.id, order.history,order.clients_POSOrders.email, clientName  )
+      }
+    }
+    this.notifyEvent('No email in contact', 'Alert')
+    return null
+  }
+
   async addItemToOrderWithBarcodePromise(site: ISite, newItem: NewItem):  Promise<ItemPostResults> {
     if (!newItem) {return}
     return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
@@ -273,9 +287,6 @@ export class OrderMethodsService implements OnDestroy {
     const payment = paymentResponse.payment
     if (order.balanceRemaining> 0) { return 0 }
     if (payment && paymentMethod) {
-
-
-
       if (paymentMethod.isCreditCard) {
         if (this.platFormService.isApp()) {
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)

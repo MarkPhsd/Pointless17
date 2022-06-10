@@ -14,6 +14,7 @@ import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
+import { AnyNaptrRecord } from 'dns';
 
 @Injectable({
   providedIn: 'root'
@@ -164,16 +165,16 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return false;
   }
 
-  async processCreditCardResponse(response: RStream, payment: IPOSPayment, order: IPOSOrder) {
+  async processCreditCardResponse(response: any, payment: IPOSPayment, order: IPOSOrder) {
 
     const site = this.sitesService.getAssignedSite();
 
-    if (response && response.CmdResponse && response.TranResponse) {
+    console.log('processCreditCardResponse', response)
 
-      const validate = this.validateResponse(response, payment)
+    if (response) {
+      const rStream      = response.RStream as RStream;
+      const validate = this.validateResponse(rStream, payment)
       if (!validate) { return }
-
-      const rStream      = response //.RStream as RStream;
       const cmdResponse  = rStream.CmdResponse;
       const trans        = rStream.TranResponse;
       const status       = cmdResponse?.TextResponse;

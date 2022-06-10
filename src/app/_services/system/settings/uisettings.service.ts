@@ -1,9 +1,12 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, switchMap } from 'rxjs';
 import { ISetting, IUser, IUserProfile } from 'src/app/_interfaces';
 import { SitesService } from '../../reporting/sites.service';
+import { EmailModel } from '../../twilio/send-grid.service';
 import { SettingsService } from '../settings.service';
+import { UserAuthorizationService } from '../user-authorization.service';
 
 export interface TransactionUISettings {
   id                     : number;
@@ -118,10 +121,17 @@ export interface UIHomePageSettings {
   sideToolbarEnableBrand   : boolean;
   sideToolbarEnableType    : boolean;
   sideToolbarEnableCategory: boolean;
-        // Public Property sideToolbarDefaultBrand As Nullable(Of Boolean)
-        // Public Property sideToolbarEnableBrand As Nullable(Of Boolean)
-        // Public Property sideToolbarEnableType As Nullable(Of Boolean)
-        // Public Property sideToolbarEnableCategory As Nullable(Of Boolean)
+
+  sendGridOrderTemplate: string;
+  sendGridSalesReportTemplate : string;
+  sendGridBalanceSheetTemplate : string;
+  sendGridPasswordResetTemplate : string;
+  sendGridNotificationTemplate: string;
+
+  administratorEmail : string;
+  outGoingCustomerSupportEmail: string;
+  salesReportsEmail: string;
+
 }
 
 @Injectable({
@@ -133,6 +143,11 @@ export class UISettingsService {
   pricingRecMed = [
     {id: 0, name: 'Both'}, {id: 1, name: 'Rec'}, {id: 2, name: 'Med'}
   ]
+
+
+  private _emailModel  = new BehaviorSubject<EmailModel>(null);
+  public  EmailModel$  = this._emailModel.asObservable();
+  emailModel: EmailModel
 
   private _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
   public  transactionUISettings$  = this._transactionUISettings.asObservable();
@@ -150,6 +165,11 @@ export class UISettingsService {
 
   private _StripeAPISettings         = new BehaviorSubject<StripeAPISettings>(null);
   public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
+
+  updateEmailModel(item: EmailModel) {
+    this._emailModel.next(item);
+    this.emailModel = item;
+  }
 
   updateHomePageSetting(ui: UIHomePageSettings) {
     this._homePageSetting.next(ui);
@@ -179,12 +199,21 @@ export class UISettingsService {
   constructor(
       private _fb            : FormBuilder,
       private siteService    : SitesService,
+      private matSnack: MatSnackBar,
+      private userAuthorizationService     : UserAuthorizationService,
       private settingsService: SettingsService) {
 
-    this.getTransactionUISettings();
-    this.subscribeToStripedCachedConfig();
-    this.getDSSIEmvSettings();
+    this.initSecureSettings()
     this.getUIHomePageSettings();
+  }
+
+  initSecureSettings() {
+    console.log('initSecureSettings',this.userAuthorizationService.currentUser() )
+    if (this.userAuthorizationService.currentUser()) {
+      this.getTransactionUISettings();
+      this.subscribeToStripedCachedConfig();
+      this.getDSSIEmvSettings();
+    }
   }
 
   getTransactionUISettings() {
@@ -196,6 +225,12 @@ export class UISettingsService {
   getUIHomePageSettings() {
     this.settingsService.getUIHomePageSettings().subscribe(data => {
       this._homePageSetting.next(data)
+    })
+  }
+
+  getEmailModel() {
+    this.settingsService.getEmailModel().subscribe(data => {
+      this._emailModel.next(data)
     })
   }
 
@@ -236,17 +271,20 @@ export class UISettingsService {
   saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
     const setting = fb.value
 
-    if (!setting || (!setting.id || setting.id === '')) {
-      console.log('setting', fb.value)
+    if (!setting || (!setting?.id || setting?.id === '')) {
+      console.log('setting doesnt exist', fb.value)
+
       this.getSetting(name).pipe(
         switchMap(data => {
           console.log('setting', data)
           setting.id = data.id;
           return this.setSetting(setting, name)
-      })).subscribe(data => {
-        console.log('setting', data)
+      })).pipe(
+        switchMap(data => {
+        console.log('returning Pipe', data)
         return this.setSetting(setting, name)
-      })
+      }))
+
     }
 
     console.log('save Config', fb.value)
@@ -305,6 +343,15 @@ export class UISettingsService {
       sideToolbarEnableType    : [''],
       sideToolbarEnableCategory: [''],
 
+      sendGridOrderTemplate: [''],
+      sendGridSalesReportTemplate : [''],
+      sendGridBalanceSheetTemplate : [''],
+      sendGridPasswordResetTemplate: [''],
+      sendGridNotificationTemplate: [''],
+      administratorEmail : [''],
+      outGoingCustomerSupportEmail: [''],
+      salesReportsEmail: [''],
+
      })
     return fb
   }
@@ -337,6 +384,31 @@ export class UISettingsService {
       apiKey           : [''],
       enabled          : [''],
       paymentAgreement : [''],
+    })
+    if (!config) { return fb}
+    fb.patchValue(config)
+    return fb
+  }
+
+  initEmailModel(config: any, fb: FormGroup): FormGroup {
+    fb = this._fb.group({
+      id     : [''],
+      name     : [''],
+      email     : [''],
+      password     : [''],
+      smtpSender_SMPTHOST     : [''],
+      mailGunSender_Enabled     : [''],
+      mailGunSender_Domain     : [''],
+      mailGunSender_APIKey     : [''],
+      sendGridSender_Enabled     : [''],
+      sendGridSender_APIKey     : [''],
+      mailkitSender_Enabled    : [''],
+      mailKitSender_Server     : [''],
+      mailKitSender_Port     : [''],
+      mailKitSender_UseSSL     : [''],
+      mailKitSender_User     : [''],
+      endOfDayAddresses    : [''],
+      alertAddresses    : [''],
     })
     if (!config) { return fb}
     fb.patchValue(config)
@@ -434,6 +506,10 @@ export class UISettingsService {
     if (name == 'StripeAPISettings') {
       return this.initStripeAPISettingsForm(config, inputForm);
     }
+
+    if (name == 'EmailModel') {
+      return this.initStripeAPISettingsForm(config, inputForm);
+    }
   }
 
   initConfig(setting: ISetting, name: string): Observable<ISetting> {
@@ -466,5 +542,7 @@ export class UISettingsService {
     }
   }
 
-
+  notify(message: string, title: string) {
+    this.matSnack.open(message, title, {duration: 1000})
+  }
 }

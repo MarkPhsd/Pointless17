@@ -50,7 +50,7 @@ export class StoreCreditEditorComponent implements OnInit {
     this.awsBucketURL =     await this.awsBucket.awsBucketURL();
   };
 
-  async initializeForm()  {
+ initializeForm()  {
     this.initFormFields()
     if (this.inputForm && this.id) {
       const site = this.siteService.getAssignedSite();
@@ -83,8 +83,24 @@ export class StoreCreditEditorComponent implements OnInit {
         this.storeCredit.userName = user.userName;
         this.storeCredit.accountNumber = user.accountNumber;
         this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID.toString())
+        this.storeCreditService.save(site, this.storeCredit).subscribe( data => {
+          this.inputForm.patchValue(data)
+        })
+
       }
     }
+  }
+
+  removeCustomer() {
+    if (!this.storeCredit) { return }
+    const site                = this.siteService.getAssignedSite();
+    this.storeCredit.clientID = 0
+    this.storeCredit.userName = '';
+    this.storeCredit.accountNumber = '';
+    this.client$ = this.contactsService.getContact(site, this.storeCredit.clientID.toString())
+    this.storeCreditService.save(site, this.storeCredit).subscribe( data => {
+      this.inputForm.patchValue(data)
+    })
   }
 
   updateItem(event) {
@@ -92,7 +108,6 @@ export class StoreCreditEditorComponent implements OnInit {
     if (this.inputForm.valid) {
       const site = this.siteService.getAssignedSite()
       let storeCredit = this.inputForm.value as StoreCredit;
-      console.log('storeCredit', storeCredit)
       return  this.storeCreditService.save(site, storeCredit)
     }
     this.snack.open('Form not valid', 'Failed', {duration:2000, verticalPosition: 'top'})

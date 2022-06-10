@@ -43,6 +43,13 @@
       </button>
     </div>
 
+    <div *ngIf="printOption">
+      <button  mat-button class="button"  (click)="email()">
+        <mat-icon>email</mat-icon>
+        <span *ngIf="!smallDevice">Email</span>
+      </button>
+    </div>
+
     <div *ngIf='!hideSave' >
       <button mat-button
               class="button"

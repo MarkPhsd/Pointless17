@@ -119,7 +119,6 @@ import { QuicklinkModule } from 'ngx-quicklink';
 import { OrderHeaderComponent } from '../modules/posorders/pos-order/order-header/order-header.component';
 import { OrderTotalComponent } from '../modules/posorders/pos-order/order-total/order-total.component';
 import { PriceTierScheduleComponent } from '../modules/admin/products/price-tiers/price-tier-edit/price-tier-schedule/price-tier-schedule.component';
-import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 import { QuantiySelectorComponent } from './widgets/quantiy-selector/quantiy-selector.component';
 import { BackgroundCoverComponent } from './widgets/background-cover/background-cover.component';
 import { UploaderComponent } from './widgets/AmazonServices';
@@ -149,6 +148,8 @@ import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatt
 import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
 import { StoreCreditSearchComponent } from './widgets/search-list-selectors/store-credit-search/store-credit-search.component';
 // import { QuicklinkStrategy } from 'ngx-quicklink';
+import { EmailSettingsComponent } from '../modules/admin/settings/email-settings/email-settings.component';
+import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 
 // export class MyHammerConfig extends HammerGestureConfig {
 //     overrides = <any> {
@@ -193,6 +194,7 @@ import { StoreCreditSearchComponent } from './widgets/search-list-selectors/stor
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
+    EmailSettingsComponent,
     ExitLabelSelectionComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
@@ -200,6 +202,7 @@ import { StoreCreditSearchComponent } from './widgets/search-list-selectors/stor
     FilterComponent,
     FilterPipe,
     FormSelectListComponent,
+
     // FoodProductEditComponent,
     FooterComponent,
     HeaderComponent,
@@ -282,12 +285,12 @@ import { StoreCreditSearchComponent } from './widgets/search-list-selectors/stor
     WebEnabledComponent,
     ValueFieldsComponent,
     CartButtonComponent,
+    UIHomePageSettingsComponent,
     UserAuthorizedDirective,
     MatSpinnerOverlayComponent,
     ValueSpinnerComponent,
     ProgressBarComponent,
     SearchDebounceInputComponent,
-    UIHomePageSettingsComponent,
     UploaderComponent,
     OverLayComponent,
     MyThingComponent,
@@ -347,6 +350,7 @@ import { StoreCreditSearchComponent } from './widgets/search-list-selectors/stor
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
     CompanyInfoHeaderComponent,
+     EmailSettingsComponent,
     DashboardComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,

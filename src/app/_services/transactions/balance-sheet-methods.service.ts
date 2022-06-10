@@ -87,7 +87,7 @@ export class BalanceSheetMethodsService {
       // this.getCurrentBalanceSheet()
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
-          console.log('returning balance sheet', data)
+          console.log('Returning balance sheet', data)
           if (data.id == 0 )  {
              return of({sheet: null, user: user})
           }
@@ -95,7 +95,6 @@ export class BalanceSheetMethodsService {
         }),
         catchError( e => {
           this.notify('Balance sheet error. User may not have employee assigned.', 'Notification')
-
           return of({sheet: null, user: user, err: e})
         })
       )
@@ -155,12 +154,16 @@ export class BalanceSheetMethodsService {
       if (sheet.shiftStarted  != 1) {
         sheet.shiftStarted = startShiftInt;
       }
-      this.sheetService.putSheet(site, sheet).subscribe(data => {
-        this.updateBalanceSheet(data)
-        this.notify('Sheet saved.', 'Succes')
-      }, (err) => {
-        this.notify('Sheet note deleted.' + err, 'Failure')
-      })
+      this.sheetService.putSheet(site, sheet).subscribe(
+        {next: data => {
+            this.updateBalanceSheet(data)
+            this.notify('Sheet saved.', 'Succes')
+          },
+          error : (err) => {
+            this.notify('Sheet not saved.' + err, 'Failure')
+          }
+        }
+      )
     }
   }
 
@@ -184,7 +187,7 @@ export class BalanceSheetMethodsService {
           this.notify('Sheet is deleted.', 'Succes')
           this.location.back()
         }, (err) => {
-          this.notify('Sheet note deleted.' + err, 'Failure')
+          this.notify('Sheet not deleted.' + err, 'Failure')
         })
       }
     }

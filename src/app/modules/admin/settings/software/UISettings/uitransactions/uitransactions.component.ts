@@ -41,7 +41,7 @@ export class UITransactionsComponent implements OnInit {
 
   updateSetting(){
     this.uISettingsService.saveConfig(this.inputForm, 'UITransactionSetting').subscribe(data => {
-      console.log('saved')
+      this.uISettingsService.notify('Saved', 'Success')
     })
   }
 

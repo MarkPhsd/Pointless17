@@ -51,7 +51,9 @@
           </app-client-search-selector>
         </ng-template>
       </div>
-
+      <div *ngIf="storeCredit && storeCredit.clientID !=0">
+        <button mat-raised-button color='primary' (click)='removeCustomer()'>Remove </button>
+      </div>
     </mat-card-subtitle>
 
     <mat-card-content>

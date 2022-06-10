@@ -17,7 +17,9 @@ export class EditButtonsStandardComponent  {
   @Output() outputViewOrder       : EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutStartOrder       : EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAdd             : EventEmitter<any> = new EventEmitter<any>();
+  @Output() outPutEmail           : EventEmitter<any> = new EventEmitter<any>();
 
+  @Input() emailOption : boolean;
   @Input() enableAdd  : boolean;
   @Input() enableCopy  : boolean;
   @Input() enableUpdate: boolean;
@@ -74,9 +76,15 @@ export class EditButtonsStandardComponent  {
   updateItemExit() {
     this.outputupdateItemExit.emit('demo')
   }
+
   deleteItem() {
     this.outputupdatedeleteItem.emit('demo')
   }
+
+  email() {
+    this.outPutEmail.emit('demo')
+  }
+
   onCancel() {
     this.outputupdateonCancel.emit('demo')
   }

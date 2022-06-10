@@ -25,10 +25,9 @@ export class UIHomePageSettingsComponent implements OnInit {
     private uISettingsService: UISettingsService) { }
 
   ngOnInit() {
-    const form = this.inputForm
-    this.inputForm = this.uISettingsService.initHomePageForm(form)
-    this.settingsService.getUIHomePageSettings().subscribe(data => {
+    this.settingsService.getUIHomePageSettingsNoCache().subscribe(data => {
       if (data) {
+        this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm)
         this.uiHomePage   = data
         this.initializeImages(this.uiHomePage)
         this.initForm(this.uiHomePage);
@@ -69,16 +68,13 @@ export class UIHomePageSettingsComponent implements OnInit {
   }
 
   updateSetting(){
-    if (!this.inputForm) {
-      console.log('Error Input Form Null')
-      return
-    }
     try {
       this.uISettingsService.saveConfig(this.inputForm, 'UIHomePageSettings').subscribe(data => {
-        console.log('saved', data)
+        this.uiHomePage = JSON.parse(data.text) as UIHomePageSettings;
+        this.uISettingsService.notify('Saved', 'Success')
       })
     } catch (error) {
-      console.log('errror', error)
+      this.uISettingsService.notify(`Saved ${error}`, 'Success')
     }
   }
 

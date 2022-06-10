@@ -12,8 +12,8 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { ScaleInfo, ScaleService } from '../system/scale-service.service';
 
 export interface ItemPostResults {
-  order            : IPOSOrder,
-  menuItem         : IMenuItem[],
+  order            : IPOSOrder;
+  menuItem         : IMenuItem[];
   ageCheckPass     : boolean;
   expirationPass   : boolean;
   inventory        : IInventoryAssignment;
