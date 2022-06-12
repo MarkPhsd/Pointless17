@@ -29,6 +29,7 @@ export class UITransactionsComponent implements OnInit {
   }
 
   initForm(setting: ISetting) {
+    if (!this.inputForm) {return}
     const form = this.inputForm
     this.uISettingsService.setFormValue(form, setting, 'UITransactionSetting' ).subscribe(
      data => {

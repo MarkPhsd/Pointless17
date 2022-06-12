@@ -44,6 +44,19 @@ export class PrintingService {
   private _printReady       = new BehaviorSubject<boolean>(null);
   public printReady$        = this._printReady.asObservable();
 
+  private _printView          = new BehaviorSubject<number>(null);
+  public printView$           = this._printView.asObservable();
+  private __printView         : number;
+
+  get printView() {
+    return this.__printView;
+  }
+
+  updatePrintView(value: number) {
+    this._printView.next(value);
+    this.__printView = value;
+  }
+
   constructor(  private electronService   : ElectronService,
                 private snack             : MatSnackBar,
                 private settingService    : SettingsService,
@@ -137,6 +150,12 @@ export class PrintingService {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
     const receiptStyle = await receiptStyle$.pipe().toPromise()
     return this.setHTMLReceiptStyle(receiptStyle)
+  }
+
+  applyStylesObservable(site: ISite): Observable<ISetting> {
+    const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
+    return receiptStyle$
+//   return this.setHTMLReceiptStyle(receiptStyle)
   }
 
   async  appyStylesCached(site: ISite): Promise<ISetting> {
@@ -240,37 +259,42 @@ getDomToImage(node: any) {
 
   async printElectron(contents: string, printerName: string, options: printOptions) : Promise<boolean> {
 
-    const printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
+    let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     printWindow.loadURL(contents)
-      .then((e) => {
+      .then( e => {
+
         if (options.silent) {
           printWindow.hide();
         }
         if (!options) {
-          options =
-          { silent: true,
+          options = {
+            silent: true,
             printBackground: false,
             deviceName: printerName
           }
         }
+
         printWindow.webContents.print(
           options,
           (error, data) => {
             if (error) {
               if (error == true)  {
                 printWindow.close();
-                return true
+                printWindow = null;
+                return false
               }
             }
             if (data) {
               printWindow.close();
+              printWindow = null;
               return true
             }
           }
         )
-        }).catch((err) => {
-          // console.log(e);
+
+        }).catch( err => {
           printWindow.close();
+          printWindow = null;
           return false
         }
     )

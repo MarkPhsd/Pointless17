@@ -1,17 +1,17 @@
 <mat-card>
   <mat-card-title>
-    Import
+    <mat-icon>file_download</mat-icon>Import
   </mat-card-title>
 
   <mat-card-subtitle>
-    <button *ngIf="schemaValue" 
+    <button *ngIf="schemaValue"
             mat-raised-button
             color="primary"
             (click)="downloadExample()">
         <mat-icon>download</mat-icon>
         Download example {{schemaName}}
     </button>
-    <button *ngIf="schemaValue" 
+    <button *ngIf="schemaValue"
             mat-raised-button
             color="primary"
             (click)="reset()">
@@ -31,7 +31,7 @@
         <div>Schema Type Selection</div>
         </form-select-list>
     </div>
-  
+
     <div class="fields">
       <mat-slide-toggle
                 [(ngModel)]="headerValues"
@@ -44,11 +44,11 @@
       <div  class="container"
             appDnd
             (fileDropped)="onFileDropped($event)" >
-          <div>     
-            <input type="file" 
+          <div>
+            <input type="file"
                    #fileDropRef
                    id="fileDropRef"
-                   accept=".csv" 
+                   accept=".csv"
                    (change)="fileChangeListener($event)"/>
 
             <div class="file-drop">
@@ -61,14 +61,14 @@
       </div>
 
       <div class="import-file">
-   
+
         <button *ngIf="!resultsMessage &&
-                       (schemaValue !=0 && schemaValue != undefined) && 
-                       itemCount>0" 
+                       (schemaValue !=0 && schemaValue != undefined) &&
+                       itemCount>0"
               mat-raised-button
               color="primary"
               (click)="importFiles()"><mat-icon>file_upload</mat-icon>
-          Import {{schemaName}}
+           Import {{schemaName}}
         </button>
 
         <div *ngIf="resultsMessage">

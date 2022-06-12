@@ -14,6 +14,8 @@ import { IUser } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'app-balance-sheet-edit',
@@ -112,7 +114,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   constructor(  private _snackBar               : MatSnackBar,
                 private sheetService            : BalanceSheetService,
-                private siteService             : SitesService,
                 private userAuthorization       : UserAuthorizationService,
                 private location                : Location,
                 private route                   : ActivatedRoute,
@@ -121,6 +122,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
                 private toolbarUIService        : ToolBarUIService,
                 private sheetMethodsService     : BalanceSheetMethodsService,
                 private sendGridService         :  SendGridService,
+                private printingService         : PrintingService,
               )
   {
     this.inputForm = this.sheetMethodsService.initForm(this.inputForm);
@@ -162,7 +164,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   toggleSearchMenu() {
     this.toolbarUIService.switchSearchBarSideBar()
   }
-
 
   getCurrentSheet() {
     this.getSheet(this.id)
@@ -305,11 +306,20 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   print(event){
-    //print
+    console.log('print')
+    this.printingService.updatePrintView(2);
+    this.printingService.previewReceipt()
   }
 
   email(event) {
-    this.sendGridService.sendBalanceSheet(this.sheet.id)
+    this.sendGridService.sendBalanceSheet(this.sheet.id).subscribe( data => {
+      if (data && data.isSuccessStatusCode) {
+        this.sendGridService.notify('Email Sent', 'Success')
+      }
+      if (!data || !data.isSuccessStatusCode) {
+        this.sendGridService.notify('Email Not Sent', 'Failed')
+      }
+    })
   }
 
   onCancel(event){

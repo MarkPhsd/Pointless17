@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
-import { AuthenticationService, AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, AWSBucketService, OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, Subscription } from 'rxjs';
-import { delay,  repeatWhen, switchMap,  } from 'rxjs/operators';
+import { delay,  repeatWhen  } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -14,17 +14,12 @@ import { fadeAnimation } from 'src/app/_animations';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { PosOrderItemsComponent } from './pos-order-items/pos-order-items.component';
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
-import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { EMPTY, } from 'rxjs';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
-import { UITransactionsComponent } from '../../admin/settings/software/UISettings/uitransactions/uitransactions.component';
-
 @Component({
 selector: 'app-pos-order',
 templateUrl: './pos-order.component.html',
@@ -286,14 +281,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   emailOrder(event) {
-    console.log('email from buttons', this.order)
-
-    this.orderMethodService.notification('Email about to send', 'Alert')
-
     this.orderMethodService.emailOrder(this.order).subscribe(data => {
-      this.orderMethodService.notification('Email Sent', 'Alert')
+      if (data.isSuccessStatusCode) {
+        this.orderMethodService.notifyEvent('Email Sent', 'Success')
+       }
+      if (!data.isSuccessStatusCode) {
+        this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
+      }
     })
-
   }
 
   checkIfPaymentsMade() {

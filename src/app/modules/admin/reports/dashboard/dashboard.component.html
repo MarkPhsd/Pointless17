@@ -6,7 +6,9 @@
         </app-widget-filter>
       </div>
       <div>
-        <button mat-raised-button (click)="showValues=!showValues"><mat-icon>analytics</mat-icon>Toggle Reports</button>
+        <button mat-raised-button (click)="showValues=!showValues">
+          <mat-icon color="primary">analytics</mat-icon>Toggle Reports
+        </button>
       </div>
     </div>
 
@@ -16,6 +18,7 @@
 
       <div class="grid-flow"
           *ngIf="showValues && dateFrom && dateTo">
+
         <div  *ngFor="let site of sites$ | async">
           <sales-tax-report
                   [site]="site"

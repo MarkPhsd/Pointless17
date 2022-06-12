@@ -62,7 +62,6 @@ export class OrderMethodsService implements OnDestroy {
 
   priceCategoryID: number;
 
-
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
@@ -92,6 +91,7 @@ export class OrderMethodsService implements OnDestroy {
     this.assignPOSItem = item;
     this._assingedPOSItem.next(item)
   }
+
 
   constructor(public route                    : ActivatedRoute,
               private dialog                  : MatDialog,

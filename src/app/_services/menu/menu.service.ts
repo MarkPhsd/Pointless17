@@ -131,9 +131,9 @@ export class MenuService {
   public searchIsLoaded = new Subject<any>();
 
   get isWebModeMenu(){
-    console.log('iswebMode', this.platFormService.isApp() )
-    console.log('isStaff', this.userAuthorizationService.isStaff)
-    if (!this.platFormService.isApp() && !this.userAuthorizationService.isStaff) { 
+    // console.log('iswebMode', this.platFormService.isApp() )
+    // console.log('isStaff', this.userAuthorizationService.isStaff)
+    if (!this.platFormService.isApp() && !this.userAuthorizationService.isStaff) {
       return true ;
     }
     return false

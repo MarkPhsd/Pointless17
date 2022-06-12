@@ -34,3 +34,11 @@ button {
   overflow-y: auto;
   overflow-x: auto;
 }
+
+
+.grid-container {
+  display: grid;
+  gap: var(--gap);
+  margin: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(150, 1fr) );
+}

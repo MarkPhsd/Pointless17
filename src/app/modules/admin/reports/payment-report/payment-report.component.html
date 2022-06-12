@@ -47,12 +47,12 @@
           </div>
 
           <div  class="grid-order-employeecount"
-                *ngIf="payments && groupBy === 'OrderEmployeCount'">
-              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Staff</div>
-              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Hour</div>
-              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Count</div>
-              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Total</div>
-              <div *ngIf="groupBy === 'OrderEmployeCount'" class="grid-item">Avg</div>
+                *ngIf="payments && groupBy === 'orderemployeecount'">
+              <div class="grid-item">Staff</div>
+              <div class="grid-item">Hour</div>
+              <div class="grid-item">Count</div>
+              <div class="grid-item">Total</div>
+              <div class="grid-item">Avg</div>
           </div>
 
           <div class="mat-divider">
@@ -69,7 +69,7 @@
 
         <mat-card-footer>
 
-          <div class="grid-footer">
+          <div class="grid-footer" *ngIf="(groupBy === 'paymentMethod')">
             <div class="grid-items">
               Credit Total
             </div>

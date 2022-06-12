@@ -11,6 +11,9 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
+import { Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+
 
 @Component({
   selector: 'pos-operations',
@@ -38,6 +41,8 @@ export class PosOperationsComponent implements OnInit {
 
   iBalanceSheet: IBalanceSheet;
   zrunID: any;
+  dsiEMVSettings      : Transaction;
+  batchInquireResponse: Transaction;
 
   constructor(
     private siteService        : SitesService,
@@ -45,8 +50,9 @@ export class PosOperationsComponent implements OnInit {
     private balanceSheetService: BalanceSheetService,
     private router             : Router,
     private orderMethodsService: OrderMethodsService,
-    private platFormService       : PlatformService,
-    private printingService       : PrintingService,
+    private platFormService    : PlatformService,
+    private printingService    : PrintingService,
+    private dsiProcess         : DSIProcessService,
     private printingAndroidService: PrintingAndroidService,
 
   ) {
@@ -57,6 +63,10 @@ export class PosOperationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const item  = localStorage.getItem('DSIEMVSettings');
+    if (item) {
+      this.dsiEMVSettings = JSON.parse(item) as Transaction;
+    }
     this.getUser();
     this.refreshSales();
   }
@@ -93,6 +103,17 @@ export class PosOperationsComponent implements OnInit {
     this.localSite = this.siteService.getAssignedSite();
   }
 
+  async emvDataCapBatchCards() {
+    this.batchInquireResponse  = null;
+    await this.dsiProcess.emvReset();
+  }
+
+  async  emvDataCapBatchInquire() {
+    //dsiProcess
+    const response = await this.dsiProcess.emvBatchInquire();
+    this.batchInquireResponse = response;
+  }
+
   closeDay() {
 
     const result = window.confirm('Are you sure you want to close the day.');
@@ -111,7 +132,8 @@ export class PosOperationsComponent implements OnInit {
         //if it can't then return what is told from the webapi
         if (data){
           if (!data.allowClose) {
-            const result = this.orderMethodsService.notifyEvent(`Data not closed. ${data}`, 'Alert');
+            this.closeResult = `Day not closed.  Open Printed Orders ${data.openPrintedOrders.length}.  Open Paid Orders ${data.openPaidOrders.length}.  Open Balance Sheets ${data.openBalanceSheets.length}`
+            const result = this.orderMethodsService.notifyEvent(`Date not closed. ${data}`, 'Alert');
             this.canCloseOrderResults = data
             this.runningClose = false
             return

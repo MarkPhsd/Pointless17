@@ -208,7 +208,7 @@ export class UISettingsService {
   }
 
   initSecureSettings() {
-    console.log('initSecureSettings',this.userAuthorizationService.currentUser() )
+    // console.log('initSecureSettings',this.userAuthorizationService.currentUser() )
     if (this.userAuthorizationService.currentUser()) {
       this.getTransactionUISettings();
       this.subscribeToStripedCachedConfig();

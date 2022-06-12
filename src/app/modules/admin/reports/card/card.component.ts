@@ -119,7 +119,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     if (this.cardValueType && this.reportItemSaleSummaries) {
 
       const xAxis = this.initSeriesLabels();
-    
+
       let options = this.initChart('values');
 
       this.refreshProductSales();
@@ -200,7 +200,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
   refreshSitesData() {
     if (this.sites || this.site) {
-      if (!this.sites) { 
+      if (!this.sites) {
         this.sites = []
         this.sites.push(this.site)
       }
@@ -248,11 +248,11 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
         const startdate = new Date(data.startTime)
         this.dateTo     = this.reportingService.addDates(startdate, 1).toISOString();
       }
-      if (data.startTime && this.dateTo) { 
+      if (data.startTime && this.dateTo) {
         this.dateFrom = this.datePipe.transform(data.startTime, 'M/d/yy')
         this.dateTo   = this.datePipe.transform(this.dateTo   , 'M/d/yy')
-      } 
-      if (data.id) { 
+      }
+      if (data.id) {
         this.zrunID   = data.id.toString();
       }
       return sites$
@@ -305,9 +305,9 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       this.chartCategories = this.itemNames;
       // console.log(this.itemNames)
       // console.log(this.chartCategories)
-     
+
       this.xAxis = this.getXAxis(this.chartCategories);
-     
+
       return this.xAxis;
     }
 
@@ -339,7 +339,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
 
     if (this.groupBy.toLowerCase() === 'month') {
 
-      if (this.rangeValue) { 
+      if (this.rangeValue) {
         const  d  = new Date(this.dateFrom)
         let dataSeriesValues = this.reportingService.getMonthSeriesValueByCount(d, this.rangeValue, true)
         dataSeriesValues.forEach(data => { if (data) { categories.push(data.date) } })
@@ -416,15 +416,15 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     //requires work
     if (this.groupBy.toLowerCase() === 'month') {
       if (this.dateFrom && this.dateTo) {
-        if(!this.dataSeriesValues) { 
+        if(!this.dataSeriesValues) {
 
-          if (this.rangeValue) { 
+          if (this.rangeValue) {
             const  d  = new Date(this.dateFrom)
             let dataSeriesValues = this.reportingService.getMonthSeriesValueByCount(d, this.rangeValue, true)
             this.dataSeriesValues = dataSeriesValues
             return dataSeriesValues;
           }
-  
+
           let dataSeriesValues =  this.reportingService.getMonthWithDatesSeries(this.dateFrom, this.dateTo)
           this.dataSeriesValues = dataSeriesValues
           return dataSeriesValues;
@@ -500,7 +500,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
       const item = {name: name, value: 0, count: 0} as ProductSale;
       productList.push( item )
     }
-  
+
     return productList;
   }
 
@@ -531,7 +531,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     // if (!this.dataSeriesValues) { return }
     let dataSeriesValues = [] as any[]
     this.sales = []
-  
+
     for (let site of sites) {
       let sales$ =  this.reportingService.getSales(site, dateFrom, dateTo, this.groupBy)
       sales$.subscribe( sales => {
@@ -602,7 +602,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
             if (!this.rangeValue) {
               dataSeriesValues = this.reportingService.getMonthWithDatesSeries(this.dateFrom, this.dateTo)
             }
-         
+
             if (this.rangeValue) {
               const  d  = new Date(this.dateFrom)
               dataSeriesValues = this.reportingService.getMonthSeriesValueByCount(d, this.rangeValue, true)
@@ -631,8 +631,8 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
                     dataSeriesValues[index] = row
                   }
                 }
-            
-              )  
+
+              )
             }
             this.setChartDateSeriesData(site.name, dataSeriesValues)
           }

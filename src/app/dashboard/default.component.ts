@@ -1,6 +1,6 @@
 import { Component, HostBinding, OnInit, AfterViewInit,
          Renderer2, OnDestroy, HostListener,
-         ChangeDetectorRef, 
+         ChangeDetectorRef,
          ElementRef,
          ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -154,7 +154,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this._searchSideBar = this.toolBarUIService._searchBarWidth$.subscribe(data => {
         this.searchBarWidth = data
-        console.log('_searchSideBar', data)
+        // console.log('_searchSideBar', data)
         if (data) {
           if (data == 55 || this.smallMenu) {
             this.barType =  "mat-drawer-searchbar-tiny"

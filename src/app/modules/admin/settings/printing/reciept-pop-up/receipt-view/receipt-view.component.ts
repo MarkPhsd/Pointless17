@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Output, EventEmitter } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
@@ -8,13 +8,17 @@ import { BtPrintingService } from 'src/app/_services/system/bt-printing.service'
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
   styleUrls: ['./receipt-view.component.scss']
 })
-export class ReceiptViewComponent implements OnInit , AfterViewInit{
+export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
+
+  @ViewChild('receipt')      receiptTemplate: TemplateRef<any>;
+  @ViewChild('balanceSheet') balanceSheetTemplate: TemplateRef<any>;
 
   @Input() autoPrint : boolean;
   @Input() hideExit = false;
@@ -22,6 +26,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   @ViewChild('printsection') printsection: ElementRef;
   @Input() printerName      : string;
   @Input() options           : printOptions;
+
+
+  _printView: Subscription;
+  printView               = 1;
 
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
@@ -78,18 +86,21 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   autoPrinted       = false;
 
   intSubscriptions() {
-    this._order       = this.orderService.currentOrder$.subscribe(data => {
-      this.order      = data;
-      this.orders     = [];
-      if (!data) {return}
-      this.orders.push(data)
-      if (data.posPayments) {
-        this.payments   = data.posPayments
-      }
-      if (data.posOrderItems) {
-        this.items      = data.posOrderItems
-      }
-    })
+
+    if (this.printView == 1 ) {
+      this._order       = this.orderService.currentOrder$.subscribe(data => {
+        this.order      = data;
+        this.orders     = [];
+        if (!data) {return}
+        this.orders.push(data)
+        if (data.posPayments) {
+          this.payments   = data.posPayments
+        }
+        if (data.posOrderItems) {
+          this.items      = data.posOrderItems
+        }
+      })
+    }
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
       if (status) {
@@ -100,11 +111,11 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
         }
       }
     )
-
   }
 
   constructor(
     private orderService          : OrdersService,
+    private orderMethodsService   : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,
@@ -116,13 +127,36 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   }
 
   async ngOnInit() {
+    this.initPrintView()
     this.getPrinterAssignment();
     this.intSubscriptions();
     await this.refreshView()
   }
 
+  initPrintView() {
+    this.printView = this.printingService.printView;
+    if (!this.printingService.printView) {
+      this.printingService.updatePrintView(1);
+      this.printView = 1;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.printingService.updatePrintView(1);
+    if(this._order) { this._order.unsubscribe()}
+  }
+
   async ngAfterViewInit() {
     this.initDefaultLayouts()
+  }
+
+  get currentView() {
+    if (this.printingService.printView == 2) {
+      return this.balanceSheetTemplate
+    }
+    if (this.printingService.printView == 1) {
+      return this.receiptTemplate
+    }
   }
 
   async refreshView(){
@@ -131,6 +165,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     if (receiptID && styles ) {
       this.initDefaultLayouts()
     }
+  }
+
+  getCurrentView() {
+
   }
 
   async  initDefaultLayouts() {
@@ -235,7 +273,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
     return file
   }
 
-  async print() {
+ print() {
 
     if (!this.printerName) {
       if (this.platFormService.webMode) { this.convertToPDF();}
@@ -264,6 +302,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
 
     if (!contents) { console.log('no contents in print electron')}
     if (!options) { console.log('no options in print electron')}
+
     if (!this.printerName) { console.log('no printerName in print electron')}
     if (contents && this.printerName, options) {
         this.printingService.printElectron( contents, this.printerName, options)
@@ -318,12 +357,11 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit{
   }
 
     async  getAndroidPrinterAssignment() {
-
-    if (this.platFormService.androidApp) {
-      this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-      this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+      if (this.platFormService.androidApp) {
+        this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+        this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+      }
     }
-  }
 
 
 }

@@ -3,6 +3,7 @@ import { ElectronService } from 'ngx-electron';
 import { XMLParser, XMLBuilder, XMLValidator} from 'fast-xml-parser';
 import { DSIEMVSettings, UISettingsService } from '../system/settings/uisettings.service';
 import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface topLevel {
   TStream: TStream;
@@ -51,6 +52,9 @@ export interface Transaction {
   MaxTransactions:                 string;
   OfflineTransactionPurchaseLimit: string;
   ProcessData:                     string;
+  BatchNo:                         string;
+  BatchItemCount:                  string;
+  NetBatchTotal:                   string;
 }
 
 export interface Avs {
@@ -85,6 +89,14 @@ export interface RStream {
   CmdResponse:  CmdResponse;
   TranResponse: TranResponse;
   PrintData:    PrintData;
+  BatchSummary: BatchSummary
+}
+
+export interface BatchSummary {
+  MerchantID: string;
+  BatchNo: string;
+  BatchItemCount: string;
+  NetBatchTotal: string;
 }
 
 export interface TranResponse {
@@ -173,6 +185,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
 
   constructor
       (private electronService: ElectronService,
+        private matSnack        : MatSnackBar,
         private uiSettingService : UISettingsService,
       ) {
       this.initSubscriptions();
@@ -183,6 +196,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     //Add 'implements OnDestroy' to the class.
     if (this._dsiEMVSubscriptions) {this._dsiEMVSubscriptions.unsubscribe()}
   }
+
   async mercuryPinPadReset(transaction: Transaction): Promise<RStream> {
     if (!transaction) { return }
     const tstream       = {} as TStream;
@@ -252,6 +266,108 @@ export class DSIEMVTransactionsService implements OnDestroy {
       console.log('response', response)
       return response
     }
+  }
+
+  async emvBatch(): Promise<RStream> {
+    const item                = localStorage.getItem('DSIEMVSettings')
+    const transactiontemp     = JSON.parse(item) as Transaction;
+    let  transaction = {} as Transaction
+
+    transaction.OperatorID    = 'Admin';
+    transaction.TerminalID    = transactiontemp.TerminalID
+    transaction.TranType      = 'Administrative'
+    transaction.TranCode      = 'BatchClose'
+    transaction.SecureDevice  = transactiontemp.SecureDevice;
+    transaction.ComPort       = transactiontemp.ComPort;
+    transaction.SequenceNo    = '0010010010'
+
+    const  inquireTransaction  = await this.getBatchInquireValues();
+    transaction.BatchItemCount = inquireTransaction.BatchItemCount;
+    transaction.BatchNo        = inquireTransaction.BatchNo;
+    transaction.NetBatchTotal  = inquireTransaction.NetBatchTotal;
+
+    if (!transaction) { return };
+
+    const tstream       = {} as TStream;
+    tstream.Transaction = transaction
+    const topLevel      = {} as topLevel;
+    topLevel.TStream    = tstream;
+    const builder       = new XMLBuilder(this.options)
+    const xml           = builder.build(topLevel);
+    let response        : any;
+    try {
+      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      response              = await emvTransactions.emvBatch(xml)
+    } catch (error) {
+      console.log('error', error)
+      return  error
+    }
+    if (response === 'reset failed') {
+      this.dsiResponse = 'Pin Pad Reset Failed'
+      return  this.dsiResponse
+    }
+    if (response) {
+      const parser  = new XMLParser(null);
+      let dsiResponse =  parser.parse(response)
+      return dsiResponse;
+    }
+  }
+
+  async emvBatchInquire(): Promise<RStream> {
+
+    const item  = localStorage.getItem('DSIEMVSettings')
+    const transactiontemp     = JSON.parse(item) as Transaction;
+    let  transaction = {} as Transaction
+
+    transaction.OperatorID    = 'Admin';
+    transaction.TerminalID    = transactiontemp.TerminalID
+    transaction.TranType      = 'Administrative'
+    transaction.TranCode      = 'BatchSummary'
+    transaction.SecureDevice  = transactiontemp.SecureDevice;
+    transaction.ComPort       = transactiontemp.ComPort;
+    transaction.SequenceNo    = '0010010010'
+
+    if (!transaction) { return }
+    const tstream       = {} as TStream;
+    tstream.Transaction = transaction
+    const topLevel      = {} as topLevel;
+    topLevel.TStream    = tstream;
+    const builder       = new XMLBuilder(this.options)
+    const xml           = builder.build(topLevel);
+    let response        : any;
+    try {
+      const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+      response              = await emvTransactions.emvBatchInquire(xml)
+    } catch (error) {
+      console.log('error', error)
+      return  error
+    }
+    if (response === 'reset failed') {
+      this.dsiResponse = 'Pin Pad Reset Failed'
+      return  this.dsiResponse
+    }
+    if (response) {
+      const parser  = new XMLParser(null);
+      let dsiResponse =  parser.parse(response)
+      return dsiResponse;
+    }
+  }
+
+  async getBatchInquireValues(): Promise<Transaction> {
+    //from batch inquire'
+    const result     = await this.emvBatchInquire()
+    let transaction  = {} as Transaction;
+
+    transaction.BatchNo        = result.BatchSummary.BatchNo
+    transaction.NetBatchTotal  = result.BatchSummary.NetBatchTotal
+    transaction.BatchItemCount = result.BatchSummary.BatchItemCount
+
+    if (result.CmdResponse.TextResponse.toLowerCase() != 'success'.toLowerCase()) {
+      this.matSnack.open(`Batch inquire problem: ${result.CmdResponse.TextResponse}`, 'Check Batching Info')
+      return null;
+    }
+
+    return transaction;
   }
 
   async emvTransaction(transaction: Transaction): Promise<RStream> {

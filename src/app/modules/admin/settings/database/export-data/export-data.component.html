@@ -1,5 +1,7 @@
 <mat-card>
-  <mat-card-title>Export</mat-card-title>
+  <mat-card-title>
+    <mat-icon>file_upload</mat-icon>
+    Export</mat-card-title>
 
   <mat-card-content>
     <div class="grid-item"
@@ -12,9 +14,9 @@
         <div fieldSearchDescription>Schema Type Selection</div>
         </form-select-list>
     </div>
-  
+
     <!-- <mat-card-subtitle>
-      <button *ngIf="schemaValue" 
+      <button *ngIf="schemaValue"
               mat-raised-button
               color="primary"
               (click)="selectSchema()"><mat-icon>download</mat-icon>
@@ -30,21 +32,21 @@
       <div *ngIf="schemaValue==1">
         <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
       </div>
-  
+
     </div>
 
     <div *ngIf="schemaValue==3">
       <div *ngIf="schemaValue==1">
         <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
       </div>
-  
+
     </div>
 
     <div *ngIf="schemaValue==4">
       <div *ngIf="schemaValue==1">
         <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
       </div>
-  
+
     </div>
   </mat-card-content>
 

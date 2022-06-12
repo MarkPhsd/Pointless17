@@ -1,10 +1,8 @@
 import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { StripeService, StripeCardComponent, StripeInstance, StripeFactoryService, StripePaymentElementComponent } from 'ngx-stripe';
+import { StripeService, StripeCardComponent, StripeInstance, StripePaymentElementComponent } from 'ngx-stripe';
 import {
-  PaymentIntent,
   StripeCardElementOptions,
-  StripeElement,
   StripeElementsOptions
 } from '@stripe/stripe-js';
 import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -28,7 +26,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
 
   @ViewChild('paymentTemplateRef') paymentTemplateRef: TemplateRef<any>;
   outletTemplate: TemplateRef<any>;
-  
+
   @Input() amount  : number;
   @Input() testMode: boolean;
   @Input() maxAmount: number;
@@ -118,14 +116,14 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         this.outletTemplate = this.paymentTemplateRef;
         this.elementsOptions.clientSecret =  data.clientSecret;
         this.errorMessage   = data.errorMessage;
-      }, 
-      error : err => { 
+      },
+      error : err => {
         this.errorMessage   = err.toString()
         this.outletTemplate = null;
       }
     })
 
-    if (!this.stripeInstance || !this.stripeInstance.confirmPayment) { 
+    if (!this.stripeInstance || !this.stripeInstance.confirmPayment) {
       this.errorMessage = 'Stripe not initiated. Please contact staff for assistance.'
       return;
     }
@@ -154,7 +152,8 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
                 public dialogRef: MatDialogRef<StripeCheckOutComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 private sitesService     : SitesService,
-                private stripePaymentService: StripePaymentService) {
+                private stripePaymentService: StripePaymentService
+                ) {
     if (this.data) {
       this.amount = data?.amount;
       this.maxAmount = data?.amount;
@@ -168,14 +167,14 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     this.initForm();
     this.initStripeIntent();
   }
-  
+
   ngOnDestroy() {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     if (this._apiSetting)  {this._apiSetting.unsubscribe()}
     if (this._order)      { this._order.unsubscribe()}
     if (this._posPayment) { this._posPayment.unsubscribe()}
-    
+
   }
 
   private createPaymentIntent(amount: number): Observable<IStripePaymentIntent> {

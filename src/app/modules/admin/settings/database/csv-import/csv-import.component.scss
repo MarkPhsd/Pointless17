@@ -1,12 +1,18 @@
-.container{ 
+mat-progress-bar {
+  width: 100%;
+  max-width: 300px;
+}
+
+.container{
   // width:  250px;
   // height: 150px;
+margin-top: 20px;
   margin: 10px;
   overflow-y: auto;
   overflow-x: auto;
 }
 
-.import-file { 
+.import-file {
   // height: 250px;
   width : 600px;
   overflow-y: auto;
@@ -14,7 +20,7 @@
   margin: 10px;
 }
 
-.grid-container { 
+.grid-container {
   --gap: 5px;
   margin-top: 2px;
   margin-right: 2px;

@@ -33,7 +33,7 @@
       {{ ordersCount }}
     </div>
 
-    <div class="item-span ">
+    <div class="item-span" *ngIf="!disableAuditButton">
       <button mat-raised-button color="warn"
               (click)="auditPayments()">Audit Payments<mat-icon>credit_card</mat-icon></button>
     </div>

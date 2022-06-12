@@ -19,6 +19,14 @@
       <button mat-raised-button (click)="print()"> <mat-icon>print</mat-icon>Print</button>
     </span>
 
+    <span *ngIf="dsiEMVSettings">
+      <button mat-raised-button (click)="emvDataCapBatchCards()"> <mat-icon>print</mat-icon>Batch Close</button>
+    </span>
+
+    <span *ngIf="dsiEMVSettings">
+      <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>print</mat-icon>Batch Inquire</button>
+    </span>
+
     <app-list-printers-electron
         [printerName]      ="printerName"
         (outputPrinterName)="setPrinter($event)" >
@@ -34,6 +42,17 @@
     <span *ngIf="closeResult">
       {{closeResult}}
     </span>
+
+    <div *ngIf="batchInquireResponse">
+      <div class="grid-container">
+        <div>Batch No</div>
+        <div>{{batchInquireResponse.BatchNo}}</div>
+        <div>Net Batch Total</div>
+        <div>{{batchInquireResponse.NetBatchTotal}}</div>
+        <div>Batch Item Count</div>
+        <div>{{batchInquireResponse.BatchItemCount}}</div>
+      </div>
+    </div>
 
     <div *ngIf="canCloseOrderResults">
 
@@ -119,8 +138,8 @@
         </sales-tax-report>
       </div>
 
-      <div >
-        <item-sales-card
+     <div >
+       <item-sales-card
               [site]="localSite"
               [dateFrom]="dateFrom"
               [dateTo]="dateTo"
@@ -149,8 +168,8 @@
               [dateFrom]="dateFrom"
               [dateTo]  ="dateTo"
               [zrunID]  ="zrunID"
-              [groupBy]="'OrderEmployeCount'">
-              <mat-icon>people_alt</mat-icon> User Orders By Hour
+              [groupBy]="'orderEmployeeCount'">
+              <mat-icon>people_alt</mat-icon> Employee Orders By Hour
         </payment-report>
 
         <payment-report

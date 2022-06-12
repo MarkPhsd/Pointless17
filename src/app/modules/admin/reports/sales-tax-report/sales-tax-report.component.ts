@@ -32,9 +32,17 @@ export class SalesTaxReportComponent implements OnInit, OnChanges {
   }
 
   refreshSales() {
+
+    if (this.zrunID) {
+      this.sales$ =
+      this.reportingItemsSalesService.putSalesTaxReport
+        (this.site, null, null, this.zrunID)
+      return
+    }
+
     this.sales$ =
       this.reportingItemsSalesService.putSalesTaxReport
-        (this.site, this.dateFrom, this.dateTo, this.zrunID)
+        (this.site, this.dateFrom, this.dateTo, null)
   }
 
 

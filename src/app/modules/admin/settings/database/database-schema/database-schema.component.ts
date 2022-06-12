@@ -26,7 +26,7 @@ export class DatabaseSchemaComponent implements AfterViewInit {
               private sitesService:      SitesService,
              )
   {
-    console.log('')
+    // console.log('')
   }
 
   async  ngAfterViewInit() {

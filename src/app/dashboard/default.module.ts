@@ -288,6 +288,7 @@ import { StoreCreditEditorComponent } from '../modules/admin/store-credit/store-
 import { StoreCreditListComponent } from '../modules/admin/store-credit/store-credit-list/store-credit-list.component';
 import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
+import { BalanceSheetViewComponent } from '../modules/admin/settings/printing/balance-sheet-view/balance-sheet-view.component';
 
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -316,6 +317,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BalanceSheetCalculationsViewComponent,
     BalanceSheetHeaderViewComponent,
     BalanceSheetQuickViewComponent,
+    BalanceSheetViewComponent,
     BrandslistComponent,
     BrandTypeSelectComponent,
     CacheSettingsComponent,

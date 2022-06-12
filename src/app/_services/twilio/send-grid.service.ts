@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import { SitesService } from '../reporting/sites.service';
 
 export interface EmailModel {
@@ -43,13 +45,14 @@ export class SendGridService {
   constructor(
     private http: HttpClient,
     private _fb: FormBuilder,
+    private matSnack : MatSnackBar,
     private siteService: SitesService,
   )
   {
 
   }
 
-  sendTestEmail() {
+  sendTestEmail(): Observable<any> {
 
     const site = this.siteService.getAssignedSite()
     const controller =  "/SendGrid/"
@@ -64,7 +67,7 @@ export class SendGridService {
 
   }
 
-  sendBalanceSheet(id: number) {
+  sendBalanceSheet(id: number): Observable<any>  {
 
     const site = this.siteService.getAssignedSite();
 
@@ -72,7 +75,7 @@ export class SendGridService {
 
     const endPoint = `SendBalanceSheet`
 
-    const parameters = ``
+    const parameters = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -80,19 +83,40 @@ export class SendGridService {
 
   }
 
-  sendOrder(id: number, history: boolean, emailTo: string, customerName: string) {
+  sendOrder(id: number, history: boolean, emailTo: string, customerName: string): Observable<any> {
 
     const site = this.siteService.getAssignedSite()
 
     const controller =  "/SendGrid/"
 
-    const endPoint = `sendTEstEmail`
+    const endPoint = `sendOrder`
 
-    const parameters = `?id=${id}&history=${history}&emailTo=${emailTo}&`
+    const parameters = `?id=${id}&history=${history}&emailTo=${emailTo}&emailReceiverName=${customerName}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.get<any>(url)
 
   }
+
+  sendSalesReport(id: number, dateFrom:string, dateTo: string): Observable<any> {
+
+    const site = this.siteService.getAssignedSite()
+
+    const controller =  "/SendGrid/"
+
+    const endPoint = `sendSalesReport`
+
+    const parameters = `?id=${id}&dateFrom=${dateFrom}&dateTo=${dateTo}&`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>(url)
+
+  }
+
+  notify(message: string, title: string) {
+    this.matSnack.open(message, title, {duration:1000})
+  }
+
 }

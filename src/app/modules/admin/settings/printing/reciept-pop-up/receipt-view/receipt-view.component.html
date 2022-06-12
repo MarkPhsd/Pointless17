@@ -1,4 +1,5 @@
 <div class="buttons-grid">
+
   <div>
     <button mat-button (click)="print()">
       <div *ngIf="printerName">
@@ -20,25 +21,37 @@
   </div>
 </div>
 
-<div class="mat-card-white" *ngIf="receiptLayoutSetting">
-
-    <div *ngIf="headerText &&  itemsText"
-          class="border-section">
-      <app-receipt-layout #printsection id="printsection"
-                          [headerText]="headerText"
-                          [footerText]="footerText"
-                          [itemText]="itemsText"
-                          [printerWidth]="receiptLayoutSetting.option9"
-                          [paymentsText]="paymentsText"
-                          [subFooterText]="subFooterText"
-                          [items]="items"
-                          [order]="orders"
-                          [payments]="payments"
-                          [orderType]="orderTypes"
-                          [testdata]="false"
-                          [liveEdit]="false"
-                          [styles]="receiptStyles">
-       </app-receipt-layout>
-    </div>
+<div class="mat-card-white" >
+  <ng-container>
+    <ng-container [ngTemplateOutlet]="currentView"></ng-container>
+  </ng-container>
 </div>
+
+<ng-template #receipt>
+  <div *ngIf="receiptLayoutSetting && headerText &&  itemsText"
+       class="border-section">
+    <app-receipt-layout #printsection id="printsection"
+                      [headerText]="headerText"
+                      [footerText]="footerText"
+                      [itemText]="itemsText"
+                      [printerWidth]="receiptLayoutSetting.option9"
+                      [paymentsText]="paymentsText"
+                      [subFooterText]="subFooterText"
+                      [items]="items"
+                      [order]="orders"
+                      [payments]="payments"
+                      [orderType]="orderTypes"
+                      [testdata]="false"
+                      [liveEdit]="false"
+                      [styles]="receiptStyles">
+    </app-receipt-layout>
+  </div>
+</ng-template>
+
+<ng-template #balanceSheet>
+<balance-sheet-view
+    #printsection id="printsection"
+    [disableAuditButton]="true">
+  </balance-sheet-view>
+</ng-template>
 

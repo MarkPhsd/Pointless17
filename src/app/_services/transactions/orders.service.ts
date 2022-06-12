@@ -66,8 +66,12 @@ export class OrdersService {
   private _currentOrder       = new BehaviorSubject<IPOSOrder>(null);
   public currentOrder$        = this._currentOrder.asObservable();
   public currentOrder         = {} as IPOSOrder
+
   private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
   public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
+
+
+
 
   isApp                       = false;
   private orderClaimed                : boolean;
@@ -80,6 +84,8 @@ export class OrdersService {
   }
 
   get IsOrderClaimed() { return this.orderClaimed};
+
+
 
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);

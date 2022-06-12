@@ -10,22 +10,35 @@
   <div *ngIf="role === 'admin' || role === 'manager'">
 
     <mat-accordion class="example-headers-align" multi="false">
-      <mat-expansion-panel [expanded]="accordionStep === 0"
+      <mat-expansion-panel [expanded]="accordionStep == 0"
                            (opened)="setStep(0)"
                            hideToggle>
         <mat-expansion-panel-header>
+
           <mat-panel-title>
             Data
           </mat-panel-title>
+
           <mat-panel-description>
             Database and Settings
             <mat-icon>database</mat-icon>
           </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <div *ngIf="accordionStep ==0">
-          <app-database-schema></app-database-schema>
-        </div>
+        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+        <ng-template #accordionStep0>
+
+          <div *ngIf="accordionStep == 0">
+            <app-database-schema></app-database-schema>
+          </div>
+
+        </ng-template>
+
+        <ng-template #loading>
+          ..loading
+          <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+        </ng-template>
 
         <mat-action-row>
           <button mat-button color="warn"    (click)="prevStep()">Previous</button>
@@ -33,7 +46,7 @@
         </mat-action-row>
       </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep === 1"
+    <mat-expansion-panel [expanded]="accordionStep == 1"
                           (opened) ="setStep(1)"
                           hideToggle>
       <mat-expansion-panel-header>
@@ -46,27 +59,36 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div>
-        <button mat-raised-button
-                color  = "primary"
-                class  = "button-wide"
-                (click)= "togglePaymentMethodsList()">
-          <mat-icon>payment</mat-icon>
-          Payment Methods
-        </button>
-      </div>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
-      <div *ngIf="accordionStep ==1" class="grid-settings-2">
-        
-        <app-inventory-settings
-                [role]="role">
-        </app-inventory-settings>
-      </div>
+      <ng-template #accordionStep1>
 
-      <div>
-  
-        <app-software-settings></app-software-settings>
-      </div>
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class  = "button-wide"
+                  (click)= "togglePaymentMethodsList()">
+            <mat-icon>payment</mat-icon>
+            Payment Methods
+          </button>
+        </div>
+
+        <div *ngIf="accordionStep ==1" class="grid-settings-2">
+          <app-inventory-settings
+                  [role]="role">
+          </app-inventory-settings>
+        </div>
+
+        <div>
+          <app-software-settings></app-software-settings>
+        </div>
+
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
@@ -75,28 +97,40 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep === 2"
+    <mat-expansion-panel [expanded]="accordionStep == 2"
                          (opened)="setStep(2)"
                          hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            Authorizations and Access
-          </mat-panel-title>
-          <mat-panel-description>
-             Behavior control and access to system features.
-            <mat-icon>menu</mat-icon>
-          </mat-panel-description>
-        </mat-expansion-panel-header>
 
-      <button mat-raised-button color="primary" (click)="openMenuManager()">Menus</button>
-      <button mat-raise-button color="primary" (click)="functionGroups()">Function Groups</button>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Authorizations and Access
+        </mat-panel-title>
+        <mat-panel-description>
+            Behavior control and access to system features.
+          <mat-icon>menu</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+      <ng-template #accordionStep2>
+        <button mat-raised-button color="primary" (click)="openMenuManager()">Menus</button>
+        <button mat-raise-button color="primary" (click)="functionGroups()">Function Groups</button>
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
+
       <mat-action-row>
         <button mat-button color="warn"    (click)="prevStep()">Previous</button>
         <button mat-button color="primary" (click)="nextStep()">Next</button>
       </mat-action-row>
+
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep === 4" (opened)="setStep(4)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep == 4" (opened)="setStep(4)" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Printer
@@ -107,18 +141,27 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <span *ngIf="accordionStep == 4">
-        <app-installed-printers></app-installed-printers>
-      </span>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
-      <mat-action-row>
-        <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
-      </mat-action-row>
+      <ng-template #accordionStep4>
+        <span *ngIf="accordionStep == 4">
+          <app-installed-printers></app-installed-printers>
+        </span>
+
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+          <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep === 5" (opened)="setStep(5)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep == 5" (opened)="setStep(5)" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
           Geo Location
@@ -129,18 +172,28 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div  *ngIf="accordionStep ==5" >
-        <app-ionic-geo-location></app-ionic-geo-location>
-      </div>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
-      <mat-action-row>
-        <button mat-button color="warn"    (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
-      </mat-action-row>
+      <ng-template #accordionStep5>
 
+        <div  *ngIf="accordionStep == 5" >
+          <app-ionic-geo-location></app-ionic-geo-location>
+        </div>
+
+        <mat-action-row>
+          <button mat-button color="warn"    (click)="prevStep()">Previous</button>
+          <button mat-button color="primary" (click)="nextStep()">Next</button>
+        </mat-action-row>
+
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep === 6" (opened)="setStep(6)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep == 6" (opened)="setStep(6)" hideToggle>
       <mat-expansion-panel-header>
           <mat-panel-title>
             Credit Card Processing
@@ -150,25 +203,35 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div  *ngIf="accordionStep ==6" >
-        <div *ngIf="role === 'admin'">
-          <button mat-button color="accent"
-                  (click)="gotoPayments()">
-                  <mat-icon>settings</mat-icon> Settings
-          </button>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+      <ng-template #accordionStep6>
+
+        <div  *ngIf="accordionStep == 6" >
+          <div *ngIf="role === 'admin'">
+            <button mat-button color="accent"
+                    (click)="gotoPayments()">
+                    <mat-icon>settings</mat-icon> Settings
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div>
-        <app-dsiemvelectron>NetEpay Settings for Windows</app-dsiemvelectron>
-      </div>
+        <div>
+          <app-dsiemvelectron>NetEpay Settings for Windows</app-dsiemvelectron>
+        </div>
 
-      <div><app-dsi-emvpayment></app-dsi-emvpayment></div>
+        <div><app-dsi-emvpayment></app-dsi-emvpayment></div>
 
-      <div>
-        <app-stripe-settings>Stripe API Settings</app-stripe-settings>
-      </div>
+        <div>
+          <app-stripe-settings>Stripe API Settings</app-stripe-settings>
+        </div>
 
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
 
       <mat-action-row>
         <button mat-button color="warn"    (click)="prevStep()">Previous</button>
@@ -177,7 +240,7 @@
 
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="accordionStep === 7" (opened)="setStep(7)" hideToggle>
+    <mat-expansion-panel [expanded]="accordionStep == 7" (opened)="setStep(7)" hideToggle>
       <mat-expansion-panel-header>
           <mat-panel-title>
             Device Info
@@ -187,9 +250,21 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <div  *ngIf="accordionStep ==7" >
-        <app-device-info></app-device-info>
-      </div>
+        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+      <ng-template #accordionStep6>
+
+        <div  *ngIf="accordionStep == 7" >
+          <app-device-info></app-device-info>
+        </div>
+
+      </ng-template>
+
+      <ng-template #loading>
+        ..loading
+        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
+      </ng-template>
+
 
       <mat-action-row>
         <button mat-button color="warn"    (click)="prevStep()">Previous</button>

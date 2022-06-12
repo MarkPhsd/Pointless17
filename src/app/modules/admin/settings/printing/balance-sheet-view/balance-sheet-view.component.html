@@ -1,0 +1,15 @@
+<h3>Balance Sheet</h3>
+
+<div>
+  <balance-sheet-header-view
+    [disableAuditButton]="true"
+    [sheetType]="sheetType"
+    [sheet]="sheet">
+  </balance-sheet-header-view>
+</div>
+
+<div>
+  <balance-sheet-calculations-view
+    [sheet]="sheet">
+  </balance-sheet-calculations-view>
+</div>

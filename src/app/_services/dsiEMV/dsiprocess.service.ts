@@ -51,6 +51,23 @@ export class DSIProcessService {
     return commandResponse;
   }
 
+  async emvBatch() : Promise<RStream> {
+
+    const item  = localStorage.getItem('DSIEMVSettings');
+    const reset               = await this.pinPadReset(); //ignore response for now.
+    let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
+    const commandResponse =  await this.dsi.emvBatch()
+    return commandResponse;
+  }
+
+  async emvBatchInquire() : Promise<Transaction> {
+
+    const item  = localStorage.getItem('DSIEMVSettings');
+    const reset               = await this.pinPadReset(); //ignore response for now.
+    let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
+    const commandResponse =  await this.dsi.getBatchInquireValues()
+    return commandResponse;
+  }
   async emvVoid(posPayment: IPOSPayment ): Promise<RStream> {
 
     try {
@@ -165,8 +182,8 @@ export class DSIProcessService {
 
   async emvTransaction(tranCode: string, amount: number,
                        paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
-    const item  = localStorage.getItem('DSIEMVSettings');
 
+    const item  = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }
 
     const transactiontemp     = JSON.parse(item) as Transaction;
@@ -177,7 +194,6 @@ export class DSIProcessService {
     }
 
     const reset               = await this.pinPadReset(); //ignore response for now.
-
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
     transaction.TranCode      = tranCode;

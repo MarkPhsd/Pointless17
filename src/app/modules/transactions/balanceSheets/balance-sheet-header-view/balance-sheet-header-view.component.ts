@@ -18,6 +18,7 @@ export class BalanceSheetHeaderViewComponent implements OnInit,OnDestroy  {
 
   @Input() sheet: any;
   @Input() sheetType = '';
+  @Input() disableAuditButton: boolean;
 
   employees$      :   Observable<IItemBasic[]>;
   paymentMethod$  :   Observable<IPaymentMethod[]>;

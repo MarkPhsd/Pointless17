@@ -1,5 +1,4 @@
-import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, RendererStyleFlags2 } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input } from '@angular/core';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -8,7 +7,6 @@ import { IProduct, ISetting } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import * as  printJS from "print-js";
 import { RenderingService } from 'src/app/_services/system/rendering.service';
-// import { SafeHtmlPipe } from 'src/app/_pipes/safe-html.pipe';
 import { Observable } from 'rxjs';
 import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printing.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -66,8 +64,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   interpolatedPaymentsTexts : string;
   interpolatedSubFooterTexts : string;
 
-  @ViewChild('canvas') canvas: ElementRef;
-  @ViewChild('labelImage') labelImageCanvas: ElementRef;
+  @ViewChild('canvas')       canvas: ElementRef;
+  @ViewChild('labelImage')   labelImageCanvas: ElementRef;
   @ViewChild('printsection') printsection: ElementRef;
   @ViewChild('receiptImage') receiptImage: ElementRef;
 
@@ -128,8 +126,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private renderingService      : RenderingService,
               private platFormService       : PlatformService,
               private icpService            : IPCService,
-
-              // private cs : ConsoleService,
   ) {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
@@ -139,8 +135,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   async ngOnInit() {
     this.getPrinterAssignment();
     this.listPrinters();
-
   }
+
   async ngAfterViewInit() {
     this.initDefaultLayouts()
   }
@@ -155,7 +151,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   async  getAndroidPrinterAssignment() {
-
     if (this.platFormService.androidApp) {
       this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
       this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
@@ -195,7 +190,22 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       }
       this.refreshSelections();
     } catch (error) {
-      // this.cs.console.log(error)
+    }
+  }
+
+  async refreshReceipt(id: any) {
+    if (!id || id == 0) { return }
+
+    try {
+      this.receiptLayoutSetting   = null;
+      const site                  = this.siteService.getAssignedSite();
+      const receipt$              = this.settingService.getSetting(site, id)
+      receipt$.subscribe(data => {
+        this.receiptID = id
+        this.initSubComponent( data, this.receiptStyles )
+      })
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -210,23 +220,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.receiptList$     =  this.settingService.getReceipts(site);
     this.labelList$       =  this.settingService.getLabels(site);
     this.prepReceiptList$ =  this.settingService.getPrepReceipts(site);
-  }
-
-  async refreshReceipt(id: any) {
-    if (!id || id == 0) { return }
-
-    try {
-      this.receiptLayoutSetting   = null;
-      const site                  = this.siteService.getAssignedSite();
-      const receipt$              = this.settingService.getSetting(site, id)
-      receipt$.subscribe(data => {
-        this.receiptID = id
-        // console.log('receiptPromise', data)
-        this.initSubComponent( data, this.receiptStyles )
-      })
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   saveAsReceiptDefault(id: number) {
@@ -260,7 +253,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   // moved to labvel view selector
-  async refreshLabelImage(id: any) {
+  refreshLabelImage(id: any) {
     const site = this.siteService.getAssignedSite();
     const zplTemp$ = this.settingService.getSetting(site, id);
     zplTemp$.subscribe(data => {
@@ -331,7 +324,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     const site = this.siteService.getAssignedSite();
     const prtContent     = document.getElementById('printsection');
     const content        = `${prtContent.innerHTML}`
-    const loadView = ({title,scriptUrl}) => {
+    const loadView       = ({title,scriptUrl}) => {
       return (`
         <!DOCTYPE html>
         <html>
@@ -365,9 +358,9 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       const styles =  this.receiptStyles.text;
     }
     const htmlHeader = `<!DOCTYPE html <html><head>
-    <style>${styles}</style>
-    <title>print</title>
-    </head> <body>`
+                        <style>${styles}</style>
+                        <title>print</title>
+                        </head> <body>`
     const htmlFooter = '</body> </html>'
     const html = `${htmlHeader}  ${htmlContent} ${htmlFooter}`
     return html
@@ -383,7 +376,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     //passorder info to new method PrintAndroidReceipt.'
     //save selected printer to local storage
     //set saved printer name /bt id to selection on load.
-    //
     const order = this.fakeData.getPOSOrderContents()
     this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
   }
@@ -392,12 +384,9 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     //this method uses an existing file within the assests folder.
     // let img = new Image();
     // img.src = '/assets/receipt.png';
-
     // let img = new Image();
     // img.src = '/assets/receipt.jpg';
-
     // const img = this.putImageOnScreen();
-
     // if (!img) {
     //   this.snack.open('no image created', 'fail')
     //   return
@@ -414,14 +403,13 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
         img.src = data;
         this.printingAndroidService.printAndroidImage( img , this.btPrinter)
       })
+
     return
+
     // img.src = '/assests/icons/icon-72x72.png'
-
     // this.printingService.printAndroidImage( img, this.btPrinter)
-
     // return
     //we need to generate the iamge from the printSection
-
     // const options = { background: 'white', height: 1000, width: 600 };
 
     domtoimage.toPng(document.getElementById('printImage') , options).then(
@@ -473,7 +461,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   printTestTolabelPrinter() {
     let printerName: string;
     if (this.printerName) { printerName = this.printerName  }
-    if (!printerName) { printerName = "ZebraLabel" }
+    if (!printerName) { printerName = 'ZebraLabel' }
     this.printToPrinter(printerName)
   }
 
@@ -531,7 +519,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   editReceiptStyles() {
-    //editStyles
     this.editCssStyles('receiptStyles')
   }
 
@@ -540,7 +527,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     if (!name) { return }
     const obs$ = this.settingService.getSettingByName(site, name);
     obs$.subscribe( data => {
-      console.log('data', data)
       let dialogRef: any;
       dialogRef = this.dialog.open(EditCSSStylesComponent,
           { width:        '800px',
@@ -607,7 +593,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.electronReceiptPrinter = event
     const site = this.siteService.getAssignedSite();
     const printerSettingName = 'defaultElectronReceiptPrinter'
-    this.settingService.getSettingByName(site, printerSettingName).subscribe( data=> {
+    this.settingService.getSettingByName(site, printerSettingName).subscribe( data => {
         if (!this.electronSetting) {
           this.electronSetting = {} as ISetting;
         }
@@ -650,7 +636,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       this.electronLabel        = data.value;
     })
   }
-
 
   setAndroidReceiptPrinter(event) {
     console.log('')

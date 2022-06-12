@@ -65,6 +65,10 @@ export class EditButtonsStandardComponent  {
     this.outPutPrint.emit('true')
   }
 
+  email() {
+    this.outPutEmail.emit('demo')
+  }
+
   copy() {
     this.outputCopy.emit('demo')
   }
@@ -81,9 +85,7 @@ export class EditButtonsStandardComponent  {
     this.outputupdatedeleteItem.emit('demo')
   }
 
-  email() {
-    this.outPutEmail.emit('demo')
-  }
+
 
   onCancel() {
     this.outputupdateonCancel.emit('demo')
