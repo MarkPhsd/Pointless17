@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   spinnerLoading: boolean;
   compName   : string;
   company    = {} as ICompany;
-  logo       = `https://pointlesspos.com/download/logo.png`;
+  logo       = `assets/images/logo.png`;
 
   loading    = false;
   submitted  = false;

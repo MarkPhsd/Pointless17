@@ -52,6 +52,18 @@ export class ApiStoredValueComponent implements OnInit {
     this.isApp = this.platformService.isApp();
   }
 
+
+  typeHttps() {
+    const value = this.inputForm.controls['apiUrl'].value;
+    this.inputForm.patchValue({apiUrl: 'https://'})
+  }
+  typeAPI() {
+    //apiUrl
+    const value = this.inputForm.controls['apiUrl'].value;
+    let url = `${value}/api`
+    this.inputForm.patchValue({apiUrl: url})
+  }
+
   //for electrononly
   initRender() {
     if (!this.electronService.isElectronApp) { return }

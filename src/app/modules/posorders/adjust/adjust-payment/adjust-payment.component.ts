@@ -46,17 +46,15 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   constructor( private  pOSPaymentService     : POSPaymentService,
                 private paymentsMethodsService: PaymentsMethodsProcessService,
-                private inventoryAssignmentService:InventoryAssignmentService,
                 private storeCreditMethodService : StoreCreditMethodsService,
                 public  route                 : ActivatedRoute,
                 private siteService           : SitesService,
                 private orderService          : OrdersService,
                 private matSnackBar           : MatSnackBar,
-                private storeCreditService: StoreCreditService,
+                private storeCreditService    : StoreCreditService,
                 private userAuthorization     : UserAuthorizationService,
                 private adjustMentService     : AdjustmentReasonsService,
                 private productEditButonService: ProductEditButtonService,
-                private requestMessageService : RequestMessageService,
                 private manifestService       : ManifestInventoryService,
                 private dialogRef             : MatDialogRef<AdjustPaymentComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: OperationWithAction,
@@ -76,10 +74,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
         return
       }
 
-      this.resultAction = data
+      this.resultAction  = data
       this.pOSPaymentService.updateItemWithAction(data);
-      this.list$  = this.adjustMentService.getReasonsByFilter(site, action);
-      this.payment = data.payment;
+      this.list$         = this.adjustMentService.getReasonsByFilter(site, action);
+      this.payment       = data.payment;
       this.pOSPaymentService.getPOSPayment(site,this.payment.id, false).subscribe(data => {
         this.voidPayment = data;
       })
@@ -88,10 +86,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   closeDialog(payment: IPOSPayment , method: IPaymentMethod ) {
+    console.log('closeDialog', payment, method)
     if (payment) {
       if (method && (method.isCreditCard || method.wic || method.ebt )) {
-        const data = { payment: payment, id: payment.id }
         if (method.isCreditCard) {
+          const data = { payment: payment, id: payment.id, voidPayment: payment }
           this.productEditButonService.openDSIEMVTransaction(data)
         }
       }
@@ -153,10 +152,10 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       let response$: Observable<OperationWithAction>;
       if (this.resultAction) {
         if (method) {
-
           if (method.isCreditCard) {
             console.log(method.isCreditCard, method.name)
-            if (this.isDSIEmvPayment()) {
+
+            if (this.isDSIEmvPayment) {
               this.voidDSIEmvPayment();
               return ;
             }
@@ -178,19 +177,20 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
       if (voidPayment) {
-        this.paymentsMethodsService.processDSIEMVCreditVoid(this.voidPayment)
+        console.log('voidPayment', voidPayment)
+        this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
       }
     }
   }
 
-  isDSIEmvPayment() {
+ get isDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
-      if (voidPayment.entryMethod === 'CHIP READ/CONTACT') {
+      // if (voidPayment.entryMethod === 'CHIP READ/CONTACT') {
         if (voidPayment.trancode ===  "EMVSale") {
           return true
         }
-      }
+      // }
     }
   }
 
@@ -225,6 +225,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           this.closeDialog(response.payment, response.paymentMethod);
           return this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce)
         }
+
         return EMPTY
       }
     )).subscribe(data => {

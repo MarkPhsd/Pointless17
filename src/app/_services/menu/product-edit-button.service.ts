@@ -460,7 +460,7 @@ export class ProductEditButtonService {
   }
 
   openVoidPaymentDialog(payment: IPOSPayment ) {
-    let dialogRef: any;
+     let dialogRef: any;
     // const site = this.siteService.getAssignedSite();
     // this.menuService.getProduct(site, id).subscribe( data=> {
     //   const productTypeID = data.prodModifierType

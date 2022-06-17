@@ -48,12 +48,13 @@ export class DSIEMVTransactionComponent implements OnInit {
   {
 
     if (data)  {
-      this.payment = data.data;
-      this.amount  = data.amount;
-      this.action  = data.action
+      this.payment = data?.data;
+      this.amount  = data?.amount;
+      this.action  = data?.action
       this.transactiondata = data;
-      this.manualPrompt = data.manualPrompt
-      if (data.action == 2) {
+      this.manualPrompt = data?.manualPrompt
+      if (data?.action == 2) {
+        this.payment = data.voidPayment;
         this.voidPayment = data.voidPayment
       }
     }
@@ -107,6 +108,7 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.processSaleCard();
       return
     }
+
     if (this.action == 2) {
       this.processVoidCard();
       return
@@ -141,7 +143,6 @@ export class DSIEMVTransactionComponent implements OnInit {
     const payment = this.payment
     if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
-    console.log('process sale card', response)
     this.processResults(response)
   }
 

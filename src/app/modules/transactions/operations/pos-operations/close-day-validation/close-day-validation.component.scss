@@ -1,0 +1,14 @@
+button { 
+  margin: 10px;
+}
+
+.grid-buttons {
+  --gap: 15px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+  align-items: flex-start;
+
+  // justify-content: left;
+  // align-content: left;
+}

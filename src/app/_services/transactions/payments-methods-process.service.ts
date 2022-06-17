@@ -120,8 +120,8 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     //so we just have to request the ID, and then we can establish everything after that.
     const site = this.sitesService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
-    posPayment.orderID = payment.id;
-    this.dialogRef = this.dialogOptions.openDSIEMVTransaction({voidPayment: payment, action: 2});
+    posPayment.id = payment.id;
+    this.dialogRef = this.dialogOptions.openDSIEMVTransaction({payment: payment, voidPayment: payment, action: 2});
     this._dialog.next(this.dialogRef)
 
   }

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, TemplateRef } from '@angular/core';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -45,6 +45,13 @@ import { IPCService } from 'src/app/_services/system/ipc.service';
   // providers: [ SafeHtmlPipe ]
 })
 export class InstalledPrintersComponent implements OnInit, AfterViewInit {
+
+  @ViewChild('webPrintingTemplate') webPrintingTemplate: TemplateRef<any>;
+  @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
+  @ViewChild('electronPrintingTemplate') electronPrintingTemplate: TemplateRef<any>;
+
+  @ViewChild('electronPrintingDesignTemplate') electronPrintingDesignTemplate: TemplateRef<any>;
+  
 
   @Input() printerName     : string;
   @Input() labelID         : number;
@@ -265,6 +272,35 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
       }
     )
   }
+
+  get  isAndroidPrintingTemplate() { 
+    if (this.platForm === 'android' ) {
+      return this.androidPrintingTemplate
+    } 
+    return null
+  }
+
+  get  isWebPrintingTemplate() { 
+    if (this.platForm === 'web' && (!this.isElectronApp)) {
+      return this.webPrintingTemplate
+    } 
+    return null
+  }
+
+  get  isElectronPrintingTemplate() { 
+    if (this.isElectronApp) {
+      return this.electronPrintingTemplate
+    } 
+    return null
+  }
+
+    get  isElectronPrintingDesignTemplate() { 
+    if (this.isElectronApp) {
+      return this.electronPrintingDesignTemplate
+    } 
+    return null
+  }
+  
 
   async applyStyles() {
     const site                = this.siteService.getAssignedSite();

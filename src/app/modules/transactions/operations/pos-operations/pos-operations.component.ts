@@ -5,15 +5,15 @@ import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactio
 import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ITaxReport} from 'src/app/_services/reporting/reporting-items-sales.service';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
-import { Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
-
+import { BatchClose, BatchSummary, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 
 @Component({
   selector: 'pos-operations',
@@ -42,8 +42,14 @@ export class PosOperationsComponent implements OnInit {
   iBalanceSheet: IBalanceSheet;
   zrunID: any;
   dsiEMVSettings      : Transaction;
-  batchInquireResponse: Transaction;
+  batchSummary: any;
+  batchClose: BatchClose;
 
+  closingCheck$ : Observable<ICanCloseOrder>;
+
+  get isElectronApp() {
+    return this.platFormService.isAppElectron
+  }
   constructor(
     private siteService        : SitesService,
     private transferDataService: TransferDataService,
@@ -54,9 +60,7 @@ export class PosOperationsComponent implements OnInit {
     private printingService    : PrintingService,
     private dsiProcess         : DSIProcessService,
     private printingAndroidService: PrintingAndroidService,
-
   ) {
-
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
     }
@@ -69,12 +73,19 @@ export class PosOperationsComponent implements OnInit {
     }
     this.getUser();
     this.refreshSales();
+    this.refreshClosingCheck();
+  }
+
+  refreshClosingCheck() {
+    const site = this.siteService.getAssignedSite();
+    this.closingCheck$ = this.transferDataService.canCloseDay(site)
   }
 
   refreshInfo(){
     this.localSite = {} as ISite;
     this.getUser();
     this.refreshSales();
+    this.refreshClosingCheck();
   }
 
   addDates(StartDate: any, NumberOfDays : number): Date{
@@ -103,18 +114,26 @@ export class PosOperationsComponent implements OnInit {
     this.localSite = this.siteService.getAssignedSite();
   }
 
-  async emvDataCapBatchCards() {
-    this.batchInquireResponse  = null;
-    await this.dsiProcess.emvReset();
+  async emvDatacapBatchCards(): Promise<boolean> {
+    try {
+      this.batchSummary  = null;
+
+      const response =  await this.dsiProcess.emvBatch()
+      this.batchClose = response
+      return true
+    } catch (error) {
+      console.log('error batch', error)
+    }
+    return false
   }
 
   async  emvDataCapBatchInquire() {
     //dsiProcess
-    const response = await this.dsiProcess.emvBatchInquire();
-    this.batchInquireResponse = response;
+    const response    = await this.dsiProcess.emvBatchInquire();
+    this.batchSummary = response;
   }
 
-  closeDay() {
+  async closeDay() {
 
     const result = window.confirm('Are you sure you want to close the day.');
     if (!result) {return}
@@ -124,6 +143,10 @@ export class PosOperationsComponent implements OnInit {
 
     //run through checks. do all the closing checks on theWebapi.
     //return a can or not and reason why.
+    const batchResult =  await this.emvDatacapBatchCards();
+    const answer = window.confirm('Batch error, did you want to continue closing? You can batch separately.')
+    if (!answer) { return }
+
     const closingCheck$ = this.transferDataService.canCloseDay(site)
     this.balanceSheetsClosed = ''
     closingCheck$.pipe(
@@ -132,7 +155,9 @@ export class PosOperationsComponent implements OnInit {
         //if it can't then return what is told from the webapi
         if (data){
           if (!data.allowClose) {
-            this.closeResult = `Day not closed.  Open Printed Orders ${data.openPrintedOrders.length}.  Open Paid Orders ${data.openPaidOrders.length}.  Open Balance Sheets ${data.openBalanceSheets.length}`
+            this.closeResult = `Day not closed.  Open Printed Orders ${data.openPrintedOrders.length}.
+                                Open Paid Orders ${data.openPaidOrders.length}.
+                                Open Balance Sheets ${data.openBalanceSheets.length}`
             const result = this.orderMethodsService.notifyEvent(`Date not closed. ${data}`, 'Alert');
             this.canCloseOrderResults = data
             this.runningClose = false
@@ -148,6 +173,7 @@ export class PosOperationsComponent implements OnInit {
             return this.balanceSheetService.closeAllSheets(site)
           }
       )).subscribe(data => {
+
         this.balanceSheetsClosed = 'All balance sheets closed'
         this.runningClose = false;
     })
@@ -166,7 +192,6 @@ export class PosOperationsComponent implements OnInit {
     if (this.platFormService.androidApp) {this.printAndroid();}
     if (this.platFormService.webMode)    { this.convertToPDF();}
   }
-
 
   closeAllSheets() {
     const site = this.siteService.getAssignedSite();
@@ -209,7 +234,6 @@ export class PosOperationsComponent implements OnInit {
     return file
   }
 
-
   convertToPDF() {
     console.log('convertToPdf')
     this.printingService.convertToPDF( document.getElementById('printsection') )
@@ -237,6 +261,7 @@ export class PosOperationsComponent implements OnInit {
   setPrinter(event) {
     this.printerName = event;
   }
+
   savePDF() {
     this.printingService.savePDF(this.printsection.nativeElement, this)
   }

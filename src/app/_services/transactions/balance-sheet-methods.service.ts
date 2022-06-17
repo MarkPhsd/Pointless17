@@ -87,7 +87,7 @@ export class BalanceSheetMethodsService {
       // this.getCurrentBalanceSheet()
       return this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
         switchMap( data => {
-          console.log('Returning balance sheet', data)
+          // console.log('Returning balance sheet', data)
           if (data.id == 0 )  {
              return of({sheet: null, user: user})
           }

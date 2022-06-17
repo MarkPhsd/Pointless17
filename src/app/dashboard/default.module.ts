@@ -289,6 +289,7 @@ import { StoreCreditListComponent } from '../modules/admin/store-credit/store-cr
 import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/store-credit-pop-up/store-credit-pop-up.component';
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 import { BalanceSheetViewComponent } from '../modules/admin/settings/printing/balance-sheet-view/balance-sheet-view.component';
+import { CloseDayValidationComponent } from '../modules/transactions/operations/pos-operations/close-day-validation/close-day-validation.component';
 
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -327,6 +328,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ClientTypeSelectionComponent,
     ClientTypeListComponent,
     ClientTypeEditComponent,
+    CloseDayValidationComponent,
     CSVImportComponent,
     CompanyEditComponent,
     DatabaseSchemaComponent,

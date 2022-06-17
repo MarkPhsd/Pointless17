@@ -1,0 +1,41 @@
+<mat-card>
+
+  <mat-card-subtitle>
+    <div *ngIf="closeDayValidation.allowClose">Ready to Close</div>
+    <div *ngIf="!closeDayValidation.allowClose">Resolutions required to close.</div>
+  </mat-card-subtitle>
+
+  <mat-card-content>
+    
+    <div *ngIf="closeDayValidation.openBalanceSheets">
+      <mat-label>Open Balance Sheets</mat-label>
+      <div class="grid-buttons" >
+          <div *ngFor="let item of closeDayValidation.openBalanceSheets">
+          <button mat-raised-button color="warn" (click)="openBalanceSheet(item.id)">
+            {{item?.deviceName}} - {{item?.balanceSheetEmployee?.lastName}}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="closeDayValidation.openPaidOrders">
+      <mat-label>Open Partial Paid Orders</mat-label>
+      <div class="grid-buttons" *ngIf="closeDayValidation.openPaidOrders">
+        <div *ngFor="let item of closeDayValidation.openPaidOrders">
+          <button mat-raised-button color="warn" (click)="setOrder(item.id)">
+          {{item.id}}</button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="closeDayValidation.openPrintedOrders">
+      <mat-label>Open Prepared Orders</mat-label>
+      <div class="grid-buttons" *ngIf="closeDayValidation.openPrintedOrders">
+        <div *ngFor="let item of closeDayValidation.openPrintedOrders">
+          <button mat-raised-button color="warn" (click)="setOrder(item.id)">
+            {{item.id}}</button>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

@@ -62,7 +62,6 @@ export class ChangeDueComponent   {
   }
 
   clearSubscriptions() {
-    // this.closeOrder();
     this.orderService.updateOrderSubscription(null) ;
     this.toolbarServiceUI.updateOrderBar(false);
   }
@@ -84,7 +83,7 @@ export class ChangeDueComponent   {
       console.log('value', value)
       this.tip( ( amount )  )
     }
-   }
+  }
 
   specifiedTip(amount: number) {
     const payment = this.payment

@@ -26,8 +26,10 @@ export class DefaultReceiptSelectorComponent implements OnInit {
     if (this.receiptID) {
       const site = this.siteService.getAssignedSite();
       const item$ = this.settingsService.getSetting(site, this.receiptID).subscribe(data=> {
-        this.receipt = data;
-        this.receiptName = data.value
+        if (data) {
+          this.receipt = data;
+          this.receiptName = data?.value
+        }
       })
     }
   }

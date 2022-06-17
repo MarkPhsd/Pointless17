@@ -172,7 +172,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private uiSettingsService : UISettingsService,
               private settingService: SettingsService,
               private productEditButtonService: ProductEditButtonService,
-
               // private printingService : Printing
               private el                : ElementRef) {
 
@@ -348,7 +347,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-
   clearOrder(event) {
     this.orderMethodService.clearOrder()
   }
@@ -367,8 +365,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.toolbarUIService.resetOrderBar(true)
   }
 
-   voidOrder() {
-   this.productEditButtonService.openVoidOrderDialog(this.order)
+  voidOrder() {
+     this.productEditButtonService.openVoidOrderDialog(this.order)
   }
 
   async deleteOrder(event) {

@@ -29,13 +29,13 @@
         Remaining Balance
       </div>
       <div class="totals">
-        {{order?.balanceRemaining | currency}}
+        {{ order?.balanceRemaining | currency }}
       </div>
       <div>
         Payments
       </div>
       <div class="totals">
-        {{order?.totalPayments | currency}}
+        {{ order?.totalPayments | currency }}
       </div>
     </div>
   </mat-card-subtitle>
@@ -81,13 +81,13 @@
                     ><mat-icon>print</mat-icon></button>
           </div>
 
-          <div *ngIf="!item.voidReason">
+          <div *ngIf="!item.voidReason || item.voidReason == 0">
             <button mat-button
                     class="grid-item-button"
                     (click)="voidPayment(item)"
                     ><mat-icon>delete</mat-icon>Void</button>
           </div>
-          <div *ngIf="item.voidReason" >
+          <div *ngIf="item.voidReason && item.voidReason != 0" >
             <mat-label class="void-info">
               {{item.voidReason}}
             </mat-label>

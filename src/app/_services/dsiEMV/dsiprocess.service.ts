@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
-import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction, CmdResponse, TranResponse } from './dsiemvtransactions.service';
+import { Account, Amount, RStream, DSIEMVTransactionsService, Transaction, CmdResponse, TranResponse, BatchSummary, BatchClose } from './dsiemvtransactions.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -10,6 +11,7 @@ export class DSIProcessService {
 
   constructor(
     private orderMethodsService: OrderMethodsService,
+    private matSnack        : MatSnackBar,
     private dsi : DSIEMVTransactionsService) { }
 
   initTransaction(): Transaction {
@@ -26,7 +28,6 @@ export class DSIProcessService {
     transaction.SecureDevice  =dsiSettings.secureDevice;
     transaction.ComPort       =dsiSettings.comPort;
     transaction.SequenceNo    ='0010010010'
-
     return transaction
   }
 
@@ -51,23 +52,50 @@ export class DSIProcessService {
     return commandResponse;
   }
 
-  async emvBatch() : Promise<RStream> {
+  async emvBatch() : Promise<BatchClose> {
 
+    const item                = localStorage.getItem('DSIEMVSettings');
+
+    const reset               = await this.pinPadReset(); //ignore response for now.
+
+    console.log('reset complete')
+
+    const batchSummary        = await this.emvBatchInquire()
+
+    // console.log('batchSummary', batchSummary)
+
+    let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
+
+    transaction               = this.initTransaction()
+
+    const  response =  await this.dsi.emvBatch(transaction, batchSummary)
+
+    // console.log('response', response)
+    // console.log('response RStream', response?.RStream)
+    // console.log('response BatchClose', response?.RStream?.BatchClose)
+
+    if (response) {
+      return  response?.RStream?.BatchClose
+    }
+
+    this.matSnack.open('Issue closing batch.', 'Alert', {duration: 1500})
+    return null
+  }
+
+  async emvBatchInquire() : Promise<BatchSummary> {
     const item  = localStorage.getItem('DSIEMVSettings');
     const reset               = await this.pinPadReset(); //ignore response for now.
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
-    const commandResponse =  await this.dsi.emvBatch()
-    return commandResponse;
+    transaction               = this.initTransaction()
+    const response            = await this.dsi.getBatchInquireValues(transaction)
+    if (response) {
+      return  response?.RStream?.BatchSummary
+    }
+    this.matSnack.open('Issue retrieving batch info.', 'Alert', {duration: 1500})
+    return null
   }
 
-  async emvBatchInquire() : Promise<Transaction> {
 
-    const item  = localStorage.getItem('DSIEMVSettings');
-    const reset               = await this.pinPadReset(); //ignore response for now.
-    let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
-    const commandResponse =  await this.dsi.getBatchInquireValues()
-    return commandResponse;
-  }
   async emvVoid(posPayment: IPOSPayment ): Promise<RStream> {
 
     try {
@@ -216,9 +244,8 @@ export class DSIProcessService {
       transaction.Amount.Gratuity = 'Prompt'
     }
 
-    console.log('emv transaction', transaction)
     const result =  await this.dsi.emvTransaction(transaction)
-    console.log('emv transaction', result)
+
     return result
   }
 

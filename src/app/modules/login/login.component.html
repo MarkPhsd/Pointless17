@@ -11,18 +11,18 @@
                      fxLayoutAlign="center center"
                      class="row-height">
 
-                    <div *ngIf="uiHomePageSetting"
+                    <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
                          class="logo"
                          (click)="setAPIAlt()">
                       <app-logo
                             [uiHomePageSetting] ="uiHomePageSetting"
                             [logoSize]          ="'large'"
-                            [logo] ="uiHomePageSetting.logoHomePage"
+                            [logo]              ="uiHomePageSetting.logoHomePage"
                       ></app-logo>
                     </div>
 
-                    <div *ngIf="!uiHomePageSetting">
-                      <img *ngIf="logo"
+                    <div *ngIf="!uiHomePageSetting && logo">
+                      <img  *ngIf="logo"
                             (click)="setAPIAlt()"
                             [src]="logo"
                             width="125px"
@@ -34,6 +34,7 @@
                         *ngIf="uiHomePageSetting">
                         {{uiHomePageSetting.displayCompanyName}}
                     </h2>
+
                 </div>
               </mat-card-title>
               <mat-card-content>

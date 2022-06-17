@@ -19,12 +19,12 @@
       <button mat-raised-button (click)="print()"> <mat-icon>print</mat-icon>Print</button>
     </span>
 
-    <span *ngIf="dsiEMVSettings">
-      <button mat-raised-button (click)="emvDataCapBatchCards()"> <mat-icon>print</mat-icon>Batch Close</button>
+    <span *ngIf="dsiEMVSettings && isElectronApp">
+      <button mat-raised-button (click)="emvDatacapBatchCards()"> <mat-icon>credit_card</mat-icon>Batch Close</button>
     </span>
 
-    <span *ngIf="dsiEMVSettings">
-      <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>print</mat-icon>Batch Inquire</button>
+    <span *ngIf="dsiEMVSettings && isElectronApp">
+      <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
     </span>
 
     <app-list-printers-electron
@@ -43,57 +43,42 @@
       {{closeResult}}
     </span>
 
-    <div *ngIf="batchInquireResponse">
-      <div class="grid-container">
-        <div>Batch No</div>
-        <div>{{batchInquireResponse.BatchNo}}</div>
-        <div>Net Batch Total</div>
-        <div>{{batchInquireResponse.NetBatchTotal}}</div>
-        <div>Batch Item Count</div>
-        <div>{{batchInquireResponse.BatchItemCount}}</div>
+    <div *ngIf="batchSummary  && isElectronApp">
+      <mat-card>
+        <mat-card-subtitle>Batch Inquire</mat-card-subtitle>
+        <div class="grid-container" >
+          <div>Batch No</div>
+          <div>{{batchSummary?.BatchNo}}</div>
+          <div>Net Batch Total</div>
+          <div>{{batchSummary?.NetBatchTotal}}</div>
+          <div>Batch Item Count</div>
+          <div>{{batchSummary?.BatchItemCount}}</div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div  *ngIf="batchClose  && isElectronApp">
+      <mat-card>
+        <mat-card-subtitle>Bath close summary</mat-card-subtitle>
+        <div class="grid-container">
+          <div>Batch No</div>
+          <div>{{batchClose?.BatchNo}}</div>
+          <div>Net Batch Total</div>
+          <div>{{batchClose?.NetBatchTotal | currency}}</div>
+          <div>Batch Item Count</div>
+          <div>{{batchClose?.BatchItemCount}}</div>
+        </div>
+      </mat-card>
+    </div>
+
+    <div *ngIf="closingCheck$ | async as closing">
+      <div>
+        <close-day-validation [closeDayValidation]="closing">
+        </close-day-validation>
       </div>
     </div>
 
-    <div *ngIf="canCloseOrderResults">
-
-      <div *ngIf="canCloseOrderResults.openPrintedOrders.length > 0">
-        <mat-card>
-          <mat-card-subtitle>Resolution required.</mat-card-subtitle>
-          <mat-card-content>
-
-            <div *ngIf="canCloseOrderResults.openPrintedOrders.length == 1">
-              There is {{canCloseOrderResults.openPrintedOrders.length}} order with printed items.
-            </div>
-            <div *ngIf="canCloseOrderResults.openPrintedOrders.length > 1">
-              There are {{canCloseOrderResults.openPrintedOrders.length}} orders with printed items.
-            </div>
-
-            <div *ngFor="let item of canCloseOrderResults.openPrintedOrders">
-              <button mat-raised-button color="warn" (click)="ordersWindow()">Resolve Open Orders with printed Items</button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <div *ngIf="canCloseOrderResults.openPaidOrders.length > 0">
-        <mat-card>
-          <mat-card-subtitle>Resolution required.</mat-card-subtitle>
-          <mat-card-content>
-            <div *ngIf="canCloseOrderResults.openPaidOrders.length == 1">
-              There is {{canCloseOrderResults.openPaidOrders.length }} order payments, but a non-zero balance.
-            </div>
-            <div *ngIf="canCloseOrderResults.openPaidOrders.length > 1">
-              There are {{canCloseOrderResults.openPaidOrders.length }} orders payments, but a non-zero balance.
-            </div>
-
-            <div *ngFor="let item of canCloseOrderResults.openPaidOrders">
-                <button mat-raised-button color="warn" (click)="ordersWindow()">Resolve</button>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-      </div>
-    </div>
+    <!-- <ng-template #checkingClosing>... validating closing procedures. </ng-template> -->
 
     <mat-divider></mat-divider>
   </mat-card-content>

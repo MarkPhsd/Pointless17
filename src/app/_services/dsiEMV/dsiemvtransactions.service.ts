@@ -10,6 +10,7 @@ export interface topLevel {
 }
 export interface TStream {
   Transaction: Transaction;
+  Admin      : Transaction;
 }
 
 export interface Transaction {
@@ -97,6 +98,13 @@ export interface BatchSummary {
   BatchNo: string;
   BatchItemCount: string;
   NetBatchTotal: string;
+}
+
+export interface BatchClose {
+	MerchantID: string;
+	BatchNo: string;
+	BatchItemCount: string;
+	NetBatchTotal: string;
 }
 
 export interface TranResponse {
@@ -268,36 +276,37 @@ export class DSIEMVTransactionsService implements OnDestroy {
     }
   }
 
-  async emvBatch(): Promise<RStream> {
-    const item                = localStorage.getItem('DSIEMVSettings')
-    const transactiontemp     = JSON.parse(item) as Transaction;
-    let  transaction = {} as Transaction
+  async emvBatch(transaction: Transaction, batchSummary: BatchSummary): Promise<any> {
 
-    transaction.OperatorID    = 'Admin';
-    transaction.TerminalID    = transactiontemp.TerminalID
-    transaction.TranType      = 'Administrative'
-    transaction.TranCode      = 'BatchClose'
-    transaction.SecureDevice  = transactiontemp.SecureDevice;
-    transaction.ComPort       = transactiontemp.ComPort;
-    transaction.SequenceNo    = '0010010010'
+    if (!transaction || !batchSummary) {
+      this.matSnack.open('Issue retrieving transaction or batch summary.', 'Alert', {duration: 1500});
+      return
+    }
 
-    const  inquireTransaction  = await this.getBatchInquireValues();
-    transaction.BatchItemCount = inquireTransaction.BatchItemCount;
-    transaction.BatchNo        = inquireTransaction.BatchNo;
-    transaction.NetBatchTotal  = inquireTransaction.NetBatchTotal;
+    transaction.OperatorID     = 'Admin';
+    transaction.TranType       = 'Administrative'
+    transaction.TranCode       = 'BatchClose'
+    transaction.SequenceNo     = '0010010010'
+    transaction.BatchItemCount = batchSummary.BatchItemCount;
+    transaction.NetBatchTotal  = batchSummary.NetBatchTotal;
+    transaction.BatchNo        = batchSummary.BatchNo;
+    console.log('emvBatch transaction 1', transaction)
 
     if (!transaction) { return };
+    console.log('emvBatch transaction 2', transaction)
 
     const tstream       = {} as TStream;
-    tstream.Transaction = transaction
+    tstream.Admin       = transaction
     const topLevel      = {} as topLevel;
     topLevel.TStream    = tstream;
     const builder       = new XMLBuilder(this.options)
     const xml           = builder.build(topLevel);
     let response        : any;
+    console.log('emvBatch xml', xml)
     try {
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response              = await emvTransactions.emvBatch(xml)
+      response              = await emvTransactions.EMVTransaction(xml)
+      console.log('EMV Batch Response', response)
     } catch (error) {
       console.log('error', error)
       return  error
@@ -313,31 +322,27 @@ export class DSIEMVTransactionsService implements OnDestroy {
     }
   }
 
-  async emvBatchInquire(): Promise<RStream> {
+  async emvBatchInquire(transaction: Transaction): Promise<RStream> {
+    if (!transaction) { return }
 
-    const item  = localStorage.getItem('DSIEMVSettings')
-    const transactiontemp     = JSON.parse(item) as Transaction;
-    let  transaction = {} as Transaction
-
-    transaction.OperatorID    = 'Admin';
-    transaction.TerminalID    = transactiontemp.TerminalID
     transaction.TranType      = 'Administrative'
     transaction.TranCode      = 'BatchSummary'
-    transaction.SecureDevice  = transactiontemp.SecureDevice;
-    transaction.ComPort       = transactiontemp.ComPort;
     transaction.SequenceNo    = '0010010010'
 
     if (!transaction) { return }
+
     const tstream       = {} as TStream;
-    tstream.Transaction = transaction
+    tstream.Admin       = transaction
     const topLevel      = {} as topLevel;
     topLevel.TStream    = tstream;
     const builder       = new XMLBuilder(this.options)
     const xml           = builder.build(topLevel);
     let response        : any;
+
     try {
+      console.log('emvBatchInquire xml', xml)
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
-      response              = await emvTransactions.emvBatchInquire(xml)
+      response              = await emvTransactions.EMVTransaction(xml)
     } catch (error) {
       console.log('error', error)
       return  error
@@ -353,21 +358,17 @@ export class DSIEMVTransactionsService implements OnDestroy {
     }
   }
 
-  async getBatchInquireValues(): Promise<Transaction> {
-    //from batch inquire'
-    const result     = await this.emvBatchInquire()
-    let transaction  = {} as Transaction;
+  async getBatchInquireValues(transaction: Transaction): Promise<any> {
+    const dsiResponse     = await this.emvBatchInquire(transaction)
+    try {
+      if (dsiResponse?.CmdResponse?.TextResponse.toLowerCase() != 'success'.toLowerCase()) {
+        this.matSnack.open(`Batch inquire problem: ${dsiResponse.CmdResponse.TextResponse}`, 'Check Batching Info')
+        return null;
+      }
+    } catch (error) {
 
-    transaction.BatchNo        = result.BatchSummary.BatchNo
-    transaction.NetBatchTotal  = result.BatchSummary.NetBatchTotal
-    transaction.BatchItemCount = result.BatchSummary.BatchItemCount
-
-    if (result.CmdResponse.TextResponse.toLowerCase() != 'success'.toLowerCase()) {
-      this.matSnack.open(`Batch inquire problem: ${result.CmdResponse.TextResponse}`, 'Check Batching Info')
-      return null;
     }
-
-    return transaction;
+    return dsiResponse;
   }
 
   async emvTransaction(transaction: Transaction): Promise<RStream> {

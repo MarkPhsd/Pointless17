@@ -4,10 +4,14 @@
     <div class="grid-totals">
       <div>Payment # </div>
       <div>{{payment?.id}}</div>
-      <div>  Order # </div>
+      <div> Order # </div>
       <div>{{payment?.orderID}} </div>
-      <div>Amount</div>
-      <div>{{amount | currency}}</div>
+
+      <div *ngIf="voidPayment">Amount</div>
+      <div *ngIf="voidPayment">{{voidPayment.amountPaid | currency}}</div>
+
+      <div *ngIf="!voidPayment">Amount</div>
+      <div *ngIf="!voidPayment"> {{amount | currency}}</div>
     </div>
 
   </mat-card-title>
