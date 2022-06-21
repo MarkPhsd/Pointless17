@@ -1,16 +1,14 @@
-import { Component, ViewChild, ChangeDetectorRef, AfterViewInit, OnInit,Output, Input, SimpleChange, EventEmitter, OnChanges, SimpleChanges, ElementRef } from '@angular/core';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
-import { MatPaginator, PageEvent} from '@angular/material/paginator';
+import { Component, ViewChild,   AfterViewInit, OnInit,Output, Input, EventEmitter, ElementRef } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { ClientSearchModel, ClientSearchResults, Item,  IUserProfile, }  from 'src/app/_interfaces';
 import { fromEvent, Observable, Subject  } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AWSBucketService, ContactsService } from 'src/app/_services';
 import { MatSort } from '@angular/material/sort';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
-// import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
@@ -18,10 +16,11 @@ import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.compon
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
-import { Capacitor, Plugins } from '@capacitor/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { IClientTable }   from  'src/app/_interfaces';
 
 @Component({
   selector: 'app-adminbrandslist',
@@ -97,7 +96,7 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
   recordCount             = 0;
   isfirstpage             : boolean;
   islastpage              : boolean;
-
+  clientTypeID:         number;
   urlPath             : string;
   selected            : number[];
   selectedRows        : any;
@@ -109,41 +108,45 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
 
   item: Item; //for routing
   constructor(private contactService: ContactsService,
-              private router: Router, private awsBucket: AWSBucketService,
-              private siteService: SitesService,
-              private clientTableService: ClientTableService,
+              private router: Router,
+              private awsBucket: AWSBucketService,
+              private siteService            : SitesService,
+              private clientTableService     : ClientTableService,
+              private clientTypeService      : ClientTypeService,
               private awsService             : AWSBucketService,
-              private agGridService          : AgGridService,
               private agGridFormatingService : AgGridFormatingService,
               private _snackBar              : MatSnackBar,
-              private fb: FormBuilder,
+              private fb                     : FormBuilder,
              ) {
 
-    const clientSearchModel       = {} as ClientSearchModel;
-    clientSearchModel.pageNumber  = 1
-    clientSearchModel.pageSize    = 25;
-    this.clientSearchModel           = clientSearchModel;
-
-    this.initForm();
-    this.initAgGrid(this.pageSize);
   }
 
     async ngOnInit() {
-      this.bucketName     = await this.awsBucket.awsBucket()
-      this.initClasses()
-      this.urlPath        = await this.awsService.awsBucketURL();
-      console.log('urlPath', this.urlPath)
       const site          = this.siteService.getAssignedSite()
+      this.bucketName     = await this.awsBucket.awsBucket()
+      this.urlPath        = await this.awsService.awsBucketURL();
+
+      const searchModel        = {} as ClientSearchModel;
+      searchModel.pageNumber   = 1
+      searchModel.pageSize     = 25;
+      this.clientSearchModel   = searchModel;
+
+      this.initForm();
+      this.initAgGrid(this.pageSize);
+      this.initClasses()
       this.rowSelection   = 'multiple'
+
     };
 
     editItem(id:number) {
       this.router.navigate(["/adminbranditem/", {id:id}]);
     }
 
-    async deleteItem(id: number) {
+     deleteItem(id: number) {
       if (!id) {return}
-      await this.clientTableService.delete(this.siteService.getAssignedSite(), id).pipe().toPromise()
+       this.clientTableService.delete(this.siteService.getAssignedSite(), id).subscribe(data => {
+
+       })
     }
 
     async deleteSelectedItems(id) {
@@ -151,6 +154,18 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
     }
 
     add() {
+      const site = this.siteService.getAssignedSite();
+      //this.selected
+      const clientType$ = this.clientTypeService.getClientTypeByName(site, 'brand')
+      const client      = {} as IClientTable;
+
+      clientType$.pipe(
+        switchMap(clientType => {
+          client.clientTypeID = clientType.id;
+          return this.clientTableService.postClient(site, client)
+      })).subscribe(newClient => {
+        this.editItemWithId(newClient.id);
+      })
 
     }
 
@@ -194,10 +209,14 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
 
     editClientFromGrid(e) {
       if (e.rowData.id)  {
-        // this.editItemWithId(e.rowData.id);
-        this.router.navigate(["/adminbranditem/", {id: e.rowData.id}]);
+       this.editItemWithId(e.rowData.id);
       }
     }
+
+    editItemWithId(id: number) {
+      this.router.navigate(["/adminbranditem/", {id: id}]);
+    }
+
 
     //ag-grid
     //standard formating for ag-grid.
@@ -262,12 +281,14 @@ export class AdminbrandslistComponent implements OnInit, AfterViewInit {
       //the filter fields are stored as variables not as an object since forms
       //and other things are required per grid.
     initSearchModel(): ClientSearchModel {
-        let clientSearchModel        = {} as ClientSearchModel;
+
+        let searchModel        = {} as ClientSearchModel;
         let search                   = this.itemName.value
-        clientSearchModel.pageSize   = this.pageSize
-        clientSearchModel.pageNumber = 1
-        clientSearchModel.name      = search;
-        return clientSearchModel
+        searchModel.pageSize   = this.pageSize
+        searchModel.pageNumber = 1
+        searchModel.clientTypeID = this.clientTypeID;
+        searchModel.name       = search;
+        return searchModel
     }
 
     //this is called from subject rxjs obversablve above constructor.

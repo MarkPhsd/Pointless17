@@ -45,7 +45,6 @@ export class KeyPadComponent implements OnInit, OnChanges {
   @Input() requireWholeNumber: boolean;
 
   constructor(  private fb: FormBuilder) {
-    // this.initForm();
     if (this.formatted) {
       if (this.inputTypeValue.toLowerCase() === 'decimal')
       { this.showDoubleZero = true}
@@ -54,15 +53,32 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.fieldName) {this.fieldName = 'itemName'}
-    if (!this.inputForm) {
-      this.initForm();
+    // if (!this.inputForm) {
+    this.initForm();
+    // }
+  }
+
+  formSubscriber() {
+    if (this.inputForm) {
+      this.inputForm.controls['itemName'].valueChanges.subscribe(data => {
+        if (data) {
+          this.onChangeValueUpdate(data)
+        }
+      })
     }
+  }
+
+  clearInput() {
+    this.outPutValue.emit('')
+    this.initForm()
   }
 
   initForm() {
     this.inputForm = this.fb.group({
       itemName: [],
     })
+
+    this.formSubscriber()
 
     if (this.inputForm) {
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
@@ -109,6 +125,17 @@ export class KeyPadComponent implements OnInit, OnChanges {
       )
       .subscribe();
     }
+  }
+
+  onChangeValueUpdate(data: number) {
+    if (this.showInput)  { return }
+    console.log('this value', this.cashValue)
+    console.log('inputTypeValue', this.inputTypeValue)
+    console.log('formatted', this.formatted)
+    this.formatted = data
+    this.value     = this.formatted
+    this.outPutValue.emit(this.formatted)
+    console.log(this.formatted)
   }
 
   enterValue(event) {

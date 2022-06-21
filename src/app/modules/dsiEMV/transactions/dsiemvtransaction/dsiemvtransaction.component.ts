@@ -216,11 +216,13 @@ export class DSIEMVTransactionComponent implements OnInit {
       return false;
     }
     if (!cmdResponse.CmdStatus) {
-      this.message = 'Processing failed, not cmdStatus.'
+      this.message = 'Processing failed, no cmdStatus.'
       return false;
     }
-    this.message        = cmdResponse.TextResponse;
-    this.resultMessage  = cmdResponse.CmdStatus;
+
+    this.message        = cmdResponse?.TextResponse;
+    this.resultMessage  = cmdResponse?.CmdStatus;
+
     this.processing     = false;
 
     //"AP*", "Approved", "Approved, Partial AP"

@@ -8,7 +8,7 @@
 
 
   <div>
-    <button *ngIf="isStaff || (order.history || order.balanceRemaining < order.total) && isApp"
+    <button [disabled]="!(isStaff || (order.history || order.balanceRemaining < order.total) && isApp)"
             mat-raised-button
             class="button"
             color="primary"
@@ -21,7 +21,7 @@
   </div>
 
   <div>
-    <button *ngIf="(order && order.clients_POSOrders && order.clients_POSOrders.email) "
+    <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
             mat-raised-button
             class="button"
             color="primary"
@@ -33,31 +33,34 @@
     </button>
   </div>
 
-  <div *ngIf="(!order.history || !order.completionDate) || isStaff ">
+  <div >
     <button mat-raised-button
+            [disabled] = "!((!order.history || !order.completionDate) || isStaff)"
             class="button"
             color="primary"
             aria-label="Check Out / Pay"
             (click)="makePayment()">
       <mat-icon>credit_card</mat-icon>
       <span *ngIf="!smallDevice">
-         Check Out / Pay
+         Check Out
        </span>
     </button>
   </div>
 
-  <div *ngIf="isStaff  && isApp">
+  <div *ngIf="isApp">
     <button mat-raised-button
+            [disabled]="!(isStaff)"
             class="button"
             color="primary"
             (click)="sendToPrep()">
       <mat-icon>done</mat-icon>
-       Send to Prep
+       Send
     </button>
   </div>
 
-  <div *ngIf="isStaff  && isApp">
+  <div *ngIf="isApp">
     <button mat-raised-button
+            [disabled]="!(isStaff)"
             class="button"
             color="primary"
             (click)="printLabels()">
@@ -66,20 +69,38 @@
     </button>
   </div>
 
-  <div *ngIf="isStaff && isApp">
+  <!-- <div>
     <button mat-raised-button
+            [disabled]="!(isStaff  && isApp)"
             class="button"
             color="primary"
             (click)="rePrintLabels()">
       <mat-icon>print</mat-icon>
         Re-Print Labels
     </button>
+  </div> -->
+
+  <div *ngIf="mainPanel && !order.suspendedOrder">
+    <span>
+      <button mat-raised-button
+              [disabled]="!(order.history && isAuthorized && order.clientID != 0)"
+              color="warn"
+              (click)="suspendOrder()">Suspend</button>
+    </span>
   </div>
 
-  <div  *ngIf="!order.history
-              && isAuthorized
-              && (itemsPrinted || paymentsMade)">
+  <div *ngIf="mainPanel && order.suspendedOrder">
+    <span>
+      <button mat-raised-button color="warn"
+              [disabled]="!(order.history && isAuthorized && order.clientID != 0)"
+              (click)="removeSuspension()">Un Suspend</button>
+    </span>
+  </div>
+  <div>
     <button mat-raised-button class="button"
+              [disabled]="!(!order.history
+                            && isAuthorized
+                            && (itemsPrinted || paymentsMade))"
             color="primary"
             (click)="voidOrder()">
       <mat-icon>delete</mat-icon>
@@ -89,34 +110,34 @@
     </button>
   </div>
 
-  <div *ngIf="mainPanel && smallDevice">
+  <div  *ngIf="!(mainPanel && smallDevice)">
     <button  mat-raised-button
-        class="button"
-        color="primary"
-        (click)="showItems()">
+
+            class="button"
+            color="primary"
+            (click)="showItems()">
       <mat-icon>list</mat-icon>
       Items
     </button>
   </div>
 
-  <div *ngIf="mainPanel && !order.suspendedOrder">
-    <span *ngIf="!order.history && isAuthorized && order.clientID != 0">
-      <button mat-raised-button color="warn"
-              (click)="suspendOrder()">Suspend Order</button>
-    </span>
-  </div>
 
-  <div *ngIf="mainPanel && order.suspendedOrder">
-    <span *ngIf="!order.history && isAuthorized && order.clientID != 0">
-      <button mat-raised-button color="warn"
-              (click)="removeSuspension()">Remove Suspension</button>
-    </span>
+  <div>
+    <button mat-raised-button
+            [disabled]="!(isStaff  && isApp)"
+            class="button"
+            color="primary"
+            (click)="rePrintLabels()">
+      <mat-icon>print</mat-icon>
+        Re-Print Labels
+    </button>
   </div>
+  <!--  -->
 
-  <div *ngIf="(!order.history || !order.completionDate)
-              || order.balanceRemaining < order.total">
+  <div >
     <button   mat-raised-button class="button"
               color="warn"
+              [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0)"
               aria-label="delete"
               (click)="deleteOrder()">
         <mat-icon>delete</mat-icon>
@@ -126,6 +147,7 @@
     </button>
   </div>
   <div></div>
+
   <div>
     <button mat-raised-button
             class="button"

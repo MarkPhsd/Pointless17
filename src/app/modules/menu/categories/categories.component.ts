@@ -233,19 +233,22 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
         debounceTime(250),
         distinctUntilChanged(),
         tap((event:KeyboardEvent) => {
-          const search  = this.input.nativeElement.value
-          this.input.nativeElement.focus();
-          this.refreshSearch();
+          if (this.input && this.input.nativeElement && this.input.nativeElement.value) {
+            const search  = this.input.nativeElement.value
+            this.input.nativeElement.focus();
+            this.refreshSearch();
+          }
         })
       )
       .subscribe();
     }
 
-
     if (this.platForm == 'android') {
       setTimeout(()=> {
-        this.input.nativeElement.focus();
-        Keyboard.hide();
+        if (this.input && this.input.nativeElement) {
+          this.input.nativeElement.focus();
+          Keyboard.hide();
+        }
       }, 200 )
     }
   }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders,  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, } from 'rxjs';
+import { EMPTY, Observable, } from 'rxjs';
 import {clientType, ISite }   from 'src/app/_interfaces';
 
 export interface IUserAuth_Properties {
@@ -74,6 +74,22 @@ export class ClientTypeService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<clientType>(url)
+
+  }
+
+  getClientTypeByName(site: ISite, name: any) : Observable<clientType> {
+
+    if (!name) {return EMPTY}
+
+    const controller =  "/clientTypes/"
+
+    const endPoint = `getClientTypeByName`
+
+    const parameters = `?name=${name}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<clientType>(url)
 
   }
 

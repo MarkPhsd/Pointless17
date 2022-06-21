@@ -32,8 +32,8 @@ export class FbServiceTypeService {
             functionChoice:        [''], //number;
             functionChoice2:       [''], //number;
             functionChoice3:       [''], //number;
-            defaultProductID1:     [''], //number;
-            defaultProductID2:     [''], //number;
+            defaultProductID1:     [0], //number;
+            defaultProductID2:     [0], //number;
             managerRequired:       [''], //number;
             showTipOption:         [''], //number;
             printerName:           [''], //string;

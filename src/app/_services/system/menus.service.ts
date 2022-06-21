@@ -157,7 +157,7 @@ export class MenusService {
     },
     {
       id:             0,
-      name:          'Dashboard',
+      name:          'Reporting',
       icon:          'dashboard',
       active:        true,
       sortOrder:      2,

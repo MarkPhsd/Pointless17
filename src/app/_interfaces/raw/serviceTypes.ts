@@ -22,4 +22,6 @@ export interface IServiceType {
   instructions:          string;
   shippingInstructions : string;
   scheduleInstructions : string;
+  defaultProductID1    : number;
+  defaultProductID2    : number;
 }

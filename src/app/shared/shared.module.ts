@@ -150,6 +150,7 @@ import { StoreCreditSearchComponent } from './widgets/search-list-selectors/stor
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 import { EmailSettingsComponent } from '../modules/admin/settings/email-settings/email-settings.component';
 import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
+import { ProductSearchSelector2Component } from '../modules/admin/products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
 
 // export class MyHammerConfig extends HammerGestureConfig {
 //     overrides = <any> {
@@ -202,7 +203,6 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
     FilterComponent,
     FilterPipe,
     FormSelectListComponent,
-
     // FoodProductEditComponent,
     FooterComponent,
     HeaderComponent,
@@ -238,7 +238,6 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
     OrderHeaderComponent,
-
     PagerBlobComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
@@ -257,6 +256,7 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
     PrinterLocationsComponent,
     ProgressUploaderComponent,
     ProductSearchSelectorComponent,
+    ProductSearchSelector2Component,
     ProductTypeSelectComponent,
     ProfileShippingAddressComponent,
     ProfileBillingAddressComponent,
@@ -415,6 +415,7 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
     PosPaymentEditComponent,
     ProductTypeSelectComponent,
     ProductSearchSelectorComponent,
+    ProductSearchSelector2Component,
     ProfileBillingAddressComponent,
     ProfileShippingAddressComponent,
     ProgressBarComponent,

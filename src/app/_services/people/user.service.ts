@@ -23,12 +23,16 @@ export class UserService {
     }
 
   getProfile():  Observable<IUserProfile>  {
+
      const site = this.siteService.getAssignedSite()
-      const user = this.auth.userValue
+
+      const user = this.auth.userValue;
+
       if (user) {
         return this.http.post<any>(`${site.url}/users/GetUserInfo`,user);
       }
-    }
+
+  }
 
   getProfileOfUSerByID(id: number):  Observable<IUserProfile>  {
     const url = `${this.apiUrl}/clients/getClientByID?=${id}`;

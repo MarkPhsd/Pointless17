@@ -108,7 +108,7 @@ export interface IPOSOrder {
   wicTotal              : number;//    As Double
   ebtTotal              : number;// As Double
   stateTotal            : number;// As Double
-
+  gratuity              : number;
 }
 
 export interface ClientsPOSOrders {
@@ -237,6 +237,7 @@ export interface PosOrderItem {
   itemPrepped                 :  string;
   printLocation               :  number;
   splitGroupID                : number;
+  gratuity                    : number;
 }
 
 export interface PosPayment {
@@ -260,7 +261,12 @@ export interface PosPayment {
   voidReason          : string;
   paymentMethod       : IPaymentMethod;
   history             : boolean;
+  refNumber:          string;
+  approvalCode:       string;
+  acqRefData:         string;
+  entryMethod:        string;
 }
+
 ////Payments - need to move to it's own file.
 export interface PaymentMethod {
   id:              number;

@@ -1,0 +1,40 @@
+<div [class]="formFieldClass"
+     [formGroup]="searchForm">
+
+  <mat-form-field [class]="formFieldClass"
+                  appearance="outline"
+                  fxFlexFill >
+  <mat-label class="form-background"><mat-icon>search</mat-icon>{{description}}</mat-label>
+
+  <input
+        #input
+        matInput
+        type             ="text"
+        [class]          ="formFieldClass"
+        placeholder      ="description"
+        formControlName  ="itemLookup"
+        [matAutocomplete]="auto">
+
+    <mat-autocomplete panelWidth    = "auto"
+                      #auto         = "matAutocomplete"
+                      (optionSelected)="onChange($event)">
+
+  <mat-option *ngFor="let item of (results$ | async)"
+                [value]="item">
+      {{item.name}}
+  </mat-option>
+
+  </mat-autocomplete>
+  </mat-form-field>
+
+</div>
+
+<div
+          hidden="true"
+          [formGroup]="inputForm">
+  <input  formControlName="productLookupField">
+</div>
+
+<!-- <div *ngIf="menuItem">
+  {{menuItem.name}}
+</div> -->

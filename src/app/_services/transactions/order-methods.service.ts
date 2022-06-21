@@ -578,23 +578,26 @@ export class OrderMethodsService implements OnDestroy {
 
     if (this.order) {
       const orderDelete$ = this.orderService.deleteOrder(site, this.order.id)
-      orderDelete$.subscribe(data => {
-        if (data) {
-          this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
-          this.clearOrder();
-          if (this.router.url == '/pos-orders') {
-            //then refresh orders
-            return
-          }
+      orderDelete$.subscribe(
+        {next: data => {
+            if (data) {
+              this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+              this.clearOrder();
+              if (this.router.url == '/pos-orders') {
+                //then refresh orders
+                return
+              }
 
-          this.router.navigate(['app-main-menu'])
+              this.router.navigate(['app-main-menu'])
+            }
+            if (!data) {
+              this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+            }
+          }, error : err => {
+            this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
+          }
         }
-        if (!data) {
-          this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
-        }
-      }, err => {
-        this._snackBar.open('Order not deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
-      })
+      )
     }
   }
 

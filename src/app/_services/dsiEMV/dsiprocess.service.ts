@@ -62,17 +62,12 @@ export class DSIProcessService {
 
     const batchSummary        = await this.emvBatchInquire()
 
-    // console.log('batchSummary', batchSummary)
-
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
 
     transaction               = this.initTransaction()
 
     const  response =  await this.dsi.emvBatch(transaction, batchSummary)
 
-    // console.log('response', response)
-    // console.log('response RStream', response?.RStream)
-    // console.log('response BatchClose', response?.RStream?.BatchClose)
 
     if (response) {
       return  response?.RStream?.BatchClose

@@ -32,6 +32,10 @@ export class UIHomePageSettingsComponent implements OnInit {
         this.initializeImages(this.uiHomePage)
         this.initForm(this.uiHomePage);
         return
+      } else {
+        this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm);
+        this.initializeImages(this.uiHomePage)
+        this.initForm(this.uiHomePage);
       }
     });
   }

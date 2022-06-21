@@ -71,8 +71,6 @@ export class OrdersService {
   public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
 
 
-
-
   isApp                       = false;
   private orderClaimed                : boolean;
 

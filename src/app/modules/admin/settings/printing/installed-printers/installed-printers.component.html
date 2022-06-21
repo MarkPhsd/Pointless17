@@ -15,7 +15,6 @@
 <div class="grid-printing">
   <div>
 
-    
     <ng-container [ngTemplateOutlet]="isWebPrintingTemplate"></ng-container>
     <ng-template #webPrintingTemplate>
       <div *ngIf="platForm === 'web' && (!isElectronApp)">
@@ -35,17 +34,18 @@
     </ng-template>
 
     <ng-container [ngTemplateOutlet]="isAndroidPrintingTemplate"></ng-container>
+
     <ng-template #androidPrintingTemplate>
-      <div *ngIf="platForm === 'android' ">
+      <div *ngIf="platForm === 'android'">
 
-        <app-list-printers-electron
+        <!-- <app-list-printers-electron
             (outputPrinterName)="setAndroidReceiptPrinter($event)" >
-        </app-list-printers-electron>
+        </app-list-printers-electron> -->
 
-        <h3>Print Test for Android</h3>
+          <h4>Print Test for BlueTooth ESCPOS Printer</h4>
 
           <mat-form-field appearance="outline">
-            <mat-label>Receipt Types</mat-label>
+            <mat-label>Bluetooth Printers</mat-label>
               <mat-select
                         type="text"
                         [(ngModel)]="btPrinter"
@@ -60,10 +60,7 @@
           </mat-form-field>
 
           <div>
-            <button mat-raised-button color="primary" (click)="printAndroidImage()"><mat-icon>print</mat-icon>Print</button>
-          </div>
-          <div>
-            <button mat-raised-button color="primary"  (click)="printAndroid()"><mat-icon>save</mat-icon> Print Test</button>
+            <button mat-raised-button color="primary"  (click)="printAndroid()"><mat-icon>print</mat-icon> Print Test</button>
           </div>
 
       </div>
@@ -72,6 +69,7 @@
     <ng-container [ngTemplateOutlet]="isElectronPrintingTemplate"></ng-container>
     <ng-template #electronPrintingTemplate>
       <div *ngIf="isElectronApp">
+        <h4>Windows Installed Printers</h4>
 
         <app-list-printers-electron
             [printerName]      ="electronReceiptPrinter"
@@ -170,25 +168,37 @@
       </mat-form-field>
 
     </div>
-      
+
     <ng-template #loadingReceiptTemplates>
       ...loading receipt templates
     </ng-template>
-  
+
     <button mat-raised-button
             color="primary"
             (click)="openEditor(receiptID)">
       <mat-icon>edit</mat-icon>Edit
     </button>
 
-    <div *ngIf="(orders && !receiptLayoutSetting) || !headerText || !footerText || !itemsText">
+    <div *ngIf="(orderService.currentOrder && !receiptLayoutSetting) || !headerText || !footerText || !itemsText">
       Loading...
     </div>
 
-    <div *ngIf="receiptLayoutSetting && orders">
+    <!-- <div *ngIf="orderService.currentOrder">
+      order
+    </div>
+    <div *ngIf="itemsText">
+      itemsText
+    </div>
+    <div *ngIf="headerText ">
+      headertext
+    </div>
+    <div *ngIf="receiptLayoutSetting ">
+      receiptLayoutSetting
+    </div> -->
+
+    <div *ngIf="  orderService.currentOrder && headerText &&  itemsText">
       <mat-card>
-        <div  *ngIf="headerText &&  itemsText"
-              class="border-section">
+        <div class="border-section">
             <app-receipt-layout #printsection id="printsection"
                               [headerText]="headerText"
                               [footerText]="footerText"
@@ -197,7 +207,7 @@
                               [paymentsText]="paymentsText"
                               [subFooterText]="subFooterText"
                               [items]="items"
-                              [order]="orders"
+                              [order]="orderService.currentOrder"
                               [payments]="payments"
                               [orderType]="orderTypes"
                               [testdata]="true"

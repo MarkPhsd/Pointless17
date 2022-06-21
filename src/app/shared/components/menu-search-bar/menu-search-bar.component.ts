@@ -236,8 +236,10 @@ constructor(
     // }
     if (this.platForm.toLowerCase() === 'android') {
       setTimeout(()=> {
-        this.input.nativeElement.focus();
-        Keyboard.hide();
+        if (this.input && this.input.nativeElement) {
+          this.input.nativeElement.focus();
+          Keyboard.hide();
+        }
       }, 200 )
     }
   }

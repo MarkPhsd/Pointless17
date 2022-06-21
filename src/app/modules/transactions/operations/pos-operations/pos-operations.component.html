@@ -19,6 +19,10 @@
       <button mat-raised-button (click)="print()"> <mat-icon>print</mat-icon>Print</button>
     </span>
 
+    <span>
+      <button mat-raised-button (click)="email()"> <mat-icon>email</mat-icon>Email</button>
+    </span>
+
     <span *ngIf="dsiEMVSettings && isElectronApp">
       <button mat-raised-button (click)="emvDatacapBatchCards()"> <mat-icon>credit_card</mat-icon>Batch Close</button>
     </span>
@@ -77,8 +81,6 @@
         </close-day-validation>
       </div>
     </div>
-
-    <!-- <ng-template #checkingClosing>... validating closing procedures. </ng-template> -->
 
     <mat-divider></mat-divider>
   </mat-card-content>

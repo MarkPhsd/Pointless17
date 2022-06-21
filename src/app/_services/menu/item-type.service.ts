@@ -224,6 +224,7 @@ type       = [
    'grouping',
    'cannabis',
    'discounts',
+   'service fee',
    'med-cannabis',
    'grocery',
    'restaurant',
@@ -232,8 +233,8 @@ type       = [
    'service liquor',
    'store credit',
    'tobacco'
-  ]
-useType = ['product', 'adjustment', 'category']
+]
+useType = ['product', 'adjustment', 'category',]
 
 site: ISite;
 constructor(private http: HttpClient,
@@ -653,7 +654,7 @@ constructor(private http: HttpClient,
                   packagingMaterial: '',
                   useGroups          : useGroup,
                   printerLocations   : printerLocations, enableCustomNote: false, wicebt: 0,
-                  requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Gratuity",              itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment',  sortOrder: 28,  ageRequirement: 0, enabled:true,type:  'store credit', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
+                  requireWholeNumber : false, instructions       : '', metrcCategoryID : 0,  requireInStock: false, packageType: '', taxable: 0, labelTypeID: 0,printLocationID: 0, prepTicketID: 0,  requiresSerial: false,printerName: '',   name : "Gratuity",              itemType_Categories: categories, imageName: '',       icon: ''      , useType:'adjustment',  sortOrder: 28,  ageRequirement: 0, enabled:true, type:  'service fee', useGroupID: 2, weightedItem: false, expirationRequired: false, labelRequired: false, },
         {id: 23,  portionValue       : '',
                   packagingMaterial: '',
                   useGroups          : useGroup,

@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
 import { tap } from 'rxjs/operators';
+import { truncateSync } from 'original-fs';
 
 @Component({
   selector: 'app-adminbranditem',
@@ -64,41 +65,41 @@ export class AdminbranditemComponent implements OnInit {
     return this.inputForm
   };
 
-  async fillForm(id: any) {
+  fillForm(id: any) {
     const form = this.initForm()
-    console.log('this.id', id)
     const site = this.siteService.getAssignedSite();
-    const user = await this.clientTableService.getClient(site, this.id).pipe().toPromise();
-    this.inputForm.patchValue(user)
-    this.clientTable = user;
-    this.onlineDescription = this.clientTable.onlineDescription ;
-    this.urlImageMain = this.clientTable.onlineDescriptionImage ;
+    const user$ =this.clientTableService.getClient(site, this.id)
 
-    this.client$ = this.clientTableService.getClient(site, this.id).pipe(
-      tap(data => {
-        this.inputForm.patchValue(data)
-        console.log('data', data)
-        this.onlineDescription = this.clientTable.onlineDescription ;
-        this.urlImageMain = this.clientTable.onlineDescriptionImage ;
-        return
-       })
-    );
+    user$.subscribe(user => {
+      this.inputForm.patchValue(user)
+      this.clientTable = user;
+      this.onlineDescription = this.clientTable.onlineDescription ;
+      this.urlImageMain = this.clientTable.onlineDescriptionImage ;
+    })
 
   }
 
-  async update(event) {
+  update(event) {
     const site = this.siteService.getAssignedSite();
+    this.clientTable = this.inputForm.value;
+
     if (this.clientTable) {
       this.clientTable.onlineDescription = this.onlineDescription
       this.clientTable.onlineDescriptionImage = this.urlImageMain
     }
-    let promise =  await this.clientTableService.saveClient(site, this.clientTable).pipe().toPromise()
-    if (promise)
-    {
-      this.notifyEvent("Updated", "Succes")
-    } else {
-      this.notifyEvent("Failed", "failed")
-    }
+
+    this.clientTableService.saveClient(site, this.clientTable).subscribe(
+      {next: data => {
+        if (event) { this.goBackToList(); }
+        this.notifyEvent("Updated", "Succes")
+        return
+      },
+      error: error => {
+        this.notifyEvent("Save error occured: " + error, "failed")
+      }
+    })
+
+
   };
 
   received_Image($event) {
@@ -111,15 +112,14 @@ export class AdminbranditemComponent implements OnInit {
       console.log($event)
     }
 
-    console.log("this id ", this.id)
     if (this.id) {
       this.update(null);
     }
   };
 
   updateExit(event) {
-    this.update(event);
-    this.goBackToList();
+    this.update(true);
+
   };
 
   onCancel(event) {

@@ -14,6 +14,10 @@
   <div class="total-headers foreground-color" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
   <div class="totals foreground-color" *ngIf="order.wicTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
 
+  <div class="total-headers foreground-color" *ngIf="order.gratuity && order.gratuity != 0">Service %{{ ( (order?.gratuity / order?.subTotal) * 100 ).toFixed(0) }} </div>
+  <div class="totals foreground-color" *ngIf="order.gratuity && order.gratuity != 0"> {{ order?.gratuity | currency }}</div>
+
+
   <div class="total-headers foreground-color">Items </div>
   <div class="totals foreground-color">{{ order.itemCount }}</div>
 

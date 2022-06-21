@@ -63,8 +63,6 @@
               <app-department-select [inputForm]="productForm" ></app-department-select>
               <product-type-select   [inputForm]="productForm"></product-type-select>
 
-               <!-- brandID value {{brandID | json}} <br>-->
-               <!-- brandID {{brandID.value}}  -->
               <app-brand-type-select
                       [formFieldClass]="'formFieldClass-standard'"
                       [id] = "brandID.value"
@@ -92,7 +90,7 @@
                 </div>
                 <div *ngIf="itemType" class="grid-container-small">
                   <div>
-                 
+
                   <app-price-category-select
                       [itemType]        ="itemType"
                       [priceCategoryID] ="product.priceCategory"
@@ -166,9 +164,6 @@
                                                          itemType.type?.toLowerCase() === 'tobacco' ||
                                                          itemType.type?.toLowerCase() === 'restaurant')">
 
-              <!-- <food-product-edit [inputForm]="productForm"></food-product-edit> -->
-           
-
               <app-value-fields
                 [inputForm]="productForm"
                 [fieldName]="'countryOfOrigin'">
@@ -186,7 +181,7 @@
 
             </div>
 
-            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' )">
+            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' || itemType.type?.toLowerCase() === 'service fee' )">
               <div class="header">
                 <mat-icon>coupon</mat-icon>
               </div>
@@ -210,7 +205,7 @@
             </div>
 
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
-              <retail-product-edit 
+              <retail-product-edit
                 [inputForm]="productForm">
               </retail-product-edit>
               <app-value-fields

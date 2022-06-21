@@ -29,13 +29,9 @@ export class UITransactionsComponent implements OnInit {
       if (data) {
         this.initForm(data);
       } else {
-
-
         const config   = {} as TransactionUISettings
         const form = this.inputForm;
         this.inputForm = this.uISettingsService.initForms_Sub(form, 'UITransactionSetting', config)
-
-
       }
     });
   }

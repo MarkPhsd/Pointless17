@@ -36,6 +36,7 @@ export interface TransactionUISettings {
   recmedPricing          : boolean;
   applyTaxChangesToDiscountedItems  : boolean;
   fuzzyMatchBarcodeLookup: boolean;
+  requireEnterTabBarcodeLookup: boolean;
 }
 
 export interface StripeAPISettings {
@@ -473,6 +474,7 @@ export class UISettingsService {
       recmedPricing          : [],
       applyTaxChangesToDiscountedItems : [],
       fuzzyMatchBarcodeLookup: [''],
+      requireEnterTabBarcodeLookup: [''],
      })
     return fb
   }

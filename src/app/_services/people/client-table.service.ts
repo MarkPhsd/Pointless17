@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { EMPTY, Observable, } from 'rxjs';
 import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendorResults }   from  'src/app/_interfaces';
-import { environment } from 'src/environments/environment';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
 
@@ -33,6 +32,8 @@ export class ClientTableService {
     return  this.http.get<IClientTable>(url)
 
   }
+
+
 
   delete(site: ISite, id: number) : Observable<IClientTable> {
 

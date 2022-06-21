@@ -264,7 +264,6 @@ import { MenuBoardComponent } from '../modules/tv-menu/menu-board/menu-board.com
 import { StripeSettingsComponent } from '../modules/admin/settings/stripe-settings/stripe-settings.component';
 import { NgxStripeModule } from 'ngx-stripe';
 import { StripeCheckOutComponent } from '../modules/admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
-
 import { DSIEMVTransactionComponent } from '../modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { NumericDirective } from '../_directives/numeric-directive.directive';
 import { PosOrderBoardComponent } from '../modules/posorders/pos-order/pos-order-board/pos-order-board.component';
@@ -290,7 +289,6 @@ import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/stor
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 import { BalanceSheetViewComponent } from '../modules/admin/settings/printing/balance-sheet-view/balance-sheet-view.component';
 import { CloseDayValidationComponent } from '../modules/transactions/operations/pos-operations/close-day-validation/close-day-validation.component';
-
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -343,7 +341,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     EditSelectedItemsComponent,
     EditCSSStylesComponent,
     EditSettingsComponent,
-
     EmployeeLookupComponent,
     EmployeeDetailsPanelComponent,
     EmployeeEditComponent,
@@ -374,6 +371,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     InventoryCountsViewComponent,
     SearchInventoryInputComponent,
     ItemCategoriesListComponent,
+    ItemSortComponent,
     ItemCategoriesEditComponent,
     ImageCaptureComponent,
     LabelViewSelectorComponent,
@@ -426,6 +424,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceTierLineEditComponent,
     PriceTierEditComponent,
     PriceTiersComponent,
+
     TVPriceTiersComponent,
     PosListComponent,
     PosEditSettingsComponent,
@@ -457,7 +456,6 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceScheduleConstraintsComponent,
     PriceScheduleInfoComponent,
     PriceScheduleFieldsComponent,
-    ItemSortComponent,
     ProfileRolesComponent,
     ProfileListComponent,
     ProfileComponent,

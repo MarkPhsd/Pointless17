@@ -28,6 +28,6 @@
 		"hostname": "Pointless",
 		"iosScheme": "ionic",
 		"androidScheme": "http",
-		"url": "https://pointlesspos.web.app"
+		"url": "http://192.168.0.16:4200"
 	}
 }

@@ -1,16 +1,15 @@
-
-<div  *ngIf="inputForm"
-      [formGroup]="inputForm">
-
+<div >
   <mat-card>
     <mat-card-subtitle>
       <ng-content></ng-content>
     </mat-card-subtitle>
-
-    <mat-card-content>
+    <mat-card-content
+          *ngIf="inputForm"
+          [formGroup]="inputForm">
 
       <div class="grid-items" >
 
+        <h4>Item Options</h4>
         <div class="toggle-fields">
          <mat-slide-toggle
                    formControlName="displayNotes"
@@ -44,31 +43,8 @@
           </mat-slide-toggle>
         </div>
 
-        <div class="toggle-fields">
-          <mat-slide-toggle
-                    formControlName="enablMEDClients"
-                    >
-            <mat-label>Enable MED Patients</mat-label>
-          </mat-slide-toggle>
-        </div>
-
-
-        <div class="toggle-fields">
-          <mat-slide-toggle
-                    formControlName="validateCustomerLicenseID"
-                    >
-            <mat-label>Validate Customer License/ID</mat-label>
-          </mat-slide-toggle>
-        </div>
-
-        <div class="toggle-fields">
-          <mat-slide-toggle
-                    formControlName="ordersRequireCustomer"
-                    >
-            <mat-label>Orders require a customer</mat-label>
-          </mat-slide-toggle>
-        </div>
-
+        <mat-divider></mat-divider>
+        <h4>Order Options</h4>
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="showOrderName"
@@ -110,6 +86,9 @@
           </mat-slide-toggle>
         </div>
 
+        <mat-divider></mat-divider>
+        <h4>Barcode Options</h4>
+
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="fuzzyMatchBarcodeLookup"
@@ -117,6 +96,17 @@
             <mat-label>Fuzzy Match Barcode Lookup (exact match not required)</mat-label>
           </mat-slide-toggle>
         </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="requireEnterTabBarcodeLookup"
+                    >
+            <mat-label>Require Enter/Tab to Lookup</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <mat-divider></mat-divider>
+        <h4>Client Options</h4>
         <div class="client-selector">
           <app-client-types-lookup
                 [formControlName]="'defaultClientTypeID'"
@@ -125,11 +115,36 @@
           </app-client-types-lookup>
         </div>
 
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="validateCustomerLicenseID"
+                    >
+            <mat-label>Validate Customer License/ID</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="enablMEDClients"
+                    >
+            <mat-label>Enable MED Patients</mat-label>
+          </mat-slide-toggle>
+        </div>
+
+
+        <div class="toggle-fields">
+          <mat-slide-toggle
+                    formControlName="ordersRequireCustomer"
+                    >
+            <mat-label>Orders require a customer</mat-label>
+          </mat-slide-toggle>
+        </div>
+
         <mat-divider></mat-divider>
         <h3>Operation Settings:</h3>
 
         <div class="grid-small">
-          
+
           <div>
            <mat-label>Max Orders allowed open by user.</mat-label>
             <app-value-fields
@@ -153,7 +168,7 @@
                 [fieldName]="'lotPreBarCode'">
                 Lot Pre code prefix.
             </app-value-fields>
-          </div> 
+          </div>
           <div>
             <mat-label>Percentage of Buyer Amount.</mat-label>
             <app-value-fields
@@ -189,10 +204,10 @@
             </app-value-fields>
           </div>
 
-   
+
         </div>
       </div>
-   
+
       <div>
         <button mat-raised-button
                 color="primary"
@@ -200,5 +215,4 @@
       </div>
     </mat-card-content>
   </mat-card>
-
 </div>

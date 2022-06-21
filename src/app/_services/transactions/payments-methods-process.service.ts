@@ -135,18 +135,19 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       this.notify(`Error no response`, 'Transaction not Complete', 3000);
       return false
     }
+
     if (!trans) {
       this.notify(`Error no transaction response`, 'Transaction not Complete', 3000);
       return false
     }
 
     if (cmdResponse.CmdStatus.toLowerCase() === 'TimeOut'.toLowerCase() ) {
-      this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
+      this.notify(`Error: ${cmdResponse}, ${trans}  `, `Transaction not Complete`, 3000);
       return false
     }
 
     if (cmdResponse.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
-      this.notify(`Error: ${status} , ${status}`, 'Transaction not Complete', 3000);
+      this.notify(`Error: ${status} , `, `Transaction not Complete`, 3000);
       return false
     }
 
@@ -169,12 +170,15 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     const site = this.sitesService.getAssignedSite();
 
-    console.log('processCreditCardResponse', response)
-
     if (response) {
+
       const rStream      = response.RStream as RStream;
       const validate = this.validateResponse(rStream, payment)
-      if (!validate) { return }
+
+      if (!validate) {
+        return rStream?.CmdResponse;
+      }
+
       const cmdResponse  = rStream.CmdResponse;
       const trans        = rStream.TranResponse;
       const status       = cmdResponse?.TextResponse;
@@ -198,8 +202,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
           this.orderService.updateOrderSubscription(data.order);
           this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
           this.printingService.previewReceipt();
-          //print receipt prompt
-          //print receipt auto
           return cmdResponse;
         })
       }
@@ -249,9 +251,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     payment.amountPaid     = +trans?.Amount?.Authorize;
     payment.amountReceived = +trans?.Amount?.Authorize;
-
     payment.applicationLabel = trans?.ApplicationLabel;
-
     payment.entryMethod   = trans?.EntryMethod;
 
     payment.aid           = trans?.AID;

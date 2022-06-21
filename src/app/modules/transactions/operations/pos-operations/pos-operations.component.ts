@@ -14,6 +14,9 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { BatchClose, BatchSummary, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
+import { Tray } from 'electron';
+import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'pos-operations',
@@ -50,6 +53,10 @@ export class PosOperationsComponent implements OnInit {
   get isElectronApp() {
     return this.platFormService.isAppElectron
   }
+
+
+
+
   constructor(
     private siteService        : SitesService,
     private transferDataService: TransferDataService,
@@ -60,6 +67,9 @@ export class PosOperationsComponent implements OnInit {
     private printingService    : PrintingService,
     private dsiProcess         : DSIProcessService,
     private printingAndroidService: PrintingAndroidService,
+    private sendGridService     :   SendGridService,
+    private matSnack           : MatSnackBar,
+    // private AuthService       : UserAuth
   ) {
     if (!this.site) {
       this.site = this.siteService.getAssignedSite();
@@ -79,6 +89,28 @@ export class PosOperationsComponent implements OnInit {
   refreshClosingCheck() {
     const site = this.siteService.getAssignedSite();
     this.closingCheck$ = this.transferDataService.canCloseDay(site)
+  }
+
+  email() {
+    const site = this.siteService.getAssignedSite();
+    const zRun$ =  this.balanceSheetService.getZRUNBalanceSheet(site);
+
+    zRun$.pipe(
+      switchMap( data => {
+        if (data && data.id) {
+          return this.sendGridService.sendSalesReport(data.id, null,null)
+
+        }
+        return null;
+    })).subscribe(
+      {next: data => {
+      console.log(data)
+      this.matSnack.open('Email Sent', 'Success', {duration: 1500})
+      }, error: err => {
+        this.matSnack.open('Email Not sent, check with administrator', 'Alert', {duration: 1500})
+      }
+    })
+
   }
 
   refreshInfo(){
@@ -143,11 +175,20 @@ export class PosOperationsComponent implements OnInit {
 
     //run through checks. do all the closing checks on theWebapi.
     //return a can or not and reason why.
-    const batchResult =  await this.emvDatacapBatchCards();
-    const answer = window.confirm('Batch error, did you want to continue closing? You can batch separately.')
-    if (!answer) { return }
+    try {
+      if (this.isElectronApp) {
+        const batchResult =  await this.emvDatacapBatchCards();
+        if (!batchResult) {
+          const answer = window.confirm('Batch error, did you want to continue closing? You can batch separately.')
+        }
+      }
+    } catch (error) {
+      const answer = window.confirm(`Batch error ${error}, did you want to continue closing? You can batch separately.`)
+      if (!answer) { return }
+    }
 
     const closingCheck$ = this.transferDataService.canCloseDay(site)
+
     this.balanceSheetsClosed = ''
     closingCheck$.pipe(
       switchMap( data => {
@@ -155,25 +196,25 @@ export class PosOperationsComponent implements OnInit {
         //if it can't then return what is told from the webapi
         if (data){
           if (!data.allowClose) {
-            this.closeResult = `Day not closed.  Open Printed Orders ${data.openPrintedOrders.length}.
-                                Open Paid Orders ${data.openPaidOrders.length}.
-                                Open Balance Sheets ${data.openBalanceSheets.length}`
+            this.closeResult = `Day not closed.  Open Printed Orders ${data?.openPrintedOrders?.length}.
+                                Open Paid Orders ${data?.openPaidOrders?.length}.
+                                Open Balance Sheets ${data?.openBalanceSheets?.length}`
             const result = this.orderMethodsService.notifyEvent(`Date not closed. ${data}`, 'Alert');
             this.canCloseOrderResults = data
             this.runningClose = false
             return
           }
         }
+        console.log('close all continue')
         return this.transferDataService.closeAll(site);
       })).pipe(
         switchMap(
           data => {
-            this.closeResult = 'Day closed.'
+            this.closeResult = 'Day closed. Closing balance Sheets.'
             this.runningClose = false;
             return this.balanceSheetService.closeAllSheets(site)
           }
       )).subscribe(data => {
-
         this.balanceSheetsClosed = 'All balance sheets closed'
         this.runningClose = false;
     })
@@ -196,12 +237,16 @@ export class PosOperationsComponent implements OnInit {
   closeAllSheets() {
     const site = this.siteService.getAssignedSite();
     this.runningClose = true;
-    this.balanceSheetService.closeAllSheets(site).subscribe(data => {
-      this.balanceSheets = data;
-      this.runningClose = false;
-     }, err => {
-      this.closeResult = err
-      this.runningClose = false;
+    this.balanceSheetService.closeAllSheets(site).subscribe(
+      {
+        next: data => {
+          this.balanceSheets = data;
+          this.runningClose = false;
+        },
+        error: err => {
+          this.closeResult = err
+          this.runningClose = false;
+        }
      }
     )
   }

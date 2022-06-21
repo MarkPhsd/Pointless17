@@ -2,7 +2,7 @@
   <mat-card-content>
     <div class="button-grid">
 
-      <div >
+      <div>
         <button class="button"
                 mat-button
                 (click)="resetSearch()">
@@ -28,12 +28,12 @@
         </button>
       </div>
 
-      <div *ngIf="isStaff">
+      <div>
         <button class="button"
                 mat-button
-                (click)="gotoPayments()">
-          <mat-icon>credit_card</mat-icon>
-          <span>Payments</span>
+                (click)="displayPanel()">
+                <mat-icon>close_fullscreen</mat-icon>
+          <span>Hide</span>
         </button>
       </div>
 
@@ -45,20 +45,20 @@
         </button>
       </div>
 
+      <div *ngIf="isStaff">
+        <button class="button"
+                mat-button
+                (click)="gotoPayments()">
+          <mat-icon>credit_card</mat-icon>
+          <span>Payments</span>
+        </button>
+      </div>
+
       <div  *ngIf="smallDevice">
         <button
                 mat-button
                 (click)="exitBottomSheet()">
           <mat-icon>close</mat-icon><span>Exit</span>
-        </button>
-      </div>
-
-      <div>
-        <button class="button"
-                mat-button
-                (click)="displayPanel()">
-                <mat-icon>close_fullscreen</mat-icon>
-          <span></span>
         </button>
       </div>
 
@@ -69,7 +69,7 @@
                   [inputForm]     ="searchForm"
                   [inputTypeValue]= "'text'"
                   (outPutValue)   ="orderSearch($event)">
-                  Enter Number
+          Enter Number
       </app-key-pad>
     </div>
 
@@ -103,8 +103,7 @@
           name        ="toggleOpenClosedAll"
           class       ="toggle-view"
           [(ngModel)] ="toggleOpenClosedAll"
-          (change)    ="refreshSearch()"
-      >
+          (change)    ="refreshSearch()" >
       <mat-button-toggle value="1" >Open </mat-button-toggle>
       <mat-button-toggle value="2">Closed</mat-button-toggle>
       <mat-button-toggle value="0">All</mat-button-toggle>
@@ -117,9 +116,10 @@
           [(ngModel)] ="toggleSuspendedOrders"
           (change)    ="refreshSearch()"
         >
+        <!-- matTooltip="Orders suspended so they don't close at the end of the day."   -->
+        <!-- #tooltip="matTooltip" -->
       <mat-button-toggle value="0" >Active </mat-button-toggle>
-      <mat-button-toggle value="1" #tooltip="matTooltip"
-                          matTooltip="Orders suspended so they don't close at the end of the day."
+      <mat-button-toggle value="1"
                           matTooltipPosition="above"
                           matTooltipHideDelay="1000">Suspended</mat-button-toggle>
     </mat-button-toggle-group>
@@ -151,7 +151,6 @@
                         matTooltipHideDelay="1000">
           <mat-icon>receipt</mat-icon> </mat-button-toggle>
     </mat-button-toggle-group>
-
 
     <div *ngIf="isStaff" [hidden]="toggleTypeEmployee  === '0' && searchModel"
          class="toggle-selector">

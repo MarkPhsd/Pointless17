@@ -77,32 +77,28 @@ export class ServiceTypeEditComponent implements OnInit {
       this.inputForm  = this.fbServiceTypeService.initForm(this.inputForm)
     }
 
-    async updateItem(event): Promise<boolean> {
-      let result: boolean;
+    updateItem(event: any)  {
 
-      return new Promise(resolve => {
-         if (this.inputForm.valid) {
-          const site = this.siteService.getAssignedSite()
-          const product$ = this.serviceTypeService.saveServiceType(site, this.inputForm.value)
-          product$.subscribe( data => {
-            this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
-            resolve(true)
+      if (!this.inputForm.valid) { return }
+      const site = this.siteService.getAssignedSite()
+      const serviceType = this.inputForm.value as IServiceType;
+      const product$ = this.serviceTypeService.saveServiceType(site, serviceType)
 
-          }, error => {
+      product$.subscribe(
+        {next: data => {
+          this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
+            if (event) {
+              this.onCancel(event);
+            }
+          }, error: error => {
             this.snack.open(`Update failed. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-            resolve(false)
-          })
-         }
+          }
         }
       )
-
     };
 
-    async updateItemExit(event) {
-      const result = await this.updateItem(event)
-      if (result) {
-        this.onCancel(event);
-      }
+    updateItemExit(event) {
+      this.updateItem(true)
     }
 
     onCancel(event) {

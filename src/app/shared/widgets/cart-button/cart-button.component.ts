@@ -113,18 +113,18 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       this.smallDevice = true
     }
 
-    if (!this.smallDevice) { 
+    if (!this.smallDevice) {
       this.gridflow = "grid-flow"
     }
-    if (this.smallDevice) { 
+    if (this.smallDevice) {
       this.gridflow = "grid-flow-small"
     }
   }
 
  async addNewOrder() {
-    this.orderService.updateOrderSubscription(null);
+    // this.orderService.updateOrderSubscription(null);
     const site = this.siteService.getAssignedSite();
-    await this.orderService.newDefaultOrder(site);
+    this.orderService.newDefaultOrder(site);
   }
 
   initOrderBarSubscription() {

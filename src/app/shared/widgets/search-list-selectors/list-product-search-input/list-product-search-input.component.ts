@@ -11,6 +11,7 @@ import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { C } from '@angular/cdk/keycodes';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -36,13 +37,15 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   _order              :   Subscription;
   order               :   IPOSOrder;
 
+  transactionUISettings:TransactionUISettings;
+
   searchItems$  : Subject<IProductSearchResults[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(
     debounceTime(250),
       distinctUntilChanged(),
       switchMap(searchPhrase =>
         {
-          console.log('search header')
+          if (!this.transactionUISettings ||  this.transactionUISettings.requireEnterTabBarcodeLookup) {return}
           this.refreshSearch()
           return null
         }
@@ -59,19 +62,27 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     private fb             :        FormBuilder,
     private orderService   :        OrdersService,
     private orderMethodService    : OrderMethodsService,
+    private uISettingsService:    UISettingsService,
   )
   {   }
 
-  ngOnInit(): void {
-    this.initForm();
-    if (!this.input ) {return}
-    this.initSearchSubscription()
-    this.hideKeyboardTimeOut();
-    if ( this.platForm != 'android' ) {return}
-    this.keyboardDisplayOn = true
-    if (this.platForm != 'android') {
-      // Keyboard.hide()
-    }
+  ngOnInit() {
+    this.uISettingsService.transactionUISettings$.subscribe( data => {
+      if (data) {
+          this.transactionUISettings =  data
+
+          this.initForm();
+          if (!this.input ) {return}
+          this.initSearchSubscription()
+          this.hideKeyboardTimeOut();
+          if ( this.platForm != 'android' ) {return}
+          this.keyboardDisplayOn = true
+          if (this.platForm != 'android') {
+
+          }
+        }
+      }
+    )
   }
 
   ngOnDestroy(): void {
@@ -108,7 +119,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
 
-  
+
   async refreshSearch() {
     const barcode =  this.input.nativeElement.value
     await this.addItemToOrder(barcode)

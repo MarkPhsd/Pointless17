@@ -52,7 +52,6 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
     this.initSubscriptions();
     if (!this.menuItem) {return }
     this.isProduct = this.getIsNonProduct(this.menuItem)
@@ -74,8 +73,10 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
         // this.orderMethodService.notifyEvent('This item has no type, please contact administrator.', 'Error')
         return false
       }
-      if (menuItem.itemType.type === 'discounts') { return false}
-      if (menuItem.itemType.type === 'grouping') {
+      if (menuItem.itemType.useType  === 'adjustment') { return false}
+      if (menuItem.itemType.type     === 'adjustment') { return false}
+      if (menuItem.itemType.type     === 'discounts') { return false}
+      if (menuItem.itemType.type     === 'grouping') {
         this.isCategory = true;
         return false
       }

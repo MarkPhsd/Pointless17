@@ -16,7 +16,7 @@ import   domtoimage from 'dom-to-image';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.component';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { IItemBasic } from 'src/app/_services';
+import { IItemBasic, OrdersService } from 'src/app/_services';
 import { IPCService } from 'src/app/_services/system/ipc.service';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
@@ -51,7 +51,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   @ViewChild('electronPrintingTemplate') electronPrintingTemplate: TemplateRef<any>;
 
   @ViewChild('electronPrintingDesignTemplate') electronPrintingDesignTemplate: TemplateRef<any>;
-  
+
 
   @Input() printerName     : string;
   @Input() labelID         : number;
@@ -106,7 +106,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   electronLabel        : string;
 
   items           : any[];
-  orders          : any[];
   payments        : any[];
   orderTypes      : any[];
   platForm        = '';
@@ -133,6 +132,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private renderingService      : RenderingService,
               private platFormService       : PlatformService,
               private icpService            : IPCService,
+              public  orderService          : OrdersService,
   ) {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
@@ -140,6 +140,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
+
     this.getPrinterAssignment();
     this.listPrinters();
   }
@@ -273,34 +274,34 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     )
   }
 
-  get  isAndroidPrintingTemplate() { 
+  get  isAndroidPrintingTemplate() {
     if (this.platForm === 'android' ) {
       return this.androidPrintingTemplate
-    } 
+    }
     return null
   }
 
-  get  isWebPrintingTemplate() { 
+  get  isWebPrintingTemplate() {
     if (this.platForm === 'web' && (!this.isElectronApp)) {
       return this.webPrintingTemplate
-    } 
+    }
     return null
   }
 
-  get  isElectronPrintingTemplate() { 
+  get  isElectronPrintingTemplate() {
     if (this.isElectronApp) {
       return this.electronPrintingTemplate
-    } 
+    }
     return null
   }
 
-    get  isElectronPrintingDesignTemplate() { 
+    get  isElectronPrintingDesignTemplate() {
     if (this.isElectronApp) {
       return this.electronPrintingDesignTemplate
-    } 
+    }
     return null
   }
-  
+
 
   async applyStyles() {
     const site                = this.siteService.getAssignedSite();
@@ -407,13 +408,19 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.printingService.printTestLabelElectron(content, this.printerName)
   }
 
-  async printAndroid() {
+  printAndroid() {
     //create fake date for order. - get order info from postman to use.
     //passorder info to new method PrintAndroidReceipt.'
     //save selected printer to local storage
     //set saved printer name /bt id to selection on load.
-    const order = this.fakeData.getPOSOrderContents()
-    this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
+    const order = this.orderService.currentOrder
+    let payment = null
+    if (order.posPayments) {
+       payment = order.posPayments[0]
+    }
+    this.printingAndroidService.printAndroidPOSReceipt( order, payment, this.btPrinter)
+
+    // this.printingAndroidService.printTestAndroidReceipt(this.btPrinter)
   }
 
   async printAndroidImage() {

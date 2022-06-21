@@ -84,8 +84,6 @@
             </mat-checkbox>
           </div>
 
-
-
           <div>
             <mat-label >Online Order</mat-label>
           </div>
@@ -134,6 +132,24 @@
                   <mat-hint>Requires user put in addresss for delivery.</mat-hint>
             </mat-checkbox>
           </div>
+
+          <!-- default productid -->
+          <product-search-selector2
+            [productLookupField] = "'defaultProductID1'"
+            [id]                 = "serviceType.defaultProductID1"
+            [inputForm]          = "inputForm"
+            [description]        = "'Default Item 1'"
+            >
+          </product-search-selector2>
+
+          <product-search-selector2
+             [productLookupField] = "'defaultProductID2'"
+             [id]                 = "serviceType.defaultProductID2"
+             [inputForm]          = "inputForm"
+             [description]        = "'Default Item 2'"
+            >
+          </product-search-selector2>
+
 
           <div>
             <mat-form-field appearance="outline">

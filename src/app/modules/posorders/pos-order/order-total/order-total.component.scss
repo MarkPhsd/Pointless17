@@ -5,7 +5,7 @@ mat-card  {
 }
 .transaction-data-side-panel {
   display      : grid;
-  grid-template-columns: 65px 125px;
+  grid-template-columns: 95px 125px;
   width        : 100%;
   overflow-y   : auto;
   overflow-x   : hidden;
@@ -20,7 +20,7 @@ mat-card  {
 
 .transaction-data {
   display: grid;
-  grid-template-columns: 65px 125px;
+  grid-template-columns: 95px 125px;
   width         : 100%;
   overflow-y    : auto;
   overflow-x    : hidden;

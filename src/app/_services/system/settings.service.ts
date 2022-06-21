@@ -41,7 +41,6 @@ export class SettingsService {
                private httpCache: HttpClientCacheService,
                private siteService: SitesService,
                private appInitService  : AppInitService,
-               private userAuthorizationService     : UserAuthorizationService,
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()
   }
@@ -115,8 +114,6 @@ export class SettingsService {
 
   }
 
-
-
   getSetting(site: ISite, id: number):  Observable<ISetting> {
 
     const controller = "/settings/"
@@ -145,7 +142,6 @@ export class SettingsService {
 
   }
 
-
   deleteSettingByName(site: ISite, name: string) {
     const controller = "/settings/"
 
@@ -157,7 +153,6 @@ export class SettingsService {
 
     return this.http.delete<ISetting>(url);
   }
-
 
   getLabels(site: ISite):  Observable<ISetting[]> {
 
@@ -291,7 +286,7 @@ export class SettingsService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    const options = { url: url, cacheMins: 60};
+    // const options = { url: url, cacheMins: 60};
 
     return this.http.get<UIHomePageSettings>(url);
 

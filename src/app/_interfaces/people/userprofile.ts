@@ -28,6 +28,8 @@ export interface ClientSearchModel {
   lastPage : number;
   useNameInAllFieldsForSearch: boolean;
   id: number;
+  clientTypeID: number;
+
 }
 
 export interface IUserProfile {
@@ -197,14 +199,14 @@ export interface FlowVendor {
   email	:     string;
   phone	:     string;
   repName	:     string;
-  repLicense:     string;	
+  repLicense:     string;
   repPhone	:     string;
   repEmail	:     string;
   nutrients	:     string;
   veriticallyIntegrated	:   boolean;
 }
 
-export interface ImportFlowVendorResults { 
+export interface ImportFlowVendorResults {
   listAdded: FlowVendor[];
   listNotAdded: FlowVendor[];
 }

@@ -2,6 +2,7 @@
 export interface ProductSearchModel {
   barcode:                      string;
   name:                         string;
+  productID                   : number;
   subCategory:                  string;
   category:                     string;
   department:                   string;

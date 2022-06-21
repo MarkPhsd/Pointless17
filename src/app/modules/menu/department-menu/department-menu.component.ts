@@ -101,7 +101,6 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this._department)  {  this._department.unsubscribe();}
-    
   }
 
   initDepartment() {

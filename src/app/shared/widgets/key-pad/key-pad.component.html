@@ -11,15 +11,24 @@
             <mat-label >
               <ng-content></ng-content>
             </mat-label>
-            <input   matInput
+            <input  matInput
                     #input
                     appAutoFocusInput
                     [(ngModel)]        ="cashValue"
                     [type]             ="inputType"
                     [formControlName]  ="fieldName"
                     class="form-control" >
+
+            <button *ngIf="cashValue"
+                    matSuffix
+                  mat-icon-button aria-label="Clear"
+                  (click)="clearInput()">
+            <mat-icon>close</mat-icon>
+          </button>
+
         </mat-form-field>
     </div>
+
     <div>
       <button class= "keyboard-button"
               mat-button
@@ -109,9 +118,3 @@
     </mat-card-content>
   </mat-card>
 
-<!--
- Field {{fieldName}} + formatted {{formatted}} / formattedValue {{formattedValue}}<br>
- decimals  {{decimals}}<br>
- requireWholeNumber {{requireWholeNumber}}<br>
- value{{value}}<br>
- inputValueType {{inputTypeValue}}<br> -->
