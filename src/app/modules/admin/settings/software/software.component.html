@@ -1,12 +1,77 @@
-
 <div class="features-grid">
-  <div>
-    <uihome-page-settings>Home Page Settings</uihome-page-settings>
-  </div>
-  <div>
-    <app-uitransactions>Transaction View Settings</app-uitransactions>
-  </div>
+  <mat-accordion class="example-headers-align" multi="false">
+    <mat-expansion-panel [expanded]="accordionStep == 0"
+                         (opened)="setStep(0)"
+                         hideToggle>
+        <mat-expansion-panel-header>
 
-  <div><app-scale-settings></app-scale-settings></div>
+          <mat-panel-title>
+            Interfaces Settings
+          </mat-panel-title>
+
+          <mat-panel-description>
+            <mat-icon>interface</mat-icon> 
+          </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+        <ng-template #accordionStep0>
+          <uihome-page-settings>Interface Settings</uihome-page-settings>
+        </ng-template>
+
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="accordionStep == 1"
+                           (opened)="setStep(1)"
+                           hideToggle>
+        <mat-expansion-panel-header>
+
+          <mat-panel-title>
+            Transaction Settings 
+          </mat-panel-title>
+
+          <mat-panel-description>
+            <mat-icon>cash_drawer</mat-icon>  
+          </mat-panel-description>
+
+        </mat-expansion-panel-header>
+
+        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+        <ng-template #accordionStep1>
+          <app-uitransactions>Transaction View Settings</app-uitransactions>
+        </ng-template>
+
+      </mat-expansion-panel>
+
+      <mat-expansion-panel [expanded]="accordionStep == 2"
+                          (opened)="setStep(2)"
+                          hideToggle>
+          <mat-expansion-panel-header>
+
+
+            <mat-panel-title>
+              Scale Settings   
+            </mat-panel-title>
+
+            <mat-panel-description>
+              <mat-icon>scale</mat-icon>
+            </mat-panel-description>
+
+          </mat-expansion-panel-header>
+
+          <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+
+          <ng-template #accordionStep2>
+              <div><app-scale-settings></app-scale-settings></div>
+          </ng-template>
+
+       </mat-expansion-panel>
+
+  </mat-accordion>
+
+
 </div>
 

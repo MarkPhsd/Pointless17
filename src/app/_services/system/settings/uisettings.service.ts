@@ -128,6 +128,7 @@ export interface UIHomePageSettings {
   sendGridBalanceSheetTemplate : string;
   sendGridPasswordResetTemplate : string;
   sendGridNotificationTemplate: string;
+  sendGridOrderReadyNotificationTemplate: string;
 
   administratorEmail : string;
   outGoingCustomerSupportEmail: string;
@@ -209,7 +210,6 @@ export class UISettingsService {
   }
 
   initSecureSettings() {
-    // console.log('initSecureSettings',this.userAuthorizationService.currentUser() )
     if (this.userAuthorizationService.currentUser()) {
       this.getTransactionUISettings();
       this.subscribeToStripedCachedConfig();
@@ -258,8 +258,8 @@ export class UISettingsService {
     if (user && user.username && user.token && (user.roles != '' && user.roles != 'user' )) {
       return this.settingsService.getSettingByName(site, name)
     }
+    return this.settingsService.getSettingByNameNoRoles(site, name);
 
-    return this.settingsService.getSettingByNameNoRoles(site, name)
   }
 
   getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
@@ -343,16 +343,15 @@ export class UISettingsService {
       sideToolbarEnableBrand   : [''],
       sideToolbarEnableType    : [''],
       sideToolbarEnableCategory: [''],
-
       sendGridOrderTemplate: [''],
       sendGridSalesReportTemplate : [''],
       sendGridBalanceSheetTemplate : [''],
       sendGridPasswordResetTemplate: [''],
       sendGridNotificationTemplate: [''],
+      sendGridOrderReadyNotificationTemplate: [''],
       administratorEmail : [''],
       outGoingCustomerSupportEmail: [''],
       salesReportsEmail: [''],
-
      })
     return fb
   }
@@ -446,7 +445,7 @@ export class UISettingsService {
   }
 
   initForm(fb: FormGroup): FormGroup {
-    fb = this._fb.group({
+    return this._fb.group({
       id                     : [],
       displayNotes           : [],
       displayView            : [],
@@ -476,7 +475,6 @@ export class UISettingsService {
       fuzzyMatchBarcodeLookup: [''],
       requireEnterTabBarcodeLookup: [''],
      })
-    return fb
   }
 
   initUITransactionsForm(config: TransactionUISettings, fb: FormGroup): FormGroup {
@@ -485,7 +483,7 @@ export class UISettingsService {
     return fb
   }
 
-  setFormValue(inputForm: FormGroup,
+  setFormValue(      inputForm: FormGroup,
                      setting: ISetting,
                      name: string): Observable<ISetting> {
     inputForm = this.initForm(inputForm);
@@ -519,7 +517,7 @@ export class UISettingsService {
 
     if (!setting || setting.id) {
       const site    = this.siteService.getAssignedSite();
-      return this.settingsService.getSettingByNameCachedNoRoles(site, name).pipe()
+      return this.settingsService.getSettingByNameNoRoles(site, name).pipe()
     };
 
     ui.id = setting.id

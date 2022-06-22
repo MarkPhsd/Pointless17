@@ -16,6 +16,7 @@
   <div>
 
     <ng-container [ngTemplateOutlet]="isWebPrintingTemplate"></ng-container>
+
     <ng-template #webPrintingTemplate>
       <div *ngIf="platForm === 'web' && (!isElectronApp)">
         <h3>Print Test for Web </h3>
@@ -67,7 +68,9 @@
     </ng-template>
 
     <ng-container [ngTemplateOutlet]="isElectronPrintingTemplate"></ng-container>
+
     <ng-template #electronPrintingTemplate>
+
       <div *ngIf="isElectronApp">
         <h4>Windows Installed Printers</h4>
 
@@ -148,6 +151,7 @@
   <h3>Print Templates</h3>
 
   <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate"></ng-container>
+  
   <ng-template #electronPrintingDesignTemplate>
 
     <div  *ngIf="(receiptList$ | async) as list; else loadingReceiptTemplates">

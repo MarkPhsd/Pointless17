@@ -25,6 +25,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Output() outPutClearOrder    = new EventEmitter();
   @Output() outPutToggleSuspension = new EventEmitter();
   @Output() outPutEmailOrder    = new EventEmitter();
+  @Output() outPutEmailNotifyOrder = new EventEmitter();
+  @Output() outPutTextNotify       = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -92,6 +94,13 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   }
   clearOrder() {
     this.outPutClearOrder.emit(true)
+  }
+
+  textNotify() {
+    this.outPutTextNotify.emit(true)
+  }
+  emailNotifyOrder() {
+    this.outPutEmailNotifyOrder.emit(true)
   }
 
 }

@@ -4,11 +4,10 @@ import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-
 @Component({
   selector: 'uihome-page-settings',
   templateUrl: './uihome-page-settings.component.html',
-  styleUrls: ['./uihome-page-settings.component.scss']
+  styleUrls: ['./uihome-page-settings.component.scss'], 
 })
 export class UIHomePageSettingsComponent implements OnInit {
 
@@ -20,25 +19,34 @@ export class UIHomePageSettingsComponent implements OnInit {
   uiSettings$ : Observable<ISetting>;
   uiHomePage  : UIHomePageSettings;
 
+  showEmailSettings = false;
+
   constructor(
     private settingsService  : SettingsService,
     private uISettingsService: UISettingsService) { }
 
   ngOnInit() {
+    
     this.settingsService.getUIHomePageSettingsNoCache().subscribe(data => {
       if (data) {
+         
         this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm)
-        this.uiHomePage   = data
-        this.initializeImages(this.uiHomePage)
-        this.initForm(this.uiHomePage);
+        if (this.inputForm) { 
+          this.uiHomePage   = data
+          this.initializeImages(this.uiHomePage)
+          this.inputForm.patchValue(data)
+          // console.log('data homepage', data)
+        }
         return
       } else {
         this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm);
+        // console.log('data homepage empty')
         this.initializeImages(this.uiHomePage)
         this.initForm(this.uiHomePage);
       }
     });
   }
+
 
   initializeImages(data: UIHomePageSettings) {
     try {
@@ -65,7 +73,6 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   initForm(data: UIHomePageSettings) {
     if (this.inputForm) {
-      const form = this.inputForm;
       this.inputForm.patchValue(data)
       return
     }

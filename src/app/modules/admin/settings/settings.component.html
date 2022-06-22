@@ -28,11 +28,9 @@
         <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
         <ng-template #accordionStep0>
-
           <div *ngIf="accordionStep == 0">
             <app-database-schema></app-database-schema>
           </div>
-
         </ng-template>
 
         <ng-template #loading>

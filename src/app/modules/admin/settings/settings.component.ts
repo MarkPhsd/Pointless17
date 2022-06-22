@@ -87,10 +87,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy(): void {
-      //Called once, before the instance is destroyed.
-      //Add 'implements OnDestroy' to the class.
       if (this._accordionStep) { this._accordionStep.unsubscribe()}
     }
+
     routerNavigation(url: string) {
       this.router.navigate([url]);
     }

@@ -26,6 +26,7 @@ import { IPaymentMethod } from './payment-methods.service';
 import { PlatformService } from '../system/platform.service';
 import { ClientTableService } from '../people/client-table.service';
 import { SendGridService } from '../twilio/send-grid.service';
+import { UISettingsService } from '../system/settings/uisettings.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -109,6 +110,8 @@ export class OrderMethodsService implements OnDestroy {
               private sendGridService         :  SendGridService,
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
+              private uiSettingService       : UISettingsService,
+            
              ) {
     this.initSubscriptions();
 
@@ -265,6 +268,23 @@ export class OrderMethodsService implements OnDestroy {
     this.notifyEvent('No email in contact', 'Alert')
     return null
   }
+
+  emailNotifyOrder(order: IPOSOrder) : Observable<any> {
+    if (order && order.clientID) {
+
+      if (order.clients_POSOrders.email) {
+        const clientName = `${order?.clients_POSOrders?.firstName} ${order?.clients_POSOrders?.lastName}`
+        if (this.uiSettingService.homePageSetting) { 
+          const set = this.uiSettingService.homePageSetting;
+          const template = set.sendGridOrderReadyNotificationTemplate
+          return  this.sendGridService.sendTemplateOrder(order.id, order.history, order.clients_POSOrders.email, clientName, template, "Your order is ready."  )
+        }
+      }
+    }
+    this.notifyEvent('No email in contact', 'Alert')
+    return null
+  }
+
 
   async addItemToOrderWithBarcodePromise(site: ISite, newItem: NewItem):  Promise<ItemPostResults> {
     if (!newItem) {return}

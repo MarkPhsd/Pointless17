@@ -1,14 +1,16 @@
 <mat-card>
   <mat-card-subtitle>
-    <ng-content></ng-content>
+    <h3><ng-content></ng-content></h3>
+    <mat-divider></mat-divider>
   </mat-card-subtitle>
 
   <ng-template #loading>... loading
     <mat-spinner [diameter]="25"></mat-spinner>
   </ng-template>
 
-  <mat-card-content>
-    <div  *ngIf="inputForm && uiHomePage; else loading"
+  <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
+
+    <div  
           [formGroup]="inputForm">
 
       <div class="grid-item">
@@ -145,7 +147,7 @@
       </div>
 
       <div>
-        <div>Order Settings</div>
+        <h4>Order Settings</h4>
         <mat-divider></mat-divider>
         <div class="toggle-fields">
           <mat-slide-toggle
@@ -160,7 +162,7 @@
 
     <div *ngIf="uiHomePage">
 
-      <div>Images</div>
+      <h4>Images</h4>
       <mat-divider></mat-divider>
 
       <div class="grid-views">
@@ -199,15 +201,24 @@
       </div>
     </div>
 
+    <mat-divider></mat-divider>
     <div>
-      <app-email-settings [inputForm]="inputForm"></app-email-settings>
-    </div>
+      <button mat-raised-button color="primary" (click)="showEmailSettings = !showEmailSettings">
+        <mat-icon>email</mat-icon>Email Settings</button>
 
+      <app-email-settings *ngIf="showEmailSettings" 
+                          [inputForm]="inputForm">
+      </app-email-settings>
+    </div>
+  
+  </mat-card-content>
+  <mat-card-actions>
+    <mat-divider></mat-divider>
     <div>
       <button mat-raised-button
               color="primary"
               (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
     </div>
-  </mat-card-content>
+  </mat-card-actions>
 
 </mat-card>

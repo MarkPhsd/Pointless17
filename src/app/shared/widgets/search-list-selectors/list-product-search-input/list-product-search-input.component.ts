@@ -10,7 +10,6 @@ import { Subject ,fromEvent, Subscription } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { C } from '@angular/cdk/keycodes';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
@@ -62,7 +61,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     private fb             :        FormBuilder,
     private orderService   :        OrdersService,
     private orderMethodService    : OrderMethodsService,
-    private uISettingsService:    UISettingsService,
+    private uISettingsService     : UISettingsService,
   )
   {   }
 
@@ -70,7 +69,6 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     this.uISettingsService.transactionUISettings$.subscribe( data => {
       if (data) {
           this.transactionUISettings =  data
-
           this.initForm();
           if (!this.input ) {return}
           this.initSearchSubscription()
@@ -96,6 +94,11 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
       debounceTime(500),
       distinctUntilChanged(),
       tap((event:KeyboardEvent) => {
+
+        if (!this.transactionUISettings ||  this.transactionUISettings.requireEnterTabBarcodeLookup) {return}
+
+        console.log('Search Results Input', this.transactionUISettings.requireEnterTabBarcodeLookup)
+        console.log('Search Results Input', this.transactionUISettings)
         const search  = this.input.nativeElement.value
         this.refreshSearch();
       })
@@ -118,12 +121,18 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     }
   }
 
-
-
   async refreshSearch() {
     const barcode =  this.input.nativeElement.value
     await this.addItemToOrder(barcode)
     this.searchForm.patchValue({itemName: ''})
+  }
+
+  async onUpdate() {
+    if (this.transactionUISettings &&  this.transactionUISettings.requireEnterTabBarcodeLookup) {
+      const barcode =  this.input.nativeElement.value
+      await this.addItemToOrder(barcode)
+      this.searchForm.patchValue({itemName: ''})
+    }
   }
 
   addItemToOrder(barcode: string) {

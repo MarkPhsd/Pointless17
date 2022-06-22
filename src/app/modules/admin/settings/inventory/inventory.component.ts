@@ -33,13 +33,15 @@ export class InventoryComponent  {
   async initTypes(){
     this.loading_initTypes = true;
     const result = window.confirm('Please confirm. This function will delete all item type settings and re-initialize all options for item types.');
+    
+    if (!result) { this.loading_initTypes = false;}
+
     if (result) {
       this.loading_initTypes = true ;
       this.itemTypeMethodsService.initalizeTypes().subscribe( data => {
         this.itemTypeMethodsService.notify(`Items re-initialized.`, 'Success', 2000)
         this.loading_initTypes = false;
       }, err => {
-        console.log('error initializing types', err)
         this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 2000)
         this.loading_initTypes = false;
       })

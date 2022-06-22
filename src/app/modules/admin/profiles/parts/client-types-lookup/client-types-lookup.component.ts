@@ -36,7 +36,6 @@ export class ClientTypesLookupComponent implements OnInit {
       if (data) {
         if (user?.roles === 'admin' || user?.roles === 'manager') {
           this.clientTypes = data
-          // console.log( 'ClientTypesLookupComponent', this.clientTypes)
           return
         }
         this.clientTypes = data.filter(  data => data.allowStaffUse ==  true)

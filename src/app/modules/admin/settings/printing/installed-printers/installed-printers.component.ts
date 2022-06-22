@@ -296,10 +296,10 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
     get  isElectronPrintingDesignTemplate() {
-    if (this.isElectronApp) {
       return this.electronPrintingDesignTemplate
-    }
-    return null
+    // if (this.isElectronApp) {
+    // }
+    // return null
   }
 
 

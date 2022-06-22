@@ -1,5 +1,5 @@
 button {
-  margin-top: 4px;
+  margin: 8px
 }
 
 mat-divider {
@@ -36,4 +36,13 @@ mat-divider {
     max-width: 175px;
     width: 175px;
     height: 175px;
+  }
+ 
+  mat-action-buttons { 
+    padding: 5px;
+  }
+
+
+  mat-card-actions { 
+    padding:5px;
   }

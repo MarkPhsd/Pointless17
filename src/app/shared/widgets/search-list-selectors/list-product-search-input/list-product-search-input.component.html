@@ -9,9 +9,10 @@
               matInput
               cdkTrapFocus
               cdkTrapFocusAutoCapture
-              type           ="text"
-              id             ="name"
-              formControlName="itemName">
+              type           = "text"
+              id             = "name"
+              (keyup.enter)  = "onUpdate()"
+              formControlName= "itemName">
     </mat-form-field>
   </div>
 

@@ -279,16 +279,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
-  emailOrder(event) {
-    this.orderMethodService.emailOrder(this.order).subscribe(data => {
-      if (data.isSuccessStatusCode) {
-        this.orderMethodService.notifyEvent('Email Sent', 'Success')
-       }
-      if (!data.isSuccessStatusCode) {
-        this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
-      }
-    })
-  }
 
   checkIfPaymentsMade() {
     this.paymentsMade = false
@@ -605,4 +595,31 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   openReceiptView() {
     this.printingService.previewReceipt()
   }
+
+  textNotify() {
+    // this.outPutTextNotify.emit(true)
+  }
+
+  emailNotifyOrder(event) {
+    this.orderMethodService.emailOrder(this.order).subscribe(data => {
+      if (data.isSuccessStatusCode) {
+        this.orderMethodService.notifyEvent('Email Sent', 'Success')
+       }
+      if (!data.isSuccessStatusCode) {
+        this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
+      }
+    })
+  }
+  
+  emailOrder(event) {
+    this.orderMethodService.emailOrder(this.order).subscribe(data => {
+      if (data.isSuccessStatusCode) {
+        this.orderMethodService.notifyEvent('Email Sent', 'Success')
+       }
+      if (!data.isSuccessStatusCode) {
+        this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
+      }
+    })
+  }
+
 }

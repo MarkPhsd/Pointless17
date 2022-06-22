@@ -33,6 +33,32 @@
     </button>
   </div>
 
+  <div>
+    <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
+            mat-raised-button
+            class="button"
+            color="primary"
+            (click)="emailNotifyOrder()">
+      <mat-icon>email</mat-icon>
+      <span *ngIf="!smallDevice">
+         Email Notify
+       </span>
+    </button>
+  </div>
+
+  <div>
+    <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.phone) "
+            mat-raised-button
+            class="button"
+            color="primary"
+            (click)="textNotify()">
+      <mat-icon>email</mat-icon>
+      <span *ngIf="!smallDevice">
+         Text Notify 
+       </span>
+    </button>
+  </div>
+
   <div >
     <button mat-raised-button
             [disabled] = "!((!order.history || !order.completionDate) || isStaff)"
@@ -83,7 +109,7 @@
   <div *ngIf="mainPanel && !order.suspendedOrder">
     <span>
       <button mat-raised-button
-              [disabled]="!(order.history && isAuthorized && order.clientID != 0)"
+              [disabled]="( (order.history && !isAuthorized) && order.clientID == 0)  == true"
               color="warn"
               (click)="suspendOrder()">Suspend</button>
     </span>
@@ -92,10 +118,11 @@
   <div *ngIf="mainPanel && order.suspendedOrder">
     <span>
       <button mat-raised-button color="warn"
-              [disabled]="!(order.history && isAuthorized && order.clientID != 0)"
+              [disabled]="( (order.history && !isAuthorized) && order.clientID == 0)  == true"
               (click)="removeSuspension()">Un Suspend</button>
     </span>
   </div>
+
   <div>
     <button mat-raised-button class="button"
               [disabled]="!(!order.history

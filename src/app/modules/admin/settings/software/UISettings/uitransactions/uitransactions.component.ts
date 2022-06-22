@@ -1,19 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy,Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { EMPTY, Observable, switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+
 @Component({
   selector: 'app-uitransactions',
   templateUrl: './uitransactions.component.html',
-  styleUrls: ['./uitransactions.component.scss']
+  styleUrls: ['./uitransactions.component.scss'],
 })
 export class UITransactionsComponent implements OnInit {
 
   inputForm       : FormGroup;
-  uiSettings      :  ISetting
+  uiSettings      : ISetting
   uiSettings$     : Observable<ISetting>;
   uiTransactions  = {} as TransactionUISettings;
 
@@ -25,49 +26,37 @@ export class UITransactionsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.uISettingsService.getSetting('UITransactionSetting').subscribe(data => {
-      if (data) {
-        this.initForm(data);
-      } else {
-        const config   = {} as TransactionUISettings
-        const form = this.inputForm;
-        this.inputForm = this.uISettingsService.initForms_Sub(form, 'UITransactionSetting', config)
-      }
-    });
-  }
 
-  initForm(setting: ISetting) {
-    // if (!this.inputForm) {return}
-    const form = this.inputForm
-    this.uISettingsService.setFormValue(form, setting, 'UITransactionSetting' ).subscribe(
-      { next:  data => {
-        if (data) {
-          const config = JSON.parse(data.text)
-          this.inputForm = this.uISettingsService.initForms_Sub(form, 'UITransactionSetting', config)
+    this.uISettingsService.getSetting('UITransactionSetting').subscribe(data => {
+      this.inputForm = this.uISettingsService.initForm(this.inputForm)
+
+      try {
+        if (data && data.text) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          this.inputForm.patchValue( this.uiTransactions)
+          console.log('this.inputForm.', this.inputForm.value)
         } else {
-          const config   = {} as TransactionUISettings
-           this.inputForm = this.uISettingsService.initForms_Sub(form, 'UITransactionSetting', config)
+          this.uiTransactions  = {} as TransactionUISettings;
+          this.inputForm.patchValue( this.uiTransactions)
+          console.log('this.inputForm2.', this.inputForm.value)
         }
-      }, error: err => {
-        const config   = {} as TransactionUISettings
-        this.inputForm = this.uISettingsService.initForms_Sub(form, 'UITransactionSetting', config)
+      } catch (error) {
+        console.log('error', error)
       }
-    } )
-  }
+
+    });
+  } 
 
   updateSetting(){
-
     if (!this.validateForm(this.inputForm)) { return }
-
     const transaction = this.inputForm.value as TransactionUISettings;
     if (transaction.id) {
-
       this.uISettingsService.saveConfig(this.inputForm, 'UITransactionSetting').subscribe(data => {
-        this.uISettingsService.notify('Saved', 'Success')
+          this.uISettingsService.notify('Saved', 'Success')
+          this.uISettingsService.updateUITransactionSubscription(transaction)
         }
       )
     }
-
   }
 
   validateForm(form: FormGroup) {

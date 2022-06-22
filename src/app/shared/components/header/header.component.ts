@@ -234,7 +234,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-
   refreshScannerOption() {
     this.scannerEnabled = false
     if (this.platFormService.isApp()) {
