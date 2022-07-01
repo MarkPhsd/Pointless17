@@ -20,6 +20,7 @@ import { FlowInventory, ImportFlowInventoryResults } from 'src/app/_interfaces/i
   styleUrls: ['./csv-import.component.scss']
 })
 export class CSVImportComponent implements OnInit, OnDestroy {
+
   public timerInterval:any;
   inputForm   : FormGroup;
   headerValues= true;
@@ -41,7 +42,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   productImports            : ImportProductResults;
   resultsMessage            : any;
 
-  constructor( 
+  constructor(
     private fakeProductsService : FakeProductsService,
     private fakeContactService  : FakeContactsService,
     private fakeInventoryService: FakeInventoryService,
@@ -61,12 +62,13 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     this.getProgressCount(true)
   }
 
-  initForm(){ 
+  initForm(){
      this.inputForm = this.fb.group({
       id: [],
       name: [],
     })
   }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
@@ -95,7 +97,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
       });
   }
 
-  selectScheme(event) { 
+  selectScheme(event) {
     this.schemaValue = event;
     this.getSchemaType();
     return;
@@ -105,7 +107,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     this.fileChangeListener($event);
   }
 
-  downloadExample() { 
+  downloadExample() {
     let items = [] as any;
     let name = 'filename';
 
@@ -129,7 +131,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
       name = 'Import Flow Products'
     }
     this.getSchemaType()
-    
+
     this.schemaName = name;
     if (!items) { return }
     this.downloadFile(items, name)
@@ -166,23 +168,23 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     if (this.schemaValue == 6) {
       name = 'Import FH Inventory'
     }
-   
+
     if (this.schemaValue == 7) {
       name = 'Import FH Clients'
     }
-   
+
     if (this.schemaValue == 8) {
       name = 'Import FH Vendors'
     }
-   
+
     if (this.schemaValue == 9) {
       name = 'Import FH Strains'
     }
-   
+
     this.schemaName = name;
     return name
   }
-  
+
   downloadFile(data: any, name: string) {
       const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
       const header = Object.keys(data[0]);
@@ -194,7 +196,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
       saveAs(blob, `${name}.csv`);
   }
 
-  reset() { 
+  reset() {
     this.schemaValue = 0;
     this.schemaName  = '';
     this.resetFileInfo();
@@ -202,16 +204,16 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     this.initForm()
   }
 
-  resetFileInfo() { 
+  resetFileInfo() {
     this.flowProductImportresults = null;
     this.csvRecords = null;
     this.resultsMessage = '';
     this.fileImportInput.nativeElement.value = "";
   }
 
-  importFiles() { 
+  importFiles() {
 
-    if (this.schemaValue == 1) { 
+    if (this.schemaValue == 1) {
       this.importProducts()
     }
     if (this.schemaValue == 2) { }
@@ -238,8 +240,8 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  getProgressCount(report: boolean){ 
-    if (report) { 
+  getProgressCount(report: boolean){
+    if (report) {
       this.timerInterval = setInterval(() => {
          this.getProgress()
       }, 5000);
@@ -251,7 +253,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
 
   getProgress() {
     const site  = this.siteService.getAssignedSite()
-    this.menuService.getImportCountProgress(site).subscribe(data => { 
+    this.menuService.getImportCountProgress(site).subscribe(data => {
       try {
         this.progress = data;
         this.progressValue =  +((+data.progress/+data.total ) * 100).toFixed(0)
@@ -260,15 +262,15 @@ export class CSVImportComponent implements OnInit, OnDestroy {
       }
     })
   }
-  
-  importFlowProducts(){ 
+
+  importFlowProducts(){
     const items =  this.csvRecords  as FlowProducts[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-    if (items) { 
+    if (items) {
       this.getProgressCount(true)
-      this.menuService.importFlowProducts(site,items).subscribe(data => { 
+      this.menuService.importFlowProducts(site,items).subscribe(data => {
         this.flowProductImportresults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -278,14 +280,14 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   }
 
 
-  importFlowStrains(){ 
+  importFlowStrains(){
     const items =  this.csvRecords  as FlowStrain[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-    if (items) { 
+    if (items) {
       this.getProgressCount(true)
-      this.menuService.importFlowStrains(site,items).subscribe(data => { 
+      this.menuService.importFlowStrains(site,items).subscribe(data => {
         this.importFlowStainsResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -294,15 +296,15 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  importProducts(){ 
+  importProducts(){
     const items =  this.csvRecords  as IProduct[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
 
-    if (items) { 
+    if (items) {
       this.getProgressCount(true)
-      this.menuService.importProducts(site,items).subscribe(data => { 
+      this.menuService.importProducts(site,items).subscribe(data => {
         this.importProductResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -311,14 +313,14 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  importFlowVendors(){ 
+  importFlowVendors(){
     const items =  this.csvRecords  as FlowVendor[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-    if (items) { 
+    if (items) {
       this.getProgressCount(true)
-      this.clientTableService.importFlowVendors(site,items).subscribe(data => { 
+      this.clientTableService.importFlowVendors(site,items).subscribe(data => {
         this.importFlowVendorResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -327,14 +329,14 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  importFlowPrices(){ 
+  importFlowPrices(){
     const items =  this.csvRecords  as FlowPrice[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-    if (items) { 
+    if (items) {
       this.getProgressCount(true)
-      this.menuService.importFlowPrices(site,items).subscribe(data => { 
+      this.menuService.importFlowPrices(site,items).subscribe(data => {
         this.importFlowPriceResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -343,15 +345,15 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  importFlowInventory(){ 
+  importFlowInventory(){
     const items =  this.csvRecords  as FlowInventory[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-    
-    if (items) { 
+
+    if (items) {
       this.getProgressCount(true)
-      this.menuService.importFlowInventory(site,items).subscribe(data => { 
+      this.menuService.importFlowInventory(site,items).subscribe(data => {
         this.importFlowInventoryResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -360,17 +362,17 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
   }
 
-  resetProgressIndicator(){ 
+  resetProgressIndicator(){
     const site  = this.siteService.getAssignedSite()
     const item$ = this.menuService.resetProgressIndicator(site)
     item$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         {
           return  this.menuService.getImportCountProgress(site)
         }
       }
       )
-    ).subscribe(data => { 
+    ).subscribe(data => {
         this.progress = data;
         this.progressValue =  +((+data.progress/+data.total ) * 100).toFixed(0)
     })

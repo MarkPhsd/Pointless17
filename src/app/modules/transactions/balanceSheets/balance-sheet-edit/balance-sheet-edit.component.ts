@@ -306,7 +306,6 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   }
 
   print(event){
-    console.log('print')
     this.printingService.updatePrintView(2);
     this.printingService.previewReceipt()
   }

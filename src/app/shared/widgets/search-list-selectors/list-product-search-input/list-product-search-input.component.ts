@@ -1,9 +1,8 @@
 import { Component,Output,OnInit,
          ViewChild ,ElementRef,
-          EventEmitter,OnDestroy,
+          EventEmitter,OnDestroy, AfterViewInit,
           } from '@angular/core';
 import { OrdersService } from 'src/app/_services';
-import { IProductSearchResults } from 'src/app/_services/menu/menu.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription } from 'rxjs';
@@ -11,6 +10,8 @@ import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -38,22 +39,29 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   transactionUISettings:TransactionUISettings;
 
-  searchItems$  : Subject<IProductSearchResults[]> = new Subject();
-  _searchItems$ = this.searchPhrase.pipe(
-    debounceTime(250),
-      distinctUntilChanged(),
-      switchMap(searchPhrase =>
-        {
-          if (!this.transactionUISettings ||  this.transactionUISettings.requireEnterTabBarcodeLookup) {return}
-          this.refreshSearch()
-          return null
-        }
-    )
-  )
+  requireEnter: boolean;
+
+  // searchItems$  : Subject<IProductSearchResults[]> = new Subject();
+  // _searchItems$ = this.searchPhrase.pipe(
+  //   debounceTime(250),
+  //     distinctUntilChanged(),
+  //     switchMap(searchPhrase =>
+  //       {
+  //         if (this.requireEnter) {return}
+  //         this.refreshSearch()
+  //         return null;
+  //       }
+  //   )
+  // )
 
   initSubscriptions() {
-    this._order = this.orderService.currentOrder$.subscribe( data => {
-      this.order = data
+    // this._order = this.orderService.currentOrder$.subscribe( data => {
+    //   this.order = data
+    // })
+    this.uiSettingService.transactionUISettings$.subscribe(data => {
+      if (!data) { return}
+      this.requireEnter = data.requireEnterTabBarcodeLookup;
+      this.transactionUISettings = data;
     })
   }
 
@@ -61,26 +69,40 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     private fb             :        FormBuilder,
     private orderService   :        OrdersService,
     private orderMethodService    : OrderMethodsService,
-    private uISettingsService     : UISettingsService,
+    private settingService        : SettingsService,
+    private siteService           : SitesService,
+    private uiSettingService      : UISettingsService,
   )
   {   }
 
   ngOnInit() {
-    this.uISettingsService.transactionUISettings$.subscribe( data => {
-      if (data) {
-          this.transactionUISettings =  data
-          this.initForm();
-          if (!this.input ) {return}
-          this.initSearchSubscription()
-          this.hideKeyboardTimeOut();
-          if ( this.platForm != 'android' ) {return}
-          this.keyboardDisplayOn = true
-          if (this.platForm != 'android') {
 
+    const site = this.siteService.getAssignedSite()
+    this.initForm();
+    this.initSubscriptions()
+    if (this.searchForm)  {
+      try {
+        this.settingService.getSettingByName(site, 'UITransactionSetting').subscribe( data => {
+
+          if (data && data.text) {
+              this.transactionUISettings =  JSON.parse(data.text) as  TransactionUISettings;
+
+              this.requireEnter = this.transactionUISettings.requireEnterTabBarcodeLookup;
+              if (!this.requireEnter) {   this.initSearchSubscription() }
+              this.hideKeyboardTimeOut();
+
+              if ( this.platForm != 'android') {return}
+              this.keyboardDisplayOn = true
+              if (this.platForm != 'android') {  }
+            }
           }
-        }
+        )
+
+      } catch (error) {
+        console.log('search Items', error)
       }
-    )
+    }
+
   }
 
   ngOnDestroy(): void {
@@ -88,21 +110,21 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   initSearchSubscription() {
-    fromEvent(this.input.nativeElement,'keyup')
-    .pipe(
-      filter(Boolean),
-      debounceTime(500),
-      distinctUntilChanged(),
-      tap((event:KeyboardEvent) => {
-
-        if (!this.transactionUISettings ||  this.transactionUISettings.requireEnterTabBarcodeLookup) {return}
-
-        console.log('Search Results Input', this.transactionUISettings.requireEnterTabBarcodeLookup)
-        console.log('Search Results Input', this.transactionUISettings)
-        const search  = this.input.nativeElement.value
-        this.refreshSearch();
-      })
-    ).subscribe();
+    try {
+      fromEvent(this.input.nativeElement,'keyup')
+      .pipe(
+        filter(Boolean),
+        debounceTime(500),
+        distinctUntilChanged(),
+        tap((event:KeyboardEvent) => {
+          if (this.requireEnter) { return}
+          const search  = this.input.nativeElement.value
+          this.refreshSearch();
+        })
+      ).subscribe();
+    } catch (error) {
+      console.log('initSearchSubscription', error)
+    }
   }
 
   initForm() {
@@ -124,19 +146,18 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   async refreshSearch() {
     const barcode =  this.input.nativeElement.value
     await this.addItemToOrder(barcode)
-    this.searchForm.patchValue({itemName: ''})
   }
 
   async onUpdate() {
-    if (this.transactionUISettings &&  this.transactionUISettings.requireEnterTabBarcodeLookup) {
+    if (this.requireEnter) {
       const barcode =  this.input.nativeElement.value
       await this.addItemToOrder(barcode)
-      this.searchForm.patchValue({itemName: ''})
     }
   }
 
-  addItemToOrder(barcode: string) {
-    this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+  async addItemToOrder(barcode: string) {
+    await this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+    this.initForm()
   }
 
 }

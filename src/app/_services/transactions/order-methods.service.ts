@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { MenuService, OrdersService } from 'src/app/_services';
+import { MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
@@ -111,7 +111,8 @@ export class OrderMethodsService implements OnDestroy {
               private router: Router,
               private promptWalkService: PromptWalkThroughService,
               private uiSettingService       : UISettingsService,
-            
+              private textMessagingService: TextMessagingService,
+
              ) {
     this.initSubscriptions();
 
@@ -269,12 +270,19 @@ export class OrderMethodsService implements OnDestroy {
     return null
   }
 
+  sendSSMSOrderISReady(order: IPOSOrder) {
+    const site = this.siteService.getAssignedSite()
+    if (order.clients_POSOrders && order.clients_POSOrders.cellPhone && order.clients_POSOrders.firstName) {
+      this.textMessagingService.sendOrderIsReady(site,order.clients_POSOrders.cellPhone,order.clients_POSOrders.firstName, order.id )
+    }
+  }
+
   emailNotifyOrder(order: IPOSOrder) : Observable<any> {
     if (order && order.clientID) {
 
       if (order.clients_POSOrders.email) {
         const clientName = `${order?.clients_POSOrders?.firstName} ${order?.clients_POSOrders?.lastName}`
-        if (this.uiSettingService.homePageSetting) { 
+        if (this.uiSettingService.homePageSetting) {
           const set = this.uiSettingService.homePageSetting;
           const template = set.sendGridOrderReadyNotificationTemplate
           return  this.sendGridService.sendTemplateOrder(order.id, order.history, order.clients_POSOrders.email, clientName, template, "Your order is ready."  )
@@ -365,6 +373,7 @@ export class OrderMethodsService implements OnDestroy {
                        input: any) {
 
     const valid = this.validateUser();
+
     if (!valid) { return };
 
     this.initItemProcess();
@@ -420,13 +429,10 @@ export class OrderMethodsService implements OnDestroy {
 
     addItem$.subscribe(data => {
       if (data) {
-        // console.log('process results', data);
-        // console.log('process results', data?.order?.id);
-        // console.log('process results', data?.message, data.resultErrorDescription);
-        // console.log('process results', data?.order);
+
       }
 
-        if (data.message) {  this.notifyEvent(`${data.message}`, 'Alert ')};
+        if (data.message) {  this.notifyEvent(`Process Result: ${data.message}`, 'Alert ')};
 
         if (data && data.resultErrorDescription) {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');

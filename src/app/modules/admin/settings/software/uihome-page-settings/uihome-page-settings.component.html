@@ -10,7 +10,7 @@
 
   <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
 
-    <div  
+    <div
           [formGroup]="inputForm">
 
       <div class="grid-item">
@@ -206,11 +206,23 @@
       <button mat-raised-button color="primary" (click)="showEmailSettings = !showEmailSettings">
         <mat-icon>email</mat-icon>Email Settings</button>
 
-      <app-email-settings *ngIf="showEmailSettings" 
+      <app-email-settings *ngIf="showEmailSettings"
                           [inputForm]="inputForm">
       </app-email-settings>
     </div>
-  
+
+    <div>
+      <h4>SSMS</h4>
+      <div class="toggle-fields">
+        Requires Twilio SSMS Message account. Secret APIKey must be assigned in configuration.
+        <mat-slide-toggle
+                  formControlName="twilioEnabled"
+                  >
+          <mat-label>Twilio Enabled</mat-label>
+        </mat-slide-toggle>
+      </div>
+    </div>
+
   </mat-card-content>
   <mat-card-actions>
     <mat-divider></mat-divider>

@@ -52,6 +52,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   _loginStatus    : Subscription;
   loginStatusvalue: number;
 
+  rememberMe: boolean;
+
   async initSubscriptions() {
     this._user = this.authenticationService.user$.subscribe( user => {
       if (user)  { this.loggedInUser = user }
@@ -112,6 +114,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   async ngOnInit() {
 
     this.bucket = await this.awsBucketService.awsBucketURL()
+
+    if (localStorage.getItem('rememberMe') === 'true') {
+      this.rememberMe = true;
+    }
 
     this.initForm();
     this.initSubscriptions()
@@ -322,6 +328,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.submitted      = true;
     this.statusMessage  = "...loggining in"
     this.spinnerLoading = true;
+  }
+
+  updateRememberMe(checked: boolean) {
+    this.rememberMe = checked
+    if (this.rememberMe) {
+      localStorage.setItem('rememberMe', 'true')
+      return
+    }
+    localStorage.setItem('rememberMe', 'false')
   }
 
   onSubmit() {

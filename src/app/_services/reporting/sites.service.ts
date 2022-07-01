@@ -10,9 +10,6 @@ import { AppInitService, IAppConfig } from '../system/app-init.service';
 import { PlatformService } from '../system/platform.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -119,29 +116,35 @@ export class SitesService {
 
    getAssignedSite(): ISite {
 
-    let site = {} as ISite
-    const url = localStorage.getItem("site.url")
+    try {
+      let site = {} as ISite
+      const url = localStorage.getItem("site.url")
 
-    if (url == undefined) {
-      this.setDefaultSite();
+      if (!url || url == undefined) {
+        this.setDefaultSite();
+      }
+
+      if (url) {
+        site.metrcURL           = localStorage.getItem('site.metrcURL')
+        site.metrcLicenseNumber = localStorage.getItem('site.metrcLicenseNumber')
+        site.url                = url
+        site.name               = localStorage.getItem("site.name")
+        site.id                 = parseInt(localStorage.getItem("site.id"))
+      } else {
+        site.url                = this.apiUrl
+        site.name               = "local"
+        site.id                 = 0
+        site.metrcURL           = ''
+        site.metrcLicenseNumber = ''
+        site.id                 = parseInt(localStorage.getItem("site.id"))
+      }
+      return site
+    } catch (error) {
+      console.log(error)
+      return null;
     }
+    return null;
 
-    if (url) {
-      site.metrcURL           = localStorage.getItem('site.metrcURL')
-      site.metrcLicenseNumber = localStorage.getItem('site.metrcLicenseNumber')
-      site.url                = url
-      site.name               = localStorage.getItem("site.name")
-      site.id                 = parseInt(localStorage.getItem("site.id"))
-    } else {
-      site.url                = this.apiUrl
-      site.name               = "local"
-      site.id                 = 0
-      site.metrcURL           = ''
-      site.metrcLicenseNumber = ''
-      site.id                 = parseInt(localStorage.getItem("site.id"))
-    }
-
-    return site
   }
 
  async setDefaultSite(): Promise<ISite> {

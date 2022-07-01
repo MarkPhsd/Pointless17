@@ -1,17 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef, Renderer2, Input, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { errorMonitor } from 'events';
 import { TextractService } from 'src/app/_services/aws/textract.service';
 import { AWSBucketService } from 'src/app/_services';
 import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
-import { catchError, retry, tap } from 'rxjs/operators';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { Router } from '@angular/router';
-import { promise } from 'protractor';
-import { IUserProfile } from 'src/app/_interfaces';
-import { async } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { IUserProfile } from 'src/app/_interfaces';
 
 @Component({
   selector: 'app-image-capture',
@@ -38,11 +34,11 @@ export class ImageCaptureComponent implements OnInit, OnDestroy {
   @Input() clientID: string;
 
   captures: Array<any>;
-  fileUploaded: boolean = false;
-  showData: boolean = false;
-  tryAgainOn: boolean = false;
-  captureOn: boolean = true;
-  profileReady: boolean = false;
+  fileUploaded = false;
+  showData      = false;
+  tryAgainOn    = false;
+  captureOn     = true;
+  profileReady = false;
 
   imageSrc: any;
   status: string;
@@ -60,7 +56,6 @@ export class ImageCaptureComponent implements OnInit, OnDestroy {
   loading: boolean ;
 
   constructor(
-              private renderer: Renderer2,
               private awsBucketService: AWSBucketService,
               private textractService: TextractService,
               private _snackBar: MatSnackBar,

@@ -82,6 +82,22 @@ export class ClientTableService {
 
   };
 
+  putPassword(site: ISite, id: any, client: IClientTable): Observable<IClientTable> {
+
+    if (id == 0) {return EMPTY}
+
+    const controller =  "/ClientTable/"
+
+    const endPoint = `putPassword`
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.put<IClientTable>(url , client)
+
+  };
+
   postClientWithEmployee(site: ISite, employee: employee): Observable<IEmployeeClient> {
 
     const controller =  "/ClientTable/"

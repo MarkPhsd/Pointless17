@@ -87,8 +87,13 @@
                                   (click)='browseMenu()'>Guest</button>
                         </div>
 
-                         <!-- {{spinnerLoading}} -->
+                        <div>
 
+                          <mat-checkbox [(ngModel)]="rememberMe"
+                                        (change)="updateRememberMe($event.checked)">
+                            Remember Me
+                          </mat-checkbox>
+                        </div>
                         <div class="spinner"
                               *ngIf="spinnerLoading" >
                           <mat-spinner diameter="30"></mat-spinner>

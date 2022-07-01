@@ -289,6 +289,8 @@ import { StoreCreditPopUpComponent } from '../modules/posorders/pos-payment/stor
 import { StoreCreditIssueComponent } from '../modules/posorders/pos-order/store-credit-issue/store-credit-issue.component';
 import { BalanceSheetViewComponent } from '../modules/admin/settings/printing/balance-sheet-view/balance-sheet-view.component';
 import { CloseDayValidationComponent } from '../modules/transactions/operations/pos-operations/close-day-validation/close-day-validation.component';
+import { PasswordValidationComponent } from '../modules/admin/profiles/password-validation/password-validation.component';
+import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -327,6 +329,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ClientTypeListComponent,
     ClientTypeEditComponent,
     CloseDayValidationComponent,
+    CreditCardPaymentsPrintListComponent,
     CSVImportComponent,
     CompanyEditComponent,
     DatabaseSchemaComponent,
@@ -463,6 +466,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ProfileEditorComponent,
     ProfileIDCardInfoComponent,
     ProfileLookupComponent,
+    PasswordValidationComponent,
     ProducteditComponent,
     ProductlistviewComponent,
     ProductInfoPanelComponent,

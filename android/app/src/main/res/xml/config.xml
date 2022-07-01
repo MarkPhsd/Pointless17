@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <access origin="*" />
-
+  
   <feature name="Printer">
     <param name="android-package" value="de.appplant.cordova.plugin.printer.Printer"/>
   </feature>
@@ -28,6 +28,7 @@
     <param name="onload" value="true"/>
   </feature>
 
+  
   <preference name="ScrollEnabled" value="true" />
   <preference name="BackupWebStorage" value="none" />
   <preference name="SplashMaintainAspectRatio" value="true" />

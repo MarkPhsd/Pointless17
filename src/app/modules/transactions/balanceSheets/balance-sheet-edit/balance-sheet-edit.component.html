@@ -11,19 +11,18 @@
         <div>
           <balance-sheet-header-view
             [sheetType]="sheetType"
-            [sheet]="sheet">
+            [sheet]    ="sheet">
           </balance-sheet-header-view>
         </div>
 
         <div>
           <balance-sheet-calculations-view
               [currentBalance]="getCurrentBalance()"
-              [sheet]="sheet">
+              [sheet]         ="sheet">
           </balance-sheet-calculations-view>
         </div>
 
         <div >
-          <!-- <div class="button-items"> -->
           <app-edit-buttons-standard
               (outputeupdateItem)     ="updateItem($event)"
               (outputupdateItemExit)  ="updateItemExit($event)"
@@ -34,7 +33,6 @@
               [emailOption]           ="true"
               [printOption]           ="true"
             ></app-edit-buttons-standard>
-          <!-- </div> -->
         </div>
       </div>
 
@@ -54,7 +52,6 @@
           </div>
 
           <div *ngIf="!sheet.endTime">
-
             <span *ngIf ="sheet.shiftStarted == 1 && ordersOpen == 0">
               <button color="warn" mat-raised-button (click)="closeSheet()">Close Sheet</button>
             </span>

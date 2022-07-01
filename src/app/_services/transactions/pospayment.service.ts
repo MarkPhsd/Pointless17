@@ -49,7 +49,9 @@ export class POSPaymentService {
 
   makePayment(site: ISite, payment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
 
-    const payLoad  = { order, payment, amount, paymentMethod}
+    const devicename = localStorage.getItem('deviceName')
+
+    const payLoad  = { order, payment, amount, paymentMethod, deviceName: devicename }
 
     const controller = '/POSPayments/'
 

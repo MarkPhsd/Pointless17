@@ -119,12 +119,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.scaleInfo = data
     })
   }
-  initOrderBarSubscriber() { 
+  initOrderBarSubscriber() {
     this._openOrderBar = this.toolbarUIService.orderBar$.subscribe( data => {
       this.openOrderBar = data;
     })
   }
-  initUserSubscriber() { 
+  initUserSubscriber() {
     this._user = this.authenticationService.user$.subscribe( data => {
       this.user  = data
       this.getUserInfo()
@@ -213,7 +213,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this._site) {this._site.unsubscribe()}
   }
 
-  refreshUserBar(user) {
+  refreshUserBar(user: IUser) {
+    if (user && user.roles === 'user') {
+      this.flexsections = 'flex-sections-user'
+      return
+    }
+
     if (user) {
       this.flexsections = 'flex-sections'
       return
@@ -303,7 +308,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.user) {
        user = JSON.parse(localStorage.getItem('user')) as IUser;
     }
+
     this.refreshUserBar(user)
+
     if (!user) {  return null }
 
     this.isAdmin      = false;
@@ -451,12 +458,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   assingBackGround(image: string) {
     if (!image) { return }
-    // // const image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
-    // console.log('asssign background', image)
-    // const styles = { 'background-image': `url(${image})`  };
-
-    // this.backgroundImage = styles
-    // const i = 1
   }
 
 }

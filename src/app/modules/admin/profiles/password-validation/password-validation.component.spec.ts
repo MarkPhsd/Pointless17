@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DSIEMVTransactionComponent } from './dsiemvtransaction.component';
+import { PasswordValidationComponent } from './password-validation.component';
 
-describe('DSIEMVTransactionComponent', () => {
-  let component: DSIEMVTransactionComponent;
-  let fixture: ComponentFixture<DSIEMVTransactionComponent>;
+describe('PasswordValidationComponent', () => {
+  let component: PasswordValidationComponent;
+  let fixture: ComponentFixture<PasswordValidationComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DSIEMVTransactionComponent ]
+      declarations: [ PasswordValidationComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DSIEMVTransactionComponent);
+    fixture = TestBed.createComponent(PasswordValidationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

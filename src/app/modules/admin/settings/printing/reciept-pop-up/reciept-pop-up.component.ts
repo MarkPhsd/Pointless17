@@ -11,12 +11,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 })
 export class RecieptPopUpComponent implements OnInit {
 
-  printOptions = {} as printOptions;
   @Input() autoPrint: boolean;
+  @Input() order    : IPOSOrder;
+
+  printOptions = {} as printOptions;
   items             : any[];
   orders            : any;
   payments          : any[];
-  @Input() order    : IPOSOrder;
   _order            : Subscription;
   _printReady       : Subscription;
   printReady        : boolean;

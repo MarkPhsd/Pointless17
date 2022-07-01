@@ -91,11 +91,12 @@ export class DSIProcessService {
   }
 
 
-  async emvVoid(posPayment: IPOSPayment ): Promise<RStream> {
+  async emvVoid(posPayment: IPOSPayment): Promise<RStream> {
 
     try {
-      const reset               = await this.pinPadReset(); //ignore response for now.
-      const item                = localStorage.getItem('DSIEMVSettings')
+      const reset          = await this.pinPadReset(); //ignore response for now.
+
+      const item           = localStorage.getItem('DSIEMVSettings');
       if (!item) {
         this.orderMethodsService.notification('Could not initialized DSI Settings', 'Error')
         return null
@@ -143,20 +144,23 @@ export class DSIProcessService {
       }
 
       let amount = {} as Amount;
-      if (posPayment.amountReceived) {
-        transaction.Amount.Purchase = posPayment.amountReceived.toString();
+
+      if (posPayment.tipAmount && posPayment.tipAmount != 0) {
+        transaction.Amount.Gratuity = posPayment.tipAmount.toFixed(2).toString();
       }
-      if (!posPayment.tipAmount && posPayment.tipAmount != 0) {
-        transaction.Amount.Gratuity = posPayment.tipAmount.toString();
+      amount.Purchase = posPayment.amountPaid.toFixed(2).toString();
+
+      if (!amount.Purchase) {
+        this.orderMethodsService.notification('Void amount cannot be 0.00', 'Error')
       }
-      if (+amount.Purchase == 0) {
-        amount.Purchase = posPayment.amountPaid.toString();
-      }
-      transaction.ProcessData = '';
 
       transaction.Amount = amount;
-      console.log('emvVoid transaction' , transaction)
-      return this.dsi.emvTransaction(transaction)
+
+      const transResult = await this.dsi.emvTransaction(transaction)
+      console.log(transResult)
+      console.log('CmdResponse', transResult?.CmdResponse)
+      console.log('TranResponse', transResult?.TranResponse)
+      return transResult
 
     } catch (error) {
       console.log('DSIEMVVoid', error)
@@ -204,7 +208,8 @@ export class DSIProcessService {
   }
 
   async emvTransaction(tranCode: string, amount: number,
-                       paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string ): Promise<RStream> {
+                       paymentID: number, manual: boolean,
+                       tipPrompt: boolean, TranType: string ): Promise<RStream> {
 
     const item  = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }
@@ -233,7 +238,7 @@ export class DSIProcessService {
     }
 
     transaction.Amount = {} as Amount
-    transaction.Amount.Purchase = amount.toString();
+    transaction.Amount.Purchase = amount.toFixed(2).toString();
 
     if (tipPrompt) {
       transaction.Amount.Gratuity = 'Prompt'
@@ -244,7 +249,7 @@ export class DSIProcessService {
     return result
   }
 
-  applyAmouunt(amount: number, gratuity: number): Amount {
+  applyAmount(amount: number, gratuity: number): Amount {
     return null
   }
 

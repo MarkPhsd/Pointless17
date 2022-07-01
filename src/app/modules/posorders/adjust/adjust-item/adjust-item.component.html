@@ -1,14 +1,17 @@
 
 <!-- Adjusts Item Container -->
+<!-- itemWithAction {{value | json}} -->
 <div *ngIf="itemWithAction">
   <mat-card>
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <h4>Item Selection: </h4>
+      <h4>Action: {{itemWithAction?.typeOfAction}} </h4>
       <h4>
-        {{itemWithAction.posItem.productName}}
+        {{itemWithAction?.posItem?.productName}}
       </h4>
+
+      {{message}}
     </mat-card-subtitle>
     <mat-card-content>
       <div *ngIf="!list$">

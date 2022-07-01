@@ -144,8 +144,6 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
       }
       this.orders[0] = order;
     }
-    // order.clients_POSOrders.accountNumber
-
   }
 
   async getInterpolatedData() {

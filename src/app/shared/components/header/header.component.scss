@@ -13,14 +13,13 @@
 
 
 :host .mat-menu-panel {
-  // padding   : 25px   !important;
   margin-top: 15px  !important;
   width     : 100%!important;
   min-width : 300px;
   overflow-x: hidden;
 }
 
-.mat-toolbar-android { 
+.mat-toolbar-android {
   margin-top    : 15px  ;
   width         : 100%  ;
   min-width     : 300px ;
@@ -117,11 +116,10 @@ button {
   justify-content : space-between;
   flex-direction  : row;
   flex-basis      : auto;
-  // margin-top      : 35px;
-  padding-top     : 10px;
+  // padding-top     : 10px;
   @include for-phone-only  {
     margin-top: 5px;
-    padding-top     : 5px;
+    // padding-top     : 5px;
   }
 }
 
@@ -136,7 +134,19 @@ button {
     margin-top: 5px;
         padding-top     : 5px;
   }
+}
 
+.flex-sections-user {
+  display         : flex;
+  justify-content : space-between;
+  flex-direction  : row;
+  flex-basis      : auto;
+  // margin-top      : 35px;
+  padding-top     : 10px;
+  @include for-phone-only  {
+    margin-top: 5px;
+        padding-top     : 5px;
+  }
 }
 
 //disable text

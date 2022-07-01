@@ -21,6 +21,7 @@ import { UserAuthorizationService } from './user-authorization.service';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
+import { HttpBackend, HttpClient } from '@angular/common/http';
 
 export interface printOptions {
   silent: true;
@@ -70,6 +71,7 @@ export class PrintingService {
                 private platFormService   : PlatformService,
                 private menuItemService   : MenuService,
                 private orderMethodsService: OrderMethodsService,
+                private http              : HttpClient,
                 private dialog            : MatDialog,) {
 
     // if (this.electronService.remote != null) {
@@ -158,9 +160,18 @@ export class PrintingService {
 //   return this.setHTMLReceiptStyle(receiptStyle)
   }
 
+  async  appyBalanceSheetStyle(): Promise<string> {
+    const style = document.createElement('style');
+    const oberservable$ = this.http.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'});
+    const value = await oberservable$.pipe().toPromise()
+    style.innerHTML = value;
+    document.head.appendChild(style);
+    return value
+  }
+
   async  appyStylesCached(site: ISite): Promise<ISetting> {
-    const receiptStyle$       = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
-    const receiptStyle = await receiptStyle$.pipe().toPromise()
+    const receiptStyle$ = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+    const receiptStyle  = await receiptStyle$.pipe().toPromise()
     return this.setHTMLReceiptStyle(receiptStyle)
   }
 

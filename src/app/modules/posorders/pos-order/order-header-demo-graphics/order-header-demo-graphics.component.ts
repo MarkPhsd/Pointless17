@@ -23,8 +23,8 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
 
+  user  = this.userAuthorization.user;
   transactionSettings: TransactionUISettings;
-
 
   constructor(private router: Router,
               private siteService: SitesService,
@@ -42,7 +42,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.transactionSettings = data;
     })
-    if (this.userAuthorization.isManagement) { 
+    if (this.userAuthorization.isManagement) {
       this.canRemoveClient = true;
     }
   }
@@ -113,18 +113,18 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
       const site = this.siteService.getAssignedSite();
       this.order.clientID = client.id;
       this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
-      this.orderService.putOrder(site, this.order).subscribe(data => { 
+      this.orderService.putOrder(site, this.order).subscribe(data => {
         this.orderService.updateOrderSubscription(data)
       })
     }
   }
 
-  clearClient() { 
+  clearClient() {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
       this.order.clientID = 0
       this.order.customerName = ''
-      this.orderService.putOrder(site, this.order).subscribe(data => { 
+      this.orderService.putOrder(site, this.order).subscribe(data => {
         this.orderService.updateOrderSubscription(data)
       })
    }

@@ -57,6 +57,14 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   transactionUISettings  : TransactionUISettings
   enableMEDClients: boolean;
   validationMessage = ''
+
+  clientForm  : FormGroup;
+  confirmPassword: FormGroup;
+  passwordsMatch      = true;
+
+  password1
+  password2
+
   initSubscriptions() {
     this._currentOrder = this.orderService.currentOrder$.subscribe(data=> {
       this.currentOrder = data;
@@ -88,7 +96,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
     this.isUser       =  this.userAuthorization.isUserAuthorized('user')
     this.initSubscriptions();
-    this.refreshOrderSearch()
+    this.refreshOrderSearch(null)
   }
 
   async ngOnInit() {
@@ -107,19 +115,57 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     const currentYear                   = new Date().getFullYear();
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
     this.initDateRangeForm();
+    this.initConfirmPassword();
   }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    if (this.searchModel) {
-      this.searchModel.clientID = 0
-      this.searchModel.completionDate_From = ''
-      this.searchModel.completionDate_To = ''
-      this.orderService.updateOrderSearchModel(this.searchModel)
-    }
+    this.orderService.updateOrderSearchModel(null)
     if (this._currentOrder) {this._currentOrder.unsubscribe()}
     if (this._searchModel) { this._searchModel.unsubscribe()}
+  }
+
+  initConfirmPassword()  {
+		this.confirmPassword = this.fb.group( {
+		  confirmPassword: ['']
+		})
+    this.validateMatchingPasswords();
+  }
+
+  validateMatchingPasswords() {
+    try {
+      this.confirmPassword.valueChanges.subscribe( data => {
+        if (!this.confirmPassword) { this.initConfirmPassword()}
+        if (this.confirmPassword) {
+          this.password1 = this.confirmPassword.controls['confirmPassword'].value;
+          if (this.password1 == this.password2) {
+            this.passwordsMatch = true;
+            return
+          }
+        }
+        this.passwordsMatch = false
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
+
+  validateMatchingPasswords2() {
+    try {
+      this.clientForm.valueChanges.subscribe( data => {
+        if (this.clientForm) {
+          this.password2 = this.clientForm.controls['apiPassword'].value;
+          if (this.password1 == this.password2) {
+            this.passwordsMatch = true;
+            return
+          }
+        }
+        this.passwordsMatch = false
+      })
+    } catch (error) {
+      console.log('error', error)
+    }
   }
 
   emitDatePickerData(event) {
@@ -144,7 +190,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
           console.log('result of validation', result)
           this.validationMessage = result.resultMessage;
           this.accountDisabled = !result.valid;
-
         }
       })
     }
@@ -203,11 +248,11 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     if (this.dateFrom != null && this.dateTo != null) {
       this.searchModel.completionDate_From = this.dateFrom.toISOString()
       this.searchModel.completionDate_To   = this.dateTo.toISOString()
-      this.refreshOrderSearch()
     }
+    this.refreshOrderSearch(this.searchModel)
   }
 
-  refreshOrderSearch() {
+  refreshOrderSearch(searchModel: IPOSOrderSearchModel) {
     if (!this.searchModel) {
       this.searchModel               = {} as IPOSOrderSearchModel
       this.searchModel.serviceTypeID = 0
@@ -230,6 +275,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       search.closedOpenAllOrders  = 1;
       search.clientID             = parseInt(this.id)
       this.searchModel            = search;
+      return search
     }
   }
 
@@ -241,11 +287,10 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       }
     }
     if (!this.dateRangeForm || !this.dateFrom || !this.dateTo) {
-      this.searchModel.completionDate_From = '';
-      this.searchModel.completionDate_To   = '';
-      this.refreshOrderSearch()
-      return
+      this.searchModel = null;
+      this.searchModel = this.initFilter(this.searchModel)
     }
+    this.refreshOrderSearch(this.searchModel)
   }
 
   fillForm(id: any) {

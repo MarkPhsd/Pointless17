@@ -420,6 +420,8 @@ export class ProductEditButtonService {
         let itemWithAction      = {}  as ItemWithAction;
         itemWithAction.action   = 1;
         itemWithAction.id       = order.id
+        itemWithAction.typeOfAction = 'VoidOrder'
+
         const id = order.id;
         dialogRef = this.dialog.open(AdjustItemComponent,
           { width:        '450px',
@@ -471,6 +473,7 @@ export class ProductEditButtonService {
         action.action   = 2;
         action.payment  = payment;
         action.id       = payment.id
+
         let method = {} as IPaymentMethod
         const method$ = this.paymentMethodService.getCacheMethod(site,payment.paymentMethodID);
         method$.subscribe(data => {

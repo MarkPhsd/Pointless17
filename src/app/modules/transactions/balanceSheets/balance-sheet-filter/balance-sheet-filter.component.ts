@@ -12,6 +12,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { BalanceSheetSearchModel, BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
 import {TooltipPosition} from '@angular/material/tooltip';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
 @Component({
   selector: 'balance-sheet-filter',
@@ -67,7 +68,8 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
                 private userAuthorization       : UserAuthorizationService,
                 private employeeService         : EmployeeService,
                 private orderService            : OrdersService,
-                private sheetMethodsService     : BalanceSheetMethodsService
+                private sheetMethodsService     : BalanceSheetMethodsService,
+                private dateHelper              : DateHelperService,
               )
     {
       this.initAuthorization();
@@ -139,10 +141,10 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
    refreshEmployees(){
       const site           = this.siteService.getAssignedSite()
+      console.log('site', site)
       if (!site) { return }
       this.employees$      = this.orderService.getActiveEmployees(site)
    }
-
 
   setEmployee(event) {
     if (!event) { return }
@@ -229,11 +231,13 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     let today = new Date();
     const month = today.getMonth();
     const year = today.getFullYear();
-    today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
 
+    // today = new Date(today.getTime() + (1000 * 60 * 60 * 24));
+    let endDate = this.dateHelper.add('day', 1 ,today)
+    //// new Date(year, month, 1),
     this.dateRangeForm =  this.fb.group({
-      start: new Date(year, month, 1),
-      end: today // new Date()
+      start: today,
+      end  : endDate // new Date()
     })
 
     this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;

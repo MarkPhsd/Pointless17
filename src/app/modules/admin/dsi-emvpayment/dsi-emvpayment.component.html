@@ -1,14 +1,20 @@
 <div class="container">
   <mat-card >
-    <mat-card-subtitle  *ngIf="isApp && androidApp">
+    <mat-card-subtitle  *ngIf="isAndroid">
       <h4>Android</h4>
       <mat-label>
         DSI Payment System Avalible in App Mode
-      </mat-label> 
+      </mat-label>
     </mat-card-subtitle>
 
-    <mat-card-content *ngIf="isApp && androidApp">
+    <mat-card-content *ngIf="isAndroid">
       <div class="grid-container">
+        checkrRsponse
+
+          <div class="button">
+            <button class="button" mat-raised-button color="primary" (click) ="checkResponse()">Permission Response</button>
+            {{responseCheck | json}}
+          </div>
 
           <div class="button">
             <button class="button" mat-raised-button color="primary" (click) ="checkPermission()">Permission Check</button>
@@ -18,11 +24,6 @@
           <div class="button">
             <button class="button" mat-raised-button  color="primary" (click) ="getInstance()">Instance Check</button>
             {{instance | json}}
-          </div>
-
-          <div class="button">
-            <button class="button" mat-raised-button  color="primary" (click) ="getEcho()">Check Echo</button>
-            {{echoResponse}}
           </div>
 
           <div class="button">
@@ -36,7 +37,7 @@
         </div>
     </mat-card-content>
 
-    <mat-card-subtitle  *ngIf="!isApp && !androidApp">
+    <!-- <mat-card-subtitle  *ngIf="!androidApp">
       <h4>Web Interface</h4>
     </mat-card-subtitle>
 
@@ -45,10 +46,10 @@
         <button class="button"
                 mat-raised-button
                 color="primary"
-                (click)="getEcho()">Check Echo</button>
-        {{echoResponse}}
+                (click)="checkEcho()">Check Echo</button>
+        {{echoResponse | json}}
       </div>
-    </mat-card-content>
+    </mat-card-content> -->
 
     {{err}}
   </mat-card>

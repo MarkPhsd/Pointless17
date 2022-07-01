@@ -15,6 +15,11 @@ export class UserAuthorizationService {
     return JSON.parse(item) as IUser;
   }
 
+  get user() {
+    const item = localStorage.getItem('user');
+    return JSON.parse(item) as IUser;
+  }
+
   validateUser() {
     const user = this.currentUser()
     if (user && user.username && user.roles)  {  return true }

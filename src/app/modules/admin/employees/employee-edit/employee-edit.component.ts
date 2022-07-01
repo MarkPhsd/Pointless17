@@ -13,7 +13,6 @@ import { EmployeeService, IEmployeeClient } from 'src/app/_services/people/emplo
 import { IStatuses } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-
 @Component({
   selector: 'employee-edit',
   templateUrl: './employee-edit.component.html',
@@ -44,12 +43,11 @@ export class EmployeeEditComponent implements OnInit {
 
   minumumAllowedDateForPurchases: Date
 
-
   password1
   password2
   constructor(
               private router: Router,
-              public route: ActivatedRoute,
+              public  route: ActivatedRoute,
               private fb: FormBuilder,
               private sanitizer : DomSanitizer,
               private awsBucket: AWSBucketService,
@@ -121,7 +119,7 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   initClientForm(client: IClientTable) {
-    this.clientForm = this.clientForm = this.fbContactsService.initForm(this.clientForm)
+    this.clientForm = this.fbContactsService.initForm(this.clientForm)
     client.password    = '';
     client.apiPassword = ''
     this.clientForm.patchValue(client)

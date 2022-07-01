@@ -155,6 +155,18 @@
                           formControlName="apiUserName"
                           class="form-control" >
                   </mat-form-field>
+
+                  <div *ngIf="inputForm.controls['apiPassword'].value == ''">
+                    Input username and press save to set user password.
+                  </div>
+
+                  <app-password-validation
+                    *ngIf="inputForm.controls['apiPassword'].value != ''"
+                    [client]="clientTable">
+                  </app-password-validation>
+
+                  <mat-divider></mat-divider>
+
                 </div>
 
                 <div>
@@ -162,15 +174,15 @@
                       [isAuthorized]="isAuthorized"
                       [inputForm] ="inputForm">
                     </app-profile-roles>
-                  <div class="form-field"
-                       *ngIf="isAuthorized && inputForm">
-                    <employee-lookup
-                            [client]      ="clientTable"
-                            [inputForm]   ="inputForm" >
-                            Employee Association
-                    </employee-lookup>
-                  </div>
 
+                    <div class="form-field"
+                        *ngIf="isAuthorized && inputForm">
+                      <employee-lookup
+                              [client]      ="clientTable"
+                              [inputForm]   ="inputForm" >
+                              Employee Association
+                      </employee-lookup>
+                    </div>
                 </div>
               </div>
             </mat-tab>

@@ -38,7 +38,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Input() mainPanel   : boolean;
   @Input() order       : IPOSOrder;
   @Input() emailOption : boolean;
-
+  @Input() ssmsOption : boolean;
   smallDevice    : boolean;
   constructor(private platFormService: PlatformService, ) { }
 
@@ -56,7 +56,6 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
    }
 
   emailOrder() {
-
     this.outPutEmailOrder.emit(true)
   }
   showItems() {

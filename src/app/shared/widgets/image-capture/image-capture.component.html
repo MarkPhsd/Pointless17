@@ -42,8 +42,6 @@
 
       <mat-icon class="md-icon-48">add_photo_alternate</mat-icon>
 
-      <!-- <h4>Drag and drop file here </h4> -->
-
       <button mat-raised-button color="primary" (click)="fileDropRef">Browse for Files</button>
 
     </div>
@@ -51,28 +49,7 @@
  </div>
 
  <div fxLayout="column" fxLayoutGap fxLayoutAlign="space-around center" >
-
-    <!-- <h4>Status:</h4>
-    {{logger}}
-
-    <div *ngIf="showData">
-      <div >
-        <h4>DL Data</h4>
-        accountNumber:  {{driversLicence?.accountNumber}}<br>
-        firstName:      {{driversLicence?.firstName}}<br>
-        middleName:     {{driversLicence?.middleName}}<br>
-        lastName:       {{driversLicence?.lastName}}<br>
-        address:        {{driversLicence?.address}}<br>
-        state:          {{driversLicence?.state}}<br>
-        city:           {{driversLicence?.city}}<br>
-        zip:            {{driversLicence?.zip}}<br>
-        dob:            {{driversLicence?.dob}}<br>
-        exp:            {{driversLicence?.exp}}<br>
-      </div>
-    </div> -->
-
     <canvas #canvas id="canvas"   width="640" height="480" ></canvas>
-
  </div>
 
 <ng-template class="mat-spinner" #loading >

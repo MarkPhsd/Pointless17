@@ -177,7 +177,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
       if (voidPayment) {
-        console.log('voidPayment', voidPayment)
         this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
       }
     }
@@ -230,7 +229,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       }
     )).subscribe(data => {
       this.storeCreditMethodService.updateSearchModel(null)
-      console.log('data',data)
     })
 
   }

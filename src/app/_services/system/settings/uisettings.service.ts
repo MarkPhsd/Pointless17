@@ -132,7 +132,8 @@ export interface UIHomePageSettings {
 
   administratorEmail : string;
   outGoingCustomerSupportEmail: string;
-  salesReportsEmail: string;
+  salesReportsEmail  : string;
+  twilioEnabled      : string;
 
 }
 
@@ -352,6 +353,7 @@ export class UISettingsService {
       administratorEmail : [''],
       outGoingCustomerSupportEmail: [''],
       salesReportsEmail: [''],
+      twilioEnabled: [''],
      })
     return fb
   }

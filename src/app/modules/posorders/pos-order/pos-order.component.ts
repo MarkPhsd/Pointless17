@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
-import { AuthenticationService, AWSBucketService, OrdersService } from 'src/app/_services';
+import { AuthenticationService, AWSBucketService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, Subscription } from 'rxjs';
 import { delay,  repeatWhen  } from 'rxjs/operators';
@@ -94,7 +94,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   uiTransactionSettings : TransactionUISettings;
 
   emailOption : boolean;
-
+  ssmsOption   : boolean;
   transactionUISettingsSubscriber() {
     this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.enableLimitsView  =false;
@@ -111,6 +111,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       if (data) {
         if (data.outGoingCustomerSupportEmail) {
           this.emailOption = true
+        }
+        if (data.twilioEnabled) {
+          this.ssmsOption = true
         }
         if (data.wideOrderBar) {
           this.wideBar = true;
@@ -172,6 +175,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private uiSettingsService : UISettingsService,
               private settingService: SettingsService,
               private productEditButtonService: ProductEditButtonService,
+              private textMessagingService: TextMessagingService,
               // private printingService : Printing
               private el                : ElementRef) {
 
@@ -395,7 +399,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       const site = this.siteService.getAssignedSite();
       this.order.suspendedOrder = false;
       this.orderService.putOrder(site, this.order).subscribe( data => {
-        this.notifyEvent('This suspension is reomved', 'Success')
+        this.notifyEvent('This suspension is removed', 'Success')
         // this.router.navigateByUrl('/pos-orders')
       })
     }
@@ -598,6 +602,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   textNotify() {
     // this.outPutTextNotify.emit(true)
+    this.orderMethodService.sendSSMSOrderISReady(this.order)
   }
 
   emailNotifyOrder(event) {
@@ -610,7 +615,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       }
     })
   }
-  
+
   emailOrder(event) {
     this.orderMethodService.emailOrder(this.order).subscribe(data => {
       if (data.isSuccessStatusCode) {

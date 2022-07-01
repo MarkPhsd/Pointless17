@@ -59,58 +59,67 @@ export class AppInitService  {
     this.apiUrl = this.getLocalApiUrl();
     //
 
-    if (!this.initialized && this.isApp()) {
-      this.clearUserSettings();
-      this.initialized = true;
-      this.router.navigate(['/login']);
-    }
+    const rememberMe = localStorage.getItem('rememberMe')
 
-    const data  = await this.httpClient.get('assets/app-config.json').pipe().toPromise() as IAppConfig
-
-    if ( !this.platFormService.isApp()  ) {
-      if ( this.apiUrl === undefined && this.isApp() ){
-        this.useAppGate = false
-        this.router.navigate(['/apisetting']);
-        return
+    if (rememberMe != 'true') {
+        if (!this.initialized && this.isApp() ) {
+          this.clearUserSettings();
+          this.initialized = true;
+        this.router.navigate(['/login']);
+        return ;
       }
     }
 
-    if ( !this.platFormService.isApp()  ) {
-      if (data) {
-        this.apiUrl     = data.apiUrl
-        if (!data.apiUrl) {
-          if (!this.platformService.androidApp && !this.platformService.isAppElectron){
-            // this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+   this.httpClient.get('assets/app-config.json').subscribe( result => {
+
+      const data = result  as IAppConfig
+
+      if ( !this.platFormService.isApp()  ) {
+        if ( this.apiUrl === undefined && this.isApp() ){
+          this.useAppGate = false
+          this.router.navigate(['/apisetting']);
+          return
+        }
+      }
+
+      if ( !this.platFormService.isApp()  ) {
+        if (data) {
+          this.apiUrl     = data.apiUrl
+          if (!data.apiUrl) {
+            if (!this.platformService.androidApp && !this.platformService.isAppElectron){
+              // this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+            }
+            this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
+            data.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
+            this.setAPIUrl(this.apiUrl)
           }
-          this.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
-          data.apiUrl     = "https://ccsposdemo.ddns.net:4443/api"
-          this.setAPIUrl(this.apiUrl)
+          this.useAppGate = data.useAppGate
+          this.logo       = data.logo;
+          this.company    = data.company
+          this.appConfig  = data ;
         }
-        this.useAppGate = data.useAppGate
-        this.logo       = data.logo;
-        this.company    = data.company
-        this.appConfig  = data ;
-      }
-    }
-
-    if ( this.platFormService.isApp()  ) {
-      if (!data ) {
-        if (!this.platformService.androidApp && !this.platformService.isAppElectron){
-          this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
-        }
-        this.apiUrl           = "https://ccsposdemo.ddns.net:4443/api"
-        this.useAppGate       = false;
-        this.logo             = "http://cafecartel.com/temp/logo.png";
-        this.company          = 'Pointless'
-        this.appConfig.apiUrl = this.apiUrl;
-        this.useAppGate       = false;
-        this.appConfig.logo   = this.logo;
-        this.appConfig.company= 'Pointless'
-      }
-      if (this.apiUrl) {
       }
 
-    }
+      if ( this.platFormService.isApp()  ) {
+        if (!data ) {
+          if (!this.platformService.androidApp && !this.platformService.isAppElectron){
+            this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
+          }
+          this.apiUrl           = "https://ccsposdemo.ddns.net:4443/api"
+          this.useAppGate       = false;
+          this.logo             = "http://cafecartel.com/temp/logo.png";
+          this.company          = 'Pointless'
+          this.appConfig.apiUrl = this.apiUrl;
+          this.useAppGate       = false;
+          this.appConfig.logo   = this.logo;
+          this.appConfig.company= 'Pointless'
+        }
+        if (this.apiUrl) {
+        }
+
+      }
+
+    })
   }
 
   setAPIUrl(apiUrl): string {

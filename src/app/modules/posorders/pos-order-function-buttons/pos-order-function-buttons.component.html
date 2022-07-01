@@ -20,7 +20,7 @@
     </button>
   </div>
 
-  <div>
+  <div *ngIf="emailOption">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
             mat-raised-button
             class="button"
@@ -33,7 +33,7 @@
     </button>
   </div>
 
-  <div>
+  <div *ngIf="emailOption">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
             mat-raised-button
             class="button"
@@ -46,7 +46,7 @@
     </button>
   </div>
 
-  <div>
+  <div *ngIf="ssmsOption">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.phone) "
             mat-raised-button
             class="button"
@@ -54,7 +54,7 @@
             (click)="textNotify()">
       <mat-icon>email</mat-icon>
       <span *ngIf="!smallDevice">
-         Text Notify 
+         Text Notify
        </span>
     </button>
   </div>
@@ -122,12 +122,12 @@
               (click)="removeSuspension()">Un Suspend</button>
     </span>
   </div>
-
+  <!-- && isAuthorized
+  && (itemsPrinted || paymentsMade)) === false -->
   <div>
     <button mat-raised-button class="button"
-              [disabled]="!(!order.history
-                            && isAuthorized
-                            && (itemsPrinted || paymentsMade))"
+              [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+
             color="primary"
             (click)="voidOrder()">
       <mat-icon>delete</mat-icon>

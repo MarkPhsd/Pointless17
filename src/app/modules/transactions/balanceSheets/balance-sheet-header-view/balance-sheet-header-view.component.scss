@@ -5,6 +5,16 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+  }
 }
 
 .title {
@@ -31,12 +41,32 @@
     grid-template-columns: 1fr;
     gap: 3px;
   }
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+  }
 }
 
 .info-width {
   width: 275px;
   @include for-phone-only  {
     width: 275px;
+  }
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
   }
 }
 
@@ -47,4 +77,14 @@
   margin-top: 3px;
   margin-bottom: 3px;
   padding: 2px;
+  @media print {
+    --gap: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+    font-size: 12pt;
+    font-weight: bold !important;
+    justify-content: right;
+    text-align: right;
+  }
 }

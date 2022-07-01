@@ -70,7 +70,7 @@ export class ReportingService {
                private appInitService  : AppInitService,
                private dateHelpers     : ReportDateHelpersService,
                private datePipe        : DatePipe,
-               private dateHelper : DateHelperService,
+               private dateHelper      : DateHelperService,
   ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
   }

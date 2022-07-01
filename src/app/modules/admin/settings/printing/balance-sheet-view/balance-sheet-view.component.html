@@ -13,3 +13,10 @@
     [sheet]="sheet">
   </balance-sheet-calculations-view>
 </div>
+
+Payments:
+<div *ngIf="(list$ | async) as list">
+  <credit-card-payments-print-list
+    [list]="list">
+  </credit-card-payments-print-list>
+</div>

@@ -171,6 +171,14 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   }
 
+  async  initBalanceSheetDefaultLayouts() {
+    try {
+      this.receiptStyles  = await this.applyStyles();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   async  initDefaultLayouts() {
     try {
       const site = this.siteService.getAssignedSite();
@@ -200,6 +208,16 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     const site  = this.siteService.getAssignedSite();
     this.receiptStyles  = await  this.printingService.appyStylesCached(site)
     this.applyStyle(this.receiptStyles)
+    return  this.receiptStyles
+  }
+
+
+  async applyBalanceSheetStyles(): Promise<ISetting> {
+      const value = await  this.printingService.appyBalanceSheetStyle();
+      const style             = document.createElement('style');
+      style.innerHTML         = value;
+      document.head.appendChild(style);
+      return this.receiptStyles
     return  this.receiptStyles
   }
 
