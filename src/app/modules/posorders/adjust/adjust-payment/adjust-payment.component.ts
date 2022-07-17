@@ -146,16 +146,15 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
       this.resultAction.voidReasonID = setting.id
-      let response = {} as OperationWithAction;
       this.resultAction.action = 1;
       const method = this.resultAction.paymentMethod;
       let response$: Observable<OperationWithAction>;
       if (this.resultAction) {
         if (method) {
           if (method.isCreditCard) {
-            console.log(method.isCreditCard, method.name)
 
-            if (this.isDSIEmvPayment) {
+            if (this.isDSIEmvPayment && this.voidPayment) {
+              this.voidPayment.voidReason = this.resultAction.voidReason = setting.name
               this.voidDSIEmvPayment();
               return ;
             }
@@ -176,6 +175,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   voidDSIEmvPayment() {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
+
       if (voidPayment) {
         this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
       }

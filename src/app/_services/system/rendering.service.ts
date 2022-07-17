@@ -18,7 +18,7 @@ export class RenderingService {
         text =  this.getFormater(text)
 
         const compiled = _.template( text );
-        console.log('compiled - no item', compiled)
+        // console.log('compiled - no item', compiled)
 
         return  compiled({});
       }

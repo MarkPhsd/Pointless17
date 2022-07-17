@@ -1,5 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input,
-         OnInit, Output, OnDestroy,  ViewChild, HostListener } from '@angular/core';
+         OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2 } from '@angular/core';
 import { AuthenticationService, AWSBucketService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
 import { Observable, Subscription } from 'rxjs';
@@ -20,6 +20,8 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
+import { ResizedEvent } from 'angular-resize-event';
+
 @Component({
 selector: 'app-pos-order',
 templateUrl: './pos-order.component.html',
@@ -40,12 +42,14 @@ styleUrls: ['./pos-order.component.scss'],
 
 export class PosOrderComponent implements OnInit ,OnDestroy {
 
+  orderItemsHeightStyle ='150px'
+  windowHeight: number;
   CDK_DRAG_CONFIG = {}
   // @ViewChild('orderItems') orderItems: ElementRef;
   @Output() toggleOpenOrderBarForMe: EventEmitter<any> = new EventEmitter();
-  @ViewChild('scrollMe') private myScrollContainer: ElementRef;
+  // @ViewChild('scrollMe') private myScrollContainer: ElementRef;
   openOrderBar                      : boolean;
-  @ViewChild('container') container : ElementRef;
+  // @ViewChild('container') container : ElementRef;
   @Input() OrderID : string;
   @Input() mainPanel: boolean;
 
@@ -125,7 +129,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   currentOrderSusbcriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-      // console.log(data)
       this.canRemoveClient = true
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
         this.canRemoveClient = false
@@ -139,6 +142,44 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
+
+onResizedorderHeightPanel(event: ResizedEvent) {
+  console.log('onResizedorderHeightPanel', event.newRect.height)
+  this.uiSettingsService.updateorderHeaderHeight(event.newRect.height) //this.orderHeightPanel.nativeElement.offsetHeight)
+  this.resizePanel()
+}
+
+onResizedorderLimitsPanel(event: ResizedEvent) {
+  this.uiSettingsService.updateLimitOrderHeight(event.newRect.height) //(this.orderLimitsPanel.nativeElement.offsetHeight)
+  this.resizePanel()
+}
+
+onResizedorderSpecialsPanel(event: ResizedEvent) {
+  this.uiSettingsService.updatespecialOrderHeight(event.newRect.height) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
+  this.resizePanel()
+}
+
+onResizedorderCustomerPanel(event: ResizedEvent) {
+  console.log('onResizedorderCustomerPanel',  event.newRect.height )
+  this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height) //(this.orderCustomerPanel.nativeElement.offsetHeight)
+  this.resizePanel()
+}
+
+resizePanel() {
+
+  this.uiSettingsService.totalOrderHeight$.subscribe(data => {
+    if (this.smallDevice) {
+      // this.orderItemsHeightStyle = `100vh - 50px - 50px ${data - this.windowHeight}px`
+      this.orderItemsHeightStyle = `calc(100vh - 50px - 50px ${data}px)`
+    }
+    if (!this.smallDevice) {
+      const value = this.windowHeight -50 - +data
+      // this.orderItemsHeightStyle = `${value}px`;
+      this.orderItemsHeightStyle = `calc(100vh - 50px)`
+    }
+  })
+}
+
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
       this.user = data;
@@ -151,6 +192,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.currentOrderSusbcriber();
     this.userSubscriber();
     this.initBarSubscription();
+    this.resizePanel();
   }
 
   initBarSubscription() {
@@ -160,6 +202,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   constructor(
+              private renderer          : Renderer2,
               private orderService      : OrdersService,
               private awsBucket         : AWSBucketService,
               private printingService   : PrintingService,
@@ -172,19 +215,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private authenticationService: AuthenticationService,
               private orderMethodService: OrderMethodsService,
               private userAuthorization : UserAuthorizationService,
-              private uiSettingsService : UISettingsService,
+              public uiSettingsService : UISettingsService,
               private settingService: SettingsService,
               private productEditButtonService: ProductEditButtonService,
-              private textMessagingService: TextMessagingService,
-              // private printingService : Printing
               private el                : ElementRef) {
 
-      const outPut = this.route.snapshot.paramMap.get('mainPanel');
-      // console.log('order Total Main Panel Check', outPut)
-      if (outPut) {
-        this.mainPanel = true
-      }
-      this.refreshOrder();
+    const outPut = this.route.snapshot.paramMap.get('mainPanel');
+    // console.log('order Total Main Panel Check', outPut)
+    if (outPut) {
+      this.mainPanel = true
+    }
+    this.refreshOrder();
   }
 
   @HostListener("window:resize", [])
@@ -193,10 +234,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
     this.gridRight       = 'grid-order-header ';
     this.orderlayout     = 'order-layout-empty';
+    this.resizePanel();
 
+
+    this.windowHeight = window.innerWidth;
     if (window.innerWidth < 768) {
       this.smallDevice = true
-      // this.infobuttonpanel = 'grid-buttons'
       this.infobuttonpanel = 'grid-order-header'
       this.gridspan3       = ''
       this.gridRight       = 'grid-order-header';
@@ -205,7 +248,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.mainPanel && !this.smallDevice) {
       this.orderlayout     = 'order-layout reverse'
       this.gridRight       = 'order-layout-buttons'// 'grid-order-header reverse'
-      // this.infobuttonpanel = 'grid-order-header'
     }
 
     if (!this.mainPanel) {
@@ -244,7 +286,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.uiTransactionSettings = data;
     })
   }
-
 
   initAuthorization() {
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')

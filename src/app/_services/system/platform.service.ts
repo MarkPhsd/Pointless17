@@ -52,9 +52,7 @@ export class PlatformService {
      ) {
 
     this.initAPIUrl();
-
     if (!this._apiUrl) {this._apiUrl =''};
-
     this.getPlatForm();
 
   }
@@ -68,7 +66,6 @@ export class PlatformService {
     this.platFormInfo.webMode = false
 
     try {
-
       const platForm            = Capacitor.getPlatform();
       this.platFormInfo.platForm = platForm
       if (platForm === 'android') {

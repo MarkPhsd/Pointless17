@@ -1,11 +1,9 @@
-
 <div  *ngIf="order && mainPanel"
       class="buttons-container">
 
   <div *ngIf="order.history">
     <h5>Transaction can not be modified.</h5>
   </div>
-
 
   <div>
     <button [disabled]="!(isStaff || (order.history || order.balanceRemaining < order.total) && isApp)"
@@ -14,7 +12,7 @@
             color="primary"
             (click)="printReceipt()">
       <mat-icon>print</mat-icon>
-      <span *ngIf="!smallDevice">
+      <span>
          Receipt
        </span>
     </button>
@@ -27,7 +25,7 @@
             color="primary"
             (click)="emailOrder()">
       <mat-icon>email</mat-icon>
-      <span *ngIf="!smallDevice">
+      <span >
          Email
        </span>
     </button>
@@ -39,9 +37,8 @@
             class="button"
             color="primary"
             (click)="emailNotifyOrder()">
-      <mat-icon>email</mat-icon>
-      <span *ngIf="!smallDevice">
-         Email Notify
+      <span>
+         Notify ready
        </span>
     </button>
   </div>
@@ -67,8 +64,8 @@
             aria-label="Check Out / Pay"
             (click)="makePayment()">
       <mat-icon>credit_card</mat-icon>
-      <span *ngIf="!smallDevice">
-         Check Out
+      <span>
+         Pay
        </span>
     </button>
   </div>
@@ -86,7 +83,7 @@
 
   <div *ngIf="isApp">
     <button mat-raised-button
-            [disabled]="!(isStaff)"
+            [disabled]="isApp && !(isStaff)"
             class="button"
             color="primary"
             (click)="printLabels()">
@@ -94,17 +91,6 @@
        Labels
     </button>
   </div>
-
-  <!-- <div>
-    <button mat-raised-button
-            [disabled]="!(isStaff  && isApp)"
-            class="button"
-            color="primary"
-            (click)="rePrintLabels()">
-      <mat-icon>print</mat-icon>
-        Re-Print Labels
-    </button>
-  </div> -->
 
   <div *ngIf="mainPanel && !order.suspendedOrder">
     <span>
@@ -122,24 +108,21 @@
               (click)="removeSuspension()">Un Suspend</button>
     </span>
   </div>
-  <!-- && isAuthorized
-  && (itemsPrinted || paymentsMade)) === false -->
+
   <div>
     <button mat-raised-button class="button"
-              [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
-
+            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
             color="primary"
             (click)="voidOrder()">
       <mat-icon>delete</mat-icon>
-      <span *ngIf="!smallDevice">
+      <span>
         Void
       </span>
     </button>
   </div>
 
-  <div  *ngIf="!(mainPanel && smallDevice)">
+  <div  *ngIf="!(mainPanel && !smallDevice)">
     <button  mat-raised-button
-
             class="button"
             color="primary"
             (click)="showItems()">
@@ -148,10 +131,9 @@
     </button>
   </div>
 
-
-  <div>
+  <div *ngIf="isApp">
     <button mat-raised-button
-            [disabled]="!(isStaff  && isApp)"
+            [disabled]="isApp && !(isStaff)"
             class="button"
             color="primary"
             (click)="rePrintLabels()">
@@ -159,16 +141,15 @@
         Re-Print Labels
     </button>
   </div>
-  <!--  -->
 
-  <div >
+  <div>
     <button   mat-raised-button class="button"
               color="warn"
               [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0)"
               aria-label="delete"
               (click)="deleteOrder()">
         <mat-icon>delete</mat-icon>
-        <span *ngIf="!smallDevice">
+        <span>
           Delete
         </span>
     </button>
@@ -182,9 +163,10 @@
             aria-label="Clear"
             (click)="clearOrder()">
         <mat-icon>exit_to_app</mat-icon>
-        <span *ngIf="!smallDevice">
-          Leave Order
+        <span >
+          Exit
         </span>
     </button>
   </div>
+
 </div>

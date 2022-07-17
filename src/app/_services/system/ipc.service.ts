@@ -55,6 +55,7 @@ export class IPCService {
      }
    }
 
+   //move to feature service.
    readScale(): ScaleInfo {
      if (this._ipc) {
        this._ipc.on('readScale', (event, data) => {

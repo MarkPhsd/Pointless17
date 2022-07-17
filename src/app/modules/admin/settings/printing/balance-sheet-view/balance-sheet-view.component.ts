@@ -1,7 +1,5 @@
-import { HttpClient } from '@angular/common/http';
+
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { Router } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { IPaymentSearchModel, IPOSPaymentsOptimzed } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -50,22 +48,17 @@ export class BalanceSheetViewComponent implements OnInit {
                 private sheetService  : BalanceSheetService,
                 private paymentService: POSPaymentService,
                 private siteService   : SitesService,
-                private router        : Router,
-                private _bottomSheet  : MatBottomSheet,
                 private sheetMethodsService: BalanceSheetMethodsService,
-                private httpClient    : HttpClient,
-
               )
   {   }
 
   async ngOnInit() {
     this.initSubscriptions()
 
-    const styles = await this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe().toPromise()
-    console.log('styles', styles)
-    const style = document.createElement('style');
-    style.innerHTML = styles;
-    document.head.appendChild(style);
+    // const styles = await this.httpClient.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'}).pipe().toPromise()
+    // const style = document.createElement('style');
+    // style.innerHTML = styles;
+    // document.head.appendChild(style);
   }
 
 

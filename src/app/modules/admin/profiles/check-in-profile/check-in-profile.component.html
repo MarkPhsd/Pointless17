@@ -126,11 +126,20 @@
                     (swipeleft)="swipe(1, $event.type)"
                      (swiperight)="swipe(1, $event.type)">
               <div class="order-panel">
-                <div>
-                   <mat-date-range
-                    [inputForm]      ="dateRangeForm"
-                    (outputDateRange)="emitDatePickerData($event)">
-                  </mat-date-range>
+                <div class="grid-ranges">
+                  <div>
+                    <mat-date-range
+                      [inputForm]      ="dateRangeForm"
+                      (outputDateRange)="emitDatePickerData($event)">
+                    </mat-date-range>
+                  </div>
+                  <div style="margin-top:15px" >
+                    <app-mat-select class="app-mat-select" [list]="dateRangeList"
+                                    [inputForm] ="selectForm"
+                                    [fieldName]="'rangeSelect'"
+                                    (outputItem)="chooseDateRangeValue($event)">
+                      Select Range</app-mat-select>
+                  </div>
                 </div>
                 <div>
                    <app-orders-list

@@ -1,17 +1,18 @@
 <div *ngIf="(scheduleMenus$ | async) as list" >
+    <div class="grid-flow">
+      <div *ngFor="let item of list.results ; let i = index">
 
-  <mat-card >
-    <mat-card-content>
-      <div  class="grid-flow">
-        <div *ngFor="let item of list.results ; let i = index"
-             [@listAnimation]="list.length">
-          <scheduled-menu-container
-            [item]="item">
-          </scheduled-menu-container>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+        <mat-card>
+          <mat-card-content>
+              [@listAnimation]="list.length">
+            <scheduled-menu-container
+              [item]="item">
+            </scheduled-menu-container>
+          </mat-card-content>
+        </mat-card>
+
+    </div>
+  </div>
 </div>
 
 <ng-template #loading>

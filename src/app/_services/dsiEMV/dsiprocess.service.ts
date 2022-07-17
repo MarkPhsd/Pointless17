@@ -42,13 +42,14 @@ export class DSIProcessService {
   }
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
-    const commandResponse = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '')
+    const commandResponse = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
     console.log('emvSale', commandResponse)
     return commandResponse;
   }
 
   async  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
-    const commandResponse = await this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit')
+    const commandResponse = await this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit');
+    console.log('emvSale', commandResponse)
     return commandResponse;
   }
 

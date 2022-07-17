@@ -277,6 +277,7 @@ getDomToImage(node: any) {
         if (options.silent) {
           printWindow.hide();
         }
+
         if (!options) {
           options = {
             silent: true,
@@ -338,14 +339,14 @@ getDomToImage(node: any) {
          console.log(error)
        }
      }
-   }
+  }
 
   getDefaultReceiptPrinter()
   {
     console.log('')
   }
 
-  printElectronReceipt(printerName: string, styles: ISetting, document) {
+  printElectronReceipt(printerName: string, document) {
     const prtContent  = document.getElementById('printsection');
     const html = this.getPrintHTML(prtContent)
     const contents = `data:text/html;charset=utf-8,  ${encodeURIComponent(html) }`

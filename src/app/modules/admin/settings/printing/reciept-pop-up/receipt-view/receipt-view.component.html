@@ -1,5 +1,4 @@
 <div class="buttons-grid">
-
   <div>
     <button mat-button (click)="print()">
       <div *ngIf="printerName">
@@ -30,7 +29,8 @@
 <ng-template #receipt>
   <div *ngIf="receiptLayoutSetting && headerText &&  itemsText"
        class="border-section">
-    <app-receipt-layout #printsection id="printsection"
+    <app-receipt-layout #printsection
+                      id="printsection"
                       [headerText]="headerText"
                       [footerText]="footerText"
                       [itemText]="itemsText"
@@ -49,9 +49,8 @@
 </ng-template>
 
 <ng-template #balanceSheet>
-
   <balance-sheet-view
-      #printsection id="printsection"
+      #printsection
       [disableAuditButton]="true">
   </balance-sheet-view>
 </ng-template>

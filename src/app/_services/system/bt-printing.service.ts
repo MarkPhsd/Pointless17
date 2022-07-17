@@ -35,8 +35,9 @@ export class BtPrintingService {
   // }
   sendToBluetoothPrinter(macAddress, data_string)  {
     //1. Try connecting to bluetooth printer
-    const printer$ = this.connectToBluetoothPrinter(macAddress)
-    printer$.subscribe(
+    const device$ = this.btSerial.connect(macAddress)
+
+    device$.subscribe(
        data =>{
         //2. Connected successfully
       this.btSerial.write(data_string)

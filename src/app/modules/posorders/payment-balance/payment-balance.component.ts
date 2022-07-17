@@ -75,13 +75,13 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
    editPayment(payment: IPOSPayment) {
-    //get payment
-    const site = this.siteService.getAssignedSite();
-    const method$ = this.paymentMethodService.getPaymentMethod(site,payment.paymentMethodID)
+      //get payment
+      const site = this.siteService.getAssignedSite();
+      const method$ = this.paymentMethodService.getPaymentMethod(site,payment.paymentMethodID)
 
-    method$.subscribe( method => {
-      this.editDialog.openChangeDueDialog(payment, method, this.order)
-    })
+      method$.subscribe( method => {
+        this.editDialog.openChangeDueDialog(payment, method, this.order)
+      })
    }
 
    ngOnDestroy(): void {
@@ -119,7 +119,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    voidPayment(payment) {
     //run void method.
     if (payment) {
-      //only manager can void. 
+      //only manager can void.
       this.productEditButtonService.openVoidPaymentDialog(payment)
       return
     }
@@ -129,7 +129,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
    requestVoidPayment(payment) {
     //run void method.
     if (payment) {
-      //only manager can void. 
+      //only manager can void.
       this.productEditButtonService.openVoidPaymentDialog(payment)
       return
     }

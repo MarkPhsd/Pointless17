@@ -117,6 +117,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
+  @Input()         panelHeightValue = 300;
+  panelHeightStyle= ''
   currentPage      : number;
   startRow         : number;
   endRow           : number;
@@ -184,12 +186,15 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.isApp = this.platFormService.isApp();
     this.section = 1
     this.href = this.router.url;
-    this.initClass('constructor');
+
   }
+
+
 
   async  ngOnInit() {
    await this.getBucket()
-   this.init()
+   this.init();
+   this.setPanelSyle();
   }
 
   getPlaceHolder() {
@@ -206,19 +211,36 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     searchModel.webMode     = this.menuService.isWebModeMenu;
     this.searchModel        = searchModel;
     this.addToList(searchModel.pageNumber, searchModel.pageSize)
+    this.initClass();;
   }
 
-  initClass(placement) {
-    if (this.href === '/categories') {
+  setPanelSyle() {
+    if ( this.singlePage ) {
+      this.panelHeightStyle =  `calc(100vh - 225px)`
+      // if (this.panelHeightValue !=0) {
+      //   this.panelHeightStyle =  `calc(${this.panelHeightValue}vh - 135px)`
+      // }
+    }
+    if ( !this.singlePage ) {
+      this.panelHeightStyle =  `calc(25vh - 95px)`
+      if (this.panelHeightValue !=0) {
+        this.panelHeightStyle =  `calc(${this.panelHeightValue}vh - 95px)`
+      }
+    }
+  }
+
+  initClass() {
+    if (this.href.substring(0, 11 ) === '/categories') {
       this.singlePage = true
       this.classcontainer = 'parent-container-single-page'
       this.orderslist = 'orders-list-single-page'
+      return;
     }
-    if (this.href != '/categories') {
-      this.singlePage = false
-      this.classcontainer = 'parent-container'
-      this.orderslist     = 'orders-list'
-    }
+
+    this.singlePage = false
+    this.classcontainer = 'parent-container'
+    this.orderslist     = 'orders-list'
+
   }
 
   ngAfterViewInit() {
@@ -275,7 +297,8 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   showAll() {
-    this.router.navigate(["/categories/"]);
+    const type = {typeID: this.itemTypeID};
+    this.router.navigate(["/categories/", type]);
   }
 
   listItems(id:number) {

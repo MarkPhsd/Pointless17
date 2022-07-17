@@ -1,9 +1,11 @@
 <div  *ngIf="order" class="container">
   <div [class]="orderlayout">
+
     <div>
       <div>
-
-        <div class="grid-header-item">
+        <div
+            class="grid-header-item"
+            (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
               [mainPanel]="mainPanel"
               [order]="order">
@@ -16,14 +18,17 @@
           ></store-credit-info>
         </div>
 
-        <div class="grid-header-item"
+        <div
+              class="grid-header-item"
               *ngIf="enableLimitsView  && (wideBar || mainPanel)">
           <limit-values-progress-bars
               [order]="order">
           </limit-values-progress-bars>
         </div>
 
-        <div  class="grid-header-item"
+        <div
+              (resized)="onResizedorderCustomerPanel($event)"
+              class="grid-header-item"
               *ngIf="wideBar || mainPanel">
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
@@ -34,7 +39,9 @@
           </app-order-header-demo-graphics>
         </div>
 
-        <div class="specials">
+        <div
+             (resized)="onResizedorderSpecialsPanel($event)"
+             class="specials">
           <pos-order-price-schedule-info></pos-order-price-schedule-info>
         </div>
 
@@ -105,10 +112,12 @@
       </div>
     </div>
 
-    <div    class="order-items"
+    <div   [style.height]="orderItemsHeightStyle"
+            class="order-items"
             *ngIf="(!smallDevice && mainPanel)
                 || (!mainPanel && smallDevice)
                 || (!mainPanel && !smallDevice)">
+
       <pos-order-items
                 [mainPanel] ="mainPanel"
                 [order]     ="order">

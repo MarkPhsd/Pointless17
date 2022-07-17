@@ -22,7 +22,6 @@
   overflow-x: hidden;
   margin    : 5px;
   width     : 340px;
-
   z-index   : 1005;
 }
 
@@ -106,10 +105,26 @@ img {
 }
 
 mat-card {
-  height:  85vh !important;
+  height: calc(100% - 250px);
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+
+// .orders-list {
+//   overflow-x: hidden;
+//   overflow-y: auto;
+//   height: 45vh;
+//   height: calc(100% - 250px);
+// }
+
+// .orders-list-single-page {
+//   overflow-x: hidden;
+//   overflow-y: auto;
+//   height: 75vh;
+//   height: calc(100% - 250px);
+// }
+
 
 mat-raised-button {
   width: 175px;

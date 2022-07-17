@@ -3,20 +3,27 @@
   <div class="overlay-items">
 
     <scheduled-menu-list></scheduled-menu-list>
-    <mat-divider></mat-divider>
 
-    <div *ngIf="homePageSetings">
+    <mat-divider></mat-divider>
+    <!-- panelHeightSize {{panelHeightSize}} -->
+
+    <div *ngIf="homePageSetings && panelHeightSize; else loading">
       <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isTierMenuViewOn"></ng-container>
     </div>
+
+    <ng-template #loading>
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
+
   </div>
 </div>
 
 <ng-template #departmentView>
-  <div>
-    <app-categories  [itemTypeID]="6">
+  <div [style.height]="panelHeightSize">
+    <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
         Department Search
     </app-categories>
     <mat-divider></mat-divider>
@@ -24,8 +31,8 @@
 </ng-template>
 
 <ng-template #categoryView>
-  <div>
-    <app-categories  [itemTypeID]="4">
+  <div [style.height]="panelHeightSize">
+    <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="4">
       Category Search
     </app-categories>
     <mat-divider></mat-divider>
@@ -33,11 +40,16 @@
 </ng-template>
 
 <ng-template #brandView>
-  <div>  <app-brandslist ></app-brandslist> </div>
+  <!-- <div> -->
+    <div [style.height]="panelHeightSize">
+    <app-brandslist ></app-brandslist>
+  </div>
 </ng-template>
 
 <ng-template #tierMenuView>
-  <div> <app-tier-menu></app-tier-menu> </div>
+  <div>
+     <app-tier-menu></app-tier-menu>
+  </div>
 </ng-template>
 
 <!-- <video autoplay muted  class="video">

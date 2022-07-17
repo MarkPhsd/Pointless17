@@ -10,7 +10,7 @@
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
-    margin-left: 10px;
+    margin: 10px;
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
     grid-auto-flow: row;
@@ -24,6 +24,9 @@ button{
 }
 
 .buttons-container {
+
+  // max-height: 300px;
+
   --gap: 5px;
   display: grid;
   margin-left: 10px;
@@ -34,7 +37,6 @@ button{
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
-    margin-left: 10px;
     gap: var(--gap);
     grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
     grid-auto-flow: row;

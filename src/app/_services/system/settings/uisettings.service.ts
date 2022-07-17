@@ -147,6 +147,34 @@ export class UISettingsService {
     {id: 0, name: 'Both'}, {id: 1, name: 'Rec'}, {id: 2, name: 'Med'}
   ]
 
+  //section cacluates the order panel so that all items are properly displayed and scrollable.
+  private _totalOrderHeightVal   : number;
+
+  private _totalOrderHeight          = new BehaviorSubject<number>(null);
+  public  totalOrderHeight$          = this._totalOrderHeight.asObservable();
+
+  private orderHeaderHeight   :number;
+  private customerOrderHeight :number;
+  private specialOrderHeight  :number;
+  private orderItemsHeight    : number;
+  private limitOrderHeight: number;
+
+  private _orderSpecialsHeight          = new BehaviorSubject<number>(null);
+  public  orderSpecialsHeight$          = this._orderSpecialsHeight.asObservable();
+
+  private _orderHeaderHeight          = new BehaviorSubject<number>(null);
+  public  orderHeaderHeight$          = this._orderHeaderHeight.asObservable();
+
+  private _customerOrderHeight        = new BehaviorSubject<number>(null);
+  public  customerOrderHeight$        = this._customerOrderHeight.asObservable();
+
+  private _limitOrderHeight         = new BehaviorSubject<number>(null);
+  public  limitOrderHeight$         = this._limitOrderHeight.asObservable();
+
+  private _orderItemsHeight         = new BehaviorSubject<number>(null);
+  public  orderItemsHeight$         = this._orderItemsHeight.asObservable();
+ ////section end.
+
 
   private _emailModel  = new BehaviorSubject<EmailModel>(null);
   public  EmailModel$  = this._emailModel.asObservable();
@@ -168,6 +196,85 @@ export class UISettingsService {
 
   private _StripeAPISettings         = new BehaviorSubject<StripeAPISettings>(null);
   public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
+
+
+  updateorderHeaderHeight(item: number) {
+    this._orderHeaderHeight.next(item);
+    this.orderHeaderHeight = item;
+    this.calcOrderHeight();
+  }
+
+  updatecustomerOrderHeight(item: number) {
+
+    this._customerOrderHeight.next(item);
+    this.customerOrderHeight = item
+    this.calcOrderHeight();
+  }
+
+  updateLimitOrderHeight(item: number) {
+    this._limitOrderHeight.next(item);
+    this.limitOrderHeight = item;
+    this.calcOrderHeight();
+  }
+
+  updatespecialOrderHeight(item: number) {
+    this._orderSpecialsHeight.next(item);
+    this.specialOrderHeight = item;
+    this.calcOrderHeight();
+  }
+
+  getOrderItemsHeight(item: number) {
+
+    if (!this.customerOrderHeight) {
+      this.customerOrderHeight = 0
+    }
+    if (!this.customerOrderHeight) {
+      this.customerOrderHeight = 0
+    }
+    if (!this.specialOrderHeight) {
+      this.specialOrderHeight = 0
+    }
+    if (!this.limitOrderHeight) {
+      this.limitOrderHeight = 0
+    }
+
+    // console.log('orderheaderheight', this.orderHeaderHeight )
+    // console.log('customerOrderHeight', this.customerOrderHeight )
+    // console.log('specialOrderHeight', this.specialOrderHeight )
+    // console.log('limitOrderHeight', this.limitOrderHeight )
+
+    const totalHeight = this.orderHeaderHeight + this.customerOrderHeight +
+                        this.specialOrderHeight + this.limitOrderHeight;
+    this._totalOrderHeightVal = +totalHeight.toFixed(0);
+    this._totalOrderHeight.next(+totalHeight.toFixed(0));
+    return +totalHeight.toFixed(0)
+  }
+
+  calcOrderHeight() {
+    if (!this.customerOrderHeight) {
+      this.customerOrderHeight = 0
+    }
+    if (!this.customerOrderHeight) {
+      this.customerOrderHeight = 0
+    }
+    if (!this.specialOrderHeight) {
+      this.specialOrderHeight = 0
+    }
+    if (!this.limitOrderHeight) {
+      this.limitOrderHeight = 0
+    }
+
+    // console.log('orderheaderheight', this.orderHeaderHeight )
+    // console.log('customerOrderHeight', this.customerOrderHeight )
+    // console.log('specialOrderHeight', this.specialOrderHeight )
+    // console.log('limitOrderHeight', this.limitOrderHeight )
+
+    const totalHeight = this.orderHeaderHeight + this.customerOrderHeight +
+                        this.specialOrderHeight + this.limitOrderHeight ;
+    this._totalOrderHeightVal = +totalHeight.toFixed(0);
+    this._totalOrderHeight.next(+totalHeight.toFixed(0));
+
+  }
 
   updateEmailModel(item: EmailModel) {
     this._emailModel.next(item);

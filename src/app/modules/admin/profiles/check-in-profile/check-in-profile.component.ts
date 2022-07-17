@@ -11,6 +11,7 @@ import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces/transaction
 import { AWSBucketService, ContactsService, OrdersService } from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { IStatuses} from 'src/app/_services/people/status-type.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
@@ -25,6 +26,15 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 
 export class CheckInProfileComponent implements OnInit, OnDestroy {
 
+  selectForm: FormGroup;
+  dateRangeList =
+  [
+    {name:'Last 90 days', value: '90'},
+    {name: 'Last 60 days', value: '60'},
+    {name: 'Last 30  days',value: '30'},
+    {name: 'Last 10  days',value: '10'},
+    {name: 'Open Orders', value: 'open'}
+  ]
   inputForm   : FormGroup;
   bucketName  :  string;
   awsBucketURL:  string;
@@ -90,6 +100,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private userAuthorization   : UserAuthorizationService,
               private uiSettingsService   : UISettingsService,
               private orderMethodsService : OrderMethodsService,
+              private dateHelperService         : DateHelperService
             ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
@@ -116,6 +127,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
     this.initDateRangeForm();
     this.initConfirmPassword();
+    this.initSelectForm();
   }
 
   ngOnDestroy(): void {
@@ -126,6 +138,11 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     if (this._searchModel) { this._searchModel.unsubscribe()}
   }
 
+  initSelectForm() {
+    this.selectForm = this.fb.group( {
+		  rangeSelect: ['']
+		})
+  }
   initConfirmPassword()  {
 		this.confirmPassword = this.fb.group( {
 		  confirmPassword: ['']
@@ -169,6 +186,34 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   emitDatePickerData(event) {
+    this.refreshDateSearch()
+  }
+
+  chooseDateRangeValue(value: any) {
+    this.initDateRangeForm();
+    //set the date range to the value
+    const now = new Date()
+    let start = new Date()
+    if (value === '90') {
+       start  =this.dateHelperService.add('d', -90, now)
+    }
+    if (value === '60') {
+       start  =this.dateHelperService.add('d', -60, now)
+    }
+
+    if (value === '30') {
+       start  =this.dateHelperService.add('d', -30, now)
+    }
+    if (value === '10') {
+       start  =this.dateHelperService.add('d', -10, now)
+    }
+    if (value === 'open') {
+
+    }
+
+    this.searchModel = {} as IPOSOrderSearchModel;
+    this.searchModel.completionDate_From = start.toISOString()
+    this.searchModel.completionDate_To   = now.toISOString()
     this.refreshDateSearch()
   }
 

@@ -160,8 +160,14 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   }
 
   async refreshView(){
-    const styles     = await this.applyStyles();
     const receiptID  = await this.getDefaultPrinter();
+
+    if (this.printingService.printView  == 2) {
+      this.initBalanceSheetDefaultLayouts()
+      return;
+    }
+
+    const styles     = await this.applyStyles();
     if (receiptID && styles ) {
       this.initDefaultLayouts()
     }
@@ -173,7 +179,12 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   async  initBalanceSheetDefaultLayouts() {
     try {
-      this.receiptStyles  = await this.applyStyles();
+      'apply balance sheet style'
+      const site = this.siteService.getAssignedSite();
+      const setting = {} as ISetting;
+      setting.text  = await  this.printingService.appyBalanceSheetStyle()
+      this.receiptStyles =  setting;
+      this.applyStyle( this.receiptStyles)
     } catch (error) {
       console.log(error)
     }
@@ -183,7 +194,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     try {
       const site = this.siteService.getAssignedSite();
       await this.printingService.initDefaultLayouts();
-      this.receiptStyles  = await this.applyStyles();
+      if (!this.receiptStyles) { this.receiptStyles  = await this.applyStyles(); }
+      if (this.receiptStyles)  { this.receiptStyles  = this.applyStyle(this.receiptStyles) };
 
       const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
       receipt$.subscribe(data => {
@@ -204,20 +216,19 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       })).subscribe()
   }
 
-  async applyStyles(): Promise<ISetting> {
-    const site  = this.siteService.getAssignedSite();
-    this.receiptStyles  = await  this.printingService.appyStylesCached(site)
-    this.applyStyle(this.receiptStyles)
-    return  this.receiptStyles
-  }
-
-
   async applyBalanceSheetStyles(): Promise<ISetting> {
       const value = await  this.printingService.appyBalanceSheetStyle();
       const style             = document.createElement('style');
       style.innerHTML         = value;
       document.head.appendChild(style);
       return this.receiptStyles
+    return  this.receiptStyles
+  }
+
+  async applyStyles(): Promise<ISetting> {
+    const site  = this.siteService.getAssignedSite();
+    this.receiptStyles  = await  this.printingService.appyStylesCached(site)
+    this.applyStyle(this.receiptStyles)
     return  this.receiptStyles
   }
 
@@ -310,9 +321,9 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   }
 
   async printElectron() {
-    const styles = this.receiptStyles.text;
+    const styles   = this.receiptStyles.text;
     const contents = this.getReceiptContents(styles)
-    const options = {
+    const options  = {
       silent: true,
       printBackground: false,
       deviceName: this.printerName

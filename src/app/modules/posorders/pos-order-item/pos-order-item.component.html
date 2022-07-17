@@ -1,4 +1,3 @@
-
 <mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
@@ -48,7 +47,6 @@
           <span class="discount-description"  *ngIf="orderItem.itemOrderPercentageDiscount>0">
             % Off Savings $ {{orderItem.itemOrderPercentageDiscount}},
           </span>
-
 
           <span class='status-icon' *ngIf="orderItem.printed && prepScreen && !isModifier">
             <mat-icon color="warn" *ngIf="orderItem.printed && !prepScreen" >print</mat-icon>

@@ -1,10 +1,10 @@
-@import "/src/mixins.scss";
 
 .grid-container {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
   @media print {
     --gap: 5px;
     display: grid;
@@ -35,12 +35,8 @@
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
   margin: 3px;
+  width: 305px;
 
-  @include for-phone-only  {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 3px;
-  }
   @media print {
     --gap: 5px;
     display: grid;
@@ -54,20 +50,8 @@
 }
 
 .info-width {
-  width: 275px;
-  @include for-phone-only  {
-    width: 275px;
-  }
-  @media print {
-    --gap: 5px;
-    display: grid;
-    gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-    font-size: 12pt;
-    font-weight: bold !important;
-    justify-content: right;
-    text-align: right;
-  }
+  width: 350px;
+
 }
 
 .cashdrop-border {
@@ -77,6 +61,7 @@
   margin-top: 3px;
   margin-bottom: 3px;
   padding: 2px;
+
   @media print {
     --gap: 5px;
     display: grid;

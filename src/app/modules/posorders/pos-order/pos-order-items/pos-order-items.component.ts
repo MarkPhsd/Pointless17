@@ -161,6 +161,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.smallDevice = true
     }
 
+    //the heights of this panel are what control
+    //the inside scroll section.
+    //changing this to a dynamic ng-style will allow controlling
+    //the absolute relative value of the height, ensuring the proper scroll height.
     if (!this.mainPanel) {
       this.orderItemsPanel = 'item-list-side-panel'
     }

@@ -66,7 +66,6 @@ mat-icon {
   padding      : 10px;
   padding-left : 15px;
   margin       : 5px;
-  // position     : absolute;
   left         : 35px;
   width: 85%;
 
@@ -90,7 +89,6 @@ mat-icon {
 
 .productname-modifier {
   color: cornflowerblue;
-  // background-color: #fff;
   background-blend-mode: difference;
 }
 
@@ -106,13 +104,14 @@ mat-icon {
 font-style: italic;
 }
 
-.panel{
+.panel {
   display: flex;
   flex-wrap: wrap;
   border: 1px solid #f00;
   min-height: 70px;
   $breakpoint: 600px;
   --multiplier: calc( #{$breakpoint} - 100%);
+
   .element{
     min-width: 33%;
     max-width: 100%;
@@ -120,6 +119,7 @@ font-style: italic;
     flex-basis: calc( var(--multiplier) * 999 );
     background: orange;
   }
+
 }
 
 .panel-modifier {
@@ -137,8 +137,6 @@ font-style: italic;
     background: orange;
   }
 }
-
-
 
 .item-details-grid {
   --gap: 20px;
@@ -385,7 +383,6 @@ button {
     height: calc(100vh - 10px);
   }
 }
-
 
 #product-name {
   @media only screen and (min-width: 1400px) {

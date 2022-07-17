@@ -1,5 +1,3 @@
-@import "/src/mixins.scss";
-
 .grid-items {
   --gap: 3px;
   display: grid;
@@ -8,7 +6,7 @@
   @media print {
     font-size: 12pt;
     font-weight: bold !important;
-     --gap: 3px;
+    --gap: 3px;
     display: grid;
     gap: var(--gap);
     grid-template-columns: 20px 55px 70px 50px 65px 55px;
@@ -39,4 +37,21 @@
     gap: var(--gap);
     grid-template-columns: 100px 100px;
   }
+}
+
+.section-item {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.receipt-width-80 {
+  width: 350px;
+}
+
+.receipt-width-58 {
+  width: 305px;
+}
+
+.receipt-width-85 {
+  width: 300px;
 }

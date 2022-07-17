@@ -204,7 +204,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       }
 
       return cmdResponse;
-
     }
   }
 
@@ -238,6 +237,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.exp           = trans?.ExpDate;
     payment.cardHolder    = trans?.CardholderName;
     payment.trancode      = trans?.TranCode;
+    payment.tranType      = trans?.TranCode;
     payment.refNumber     = trans?.RefNo;
     payment.dlNumber      = trans?.AcqRefData;
     payment.processData   = trans?.ProcessData;
@@ -334,7 +334,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       }
       return null;
   }
-
 
   validatePaymentAmount(amount, isCash: boolean, balanceRemaining: number): boolean {
     if (  +amount > + balanceRemaining ) {

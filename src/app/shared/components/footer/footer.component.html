@@ -5,19 +5,20 @@
 </mat-toolbar>
 
 <ng-template #footerMenu>
- 
+
     <div class="grid-items">
-      <div class="theme-spacer">
+
+      <div>
         <app-toggle-theme></app-toggle-theme>
       </div>
-  
+
       <div>
-        <app-cart-button 
+        <app-cart-button
             [hideAddNewOrder]="true"
             [smallDevice]="true">
         </app-cart-button>
       </div>
-  
+
       <div>
           <button
                 mat-raised-button
@@ -27,7 +28,7 @@
                 (click)="navPOSOrders()">
              My Orders
              <!-- <mat-icon>list</mat-icon> -->
-             <mat-icon  
+             <mat-icon
                 matBadgeColor="accent"
                 matBadgePosition="before">
                 list

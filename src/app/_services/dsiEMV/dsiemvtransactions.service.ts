@@ -340,7 +340,6 @@ export class DSIEMVTransactionsService implements OnDestroy {
     let response        : any;
 
     try {
-      console.log('emvBatchInquire xml', xml)
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       response              = await emvTransactions.EMVTransaction(xml)
     } catch (error) {
@@ -397,7 +396,6 @@ export class DSIEMVTransactionsService implements OnDestroy {
       return dsiResponse;
     }
   }
-
 
   async testADODBConnection() {
     const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
@@ -458,7 +456,6 @@ export class DSIEMVTransactionsService implements OnDestroy {
   }
 
 }
-
 
     // <HostOrIP>127.0.0.1</HostOrIP>
     //       <IpPort>9000</IpPort>

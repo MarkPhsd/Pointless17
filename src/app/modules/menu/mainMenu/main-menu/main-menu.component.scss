@@ -10,7 +10,6 @@
 //   z-index: -1;
 // }
 
-
 .viewport-header {
   height: 100vh;
   width: 100vh;
@@ -61,7 +60,6 @@ mat-divider {
   left: 0px;
   -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
   filter: blur(5px);
-
   background-blend-mode:hue;
 }
 
@@ -72,7 +70,6 @@ video {
   position: fixed;
   top: 0;
   left: 0;
-
   mix-blend-mode: overlay;
   z-index: -1;
 }
@@ -81,7 +78,6 @@ header {
   position: fixed;
   width: 100%;
   text-align: center;
-
   transition: .4s;
 }
 

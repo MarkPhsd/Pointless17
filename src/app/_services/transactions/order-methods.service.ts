@@ -312,9 +312,15 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
+
+    if (paymentMethod.reverseCharge) {
+
+    }
+
     const payment = paymentResponse.payment
-    if (order.balanceRemaining> 0) { return 0 }
+    if (order.balanceRemaining > 0) { return 0 }
     if (payment && paymentMethod) {
+
       if (paymentMethod.isCreditCard) {
         if (this.platFormService.isApp()) {
           this.editDialog.openChangeDueDialog(payment, paymentMethod, order)
@@ -330,6 +336,7 @@ export class OrderMethodsService implements OnDestroy {
       }
 
       return 0
+
     }
   }
 

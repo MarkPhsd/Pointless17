@@ -143,7 +143,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     //Add 'implements OnDestroy' to the class.
     if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
     if (this._assignedPOSItem) { this._assignedPOSItem.unsubscribe()}
-    
+
   }
 
   constructor(  private orderService: OrdersService,
@@ -230,7 +230,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.editProperties('quantity' , 'Change Quantity')
   }
 
-  editPrice() { 
+  editPrice() {
     this.editProperties('price' , 'Change Price')
   }
 
@@ -256,13 +256,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           this.notifyEvent('Item type not defined', 'Alert')
           return;
         }
-        
+
         let requireWholeNumber = false;
         if (editField == 'quantity') {
           requireWholeNumber = this.menuItem.itemType.requireWholeNumber
         }
         console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
-        
+
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
@@ -318,7 +318,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       } else {
         this.isNotInSidePanel = true
         this.sidePanelPercentAdjust = 80
-        // this.customcard ='custom-card-side'
         this.updateCardStyle(true)
       }
       if (this.onlineShortDescription) {

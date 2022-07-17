@@ -131,7 +131,7 @@ export class POSPaymentService {
 
   voidPayment(site: ISite, paymentWithAction: OperationWithAction): Observable<OperationWithAction> {
 
-    if (paymentWithAction.payment.voidReason)  {
+    if (paymentWithAction?.payment?.voidReason)  {
       this.notificationEvent(`Payment already voided: ${paymentWithAction.voidReason}`, 'Payment Voided')
       return
     }

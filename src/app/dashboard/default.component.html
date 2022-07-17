@@ -2,10 +2,10 @@
 
 <mat-drawer-container >
   <mat-drawer
-              position ="start"
-              [class]  ="barType"
-              [mode]   ="sidebarMode"
-              [opened] ="leftSideBarToggle">
+        position ="start"
+        [class]  ="barType"
+        [mode]   ="sidebarMode"
+        [opened] ="leftSideBarToggle">
 
     <div    [hidden]="searchSideBar">
       <div  [hidden]="toolbarTiny">
@@ -27,7 +27,7 @@
 
   <mat-drawer-content>
 
-    <div *ngIf="departmentID && departmentID !=0" 
+    <div *ngIf="departmentID && departmentID !=0"
          class="overlay">
         <app-department-menu
           [departmentID]="departmentID">
@@ -51,5 +51,6 @@
   </mat-drawer>
 
 </mat-drawer-container>
+
 
 <app-footer></app-footer>

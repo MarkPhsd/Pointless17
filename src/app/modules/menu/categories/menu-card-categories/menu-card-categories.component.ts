@@ -10,6 +10,7 @@ export class MenuCardCategoriesComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    const i = 0;
   }
 
 }

@@ -110,6 +110,15 @@ export class DSIEMVTransactionComponent implements OnInit {
 
   processTransation() {
 
+    if (this.order) {
+      if (this.order.balanceRemaining < 0) {
+        this.action == 3
+        this.amount = Math.abs(+this.order.balanceRemaining);
+        this.processRefundCard();
+        return
+      }
+    }
+
     if (this.action == 0 || this.action == 1) {
       this.processSaleCard();
       return
@@ -161,7 +170,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   async processRefundCard() {
-    const amount = this.amount
+    const amount  = this.amount
     const payment = this.payment
     if (!this.order) { return }
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
@@ -203,7 +212,8 @@ export class DSIEMVTransactionComponent implements OnInit {
   async processVoidResults(response: any) {
 
     console.log('RStream', response.RStream.CmdResponse)
-    const cmdResponse = response?.RStream?.CmdResponse
+    const cmdResponse = response?.RStream?.CmdResponse;
+
     const result =  this.readResult(cmdResponse);
     if (!result) {
       this.processing = false;
@@ -257,6 +267,7 @@ export class DSIEMVTransactionComponent implements OnInit {
       }
       try {
         item.payment.trancode        = response?.TranResponse?.TranCode
+        item.payment.tranType        = response?.TranResponse?.TranCode
       } catch (error) {
       }
 
@@ -312,8 +323,17 @@ export class DSIEMVTransactionComponent implements OnInit {
     this.processing     = false;
 
     //"AP*", "Approved", "Approved, Partial AP"
-    if (cmdResponse.TextResponse.toLowerCase() === 'Approved'.toLowerCase() || cmdResponse.TextResponse.toLowerCase() === 'AP*'.toLowerCase()
-       ||cmdResponse.TextResponse.toLowerCase() === 'Approved, Partial AP'.toLowerCase()
+
+    const response = cmdResponse.TextResponse.toLowerCase();
+    const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
+    if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
+      this.cancel();
+      return true;
+    }
+
+    if (response === 'Approved'.toLowerCase() || response === 'AP*'.toLowerCase()
+       || response === 'Approved, Partial AP'.toLowerCase()
+
     ) {
       this.cancel();
       return true;

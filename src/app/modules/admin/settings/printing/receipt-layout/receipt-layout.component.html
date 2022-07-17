@@ -44,8 +44,7 @@
 
       <div   *ngIf="interpolatedHeaderTexts" class="section-item">
         <div *ngFor="let item of interpolatedHeaderTexts; let i = index">
-          <div
-            [innerHTML]="interpolatedHeaderTexts[i]" >  </div>
+          <div  [innerHTML]="interpolatedHeaderTexts[i]" >  </div>
         </div>
       </div>
 

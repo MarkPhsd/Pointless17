@@ -291,6 +291,7 @@ import { BalanceSheetViewComponent } from '../modules/admin/settings/printing/ba
 import { CloseDayValidationComponent } from '../modules/transactions/operations/pos-operations/close-day-validation/close-day-validation.component';
 import { PasswordValidationComponent } from '../modules/admin/profiles/password-validation/password-validation.component';
 import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
+import { AngularResizeEventModule } from 'angular-resize-event';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -556,6 +557,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
    imports: [
       AgGridModule.withComponents([ButtonRendererComponent,AgIconFormatterComponent, AgGridToggleComponent,AgGridImageFormatterComponent]),
       DashBoardRoutingModule,
+      AngularResizeEventModule,
       AppRoutingModule,
       AppMaterialModule,
       BrowserAnimationsModule,
