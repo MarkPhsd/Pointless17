@@ -52,8 +52,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // @ViewChild('container') container : ElementRef;
   @Input() OrderID : string;
   @Input() mainPanel: boolean;
-
-  state   = 'nothing';
+  // totalOrderHeight$: Observable<any>;
+  // remainingHeight$:  Observable<any>;
+  // state   = 'nothing';
   id: any = '';
   order$: Observable<IPOSOrder>;
 
@@ -145,37 +146,41 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
 onResizedorderHeightPanel(event: ResizedEvent) {
   console.log('onResizedorderHeightPanel', event.newRect.height)
-  this.uiSettingsService.updateorderHeaderHeight(event.newRect.height) //this.orderHeightPanel.nativeElement.offsetHeight)
+  this.uiSettingsService.updateorderHeaderHeight(event.newRect.height,this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
   this.resizePanel()
 }
 
 onResizedorderLimitsPanel(event: ResizedEvent) {
-  this.uiSettingsService.updateLimitOrderHeight(event.newRect.height) //(this.orderLimitsPanel.nativeElement.offsetHeight)
+  this.uiSettingsService.updateLimitOrderHeight(event.newRect.height,this.windowHeight) //(this.orderLimitsPanel.nativeElement.offsetHeight)
   this.resizePanel()
 }
 
 onResizedorderSpecialsPanel(event: ResizedEvent) {
-  this.uiSettingsService.updatespecialOrderHeight(event.newRect.height) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
+  this.uiSettingsService.updatespecialOrderHeight(event.newRect.height,this.windowHeight) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
   this.resizePanel()
 }
 
 onResizedorderCustomerPanel(event: ResizedEvent) {
   console.log('onResizedorderCustomerPanel',  event.newRect.height )
-  this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height) //(this.orderCustomerPanel.nativeElement.offsetHeight)
+  this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height,this.windowHeight) //(this.orderCustomerPanel.nativeElement.offsetHeight)
   this.resizePanel()
 }
 
 resizePanel() {
-
-  this.uiSettingsService.totalOrderHeight$.subscribe(data => {
-    if (this.smallDevice) {
-      // this.orderItemsHeightStyle = `100vh - 50px - 50px ${data - this.windowHeight}px`
-      this.orderItemsHeightStyle = `calc(100vh - 50px - 50px ${data}px)`
+  this.uiSettingsService.remainingHeight$.subscribe(data => {
+    if (this.mainPanel) {
+      this.orderItemsHeightStyle = `calc(100vh -${ - 100}px)`
+      if (this.smallDevice) {
+        this.orderItemsHeightStyle = `calc(100vh -${ - 100}px)`
+      }
+      return;
     }
-    if (!this.smallDevice) {
-      const value = this.windowHeight -50 - +data
-      // this.orderItemsHeightStyle = `${value}px`;
-      this.orderItemsHeightStyle = `calc(100vh - 50px)`
+    if (data) {
+      const value = +data.toFixed(0)
+      this.orderItemsHeightStyle = `${value - 70}px`
+      if (this.smallDevice) {
+        this.orderItemsHeightStyle = `${value - 105}px`
+      }
     }
   })
 }
@@ -236,8 +241,8 @@ resizePanel() {
     this.orderlayout     = 'order-layout-empty';
     this.resizePanel();
 
+    this.windowHeight = window.innerHeight;
 
-    this.windowHeight = window.innerWidth;
     if (window.innerWidth < 768) {
       this.smallDevice = true
       this.infobuttonpanel = 'grid-order-header'

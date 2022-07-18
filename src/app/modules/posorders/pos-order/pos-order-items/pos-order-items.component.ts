@@ -31,7 +31,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
-
+  @Input() panelHeight = '100%';
   @Input() orderItemsPanel: string;
   smallDevice    : boolean;
   animationState : string;

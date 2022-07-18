@@ -3,20 +3,29 @@
   <div>
     <span *ngIf="isAuthorized || isStaff">
 
-      <button mat-button (click)="changeView()">
+      <button *ngIf="!smallDevice" mat-button (click)="changeView()">
         <mat-icon>
           <span *ngIf="viewType == 1">view_list</span>
           <span *ngIf="viewType == 0">view_module</span>
           <span *ngIf="viewType == 3">view_module</span>
         </mat-icon>
-        <span *ngIf="viewType == 1">View List</span>
-        <span *ngIf="viewType == 0">View Grid</span>
-        <span *ngIf="viewType == 3">View Grid</span>
+        <span *ngIf="viewType == 1"> List View</span>
+        <span *ngIf="viewType == 0"> Grid View</span>
+        <span *ngIf="viewType == 3"> Grid View</span>
       </button>
 
-      <button mat-button (click)="filterBottomSheet()">
+      <button *ngIf="smallDevice"  mat-button (click)="filterBottomSheet()">
         <mat-icon>search</mat-icon>
       </button>
+
+      <span  *ngIf="isAuthorized">
+        <span *ngIf="!smallDevice || (!smallDevice && hidePanel)">
+          <button mat-button (click)="displayPanel($event)">
+            <mat-icon>search</mat-icon>
+          </button>
+        </span>
+      </span>
+
       <button mat-button (click)="newOrder()">
         <mat-icon>receipt</mat-icon><span>New Order</span>
       </button>
@@ -25,16 +34,10 @@
       </button>
     </span>
 
-    <span  *ngIf="isAuthorized">
-      <span *ngIf="smallDevice || hidePanel">
-        <button mat-button (click)="displayPanel($event)">
-          <mat-icon>view</mat-icon><span>Expand Filter Panel</span>
-        </button>
-      </span>
-    </span>
-    <span>
+
+    <span *ngIf="!smallDevice">
       <button mat-button (click)="setViewType(3)">
-        <mat-icon>done</mat-icon> View Prep
+        <mat-icon>countertops</mat-icon> View Prep
       </button>
     </span>
 

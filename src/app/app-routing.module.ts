@@ -128,7 +128,6 @@ const routes: Routes = [
         { path: 'categories', component: CategoriesComponent,canActivate: [AgeVerificationGuardService],   data: { title: 'Categories',  animation: 'isLeft'} },
         { path: 'brandslist', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { title: 'Brands',  animation: 'isLeft'} },
         { path: 'menuitems-infinite', component: MenuItemsInfiniteComponent ,canActivate: [AgeVerificationGuardService],   data: {  title: 'Menu Items',  animation:  'isLeft'} },
-
         { path: 'menuitem',     component: MenuitemComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Item',  animation:  'isLeft'} },
         { path: 'searchproducts', component: SearchResultsComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
 

@@ -112,17 +112,21 @@
       </div>
     </div>
 
-    <div   [style.height]="orderItemsHeightStyle"
+    <div    [style.height]="orderItemsHeightStyle"
             class="order-items"
             *ngIf="(!smallDevice && mainPanel)
                 || (!mainPanel && smallDevice)
                 || (!mainPanel && !smallDevice)">
-
       <pos-order-items
                 [mainPanel] ="mainPanel"
+                [panelHeight]="orderItemsHeightStyle"
                 [order]     ="order">
       </pos-order-items>
     </div>
   </div>
 </div>
 
+    <!-- orderItemsHeightStyle {{orderItemsHeightStyle}} -->
+    <!-- orderItemsHeightStyle {{orderItemsHeightStyle}}
+    remainingHeight {{remainingHeight$ | async}}
+    totalOrderHeight  {{totalOrderHeight$ | async}} -->

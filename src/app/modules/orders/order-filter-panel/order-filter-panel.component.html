@@ -20,7 +20,7 @@
         </button>
       </div>
 
-      <div *ngIf="isStaff">
+      <div  *ngIf="!smallDevice && isStaff">
         <button class="button"
                 mat-button
                 (click)="newOrder()">
@@ -37,7 +37,7 @@
         </button>
       </div>
 
-      <div *ngIf="isStaff">
+      <div *ngIf="!smallDevice && isStaff">
         <button class="button"
                   mat-button
                   (click)="newOrderOptions()">

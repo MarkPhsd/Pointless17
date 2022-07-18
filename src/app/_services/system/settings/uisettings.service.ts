@@ -153,6 +153,11 @@ export class UISettingsService {
   private _totalOrderHeight          = new BehaviorSubject<number>(null);
   public  totalOrderHeight$          = this._totalOrderHeight.asObservable();
 
+
+  private  _remainingHeight          = new BehaviorSubject<number>(null);
+  public  remainingHeight$          = this._remainingHeight.asObservable();
+  private windowHeight: number;
+
   private orderHeaderHeight   :number;
   private customerOrderHeight :number;
   private specialOrderHeight  :number;
@@ -198,57 +203,34 @@ export class UISettingsService {
   public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
 
 
-  updateorderHeaderHeight(item: number) {
+  updateorderHeaderHeight(item: number, windowHeight: number) {
+    this.windowHeight = windowHeight;
     this._orderHeaderHeight.next(item);
     this.orderHeaderHeight = item;
     this.calcOrderHeight();
   }
 
-  updatecustomerOrderHeight(item: number) {
-
+  updatecustomerOrderHeight(item: number, windowHeight: number) {
+    this.windowHeight = windowHeight;
     this._customerOrderHeight.next(item);
     this.customerOrderHeight = item
     this.calcOrderHeight();
   }
 
-  updateLimitOrderHeight(item: number) {
+  updateLimitOrderHeight(item: number, windowHeight: number)  {
+    this.windowHeight = windowHeight;
     this._limitOrderHeight.next(item);
     this.limitOrderHeight = item;
     this.calcOrderHeight();
   }
 
-  updatespecialOrderHeight(item: number) {
+  updatespecialOrderHeight(item: number, windowHeight: number)  {
+    this.windowHeight = windowHeight;
     this._orderSpecialsHeight.next(item);
     this.specialOrderHeight = item;
     this.calcOrderHeight();
   }
 
-  getOrderItemsHeight(item: number) {
-
-    if (!this.customerOrderHeight) {
-      this.customerOrderHeight = 0
-    }
-    if (!this.customerOrderHeight) {
-      this.customerOrderHeight = 0
-    }
-    if (!this.specialOrderHeight) {
-      this.specialOrderHeight = 0
-    }
-    if (!this.limitOrderHeight) {
-      this.limitOrderHeight = 0
-    }
-
-    // console.log('orderheaderheight', this.orderHeaderHeight )
-    // console.log('customerOrderHeight', this.customerOrderHeight )
-    // console.log('specialOrderHeight', this.specialOrderHeight )
-    // console.log('limitOrderHeight', this.limitOrderHeight )
-
-    const totalHeight = this.orderHeaderHeight + this.customerOrderHeight +
-                        this.specialOrderHeight + this.limitOrderHeight;
-    this._totalOrderHeightVal = +totalHeight.toFixed(0);
-    this._totalOrderHeight.next(+totalHeight.toFixed(0));
-    return +totalHeight.toFixed(0)
-  }
 
   calcOrderHeight() {
     if (!this.customerOrderHeight) {
@@ -264,15 +246,16 @@ export class UISettingsService {
       this.limitOrderHeight = 0
     }
 
-    // console.log('orderheaderheight', this.orderHeaderHeight )
-    // console.log('customerOrderHeight', this.customerOrderHeight )
-    // console.log('specialOrderHeight', this.specialOrderHeight )
-    // console.log('limitOrderHeight', this.limitOrderHeight )
-
     const totalHeight = this.orderHeaderHeight + this.customerOrderHeight +
                         this.specialOrderHeight + this.limitOrderHeight ;
     this._totalOrderHeightVal = +totalHeight.toFixed(0);
     this._totalOrderHeight.next(+totalHeight.toFixed(0));
+
+    console.log('windowHeight', this.windowHeight)
+    if (this.windowHeight != 0) {
+      const remainder = this.windowHeight - +totalHeight - 100
+      this._remainingHeight.next(remainder)
+    }
 
   }
 

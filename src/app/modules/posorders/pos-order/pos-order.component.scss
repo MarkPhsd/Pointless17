@@ -5,18 +5,17 @@
   }
 
   .container {
-
-
     overflow-x: hidden;
     overflow-y: hidden;
+    height: calc(100vh - 75px);
 
-    height: calc(100vh - 55px);
     @include for-phone-only  {
-      height: calc(100vh - 120px);
-      overflow-x: hidden;
       overflow-y: auto;
     }
 
+    @media (max-height: 625px)  {
+      overflow: auto;
+    }
   }
 
   h3, .h3 {
@@ -33,6 +32,8 @@
    margin-bottom : 1px;
    margin-top    : 1px;
    margin-left   : -2px;
+   height: 75px;
+   overflow-y: auto;
  }
 
 .grid-header-order-total {
@@ -67,17 +68,29 @@
 
 .buttons-container {
   width: 100%;
-  justify-content: center;
-  display: flex;
-  flex-direction: row;
+  margin: 5px;
   align-content: center;
-  margin-top: 5px;
-  // overflow-y: auto;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content:  space-between;
+
+  @include for-phone-only  {
+    max-height: 250px;
+    overflow: auto;
+  }
+
+  @media (max-height: 625px)  {
+    max-height: 150px;
+    overflow: auto;
+  }
 }
+
 
 .grid-buttons {
   margin    : 5px;
   width: 100%;
+  overflow-y: auto;
   @include for-phone-only  {
     margin: 5px;
     width: 100%;
@@ -159,7 +172,7 @@
   display: grid;
   grid-template-columns: auto;
   gap: 5px;
-  // grid-auto-flow:dense;
+  overflow: hidden;
 }
 
 .order-layout {
@@ -168,7 +181,7 @@
   grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
   gap             : 5px;
   grid-auto-flow  : dense;
-
+  overflow: hidden;
   @include for-phone-only  {
     display: grid;
     grid-template-columns: 1fr;
@@ -193,20 +206,14 @@
 
   //1024 x768
   @include for-tablet-landscape-up  {
-    // max-height:   550px;
-    // height:   99%;
     height:  calc(100vh - 150px);
   }
 
   @include for-desktop-up {
-    // max-height:  600px;
-    // height:   99%;
     height:  calc(100vh - 150px);
   }
 
   @include for-big-desktop-up {
-    // max-height:   800px;
-    // height:   99%;
     height:  calc(100vh - 150px);
   }
 
@@ -216,56 +223,29 @@
   margin-bottom: 25px;
   margin-top   : 2px;
   margin-left  : 2px;
-
-  height:   99%;
   overflow-y: hidden;
   overflow-x: hidden;
 
+  // height:   99%;
 
+  // @include for-phone-only  {
+  //   margin: 5px;
+  //   width: 100%;
+  // }
 
-  @include for-phone-only  {
-    margin: 5px;
-    width: 100%;
-    // height:  300px;
-  }
+  // @include for-tablet-landscape-up  {
+  //   height:  calc(100vh - 150px);
+  // }
 
-  @include for-tablet-landscape-up  {
-    // max-height: 700px;
-    height:  calc(100vh - 150px);
-  }
+  // @include for-desktop-up {
+  //   height:  calc(100vh - 150px);
+  // }
 
-  @include for-desktop-up {
-    // max-height:  600px;
-    height:  calc(100vh - 150px);
-  }
-
-  @include for-big-desktop-up {
-    // max-height:   800px;
-    height:  calc(100vh - 150px);
-  }
+  // @include for-big-desktop-up {
+  //   height:  calc(100vh - 150px);
+  // }
 
 }
-
-
-// @mixin for-phone-only {
-//   @media (max-width: 599px) { @content; }
-// }
-// @mixin for-tablet-portrait-up {
-//   @media (min-width: 600px) { @content; }
-// }
-// @mixin for-tablet-landscape-up {
-//   @media (min-width: 900px) { @content; }
-// }
-// @mixin for-desktop-up {
-//   @media (min-width: 1200px) { @content; }
-// }
-// @mixin for-big-desktop-up {
-//   @media (min-width: 1800px) { @content; }
-// }
-
-
-
-
 
 .order-layout div {
   // min-height: 50px;
@@ -483,31 +463,7 @@ img {
   }
 }
 
-// .buttons-container2 {
-//   display: flex;
-//   flex-direction: row;
-//   justify-content:  space-between;
-//   gap: 20px;
-//   @include for-phone-only  {
-//     max-height: 300px;
-//     overflow: scroll;
-//   }
-// }
 
-.buttons-container {
-  // display: grid;
-  // gap: 5px;
-  // grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-  margin: 10px;
-
-  display: flex;
-  flex-direction: column;
-  justify-content:  space-between;
-  @include for-phone-only  {
-    max-height: 350px;
-    overflow: scroll;
-  }
-}
 
 .order-layout-buttons {
   display: grid;
