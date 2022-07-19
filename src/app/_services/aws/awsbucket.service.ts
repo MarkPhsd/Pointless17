@@ -214,12 +214,21 @@ export class AWSBucketService {
     const parameter = "getAWSBucket"
 
     const url = `${site.url}${controller}${parameter}`
+    try {
+      this.httpCache.get<IAWS_Temp_Key>( {url: url, cacheMins: 60} ).subscribe(
+        {
+        next: data => {
+          this._awsBucket =  data.preassignedURL;
+          localStorage.setItem('awsbucket', `${data.preassignedURL}`)
+          return data.preassignedURL;
+        },
+        error: err => {
+          console.log(err)
+        }}
+      )
+    } catch (error) {
 
-    this.httpCache.get<IAWS_Temp_Key>( {url: url, cacheMins: 60} ).subscribe(data => {
-      this._awsBucket =  data.preassignedURL;
-      localStorage.setItem('awsbucket', `${data.preassignedURL}`)
-      return data.preassignedURL;
-    })
+    }
 
     return ''
 

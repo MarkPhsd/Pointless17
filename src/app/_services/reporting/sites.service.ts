@@ -50,6 +50,9 @@ export class SitesService {
     console.log('apiUrl', this.apiUrl)
     const endPoint = `/CCSSites/getsites`
 
+    if (!this.apiUrl) {
+      this.apiUrl = this.getAssignedSite().url
+    }
     const url = `${this.apiUrl}${endPoint}`
 
     return this.http.get<ISite[]>(url)
@@ -62,6 +65,9 @@ export class SitesService {
 
     const params = `getSite?id=${id}`
 
+    if (!this.apiUrl) {
+      this.apiUrl = this.getAssignedSite().url
+    }
     const url = `${this.apiUrl}${endPoint}${params}`
 
     return this.http.get<ISite>(url)
@@ -76,6 +82,11 @@ export class SitesService {
 
     const params = `putSite?id=${id}`
 
+
+    if (!this.apiUrl) {
+      this.apiUrl = this.getAssignedSite().url
+    }
+
     const url = `${this.apiUrl}${endPoint}${params}`
 
     return this.http.put<ISite>(url, site)
@@ -88,6 +99,10 @@ export class SitesService {
 
     const params = `postSite`
 
+    if (!this.apiUrl) {
+      this.apiUrl = this.getAssignedSite().url
+    }
+
     const url = `${this.apiUrl}${endPoint}${params}`
 
     return this.http.post<ISite>(url, site)
@@ -99,6 +114,10 @@ export class SitesService {
     const endPoint = `/CCSSites/`
 
     const params = `deleteSite?id=${id}`
+
+   if (!this.apiUrl) {
+      this.apiUrl = this.getAssignedSite()
+    }
 
     const url = `${this.apiUrl}${endPoint}${params}`
 

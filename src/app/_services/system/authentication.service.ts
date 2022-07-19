@@ -143,6 +143,8 @@ export class AuthenticationService {
       localStorage.removeItem('userx');
       localStorage.removeItem('site')
       localStorage.removeItem('orderSubscription')
+      // https://localhost:44309  /api
+      // localStorage.removeItem('storedApiUrl')
       this.updateUser(null);
       this.updateUserX(null);
     }

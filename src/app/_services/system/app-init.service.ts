@@ -56,7 +56,6 @@ export class AppInitService  {
   async init() {
     // console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
-    //
 
     const rememberMe = localStorage.getItem('rememberMe')
 
@@ -69,7 +68,7 @@ export class AppInitService  {
       }
     }
 
-   this.httpClient.get('assets/app-config.json').subscribe( result => {
+    this.httpClient.get('assets/app-config.json').subscribe( result => {
 
       const data = result  as IAppConfig
 
@@ -174,7 +173,9 @@ export class AppInitService  {
 
   apiBaseUrl() {
     this.init();
+
     const urlSaved = this.getLocalApiUrl();
+
     if (this.isApp() && urlSaved != undefined) {
       this.apiUrl =  urlSaved
       return   this.apiUrl

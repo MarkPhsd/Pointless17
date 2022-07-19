@@ -129,10 +129,14 @@ export class SiteEditFormComponent implements OnInit {
         this.notifyEvent(`update ${error}`, `failure` )
       })
     } else {
-      this.sitesService.addSite(data).subscribe(data => {
-        this.notifyEvent(`${data.name} Added`, `Success` )
-       }, error => {
-        this.notifyEvent(`error ${error}`, `failure` )
+      this.sitesService.addSite(data).subscribe(
+      {
+        next: data => {
+          this.notifyEvent(`${data.name} Added`, `Success` )
+        },
+        error: error => {
+          this.notifyEvent(`error ${error}`, `failure` )
+        }
       })
     }
   }
