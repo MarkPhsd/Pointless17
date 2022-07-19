@@ -346,7 +346,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       search.prepStatus         = 1//this.prepStatus
     }
     this.initOrderSearch(search)
-    console.log(search)
+    // console.log(search)
     return this._searchItems$
   }
 
@@ -360,7 +360,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
     this.initOrderSearch(search)
-    console.log(search)
+    // console.log(search)
     return this._searchItems$
   }
 
