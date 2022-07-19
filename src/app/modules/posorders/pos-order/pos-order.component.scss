@@ -33,7 +33,8 @@
    margin-top    : 1px;
    margin-left   : -2px;
    height: 75px;
-   overflow-y: auto;
+  //  overflow-y: auto;
+  overflow: hidden;
  }
 
 .grid-header-order-total {
@@ -410,7 +411,7 @@ img {
 
   button {
     margin: 5px ;
-    height: 65px;
+    height: 55px;
   }
 
   .btn {
