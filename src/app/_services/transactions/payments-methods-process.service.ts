@@ -11,7 +11,6 @@ import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
-import { AnyNaptrRecord } from 'dns';
 
 @Injectable({
   providedIn: 'root'
@@ -109,7 +108,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return null
   }
 
-
   processDSIEMVCreditVoid( payment: IPOSPayment) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
@@ -120,7 +118,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     posPayment.id = payment.id;
     this.dialogRef = this.dialogOptions.openDSIEMVTransaction({payment: payment, voidPayment: payment, action: 2});
     this._dialog.next(this.dialogRef)
-
   }
 
   validateResponse(response: RStream, payment: IPOSPayment) {

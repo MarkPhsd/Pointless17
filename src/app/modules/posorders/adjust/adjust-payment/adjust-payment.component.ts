@@ -86,7 +86,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   closeDialog(payment: IPOSPayment , method: IPaymentMethod ) {
-    console.log('closeDialog', payment, method)
     if (payment) {
       if (method && (method.isCreditCard || method.wic || method.ebt )) {
         if (method.isCreditCard) {
@@ -178,6 +177,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
       if (voidPayment) {
         this.paymentsMethodsService.processDSIEMVCreditVoid(voidPayment)
+        //  this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
+        this.closeDialog(null, null);
       }
     }
   }

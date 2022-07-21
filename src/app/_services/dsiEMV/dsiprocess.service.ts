@@ -34,10 +34,15 @@ export class DSIProcessService {
   pinPadReset(): Promise<RStream> {
     const item = localStorage.getItem('DSIEMVSettings')
     if (!item) { return }
-    const transactiontemp     = JSON.parse(item) as Transaction;
-    let transaction           ={} as Transaction // {...transactiontemp, id: undefined}
+    const transactiontemp     = JSON.parse(item) as DSIEMVSettings;
+
+    if (transactiontemp?.secureDevice.toLowerCase() === 'test') {
+      return null;
+    }
+
+    let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
-    transaction.TranCode      =transactiontemp.TranCode;
+    transaction.TranCode      = transactiontemp?.tranCode;
     return this.dsi.pinPadReset(transaction)
   }
 
@@ -69,7 +74,6 @@ export class DSIProcessService {
 
     const  response =  await this.dsi.emvBatch(transaction, batchSummary)
 
-
     if (response) {
       return  response?.RStream?.BatchClose
     }
@@ -95,9 +99,12 @@ export class DSIProcessService {
   async emvVoid(posPayment: IPOSPayment): Promise<RStream> {
 
     try {
-      const reset          = await this.pinPadReset(); //ignore response for now.
+      const item     = localStorage.getItem('DSIEMVSettings') ;
 
-      const item           = localStorage.getItem('DSIEMVSettings');
+      const device   = JSON.parse(item) as DSIEMVSettings;
+
+      const reset    = await this.pinPadReset(); //ignore response for now.
+
       if (!item) {
         this.orderMethodsService.notification('Could not initialized DSI Settings', 'Error')
         return null
@@ -111,6 +118,11 @@ export class DSIProcessService {
 
       transaction.TranType = 'Credit';
       transaction.TranCode = 'VoidSaleByRecordNo';
+
+      if (transaction.SecureDevice.toLowerCase() === 'test') {
+        transaction.TranType = 'Credit';
+        transaction.TranCode = 'EMVVoidSale';
+      }
 
       if (transaction.SecureDevice === 'EMV_VX805_PAYMENTECH') {
         transaction.TranType = 'Credit';
@@ -155,13 +167,24 @@ export class DSIProcessService {
         this.orderMethodsService.notification('Void amount cannot be 0.00', 'Error')
       }
 
-      transaction.Amount = amount;
+      if (transaction.SecureDevice.toLowerCase() === 'test') {
+        transaction.TranType = 'Credit';
+        transaction.TranCode = 'EMVVoidSale';
+        const result = this.testVoid(transaction.TranCode, +transaction.Amount, posPayment.id, false, false,  transaction.TranType)
+        result.TranResponse.TranCode = 'EMVVoidSale';
+        console.log('CmdResponse', result?.CmdResponse)
+        console.log('TranResponse', result?.TranResponse)
+        return result
+      }
 
-      const transResult = await this.dsi.emvTransaction(transaction)
-      console.log(transResult)
-      console.log('CmdResponse', transResult?.CmdResponse)
-      console.log('TranResponse', transResult?.TranResponse)
-      return transResult
+      if (transaction.SecureDevice.toLowerCase() != 'test') {
+        transaction.Amount = amount;
+        const transResult = await this.dsi.emvTransaction(transaction)
+        console.log(transResult)
+        console.log('CmdResponse', transResult?.CmdResponse)
+        console.log('TranResponse', transResult?.TranResponse)
+        return transResult
+      }
 
     } catch (error) {
       console.log('DSIEMVVoid', error)
@@ -174,6 +197,7 @@ export class DSIProcessService {
     const commandResponse = this.emvReset()
     return commandResponse;
   }
+
   // XML = XML & setTag("TranType", opay.TranType) 'CREDIT/DEBIT/EBT
   // XML = XML & setTag("TranCode", opay.TranCode) ''SALE/REFUND/VOUCHERReturn
 
@@ -208,6 +232,38 @@ export class DSIProcessService {
     return stream;
   }
 
+  testVoid(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {
+    const stream = {} as RStream;
+    stream.CmdResponse = {} as CmdResponse
+    stream.TranResponse = {} as TranResponse
+    stream.TranResponse.Amount = {} as Amount
+
+    //VoidSaleByRecordNo	APPROVED	Captured
+    stream.CmdResponse.CmdStatus      = "Approved"
+    stream.CmdResponse.TextResponse   = "APPROVED"
+
+    stream.TranResponse.CardType      = "VISA"
+
+    stream.TranResponse.AuthCode     = "00421D" //</AuthCode>
+		stream.TranResponse.CaptureStatus= "Captured" //</CaptureStatus>
+		stream.TranResponse.RefNo        = "212442535014"//</RefNo>
+    stream.TranResponse.InvoiceNo    = "249571"//</InvoiceNo>
+		stream.TranResponse.OperatorID   =" Wolf Wolverson"//</OperatorID>
+
+    stream.TranResponse.Amount.Authorize = amount.toString();
+    stream.TranResponse.Amount.Purchase = amount.toString();
+
+    stream.TranResponse.AcqRefData  ="|1623410529|95985"//</AcqRefData>
+    stream.TranResponse.AVSResult   ="Z"//</AVSResult>
+		stream.TranResponse.CVVResult   ="M"//</CVVResult>
+		stream.TranResponse.RecordNo    ="1623410529"//</RecordNo>
+		stream.TranResponse.EntryMethod ="CHIP READ/MANUAL"//</EntryMethod>
+		stream.TranResponse.Date        ="05/04/2022"//</Date>
+		stream.TranResponse.Time        ="15:00:14"//</Time>
+
+    return stream;
+  }
+
   async emvTransaction(tranCode: string, amount: number,
                        paymentID: number, manual: boolean,
                        tipPrompt: boolean, TranType: string ): Promise<RStream> {
@@ -217,7 +273,7 @@ export class DSIProcessService {
 
     const transactiontemp     = JSON.parse(item) as Transaction;
 
-    if (transactiontemp.SecureDevice === 'testDevice') {
+    if (transactiontemp.SecureDevice === 'test') {
       const result = this.testSale(tranCode, amount,paymentID, manual, tipPrompt, TranType)
       return result;
     }

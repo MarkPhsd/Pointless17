@@ -30,7 +30,7 @@
               "replaceDuplicatePlugins": true
             },
             "assets": [
-              "src/favicon.ico",
+              "src/assets/favicon.ico",
               "src/assets",
               { "glob": "**/*",
                 "input": "node_modules/tinymce",
@@ -73,18 +73,100 @@
                 }
               ]
             },
+
             "production": {
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "namedChunks": false,
-              "extractLicenses": true,
-              "vendorChunk": false,
+              "namedChunks": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
               "buildOptimizer": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "35mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4mb",
+                  "maximumError": "35mb"
+                }
+              ]
+            },
+            "productionKosher": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/assets/app-config.json",
+                  "with": "src/assets/ockosher.json"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "35mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4mb",
+                  "maximumError": "35mb"
+                }
+              ]
+            },
+            "productionCoconuts": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/assets/app-config.json",
+                  "with": "src/assets/coconuts.json"
+                }
+              ],
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "35mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "4mb",
+                  "maximumError": "35mb"
+                }
+              ]
+            },
+            "productionPointless": {
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "namedChunks": true,
+              "extractLicenses": false,
+              "vendorChunk": true,
+              "buildOptimizer": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/assets/app-config.json",
+                  "with": "src/assets/coconuts.json"
                 }
               ],
               "budgets": [
@@ -134,7 +216,7 @@
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
-              "src/favicon.ico",
+              "src/assets/favicon.ico",
               "src/assets",
               { "glob": "**/*", "input": "node_modules/tinymce", "output": "/tinymce/" },
               "src/manifest.webmanifest"

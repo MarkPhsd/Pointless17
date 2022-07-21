@@ -379,6 +379,31 @@ export class DSIEMVTransactionsService implements OnDestroy {
     const builder       = new XMLBuilder(this.options)
     const xml           = builder.build(topLevel);
     let response        : any;
+
+    try {
+      if (transaction.SecureDevice.toLowerCase() === 'test') {
+
+        const cmdResponse = {} as CmdResponse;
+        cmdResponse.TextResponse = 'Approved';
+        const rStream = {} as RStream;
+        rStream.CmdResponse = cmdResponse;
+        const TranResponse  = {}  as TranResponse;
+        if (transaction.TranCode.toLowerCase() === 'EMVVoid'.toLowerCase()) {
+          const tran = this.getFakeVoidResponse(transaction)
+          rStream.TranResponse = tran;
+        }
+        if (transaction.TranCode.toLowerCase() === 'EMVSale'.toLowerCase()) {
+          const tran = this.getFakeSaleReponse(transaction)
+          rStream.TranResponse = tran;
+        }
+        return rStream
+      }
+    } catch (error) {
+      console.log('error', error)
+      return  error
+    }
+
+
     try {
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       response              = await emvTransactions.EMVTransaction(xml)
@@ -386,6 +411,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
       console.log('error', error)
       return  error
     }
+
     if (response === 'reset failed') {
       this.dsiResponse = 'Pin Pad Reset Failed'
       return  this.dsiResponse
@@ -438,10 +464,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     //  const transaction = {} as Transaction;
   }
 
-  private getPadSettings(transaction: Transaction): Transaction {
-    if (this.dsiEMVSettings && transaction) {
-      transaction.IpPort        = this.dsiEMVSettings.ipPort
-      transaction.TerminalID    = this.dsiEMVSettings.terminalID
+  private getPadSettings(transaction: Transaction)  {
       transaction.OperatorID    = this.dsiEMVSettings.operatorID
       transaction.UserTrace     = this.dsiEMVSettings.userTrace
       transaction.TranCode      = this.dsiEMVSettings.tranCode
@@ -451,8 +474,26 @@ export class DSIEMVTransactionsService implements OnDestroy {
       transaction.SequenceNo    = '0010010010'
       transaction.HostOrIP      = this.dsiEMVSettings.hostOrIP;
       return transaction
-    }
-    return null
+  }
+
+  getFakeSaleReponse(transaction: Transaction): TranResponse {
+    const response = {} as TranResponse;
+    response.Amount = transaction.Amount;
+    response.CaptureStatus = 'Approved';
+    response.EntryMethod = 'Test';
+    response.TranCode = 'EMVSale';
+    response.CardType = 'VISA'
+    return response
+  }
+
+  getFakeVoidResponse(transaction: Transaction): TranResponse {
+    const response = {} as TranResponse;
+    response.Amount = transaction.Amount;
+    response.CaptureStatus = 'Approved';
+    response.EntryMethod = 'Test';
+    response.TranCode = 'EMVSale';
+    response.CardType = 'VISA'
+    return response
   }
 
 }

@@ -39,6 +39,7 @@ ul {
   margin: auto;
   line-height: 1.6em;
   border-radius: 4px;
+    overflow-x: hidden;
 }
 
 .accordion .menu {
@@ -75,7 +76,7 @@ ul {
 .grid-toggle-tiny {
   height: 50px;
   grid-template-columns: minmax(45px, 50px) 140px;
-  
+
   @include for-phone-only {
     grid-template-columns: minmax(45px, 50px);
   }
@@ -84,7 +85,7 @@ ul {
 .grid-toggle-collapsed {
   height: 50px;
   // grid-template-columns: minmax(45px, 50px) 140px;
-  
+
   @include for-phone-only {
     grid-template-columns: minmax(45px, 50px);
   }

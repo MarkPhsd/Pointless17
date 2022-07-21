@@ -73,14 +73,14 @@ export class DSIEMVTransactionComponent implements OnInit {
     })
 
     const i = 0;
-     this.message  = 'Press Process to use Card'
-     this.processing = false;
-     this.displayAction(this.action)
+    this.message  = 'Press Process to use Card'
+    this.processing = false;
+    this.displayAction(this.action)
 
-     if (this.action == 0 || this.action == 1) {
-       this.process();
-       return
-     }
+    if (this.action == 0 || this.action == 1) {
+      this.process();
+      return
+    }
 
   }
 
@@ -166,6 +166,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const payment = this.voidPayment
     if (!this.order) { return }
     const response  = await this.dsiProcess.emvVoid(payment);
+
     this.processVoidResults(response)
   }
 
@@ -209,10 +210,12 @@ export class DSIEMVTransactionComponent implements OnInit {
     this.processResults(response)
   }
 
-  async processVoidResults(response: any) {
+  async processVoidResults(response: RStream) {
 
-    console.log('RStream', response.RStream.CmdResponse)
-    const cmdResponse = response?.RStream?.CmdResponse;
+    try {
+
+    console.log('RStream', response.CmdResponse)
+    const cmdResponse = response?.CmdResponse;
 
     const result =  this.readResult(cmdResponse);
     if (!result) {
@@ -232,11 +235,16 @@ export class DSIEMVTransactionComponent implements OnInit {
 
       item.action  = this.action;
       item.payment = this.voidPayment;
+      try {
+        item.payment.textResponse     = response?.CmdResponse?.TextResponse;
+      } catch (error) {
 
+      }
       try {
         item.payment.amountPaid      = +response.TranResponse?.Amount?.Purchase;
       } catch (error) {
       }
+
       try {
         item.payment.tipAmount       = +response?.TranResponse?.Amount?.Gratuity;
       } catch (error) {
@@ -288,6 +296,9 @@ export class DSIEMVTransactionComponent implements OnInit {
 
       // // const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment, this.order)
       // this.readResult(cmdResponse);
+      }
+    } catch (error) {
+      console.log('Process Void Error', error)
     }
   }
 

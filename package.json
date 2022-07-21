@@ -1,6 +1,6 @@
 {
   "name": "pointless",
-  "version": "1.2.61",
+  "version": "1.2.72",
   "browser": {
     "crypto": false,
     "stream": false,
@@ -16,9 +16,19 @@
     "start with IP": "ng serve --configuration dev --public-host --host=192.168.0.16 --port=4200 ",
     "startLocal": "ng serve --configuration dev --host=localhost --port=4200",
     "startLocalNode": "ng serve   --configuration dev --host=localhost --port=4200",
-    "DontusebuildSlow": "ng build --optimization --configuration production --buildOptimizer=true --outputHashing=all ",
-    "DontUsebuildNoSourceMap": "ng build   --configuration production --buildOptimizer=true --outputHashing=all",
-    "buildHighMem production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production --buildOptimizer=true --outputHashing=all",
+
+    "buildHighMem production": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build  --configuration production",
+
+    "BuildCoconuts": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration production ",
+    "BuildKosher": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration productionKosher",
+    "BuildPointless": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration productionPointless ElectrDist",
+
+    "FireBaseKosher": "firebase deploy --only hosting:ockosherstore",
+    "FireBasePointless": "firebase deploy --only hosting:pointlesspos",
+    "FireBasecoconutsfl": "firebase deploy --only hosting:coconutsfl",
+
+    "ElectrDist": "npx cap copy electron",
+
     "buildHighMemDebug": "node --max_old_space_size=16384 ./node_modules/@angular/cli/bin/ng build --configuration dev --outputHashing=all",
     "test": "ng test",
     "lint": "ng lint",

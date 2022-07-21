@@ -384,7 +384,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
             this.groupPaymentAmount  = 0;
             this.groupPaymentGroupID = 0;
           },
-          error: err => console.error(err)
+          error: err => {
+            this.notify(`Payment not processed ${err}`, 'failure', 1000)
+            console.error(err)
+          }
         }
       )
     }

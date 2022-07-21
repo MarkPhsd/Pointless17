@@ -61,18 +61,6 @@ import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
 import { DashBoardRoutingModule } from './dash-board-routing.module';
-// import { NGXMaterialModule } from './ngx-material.module';
-// import { NgxKeypadModule } from 'ngx-keypad';
-// import * as CapacitorSQLPlugin from 'capacitor-sqlite';
-// import { IonCustomScrollbarModule } from 'ion-custom-scrollbar'
-
-// import { AgGridTestComponent } from 'ag-grid-test/ag-grid-test.component';
-// export class MyHammerConfig extends HammerGestureConfig  {
-//   overrides = <any>{
-//       // override hammerjs default configuration
-//       'swipe': { direction: Hammer.DIRECTION_ALL  }
-//   }
-// }
 
 export function init_app(appLoadService: AppInitService) {
   return () => appLoadService.init();
