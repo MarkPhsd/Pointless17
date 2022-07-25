@@ -9,34 +9,57 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class ErrorInterceptor implements HttpInterceptor {
 
     //private authenticationService: AuthenticationService,
-
+    debugNotification: boolean
     constructor(
                 private _snackBar: MatSnackBar
-                ) { }
+                ) {
+
+      const debug  = localStorage.getItem('debugOn');
+      if (debug === 'true') {
+      }
+      this.debugNotification = true;
+    }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request)
         .pipe(
             retry(3),
           catchError(err => {
-            let errorMessage = '';
+            let errorMessage =  err?.status + ' '  + err?.message + err?.messageDetail;
+
+            if (err.status === 400) {
+              if (this.debugNotification) {
+                this.notifyEvent(errorMessage, 'Some error occured.' );
+              }
+              console.log(errorMessage)
+              return;
+            }
             if (err.status === 401) {
-              // this.notifyEvent('Oh no!:' + err.message, 'Some error occured.')
-              console.log(err)
+              if (this.debugNotification) {
+                this.notifyEvent(errorMessage, 'Some error occured.' );
+              }
+              console.log(errorMessage)
+              return;
             }
             if (err.status === 500) {
-              // this.notifyEvent('Oh no!:' + err, 'Some error occured.')
-              errorMessage = `Error Code: ${err.status}\nMessage: ${err.message}`;
+              if (this.debugNotification) {
+                this.notifyEvent(errorMessage, 'Some error occured.' );
+              }
+              console.log(errorMessage)
+              return;
             }
-            //const error = err.error.message || err.statusText;
-            console.log("HttpInterceptor error:",  errorMessage )
-            return throwError(errorMessage);
+            if (this.debugNotification) {
+              this.notifyEvent(errorMessage, 'Some error occured.' );
+            }
+
+            console.log("HttpInterceptor error:",  err?.status + ' '  + err?.message + err?.messageDetail )
+            return throwError(err?.status + ' '  + err?.message + err?.messageDetail);
       }))
     }
 
     notifyEvent(message: string, action: string) {
       this._snackBar.open(message, action, {
-        duration: 2000,
+        duration: 100000,
         verticalPosition: 'top'
       });
     }

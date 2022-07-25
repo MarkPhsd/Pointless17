@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { Observable, of, } from 'rxjs';
+import { interval, Observable, of, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -457,7 +457,10 @@ export class SettingsService {
     setting.option6    =  await this.getDefaultReceiptHeaderLayout()
     setting.option5    =  await this.getDefaultReceiptFooterLayout()
     setting.option7    =  await this.getDefaultReceiptPaymentLayout()
+    setting.option11    =  await this.getDefaultReceiptCreditPaymentLayout()
+    setting.option10   =  await this.getDefaultReceiptWICEBTPaymentLayout()
     setting.option8    =  await this.getDefaultReceiptsubFooterLayout()
+
     setting.description = 'ReceiptLayouts'
     return await this.setText(site, setting)
   }
@@ -482,6 +485,18 @@ export class SettingsService {
     const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplatePayments.html', {responseType: 'text'});
     return await oberservable$.pipe().toPromise()
   }
+  async getDefaultReceiptCreditPaymentLayout() {
+    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateCreditPayments.html', {responseType: 'text'});
+    return await oberservable$.pipe().toPromise()
+  }
+  async getDefaultReceiptWICEBTPaymentLayout() {
+    const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateWICEBTPayments.html', {responseType: 'text'});
+    return await oberservable$.pipe().toPromise()
+    // const source$ = interval(2000).pipe(take(10));
+    // // const source$ = oberservable$.pipe(take(1));
+    // const finalNumber = await lastValueFrom(source$);
+  }
+
   ////////////////
 
   ////////////////

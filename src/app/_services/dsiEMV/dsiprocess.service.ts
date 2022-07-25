@@ -48,7 +48,6 @@ export class DSIProcessService {
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
     const commandResponse = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
-    console.log('emvSale', commandResponse)
     return commandResponse;
   }
 
@@ -180,10 +179,7 @@ export class DSIProcessService {
       if (transaction.SecureDevice.toLowerCase() != 'test') {
         transaction.Amount = amount;
         const transResult = await this.dsi.emvTransaction(transaction)
-        console.log(transResult)
-        console.log('CmdResponse', transResult?.CmdResponse)
-        console.log('TranResponse', transResult?.TranResponse)
-        return transResult
+        return transResult.RStream
       }
 
     } catch (error) {
@@ -266,7 +262,7 @@ export class DSIProcessService {
 
   async emvTransaction(tranCode: string, amount: number,
                        paymentID: number, manual: boolean,
-                       tipPrompt: boolean, TranType: string ): Promise<RStream> {
+                       tipPrompt: boolean, TranType: string ): Promise<any> {
 
     const item  = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }

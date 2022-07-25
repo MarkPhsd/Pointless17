@@ -112,6 +112,7 @@ export class ClientTypeEditComponent implements OnInit {
         if (!item.voidOrder) {item.voidOrder = false}
         if (!item.voidPayment) {item.voidPayment = false}
         if (!item.deleteClientType) { item.deleteClientType = false }
+        if (!item.accessAdmins) { item.accessAdmins = false }
       }
       let clientType = this.inputForm.value as clientType;
       clientType.jsonObject = JSON.stringify(item);

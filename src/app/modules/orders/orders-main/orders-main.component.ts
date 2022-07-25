@@ -224,7 +224,6 @@ export class OrdersMainComponent implements OnInit, OnDestroy {
       return
     }
 
-
   }
 
   setViewType(value) {

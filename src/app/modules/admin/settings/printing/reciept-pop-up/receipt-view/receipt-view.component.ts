@@ -40,6 +40,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   itemsText         : string;
   footerText        : string;
   paymentsText      : string;
+  paymentsCreditText: string;
+  paymentsWICEBTText: string;
   subFooterText     : string;
 
   receiptList$      : Observable<ISetting[]>;
@@ -70,7 +72,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   printReady        : boolean
 
   orderCheck        = 0;
-
 
   isElectronApp         : boolean;
   electronSetting       : ISetting;
@@ -115,7 +116,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   constructor(
     private orderService          : OrdersService,
-    private orderMethodsService   : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,
@@ -269,6 +269,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       this.footerText           =  this.receiptLayoutSetting.option5
       this.itemsText            =  this.receiptLayoutSetting.text
       this.paymentsText         =  this.receiptLayoutSetting.option7
+      this.paymentsCreditText   = this.receiptLayoutSetting.option10;
+      this.paymentsWICEBTText    = this.receiptLayoutSetting.option11;
       this.subFooterText        =  this.receiptLayoutSetting.option8
       return true
     }

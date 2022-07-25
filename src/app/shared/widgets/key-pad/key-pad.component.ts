@@ -69,6 +69,8 @@ export class KeyPadComponent implements OnInit, OnChanges {
   }
 
   clearInput() {
+    this.value = '';
+    this.cashValue = ''
     this.outPutValue.emit('')
     this.initForm()
   }

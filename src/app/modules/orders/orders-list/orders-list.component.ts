@@ -120,7 +120,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           const searchModel       = {} as IPOSOrderSearchModel;
           this.currentPage        = 1
           searchModel.pageNumber  = 1;
-          searchModel.pageSize    = 25;
+          searchModel.pageSize    = 50;
           this.searchModel        = searchModel
         }
         this.refreshSearch()
@@ -155,7 +155,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     if (this._searchModel) {
       this._searchModel.unsubscribe()
     }
-    if (this._menuBar) { 
+    if (this._menuBar) {
       this._menuBar.unsubscribe()
     }
     if (this._orderBar) { this._orderBar.unsubscribe()}

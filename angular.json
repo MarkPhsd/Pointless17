@@ -109,12 +109,7 @@
               "extractLicenses": false,
               "vendorChunk": true,
               "buildOptimizer": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/assets/app-config.json",
-                  "with": "src/assets/ockosher.json"
-                }
-              ],
+
               "budgets": [
                 {
                   "type": "initial",

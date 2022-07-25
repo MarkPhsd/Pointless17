@@ -64,7 +64,18 @@
 
       <div   *ngIf="interpolatedPaymentsTexts"  class="section-item">
           <div *ngFor="let payment of payments">
-            <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+            <div *ngIf=" payment.paymentMethod">
+
+
+              <div *ngIf=" payment.paymentMethod.isCreditCard  ">
+                <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
+              </div>
+
+              <div *ngIf=" payment.paymentMethod.isCash ">
+                <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
+              </div>
+            </div>
+
           </div>
       </div>
 
@@ -80,5 +91,11 @@
   </div>
 </div>
 
+<!-- // if (this.payments && this.paymentsCreditText) {
+  //   this.interpolatedCreditPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsCreditText, this.payments)
+  // }
 
+  // if (this.payments && this.paymentsWICEBTText) {
+  //   this.interpolatedWICEBTPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsWICEBTText, this.payments)
+  // } -->
 

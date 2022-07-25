@@ -1,20 +1,19 @@
 import { Component, ElementRef, Inject, Input, OnInit, ViewChild } from '@angular/core';
-import { IOrderItem, ISetting } from 'src/app/_interfaces';
+import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { FbSettingsService } from 'src/app/_form-builder/fb-settings.service';
-import { tap } from 'rxjs/operators';
+
 import { PrintingService } from 'src/app/_services/system/printing.service';
-import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
+
 import { RenderingService } from 'src/app/_services/system/rendering.service';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
+
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
-import { LabelaryService, zplLabel } from 'src/app/_services/labelary/labelary.service';
 
 @Component({
   selector: 'app-htmledit-printing',
@@ -24,12 +23,12 @@ import { LabelaryService, zplLabel } from 'src/app/_services/labelary/labelary.s
 
 export class HTMLEditPrintingComponent implements OnInit {
 
-  get name()        { return this.inputForm.get("name") as FormControl;}
-  get item()        { return this.inputForm.get("text") as FormControl;}
-  get header()      { return this.inputForm.get("header") as FormControl;}
-  get footer()      { return this.inputForm.get("footer") as FormControl;}
-  get payment()     { return this.inputForm.get("payment") as FormControl;}
-  get orderType()   { return this.inputForm.get("orderType") as FormControl;}
+  // get name()        { return this.inputForm.get("name") as FormControl;}
+  // get item()        { return this.inputForm.get("text") as FormControl;}
+  // get header()      { return this.inputForm.get("header") as FormControl;}
+  // get footer()      { return this.inputForm.get("footer") as FormControl;}
+  // get payment()     { return this.inputForm.get("payment") as FormControl;}
+  // get orderType()   { return this.inputForm.get("orderType") as FormControl;}
 
   @ViewChild('printsection') printsection: ElementRef;
   @Input() setting: ISetting;
@@ -55,6 +54,8 @@ export class HTMLEditPrintingComponent implements OnInit {
   itemsText        : string;
   footerText       : string;
   paymentsText     : string;
+  paymentCreditText : string;
+  paymentWEICEBT   : string;
   subFooterText    : string;
 
   labelImage$               : Observable<any>;
@@ -67,8 +68,9 @@ export class HTMLEditPrintingComponent implements OnInit {
   interpolatedHeaderTexts = {} as string[];
   interpolatedFooterTexts = [] as string[];
   interpolatedPaymentsTexts = [] as string[];
+  interpolatedCreditPaymentsTexts = [] as string[];
+  interpolatedWICEBTPaymentsTexts = [] as string[];
   interpolatedSubFooterTexts = [] as string[];
-
 
   constructor(
               private settingsService  : SettingsService,
@@ -165,8 +167,15 @@ export class HTMLEditPrintingComponent implements OnInit {
     this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.setting.option7, this.payments)
   }
 
+  refreshCreditPaymentsFooter() {
+    this.interpolatedCreditPaymentsTexts  = this.renderingService.refreshStringArrayData(this.setting.option11, this.payments)
+  }
+
+  refreshWICEBTPaymentsFooter() {
+    this.interpolatedWICEBTPaymentsTexts  = this.renderingService.refreshStringArrayData(this.setting.option10, this.payments)
+  }
+
   refreshSubFooter() {
-    console.log(this.orderTypes)
     this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.setting.option8, this.orderTypes )
   }
 
@@ -179,6 +188,10 @@ export class HTMLEditPrintingComponent implements OnInit {
         this.footerText           =  this.receiptLayoutSetting.option5
         this.itemsText            =  this.receiptLayoutSetting.text
         this.paymentsText         =  this.receiptLayoutSetting.option7
+        this.subFooterText        =  this.receiptLayoutSetting.option8
+        this.paymentsText         =  this.receiptLayoutSetting.option7
+        this.paymentWEICEBT       = this.receiptLayoutSetting.option10;
+        this.paymentCreditText    = this.receiptLayoutSetting.option11;
         this.subFooterText        =  this.receiptLayoutSetting.option8
       }
     } catch (error) {

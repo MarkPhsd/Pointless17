@@ -370,7 +370,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     return dsiResponse;
   }
 
-  async emvTransaction(transaction: Transaction): Promise<RStream> {
+  async emvTransaction(transaction: Transaction): Promise<any> {
     if (!transaction) { return }
     const tstream       = {} as TStream;
     tstream.Transaction = transaction
@@ -383,21 +383,26 @@ export class DSIEMVTransactionsService implements OnDestroy {
     try {
       if (transaction.SecureDevice.toLowerCase() === 'test') {
 
+        console.log('EMVTransaction Point')
         const cmdResponse = {} as CmdResponse;
         cmdResponse.TextResponse = 'Approved';
         const rStream = {} as RStream;
         rStream.CmdResponse = cmdResponse;
         const TranResponse  = {}  as TranResponse;
+
         if (transaction.TranCode.toLowerCase() === 'EMVVoid'.toLowerCase()) {
           const tran = this.getFakeVoidResponse(transaction)
           rStream.TranResponse = tran;
         }
+
         if (transaction.TranCode.toLowerCase() === 'EMVSale'.toLowerCase()) {
           const tran = this.getFakeSaleReponse(transaction)
           rStream.TranResponse = tran;
         }
+
         return rStream
       }
+
     } catch (error) {
       console.log('error', error)
       return  error
@@ -407,6 +412,8 @@ export class DSIEMVTransactionsService implements OnDestroy {
     try {
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       response              = await emvTransactions.EMVTransaction(xml)
+      console.log('EMVTransaction response', response);
+
     } catch (error) {
       console.log('error', error)
       return  error

@@ -77,6 +77,7 @@
                   *ngIf             = "(categories$ | async) as list"
                   [mouseOver]       = "false"
                   [showIcon]        = "showIcon"
+                  [toggleDimensions]="'toggle-group-tall'"
                   [textLength]      = "21"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"

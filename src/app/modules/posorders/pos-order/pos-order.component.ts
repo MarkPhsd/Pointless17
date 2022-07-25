@@ -432,7 +432,11 @@ resizePanel() {
 
       const site = this.siteService.getAssignedSite();
       this.order.suspendedOrder = true;
-      this.orderService.putOrder(site, this.order).subscribe( data => {
+      this.order.orderLocked = null;
+      const suspend$ =  this.orderService.putOrder(site, this.order)
+
+      suspend$.subscribe(data =>{
+        this.clearOrder(null)
         this.notifyEvent('This order has been suspended', 'Success')
         this.router.navigateByUrl('/pos-orders')
       })

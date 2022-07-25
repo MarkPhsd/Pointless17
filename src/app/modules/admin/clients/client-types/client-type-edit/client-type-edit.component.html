@@ -152,7 +152,39 @@
           </div>
 
           <div class="grid-auths" *ngIf="jsonObjectForm" [formGroup]="jsonObjectForm">
+            <div>
 
+              <h4>Admin</h4>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="addEmployee" >
+                  <mat-label>Add employees</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="changeClientType" >
+                  <mat-label>Change User Type</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="changeAuths" >
+                  <mat-label>Change Auths</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <mat-label>Used for Super User Admin</mat-label>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="accessAdmins" >
+                  <mat-label>Access Admins</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+            </div>
             <div>
               <h3>Sales</h3>
               <div class="toggle-fields">
@@ -291,28 +323,8 @@
               </div>
             </div>
 
-            <div>
-              <h4>Admin</h4>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="addEmployee" >
-                  <mat-label>Add employees</mat-label>
-                </mat-slide-toggle>
-              </div>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="changeClientType" >
-                  <mat-label>Change User Type</mat-label>
-                </mat-slide-toggle>
-              </div>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="changeAuths" >
-                  <mat-label>Change Auths</mat-label>
-                </mat-slide-toggle>
-              </div>
 
-            </div>
+
             <div>
               <h4>Delete</h4>
                <div class="toggle-fields">

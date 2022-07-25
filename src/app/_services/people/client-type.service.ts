@@ -38,6 +38,7 @@ export interface IUserAuth_Properties {
    changeClientType    : boolean;
 
    changeAuths         : boolean;
+   accessAdmins        : boolean;
 
 }
 

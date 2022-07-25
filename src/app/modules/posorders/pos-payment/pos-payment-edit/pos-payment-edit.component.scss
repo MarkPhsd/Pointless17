@@ -1,8 +1,44 @@
+.grid-container {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+}
+
+.header-section {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+  width: 95%;
+}
 
 .header-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin: 5px;
+  grid-gap: 10px;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  max-width: 325px;
+}
+
+.grid-form-sections {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(310px, 1fr) );
+  // // min-width: 325px;
+  // max-width: 400px;
+}
+
+.grid-form {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+  // min-width: 325px;
+
+  max-width: 400px;
+}
+
+
+.header {
+  grid-column: 1/3;
 }
 
 .info-width {
@@ -13,17 +49,17 @@
   font-size: 1em;
 }
 
-.grid-container {
-  --gap: 10px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
-}
-
 .sub-title {
   margin: 20px;
 }
 
 .card-dimensions {
   margin: 10px;
+}
+
+.raw-data {
+  width: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 150px;
 }

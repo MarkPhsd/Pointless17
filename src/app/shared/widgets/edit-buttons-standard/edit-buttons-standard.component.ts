@@ -18,7 +18,9 @@ export class EditButtonsStandardComponent  {
   @Output() outPutStartOrder       : EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAdd             : EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutEmail           : EventEmitter<any> = new EventEmitter<any>();
+  @Output() outPutReOpenOrder     : EventEmitter<any> = new EventEmitter<any>();
 
+  @Input() enableReOpen : boolean;
   @Input() emailOption : boolean;
   @Input() enableAdd  : boolean;
   @Input() enableCopy  : boolean;
@@ -67,6 +69,10 @@ export class EditButtonsStandardComponent  {
 
   email() {
     this.outPutEmail.emit('demo')
+  }
+
+  reOpenOrder() {
+    this.outPutReOpenOrder.emit('demo')
   }
 
   copy() {

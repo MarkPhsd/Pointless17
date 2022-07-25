@@ -6,7 +6,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { Observable,  Subscription } from 'rxjs';
+import { Observable,  Subscription, switchMap } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -22,13 +22,15 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
 
   inputForm       : FormGroup;
 
+  paymentMethod$  : Observable<IPaymentMethod>;
   paymenthMethods$: Observable<IPaymentMethod[]>;
   paymentMethod   : IPaymentMethod;
   isUserStaff     : boolean;
   roles           : string;
   id              : string;
 
-  deleteAllowed = false;
+  deleteAllowed   = false;
+  payment$        :Observable<IPOSPayment>;
   payment         : IPOSPayment;
   _payment        : Subscription;
 
@@ -58,17 +60,16 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     this.isUserStaff = this.userAuthorization.isCurrentUserStaff()
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.initSubscriptions()
-    if (!this.payment){
-      this.id = this.route.snapshot.paramMap.get('id');
-      this.getItem(parseInt(this.id));
+    this.id = this.route.snapshot.paramMap.get('id');
+    if (this.payment.id) {
+      this.id = this.payment.id.toString();
     }
-    this.initForm();
+    this.getItem(parseInt(this.id));
   }
+
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     if (this._payment) { this._payment.unsubscribe()}
     this.paymentService.updatePaymentSubscription(null)
   }
@@ -102,49 +103,54 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     })
   }
 
-  async getPaymentMethod(methodID: number) {
+  getPaymentMethod(methodID: number) {
     const site         = this.siteService.getAssignedSite()
-    this.paymentMethod = await  this.paymentMethodService.getPaymentMethod(site, methodID).pipe().toPromise()
+    this.paymentMethod$ = this.paymentMethodService.getPaymentMethod(site, methodID)
   }
 
- 
-  async getItem(id: number) {
-    console.log('payment id', this.id)
-    const site      = this.siteService.getAssignedSite()
-    const payment$  = this.paymentService.getPOSPayment(site, id, false)
-    this.payment    = await payment$.pipe().toPromise();
 
-    if (this.payment) {
-      const methodID = this.payment.paymentMethodID
-      this.getPaymentMethod(methodID);
-    }
+   getItem(id: number) {
+    const site      = this.siteService.getAssignedSite()
+    this.payment$  = this.paymentService.getPOSPayment(site, id, false);
+
+    this.payment$.pipe(
+      switchMap( data => {
+        this.payment = data;
+        this.initForm();
+        return this.paymentMethodService.getCacheMethod(site,data.paymentMethodID)
+      })).subscribe(data => {
+        this.paymentMethod = data;
+    })
+
+
   }
 
   updateItem(event) {
-    if (this.payment) {
+    if (this.payment && this.inputForm.value) {
       const site      = this.siteService.getAssignedSite()
       this.payment = this.inputForm.value;
-      this.paymentService.putPOSPayment(site,this.payment)
-      this.payment = this.inputForm.value
-      this.notify('Payment saved', 'Success')
+      this.paymentService.putPOSPayment(site,this.payment).subscribe(data => {
+        this.payment = this.inputForm.value
+        this.notify('Payment saved', 'Success')
+      })
     }
   }
 
   updateItemExit(event) {
-    if (this.payment) {
+    if (this.payment && this.inputForm.value) {
       const site      = this.siteService.getAssignedSite()
       this.payment = this.inputForm.value;
-      this.paymentService.putPOSPayment(site,this.payment)
-      this.payment = this.inputForm.value
-      this.notify('Payment saved', 'Success')
-      this.onCancel(null);
+      this.paymentService.putPOSPayment(site,this.payment).subscribe(data => {
+        this.payment = this.inputForm.value
+        this.notify('Payment saved', 'Success')
+        this.onCancel(null);
+      })
     }
   }
 
   deleteItem(event) {
     const site      = this.siteService.getAssignedSite()
     if (this.payment) {
-      console.log('payment', this.payment)
       const orderID   = this.payment.orderID;
       if (this.paymentMethod && this.paymentMethod.isCreditCard) {
         const result = window.confirm('Warning, this should not be deleted unless you have also canceled or managed the transaction with the processor.');
@@ -171,22 +177,31 @@ export class PosPaymentEditComponent implements OnInit, OnDestroy {
     }
   }
 
+  reOpenOrderSub() {
+    const orderID   = this.payment.orderID;
+    this.reOpenOrder(orderID)
+  }
 
   reOpenOrder(id: number) {
+    if (!this.payment) {
+      return
+    }
     const site      = this.siteService.getAssignedSite()
-    const order     = this.orderService.getOrder(site, id.toString(), false ).subscribe( data => {
-      data.completionDate = null
-      data.completionTime = null;
-      this.orderService.putOrder(site, data).subscribe(data => {
+    const order$    = this.orderService.getOrder(site, this.payment.orderID.toString(), false)
+
+    order$.pipe(
+      switchMap(data => {
+        data.completionDate = null;
+        data.completionTime = null;
+        return this.orderService.putOrder(site, data)
+      })).subscribe(data => {
         this.notify('This order has been re-opened.', 'Success')
-      })
     })
   }
 
   onCancel(event) {
     console.log('cancel')
     this._bottomSheet.dismiss();
-    // this.location.back();
   }
 
   notify(message: string, action: string) {

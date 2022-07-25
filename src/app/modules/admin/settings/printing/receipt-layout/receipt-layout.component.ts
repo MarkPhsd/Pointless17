@@ -26,6 +26,11 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
   @Input() itemText    : string;
   @Input() footerText  : string;
   @Input() paymentsText: string;
+  @Input() paymentsCreditText: string;
+  @Input() paymentsWICEBTText: string;
+    // [paymentsWICEBTText]="setting.option10"
+    // [paymentsCreditText]="setting.option11"
+
   @Input() subFooterText: string;
   @Input() testdata    : boolean
   @Input() printerWidth: number;
@@ -41,16 +46,25 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
   site                 : ISite;
   @Input() isLabel: boolean;
 
-  interpolatedHeaderText:  string;
-  interpolatedFooterText:  string;
+  interpolatedHeaderText  :  string;
+  interpolatedFooterText  :  string;
   interpolatedSubFooterText: string;
   interpolatedPaymentsText: string;
+  interpolatedCreditPaymentsText: string;
+  interpolatedWICEBTPaymentsText: string;
 
   @Input() interpolatedItemTexts      = [] as string[];
   @Input() interpolatedHeaderTexts    = [] as string[];
   @Input() interpolatedFooterTexts    = [] as string[];
-  @Input() interpolatedPaymentsTexts  = [] as string[];
   @Input() interpolatedSubFooterTexts = [] as string[];
+  @Input() interpolatedPaymentsTexts  = [] as string[];
+  @Input() interpolatedCreditPaymentsTexts = [] as string[];
+  @Input() interpolatedWICEBTPaymentsTexts = [] as string[];
+
+      // [interpolatedCreditPaymentsTexts] ="interpolatedCreditPaymentsTexts"
+      //                           [interpolatedWICEBTPaymentsTexts] ="interpolatedWICEBTPaymentsTexts"
+      //                           [interpolatedSubFooterTexts] ="interpolatedSubFooterTexts"
+
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
 
@@ -64,7 +78,6 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
         data => {
           if (!data)  {return EMPTY   }
           this.order      = data
-
           this.items      = this.order.posOrderItems
           this.payments   = this.order.posPayments
           this.orders     = []
@@ -150,15 +163,26 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
     this.scrubOrders(this.orders[0])
 
     try {
+
       if (this.orders && this.headerText) {
         this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.headerText, this.orders)
         this.interpolatedFooterTexts    = this.renderingService.refreshStringArrayData(this.footerText, this.orders)
       }
+
       if (this.items && this.itemText) {
         this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items)
       }
+
       if (this.payments && this.paymentsText) {
         this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsText, this.payments)
+      }
+
+      if (this.payments && this.paymentsCreditText) {
+        this.interpolatedCreditPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsCreditText, this.payments)
+      }
+
+      if (this.payments && this.paymentsWICEBTText) {
+        this.interpolatedWICEBTPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsWICEBTText, this.payments)
       }
 
       if (this.orders && this.orders[0].serviceTypeID) {

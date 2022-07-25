@@ -83,8 +83,8 @@ toggle-button {
 .filter-container {
   overflow-x: hidden;
   overflow-y: auto;
-  height: 84vh;
-  max-height: 84vh;
+
+  height: calc(85vh - 50px);
   width: 350px;
   max-width:  350px;
   margin: 5px;
@@ -109,7 +109,13 @@ toggle-button {
 .orders-list {
   overflow-x: hidden;
   overflow-y: auto;
-  height: 84vh;
+  height: calc(85vh - 75px);
+  @include for-tablet-portrait-up   {
+    height: calc(85vh - 185px);
+  }
+  @include for-phone-only  {
+    height: calc(85vh - 235px);
+  }
 }
 
 .grid-item {
@@ -170,20 +176,15 @@ toggle-button {
     display: flex;
     flex-direction: column;
     gap: 5px;
-    // display: grid;
-    // grid-template-columns: repeat(1, 1fr);
-    // grid-template-rows: auto auto;
-    // // gap: 5px;
-    // grid-gap: 5px;
   }
 
   @include for-tablet-portrait-up   {
     display: grid;   // @mixin for-tablet-portrait-up {
     grid-template-columns:  repeat(1, 1fr) ;
     grid-template-rows: auto auto auto;
-    // grid-gap: 10px;
+
     grid-gap: 5px;
-    // background-color: rgb(53, 12, 70);
+
   }
 
   @include for-tablet-landscape-up {

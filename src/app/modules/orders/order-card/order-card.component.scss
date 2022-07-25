@@ -38,7 +38,7 @@ mat-card-subtitle {
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto;
   grid-gap: 5px;
-  height: 75px;
+  height: 50px;
   padding: 1px;
 
   @include for-phone-only  {
@@ -51,7 +51,7 @@ mat-card-subtitle {
   grid-template-columns : repeat(2, 1fr);
   grid-template-rows    : auto;
   grid-gap              : 5px;
-
+  padding               : 4px;
   @include for-phone-only  {
     display               : grid;
     grid-template-columns : auto auto;
@@ -98,6 +98,13 @@ mat-card-subtitle {
   font-size: 1.2em;
   font-weight: 600;
   color:  --ion-color-medium;
+  max-height: 2.4em;
+  height: 2.4em;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+          line-clamp: 2;
+  -webkit-box-orient: vertical;
+
   @include for-phone-only  {
     font-size: 1.2em;
     grid-column: 1 / span 2;
