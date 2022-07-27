@@ -13,6 +13,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 })
 export class ClientTypesLookupComponent implements OnInit {
 
+  @Input() style       : string;
   @Input() clientTypeID: number;
   @Input() clientTypes$: Observable<clientType[]>;
   @Input() inputForm:    FormGroup;

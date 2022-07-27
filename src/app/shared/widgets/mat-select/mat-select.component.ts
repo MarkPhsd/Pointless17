@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./mat-select.component.scss']
 })
 export class MatSelectComponent {
-
+  @Input()  style = ''
   @Input()  class='mat-form-field'
   @Input()  inputForm: FormGroup;
   @Input()  fieldName: string;

@@ -1,3 +1,4 @@
+
 <mat-card *ngIf="payment && step == 1">
 
     <div class="action-center">
@@ -28,47 +29,54 @@
                   (click)="step = 2"><mat-icon>arrow_forward_ios</mat-icon>Next</button>
         </div>
 
-        <div class="action-center"  *ngIf="paymentMethod.isCreditCard">
-          <app-key-pad
-              [showInput]     ="'true'"
-              [inputForm]     ="inputForm"
-              [inputTypeValue]= "'decimal'"
-              (outPutReturnEnter)   ="customTipAmount($event)">
-              Enter tip amount.
-          </app-key-pad>
+        <div  *ngIf="paymentMethod.isCreditCard">
+            <div class="action-center">
+              <app-key-pad
+                  [showInput]     ="'true'"
+                  [inputForm]     ="inputForm"
+                  [inputTypeValue]= "'decimal'"
+                  (outPutReturnEnter)   ="customTipAmount($event)">
+                  Enter tip amount.
+              </app-key-pad>
+            </div>
+
+          <div class="tip-button-grid">
+
+            <div class="action-center">
+                <button class="tip-button"
+                        mat-button
+                        (click)="specifiedTip(15)">Tip 15 % </button>
+
+                <div class="action-center-column">
+                  {{ payment.amountPaid * (15/100) | currency }}
+                </div>
+            </div>
+
+            <div class="action-center">
+                <button  class="tip-button" mat-button (click)="specifiedTip(18)">Tip 18 %  </button>
+                {{ payment.amountPaid * (18/100) | currency }}
+            </div>
+
+            <div class="action-center">
+                <button  class="tip-button" mat-button (click)="specifiedTip(20)">Tip 20 %  </button>
+                {{ payment.amountPaid * (20/100) | currency  }}
+            </div>
+          </div>
         </div>
 
-        <div class="tip-button-grid"
-             *ngIf="paymentMethod.isCreditCard">
-
-          <div class="action-center">
-              <button class="tip-button"
-                      mat-button
-                      (click)="specifiedTip(15)">Tip 15 % </button>
-
-              <div class="action-center-column">
-                {{ payment.amountPaid * (15/100) | currency }}
-              </div>
-          </div>
-
-          <div class="action-center">
-              <button  class="tip-button" mat-button (click)="specifiedTip(18)">Tip 18 %  </button>
-              {{ payment.amountPaid * (18/100) | currency }}
-          </div>
-
-          <div class="action-center">
-              <button  class="tip-button" mat-button (click)="specifiedTip(20)">Tip 20 %  </button>
-              {{ payment.amountPaid * (20/100) | currency  }}
-          </div>
-        </div>
       </div>
     </div>
 
-  <mat-card-actions>
-  </mat-card-actions>
 </mat-card>
 
 <mat-card *ngIf="step == 2">
+
+  <div class="action-center margin">
+    <h2>
+      Change Due: {{changeDue | currency}}
+    </h2>
+  </div>
+
   <div class="action-center">
     <new-order-type
               [order]        ="order"

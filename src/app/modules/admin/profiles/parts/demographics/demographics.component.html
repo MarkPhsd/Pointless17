@@ -143,12 +143,14 @@
     <div  class="name-fields">
       <div *ngIf="isStaff || isAuthorized">
         <app-status-lookup
+            [style]="'font-size: 1.1em'"
             [inputForm]="inputForm">
         </app-status-lookup>
       </div>
 
       <div *ngIf="isStaff" >
         <app-client-types-lookup
+            [style]="'font-size: 1.1em'"
             [inputForm]="inputForm">
         </app-client-types-lookup>
       </div>

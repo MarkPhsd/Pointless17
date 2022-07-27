@@ -50,8 +50,11 @@ export class ChangeDueComponent   {
       this.payment = data.payment
       this.paymentMethod = data.paymentMethod;
       this.changeDue = (this.payment.amountReceived - this.payment.amountPaid).toFixed(2)
+      this.step = 1;
+      if (!this.paymentMethod.isCreditCard) {
+        this.step = 2
+      }
     }
-    // this.initializeForm()
     this.initForm();
   }
 
@@ -77,7 +80,6 @@ export class ChangeDueComponent   {
   }
 
   customTipAmount(amount) {
-    console.log('customTipAmount',amount)
     if (this.payment) {
       const value = +amount;
       console.log('value', value)

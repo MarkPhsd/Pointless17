@@ -33,7 +33,8 @@ button{
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(145px, 1fr) );
   grid-auto-flow: row;
-
+  overflow-x: hidden;
+  overflow-y: hidden;
   @include for-phone-only  {
     --gap: 5px;
     display: grid;

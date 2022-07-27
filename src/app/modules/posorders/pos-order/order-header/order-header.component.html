@@ -8,7 +8,7 @@
   <div class="total-card">
     <div  *ngIf="order.employeeName">{{order?.employeeName}}  </div>
   </div>
-  <div *ngIf="order.completionDate" class="total-card">
+  <div  class="total-card">
     Started  {{order.orderDate | date: 'shortDate'}} - {{order?.orderDate | date: 'shortTime'}}
   </div>
   <div *ngIf="order.completionDate" class="total-card">

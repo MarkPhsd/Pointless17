@@ -85,7 +85,7 @@
       </button>
     </div>
 
-    <div *ngIf="!enableReOpen">
+    <div *ngIf="enableReOpen">
       <button  mat-button class="button"  (click)="reOpenOrder()">
         <mat-icon>view</mat-icon>
         <span *ngIf="!smallDevice">Re Open</span>

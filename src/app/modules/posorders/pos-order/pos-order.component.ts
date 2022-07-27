@@ -21,6 +21,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ResizedEvent } from 'angular-resize-event';
+import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -222,6 +223,7 @@ resizePanel() {
               private userAuthorization : UserAuthorizationService,
               public uiSettingsService : UISettingsService,
               private settingService: SettingsService,
+              private posOrderItemService: POSOrderItemServiceService,
               private productEditButtonService: ProductEditButtonService,
               private el                : ElementRef) {
 
@@ -441,7 +443,21 @@ resizePanel() {
         this.router.navigateByUrl('/pos-orders')
       })
 
-    }
+    };
+  }
+
+  removeDiscount(event) {
+
+    const result = window.confirm('Are you sure you want to remove the discounts?');
+    if (result) { return };
+    if (this.order) {
+      const site = this.siteService.getAssignedSite();
+      let item$ = this.posOrderItemService.removeOrderDiscount(site, this.order.id);
+      item$.subscribe(data => {
+        this.orderService.updateOrderSubscription(data);
+      })
+    };
+
   }
 
   removeSuspension() {
@@ -452,7 +468,7 @@ resizePanel() {
         this.notifyEvent('This suspension is removed', 'Success')
         // this.router.navigateByUrl('/pos-orders')
       })
-    }
+    };
   }
 
   notifyEvent(message: string, action: string) {

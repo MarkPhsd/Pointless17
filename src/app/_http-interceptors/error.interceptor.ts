@@ -14,10 +14,17 @@ export class ErrorInterceptor implements HttpInterceptor {
                 private _snackBar: MatSnackBar
                 ) {
 
-      const debug  = localStorage.getItem('debugOn');
-      if (debug === 'true') {
+      this.debugNotification = this.getdebugOnThisDevice();
+
+    }
+
+    getdebugOnThisDevice() {
+      if (localStorage.getItem('debugOnThisDevice') === 'true') {
+        localStorage.getItem('debugOnThisDevice') === 'false'
+        return false;
       }
-      this.debugNotification = true;
+      localStorage.getItem('debugOnThisDevice') === 'true'
+      return true;
     }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {

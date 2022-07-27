@@ -69,15 +69,14 @@ export class EmployeeLookupComponent implements OnInit, AfterViewInit, OnChanges
     })
 
     if (this.client) {
-      if (this.client.employeeID != 0) {
-        console.log('id', this.client.employeeID)
+      if (this.client.employeeID != 0 && !this.client.employeeID) {
         this.refreshEmployee(this.client.employeeID);
       }
     }
   }
 
   refreshEmployee(id: number) {
-    if (id == 0 ) { return }
+    if (id == 0 || !id) { return }
     console.log('refreshEmployee', id)
     const site = this.siteService.getAssignedSite();
     const employee$ = this.employeeService.getEmployee(site, id)

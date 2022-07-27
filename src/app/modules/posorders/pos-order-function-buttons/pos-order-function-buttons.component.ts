@@ -27,6 +27,7 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Output() outPutEmailOrder    = new EventEmitter();
   @Output() outPutEmailNotifyOrder = new EventEmitter();
   @Output() outPutTextNotify       = new EventEmitter();
+  @Output() outPutRemoveDiscount = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -95,11 +96,18 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
     this.outPutClearOrder.emit(true)
   }
 
+  removeDiscounts() {
+    this.outPutRemoveDiscount.emit(true)
+  }
   textNotify() {
     this.outPutTextNotify.emit(true)
   }
   emailNotifyOrder() {
     this.outPutEmailNotifyOrder.emit(true)
+  }
+
+  get orderHasDiscounts() {
+    return true;
   }
 
 }

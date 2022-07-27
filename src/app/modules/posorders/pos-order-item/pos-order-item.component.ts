@@ -99,9 +99,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   // transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass       = 'product-name'
-
-  isModifier: boolean;
-  isItemKitItem: boolean;
+  isModifier            : boolean;
+  isItemKitItem         : boolean;
 
   panel  ='string'
   @HostListener("window:resize", [])
@@ -111,6 +110,17 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
        this.smallDevice = true
      }
   }
+
+
+  get itemHasDiscount() {
+    const item = this.orderItem
+    if (item.itemOrderCashDiscount != 0 || item.itemPercentageDiscountValue != 0 || item.itemPercentageDiscountValue != 0 ||
+        item.itemOrderPercentageDiscount ) {
+          return true;
+    }
+    return false;
+  }
+
 
   initSubscriptions() {
 
@@ -127,15 +137,23 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this._assignedPOSItem = this.orderMethodsService.assignedPOSItem$.subscribe( data => {
       this.assignedPOSItem = data;
       // this.productnameClass = 'product-name'
-      if (data) {
-        if (data.id == this.orderItem.id) {
-          // this.productnameClass = 'product-name-alt'
+        if (data) {
+          if (data.id == this.orderItem.id) {
+            this.productnameClass = 'product-name-alt'
+            this.selectAssignedItem(true)
+            return
+          }
+          if (data.id != this.orderItem.id) {
+            this.productnameClass = 'product-name'
+            this.selectAssignedItem(false)
+            return
+          }
         }
-        if (data.id != this.orderItem.id) {
-          // this.productnameClass = 'product-name'
-        }
+
+        this.selectAssignedItem(false)
       }
-    })
+    )
+
   }
 
   ngOnDestroy(): void {
@@ -197,16 +215,24 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   assignItem() {
-    if (this.orderItem && this.assignedPOSItem) {
-      if (this.orderItem.id && this.assignedPOSItem.id) {
-        if (this.orderItem.id == this.assignedPOSItem.id) {
-          // console.log('this is the same item so clear')
-          this.orderMethodsService.updateAssignedItem(null)
-          return
-        }
-      }
+
+    console.log(this.assignedPOSItem)
+
+    if (!this.assignedPOSItem) {
+      this.orderMethodsService.updateAssignedItem(this.orderItem)
+      return
     }
-    this.orderMethodsService.updateAssignedItem(this.orderItem)
+    // if (this.orderItem && this.assignedPOSItem) {
+    //   if (this.orderItem.id && this.assignedPOSItem.id) {
+    //     if (this.orderItem.id == this.assignedPOSItem.id) {
+    //       this.orderMethodsService.updateAssignedItem(null)
+    //       return
+    //     }
+    //   }
+    // }
+
+    this.orderMethodsService.updateAssignedItem(null);
+
   }
 
   @HostListener('window:resize', ['$event.target']) onResize()
@@ -241,7 +267,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (this.productnameClass != 'product-name') {
       this.productnameClass == 'product-name-alt'
     }
-    // this.orderMethodsService.updateAssignedItem(this.orderItem)
+  }
+
+  selectAssignedItem(isAssigned: boolean) {
+    if (isAssigned) {
+      this.productnameClass == 'product-name-alt'
+    }
+    if (!isAssigned) {
+      this.productnameClass == 'product-name-alt'
+    }
+    console.log(this.productnameClass )
   }
 
   editProperties(editField: string, instructions: string) {
@@ -381,17 +416,23 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           if (!data.resultMessage) {
             this.notifyEvent(`The quantity has not been changed. Is the item n inventory item? If so another item must be added on the order.` , 'Thank You')
           }
-        }, err => {
-          this.notifyEvent('An error occured, ' + err, 'Failed')
-        }
+         }
         )
       }
     }
   }
 
-  updateCardStyle(option: boolean)  {
+  removeDiscount() {
+    if (this.orderItem && this.menuItem) {
+      const site = this.siteService.getAssignedSite();
+      let item$ = this.posOrderItemService.removeItemDiscount(site, this.orderItem, this.menuItem);
+      item$.subscribe(data => {
+        this.orderService.updateOrderSubscription(data);
+      })
+    }
+  }
 
-    // console.log('option', option, this.orderItem.id, this.orderItem.idRef)
+  updateCardStyle(option: boolean)  {
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef) {
       this.customcard       = 'custom-card-modifier';
       this.productnameClass = 'productname-modifier'
@@ -472,7 +513,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.cancelItem(this.index,  this.orderItem)
   }
 
-  async editPrompt() {
+  editPrompt() {
     const site = this.siteService.getAssignedSite();
     let item : IPurchaseOrderItem;
     if (this.orderItem) {

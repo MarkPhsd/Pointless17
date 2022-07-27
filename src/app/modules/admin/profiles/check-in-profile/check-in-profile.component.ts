@@ -218,10 +218,21 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
   }
 
   listAllOrders() {
-    const site           = this.siteService.getAssignedSite();
     const searchModel    = {} as IPOSOrderSearchModel;
     searchModel.clientID = parseInt (this.id)
+    searchModel.suspendedOrder        = 2;
     this.orderService.updateOrderSearchModel(searchModel)
+  }
+
+  showOnlyOpenOrders() {
+    const search                = {} as IPOSOrderSearchModel
+    search.suspendedOrder       = 0
+    search.greaterThanZero      = 0
+    search.closedOpenAllOrders  = 1;
+    search.suspendedOrder        = 2;
+    search.clientID             = parseInt(this.id)
+    this.searchModel            = search;
+    this.orderService.updateOrderSearchModel(search)
   }
 
   initForm() {
@@ -232,7 +243,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
 
         if (data && this.transactionUISettings &&   this.transactionUISettings.validateCustomerLicenseID) {
           const result = this.orderMethodsService.validateCustomerForOrder(this.inputForm.value, this.transactionUISettings.ordersRequireCustomer )
-          console.log('result of validation', result)
           this.validationMessage = result.resultMessage;
           this.accountDisabled = !result.valid;
         }
@@ -318,6 +328,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       search.suspendedOrder       = 0
       search.greaterThanZero      = 0
       search.closedOpenAllOrders  = 1;
+      search.suspendedOrder       = 2;
       search.clientID             = parseInt(this.id)
       this.searchModel            = search;
       return search

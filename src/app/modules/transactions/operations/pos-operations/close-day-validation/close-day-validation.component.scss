@@ -1,4 +1,4 @@
-button { 
+button {
   margin: 10px;
 }
 
@@ -7,8 +7,21 @@ button {
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
-  align-items: flex-start;
+  // align-items: flex-start;
 
-  // justify-content: left;
-  // align-content: left;
 }
+
+
+// .grid-flow {
+//   --gap: 15px;
+//   display: grid;
+//   gap: var(--gap);
+//   grid-template-columns: repeat( auto-fit, minmax(150px, 1fr) );
+
+//   @include for-phone-only  {
+//     --gap: 10px;
+//     display: grid;
+//     gap: var(--gap);
+//     grid-template-columns: repeat( auto-fit, minmax(120px, 1fr) );
+//   }
+// }

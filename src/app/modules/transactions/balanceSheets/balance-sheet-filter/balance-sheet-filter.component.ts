@@ -1,7 +1,7 @@
 import {Component,  Output,
   OnInit,  ViewChild, ElementRef, EventEmitter, OnDestroy}  from '@angular/core';
 import { IUser } from 'src/app/_interfaces';
-import {AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
+import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { EmployeeService} from 'src/app/_services/people/employee-service.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,8 +9,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { BalanceSheetSearchModel, BalanceSheetService } from 'src/app/_services/transactions/balance-sheet.service';
-import {TooltipPosition} from '@angular/material/tooltip';
+import { BalanceSheetSearchModel, } from 'src/app/_services/transactions/balance-sheet.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
@@ -71,9 +70,9 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
                 private sheetMethodsService     : BalanceSheetMethodsService,
                 private dateHelper              : DateHelperService,
               )
-    {
-      this.initAuthorization();
-    }
+  {
+    this.initAuthorization();
+  }
 
   ngOnInit(): void {
     this.initPlatForm();
@@ -116,18 +115,27 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
       this.toggleEmployeeDeviceAll     =  search.type.toString();
 
-      if (search.completionDate_From || search.completionDate_To) {
-        try {
-          this.dateRangeForm =  this.fb.group({
-            start: new Date(search.completionDate_From),
-            end  : new Date(search.completionDate_To)
-          })
-        } catch (error) {
-        }
-      } else {
-        this.initDateForm();
+      if (this.toggleOpenClosedAll === '1') {
+        this.dateRangeForm = this.fb.group({
+          start: [],
+          end  : []
+        });
       }
-      this.subscribeToDatePicker();
+      if (this.toggleOpenClosedAll != '1') {
+
+          if (search.completionDate_From || search.completionDate_To) {
+          try {
+            this.dateRangeForm =  this.fb.group({
+              start: new Date(search.completionDate_From),
+              end  : new Date(search.completionDate_To)
+            })
+          } catch (error) {
+          }
+        } else {
+          this.initDateForm();
+        }
+        this.subscribeToDatePicker();
+      }
     }
   }
 
@@ -191,7 +199,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
 
     this.sheetMethodsService.updateBalanceSearchModel(this.searchModel)
 
-    this.toggleOpenClosedAll     = "0"
+    this.toggleOpenClosedAll     = "1"
     this.toggleEmployeeDeviceAll = "0"
 
     this.searchModel.employeeID  = 0
@@ -225,7 +233,7 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
   async initDateForm() {
     this.dateRangeForm = new FormGroup({
       start: new FormControl(),
-      end: new FormControl()
+      end  : new FormControl()
     });
 
     let today = new Date();

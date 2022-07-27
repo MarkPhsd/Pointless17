@@ -12,7 +12,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
   styleUrls: ['./status-lookup.component.scss']
 })
 export class StatusLookupComponent {
-
+  @Input() style    : string;
   @Input() statusID: number;
   @Input() statuses$: Observable<any>;
   @Input() inputForm:    FormGroup;

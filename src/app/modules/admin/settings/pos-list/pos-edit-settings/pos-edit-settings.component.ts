@@ -24,7 +24,7 @@ export class PosEditSettingsComponent implements OnInit {
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
-  
+
   constructor(
     private _snackBar      : MatSnackBar,
     private fb             : FormBuilder,
@@ -36,26 +36,26 @@ export class PosEditSettingsComponent implements OnInit {
   )
 {
   if (data) {
-    console.log(data)
     this.setting = data
-    if (!this.setting.text) { 
+    if (!this.setting.text) {
       this.terminal  = {} as ITerminalSettings;
       this.terminal.name = this.setting.name = 'New Terminal'
       this.terminal.enabled = true;
+      this.terminal.resetOrdersFilter = true;
       this.terminal.medicalRecSales = 0
-      this.initForm() 
+      this.initForm()
       return
     }
     if (this.setting.text){
       try {
         this.terminal = JSON.parse(this.setting.text)  as ITerminalSettings;
-        console.log('this termina', this.terminal)
       } catch (error) {
         this.terminal  = {} as ITerminalSettings;
         this.terminal.name = this.setting.name = 'New Terminal'
         this.terminal.enabled = true;
+        this.terminal.resetOrdersFilter = true;
         this.terminal.medicalRecSales = 0
-        this.initForm() 
+        this.initForm()
       }
     }
   }
@@ -72,11 +72,12 @@ export class PosEditSettingsComponent implements OnInit {
       labelPrinter    : [],
       labelPrinter2   : [],
       enabled         : [],
+      resetOrdersFilter: [],
       name:             [''],
       deviceName      : [],
     })
 
-    if (this.terminal) { 
+    if (this.terminal) {
       this.inputForm.patchValue(this.terminal)
     }
   }
@@ -91,15 +92,15 @@ export class PosEditSettingsComponent implements OnInit {
     this.setting.filter = 421
     this.saving$ = this.settingsService.putSetting(site, this.setting.id, this.setting)
     this.saving = true;
-    this.saving$.subscribe(data => { 
-      if (close) { 
+    this.saving$.subscribe(data => {
+      if (close) {
         this.onCancel(true);
       }
       this.saving = false
     })
   }
 
-  saveSetting(event) { 
+  saveSetting(event) {
     this.saveTerminalSetting(false)
   }
 
@@ -107,17 +108,17 @@ export class PosEditSettingsComponent implements OnInit {
     this.dialogRef.close();
   }
 
-  updateExit(event) { 
+  updateExit(event) {
     this.saveTerminalSetting(true)
   }
 
-  delete(event) { 
+  delete(event) {
     const warn = window.confirm('Are you sure you want to delete this terminal?')
-    if (warn) { 
+    if (warn) {
       const site = this.sitesService.getAssignedSite()
       this.saving$ = this.settingsService.deleteSetting(site, this.setting.id)
       this.saving = true;
-      this.saving$.subscribe(data => { 
+      this.saving$.subscribe(data => {
         this.onCancel(true);
       })
     }

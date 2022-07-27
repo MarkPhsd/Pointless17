@@ -121,7 +121,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           this.currentPage        = 1
           searchModel.pageNumber  = 1;
           searchModel.pageSize    = 50;
-          this.searchModel        = searchModel
+                  this.searchModel        = searchModel
         }
         this.refreshSearch()
         return

@@ -17,6 +17,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Output() outPutItem        = new EventEmitter<any>();
   @Input()  hideAllOption     : boolean;
   @Input()  textLength        = 20
+  @Input()  toggleWidth       = ''
   @Input()  toggleDimensions  = 'toggle-group'
   @Input()  toggleButtonClass = 'toggle-button'
   @Input()  buttonDimensions  = 'button-dimensions-short'

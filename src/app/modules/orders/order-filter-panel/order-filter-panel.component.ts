@@ -19,6 +19,7 @@ import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
 import { IPrinterLocation } from 'src/app/_services/menu/printer-locations.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 
 const { Keyboard } = Plugins;
 
@@ -29,6 +30,9 @@ const { Keyboard } = Plugins;
 })
 export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewInit {
 
+
+
+  terminalSetting : ITerminalSettings;
   //auth - suspended orders, employee selection
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
@@ -97,6 +101,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
   )
 
+  initTerminalSettingSubscriber() { 
+    this.settingService.terminalSettings$.subscribe(data => { 
+      this.terminalSetting = data;
+      if (!data) { 
+        this.terminalSetting = {} as ITerminalSettings;
+      }
+    })
+  }
+
   initStatusSubscriber() {
     this._prepStatus = this.orderService.prepStatus$.subscribe( data => {
       if (!data) {
@@ -111,7 +124,6 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   initPrintLocationSubscriber() {
     this._printLocation = this.orderService.printerLocation$.subscribe( data => {
       if (data) {
-        console.log('order filter printLocation')
         this.printLocation = data;
       }
     })
@@ -134,6 +146,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   }
 
   initSubscriptions() {
+    this.initTerminalSettingSubscriber();
     this.initStatusSubscriber();
     this.initPrintLocationSubscriber();
     this.initViewTypeSubscriber();
@@ -158,6 +171,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       public  route           : ActivatedRoute,
       private siteService     : SitesService,
       private serviceTypes    : ServiceTypeService,
+      private settingService  : SettingsService,
       private matSnack        : MatSnackBar,
       private fb              : FormBuilder,
       private userAuthorization  : UserAuthorizationService,
@@ -165,7 +179,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private _bottomSheet    : MatBottomSheet
   )
   {
+
     this.initSubscriptions();
+    
+    if ( this.terminalSetting) { 
+      if (this.terminalSetting.resetOrdersFilter) {
+        this.orderService.updateOrderSearchModel(null)
+      }
+    }
+
     const site           = this.siteService.getAssignedSite();
     this.employees$      = this.orderService.getActiveEmployees(site);
     this.serviceTypes$   = this.serviceTypes.getSaleTypes(site);

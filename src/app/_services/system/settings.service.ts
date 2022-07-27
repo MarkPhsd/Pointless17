@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { interval, Observable, of, } from 'rxjs';
+import { BehaviorSubject, interval, Observable, of, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -10,7 +10,8 @@ import { AppInitService } from './app-init.service';
 import { IItemBasic } from '..';
 import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
 import { EmailModel } from '../twilio/send-grid.service';
-import { UserAuthorizationService } from './user-authorization.service';
+
+import { T } from '@angular/cdk/keycodes';
 
 interface IIsOnline {
   result: string;
@@ -24,6 +25,7 @@ export interface ITerminalSettings {
   enabled         : boolean;
   name            : string;
   deviceName      : string;
+  resetOrdersFilter: boolean;
 }
 
 @Injectable({
@@ -32,11 +34,20 @@ export interface ITerminalSettings {
 
 export class SettingsService {
 
-  get deviceName() {
-    return localStorage.getItem('devicename')
-  }
-  apiUrl: any;
+  private _TerminalSettings     = new BehaviorSubject<ITerminalSettings>(null);
+  public  terminalSettings$      = this._TerminalSettings.asObservable();
 
+
+  get deviceName() {
+    return localStorage.getItem('devicename');
+  }
+  
+  apiUrl: any;
+  
+  updateTerminalSetting(data: ITerminalSettings) {
+    this._TerminalSettings.next(data);
+  }
+  
   constructor( private http: HttpClient,
                private httpCache: HttpClientCacheService,
                private siteService: SitesService,
@@ -44,6 +55,15 @@ export class SettingsService {
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()
   }
+
+  getDeviceSettings(): Observable<ISetting> {
+    //this.terminal = JSON.parse(this.setting.text)  as ITerminalSettings;
+    const site = {} as ISite;
+    site.url = this.apiUrl;
+    const name = this.deviceName;
+    return this.getSettingByName(site, name);
+  }
+
 
   isAPIOnline(): Observable<any> {
 

@@ -33,11 +33,11 @@ export class PosListComponent implements OnInit, OnDestroy {
                private orderService          : OrdersService,
                private siteService           : SitesService,
                public  platForm              : PlatformService,
-               private dialog                : MatDialog,  
+               private dialog                : MatDialog,
                private _snackBar             : MatSnackBar,)
   { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.getListOfPOSComptuers()
   }
 
@@ -53,30 +53,27 @@ export class PosListComponent implements OnInit, OnDestroy {
     });
   }
 
-  refresh() { 
+  refresh() {
     this.getListOfPOSComptuers();
   }
 
-  addDevice() { 
-    // const id = event;
-    // if (id) { 
-      const site  = this.siteService.getAssignedSite()
-      const terminal = {} as ISetting;
-      terminal.filter = 421;
-      terminal.name = 'New Terminal'
-      const item$ = this.setingsServerice.postSetting(site, terminal)
-      item$.subscribe(data => { 
-        this.editItem(data)
-      })
-    // }
+  addDevice() {
+    const site  = this.siteService.getAssignedSite()
+    const terminal = {} as ISetting;
+    terminal.filter = 421;
+    terminal.name = 'New Terminal'
+    const item$ = this.setingsServerice.postSetting(site, terminal)
+    item$.subscribe(data => {
+      this.editItem(data)
+    })
   }
 
-  editTerminal(event) { 
+  editTerminal(event) {
     const id = event;
-    if (id) { 
+    if (id) {
       const site  = this.siteService.getAssignedSite()
       const item$ = this.setingsServerice.getSetting(site, id)
-      item$.subscribe(data => { 
+      item$.subscribe(data => {
         this.editItem(data)
       })
     }
@@ -96,7 +93,7 @@ export class PosListComponent implements OnInit, OnDestroy {
   }
 
   setPOSName(name: string) {
-    if (this.platForm.isApp()) { 
+    if (this.platForm.isApp()) {
       this.notifyEvent(`${this.posName} has not been assigned!`, "Failure")
       return
     }

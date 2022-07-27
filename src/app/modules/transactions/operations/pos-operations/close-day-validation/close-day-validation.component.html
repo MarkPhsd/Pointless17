@@ -6,21 +6,21 @@
   </mat-card-subtitle>
 
   <mat-card-content>
-    
-    <div *ngIf="closeDayValidation.openBalanceSheets">
-      <mat-label>Open Balance Sheets</mat-label>
+
+    <div *ngIf="closeDayValidation && closeDayValidation.openBalanceSheets.length">
+      <mat-label>{{closeDayValidation.openBalanceSheets.length}} Balance Sheets </mat-label>
       <div class="grid-buttons" >
-          <div *ngFor="let item of closeDayValidation.openBalanceSheets">
-          <button mat-raised-button color="warn" (click)="openBalanceSheet(item.id)">
-            {{item?.deviceName}} - {{item?.balanceSheetEmployee?.lastName}}
+        <div *ngFor="let sheets of closeDayValidation.openBalanceSheets">
+          <button mat-raised-button color="warn" (click)="openBalanceSheet(sheets.id)">
+            {{sheets?.deviceName}} - {{sheets?.balanceSheetEmployee?.lastName}}
           </button>
         </div>
       </div>
     </div>
 
-    <div *ngIf="closeDayValidation.openPaidOrders">
-      <mat-label>Open Partial Paid Orders</mat-label>
-      <div class="grid-buttons" *ngIf="closeDayValidation.openPaidOrders">
+    <div *ngIf="closeDayValidation.openPaidOrders && closeDayValidation.openPaidOrders.length">
+      <mat-label>{{closeDayValidation.openPaidOrders.length}} Partial Paid Orders </mat-label>
+      <div class="grid-buttons" >
         <div *ngFor="let item of closeDayValidation.openPaidOrders">
           <button mat-raised-button color="warn" (click)="setOrder(item.id)">
           {{item.id}}</button>
@@ -28,9 +28,9 @@
       </div>
     </div>
 
-    <div *ngIf="closeDayValidation.openPrintedOrders">
-      <mat-label>Open Prepared Orders</mat-label>
-      <div class="grid-buttons" *ngIf="closeDayValidation.openPrintedOrders">
+    <div *ngIf="closeDayValidation.openPrintedOrders && closeDayValidation.openPrintedOrders.length">
+      <mat-label>{{closeDayValidation.openPrintedOrders.length}} Remaining Prepared Orders Unpaid </mat-label>
+      <div class="grid-buttons">
         <div *ngFor="let item of closeDayValidation.openPrintedOrders">
           <button mat-raised-button color="warn" (click)="setOrder(item.id)">
             {{item.id}}</button>

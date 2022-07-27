@@ -1,6 +1,7 @@
 <div *ngIf="inputForm" [formGroup]="inputForm">
   <div *ngIf="(statuses$ | async) as list" >
-    <mat-form-field class="fields" appearance="outline">
+
+    <mat-form-field [style]="style" class="fields" appearance="outline">
       <mat-label>Status</mat-label>
       <mat-select
             type            = "number"

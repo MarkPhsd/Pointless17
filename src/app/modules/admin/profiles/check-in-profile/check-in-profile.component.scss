@@ -50,7 +50,7 @@
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(235px, 1fr) );
-  width: 550px;
+  // max-width: 650px;
 }
 
 .toggle-container {
@@ -63,11 +63,14 @@
 
 .button {
   position:relative;
-  // top:-5px;
   margin-top: -5px;
   margin-right: 10px;
 }
 
+.pending-button {
+  height: 50px;
+  margin: 10px;
+}
 .grid-item {
   // align-items: flex-end;
   // max-height: 150px;

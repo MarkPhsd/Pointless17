@@ -118,6 +118,8 @@ export class AppInitService  {
       }
 
     })
+
+    // this.settingService.setDeviceSettings
   }
 
   setAPIUrl(apiUrl): string {

@@ -14,16 +14,34 @@ export class DeviceInfoComponent implements OnInit {
   isDesktopDevice : boolean;
   deviceName      : string;
 
+  debugOnThisDevice: boolean;
   constructor( public  deviceService:   DeviceDetectorService,) { }
 
   ngOnInit(): void {
     this.getDeviceInfo();
-    this.deviceName = localStorage.getItem('devicename')
+    this.deviceName = localStorage.getItem('devicename');
+    this.debugOnThisDevice = this.getdebugOnThisDevice()
   }
 
-  // get deviceName() { 
-  //   return localStorage.getItem('devicename')
-  // }
+
+  getdebugOnThisDevice() {
+    if (localStorage.getItem('debugOnThisDevice') === 'true') {
+      localStorage.getItem('debugOnThisDevice') === 'false'
+      return false;
+    }
+    localStorage.getItem('debugOnThisDevice') === 'true'
+    return true;
+  }
+
+  setDebugOnThisDevice() {
+    if (localStorage.getItem('debugOnThisDevice') === 'true') {
+      localStorage.setItem('debugOnThisDevice', 'false')// === 'false'
+      this.debugOnThisDevice =  false;
+      return
+    }
+    localStorage.setItem('debugOnThisDevice', 'false') // === 'true'
+    this.debugOnThisDevice =  true;
+  }
 
   getDeviceInfo() {
     this.deviceInfo = this.deviceService.getDeviceInfo();

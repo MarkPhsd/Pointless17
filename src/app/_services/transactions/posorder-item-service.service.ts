@@ -405,6 +405,36 @@ export class POSOrderItemServiceService {
 
   }
 
+  removeOrderDiscount(site: ISite, id: number): Observable<IPOSOrder> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "removeOrderDiscount";
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IPOSOrder>(url)
+
+  }
+
+  removeItemDiscount(site: ISite, posOrderItem: PosOrderItem, menuItem: IMenuItem): Observable<IPOSOrder> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "removeItemDiscount";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const payLoad = { posOrderItem: posOrderItem, menuItem: menuItem }
+
+    return  this.http.post<IPOSOrder>(url, payLoad)
+
+  }
+
   getPurchaseOrderItem(site: ISite, id: number): Observable<IPurchaseOrderItem> {
 
     const controller = "/POSOrderItems/";

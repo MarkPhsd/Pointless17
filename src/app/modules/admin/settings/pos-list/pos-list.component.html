@@ -1,21 +1,21 @@
 <div id="header" >
 
   <h2>
-    <mat-icon>computer</mat-icon>Terminal List 
+    <mat-icon>computer</mat-icon>Terminal List
   </h2>
 
   <h3 *ngIf="this.platForm.isApp()">This terminal assignment is: {{posName}}</h3>
-            
-  <button mat-raised-button 
-          color="primary" 
+
+  <button mat-raised-button
+          color="primary"
           (click)="addDevice()">Add device</button>
 
-  <button mat-raised-button 
-          color="primary" 
+  <button mat-raised-button
+          color="primary"
           (click)="refresh()"><mat-icon>refresh</mat-icon>Refresh</button>
 
-  <button mat-raised-button 
-          color="primary" 
+  <button mat-raised-button
+          color="primary"
           (click)="clearPOS()">Clear device</button>
 
 </div>
@@ -44,7 +44,7 @@
             </td>
           </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
     <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
         [class.example-element-row]="element.addresses?.data.length" >
     </tr>

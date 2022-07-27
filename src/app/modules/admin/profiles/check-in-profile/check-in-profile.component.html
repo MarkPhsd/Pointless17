@@ -133,12 +133,25 @@
                       (outputDateRange)="emitDatePickerData($event)">
                     </mat-date-range>
                   </div>
-                  <div style="margin-top:15px" >
-                    <app-mat-select class="app-mat-select" [list]="dateRangeList"
+                  <div >
+                    <app-mat-select
+                                    style="
+                                    margin-top: 5px;
+                                    height: 1em;
+                                    font-size: 1em;"
+                                    class="app-mat-select" [list]="dateRangeList"
                                     [inputForm] ="selectForm"
                                     [fieldName]="'rangeSelect'"
                                     (outputItem)="chooseDateRangeValue($event)">
                       Select Range</app-mat-select>
+                  </div>
+                  <div>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        class="pending-button"
+                        (click)="showOnlyOpenOrders()">Pending Orders
+                    </button>
                   </div>
                 </div>
                 <div>

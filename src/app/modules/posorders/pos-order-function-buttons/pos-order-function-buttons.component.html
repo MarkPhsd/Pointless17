@@ -121,6 +121,17 @@
     </button>
   </div>
 
+  <div>
+    <!-- [disabled]=" ((order.history) && orderHasDiscounts) == true" -->
+    <button mat-raised-button class="button"
+            color="primary"
+            (click)="removeDiscounts()">
+      <span>
+        Clear Discounts
+      </span>
+    </button>
+  </div>
+
   <div  *ngIf="!(mainPanel && !smallDevice)">
     <button  mat-raised-button
             class="button"

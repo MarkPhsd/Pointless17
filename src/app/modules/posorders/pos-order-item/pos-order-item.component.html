@@ -1,7 +1,8 @@
+<!-- (tapClick)="assignItem()" -->
 <mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
-          (tapClick)="assignItem()"
+          (Click)="assignItem()"
           [class]="customcard"
         >
 
@@ -94,7 +95,10 @@
                   (click)="menuTrigger.openMenu()">
             <mat-icon>more_vert</mat-icon>
         </button>
-        <mat-menu class="mat-menu-panel" [overlapTrigger]="false" #menu="matMenu">
+
+        <mat-menu class="mat-menu-panel"
+                  [overlapTrigger]="false"
+                  #menu="matMenu">
           <span (mouseleave)="menuTrigger.closeMenu()">
 
             <div class="button-list">
@@ -138,6 +142,11 @@
                 <button mat-raised-button  class="button" color="warn" (click)="swipeOutItem()" >
                   <mat-icon>delete</mat-icon> <span *ngIf="!smallDevice">Remove </span>
                 </button>
+              </div>
+              <div>
+              </div>
+              <div *ngIf="itemHasDiscount">
+                <button mat-button  color="accent"  (click)="removeDiscount()"><mat-icon>edit</mat-icon>Clear Discount</button>
               </div>
 
             </div>
