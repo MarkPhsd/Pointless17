@@ -61,6 +61,8 @@ import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
 import { DashBoardRoutingModule } from './dash-board-routing.module';
+import { NgIdleModule } from '@ng-idle/core';
+// import { NgIdleModule } from '@ng-idle/core';
 
 export function init_app(appLoadService: AppInitService) {
   return () => appLoadService.init();
@@ -68,7 +70,7 @@ export function init_app(appLoadService: AppInitService) {
 @NgModule({
   declarations: [
     AgGridTestComponent,
-    AgGridImageFormatterComponent,
+    AgGridImageFormatterComponent,  
     AgGridToggleComponent,
     AppComponent,
     AppGateComponent,
@@ -101,6 +103,7 @@ export function init_app(appLoadService: AppInitService) {
   imports: [
     IonicModule.forRoot(),
     AgGridModule.withComponents([AgGridImageFormatterComponent,AgGridToggleComponent]),
+    NgIdleModule.forRoot(),
     AppRoutingModule,
     AppMaterialModule,
     DashBoardRoutingModule,
