@@ -27,7 +27,7 @@ export interface OrderPayload {
   serviceType : IServiceType;
   deviceName  : string;
   client      : IUserProfile;
-  orderName   : StringDecoder
+  orderName   : string
   order       : IPOSOrder;
 }
 
@@ -38,6 +38,13 @@ export interface IVoidOrder {
   voidReason  : string;
   returnToInventory: boolean;
 }
+
+export interface OrderActionResult {
+  message : String;
+  errorMessage : String;
+  order : IPOSOrder;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -367,6 +374,54 @@ export class OrdersService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.http.get<IPOSOrder>(url);
+
+  }
+
+  refundOrder(site: ISite, item: ItemWithAction):  Observable<OrderActionResult>  {
+
+    const deviceName = localStorage.getItem('devicename')
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "refundOrder"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<OrderActionResult>(url, item);
+
+  }
+
+  refundItem(site: ISite, item: ItemWithAction):  Observable<OrderActionResult>  {
+
+    const deviceName = localStorage.getItem('devicename')
+
+    const controller = "/POSOrderItems/"
+
+    const endPoint  = "refunditems"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<OrderActionResult>(url, item);
+
+  }
+
+  refundPayment(site: ISite, item: ItemWithAction):  Observable<IPOSOrder>  {
+
+    const deviceName = localStorage.getItem('devicename')
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "refundItem"
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.post<IPOSOrder>(url, item);
 
   }
 

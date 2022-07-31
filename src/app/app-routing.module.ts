@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
+import { Routes, RouterModule, PreloadAllModules } from '@angular/router';
+// import { QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 import { DefaultComponent  } from './dashboard/default.component';
 import { SitesComponent } from './modules/sites/sites.component';
 import { LoginComponent} from './modules/login/login.component';
@@ -308,8 +308,8 @@ const routes: Routes = [
 
 @NgModule({
   imports:[
-    // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
-    RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    // RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy })
     // RouterModule.forRoot(routes, { enableTracing: true })
   ],
   // imports: [RouterModule.forRoot(routes)],

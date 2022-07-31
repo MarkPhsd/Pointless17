@@ -1,11 +1,8 @@
-
-
 import { Component,  Inject, OnInit,
   } from '@angular/core';
 import { AWSBucketService,  } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormGroup } from '@angular/forms';
-import { tap } from 'rxjs/operators';
 import { ClientTypeService, IUserAuth_Properties } from 'src/app/_services/people/client-type.service';
 import { clientType } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -39,40 +36,50 @@ export class ClientTypeEditComponent implements OnInit {
     if (data) {
       this.id = data
     }
-    this.initializeForm()
   }
 
   async ngOnInit() {
     this.bucketName =       await this.awsBucket.awsBucket();
     this.awsBucketURL =     await this.awsBucket.awsBucketURL();
+    this.initializeForm()
   };
 
-  async initializeForm()  {
+  initializeForm()  {
 
-    this.initFormFields()
+    this.inputForm = this.initFormFields();
+
     if (this.inputForm && this.id) {
       const site = this.siteService.getAssignedSite();
       this.clientTypeService.getClientType(site, this.id).subscribe(data =>
         {
           this.clientType = data
           this.id         = data.id
-          this.initJSONObjectForm(data.jsonObject)
           this.inputForm.patchValue(data)
+          // console.log('initialied form', data, this.inputForm.value)
+          this.initJSONObjectForm(data.jsonObject)
         }
       )
     } else {
       this.clientType = {} as clientType
       this.inputForm.patchValue(this.clientType)
+      const object = {} as IUserAuth_Properties;
+      this.jsonObjectForm.patchValue(object);
     }
 
+  };
+
+  initFormFields() {
+    this.inputForm  = this.fbClientTypesService.initForm(this.inputForm)
+    return this.inputForm;
   };
 
   initJSONObjectForm(jsonObject: string) {
     this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
 
     if (jsonObject) {
-      const object = JSON.parse(jsonObject) as IUserAuth_Properties;
-      console.log('object', object)
+      let object = JSON.parse(jsonObject) as IUserAuth_Properties;
+      // console.log(object)
+      object = this.initUserAuth(object)
       this.jsonObjectForm.patchValue(object);
     }
 
@@ -82,37 +89,14 @@ export class ClientTypeEditComponent implements OnInit {
     }
   }
 
-  initFormFields() {
-    this.inputForm  = this.fbClientTypesService.initForm(this.inputForm)
-  }
-
-  async updateItem(event, close: boolean) {
+  updateItem(event, close: boolean) {
     let result: boolean;
     if (this.inputForm.valid) {
       const site = this.siteService.getAssignedSite()
       let item = {} as IUserAuth_Properties
       if (this.jsonObjectForm) {
         item = this.jsonObjectForm.value as IUserAuth_Properties;
-        if (!item.accessDailyReport) {item.accessDailyReport = false};
-        if (!item.accessHistoryReports) {item.accessHistoryReports = false}
-        if (!item.addEmployee) {item.addEmployee = false}
-        if (!item.adjustInventory) {item.adjustInventory = false}
-        if (!item.adjustProductCount) {item.adjustProductCount = false}
-        if (!item.blindBalanceSheet) {item.blindBalanceSheet = false}
-        if (!item.blindClose) {item.blindClose = false}
-        if (!item.changeAuths) {item.changeAuths = false}
-        if (!item.changeClientType) {item.changeClientType = false}
-        if (!item.changeInventoryValue) {item.changeInventoryValue = false}
-        if (!item.changeItemPrice) {item.changeItemPrice = false}
-        if (!item.closeDay) {item.closeDay = false}
-        if (!item.importMETRCPackages) {item.importMETRCPackages = false}
-        if (!item.sendEmailBlast) {item.sendEmailBlast = false}
-        if (!item.sendTextBlast) {item.sendTextBlast = false}
-        if (!item.voidItem) {item.voidItem = false}
-        if (!item.voidOrder) {item.voidOrder = false}
-        if (!item.voidPayment) {item.voidPayment = false}
-        if (!item.deleteClientType) { item.deleteClientType = false }
-        if (!item.accessAdmins) { item.accessAdmins = false }
+        item = this.initUserAuth(item)
       }
       let clientType = this.inputForm.value as clientType;
       clientType.jsonObject = JSON.stringify(item);
@@ -121,7 +105,6 @@ export class ClientTypeEditComponent implements OnInit {
       item$.subscribe( {
           next: data => {
             this.clientType = data;
-            // this.initJSONObjectForm(data.jsonObject)
             this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
               if (close) {this.onCancel(null); }
             },
@@ -133,6 +116,33 @@ export class ClientTypeEditComponent implements OnInit {
         )
       }
   };
+
+  initUserAuth(item: IUserAuth_Properties) : IUserAuth_Properties{
+    if (!item.accessDailyReport) {item.accessDailyReport = false};
+    if (!item.accessHistoryReports) {item.accessHistoryReports = false}
+    if (!item.addEmployee) {item.addEmployee = false}
+    if (!item.adjustInventory) {item.adjustInventory = false}
+    if (!item.adjustProductCount) {item.adjustProductCount = false}
+    if (!item.blindBalanceSheet) {item.blindBalanceSheet = false}
+    if (!item.blindClose) {item.blindClose = false}
+    if (!item.changeAuths) {item.changeAuths = false}
+    if (!item.changeClientType) {item.changeClientType = false}
+    if (!item.changeInventoryValue) {item.changeInventoryValue = false}
+    if (!item.changeItemPrice) {item.changeItemPrice = false}
+    if (!item.closeDay) {item.closeDay = false}
+    if (!item.importMETRCPackages) {item.importMETRCPackages = false}
+    if (!item.sendEmailBlast) {item.sendEmailBlast = false}
+    if (!item.sendTextBlast) {item.sendTextBlast = false}
+    if (!item.voidItem) {item.voidItem = false}
+    if (!item.voidOrder) {item.voidOrder = false}
+    if (!item.voidPayment) {item.voidPayment = false}
+    if (!item.deleteClientType) { item.deleteClientType = false }
+    if (!item.accessAdmins) { item.accessAdmins = false }
+    if (!item.refundItem) {item.refundItem = false}
+    if (!item.refundOrder) { item.refundOrder = false }
+    if (!item.refundPayment) { item.refundPayment = false }
+    return item;
+  }
 
   updateItemExit(event) {
     this.updateItem(event, true)

@@ -1,0 +1,61 @@
+<mat-card>
+  <mat-card-subtitle>
+    Items by Barcode
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div class="grid-container">
+      <div
+          *ngFor="let item of menuItems">
+        <div class="grid-panel">
+
+          <div>
+            <button mat-raised-button
+                  class="item-button"
+                  color="primary"
+                  (click)="addItem(item)">
+              <mat-icon>add</mat-icon>  Add Item
+            </button>
+          </div>
+
+          <div class="item-name">
+            <div>
+              {{item.name}}
+            </div>
+            <div class="description">
+              {{item.description | truncateText: 20}}
+            </div>
+          </div>
+
+          <div class="item-price">
+            <div>Standard</div>
+            <div>
+              {{item.retail | currency}}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <!-- <div class="action-buttons"> -->
+      <button mat-raised-button
+          class="item-button"
+          color="primary"
+          (click)="closeWindow()">
+        <mat-icon>close</mat-icon>  Cancel
+      </button>
+    <!-- </div> -->
+  </mat-card-actions>
+
+</mat-card>
+
+<mat-card>
+  <app-key-pad
+    [decimals]="0"
+    [requireWholeNumber]="true"
+    [showInput]="true"
+    (outPutReturnEnter) ='updateQuantity($event)'
+  ></app-key-pad>
+</mat-card>

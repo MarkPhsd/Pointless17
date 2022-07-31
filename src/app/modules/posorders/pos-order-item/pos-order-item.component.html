@@ -2,10 +2,10 @@
 <mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
-          (Click)="assignItem()"
+          (click)="assignItem()"
           [class]="customcard"
         >
-
+  <!-- {{productnameClass}} -->
   <mat-card-content>
     <div class="grid-items">
       <div *ngIf="orderItem">

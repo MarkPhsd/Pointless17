@@ -8,7 +8,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ItemPostResults, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { PromptWalkThroughComponent } from 'src/app/modules/posorders/prompt-walk-through/prompt-walk-through.component';
 import { PromptGroupService } from '../menuPrompt/prompt-group.service';
 import { ISite }   from 'src/app/_interfaces';
@@ -27,6 +27,7 @@ import { PlatformService } from '../system/platform.service';
 import { ClientTableService } from '../people/client-table.service';
 import { SendGridService } from '../twilio/send-grid.service';
 import { UISettingsService } from '../system/settings/uisettings.service';
+import { ProductListByBarcodeComponent } from 'src/app/modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -49,9 +50,9 @@ export class OrderMethodsService implements OnDestroy {
 
   processItem : ProcessItem
 
-  private _assingedPOSItem = new BehaviorSubject<PosOrderItem>(null);
-  public  assignedPOSItem$ = this._assingedPOSItem.asObservable();
-  private assignPOSItem    : PosOrderItem;
+  private _assingedPOSItems = new BehaviorSubject<PosOrderItem[]>(null);
+  public  assignedPOSItems$ = this._assingedPOSItems.asObservable();
+  private assignPOSItems    : PosOrderItem[];
 
   private _posIssuePurchaseItem   = new BehaviorSubject<IPurchaseOrderItem>(null);
   public  posIssuePurchaseItem$ = this._posIssuePurchaseItem.asObservable();
@@ -59,13 +60,14 @@ export class OrderMethodsService implements OnDestroy {
   private _posIssueItem = new BehaviorSubject<PosOrderItem>(null);
   public  posIssueItem$ = this._posIssueItem.asObservable();
 
-  public get assignedPOSItem() {return this.assignPOSItem }
+  public get assignedPOSItem() {return this.assignPOSItems }
 
   priceCategoryID: number;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
+      this.clearAssignedItems();
     })
   }
 
@@ -78,6 +80,7 @@ export class OrderMethodsService implements OnDestroy {
   updatePOSIssueItem(item: PosOrderItem) {
     this._posIssueItem.next(item)
   }
+
   updatePOSIssuePurchaseItem(item: IPurchaseOrderItem) {
     this._posIssuePurchaseItem.next(item)
   }
@@ -88,11 +91,58 @@ export class OrderMethodsService implements OnDestroy {
     this.handleProcessItem()
   }
 
-  updateAssignedItem(item: PosOrderItem) {
-    this.assignPOSItem = item;
-    this._assingedPOSItem.next(item)
+  clearAssignedItems() {
+    this.assignPOSItems = null;
+    this._assingedPOSItems.next(null)
   }
 
+  updateAssignedItems(item: PosOrderItem) {
+
+    if (this.isItemAssigned(item.id)) {
+      this.removeAssignedItem(item)
+    } else {
+      this.addAssignedItem(item)
+    }
+  }
+
+  addAssignedItem(item: PosOrderItem) {
+    if (!this.assignPOSItems) { this.assignPOSItems= [] }
+    this.assignPOSItems.push(item);
+    this._assingedPOSItems.next(this.assignPOSItems)
+  }
+
+  removeAssignedItem(item: PosOrderItem) {
+    if (!this.assignPOSItems) {
+      this._assingedPOSItems.next(null)
+    }
+
+    const index = this.assignPOSItems.findIndex( data => {
+        // console.log(data.productName + ' ' + data.id)
+        return +data.id == +item.id;
+      }
+    )
+    // if (index) {
+      // console.log(this.assignPOSItems, item.productName, item.id, index)
+    // }
+    this.assignPOSItems.splice(index, 1)
+    this._assingedPOSItems.next(this.assignPOSItems)
+  }
+
+  isItemAssigned(id: number): boolean {
+    if (!this.assignPOSItems) {
+      return false
+    };
+    let i = 0
+    let result = false
+    this.assignPOSItems.forEach( data => {
+      if (data.id == id ) {
+        result = true;
+        return
+      }
+      i = i+1
+    })
+    return result
+  }
 
   constructor(public route                    : ActivatedRoute,
               private dialog                  : MatDialog,
@@ -412,7 +462,6 @@ export class OrderMethodsService implements OnDestroy {
           itemNote         = input?.itemNote;
         }
 
-
         if (item) {
           const deviceName  = localStorage.getItem('devicename')
           const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
@@ -438,9 +487,7 @@ export class OrderMethodsService implements OnDestroy {
       if (data) {
 
       }
-
         if (data.message) {  this.notifyEvent(`Process Result: ${data.message}`, 'Alert ')};
-
         if (data && data.resultErrorDescription) {
             this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
             return;
@@ -475,6 +522,17 @@ export class OrderMethodsService implements OnDestroy {
     // this.dialog.closeAll();
     return true
   }
+
+  refundOrder(item: ItemWithAction) {
+    const site = this.siteService.getAssignedSite();
+    return this.orderService.refundOrder(site,item);
+  }
+
+  refundItem(item: ItemWithAction) {
+    const site = this.siteService.getAssignedSite();
+    return this.orderService.refundItem(site,item);
+  }
+
 
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
      this.processAddItem(this.order, barcode, null, quantity, input);
@@ -562,6 +620,34 @@ export class OrderMethodsService implements OnDestroy {
     return true;
   }
 
+
+  openProductsByBarcodeList(items: IMenuItem[], order: IPOSOrder) {
+    const  newItem = { item: items, order: order}
+    const dialogRef = this.dialog.open(ProductListByBarcodeComponent,
+      {
+        width:     '500px',
+        maxWidth:  '500px',
+        height:    '75vh',
+        maxHeight: '675px',
+        panelClass: 'foo',
+        data: newItem
+      }
+    )
+    dialogRef.afterClosed().subscribe(result => {
+      //use this to remove item if price isn't choice.
+      // this.promptGroupService.updatePromptGroup(null)
+      // this.promptWalkService.updatePromptGroup(null)
+      if (!result) {
+
+        return
+      }
+      if (result) {
+        // this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+        return
+      }
+
+    });
+  }
 
   cancelItem(id: number, notify : boolean ) {
     const site = this.siteService.getAssignedSite();
@@ -651,7 +737,6 @@ export class OrderMethodsService implements OnDestroy {
     }
 
   }
-
 
   closeOrder(site: ISite, order: IPOSOrder) {
     if (order) {

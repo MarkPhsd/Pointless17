@@ -16,7 +16,7 @@ export class CompanyService {
                private appInitService  : AppInitService,
                ) {
       this.apiUrl   = this.appInitService.apiBaseUrl()
-               }
+  }
 
   getCompany(site: ISite): Observable<ICompany> {
 
@@ -26,7 +26,7 @@ export class CompanyService {
 
     const parameters = ''
 
-    const url = `${this.apiUrl}${controller}${endPoint}${parameters}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.get<ICompany>(url)
 
@@ -40,7 +40,7 @@ export class CompanyService {
 
     const parameters = `?id=${company.companyID}`
 
-    const url = `${this.apiUrl}${controller}${endPoint}${parameters}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.put<ICompany>(url,  company)
 

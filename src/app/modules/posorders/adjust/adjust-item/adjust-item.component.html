@@ -15,22 +15,30 @@
     </mat-card-subtitle>
     <mat-card-content>
       <div *ngIf="!list$">
-        No Void Options Setup
+        No Options Setup
       </div>
 
-      <div>
-        <div *ngIf="list$">
+      <ng-template #loading>
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </ng-template>
+
+      <div  *ngIf="inventoryReturnDiscard != undefined">
+        <div *ngIf="(list$ | async) as list; else loading">
           <app-mat-toggle-selector
               [toggleButtonClass]="'toggle-buttons-wide'"
               (outPutID)="selectItem($event)"
               [hideAllOption]="true"
-              [list$]="list$">
-              Select
+              [list]="list">
+              Reason for Action
           </app-mat-toggle-selector>
         </div>
       </div>
 
-      <div class="toggle-group">
+      <div class="toggle-group" >
+        <div>
+          <h3> Adjustment Action </h3>
+        </div>
+
         <mat-button-toggle-group
                 name="type"
                 [(ngModel)]  = "inventoryReturnDiscard"
@@ -49,7 +57,24 @@
                 >
               Return to Inventory
           </mat-button-toggle>
-          </mat-button-toggle-group>
+        </mat-button-toggle-group>
+
+        <div *ngIf="posItems" class="grid-container">
+          <h3>Items</h3>
+          <div *ngFor="let item of posItems">
+            <div class="grid-items">
+              <div>
+                {{item.quantity  }}
+              </div>
+              <div>
+                {{item.productName | truncateText: 20 }}
+              </div>
+              <div>
+                {{item.unitPrice | currency }}
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
     </mat-card-content>

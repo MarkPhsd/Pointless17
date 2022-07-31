@@ -1,6 +1,7 @@
 <div  class="container" *ngIf="clientType">
 
   <mat-card class="mat-card">
+
     <mat-card-title>
       <div class="header-container" >
         <div>
@@ -20,23 +21,20 @@
           <mat-divider></mat-divider>
         </div>
       </div>
-
     </mat-card-title>
-
-    <mat-card-subtitle>
-
-    </mat-card-subtitle>
 
     <mat-card-content>
 
-      <div *ngIf="inputForm" [formGroup]="inputForm" >
+      <div >
 
-        <mat-tab-group mat-align-tabs="start"
+        <mat-tab-group
+              mat-align-tabs="start"
               md-stretch-tabs>
+
         <mat-tab label="Features">
 
             <div class="grid-headers">
-              <div >
+              <div>
                 <h4>Description</h4>
               </div >
               <div>
@@ -44,8 +42,11 @@
               </div>
             </div>
 
-            <div class="grid-headers">
-              <div  class="grid-fields name-height ">
+            <div class="grid-headers"
+                  *ngIf="inputForm"
+                  [formGroup]="inputForm" >
+
+              <div  class="grid-fields name-height">
                   <div>
                     <mat-form-field appearance="outline">
                       <mat-label >Display Name</mat-label>
@@ -78,6 +79,7 @@
               </div>
 
               <div class="grid-fields">
+<!--
                 <div>
                   <mat-form-field appearance="outline">
                     <mat-label >Daily Limit</mat-label>
@@ -86,7 +88,7 @@
                           formControlName  ="dailyLimit"
                           class="form-control" >
                   </mat-form-field>
-                </div>
+                </div> -->
 
                 <div>
                   <mat-form-field appearance="outline">
@@ -138,56 +140,61 @@
                   </mat-form-field>
                 </div>
 
+                <!-- <h4>Auths</h4>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="allowStaffUse" >
+                    <mat-label></mat-label>
+                  </mat-slide-toggle>
+                </div> -->
               </div>
+
             </div>
         </mat-tab>
 
         <mat-tab label="Authorizations">
-          <h4>Auths</h4>
-          <div class="toggle-fields">
-            <mat-slide-toggle
-                      formControlName="allowStaffUse" >
-              <mat-label>Allow Staff Use</mat-label>
-            </mat-slide-toggle>
-          </div>
 
-          <div class="grid-auths" *ngIf="jsonObjectForm" [formGroup]="jsonObjectForm">
+          <div class="grid-auths"
+               *ngIf="jsonObjectForm"
+               [formGroup]="jsonObjectForm">
             <div>
 
-              <h4>Admin</h4>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="addEmployee" >
-                  <mat-label>Add employees</mat-label>
-                </mat-slide-toggle>
-              </div>
+                <h4>Admin</h4>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="addEmployee" >
+                    <mat-label>Add employees</mat-label>
+                  </mat-slide-toggle>
+                </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="changeClientType" >
-                  <mat-label>Change User Type</mat-label>
-                </mat-slide-toggle>
-              </div>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="changeClientType" >
+                    <mat-label>Change User Type</mat-label>
+                  </mat-slide-toggle>
+                </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="changeAuths" >
-                  <mat-label>Change Auths</mat-label>
-                </mat-slide-toggle>
-              </div>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="changeAuths" >
+                    <mat-label>Change Auths</mat-label>
+                  </mat-slide-toggle>
+                </div>
 
-              <mat-label>Used for Super User Admin</mat-label>
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="accessAdmins" >
-                  <mat-label>Access Admins</mat-label>
-                </mat-slide-toggle>
-              </div>
+                <mat-label>Used for Super User Admin</mat-label>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="accessAdmins" >
+                    <mat-label>Access Admins</mat-label>
+                  </mat-slide-toggle>
+                </div>
 
             </div>
+
             <div>
               <h3>Sales</h3>
-              <div class="toggle-fields">
+
+                <div class="toggle-fields">
                 <mat-slide-toggle
                           formControlName="voidOrder" >
                   <mat-label>Void Order</mat-label>
@@ -210,6 +217,28 @@
 
               <div class="toggle-fields">
                 <mat-slide-toggle
+                          formControlName="refundPayment" >
+                  <mat-label>Refund Payment</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="refundItem" >
+                  <mat-label>Refund Item</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="refundOrder" >
+                  <mat-label>Refund Order</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+
+              <div class="toggle-fields">
+                <mat-slide-toggle
                           formControlName="changeItemPrice" >
                   <mat-label>Change Item Price</mat-label>
                 </mat-slide-toggle>
@@ -221,6 +250,7 @@
                   <mat-label>Change Inventory Value</mat-label>
                 </mat-slide-toggle>
               </div>
+
             </div>
 
             <div>
@@ -244,98 +274,100 @@
                   <mat-label>Blind Close</mat-label>
                 </mat-slide-toggle>
               </div>
+
             </div>
 
-            <div class="toggle-fields">
-              <mat-slide-toggle
-                        formControlName="closeDay" >
-                <mat-label>Close Day</mat-label>
-              </mat-slide-toggle>
-            </div>
-
-            <div>
-              <h4>Marketing</h4>
               <div class="toggle-fields">
                 <mat-slide-toggle
-                          formControlName="sendTextBlast" >
-                  <mat-label>Send Text Blast</mat-label>
+                          formControlName="closeDay" >
+                  <mat-label>Close Day</mat-label>
                 </mat-slide-toggle>
               </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="sendEmailBlast" >
-                  <mat-label>Send Email Blast</mat-label>
-                </mat-slide-toggle>
-              </div>
-            </div>
+              <div>
+                <h4>Marketing</h4>
 
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="sendTextBlast" >
+                    <mat-label>Send Text Blast</mat-label>
+                  </mat-slide-toggle>
+                </div>
 
-            <div>
-              <h4>Reporting</h4>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="sendEmailBlast" >
+                    <mat-label>Send Email Blast</mat-label>
+                  </mat-slide-toggle>
+                </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="accessDailyReport" >
-                  <mat-label>Daily Report</mat-label>
-                </mat-slide-toggle>
-              </div>
-
-
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="accessHistoryReports" >
-                  <mat-label>History Reports</mat-label>
-                </mat-slide-toggle>
-              </div>
-            </div>
-
-            <div>
-              <h4>Inventory</h4>
-
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="importMETRCPackages" >
-                  <mat-label>Import Metrc</mat-label>
-                </mat-slide-toggle>
               </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="adjustInventory" >
-                  <mat-label>Adjust Inventory</mat-label>
-                </mat-slide-toggle>
+              <div>
+                <h4>Reporting</h4>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="accessDailyReport" >
+                    <mat-label>Daily Report</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="accessHistoryReports" >
+                    <mat-label>History Reports</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
               </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="adjustInventoryCount" >
-                  <mat-label>Adjust Inventory Count</mat-label>
-                </mat-slide-toggle>
+              <div>
+                <h4>Inventory</h4>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="importMETRCPackages" >
+                    <mat-label>Import Metrc</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="adjustInventory" >
+                    <mat-label>Adjust Inventory</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="adjustInventoryCount" >
+                    <mat-label>Adjust Inventory Count</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="adjustProductCount" >
+                    <mat-label>Adjust Product Count</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
               </div>
 
-              <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="adjustProductCount" >
-                  <mat-label>Adjust Product Count</mat-label>
-                </mat-slide-toggle>
+              <div>
+                <h4>Delete</h4>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="deleteClientType" >
+                    <mat-label>Delete Client Types</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
               </div>
-            </div>
-
-
-
-            <div>
-              <h4>Delete</h4>
-               <div class="toggle-fields">
-                <mat-slide-toggle
-                          formControlName="deleteClientType" >
-                  <mat-label>Delete Client Types</mat-label>
-                </mat-slide-toggle>
-              </div>
-            </div>
-
           </div>
+
         </mat-tab>
       </mat-tab-group>
       </div>

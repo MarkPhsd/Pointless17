@@ -38,11 +38,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   interface = {}
   payload: payload;
-  // @HostBinding('@pageAnimations') //messes with refreshing.
+
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
   @Input() uiConfig : TransactionUISettings
-    // @ViewChild('panel') element: ElementRef
+
   @Input() index          = 0;
   @Input() orderItem      : PosOrderItem;
   @Input() order          : IPOSOrder;
@@ -94,8 +94,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   bottomSheetOpen       : boolean ;
   _bottomSheetOpen      : Subscription;
 
-  assignedPOSItem       : PosOrderItem;
-  _assignedPOSItem      : Subscription;
+  assignedPOSItems      : PosOrderItem[];
+  _assignedPOSItems      : Subscription;
 
   // transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass       = 'product-name'
@@ -111,7 +111,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
      }
   }
 
-
   get itemHasDiscount() {
     const item = this.orderItem
     if (item.itemOrderCashDiscount != 0 || item.itemPercentageDiscountValue != 0 || item.itemPercentageDiscountValue != 0 ||
@@ -121,9 +120,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     return false;
   }
 
-
   initSubscriptions() {
-
+    this.initAssignedItemSubscriber();
+    this.initBottomSheetSubscriber();
+  }
+  initBottomSheetSubscriber() {
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
       if (data) {
@@ -132,35 +133,31 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         this.updateCardStyle(data)
       }
     })
-
+  }
+  initAssignedItemSubscriber() {
     //disabled  class style when added button for item functions
-    this._assignedPOSItem = this.orderMethodsService.assignedPOSItem$.subscribe( data => {
-      this.assignedPOSItem = data;
-      // this.productnameClass = 'product-name'
-        if (data) {
-          if (data.id == this.orderItem.id) {
-            this.productnameClass = 'product-name-alt'
-            this.selectAssignedItem(true)
-            return
-          }
-          if (data.id != this.orderItem.id) {
-            this.productnameClass = 'product-name'
-            this.selectAssignedItem(false)
-            return
-          }
+    this._assignedPOSItems = this.orderMethodsService.assignedPOSItems$.subscribe( data => {
+        this.assignedPOSItems = data;
+        if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) {
+          this.productnameClass = 'product-name-alt'
+          return
+        } else {
+          this.productnameClass = 'product-name'
+          return
         }
-
-        this.selectAssignedItem(false)
       }
     )
-
   }
+
+
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    this.assignedPOSItems = null;
+    this.orderMethodsService.clearAssignedItems();
     if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
-    if (this._assignedPOSItem) { this._assignedPOSItem.unsubscribe()}
+    if (this._assignedPOSItems) { this._assignedPOSItems.unsubscribe()}
 
   }
 
@@ -187,6 +184,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   async ngOnInit() {
 
     this.initSubscriptions();
+
     const site = this.siteService.getAssignedSite();
     this.bucketName   =  await this.awsBucket.awsBucket();
     this.awsBucketURL =  await this.awsBucket.awsBucketURL();
@@ -215,24 +213,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   assignItem() {
-
-    console.log(this.assignedPOSItem)
-
-    if (!this.assignedPOSItem) {
-      this.orderMethodsService.updateAssignedItem(this.orderItem)
-      return
-    }
-    // if (this.orderItem && this.assignedPOSItem) {
-    //   if (this.orderItem.id && this.assignedPOSItem.id) {
-    //     if (this.orderItem.id == this.assignedPOSItem.id) {
-    //       this.orderMethodsService.updateAssignedItem(null)
-    //       return
-    //     }
-    //   }
-    // }
-
-    this.orderMethodsService.updateAssignedItem(null);
-
+    this.orderMethodsService.updateAssignedItems(this.orderItem)
   }
 
   @HostListener('window:resize', ['$event.target']) onResize()
@@ -508,7 +489,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   swipeOutItem(){
-    // console.log(this.index, this.orderItem)
     if (this.disableActions) {return}
     this.cancelItem(this.index,  this.orderItem)
   }

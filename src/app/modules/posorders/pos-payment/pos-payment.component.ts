@@ -504,9 +504,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyPointBalance() {
     let  amountPaid = this.paymentsMethodsService.getPointsRequiredToPayBalance(
                     this.order.balanceRemaining,
-                    this.order.clients_POSOrders.loyaltyPointValue)
-    this.pointValueForm = this.fb.group( { itemName: [amountPaid] } )
-    const paymentResponse$ = this.processGetResults(amountPaid, this.posPayment)
+                    this.order.clients_POSOrders.loyaltyPointValue);
+    this.pointValueForm = this.fb.group( { itemName: [amountPaid] } );
+    const paymentResponse$ = this.processGetResults(amountPaid, this.posPayment);
     paymentResponse$.subscribe( {
         next: (data) => {
           if (!data) {

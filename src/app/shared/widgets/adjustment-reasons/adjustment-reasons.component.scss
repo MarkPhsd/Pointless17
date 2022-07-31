@@ -2,8 +2,15 @@ table {
   width: 100%;
 }
 
+.grid-buttons {
+  grid:display;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
+}
+
 .form-button {
   margin: 2px;
+  width: 140px;
 }
 
 .table-container {

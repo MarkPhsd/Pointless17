@@ -28,6 +28,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Output() outPutEmailNotifyOrder = new EventEmitter();
   @Output() outPutTextNotify       = new EventEmitter();
   @Output() outPutRemoveDiscount = new EventEmitter();
+  @Output() outPutRefundItem         = new EventEmitter();
+  @Output() outPutRefundOrder         = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -40,6 +42,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Input() order       : IPOSOrder;
   @Input() emailOption : boolean;
   @Input() ssmsOption : boolean;
+
+
   smallDevice    : boolean;
   constructor(private platFormService: PlatformService, ) { }
 
@@ -55,6 +59,13 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
      }
      this.order.balanceRemaining
    }
+
+  refundItem() {
+    this.outPutRefundItem.emit(true)
+  }
+  refundOrder() {
+    this.outPutRefundOrder.emit(true)
+  }
 
   emailOrder() {
     this.outPutEmailOrder.emit(true)

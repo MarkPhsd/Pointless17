@@ -1,4 +1,3 @@
-import { ReturnStatement } from '@angular/compiler';
 import { Injectable } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { tap } from 'rxjs/operators';
@@ -19,47 +18,70 @@ export class FbClientTypesService {
 
   initUserAuthForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
-      voidOrder : [''],
-      voidItem : [''],
-      voidPayment : [''],
-      changeItemPrice : [''],
-      changeInventoryValue : [''],
-      blindBalanceSheet : [''],
-      blindClose : [''],
-      closeDay : [''],
-      sendTextBlast : [''],
-      sendEmailBlast : [''],
-      accessHistoryReports : [''],
-      accessDailyReport : [''],
-      importMETRCPackages : [''],
-      adjustInventory : [''],
-      adjustProductCount : [''],
-      addEmployee : [''],
-      changeClientType : [''],
-      changeAuths : [''],
-      deleteClientType : [''],
-      adjustInventoryCount : [''],
+
+
+      voidOrder           : [],
+      voidItem            : [],
+      voidPayment         : [],
+
+      changeItemPrice     : [],
+      changeInventoryValue: [],
+      blindBalanceSheet   : [],
+      blindClose          : [],
+
+      // 'admin section
+      closeDay            : [],
+      sendTextBlast       : [],
+      sendEmailBlast      : [],
+      deleteClientType    : [],
+
+      accessHistoryReports: [],
+      accessDailyReport   : [],
+
+      // 'metrc work
+      importMETRCPackages: [],
+
+    // 'inventory work
+      adjustInventory    : [],
+
+    // 'product work
+      adjustInventoryCount: [],
+      adjustProductCount : [],
+
+      // 'add non customer types
+      addEmployee        : [],
+      changeClientType   : [],
+
+      changeAuths        : [],
+      accessAdmins       : [],
+
+      refundItem     : [],
+      refundOrder    : [],
+      refundPayment  : [],
     })
     return fb
 
   }
 
   initForm(fb: FormGroup): FormGroup {
-    // const serializedDate = new Date(user?.dob)
+
          fb = this._fb.group({
-            id:                [''], //
-            name:              [''], //
-            pointValue:        [''], //
-            dailyCredit:       [''], //
-            dailyLimit:        [''], //
-            limitSeeds:        [''], //
-            limitPlants:       [''], //
-            limitLiquid:       [''], //
-            limitSolid:        [''], //
-            limitConcentrate:  [''], //
-            limitExtract:      [''], //
-            limitConcentrates: [''], //
-            allowStaffUse: [''], //
+
+            id: [],
+            name: [],
+            pointValue: [],
+            dailyCredit: [],
+            dailyLimit: [],
+            limitGram : [],
+            limitSeeds: [],
+            limitPlants: [],
+            limitLiquid: [],
+            limitSolid: [],
+            limitConcentrate: [],
+            limitExtract: [],
+            limitConcentrates: [],
+            allowStaffUse: [],
+            jsonObject       : [],
           }
         )
         return fb

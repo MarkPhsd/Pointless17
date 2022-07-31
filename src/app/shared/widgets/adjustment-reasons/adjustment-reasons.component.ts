@@ -84,6 +84,14 @@ export class AdjustmentReasonsComponent implements OnInit {
       this.filterDescription = 'Manifest Rejections'
       this.filter = 4
     }
+    if (filter == 10) {
+      this.filterDescription = 'Refund Order'
+      this.filter = 10
+    }
+    if (filter == 11) {
+      this.filterDescription = 'Refund Item'
+      this.filter = 11
+    }
     this.refreshTable(filter)
   }
 
@@ -174,12 +182,13 @@ export class AdjustmentReasonsComponent implements OnInit {
     if (this.adjustmentReason) {
 
       let site$ =  this.adjustmentReasonsService.deleteReason(site, this.adjustmentReason.id)
-      site$.subscribe(data=>{
-        this.refreshTable(this.filter);
-        this.notifyEvent("Deleted", "Deleted")
-      }, err => {
-        this.notifyEvent("Error deleting: " + err, "Error")
-      })
+
+      site$.subscribe(
+      data => {
+          this.refreshTable(this.filter);
+          this.notifyEvent("Deleted", "Deleted")
+         }
+      )
 
       this.adjustmentReason = {}  as AdjustmentReason;
       this.initForm();

@@ -50,16 +50,17 @@ export class ErrorInterceptor implements HttpInterceptor {
             }
             if (err.status === 500) {
               if (this.debugNotification) {
-                this.notifyEvent(errorMessage, 'Some error occured.' );
+                this.notifyEvent(errorMessage, 'Some error occured.'  );
               }
               console.log(errorMessage)
               return;
             }
             if (this.debugNotification) {
               this.notifyEvent(errorMessage, 'Some error occured.' );
+              return
             }
 
-            console.log("HttpInterceptor error:",  err?.status + ' '  + err?.message + err?.messageDetail )
+            console.log("HttpInterceptor error: ",  err?.status + ' '  + err?.message + ' ' + err?.messageDetail )
             return throwError(err?.status + ' '  + err?.message + err?.messageDetail);
       }))
     }

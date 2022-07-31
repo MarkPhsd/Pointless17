@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPOSOrder, IPurchaseOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
 export interface Item {
   order: IPOSOrder;
   item: IMenuItem;

@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CustomReuseStrategy } from './_routing/route-reuse-strategy';
-import { QuicklinkStrategy } from 'ngx-quicklink';
-import { RouterModule, Routes } from '@angular/router';
+// import { QuicklinkStrategy } from 'ngx-quicklink';
+import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { AuthGuard } from './_http-interceptors/auth.guard';
@@ -21,9 +21,9 @@ const routes: Routes = [
 @NgModule({
   imports:[
     CommonModule,
-    // RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules }),
     // RouterModule.forRoot(routes, { enableTracing: true }),
-    RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy }),
+    // RouterModule.forRoot(routes, { preloadingStrategy: QuicklinkStrategy }),
     IonicModule.forRoot(),
   ],
 

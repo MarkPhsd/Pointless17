@@ -121,6 +121,20 @@
     </button>
   </div>
 
+
+  <div>
+    <button mat-raised-button class="button"
+            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+            color="primary"
+            (click)="refundItem()">
+            <mat-icon>refresh</mat-icon>
+      <span>
+        Refund Item
+      </span>
+    </button>
+  </div>
+
+
   <div>
     <!-- [disabled]=" ((order.history) && orderHasDiscounts) == true" -->
     <button mat-raised-button class="button"
@@ -153,6 +167,10 @@
     </button>
   </div>
 
+  <!-- If the order is completed it's one kind of refund if it's not it's another | right now refunds only happen on new orders, not completed orders -->
+  <!-- So this refund option is only enabled if the order is not history -->
+  <div></div>
+
   <div>
     <button   mat-raised-button class="button"
               color="warn"
@@ -165,7 +183,19 @@
         </span>
     </button>
   </div>
-  <div></div>
+
+  <div>
+    <button mat-raised-button class="button"
+            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+            color="primary"
+            (click)="refundOrder()">
+        <mat-icon>refresh</mat-icon>
+      <span>
+        Refund Order
+      </span>
+    </button>
+  </div>
+
 
   <div>
     <button mat-raised-button

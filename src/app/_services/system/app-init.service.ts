@@ -4,7 +4,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { SettingsService } from './settings.service';
 
 export interface IAppConfig {
   apiUrl : string
@@ -57,6 +56,7 @@ export class AppInitService  {
   async init() {
     // console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
+    console.log('apiBaseUrl init',  this.apiUrl);
 
     const rememberMe = localStorage.getItem('rememberMe')
 
@@ -96,6 +96,7 @@ export class AppInitService  {
           this.logo       = data.logo;
           this.company    = data.company
           this.appConfig  = data ;
+          localStorage.setItem('storedApiUrl', data.apiUrl)
         }
       }
 
@@ -112,6 +113,7 @@ export class AppInitService  {
           this.useAppGate       = false;
           this.appConfig.logo   = this.logo;
           this.appConfig.company= 'Pointless'
+          localStorage.setItem('storedApiUrl', data.apiUrl)
         }
         if (this.apiUrl) {
         }
@@ -145,7 +147,7 @@ export class AppInitService  {
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
     const site = {} as ISite;
-
+    console.log('get local apiurl', result)
     site.url = result
     if (result != null && result != '' ) {
       return result;
@@ -176,8 +178,8 @@ export class AppInitService  {
 
   apiBaseUrl() {
     this.init();
-
     const urlSaved = this.getLocalApiUrl();
+    console.log('apiBaseUrl', urlSaved)
 
     if (this.isApp() && urlSaved != undefined) {
       this.apiUrl =  urlSaved

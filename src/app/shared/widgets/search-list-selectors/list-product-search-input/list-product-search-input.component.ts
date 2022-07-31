@@ -2,7 +2,7 @@ import { Component,Output,OnInit,
          ViewChild ,ElementRef,
           EventEmitter,OnDestroy, AfterViewInit,
           } from '@angular/core';
-import { OrdersService } from 'src/app/_services';
+import { MenuService, OrdersService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map } from 'rxjs/operators';
 import { Subject ,fromEvent, Subscription } from 'rxjs';
@@ -12,6 +12,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -68,6 +69,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   constructor(
     private fb             :        FormBuilder,
     private orderService   :        OrdersService,
+    private menuItemService :       MenuService,
     private orderMethodService    : OrderMethodsService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
@@ -156,8 +158,37 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   }
 
   async addItemToOrder(barcode: string) {
-    await this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+
+    const site = this.siteService.getAssignedSite();
+
+    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode);
+
+    item$.subscribe(data => {
+      if (data) {
+
+        console.log(data.length)
+        if (data.length == 0 || !data) {
+          // console.log('should be 0')
+        } else
+        {
+          if (data.length == 1) {
+            // console.log('should add')
+            this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+          } else {
+            // console.log('should list')
+            this.listBarcodeItems(data, this.order)
+          }
+        }
+      }
+    })
+
     this.initForm()
+  }
+
+  //this.orderMethodService.processAddItem
+  listBarcodeItems(items: IMenuItem[], order: IPOSOrder) {
+    // const data = {items: items , order: order}
+    this.orderMethodService.openProductsByBarcodeList(items, order)
   }
 
 }

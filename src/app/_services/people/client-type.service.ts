@@ -6,39 +6,44 @@ import {clientType, ISite }   from 'src/app/_interfaces';
 
 export interface IUserAuth_Properties {
   // 'pos section
-   voidOrder            : boolean;
-   voidItem             : boolean;
-   voidPayment          : boolean;
-   changeItemPrice      : boolean;
-   changeInventoryValue : boolean;
-   blindBalanceSheet    : boolean;
-   blindClose           : boolean;
+  voidOrder            : boolean;
+  voidItem             : boolean;
+  voidPayment          : boolean;
+
+  changeItemPrice      : boolean;
+  changeInventoryValue : boolean;
+  blindBalanceSheet    : boolean;
+  blindClose           : boolean;
 
   // 'admin section
-   closeDay             : boolean;
-   sendTextBlast        : boolean;
-   sendEmailBlast       : boolean;
-   deleteClientType     : boolean;
+  closeDay             : boolean;
+  sendTextBlast        : boolean;
+  sendEmailBlast       : boolean;
+  deleteClientType     : boolean;
 
-   accessHistoryReports : boolean;
-   accessDailyReport    : boolean;
+  accessHistoryReports : boolean;
+  accessDailyReport    : boolean;
 
   // 'metrc work
-   importMETRCPackages : boolean;
+  importMETRCPackages : boolean;
 
-  // 'inventory work
-   adjustInventory     : boolean;
+// 'inventory work
+  adjustInventory     : boolean;
 
-  // 'product work
-   adjustInventoryCount: boolean;
-   adjustProductCount  : boolean;
+// 'product work
+  adjustInventoryCount: boolean;
+  adjustProductCount  : boolean;
 
   // 'add non customer types
-   addEmployee         : boolean;
-   changeClientType    : boolean;
+  addEmployee         : boolean;
+  changeClientType    : boolean;
 
-   changeAuths         : boolean;
-   accessAdmins        : boolean;
+  changeAuths         : boolean;
+  accessAdmins        : boolean;
+
+  refundItem      : boolean;
+  refundOrder     : boolean;
+  refundPayment   : boolean;
 
 }
 

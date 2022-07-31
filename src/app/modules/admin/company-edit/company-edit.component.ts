@@ -49,8 +49,7 @@ export class CompanyEditComponent implements OnInit {
   ) { }
 
     async ngOnInit() {
-      const site        = this.siteService.getAssignedSite();
-      this.company$     = this.companyService.getCompany(site);
+
       this.bucketName   = await this.awsBucket.awsBucket();
       this.awsBucketURL = await this.awsBucket.awsBucketURL();
       this.selectedIndex = 0
@@ -58,12 +57,19 @@ export class CompanyEditComponent implements OnInit {
     }
 
     fillForm() {
+      const site        = this.siteService.getAssignedSite();
+      if (!site) {
+        this.notifyEvent('Site Not selected. Company can not be edited.', 'Alert')
+        return
+      }
+
       this.initForm();
-      const site     = this.siteService.getAssignedSite();
-      this.companyService.getCompany(site).subscribe( company => {
-        if (!company) {return}
-        this.inputForm.patchValue(company)
+      this.companyService.getCompany(site).subscribe( data => {
+        if (!data) {return}
+        this.company = data;
+        this.inputForm.patchValue(data)
       })
+
     }
 
     initForm() {

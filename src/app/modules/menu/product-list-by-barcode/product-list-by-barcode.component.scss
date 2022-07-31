@@ -1,0 +1,37 @@
+.grid-panel {
+  display: grid;
+  grid-template-columns: 125px  150px  120px;
+  gap: 10px;
+}
+
+.grid-container {
+  height:     175px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.item-name {
+  font-size: 1em;
+  margin:10px
+}
+
+.description {
+  font-size: 1em;
+  margin:10px
+}
+
+.item-price {
+  font-size: 1em;
+  font-weight: bold;
+  margin:10px
+}
+
+.item-button {
+  height: 50px;
+  width: 125px;
+  margin:10px;
+}
+
+.action-buttons {
+  float: right;
+}

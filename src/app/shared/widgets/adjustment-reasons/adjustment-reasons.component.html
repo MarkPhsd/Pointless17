@@ -4,11 +4,13 @@
       <h2>Adjustment Reasons for {{filterDescription}}</h2>
     </mat-card-title>
     <mat-card-subtitle>
-      <div  fxLayout="row">
+      <div class="grid-buttons">
           <button mat-raised-button class="form-button" color="primary" (click)="changeFilter(1)">Items</button>
           <button mat-raised-button class="form-button" color="primary" (click)="changeFilter(2)">Payments</button>
           <button mat-raised-button class="form-button" color="primary" (click)="changeFilter(3)">Orders</button>
           <button mat-raised-button class="form-button" color="primary" (click)="changeFilter(4)">Manifest Rejections</button>
+          <button mat-raised-button class="form-button" color="primary" (click)="changeFilter(10)">Refund Order</button>
+          <button mat-raised-button class="form-button" color="primary" (click)="changeFilter(11)">Refund Item</button>
           <button mat-raised-button class="form-button" color="primary" (click)="onCancel()"><mat-icon>close</mat-icon>Exit</button>
       </div>
     </mat-card-subtitle>

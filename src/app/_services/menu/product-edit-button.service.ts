@@ -119,8 +119,6 @@ export class ProductEditButtonService {
     this.openProductEditor(product.id,  product.prodModifierType)
   }
 
-
-
   openPromptEditor(id: any) {
     let dialogRef: any;
     dialogRef = this.dialog.open(PromptGroupEditComponent,
@@ -133,7 +131,6 @@ export class ProductEditButtonService {
     )
     return dialogRef
   }
-
 
   openPromptSubEditor(id: any) {
     let dialogRef: any;
@@ -196,10 +193,7 @@ export class ProductEditButtonService {
         data : data
       },
     )
-
   }
-
-
 
   getItemForNewEditor(id: number, productTypeID: number) : Observable<IProduct> {
     const site = this.siteService.getAssignedSite();
@@ -248,7 +242,6 @@ export class ProductEditButtonService {
     )).subscribe()
 
   }
-
 
   openChangeDueDialog(payment, paymentMethod, order: IPOSOrder) {
 
@@ -355,10 +348,7 @@ export class ProductEditButtonService {
           break;
           return
         }
-
-
     }
-
   }
 
   openClientTypeEditor(id: number) {
@@ -432,7 +422,49 @@ export class ProductEditButtonService {
         })
 
       }
+  }
 
+  openRefundOrderDialog(order: IPOSOrder ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+      if (order) {
+
+        let itemWithAction      = {}  as ItemWithAction;
+        itemWithAction.action   = 10;
+        itemWithAction.id       = order.id
+        itemWithAction.items = order.posOrderItems;
+        itemWithAction.typeOfAction = 'refundorder'
+
+        const id = order.id;
+        dialogRef = this.dialog.open(AdjustItemComponent,
+          { width:        '450px',
+            minWidth:     '450px',
+            height:       '600px',
+            minHeight:    '600px',
+            data : itemWithAction
+        })
+
+      }
+  }
+  openRefundItemDialog(items: PosOrderItem[] ) {
+    let dialogRef: any;
+    if (items) {
+      let itemWithAction      = {}  as ItemWithAction;
+      itemWithAction.action   = 11;
+      itemWithAction.items = items;
+      itemWithAction.typeOfAction = 'refunditem'
+
+      dialogRef = this.dialog.open(AdjustItemComponent,
+        { width:        '450px',
+          minWidth:     '450px',
+          height:       '600px',
+          minHeight:    '600px',
+          data : itemWithAction
+      })
+    }
   }
 
   openVoidItemDialog(posOrderItem: PosOrderItem ) {

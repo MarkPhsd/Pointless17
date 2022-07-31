@@ -88,6 +88,8 @@ export interface ItemWithAction {
   resultMessage     : string;
   result            : boolean;
   typeOfAction      : string;
+  items             : PosOrderItem[];
+  order             : IPOSOrder;
 }
 
 // firstPOSTCallToAPI('url', data).pipe(

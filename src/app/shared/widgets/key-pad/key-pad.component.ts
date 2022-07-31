@@ -131,9 +131,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   onChangeValueUpdate(data: number) {
     if (this.showInput)  { return }
-    console.log('this value', this.cashValue)
-    console.log('inputTypeValue', this.inputTypeValue)
-    console.log('formatted', this.formatted)
+    // console.log('this value', this.cashValue)
+    // console.log('inputTypeValue', this.inputTypeValue)
+    // console.log('formatted', this.formatted)
     this.formatted = data
     this.value     = this.formatted
     this.outPutValue.emit(this.formatted)

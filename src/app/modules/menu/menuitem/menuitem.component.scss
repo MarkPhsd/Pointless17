@@ -17,7 +17,7 @@ mat-card {
   overflow-x: hidden;
 }
 
-mat-label { 
+mat-label {
   font-size: 1em;
 }
 
@@ -372,7 +372,7 @@ mat-form-field {
 
 .grid-title {
   display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(155px, 1fr) );
   gap: 10px;
 }
 

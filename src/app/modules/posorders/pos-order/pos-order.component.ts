@@ -101,6 +101,17 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   emailOption : boolean;
   ssmsOption   : boolean;
+
+  private _items : Subscription
+  assignedItems:  PosOrderItem[];
+
+  initAssignedItemsSubscriber() {
+    this._items = this.orderMethodService.assignedPOSItems$.subscribe(data => {
+      this.assignedItems = data;
+    })
+  }
+  // item$ = this.orderMethodService.assignedPOSItems$;
+
   transactionUISettingsSubscriber() {
     this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.enableLimitsView  =false;
@@ -145,46 +156,46 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
 
-onResizedorderHeightPanel(event: ResizedEvent) {
-  console.log('onResizedorderHeightPanel', event.newRect.height)
-  this.uiSettingsService.updateorderHeaderHeight(event.newRect.height,this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
-  this.resizePanel()
-}
+  onResizedorderHeightPanel(event: ResizedEvent) {
+    console.log('onResizedorderHeightPanel', event.newRect.height)
+    this.uiSettingsService.updateorderHeaderHeight(event.newRect.height,this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
+    this.resizePanel()
+  }
 
-onResizedorderLimitsPanel(event: ResizedEvent) {
-  this.uiSettingsService.updateLimitOrderHeight(event.newRect.height,this.windowHeight) //(this.orderLimitsPanel.nativeElement.offsetHeight)
-  this.resizePanel()
-}
+  onResizedorderLimitsPanel(event: ResizedEvent) {
+    this.uiSettingsService.updateLimitOrderHeight(event.newRect.height,this.windowHeight) //(this.orderLimitsPanel.nativeElement.offsetHeight)
+    this.resizePanel()
+  }
 
-onResizedorderSpecialsPanel(event: ResizedEvent) {
-  this.uiSettingsService.updatespecialOrderHeight(event.newRect.height,this.windowHeight) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
-  this.resizePanel()
-}
+  onResizedorderSpecialsPanel(event: ResizedEvent) {
+    this.uiSettingsService.updatespecialOrderHeight(event.newRect.height,this.windowHeight) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
+    this.resizePanel()
+  }
 
-onResizedorderCustomerPanel(event: ResizedEvent) {
-  console.log('onResizedorderCustomerPanel',  event.newRect.height )
-  this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height,this.windowHeight) //(this.orderCustomerPanel.nativeElement.offsetHeight)
-  this.resizePanel()
-}
+  onResizedorderCustomerPanel(event: ResizedEvent) {
+    console.log('onResizedorderCustomerPanel',  event.newRect.height )
+    this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height,this.windowHeight) //(this.orderCustomerPanel.nativeElement.offsetHeight)
+    this.resizePanel()
+  }
 
-resizePanel() {
-  this.uiSettingsService.remainingHeight$.subscribe(data => {
-    if (this.mainPanel) {
-      this.orderItemsHeightStyle = `calc(100vh -${ - 100}px)`
-      if (this.smallDevice) {
+  resizePanel() {
+    this.uiSettingsService.remainingHeight$.subscribe(data => {
+      if (this.mainPanel) {
         this.orderItemsHeightStyle = `calc(100vh -${ - 100}px)`
+        if (this.smallDevice) {
+          this.orderItemsHeightStyle = `calc(100vh -${ - 100}px)`
+        }
+        return;
       }
-      return;
-    }
-    if (data) {
-      const value = +data.toFixed(0)
-      this.orderItemsHeightStyle = `${value - 70}px`
-      if (this.smallDevice) {
-        this.orderItemsHeightStyle = `${value - 105}px`
+      if (data) {
+        const value = +data.toFixed(0)
+        this.orderItemsHeightStyle = `${value - 70}px`
+        if (this.smallDevice) {
+          this.orderItemsHeightStyle = `${value - 105}px`
+        }
       }
-    }
-  })
-}
+    })
+  }
 
   userSubscriber() {
     this._user = this.authenticationService.user$.subscribe(data => {
@@ -199,6 +210,7 @@ resizePanel() {
     this.userSubscriber();
     this.initBarSubscription();
     this.resizePanel();
+    this.initAssignedItemsSubscriber()
   }
 
   initBarSubscription() {
@@ -411,6 +423,20 @@ resizePanel() {
      this.productEditButtonService.openVoidOrderDialog(this.order)
   }
 
+  refundItem(event) {
+
+    if (this.assignedItems) {
+      console.log(this.assignedItems)
+      console.log('what is happening.')
+      this.productEditButtonService.openRefundItemDialog(this.assignedItems)
+    }
+
+  }
+
+  refundOrder(event) {
+    this.productEditButtonService.openRefundOrderDialog(this.order)
+  }
+
   async deleteOrder(event) {
     this.orderMethodService.deleteOrder(this.order.id, false)
   }
@@ -457,6 +483,7 @@ resizePanel() {
         this.orderService.updateOrderSubscription(data);
       })
     };
+
 
   }
 
