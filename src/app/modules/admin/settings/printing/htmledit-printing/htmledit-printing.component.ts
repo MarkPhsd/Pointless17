@@ -127,7 +127,8 @@ export class HTMLEditPrintingComponent implements OnInit {
   refresh() {
     if (!this.inputForm || !this.setting) { return }
       const site = this.siteService.getAssignedSite();
-      this.setting$ = this.settingsService.getSetting(site, this.setting.id).pipe( )
+      this.setting$ = this.settingsService.getSetting(site, this.setting.id)
+
       this.setting$.subscribe(
         data => {
         this.setting = data

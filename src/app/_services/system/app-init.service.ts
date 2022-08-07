@@ -56,7 +56,7 @@ export class AppInitService  {
   async init() {
     // console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
-    console.log('apiBaseUrl init',  this.apiUrl);
+    // console.log('apiBaseUrl init',  this.apiUrl);
 
     const rememberMe = localStorage.getItem('rememberMe')
 
@@ -147,7 +147,7 @@ export class AppInitService  {
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
     const site = {} as ISite;
-    console.log('get local apiurl', result)
+    // console.log('get local apiurl', result)
     site.url = result
     if (result != null && result != '' ) {
       return result;
@@ -179,7 +179,7 @@ export class AppInitService  {
   apiBaseUrl() {
     this.init();
     const urlSaved = this.getLocalApiUrl();
-    console.log('apiBaseUrl', urlSaved)
+    // console.log('apiBaseUrl', urlSaved)
 
     if (this.isApp() && urlSaved != undefined) {
       this.apiUrl =  urlSaved

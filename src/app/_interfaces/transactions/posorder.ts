@@ -238,6 +238,7 @@ export interface PosOrderItem {
   printLocation               :  number;
   splitGroupID                : number;
   gratuity                    : number;
+  itemReturn                  : number;
 }
 
 export interface PosPayment {

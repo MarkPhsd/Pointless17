@@ -192,8 +192,8 @@ export class ProducteditComponent implements  OnInit  {
 
   deleteItem(event) {
 
-    const result = window.confirm('Are you sure you want to delete this item?')
-    if (!result) { return }
+    // const result = window.confirm('Are you sure you want to delete this item?')
+    // if (!result) { return }
 
     const site = this.siteService.getAssignedSite()
     if (!this.product) {

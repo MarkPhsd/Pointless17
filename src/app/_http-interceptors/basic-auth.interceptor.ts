@@ -5,10 +5,12 @@ import { AuthenticationService } from 'src/app/_services/system/authentication.s
 import { IUser  } from '../_interfaces';
 export const InterceptorSkipHeader = 'X-Skip-Interceptor';
 
+
 @Injectable()
 export class BasicAuthInterceptor implements HttpInterceptor {
-    user              : IUser;
-    _user             : Subscription;
+
+  user              : IUser;
+  _user             : Subscription;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
@@ -25,21 +27,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const user = this.authenticationService.userValue;
 
-      // console.log(user)
-
       if (request.headers.has(InterceptorSkipHeader)) {
-        //     //we might have to have two login options here, because this area was changed to userx
-        //     this.authenticationService.externalAPI = true
-        //     const userx = this.authenticationService.userxValue;
-        //     // console.log("user x login", userx.authdata)
-        //     request = request.clone({
-        //         setHeaders: {
-        //             Authorization: `Basic ${userx.authdata}`
-        //         }
-        //     });
-        //     this.authenticationService.externalAPI = false
-        //     return next.handle(request);
-        // console.log('intercept skip header')
         const headers = request.headers.delete(InterceptorSkipHeader);
         return next.handle(request.clone({ headers }));
       }

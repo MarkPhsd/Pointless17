@@ -122,7 +122,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   }
 
  async addNewOrder() {
-    // this.orderService.updateOrderSubscription(null);
     const site = this.siteService.getAssignedSite();
     this.orderService.newDefaultOrder(site);
   }

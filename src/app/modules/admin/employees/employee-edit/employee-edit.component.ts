@@ -281,9 +281,9 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   delete(event) {
-    const result =  window.confirm('Are you sure you want to delete this profile?')
+    // const result =  window.confirm('Are you sure you want to delete this profile?')
 
-    if (result && this.employee) {
+    if (this.employee) {
       const site = this.siteService.getAssignedSite();
       const employe$ = this.employeeService.delete(site, this.employee.id)
       employe$.subscribe( data => {

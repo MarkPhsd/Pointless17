@@ -70,7 +70,7 @@ export class EditCSSStylesComponent implements OnInit {
   {
     if (data) {
       this.setting = data
-      console.log('constructor', this.setting)
+      // console.log('constructor', this.setting)
       this.initForm()
     }
   }
@@ -79,12 +79,22 @@ export class EditCSSStylesComponent implements OnInit {
     this.inputForm = this.fbService.initForm(this.inputForm)
     if (this.setting) {
       this.inputForm.patchValue(this.setting)
-      console.log('patching Value ', this.setting)
     }
   }
 
   ngOnInit() {
     console.log('')
+  }
+
+  async resetDefault() {
+    const result = window.confirm('Rest to default styles?')
+    if (result) {
+      // this.settingsService.getDefaultReceiptStyles()
+      const site = this.siteService.getAssignedSite();
+      const setting = await this.settingsService.setDefaultReceiptStyles(site)
+      this.setting = setting;
+      this.initForm()
+    }
   }
 
   copy() {
@@ -112,11 +122,15 @@ export class EditCSSStylesComponent implements OnInit {
 
   update() {
     const site = this.siteService.getAssignedSite();
-    this.settingsService.putSetting(site, this.setting.id, this.inputForm.value).subscribe(data =>  {
-      this.notify('Saved', 'Success')
-    }, err => {
-      this.notify(err, 'Failed')
-    })
+    this.settingsService.putSetting(site, this.setting.id, this.inputForm.value).subscribe(
+      { next: data =>  {
+          this.notify('Saved', 'Success')
+        },
+        error: err => {
+          this.notify(err, 'Failed')
+        }
+      }
+    )
   }
 
   notify(message, title) {

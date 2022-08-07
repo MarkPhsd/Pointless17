@@ -41,7 +41,7 @@ export class StrainsAddComponent implements OnInit {
   facility = {} as        IItemFacilitiyBasic
   site:                   ISite;
   menuItem:               any ;
- 
+
 
   //remove
   intakeConversion         = {}  as IUnitConversion;
@@ -79,7 +79,7 @@ export class StrainsAddComponent implements OnInit {
   async ngOnInit() {
 
       this.initProductSearchModel();
-      
+
       const site        = this.siteService.getAssignedSite();
 
       const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
@@ -88,7 +88,7 @@ export class StrainsAddComponent implements OnInit {
 
       item$.subscribe(
         {
-          next: data => { 
+          next: data => {
             this.package = data;
             if (this.package) {
               this.site         =  this.siteService.getAssignedSite();
@@ -97,14 +97,14 @@ export class StrainsAddComponent implements OnInit {
               this.initPriceForm();
             }
          },
-          error: err => { 
+          error: err => {
             console.log('error', err)
           }
         }
       )
   }
 
-  initProductSearchModel() { 
+  initProductSearchModel() {
     const model = {} as ProductSearchModel;
     const list  = []
     list.push(30)
@@ -126,15 +126,15 @@ export class StrainsAddComponent implements OnInit {
   }
 
   update(event) {
-    if (!this.package) { 
+    if (!this.package) {
       this.notifyEvent('Item not saved, package is null.', 'Failure')
-      return 
+      return
     }
     let metrcPackage = this.packageForm.value as METRCPackage;
 
     const site = this.siteService.getAssignedSite();
 
-    if (this.hasImportedControl) { 
+    if (this.hasImportedControl) {
       //  package.inventoryImported = this.hasImportedControl.value as boolean;
       if (this.hasImportedControl.value)  {   metrcPackage.inventoryImported = true  }
       if (!this.hasImportedControl.value) {   metrcPackage.inventoryImported = false  }
@@ -152,8 +152,8 @@ export class StrainsAddComponent implements OnInit {
   }
 
   deleteItem(event) {
-    const alert    = window.confirm('Are you sure you want to delete this item? It will re-import when you download again.')
-    if (!alert) {return}
+    // const alert    = window.confirm('Are you sure you want to delete this item? It will re-import when you download again.')
+    // if (!alert) {return}
     const site     = this.siteService.getAssignedSite();
     const package$ = this.metrcPackagesService.deletePackage(site,this.id)
     package$.subscribe( data => {
@@ -192,7 +192,7 @@ export class StrainsAddComponent implements OnInit {
     }
   }
 
-  assignMenItem(id: number) { 
+  assignMenItem(id: number) {
     if (id == 0) { return}
     this.menuService.getMenuItemByID(this.site, id).subscribe(data => {
       if (data) {
@@ -211,7 +211,7 @@ export class StrainsAddComponent implements OnInit {
     inputForm.patchValue(item)
   }
 
-  initPriceForm(){ 
+  initPriceForm(){
     this.priceForm = this.fb.group({
       cost           : [0],
       price          : [0],

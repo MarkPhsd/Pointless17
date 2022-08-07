@@ -22,7 +22,13 @@
             ( {{orderItem?.itemType?.name}} )
           </span>
           <span  *ngIf="quantity && !prepScreen">
-            {{ quantity }} {{orderItem.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+            <div *ngIf="subTotal>0">
+              {{ quantity }} {{orderItem.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+            </div>
+            <div *ngIf="subTotal<0"  style="color:crimson">
+              {{ quantity }} {{orderItem.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+            </div>
+
           </span>
           <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode && !prepScreen">
             SN#/({{ orderItem.serialCode }})
@@ -59,10 +65,10 @@
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.itemPrepped | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-icon void-info" *ngIf="orderItem.voidReason && prepScreen && !isModifier">
+          <div class="void-icon void-info" *ngIf="orderItem.voidReason && orderItem.itemReturn != 1 && prepScreen && !isModifier">
             <span *ngIf="orderItem.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              Item voided:  {{ orderItem.voidReason }}
+              <b  style="color:crimson">Item voided:  {{ orderItem.voidReason }}</b>
             </span>
           </div>
 
@@ -75,10 +81,10 @@
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-info" *ngIf="orderItem.voidReason && !isModifier">
-            <span  >  <mat-icon   color="warn">lock</mat-icon>  </span>
+          <div class="void-info" *ngIf="orderItem.voidReason && orderItem.itemReturn == 1 && !isModifier">
+            <span  >  <mat-icon   color="warn">refresh</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              Item voided:  {{ orderItem.voidReason }}
+              <b style="color:crimson">Item Return:  {{ orderItem.voidReason }}</b>
             </span>
           </div>
         </div>

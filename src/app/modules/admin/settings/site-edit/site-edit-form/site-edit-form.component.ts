@@ -75,8 +75,8 @@ export class SiteEditFormComponent implements OnInit {
   }
 
   deleteCurrentSite(event) {
-    const confirm = window.confirm('Are you sure you want to delete this site?')
-    if (confirm) {
+    // const confirm = window.confirm('Are you sure you want to delete this site?')
+    // if (confirm) {
       if (this.ccsSite) {
         const id = this.ccsSite.id
         this.initForm()
@@ -90,7 +90,7 @@ export class SiteEditFormComponent implements OnInit {
           }
         )
       }
-    }
+    // }
   }
 
   //image data

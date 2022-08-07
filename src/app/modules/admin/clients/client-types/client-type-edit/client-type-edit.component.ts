@@ -153,8 +153,8 @@ export class ClientTypeEditComponent implements OnInit {
   }
 
   deleteItem(event) {
-    const warn = window.confirm('Are you sure you want to delete this item?')
-    if (!warn) { return }
+    // const warn = window.confirm('Are you sure you want to delete this item?')
+    // if (!warn) { return }
 
     const site = this.siteService.getAssignedSite()
     if (!this.clientType) {

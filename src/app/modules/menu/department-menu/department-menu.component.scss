@@ -3,6 +3,10 @@
 .panel {
   overflow-y: auto;
   overflow-x: hidden;
+  min-height: calc(100vh - 100px);
+  @include for-phone-only {
+    min-height: calc(100vh - 165px);
+  }
 }
 
 .categories {

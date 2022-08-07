@@ -217,8 +217,8 @@ export class METRCProductsAddComponent implements OnInit {
   }
 
   deleteItem(event) {
-    const alert = window.confirm('Are you sure you want to delete this item? It will reimport when you download again.')
-    if (!alert) {return}
+    // const alert = window.confirm('Are you sure you want to delete this item? It will reimport when you download again.')
+    // if (!alert) {return}
     const site = this.siteService.getAssignedSite();
     const package$ =this.metrcPackagesService.deletePackage(site,this.id)
     package$.subscribe(data => {

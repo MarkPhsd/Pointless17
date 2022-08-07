@@ -11,7 +11,7 @@
         {{itemWithAction?.posItem?.productName}}
       </h4>
 
-      {{message}}
+      <!-- {{message}} -->
     </mat-card-subtitle>
     <mat-card-content>
       <div *ngIf="!list$">
@@ -22,7 +22,7 @@
         <mat-spinner [diameter]="50"></mat-spinner>
       </ng-template>
 
-      <div  *ngIf="inventoryReturnDiscard != undefined">
+      <div  *ngIf="inventoryReturnDiscard || inventoryReturnDiscard != undefined">
         <div *ngIf="(list$ | async) as list; else loading">
           <app-mat-toggle-selector
               [toggleButtonClass]="'toggle-buttons-wide'"

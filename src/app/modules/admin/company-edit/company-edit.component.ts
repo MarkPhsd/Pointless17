@@ -87,12 +87,15 @@ export class CompanyEditComponent implements OnInit {
       try {
         const company = this.inputForm.value as ICompany;
         const company$ = this.companyService.updateCompany(site, company)
-        company$.subscribe(data =>{
+        company$.subscribe(
+          {
+          next: data =>{
             this.notifyEvent('Saved', "Saved")
           },
-          err => {
+          error: err => {
             this.notifyEvent(err, "Failure")
           }
+        }
         )
       } catch (error) {
         this.notifyEvent(result, "Failure")

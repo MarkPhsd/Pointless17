@@ -88,10 +88,10 @@ export class EditButtonsStandardComponent  {
   }
 
   deleteItem() {
+   const result = window.confirm('Are you sure you want to delete this item?')
+    if (!result) { return }
     this.outputupdatedeleteItem.emit('demo')
   }
-
-
 
   onCancel() {
     this.outputupdateonCancel.emit('demo')

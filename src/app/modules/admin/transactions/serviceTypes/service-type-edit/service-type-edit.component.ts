@@ -51,24 +51,19 @@ export class ServiceTypeEditComponent implements OnInit {
 
       if (this.inputForm && this.id) {
         const site = this.siteService.getAssignedSite();
-        const serviceType$ = this.serviceTypeService.getType(site, this.id).pipe(
-            tap(data => {
+        const serviceType$ = this.serviceTypeService.getType(site, this.id)
+
+        serviceType$.subscribe(
+           {next:  data => {
               this.serviceType = data
               this.id         = data.id
-              this.inputForm.patchValue(this.serviceType)
-            }
-          )
-        );
-        serviceType$.subscribe(
-          data => {
-            this.serviceType = data
-            this.id          = data.id
-        })
-      }
 
-      if (!this.id)  {
-        this.serviceType = {} as IServiceType;
-        this.inputForm.patchValue(this.serviceType)
+              this.inputForm.patchValue(this.serviceType)
+            }, error: error => {
+              this.snack.open(`Issue. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+            }
+          }
+        )
       }
 
     };
@@ -106,6 +101,7 @@ export class ServiceTypeEditComponent implements OnInit {
     }
 
     deleteItem(event) {
+
       const site = this.siteService.getAssignedSite()
       if (!this.serviceType) {
         this.snack.open("No item initiated.", "Failure", {duration:2000, verticalPosition: 'top'})

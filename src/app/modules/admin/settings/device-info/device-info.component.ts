@@ -23,24 +23,29 @@ export class DeviceInfoComponent implements OnInit {
     this.debugOnThisDevice = this.getdebugOnThisDevice()
   }
 
-
   getdebugOnThisDevice() {
     if (localStorage.getItem('debugOnThisDevice') === 'true') {
-      localStorage.getItem('debugOnThisDevice') === 'false'
-      return false;
+      return true;
     }
-    localStorage.getItem('debugOnThisDevice') === 'true'
-    return true;
+    return false;
+  }
+
+  testErrorSentry() {
+    const someValue = localStorage.getItem('getSomeValue')
+    // const myValue   = someValue * 100
+    throw('Error')
   }
 
   setDebugOnThisDevice() {
     if (localStorage.getItem('debugOnThisDevice') === 'true') {
       localStorage.setItem('debugOnThisDevice', 'false')// === 'false'
       this.debugOnThisDevice =  false;
+      console.log(localStorage.getItem('debugOnThisDevice'))
       return
     }
-    localStorage.setItem('debugOnThisDevice', 'false') // === 'true'
+    localStorage.setItem('debugOnThisDevice', 'true') // === 'true'
     this.debugOnThisDevice =  true;
+    console.log(localStorage.getItem('debugOnThisDevice'))
   }
 
   getDeviceInfo() {

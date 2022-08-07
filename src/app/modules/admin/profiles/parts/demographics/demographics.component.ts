@@ -14,7 +14,6 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
   _uiTransactionSettings: Subscription;
   uiTransactionSettings : TransactionUISettings;
 
-
   @Input() inputForm    : FormGroup;
   @Input() isAuthorized : boolean;
   @Input() isStaff      : boolean;
@@ -27,7 +26,6 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
     console.log('')
     this.initSubscriptions();
   }
-
 
   initSubscriptions() {
 

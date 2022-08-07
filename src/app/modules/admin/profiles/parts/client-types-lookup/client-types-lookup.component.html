@@ -1,21 +1,46 @@
-<div *ngIf="inputForm && clientTypes && formControlName"
+<div *ngIf="inputForm && formControlName && (clientTypes$ | async) as clientTypes"
      [formGroup]="inputForm">
 
-    <mat-form-field [style]='style' class="fields" appearance="outline">
-      <mat-label>Client Type</mat-label>
-      <mat-select
-                  type              = "number"
-                  name              = "clientTypeID"
-                  ngDefaultControl
-                  [formControlName] = "formControlName"
-                >
+    <mat-form-field [style]='style'
+                    class="fields"
+                    appearance="outline">
 
-        <mat-option *ngFor="let item of clientTypes"
-                    [value]="item.id">
+      <mat-label><ng-content></ng-content> {{formControlName}}</mat-label>
+
+      <ng-container [ngTemplateOutlet]="matSelectOption"></ng-container>
+
+      <ng-template #clientTypeID>
+        <div *ngIf="formControlName && formControlName === 'clientTypeID' ">
+          <mat-select
+                      type              = "number"
+                      ngDefaultControl
+                      formControlName   = "clientTypeID"
+                    >
+            <mat-option *ngFor="let item of clientTypes"
+              [value]="item.id">
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </div>
+    </ng-template>
+
+    <ng-template #defaultClientTypeID>
+      <div *ngIf="formControlName && formControlName === 'defaultClientTypeID' ">
+        <mat-select
+                type             = "number"
+                ngDefaultControl
+                name             = 'defaultClientTypeID'
+                formControlName  = "defaultClientTypeID">
+
+          <mat-option *ngFor="let item of clientTypes"
+            [value]="item.id">
             {{item.name}}
-        </mat-option>
+          </mat-option>
 
-      </mat-select>
+        </mat-select>
+      </div>
+    </ng-template>
+
     </mat-form-field>
 
 </div>

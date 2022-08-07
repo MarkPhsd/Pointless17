@@ -257,8 +257,8 @@ export class PriceTierEditComponent implements OnInit {
   }
 
   deleteTier(item) {
-    const result = window.confirm('Are you sure you want to delete this Price Tier?')
-    if (!result) { return }
+    // const result = window.confirm('Are you sure you want to delete this Price Tier?')
+    // if (!result) { return }
     const id = this.priceTier.id
     const site = this.siteService.getAssignedSite()
     if (!item) { return }

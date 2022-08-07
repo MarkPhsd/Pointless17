@@ -266,17 +266,26 @@ constructor(
 
   clearAll(){
     this.initProductSearchModel();
-    this.input.nativeElement.value = '';
-    this.input.nativeElement.focus();
+    if (this.input && this.input.nativeElement) {
+      this.input.nativeElement.value = '';
+      this.input.nativeElement.focus();
+    }
     //set the toggle buttons as well:
     this.categoryID        = 0;
     this.brandID           = 0;
     this.typeID            = 0;
     this.productTypeSearch = null;
+    this.departmentID      = 0;
     this.productTypeID     = null;
     this.typeID            = null;
     this.brandID           = null;
     this.name              = null;
+    this.brand             = null;
+    this.department        = null;
+    this.departments$      = null;
+
+    const site               = this.siteService.getAssignedSite()
+    this.departments$    = this.menuService.getListOfDepartments(site)
     if (this.platForm.toLowerCase() === 'android') {
       Keyboard.hide();
     }
@@ -320,6 +329,8 @@ constructor(
     productSearchModel.name         = null;
     productSearchModel.barcode      = null;
     productSearchModel.departmentName = null;
+
+
 
     if (this.itemName) {
       productSearchModel.name               =  this.itemName;

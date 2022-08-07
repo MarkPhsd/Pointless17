@@ -23,14 +23,13 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
   @Input() formFieldClass     = 'formFieldClass-standard'
   @Input() inputForm:         FormGroup;
   @Input() searchForm:        FormGroup;
-  // @Input() searchField:       FormControl;
-  @Input() id               : any;
-  // @Input() name:              string;
+  @Input() id                : any;
+  @Input() productLookupField: string;
+  @Input() description       : string;
+
   searchPhrase:               Subject<any> = new Subject();
   item:                       IProduct;
   site:                       ISite;
-  @Input() productLookupField: string;
-  @Input() description       : string;
   menuItem: IMenuItem;
 
   get productLookupControl()   { return this.inputForm.get(this.productLookupField) as FormControl};
@@ -53,6 +52,7 @@ export class ProductSearchSelector2Component implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    if (!this.input) { return  }
     fromEvent(this.input.nativeElement,'keyup')
       .pipe(
           filter(Boolean),

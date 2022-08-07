@@ -1,6 +1,8 @@
-import { Component, OnInit, Output, Input,EventEmitter, HostListener } from '@angular/core';
+import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'pos-order-function-buttons',
@@ -8,7 +10,7 @@ import { PlatformService } from 'src/app/_services/system/platform.service';
   styleUrls: ['./pos-order-function-buttons.component.scss']
 })
 
-export class PosOrderFunctionButtonsComponent implements OnInit {
+export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
   isApp = false;
   @Output() outPutSendToPrep    = new EventEmitter();
@@ -42,13 +44,35 @@ export class PosOrderFunctionButtonsComponent implements OnInit {
   @Input() order       : IPOSOrder;
   @Input() emailOption : boolean;
   @Input() ssmsOption : boolean;
+  @Input() refundItemEnabled: boolean;
 
+  assignedItems   : Subscription;
+  refundItems     : boolean;
+  smallDevice     : boolean;
 
-  smallDevice    : boolean;
-  constructor(private platFormService: PlatformService, ) { }
+  constructor(private platFormService: PlatformService,
+              private orderMethodsService: OrderMethodsService ) { }
 
   ngOnInit() {
-    this.isApp = this.platFormService.isApp()
+    this.isApp = this.platFormService.isApp();
+    this.initSubscriptions();
+  }
+
+  initSubscriptions() {
+    this.assignedItems = this.orderMethodsService.assignedPOSItems$.subscribe(data => {
+      this.refundItems = false;
+      if (data.length> 0) {
+        this.refundItems = true;
+      }
+    })
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this.assignedItems) {
+      this.assignedItems.unsubscribe()
+    }
   }
 
   @HostListener("window:resize", [])

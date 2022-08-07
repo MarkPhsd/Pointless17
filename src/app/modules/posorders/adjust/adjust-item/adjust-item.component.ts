@@ -52,12 +52,18 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   {
     if (data) {
       this.orderService.currentOrder$.subscribe(order => {
-        this.order = order;
-        this.inventoryReturnDiscard = true;
-        this.itemWithAction = data;
-        this.posItems = data.items;
 
-        this.itemService.updateItemWithAction(data);
+        if (order) {
+          this.order = order;
+        }
+
+        if (data) {
+          this.itemWithAction = data;
+          this.posItems = data.items;
+          this.itemService.updateItemWithAction(data);
+        }
+        this.inventoryReturnDiscard = true;
+
         this.getVoidReasons();
       })
     }
@@ -73,8 +79,9 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   }
 
   getVoidReasons() {
+    console.log('action', this.itemWithAction.action)
     const site = this.siteService.getAssignedSite();
-
+    if (!this.itemWithAction) { return }
     if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'VoidOrder'.toLowerCase() ) {
       this.list$  = this.settingsService.getVoidReasons(site, 1);
       return
@@ -95,14 +102,16 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       return
     }
 
-    if (+this.itemWithAction.action  == 11) {
-      this.posItems = this.itemWithAction?.items;
+    if (+this.itemWithAction.action  == 10) {
+      console.log('orderr fund')
+      this.posItems = this.itemWithAction?.order?.posOrderItems;
       this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction?.action);
       return
     }
 
-    if (+this.itemWithAction.action  == 10) {
-      this.posItems = this.itemWithAction?.order.posOrderItems;
+    if (+this.itemWithAction.action  == 11) {
+       console.log('item refund')
+      this.posItems = this.itemWithAction?.items;
       this.list$  = this.settingsService.getVoidReasons(site, this.itemWithAction?.action);
       return
     }
@@ -217,7 +226,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
         }
 
         response$.subscribe(data => {
-          console.log('refund result', data, value)
+
           if (value == 10) {
             this.orderService.updateOrderSubscription(data.order)
 

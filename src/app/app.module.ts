@@ -1,5 +1,5 @@
 import { CommonModule, CurrencyPipe } from '@angular/common';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, enableProdMode, ErrorHandler, NgModule } from '@angular/core';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { Printer } from '@ionic-native/printer/ngx';
 import { BrowserModule, Title } from '@angular/platform-browser';
@@ -29,7 +29,7 @@ import { AgGridModule } from 'ag-grid-angular'
 import { CategoriesAlternateComponent } from './modules/menu/categories/categories-alternate/categories-alternate.component';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { RouteReuseStrategy } from '@angular/router';
+import { Router, RouteReuseStrategy } from '@angular/router';
 import '@capacitor-community/camera-preview';
 import '@capacitor-community/barcode-scanner';
 import { BarcodeScannerComponent } from './shared/widgets/barcode-scanner/barcode-scanner.component';
@@ -63,10 +63,42 @@ import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/c
 import { DashBoardRoutingModule } from './dash-board-routing.module';
 // import { NgIdleModule } from '@ng-idle/core';
 // import { NgIdleModule } from '@ng-idle/core';
+import * as Sentry from "@sentry/angular";
+import { BrowserTracing } from "@sentry/tracing";
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+
+Sentry.init({
+  dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
+  integrations: [
+    new BrowserTracing({
+      tracingOrigins: ["localhost", "https://yourserver.io/api"],
+      routingInstrumentation: Sentry.routingInstrumentation,
+    }),
+  ],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 3.0,
+});
+
+enableProdMode();
+// platformBrowserDynamic()
+//   .bootstrapModule(AppModule)
+//   .then(success => console.log(`Bootstrap success`))
+//   .catch(err => console.error(err));
+
+export function getIsDebugDevice(): boolean {
+  if (localStorage.getItem('debugOnThisDevice') === 'true') {
+    return true
+  }
+  return false
+}
 
 export function init_app(appLoadService: AppInitService) {
   return () => appLoadService.init();
 }
+
 @NgModule({
   declarations: [
     AgGridTestComponent,
@@ -148,9 +180,19 @@ export function init_app(appLoadService: AppInitService) {
     StatusBar,
     AppInitService,
     {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: getIsDebugDevice()
+      }),
+    },
+    {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
       provide: APP_INITIALIZER,
       useFactory: init_app,
-      deps: [AppInitService],
+      deps: [AppInitService, Sentry.TraceService],
       multi: true
     },
     Title

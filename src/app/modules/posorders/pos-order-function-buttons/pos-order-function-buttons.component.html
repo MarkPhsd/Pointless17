@@ -124,7 +124,7 @@
 
   <div>
     <button mat-raised-button class="button"
-            [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
+            [disabled]=" !refundItemEnabled || ((order.history) && (itemsPrinted || paymentsMade)) == true"
             color="primary"
             (click)="refundItem()">
             <mat-icon>refresh</mat-icon>

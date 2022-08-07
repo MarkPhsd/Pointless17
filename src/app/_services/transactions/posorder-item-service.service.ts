@@ -155,9 +155,11 @@ export class POSOrderItemServiceService {
     if (this.scaleInfo) {
       const scaleInfo = this.scaleInfo
       if  (scaleInfo) {
-        let weight = scaleInfo.value;
-        newItem.weight = weight;
-        newItem.quantity = 1;
+        let weight = +scaleInfo.value;
+        if (weight && weight != 0){
+          newItem.weight = weight;
+          newItem.quantity = 1;
+        }
       }
     }
     return newItem;

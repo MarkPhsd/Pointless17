@@ -116,7 +116,7 @@ export class PriceCategoriesEditComponent implements OnInit {
     }
   }
 
-  selectRecMedOption(event) { 
+  selectRecMedOption(event) {
     if (!event) { return }
     const id = event.id
     console.log(event)
@@ -286,8 +286,8 @@ export class PriceCategoriesEditComponent implements OnInit {
 
   deleteCategory(item) {
 
-    const result = window.confirm('Are you sure you want to delete this item?')
-    if (!result) { return }
+    // const result = window.confirm('Are you sure you want to delete this item?')
+    // if (!result) { return }
 
     const site = this.siteService.getAssignedSite()
     if (!this.priceCategory) { return }

@@ -429,11 +429,13 @@ export class OrderMethodsService implements OnDestroy {
                        quantity: number,
                        input: any) {
 
+    console.log('quantity check', quantity)
     const valid = this.validateUser();
 
     if (!valid) { return };
 
     this.initItemProcess();
+
     if (quantity === 0 ) { quantity = 1};
 
     if (!this.validateItem(item, barcode)) { return }

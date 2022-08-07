@@ -112,8 +112,8 @@ export class NewInventoryItemComponent implements OnInit {
   }
 
   deleteItem(event) {
-    const result = window.confirm('Are you sure you want to delete this item?')
-    if (!result) { return }
+    // const result = window.confirm('Are you sure you want to delete this item?')
+    // if (!result) { return }
     const site = this.siteService.getAssignedSite();
     const delete$ = this.inventoryAssignmentService.deleteInventory(site, this.item.id)
     delete$.subscribe(

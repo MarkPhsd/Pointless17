@@ -689,6 +689,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
         sales$.subscribe( summary => {
           if (summary.resultMessage === 'failed') { return }
           const sales = summary.paymentSummary;
+            if (!sales || sales == null) { return }
             //first take the sales of each employee so run a filter on the sales and filter for each employee.
             //get list of employees that have sold.
             // const uniqueArr = [... new Set(students.map(data => data.name))]

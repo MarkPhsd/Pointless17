@@ -111,18 +111,35 @@
                   >
           <mat-label>Require Enter/Tab to Lookup</mat-label>
         </mat-slide-toggle>
-      </div> 
+      </div>
 
       <mat-divider></mat-divider>
       <h4>Client Options</h4>
 
-      <div class="client-selector">
-        <app-client-types-lookup
+        <!-- <div class="client-selector">
+          <app-client-types-lookup
               [formControlName]="'defaultClientTypeID'"
               [inputForm]="inputForm">
-          Default client Type
-        </app-client-types-lookup>
-      </div>
+          </app-client-types-lookup>
+        </div> -->
+        <div *ngIf=" (clientTypes$ | async) as clientTypes ">
+        <mat-form-field style="width: 200px" class="fields"
+              appearance="outline">
+
+          <mat-label>Default Client Type</mat-label>
+            <mat-select
+                      type              = "number"
+                      formControlName   = "defaultClientTypeID"
+                      >
+              <mat-option
+                  *ngFor="let item of clientTypes"
+                  [value]="item.id">
+                  {{item.name}}
+              </mat-option>
+            </mat-select>
+
+          </mat-form-field>
+        </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
@@ -147,14 +164,14 @@
                   >
           <mat-label>Orders require a customer</mat-label>
         </mat-slide-toggle>
-      </div> 
+      </div>
 
       <mat-divider></mat-divider>
       <h3>Operation Settings:</h3>
 
       <div class="grid-small">
 
-      
+
         <div>
           <mat-label>Max Orders allowed open by user.</mat-label>
           <app-value-fields
@@ -214,7 +231,7 @@
               [fieldName]="'highTipInputPercentage'">
               High Tip %
           </app-value-fields>
-        </div> 
+        </div>
 
       </div>
     </div>

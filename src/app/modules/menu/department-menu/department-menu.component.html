@@ -1,11 +1,11 @@
-
 <div   class="panel"
        *ngIf="(departments$ | async) as list; else loading">
 
   <div *ngFor="let item of list">
 
     <div class="fab-container">
-      <button mat-fab  class="mat-fab-close" (click)="close()"><mat-icon>close</mat-icon></button>
+      <button mat-fab  class="mat-fab-close" (click)="close()">
+        <mat-icon>close</mat-icon></button>
     </div>
 
     <div class="content-position">
@@ -22,7 +22,7 @@
         <div class="title-container">
           <div>
             <span class="item-font">
-                <span [class]="'mdi ' + item.icon"></span>
+              <span [class]="'mdi ' + item.icon"></span>
             </span>
 
             <span class="item-text">
@@ -33,7 +33,6 @@
       </mat-card-subtitle>
 
       <mat-card-content>
-
         <div class="menu-container">
 
           <div>

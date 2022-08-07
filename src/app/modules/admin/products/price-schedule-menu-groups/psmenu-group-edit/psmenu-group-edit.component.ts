@@ -77,8 +77,8 @@ export class PSMenuGroupEditComponent implements OnInit {
 
  deleteCategory(event){
 
-  const result = window.confirm('Are you sure you want to delete this item?')
-  if (!result) { return }
+  // const result = window.confirm('Are you sure you want to delete this item?')
+  // if (!result) { return }
   // console.log('delete group')
   // return
   const site = this.siteService.getAssignedSite();

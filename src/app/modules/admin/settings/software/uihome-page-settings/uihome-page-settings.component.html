@@ -11,7 +11,8 @@
   <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
 
     <div
-          [formGroup]="inputForm">
+        *ngIf="inputForm"
+        [formGroup]="inputForm">
 
       <div class="grid-item">
         <app-value-fields
@@ -23,7 +24,6 @@
       </div>
 
       <div class="grid-view-sections">
-
         <div class="grid-views">
           <div>Customer View </div>
 
@@ -112,6 +112,7 @@
             </mat-slide-toggle>
           </div>
         </div>
+
         <div class="grid-views">
           <div>Side Bar (Search)</div>
 
@@ -167,51 +168,54 @@
 
       <div class="grid-views">
         <div class="grid-item">
-          <mat-card >
+          <!-- <mat-card >
             <app-widget-uploader
                 [(fileNames)]="backgroundImage"
                 (messageOut) ="received_Image($event)"
                 >
                 Upload Background Image
             </app-widget-uploader>
-          </mat-card>
+          </mat-card> -->
         </div>
 
         <div class="grid-item">
-          <mat-card >
+          <!-- <mat-card >
             <app-widget-uploader
                 [(fileNames)]="logoHomePage"
                 (messageOut) ="received_Logo($event)"
                 >
                 Upload Home Page Logo
             </app-widget-uploader>
-          </mat-card>
+          </mat-card> -->
         </div>
 
         <div class="grid-item">
-          <mat-card >
+          <!-- <mat-card >
             <app-widget-uploader
                 [(fileNames)]="tinyLogo"
                 (messageOut) ="received_TinyLogo($event)"
                 >
                 Tiny Logo
             </app-widget-uploader>
-          </mat-card>
+          </mat-card> -->
         </div>
       </div>
     </div>
 
     <mat-divider></mat-divider>
     <div>
-      <button mat-raised-button color="primary" (click)="showEmailSettings = !showEmailSettings">
+      <button mat-raised-button color="primary"
+              (click)="showEmailSettings = !showEmailSettings">
         <mat-icon>email</mat-icon>Email Settings</button>
 
-      <app-email-settings *ngIf="showEmailSettings"
-                          [inputForm]="inputForm">
+      <app-email-settings
+          *ngIf="showEmailSettings"
+          [inputForm]="inputForm">
       </app-email-settings>
     </div>
 
-    <div>
+    <div  *ngIf="inputForm"
+          [formGroup]="inputForm">
       <h4>SSMS</h4>
       <div class="toggle-fields">
         Requires Twilio SSMS Message account. Secret APIKey must be assigned in configuration.

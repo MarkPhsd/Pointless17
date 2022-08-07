@@ -28,6 +28,8 @@ export class ProductListByBarcodeComponent implements OnInit {
   }
 
   async addItem(item: IMenuItem) {
+
+    console.log('this.quantity', this.quantity)
     await this.orderMethodService.processAddItem(this.order, '',  item, this.quantity, '')
     this.dialogRef.close();
   }

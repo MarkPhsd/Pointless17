@@ -7,12 +7,26 @@
         Debug on this device.
       </div>
       <div>
-        <mat-checkbox [(ngModel)]="debugOnThisDevice"
-                      (onChange) ='setDebugOnThisDevice()'
-                      color="primary">
-              </mat-checkbox>
-      </div>
+        <h3>Enable Bug Nofitications and Submit form</h3>
+        <mat-label>This feature requires a restart of the app or browser refresh. Please press the
+          test button after enabling, this will result in a form appearing if the debug is enabled.
+          Keep in mind, sentry will still be working, you just won't get notifications if debug is not enabled.
+        </mat-label>
 
+        <div>
+          <mat-checkbox [(ngModel)]="debugOnThisDevice"
+                        (change) ='setDebugOnThisDevice()'
+                        color="primary">
+                </mat-checkbox>
+        </div>
+        <div>
+
+          <button mat-raised-button color="warn" (click)="testErrorSentry()">Test Sentry</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="device-info">
       <div>
         Device Info
       </div>

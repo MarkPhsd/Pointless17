@@ -207,7 +207,9 @@ export class SitesService {
   }
 
  async clearAssignedSite(){
-
+    if (!this.platformSevice.isApp) {
+      localStorage.removeItem('storedApiUrl') //, site.url)
+    }
     localStorage.removeItem("site.url") //, site.url)
     localStorage.removeItem("site.name") //, site.name)
     localStorage.removeItem("site.id") //, site.id.toString())

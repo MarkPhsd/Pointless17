@@ -2,7 +2,7 @@ import { Component, Input, OnInit , OnDestroy} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AWSBucketService, IDepartmentList, MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { trigger,state,style,animateChild,transition,animate,keyframes,query,stagger } from '@angular/animations';
+import { trigger,style,animateChild,transition,animate,keyframes,query,stagger } from '@angular/animations';
 import { Observable, Subscription } from 'rxjs';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ISite } from 'src/app/_interfaces';
@@ -47,6 +47,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 
   ]
 })
+
 export class DepartmentMenuComponent implements OnInit, OnDestroy {
 
   @Input() departmentID: number;
@@ -77,8 +78,6 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
       this.categoryID     = 0
       this.subCateogryID  = 0;
     })
-
-
   }
 
   constructor(

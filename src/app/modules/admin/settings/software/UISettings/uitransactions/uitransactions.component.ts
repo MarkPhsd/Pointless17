@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy,Component, OnInit } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import { FormGroup, FormGroupDirective,FormControl ,NgForm} from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
+import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -13,19 +15,24 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 })
 export class UITransactionsComponent implements OnInit {
 
+
+
   inputForm       : FormGroup;
   uiSettings      : ISetting
   uiSettings$     : Observable<ISetting>;
   uiTransactions  = {} as TransactionUISettings;
-
+  clientTypes$
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,
+      private clientTypeService: ClientTypeService,
       private sitesService     : SitesService,
   ) {
   }
 
   ngOnInit() {
+    const site = this.sitesService.getAssignedSite();
+    this.clientTypes$ = this.clientTypeService.getClientTypes(site);
 
     this.uISettingsService.getSetting('UITransactionSetting').subscribe(data => {
       this.inputForm = this.uISettingsService.initForm(this.inputForm)
@@ -34,18 +41,16 @@ export class UITransactionsComponent implements OnInit {
         if (data && data.text) {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
           this.inputForm.patchValue( this.uiTransactions)
-          console.log('this.inputForm.', this.inputForm.value)
         } else {
           this.uiTransactions  = {} as TransactionUISettings;
           this.inputForm.patchValue( this.uiTransactions)
-          console.log('this.inputForm2.', this.inputForm.value)
         }
       } catch (error) {
         console.log('error', error)
       }
 
     });
-  } 
+  }
 
   updateSetting(){
     if (!this.validateForm(this.inputForm)) { return }
@@ -60,12 +65,6 @@ export class UITransactionsComponent implements OnInit {
   }
 
   validateForm(form: FormGroup) {
-    // console.log(form.value)
-    // if (form.valid) {
-    //   this.uISettingsService.notify('Form not valid.', 'Problem Occured')
-    //   return false;
-    // }
-
     if (!this.inputForm.value) {
       this.uISettingsService.notify('Form has no value.', 'Problem Occured')
       return false;
@@ -99,3 +98,9 @@ export class UITransactionsComponent implements OnInit {
 // uiSettings      :  ISetting
 // uiSettings$     : Observable<ISetting>;
 // uiTransactions  = {} as TransactionUISettings;
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}

@@ -1,8 +1,0 @@
-{
-  "apiUrl": "https://ockosherwebapi.ddns.net/api",
-  "useAppGate" : false,
-  "appGateMessage": "Are you over 21? If so press yes to continue.",
-  "company": "Pointless POS",
-  "logo"   : "https://cafecartel.com/temp/logo.png",
-  "appUrl": "http://pointlesspos.web.app"
-}

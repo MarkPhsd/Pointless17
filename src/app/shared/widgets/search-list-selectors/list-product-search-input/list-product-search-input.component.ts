@@ -166,16 +166,13 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     item$.subscribe(data => {
       if (data) {
 
-        console.log(data.length)
         if (data.length == 0 || !data) {
-          // console.log('should be 0')
+          this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
         } else
         {
           if (data.length == 1) {
-            // console.log('should add')
             this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
           } else {
-            // console.log('should list')
             this.listBarcodeItems(data, this.order)
           }
         }

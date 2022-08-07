@@ -63,32 +63,32 @@ export class GridManagerEditComponent implements OnInit {
       this.fillForm();
       return;
     }
-    
-    this.layoutService.dashboardModel$.subscribe(data => { 
+
+    this.layoutService.dashboardModel$.subscribe(data => {
         if (data) {
           this.dashboardModel = data;
           this.fillForm();
           return;
         }
 
-        if (!data && data != null) { 
+        if (!data && data != null) {
           const id  = data.id;
-          this.gridDataService.getGrid(site,  id).subscribe(data => { 
+          this.gridDataService.getGrid(site,  id).subscribe(data => {
             this.dashboardModel = data;
             this.fillForm();
           }
         )
-        
+
         if (data == null) {
           this.dashboardModel = {} as DashboardModel
           this.fillForm();
           return;
         }
-      
-       } 
+
+       }
       }
     )
-  
+
   }
 
   onCancel(event) {
@@ -178,8 +178,6 @@ export class GridManagerEditComponent implements OnInit {
   }
 
   delete(event) {
-    const result = window.confirm('Are you sure you want to delete this item?')
-    if (!result) { return }
     this.layoutService.deleteModel(this.dashboardModel)
   }
 

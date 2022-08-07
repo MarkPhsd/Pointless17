@@ -151,7 +151,7 @@
   <h3>Print Templates</h3>
 
   <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate"></ng-container>
-  
+
   <ng-template #electronPrintingDesignTemplate>
 
     <div  *ngIf="(receiptList$ | async) as list; else loadingReceiptTemplates">
@@ -199,8 +199,14 @@
     <div *ngIf="receiptLayoutSetting ">
       receiptLayoutSetting
     </div> -->
-
-    <div *ngIf="  orderService.currentOrder && headerText &&  itemsText">
+    <!-- {{receiptLayoutSetting | json}} -->
+    <div *ngIf="receiptLayoutSetting
+                && orderService.currentOrder
+                && headerText
+                && itemsText
+                && receiptStyles
+                && receiptLayoutSetting.option9"
+                >
       <mat-card>
         <div class="border-section">
             <app-receipt-layout #printsection id="printsection"

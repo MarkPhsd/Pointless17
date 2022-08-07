@@ -5,12 +5,13 @@
           [class]="fieldsClass"
           appearance="outline">
 
-      <mat-label><ng-content></ng-content></mat-label>
+        <mat-label><ng-content></ng-content></mat-label>
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput
                 [disabled] ='!enabled'
                 [class]="fieldsClass"
                 appAppPasswordMask
+                ngDefaultControl
                 [type]="fieldType"
                 [formControlName]="fieldName">
         </div>
@@ -18,6 +19,7 @@
           <input matInput
                 [class]="fieldsClass"
                 [type]="fieldType"
+                ngDefaultControl
                 [formControlName]="fieldName">
         </div>
 
@@ -31,6 +33,7 @@
         [name]="fieldName"
         [disabled] ='!enabled'
         class="mat-label"
+        ngDefaultControl
         [formControlName]="fieldName">
     </mat-slide-toggle>
   </div>

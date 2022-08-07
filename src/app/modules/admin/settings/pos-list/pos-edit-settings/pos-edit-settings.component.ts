@@ -113,14 +113,14 @@ export class PosEditSettingsComponent implements OnInit {
   }
 
   delete(event) {
-    const warn = window.confirm('Are you sure you want to delete this terminal?')
-    if (warn) {
+    // const warn = window.confirm('Are you sure you want to delete this terminal?')
+    // if (warn) {
       const site = this.sitesService.getAssignedSite()
       this.saving$ = this.settingsService.deleteSetting(site, this.setting.id)
       this.saving = true;
       this.saving$.subscribe(data => {
         this.onCancel(true);
       })
-    }
+    // }
   }
 }

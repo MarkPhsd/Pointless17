@@ -133,23 +133,25 @@
             </mat-checkbox>
           </div>
 
-          <!-- default productid -->
-          <product-search-selector2
-            [productLookupField] = "'defaultProductID1'"
-            [id]                 = "serviceType.defaultProductID1"
-            [inputForm]          = "inputForm"
-            [description]        = "'Default Item 1'"
-            >
-          </product-search-selector2>
+          <div *ngIf="serviceType">
+            <product-search-selector2
+              [productLookupField] = "'defaultProductID1'"
+              [id]                 = "serviceType.defaultProductID1"
+              [inputForm]          = "inputForm"
+              [description]        = "'Default Item 1'"
+              >
+            </product-search-selector2>
+          </div>
 
-          <product-search-selector2
-             [productLookupField] = "'defaultProductID2'"
-             [id]                 = "serviceType.defaultProductID2"
-             [inputForm]          = "inputForm"
-             [description]        = "'Default Item 2'"
-            >
-          </product-search-selector2>
-
+          <div *ngIf="serviceType">
+            <product-search-selector2
+              [productLookupField] = "'defaultProductID2'"
+              [id]                 = "serviceType.defaultProductID2"
+              [inputForm]          = "inputForm"
+              [description]        = "'Default Item 2'"
+              >
+            </product-search-selector2>
+          </div>
 
           <div>
             <mat-form-field appearance="outline">
@@ -175,7 +177,7 @@
                             style="height: 200px;"
                             name="description"
                             formControlName="description"
-                            [ngModel]="description">
+                            >
             </simple-tinymce>
           </div>
         </div>
@@ -202,7 +204,7 @@
                             style="height: 200px;"
                             name="shippingInstructions"
                             formControlName="shippingInstructions"
-                            [ngModel]="description">
+                            >
             </simple-tinymce>
           </div>
         </div>

@@ -7,7 +7,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 @Component({
   selector: 'uihome-page-settings',
   templateUrl: './uihome-page-settings.component.html',
-  styleUrls: ['./uihome-page-settings.component.scss'], 
+  styleUrls: ['./uihome-page-settings.component.scss'],
 })
 export class UIHomePageSettingsComponent implements OnInit {
 
@@ -26,23 +26,26 @@ export class UIHomePageSettingsComponent implements OnInit {
     private uISettingsService: UISettingsService) { }
 
   ngOnInit() {
-    
-    this.settingsService.getUIHomePageSettingsNoCache().subscribe(data => {
-      if (data) {
-         
-        this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm)
-        if (this.inputForm) { 
-          this.uiHomePage   = data
+
+    this.settingsService.getUIHomePageSettingsNoCache().subscribe(
+      {next:
+        data => {
+        if (data) {
+          this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm)
+          if (this.inputForm) {
+            this.uiHomePage   = data as UIHomePageSettings
+            this.inputForm.patchValue(data)
+            this.initializeImages(this.uiHomePage)
+          }
+          return
+        } else {
+          this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm);
           this.initializeImages(this.uiHomePage)
-          this.inputForm.patchValue(data)
-          // console.log('data homepage', data)
+          this.initForm(this.uiHomePage);
         }
-        return
-      } else {
-        this.inputForm = this.uISettingsService.initHomePageForm(this.inputForm);
-        // console.log('data homepage empty')
-        this.initializeImages(this.uiHomePage)
-        this.initForm(this.uiHomePage);
+      },
+      error: error => {
+        console.log('error initializing settings')
       }
     });
   }

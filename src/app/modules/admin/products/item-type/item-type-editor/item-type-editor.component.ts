@@ -257,8 +257,8 @@ export class ItemTypeEditorComponent   {
   }
 
   deleteItem(event) {
-    const result = window.confirm('Are you sure you want to delete this item?')
-    if (!result) { return }
+    // const result = window.confirm('Are you sure you want to delete this item?')
+    // if (!result) { return }
     const item = this.inputForm.value;
     const id   = item.id;
     const site = this.siteService.getAssignedSite();

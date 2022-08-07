@@ -37,7 +37,7 @@
         <mat-card-subtitle>
           <div class="span-column">
 
-            <h3> Group {{currentGroup}}  </h3> 
+            <h3> Group {{currentGroup}}  </h3>
             <br>
             <mat-label>Apply all splits before making payments. Once payments are made splits can not be.</mat-label>
 
@@ -52,17 +52,17 @@
               <mat-card-actions >
                 <div class="buttons-grid">
                   <div *ngIf="changesOcurred">
-                    <button mat-raised-button color="primary" (click)="saveChanges()"> 
+                    <button mat-raised-button color="primary" (click)="saveChanges()">
                       <mat-icon>save</mat-icon>Save Changes
                     </button>
                   </div>
                   <div *ngIf="!changesOcurred && order.total>0">
-                    <button mat-raised-button color="primary" (click)="submitPaymentAmount()"> 
+                    <button mat-raised-button color="primary" (click)="submitPaymentAmount()">
                       <mat-icon>save</mat-icon>Make Payment
                     </button>
                   </div>
                 </div>
-            
+
               </mat-card-actions>
             </mat-card>
             <ng-template #calculating>
@@ -73,16 +73,16 @@
           </div>
         </mat-card-subtitle>
         <mat-card-content >
-    
+
           <ng-template #savingChangesOn>
             ...saving
           </ng-template>
-          
+
           <div class="span-column" *ngIf="!savingChanges; else savingChangesOn">
             <div class="grid-dual-list">
 
               <div class="col-md-6 col-lg-6 col-sm-12 dualListLeft">
-                
+
                 <div class="primary-container drag-drop-container">
                   Avalible Items
                   <div
@@ -106,7 +106,7 @@
                   </div>
                 </div>
               </div>
-            
+
               <div class="col-md-6 col-lg-6 col-sm-12 dualListRight">
                 <div class="primary-container drag-drop-container">
                   Items in group {{currentGroup}}
@@ -136,11 +136,6 @@
           </div>
 
         </mat-card-content>
-
-
-    
-        
-
       </mat-card>
     </div>
   </div>

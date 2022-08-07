@@ -1,4 +1,5 @@
 <div [class]="formFieldClass"
+
      [formGroup]="searchForm">
 
   <mat-form-field [class]="formFieldClass"
@@ -29,12 +30,8 @@
 
 </div>
 
-<div
+<div      *ngIf="inputForm"
           hidden="true"
           [formGroup]="inputForm">
-  <input  formControlName="productLookupField">
+  <input  [formControlName]="productLookupField">
 </div>
-
-<!-- <div *ngIf="menuItem">
-  {{menuItem.name}}
-</div> -->

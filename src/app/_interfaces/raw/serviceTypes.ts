@@ -24,4 +24,9 @@ export interface IServiceType {
   scheduleInstructions : string;
   defaultProductID1    : number;
   defaultProductID2    : number;
+  functionChoice      : number;
+  functionChoice2     : number;
+  functionChoice3     : number;
+  requireNumOfGuests  : number;
+  promptForOrderName  : number;
 }

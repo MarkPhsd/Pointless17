@@ -162,13 +162,15 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   deleteItem(event) {
     const site = this.siteService.getAssignedSite();
     const delete$ = this.inventoryAssignmentService.deleteInventory(site, this.item.id)
-    delete$.subscribe(data => {
-        this.notifyEvent('Item Deleted. ', 'Success')
-        return
-      }, catchError => {
-        this.notifyEvent('Item did not delete. ', 'Failed')
-        return
-      }
+    delete$.subscribe(
+      {next: data => {
+          this.notifyEvent('Item Deleted. ', 'Success')
+          return
+        }, error: error => {
+          this.notifyEvent(`Item did not delete. ${error}` , 'Failed')
+          return
+        }
+    }
     )
   }
 
