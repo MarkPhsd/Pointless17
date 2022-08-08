@@ -5,15 +5,16 @@
                     class="fields"
                     appearance="outline">
 
-      <mat-label><ng-content></ng-content> {{formControlName}}</mat-label>
+      <mat-label><ng-content></ng-content> </mat-label>
 
       <ng-container [ngTemplateOutlet]="matSelectOption"></ng-container>
 
-      <ng-template #clientTypeID>
+      <ng-template #clientTypeView>
         <div *ngIf="formControlName && formControlName === 'clientTypeID' ">
           <mat-select
                       type              = "number"
                       ngDefaultControl
+                      name              ='clientTypeID'
                       formControlName   = "clientTypeID"
                     >
             <mat-option *ngFor="let item of clientTypes"

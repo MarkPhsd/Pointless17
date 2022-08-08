@@ -55,17 +55,17 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.isApp = this.platFormService.isApp();
-    this.initSubscriptions();
+    // this.initSubscriptions();
   }
 
-  initSubscriptions() {
-    this.assignedItems = this.orderMethodsService.assignedPOSItems$.subscribe(data => {
-      this.refundItems = false;
-      if (data.length> 0) {
-        this.refundItems = true;
-      }
-    })
-  }
+  // initSubscriptions() {
+  //   this.assignedItems = this.orderMethodsService.assignedPOSItems$.subscribe(data => {
+  //     this.refundItems = false;
+  //     if (data && data.length> 0) {
+  //       this.refundItems = true;
+  //     }
+  //   })
+  // }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.

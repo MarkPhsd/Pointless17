@@ -125,10 +125,10 @@ export class UserSwitchingService implements  OnDestroy {
   }
 
   clearLoggedInUser() {
-    this.toolbarUIService.updateDepartmentMenu(0);
-    this.authenticationService.logout();
     this.orderService.updateOrderSubscriptionClearOrder(0)
     this.orderService.updateOrderSearchModel(null);
+    this.toolbarUIService.updateDepartmentMenu(0);
+    this.authenticationService.logout();
 
   }
 

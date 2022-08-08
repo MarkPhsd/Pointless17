@@ -146,12 +146,12 @@ export function init_app(appLoadService: AppInitService) {
     DynamicModule,
     EditorModule,
     FlexLayoutModule,
+    ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     LayoutModule,
     NGXMaterialModule,
     NgxElectronModule,
-    ReactiveFormsModule,
     SharedModule,
   ],
 

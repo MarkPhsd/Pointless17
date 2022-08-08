@@ -23,7 +23,7 @@ import {NO_ERRORS_SCHEMA} from "@angular/core";
 export class ClientTypesLookupComponent implements OnInit {
 
   @ViewChild('defaultClientTypeID') defaultClientTypeMat: TemplateRef<any>;
-  @ViewChild('clientTypeID')        clientTypeMat: TemplateRef<any>;
+  @ViewChild('clientTypeView')        clientTypeMat: TemplateRef<any>;
 
   @Input() style           : string;
   @Input() clientTypeID    : number;
@@ -43,7 +43,7 @@ export class ClientTypesLookupComponent implements OnInit {
 
   ngOnInit(): void {
 
-    const site = this.siteService.getAssignedSite();
+    const site        = this.siteService.getAssignedSite();
     this.clientTypes$ = this.clientTypeService.getClientTypes(site);
     this.initClientTypes()
 
@@ -56,6 +56,7 @@ export class ClientTypesLookupComponent implements OnInit {
     if (this.formControlName === 'defaultClientTypeID') {
       return this.defaultClientTypeMat
     }
+    return this.clientTypeMat
   }
 
   initClientTypes() {

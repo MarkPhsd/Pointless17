@@ -1,9 +1,9 @@
 <div *ngIf="clientTable && inputForm && transactionUISettings; else loading" >
 
-  <div *ngIf="inputForm.controls.firstName.errors?.required && inputForm.controls.firstName.touched" class="error">
+  <div *ngIf="inputForm.controls?.firstName.errors?.required && inputForm.controls?.firstName.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Full Name required in basic tab.
   </div>
-  <div *ngIf="inputForm.controls.lastName.errors?.required && inputForm.controls.lastName.touched" class="error">
+  <div *ngIf="inputForm.controls?.lastName.errors?.required && inputForm.controls?.lastName.touched" class="error">
     <mat-icon color="warn">warning</mat-icon> Name required in basic tab.
   </div>
 
@@ -86,8 +86,8 @@
 
               <span *ngIf="transactionUISettings">
                 <app-profile-demographics
-                  [client]="clientTable"
-                  [inputForm]="inputForm"
+                  [client]      ="clientTable"
+                  [inputForm]   ="inputForm"
                   [isAuthorized]="isAuthorized"
                   [enableMEDClients]="enableMEDClients"
                   [isStaff]="isStaff">
@@ -168,7 +168,7 @@
                      (swiperight)="swipe(1, $event.type)">
               <div  class="grid-flow">
 
-                <div *ngIf="isAuthorized" >
+                <div>
                   <mat-form-field appearance="outline">
                   <mat-label >User Login</mat-label>
                   <input  matInput

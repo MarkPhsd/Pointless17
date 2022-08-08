@@ -26,6 +26,8 @@ export interface ITerminalSettings {
   name            : string;
   deviceName      : string;
   resetOrdersFilter: boolean;
+  cardPointeHSN: string;
+  sSISecureDevice: string;
 }
 
 @Injectable({
@@ -41,13 +43,13 @@ export class SettingsService {
   get deviceName() {
     return localStorage.getItem('devicename');
   }
-  
+
   apiUrl: any;
-  
+
   updateTerminalSetting(data: ITerminalSettings) {
     this._TerminalSettings.next(data);
   }
-  
+
   constructor( private http: HttpClient,
                private httpCache: HttpClientCacheService,
                private siteService: SitesService,

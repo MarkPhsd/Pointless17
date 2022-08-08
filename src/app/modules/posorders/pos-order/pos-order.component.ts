@@ -105,9 +105,15 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   private _items : Subscription
   assignedItems:  PosOrderItem[];
 
+  refundItemsAvalible;
+
   initAssignedItemsSubscriber() {
     this._items = this.orderMethodService.assignedPOSItems$.subscribe(data => {
       this.assignedItems = data;
+      if (data && data.length>0) {
+        this.refundItemsAvalible = true;
+      }
+      this.refundItemsAvalible = false;
     })
   }
   // item$ = this.orderMethodService.assignedPOSItems$;

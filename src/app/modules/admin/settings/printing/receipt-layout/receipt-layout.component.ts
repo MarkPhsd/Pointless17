@@ -220,7 +220,7 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
 
   getInterpolatedHTML(html: any, item: any) {
     if (!item || !html) { return}
-     return  this.renderingService.interpolateText(item, html)
+    return  this.renderingService.interpolateText(item, html)
   }
 
   async applyStyles() {

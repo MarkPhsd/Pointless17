@@ -126,9 +126,11 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     const site          = this.siteService.getAssignedSite()
     this.rowSelection   = 'multiple'
     this.priceAdjustScheduleTypes$ = this.priceScheduleService.getPriceAdjustList(site)
+
     this.priceAdjustScheduleTypes$.subscribe( data =>  {
       this.priceAdjustScheduleTypes = data;
     })
+
     this.initPriceScheduleService()
   };
 
@@ -145,17 +147,22 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
   // //ag-grid
   ngAfterViewInit() {
-    fromEvent(this.input.nativeElement,'keyup')
-    .pipe(
-      filter(Boolean),
-      debounceTime(300),
-      distinctUntilChanged(),
-      tap((event:KeyboardEvent) => {
-        const search  = this.input.nativeElement.value
-        this.refreshSearch(search);
-      })
-    )
-    .subscribe();
+    try {
+      fromEvent(this.input.nativeElement,'keyup')
+      .pipe(
+        filter(Boolean),
+        debounceTime(300),
+        distinctUntilChanged(),
+        tap((event:KeyboardEvent) => {
+          const search  = this.input.nativeElement.value
+          this.refreshSearch(search);
+        })
+      )
+      .subscribe();
+    } catch (error) {
+      console.log('error', error)
+    }
+
   }
 
   //ag-grid
@@ -380,8 +387,9 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     return {
     getRows: (params: IGetRowsParams) => {
       const items$ = this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
+      items$.subscribe(
+        {next: data =>
+          {
             const resp         =  data.paging
             this.isfirstpage   = resp.isFirstPage
             this.islastpage    = resp.isFirstPage
@@ -390,9 +398,12 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
             this.recordCount   = resp.recordCount
             params.successCallback(data.results)
             this.rowData = data.results
-          }, err => {
+          }, error: err => {
+            params.successCallback(null)
+            this.rowData = null;
             console.log(err)
           }
+        }
         );
       }
     };
@@ -426,16 +437,18 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
-      items$.subscribe(data =>
-        {
-            const resp =  data.paging
-            this.isfirstpage   = resp.isFirstPage
-            this.islastpage    = resp.isFirstPage
-            this.currentPage   = resp.currentPage
-            this.numberOfPages = resp.pageCount
-            this.recordCount   = resp.recordCount
-            // let results        =  this.refreshImages(data.results)
-            params.successCallback(data.results)
+      items$.subscribe(data => {
+            if (data) {
+                if (data.paging){
+                  const resp         = data.paging
+                  this.isfirstpage   = resp.isFirstPage
+                  this.islastpage    = resp.isFirstPage
+                  this.currentPage   = resp.currentPage
+                  this.numberOfPages = resp.pageCount
+                  this.recordCount   = resp.recordCount
+                }
+                params.successCallback(data.results)
+            }
           }
         );
       }
@@ -447,6 +460,7 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
   }
 
   refreshImages(data) {
+    if (!data) { return }
     const urlPath = this.urlPath
     if (urlPath) {
       data.forEach( item =>
@@ -465,6 +479,7 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
   //search method for debounce on form field
   displayFn(search) {
+    if (!search) {return }
     this.selectItem(search)
     return search;
   }

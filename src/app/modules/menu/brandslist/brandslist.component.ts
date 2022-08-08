@@ -198,7 +198,6 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
     searchModel.pageNumber  = 1
     searchModel.pageSize    = 25;
     this.clientSearchModel        = searchModel;
-    // this.addToList(searchModel.pageNumber, searchModel.pageSize)
     this.initFirstSearch(site, searchModel);
   }
 
@@ -219,27 +218,32 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   }
 
   initSearchOption() {
-    if (this.input) {
-      fromEvent(this.input.nativeElement,'keyup')
-      .pipe(
-        filter(Boolean),
-        debounceTime(250),
-        distinctUntilChanged(),
-        tap((event:KeyboardEvent) => {
-          const search  = this.input.nativeElement.value
+    try {
+      if (this.input) {
+        fromEvent(this.input.nativeElement,'keyup')
+        .pipe(
+          filter(Boolean),
+          debounceTime(250),
+          distinctUntilChanged(),
+          tap((event:KeyboardEvent) => {
+            const search  = this.input.nativeElement.value
+            this.input.nativeElement.focus();
+            this.refreshSearch();
+          })
+        )
+        .subscribe();
+      }
+
+      if (this.platForm != 'web') {
+        setTimeout(()=> {
           this.input.nativeElement.focus();
-          this.refreshSearch();
-        })
-      )
-      .subscribe();
+          Keyboard.hide();
+        }, 200 )
+      }
+    } catch (error) {
+      console.log('error', error)
     }
 
-    if (this.platForm != 'web') {
-      setTimeout(()=> {
-        this.input.nativeElement.focus();
-        Keyboard.hide();
-      }, 200 )
-    }
   }
 
   clearAll(){

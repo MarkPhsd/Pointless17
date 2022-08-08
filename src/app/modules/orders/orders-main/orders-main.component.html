@@ -82,18 +82,20 @@
             </mat-button-toggle>
           </mat-button-toggle-group>
           <mat-button-toggle-group
-                 *ngFor      ="let item of printLocations;let i = index"
+                 *ngFor      ="let item of printLocations; let i = index"
                 name        ="toggleOpenClosedAll"
                 class       ="toggle-view"
                 [(ngModel)] ="printLocation"
                 (click)     ="updatePrinterLocation()" >
+
             <mat-button-toggle
                 color="warn" [value]="item.id" >
-              <span *ngIf="item.name.toLowerCase()  == 'bar'"><mat-icon>blender</mat-icon></span>
-              <span *ngIf="item.name.toLowerCase()  == 'kitchen'"><mat-icon>soup_kitchen</mat-icon></span>
-              <span *ngIf="item.name.toLowerCase()  == 'barista'"><mat-icon>local_cafe</mat-icon></span>
+              <span *ngIf="item && item.name && item.name.toLowerCase()  == 'bar'"><mat-icon>blender</mat-icon></span>
+              <span *ngIf="item && item.name && item.name.toLowerCase()  == 'kitchen'"><mat-icon>soup_kitchen</mat-icon></span>
+              <span *ngIf="item && item.name && item.name.toLowerCase()  == 'barista'"><mat-icon>local_cafe</mat-icon></span>
               {{item.name}}
             </mat-button-toggle>
+
           </mat-button-toggle-group>
         </span>
 

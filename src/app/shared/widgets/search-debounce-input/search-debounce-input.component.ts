@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
@@ -11,15 +11,18 @@ import { IProductSearchResults } from 'src/app/_services';
 })
 export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
 
+  @ViewChild('searchFormView') searchFormView: TemplateRef<any>;
+  @ViewChild('input', {static: true}) input: ElementRef;
+  get itemName() { return this.searchForm.get(this.itemNameControl) as FormControl;}
+
   @Input()  itemNameInput: string;
   @Output() outPutMethod   = new EventEmitter();
   @Output() itemSelect     = new EventEmitter();
   @Input()  searchForm:    FormGroup;
   @Input()  itemNameControl : string;
-  @ViewChild('input', {static: true}) input: ElementRef;
 
   searchPhrase:      Subject<any> = new Subject();
-  get itemName() { return this.searchForm.get(this.itemNameControl) as FormControl;}
+
 
   private readonly onDestroy = new Subject<void>();
   // //search with debounce
@@ -28,8 +31,7 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
     debounceTime(250),
       distinctUntilChanged(),
       switchMap(searchPhrase =>
-      {  // this.refreshSearch()/
-        console.log(searchPhrase)
+      {
         this.outPutMethod.emit(searchPhrase)
         return searchPhrase
       }
@@ -37,30 +39,41 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
   )
 
   constructor() { }
-  ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
 
+
+
+  ngOnInit(): void {
     if (!this.itemNameControl) { this.itemNameControl = 'itemName'}
   }
 
   ngAfterViewInit() {
+    // try {
+      if (!this.searchForm) { console.log('something') }
 
-    if (!this.searchForm) { console.log('something') }
+      if (this.searchForm) {
+        console.log('seach form exists')
+        fromEvent(this.input.nativeElement,'keyup')
+        .pipe(
+          filter(Boolean),
+          debounceTime(500),
+          distinctUntilChanged(),
+          tap((event:KeyboardEvent) => {
+            const search  = this.input.nativeElement.value
+            this.outPutMethod.emit(search)
+          })
+        ).subscribe();
+      }
+    // } catch (error) {
+    //   console.log('error', error)
+    // }
 
-    if (this.searchForm) {
-      fromEvent(this.input.nativeElement,'keyup')
-      .pipe(
-        filter(Boolean),
-        debounceTime(500),
-        distinctUntilChanged(),
-        tap((event:KeyboardEvent) => {
-          const search  = this.input.nativeElement.value
-          console.log('searchPhrase Debounced', search)
-          this.outPutMethod.emit(search)
-        })
-      ).subscribe();
+  }
+
+  get isSearchFormOn() {
+    if (this.searchForm)  {
+      return this.searchFormView
     }
+    return null;
   }
 
   selectItem(search){

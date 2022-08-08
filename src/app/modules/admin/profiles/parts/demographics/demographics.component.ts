@@ -1,7 +1,9 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { Observable, Subscription } from 'rxjs';
+import { clientType, ClientType, IClientTable, IUserProfile } from 'src/app/_interfaces';
+import { ClientTypeService } from 'src/app/_services/people/client-type.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -20,16 +22,22 @@ export class ProfileDemographicsComponent implements OnInit, OnDestroy {
   @Input() client       : IClientTable;
   @Input() enableMEDClients: boolean;
 
-  constructor( private uiSettingsService : UISettingsService,) { }
+  clientTypes$: Observable<clientType[]>;
+
+  constructor(
+    private siteService       : SitesService,
+    private clientTypeService : ClientTypeService,
+    private uiSettingsService : UISettingsService,) { }
 
   ngOnInit(): void {
-    console.log('')
     this.initSubscriptions();
+    const site        = this.siteService.getAssignedSite();
+    this.clientTypes$ = this.clientTypeService.getClientTypes(site);
   }
 
   initSubscriptions() {
-
-    this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
+    // this.client.clientTypeID
+    this.uiSettingsService.transactionUISettings$.subscribe(data => {
       this.enableLimitsView  =false;
       if (data) {
         this.uiTransactionSettings = data;

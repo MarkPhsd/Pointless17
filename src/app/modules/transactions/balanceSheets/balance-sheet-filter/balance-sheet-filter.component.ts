@@ -147,12 +147,16 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
     setInterval(this.refreshEmployees,  (60*1000) *5);
    }
 
-   refreshEmployees(){
+  refreshEmployees(){
+    try {
       const site           = this.siteService.getAssignedSite()
       console.log('site', site)
       if (!site) { return }
       this.employees$      = this.orderService.getActiveEmployees(site)
-   }
+    } catch (error) {
+      console.log('error',error)
+    }
+  }
 
   setEmployee(event) {
     if (!event) { return }

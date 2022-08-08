@@ -75,6 +75,8 @@ export class PosEditSettingsComponent implements OnInit {
       resetOrdersFilter: [],
       name:             [''],
       deviceName      : [],
+      dSISecureDevice      : [],
+      cardPointeHSN      : [],
     })
 
     if (this.terminal) {

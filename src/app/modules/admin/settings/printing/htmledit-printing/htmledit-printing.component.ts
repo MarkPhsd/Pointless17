@@ -234,6 +234,15 @@ export class HTMLEditPrintingComponent implements OnInit {
   delete() {
     if (!this.setting) { return }
     const site = this.siteService.getAssignedSite();
+
+    if (this.setting.name === 'ReceiptStyles') {
+      //DeleteSettingByName
+      const obs$ = this.settingsService.deleteSettingByName(site, this.setting.name)
+      obs$.subscribe( data => {
+        // this._snackBar.open("Item deleted.", "Success")
+      })
+    }
+
     const obs$ = this.settingsService.deleteSetting(site, this.setting.id)
     obs$.subscribe( data => {
       this._snackBar.open("Item deleted.", "Success")

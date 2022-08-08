@@ -2,12 +2,11 @@ import { Component, OnInit, EventEmitter, Input, Output, HostListener } from '@a
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import { map, Observable} from 'rxjs';
 import { IItemBasic, IItemBasicB } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
-import { CdkNoDataRow } from '@angular/cdk/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 export interface   ISelectedItems{
@@ -41,7 +40,7 @@ export class POSSplitItemsComponent implements OnInit {
     savingChanges    : boolean;
     transferAllowed  : boolean;
 
-    values  = 
+    values  =
       [
         {id:0,name: 0},
         {id:1,name: 1},
@@ -109,13 +108,13 @@ export class POSSplitItemsComponent implements OnInit {
       if (window.innerWidth < 768) {
         this.smallDevice = true
       }
-  
+
       if (!this.smallDevice) {
-     
+
       }
     }
 
-    
+
     ngOnInit() {
       this.updateItemsPerPage()
       const site          = this.siteService.getAssignedSite()
@@ -124,13 +123,13 @@ export class POSSplitItemsComponent implements OnInit {
     }
 
     initGroupList(): any {
-      if (this.order && this.order.posOrderItems) { 
+      if (this.order && this.order.posOrderItems) {
         return this.removeSelectedFromAvailable(this.order.posOrderItems, 0)
       }
     }
 
-    applyGroupID(event) { 
-      if (event) { 
+    applyGroupID(event) {
+      if (event) {
         this.currentGroupID = event.id;
         this.currentGroup   = event.id.toString()
         this.changesOcurred = false;
@@ -140,10 +139,10 @@ export class POSSplitItemsComponent implements OnInit {
 
     removeSelectedFromAvailable( orderItems: PosOrderItem[], groupID: number): IListBoxItem[]   {
       let allItems = orderItems.map( item => (
-          { value  : item.id.toString(), 
-            text   : item.productName, 
+          { value  : item.id.toString(),
+            text   : item.productName,
             groupID: item.splitGroupID }
-        ) 
+        )
       );
 
       this.availableItems = allItems.filter( x => {
@@ -151,9 +150,9 @@ export class POSSplitItemsComponent implements OnInit {
             return x;
           }
         }
-      )       
-      
-      const assignedItems = allItems.filter( x => { 
+      )
+
+      const assignedItems = allItems.filter( x => {
         if ( x.groupID != 0 && x.groupID != undefined && x.groupID != null ) {
           return x;
         }
@@ -164,9 +163,9 @@ export class POSSplitItemsComponent implements OnInit {
 
     convertTolistBoxItem(listSource: any[]): IListBoxItem[] {
       return listSource.map(item => (
-        { value: item.id.toString(), 
-          text: item.name, 
-          groupID: item.splitGroupID 
+        { value: item.id.toString(),
+          text: item.name,
+          groupID: item.splitGroupID
         })
       );
     }
@@ -180,16 +179,16 @@ export class POSSplitItemsComponent implements OnInit {
       if (selected) {
         if (selected.length     == 0)      { return   }
         if (this.currentGroupID == 0 ) { return   }
-          
+
         const site           = this.siteService.getAssignedSite();
         const items$         = this.orderService.applyItemsToGroup(site, this.currentGroupID, selected);
         const assignedItems$ = this.orderService.applyItemsToGroup(site, 0, this.availableItems)
 
         items$.pipe(
-          map( data => { 
+          map( data => {
             return assignedItems$
           })).subscribe( data => {
-            if (data) { 
+            if (data) {
               this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site, this.order.id, this.currentGroupID)
               this.changesOcurred = false;
               this.savingChanges = false
@@ -199,10 +198,9 @@ export class POSSplitItemsComponent implements OnInit {
       };
     }
 
-    submitPaymentAmount() { 
-      this.orderGroupTotal$.subscribe( data => { 
-        console.log('order total', data.total)
-        this.outPutPaymentAmount.emit({amount: data.total.toFixed(2), groupID: this.currentGroupID}) 
+    submitPaymentAmount() {
+      this.orderGroupTotal$.subscribe( data => {
+        this.outPutPaymentAmount.emit({amount: data.total.toFixed(2), groupID: this.currentGroupID})
       })
     }
 
@@ -215,7 +213,7 @@ export class POSSplitItemsComponent implements OnInit {
         this.selectedItems$.subscribe(data => { this.selectedItems = data })
 
         this.orderGroupTotal$ = this.orderService.getPOSOrderGroupTotal(site,this.order.id, this.currentGroupID);
-        
+
         this.allitems$ = this.orderService.getSplitItemsList(site,  this.order.id, 0);
         this.allitems$.subscribe(data => { this.availableItems = data })
 
@@ -224,7 +222,7 @@ export class POSSplitItemsComponent implements OnInit {
       }
     }
 
-    refreshUnassignedItems() { 
+    refreshUnassignedItems() {
       const site = this.siteService.getAssignedSite()
       this.allitems$ = this.orderService.getSplitItemsList(site,  this.order.id, 0);
       this.allitems$.subscribe(data => { this.availableItems = data })
@@ -232,7 +230,7 @@ export class POSSplitItemsComponent implements OnInit {
 
     assignArrayToItemType(selected: IListBoxItem[]) {
       if (!this.selectedItems) { this.selectedItems = [] };
-      selected.forEach( data => { 
+      selected.forEach( data => {
         this.selectedItems.push(data)
       });
       this.saveAssignedCategories(selected);
@@ -262,9 +260,9 @@ export class POSSplitItemsComponent implements OnInit {
 
     }
 
-    saveChanges() { 
+    saveChanges() {
       const paymentsMade  = this.order.balanceRemaining.toFixed(2 )== this.order.total.toFixed(2);
-      if (!paymentsMade) { 
+      if (!paymentsMade) {
         this.matSnack.open(`Unable to save, payments have been applied. Apply payments based on normal procedures. Balance is: ${this.order.balanceRemaining} and total is ${this.order.total}`, 'Alert');
         this.changesOcurred = false;
         this.savingChanges = false;

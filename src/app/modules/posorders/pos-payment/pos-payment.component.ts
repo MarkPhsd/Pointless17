@@ -398,8 +398,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyGroupPayment(event) {
     if (!event || event.amount == 0) { return }
     this.splitByItem = false;
+    // this.paymentAmountForm
     this.groupPaymentAmount = event.amount;
-    this.groupPaymentGroupID = event.groupID
+    this.groupPaymentGroupID = event.groupID;
+    this.applyPaymentAmount(event.amount)
   }
 
   processResults(paymentResponse: IPaymentResponse) {
