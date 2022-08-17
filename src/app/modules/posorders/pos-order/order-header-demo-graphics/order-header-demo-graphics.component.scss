@@ -21,7 +21,8 @@ mat-card-subtitle {
 
 .grid-demo {
   display: grid;
-  grid-template-columns: auto 75px;
+  width: 95%;
+  grid-template-columns:repeat( auto-fit, minmax(75px, 1fr) );
   gap: 5px;
   margin: 5px;
 }

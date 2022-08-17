@@ -11,10 +11,10 @@ export class MatToggleSelectorComponent implements OnChanges {
   @ViewChild('departmentMenuTrigger') departmentMenuTrigger: MatMenuTrigger;
 
   emptyItem = {id: 0, name: ''}
-  @Input()  id                : number;
-  @Input()  list$             : Observable<any>;
   @Output() outPutID          = new EventEmitter<any>();
   @Output() outPutItem        = new EventEmitter<any>();
+  @Input()  id                : number;
+  @Input()  list$             : Observable<any>;
   @Input()  hideAllOption     : boolean;
   @Input()  textLength        = 20
   @Input()  toggleWidth       = ''
@@ -30,7 +30,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   @Input()  toggleHeight      ='toggle-buttons-height-size-medium'
   @Input()  useMatMenu        : boolean;
   @Input()  toggleVertical    = true;
-
+  // @Input()  sideBar : boolean;
   departmentID: number;
   subscribed : boolean;
 

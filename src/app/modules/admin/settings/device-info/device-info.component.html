@@ -1,6 +1,23 @@
 <mat-card>
   <mat-card-content>
     <h4>Device Info</h4>
+
+    <div>
+      <div>
+        <mat-form-field appearance="outline">
+          <mat-label>POS Token</mat-label>
+            <input  matInput
+              type =      "password"
+              [(ngModel)]="posToken"
+              >
+        </mat-form-field>
+      </div>
+      <div>
+          <button mat-raised-button (click)="setAPIToken()">
+          <mat-icon>save</mat-icon>Save Token</button>
+      </div>
+    </div>
+
     <div class="device-info">
 
       <div>
@@ -37,8 +54,6 @@
       <div>
        Mobile Device
       </div>
-
-
 
       <div>
         <mat-checkbox [(ngModel)]="isMobile"

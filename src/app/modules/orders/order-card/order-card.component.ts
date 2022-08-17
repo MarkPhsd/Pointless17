@@ -10,6 +10,7 @@ import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 })
 export class OrderCardComponent implements OnInit {
 
+  phoneDevice: boolean;
   @Input() order : IPOSOrder;
   smallDevice : boolean;
   minutesOpen: number;
@@ -21,11 +22,13 @@ export class OrderCardComponent implements OnInit {
   @HostListener("window:resize", [])
    updateItemsPerPage() {
      this.smallDevice = false
-     if (window.innerWidth < 768) {
+     if (window.innerWidth < 811) {
        this.smallDevice = true
      }
+     if (window.innerWidth < 599) {
+       this.phoneDevice = true
+     }
    }
-
 
   ngOnInit() {
     if (this.order) {

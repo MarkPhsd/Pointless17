@@ -42,7 +42,6 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this._user = this.authenticationService.user$.subscribe(
         user => {
         user = JSON.parse(localStorage.getItem('user')) as IUser;
-
         this.user = user
         if (!user || !user.token) {
           this.menus = [] as AccordionMenu[];
@@ -58,7 +57,6 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     if (!mainMenu && item) { return }
     if (item.active) {mainMenu.push(item) }
     this.menus =  [...new Set(this.menus)]
-    // console.log('this.menus', this.menus)
   }
 
   constructor ( private menusService            : MenusService,
@@ -78,7 +76,6 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
     this.updateScreenSize();
   }
 
-  // sort(users, 'name', '-age', 'id')
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.tinyMenu = false
@@ -129,32 +126,34 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
       ).subscribe(
         {next: data => {
-        if (!user.roles) {return}
-        if (user.roles === 'admin' ) {
-          if (!data) {  return }
-          const menuGroup = data as MenuGroup;
-          this.refreshMenuFromAccordion(menuGroup.accordionMenus)
-          return
-        }
+          if (!user.roles) {return}
+          
+          if (user.roles === 'admin' ) {
+            if (!data) {  return }
+            const menuGroup = data as MenuGroup;
+            this.refreshMenuFromAccordion(menuGroup.accordionMenus)
+            return
+          }
 
-        if (user.roles && user.roles != 'admin' ) {
-          if (!data) {  return }
-          this.refreshMenuFromAccordion(data)
-          return
-        }
+          if (user.roles && user.roles != 'admin' ) {
+            if (!data) {  return }
+            this.refreshMenuFromAccordion(data)
+            return
+          }
 
-      },
-      error: error=> {
+        },
+        error: error=> {
+          console.log('error', error)
+        }})
+      } catch (error) {
         console.log('error', error)
-      }})
-    } catch (error) {
-      console.log('error', error)
-    }
+      }
   }
 
   refreshMenu(user: IUser) {
 
     this.initMenus()
+    
     if (!user || !user.token) {return}
     const site  = this.siteService.getAssignedSite();
     const menu$ = this.menusService.getMainMenu(site)
@@ -171,6 +170,7 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
 
       }
     )
+    
     this._barSize = this.toolbarUIService.barSize$.subscribe( data => {
       this.smallMenu = data;
     })

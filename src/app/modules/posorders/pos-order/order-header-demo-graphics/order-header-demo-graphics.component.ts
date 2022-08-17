@@ -1,6 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { ContactsService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -23,8 +24,37 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
   @Output() outPutRemoveClient:   EventEmitter<any> = new EventEmitter<any>();
   @Output() outPutAssignCustomer:   EventEmitter<any> = new EventEmitter<any>();
 
+  _uiSettings : Subscription;
+  uiSettings  : UIHomePageSettings;
   user  = this.userAuthorization.user;
   transactionSettings: TransactionUISettings;
+
+  homePageSubscriber(){
+    try {
+      this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
+        this.uiSettings = data;
+        console.log(data, data.wideOrderBar)
+        if (!data.wideOrderBar) { 
+          // this.transactionDataClass = 'transaction-data-side-panel-small' 
+        }
+        // if (data) {
+        //   if (data.wideOrderBar) { 
+        //     if (this.smallDevice)  {
+        //         this.matorderBar = 'mat-orderBar'
+        //     }
+        //   }
+
+        //   if (data.wideOrderBar) {
+        //     if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
+        //     if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
+        //   }
+        // }
+      })
+    } catch (error) {
+      console.log('HomePage Subscriber', error)
+    }
+  }
+
 
   constructor(private router: Router,
               private siteService: SitesService,
@@ -45,6 +75,7 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     if (this.userAuthorization.isManagement) {
       this.canRemoveClient = true;
     }
+    this.homePageSubscriber();
   }
 
   ngOnChanges(): void {

@@ -38,7 +38,11 @@ export class NewOrderTypeComponent  {
   }
 
   onCancel() {
-    this._bottomSheet.dismiss();
+    try {
+      this._bottomSheet.dismiss();
+    } catch (error) {
+      
+    }
   }
 
   newOrder(){
@@ -53,7 +57,7 @@ export class NewOrderTypeComponent  {
         this.dialogRef.close();
         return
       }  else {
-        this._bottomSheet.dismiss();
+        this.onCancel();
       }
     } catch (error) {
       console.log(error)

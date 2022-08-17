@@ -242,7 +242,7 @@ export class MenusService {
 
       return this.http.get<AccordionMenu[]>(url)
 
-    }
+  }
 
   getMainMenu(site: ISite): Observable<AccordionMenu[]> {
      return this.getMenu(site, 'main')
@@ -311,14 +311,16 @@ export class MenusService {
   }
 
   createMainMenu(user: IUser, site: ISite): Observable<MenuGroup> {
-
-    if (!user) {
+    // console.log('createMainMenu', user) 
+    if (!user || !user.roles) {
       return null
     }
+    // console.log('createMainMenu2', user) 
 
-    if (this.user.roles != 'admin') { return }
+    if (user.roles != 'admin') { return }
 
-    const  menuGroup =  {name: 'main', id: 0, userType: this.getUsers(), accordionMenus: this.accordionMenus }  as MenuGroup;
+    const  menuGroup =  {name: 'main', id: 0, userType: user.roles, 
+                         accordionMenus: this.accordionMenus }  as MenuGroup;
 
     const controller = "/MenuGroups/"
 
@@ -431,6 +433,7 @@ export class MenusService {
 
     return this.http.post<AccordionMenu>(url, accordionMenu)
   }
+
   putAccordionMenuByID(site: ISite, id: number, accordionMenu: AccordionMenu): Observable<AccordionMenu> {
     const controller = "/MenuGroups/"
 
@@ -480,7 +483,6 @@ export class MenusService {
 
     return this.http.post<SubMenu>(url, subMenu)
   }
-
 
   getDefaultMenuData() {
     return

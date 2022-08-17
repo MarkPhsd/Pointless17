@@ -1,11 +1,10 @@
-import {  Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-reasons/adjustment-reasons.component';
 import { IUser } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
-import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SystemManagerService } from 'src/app/_services/system/system-manager.service';
 import { Subscription } from 'rxjs';
 
@@ -24,7 +23,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('accordionStep5') accordionStep5: TemplateRef<any>;
     @ViewChild('accordionStep6') accordionStep6: TemplateRef<any>;
     @ViewChild('accordionStep7') accordionStep7: TemplateRef<any>;
-
 
     get platForm() {  return Capacitor.getPlatform(); }
 
@@ -76,6 +74,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private AuthenticationService: AuthenticationService,
         private dialog               : MatDialog,
         private systemManagerService : SystemManagerService,
+        private route                : ActivatedRoute,
+      
         private router               : Router)
     {
       this.accordionStep = -1;
@@ -84,6 +84,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
       this.getCurrentUser();
+      const step = this.route.snapshot.paramMap.get('accordionStep');
+      if (step) { 
+        this.accordionStep = +step;
+        this.setStep(+step)
+      }
     }
 
     ngOnDestroy(): void {
@@ -92,18 +97,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     routerNavigation(url: string) {
       this.router.navigate([url]);
-    }
-
-    clientTypesList() {
-      this.routerNavigation('client-type-list')
-    }
-
-    serviceTypeList() {
-      this.routerNavigation('service-type-list')
-    }
-
-    gotoPayments() {
-      this.routerNavigation('payments')
     }
 
     setStep(index: number) {
@@ -143,7 +136,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
       });
     }
-
+    
+    gotoPayments() {
+      this.routerNavigation('payments')
+    }
     openMenuManager() {
       this.router.navigate(['/side-menu-layout'])
     }
@@ -156,13 +152,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.router.navigate(['/location'])
     }
 
-    togglePaymentMethodsList() {
-      // this.showPaymentMethods= !this.showPaymentMethods
-      this.router.navigate(['/edit-payment-method-list'])
-    }
-
     functionGroups() {
       this.router.navigate(['/function-group-list'])
     }
 }
-// this.router.navigate(['function-group-edit', {id:id}])

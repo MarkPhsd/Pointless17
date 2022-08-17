@@ -1,13 +1,13 @@
 import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, TemplateRef } from '@angular/core';
 import { IInventoryAssignment } from 'src/app/_services/inventory/inventory-assignment.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SettingsService } from 'src/app/_services/system/settings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IProduct, ISetting } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import * as  printJS from "print-js";
 import { RenderingService } from 'src/app/_services/system/rendering.service';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { HTMLEditPrintingComponent } from '../htmledit-printing/htmledit-printing.component';
 import { MatDialog } from '@angular/material/dialog';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
@@ -18,6 +18,7 @@ import { EditCSSStylesComponent } from '../edit-cssstyles/edit-cssstyles.compone
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { IPCService } from 'src/app/_services/system/ipc.service';
+import { Router } from '@angular/router';
 
 // https://github.com/Ans0n-Ti0/esc-pos-encoder-ionic-demo
 // https://github.com/tojocky/node-printer
@@ -119,6 +120,10 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   hideWindow      : boolean;
   showElectronPrinters = false;
   electronPrinterList : any;
+  terminal : ITerminalSettings;
+  terminalSetting : ISetting;
+  terminalSetting$: Observable<ISetting>;
+  deviceName: string;
 
   constructor(
               private printingService       : PrintingService,
@@ -133,18 +138,37 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private platFormService       : PlatformService,
               private icpService            : IPCService,
               public  orderService          : OrdersService,
+              private router: Router,
+
   ) {
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
     this.isElectronApp = this.icpService.isElectronApp;
+
   }
 
   async ngOnInit() {
-
     this.getPrinterAssignment();
     this.listPrinters();
+    this.deviceName = this.orderService.posName
   }
 
+  saveTerminalSetting()  {
+    //terminal
+    const site = this.siteService.getAssignedSite();
+    this.settingService.getSettingByName(site,this.deviceName).pipe(
+      switchMap(data => {
+      this.terminalSetting = data;
+      this.terminal = JSON.parse(data.text)  as ITerminalSettings;
+      this.terminal.btPrinter = this.btPrinter;
+      data.text = JSON.stringify(this.terminal);
+      return this.settingService.putSetting(site,data.id,data)
+    })).subscribe
+  }
+
+  navPosDevices() {
+    this.router.navigate(['posDevies'])
+  }
   async ngAfterViewInit() {
     this.initDefaultLayouts()
   }

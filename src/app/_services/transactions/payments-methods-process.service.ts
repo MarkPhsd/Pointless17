@@ -335,7 +335,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   validatePaymentAmount(amount, isCash: boolean, balanceRemaining: number): boolean {
     if (  +amount > + balanceRemaining ) {
       if (!isCash) {
-        this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again',3000)
+        this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again', 3000)
         return false
       }
     }

@@ -104,7 +104,6 @@ import { PosOrderItemComponent } from 'src/app/modules/posorders/pos-order-item/
 import { IonicModule } from '@ionic/angular';
 import { IonicSwipeToDeleteComponent } from './widgets/ionic-swipe-to-delete/ionic-swipe-to-delete.component';
 import { DisableControlDirective } from '../_directives/disable-control-directive.directive';
-import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fast-user-switch.component';
 import { PaymentReportComponent } from '../modules/admin/reports/payment-report/payment-report.component';
 import { ItemSalesCardComponent } from '../modules/admin/reports/item-sales-card/item-sales-card.component';
 import { SearchDebounceInputComponent } from './widgets/search-debounce-input/search-debounce-input.component';
@@ -146,12 +145,14 @@ import { DsiEMVPaymentComponent } from '../modules/admin/dsi-emvpayment/dsi-emvp
 import { AgIconFormatterComponent } from '../_components/_aggrid/ag-icon-formatter/ag-icon-formatter.component';
 import { StoreCreditInfoComponent } from '../modules/posorders/pos-order/store-credit-info/store-credit-info.component';
 import { StoreCreditSearchComponent } from './widgets/search-list-selectors/store-credit-search/store-credit-search.component';
-// import { QuicklinkStrategy } from 'ngx-quicklink';
-// import { QuicklinkModule } from 'ngx-quicklink';
 import { EmailSettingsComponent } from '../modules/admin/settings/email-settings/email-settings.component';
 import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/uihome-page-settings/uihome-page-settings.component';
 import { ProductSearchSelector2Component } from '../modules/admin/products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
+import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fast-user-switch.component';
+import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-button/app-wizard-progress-button.component';
 
+// import { QuicklinkStrategy } from 'ngx-quicklink';
+// import { QuicklinkModule } from 'ngx-quicklink';
 // export class MyHammerConfig extends HammerGestureConfig {
 //     overrides = <any> {
 //         'pinch': { enable: false },
@@ -164,6 +165,7 @@ import { ProductSearchSelector2Component } from '../modules/admin/products/produ
     AdjustmentReasonsComponent,
     AdjustPaymentComponent,
     AreaComponent,
+    AppWizardProgressButtonComponent,
     APISettingComponent,
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
@@ -329,6 +331,7 @@ import { ProductSearchSelector2Component } from '../modules/admin/products/produ
     APISettingComponent,
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
+    AppWizardProgressButtonComponent,
     UserAuthorizedDirective,
     CashValueCalcComponent,
     ChangeDueComponent,

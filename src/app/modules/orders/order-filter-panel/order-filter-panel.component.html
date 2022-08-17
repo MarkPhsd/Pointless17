@@ -28,12 +28,20 @@
         </button>
       </div>
 
-      <div>
+      <div  *ngIf="!smallDevice">
         <button class="button"
                 mat-button
                 (click)="displayPanel()">
                 <mat-icon>close_fullscreen</mat-icon>
           <span>Hide</span>
+        </button>
+      </div>
+
+      <div  *ngIf="smallDevice">
+        <button
+                mat-button
+                (click)="exitBottomSheet()">
+          <mat-icon>close</mat-icon><span>Hide</span>
         </button>
       </div>
 
@@ -54,13 +62,6 @@
         </button>
       </div>
 
-      <div  *ngIf="smallDevice">
-        <button
-                mat-button
-                (click)="exitBottomSheet()">
-          <mat-icon>close</mat-icon><span>Exit</span>
-        </button>
-      </div>
 
     </div>
 

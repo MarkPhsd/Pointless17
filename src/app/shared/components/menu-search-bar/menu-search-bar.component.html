@@ -1,6 +1,8 @@
 <mat-sidenav-container>
 
   <div    class="grid-container">
+
+    
     <div  class="form-width"
           *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
       <search-debounce-input
@@ -59,10 +61,15 @@
         </button>
       </div>
     </div>
-
-    <div *ngIf="multifilter || (uiHomePage &&  !uiHomePage.sideToolbarDefaultBrand)">
+    
+    <div *ngIf="multifilter || ( uiHomePage && (uiHomePage.staffCategoriesEnabled || uiHomePage.sideToolbarEnableCategory) )">
       <mat-accordion multi>
-        <mat-expansion-panel  *ngIf="uiHomePage && uiHomePage.sideToolbarEnableCategory">
+        <mat-expansion-panel  
+             [expanded]="accordionStep == 0"
+             (opened)="setStep(0)"
+             hideToggle
+              *ngIf="uiHomePage && (uiHomePage.staffCategoriesEnabled
+                                   || uiHomePage.sideToolbarEnableCategory)">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Categories
@@ -76,21 +83,23 @@
               <app-mat-toggle-selector
                   *ngIf             = "(categories$ | async) as list"
                   [mouseOver]       = "false"
-                  [showIcon]        = "showIcon"
+                  [showIcon]        = "true"
                   [toggleDimensions]="'toggle-group-tall'"
                   [textLength]      = "21"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
-
-                  [list]            = "list">
+                  [list]            = "list"
+                  [materialIcons]   = 'true'
+                  >
               </app-mat-toggle-selector>
             </div>
         </mat-expansion-panel>
-<!--
-        [toggleDimensions]= "'toggle-group-tall'"
-        [toggleHeight]    = "toggleCatHeight"
-         -->
-        <mat-expansion-panel *ngIf="uiHomePage && uiHomePage.sideToolbarEnableBrand">
+
+        <mat-expansion-panel 
+            [expanded]="accordionStep == 1"
+            (opened)="setStep(1)"
+            hideToggle
+            *ngIf="uiHomePage && uiHomePage.sideToolbarEnableBrand">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Brands
@@ -99,7 +108,6 @@
               <mat-icon>branding_watermark</mat-icon>
             </mat-panel-description>
           </mat-expansion-panel-header>
-
 
           <div  class="mat-toggle-list" >
             <app-mat-toggle-selector
@@ -120,7 +128,11 @@
 
         </mat-expansion-panel>
 
-        <mat-expansion-panel *ngIf="uiHomePage && uiHomePage.sideToolbarEnableType">
+        <mat-expansion-panel
+                [expanded]="accordionStep == 2"
+                (opened)="setStep(2)"
+                hideToggle
+                *ngIf="uiHomePage && uiHomePage.sideToolbarEnableType">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Types

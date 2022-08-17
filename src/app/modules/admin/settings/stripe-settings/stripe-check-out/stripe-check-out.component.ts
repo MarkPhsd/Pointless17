@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef} from '@angular/core';
+import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef, Optional} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StripeService, StripeCardComponent, StripeInstance, StripePaymentElementComponent } from 'ngx-stripe';
 import {
@@ -131,6 +131,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   }
 
   cancel() {
+    if (!this.dialogRef) { return}
     this.dialogRef.close();
   }
 
@@ -142,18 +143,19 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     }
   }
 
-  constructor(
+  constructor(  @Optional() public dialogRef: MatDialogRef<StripeCheckOutComponent>,
+                @Inject(MAT_DIALOG_DATA) public data: any,
                 private uISettingsService: UISettingsService,
                 private matSnack         : MatSnackBar,
                 private fb               : FormBuilder,
                 private stripeService    : StripeService,
                 private orderService     : OrdersService,
                 private posPaymentService   : POSPaymentService,
-                public dialogRef: MatDialogRef<StripeCheckOutComponent>,
-                @Inject(MAT_DIALOG_DATA) public data: any,
                 private sitesService     : SitesService,
                 private stripePaymentService: StripePaymentService
                 ) {
+
+
     if (this.data) {
       this.amount = data?.amount;
       this.maxAmount = data?.amount;
@@ -266,6 +268,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
             this.outPutPayment.emit(data)
           }
           this.posPaymentService.updatePaymentSubscription(data.payment)
+          if (!this.dialogRef) { return}
           this.dialogRef.close(data);
         }
       });

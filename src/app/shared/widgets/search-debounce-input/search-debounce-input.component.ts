@@ -23,7 +23,6 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
 
   searchPhrase:      Subject<any> = new Subject();
 
-
   private readonly onDestroy = new Subject<void>();
   // //search with debounce
   searchItems$  : Subject<IProductSearchResults[]> = new Subject();
@@ -39,8 +38,6 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
   )
 
   constructor() { }
-
-
 
   ngOnInit(): void {
     if (!this.itemNameControl) { this.itemNameControl = 'itemName'}
@@ -63,9 +60,6 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
           })
         ).subscribe();
       }
-    // } catch (error) {
-    //   console.log('error', error)
-    // }
 
   }
 

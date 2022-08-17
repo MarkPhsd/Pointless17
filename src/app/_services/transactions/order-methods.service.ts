@@ -429,7 +429,6 @@ export class OrderMethodsService implements OnDestroy {
                        quantity: number,
                        input: any) {
 
-    console.log('quantity check', quantity)
     const valid = this.validateUser();
 
     if (!valid) { return };
@@ -534,7 +533,6 @@ export class OrderMethodsService implements OnDestroy {
     const site = this.siteService.getAssignedSite();
     return this.orderService.refundItem(site,item);
   }
-
 
   async scanBarcodeAddItem(barcode: string, quantity: number, input: any) {
      this.processAddItem(this.order, barcode, null, quantity, input);

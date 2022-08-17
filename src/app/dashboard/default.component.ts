@@ -47,7 +47,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   @HostBinding('class') className = '';
   @HostListener('unloaded')
 
-
   _leftSideBarToggle: Subscription;
   leftSideBarToggle = false;
 
@@ -68,8 +67,8 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   _department : Subscription;
   department  : IDepartmentList;
 
-  matorderBar = 'mat-orderBar-wide'
-  barType     = "mat-drawer-toolbar"
+  matorderBar = 'mat-orderBar-wide';
+  barType     = 'mat-drawer-toolbar';
   apiUrl      : any;
 
   _user       : Subscription;
@@ -85,7 +84,17 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         this.uiSettings = data;
+        console.log(data, data.wideOrderBar)
+        this.matorderBar = 'mat-orderBar' 
+
         if (data) {
+          if (!data.wideOrderBar) { 
+            if (this.smallDevice)  {
+              this.matorderBar = 'mat-orderBar'
+            }
+            if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
+          }
+
           if (data.wideOrderBar) {
             if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
             if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
@@ -154,7 +163,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this._searchSideBar = this.toolBarUIService._searchBarWidth$.subscribe(data => {
         this.searchBarWidth = data
-        // console.log('_searchSideBar', data)
+      
         if (data) {
           if (data == 55 || this.smallMenu) {
             this.barType =  "mat-drawer-searchbar-tiny"
@@ -246,7 +255,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('error', err)
       }
     })
-    this.initSubscriptions();
+ 
   }
 
   initUI() {
@@ -315,7 +324,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.toolbarTiny = false
     }
-    if (window.innerWidth > 599) {
+    if (window.innerWidth > 811) {
       this.sidebarMode = 'side'
       this.smallDevice = false;
     } else {

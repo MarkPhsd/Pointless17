@@ -354,17 +354,29 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   applyPaymentAmount(event) {
 
+    console.log(event)
     if (!event && this.groupPaymentAmount != 0) {
-      this.initPaymentForm(); return
+      this.initPaymentForm();
+      return
     }
 
     if (this.order &&  this.paymentMethod) {
+        let amount
+        if (event) {
+          amount = event
+        }  else {
+          amount = this.groupPaymentAmount;
+        }
 
-        let amount = this.groupPaymentAmount;
-
-        if (amount == 0) {
+        if (!amount || amount == 0) {
           amount   = this.formatValueEntered(event)
-          this.posPayment.groupID = this.groupPaymentGroupID;
+          if ( this.groupPaymentGroupID) {
+            this.posPayment.groupID = this.groupPaymentGroupID;
+          }
+        }
+        if (!amount) {
+          this.notify('Error getting values for payment.', 'Alert', 2000);
+          return
         }
 
         const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
@@ -374,6 +386,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         if (!isValidAmount) { return }
 
         const processResults$ = this.processGetResults(amount, this.posPayment)
+
+        if (!processResults$) {
+          this.notify('Error getting values for payment.', 'Alert', 2000);
+          return
+        }
 
         processResults$.subscribe( {
           next: (data) => {

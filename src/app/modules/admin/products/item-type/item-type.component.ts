@@ -13,6 +13,8 @@ import { ItemTypeEditorComponent } from './item-type-editor/item-type-editor.com
 import { AWSBucketService, MenuService } from 'src/app/_services';
 import { ItemTypeDisplayAssignmentService } from 'src/app/_services/menu/item-type-display-assignment.service';
 import { AgGridImageFormatterComponent } from 'src/app/_components/_aggrid/ag-grid-image-formatter/ag-grid-image-formatter.component';
+import { ItemTypeMethodsService } from 'src/app/_services/menu/item-type-methods.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-item-type',
@@ -50,7 +52,7 @@ export class ItemTypeComponent implements OnInit {
   numberOfPages           = 1
   rowCount                = 50
   rowSelection;
-
+  loading_initTypes      : boolean;
   selected               : any;
   itemTypes              : IItemType[];
 
@@ -71,11 +73,14 @@ export class ItemTypeComponent implements OnInit {
                 private menuService: MenuService,
                 private itemTypeDisplay: ItemTypeDisplayAssignmentService,
                 private awsService     : AWSBucketService,
-                ) {}
+                private itemTypeMethodsService: ItemTypeMethodsService,
+                private route: ActivatedRoute,
+                ) {
+
+  }
 
   async ngOnInit()
   {
-
     this.accordionStep  = -1;
     this.refreshData();
     this.initGridResults();
@@ -87,7 +92,35 @@ export class ItemTypeComponent implements OnInit {
 
     this.itemTypeBasic            =  await this.itemTypeService.getBasicTypes(site).pipe().toPromise();
     this.selectedItemTypes        =  await this.itemTypeDisplay.getSortedList(site).pipe().toPromise();
+    
+    const step = this.route.snapshot.paramMap.get('accordionStep');
+    console.log('step', step)
+    if (step) { 
+      this.accordionStep = +step;
+      this.setStep(+step)
+    }
+    
+  }
 
+  initalizeTypes() {
+    this.loading_initTypes = true;
+    const result = window.confirm('Please confirm. This function will delete all item type settings and re-initialize all options for item types.');
+      
+    if (!result) { this.loading_initTypes = false;}
+
+    if (result) {
+      this.loading_initTypes = true ;
+      this.itemTypeMethodsService.initalizeTypes().subscribe( {
+        next: data => {
+          this.itemTypeMethodsService.notify(`Items initialized.`, 'Success', 2000)
+          this.loading_initTypes = false;
+        }, 
+        error: err => {
+          this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 2000)
+          this.loading_initTypes = false;
+        }
+      })
+    }
   }
 
   async refreshData() {

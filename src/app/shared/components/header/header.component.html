@@ -3,7 +3,6 @@
 
     <div [class]="flexsections">
      <div>
-
         <div class="grid-flow">
           <div *ngIf="!smallDevice && isApp">
             <button aria-label="back" mat-button
@@ -58,7 +57,7 @@
             <api-status-display></api-status-display>
           </div>
 
-          <div *ngIf="smallDevice &&  ( (isUserStaff && platFormService.platForm !='web') || (isAdmin) )">
+          <div *ngIf="phoneDevice &&  ( (isUserStaff && platFormService.platForm !='web') || (isAdmin) )">
             <button mat-button
                     aria-label="POS"
                     color="accent"
@@ -67,15 +66,15 @@
             </button>
           </div>
         </div>
-
       </div>
 
       <div class="pos-panel">
 
-        <div class="grid-flow" *ngIf="!smallDevice">
+        <div class="grid-flow" *ngIf="!phoneDevice">
           <mat-card *ngIf="( (isUserStaff && platFormService.platForm !='web' )
                           || (isUserStaff) )">
             <ul
+                class="ul-pos-panel"
                 fxFlex fxLayout="row"
                 fxLayoutAlign="center center">
 
@@ -91,7 +90,8 @@
                   </div>
                 </li>
 
-                <li>
+
+                <li *ngIf="!smallDevice">
                   <button mat-button
                           color="accent"
                           aria-label="POS"
@@ -110,7 +110,6 @@
                   </button>
                 </li>
 
-                <!-- if android device -->
                 <li *ngIf="platFormService.androidApp">
                   <button mat-button
                           aria-label="badge"
@@ -120,7 +119,7 @@
                   </button>
                 </li>
 
-                <li>
+                <li *ngIf="!smallDevice">
                   <list-product-search-input></list-product-search-input>
                 </li>
 
@@ -150,14 +149,17 @@
             </ul>
           </mat-card>
         </div>
-
       </div>
 
-      <div >
+      <div>
 
         <div class="grid-flow">
           <div *ngIf="!smallDevice">
             <app-toggle-theme></app-toggle-theme>
+          </div>
+
+          <div *ngIf="!smallDevice && isAdmin">
+            <wizard-progress-button></wizard-progress-button>
           </div>
 
           <div *ngIf="!smallDevice">
@@ -175,8 +177,8 @@
                     aria-label="logout"
                     class="nav-item nav-link"
                     (click)="logout()">
-                    Sign In
-                <mat-icon>exit_to_app</mat-icon>
+                  Sign In
+              <mat-icon>exit_to_app</mat-icon>
             </button>
           </div>
 
@@ -198,11 +200,11 @@
 
                 <div  class="mat-item">
                   <button
-                          mat-button
-                          color="accent"
-                          class="menu-button"
-                          aria-label="logout"
-                          (click)="logout()">
+                        mat-button
+                        color="accent"
+                        class="menu-button"
+                        aria-label="logout"
+                        (click)="logout()">
                       Log Out
                       <mat-icon>exit_to_app</mat-icon>
                   </button>
@@ -217,12 +219,12 @@
 
                 <div  class="mat-item">
                   <button
-                        mat-button
-                        color="accent"
-                        class="menu-button"
-                        aria-label="face"
-                        routerLink="/app-profile">
-                        {{ userName }} - {{userRoles}}
+                      mat-button
+                      color="accent"
+                      class="menu-button"
+                      aria-label="face"
+                      routerLink="/app-profile">
+                      {{ user?.lastName }} - {{userRoles}}
                       <mat-icon>face</mat-icon>
                   </button>
                   <mat-divider class="mat-divider"></mat-divider>
@@ -243,24 +245,24 @@
                 <div  class="mat-item"
                       *ngIf="smallDevice">
                   <button
-                        mat-raised-button
-                        color="primary"
-                        aria-label="location"
-                        class="menu-button"
-                        (click)="siteSelector()">
+                      mat-raised-button
+                      color="primary"
+                      aria-label="location"
+                      class="menu-button"
+                      (click)="siteSelector()">
                     <mat-icon>location_on</mat-icon>
                   </button>
                   <mat-divider class="mat-divider"></mat-divider>
                 </div>
 
                 <div  class="mat-item"
-                      *ngIf="user && user.roles === 'user'  && user.username != 'user'">
+                      *ngIf="user && user.roles === 'user'  && user?.username != 'user'">
                     <button
-                          mat-raised-button
-                          color="primary"
-                          aria-label="Order history"
-                          class="mat-item"
-                          (click)="navPOSOrders()">
+                        mat-raised-button
+                        color="primary"
+                        aria-label="Order history"
+                        class="mat-item"
+                        (click)="navPOSOrders()">
                       My Orders<mat-icon>list</mat-icon>
                     </button>
                 </div>

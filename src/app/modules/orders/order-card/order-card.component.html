@@ -12,7 +12,7 @@
           {{order.serviceType | truncateText : 15}}
       </div>
 
-      <div class="employee-name">
+      <div class="employee-name" *ngIf="!phoneDevice && (phoneDevice && order.employeeName)">
         {{order.employeeName | truncateText : 12 }}
       </div>
 
@@ -37,7 +37,7 @@
           </div>
         </div>
 
-        <div class="field-center">
+        <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order.customerName)">
           <div class="order-name" >
             <div *ngIf="smallDevice">
               {{ order.customerName | truncateText : 15}}
@@ -54,7 +54,7 @@
         <div class='total' >Total</div>
         <div class="total">{{ order.total | currency}}</div>
 
-        <div class="field-center">
+        <div class="field-center" *ngIf="minutesOpen && minutesOpen != 0">
           <div *ngIf="smallDevice">
             Open {{minutesOpen}} min.
           </div>

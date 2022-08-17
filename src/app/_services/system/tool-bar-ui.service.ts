@@ -15,14 +15,14 @@ export class ToolBarUIService {
   private _searchSideBar    = new BehaviorSubject<any>(null);
   public searchSideBar$     = this._searchSideBar.asObservable();
 
-  private _searchBarWidth    = new BehaviorSubject<number>(null);
-  public  _searchBarWidth$   = this._searchBarWidth.asObservable();
+  private _searchBarWidth     = new BehaviorSubject<number>(null);
+  public  _searchBarWidth$    = this._searchBarWidth.asObservable();
 
-  private _barSize    = new BehaviorSubject<boolean>(null);
-  public  barSize$    = this._barSize.asObservable();
+  private _barSize            = new BehaviorSubject<boolean>(null);
+  public  barSize$            = this._barSize.asObservable();
 
-  private _orderBar          = new BehaviorSubject<any>(null);
-  public  orderBar$          = this._orderBar.asObservable();
+  private _orderBar           = new BehaviorSubject<any>(null);
+  public  orderBar$           = this._orderBar.asObservable();
 
   private _departmentMenu     = new BehaviorSubject<any>(null);
   public  departmentMenu$     = this._departmentMenu.asObservable();
@@ -65,7 +65,6 @@ export class ToolBarUIService {
   updateleftSideBarToggle(value: boolean) {
     this._leftSideBarToggle.next(value)
     this.leftSideBarToggle = value;
-    console.log('updateleftSideBarToggle', value)
   }
 
   updateBarSize(value: boolean) {
@@ -208,8 +207,5 @@ export class ToolBarUIService {
     this._mainMenuSideBar.next(true);
     this.resizeWindow();
   }
-
-
-
 
 }

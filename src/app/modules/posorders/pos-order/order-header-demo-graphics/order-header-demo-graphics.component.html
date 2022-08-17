@@ -54,7 +54,8 @@
     </div>
   </div>
 
-  <div class="grid-demo" *ngIf="transactionSettings?.showOrderName">
+  <div class="grid-demo" 
+      *ngIf="transactionSettings?.showOrderName">
     <div>
       <app-value-fields
         [inputForm]="orderNameForm"

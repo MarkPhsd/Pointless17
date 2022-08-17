@@ -63,6 +63,7 @@ export class ClientTypeEditComponent implements OnInit {
       this.clientType = {} as clientType
       this.inputForm.patchValue(this.clientType)
       const object = {} as IUserAuth_Properties;
+      this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
       this.jsonObjectForm.patchValue(object);
     }
 

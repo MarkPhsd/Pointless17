@@ -1,43 +1,40 @@
 @import "/src/mixins.scss";
 
 
-.grid-flow-small { 
+.grid-flow-small {
   display: flex;
-  flex-direction: column;
-  // margin: 10px;
+  flex-direction: row;
   justify-content: center;
+  gap    : 5px;
 }
 
-.grid-flow { 
+.grid-flow {
   display: grid;
-  gap    :5px;
+  gap    : 15px;
   grid-template-columns: repeat( auto-fit, minmax(55px, 1fr) );
   grid-auto-flow: row;
   margin-right: 30px;
 
   @include for-phone-only {
     display: flex;
-    flex-direction: column;
-    // margin: 10px;
+    flex-direction: row;
+    margin-right: 5px;
     justify-content: center;
   }
+
 }
 
-button { 
+button {
 
   @include for-phone-only {
     min-width: 85%;
     width: 55px;
     height: 45px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 5px;
+    margin-left : 0px;
   }
-
 }
 
-.grid-section-flow { 
+.grid-section-flow {
   display: flex;
   justify-content: center;
-  // margin: 5px;
 }

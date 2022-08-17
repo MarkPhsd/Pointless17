@@ -138,22 +138,22 @@ export class EditCSSStylesComponent implements OnInit {
   }
 
   refreshOrderData() {
-    this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.setting.option5, this.order)
+    this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.setting.option5, this.order, 'header')
   }
   refreshItemData() {
-    this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.setting.text, this.items)
+    this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.setting.text, this.items, 'items')
   }
 
   refreshFooterData() {
-    this.interpolatedFooterTexts    = this.renderingService.refreshStringArrayData(this.setting.option6, this.order)
+    this.interpolatedFooterTexts    = this.renderingService.refreshStringArrayData(this.setting.option6, this.order, 'footer')
   }
 
   refreshPaymentsFooter() {
-    this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.setting.option7, this.payments)
+    this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.setting.option7, this.payments, 'payments')
   }
 
   refreshSubFooter() {
-    this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.setting.option8, this.orderTypes )
+    this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.setting.option8, this.orderTypes , 'footer')
   }
 
 

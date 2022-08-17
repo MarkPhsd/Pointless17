@@ -25,6 +25,14 @@ toggle-button {
   grid-template-columns: auto 300px;
   overflow: hidden;
 
+  // @include for-tablet-portrait-up   {
+  //   grid-template-columns: auto;
+  // }
+
+  @media (max-width: 815px) {
+    grid-template-columns: auto;
+  }
+
   @include for-phone-only  {
     --gap: 5px;
     display: grid;
@@ -32,6 +40,7 @@ toggle-button {
     grid-template-columns: auto;
   }
 }
+
 .toggle-sections {
   margin-left: 10px;
 }
@@ -56,6 +65,7 @@ toggle-button {
   display: grid;
   gap: var(--gap);
   grid-template-columns: repeat( auto-fit, minmax(195px, 1fr) );
+
   @include for-phone-only  {
     --gap: 10px;
     display: grid;
@@ -110,9 +120,11 @@ toggle-button {
   overflow-x: hidden;
   overflow-y: auto;
   height: calc(85vh - 75px);
-  @include for-tablet-portrait-up   {
-    height: calc(85vh - 185px);
-  }
+
+  // @include for-tablet-portrait-up   {
+  //   height: calc(85vh - 185px);
+  // }
+
   @include for-phone-only  {
     height: calc(85vh - 235px);
   }

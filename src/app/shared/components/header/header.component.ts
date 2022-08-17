@@ -59,6 +59,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   sitePickerWidth = 50;
   searchForm      : FormGroup;
 
+  phoneDevice: boolean;
   scannerEnabled  : boolean;
   private toolBar :  boolean;
 
@@ -218,7 +219,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.flexsections = 'flex-sections-user'
       return
     }
-
     if (user) {
       this.flexsections = 'flex-sections'
       return
@@ -279,19 +279,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.sitePickerWidth = 33
     } else if (window.innerWidth >= 992) {
       this.sitePickerWidth = 33
-    } else if (window.innerWidth  >= 768) {
-      this.sitePickerWidth = 75
-    } else if (window.innerWidth < 768) {
+    }
+
+    if (811 >= window.innerWidth ) {
       this.showSearchForm = false
       this.sitePickerWidth = 75
       this.smallDevice = true
     }
+    this.refreshUserBar(this.user)
   }
 
   @HostListener("window:resize", [])
   updateScreenSize() {
     this.smallDevice = false
-    if (window.innerWidth < 768) {
+    if (811 >= window.innerWidth ) {
       this.smallDevice = true
     }
 
@@ -319,7 +320,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!user.roles) { return }
 
     this.userRoles    = user.roles.toLowerCase();
-    this.employeeName = user.username;
+    this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
 
     if (user.roles === 'admin') {
       this.showPOSFunctions = true;

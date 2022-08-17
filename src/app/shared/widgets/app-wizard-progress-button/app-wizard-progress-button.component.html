@@ -1,0 +1,15 @@
+
+<div  class="position" *ngIf="(user && user.roles === 'admin') &&  (status && !status.disabled)">
+  <button 
+        mat-button
+        (click)="navAppWizardStatus()" >
+    <mat-icon
+
+        matBadge="{{ status.percentage }}% "
+        matBadgeColor="accent"
+        matBadgePosition="before">
+        build_circle
+    </mat-icon>
+  </button>
+</div>
+

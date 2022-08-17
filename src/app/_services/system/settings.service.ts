@@ -28,6 +28,7 @@ export interface ITerminalSettings {
   resetOrdersFilter: boolean;
   cardPointeHSN: string;
   sSISecureDevice: string;
+  btPrinter      : string;
 }
 
 @Injectable({

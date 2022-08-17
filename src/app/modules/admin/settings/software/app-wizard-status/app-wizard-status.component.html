@@ -1,0 +1,340 @@
+<mat-card>
+  <mat-card-title>
+    <div class="title-grid">
+      <div>
+        <mat-icon>
+          settings_applications
+        </mat-icon>
+      </div> 
+      <div>
+        <h2>App Setup Guide</h2>
+      </div>
+
+
+      <div><button mat-button (click)="exit()"><mat-icon>close</mat-icon></button></div>
+      <div><button mat-button (click)="appWizardService.saveAppWizard()"><mat-icon>save</mat-icon></button></div>
+    </div>
+  
+  <mat-progress-bar mode="determinate" [value]="status.percentage"></mat-progress-bar>
+
+  </mat-card-title>
+  <mat-card-content >
+    <div  class= "container" 
+          [formGroup]="inputForm"
+          *ngIf="inputForm">
+        <div class="header-grid">
+          <div>
+            <mat-icon>store</mat-icon>
+          </div> 
+          <div>
+            <h3>Company Setup</h3>
+          </div>
+        </div>
+        
+        <div class="grid-progress">
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupCompany"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div><mat-label>Company setup, address, phone etc.</mat-label></div>
+          <div><a (click)="view('company-edit')">Open</a></div>
+        </div>
+      
+        <div class="header-grid">
+          <div>
+            <mat-icon>inventory</mat-icon> 
+          </div> 
+          <div>
+            <h3>Products, and Catalog Setup.</h3>
+          </div>
+        </div>
+
+        <div class="grid-progress">
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupItemsTypes"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Item Types control your product, discount behaviors etc. 
+          </div>
+          <div><a (click)="itemTypeEdit(0)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="configureGenericItemType"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Configure your generic item type to confirm your understanding.
+          </div>
+          <div><a (click)="itemTypeEdit(0)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="addedTax"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Add Tax Rates, assign tax columns.
+          </div>
+          <div><a (click)="view('taxes')">Open</a></div>
+  
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="associateItemTaxes"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Not all item types are taxed the same, associate tax rates with item types.
+          </div>
+          <div><a (click)="itemTypeEdit(3)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="importProducts"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Import catalog from csv spreadsheet.
+          </div>
+          <div><a (click)="openSettings(0)">Open</a></div>
+          
+        </div> 
+
+        <div class="header-grid">
+          <div>
+            <mat-icon>receipt_long</mat-icon> 
+          </div> 
+          <div>
+            <h3>Payment & Transaction Types,  Adjustments, Receipt Layout</h3>
+          </div>
+        </div>
+       
+        <div class="grid-progress">
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupPaymentTypes"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Edit the payment methods you accept.
+          </div>
+          <div><a (click)="openSettings(1)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupFirstItem"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Make your first product to sell.
+          </div>
+          <div><a (click)="view('product-list-view')">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupAdjustments"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Manage labels for voids, refunds, inventory and other adjustments.
+          </div>
+          <div><a (click)="openSettings(1)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupTransactionTypes"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Retail, Dine In, Take Out, Delivery, Pickup, you can assign the behaviors of these and customt types you require.
+          </div>
+          <div><a (click)="view('service-type-list')">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="confirmReceipt"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Review how receipts will look.
+          </div>
+          <div><a (click)="openSettings(4)">Open</a></div>
+
+        </div> 
+
+        <div class="header-grid">
+          <div>
+            <mat-icon>people</mat-icon>
+          </div> 
+          <div>
+            <h3>User Type, Employees and Authorizations.</h3>
+          </div>
+        </div>
+
+        <div class="grid-progress">
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupUserType"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            User Types
+          </div>
+          <div><a (click)="openSettings(1)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupAuthorizations"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            When reviewing user types, you will review authorizations.
+          </div>
+          <div><a (click)="openSettings(1)">Open</a></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupFirstEmployee"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Employees are simliar to users but with different authorzations, and can use a PIN in the app.
+          </div>
+          <div><a (click)="view('employee-list')">Open</a></div>
+
+          <!-- profileListing -->
+          <!-- employee-list -->
+
+        </div>
+
+        <div class="header-grid">
+          <div>
+            <mat-icon>point_of_sale</mat-icon>
+          </div> 
+          <div>
+            <h3>Review Sales, Balance Sheets, and Daily Operation Procedures </h3>
+          </div>
+        </div> 
+
+        <div class="grid-progress">
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="firstSale"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            First completed sale.
+          </div>
+          <div></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="firstBalanceSheet"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            First balance sheet initialization.
+          </div>
+          <div></div>
+
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="firstCloseOfDay"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Close daily sales.
+           </div>
+          <div></div>
+        </div> 
+
+        <div class="header-grid">
+          <div>
+            <mat-icon>credit_card</mat-icon>
+          </div> 
+          <div>
+            <h3>Setup your credit card processsing </h3>
+          </div>
+        </div>
+         
+        <div class="grid-progress">
+          <div>
+            <mat-checkbox
+                  type             ="checkbox"
+                  formControlName  ="setupMerchantAccount"
+                  class="form-control" >
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Merchant account setup.
+          </div>
+          <div><a (click)="openSettings(6)">Open</a></div>
+        </div>
+
+        <mat-divider></mat-divider>
+        <div class="header-grid">
+          <div>
+            <mat-icon>point_of_sale</mat-icon>
+          </div> 
+          <div>
+            <h3>Complete</h3>
+          </div>
+        </div>
+        <div class="grid-progress" >
+          <div>
+            <mat-checkbox
+                type             ="checkbox"
+                formControlName  ="disableAppWizard"
+                (click)="disable()">
+            </mat-checkbox>
+          </div>
+          <div class="instructions">
+            Disable Guide in Toolbar
+          </div>
+          <div></div>
+        </div>
+
+    </div>
+
+  </mat-card-content>
+</mat-card> 
+

@@ -9,7 +9,6 @@ import { AuthenticationService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MenusService } from 'src/app/_services/system/menus.service';
 import { AccordionMenuItemEditComponent } from '../accordion-menu-item-edit/accordion-menu-item-edit.component';
-import { MenuGroupItemEditComponent } from '../menu-group-item-edit/menu-group-item-edit.component';
 
 // https://marceljuenemann.github.io/angular-drag-and-drop-lists/demo/#/nested
 // https://material.angular.io/cdk/drag-drop/overview

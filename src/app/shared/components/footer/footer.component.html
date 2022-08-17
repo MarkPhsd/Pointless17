@@ -1,42 +1,76 @@
+
 <mat-toolbar *ngIf="smallDevice" color="primary">
-  <div class="row-align">
-    <ng-container [ngTemplateOutlet]="outlet"></ng-container>
-  </div>
+  <ng-container [ngTemplateOutlet]="outlet"></ng-container>
 </mat-toolbar>
 
 <ng-template #footerMenu>
+  <div class="grid-items">
 
-    <div class="grid-items">
-
-      <div>
-        <app-toggle-theme></app-toggle-theme>
-      </div>
-
-      <div>
-        <app-cart-button
-            [hideAddNewOrder]="true"
-            [smallDevice]="true">
-        </app-cart-button>
-      </div>
-
-      <div>
-          <button
-                mat-raised-button
-                color="primary"
-                aria-label="Order history"
-                class="mat-item"
-                (click)="navPOSOrders()">
-             My Orders
-             <!-- <mat-icon>list</mat-icon> -->
-             <mat-icon
-                matBadgeColor="accent"
-                matBadgePosition="before">
-                list
-             </mat-icon>
-
-          </button>
-      </div>
-
+    <div  class="mat-item">
+        <button
+              mat-raised-button
+              color="primary"
+              aria-label="Order history"
+              (click)="navPOSOrders()">
+             Orders
+            <mat-icon
+              matBadgeColor="accent"
+              matBadgePosition="before">
+              list
+            </mat-icon>
+        </button>
     </div>
 
+    <div  class="mat-item">
+      <app-cart-button
+          [hideAddNewOrder]="true"
+          [smallDevice]="true">
+      </app-cart-button>
+    </div>
+
+    <div class="mat-item">
+      <button mat-raised-button
+        fxFill
+        color="primary"
+        (click)="toggleOpenOrderBar()">
+        <div *ngIf="order && order.history">
+          <mat-icon>view</mat-icon>
+          View Cart
+        </div>
+        <div *ngIf="order && !order.history">
+          <mat-icon>edit</mat-icon>
+          Edit Cart
+        </div>
+      </button>
+    </div>
+
+    <div class="mat-item" *ngIf="order && !smallDevice">
+      <button  mat-raised-button
+        fxFill
+        color="primary"
+        (click)="makePayment()">
+        <mat-icon>credit_card</mat-icon>
+        <span *ngIf="!order.history">
+          Check Out
+        </span>
+        <span *ngIf="order.history">
+          Payments
+        </span>
+      </button>
+    </div>
+
+    <div class="mat-item" *ngIf="order && !smallDevice">
+      <button  mat-raised-button
+        fxFill
+        color="primary"
+        (click)="printingService.previewReceipt()">
+        <mat-icon>print</mat-icon>
+        <span >
+          Print
+        </span>
+      </button>
+    </div>
+
+  </div>
 </ng-template>
+

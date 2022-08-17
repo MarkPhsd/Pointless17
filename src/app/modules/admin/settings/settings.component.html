@@ -61,16 +61,6 @@
 
       <ng-template #accordionStep1>
 
-        <div>
-          <button mat-raised-button
-                  color  = "primary"
-                  class  = "button-wide"
-                  (click)= "togglePaymentMethodsList()">
-            <mat-icon>payment</mat-icon>
-            Payment Methods
-          </button>
-        </div>
-
         <div *ngIf="accordionStep ==1" class="grid-settings-2">
           <app-inventory-settings
                   [role]="role">
@@ -80,6 +70,7 @@
         <div>
           <app-software-settings></app-software-settings>
         </div>
+       
 
       </ng-template>
 
@@ -138,22 +129,8 @@
         <mat-icon>printer</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
-      
+
       <app-installed-printers></app-installed-printers>
-      <!-- <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container> -->
-
-      <!-- <ng-template #accordionStep4>
-        <span *ngIf="accordionStep == 4">
-        
-        </span>
-
-       
-      </ng-template>
-
-        <ng-template #loading>
-        ..loading
-        <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
-      </ng-template> -->
 
 
       <mat-action-row>

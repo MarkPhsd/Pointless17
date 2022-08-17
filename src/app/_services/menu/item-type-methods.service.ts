@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { EMPTY, Observable, of } from 'rxjs';
+import {  Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { SitesService } from '../reporting/sites.service';
-import { IItemType, ItemTypeService } from './item-type.service';
+import { ItemTypeService } from './item-type.service';
 import { UseGroupsService } from './use-groups.service';
-
 @Injectable({
   providedIn: 'root'
 })

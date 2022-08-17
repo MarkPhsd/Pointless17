@@ -1,11 +1,14 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ResizedEvent } from 'angular-resize-event';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
+import { IProductSearchResults, MenuService } from 'src/app/_services';
 
 @Component({
   selector: 'app-main-menu',
@@ -16,13 +19,17 @@ import { ResizedEvent } from 'angular-resize-event';
 })
 export class MainMenuComponent implements OnInit  {
 
+  searchForm: FormGroup;
   panelHeightValue = 100;
   panelHeightSize : string;
+  smallDevice =false;
 
   @ViewChild('brandView') brandView: TemplateRef<any>;
   @ViewChild('categoryView') categoryView: TemplateRef<any>;
   @ViewChild('departmentView') departmentView: TemplateRef<any>;
   @ViewChild('tierMenuView') tierMenuView: TemplateRef<any>;
+  @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
+  @ViewChild('viewOverlay') viewOverlay: TemplateRef<any>;
 
   homePageSetings: UIHomePageSettings;
   smoke  = "./assets/video/smoke.mp4"
@@ -46,6 +53,8 @@ export class MainMenuComponent implements OnInit  {
     private userAuthorizationService: UserAuthorizationService,
     private siteService: SitesService,
     private router: Router,
+    private menuService: MenuService,
+    private fb: FormBuilder,
   ) {
   }
 
@@ -62,6 +71,10 @@ export class MainMenuComponent implements OnInit  {
   }
 
   ngOnInit(): void {
+     this.updateItemsPerPage()
+      this.searchForm = this.fb.group( {
+        itemName: ''
+      })
       this.initSiteSubscriber();
       this.isStaff = false;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
@@ -83,6 +96,18 @@ export class MainMenuComponent implements OnInit  {
       })
   }
 
+
+  @HostListener("window:resize", [])
+  updateItemsPerPage() {
+
+    this.smallDevice = false
+  
+    if ( window.innerWidth < 811 ) {
+      this.smallDevice = true
+    }
+ 
+  }
+  
   reloadComponent() {
     let currentUrl = this.router.url;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -125,6 +150,61 @@ export class MainMenuComponent implements OnInit  {
     }
     return null;
   }
+
+  get isSearchSelectorOn() { 
+    if (this.smallDevice) {
+      return this.searchSelector
+    }
+    return null;
+  }
+
+  isviewOverlayOn() { 
+    // if (this.smallDevice) {
+    //   return this.departmentView
+    // }
+    return null;
+  }
+
+  
+  applyProductSearchModel(itemName: string) : ProductSearchModel {
+    let  productSearchModel=  {} as ProductSearchModel 
+		productSearchModel.type         = null;
+		productSearchModel.categoryID   = null;
+		productSearchModel.departmentID = null;
+		productSearchModel.name         = null;
+		productSearchModel.barcode      = null;
+		productSearchModel.departmentName = null;
+		if (itemName) {
+		  productSearchModel.name               =  itemName;
+		  productSearchModel.useNameInAllFields = true
+		}
+
+		productSearchModel.barcode    = productSearchModel.name
+		productSearchModel.pageSize   = 50
+		productSearchModel.pageNumber = 1
+		this.menuService.updateMeunuItemData(productSearchModel)
+		return productSearchModel
+
+	  }
+
+	  //this is called from subject rxjs obversablve above constructor.
+	  refreshSearch(itemName) {
+      try {
+        const site               = this.siteService.getAssignedSite()
+        const searchModel        = this.applyProductSearchModel(itemName);
+        this.listItems(searchModel)
+      } catch (error) {
+        console.log('error', error)
+      }
+	  }
+    
+    listItems(model: ProductSearchModel) {
+      this.router.navigate(
+        [
+          "/menuitems-infinite", { value: 1}
+        ]
+      )
+    }
 
 }
 

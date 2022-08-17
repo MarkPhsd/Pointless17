@@ -28,13 +28,17 @@
    width: 99%;
    display: grid;
    gap: 5px;
-   grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+   grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
    margin-bottom : 1px;
    margin-top    : 1px;
    margin-left   : -2px;
    height: 75px;
-  //  overflow-y: auto;
-  overflow: hidden;
+   overflow: hidden;
+
+   // if (window.innerWidth < 500) {
+   //   this.deviceWidthPercentage = '85%'
+   // }
+
  }
 
 .grid-header-order-total {
@@ -318,7 +322,6 @@
     overflow-x: hidden;
     height: 100%;
   }
-
 }
 
 .item-list-side-panel {
@@ -388,7 +391,6 @@ img {
     display: grid;
     grid-template-columns: 2;
     grid-template-rows: 2;
-
  }
 
  .price {
@@ -463,8 +465,6 @@ img {
     z-index:100;
   }
 }
-
-
 
 .order-layout-buttons {
   display: grid;

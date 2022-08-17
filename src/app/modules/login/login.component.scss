@@ -38,7 +38,7 @@ mat-checkbox {
 }
 
 .center {
-  max-width       : 395px;
+  max-width       : 495px;
   display         : grid;
   place-items     : center;
   justify-content : space-evenly;
@@ -59,7 +59,7 @@ button{
 }
 
 .login-window {
-  max-width: 500px;
+  max-width: 450px;
 }
 
 .row-height {
@@ -68,7 +68,7 @@ button{
 
 .login-form {
   min-width: 150px;
-  max-width: 500px;
+  max-width: 450px;
   width: 100%;
 }
 
@@ -105,7 +105,6 @@ h4 {
   margin-bottom: 5px;
 }
 
-
 #mat-card {
    border-radius: 5px;
 
@@ -120,4 +119,8 @@ h4 {
   .mat-card-content{
     padding:5px;
   }
+ }
+
+ .pin-card { 
+  //  width:450px;
  }

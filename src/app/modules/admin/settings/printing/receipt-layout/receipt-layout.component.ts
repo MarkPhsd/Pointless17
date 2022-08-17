@@ -95,7 +95,7 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
         this.orderTypes = []
         this.orderTypes.push(this.orderType)
         if (this.subFooterText) {
-          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes)
+          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
         }
         this.printingService.updatePrintReady(true)
         return this.order
@@ -160,29 +160,33 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
   }
 
   async getInterpolatedData() {
+
+    if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
 
     try {
 
       if (this.orders && this.headerText) {
-        this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.headerText, this.orders)
-        this.interpolatedFooterTexts    = this.renderingService.refreshStringArrayData(this.footerText, this.orders)
+        this.interpolatedHeaderTexts    = this.renderingService.refreshStringArrayData(this.headerText, this.orders, 'header')
+        this.interpolatedFooterTexts    = this.renderingService.refreshStringArrayData(this.footerText, this.orders, 'footer')
       }
 
       if (this.items && this.itemText) {
-        this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items)
+        // console.log('get Interpolated Data', 'items')
+        this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items, 'items')
+        // console.log('items' , this.interpolatedItemTexts)
       }
 
       if (this.payments && this.paymentsText) {
-        this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsText, this.payments)
+        this.interpolatedPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsText, this.payments, 'payments')
       }
 
       if (this.payments && this.paymentsCreditText) {
-        this.interpolatedCreditPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsCreditText, this.payments)
+        this.interpolatedCreditPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsCreditText, this.payments, 'payments')
       }
 
       if (this.payments && this.paymentsWICEBTText) {
-        this.interpolatedWICEBTPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsWICEBTText, this.payments)
+        this.interpolatedWICEBTPaymentsTexts  = this.renderingService.refreshStringArrayData(this.paymentsWICEBTText, this.payments, 'payments')
       }
 
       if (this.orders && this.orders[0].serviceTypeID) {
@@ -191,7 +195,7 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
               this.orderType = data
               this.orderTypes = []
               this.orderTypes.push(this.orderType)
-              this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes)
+              this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
             }
           }
         )

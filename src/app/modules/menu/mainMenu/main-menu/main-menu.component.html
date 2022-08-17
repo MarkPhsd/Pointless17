@@ -1,11 +1,10 @@
 <div class="canvas">
-
+  
   <div class="overlay-items">
 
+    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+    
     <scheduled-menu-list></scheduled-menu-list>
-
-    <mat-divider></mat-divider>
-    <!-- panelHeightSize {{panelHeightSize}} -->
 
     <div *ngIf="homePageSetings && panelHeightSize; else loading">
       <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
@@ -20,6 +19,18 @@
 
   </div>
 </div>
+
+<ng-template #searchSelector>
+  <div >
+    <search-debounce-input
+       [searchForm]="searchForm"  
+       [itemNameControl]="'itemName'"
+       (outPutMethod)="refreshSearch($event)">
+      <div #fieldDescription>Search Items</div>
+    </search-debounce-input>
+    <mat-divider></mat-divider>
+  </div>
+</ng-template>
 
 <ng-template #departmentView>
   <div [style.height]="panelHeightSize">
@@ -40,7 +51,6 @@
 </ng-template>
 
 <ng-template #brandView>
-  <!-- <div> -->
     <div [style.height]="panelHeightSize">
     <app-brandslist ></app-brandslist>
   </div>
@@ -52,6 +62,8 @@
   </div>
 </ng-template>
 
-<!-- <video autoplay muted  class="video">
-  <source [src]="smoke" type="video/mp4">
-</video>  -->
+<ng-template #isviewOverlayOn>
+  <video autoplay muted  class="video">
+    <source [src]="smoke" type="video/mp4">
+  </video> 
+</ng-template>

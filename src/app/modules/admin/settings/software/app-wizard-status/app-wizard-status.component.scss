@@ -1,0 +1,46 @@
+.grid-progress { 
+    display: grid;
+    --gap: 5px;
+    margin: 5px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 45px 1fr  45px;
+ 
+}
+
+.container { 
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 450px;
+}
+
+mat-progress-bar {
+  margin: 5px;
+}
+
+mat-icon { 
+  margin-top: 15px;
+  // margin-left:-5px;
+}
+
+.header-grid { 
+  display: grid;
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 45px 1fr ;
+
+}
+
+.title-grid { 
+  display: grid;
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 45px 1fr 45px 45px 45px;
+
+}

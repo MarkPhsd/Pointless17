@@ -1,5 +1,4 @@
 <div class="parent-container">
-
   <div>
     <span *ngIf="isAuthorized || isStaff">
 
@@ -18,7 +17,7 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <span  *ngIf="isAuthorized">
+      <span  *ngIf="isAuthorized  || isStaff">
         <span *ngIf="!smallDevice || (!smallDevice && hidePanel)">
           <button mat-button (click)="displayPanel($event)">
             <mat-icon>search</mat-icon>
@@ -34,7 +33,6 @@
       </button>
     </span>
 
-
     <span *ngIf="!smallDevice">
       <button mat-button (click)="setViewType(3)">
         <mat-icon>countertops</mat-icon> View Prep
@@ -48,7 +46,7 @@
     <span *ngIf="viewType == 1">
       <app-order-cards
         [cardStyle]="'block'"
-        ></app-order-cards>
+      ></app-order-cards>
     </span>
 
     <span *ngIf="viewType == 0">
@@ -65,7 +63,7 @@
         </h2>
       </app-order-cards>
     </span>
-    <!-- printLocation  {{printLocation}} prepStatus {{prepStatus}} -->
+
     <span *ngIf="viewType == 3">
       <span *ngIf="viewType == 3 && (printerLocations$ | async) as printLocations">
 

@@ -62,7 +62,7 @@ export class StripePaymentService {
 
     const endPoint = 'GetPaymentIntent'
 
-    const parameters = `?paymentID=${paymentID}&currency=${currency}`
+    const parameters = `?id=${paymentID}&currency=${currency}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

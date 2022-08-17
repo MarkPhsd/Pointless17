@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, Inject, OnInit, Optional, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
@@ -14,17 +14,19 @@ export class FastUserSwitchComponent implements OnInit {
   request  : string;
   requestData: any;
 
+  @Output() outPutLogin = new EventEmitter();
+  
   constructor(
-    private dialog             : MatDialog,
+    private dialog   : MatDialog,
     private userSwitchingService   : UserSwitchingService,
-    private dialogRef: MatDialogRef<FastUserSwitchComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
-  ) {
+    // @Optional()  dialogRef: MatDialogRef<FastUserSwitchComponent>,
+    // @Inject(MAT_DIALOG_DATA) public data: any
+    ) {
 
-    if (data) {
-      this.request = data.request
-      this.requestData = data
-    }
+    // if (data) {
+    //   this.request = data.request
+    //   this.requestData = data
+    // }
   }
 
   ngOnInit(): void {
@@ -32,21 +34,25 @@ export class FastUserSwitchComponent implements OnInit {
   }
 
   entry(event) {
-    switch (this.request) {
-      case 'switchUser':
-        this.userSwitchingService.pinEntryResults(event)
-          break;
-      case 'voidRequest':
 
-          break;
-      default:
-        break;
-    }
-    this.dialogRef.close();
+    // this.userSwitchingService.pinEntryResults(event).subscribe();
+
+    // switch (this.request) {
+    //   case 'switchUser':
+    //     this.userSwitchingService.pinEntryResults(event)
+    //       break;
+    //   case 'voidRequest':
+    //     break;
+    //   default:
+    //     break;
+    // }
+    // this.dialogRef.close();
   }
 
   enterPIN(event) {
-    this.userSwitchingService.openPIN(event)
+    const user = localStorage.getItem('posToken')
+    const login = {user: user, password: event }
+    this.outPutLogin.emit(login)
   }
 
   onCancel() {

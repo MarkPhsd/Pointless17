@@ -6,6 +6,7 @@ import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
@@ -30,7 +31,7 @@ export class PosEditSettingsComponent implements OnInit {
     private fb             : FormBuilder,
     private sitesService   : SitesService,
     private settingsService: SettingsService,
-    public  deviceService  :   DeviceDetectorService,
+    public  deviceService  : DeviceDetectorService,
     private dialogRef      : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
@@ -77,6 +78,7 @@ export class PosEditSettingsComponent implements OnInit {
       deviceName      : [],
       dSISecureDevice      : [],
       cardPointeHSN      : [],
+      btPrinter : [],
     })
 
     if (this.terminal) {
@@ -84,7 +86,7 @@ export class PosEditSettingsComponent implements OnInit {
     }
   }
 
-  saveTerminalSetting( close: boolean) {
+  saveTerminalSetting(close: boolean) {
     const site = this.sitesService.getAssignedSite()
     const item = this.inputForm.value as ITerminalSettings;
     const text = JSON.stringify(item);

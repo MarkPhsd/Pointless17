@@ -71,6 +71,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
   clearInput() {
     this.value = '';
     this.cashValue = ''
+    this.formattedValue = ''
     this.outPutValue.emit('')
     this.initForm()
   }
@@ -131,13 +132,9 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   onChangeValueUpdate(data: number) {
     if (this.showInput)  { return }
-    // console.log('this value', this.cashValue)
-    // console.log('inputTypeValue', this.inputTypeValue)
-    // console.log('formatted', this.formatted)
     this.formatted = data
     this.value     = this.formatted
     this.outPutValue.emit(this.formatted)
-    console.log(this.formatted)
   }
 
   enterValue(event) {
@@ -171,6 +168,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       return
     }
     if (len > 0) {  this.value = this.value.substring(0, len -1) }
+    
     this.updateDisplayOutput();
   }
 

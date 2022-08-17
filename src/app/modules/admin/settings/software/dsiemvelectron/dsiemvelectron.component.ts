@@ -31,6 +31,7 @@ export class DSIEMVElectronComponent implements OnInit {
 
   pathName = 'default'
   get f() {return this.pathForm.controls}
+
   constructor(private uISettingsService: UISettingsService,
               private dsiEMVService:     DSIEMVTransactionsService,
               private dsiProcess        : DSIProcessService,

@@ -37,7 +37,7 @@
                       *ngIf="showIcon && item.icon && item.icon != ''">
 
                   <span *ngIf="materialIcons">
-                      <mat-icon>{{item.icon}}</mat-icon>
+                    <mat-icon>{{item.icon}}</mat-icon>
                   </span>
                   <span *ngIf="!materialIcons"
                       [class]="'mdi ' + item.icon">
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="item-text"
-                      *ngIf="((item.icon === '' || !item.icon) && tinyMenu )
+                     *ngIf="((item.icon === '' || !item.icon) && tinyMenu )
                             || !tinyMenu">
                   {{item[fieldName] | truncateText : textLength}}
                 </div>

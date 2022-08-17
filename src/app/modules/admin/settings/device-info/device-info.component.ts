@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DeviceDetectorService } from 'ngx-device-detector'
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-device-info',
@@ -13,14 +14,21 @@ export class DeviceInfoComponent implements OnInit {
   isTablet        : boolean;
   isDesktopDevice : boolean;
   deviceName      : string;
+  posToken        : string;
 
   debugOnThisDevice: boolean;
-  constructor( public  deviceService:   DeviceDetectorService,) { }
+  constructor(
+    public platformService: PlatformService,
+    public  deviceService:   DeviceDetectorService,) { }
 
   ngOnInit(): void {
     this.getDeviceInfo();
     this.deviceName = localStorage.getItem('devicename');
     this.debugOnThisDevice = this.getdebugOnThisDevice()
+  }
+
+  setAPIToken() {
+    localStorage.setItem('posToken', this.posToken)
   }
 
   getdebugOnThisDevice() {

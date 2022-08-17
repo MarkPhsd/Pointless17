@@ -483,13 +483,22 @@ mat-dialog-container {
   background-color: #357a38 !important;
 }
 
-// mat-toolbar {
-//   // border: 1px solid #e7e7e7;
-//   // font-weight: bold;
-//   height: 55px !important;
-// }
-// mat-toolbar-row {
-//   // border: 1px solid #e7e7e7;
-//   // font-weight: bold;
-//   height: 55px !important;
-// }
+
+
+.grid-image-button { 
+  display: grid;
+  gap: 4px;
+  grid-template-columns: 25px 1fr;
+ 
+  min-width: 193px;
+  // height:45px;
+}
+
+.grid-image-button-group {
+  margin: 5px;
+  height: 45px;
+}
+
+.mat-grid-image-icon { 
+  margin-top: -10px;
+}

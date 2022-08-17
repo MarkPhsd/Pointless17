@@ -1,4 +1,5 @@
 <div  #scrollMe
+      [style.width]="deviceWidthPercentage"
       [style.height]="panelHeight"
       *ngIf="order && order.posOrderItems && order.posOrderItems.length>0"
       [class]="orderItemsPanel" >

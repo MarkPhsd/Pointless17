@@ -53,7 +53,7 @@ export class DSIProcessService {
 
   async  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
     const commandResponse = await this.emvTransaction('EMVReturn', amount, paymentID, manual, false, 'credit');
-    console.log('emvSale', commandResponse)
+    // console.log('emvSale', commandResponse)
     return commandResponse;
   }
 
@@ -171,12 +171,13 @@ export class DSIProcessService {
         transaction.TranCode = 'EMVVoidSale';
         const result = this.testVoid(transaction.TranCode, +transaction.Amount, posPayment.id, false, false,  transaction.TranType)
         result.TranResponse.TranCode = 'EMVVoidSale';
-        console.log('CmdResponse', result?.CmdResponse)
-        console.log('TranResponse', result?.TranResponse)
+        // console.log('CmdResponse', result?.CmdResponse)
+        // console.log('TranResponse', result?.TranResponse)
         return result
       }
 
       if (transaction.SecureDevice.toLowerCase() != 'test') {
+        // transaction.Amount = amount;
         transaction.Amount = amount;
         const transResult = await this.dsi.emvTransaction(transaction)
         return transResult.RStream
@@ -267,6 +268,12 @@ export class DSIProcessService {
     const item  = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }
 
+    if (!amount) {
+      const result  = 'Failed, no amount given.'
+
+      return
+    }
+
     const transactiontemp     = JSON.parse(item) as Transaction;
 
     if (transactiontemp.SecureDevice === 'test') {
@@ -291,7 +298,10 @@ export class DSIProcessService {
     }
 
     transaction.Amount = {} as Amount
-    transaction.Amount.Purchase = amount.toFixed(2).toString();
+    if (amount) {
+      const value = +amount
+      transaction.Amount.Purchase = value.toFixed(2)
+    }
 
     if (tipPrompt) {
       transaction.Amount.Gratuity = 'Prompt'

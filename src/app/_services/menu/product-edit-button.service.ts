@@ -39,6 +39,8 @@ export interface IBalanceDuePayload {
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/dsiemvtransaction/dsiemvtransaction.component';
 import { StoreCreditEditorComponent } from 'src/app/modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
+import { AppWizardProgressButtonComponent } from 'src/app/shared/widgets/app-wizard-progress-button/app-wizard-progress-button.component';
+import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 
 @Injectable({
   providedIn: 'root'
@@ -191,6 +193,18 @@ export class ProductEditButtonService {
         height:       '420px',
         minHeight:    '420px',
         data : data
+      },
+    )
+  }
+
+  
+  openAppWizard() {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(AppWizardStatusComponent,
+      { width:        '600px',
+        minWidth:     '600px',
+        height:       '600px',
+        minHeight:    '600px',
       },
     )
   }

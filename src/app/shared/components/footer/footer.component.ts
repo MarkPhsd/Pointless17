@@ -1,6 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener } from '@angular/core';
-import { IUser } from 'src/app/_interfaces';
+import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { IPOSOrder, IUser } from 'src/app/_interfaces';
+import { OrdersService } from 'src/app/_services';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 
 @Component({
@@ -8,38 +11,70 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.scss']
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent implements OnInit, OnDestroy {
 
   @ViewChild('footerMenu') footerMenu: TemplateRef<any>;
+  outlet              : TemplateRef<any>;
+
   smallDevice: boolean;
-  isUserStaff         =   false;
+  isStaff             =   false;
   isAdmin             =   false;
   isUser              =   false;
-  outlet : TemplateRef<any>;
   user                : IUser;
   userName:           string;
   userRoles:          string;
   employeeName        : string;
-  showPOSFunctions =   false;
+  showPOSFunctions    = false;
+  screenWidth         : number;
+  _order        :   Subscription;
+  order         :   IPOSOrder;
 
-  @HostListener("window:resize", [])
-  updateScreenSize() {
-    this.smallDevice = false
-    this.outlet  = null;
-    if (window.innerWidth < 768) {
-       this.smallDevice = true  
-       this.outlet = this.footerMenu
-    }
+  currentOrderSusbcriber() {
+    this._order = this.orderService.currentOrder$.subscribe( data => {
+      this.order = data
+      // this.canRemoveClient = true
+      // if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
+      //   this.canRemoveClient = false
+      // }
+      // if (this.order && this.order.posPayments && this.order.posPayments.length > 0)  {
+      //   this.canRemoveClient = false
+      // }
+      // if (!data) { return }
+      // this.checkIfPaymentsMade()
+      // this.checkIfItemsPrinted()
+    })
   }
 
+
   constructor(
-    public  toolbarUIService:       ToolBarUIService,
+    public  toolbarUIService  : ToolBarUIService,
+    private orderService      : OrdersService,
     private  navigationService: NavigationService,
+    public printingService        : PrintingService,
   ) { }
 
   ngOnInit(): void {
     this.updateScreenSize()
     const i = 0
+    this.currentOrderSusbcriber()
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if (this._order) { this._order.unsubscribe()}
+  }
+
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    this.smallDevice = false
+    this.outlet  = null;
+    this.screenWidth = window.innerWidth;
+
+    if ( window.innerWidth < 850 ) {
+      this.smallDevice = true
+      this.outlet = this.footerMenu
+    }
   }
 
   getUserInfo() {
@@ -72,7 +107,7 @@ export class FooterComponent implements OnInit {
     this.userRoles        = '';
     this.showPOSFunctions = false;
     this.isAdmin          = false;
-    this.isUserStaff      = false;
+    this.isStaff      = false;
     this.employeeName     = '';
   }
 
@@ -80,9 +115,19 @@ export class FooterComponent implements OnInit {
     this.smallDeviceLimiter();
     this.navigationService.navPOSOrders()
   }
-  
+
   smallDeviceLimiter() {
     if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
   }
+
+  toggleOpenOrderBar() {
+    this.navigationService.toggleOpenOrderBar(this.isStaff)
+  }
+
+  makePayment() {
+    this.navigationService.makePayment(false, this.smallDevice, this.isStaff)
+  }
+
+
 
 }

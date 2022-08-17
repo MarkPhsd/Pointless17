@@ -1,6 +1,6 @@
 <app-header></app-header>
 
-<mat-drawer-container >
+<mat-drawer-container>
   <mat-drawer
         position ="start"
         [class]  ="barType"
@@ -45,12 +45,13 @@
               position  ="end"
               [mode]    ="sidebarMode"
               [opened]  ="orderBarOpen"
-              [class]   ="'mat-orderBar-wide'" >
+              [class]   ="matorderBar"
+              >
+         <!-- {{matorderBar}} | smallDevice {{smallDevice}} -->
     <app-order-bar>
     </app-order-bar>
   </mat-drawer>
 
 </mat-drawer-container>
-
 
 <app-footer></app-footer>

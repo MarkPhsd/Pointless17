@@ -61,11 +61,8 @@ import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
 import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
 import { DashBoardRoutingModule } from './dash-board-routing.module';
-// import { NgIdleModule } from '@ng-idle/core';
-// import { NgIdleModule } from '@ng-idle/core';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 Sentry.init({
   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
@@ -111,6 +108,7 @@ export function init_app(appLoadService: AppInitService) {
     CategoriesAlternateComponent,
     CurrencyFormatterDirective,
     LoginComponent,
+    
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
     RegisterAccountExistingUserWithTokenComponent,

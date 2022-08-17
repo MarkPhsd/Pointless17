@@ -28,7 +28,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() prepScreen     : boolean;
   @Input() site:            ISite;
   @Input() disableActions = false;
-
+  deviceWidthPercentage = '100%'
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
   @Input() panelHeight = '100%';
@@ -159,6 +159,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
     if (window.innerWidth < 768) {
       this.smallDevice = true
+    }
+
+    if (window.innerWidth < 500) {
+      this.deviceWidthPercentage = '85%'
     }
 
     //the heights of this panel are what control

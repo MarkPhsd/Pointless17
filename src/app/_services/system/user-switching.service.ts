@@ -129,48 +129,47 @@ export class UserSwitchingService implements  OnDestroy {
     this.orderService.updateOrderSearchModel(null);
     this.toolbarUIService.updateDepartmentMenu(0);
     this.authenticationService.logout();
-
   }
 
   pinEntryResults(pin: any) {
     //find employee
+
+    const token =  localStorage.getItem('posToken')
     const site = this.siteService.getAssignedSite()
+
+    return this.login(token, pin)
     //secret user
-    if (!this.user && !this.platformService.webMode) {
-      this.setAppUser();
-    }
+    // if (!this.user && !this.platformService.webMode) {
+    //   this.setAppUser();
+    // }
 
-    this.employeeService.getEmployeeByPIN(site, pin).subscribe
-      (data =>
-      {
-        if (data) {
-          if (data.employee && data.client) {
+    // this.employeeService.getEmployeeByPIN(site, pin).subscribe
+    //   (data =>
+    //   {
+    //     if (data) {
+    //       if (data.employee && data.client) {
 
-            let currentUser       = {} as IUser;
-            const emp             = data.employee
-            const client          = data.client;
+    //         let currentUser       = {} as IUser;
+    //         const emp             = data.employee
+    //         const client          = data.client;
 
-            currentUser.password  = pin;
-            currentUser.roles     = client.roles
-            currentUser.roles     = client.roles.toLowerCase()
-            currentUser.id        = client.id
-            currentUser.employeeID= client.employeeID
-            currentUser.username  = client.userName;
-            currentUser.phone     = client.phone;
-            currentUser.email     = client.email;
+    //         currentUser.password  = pin;
+    //         currentUser.roles     = client.roles.toLowerCase()
+    //         currentUser.id        = client.id
+    //         currentUser.employeeID= client.employeeID
+    //         currentUser.username  = client.userName;
+    //         currentUser.phone     = client.phone;
+    //         currentUser.email     = client.email;
 
-            const user = this.setUserInfo(currentUser, pin)
-            this.authenticationService.updateUser(user)
-            this.clearSubscriptions();
-            return true;
+    //         const user = this.setUserInfo(currentUser, pin)
+    //         this.authenticationService.updateUser(user)
+    //         this.clearSubscriptions();
+    //         return true;
 
-          }
-        }
-      }
-      , (err: HttpErrorResponse) => {
-        this.snackBar.open("Try again.", "Failure", {verticalPosition: 'top', duration: 2000})
-        // console.log(err)
-     })
+    //       }
+    //     }
+    //   }
+    // )
   }
 
   login(username: string, password: string): Observable<any> {
@@ -179,41 +178,43 @@ export class UserSwitchingService implements  OnDestroy {
     let url = `${apiUrl}/users/authenticate`
 
     this.clearSubscriptions();
+
     this.authenticationService.clearUserSettings();
+
     const userLogin = { username, password };
-    const timeOut    = 3 * 1000;
+    const timeOut   = 3 * 1000;
 
     return  this.http.post<any>(url, userLogin)
       .pipe(
         switchMap(
            user => {
 
-           if (user && user.errorMessage) {
-            const message = user?.errorMessage;
-            this.snackBar.open(message, 'Failed Login', {duration: 1500})
-            const item = {message: 'failed'}
-            return of(item)
-          }
+            // console.log(user)
+            if (user && user.errorMessage) {
+              const message = user?.errorMessage;
+              this.snackBar.open(message, 'Failed Login', {duration: 1500})
+              const item = {message: 'failed'}
+              return of(item)
+            }
 
-          if (user) {
+            if (user) {
 
-            if (user.message.toLowerCase() === 'failed') {
+              if (user?.message.toLowerCase() === 'failed') {
+                const user = {message: 'failed'}
+                return of(user)
+              }
+
+              user.message = 'success'
+              const currentUser = this.setUserInfo(user, password)
+              this.uiSettingService.initSecureSettings();
+
+              if ( this.platformService.isApp()  )  { return this.changeUser(user) }
+              if ( !this.platformService.isApp() )  { return of(user)              }
+
+            } else {
               const user = {message: 'failed'}
               return of(user)
             }
-
-            user.message = 'success'
-
-            const currentUser = this.setUserInfo(user, password)
-            this.uiSettingService.initSecureSettings();
-
-            if ( this.platformService.isApp()  )  { return this.changeUser(user) }
-            if ( !this.platformService.isApp() )  { return of(user)              }
-
-          } else {
-            const user = {message: 'failed'}
-            return of(user)
-          }
       })
     )
   }
@@ -225,14 +226,15 @@ export class UserSwitchingService implements  OnDestroy {
     if (!user.firstName) { user.firstName = user.username }
     localStorage.setItem("ami21", 'true')
     currentUser.password     = password;
-    currentUser.roles        = user.roles
-    currentUser.roles        = currentUser.roles.toLowerCase()
+    currentUser.roles        = user?.roles.toLowerCase()
     currentUser.id           = user.id
     currentUser.employeeID   = user.employeeID
     currentUser.username     = user.username;
     currentUser.phone        = user.phone;
     currentUser.email        = user.email;
     currentUser.token        = user.token;
+    currentUser.firstName    = user?.firstName;
+    currentUser.lastName     = user?.lastName;
     currentUser.errorMessage = user.errorMessage
     currentUser.message      = user.message
     user.authdata = window.btoa(user.username + ':' + user.password);

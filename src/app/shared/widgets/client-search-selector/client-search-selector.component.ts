@@ -17,7 +17,7 @@ export class ClientSearchSelectorComponent implements OnInit, AfterViewInit  {
 
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  // @Input()  wideOrderBar      : boolean;
   @Input()  searchForm:       FormGroup;
   @Input()  itemType:         number; //removed default 1
   @Input()  searchField:      FormControl;

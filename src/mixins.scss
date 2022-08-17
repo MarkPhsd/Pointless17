@@ -18,3 +18,11 @@
 @mixin for-big-desktop-up {
   @media (min-width: 1800px) { @content; }
 }
+
+@mixin horizontal-tablet {
+  @media (max-width: 815px) { @content; }
+}
+
+// @media (max-width: 815px) {
+//   grid-template-columns: auto;
+// }

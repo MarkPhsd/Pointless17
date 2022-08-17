@@ -122,20 +122,18 @@ isDepartmentOpen    = false;
 
 _uiHomePage         : Subscription;
 uiHomePage          : any;
+accordionStep       : number;
 
 initSubscriptions() {
-
   this._order = this.orderService.currentOrder$.subscribe( data => {
     this.order = data
   })
-
   this._uiHomePage = this.uiSettingsService.homePageSetting$.subscribe(data => {
     this.uiHomePage = data;
     if (data) {
       if (!data.sideToolbarDefaultBrand) { this.multifilter = false }
     }
   })
-
 }
 
 constructor(
@@ -150,7 +148,6 @@ constructor(
     private toolBarUIService    : ToolBarUIService,
     public  platFormService     : PlatformService,
     public  uiSettingsService   : UISettingsService,
-
   )
   {
     this.initForm();
@@ -171,7 +168,12 @@ constructor(
     this.productTypes$  = this.itemTypeService.getBasicTypesByUseType(site, 'product')
     this.isDevMode      = isDevMode()
     this.initSubscriptions();
+    this.setStep(0)
   };
+
+  setStep(value: number) { 
+    this.accordionStep = value;
+  }
 
   ngOnDestroy() {
     if (this._order)      { this._order.unsubscribe(); }
@@ -220,20 +222,6 @@ constructor(
   }
 
   ngAfterViewInit() {
-    // if (this.input) {
-    //   fromEvent(this.input.nativeElement,'keyup')
-    //   .pipe(
-    //     filter(Boolean),
-    //     debounceTime(250),
-    //     distinctUntilChanged(),
-    //     tap((event:KeyboardEvent) => {
-    //       const search  = this.input.nativeElement.value
-    //       this.input.nativeElement.focus();
-    //       this.refreshSearch();
-    //     })
-    //   )
-    //   .subscribe();
-    // }
     if (this.platForm.toLowerCase() === 'android') {
       setTimeout(()=> {
         if (this.input && this.input.nativeElement) {
@@ -329,9 +317,6 @@ constructor(
     productSearchModel.name         = null;
     productSearchModel.barcode      = null;
     productSearchModel.departmentName = null;
-
-
-
     if (this.itemName) {
       productSearchModel.name               =  this.itemName;
       productSearchModel.useNameInAllFields = true

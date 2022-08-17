@@ -81,29 +81,29 @@
         </div>
 
         <div class="side-panel-buttons-container"
-             *ngIf="!mainPanel" >
+             [style.width]="deviceWidthPercentage"
+             *ngIf="!mainPanel && (uiSettings && uiSettings.wideOrderBar)" >
 
-          <div>
+          <div *ngIf="!phoneDevice">
             <button mat-raised-button
-              fxFill
               class="button"
+              fxFill
               color="primary"
               (click)="toggleOpenOrderBar()">
-              <div *ngIf="order.history">
+              <div *ngIf="order && order.history">
                 <mat-icon>view</mat-icon>
                 View Cart
               </div>
-              <div *ngIf="!order.history">
+              <div *ngIf="order && !order.history">
                 <mat-icon>edit</mat-icon>
                 Edit Cart
               </div>
             </button>
           </div>
 
-          <div>
-
+          <div  >
             <button  mat-raised-button
-              fxFill
+              fxFill  
               class="button"
               color="primary"
               (click)="makePayment()">
@@ -111,7 +111,6 @@
                Check Out
             </button>
           </div>
-
         </div>
       </div>
     </div>

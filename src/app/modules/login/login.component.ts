@@ -23,6 +23,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   @Input() statusMessage: string;
   initApp    = true
+  togglePIN: boolean;
 
   backgroundImage: any //'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
   bucket         : string;
@@ -106,6 +107,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private appInitService       : AppInitService,
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
+
     )
   {
     this.redirects();
@@ -339,13 +341,21 @@ export class LoginComponent implements OnInit, OnDestroy {
     localStorage.setItem('rememberMe', 'false')
   }
 
+  pinLogin(event) { 
+    const pin = event.password;
+    const user = event.user;
+    this.submitLogin(user,pin)
+  }
+
   onSubmit() {
-
     if (!this.validateForm(this.loginForm)) { return }
-
     this.spinnerLoading = true;
     const userName = this.f.username.value;
     const password = this.f.password.value;
+    this.submitLogin(userName,password)
+  }
+
+  submitLogin(userName: string, password: string) {
 
     this.userSwitchingService.login(userName, password)
       .subscribe({

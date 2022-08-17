@@ -3,9 +3,20 @@
 mat-card  {
   width: 100%;
 }
+
+.transaction-data-side-panel-small {
+  display      : grid;
+  grid-template-columns: 55px 1fr;
+  width        : 125px;
+  overflow-y   : auto;
+  overflow-x   : hidden;
+  font-size    : large;
+  margin-bottom: 5px;
+}
+
 .transaction-data-side-panel {
   display      : grid;
-  grid-template-columns: 95px 125px;
+  grid-template-columns: 1fr 1fr;
   width        : 100%;
   overflow-y   : auto;
   overflow-x   : hidden;

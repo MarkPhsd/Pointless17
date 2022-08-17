@@ -30,6 +30,24 @@ button {
   width: 25px;
 }
 
+// .grid-image-button { 
+//   display: grid;
+//   gap: 4px;
+//   grid-template-columns: 25px 1fr;
+ 
+//   min-width: 193px;
+//   height:45px;
+// }
+
+// mat-raised-button, button {
+//   margin: 3px;
+//   height: 40px;
+// }
+
+// .mat-grid-icon { 
+//   margin-top: -10px;
+// }
+
 .settings {
   width: 100%;
   float: left;
@@ -67,9 +85,7 @@ mat-form-field {
   font-size: .8em;
 }
 
-mat-raised-button, button {
-  margin: 3px 3px 3px 3px
-}
+
 
 .grid-settings-2 {
   // display: grid;

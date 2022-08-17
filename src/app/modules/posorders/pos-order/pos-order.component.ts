@@ -22,6 +22,7 @@ import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'sr
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { ResizedEvent } from 'angular-resize-event';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { NavigationService } from 'src/app/_services/system/navigation.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -42,7 +43,7 @@ styleUrls: ['./pos-order.component.scss'],
 })
 
 export class PosOrderComponent implements OnInit ,OnDestroy {
-
+  deviceWidthPercentage ='100%'
   orderItemsHeightStyle ='150px'
   windowHeight: number;
   CDK_DRAG_CONFIG = {}
@@ -63,6 +64,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   sidePanelWidth: number
   sidePanelPercentAdjust: number
   smallDevice : boolean;
+  phoneDevice = false;
   bucketName:             string;
   awsBucketURL:           string;
   currentPage: any;
@@ -131,6 +133,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   homePageSettingSubscriber() {
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
+   
+
       if (data) {
         if (data.outGoingCustomerSupportEmail) {
           this.emailOption = true
@@ -227,6 +231,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   constructor(
               private renderer          : Renderer2,
+              private navigationService : NavigationService,
               private orderService      : OrdersService,
               private awsBucket         : AWSBucketService,
               private printingService   : PrintingService,
@@ -256,7 +261,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false
-
+    this.phoneDevice = false
+    this.deviceWidthPercentage = '100%'
     this.gridRight       = 'grid-order-header ';
     this.orderlayout     = 'order-layout-empty';
     this.resizePanel();
@@ -268,6 +274,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.infobuttonpanel = 'grid-order-header'
       this.gridspan3       = ''
       this.gridRight       = 'grid-order-header';
+    }
+
+    if (window.innerWidth < 599) { 
+      this.phoneDevice = true
+      this.deviceWidthPercentage = '65%'
     }
 
     if (this.mainPanel && !this.smallDevice) {
@@ -411,32 +422,18 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.orderMethodService.clearOrder()
   }
 
-  public toggleOpenOrderBar() {
 
-    // http://localhost:4200/pos-order-schedule
-    let schedule = 'currentorder'
-
-    if (this.isStaff) { schedule = '/currentorder/' }
-
-    this.router.navigate([ schedule , {mainPanel:true}]);
-
-    this.openOrderBar = false
-    this.toolbarUIService.updateOrderBar(this.openOrderBar)
-    this.toolbarUIService.resetOrderBar(true)
-  }
 
   voidOrder() {
      this.productEditButtonService.openVoidOrderDialog(this.order)
   }
 
   refundItem(event) {
-
     if (this.assignedItems) {
       console.log(this.assignedItems)
       console.log('what is happening.')
       this.productEditButtonService.openRefundItemDialog(this.assignedItems)
     }
-
   }
 
   refundOrder(event) {
@@ -490,7 +487,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       })
     };
 
-
   }
 
   removeSuspension() {
@@ -532,27 +528,16 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  toggleOpenOrderBar() {
+    this.openOrderBar= false
+    this.navigationService.toggleOpenOrderBar(this.isStaff)
+  }
+
   makePayment() {
     if (this.smallDevice) {
       this.openOrderBar = false
-      this.toolbarUIService.updateOrderBar(this.openOrderBar)
-      this.toolbarUIService.resetOrderBar(false)
     }
-
-    let url = 'pos-order-schedule'
-    if (!this.isStaff) {
-      url = 'pos-order-schedule'
-      this.router.navigateByUrl(url)
-      return
-    }
-
-    if (this.isStaff) {
-       url = 'pos-payment'
-       this.router.navigateByUrl(url)
-       return
-    }
-
-    this.toolbarUIService.updateOrderBar(false)
+    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff) 
   }
 
   //loop the items

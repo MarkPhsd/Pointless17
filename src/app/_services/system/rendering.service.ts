@@ -68,12 +68,52 @@ export class RenderingService {
    }).format(number)
   }
 
-  refreshStringArrayData(text: string, obj: any[]) {
+  refreshStringArrayData(text: string, obj: any[], type: string) {
     let  stringArray = []
+    let percDiscountText = ''
+    let newText= '';
+
     if (obj) {
+
       obj.forEach( data => {
         if (data) {
-          stringArray.push( this.interpolateText(data, text))
+
+          newText = text;
+
+          if (type === 'items') {
+            if (data.itemPercentageDiscountValue && data?.itemPercentageDiscountValue != 0) {
+              console.log('data %', data?.itemPercentageDiscountValue)
+              let disc = `${text} ${this.itemPercentageDiscountText}`;
+              newText = newText + disc;
+            }
+          }
+
+          if (type === 'items') {
+            if (data.itemCashDiscount && data?.itemCashDiscount != 0) {
+              console.log('data %', data?.itemCashDiscount)
+              let disc = `${text} ${this.itemCashDiscountText}`;
+              newText = newText + disc;
+            }
+          }
+
+          if (type === 'items') {
+            if (data.itemOrderCashDiscount && data?.itemOrderCashDiscount != 0) {
+              console.log('data %', data?.itemOrderCashDiscount)
+              let disc = `${text} ${this.itemOrderCashDiscountText}`;
+              newText = newText + disc;
+            }
+          }
+
+          if (type === 'items') {
+            if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
+              console.log('data %', data?.ItemOrderPercentageDiscount)
+              let disc = `${text} ${this.itemOrderPercentageDiscountText}`;
+              newText = newText + disc;
+            }
+          }
+
+          stringArray.push( this.interpolateText(data, newText))
+          // console.log(this.interpolateText(data, newText))
         }
       })
     }
@@ -87,4 +127,39 @@ export class RenderingService {
     return textCompiled;
   }
 
+  get itemPercentageDiscountText() {
+    let line =     "<div class=\'items-span-columns-3 itemName\'>"
+    line = line +     "% disc $ ${item.itemPercentageDiscountValue.toFixed(2)}"
+    line = line +  "</div>"
+    return line
+  }
+
+  get itemCashDiscountText() {
+    let line =     "<div class=\'items-span-columns-3 itemName\'>"
+    line = line +     "$ disc $ ${item.itemCashDiscount.toFixed(2)}"
+    line = line +  "</div>"
+    return line
+  }
+
+  get itemOrderCashDiscountText() {
+    let line =     "<div class=\'items-span-columns-3 itemName\'>"
+    line = line +     "$ disc $ ${item.itemOrderCashDiscount.toFixed(2)}"
+    line = line +  "</div>"
+    return line
+  }
+
+  //ItemOrderPercentageDiscount
+  get itemOrderPercentageDiscountText() {
+    let line =     "<div class=\'items-span-columns-3 itemName\'>"
+    line = line +     "% disc $ ${item.itemOrderPercentageDiscount.toFixed(2)}"
+    line = line +  "</div>"
+    return line
+  }
+
+  get itemLoyaltyPointDiscountText() {
+    let line =     "<div class=\'items-span-columns-3 itemName\'>"
+    line = line +     "Points $ ${item.itemLoyaltyPointDiscount.toFixed(2)}"
+    line = line +  "</div>"
+    return line
+  }
 }

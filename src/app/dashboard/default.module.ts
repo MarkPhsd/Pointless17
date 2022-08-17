@@ -293,6 +293,7 @@ import { PasswordValidationComponent } from '../modules/admin/profiles/password-
 import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/balanceSheets/credit-card-payments-print-list/credit-card-payments-print-list.component';
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { ProductListByBarcodeComponent } from '../modules/menu/product-list-by-barcode/product-list-by-barcode.component';
+import { AppWizardStatusComponent } from '../modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -302,6 +303,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
 @NgModule({
   declarations: [
+    AppWizardStatusComponent,
     AccordionMenuItemEditComponent,
     ActivityTogglesComponent,
     ActivityTogglesMetrcComponent,

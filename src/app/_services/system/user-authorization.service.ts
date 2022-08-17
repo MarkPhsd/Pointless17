@@ -29,14 +29,9 @@ export class UserAuthorizationService {
   isUserAuthorized(requiredArray: string): boolean {
 
     const user = this.currentUser();
-
-    let currentRole
-    try {
-      currentRole = user.roles;
-    } catch (error) {
-      return false
-    }
-
+   
+    const currentRole = user?.roles;
+   
     if (!currentRole) { return }
     if (!user || !user.roles) { return false}
     if (!this.validateUser)   { return false }
@@ -48,25 +43,27 @@ export class UserAuthorizationService {
     rolesArray.forEach( data => {
       if (data === currentRole) {
           result = true;
+          // console.log('isAuthorized', result)
         }
       }
     )
 
+    // console.log('isAuthorized', result)
     return result
   }
 
   isCurrentUserStaff(): boolean {
-    return  this.isUserAuthorized('admin, manager, employee')
+    return  this.isUserAuthorized('admin,manager,employee')
   }
 
   get isStaff(): boolean {
-    return  this.isUserAuthorized('admin, manager, employee')
+    return  this.isUserAuthorized('admin,manager,employee')
   }
   get isUser(): boolean {
     return  this.isUserAuthorized('user')
   }
   get isManagement(): boolean {
-    return  this.isUserAuthorized('admin, manager')
+    return  this.isUserAuthorized('admin,manager')
   }
   get isAdmin(): boolean {
     return  this.isUserAuthorized('admin')

@@ -38,6 +38,7 @@
             <div [innerHTML]="getInterpolatedHTML(subFooterText, orderType)" >  </div>
         </div>
       </div>
+
     </div>
 
     <div *ngIf="!liveEdit" class="background">
@@ -48,7 +49,7 @@
           <div  [innerHTML]="interpolatedHeaderTexts[i]" >  </div>
         </div>
       </div>
-
+      <!-- {{interpolatedItemTexts | json}} -->
       <div      *ngIf="interpolatedItemTexts  && interpolatedItemTexts.length>0"  class="section-item">
         <div    *ngFor="let item of interpolatedItemTexts; let i = index">
           <div  [class]="gridReceiptClass"

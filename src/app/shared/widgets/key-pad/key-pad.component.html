@@ -8,9 +8,11 @@
          [formGroup]="inputForm">
       <div>
         <mat-form-field  appearance="outline">
+
             <mat-label >
               <ng-content></ng-content>
             </mat-label>
+
             <input  matInput
                     #input
                     appAutoFocusInput
@@ -42,6 +44,7 @@
             *ngIf="showInput">
     <mat-card-content >
       <div [class]="alternateClass">
+
         <div [class]="numberbuttons">
           <button mat-button  (click)="enterValue(1)">1 </button>
         </div>
@@ -115,6 +118,8 @@
           </button>
         </div>
       </div>
+
+      <!-- formatted {{formatted}} value {{value}} cashValue {{cashValue}} -->
     </mat-card-content>
   </mat-card>
 
