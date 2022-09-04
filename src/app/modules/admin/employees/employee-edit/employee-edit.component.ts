@@ -6,9 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { EMPTY, Observable } from 'rxjs';
 import { switchMap, } from 'rxjs/operators';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { employee, IClientTable } from 'src/app/_interfaces';
+import { clientType, employee, IClientTable } from 'src/app/_interfaces';
 import { AWSBucketService} from 'src/app/_services';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
+import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { EmployeeService, IEmployeeClient } from 'src/app/_services/people/employee-service.service';
 import { IStatuses } from 'src/app/_services/people/status-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -42,6 +43,7 @@ export class EmployeeEditComponent implements OnInit {
   passwordsMatch      = true;
 
   minumumAllowedDateForPurchases: Date
+  clientTypes$: Observable<clientType[]>;
 
   password1
   password2
@@ -54,8 +56,9 @@ export class EmployeeEditComponent implements OnInit {
               private _snackBar: MatSnackBar,
               private employeeService   : EmployeeService,
               private siteService: SitesService,
-              private clientTableService: ClientTableService,
-              private fbContactsService: FbContactsService,
+              private clientTableService      : ClientTableService,
+              private fbContactsService       : FbContactsService,
+              private clientTypeService       : ClientTypeService,
               private userAuthorization       : UserAuthorizationService,
             ) {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -68,6 +71,7 @@ export class EmployeeEditComponent implements OnInit {
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
     this.initConfirmPassword()
+    
   }
 
   async initializeClient() {
@@ -127,11 +131,13 @@ export class EmployeeEditComponent implements OnInit {
   }
 
   async ngOnInit() {
+    const site     = this.siteService.getAssignedSite();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
     this.initializeClient();
     this.initConfirmPassword();
+    this.clientTypes$ = this.clientTypeService.getClientTypes(site);
   }
 
   async fillForm(id: any) {
@@ -256,6 +262,7 @@ export class EmployeeEditComponent implements OnInit {
       client.lastName = employee.lastName;
       client.phone = employee.phone;
       client.email = employee.email
+      console.log(client)
       if (employee.terminationDate) {
         client.apiUserName = ''
         client.apiPassword = ''

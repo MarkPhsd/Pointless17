@@ -2,7 +2,9 @@ import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription,Observable, switchMap, EMPTY } from 'rxjs';
+import { isNull } from 'lodash';
+import { Subscription,Observable, switchMap, EMPTY, of } from 'rxjs';
+import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, OperationWithAction } from 'src/app/_interfaces';
 import { IItemBasic, OrdersService } from 'src/app/_services';
 import { InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
@@ -52,6 +54,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 private orderService          : OrdersService,
                 private matSnackBar           : MatSnackBar,
                 private storeCreditService    : StoreCreditService,
+                private cardPointMethdsService: CardPointMethodsService,
                 private userAuthorization     : UserAuthorizationService,
                 private adjustMentService     : AdjustmentReasonsService,
                 private productEditButonService: ProductEditButtonService,
@@ -139,7 +142,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-
   voidPaymentFromSelection(setting) {
     if (setting) {
       const site = this.siteService.getAssignedSite();
@@ -148,21 +150,85 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       this.resultAction.action = 1;
       const method = this.resultAction.paymentMethod;
       let response$: Observable<OperationWithAction>;
+
       if (this.resultAction) {
         if (method) {
           if (method.isCreditCard) {
+            this.voidPayment.voidReason = this.resultAction.voidReason
 
             if (this.isDSIEmvPayment && this.voidPayment) {
-              this.voidPayment.voidReason = this.resultAction.voidReason = setting.name
               this.voidDSIEmvPayment();
               return ;
             }
 
+            if (this.voidPayment.respstat) {
+              const voidByRef$ = this.cardPointMethdsService.voidByRetRef(this.voidPayment.retref);
+
+              voidByRef$.pipe(
+                switchMap( data => {
+
+                  if (data && data === "Void Not Allowed") {
+                    return of(null)
+                  }
+
+                  if (data && data?.respstat && data?.respstat.toLowerCase() == 'a') {
+                    this.resultAction.payment.amountPaid = 0;
+                    this.resultAction.payment.amountReceived = 0;
+                    this.resultAction.payment.voidReason = this.resultAction.voidReason;
+                    this.resultAction.payment.retref   = data?.retref;
+                    this.resultAction.payment.respstat = data?.respstat;
+                    this.resultAction.payment.respcode = data?.respcode;
+                    return of(this.resultAction)
+                  }
+                  if (data && data?.respstat && data?.respstat.toLowerCase() == 'b') {
+                    this.notifyEvent('Please retry', 'Alert')
+                  }
+                  if (data && data?.respstat && data?.respstat.toLowerCase() == 'c') {
+                    this.notifyEvent(`Declined, refund most likely required.  ${data?.resptext}`, 'Alert');
+                    const confirm = window.confirm('This credit card transaction may already be voided. If you want to void the record of the payment here, you can press okay to continue. Otherwise the payment will remain as it appears.')
+                  }
+
+                  if (confirm) {
+                    this.resultAction.payment.amountPaid = 0;
+                    this.resultAction.payment.amountReceived = 0;
+                    this.resultAction.payment.voidReason = this.resultAction.voidReason;
+                    return of(this.resultAction)
+                  }
+
+                  // console.log('voided credit ', data?.respstat)
+                  this.resultAction = null
+                  return of(this.resultAction)
+
+                })).pipe(
+                  switchMap( resultAction => {
+                    // console.log(' voiding pos payment', resultAction)
+                    if (!resultAction) {
+                      this.notifyEvent('Void not allowed by user', 'CC Result')
+                      return of(null)
+                    }
+                    if (resultAction) {
+                      return this.pOSPaymentService.voidPayment(site, resultAction);
+                    }
+                  })
+                ).subscribe( data => {
+                  // console.log('voiding pos payment result', data)
+                  if (!data || !data.result) {
+                    if ( data?.resultMessage == null ) {
+                      this.notifyEvent(`Void failed: user may not be authorized`, 'Void Result')
+                      return
+                    }
+
+                    this.notifyEvent(`Void failed: ${data?.resultMessage}`, 'Void Result')
+                    return
+                  }
+                  this.updateVoidPayment(data)
+                })
+                return;
+            }
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)//.pipe().toPromise();
             this.updateVoidPaymentResponse(response$)
 
           } else {
-
             response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)//.pipe().toPromise();
             this.updateVoidPaymentResponse(response$)
           }
@@ -170,6 +236,33 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
       }
     }
   }
+
+  updateVoidPayment(response: OperationWithAction) {
+
+    const site = this.siteService.getAssignedSite();
+    const item$ = this.updateOrderSubscription()
+
+    if (response && response.result) {
+      item$.subscribe( order => {
+        this.orderService.updateOrderSubscription(order)
+        this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
+        this.closeDialog(response.payment, response.paymentMethod);
+      });
+      return
+    }
+
+    if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
+      const valueToReduce = response.payment.amountPaid
+      this.closeDialog(response.payment, response.paymentMethod);
+      this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce).subscribe(data => {
+        if (data == null) { return }
+        this.storeCreditMethodService.updateSearchModel(null)
+      })
+      return;
+    }
+
+  }
+
 
   voidDSIEmvPayment() {
     if (this.voidPayment) {
@@ -196,21 +289,8 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   updateVoidPaymentResponse(response$: Observable<OperationWithAction>) {
     const site = this.siteService.getAssignedSite();
-    // response$.subscribe( response => {
-    //     if (response && response.result) {
-    //       const item$ = this.updateOrderSubscription()
-    //       item$.subscribe( order => {
-    //         this.orderService.updateOrderSubscription(order)
-    //         this.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
-    //         this.closeDialog(response.payment, response.paymentMethod);
-    //       });
-    //     }
-    //   }
-    // )
-    console.log('updateVoidPaymentResponse')
     response$.pipe(
       switchMap(response => {
-
         if (response && response.result) {
           const item$ = this.updateOrderSubscription()
           item$.subscribe( order => {
@@ -225,14 +305,17 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
           this.closeDialog(response.payment, response.paymentMethod);
           return this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce)
         }
-
-        return EMPTY
+        return of(null)
       }
     )).subscribe(data => {
+      if (data == null) { return }
       this.storeCreditMethodService.updateSearchModel(null)
+
     })
 
   }
+
+
 
   updateManifestResponse(response$: Observable<OperationWithAction>) {
     response$.subscribe( response => {

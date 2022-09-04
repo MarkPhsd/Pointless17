@@ -9,7 +9,7 @@
 
     <mat-card-content *ngIf="isAndroid">
       <div class="grid-container">
-        checkrRsponse
+
 
           <div class="button">
             <button class="button" mat-raised-button color="primary" (click) ="checkResponse()">Permission Response</button>
@@ -37,19 +37,6 @@
         </div>
     </mat-card-content>
 
-    <!-- <mat-card-subtitle  *ngIf="!androidApp">
-      <h4>Web Interface</h4>
-    </mat-card-subtitle>
-
-    <mat-card-content *ngIf="!androidApp">
-      <div class="button">
-        <button class="button"
-                mat-raised-button
-                color="primary"
-                (click)="checkEcho()">Check Echo</button>
-        {{echoResponse | json}}
-      </div>
-    </mat-card-content> -->
 
     {{err}}
   </mat-card>

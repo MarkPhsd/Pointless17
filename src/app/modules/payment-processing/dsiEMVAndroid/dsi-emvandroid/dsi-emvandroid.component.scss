@@ -1,0 +1,82 @@
+button {
+  height:55px;
+  width: 100px;
+  margin: 10px;
+}
+
+.grid-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+mat-icon {
+  margin: 3px;
+}
+
+mat-option {
+  margin: 1rem 0;
+  overflow: visible;
+  line-height: initial;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+mat-option i {
+  display: block;
+  font-size: 1.5rem;
+  opacity: 0.6;
+}
+
+.item-description {
+  // margin: 5px;
+}
+
+.item-secure {
+  // margin: 5px;
+}
+
+.grid-fields {
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
+}
+
+.transaction-response {
+  max-width: 500px;
+  max-height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.message {
+  // max-width: 550px;
+  width: 100%;
+  min-width: 550px;
+  max-height: 400px;
+  height: 400px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.example-form {
+  min-width: 350px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.example-full-width {
+  height: 45px;
+  width: 100%;
+  margin: 10px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr ;
+  width: 100%;
+  grid-auto-flow: row;
+}
+
+
+.response {
+  margin: 5px;
+}

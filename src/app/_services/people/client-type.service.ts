@@ -99,7 +99,7 @@ export class ClientTypeService {
 
   }
 
-  getClientTypes(site: ISite): Observable<clientType[]> {
+  getClientTypes(site: ISite): Observable<any> {
 
     const controller = "/clientTypes/"
 
@@ -109,7 +109,7 @@ export class ClientTypeService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.http.get<clientType[]>(url)
+    return this.http.get<any>(url)
 
   }
 

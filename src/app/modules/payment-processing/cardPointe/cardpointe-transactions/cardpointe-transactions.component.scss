@@ -1,0 +1,42 @@
+
+.button-grid {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+}
+
+button {
+  margin: 10px;
+  height: 80px;
+  min-width: 100px;
+  max-width: 135px;
+}
+
+
+.transaction-buttons-grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
+
+}
+.button-container {
+  max-width: 450px;
+  width: 450px;
+}
+
+
+.values {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 1fr;
+
+}
+
+.header {
+  font-size: 2em;
+  font-weight: 500;
+}
+.value {
+  font-size: 2em;
+  font-weight: 600;
+}

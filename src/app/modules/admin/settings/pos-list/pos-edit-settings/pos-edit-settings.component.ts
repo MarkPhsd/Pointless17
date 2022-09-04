@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceDetectorService } from 'ngx-device-detector';
 import { Observable } from 'rxjs';
+import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-processing/services';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
@@ -21,64 +22,72 @@ export class PosEditSettingsComponent implements OnInit {
   terminal : ITerminalSettings;
   saving$  : Observable<ISetting>;
   saving   : boolean;
+  blueToothDeviceList: any;
 
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
   ]
 
   constructor(
-    private _snackBar      : MatSnackBar,
-    private fb             : FormBuilder,
-    private sitesService   : SitesService,
-    private settingsService: SettingsService,
-    public  deviceService  : DeviceDetectorService,
-    private dialogRef      : MatDialogRef<PosEditSettingsComponent>,
+    private _snackBar           : MatSnackBar,
+    private fb                  : FormBuilder,
+    private sitesService        : SitesService,
+    private settingsService     : SettingsService,
+    public  deviceService       : DeviceDetectorService,
+    private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
+    private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
-{
-  if (data) {
-    this.setting = data
-    if (!this.setting.text) {
-      this.terminal  = {} as ITerminalSettings;
-      this.terminal.name = this.setting.name = 'New Terminal'
-      this.terminal.enabled = true;
-      this.terminal.resetOrdersFilter = true;
-      this.terminal.medicalRecSales = 0
-      this.initForm()
-      return
-    }
-    if (this.setting.text){
-      try {
-        this.terminal = JSON.parse(this.setting.text)  as ITerminalSettings;
-      } catch (error) {
+ {
+    if (data) {
+      this.setting = data
+      if (!this.setting.text) {
         this.terminal  = {} as ITerminalSettings;
         this.terminal.name = this.setting.name = 'New Terminal'
         this.terminal.enabled = true;
         this.terminal.resetOrdersFilter = true;
         this.terminal.medicalRecSales = 0
         this.initForm()
+        return
+      }
+      if (this.setting.text){
+        try {
+          this.terminal = JSON.parse(this.setting.text)  as ITerminalSettings;
+        } catch (error) {
+          this.terminal  = {} as ITerminalSettings;
+          this.terminal.name = this.setting.name = 'New Terminal'
+          this.terminal.enabled = true;
+          this.terminal.resetOrdersFilter = true;
+          this.terminal.medicalRecSales = 0
+          this.initForm()
+        }
       }
     }
-  }
-}
+ }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.initForm()
+    await this.listBTDevices();
+  }
+
+  async listBTDevices() { 
+    this.blueToothDeviceList = await this.dSIEMVAndroidService.listBTDevices();
   }
 
   initForm() {
     this.inputForm = this.fb.group({
       medicalRecSales : [''],
       receiptPrinter  : [],
-      labelPrinter    : [],
-      labelPrinter2   : [],
-      enabled         : [],
-      resetOrdersFilter: [],
-      name:             [''],
-      deviceName      : [],
-      dSISecureDevice      : [],
+      labelPrinter       : [],
+      labelPrinter2      : [],
+      enabled            : [],
+      resetOrdersFilter  : [],
+      name:                [],
+      deviceName         : [],
+      dSISecureDevice    : [],
       cardPointeHSN      : [],
-      btPrinter : [],
+      btPrinter          : [],
+      bluetoothDeviceName: [],
     })
 
     if (this.terminal) {

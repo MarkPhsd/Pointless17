@@ -1,0 +1,261 @@
+<div  *ngIf="methodsService.boltInfoInitialized && methodsService.boltTerminalInitialized;
+               else loadingBoltInfo">
+  <mat-card >
+
+    <mat-card-title>
+      <mat-icon>credit_card</mat-icon>
+    </mat-card-title>
+
+    <mat-card-subtitle *ngIf="methodsService.connect">
+      <h3>Process</h3>
+      <div class="button-grid" >
+
+        <div>
+          <button [disabled]="!methodsService.amount"
+                  mat-raised-button color="primary"
+                  (click)="sendAuthCardAndCapture()">Auth Capture</button>
+        </div>
+
+        <div>
+          <button [disabled]="!methodsService.manualPrompt && !methodsService.amount && (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
+                  mat-raised-button color="primary"
+                  (click)="pinDebitSaleAuthCapture()">PIN Debit Sale</button>
+        </div>
+
+        <div >
+          <button [disabled]="!methodsService.amount || !methodsService.retRef"
+                  mat-raised-button color="primary"
+                  (click)="processVoid(methodsService.retRef)">Void Sale RetRef </button>
+        </div>
+
+        <div>
+          <button [disabled]="!methodsService.amount || !methodsService.retRef"
+                  mat-raised-button color="primary"
+                  (click)="refundByRetRef(methodsService.retRef)">Refund (RetRef) </button>
+        </div>
+        <div>
+          <button [disabled]="methodsService.processing"
+                  mat-raised-button color="primary"
+                  (click)="cancel()">Cancel</button>
+        </div>
+      </div>
+    </mat-card-subtitle>
+    <mat-card-content >
+
+      <ng-template #connecting>
+        ...connecting to device.
+      </ng-template>
+
+      <div *ngIf="!methodsService.boltTerminal || ( !methodsService.boltTerminal.hsn && methodsService.boltTerminal)">
+        <mat-icon>alert</mat-icon>HSN Required to perform transactions.
+      </div>
+      <div *ngIf="methodsService.boltInfo && !methodsService.boltInfo.apiURL">
+        <mat-icon>alert</mat-icon>API URL Required to perform transactions.
+      </div>
+      <div *ngIf="methodsService.boltInfo && !methodsService.boltInfo.merchID">
+        <mat-icon>alert</mat-icon>MerchantID Required to perform transactions.
+      </div>
+
+      <div *ngIf="(methodsService.ping$ | async) as item">
+        Connected Status {{item.connected}}
+      </div>
+
+      <ng-template *ngIf="auth.isAdmin || auth.isManager" >
+
+        <div *ngIf="(methodsService.listTerminals$ | async) as item">
+          {{item | json}}
+        </div>
+
+        <div *ngIf="(methodsService.disconnect$ | async) as item">
+          {{item | json}}
+        </div>
+
+      </ng-template>
+
+      <ng-template #loading>
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </ng-template>
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="methodsService.connect; else connecting">
+    <mat-card-title>Authorization and Payments</mat-card-title>
+    <mat-card-content>
+      <div *ngIf="!auth.isAdmin" class="values">
+        <div class="header">Currency</div>
+        <div class="value" >{{methodsService.currency}}</div>
+
+        <div class="header">Payment#</div>
+        <div class="value" >{{methodsService.orderID}}</div>
+
+        <div class="header">Amount</div>
+        <div class="value" >{{methodsService.amount | currency}}</div>
+
+        <div class="header">RetRef</div>
+        <div class="value" >{{methodsService.retRef}}</div>
+      </div>
+      <div *ngIf="auth.isAdmin">
+        <div>
+          <mat-form-field appearance="outline">
+          <mat-label >Currency</mat-label>
+          <input matInput
+                type="text"
+                [(ngModel)]="methodsService.currency"
+                class="form-control" >
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+          <mat-label >Order #</mat-label>
+          <input matInput
+                type="number"
+                [(ngModel)]="methodsService.orderID"
+                class="form-control" >
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+          <mat-label >Amount</mat-label>
+          <input matInput
+                type="number"
+                [(ngModel)]="methodsService.amount"
+                class="form-control" >
+          </mat-form-field>
+
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+          <mat-label >RetRef</mat-label>
+          <input matInput
+                type="text"
+                [(ngModel)]="methodsService.retRef"
+                class="form-control" >
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div *ngIf="(auth.isAdmin || auth.isManager) && methodsService.testProcess">
+        <h3>Step by Step Process</h3>
+        <div class="button-grid">
+          <div>
+            <button [disabled]="!methodsService.amount && (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
+                    mat-raised-button color="primary"
+                    (click)="methodsService.sendReadCard()">Read Card</button>
+          </div>
+
+          <div>
+            <button [disabled]="!methodsService.amount && (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
+                    mat-raised-button color="primary"
+                    (click)="sendAuthCard()">Auth Card</button>
+          </div>
+
+          <div>
+            <button [disabled]="!methodsService.transaction"
+                    mat-raised-button color="primary"
+                    (click)="methodsService.authCapture()">Auth Capture</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div *ngIf="methodsService.transaction as item">
+        {{item | json}}
+      </div> -->
+
+      <div *ngIf="methodsService.processing">
+        <!-- <mat-icon [diameter]="50"></mat-icon> -->
+        ...processing
+      </div>
+
+      <!-- <div *ngIf="methodsService.sale">
+        <h2>Request</h2>
+        <mat-label>{{methodsService.request | json}}</mat-label>
+        <h2>Response</h2>
+        {{methodsService.sale | json}}
+      </div> -->
+
+      <div *ngIf="methodsService.sale as sale">
+        <h3>Result</h3>
+
+        <div class="values">
+
+          <div class="header">Response</div>
+          <div class="value">{{sale?.resptext}}</div>
+
+          <div class="header">Code</div>
+          <div class="value">{{sale?.retref}}</div>
+
+          <div class="header">Approved</div>
+          <div class="value">{{sale?.amount | currency}}</div>
+
+        </div>
+
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="auth.isAdmin">
+
+    <mat-card-title>
+      <mat-card-title>Technical Info and Admin Features</mat-card-title>
+    </mat-card-title>
+
+    <mat-card-content>
+      <div *ngIf="methodsService.connect">
+        <div>
+          SessionID  {{methodsService.connect?.xSessionKey}}
+        </div>
+        <div>
+          Expiry {{methodsService.connect?.expiry | date: 'shortDate'}} {{methodsService.connect?.expiry | date: 'time' }}
+        </div>
+      </div>
+
+      <div>
+        Bolt Info: {{methodsService?.boltTerminal?.hsn | json}}
+      </div>
+
+      <div class="button-container">
+        <div class="transaction-buttons-grid"
+            *ngIf=" methodsService.boltInfoInitialized && methodsService.boltTerminalInitialized">
+
+          <div>
+            <button mat-raised-button color="primary"
+                    (click)="methodsService.sendconnect()">Connect</button>
+          </div>
+
+          <div>
+            <button *ngIf="auth.isAdmin || auth.isManager" [disabled]="!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === ''" mat-raised-button color="primary"
+                    (click)="methodsService.sendPing()">Ping</button>
+          </div>
+
+          <div>
+            <button *ngIf="auth.isAdmin || auth.isManager" [disabled]="!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === ''" mat-raised-button color="primary"
+                    (click)="methodsService.sendlistTerminals()">List Terminals</button>
+          </div>
+
+          <div>
+            <button *ngIf="auth.isAdmin || auth.isManager" [disabled]="!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === ''" mat-raised-button color="primary"
+                    (click)="methodsService.sendterminalDetails()">List Details </button>
+          </div>
+
+          <div>
+            <button *ngIf="auth.isAdmin || auth.isManager" [disabled]="!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === ''" mat-raised-button color="primary"
+                    (click)="methodsService.sendDisconnect()">Disconnect</button>
+          </div>
+
+          <div>
+            <button mat-raised-button color="primary"
+                    (click)="methodsService.resetAll()">Reset</button>
+          </div>
+
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+
+<ng-template #loadingBoltInfo>
+  ...loading bolt info
+</ng-template>

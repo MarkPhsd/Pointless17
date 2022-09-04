@@ -1,0 +1,29 @@
+<ng-content></ng-content>
+
+<div  *ngIf="tranResponse" class="reponse-results"  >
+
+  <div>Response</div>
+  <div>{{tranResponse?.Amount?.TextResponse}}</div>
+
+  <div>Amount</div>
+  <div>{{tranResponse?.Amount?.Purchase}}</div>
+
+  <div>Ref No</div>
+  <div>{{tranResponse?.RefNo}}</div>
+
+  <div>Capture Satuts</div>
+  <div>{{tranResponse?.CaptureStatus}}</div>
+
+  <div>Entry method</div>
+  <div>{{tranResponse?.EntryMethod}}</div>
+
+  <div>TranCode</div>
+  <div>{{tranResponse?.TranCode}}/div>
+
+  <div>AcqRefData</div>
+  <div>{{tranResponse?.AcqRefData}}/div>
+
+  <div>AcctNo</div>
+  <div>{{tranResponse?.AcctNo}}</div>
+
+</div>

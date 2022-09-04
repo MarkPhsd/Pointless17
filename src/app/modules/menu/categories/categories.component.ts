@@ -128,7 +128,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   searchPhrase     :         Subject<any> = new Subject();
   get itemName()   { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
-  placeHolderImage   : String = "../assets/images/placeholderimage.png"
+  placeHolderImage   : String = "assets/images/placeholderimage.png"
 
   searchModel: ProductSearchModel
   searchItems$     : Subject<IProductSearchResults> = new Subject();

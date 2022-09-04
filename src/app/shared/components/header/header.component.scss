@@ -51,7 +51,7 @@
 }
 
 .api-status {
-  margin-right: 3px;
+  margin-right: 10px;
 }
 
 mat-menu {
@@ -61,7 +61,6 @@ mat-menu {
 mat-card  {
   padding:0px;
 }
-
 
 ul li{
   list-style: none;
@@ -79,26 +78,27 @@ ul li{
 .grid-flow {
     display: grid;
     margin-top: 0px;
-    gap: var(--gap);
-     grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
+    gap: 5px;
+    grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
     margin-left: -5px;
-
+    margin-right: 5px;
     @include for-tablet-landscape-up {
-      --gap: 0px;
+      gap: 5px;
       display: grid;
-      gap: var(--gap);
+      gap: 5px;
       grid-template-columns: repeat(10, 1fr); // repeat( auto-fit, minmax(50px, 1fr) );
       margin-left: -15px;
       left: -10px;
     }
 
     @include for-phone-only  {
+      gap: 3px;
       display: grid;
       grid-template-columns: repeat(10, 1fr);
 
     }
 
-  }
+}
 
 .pos-panel {
   // margin-top: 15px;
@@ -121,17 +121,16 @@ ul li{
 
 }
 
-
-
+.search-input {
+  margin-top: -15px;
+}
 
 .second-list {
   position: relative;
 }
 
-
-
 .margin-info {
-  margin-left: 3px;;
+  margin-left: 8px;
 }
 
 button {
@@ -139,7 +138,7 @@ button {
 }
 
 .logo {
-  margin-top: 3px;
+  margin:     5px;
   width     : 50px;
 }
 
@@ -154,7 +153,6 @@ button {
     align-content: center;
     justify-content: center;
   }
-
 }
 
 .flex-sections {
@@ -162,19 +160,48 @@ button {
   justify-content : space-between;
   flex-direction  : row;
   flex-basis      : auto;
-  margin-top      : 35px;
+
+
+  @include for-phone-only  {
+    // margin-top: 35px;
+    align-content: center;
+    justify-content: center;
+    // margin-top    : 5px  ;
+    // padding-top   : 5px ;
+  }
+
+  @include horizontal-tablet  {
+    // margin-top    : 25px  ;
+    // padding-top   : 10px ;
+    // margin-top    : 15px  ;
+    // padding-top   : 5px ;
+    align-content: center;
+    justify-content: center;
+  }
+}
+
+.grid-margin {
+
+  margin-top      : 15px;
   padding-top     : 10px;
 
   @include for-phone-only  {
     // margin-top: 35px;
     align-content: center;
     justify-content: center;
+    margin-top    : 5px  ;
+    padding-top   : 5px ;
   }
 
   @include horizontal-tablet  {
-    margin-top    : 0px  ;
-    padding-top   : 10px ;
+    // margin-top    : 25px  ;
+    // padding-top   : 10px ;
+    margin-top    : 5px  ;
+    padding-top   : 5px ;
+    align-content: center;
+    justify-content: center;
   }
+
 }
 
 .flex-sections-user {
@@ -264,11 +291,13 @@ button {
   grid-auto-flow: row;
 }
 
-
-
 .ul-pos-panel {
-  padding: 2px;
+  padding: 3px;
   margin: 2px;
 }
 
+.panel-card {
+  margin-top: 0px;
+  padding: 5px;
+}
 

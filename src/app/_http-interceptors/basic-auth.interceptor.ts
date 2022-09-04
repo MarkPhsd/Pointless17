@@ -3,6 +3,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
 import { IUser  } from '../_interfaces';
+
 export const InterceptorSkipHeader = 'X-Skip-Interceptor';
 
 

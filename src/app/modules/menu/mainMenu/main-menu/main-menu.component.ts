@@ -8,7 +8,7 @@ import { UserAuthorizationService } from 'src/app/_services/system/user-authoriz
 import { ResizedEvent } from 'angular-resize-event';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import { IProductSearchResults, MenuService } from 'src/app/_services';
+import {  MenuService } from 'src/app/_services';
 
 @Component({
   selector: 'app-main-menu',
@@ -99,15 +99,12 @@ export class MainMenuComponent implements OnInit  {
 
   @HostListener("window:resize", [])
   updateItemsPerPage() {
-
     this.smallDevice = false
-  
     if ( window.innerWidth < 811 ) {
       this.smallDevice = true
     }
- 
   }
-  
+
   reloadComponent() {
     let currentUrl = this.router.url;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
@@ -151,23 +148,22 @@ export class MainMenuComponent implements OnInit  {
     return null;
   }
 
-  get isSearchSelectorOn() { 
+  get isSearchSelectorOn() {
     if (this.smallDevice) {
       return this.searchSelector
     }
     return null;
   }
 
-  isviewOverlayOn() { 
+  isviewOverlayOn() {
     // if (this.smallDevice) {
     //   return this.departmentView
     // }
     return null;
   }
 
-  
   applyProductSearchModel(itemName: string) : ProductSearchModel {
-    let  productSearchModel=  {} as ProductSearchModel 
+    let  productSearchModel=  {} as ProductSearchModel
 		productSearchModel.type         = null;
 		productSearchModel.categoryID   = null;
 		productSearchModel.departmentID = null;
@@ -185,26 +181,26 @@ export class MainMenuComponent implements OnInit  {
 		this.menuService.updateMeunuItemData(productSearchModel)
 		return productSearchModel
 
-	  }
+  }
 
-	  //this is called from subject rxjs obversablve above constructor.
-	  refreshSearch(itemName) {
-      try {
-        const site               = this.siteService.getAssignedSite()
-        const searchModel        = this.applyProductSearchModel(itemName);
-        this.listItems(searchModel)
-      } catch (error) {
-        console.log('error', error)
-      }
-	  }
-    
-    listItems(model: ProductSearchModel) {
-      this.router.navigate(
-        [
-          "/menuitems-infinite", { value: 1}
-        ]
-      )
+  //this is called from subject rxjs obversablve above constructor.
+  refreshSearch(itemName) {
+    try {
+      const site               = this.siteService.getAssignedSite()
+      const searchModel        = this.applyProductSearchModel(itemName);
+      this.listItems(searchModel)
+    } catch (error) {
+      console.log('error', error)
     }
+  }
+
+  listItems(model: ProductSearchModel) {
+    this.router.navigate(
+      [
+        "/menuitems-infinite", { value: 1}
+      ]
+    )
+  }
 
 }
 

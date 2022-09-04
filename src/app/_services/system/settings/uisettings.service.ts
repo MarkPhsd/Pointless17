@@ -37,6 +37,13 @@ export interface TransactionUISettings {
   applyTaxChangesToDiscountedItems  : boolean;
   fuzzyMatchBarcodeLookup: boolean;
   requireEnterTabBarcodeLookup: boolean;
+
+  cardPointBoltEnabled   : boolean;
+  cardPointAndroidEnabled: boolean;
+  dsiEMVAndroidEnabled   : boolean;
+  dsiEMVNeteEpayEnabled  : boolean;
+  dsiEMVIP               : boolean;
+
 }
 
 export interface StripeAPISettings {
@@ -567,6 +574,13 @@ export class UISettingsService {
       applyTaxChangesToDiscountedItems : [],
       fuzzyMatchBarcodeLookup: [''],
       requireEnterTabBarcodeLookup: [''],
+
+      cardPointBoltEnabled   : [''],
+      cardPointAndroidEnabled: [''],
+      dsiEMVAndroidEnabled   : [''],
+      dsiEMVNeteEpayEnabled  : [''],
+      dsiEMVIP               : [''],
+
      })
   }
 

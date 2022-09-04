@@ -2,9 +2,9 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable, Subject ,fromEvent, of ,switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IProductCategory, TaxRate } from 'src/app/_interfaces';
+import { IProductCategory, ISite, TaxRate } from 'src/app/_interfaces';
 import { UseGroupsService, Taxes, UseGroupTax, UseGroups } from 'src/app/_services/menu/use-groups.service';
 import { UseGroupTaxesService } from 'src/app/_services/menu/use-group-taxes.service';
 import { TaxesService, UseGroupTaxAssigned, UseGroupTaxAssignedList } from 'src/app/_services/menu/taxes.service';
@@ -51,6 +51,8 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   //useGroups lists on the left.
   taxes$           : Observable<TaxRate[]>;
   useGroups        : IProductCategory[];
+  useGroupsList    : any[];
+  useGroupsList$    : Observable<any[]>;
   useGroupID       : number;
   taxID            : number;
   taxRate          : TaxRate;
@@ -76,8 +78,22 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   async ngOnInit() {
     const site = this.siteService.getAssignedSite()
     this.taxes$ = this.taxService.getTaxRates(site);
+    this.useGroupsList$ = this.initGroups(site)
   }
 
+  resetUseGroups() { 
+    ///resetUseGroups
+    const site = this.siteService.getAssignedSite()
+    const removeItems$ = this.useGroupService.resetUseGroups(site);
+    this.useGroupsList$ = removeItems$.pipe(data => { 
+      return this.initGroups(site);
+    })
+  }
+
+  initGroups(site: ISite) {
+    return  this.useGroupService.restoreGroups(site)
+  }
+  
   // only call this when the tax is selected.
   // pass the taxID, this will show the
   //Group Types that have been assigned on the right, and the taxes that
@@ -86,7 +102,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   refreshTaxAssignment(taxID: number) {
     const site   = this.siteService.getAssignedSite()
     const taxes$ = this.taxService.getTaxRateWithGroups(site, taxID)
-    taxes$.subscribe(data => { 
+    taxes$.subscribe(data => {
       if (data) {
         //then we have each group assisnged from the taxes.
         this.assignSelectedAndAvalible(data.useGroupTaxes)

@@ -31,7 +31,8 @@
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": { "@angular/*": [ "../node_modules/@angular/*" ] }
   }
 }
 

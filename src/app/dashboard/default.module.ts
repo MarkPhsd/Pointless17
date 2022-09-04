@@ -294,6 +294,16 @@ import { CreditCardPaymentsPrintListComponent } from '../modules/transactions/ba
 import { AngularResizeEventModule } from 'angular-resize-event';
 import { ProductListByBarcodeComponent } from '../modules/menu/product-list-by-barcode/product-list-by-barcode.component';
 import { AppWizardStatusComponent } from '../modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
+import { ViewComponent, RoomLayoutDesignerComponent, PointlessRoomLayoutModule} from 'pointless-room-layout';
+import { FloorPlanComponent } from '../modules/floor-plan/floor-plan/floor-plan.component';
+import { CardPointSettingsComponent } from '../modules/payment-processing/cardPointe/card-point-settings/card-point-settings.component';
+import { CardpointeTransactionsComponent } from '../modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
+import { CardPointIDTECHAndroidComponent } from '../modules/payment-processing/cardPointe/card-point-idtechandroid/card-point-idtechandroid.component';
+import { CpVIVO3300Component } from '../modules/payment-processing/cardPointe/cp-vivo3300/cp-vivo3300.component';
+import { DsiAndroidResultsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
+import { DSIAndroidSettingsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
+import { DsiEMVAndroidComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
+//
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -359,6 +369,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     FlatRateEditComponent,
     FlatRateListComponent,
     FlatTaxRateListComponent,
+    FloorPlanComponent,
     FunctionGroupListComponent,
     FunctionGroupEditComponent,
     FunctionGroupButtonEditComponent,
@@ -555,6 +566,17 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UseGroupTaxAssignmentComponent,
     WeekDaySelectionComponent,
     WishlistComponent,
+
+ 
+    CardPointSettingsComponent,
+    CardPointIDTECHAndroidComponent,
+    CardpointeTransactionsComponent,
+    CpVIVO3300Component,
+    DsiEMVAndroidComponent,
+    DSIAndroidSettingsComponent,
+    DsiAndroidResultsComponent,
+    EditSettingsComponent,
+
    ],
 
    imports: [
@@ -571,8 +593,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       HammerModule,
       IonicModule.forRoot(),
       InfiniteScrollModule,
+      PointlessRoomLayoutModule,
       NgPipesModule,
-      ReactiveFormsModule,
       ReactiveFormsModule,
       RouterModule,
       SharedModule,
@@ -588,6 +610,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     HammerModule,
     SimpleTinyComponent,
     NumericDirective,
+
+    // RoomLayout,
   ],
 
   providers: [
@@ -618,7 +642,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ThemesService,
     UserService,
     ItemTypeService,
-
+    ViewComponent,
+    RoomLayoutDesignerComponent,
    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
    {provide: RouteReuseStrategy , useClass: RouteReuseService},
 

@@ -115,31 +115,21 @@
 
       <mat-divider></mat-divider>
       <h4>Client Options</h4>
-
-        <!-- <div class="client-selector">
-          <app-client-types-lookup
-              [formControlName]="'defaultClientTypeID'"
-              [inputForm]="inputForm">
-          </app-client-types-lookup>
-        </div> -->
-        <div *ngIf=" (clientTypes$ | async) as clientTypes ">
+      <div *ngIf="(clientTypes$ | async) as clientTypes ">
         <mat-form-field style="width: 200px" class="fields"
-              appearance="outline">
-
+            appearance="outline">
           <mat-label>Default Client Type</mat-label>
             <mat-select
                       type              = "number"
-                      formControlName   = "defaultClientTypeID"
-                      >
+                      formControlName   = "defaultClientTypeID" >
               <mat-option
                   *ngFor="let item of clientTypes"
                   [value]="item.id">
                   {{item.name}}
               </mat-option>
             </mat-select>
-
           </mat-form-field>
-        </div>
+      </div>
 
       <div class="toggle-fields">
         <mat-slide-toggle
@@ -157,7 +147,6 @@
         </mat-slide-toggle>
       </div>
 
-
       <div class="toggle-fields">
         <mat-slide-toggle
                   formControlName="ordersRequireCustomer"
@@ -170,8 +159,6 @@
       <h3>Operation Settings:</h3>
 
       <div class="grid-small">
-
-
         <div>
           <mat-label>Max Orders allowed open by user.</mat-label>
           <app-value-fields
@@ -198,6 +185,7 @@
               Lot Pre code prefix.
           </app-value-fields>
         </div>
+
         <div>
           <mat-label>Percentage of Buyer Amount.</mat-label>
           <app-value-fields
@@ -206,6 +194,7 @@
               Buyer Amount
           </app-value-fields>
         </div>
+
         <div>
           <mat-label>Log out time in minutes of inactivity.</mat-label>
           <app-value-fields
@@ -234,8 +223,48 @@
         </div>
 
       </div>
+
+
     </div>
 
+    <mat-divider></mat-divider>
+    <h4>Credit Card Processing</h4>
+
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="cardPointBoltEnabled"
+                >
+        <mat-label>CardPoint Bolt/Ingenico Enabled</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="cardPointAndroidEnabled"
+                >
+        <mat-label>CardPoint Android Enabled</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="dsiEMVAndroidEnabled"
+                >
+        <mat-label>Data Cap EMV Android</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="dsiEMVNeteEpayEnabled"
+                >
+        <mat-label>Data Cap Netepay PDCX</mat-label>
+      </mat-slide-toggle>
+    </div>
+    <div class="toggle-fields">
+      <mat-slide-toggle
+                formControlName="dsiEMVIP"
+                >
+        <mat-label>Datacap EMV IP</mat-label>
+      </mat-slide-toggle>
+    </div>
   </mat-card-content>
 
   <mat-card-actions>

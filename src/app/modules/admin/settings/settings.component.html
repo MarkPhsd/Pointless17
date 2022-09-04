@@ -70,7 +70,6 @@
         <div>
           <app-software-settings></app-software-settings>
         </div>
-       
 
       </ng-template>
 
@@ -103,8 +102,49 @@
       <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
       <ng-template #accordionStep2>
-        <button mat-raised-button color="primary" (click)="openMenuManager()">Menus</button>
-        <button mat-raise-button color="primary" (click)="functionGroups()">Function Groups</button>
+
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class ="grid-image-button-group "
+                  (click)="clientTypesList()">
+            <div class="grid-image-button">
+              <div class="mat-grid-icon">  </div>
+              <div>
+                User Types
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class ="grid-image-button-group "
+                  (click)="openMenuManager()">
+            <div class="grid-image-button">
+              <div class="mat-grid-icon">  </div>
+              <div>
+                Menus
+              </div>
+            </div>
+          </button>
+        </div>
+
+        <div>
+          <button mat-raised-button
+                  color  = "primary"
+                  class ="grid-image-button-group "
+                  (click)="functionGroups()">
+            <div class="grid-image-button">
+              <div class="mat-grid-icon"> </div>
+              <div>
+                Function Groups
+              </div>
+            </div>
+          </button>
+        </div>
+
       </ng-template>
 
       <ng-template #loading>
@@ -130,8 +170,11 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-      <app-installed-printers></app-installed-printers>
-
+      <ng-container [ngTemplateOutlet]="currentAccordionStep">
+        <ng-template #accordionStep4>
+            <app-installed-printers></app-installed-printers>
+        </ng-template>
+      </ng-container>
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
@@ -153,16 +196,11 @@
       <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
       <ng-template #accordionStep5>
-
-        <div  *ngIf="accordionStep == 5" >
-          <app-ionic-geo-location></app-ionic-geo-location>
-        </div>
-
+        <app-ionic-geo-location></app-ionic-geo-location>
         <mat-action-row>
           <button mat-button color="warn"    (click)="prevStep()">Previous</button>
           <button mat-button color="primary" (click)="nextStep()">Next</button>
         </mat-action-row>
-
       </ng-template>
 
       <ng-template #loading>
@@ -185,24 +223,16 @@
 
       <ng-template #accordionStep6>
 
-        <div  *ngIf="accordionStep == 6" >
-          <div *ngIf="role === 'admin'">
-            <button mat-button color="accent"
-                    (click)="gotoPayments()">
-                    <mat-icon>settings</mat-icon> Settings
-            </button>
-          </div>
+        <div *ngIf="role === 'admin'">
+          <button mat-button color="accent"
+                  (click)="gotoPayments()">
+                  <mat-icon>settings</mat-icon> Settings
+          </button>
         </div>
-
-        <div>
-          <app-dsiemvelectron>NetEpay Settings for Windows</app-dsiemvelectron>
-        </div>
-
-        <div><app-dsi-emvpayment></app-dsi-emvpayment></div>
-
-        <div>
-          <app-stripe-settings>Stripe API Settings</app-stripe-settings>
-        </div>
+        <div><app-dsiemvelectron>NetEpay Settings for Windows</app-dsiemvelectron> </div>
+        <div><pointlesscc-dsiandroid-settings>NetEpay DSI EMV Android Settings</pointlesscc-dsiandroid-settings></div>
+        <div><card-point-settings>Bolt Card Point Settings</card-point-settings></div>
+        <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div>
 
       </ng-template>
 
@@ -228,7 +258,7 @@
           </mat-panel-description>
       </mat-expansion-panel-header>
 
-        <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
+      <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
       <ng-template #accordionStep7>
 
@@ -242,7 +272,6 @@
         ..loading
         <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
       </ng-template>
-
 
       <mat-action-row>
         <button mat-button color="warn"    (click)="prevStep()">Previous</button>

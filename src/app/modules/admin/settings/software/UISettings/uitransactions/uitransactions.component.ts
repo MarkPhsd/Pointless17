@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy,Component, OnInit } from '@angular/core';
 import { FormGroup, FormGroupDirective,FormControl ,NgForm} from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { Observable, switchMap } from 'rxjs';
-import { ISetting } from 'src/app/_interfaces';
+import { clientType, ISetting } from 'src/app/_interfaces';
 import { ClientTypeService } from 'src/app/_services/people/client-type.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -15,13 +15,13 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 })
 export class UITransactionsComponent implements OnInit {
 
-
-
   inputForm       : FormGroup;
   uiSettings      : ISetting
   uiSettings$     : Observable<ISetting>;
   uiTransactions  = {} as TransactionUISettings;
-  clientTypes$
+  clientTypes$    :  Observable<any>;
+  clientTypes     : clientType[];
+
   constructor(
       private uISettingsService: UISettingsService,
       private settingService   : SettingsService,

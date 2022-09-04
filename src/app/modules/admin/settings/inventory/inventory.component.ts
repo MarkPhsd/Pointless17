@@ -25,8 +25,7 @@ export class InventoryComponent  {
     private itemTypeMethodsService : ItemTypeMethodsService,
     private adustmentReasonsService: AdjustmentReasonsService,
     public productButtonsService   : ProductEditButtonService,
-) { }
-
+  ) { }
 
   openAdjustmentReasonsDialog() {
     this.adustmentReasonsService.openAdjustmentReasonEdit();
@@ -69,14 +68,9 @@ export class InventoryComponent  {
     this.routerNavigation('company-edit')
   }
 
-  
-
-
   togglePaymentMethodsList() {
-    // this.showPaymentMethods= !this.showPaymentMethods
+    // this.showPaymentMethods = !this.showPaymentMethods
     this.router.navigate(['/edit-payment-method-list'])
   }
-
-
 
 }

@@ -677,9 +677,11 @@ export class OrdersService {
     )
   }
 
+
   newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<IPOSOrder> {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
+    console.log('newOrderWithPayloadMethod')
     return  this.postOrderWithPayload(site, orderPayload)
   }
 

@@ -244,7 +244,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       return false
     }
 
-
     validateInventoryRequirement(menuItem: IMenuItem, quantity: number) {
 
       let stockRequired = this.getIsStockRequired(menuItem);
@@ -342,7 +341,6 @@ export class MenuitemComponent implements OnInit, OnDestroy {
       this.outputExitForm.emit(true)
       // this.location.back();
     }
-
 
     sanitize(html) {
       return this.sanitizer.bypassSecurityTrustHtml(html);

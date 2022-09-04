@@ -74,8 +74,8 @@ export class ChangeDueComponent   {
   }
 
   close() {
-    this.clearSubscriptions()
-    this.router.navigateByUrl('/')
+    // this.clearSubscriptions()
+    // this.router.navigateByUrl('/')
     this.dialogRef.close()
   }
 

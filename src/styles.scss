@@ -483,15 +483,11 @@ mat-dialog-container {
   background-color: #357a38 !important;
 }
 
-
-
-.grid-image-button { 
+.grid-image-button {
   display: grid;
   gap: 4px;
   grid-template-columns: 25px 1fr;
- 
   min-width: 193px;
-  // height:45px;
 }
 
 .grid-image-button-group {
@@ -499,6 +495,6 @@ mat-dialog-container {
   height: 45px;
 }
 
-.mat-grid-image-icon { 
+.mat-grid-image-icon {
   margin-top: -10px;
 }

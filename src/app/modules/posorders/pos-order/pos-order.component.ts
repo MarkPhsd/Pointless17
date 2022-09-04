@@ -133,7 +133,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   homePageSettingSubscriber() {
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
-   
+
 
       if (data) {
         if (data.outGoingCustomerSupportEmail) {
@@ -167,7 +167,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
 
   onResizedorderHeightPanel(event: ResizedEvent) {
-    console.log('onResizedorderHeightPanel', event.newRect.height)
+
     this.uiSettingsService.updateorderHeaderHeight(event.newRect.height,this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
     this.resizePanel()
   }
@@ -183,7 +183,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   onResizedorderCustomerPanel(event: ResizedEvent) {
-    console.log('onResizedorderCustomerPanel',  event.newRect.height )
+    // console.log('onResizedorderCustomerPanel',  event.newRect.height )
     this.uiSettingsService.updatecustomerOrderHeight(event.newRect.height,this.windowHeight) //(this.orderCustomerPanel.nativeElement.offsetHeight)
     this.resizePanel()
   }
@@ -276,7 +276,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.gridRight       = 'grid-order-header';
     }
 
-    if (window.innerWidth < 599) { 
+    if (window.innerWidth < 599) {
       this.phoneDevice = true
       this.deviceWidthPercentage = '65%'
     }
@@ -324,8 +324,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   initAuthorization() {
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
 
@@ -430,8 +430,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   refundItem(event) {
     if (this.assignedItems) {
-      console.log(this.assignedItems)
-      console.log('what is happening.')
+      // console.log(this.assignedItems)
+      // console.log('what is happening.')
       this.productEditButtonService.openRefundItemDialog(this.assignedItems)
     }
   }
@@ -537,7 +537,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.smallDevice) {
       this.openOrderBar = false
     }
-    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff) 
+    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff)
   }
 
   //loop the items

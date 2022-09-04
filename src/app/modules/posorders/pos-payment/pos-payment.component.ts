@@ -17,7 +17,7 @@ import { IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
-import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { StripeAPISettings, TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
@@ -28,6 +28,7 @@ import { MatDialog,} from '@angular/material/dialog';
 import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/stripe-check-out/stripe-check-out.component';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
+import { CardPointMethodsService } from '../../payment-processing/services';
 
 @Component({
   selector: 'app-pos-payment',
@@ -75,6 +76,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   groupPaymentAmount  = 0;
   groupPaymentGroupID = 0;
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
+  uiTransactions: TransactionUISettings
+  uiTransactions$ : Observable<TransactionUISettings>;
 
   message: string;
 
@@ -117,6 +120,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private dialog          : MatDialog,
               private dsiProcess      : DSIProcessService,
               private storeCreditMethodsService: StoreCreditMethodsService,
+              private cardPointMethodsService: CardPointMethodsService,
               private router          : Router,
               private fb              : FormBuilder) { }
 
@@ -127,11 +131,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initForms();
     this.initSubscriptions();
     this.getPaymentMethods(site)
+
     try {
       this.dsiEMVEnabled = this.paymentsMethodsService.DSIEmvSettings?.enabled;
     } catch (error) {
       console.log('error pospayment init' , error)
     }
+
     if (this.order) {
       const searchModel = {} as IPaymentSearchModel
       searchModel.orderID = this.order.id
@@ -140,7 +146,26 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.refreshIsOrderPaid();
     this.updateItemsPerPage();
     this.initStripe();
+    this.initTransactionUISettings();
   }
+
+  initTransactionUISettings() {
+    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+      switchMap(data => {
+        if (data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+        if (!data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+    }))
+  }
+
+
+
+
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -315,19 +340,21 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  processDSICreditCardPayment() {
+  applyBoltPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processSubDSIEMVCreditPayment(this.order, order.balanceRemaining, false)
+      this.cardPointMethodsService.processSubCreditPayment(order, order.balanceRemaining, false)
     }
   }
 
-  processDSIManualCreditCardPayment() {
+  processDSICreditCardPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processSubDSIEMVCreditPayment(this.order, order.balanceRemaining, true)
+      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, order.balanceRemaining, manual)
     }
   }
+
+
 
   async dsiResetDevice() {
     const response  = await this.dsiProcess.pinPadReset( );

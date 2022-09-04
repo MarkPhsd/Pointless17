@@ -25,10 +25,11 @@ export interface ITerminalSettings {
   enabled         : boolean;
   name            : string;
   deviceName      : string;
-  resetOrdersFilter: boolean;
-  cardPointeHSN: string;
-  sSISecureDevice: string;
-  btPrinter      : string;
+  resetOrdersFilter   : boolean;
+  cardPointeHSN       : string;
+  sSISecureDevice     : string;
+  btPrinter           : string;
+  bluetoothDeviceName : string;
 }
 
 @Injectable({

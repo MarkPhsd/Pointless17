@@ -166,8 +166,6 @@ export class UploaderComponent implements OnInit {
     this.messageOut.emit('')
   }
 
-
-
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
       duration: 3000,

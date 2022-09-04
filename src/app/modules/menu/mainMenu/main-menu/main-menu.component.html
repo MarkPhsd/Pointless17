@@ -1,9 +1,13 @@
 <div class="canvas">
-  
+
   <div class="overlay-items">
 
-    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+    <!-- <pointless-room-layout-designer></pointless-room-layout-designer> -->
+ 
+    <!-- <pointless-room-layout-view></pointless-room-layout-view> -->
     
+    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+
     <scheduled-menu-list></scheduled-menu-list>
 
     <div *ngIf="homePageSetings && panelHeightSize; else loading">
@@ -23,7 +27,7 @@
 <ng-template #searchSelector>
   <div >
     <search-debounce-input
-       [searchForm]="searchForm"  
+       [searchForm]="searchForm"
        [itemNameControl]="'itemName'"
        (outPutMethod)="refreshSearch($event)">
       <div #fieldDescription>Search Items</div>
@@ -65,5 +69,5 @@
 <ng-template #isviewOverlayOn>
   <video autoplay muted  class="video">
     <source [src]="smoke" type="video/mp4">
-  </video> 
+  </video>
 </ng-template>

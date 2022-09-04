@@ -36,13 +36,13 @@
 
         <img *ngIf="isApp && !isCategory"
               [src]="imageUrl"
-              onerror   = "this.src='../assets/images/placeholderimage.png'"
+              onerror   = "this.src='assets/images/placeholderimage.png'"
               class="product-image"
               (click)="menuItemAction(true)"/>
 
         <img  *ngIf="!isApp && !isCategory"
               [src]="imageUrl"
-              onerror   = "this.src='../assets/images/placeholderimage.png'"
+              onerror   = "this.src='assets/images/placeholderimage.png'"
               class="product-image"
               (click)="menuItemAction(false)"/>
 
@@ -50,7 +50,7 @@
           <img  *ngIf="isCategory"
 
             [src]="imageUrl"
-            onerror   = "this.src='../assets/images/placeholderimage.png'"
+            onerror   = "this.src='assets/images/placeholderimage.png'"
             class="product-image"
             (click)="menuItemAction(true)"/>
         </div>

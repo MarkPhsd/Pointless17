@@ -28,6 +28,8 @@ import { ClientTableService } from '../people/client-table.service';
 import { SendGridService } from '../twilio/send-grid.service';
 import { UISettingsService } from '../system/settings/uisettings.service';
 import { ProductListByBarcodeComponent } from 'src/app/modules/menu/product-list-by-barcode/product-list-by-barcode.component';
+import { ToolBarUIService } from '../system/tool-bar-ui.service';
+import { FloorPlanService } from '../floor-plan.service';
 
 export interface ProcessItem {
   order   : IPOSOrder;
@@ -155,14 +157,15 @@ export class OrderMethodsService implements OnDestroy {
               private promptGroupService      : PromptGroupService,
               private userAuthorization       : UserAuthorizationService,
               private menuService             : MenuService,
-              private priceCategoriesService:  PriceCategoriesService,
+              private priceCategoriesService  : PriceCategoriesService,
               private platFormService         : PlatformService,
-              private sendGridService         :  SendGridService,
-              private router: Router,
-              private promptWalkService: PromptWalkThroughService,
-              private uiSettingService       : UISettingsService,
-              private textMessagingService: TextMessagingService,
-
+              private sendGridService         : SendGridService,
+              private router                  : Router,
+              private promptWalkService       : PromptWalkThroughService,
+              private uiSettingService        : UISettingsService,
+              private textMessagingService    : TextMessagingService,
+              private toolbarServiceUI        : ToolBarUIService,
+              private floorPlanService        : FloorPlanService,
              ) {
     this.initSubscriptions();
 
@@ -229,6 +232,10 @@ export class OrderMethodsService implements OnDestroy {
     }
     this.listItem(item.id);
 
+  }
+
+  clearOrderFromFloorPlan(site, floorPlanID: number, tableUUID: string): Observable<any> {
+    return this.floorPlanService.clearTable(site, floorPlanID, tableUUID )
   }
 
   //determines if the users action will add the item or view the item on the order.
@@ -343,7 +350,6 @@ export class OrderMethodsService implements OnDestroy {
     return null
   }
 
-
   async addItemToOrderWithBarcodePromise(site: ISite, newItem: NewItem):  Promise<ItemPostResults> {
     if (!newItem) {return}
     return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
@@ -358,7 +364,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
-   await this.processAddItem(order, null, item, quantity, null);
+    await this.processAddItem(order, null, item, quantity, null);
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {
@@ -367,7 +373,8 @@ export class OrderMethodsService implements OnDestroy {
 
     }
 
-    const payment = paymentResponse.payment
+    const payment = paymentResponse.payment;
+
     if (order.balanceRemaining > 0) { return 0 }
     if (payment && paymentMethod) {
 
@@ -489,14 +496,18 @@ export class OrderMethodsService implements OnDestroy {
 
       }
         if (data.message) {  this.notifyEvent(`Process Result: ${data.message}`, 'Alert ')};
+
         if (data && data.resultErrorDescription) {
-            this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
-            return;
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
+          return;
         }
 
         if (data.order) {
           this.orderService.updateOrderSubscription(data.order);
           this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
+          if (data.order.posOrderItems.length == 1 ) {
+            this.toolbarServiceUI.updateOrderBar(true)
+          }
         } else {
           this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
         }

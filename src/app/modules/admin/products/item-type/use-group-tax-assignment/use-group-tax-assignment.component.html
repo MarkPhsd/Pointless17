@@ -1,18 +1,33 @@
-<div class="grid-container">
+<ng-template #loading><mat-spinner diameter="50"></mat-spinner></ng-template>
+
+<div class="grid-container" *ngIf="(useGroupsList$ | async) as useGroupList">
 
   <div class="type-list">
     <h4 class="text-center listbox-title">Taxes</h4>
-    <div>
+
+    <div class="item">
       Select  a tax, then drag items in the left list to the right list to assign them to this tax rate.
     </div>
 
-    <div *ngIf="(taxes$ | async) as list"  >
+    <div *ngIf="(taxes$ | async) as list"  class="item">
       <mat-button-toggle-group name="fontStyle" aria-label="Font Style" vertical >
         <mat-button-toggle (click)="setItemType(item)" *ngFor="let item of list" [value]="item.id">
            {{ item.name }} <mat-icon>{{item.icon}}</mat-icon>
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
+    
+    <div class="item">
+
+      <mat-label>If new groups are added, you may need to reset them.</mat-label>
+    </div>
+
+    <div  class="item">
+      <button mat-raised-button 
+      (click)='resetUseGroups()'>
+      <mat-icon>setting</mat-icon>Reset Groups</button>
+    </div>
+
   </div>
 
   <div>

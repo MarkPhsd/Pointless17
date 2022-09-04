@@ -1,0 +1,10 @@
+.reponse-results {
+  display: grid;
+  grid-template-columns: 150px 1fr ;
+  width: 100%;
+  grid-auto-flow: row;
+}
+
+.response-container {
+  width: 350px;
+}

@@ -40,6 +40,7 @@ export class CartButtonComponent implements OnInit, OnDestroy {
   gridflow            = 'grid-flow';
   @Input() hideAddNewOrder     = false
 
+
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       if (data && data.id) {
@@ -50,8 +51,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     })
 
     this._user = this.authenticationService.user$.subscribe(user => {
+      console.log('user', user)
       this.user = user;
       this.isUserStaff = false;
+      console.log('user subscription', user?.roles)
       if (user) {
         if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
           this.isUserStaff      = true
@@ -59,7 +62,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
       }
     })
   }
-
   constructor(
     private siteService:            SitesService,
     public orderService:            OrdersService,
@@ -76,8 +78,6 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     this.assignCurrentOrder();
     this.refreshOrderCheck();
     this.updateItemsPerPage();
-
-
   }
 
   ngOnDestroy() {

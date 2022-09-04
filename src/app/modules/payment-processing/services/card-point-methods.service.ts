@@ -456,24 +456,21 @@ export class CardPointMethodsService {
 
   }
 
-  getAuthCaptureRequest(data) {
-    // return {
-    //   "merchid" : this.boltInfo.merchID,
-    //   "account":  data.account,
-    //   "expiry" :  data.expiry, //not the expiry of the connect feature.
-    //   "amount" :  this.amount * 100,
-    //   "orderid":  this.orderID,
-    //   "currency": this.currency,
-    //   "name": "CC TEST",
-    //   "capture": "y",
-    //   "receipt": "n"
-    // };
+  getProcessTip(session: string) {
+    const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
+    if (!bolt) {
+      console.log('no bolt terminal')
+      return
+    }
+    return this.cardPointBoltService.tip(bolt.url, this.boltTerminal.hsn, this.connect.xSessionKey)
+  }
 
+  getAuthCaptureRequest(data) {
     const item =  {
       "merchid":  this.boltInfo.merchID,
       "account":  data.token,
       "expiry":   data.expiry,
-      "amount":   (this.amount * 100).toFixed(0),
+      "amount":   ((this.amount + this.payment.tipAmount) * 100).toFixed(0),
       "currency": this.currency,
       "name"    : data?.name,
       "capture": "y",
@@ -492,11 +489,11 @@ export class CardPointMethodsService {
     if (aid === 'debit') {
       inlcudePIN = 'true'
     }
-    console.log(this.amount)
+
     const item = {
       "merchantId" : this.boltInfo.merchID,
       "hsn"     :    this.boltTerminal.hsn,
-      "amount"  :    (this.amount * 100).toFixed(0),
+      "amount"  :    ((this.amount) * 100).toFixed(0),
       "orderId" :    this.orderID,
       "includeSignature" : "false",
       "includeAmountDisplay" : "true",

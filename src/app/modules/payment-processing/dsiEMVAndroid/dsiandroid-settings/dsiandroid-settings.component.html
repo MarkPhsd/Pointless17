@@ -1,0 +1,257 @@
+<mat-card>
+  <mat-card-title><ng-content></ng-content>
+  </mat-card-title>
+  <mat-card-content >
+    <div>
+      <button mat-raised-button class="button-info" (click)="viewSelectDeviceList = !viewSelectDeviceList">
+        <mat-icon>search</mat-icon>
+        <span *ngIf="!viewSelectDeviceList">View Device List</span>
+        <span *ngIf="viewSelectDeviceList">Hide Device List</span>
+      </button>
+    </div>
+
+    <div *ngIf="inputForm && !viewSelectDeviceList" [formGroup]="inputForm" >
+      <div>
+          <mat-card-subtitle>Admin</mat-card-subtitle>
+      </div>
+        <div class="grid-fields">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Merchant ID</mat-label>
+            <input matInput formControlName="merchantID" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <div>
+          </div>
+          <mat-form-field appearance="outline">
+            <mat-label>User</mat-label>
+            <input formControlName="userTrace" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Application Name</mat-label>
+            <input formControlName="pOSPackageID" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Sequence No</mat-label>
+            <input formControlName="sequenceNo" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <div>
+          </div>
+          <mat-form-field class="example-full-width" appearance="outline">
+            <mat-label>Secure Device</mat-label>
+            <input formControlName="secureDevice" matInput >
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0">
+          <mat-form-field   appearance="outline" >
+            <mat-label>Bluetooth Device Name</mat-label>
+            <mat-select  formControlName="bluetoothDeviceName" >
+              <div *ngFor="let item of blueToothDeviceList">
+                <mat-option  [value]="item">
+                  {{item}}
+                </mat-option>
+              </div>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+
+        <div *ngIf="!blueToothDeviceList">
+          <button mat-raised-button (click)="listBTDevices()">List Devices</button>
+        </div>
+
+        <div>
+          <mat-form-field  appearance="outline">
+            <mat-label>Operation Mode</mat-label>
+            <input formControlName="operationMode" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field  appearance="outline">
+            <mat-label>IP Address</mat-label>
+            <input formControlName="pinPadIpAddress" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field  appearance="outline">
+            <mat-label>Pad Port</mat-label>
+            <input formControlName="padPort" matInput >
+          </mat-form-field>
+        </div>
+
+      </div>
+
+      <div>
+        <mat-card-subtitle>Transaction</mat-card-subtitle>
+      </div>
+
+      <div class="grid-fields">
+        <div >
+          <mat-form-field  appearance="outline"  >
+            <mat-label>Transaction Type</mat-label>
+              <mat-select
+                formControlName  ="tranCode">
+              <mat-option value="EMVVoid">
+                EMVVoid
+              </mat-option>
+              <mat-option value="EMVSale">
+                EMVSale
+              </mat-option>
+              <mat-option value="EMVReturn">
+                EMVReturn
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label>Amount</mat-label>
+            <input formControlName="amount" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field  appearance="outline">
+            <mat-label>Record No</mat-label>
+            <input formControlName="recordNo" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field  appearance="outline">
+            <mat-label>Ref No</mat-label>
+            <input formControlName="refNo" matInput >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field  appearance="outline">
+            <mat-label>Invoice No</mat-label>
+            <input formControlName="invoiceNo" matInput >
+          </mat-form-field>
+        </div>
+
+      </div>
+
+    </div>
+  </mat-card-content>
+  <div *ngIf="dsiSettings$ | async"></div>
+</mat-card>
+
+
+<div *ngIf="viewSelectDeviceList && dsiDeviceList" class="message">
+  
+  <mat-selection-list
+        [multiple]="false"
+        class="example-full-width"
+        appearance="outline"
+        [(ngModel)]="secureDevice"
+        (selectionChange)="setSecureDevice(secureDevice)"  >
+
+      <mat-label>Secure Device </mat-label>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice1?.Description1">
+        <div matLine class="item-description">
+          {{dsiDeviceList?.Devices?.SecureDevice1?.Description1}}
+        </div>
+        <div matLine class="item-secure">
+          {{dsiDeviceList?.Devices?.SecureDevice2?.SecureDeviceID1}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice2?.SecureDeviceID2">
+        <div matLine  class="item-description">
+           {{dsiDeviceList?.Devices?.SecureDevice2?.Description2}}
+        </div>
+        <div  matLine  class="item-secure">
+           {{dsiDeviceList?.Devices?.SecureDevice2?.SecureDeviceID2}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice3?.SecureDeviceID3">
+        <div matLine  class="item-description">
+            {{dsiDeviceList?.Devices?.SecureDevice3?.Description3}}
+        </div>
+        <div matLine class="item-secure">
+            {{dsiDeviceList?.Devices?.SecureDevice3?.SecureDeviceID3}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice4?.SecureDeviceID4">
+        <div matLine  class="item-description">
+           {{dsiDeviceList?.Devices?.SecureDevice4?.Description4}}
+        </div>
+        <div matLine  matLine class="item-secure">
+           {{dsiDeviceList?.Devices?.SecureDevice4?.SecureDeviceID4}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice5?.SecureDeviceID5">
+        <div matLine  class="item-description">
+            {{dsiDeviceList?.Devices?.SecureDevice5?.Description5}}
+        </div>
+        <div matLine class="item-secure">
+            {{dsiDeviceList?.Devices?.SecureDevice5?.SecureDeviceID5}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice6?.SecureDeviceID6">
+        <div matLine  class="item-description">
+            {{dsiDeviceList?.Devices?.SecureDevice6?.Description6}}
+        </div>
+        <div matLine class="item-secure">
+            {{dsiDeviceList?.Devices?.SecureDevice6?.SecureDeviceID6}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice7?.SecureDeviceID7">
+        <div class="item-description">
+           {{dsiDeviceList?.Devices?.SecureDevice7?.Description7}}
+        </div>
+        <div matLine class="item-secure">
+           {{dsiDeviceList?.Devices?.SecureDevice7?.SecureDeviceID7}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice8?.SecureDeviceID8">
+        <div matLine  class="item-description">
+            {{dsiDeviceList?.Devices?.SecureDevice8?.Description8}}
+        </div>
+        <div matLine class="item-secure">
+            {{dsiDeviceList?.Devices?.SecureDevice8?.SecureDeviceID8}}
+        </div>
+      </mat-list-option>
+
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice1?.SecureDeviceID9">
+        <div  matLine class="item-description">
+            {{dsiDeviceList?.Devices?.SecureDevice9?.Description9}}
+        </div>
+        <div matLine class="item-secure">
+            {{dsiDeviceList?.Devices?.SecureDevice9?.SecureDeviceID9}}
+        </div>
+      </mat-list-option>
+      <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice10?.SecureDeviceID10">
+        <div  matLine class="item-description">
+            {{dsiDeviceList?.Devices?.SecureDevice10?.Description10}}
+        </div>
+        <div matLine class="item-secure">
+            {{dsiDeviceList?.Devices?.SecureDevice10?.SecureDeviceID10}}
+        </div>
+      </mat-list-option>
+  </mat-selection-list>
+</div>

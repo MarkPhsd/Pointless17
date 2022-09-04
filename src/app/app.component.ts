@@ -12,6 +12,7 @@ import { Title } from '@angular/platform-browser';
 import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
+
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
 @Component({
   selector: 'app-root',

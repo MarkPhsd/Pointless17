@@ -14,7 +14,6 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './modules/login/login.component';
 import { SharedModule } from './shared/shared.module';
 import { LayoutModule } from '@angular/cdk/layout';
-
 import { ChangepasswordComponent } from './modules/login/changepassword/changepassword.component';
 import { ResetpasswordComponent } from './modules/login/resetpassword/resetpassword.component';
 import { EditorModule } from '@tinymce/tinymce-angular';
@@ -64,20 +63,20 @@ import { DashBoardRoutingModule } from './dash-board-routing.module';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 
-Sentry.init({
-  dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
-  integrations: [
-    new BrowserTracing({
-      tracingOrigins: ["localhost", "https://yourserver.io/api"],
-      routingInstrumentation: Sentry.routingInstrumentation,
-    }),
-  ],
+// Sentry.init({
+//   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
+//   integrations: [
+//     new BrowserTracing({
+//       tracingOrigins: ["localhost", "https://yourserver.io/api"],
+//       routingInstrumentation: Sentry.routingInstrumentation,
+//     }),
+//   ],
 
-  // Set tracesSampleRate to 1.0 to capture 100%
-  // of transactions for performance monitoring.
-  // We recommend adjusting this value in production
-  tracesSampleRate: 3.0,
-});
+//   // Set tracesSampleRate to 1.0 to capture 100%
+//   // of transactions for performance monitoring.
+//   // We recommend adjusting this value in production
+//   tracesSampleRate: 3.0,
+// });
 
 enableProdMode();
 // platformBrowserDynamic()
@@ -108,7 +107,6 @@ export function init_app(appLoadService: AppInitService) {
     CategoriesAlternateComponent,
     CurrencyFormatterDirective,
     LoginComponent,
-    
     TvPriceTierMenuItemsComponent,
     TvPriceSpecialsComponent,
     RegisterAccountExistingUserWithTokenComponent,
@@ -177,20 +175,21 @@ export function init_app(appLoadService: AppInitService) {
     PagerService,
     StatusBar,
     AppInitService,
-    {
-      provide: ErrorHandler,
-      useValue: Sentry.createErrorHandler({
-        showDialog: getIsDebugDevice()
-      }),
-    },
-    {
-      provide: Sentry.TraceService,
-      deps: [Router],
-    },
+    // {
+    //   provide: ErrorHandler,
+    //   useValue: Sentry.createErrorHandler({
+    //     showDialog: getIsDebugDevice()
+    //   }),
+    // },
+    // {
+    //   provide: Sentry.TraceService,
+    //   deps: [Router],
+    // },
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,
-      deps: [AppInitService, Sentry.TraceService],
+      // deps: [AppInitService, Sentry.TraceService],
+      deps: [AppInitService],
       multi: true
     },
     Title

@@ -29,9 +29,9 @@ export class UserAuthorizationService {
   isUserAuthorized(requiredArray: string): boolean {
 
     const user = this.currentUser();
-   
-    const currentRole = user?.roles;
-   
+
+    const currentRole = user?.roles.toLowerCase();
+
     if (!currentRole) { return }
     if (!user || !user.roles) { return false}
     if (!this.validateUser)   { return false }
@@ -63,6 +63,9 @@ export class UserAuthorizationService {
     return  this.isUserAuthorized('user')
   }
   get isManagement(): boolean {
+    return  this.isUserAuthorized('admin,manager')
+  }
+  get isManager(): boolean {
     return  this.isUserAuthorized('admin,manager')
   }
   get isAdmin(): boolean {

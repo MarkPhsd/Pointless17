@@ -43,11 +43,12 @@
   <mat-card-content *ngIf="order.posPayments">
     <div
         *ngFor="let item of order.posPayments">
-        <div class="payment-grid" *ngIf="item.completionDate && item.amountPaid>0">
+        <div class="payment-grid" *ngIf="(item.completionDate && item.amountPaid>0) || (item && item.voidReason)">
           <div *ngIf="item.paymentMethod" class="grid-item">
+            <span *ngIf="item.voidReason"><mat-icon>void</mat-icon> </span>
             {{item.paymentMethod.name}}
             <span  *ngIf="item?.paymentMethod?.isCreditCard">
-              <button  mat-button (click)="editPayment(item)"><mat-icon>edit</mat-icon></button>
+              <button [disabled]="item.voidReason"  mat-button (click)="editPayment(item)"><mat-icon>edit</mat-icon></button>
             </span>
             <div *ngIf="item?.paymentMethod?.isCash && item?.amountPaid > 0">
               <span *ngIf="item.amountPaid - item.amountReceived !=0">
@@ -81,9 +82,11 @@
                     ><mat-icon>print</mat-icon></button>
           </div>
 
-          <div *ngIf="!item.voidReason || item.voidReason == 0">
+          <div>
             <button mat-button
+                    [disabled]="item.voidReason"
                     class="grid-item-button"
+                    color="warn"
                     (click)="voidPayment(item)"
                     ><mat-icon>delete</mat-icon>Void</button>
           </div>

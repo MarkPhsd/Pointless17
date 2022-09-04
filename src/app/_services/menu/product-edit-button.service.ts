@@ -41,6 +41,7 @@ import { DSIEMVTransactionComponent } from 'src/app/modules/dsiEMV/transactions/
 import { StoreCreditEditorComponent } from 'src/app/modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
 import { AppWizardProgressButtonComponent } from 'src/app/shared/widgets/app-wizard-progress-button/app-wizard-progress-button.component';
 import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
+import { CardpointeTransactionsComponent } from 'src/app/modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 
 @Injectable({
   providedIn: 'root'
@@ -197,14 +198,13 @@ export class ProductEditButtonService {
     )
   }
 
-  
   openAppWizard() {
     let dialogRef: any;
     dialogRef = this.dialog.open(AppWizardStatusComponent,
       { width:        '600px',
         minWidth:     '600px',
-        height:       '600px',
-        minHeight:    '600px',
+        height:       '650px',
+        minHeight:    '650px',
       },
     )
   }
@@ -368,8 +368,8 @@ export class ProductEditButtonService {
   openClientTypeEditor(id: number) {
     let dialogRef: any;
     dialogRef = this.dialog.open(ClientTypeEditComponent,
-      { width:        '60vw',
-        minWidth:     '800px',
+      { width:        '75vw',
+        minWidth:     '900px',
         height:       '725px',
         minHeight:    '725px',
         data : id
@@ -533,6 +533,24 @@ export class ProductEditButtonService {
           })
         })
       }
+  }
+
+  openCardPointBoltTransaction(options: any ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (options) {
+      dialogRef = this.dialog.open(CardpointeTransactionsComponent,
+        { width:          '800px',
+          minWidth:       '399px',
+          height:         '800px',
+          minHeight:      '650px',
+          data : options
+      })
+      return dialogRef
+    }
   }
 
   openDSIEMVTransaction(options: any ) {

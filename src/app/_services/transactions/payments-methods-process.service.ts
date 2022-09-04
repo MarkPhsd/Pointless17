@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { BehaviorSubject, Observable, of, Subscription, switchMap, } from 'rxjs';
-import { IPaymentResponse, IPOSOrder, IPOSPayment,  ISite }   from 'src/app/_interfaces';
+import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
 import { IPaymentMethod, PaymentMethodsService } from './payment-methods.service';
@@ -23,6 +23,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   private _dialog     = new BehaviorSubject<any>(null);
   public  dialog$      = this._dialog.asObservable();
+
+
+  _initTransactionComplete = new BehaviorSubject<any>(null);
 
   initSubscriptions() {
      this.dialogSubject = this.dialogRef.afterClosed().subscribe(result => {
@@ -160,6 +163,46 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return false;
   }
 
+  isCardPointApproved(trans: any) {
+    if (trans && (trans?.resptext.toLowerCase() === 'Approved'.toLowerCase() ||
+                  trans?.resptext.toLowerCase() === 'Approval'.toLowerCase() ||
+                  trans?.respstat.toLowerCase() === 'A'.toLowerCase()
+                  ) ) {
+      return true;
+    }
+    this.notify(`Response not approved. Response given ${trans.resptext}`, 'Failed', 3000)
+    return false;
+  }
+
+  processCardPointResponse(trans: any, payment: IPOSPayment, order: IPOSOrder) {
+    console.log('processCardPointResponse', trans)
+    const site = this.sitesService.getAssignedSite();
+    //validate response
+    if (this.isCardPointApproved(trans)) {
+
+      payment   = this.applyCardPointResponseToPayment(trans, payment)
+      payment.textResponse =  trans?.resptext.toLowerCase();
+      let paymentMethod    = {} as IPaymentMethod;
+      console.log('processCardPointResponse', trans);
+
+      this.paymentMethodService.getPaymentMethodByName(site, 'credit').pipe(
+        switchMap( data => {
+          payment.paymentMethodID = data.id;
+          paymentMethod = data;
+          return this.paymentService.makePayment(site, payment, order, payment.amountPaid, data)
+        }
+      )).subscribe(data => {
+        console.log('data. completed response', data.orderCompleted)
+        this.orderService.updateOrderSubscription(data.order);
+        this.orderMethodsService.finalizeOrder(data, paymentMethod, data.order);
+        // this.printingService.previewReceipt();
+        this._initTransactionComplete.next(true)
+        return payment.textResponse;
+      })
+    }
+
+  }
+
   async processCreditCardResponse(response: any, payment: IPOSPayment, order: IPOSOrder) {
 
     const site = this.sitesService.getAssignedSite();
@@ -202,6 +245,34 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
       return cmdResponse;
     }
+  }
+
+  applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
+
+
+    // payment.au
+    // payment.commcard = response?.commcard;
+    payment.resptext = response?.resptext;
+    payment.cvvresp = response?.cvvresp;
+    payment.respcode = response?.respcode;
+    payment.preAuth = response?.authcode;
+    payment.entryMethod = response?.entrymode;
+    payment.avsresp = response?.avsresp;
+    payment.entrymode = response?.entrymode;
+    payment.respproc = response?.respproc;
+    payment.bintype = response?.bintype;
+    payment.expiry = response?.expiry;
+    payment.retref = response?.retref;
+    payment.respstat = response?.respstat;
+    payment.account = response?.account;
+    payment.amountPaid = response?.amount;
+    payment.amountReceived = response?.amount;
+    payment.saleType      = 1;
+    payment.exp           =  response?.expiry;
+    payment.approvalCode  =  response?.authcode;
+    payment.captureStatus =  response?.resptext;
+
+    return payment;
   }
 
   applyEMVResponseToPayment(trans: TranResponse, payment: IPOSPayment) {

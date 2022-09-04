@@ -30,7 +30,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   @Input() imageUrl  : string;
   @Input() menuItem  : IMenuItem;
   @Input() bucketName: string;
-  placeHolderImage   : String = "../assets/images/placeholderimage.png"
+  placeHolderImage   : String = "assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
 

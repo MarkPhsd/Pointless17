@@ -29,13 +29,13 @@ export class OrderTotalComponent implements OnInit {
         if (!this.mainPanel) {
           this.transactionDataClass ="transaction-data-side-panel"
         }
-    
-       
-        if (!data.wideOrderBar) { 
-          this.transactionDataClass = 'transaction-data-side-panel-small' 
+
+
+        if (!data?.wideOrderBar) {
+          this.transactionDataClass = 'transaction-data-side-panel-small'
         }
         // if (data) {
-        //   if (data.wideOrderBar) { 
+        //   if (data.wideOrderBar) {
         //     if (this.smallDevice)  {
         //         this.matorderBar = 'mat-orderBar'
         //     }
@@ -74,5 +74,5 @@ export class OrderTotalComponent implements OnInit {
       this.smallDevice = true
     }
   }
-  
+
 }

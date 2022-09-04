@@ -111,6 +111,7 @@ import { ManifestsComponent } from './modules/admin/inventory/manifests/manifest
 import { ManifestStatusComponent } from './modules/admin/inventory/manifest-status/manifest-status.component';
 import { ManifestTypeComponent } from './modules/admin/inventory/manifest-type/manifest-type.component';
 import { StoreCreditListComponent } from './modules/admin/store-credit/store-credit-list/store-credit-list.component';
+import { FloorPlanComponent } from './modules/floor-plan/floor-plan/floor-plan.component';
 
 const routes: Routes = [
     // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -178,6 +179,9 @@ const routes: Routes = [
 
         ///price schedule layout menu
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
+
+        ///price schedule layout menu
+        {path: 'table-layout', component: FloorPlanComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         // function-group-list
         { path: 'function-group-list', component: FunctionGroupListComponent,  canActivate: [AuthGuard], data: {  title: 'Function List', animation: 'isLeft'}},

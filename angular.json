@@ -25,6 +25,7 @@
             "main"      : "src/main.ts",
             "tsConfig"  : "tsconfig.app.json",
             "polyfills" : "src/polyfills.ts",
+            "preserveSymlinks": true,
             "customWebpackConfig": {
               "path": "./webpack.config.ts",
               "replaceDuplicatePlugins": true
@@ -109,7 +110,6 @@
               "extractLicenses": false,
               "vendorChunk": true,
               "buildOptimizer": true,
-
               "budgets": [
                 {
                   "type": "initial",

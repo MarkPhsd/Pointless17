@@ -1,7 +1,7 @@
   <div [class]="gridflow"
-       *ngIf="order" >
+        >
 
-    <div  *ngIf="(order && order.history == true || (order.completionDate)) 
+    <div  *ngIf="(order && order.history == true || (order && order.completionDate))
                 || isUserStaff " >
       <button
           mat-raised-button
@@ -10,11 +10,11 @@
       <mat-icon>
         add
       </mat-icon>
-      
+
       </button>
     </div>
 
-    <div *ngIf="isUserStaff">
+    <div *ngIf="isUserStaff && order ">
       <button
               mat-raised-button
               color="primary"
@@ -28,7 +28,7 @@
       </button>
     </div>
 
-    <div *ngIf="!isUserStaff">
+    <div *ngIf="!isUserStaff && order ">
       <button
             mat-raised-button
             color="primary"

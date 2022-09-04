@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 export class NavigationService {
 
   constructor(
+
     private toolbarUIService: ToolBarUIService,
     private router:           Router,
   ) { }
@@ -25,6 +26,11 @@ export class NavigationService {
     this.router.navigate(['/pos-orders']);
   }
 
+  navTableService() {
+    this.toolbarUIService.hidetoolBars();
+    this.router.navigate(['/table-layout']);
+  }
+
   navDashboard(){
     this.toolbarUIService.updateDepartmentMenu(0);
     this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
@@ -32,10 +38,10 @@ export class NavigationService {
     });
   }
 
-  makePayment(openOrderBar: boolean , smallDevive: boolean, isStaff: boolean) { 
+  makePayment(openOrderBar: boolean , smallDevive: boolean, isStaff: boolean) {
     this.toolbarUIService.updateOrderBar(openOrderBar)
     this.toolbarUIService.resetOrderBar(false)
-    
+
     let url = 'pos-order-schedule'
     if (!isStaff) {
       url = 'pos-order-schedule'
@@ -53,7 +59,7 @@ export class NavigationService {
 
   }
 
-  toggleOpenOrderBar(isStaff: boolean) { 
+  toggleOpenOrderBar(isStaff: boolean) {
     let schedule = 'currentorder'
     if (isStaff) { schedule = '/currentorder/' }
     this.router.navigate([ schedule , {mainPanel:true}]);

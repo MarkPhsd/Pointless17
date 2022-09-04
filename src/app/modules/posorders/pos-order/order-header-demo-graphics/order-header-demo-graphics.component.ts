@@ -33,10 +33,10 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
         this.uiSettings = data;
-        console.log(data, data.wideOrderBar)
-        if (!data.wideOrderBar) { 
-          // this.transactionDataClass = 'transaction-data-side-panel-small' 
-        }
+       
+        // if (!data.wideOrderBar) { 
+        //   // this.transactionDataClass = 'transaction-data-side-panel-small' 
+        // }
         // if (data) {
         //   if (data.wideOrderBar) { 
         //     if (this.smallDevice)  {

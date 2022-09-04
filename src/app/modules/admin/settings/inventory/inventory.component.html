@@ -1,13 +1,13 @@
 
 <div class="features" *ngIf="role == 'admin'">
-  
+
   <div>
-    <button mat-raised-button 
+    <button mat-raised-button
             color  = "primary"
             class ="grid-image-button-group "
             (click)="productButtonsService.openAppWizard()">
       <div class="grid-image-button">
-        <div class="mat-grid-icon"> 
+        <div class="mat-grid-icon">
           <mat-icon> build_circle</mat-icon>
         </div>
         <div>
@@ -59,19 +59,6 @@
     </button>
   </div>
 
-  <div>
-    <button mat-raised-button
-            color  = "primary"
-            class ="grid-image-button-group "
-            (click)="clientTypesList()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">  <mat-icon>manage_accounts</mat-icon> </div>
-        <div>
-         User Types 
-        </div>
-      </div>
-    </button>
-  </div>
 
   <div>
     <button mat-raised-button

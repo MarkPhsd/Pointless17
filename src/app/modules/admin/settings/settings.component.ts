@@ -75,7 +75,6 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private dialog               : MatDialog,
         private systemManagerService : SystemManagerService,
         private route                : ActivatedRoute,
-      
         private router               : Router)
     {
       this.accordionStep = -1;
@@ -85,7 +84,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
     ngOnInit() {
       this.getCurrentUser();
       const step = this.route.snapshot.paramMap.get('accordionStep');
-      if (step) { 
+      if (step) {
         this.accordionStep = +step;
         this.setStep(+step)
       }
@@ -136,7 +135,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
       });
     }
-    
+
     gotoPayments() {
       this.routerNavigation('payments')
     }
@@ -155,4 +154,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     functionGroups() {
       this.router.navigate(['/function-group-list'])
     }
+
+    clientTypesList() {
+      this.routerNavigation('client-type-list')
+    }
+
 }

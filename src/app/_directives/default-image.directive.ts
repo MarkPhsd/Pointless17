@@ -13,10 +13,10 @@ import {
 
   constructor(private elem: ElementRef) {     }
 
-    @Input() default = "../assets/images/placeholderimage.png"
+    @Input() default = "assets/images/placeholderimage.png"
 
     @HostListener('error') onError(): void {
-       this.elem.nativeElement.src = this.default;     }
+       this.elem.nativeElement.src = this.default; }
 }
 
 

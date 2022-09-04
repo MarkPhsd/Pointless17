@@ -1,0 +1,65 @@
+<mat-card>
+  <mat-card-title>
+    <ng-content></ng-content>
+  </mat-card-title>
+  <mat-card-subtitle>
+    <div>
+
+    </div>
+
+  </mat-card-subtitle>
+  <mat-card-content>
+    <div *ngIf="inputForm"
+         [formGroup]="inputForm" >
+
+      <div>
+        <mat-form-field appearance="outline">
+        <mat-label >Device Name</mat-label>
+        <input matInput
+              type="text"
+              formControlName="deviceName"
+              class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline">
+        <mat-label >HSN</mat-label>
+        <input matInput
+              type="text"
+              formControlName="hsn"
+              class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline">
+        <mat-label >MerchID</mat-label>
+        <input matInput
+              type="text"
+              formControlName="merchID"
+              class="form-control" >
+        </mat-form-field>
+      </div>
+
+      <div>
+        <mat-form-field appearance="outline">
+        <mat-label >API Url</mat-label>
+        <input matInput
+              type="text"
+              formControlName="apiURL"
+              class="form-control" >
+        </mat-form-field>
+      </div>
+    </div>
+
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" (click)="save()"><mat-icon>save</mat-icon>Save</button>
+  </mat-card-actions>
+</mat-card>
+
+<mat-card>
+  Info    {{deviceInfoService.deviceInfo | json}}
+</mat-card>
+

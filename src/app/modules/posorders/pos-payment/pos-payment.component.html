@@ -84,13 +84,18 @@
 
                 <span class="item-buttons-container"
                       *ngIf="order.wicTotal && order.wicTotal !=0">
-                  <button class="payment-buttons" mat-raised-button (click)="applyWICPayment()">
+                  <button class="payment-buttons"
+                          mat-raised-button
+                          (click)="applyWICPayment()">
                     <mat-icon color="warn">credit_card</mat-icon>WIC Payment
                   </button>
                 </span>
 
-                <span class="item-buttons-container" *ngIf="order.ebtTotal && order.ebtTotal !=0 ">
-                  <button class="payment-buttons"  mat-raised-button (click)="applyEBTPayment()">
+                <span class="item-buttons-container"
+                      *ngIf="order.ebtTotal && order.ebtTotal !=0 ">
+                  <button class="payment-buttons"
+                          mat-raised-button
+                          (click)="applyEBTPayment()">
                     <mat-icon color="warn">credit_card</mat-icon>EBT Payment
                   </button>
                 </span>
@@ -100,18 +105,20 @@
 
             <mat-card>
               <mat-card-content>
-                <div class="item-container" >
-                  <div *ngIf="dsiEMVEnabled && order  && order.balanceRemaining > 0">
+                <div class="item-container"
+                     *ngIf="(uiTransactions$ | async) as uiTransactions" >
+
+                  <div *ngIf="(uiTransactions?.dsiEMVNeteEpayEnabled || dsiEMVEnabled) && order  && order?.balanceRemaining > 0">
 
                     <button class="payment-buttons"
                         mat-raised-button
-                        (click)="processDSICreditCardPayment()">
+                        (click)="processDSICreditCardPayment(false)">
                       <mat-icon color="warn">credit_card</mat-icon>Credit / Debit
                     </button>
 
                     <button class="payment-buttons"
                         mat-raised-button
-                        (click)="processDSIManualCreditCardPayment()">
+                        (click)="processDSICreditCardPayment(true)">
                       <mat-icon color="warn">credit_card</mat-icon>Manual Input
                     </button>
 
@@ -121,6 +128,24 @@
                       <mat-icon color="warn">refresh</mat-icon>Reset
                     </button>
 
+                  </div>
+
+                  <div *ngIf="uiTransactions?.cardPointBoltEnabled && (order && order?.balanceRemaining > 0)">
+                    <button class="payment-buttons"
+                        mat-raised-button
+                        (click)="applyBoltPayment(false)">
+                      <mat-icon color="warn">credit_card</mat-icon>Credit Card
+                    </button>
+                     <button class="payment-buttons"
+                        mat-raised-button
+                        (click)="applyBoltPayment(true)">
+                      <mat-icon color="warn">credit_card</mat-icon>Manual Card
+                    </button>
+                  </div>
+
+                  <div *ngIf="uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining > 0)">
+                    <!-- if is android.
+                    Android Payment -->
                   </div>
 
                   <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
@@ -147,7 +172,6 @@
                   (outPutItem)       = "getPaymentMethod($event)"  >
                 Enter Partial Payments
               </app-mat-toggle-selector>
-
             </mat-card>
           </div>
         </div>

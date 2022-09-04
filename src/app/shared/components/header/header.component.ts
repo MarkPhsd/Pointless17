@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter,
-        HostBinding, Renderer2, HostListener, OnDestroy, OnChanges } from '@angular/core';
+        HostBinding, Renderer2, HostListener, OnDestroy, OnChanges, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder,FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyService,AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
+import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { Observable, of, Subject, Subscription,   } from 'rxjs';
@@ -12,11 +13,14 @@ import { Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { Router } from '@angular/router';
+import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
+import { FloorPlanService } from 'src/app/_services/floor-plan.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 interface IIsOnline {
   result: string;
@@ -30,6 +34,7 @@ interface IIsOnline {
 
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
+  @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
   openOrderBar:                      boolean;
@@ -60,14 +65,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   searchForm      : FormGroup;
 
   phoneDevice: boolean;
+  smallDevice         :   boolean;
   scannerEnabled  : boolean;
   private toolBar :  boolean;
 
   showPOSFunctions    =   false;
-  showTableLayout     =   false;
   scaleName           :   any;
   scaleValue          :   any;
-  smallDevice         :   boolean;
+
   isUserStaff         =   false;
   isAdmin             =   false;
   isUser              =   false;
@@ -103,6 +108,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   siteName: string;
   bucket = '';
+  homePageSetings: UIHomePageSettings;
+  floorPlans$ : Observable<IFloorPlan[]>;
 
   _site: Subscription;
   initSiteSubscriber() {
@@ -151,6 +158,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       }
     })
   }
+
+  initUIService() {
+    this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
+        if (data) {
+          this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
+        }
+      }
+    )
+  }
+
   initSubscriptions() {
     this.initOrderSubscriber()
     this.initScaleSubscriber();
@@ -177,6 +194,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
+              private floorPlanSevice       : FloorPlanService,
+              private uiSettings            : UISettingsService,
               private fb                    : FormBuilder ) {
   }
 
@@ -185,6 +204,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async  ngOnInit() {
+    this.site = this.siteService.getAssignedSite();
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');
@@ -202,6 +222,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.pollingService.poll();
     this.initUserOrder();
     this.updateScreenSize();
+    this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
   }
 
   ngOnDestroy() {
@@ -271,10 +292,24 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
   }
 
+  // get istableLayout() {
+  //   if (this.isUserStaff) {
+  //     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site);
+  //   }
+  // }
+
+  get isfloorPlan() {
+    if (this.isUserStaff || this.isAdmin) {
+      return this.floorPlanTemplate
+    }
+    return null;
+  }
+
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.showSearchForm = true
     this.smallDevice = false
+    this.phoneDevice = false;
     if (window.innerWidth >= 1200) {
       this.sitePickerWidth = 33
     } else if (window.innerWidth >= 992) {
@@ -285,6 +320,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.showSearchForm = false
       this.sitePickerWidth = 75
       this.smallDevice = true
+    }
+    if (500 >= window.innerWidth) {
+      this.phoneDevice = true;
     }
     this.refreshUserBar(this.user)
   }
@@ -404,6 +442,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   navTableService() {
     this.smallDeviceLimiter();
+    this.navigationService.navTableService()
   }
 
   toggleSideBar() {

@@ -115,7 +115,7 @@ export class BrandslistComponent implements OnInit, AfterViewInit {
   searchPhrase     :         Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
-  placeHolderImage   : String = "../assets/images/placeholderimage.png"
+  placeHolderImage   : String = "assets/images/placeholderimage.png"
 
   searchItems$              : Subject<ClientSearchResults[]> = new Subject();
   _searchItems$ = this.searchPhrase.pipe(

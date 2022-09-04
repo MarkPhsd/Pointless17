@@ -7,7 +7,6 @@ import { PosOrderMenuItem } from "./posorderitems";
 
 // export wicEBTList  id: number       = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
 
-
 export interface IPOSOrderSearchModel {
   completionDate_From:         string;
   completionDate_To:           string;
@@ -109,6 +108,9 @@ export interface IPOSOrder {
   ebtTotal              : number;// As Double
   stateTotal            : number;// As Double
   gratuity              : number;
+  tableUUID            : string;
+  floorPlanID           : number;
+  tableName             : string;
 }
 
 export interface ClientsPOSOrders {
@@ -167,6 +169,7 @@ export interface ClientType {
   limitExtract:      number;
   limitConcentrates: number;
   allowStaffUse    : boolean;
+  authorizationGroupID:  number;
   jsonObject      : string;
 }
 
@@ -415,6 +418,7 @@ export interface OperationWithAction {
   manifest          : InventoryManifest;
   result            : boolean;
   purchaseOrderPayment: IPOSPayment;
+  resultMessage     : string;
 }
 
 export interface IPaymentSearchModel {

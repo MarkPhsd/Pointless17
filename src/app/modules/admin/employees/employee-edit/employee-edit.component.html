@@ -109,6 +109,10 @@
             </mat-form-field>
           </div>
 
+       
+         
+       
+
         </div>
         <ng-template #loading >
           <mat-spinner  diameter="100"></mat-spinner>
@@ -157,9 +161,28 @@
 
         <div *ngIf="clientForm">
           <app-profile-roles
-            [isAuthorized]="isAuthorized"
-            [inputForm] ='clientForm'>
+                [isAuthorized]="isAuthorized"
+                [inputForm] ='clientForm'>
           </app-profile-roles>
+          <div [formGroup]="clientForm">
+            <mat-form-field
+                [style]="'font-size: 1.1em; width: 90%;'"
+                class="fields"
+                appearance="outline">
+              <mat-label>Type</mat-label>
+              <mat-select
+                        type              = "number"
+                        ngDefaultControl
+                        name              = 'clientTypeID'
+                        formControlName   = "clientTypeID"
+                      >
+                <mat-option *ngFor="let item of (clientTypes$ | async) as list"
+                  [value]="item.id">
+                  {{item.name}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
         </div>
 
         <mat-label *ngIf="(clientForm && confirmPassword)  &&

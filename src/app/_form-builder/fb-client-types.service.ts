@@ -81,6 +81,7 @@ export class FbClientTypesService {
             limitExtract: [],
             limitConcentrates: [],
             allowStaffUse: [],
+            authorizationGroupID: [],
             jsonObject       : [],
           }
         )

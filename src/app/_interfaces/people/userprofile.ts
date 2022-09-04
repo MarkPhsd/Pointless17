@@ -108,6 +108,7 @@ export interface clientType {
   limitExtract:      number;
   limitConcentrates: number;
   allowStaffUse:    boolean;
+  authorizationGroupID:  number;
   jsonObject       : string;
 }
 
