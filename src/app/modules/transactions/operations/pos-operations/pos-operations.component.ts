@@ -5,7 +5,7 @@ import { BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactio
 import { switchMap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { ITaxReport} from 'src/app/_services/reporting/reporting-items-sales.service';
-import { Observable, Subject } from 'rxjs';
+import { Observable, of, Subject } from 'rxjs';
 import { ISite } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
@@ -17,6 +17,7 @@ import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
 import { Tray } from 'electron';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'pos-operations',
@@ -49,13 +50,12 @@ export class PosOperationsComponent implements OnInit {
   batchClose: BatchClose;
 
   closingCheck$ : Observable<ICanCloseOrder>;
+  uiTransactions: TransactionUISettings;
+  uiTransactions$: Observable<TransactionUISettings>;
 
   get isElectronApp() {
     return this.platFormService.isAppElectron
   }
-
-
-
 
   constructor(
     private siteService        : SitesService,
@@ -69,6 +69,7 @@ export class PosOperationsComponent implements OnInit {
     private printingAndroidService: PrintingAndroidService,
     private sendGridService     :   SendGridService,
     private matSnack           : MatSnackBar,
+    private uISettingsService: UISettingsService,
     // private AuthService       : UserAuth
   ) {
     if (!this.site) {
@@ -77,13 +78,30 @@ export class PosOperationsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
     const item  = localStorage.getItem('DSIEMVSettings');
     if (item) {
       this.dsiEMVSettings = JSON.parse(item) as Transaction;
     }
+
     this.getUser();
     this.refreshSales();
     this.refreshClosingCheck();
+    this.initTransactionUISettings();
+  }
+
+  initTransactionUISettings() {
+      this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+      switchMap(data => {
+        if (data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+        if (!data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+    }))
   }
 
   refreshClosingCheck() {
@@ -99,12 +117,10 @@ export class PosOperationsComponent implements OnInit {
       switchMap( data => {
         if (data && data.id) {
           return this.sendGridService.sendSalesReport(data.id, null,null)
-
         }
         return null;
     })).subscribe(
       {next: data => {
-      console.log(data)
       this.matSnack.open('Email Sent', 'Success', {duration: 1500})
       }, error: err => {
         this.matSnack.open('Email Not sent, check with administrator', 'Alert', {duration: 1500})
@@ -148,11 +164,12 @@ export class PosOperationsComponent implements OnInit {
 
   async emvDatacapBatchCards(): Promise<boolean> {
     try {
-      this.batchSummary  = null;
-
-      const response =  await this.dsiProcess.emvBatch()
-      this.batchClose = response
-      return true
+      if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
+        this.batchSummary  = null;
+        const response =  await this.dsiProcess.emvBatch()
+        this.batchClose = response
+        return true
+      }
     } catch (error) {
       console.log('error batch', error)
     }
@@ -160,9 +177,10 @@ export class PosOperationsComponent implements OnInit {
   }
 
   async  emvDataCapBatchInquire() {
-    //dsiProcess
-    const response    = await this.dsiProcess.emvBatchInquire();
-    this.batchSummary = response;
+    if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
+      const response    = await this.dsiProcess.emvBatchInquire();
+      this.batchSummary = response;
+    }
   }
 
   async closeDay() {
@@ -177,9 +195,11 @@ export class PosOperationsComponent implements OnInit {
     //return a can or not and reason why.
     try {
       if (this.isElectronApp) {
-        const batchResult =  await this.emvDatacapBatchCards();
-        if (!batchResult) {
-          const answer = window.confirm('Batch error, did you want to continue closing? You can batch separately.')
+        if (this.uiTransactions && this.uiTransactions.dsiEMVNeteEpayEnabled) {
+          const batchResult =  await this.emvDatacapBatchCards();
+          if (!batchResult) {
+            const answer = window.confirm('Batch error, did you want to continue closing? You can batch separately.')
+          }
         }
       }
     } catch (error) {
@@ -209,16 +229,25 @@ export class PosOperationsComponent implements OnInit {
         return this.transferDataService.closeAll(site);
       })).pipe(
         switchMap(
-          data => {
+           data => {
             this.closeResult = 'Day closed. Closing balance Sheets.'
             this.runningClose = false;
             return this.balanceSheetService.closeAllSheets(site)
-          }
+          // },
+          // error: error => {
+          //   return of ('Error Occured')
+          // }
+        }
       )).subscribe(data => {
-        this.balanceSheetsClosed = 'All balance sheets closed'
+        // if (data === 'Error Occured') {
+        //   this.balanceSheetsClosed = 'Balance sheet not closed.'
+        //   this.runningClose = false;
+        //   return
+        // }
+        this.closeResult = 'Day closed. All balance sheets closed.'
+        this.balanceSheetsClosed = ''
         this.runningClose = false;
     })
-
   }
 
   ordersWindow() {

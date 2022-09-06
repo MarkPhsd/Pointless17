@@ -150,7 +150,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   initTransactionUISettings() {
-    this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+      this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap(data => {
         if (data) {
           this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
@@ -162,10 +162,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
     }))
   }
-
-
-
-
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -343,7 +339,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyBoltPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.cardPointMethodsService.processSubCreditPayment(order, order.balanceRemaining, false)
+      console.log(this.uiTransactions)
+      this.cardPointMethodsService.processSubCreditPayment(order, order.balanceRemaining,
+                                                          false, this.uiTransactions)
     }
   }
 

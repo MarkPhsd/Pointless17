@@ -37,9 +37,10 @@ export interface TransactionUISettings {
   applyTaxChangesToDiscountedItems  : boolean;
   fuzzyMatchBarcodeLookup: boolean;
   requireEnterTabBarcodeLookup: boolean;
-
+  cardPointPreAuth        : boolean;
   cardPointBoltEnabled   : boolean;
   cardPointAndroidEnabled: boolean;
+  cardPointRequestTip    : boolean;
   dsiEMVAndroidEnabled   : boolean;
   dsiEMVNeteEpayEnabled  : boolean;
   dsiEMVIP               : boolean;
@@ -574,7 +575,8 @@ export class UISettingsService {
       applyTaxChangesToDiscountedItems : [],
       fuzzyMatchBarcodeLookup: [''],
       requireEnterTabBarcodeLookup: [''],
-
+      cardPointRequestTip    : [''],
+      cardPointPreAuth       : [''],
       cardPointBoltEnabled   : [''],
       cardPointAndroidEnabled: [''],
       dsiEMVAndroidEnabled   : [''],

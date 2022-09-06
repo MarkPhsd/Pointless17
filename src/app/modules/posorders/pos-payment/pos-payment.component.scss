@@ -19,7 +19,7 @@ mat-card {
 .order-layout-empty {
 }
 
-.center-items { 
+.center-items {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -244,12 +244,12 @@ mat-card {
 }
 
 .payment-dimensions {
-  max-height: 550px;
-  min-height: 550px;
+  // max-height: 550px;
+  // min-height: 550px;
   overflow-y: auto;
   overflow-x: hidden;
   @include for-phone-only  {
-    height    : 350px;
+    // height    : 350px;
     overflow-y: auto;
     overflow-x: hidden;
   }

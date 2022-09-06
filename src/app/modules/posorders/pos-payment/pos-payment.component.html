@@ -1,8 +1,9 @@
-<div *ngIf="order">
+<div *ngIf="order  && (uiTransactions$ | async) as uiTransactions">
   <div [class]="orderlayout">
     <div class="transaction-data">
       <div class="grid-header-item">
         <app-payment-balance
+          [uiTransactions]="uiTransactions"
           [mainPanel]="true"
           [order]="order">
         </app-payment-balance>
@@ -35,12 +36,8 @@
         </mat-card>
       </ng-template>
 
-      <div class="center-items">
-        <h4>Select Payment Method</h4>
-      </div>
-
       <mat-card>
-        <div class="grid-items">
+        <div class="center-items grid-items">
           <div>
             <button class="splitbutton"
                   mat-raised-button
@@ -106,9 +103,9 @@
             <mat-card>
               <mat-card-content>
                 <div class="item-container"
-                     *ngIf="(uiTransactions$ | async) as uiTransactions" >
-
-                  <div *ngIf="(uiTransactions?.dsiEMVNeteEpayEnabled || dsiEMVEnabled) && order  && order?.balanceRemaining > 0">
+                      >
+                  <!-- {{uiTransactions | json}} -->
+                  <div *ngIf="(uiTransactions?.dsiEMVNeteEpayEnabled || dsiEMVEnabled) && order  && order?.balanceRemaining != 0">
 
                     <button class="payment-buttons"
                         mat-raised-button
@@ -130,25 +127,20 @@
 
                   </div>
 
-                  <div *ngIf="uiTransactions?.cardPointBoltEnabled && (order && order?.balanceRemaining > 0)">
+                  <div *ngIf="uiTransactions?.cardPointBoltEnabled && (order && order?.balanceRemaining != 0)">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyBoltPayment(false)">
                       <mat-icon color="warn">credit_card</mat-icon>Credit Card
                     </button>
-                     <button class="payment-buttons"
-                        mat-raised-button
-                        (click)="applyBoltPayment(true)">
-                      <mat-icon color="warn">credit_card</mat-icon>Manual Card
-                    </button>
                   </div>
 
-                  <div *ngIf="uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining > 0)">
+                  <div *ngIf="uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining != 0)">
                     <!-- if is android.
                     Android Payment -->
                   </div>
 
-                  <div *ngIf="stripeEnabled && order  && order.balanceRemaining >0">
+                  <div *ngIf="stripeEnabled && order  && order.balanceRemaining  != 0 ">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyStripePayment()">
@@ -223,7 +215,7 @@
               <div class="item-container"  *ngIf="paymentMethod">
                 <div>
                   <h4>
-                    {{paymentMethod.name}} | Order Balance : {{order.balanceRemaining | currency}}
+                    {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
                   </h4>
                   <h5>
                     <div *ngIf="order && order.clients_POSOrders">
@@ -273,9 +265,9 @@
               <div class="item-container"  *ngIf="paymentMethod">
                 <div>
                   <h4>
-                    {{paymentMethod.name}} | Order Balance : {{order.balanceRemaining | currency}}
+                    {{paymentMethod?.name}} | Order Balance : {{order?.balanceRemaining | currency}}
                     <span *ngIf="paymentMethod.name === 'check'">
-                        {{posPayment.checkNumber}}
+                        {{posPayment?.checkNumber}}
                     </span>
                   </h4>
                 </div>

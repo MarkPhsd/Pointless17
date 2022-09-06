@@ -7,10 +7,12 @@ import { OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { CardPointMethodsService } from '../../payment-processing/services';
 
 @Component({
   selector: 'app-payment-balance',
@@ -21,6 +23,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   @Input() order : IPOSOrder;
   @Input() mainPanel = true;
+  @Input() uiTransactions: TransactionUISettings;
 
   paymentsEqualTotal: boolean;
   site           : ISite;
@@ -28,6 +31,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   _currentPayment: Subscription;
   posPayment     : IPOSPayment;
   isAuthorized   = false;
+
 
   async initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -46,6 +50,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private userAuthorization: UserAuthorizationService,
               private productEditButtonService: ProductEditButtonService,
               private editDialog      : ProductEditButtonService,
+              private methodsService: CardPointMethodsService,
               private toolBarUI       : ToolBarUIService,
               private matSnackBar   : MatSnackBar,
               private printingService: PrintingService,
@@ -74,9 +79,24 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.toolbarUIService.resetOrderBar(true)
   }
 
-   editPayment(payment: IPOSPayment) {
+  capture(item: IPOSPayment) {
+
+    if (this.order) {
+      this.methodsService.processCapture(item, this.order.balanceRemaining,
+                                                   this.uiTransactions)
+    }
+
+  }
+
+  editPayment(payment: IPOSPayment) {
       //get payment
       const site = this.siteService.getAssignedSite();
+
+      if (payment.paymentMethodID == 0) {
+        this.editDialog.openChangeDueDialog(payment, null, this.order)
+        return;
+      }
+
       const method$ = this.paymentMethodService.getPaymentMethod(site,payment.paymentMethodID)
 
       method$.subscribe( method => {

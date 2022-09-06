@@ -3,56 +3,106 @@
   <mat-card >
 
     <mat-card-title>
-      <mat-icon>credit_card</mat-icon>
+      <h3> <mat-icon>credit_card</mat-icon> Process</h3>
     </mat-card-title>
 
     <mat-card-subtitle *ngIf="methodsService.connect">
-      <h3>Process</h3>
-      <div class="button-grid" >
 
-        <div>
+      <div class="transaction-buttons-grid" >
+        <!-- cardPointPreAuth  {{methodsService?.transactionUISettings?.cardPointPreAuth}}
+        account {{ methodsService.payment.account }} -->
+
+        <div  *ngIf="!methodsService.payment?.account">
           <button [disabled]="!methodsService.amount"
                   mat-raised-button color="primary"
-                  (click)="sendAuthCardAndCapture()">Auth Capture</button>
+                  (click)="sendAuthCardAndCapture(false)">
+                  Sale</button>
         </div>
 
-        <div>
-          <button [disabled]="!methodsService.manualPrompt && !methodsService.amount && (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
+        <div  *ngIf="!methodsService.payment.account">
+          <button [disabled]="!methodsService.manualPrompt && !methodsService.amount &&
+                              (!methodsService.boltTerminal ||
+                               methodsService.boltTerminal.xSessionKey === '')"
                   mat-raised-button color="primary"
-                  (click)="pinDebitSaleAuthCapture()">PIN Debit Sale</button>
+                  (click)="sendAuthCardAndCapture(true)">
+                  Manual<br>
+                  <div *ngIf="methodsService.payment.amountPaid < 0">  Refund</div>
+                  <div *ngIf="methodsService.payment.amountPaid > 0">  Sale</div>
+          </button>
         </div>
 
-        <div >
+        <div  *ngIf="methodsService?.transactionUISettings?.cardPointPreAuth &&
+                    !methodsService.payment.account">
+          <button [disabled]="(!methodsService.payment.retref) && !methodsService.amount"
+                  mat-raised-button color="primary"
+                  (click)="sendAuthCardOnly(false)">Authorize
+                  <div *ngIf="methodsService.payment.amountPaid < 0">  Refund</div>
+                  <div *ngIf="methodsService.payment.amountPaid > 0">  Sale</div>
+          </button>
+        </div>
+
+        <div  *ngIf="methodsService?.transactionUISettings?.cardPointPreAuth &&
+                    !methodsService.payment.account">
+          <button [disabled]="(!methodsService.payment.retref) && !methodsService.amount"
+                  mat-raised-button color="primary"
+                  (click)="sendAuthCardOnly(true)">Manual <br>Authorize
+                  <div *ngIf="methodsService.payment.amountPaid < 0">  Refund</div>
+          </button>
+        </div>
+
+        <div *ngIf="methodsService?.transactionUISettings?.cardPointPreAuth &&
+               methodsService.payment.account &&
+               (balanceRemaining > 0 && balanceRemaining > methodsService.payment.amountPaid)">
+          <button [disabled]="!methodsService.amount"
+               mat-raised-button color="primary"
+               (click)="applyBalance()">Apply <br> Balance</button>
+        </div>
+
+        <div *ngIf="methodsService?.transactionUISettings?.cardPointPreAuth &&
+                   methodsService.payment.account">
+          <button [disabled]="!methodsService.amount"
+                  mat-raised-button color="primary"
+                  (click)="captureOnly()">Confirm <br> Purchase</button>
+        </div>
+
+        <!-- <div *ngIf="methodsService?.amount < 0">
           <button [disabled]="!methodsService.amount || !methodsService.retRef"
                   mat-raised-button color="primary"
-                  (click)="processVoid(methodsService.retRef)">Void Sale RetRef </button>
-        </div>
+                  (click)="refundByRetRef(methodsService.retRef)"> Refund </button>
+        </div> -->
 
         <div>
-          <button [disabled]="!methodsService.amount || !methodsService.retRef"
-                  mat-raised-button color="primary"
-                  (click)="refundByRetRef(methodsService.retRef)">Refund (RetRef) </button>
-        </div>
-        <div>
-          <button [disabled]="methodsService.processing"
+          <button [disabled]="!methodsService.processing"
                   mat-raised-button color="primary"
                   (click)="cancel()">Cancel</button>
         </div>
+
+        <div>
+          <button [disabled]="methodsService.processing"
+                  mat-raised-button color="primary"
+                  (click)="cancel()">Close</button>
+        </div>
+
       </div>
     </mat-card-subtitle>
     <mat-card-content >
 
       <ng-template #connecting>
         ...connecting to device.
+        <div>
+          <button
+                  mat-raised-button color="primary"
+                  (click)="cancel()">Cancel</button>
+        </div>
       </ng-template>
 
-      <div *ngIf="!methodsService.boltTerminal || ( !methodsService.boltTerminal.hsn && methodsService.boltTerminal)">
+      <div *ngIf="methodsService && (!methodsService.boltTerminal || ( !methodsService.boltTerminal.hsn && methodsService.boltTerminal))">
         <mat-icon>alert</mat-icon>HSN Required to perform transactions.
       </div>
-      <div *ngIf="methodsService.boltInfo && !methodsService.boltInfo.apiURL">
+      <div *ngIf="methodsService && methodsService.boltInfo && !methodsService.boltInfo.apiURL">
         <mat-icon>alert</mat-icon>API URL Required to perform transactions.
       </div>
-      <div *ngIf="methodsService.boltInfo && !methodsService.boltInfo.merchID">
+      <div *ngIf="methodsService && methodsService.boltInfo && !methodsService.boltInfo.merchID">
         <mat-icon>alert</mat-icon>MerchantID Required to perform transactions.
       </div>
 
@@ -60,7 +110,7 @@
         Connected Status {{item.connected}}
       </div>
 
-      <ng-template *ngIf="auth.isAdmin || auth.isManager" >
+      <ng-template *ngIf="auth && (auth.isAdmin || auth.isManager)" >
 
         <div *ngIf="(methodsService.listTerminals$ | async) as item">
           {{item | json}}
@@ -79,22 +129,45 @@
     </mat-card-content>
   </mat-card>
 
-  <mat-card *ngIf="methodsService.connect; else connecting">
-    <mat-card-title>Authorization and Payments</mat-card-title>
+  <mat-card *ngIf="methodsService?.connect; else connecting">
+    <mat-card-title>Order Info</mat-card-title>
     <mat-card-content>
       <div *ngIf="!auth.isAdmin" class="values">
         <div class="header">Currency</div>
         <div class="value" >{{methodsService.currency}}</div>
-
         <div class="header">Payment#</div>
         <div class="value" >{{methodsService.orderID}}</div>
-
+      </div>
+      <br>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <div  class="values">
         <div class="header">Amount</div>
         <div class="value" >{{methodsService.amount | currency}}</div>
+
+        <div class="header" *ngIf="methodsService.payment?.tipAmount>0">Tip</div>
+        <div class="value" *ngIf="methodsService.payment?.tipAmount>0">{{methodsService.payment.tipAmount | currency}}</div>
+
+        <div class="header" *ngIf="methodsService.payment?.tipAmount>0">Total</div>
+        <div class="value"  *ngIf="methodsService.payment?.tipAmount>0">
+              {{methodsService.payment.tipAmount + methodsService?.amount | currency}}</div>
+      </div>
+
+      <br>
+      <br>
+      <mat-divider></mat-divider>
+      <br>
+      <br>
+      <div *ngIf="!auth.isAdmin" class="values">
+        <div *ngIf="(balanceRemaining > 0 && balanceRemaining > methodsService.payment.amountPaid)" class="header">Order Balance</div>
+        <div *ngIf="(balanceRemaining > 0 && balanceRemaining > methodsService.payment.amountPaid)" class="value">{{balanceRemaining | currency}}</div>
 
         <div class="header">RetRef</div>
         <div class="value" >{{methodsService.retRef}}</div>
       </div>
+
       <div *ngIf="auth.isAdmin">
         <div>
           <mat-form-field appearance="outline">
@@ -145,9 +218,17 @@
           </div>
 
           <div>
-            <button [disabled]="!methodsService.amount && (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
+            <button [disabled]="!methodsService.amount &&
+                                (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
                     mat-raised-button color="primary"
-                    (click)="sendAuthCard()">Auth Card</button>
+                    (click)="sendAuthCard(false)">Auth Card</button>
+          </div>
+
+          <div>
+            <button [disabled]="!methodsService.amount &&
+                                (!methodsService.boltTerminal || methodsService.boltTerminal.xSessionKey === '')"
+                    mat-raised-button color="primary"
+                    (click)="sendAuthCard(true)">Auth Manual Card</button>
           </div>
 
           <div>
@@ -248,14 +329,30 @@
             <button mat-raised-button color="primary"
                     (click)="methodsService.resetAll()">Reset</button>
           </div>
+          <div>
+            <button mat-raised-button color="primary" (click)="toggleData = !toggleData">
+              Toggle Data
+            </button>
+          </div>
 
         </div>
+      </div>
+      <div *ngIf="toggleData" >
+        payment  {{methodsService.payment | json}}
       </div>
     </mat-card-content>
   </mat-card>
 </div>
 
+<!-- <div *ngIf="methodsService?.payment?.retref">
+  payment.retref {{methodsService.payment.retref}}
+</div> -->
 
 <ng-template #loadingBoltInfo>
   ...loading bolt info
+  <div>
+    <button
+            mat-raised-button color="primary"
+            (click)="cancel()">Cancel</button>
+  </div>
 </ng-template>

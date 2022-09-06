@@ -117,6 +117,17 @@ export class POSPaymentService {
     return this.http.post<IPOSPayment>(url, payment);
   }
 
+  savePOSPayment(site: ISite, payment: IPOSPayment) {
+
+    if (payment.id == 0) {
+      return this.postPOSPayment(site, payment)
+    }
+    if (payment.id != 0) {
+      return this.putPOSPayment(site, payment)
+    }
+
+  }
+
   deletePOSPayment(site: ISite, id: number): Observable<IPOSPayment> {
     const controller = '/POSPayments/'
 

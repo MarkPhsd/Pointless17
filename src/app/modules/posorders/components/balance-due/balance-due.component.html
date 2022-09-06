@@ -1,18 +1,15 @@
-
-<mat-card *ngIf="payment && step == 1">
-
+<div *ngIf=" (uiTransactions$ | async) as uiTransactions">
+  <mat-card *ngIf="payment && step == 1">
     <div class="action-center">
-
       <div class="tip-grid">
-
         <div class="action-center margin">
           <h2>
-            Change Due: {{changeDue | currency}}
+            <div *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </div>
+            <div *ngIf="payment.completionDate"> Change Due: {{ changeDue | currency }}</div>
           </h2>
         </div>
 
         <div class="action-center ">
-
           <button mat-button
                   class="tip-button"
                   (click)="printReceipt()">
@@ -25,28 +22,27 @@
                   Exit</button>
 
           <button mat-button
+                  *ngIf="payment.completionDate"
                   class="tip-button"
                   (click)="step = 2"><mat-icon>arrow_forward_ios</mat-icon>Next</button>
         </div>
 
-        <div  *ngIf="paymentMethod.isCreditCard">
-            <div class="action-center">
-              <app-key-pad
-                  [showInput]     ="'true'"
-                  [inputForm]     ="inputForm"
-                  [inputTypeValue]= "'decimal'"
-                  (outPutReturnEnter)   ="customTipAmount($event)">
-                  Enter tip amount.
-              </app-key-pad>
-            </div>
+        <div  *ngIf="(payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard)">
+          <div class="action-center">
+            <app-key-pad
+                [showInput]     ="'true'"
+                [inputForm]     ="inputForm"
+                [inputTypeValue]= "'decimal'"
+                (outPutReturnEnter)   ="customTipAmount($event)">
+                Enter tip amount.
+            </app-key-pad>
+          </div>
 
           <div class="tip-button-grid">
-
             <div class="action-center">
                 <button class="tip-button"
                         mat-raised-button
                         (click)="specifiedTip(15)">Tip 15 % </button>
-
                 <div class="action-center-column">
                   {{ payment.amountPaid * (15/100) | currency }}
                 </div>
@@ -61,51 +57,58 @@
                 <button  class="tip-button"  mat-raised-button (click)="specifiedTip(20)">Tip 20 %  </button>
                 {{ payment.amountPaid * (20/100) | currency  }}
             </div>
+
+            <div class="action-center">
+              <button  class="tip-button"  mat-raised-button (click)="specifiedTip(20)">Tip 22 %  </button>
+              {{ payment.amountPaid * (22/100) | currency  }}
+            </div>
+
           </div>
         </div>
 
       </div>
     </div>
+  </mat-card>
 
-</mat-card>
-
-<mat-card *ngIf="step == 2">
-
-  <div class="action-center margin">
-    <h2>
-      Change Due: {{changeDue | currency}}
-    </h2>
-  </div>
-
-  <div class="action-center">
-    <new-order-type
-              [order]        ="order"
-              [payment]      ="payment"
-              [paymentMethod]="paymentMethod"
-              [showCancel]   ="'false'"
-    ></new-order-type>
-  </div>
-
-  <mat-card-actions>
-
-    <div class="action-center ">
-
-      <button mat-button
-              class="tip-button"
-              (click)="printReceipt()">
-              <mat-icon>print</mat-icon>
-              Print</button>
-
-      <button mat-button
-              class="tip-button"
-              (click)="close()"><mat-icon>close</mat-icon>
-              Exit</button>
-
-      <button mat-button
-              class="tip-button"
-              (click)="step = 1"><mat-icon>arrow_forward_ios</mat-icon>Next</button>
+  <mat-card *ngIf="step == 2">
+    <div class="action-center margin">
+      <h2>
+        Change Due: {{changeDue | currency}}
+      </h2>
     </div>
 
-  </mat-card-actions>
+    <div class="action-center">
+      <new-order-type
+                [order]        ="order"
+                [payment]      ="payment"
+                [paymentMethod]="paymentMethod"
+                [showCancel]   ="'false'"
+      ></new-order-type>
+    </div>
 
-</mat-card>
+    <mat-card-actions>
+
+      <div class="action-center ">
+
+        <button mat-button
+                class="tip-button"
+                (click)="printReceipt()">
+                <mat-icon>print</mat-icon>
+                Print</button>
+
+        <button mat-button
+                class="tip-button"
+                (click)="close()"><mat-icon>close</mat-icon>
+                Exit</button>
+
+        <button mat-button
+                class="tip-button"
+                (click)="step = 1">
+                <mat-icon>arrow_forward_ios</mat-icon>Next
+        </button>
+      </div>
+
+    </mat-card-actions>
+
+  </mat-card>
+</div>

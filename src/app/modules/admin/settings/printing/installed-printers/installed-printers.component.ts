@@ -428,7 +428,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   printTestLabelElectron(){
-    const content = this.renderingService.interpolateText(this.item, this.zplSetting.text)
+    if (this.zplSetting?.text) { return }
+    const content = this.renderingService.interpolateText(this.item, this.zplSetting?.text)
     this.printingService.printTestLabelElectron(content, this.printerName)
   }
 

@@ -374,8 +374,10 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     const payment = paymentResponse.payment;
+    console.log('finalizeorder balance greater than 0', order.balanceRemaining > 0)
+    if (order.balanceRemaining > 0) { return 0 };
 
-    if (order.balanceRemaining > 0) { return 0 }
+    console.log('finalizeorder', payment , paymentMethod)
     if (payment && paymentMethod) {
 
       if (paymentMethod.isCreditCard) {

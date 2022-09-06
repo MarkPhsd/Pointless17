@@ -249,7 +249,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {
 
-
     // payment.au
     // payment.commcard = response?.commcard;
     payment.resptext = response?.resptext;
@@ -265,8 +264,26 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment.retref = response?.retref;
     payment.respstat = response?.respstat;
     payment.account = response?.account;
-    payment.amountPaid = response?.amount;
-    payment.amountReceived = response?.amount;
+    payment.transactionData = JSON.stringify(response);
+
+    const tip = +payment.tipAmount
+    const amountPaid = +payment.amountPaid
+    const amount  = +response?.amount
+
+    console.log(amount == tip + amountPaid)
+    console.log(amount,amountPaid,tip)
+
+    if ( tip !=0 ) {
+      if (amount == tip + amountPaid) {
+        payment.amountPaid      = +(+payment.amountPaid).toFixed(2)
+        payment.amountReceived  = +(+payment.amountPaid).toFixed(2)
+        payment.tipAmount       = +(tip ).toFixed(2)
+      }
+    } else {
+      payment.amountPaid = response?.amount;
+      payment.amountReceived = response?.amount;
+    }
+
     payment.saleType      = 1;
     payment.exp           =  response?.expiry;
     payment.approvalCode  =  response?.authcode;

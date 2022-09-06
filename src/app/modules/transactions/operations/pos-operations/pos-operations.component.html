@@ -1,4 +1,4 @@
-<mat-card>
+<mat-card *ngIf="(uiTransactions$ | async) as uiTransactions">
 
   <mat-card-title></mat-card-title>
   <mat-card-subtitle>
@@ -23,11 +23,11 @@
       <button mat-raised-button (click)="email()"> <mat-icon>email</mat-icon>Email</button>
     </span>
 
-    <span *ngIf="dsiEMVSettings && isElectronApp">
+    <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
       <button mat-raised-button (click)="emvDatacapBatchCards()"> <mat-icon>credit_card</mat-icon>Batch Close</button>
     </span>
 
-    <span *ngIf="dsiEMVSettings && isElectronApp">
+    <span *ngIf="(uiTransactions && uiTransactions.dsiEMVNeteEpayEnabled) && dsiEMVSettings && isElectronApp">
       <button mat-raised-button (click)="emvDataCapBatchInquire()"> <mat-icon>credit_card</mat-icon>Batch Inquire</button>
     </span>
 

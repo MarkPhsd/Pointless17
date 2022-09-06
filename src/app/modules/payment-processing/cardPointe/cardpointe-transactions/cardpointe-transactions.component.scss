@@ -9,27 +9,27 @@ button {
   margin: 10px;
   height: 80px;
   min-width: 100px;
-  max-width: 135px;
+   width: 120px;
 }
-
 
 .transaction-buttons-grid {
   display: grid;
   gap: 10px;
   grid-template-columns: repeat( auto-fit, minmax(135px, 1fr) );
-
 }
+
 .button-container {
   max-width: 450px;
-  width: 450px;
+  width: 95%;
 }
 
-
+mat-divider {
+margin: 20px;
+}
 .values {
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr 1fr;
-
 }
 
 .header {

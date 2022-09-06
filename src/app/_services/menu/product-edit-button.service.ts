@@ -266,10 +266,11 @@ export class ProductEditButtonService {
 
     let dialogRef: any;
     dialogRef = this.dialog.open(ChangeDueComponent,
-      { width:        '95%',
-        minWidth:     '375px',
-        height:       '85%',
-        minHeight:    '650px',
+      { width:        '100%',
+        minWidth:     '100%',
+        maxWidth:     'max-width: 100vw !important',
+        height:       '100vh',
+        minHeight:    '100vh',
         data : payload
       },
     )
@@ -543,10 +544,11 @@ export class ProductEditButtonService {
     //   this.openProductEditor(id, productTypeID)
     if (options) {
       dialogRef = this.dialog.open(CardpointeTransactionsComponent,
-        { width:          '800px',
-          minWidth:       '399px',
-          height:         '800px',
-          minHeight:      '650px',
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
           data : options
       })
       return dialogRef
@@ -561,10 +563,11 @@ export class ProductEditButtonService {
     //   this.openProductEditor(id, productTypeID)
     if (options) {
       dialogRef = this.dialog.open(DSIEMVTransactionComponent,
-        { width:          '800px',
-          minWidth:       '399px',
-          height:         '800px',
-          minHeight:      '650px',
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
           data : options
       })
       return dialogRef

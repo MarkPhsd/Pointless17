@@ -296,7 +296,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   async ngOnInit() {
-
+    this.initAuthorization();
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
@@ -311,7 +311,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.sidePanelPercentAdjust = 60
     }
 
-    this.initAuthorization();
+
     this.toolbarUIService.hidetoolBars();
 
     this.settingService.getUIHomePageSettings().subscribe(data => {

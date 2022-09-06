@@ -51,10 +51,10 @@ export class CartButtonComponent implements OnInit, OnDestroy {
     })
 
     this._user = this.authenticationService.user$.subscribe(user => {
-      console.log('user', user)
+      // console.log('user', user)
       this.user = user;
       this.isUserStaff = false;
-      console.log('user subscription', user?.roles)
+      // console.log('user subscription', user?.roles)
       if (user) {
         if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
           this.isUserStaff      = true

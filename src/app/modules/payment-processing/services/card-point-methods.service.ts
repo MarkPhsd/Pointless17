@@ -13,7 +13,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrdersService } from 'src/app/_services';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-
+import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 export interface IBoltInfo {
    boltInfo: BoltInfo;
@@ -25,11 +25,13 @@ export interface IBoltInfo {
 })
 export class CardPointMethodsService {
 
+
   amount = 1;
   orderID = 1139191;
   currency = 'USD';
   retRef: string;
   payment: IPOSPayment;
+  transactionUISettings: TransactionUISettings;
 
   ping$: Observable<any>;
   connect$: Observable<any>;
@@ -110,8 +112,9 @@ export class CardPointMethodsService {
       switchMap( data => {
       this.boltTerminal = {} as BoltTerminal;
       const item = JSON.parse(data.text) as ITerminalSettings;
+      console.log(item)
       this.terminalSettings = item
-      this.boltTerminal.hsn = item.cardPointeHSN;
+      this.boltTerminal.hsn = item?.cardPointeHSN;
       return of(item)
     }))
   };
@@ -154,23 +157,12 @@ export class CardPointMethodsService {
   }
 
   initValues() {
-    this.processing = false;
-    this.sale = null;
-    this.retRef = null;
-    this.payment = null;
-    this.amount = null;
-    this.orderID= null;
-
     this.connect = null;
     this.processing = false;
-
     if (this.boltTerminal) {
       this.boltTerminal.xSessionKey = null;
       this.boltTerminal.expiry = null;
     }
-
-    this.boltInfo = null;
-    this.connect = null;
 
     this.amount = 1;
     this.orderID = 0;
@@ -184,13 +176,12 @@ export class CardPointMethodsService {
     this.disconnect$= null;
     this.terminalDetails$= null;
     this.terminalSettings= null;
-
+    this.terminalDetails= null;
     this.transaction$ = null;
     this.transaction= null;
     this.testProcess= false;
     this.sale = null;
     this.request= null;
-    this.terminalDetails= null;
     this.connect = null;
     this.disconnect= null;
     this.listTerminals = null;
@@ -207,7 +198,6 @@ export class CardPointMethodsService {
 
   getConnectObservable() {
     const bolt = this.boltInfo;
-
     return  this.cardPointBoltService.connect( bolt.apiURL, this.boltTerminal.hsn).pipe(
       switchMap( data => {
         this.connect = data
@@ -274,6 +264,7 @@ export class CardPointMethodsService {
         "beep" : "false",
         "aid" : "credit"
     };
+    this.request = item;
     if (item) {
       const bolt = this.boltTerminal
       const connect$ = this.getConnect();
@@ -307,30 +298,46 @@ export class CardPointMethodsService {
     };
   }
 
-  sendAuthCard(aid: string) {
+  getAuthRequest(aid: string, capture: boolean, manual: boolean) {
+    if (!manual) {
+      return this.getAuthCardRequest(aid, capture);
+    }
+    if (manual) {
+      return this.getAuthCardManualRequest( capture );
+    }
+  }
+
+  sendAuthCard(aid: string, capture: boolean, manual: boolean) {
 
     if (!this.connect) {
-      console.log('Error 0 Auth Capture')
       this.sale = {errorMessage:  'Failed, No connection to device', errorCode: -1}
       return of({errorMessage: 'Failed, No connection to device', errorCode: -1})
     }
 
-    const item = this.getAuthCardRequest(aid);
-    console.log('sendAuthCard', item)
+    const item  = this.getAuthRequest(aid, capture, manual)
+
+    this.request = item;
+    // console.log('sendAuthCard', item);
+
     if (!item) {
-      console.log('Error 2 sendAuthCard')
+      // console.log('Error 2 sendAuthCard')
       this.transaction = {errorMessage: 'Failed, no auth request', errorCode: -1}
       return of({errorMessage: 'Failed, no auth request', errorCode: -1})
     }
 
     if (!this.boltTerminal) {
-      console.log('Terminal not initiated')
+      // console.log('Terminal not initiated')
       this.transaction = {errorMessage: 'Terminal not initiated', errorCode: -1}
       return of({errorMessage: 'Terminal not initiated', errorCode: -1})
     }
+
     const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
 
+    if (manual) {
+      return this.cardPointBoltService.authManual( this.boltTerminal.url, item, this.connect.xSessionKey )
+    }
     return this.cardPointBoltService.authCard( this.boltTerminal.url, item, this.connect.xSessionKey )
+
   }
 
   //{ "message": null, "errorcode": 0, "token": "9674338015190051", "expiry": "1222", "name": "Datacap/Test Card 02" }
@@ -344,25 +351,25 @@ export class CardPointMethodsService {
   validateAuthResult() {
     //this.connect
     if (!this.connect) {
-      console.log('Error 0 Auth Capture')
+      // console.log('Error 0 Auth Capture')
       this.sale = {errorMessage:  'Failed, No connection to device', errorCode: -1}
       return {errorMessage: 'Failed, No connection to device', errorCode: -1}
     }
 
     if (!this.transaction) {
-      console.log('Error 1 Auth Capture')
+      // console.log('Error 1 Auth Capture')
       this.sale = {errorMessage:  'Failed, No authorization request', errorCode: -1}
       return  {errorMessage: 'Failed, No authorization request', errorCode: -1}
     }
 
     if (this.transaction && this.transaction?.errorMessage != 0)   {
-      console.log('Error 2 Auth Capture')
+      // console.log('Error 2 Auth Capture')
       this.sale = {errorMessage: this.transaction?.errorMessage, errorCode: -1}
       return {errorMessage: this.transaction?.errorMessage, errorCode: -1}
     }
 
     if (this.transaction && !this.transaction?.token )   {
-      console.log('Error 2 Auth Capture')
+      // console.log('Error 2 Auth Capture')
       this.sale = {errorMessage: this.transaction?.errorMessage, errorCode: -1}
       return  {errorMessage: `no token provided`, errorCode: -1}
     }
@@ -371,25 +378,25 @@ export class CardPointMethodsService {
   validateAuth() {
     //this.connect
     if (!this.connect) {
-      console.log('Error 0 Auth Capture')
+      // console.log('Error 0 Auth Capture')
       this.sale = {errorMessage:  'Failed, No connection to device', errorCode: -1}
       return of({errorMessage: 'Failed, No connection to device', errorCode: -1})
     }
 
     if (!this.transaction) {
-      console.log('Error 1 Auth Capture')
+      // console.log('Error 1 Auth Capture')
       this.sale = {errorMessage:  'Failed, No authorization request', errorCode: -1}
       return of({errorMessage: 'Failed, No authorization request', errorCode: -1})
     }
 
     if (this.transaction && this.transaction?.errorMessage != 0)   {
-      console.log('Error 2 Auth Capture')
+      // console.log('Error 2 Auth Capture')
       this.sale = {errorMessage: this.transaction?.errorMessage, errorCode: -1}
       return of({errorMessage: this.transaction?.errorMessage, errorCode: -1})
     }
 
     if (this.transaction && !this.transaction?.token )   {
-      console.log('Error 2 Auth Capture')
+      // console.log('Error 2 Auth Capture')
       this.sale = {errorMessage: this.transaction?.errorMessage, errorCode: -1}
       return of({errorMessage: `no token provided`, errorCode: -1})
     }
@@ -414,6 +421,26 @@ export class CardPointMethodsService {
       this.request = item;
       this.sale =   data;
     })
+
+  }
+
+  captureOnly(auth) {
+
+    let boltInfo = this.boltInfo
+    // this.posPayment , this.order , this.order.balanceRemaining,
+    //                                                     this.uiTransactions
+    if (!boltInfo) {
+       boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
+    }
+    if (!boltInfo) {
+      this.orderService.notificationEvent('Bolt info not initialized', 'Alert');
+      return
+    }
+    this.boltInfo = boltInfo;
+
+    const site = this.siteService.getAssignedSite();
+
+    return this.cardPointService.capture(site.url, auth)
 
   }
 
@@ -443,17 +470,28 @@ export class CardPointMethodsService {
     return this.cardPointService.void(boltInfo.apiURL, item )
   }
 
-  processSale(amount: any, orderID: any, auth: any) {
+  voidByOrderID(orderID: any) {
+    let boltInfo = this.boltInfo
 
-    this.amount = amount;
-    this.orderID = orderID;
-    const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
-    if (!bolt) {
-      console.log('no bolt terminal')
-      return
+    if (!boltInfo) {
+      boltInfo = JSON.parse(localStorage.getItem('boltInfo'))
     }
-    return this.cardPointService.authCapture(bolt.url, auth)
 
+    const item = { orderid: orderID, merchID: boltInfo.merchID }
+
+    return this.cardPointService.voidByOrderId(boltInfo.apiURL, item )
+  }
+
+  processSale(auth: any, url: string) {
+    if (!url) {
+      const bolt = this.initTerminal(this.connect.xSessionKey, this.connect.expiry);
+      if (!bolt) {
+        console.log('no bolt terminal')
+        return
+      }
+      url = bolt.url;
+    }
+    return this.cardPointService.authCapture(url, auth)
   }
 
   getProcessTip(session: string) {
@@ -466,21 +504,60 @@ export class CardPointMethodsService {
   }
 
   getAuthCaptureRequest(data) {
+
+    let token = data?.token;
+    if (!token) {
+      token = data?.account
+    }
+
+    let amount = data?.amount;
+    if (!data?.amount) {
+      amount = data.amountPaid  + data?.tipAmount
+    }
+
     const item =  {
       "merchid":  this.boltInfo.merchID,
-      "account":  data.token,
+      "account":  token,
       "expiry":   data.expiry,
-      "amount":   ((this.amount + this.payment.tipAmount) * 100).toFixed(0),
+      "amount":   (amount * 100).toFixed(0),
       "currency": this.currency,
       "name"    : data?.name,
       "capture": "y",
       "receipt": "y",
     }
     console.log('getAuthCaptureRequest', item)
+    this.request = item;
     return item
   }
 
-  getAuthCardRequest(aid: string) {
+  getAuthCardManualRequest( capture: boolean ) {
+
+    let _capture = 'false'
+    if (capture) {
+      _capture = 'true'
+    }
+
+    const item = {
+      "merchantId" : this.boltInfo.merchID,
+      "hsn"        : this.boltTerminal.hsn,
+      "amount"     : ((this.amount) * 100).toFixed(0),
+      "includeSignature" : "false",
+      "includeAmountDisplay" : "true",
+      "beep"          : "true",
+      "includeAVS"    : "true",
+      "includeCVV"    : "true",
+      "capture"       : _capture,
+      "gzipSignature" : "false",
+      "orderId"       :  this.payment.id,
+      "clearDisplayDelay" : "500"
+    }
+
+    console.log('getAuthCardManualRequest', item)
+    this.request = item;
+    return item
+  }
+
+  getAuthCardRequest(aid: string, capture: boolean) {
 
     let inlcudePIN = 'false'
     if (!aid) {
@@ -489,22 +566,27 @@ export class CardPointMethodsService {
     if (aid === 'debit') {
       inlcudePIN = 'true'
     }
+    let _capture = 'false'
+    if (capture) {
+      _capture = 'true'
+    }
 
     const item = {
       "merchantId" : this.boltInfo.merchID,
       "hsn"     :    this.boltTerminal.hsn,
       "amount"  :    ((this.amount) * 100).toFixed(0),
-      "orderId" :    this.orderID,
+      "orderId" :    this.payment.id,
       "includeSignature" : "false",
       "includeAmountDisplay" : "true",
-      "beep" : "false",
+      "beep" : "true",
       "aid"  : aid,
       "includeAVS" : "false",
-      "capture" : "true",
+      "capture" : _capture,
       "clearDisplayDelay" : "500",
       'includePIN': inlcudePIN
     };
-    console.log('item', item)
+
+    this.request = item;
     return item
   }
 
@@ -524,18 +606,19 @@ export class CardPointMethodsService {
     terminal.xSessionKey = sessionID;
     terminal.expiry      = expiry;
     this.boltTerminal    = terminal;
-    console.log('initTerminal', terminal)
+
     this.processing = false;
     return terminal;
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
-    order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
-    this.processSubCreditPayment(order, amount, true)
+    order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod,
+    settings: TransactionUISettings): Observable<IPaymentResponse> {
+    this.processSubCreditPayment(order, amount, true, settings)
     return
   }
 
-  processSubCreditPayment ( order: IPOSOrder, amount: number, manualPrompt: boolean) {
+  processSubCreditPayment ( order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
     //once we get back the method 'Card Type'
     //lookup the payment method.
     //we can't get the type of payment before we get the PaymentID.
@@ -555,7 +638,7 @@ export class CardPointMethodsService {
       {
         data.amountPaid = amount;
         this.payment = data;
-        this.dialogRef = this.dialogOptions.openCardPointBoltTransaction({data, amount, action: 1, manualPrompt: manualPrompt});
+        this.dialogRef = this.dialogOptions.openCardPointBoltTransaction({data, amount, action: 1, manualPrompt: manualPrompt, settings: settings});
         this._dialog.next(this.dialogRef)
         return of(data)
       }
@@ -568,7 +651,7 @@ export class CardPointMethodsService {
     //lookup the payment method.
     //we can't get the type of payment before we get the PaymentID.
     //so we just have to request the ID, and then we can establish everything after that.
-    this.amount       = payment.amountPaid;
+    this.amount       = payment.amountPaid + payment.tipAmount;
     // this.manualPrompt = manualPrompt;
     this.orderID      = payment.orderID;
 
@@ -579,5 +662,16 @@ export class CardPointMethodsService {
     this._dialog.next(this.dialogRef)
   }
 
+  processCapture( payment: IPOSPayment, balanceRemaining: number, setting: TransactionUISettings) {
+    //once we get back the method 'Card Type'
+    //lookup the payment method.
+    //we can't get the type of payment before we get the PaymentID.
+    //so we just have to request the ID, and then we can establish everything after that.
+    this.amount       = payment.amountPaid + payment.tipAmount;
+    this.orderID      = payment.orderID;
+
+    this.dialogRef = this.dialogOptions.openCardPointBoltTransaction({payment: payment, setting: setting,balanceRemaining: balanceRemaining });
+    this._dialog.next(this.dialogRef)
+  }
 
 }

@@ -3,7 +3,9 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { Observable, of } from 'rxjs';
 import { catchError, switchMap } from 'rxjs/operators';
+import { CardPointMethodsService } from 'src/app/modules/payment-processing/services';
 import { IPOSOrder, IPOSPayment, IServiceType, ServiceType } from 'src/app/_interfaces';
 import { OrderPayload, OrdersService } from 'src/app/_services';
 import { IBalanceDuePayload } from 'src/app/_services/menu/product-edit-button.service';
@@ -11,6 +13,7 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
+import { TransactionUISettings,  UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
@@ -21,7 +24,9 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
   templateUrl: './balance-due.component.html',
   styleUrls: ['./balance-due.component.scss']
 })
-export class ChangeDueComponent   {
+export class ChangeDueComponent implements OnInit  {
+  uiTransactions: TransactionUISettings
+  uiTransactions$ : Observable<TransactionUISettings>;
 
   inputForm             : FormGroup;
   @Input() paymentMethod: IPaymentMethod;
@@ -40,7 +45,9 @@ export class ChangeDueComponent   {
               private snackBar : MatSnackBar,
               private fb       : FormBuilder,
               private router   : Router,
+               private uISettingsService: UISettingsService,
               private printingService: PrintingService,
+              private methodsService: CardPointMethodsService,
               private dialogRef: MatDialogRef<ChangeDueComponent>,
               @Inject(MAT_DIALOG_DATA) public data: IBalanceDuePayload
             )
@@ -51,11 +58,31 @@ export class ChangeDueComponent   {
       this.paymentMethod = data.paymentMethod;
       this.changeDue = (this.payment.amountReceived - this.payment.amountPaid).toFixed(2)
       this.step = 1;
-      if (!this.paymentMethod.isCreditCard) {
+      if (!this.paymentMethod?.isCreditCard && !this.payment.account) {
         this.step = 2
       }
     }
     this.initForm();
+  }
+  ngOnInit(): void {
+    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    //Add 'implements OnInit' to the class.
+
+    this.initTransactionUISettings();
+  }
+
+  initTransactionUISettings() {
+      this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
+      switchMap(data => {
+        if (data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+        if (!data) {
+          this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+          return of(this.uiTransactions)
+        }
+    }))
   }
 
   initForm() {
@@ -89,7 +116,6 @@ export class ChangeDueComponent   {
 
   specifiedTip(amount: number) {
     const payment = this.payment
-    console.log('specifiedTip',amount)
     if (payment) {
       const value = payment.amountPaid * (amount / 100 );
       this.tip(  +value.toFixed(2)  )
@@ -112,15 +138,26 @@ export class ChangeDueComponent   {
         })).subscribe(data => {
           this.orderService.updateOrderSubscription(data)
           this.dialogRef.close()
+          if (this.uiTransactions && this.uiTransactions.cardPointBoltEnabled) {
+            this.capture(this.payment)
+          }
         }
       )
     }
+  }
+
+  capture(item: IPOSPayment) {
+
+    if (this.order) {
+      this.methodsService.processCapture(item, this.order.balanceRemaining,
+                                                   this.uiTransactions)
+    }
+
   }
 
   notify(message: string, title: string, duration: number) {
     if (duration == 0 ) {duration = 1000}
     this.snackBar.open(message, title, {duration: duration, verticalPosition: 'top'})
   }
-
 
 }

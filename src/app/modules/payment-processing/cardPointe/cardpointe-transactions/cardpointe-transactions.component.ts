@@ -6,21 +6,26 @@ import { CardPointMethodsService } from './../../services/index';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { OrdersService } from 'src/app/_services';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
+import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
+import { SitesService } from 'src/app/_services/reporting/sites.service';
+
 @Component({
   selector: 'app-cardpointe-transactions',
   templateUrl: './cardpointe-transactions.component.html',
   styleUrls: ['./cardpointe-transactions.component.scss']
 })
 export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
-
+  toggleData: boolean;
   sale$: Observable<any>;
   auth$: Observable<any>;
   boltConnection$  :  Observable<any>;
   boltInfo$: Observable<any>;
   boltConnection: Observable<any>;
+  balanceRemaining: number;
   public _finalizeSale     = new BehaviorSubject<any>(null);
-
-  private _sale               = new BehaviorSubject<number>(null);
+  settings: TransactionUISettings;
+  private _sale               = new BehaviorSubject<any>(null);
   public itemProcessSection$  = this._sale.asObservable();
 
   public _connect     = new BehaviorSubject<any>(null);
@@ -52,69 +57,124 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       if (!this.methodsService.connect) { return }
       if (this.methodsService.connect && !this.methodsService.connect?.xSessionKey)  { return }
 
-      const auth = this.methodsService.getAuthCaptureRequest(data)
-      this.methodsService.processSale(this.methodsService.amount, this.methodsService.orderID, auth)
-        .subscribe(data => {
-          if (data && data?.respstat.toLowerCase() == 'b') {
-            this.orderService.notificationEvent('Please retry. Transaction failed to run correctly and has not been processed.', 'Alert')
-            return;
-          }
-          if (data && data?.respstat.toLowerCase() == 'c') {
-            this.orderService.notificationEvent('Declined.', 'Alert')
-            return;
-          }
-          this._finalizeSale.next(data);
-          this._sale = new BehaviorSubject<number>(null)
-      })
+      // const item = {request: this.methodsService.request, response: data};
+      // this._sale.next(item)
+      const response = data.response;
+      const request = data.request;
+
+      //if  already captured.
+      if (request?.capture) {
+        this._finalizeSale.next(response);
+        this._sale = new BehaviorSubject<number>(null)
+        return
+      }
+
+      const auth = this.methodsService.getAuthCaptureRequest(response)
+      this._processSale(auth)
     })
+  }
+
+  _processSale(auth) {
+    const site = this.siteService.getAssignedSite()
+
+    const void$ = this.getVoid()
+    const processSale$ =  this.methodsService.processSale(auth, site.url);
+
+    void$.pipe(
+        switchMap(data => {
+          console.log('void' , data)
+          return processSale$
+        })
+      )
+      .subscribe(data => {
+        if (data && data?.respstat.toLowerCase() == 'b') {
+          this.orderService.notificationEvent('Please retry. Transaction failed to run correctly and has not been processed.', 'Alert')
+          return;
+        }
+        if (data && data?.respstat.toLowerCase() == 'c') {
+          this.orderService.notificationEvent('Declined.', 'Alert')
+          return;
+        }
+        this._finalizeSale.next(data);
+        this._sale = new BehaviorSubject<number>(null)
+    })
+
+  }
+
+  initFinalizer() {
+  this._finalizeSale.subscribe(data => {
+    if (!data) {return}
+    this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
+                                                          this.orderService.currentOrder)
+    this.methodsService.initValues();
+    this.dialogRef.close(null)
+  })
+  }
+
+  getVoid() {
+    let void$
+    if (this.methodsService.payment && this.methodsService.payment.retref) {
+      void$ = this.methodsService.voidByRetRef(this.methodsService.payment.retref.toString())
+    }
+    if (this.methodsService.payment && !this.methodsService.payment.retref) {
+      // this.methodsService.payment.retref.toString()
+      void$ = of('success')
+    }
+    return void$
   }
 
   constructor(  public methodsService       : CardPointMethodsService,
                 public auth                 : UserAuthorizationService,
                 public paymentMethodsService: PaymentsMethodsProcessService,
+                public paymentService       : POSPaymentService,
+                private siteService         : SitesService,
                 private orderService        : OrdersService,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 @Optional() private dialogRef  : MatDialogRef<CardpointeTransactionsComponent>,
               ) {
 
     this.methodsService.orderID = data?.data?.id;
-    this.methodsService.retRef = data?.data?.retRef;
+    this.methodsService.retRef = data?.data?.retref;
     this.methodsService.amount = data?.amount;
+    this.methodsService.transactionUISettings = data?.settings
+
+    //payment: payment, setting: setting,balanceRemaining: balanceRemaining
+    if (data && data.payment) {
+      this.balanceRemaining = data?.balanceRemaining;
+      this.methodsService.payment = data.payment;
+      this.methodsService.orderID =  data.payment?.id;
+      this.methodsService.retRef  =  data.payment?.retref;
+      this.methodsService.amount  =  data.payment?.amountPaid;
+      this.methodsService.transactionUISettings  = data?.setting;
+    }
 
   }
 
   ngOnInit()  {
 
     this.methodsService.getBoltInfo().subscribe(data => {
-
-        // console.log('ngOnInit', data)
-        if (data.boltInfo && data.terminal) {
-          this.methodsService.boltTerminal = {} as BoltTerminal;
-          if (!this.methodsService.boltInfo) {
-            this.methodsService.boltInfo = {} as BoltInfo;
-          }
-          this.methodsService.boltInfo = data.boltInfo ;
-          this.methodsService.boltTerminal.hsn = data.terminal.cardPointeHSN;
-          this.methodsService.boltInfo.hsn     = data.terminal.cardPointeHSN;
-          this.methodsService.boltInfoInitialized = true;
-          this.methodsService.boltTerminalInitialized = true;
-          this.initConnectSubscriber();
-          // console.log('calling connect')
-          this._connect.next(true);
-
-        } else {
-          //terminal info not initialized.
-          this.orderService.notificationEvent('Info not initialized. Please close and reopen window.', 'Alert')
+      if (data.boltInfo && data.terminal) {
+        this.methodsService.boltTerminal = {} as BoltTerminal;
+        if (!this.methodsService.boltInfo) {
+          this.methodsService.boltInfo = {} as BoltInfo;
         }
-
+        this.methodsService.boltInfo = data.boltInfo ;
+        this.methodsService.boltTerminal.hsn = data.terminal.cardPointeHSN;
+        this.methodsService.boltInfo.hsn     = data.terminal.cardPointeHSN;
+        this.methodsService.boltInfoInitialized = true;
+        this.methodsService.boltTerminalInitialized = true;
+        this.initConnectSubscriber();
+        this._connect.next(true);
+      } else {
+        //terminal info not initialized.
+        this.orderService.notificationEvent('Info not initialized. Please close and reopen window.', 'Alert')
+      }
     });
-
   }
 
   cancel() {
     this.dialogRef.close(null)
   }
-
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
@@ -132,37 +192,29 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     }
   }
 
- initTransactionComplete() {
-   this.paymentMethodsService._initTransactionComplete.subscribe(data => {
-    this.dialogRef.close()
-   })
- }
+  initTransactionComplete() {
+    this.paymentMethodsService._initTransactionComplete.subscribe(data => {
+      this.dialogRef.close()
+    })
+  }
 
- initFinalizer() {
-  this._finalizeSale.subscribe(data => {
-     if (!data) {return}
-    //  console.log('finalizer called')
-      this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment, this.orderService.currentOrder)
-      this.methodsService.initValues();
-      this.dialogRef.close(null)
-  })
- }
 
- sendAuthCardAndCapture() {
+ sendAuthCardAndCapture(manual: boolean) {
     // this.methodsService.initValues()
+    const sendAuth$ = this.methodsService.sendAuthCard(null, true, manual);
+    const tip$  = this.methodsService.getProcessTip(this.methodsService.boltTerminal.xSessionKey);
     this.methodsService.processing = true;
-    this.methodsService.sendAuthCard(null).subscribe(data => {
-      if (!data || data.errorcode != 0) {
 
+    sendAuth$.subscribe(data => {
+      if (!data || data.errorcode != 0) {
         if (data.errorcode == 7 ) {
           return;
         }
-
         this.orderService.notificationEvent(`result ${data?.errormessage}`, 'Error Occured')
-
         return
       }
-      this._sale.next(data)
+      const item = {request: this.methodsService.request, response: data};
+      this._sale.next(item)
     })
   }
 
@@ -174,6 +226,10 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       this.methodsService.sale = data;
       this.methodsService.retRef = data?.retref
     })
+  };
+
+  voidByOrder(orderID: string) {
+    return this.methodsService.voidByRetRef(orderID)
   }
 
   refundByRetRef(retRef) {
@@ -187,21 +243,84 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     })
   }
 
-  sendAuthCard() {
+  sendAuthCard(manual: boolean) {
     // this.methodsService.initValues()
     this.methodsService.processing = true;
-    this.methodsService.sendAuthCard(null).subscribe(data => {
+    // this.methodsService.sendAuthCard(null, true)
+    const authCard$ =  this.methodsService.sendAuthCard(null, true, manual);
+
+    authCard$.subscribe(data => {
       this.methodsService.processing = false;
       this.methodsService.transaction = data;
       this.methodsService.retRef = data?.retref
     })
+
   }
 
-  pinDebitSaleAuthCapture(){
+  sendAuthCardOnly(manual: boolean) {
+    const site = this.siteService.getAssignedSite()
+    this.methodsService.processing = true;
+
+    const auth$ = this.methodsService.sendAuthCard(null, false, manual);
+
+    if (this.methodsService.payment) {
+      auth$.pipe(
+        switchMap(data => {
+          this.methodsService.processing = false;
+          this.methodsService.transaction = data;
+          this.methodsService.retRef = data?.retref
+          this.methodsService.payment.retref =  data?.retref
+          this.methodsService.payment.account =  data?.token
+          this.methodsService.payment.approvalCode =  data?.retref
+          this.methodsService.payment.resptext =  data?.resptext
+          this.methodsService.payment.amountPaid =  data?.amount
+          this.methodsService.payment.processData = data?.emvTagData;
+          this.methodsService.payment.expiry = data?.expiry;
+          return this.paymentService.savePOSPayment(site, this.methodsService.payment);
+        }
+      )).pipe(
+        switchMap(data => {
+            console.log('savePOSPayment', data, data.orderID);
+            if (data && data.orderID) {
+              const id =  data?.orderID.toString();
+              return this.orderService.getOrder(site, id, false)
+            }
+            else {
+              return of(null)
+            }
+          }
+        )
+      ).subscribe(data => {
+        if (!data) {
+          this.orderService.notificationEvent('Card not Authorized', 'Alert')
+          return
+        }
+        this.orderService.notificationEvent('Card Authorized. Press the edit button in the payments to capture.', 'Alert')
+        this.orderService.updateOrderSubscription(data);
+      })
+    }
+  }
+
+
+
+  applyBalance() {
+    if ( this.balanceRemaining) {
+      this.methodsService.payment.amountPaid = this.balanceRemaining;
+      this.methodsService.amount = this.balanceRemaining;
+    }
+  }
+
+  captureOnly() {
+    const auth = this.methodsService.getAuthCaptureRequest(this.methodsService.payment)
+    this._processSale(auth);
+  }
+
+  pinDebitSaleAuthCapture(manual: boolean){
     // this.methodsService.initValues()
     this.methodsService.processing = true;
-    this.methodsService.sendAuthCard('debit').subscribe(data => {
-      this._sale.next(data)
+    this.methodsService.sendAuthCard('debit', true, manual).subscribe(data => {
+      const item = {request: this.methodsService.request, response: data};
+      this._sale.next(item)
     })
   }
 }
