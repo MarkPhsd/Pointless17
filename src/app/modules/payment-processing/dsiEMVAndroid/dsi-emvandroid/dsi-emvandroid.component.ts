@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Capacitor} from '@capacitor/core';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { NgxXml2jsonService } from 'ngx-xml2json';
+import { Observable } from 'rxjs';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { TranResponse, Transaction } from './../../models/models';
 import { PointlessCCDSIEMVAndroidService } from './../../services/index';
@@ -59,7 +60,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   textResponse : any;
   tranResponse : any;
   responseSuccess = ''
-
+  transaction$ : Observable<Transaction>;
   payment: IPOSPayment;
   get isAndroid() {
     const platForm =   Capacitor.getPlatform();
@@ -71,7 +72,7 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   constructor(
      private ngxXml2jsonService: NgxXml2jsonService,
-     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
+     public dsiAndroidService: PointlessCCDSIEMVAndroidService,
      private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
   ){  
@@ -82,10 +83,11 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.resetResponse();// = ''
     this.message = "...waiting for test results."
     this.getMessageResponse();
+    this.transaction$ = this.dsiAndroidService.getSettings();
   }
 
   async checkBTPermission() {
@@ -94,7 +96,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   }
 
   async getDeviceInfo() {
-    return  await  this.dSIEMVAndroidService.getDeviceInfo;
+    return  await  this.dsiAndroidService.getDeviceInfo;
   }
 
   async resetResponse() {
@@ -125,7 +127,9 @@ export class DsiEMVAndroidComponent implements OnInit {
   async connectToBTDevice() {
     await this.resetbtResponse();
     this.processRunning = true;
-    const item = this.dSIEMVAndroidService.savedSettings;
+
+    const item = this.dsiAndroidService.transaction;
+
     if (!item.bluetoothDeviceName) {
       this.message = 'No Bluetooth Device is selected';
       return;
@@ -153,7 +157,7 @@ export class DsiEMVAndroidComponent implements OnInit {
     try {
       await this.resetResponse();
       this.processRunning = true;
-      const item =  await this.dSIEMVAndroidService.dsiEMVReset();
+      const item =  await this.dsiAndroidService.dsiEMVReset();
       this.messageResponse = item?.value;
       this.processRunning = false;
     } catch (error) {
@@ -171,9 +175,13 @@ export class DsiEMVAndroidComponent implements OnInit {
     try {
       await this.resetResponse();
       this.processRunning = true;
-      const options =  this.dSIEMVAndroidService.savedSettings as any;
+      const options =  this.dsiAndroidService.transaction as any;
       options.merchantID      = options.merchantID;
       options.pinPadIpAddress = options.pinPadIpAddress;
+
+      const ip = { value: ' value.'}
+      options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
+      
       options.padPort         = options.padPort;
       const item    = await dsiemvandroid.disconnectFromBt(options)
       this.message  = item;
@@ -186,13 +194,17 @@ export class DsiEMVAndroidComponent implements OnInit {
   async emvParamDownload() {
     try {
       await this.resetResponse();
-      const transaction       = this.dSIEMVAndroidService.savedSettings
+      const transaction       = this.dsiAndroidService.transaction
       this.processRunning     = true;
-      const options           = this.dSIEMVAndroidService.savedSettings as any;
+      const options           = this.dsiAndroidService.transaction as any;
       options.BTDevice        = transaction.bluetoothDeviceName
       options.secureDevice    = transaction.secureDevice;
       options.merchantID      = transaction.merchantID;
-      options.pinPadIpAddress = transaction.pinPadIpAddress;
+      // options.pinPadIpAddress = transaction.pinPadIpAddress;
+
+       const ip = { value: ' value.'}
+      options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
+
       options.padPort         = transaction.padPort;
       const item              = await dsiemvandroid.emvParamDownload(options)
       this.message            = item;
@@ -418,27 +430,25 @@ export class DsiEMVAndroidComponent implements OnInit {
       await this.resetResponse();
 
       this.processRunning = true;
-      let options  = this.initTransaction();
+      let options  = await this.initTransaction();
       if (this.transaction) {
-        options = this.transaction;
+        options =  this.transaction;
       }
-
       const item = await dsiemvandroid.processSale(options)
-
       await  this.checkResponse();
-
     } catch (error) {
       this.message = error;
     }
   }
 
-  initTransaction(): any {
+  async initTransaction(): Promise<any> {
     const item           = {} as any;
-    const value          = this.dSIEMVAndroidService.savedSettings;// as Transaction;
+    const value          = this.dsiAndroidService.transaction;// as Transaction;
     item.amount          = value.amount;
     item.pOSPackageID    = value.pOSPackageID
     item.padPort         = value.padPort;
-    item.pinPadIpAddress = value.pinPadIpAddress;
+    const ip = { value: ' value.'}
+    item.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
     item.merchantID      = value.merchantID;
     item.secureDevice    = value.secureDevice;
     item.tranCode        = value.tranCode;

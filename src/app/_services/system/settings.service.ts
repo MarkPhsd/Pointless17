@@ -12,6 +12,7 @@ import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSet
 import { EmailModel } from '../twilio/send-grid.service';
 
 import { T } from '@angular/cdk/keycodes';
+import { UserAuthorizationService } from './user-authorization.service';
 
 interface IIsOnline {
   result: string;
@@ -56,6 +57,7 @@ export class SettingsService {
                private httpCache: HttpClientCacheService,
                private siteService: SitesService,
                private appInitService  : AppInitService,
+               private userAuthorizationService     : UserAuthorizationService,
                ) {
      this.apiUrl =  this.appInitService.apiBaseUrl()
   }
@@ -238,6 +240,8 @@ export class SettingsService {
 
   getDSIEMVSettings():  Observable<DSIEMVSettings> {
 
+    if (!this.userAuthorizationService.user) {  of(null)  }
+
     //get device name
     const deviceName = this.deviceName
 
@@ -263,6 +267,8 @@ export class SettingsService {
   }
 
   getStripeAPISetting():  Observable<StripeAPISettings> {
+
+    if (!this.userAuthorizationService.user) {  of(null)  }
 
     const site =  this.siteService.getAssignedSite();
 
@@ -336,6 +342,11 @@ export class SettingsService {
 
   getUITransactionSetting():  Observable<TransactionUISettings> {
 
+    if (!this.userAuthorizationService.user) {  of(null)  }
+    const user = this.userAuthorizationService.user;
+    if (!user || !user.roles ) {return  of(null) };
+
+    // console.log('getUITransactionSetting user', user)
     const site =  this.siteService.getAssignedSite();
 
     const controller = "/settings/"

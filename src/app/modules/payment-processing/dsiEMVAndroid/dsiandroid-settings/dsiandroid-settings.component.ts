@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
-import { Observable } from 'rxjs';
+import { Observable, of , switchMap} from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
@@ -16,8 +16,10 @@ import { PointlessCCDSIEMVAndroidService } from './../../services/index';
 export class DSIAndroidSettingsComponent implements OnInit {
 
   @Output() getDSISettings = new EventEmitter();
-  @Input() setDSISettings: Transaction;
+  // @Input() setDSISettings: Transaction;
 
+  transaction$: Observable<Transaction>;
+  deviceName : string;
   inputForm: FormGroup;
   blueToothDeviceList: any;
   dsiDeviceList: any;
@@ -25,17 +27,28 @@ export class DSIAndroidSettingsComponent implements OnInit {
   dsiSettings$ : Observable<any>;
   secureDevice: any;
   terminalSetting: ISetting;
+
   terminalSettingInfo: ITerminalSettings;
+
   constructor(private fb                  : FormBuilder,
               private settingsService     : SettingsService,
               private siteService         : SitesService,  
-              private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService) { }
+              public  dsiAndroidService: PointlessCCDSIEMVAndroidService) { }
 
   async ngOnInit() {
+    this.deviceName = localStorage.getItem('devicename')
     await this.listBTDevices();
-    this.dsiDeviceList = await this.dSIEMVAndroidService.getDeviceInfo();
+    this.dsiDeviceList = await this.dsiAndroidService.getDeviceInfo();
     this.initForm();
-    
+    this.transaction$ = this.dsiAndroidService.getSettings(); 
+    await this.checkBTPermission();
+  }
+
+  async checkBTPermission() {
+    await this.dsiAndroidService.listBTDevices()
+    const options = {value: 'test'};
+    const value = dsiemvandroid.getHasPermission(options);
+    console.log('has permissions', value)
   }
 
   //deviceName
@@ -44,14 +57,14 @@ export class DSIAndroidSettingsComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     this.settingsService.getSettingByName(site,deviceName).subscribe(data => { 
       this.terminalSetting = data;
-      //ITerminalSettings
       this.terminalSettingInfo = JSON.parse(data.text)  as ITerminalSettings;
     })
   }
 
   async listBTDevices() { 
-    this.blueToothDeviceList = await this.dSIEMVAndroidService.listBTDevices();
+    this.blueToothDeviceList = await this.dsiAndroidService.listBTDevices();
   }
+
 
   async initForm() {
     const options = { value: ' value.'}
@@ -60,7 +73,7 @@ export class DSIAndroidSettingsComponent implements OnInit {
     this.inputForm = this.fb.group({
       merchantID: ['CROSSCHAL1GD'],
       userTrace: ['User'],
-      pOSPackageID: ['PointlessPOS1.0'],
+      pOSPackageID: ['PointlessPOS1.54.3'],
       tranCode: ['EMVSale'],
       secureDevice: ['EMV_VP3300_DATACAP'],
       invoiceNo: ['100'],
@@ -74,18 +87,22 @@ export class DSIAndroidSettingsComponent implements OnInit {
       padPort: ['1200'],
     })
 
-    let item = this.dSIEMVAndroidService.savedSettings;
-    if (this.setDSISettings) {
-      item = this.setDSISettings;
-    }
-
-    if (item) {
-      this.inputForm.patchValue(item)
-      this.saveSettings();
-    }
-
+    this.transaction$ = this.getSettings();
     this.subscribeChanges();
+  }
 
+  getSettings() { 
+   
+    const result$ =  this.dsiAndroidService.getSettings();
+
+    result$.pipe(
+      switchMap(data => { 
+        this.inputForm.patchValue(data)
+        return of(data)
+      })
+    )
+
+    return result$
   }
 
   subscribeChanges() {
@@ -98,17 +115,15 @@ export class DSIAndroidSettingsComponent implements OnInit {
     if (this.inputForm && this.inputForm.value) {
       const item = this.inputForm.value as Transaction;
       const setting = JSON.stringify(item);
-      localStorage.setItem('DSIEMVSetting', setting);
-      this.dsiSettings$ = this.dSIEMVAndroidService.saveDSIEMVSetting(item)
-
- 
-      // this.getDSISettings.emit(setting)
+      localStorage.setItem('DSIEMVAndroidSetting', setting);
+      this.dsiSettings$ = this.dsiAndroidService.saveDSIEMVSetting(item)
     }
   }
 
   async setSecureDevice(event: any) {
-    let setting =  this.dSIEMVAndroidService.savedSettings as Transaction;
-    setting.secureDevice = event[0];
+    if (this.dsiAndroidService.transaction) { 
+      this.dsiAndroidService.transaction = event[0];
+    }
   }
 
 }

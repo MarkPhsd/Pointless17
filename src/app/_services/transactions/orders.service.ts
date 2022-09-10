@@ -248,6 +248,20 @@ export class OrdersService {
     return this.http.get<IPOSOrder[]>(url);
   }
 
+  getActiveTableOrders(site: ISite, floorPlanID: number):  Observable<IPOSOrder[]> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "getActiveTableOrders"
+
+    const parameters = `?floorPlanID=${floorPlanID}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder[]>(url);
+  }
+
+
+
   completeOrder(site: ISite , id: number) {
     const controller = "/POSOrders/"
 
@@ -370,6 +384,23 @@ export class OrdersService {
     const endPoint  = "GetPOSOrder"
 
     const parameters = `?ID=${id}&history=${history}&deviceName=${deviceName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+
+  }
+
+  
+  getOrderByTableUUID(site: ISite, UUID: string):  Observable<IPOSOrder>  {
+
+    // const deviceName = localStorage.getItem('devicename')
+
+    const controller = "/POSOrders/"
+
+    const endPoint  = "getOrderByTableUUID"
+
+    const parameters = `?UUID=${UUID}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
@@ -681,7 +712,19 @@ export class OrdersService {
   newOrderWithPayloadMethod(site: ISite, serviceType: IServiceType): Observable<IPOSOrder> {
     if (!site) { return }
     const orderPayload = this.getPayLoadDefaults(serviceType)
-    console.log('newOrderWithPayloadMethod')
+    return  this.postOrderWithPayload(site, orderPayload)
+  }
+
+  newOrderFromTable(site: ISite, serviceType: IServiceType, uuID: string, floorPlanID: number, name: string): Observable<IPOSOrder> {
+    if (!site) { return }
+    let orderPayload = this.getPayLoadDefaults(serviceType)
+    if (!orderPayload.order) {
+      orderPayload.order = {} as IPOSOrder
+    }
+    orderPayload.order.tableUUID = uuID;
+    orderPayload.order.floorPlanID = floorPlanID;
+    orderPayload.order.customerName = name;
+    orderPayload.order.tableName = name;
     return  this.postOrderWithPayload(site, orderPayload)
   }
 

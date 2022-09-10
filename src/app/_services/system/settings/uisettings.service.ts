@@ -1,7 +1,7 @@
 import { Injectable, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
 import { ISetting, IUser, IUserProfile } from 'src/app/_interfaces';
 import { SitesService } from '../../reporting/sites.service';
 import { EmailModel } from '../../twilio/send-grid.service';
@@ -259,7 +259,7 @@ export class UISettingsService {
     this._totalOrderHeightVal = +totalHeight.toFixed(0);
     this._totalOrderHeight.next(+totalHeight.toFixed(0));
 
-    console.log('windowHeight', this.windowHeight)
+    // console.log('windowHeight', this.windowHeight)
     if (this.windowHeight != 0) {
       const remainder = this.windowHeight - +totalHeight - 100
       this._remainingHeight.next(remainder)
@@ -317,30 +317,36 @@ export class UISettingsService {
   }
 
   getTransactionUISettings() {
+      if (!this.userAuthorizationService.user) {  this._transactionUISettings.next(null)  }
     this.settingsService.getUITransactionSetting().subscribe(data => {
       this._transactionUISettings.next(data)
     })
   }
 
   getUIHomePageSettings() {
+    if (!this.userAuthorizationService.user) {  this._homePageSetting.next(null)  }
     this.settingsService.getUIHomePageSettings().subscribe(data => {
       this._homePageSetting.next(data)
     })
   }
 
   getEmailModel() {
+    if (!this.userAuthorizationService.user) {  this._emailModel.next(null)  }
     this.settingsService.getEmailModel().subscribe(data => {
       this._emailModel.next(data)
     })
   }
 
   getDSSIEmvSettings() {
+    if (!this.userAuthorizationService.user) {  this._DSIEMVSettings.next(null)  }
+     if (!this.userAuthorizationService.user) { return }
      this.settingsService.getDSIEMVSettings().subscribe(data => {
       this._DSIEMVSettings.next(data)
     })
   }
   ////////////// subscribeToStripedCachedConfig
   subscribeToStripedCachedConfig()  {
+    if (!this.userAuthorizationService.user) { return  }
    this.settingsService.getStripeAPISetting().subscribe(data => {
       this.updateStripeAPISettings(data);
    });
@@ -353,7 +359,6 @@ export class UISettingsService {
   getSetting(name: string): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
-
     if (user && user.username && user.token && (user.roles != '' && user.roles != 'user' )) {
       return this.settingsService.getSettingByName(site, name)
     }
@@ -381,7 +386,7 @@ export class UISettingsService {
           return this.setSetting(setting, name)
       })).pipe(
         switchMap(data => {
-        console.log('returning Pipe', data)
+        // console.log('returning Pipe', data)
         return this.setSetting(setting, name)
       }))
 

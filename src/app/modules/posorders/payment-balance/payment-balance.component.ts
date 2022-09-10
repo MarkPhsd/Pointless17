@@ -31,7 +31,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   _currentPayment: Subscription;
   posPayment     : IPOSPayment;
   isAuthorized   = false;
-
+  hidePrint:      boolean;
+  href          : string;
 
   async initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -53,12 +54,14 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
               private methodsService: CardPointMethodsService,
               private toolBarUI       : ToolBarUIService,
               private matSnackBar   : MatSnackBar,
-              private printingService: PrintingService,
+              public printingService: PrintingService,
               private toolbarUIService  : ToolBarUIService,
               private router: Router) {
    }
 
    ngOnInit() {
+
+    this.href = this.router.url;
     this.site = this.siteService.getAssignedSite();
     this.initSubscriptions();
     this.paymentsEqualTotal = false;
@@ -71,7 +74,13 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       }
     }
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-   }
+
+    if (this.href.substring(0, 11 ) === '/pos-payment') {
+      this.hidePrint = true;
+      return;
+    }
+
+  }
 
   editCart() {
     this.router.navigate(["/currentorder/",{mainPanel:true}]);
@@ -80,25 +89,20 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   capture(item: IPOSPayment) {
-
     if (this.order) {
       this.methodsService.processCapture(item, this.order.balanceRemaining,
                                                    this.uiTransactions)
     }
-
   }
 
   editPayment(payment: IPOSPayment) {
       //get payment
       const site = this.siteService.getAssignedSite();
-
       if (payment.paymentMethodID == 0) {
         this.editDialog.openChangeDueDialog(payment, null, this.order)
         return;
       }
-
       const method$ = this.paymentMethodService.getPaymentMethod(site,payment.paymentMethodID)
-
       method$.subscribe( method => {
         this.editDialog.openChangeDueDialog(payment, method, this.order)
       })

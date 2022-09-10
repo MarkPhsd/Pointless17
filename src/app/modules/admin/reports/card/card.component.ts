@@ -211,7 +211,7 @@ export class CardComponent  implements OnInit , OnChanges, OnDestroy{
     if (!this.sites) {
       this.sitesService.getSites().subscribe( data => {
           this.sites  = data;
-          console.log('refreshSitesData 2', data)
+          // console.log('refreshSitesData 2', data)
           // const sites = [...new Set(data)]
           // console.log ('refresh sites 3', sites)
           this.refresh();

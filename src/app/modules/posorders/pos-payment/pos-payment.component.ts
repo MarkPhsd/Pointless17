@@ -249,7 +249,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
       this.settingService.getSettingByNameCached(site, 'DefaultOrderType').pipe(
         switchMap(data => {
-          console.log('update order scheduleddata', data)
+          // console.log('update order scheduleddata', data)
         if (data) {
           if (+data.value != this.order.serviceTypeID) {
             return this.serviceTypeService.getType(site, +data.value)
@@ -269,7 +269,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
 
     this.serviceTypeService.getType(site, serviceTypeID).subscribe(data => {
-        console.log('result', data)
+        // console.log('result', data)
         if (!data) { return }
         this.serviceType = data;
         this.processPaymentReady(data)

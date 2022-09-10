@@ -46,6 +46,17 @@ repositories {
     }
 }
 
+// dependencies {
+//     implementation fileTree(include: ['*.jar'], dir: 'libs')
+//     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+//     implementation project(':capacitor-android')
+//     testImplementation "junit:junit:$junitVersion"
+//     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+//     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+//     implementation project(':capacitor-cordova-android-plugins')
+//     implementation 'com.android.support:design:27.1.1'
+// }
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
@@ -54,9 +65,7 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
     implementation project(':capacitor-cordova-android-plugins')
-    implementation 'com.android.support:design:27.1.1'
 }
-
 apply from: 'capacitor.build.gradle'
 
 try {

@@ -5,19 +5,20 @@ import { NgxXml2jsonService } from 'ngx-xml2json';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ISetting } from 'src/app/_interfaces';
-import { switchMap } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PointlessCCDSIEMVAndroidService {
+  public transaction: Transaction;
+  public saving: boolean;
 
   constructor(
     private jsonService   : NgxXml2jsonService,
     private settingService: SettingsService,
     private siteService   : SitesService,
   ) { }
-
 
   saveDSIEMVSetting(transaction: Transaction) {
     const site = this.siteService.getAssignedSite();
@@ -28,24 +29,95 @@ export class PointlessCCDSIEMVAndroidService {
     const setting$ = this.settingService.getSettingByName(site, name)
 
     const value = JSON.stringify(transaction);
-
+    this.saving = true
     return setting$.pipe(
       switchMap( data => {
         data.text = value
+        this.saving  = false
         return this.settingService.saveSetting(site, data)
       }
-    ));
+    )).pipe(
+      switchMap(data => { 
+        if (data) { 
+          this.transaction = JSON.parse(data.text)  as Transaction;
+        }
+        if (!data) { 
+          const item = this.defaultTransaction as Transaction;
+          this.transaction = this.defaultTransaction  as Transaction;
+        }
+        return of(this.transaction)
+      })
+    );
 
   }
 
-
-
-  get savedSettings(): Transaction | undefined {
-    const setting = localStorage.getItem('DSIEMVSetting')
-    if (setting) {
-      const item = JSON.parse(setting) as Transaction;
-      return item
+  get defaultTransaction() { 
+    return {
+      merchantID: 'CROSSCHAL1GD',
+      userTrace: 'User',
+      pOSPackageID: 'PointlessPOS1.54.3',
+      tranCode: 'EMVSale',
+      secureDevice: 'EMV_VP3300_DATACAP',
+      invoiceNo: '100',
+      amount: '1.00',
+      sequenceNo: '0010010010',
+      bluetoothDeviceName: '',
+      operationMode: 'cert',
+      recordNo: 'RecordNumberRequested',
+      refNo: '1',
+      pinPadIpAddress: '',
+      padPort: '1200',
     }
+  }
+
+ //   merchantID: string;
+  //  userTrace: string;
+  //  pOSPackageID: string;
+  //  tranCode: string;
+  //  secureDevice: string;
+  //  invoiceNo: string;
+  //  amount: string;
+  //  sequenceNo: string;
+  //  bluetoothDeviceName: string;
+  //  operationMode: string;
+  //  recordNo: string;
+  //  refNo: string;
+  //  pinPadIpAddress: string;
+  //  padPort: string;
+
+  getSettings():  Observable<Transaction> {
+    const site = this.siteService.getAssignedSite();
+
+    const setting = localStorage.getItem('dsiEMVAndroidSettings')
+    if (setting) {
+      this.transaction = JSON.parse(setting) as Transaction;
+    }
+    const name = 'DSIEMVAndroidSetting';
+
+    const setting$ = this.settingService.getSettingByName(site, name)
+
+    const result$ = setting$.pipe(
+      switchMap( data => {
+        console.log('setting', data)
+        if (!data) { 
+          const name = 'DSIEMVAndroidSetting';
+          return this.settingService.saveSettingObservable(site, data)
+        }
+        if (data) { 
+          return of(data)
+        }
+      }
+    )).pipe(
+      switchMap(data => { 
+        if (!data.text) {
+          this.transaction = {} as Transaction;
+          return of(this.transaction)
+        }
+        this.transaction = JSON.parse(data.text) as Transaction;
+        return of(this.transaction)
+    }));
+
+    return result$
   }
 
   async  listBTDevices() {
@@ -57,7 +129,7 @@ export class PointlessCCDSIEMVAndroidService {
 
   async getDeviceInfo() {
     try {
-      const options = this.savedSettings as Transaction;
+      const options = this.transaction as Transaction;
       options.merchantID = options.merchantID;
       options.pinPadIpAddress = options.pinPadIpAddress;
       options.padPort = options.padPort;
@@ -85,7 +157,7 @@ export class PointlessCCDSIEMVAndroidService {
 
   async dsiEMVReset() {
     try {
-      const setting = this.savedSettings as Transaction;
+      const setting = this.transaction as Transaction;
       let options = {} as any;
       options =  { bluetoothDeviceName: setting.bluetoothDeviceName, secureDevice: setting.secureDevice, merchantID: setting.merchantID,
                    pinPadIpAddress: setting.pinPadIpAddress, padPort: setting.padPort }

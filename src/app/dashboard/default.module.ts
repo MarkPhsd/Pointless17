@@ -303,6 +303,7 @@ import { CpVIVO3300Component } from '../modules/payment-processing/cardPointe/cp
 import { DsiAndroidResultsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-android-results/dsi-android-results.component';
 import { DSIAndroidSettingsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiEMVAndroidComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
+import { ZoomFloorPlanComponent } from '../modules/floor-plan/zoom-floor-plan/zoom-floor-plan.component';
 //
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
@@ -566,7 +567,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     UseGroupTaxAssignmentComponent,
     WeekDaySelectionComponent,
     WishlistComponent,
-
+    ZoomFloorPlanComponent,
  
     CardPointSettingsComponent,
     CardPointIDTECHAndroidComponent,

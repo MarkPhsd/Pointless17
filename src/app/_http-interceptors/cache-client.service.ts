@@ -26,10 +26,17 @@ export class CacheClientService {
         const record = JSON.parse(item)
         const now = new Date().getTime()
         // Expired data will return null
-        if (!record || (record.hasExpiration && record.expiration <= now)) {
+        if ((!record || !record.value )|| (record.hasExpiration && record.expiration <= now)) {
           return null
         } else {
-          return JSON.parse(record.value)
+          if (!record.value) { 
+            return null
+          }
+          try {
+            return JSON.parse(record.value)
+          } catch (error) {
+            return null
+          }
         }
       }
       return null

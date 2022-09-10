@@ -88,7 +88,7 @@ export class SystemInitializationService {
       const appWizard = {} as IAppWizardStatus
       this.appWizardStatus = appWizard
       this._AppWizardStatus.next(appWizard)
-      console.log('appWizard', appWizard)
+      // console.log('appWizard', appWizard)
       if (appWizard) {
         this._appStatus.next(this.getStatusCount(appWizard))
       }
@@ -122,7 +122,7 @@ export class SystemInitializationService {
 
   getStatusCount(item: IAppWizardStatus): AppStatus { 
     let count = 0;
-    console.log('getStatusCount', item)
+    // console.log('getStatusCount', item)
 
     // if (!item) { 
     //   const returnItem = {completed: 0, total: 0, percentage: '0', disabled: false} as AppStatus

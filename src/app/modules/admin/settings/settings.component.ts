@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Capacitor } from '@capacitor/core';
 import { SystemManagerService } from 'src/app/_services/system/system-manager.service';
 import { Subscription } from 'rxjs';
+import { PointlessCCDSIEMVAndroidService } from '../../payment-processing/services';
 
 @Component({
   selector: 'app-settings',
@@ -24,8 +25,14 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('accordionStep6') accordionStep6: TemplateRef<any>;
     @ViewChild('accordionStep7') accordionStep7: TemplateRef<any>;
 
+    @ViewChild('processorItem1') processorItem1: TemplateRef<any>;
+    @ViewChild('processorItem2') processorItem2: TemplateRef<any>;
+    @ViewChild('processorItem3') processorItem3: TemplateRef<any>;
+    @ViewChild('processorItem4') processorItem4: TemplateRef<any>;
+    processorSelection: TemplateRef<any>;
+    showAndroid: boolean;
     get platForm() {  return Capacitor.getPlatform(); }
-
+    blueToothDeviceList: any;
     showPaymentMethods = false;
     user          :  IUser;
     role          :  string;
@@ -75,13 +82,18 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private dialog               : MatDialog,
         private systemManagerService : SystemManagerService,
         private route                : ActivatedRoute,
+        private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
         private router               : Router)
     {
       this.accordionStep = -1;
       this.initSubscriptions();
     }
 
-    ngOnInit() {
+    async ngOnInit() {
+      
+      if (this.platForm === 'android') { 
+        await this.listBTDevices()
+      }
       this.getCurrentUser();
       const step = this.route.snapshot.paramMap.get('accordionStep');
       if (step) {
@@ -94,12 +106,35 @@ export class SettingsComponent implements OnInit, OnDestroy {
       if (this._accordionStep) { this._accordionStep.unsubscribe()}
     }
 
+    async listBTDevices() { 
+      this.blueToothDeviceList = await this.dSIEMVAndroidService.listBTDevices();
+    }
+
     routerNavigation(url: string) {
       this.router.navigate([url]);
     }
 
     setStep(index: number) {
       this.systemManagerService.updateAccordionStep(index)
+    }
+
+    processorselect(index: number) { 
+     
+      switch ( index) {
+        case 1:
+          this.processorSelection  =  this.processorItem1;
+          break;
+        case 2:
+          // this.showAndroid = true;
+          this.processorSelection  =  this.processorItem2;
+          break;
+        case 3:
+          this.processorSelection  = this.processorItem3;
+          break;
+        case 4:
+          this.processorSelection  = this.processorItem4;
+          break;
+        }
     }
 
     nextStep() {

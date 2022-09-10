@@ -14,13 +14,19 @@
   grid-auto-flow: row;
   margin-right: 30px;
 
-  @include for-phone-only {
+  @include horizontal-tablet {
     display: flex;
     flex-direction: row;
     margin-right: 5px;
     justify-content: center;
   }
 
+  @include for-phone-only {
+    display: flex;
+    flex-direction: row;
+    margin-right: 5px;
+    justify-content: center;
+  }
 }
 
 button {

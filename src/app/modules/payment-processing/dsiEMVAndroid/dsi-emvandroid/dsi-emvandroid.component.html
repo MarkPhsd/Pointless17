@@ -1,4 +1,4 @@
-<div class="cards">
+<div class="cards" *ngIf="transaction$ | async">
   <div>
       <mat-card>
         <mat-card-title><ng-content  title ></ng-content></mat-card-title>
@@ -6,20 +6,27 @@
           <div class="grid-buttons">
 
             <div>
-              <button (click)="emvSale()"><mat-icon>money</mat-icon>Transaction</button>
+              <div>
+                <button (click)="emvSale()"><mat-icon>money</mat-icon>Transaction</button>
+              </div>
+
+               <div *ngIf="isAdmin || isManager">
+                <button (click)="emvParamDownload()"><mat-icon>download</mat-icon>Param Download</button>
+              </div>
+
+              <div>
+                <button (click)="connectToBTDevice()"><mat-icon>connect</mat-icon>Connect to BT</button>
+              </div>
+
+            </div>
+
+            <div>
+              <button (click)="emvCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
             </div>
 
             <span *ngIf="isAdmin || isManager">
               <div>
                 <button (click)="getResponse()">Get Response</button>
-              </div>
-
-              <div>
-                <button (click)="emvParamDownload()"><mat-icon>download</mat-icon>Param Download</button>
-              </div>
-
-              <div>
-                <button (click)="emvCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
               </div>
 
               <div>
@@ -45,16 +52,22 @@
             [tranResponse]="tranResponse">
             <h3>Response</h3>
             <div>
-              {{ messageResponse }}
+              {{ messageResponse | json}}
             </div>
             <div>
-              {{message}}
+              {{message | json}}
             </div>
             <div *ngIf="processRunning"><mat-spinner [diameter]="50"></mat-spinner></div>
-          </pointlesscc-dsi-android-results>
+            </pointlesscc-dsi-android-results>
         </mat-card>
       </div>
 
+      <div *ngIf="isAdmin">
+        Current transaction
+        <div>
+          {{dsiAndroidService.transaction | json}}
+        </div>
+      </div>
     </div>
 
 </div>

@@ -1,6 +1,10 @@
-<mat-card>
+<mat-card *ngIf="(transaction$ | async)  ; else loading">
   <mat-card-title><ng-content></ng-content>
   </mat-card-title>
+  <mat-card-subtitle>
+    <mat-icon *ngIf="dsiAndroidService.saving">save</mat-icon>
+    <mat-icon *ngIf="(dsiSettings$ | async) as saving">  </mat-icon>
+  </mat-card-subtitle>
   <mat-card-content >
     <div>
       <button mat-raised-button class="button-info" (click)="viewSelectDeviceList = !viewSelectDeviceList">
@@ -8,9 +12,13 @@
         <span *ngIf="!viewSelectDeviceList">View Device List</span>
         <span *ngIf="viewSelectDeviceList">Hide Device List</span>
       </button>
+      <button mat-raised-button class="button-info" (click)="checkBTPermission()">
+        <mat-icon>security</mat-icon>Permissions
+      </button>
     </div>
 
-    <div *ngIf="inputForm && !viewSelectDeviceList" [formGroup]="inputForm" >
+    <div *ngIf="inputForm &&
+                !viewSelectDeviceList" [formGroup]="inputForm" >
       <div>
           <mat-card-subtitle>Admin</mat-card-subtitle>
       </div>
@@ -53,21 +61,32 @@
             <input formControlName="secureDevice" matInput >
           </mat-form-field>
         </div>
-
-        <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0">
-          <mat-form-field   appearance="outline" >
-            <mat-label>Bluetooth Device Name</mat-label>
-            <mat-select  formControlName="bluetoothDeviceName" >
-              <div *ngFor="let item of blueToothDeviceList">
-                <mat-option  [value]="item">
-                  {{item}}
-                </mat-option>
-              </div>
-            </mat-select>
-          </mat-form-field>
-
+      
+        <div >
+          <div *ngIf="dsiAndroidService.transaction && dsiAndroidService.transaction?.bluetoothDeviceName">
+            Current Device: {{dsiAndroidService?.transaction?.bluetoothDeviceName}}
+          </div>
+     
+           <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0"
+              class="device-grid">
+           
+            <div>
+              <mat-form-field style="width: 100px;"   appearance="outline" >
+                <mat-label>Bluetooth Device Name</mat-label>
+                <mat-select  formControlName="bluetoothDeviceName" >
+                  <div *ngFor="let item of blueToothDeviceList">
+                    <mat-option  [value]="item">
+                      {{item}}
+                    </mat-option>
+                  </div>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <button mat-raised-button (click)="listBTDevices()"><mat-icon>refresh</mat-icon></button>
+            </div>
+          </div>
         </div>
-
         <div *ngIf="!blueToothDeviceList">
           <button mat-raised-button (click)="listBTDevices()">List Devices</button>
         </div>
@@ -152,7 +171,9 @@
   </mat-card-content>
   <div *ngIf="dsiSettings$ | async"></div>
 </mat-card>
-
+<ng-template #loading>
+  ...loading DSI Emv Android Settings.
+</ng-template>
 
 <div *ngIf="viewSelectDeviceList && dsiDeviceList" class="message">
   
@@ -245,6 +266,7 @@
             {{dsiDeviceList?.Devices?.SecureDevice9?.SecureDeviceID9}}
         </div>
       </mat-list-option>
+
       <mat-list-option [value]="dsiDeviceList?.Devices?.SecureDevice10?.SecureDeviceID10">
         <div  matLine class="item-description">
             {{dsiDeviceList?.Devices?.SecureDevice10?.Description10}}
@@ -253,5 +275,6 @@
             {{dsiDeviceList?.Devices?.SecureDevice10?.SecureDeviceID10}}
         </div>
       </mat-list-option>
+
   </mat-selection-list>
 </div>

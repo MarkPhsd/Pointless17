@@ -59,10 +59,8 @@ button {
   font-weight: 500;
   margin-left: 2px;
   line-height: 1.2em;
-
   vertical-align: bottom;
   float: left;
-
 }
 
 mat-icon {
@@ -85,8 +83,6 @@ mat-form-field {
   font-size: .8em;
 }
 
-
-
 .grid-settings-2 {
   // display: grid;
   // grid-template-columns:  auto;
@@ -102,3 +98,7 @@ mat-form-field {
 
 }
 
+.grid-android { 
+  display: grid;
+  grid-template-columns: 400px 1fr;
+}

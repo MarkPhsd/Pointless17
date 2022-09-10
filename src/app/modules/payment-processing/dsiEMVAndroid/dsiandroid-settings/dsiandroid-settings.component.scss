@@ -6,3 +6,9 @@
 .button-info { 
   margin: 5px;
 }
+
+.device-grid { 
+  display: grid;
+  grid-template-columns: 100px 50px;
+  
+}

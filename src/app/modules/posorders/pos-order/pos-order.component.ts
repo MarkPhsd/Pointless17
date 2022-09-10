@@ -311,9 +311,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.sidePanelPercentAdjust = 60
     }
 
-
     this.toolbarUIService.hidetoolBars();
-
     this.settingService.getUIHomePageSettings().subscribe(data => {
       this.uiSettings = data;
     })

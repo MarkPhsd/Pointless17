@@ -1,8 +1,8 @@
 <div class="header">
   <mat-icon>settings</mat-icon>
-  Settings
+  Settings 
 </div>
-<div class="roleDescription">User Level: {{ role }}</div>
+<div class="roleDescription">User Level: {{ role }} -  User Platform: {{platForm}}</div>
 <br>
 
 <div class="settings" *ngIf="role">
@@ -95,7 +95,7 @@
         </mat-panel-title>
         <mat-panel-description>
             Behavior control and access to system features.
-          <mat-icon>menu</mat-icon>
+          <mat-icon>permissions</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -189,7 +189,7 @@
         </mat-panel-title>
         <mat-panel-description>
           Geo Location
-          <mat-icon>location_on</mat-icon>
+        <mat-icon>location_on</mat-icon>
         </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -216,27 +216,21 @@
           </mat-panel-title>
           <mat-panel-description>
             Merchant Services
+            <mat-icon>credit_card</mat-icon>
           </mat-panel-description>
       </mat-expansion-panel-header>
 
       <ng-container [ngTemplateOutlet]="currentAccordionStep"></ng-container>
 
       <ng-template #accordionStep6>
-
-        <div *ngIf="role === 'admin'">
-          <button mat-button color="accent"
-                  (click)="gotoPayments()">
-                  <mat-icon>settings</mat-icon> Settings
-          </button>
-        </div>
-        <div><app-dsiemvelectron>NetEpay Settings for Windows</app-dsiemvelectron> </div>
-        <div><pointlesscc-dsiandroid-settings>NetEpay DSI EMV Android Settings</pointlesscc-dsiandroid-settings></div>
-        <div><card-point-settings>Bolt Card Point Settings</card-point-settings></div>
-        <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div>
-
+        <button mat-raised-button (click)="processorselect(1)">NetEpay Windows</button>
+        <button mat-raised-button (click)="processorselect(2)">NetEpay Android</button>
+        <button mat-raised-button (click)="processorselect(3)">CardPointe with Bolt</button>
+        <button mat-raised-button (click)="processorselect(4)">Stripe</button>
+        <ng-container [ngTemplateOutlet]="processorSelection"></ng-container>
       </ng-template>
 
-      <ng-template #loading>
+       <ng-template #loading>
         ..loading
         <mat-progress-spinner [diameter]="50"></mat-progress-spinner>
       </ng-template>
@@ -255,6 +249,7 @@
           </mat-panel-title>
           <mat-panel-description>
             Device Info
+            <mat-icon>device</mat-icon>
           </mat-panel-description>
       </mat-expansion-panel-header>
 
@@ -282,3 +277,26 @@
   </div>
 
 </div>
+
+<!-- Processor Selections -->
+<ng-template #processorItem1>
+  <div><app-dsiemvelectron>NetEpay Windows</app-dsiemvelectron> </div>
+</ng-template>
+
+<ng-template #processorItem2>
+  <div class="grid-android">
+    <div>
+      <pointlesscc-dsi-emvandroid
+      [isAdmin]="true"></pointlesscc-dsi-emvandroid>
+    </div>
+    <div><pointlesscc-dsiandroid-settings>NetEpay Android</pointlesscc-dsiandroid-settings></div>
+  </div>
+</ng-template>
+
+<ng-template #processorItem3>
+  <div><card-point-settings>Bolt Card Point</card-point-settings></div>
+</ng-template>
+
+<ng-template #processorItem4>
+  <div><app-stripe-settings>Stripe API Settings</app-stripe-settings> </div>
+</ng-template>

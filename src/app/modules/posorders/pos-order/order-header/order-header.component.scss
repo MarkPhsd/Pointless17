@@ -5,3 +5,14 @@ h4 {
 mat-card {
   padding: 3px !important;
 }
+
+.container { 
+  display: grid;
+  grid-template-columns: 75% 100px;
+  gap: 10px;
+  width:100%
+}
+
+.button-container { 
+  margin: 10px;
+}

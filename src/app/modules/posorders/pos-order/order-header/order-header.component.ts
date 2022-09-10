@@ -1,19 +1,24 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input , OnInit} from '@angular/core';
+import { Router } from '@angular/router';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
   selector: 'app-order-header',
   templateUrl: './order-header.component.html',
   styleUrls: ['./order-header.component.scss']
 })
-export class OrderHeaderComponent  {
-
+export class OrderHeaderComponent implements OnInit  {
+  @Input() mainPanel: boolean;
   @Input() order: IPOSOrder
   isOrderClaimed: boolean;
-
-  constructor(
+  href: string;
+  hidePrint: boolean;
+  constructor(  
              private  ordersService:   OrdersService,
+             private router: Router,
+             public printingService: PrintingService,
     ) {
 
     this.ordersService.currentOrder$.subscribe(data => {
@@ -22,5 +27,12 @@ export class OrderHeaderComponent  {
 
   }
 
+  ngOnInit() {
+    this.href = this.router.url;
+    if (this.href.substring(0, '/pos-payment'.length ) === '/pos-payment') {
+      this.hidePrint = true;
+      return;
+    }
+  }
 
 }

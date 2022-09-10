@@ -50,7 +50,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   @ViewChild('webPrintingTemplate') webPrintingTemplate: TemplateRef<any>;
   @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
   @ViewChild('electronPrintingTemplate') electronPrintingTemplate: TemplateRef<any>;
-
   @ViewChild('electronPrintingDesignTemplate') electronPrintingDesignTemplate: TemplateRef<any>;
 
 

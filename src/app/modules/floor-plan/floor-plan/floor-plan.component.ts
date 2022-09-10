@@ -2,11 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { Observable,  of,  Subject, switchMap } from 'rxjs';
 import { FloorPlanService, IFloorPlan } from 'src/app/_services/floor-plan.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { CompanyService, AuthenticationService, OrdersService, MessageService, } from 'src/app/_services';
-import { IUser } from 'src/app/_interfaces';
-import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
+import { OrdersService } from 'src/app/_services';
+import { IPOSOrder, IUser } from 'src/app/_interfaces';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+// import { compress, decompress } from 'compress-json'
 
+export interface uuidList { 
+  uuID: string;
+  color: string;
+}
 @Component({
   selector: 'app-floor-plan',
   templateUrl: './floor-plan.component.html',
@@ -19,24 +23,31 @@ export class FloorPlanComponent implements OnInit {
   isUserStaff         =   false;
   isAdmin             =   false;
   isUser              =   false;
-
+  refresh: boolean;
   editMode = false;
   userMode = false;
   user: IUser;
 
   floorPlans$: Observable<IFloorPlan[]>;
   floorPlan: IFloorPlan;
-  _userMode: Subject<boolean> = new Subject();
+
+  _zoom     : Subject<number> = new Subject();
+  _userMode : Subject<boolean> = new Subject();
   _floorPlan: Subject<IFloorPlan> = new Subject();
   _performOperations: Subject<any> = new Subject();
+  changeObjectColor: Subject<any> = new Subject();
   tableInfo: any;
   orderInfo: any;
   _setTableInfo: Subject<any> = new Subject();
   _newOrder    : Subject<any> = new Subject();
   interval: any;
-
+  backupRestore$: Observable<any>;
+  loading: boolean;
+  saving: boolean;
+  zoomDefault: number
   constructor(private siteService       : SitesService,
               private orderService      : OrdersService,
+              public  userAuth : UserAuthorizationService,
               private floorPlanSevice   : FloorPlanService,
          ) { }
 
@@ -46,23 +57,17 @@ export class FloorPlanComponent implements OnInit {
     this.initPlansList(site);
     this.userMode = false
     this.toggleUserMode()
+    this.zoomDefault = 100;
+    this._zoom.next(this.zoomDefault);
+    // this.changeObjectColor.subscribe(data => { 
+    //   console.log('output', data)
+    // })
   }
 
-
-  refresher() {
-    setInterval(function () {
-      if (this.userMode) {
-        if ( this.floorPlan ) {
-          this._getFloorPlan(this.floorPlan)
-        }
-      }
-    }, 60000);
-  }
 
   initPlansList(site) {
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site);
     this.floorPlans$.subscribe(data => {
-      console.log('initPlansList', data)
       if (data) {
         this._getFloorPlan(data[0])
       }
@@ -76,7 +81,7 @@ export class FloorPlanComponent implements OnInit {
 
   saveTableSettings() {
     this._setTableInfo.next(data => {
-      console.log(data)
+      // console.log('saveTableSettings', data?.name)
     })
   }
 
@@ -107,21 +112,56 @@ export class FloorPlanComponent implements OnInit {
     )
   }
 
+  refresher() {
+    setInterval(function () {
+      if (this.userMode) {
+        if ( this.floorPlan ) {
+          this._getFloorPlan(this.floorPlan)
+        }
+      }
+    }, 60000);
+  }
+
   saveFloorPlan(event) {
     if (!event) { return }
+   
+    if (event.template) {
+      event.template = JSON.stringify(event.template)
+      event.template = event.template.replace(/(^"|"$)/g, '');
+      event.template = event.template.replaceAll('\\', '');
+    }
+
+    const site = this.siteService.getAssignedSite();
+    const plan = event as IFloorPlan;
+    this.floorPlanSevice.saveFloorPlan(site, plan).subscribe(data => {
+        this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site);
+        this.floorPlan  = data;
+      }
+    )
+  }
+
+  saveFloorPlanfromOrder(event) {
+    if (!event) { return }
+    console.log('save floorplan')
+    this.saving = true;
+ 
 
     if (event.template) {
       event.template = JSON.stringify(event.template)
       event.template = event.template.replace(/(^"|"$)/g, '');
       event.template = event.template.replaceAll('\\', '');
     }
+
     const site = this.siteService.getAssignedSite();
     const plan = event as IFloorPlan;
-     this.floorPlanSevice.saveFloorPlan(site, plan).subscribe(data => {
-        this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(site);
+    this.backupRestore$ = this.floorPlanSevice.saveFloorPlan(site, plan).pipe(
+      switchMap(data => {
+        this.saving = false;
         this.floorPlan  = data;
+        return this.floorPlanSevice.listFloorPlansNames(site);
       }
-    )
+    ))
+
   }
 
   outPutJSONFull() {
@@ -129,17 +169,15 @@ export class FloorPlanComponent implements OnInit {
   }
 
   outPutJSON(event) {
-    // console.log(event)
+    console.log('outPutJSON', event)
   }
 
   clearPlan() {
-
     const confirm = window.confirm("If you you confirm you will clear this layout of any items.")
     if (!confirm) { return }
     this.floorPlan.template = this.templateBasic;
     this.setFloorPlan(this.floorPlan);
     this.saveFloorPlan(this.floorPlan);
-
   }
 
   initUserInfo() {
@@ -149,33 +187,27 @@ export class FloorPlanComponent implements OnInit {
 
   getUserInfo() {
     this.initUserInfo();
-    const user =JSON.parse(localStorage.getItem('user')) as IUser;
-    this.isAdmin  = false;
-    this.isUser   = false;
+    // const user =   JSON.parse(localStorage.getItem('user')) as IUser;
+    this.isAdmin  = this.userAuth.isAdmin;
+    this.isUser   = this.userAuth.isUser;
     this.userMode = true;
     this.editMode = false;
 
-    if (!user) {  return null }
-
-    if (!user.roles) { return }
-
-    if (user.roles === 'admin') {
+    if (this.isAdmin) {
       this.isAdmin          = true
       this.isUser           = true;
       this.isUserStaff      = true
     }
 
-    if (user.roles == 'employee') {
+    if (!this.isAdmin) {
       this.isUserStaff      = true
       this.isUser = true;
       this.userMode = true;
       this.editMode = false;
     }
-
   }
 
   setFloorPlan(item: IFloorPlan) {
-
     this.floorPlan = item;
     this.floorPlan.template  = JSON.parse(this.floorPlan.template)
     this._floorPlan.next(item);
@@ -184,34 +216,89 @@ export class FloorPlanComponent implements OnInit {
     }
   }
 
+  backup() { 
+    const site = this.siteService.getAssignedSite()
+    this.backupRestore$ = this.floorPlanSevice.saveBackup(site, this.floorPlan)
+  }
+
+  restore() { 
+    this.loading = true;
+    const site = this.siteService.getAssignedSite()
+    const item$ = this.floorPlanSevice.restoreBackup(site, this.floorPlan.id)
+    this.backupRestore$ = item$.pipe(
+      switchMap( data => { 
+        this._floorPlan.next(data)
+        this.floorPlan = data;
+        this.loading = false;
+        return of(data)
+    }))
+
+  }
+
   setTable(event) {
     if (event) {
       const value = event?.name.split(';')
-      const item = {uuid: value[0], orderID: value[1],  name: value[2], status: value[3] };
-
-      if (item) {
-        if (this.userMode) {
-          this.orderInfo = item;
-          this.tableInfo = event;
-          const id = this.getOrderIDFromTable(item);
-
-          if (!id) {
-            this.newOrder(event, item)
+      if (value) {
+        const item = {uuid: value[0], orderID: value[1],  name: value[2], status: value[3] };
+        if (item) {
+          if (this.userMode) {
+            this.orderInfo = item;
+            this.tableInfo = event;
+            // console.log(item)
+            this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
           }
-
-          if (id) {
-            this.setActiveOrder(this.orderInfo.orderID)
-          }
-
         }
-
       }
     }
   }
 
+  setActiveOrder(id: string, uuID: string, floorPlanID: number, name: string) {
+    const site   = this.siteService.getAssignedSite();
+    const order$ =  this.orderService.getOrderByTableUUID(site, uuID )
+    order$.pipe(
+      switchMap(data => {
+        this.refresh = false;
+        if (!data || !data.id || data.id == 0) {
+          this.refresh = true;
+          return this.orderService.newOrderFromTable(site, null, uuID, floorPlanID, name);
+        }
+      
+        if (data) {return of(data)}
+      }
+    )).pipe(
+      switchMap(data => {
+
+      this.orderService.setActiveOrder(site, data)
+
+      if (this.orderInfo) {
+        const item = {orderID: data.id, status: 'active'};
+      }
+
+      if (data && this.floorPlan && this.refresh) { 
+        return this.orderService.getActiveTableOrders(site, this.floorPlan.id)
+      }
+
+      const orders = [] as IPOSOrder[]
+      return of(orders)
+
+    })).subscribe( orders => { 
+
+      if (this.refresh) { 
+        if (orders && orders.length>0) {
+          try {
+            this.floorPlan.template  = JSON.parse(this.floorPlan.template)
+            this.floorPlan.template  = JSON.parse(this.floorPlan.template)
+          } catch (error) {
+          }
+          this.processActiveItems(orders)
+        }
+      }
+
+    })
+  }
+
   getOrderIDFromTable(item: any) {
     const id = item?.orderID;
-    console.log('getOrderIDFromTable', item?.orderID);
     if (id == undefined || id === 'undefined' || !id || id === '' ||
         id === 'orderid' || id === '0') {
       return null
@@ -219,80 +306,100 @@ export class FloorPlanComponent implements OnInit {
     return id;
   }
 
-  newOrder(event, item) {
-    const site = this.siteService.getAssignedSite();
-    const order$ = this.orderService.newOrderWithPayloadMethod(site, null);
-    order$.pipe(
-      switchMap(data => {
-        data.customerName = item?.name;
-        data.tableName = item?.name;
-        data.tableUUID = item?.uuid;
-        data.floorPlanID = this.floorPlan?.id;
-        console.log('new order data', data)
-        return this.orderService.putOrder(site, data);
-    })).subscribe(data => {
-      this.orderService.setActiveOrder(site, data);
-      const item = {orderID: data.id, status: 'active'};
-      console.log(item)
-      this._newOrder.next(item);
-    })
-  }
-
-  setActiveOrder(id: string) {
-    const site   = this.siteService.getAssignedSite();
-    const order$ =  this.orderService.getOrder(site, id, false )
-    order$.pipe(
-      switchMap(data => {
-        console.log('order data', data.id)
-
-        if (!data || !data.id || data.id == 0) {
-          console.log('new data');
-          return this.orderService.newOrderWithPayloadMethod(site, null);
-        }
-
-        if (data) {
-           console.log('current data', data.id)
-          return of(data)
-        }
-
-      }
-    )).subscribe(data => {
-      this.orderService.setActiveOrder(site, data)
-      if (this.orderInfo) {
-        const item = {orderID: data.id, status: 'active'};
-        this._newOrder.next({orderID: data.id, status: 'active'});
-      }
-    })
-  }
-
   setOrder(event) {
     if (this.orderInfo) {
-      const item = this.orderInfo// = ;
-      // console.log(this.orderInfo)
-      // console.log(this)
+      const item = this.orderInfo
       this._newOrder.next(this.orderInfo)
     }
   }
 
   getFloorPlan(event) {
-    this._getFloorPlan(event);
-    if (this.editMode)  { return }
+    
   }
 
   _getFloorPlan(event) {
     const site = this.siteService.getAssignedSite();
     if (!event) { return }
-    this.floorPlanSevice.getFloorPlan(site, event.id).subscribe( data => {
+    let floorPlan$ : Observable<IFloorPlan>;
+
+    if (this.userMode) {
+      floorPlan$ = this.floorPlanSevice.getFloorPlanNoBackupCached(site, event.id);
+    }
+    if (!this.userMode) {
+      floorPlan$ = this.floorPlanSevice.getFloorPlan(site, event.id);
+    }
+
+    floorPlan$.pipe(
+      switchMap(data => {
       data.template  = JSON.stringify(data.template)
       try {
         data.template  = JSON.parse(data.template)
-        console.log(JSON.parse(data.template));
-      } catch (error) {
-        console.log('error', error)
-      }
+        data.template  = JSON.parse(data.template)
+      } catch (error) {console.log('error', error)}
+      // console.log(data.template)
+
       this.floorPlan = data;
-      this._floorPlan.next(data);
+      
+      if (data) { 
+        return this.orderService.getActiveTableOrders(site, data.id)
+      }
+
+      this._floorPlan.next(this.floorPlan);
+      const orders = [] as IPOSOrder[]
+      return of(orders)
+    
+    })).subscribe(orders => { 
+      if (orders && orders.length>0) {
+        this.processActiveItems(orders);
+        return
+      }
+      this._floorPlan.next(this.floorPlan);
+      this.setZoomOnTimer();
+
     })
+
+  }
+
+  setZoomDefault() { 
+    this.zoomDefault = +localStorage.getItem('zoomDefault');
+    if (this.zoomDefault == 0 || !this.zoomDefault) { 
+      this.zoomDefault = 100;
+    }
+  }
+
+  onZoom(event) {
+    localStorage.setItem('zoomDefault', event)
+    this.zoomDefault = event;
+    this._zoom.next(this.zoomDefault)
+  }
+
+  processActiveItems(orders: IPOSOrder[]) { 
+    // console.log('processActiveItems', orders)
+
+    // this.changeObjectColor.next(orders)
+    // return;
+
+    if (orders && orders.length>0) {
+      // const list = [] as uuidList[] 
+      orders.forEach(order => { 
+        const item = {uuID: order.tableUUID, color: 'red'};
+        this.floorPlan.template = this.floorPlanSevice.alterObjectColor(item.uuID,item.color, this.floorPlan.template)
+      })
+      this.floorPlan.template = JSON.stringify(this.floorPlan.template)
+    }
+
+    this._floorPlan.next(this.floorPlan);
+    this.setZoomOnTimer()
+    
+  }
+
+  setZoomOnTimer() { 
+    this.setZoomDefault()
+    this._zoom.next(this.zoomDefault)
+    // setTimeout (() => {
+    //   this.setZoomDefault()
+    //   this._zoom.next(this.zoomDefault)
+    // }, 1000);
   }
 
   toggleUserMode() {

@@ -83,11 +83,10 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   homePageSubscriber(){
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-        this.uiSettings = data;
-        console.log(data, data.wideOrderBar)
         this.matorderBar = 'mat-orderBar' 
-
         if (data) {
+          this.uiSettings = data;
+  
           if (!data.wideOrderBar) { 
             if (this.smallDevice)  {
               this.matorderBar = 'mat-orderBar'

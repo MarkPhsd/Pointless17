@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+  import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
@@ -48,7 +48,7 @@ export class SearchDebounceInputComponent implements AfterViewInit,OnInit {
       if (!this.searchForm) { console.log('something') }
 
       if (this.searchForm) {
-        console.log('seach form exists')
+        // console.log('seach form exists')
         fromEvent(this.input.nativeElement,'keyup')
         .pipe(
           filter(Boolean),

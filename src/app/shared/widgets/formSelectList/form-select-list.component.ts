@@ -43,6 +43,7 @@ export class FormSelectListComponent implements OnInit , OnChanges{
     }
     if (!this.list$) { return }
     this.list$.subscribe(data => {
+      if (!data) { return }
       this.itemList = data.map( ({ name, id, active }) =>   ({name: name, id: id,active: active })  );
       this.setSelectValue()
     })

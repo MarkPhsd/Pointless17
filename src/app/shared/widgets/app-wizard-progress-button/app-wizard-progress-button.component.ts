@@ -39,7 +39,7 @@ export class AppWizardProgressButtonComponent implements OnInit , OnDestroy{
 
   initSubscription() { 
     this.appWizardService.appStatus$.subscribe(data => { 
-      console.log( 'status', data)
+      // console.log( 'status', data)
       this.status = data;
     })
   }

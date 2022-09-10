@@ -3,27 +3,30 @@
 <div  *ngIf="tranResponse" class="reponse-results"  >
 
   <div>Response</div>
-  <div>{{tranResponse?.Amount?.TextResponse}}</div>
+  <div>{{tranResponse?.Amount?.TextResponse | json}}</div>
 
   <div>Amount</div>
-  <div>{{tranResponse?.Amount?.Purchase}}</div>
+  <div>{{tranResponse?.Amount?.Purchase | json}}</div>
 
   <div>Ref No</div>
-  <div>{{tranResponse?.RefNo}}</div>
+  <div>{{tranResponse?.RefNo | json}}</div>
 
   <div>Capture Satuts</div>
-  <div>{{tranResponse?.CaptureStatus}}</div>
+  <div>{{tranResponse?.CaptureStatus  | json}}</div>
 
   <div>Entry method</div>
-  <div>{{tranResponse?.EntryMethod}}</div>
+  <div>{{tranResponse?.EntryMethod | json}}</div>
 
   <div>TranCode</div>
-  <div>{{tranResponse?.TranCode}}/div>
+  <div>{{tranResponse?.TranCode| json}}</div>
+
 
   <div>AcqRefData</div>
-  <div>{{tranResponse?.AcqRefData}}/div>
+  <div>{{tranResponse?.AcqRefData| json}}</div>
+
 
   <div>AcctNo</div>
-  <div>{{tranResponse?.AcctNo}}</div>
+  <div>{{tranResponse?.AcctNo| json}}</div>
+
 
 </div>

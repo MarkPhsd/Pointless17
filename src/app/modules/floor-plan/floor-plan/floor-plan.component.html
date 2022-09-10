@@ -1,8 +1,11 @@
-
-
 <div class="panel">
+  
   <button  class="button" *ngIf="isAdmin" mat-raised-button (click)="toggleUserMode()">Admin</button>
   <button  class="button" *ngIf="isAdmin" mat-raised-button (click)="refreshPlans()"><mat-icon>refresh</mat-icon></button>
+  
+  <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="backup()"><mat-icon>backup</mat-icon>Backup</button>
+  <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="restore()"><mat-icon>restore</mat-icon>Restore</button>
+  
   <button class="button" *ngIf="isAdmin && !userMode" mat-raised-button (click)="newFloorPlan()"><mat-icon>add</mat-icon></button>
   <button class="button" *ngIf="isAdmin && !userMode  && floorPlan" mat-raised-button (click)="displayImage = !displayImage"><mat-icon>image</mat-icon></button>
   <button class="button" *ngIf="isAdmin && !userMode && floorPlan" mat-raised-button (click)="deleteFloorPlan()"><mat-icon>delete</mat-icon></button>
@@ -13,6 +16,15 @@
   </span>
   <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="clearPlan()">Clear</button>
   <button class="button" *ngIf="!userMode && isAdmin" mat-raised-button (click)="outPutJSONFull()">JSON</button>
+
+  <span *ngIf="saving">
+    <mat-icon>save</mat-icon>
+  </span>
+
+  <span>
+    <zoom-floor-plan (zoomChange)="onZoom($event)" [zoom]="zoomDefault"></zoom-floor-plan>
+  </span> 
+ 
 </div>
 
 <div *ngIf="isAdmin && displayImage && floorPlan">
@@ -24,25 +36,32 @@
 </app-widget-uploader>
 </div>
 
-<div *ngIf="!displayImage">
+<div *ngIf="(backupRestore$ | async)">
+  
+</div>
+
+<div *ngIf="!displayImage || loading">
   <pointless-room-layout-designer
       [toggleButtonHidden] = true
       [isAdmin]        = "isAdmin"
-      [_userMode]      = "_userMode"
       [userMode]       = "userMode"
+      [_userMode]      = "_userMode"
       [_floorPlan]     = "_floorPlan"
-      [floorPlan]      = 'floorPlan'
+      [_zoom]          = "_zoom"
       [_newOrder]      = '_newOrder'
+      
+      [changeObjectColor] = 'changeObjectColor'
       [_setTableInfo]  = '_setTableInfo'
       [_performOperations]="_performOperations"
-      (outPutJSON)     = "outPutJSON($event)"
       (setTable)       = 'setTable($event)'
       (getFloorPlan)   = "getFloorPlan($event)"
       (setOrder)       = "setOrder($event)"
-      (saveFloorPlan)  = "saveFloorPlan($event)"
+      (saveFloorPlan)  = "saveFloorPlanfromOrder($event)"
     >
   </pointless-room-layout-designer>
 </div>
-
-
-
+<!-- [changeObjectColor] = 'changeObjectColor' -->
+<!-- (outPutJSON)     = "outPutJSON($event)" -->
+<!-- [userMode]       = "userMode" -->
+<!-- [floorPlan]      = 'floorPlan' -->
+<!-- (saveFloorPlan)  = "saveFloorPlanfromOrder($event)" -->

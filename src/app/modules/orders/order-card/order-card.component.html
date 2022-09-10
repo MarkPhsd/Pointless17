@@ -37,22 +37,24 @@
           </div>
         </div>
 
-        <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order.customerName)">
+        <div class="field-center" *ngIf="!phoneDevice || (phoneDevice && order?.customerName) || order.tableName">
           <div class="order-name" >
             <div *ngIf="smallDevice">
-              {{ order.customerName | truncateText : 15}}
+              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 15}}</span> 
+              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span> 
             </div>
             <div *ngIf="!smallDevice">
-              {{ order.customerName | truncateText : 12}}
+              <span *ngIf="order?.customerName"> {{ order?.customerName.trim() | truncateText : 12}}</span> 
+              <span *ngIf="order?.tableName">{{order?.tableName.trim()}}</span> 
             </div>
           </div>
         </div>
 
         <div class="items">Items</div>
-        <div class="itemcount">{{order.itemCount}} </div>
+        <div class="itemcount">{{order?.itemCount}} </div>
 
         <div class='total' >Total</div>
-        <div class="total">{{ order.total | currency}}</div>
+        <div class="total">{{ order?.total | currency}}</div>
 
         <div class="field-center" *ngIf="minutesOpen && minutesOpen != 0">
           <div *ngIf="smallDevice">
