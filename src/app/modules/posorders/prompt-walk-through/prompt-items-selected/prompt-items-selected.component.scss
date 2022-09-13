@@ -13,7 +13,7 @@
 .grid-list {
   display      : grid;
   gap          : 5px;
-  grid-template-columns: 1fr .2fr;
+  grid-template-columns: 1fr .2fr .2fr;
 
   // @include for-phone-only {
   //   display: grid;

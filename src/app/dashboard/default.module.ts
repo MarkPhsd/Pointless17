@@ -304,7 +304,7 @@ import { DsiAndroidResultsComponent } from '../modules/payment-processing/dsiEMV
 import { DSIAndroidSettingsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiEMVAndroidComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 import { ZoomFloorPlanComponent } from '../modules/floor-plan/zoom-floor-plan/zoom-floor-plan.component';
-//
+
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -568,7 +568,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     WeekDaySelectionComponent,
     WishlistComponent,
     ZoomFloorPlanComponent,
- 
+
     CardPointSettingsComponent,
     CardPointIDTECHAndroidComponent,
     CardpointeTransactionsComponent,
@@ -576,6 +576,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DsiEMVAndroidComponent,
     DSIAndroidSettingsComponent,
     DsiAndroidResultsComponent,
+    // DsiAndroidTransactionComponent,
+
     EditSettingsComponent,
 
    ],

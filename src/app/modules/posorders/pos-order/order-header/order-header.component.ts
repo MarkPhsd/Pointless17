@@ -10,12 +10,13 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
   styleUrls: ['./order-header.component.scss']
 })
 export class OrderHeaderComponent implements OnInit  {
+
   @Input() mainPanel: boolean;
   @Input() order: IPOSOrder
   isOrderClaimed: boolean;
   href: string;
   hidePrint: boolean;
-  constructor(  
+  constructor(
              private  ordersService:   OrdersService,
              private router: Router,
              public printingService: PrintingService,

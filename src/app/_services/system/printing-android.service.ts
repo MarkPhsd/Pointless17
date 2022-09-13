@@ -27,7 +27,7 @@ export class PrintingAndroidService {
   order                 : IPOSOrder
   isElectronServiceInitiated = false
 
-  constructor(  private electronService: ElectronService,
+  constructor(
                 private snack: MatSnackBar,
                 private siteService: SitesService,
                 private serviceTypeService: ServiceTypeService,

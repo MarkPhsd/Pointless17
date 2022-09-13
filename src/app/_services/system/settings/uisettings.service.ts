@@ -1,12 +1,15 @@
-import { Injectable, Renderer2 } from '@angular/core';
+import { Injectable} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BehaviorSubject, Observable, of, switchMap } from 'rxjs';
-import { ISetting, IUser, IUserProfile } from 'src/app/_interfaces';
+import { ISetting, IUser } from 'src/app/_interfaces';
 import { SitesService } from '../../reporting/sites.service';
 import { EmailModel } from '../../twilio/send-grid.service';
 import { SettingsService } from '../settings.service';
 import { UserAuthorizationService } from '../user-authorization.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { MatDialog } from '@angular/material/dialog';
+import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 
 export interface TransactionUISettings {
   id                     : number;
@@ -193,6 +196,10 @@ export class UISettingsService {
   public  EmailModel$  = this._emailModel.asObservable();
   emailModel: EmailModel
 
+  public  posDeviceInfo            : ITerminalSettings;
+  public  posDevice               = new BehaviorSubject<ITerminalSettings>(null);
+  private _posDevice$             = new BehaviorSubject<ITerminalSettings>(null);
+
   private _transactionUISettings  = new BehaviorSubject<TransactionUISettings>(null);
   public  transactionUISettings$  = this._transactionUISettings.asObservable();
 
@@ -205,7 +212,6 @@ export class UISettingsService {
 
   private _DSIEMVAndroidSettings         = new BehaviorSubject<DSIEMVAndroidSettings>(null);
   public  dsiEMVAndroidSettings$        = this._DSIEMVAndroidSettings.asObservable();
-
 
   private _StripeAPISettings         = new BehaviorSubject<StripeAPISettings>(null);
   public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
@@ -300,8 +306,9 @@ export class UISettingsService {
   constructor(
       private _fb            : FormBuilder,
       private siteService    : SitesService,
-      private matSnack: MatSnackBar,
+      private matSnack       : MatSnackBar,
       private userAuthorizationService     : UserAuthorizationService,
+      private dialog                : MatDialog,
       private settingsService: SettingsService) {
 
     this.initSecureSettings()
@@ -315,6 +322,8 @@ export class UISettingsService {
       this.getDSSIEmvSettings();
     }
   }
+
+
 
   getTransactionUISettings() {
       if (!this.userAuthorizationService.user) {  this._transactionUISettings.next(null)  }
@@ -335,6 +344,28 @@ export class UISettingsService {
     this.settingsService.getEmailModel().subscribe(data => {
       this._emailModel.next(data)
     })
+  }
+
+  getPOSDeviceSettings() {
+    return this.settingsService.getDeviceSettings()
+  }
+
+  updatePOSDevice(data: ITerminalSettings) {
+    this.posDeviceInfo = data;
+    this._posDevice$.next(data)
+  }
+
+  openEditPOSDevice(data): Observable<typeof dialogRef> {
+    let dialogRef: any;
+    dialogRef = this.dialog.open(PosEditSettingsComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '650px',
+        minHeight:    '650px',
+        data   : data
+      },
+    )
+    return dialogRef;
   }
 
   getDSSIEmvSettings() {

@@ -6,14 +6,13 @@ import { CompanyService,AuthenticationService, OrdersService, MessageService, } 
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { ICompany, IPOSOrder, ISite, IUser, IUserProfile,  }  from 'src/app/_interfaces';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
-import { Observable, of, Subject, Subscription,   } from 'rxjs';
+import { Observable, of, Subject, Subscription,switchMap   } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SiteSelectorComponent } from '../../widgets/site-selector/site-selector.component';
 import { Location} from '@angular/common';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
-
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { PollingService } from 'src/app/_services/system/polling.service';
@@ -21,6 +20,8 @@ import { Router } from '@angular/router';
 import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
 import { FloorPlanService } from 'src/app/_services/floor-plan.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+
 
 interface IIsOnline {
   result: string;
@@ -62,18 +63,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   isAPIOnline$:   Observable<any>;
   site:           ISite;
   sitePickerWidth = 50;
-  searchForm      : FormGroup;
+  searchForm          : FormGroup;
 
-  phoneDevice: boolean;
+  phoneDevice         : boolean;
   smallDevice         :   boolean;
-  scannerEnabled  : boolean;
-  private toolBar :  boolean;
+  scannerEnabled      : boolean;
+  private toolBar     :  boolean;
 
   showPOSFunctions    =   false;
   scaleName           :   any;
   scaleValue          :   any;
 
   isUserStaff         =   false;
+  isManager           :     boolean;
   isAdmin             =   false;
   isUser              =   false;
   _order              :   Subscription;
@@ -106,10 +108,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   flexsections = 'flex-sections'
   matToolbarColor = 'primary';
 
-  siteName: string;
-  bucket = '';
-  homePageSetings: UIHomePageSettings;
-  floorPlans$ : Observable<IFloorPlan[]>;
+  siteName        : string;
+  bucket          = '';
+  homePageSetings : UIHomePageSettings;
+  floorPlans$     : Observable<IFloorPlan[]>;
+  posDevice$      : Observable<ITerminalSettings>;
+  terminalSetting : any;
 
   _site: Subscription;
   initSiteSubscriber() {
@@ -194,6 +198,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
+
               private floorPlanSevice       : FloorPlanService,
               private uiSettings            : UISettingsService,
               private fb                    : FormBuilder ) {
@@ -223,6 +228,19 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.initUserOrder();
     this.updateScreenSize();
     this.floorPlans$ = this.floorPlanSevice.listFloorPlansNames(this.site);
+
+    const devicename = localStorage.getItem('devicename')
+    if (devicename) {
+      this.posDevice$ = this.uiSettings.getPOSDeviceSettings().pipe(
+        switchMap(data => {
+          this.terminalSetting = data;
+          const posDevice = JSON.parse(data.text) as ITerminalSettings;
+          this.uiSettings.updatePOSDevice(posDevice)
+          return of(posDevice)
+        }
+      ))
+    }
+
   }
 
   ngOnDestroy() {
@@ -246,6 +264,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
     if (!user) {
       this.flexsections = 'flex-sections-nouser'
+      this.flexsections = 'flex-sections'
       return
     }
   }
@@ -337,6 +356,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (this.platFormService.androidApp) {
       this.mattoolbar = 'mat-toolbar-android'
     }
+
+    if (this.platFormService.androidApp && !this.user) {
+      this.mattoolbar = 'mat-toolbar-android-no-user'
+    }
   }
 
   getUserInfo() {
@@ -373,6 +396,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isUserStaff      = true
       this.showPOSFunctions = true;
     }
+
+    if (user?.roles == 'manager') {
+      this.isManager = true
+    }
+
   }
 
   initUserInfo() {
@@ -428,6 +456,11 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         this.messages = [];
       }
     });
+  }
+
+  deviceInfo() {
+    if (this.terminalSetting) { return }
+    this.uiSettings.openEditPOSDevice(this.terminalSetting)
   }
 
   goHome() {

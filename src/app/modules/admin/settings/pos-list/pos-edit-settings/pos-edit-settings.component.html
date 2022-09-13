@@ -93,6 +93,14 @@
         </mat-form-field>
       </div>
 
+      <!-- <mat-label>Select if logged directly into the computer.</mat-label>
+      <app-list-printers-electron
+              [printerName]      ="receiptPrinter"
+              [printerList]      ="electronPrinterList"
+              (outputPrinterName)="setElectronPrinterName($event)" >
+              Receipt Printer
+      </app-list-printers-electron> -->
+
       <div>
         <mat-form-field appearance="standard">
           <mat-label >Label Printer</mat-label>
@@ -129,6 +137,24 @@
         </mat-form-field>
       </div>
 
+      <ng-container [ngTemplateOutlet]="isAndroidPrintingTemplate"></ng-container>
+      <mat-label *ngIf="terminal && terminal.btPrinter">{{terminal.btPrinter}}</mat-label>
+      <ng-template #androidPrintingTemplate>
+        <mat-form-field appearance="outline">
+          <mat-label>Bluetooth Devices</mat-label>
+            <mat-select
+                      type="text"
+                      formControlName = "btPrinter"
+                    >
+            <div *ngIf="(btPrinters$ | async) as list">
+                <mat-option *ngFor="let item of list"
+                            [value]="item.address">
+                {{ item.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+      </ng-template>
 
       <h3>Android Secure Device</h3>
       <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0">

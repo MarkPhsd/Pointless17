@@ -147,9 +147,10 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
   }
 
   deleteItem() {
+    console.log('menu item accordion menu')
     const site = this.siteService.getAssignedSite()
     let item$: any;
-    if (this.item.id != 0) {
+    if (this.item.id) {
       item$ = this.menusService.deleteAccordionMenu(site , this.item.id)
       this.saveSub(item$, 'Item deleted')
     }

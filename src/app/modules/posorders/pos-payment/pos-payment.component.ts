@@ -29,6 +29,7 @@ import { StripeCheckOutComponent } from '../../admin/settings/stripe-settings/st
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
+import { Capacitor } from '@capacitor/core';
 
 @Component({
   selector: 'app-pos-payment',
@@ -36,7 +37,7 @@ import { CardPointMethodsService } from '../../payment-processing/services';
   styleUrls: ['./pos-payment.component.scss']
 })
 export class PosPaymentComponent implements OnInit, OnDestroy {
-
+  get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('receiptView') receiptView: TemplateRef<any>;
   @ViewChild('splitItemsView') splitItemsView: TemplateRef<any>;
 
@@ -78,7 +79,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
-
+  devicename = localStorage.getItem('devicename')
   message: string;
 
   initSubscriptions() {
@@ -339,9 +340,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyBoltPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      console.log(this.uiTransactions)
-      this.cardPointMethodsService.processSubCreditPayment(order, order.balanceRemaining,
-                                                          false, this.uiTransactions)
+      // console.log(this.uiTransactions)
+      this.cardPointMethodsService.processSubCreditPayment(order, order.balanceRemaining, false, this.uiTransactions)
     }
   }
 
@@ -352,7 +352,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  processDSIEMVAndroidCreditCardPayment(manual: boolean) {
+    const order = this.order;
+    if (order) {
+      this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, order.balanceRemaining, manual, this.uiTransactions)
+    }
+  }
 
   async dsiResetDevice() {
     const response  = await this.dsiProcess.pinPadReset( );

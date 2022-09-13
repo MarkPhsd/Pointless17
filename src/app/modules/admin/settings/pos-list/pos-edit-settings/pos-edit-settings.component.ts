@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit,  ViewChild, AfterViewInit, Input, TemplateRef , Inject} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,7 +8,10 @@ import { PointlessCCDSIEMVAndroidService } from 'src/app/modules/payment-process
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PrintingService } from 'src/app/_services/system/printing.service';
 import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/settings.service';
+import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-pos-edit-settings',
@@ -16,13 +19,20 @@ import { ITerminalSettings,  SettingsService } from 'src/app/_services/system/se
   styleUrls: ['./pos-edit-settings.component.scss']
 })
 export class PosEditSettingsComponent implements OnInit {
-
+  @ViewChild('androidPrintingTemplate') androidPrintingTemplate: TemplateRef<any>;
   inputForm: FormGroup;
   setting  : any;
   terminal : ITerminalSettings;
   saving$  : Observable<ISetting>;
   saving   : boolean;
   blueToothDeviceList: any;
+
+  btPrinter: string;
+  btPrinters$: any;
+  btPrinters: any;
+
+  electronPrinterList : any;
+  receiptPrinter: string;
 
   medOrRecStoreList = [
     {id:0,name:'Any'},  {id:1,name:'Med'},  {id:2,name:'Rec'}
@@ -35,6 +45,10 @@ export class PosEditSettingsComponent implements OnInit {
     private settingsService     : SettingsService,
     public  deviceService       : DeviceDetectorService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
+    private platFormService     : PlatformService,
+    private btPrinterService      : BtPrintingService,
+    private printingService     : PrintingService,
+      private uiSettingService  : UISettingsService,
     private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: number
   )
@@ -68,9 +82,25 @@ export class PosEditSettingsComponent implements OnInit {
   async ngOnInit() {
     this.initForm()
     await this.listBTDevices();
+    await this.getAndroidPrinterAssignment()
   }
 
-  async listBTDevices() { 
+  async  getAndroidPrinterAssignment() {
+    if (this.platFormService.androidApp) {
+      this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+      this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+    }
+  }
+
+  listPrinters(): any {
+    this.electronPrinterList = this.printingService.listPrinters();
+  }
+
+  setElectronPrinterName(event) {
+    this.receiptPrinter = event
+  }
+
+  async listBTDevices() {
     this.blueToothDeviceList = await this.dSIEMVAndroidService.listBTDevices();
   }
 
@@ -95,14 +125,23 @@ export class PosEditSettingsComponent implements OnInit {
     }
   }
 
+  get  isAndroidPrintingTemplate() {
+    if (this.platFormService.androidApp) {
+      return this.androidPrintingTemplate
+    }
+    return null
+  }
+
   saveTerminalSetting(close: boolean) {
     const site = this.sitesService.getAssignedSite()
     const item = this.inputForm.value as ITerminalSettings;
     const text = JSON.stringify(item);
-
+    console.log(text, item)
     this.setting.name = item.name;
     this.setting.text = text;
     this.setting.filter = 421
+    this.uiSettingService.posDevice.next(item);
+
     this.saving$ = this.settingsService.putSetting(site, this.setting.id, this.setting)
     this.saving = true;
     this.saving$.subscribe(data => {

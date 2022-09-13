@@ -1,12 +1,24 @@
 button {
-  height:55px;
-  width: 100px;
+  height: 55px;
+  width: 150px;
   margin: 10px;
 }
 
+.action-center {
+  display         : flex;
+  flex-direction  : row;
+  flex-wrap       : wrap;
+  justify-content : center ;
+  align-items     : baseline;
+  align-content   : center;
+  margin-bottom   : 5px;
+}
+
 .grid-buttons {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  display: flex;
+  align-content: space-between;
+  align-items: center;
+  justify-content: center;
 }
 
 mat-icon {
@@ -19,6 +31,11 @@ mat-option {
   line-height: initial;
   word-wrap: break-word;
   white-space: pre-wrap;
+}
+
+.tip-container {
+  margin: 10px;
+  margin-top: 15px;
 }
 
 mat-option i {
@@ -47,6 +64,13 @@ mat-option i {
   overflow-x: hidden;
 }
 
+.transaction {
+  display: flex;
+  align-content: space-between;
+  align-items: center;
+  justify-content: center;
+}
+
 .message {
   // max-width: 550px;
   width: 100%;
@@ -70,12 +94,9 @@ mat-option i {
 }
 
 .cards {
-  display: grid;
-  grid-template-columns: 1fr 1fr ;
   width: 100%;
-  grid-auto-flow: row;
+  width: 100%;
 }
-
 
 .response {
   margin: 5px;

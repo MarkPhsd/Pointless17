@@ -42,6 +42,7 @@ import { StoreCreditEditorComponent } from 'src/app/modules/admin/store-credit/s
 import { AppWizardProgressButtonComponent } from 'src/app/shared/widgets/app-wizard-progress-button/app-wizard-progress-button.component';
 import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 import { CardpointeTransactionsComponent } from 'src/app/modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
+import { DsiEMVAndroidComponent } from 'src/app/modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 
 @Injectable({
   providedIn: 'root'
@@ -563,6 +564,25 @@ export class ProductEditButtonService {
     //   this.openProductEditor(id, productTypeID)
     if (options) {
       dialogRef = this.dialog.open(DSIEMVTransactionComponent,
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
+          data : options
+      })
+      return dialogRef
+    }
+  }
+
+  openDSIEMVAndroidTransaction(options: any ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (options) {
+      dialogRef = this.dialog.open(DsiEMVAndroidComponent,
         { width:        '100%',
           minWidth:     '100%',
           maxWidth:     'max-width: 100vw !important',

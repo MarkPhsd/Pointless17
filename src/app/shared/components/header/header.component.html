@@ -55,100 +55,88 @@
         <div>
           <api-status-display></api-status-display>
         </div>
-
-        <!-- <div *ngIf="!phoneDevice && !smallDevice &&  ((isUserStaff && platFormService.platForm !='web') || (isAdmin) )">
-          <button mat-button
-                  aria-label="POS"
-                  color="accent"
-                  (click)="navPOSOrders()">
-            <mat-icon>point_of_sale</mat-icon>
-          </button>
-        </div> -->
       </div>
-      <!-- <div class="pos-panel"> -->
       <div class="grid-flow"
           *ngIf="!phoneDevice">
         <mat-card class='panel-card'
                   *ngIf="( (isUserStaff && platFormService.platForm !='web' )
                         || (isUserStaff) )">
           <ul
-              class="ul-pos-panel"
-              fxFlex fxLayout="row"
-              fxLayoutAlign="top center">
+            class="ul-pos-panel"
+            fxFlex fxLayout="row"
+            fxLayoutAlign="top center">
 
-              <li *ngIf="employeeName">
-                <div class="pos-name">
-                  <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
-                </div>
-              </li>
+            <li *ngIf="employeeName">
+              <div class="pos-name">
+                <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
+              </div>
+            </li>
 
-              <li *ngIf="!smallDevice">
-                <div class="pos-name"
-                      *ngIf="(orderService && orderService.posName && showSearchForm) "
-                      id="pos-name">
-                  <h2 > | {{ orderService?.posName.toUpperCase()  }} | </h2>
-                </div>
-              </li>
+            <li *ngIf="!smallDevice">
+              <div class="pos-name"
+                    *ngIf="(orderService && orderService.posName && showSearchForm) "
+                    id="pos-name">
+                <h2 > | {{ orderService?.posName.toUpperCase()  }} | </h2>
+              </div>
+            </li>
 
-              <li *ngIf="!smallDevice">
-                <div class='search-input'>
+            <li *ngIf="!smallDevice">
+              <div class='search-input'>
+                <button mat-button
+                        color="accent"
+                        aria-label="POS"
+                        (click)="navPOSOrders()">
+                  <mat-icon>point_of_sale</mat-icon>
+                </button>
+              </div>
+            </li>
+
+            <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
+
+            <li *ngIf="platFormService.androidApp">
+              <div class='search-input'>
                   <button mat-button
-                          color="accent"
-                          aria-label="POS"
-                          (click)="navPOSOrders()">
-                    <mat-icon>point_of_sale</mat-icon>
+                          aria-label="badge"
+                          routerLinkActive="list-item-active"
+                          routerLink="/barcodescanner">
+                    <mat-icon>badge</mat-icon>
                   </button>
-                </div>
-              </li>
+              </div>
+            </li>
 
-              <ng-container [ngTemplateOutlet]="isfloorPlan"></ng-container>
+            <li *ngIf="!phoneDevice">
+              <list-product-search-input></list-product-search-input>
+            </li>
 
-              <li *ngIf="platFormService.androidApp">
-                <div class='search-input'>
-                    <button mat-button
-                            aria-label="badge"
-                            routerLinkActive="list-item-active"
-                            routerLink="/barcodescanner">
-                      <mat-icon>badge</mat-icon>
-                    </button>
-                </div>
-              </li>
+            <li *ngIf="scaleInfo">
+              <div class='search-input'>
+                {{scaleInfo.value}} {{scaleInfo.mode}}
+              </div>
+            </li>
 
-              <li *ngIf="!phoneDevice">
-                <!-- <div class='search-input'> -->
-                  <list-product-search-input></list-product-search-input>
-                <!-- </div> -->
-              </li>
+            <li *ngIf="platFormService && !platFormService.webMode">
+              <div class='search-input'>
+                <button mat-button
+                        aria-label="transfer_within_a_station"
+                        color="accent"
+                        (click)="switchUser()">
+                  <mat-icon>transfer_within_a_station</mat-icon>
+                </button>
+              </div>
+            </li>
 
-              <li *ngIf="scaleInfo">
-                <div class='search-input'>
-                  {{scaleInfo.value}} {{scaleInfo.mode}}
-                </div>
-              </li>
-
-              <li *ngIf="platFormService && !platFormService.webMode">
-                  <div class='search-input'>
-                  <button mat-button
-                          aria-label="transfer_within_a_station"
-                          color="accent"
-                          (click)="switchUser()">
-                    <mat-icon>transfer_within_a_station</mat-icon>
-                  </button>
-                  </div>
-              </li>
-
-              <li>
-                <div class='search-input'>
-                  <button color="warn"
-                          mat-button
-                          aria-label="exit_to_app"
-                          class="nav-item nav-link"
-                          (click)="logout()">
-                      <mat-icon>exit_to_app</mat-icon>
-                      <span *ngIf="!user">Log Out</span>
-                  </button>
-                </div>
-              </li>
+            <li>
+              <div class='search-input'>
+                <button color="warn"
+                        mat-button
+                        aria-label="exit_to_app"
+                        class="nav-item nav-link"
+                        (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span *ngIf="!user">Log Out</span>
+                </button>
+              </div>
+            </li>
           </ul>
         </mat-card>
       </div>
@@ -265,6 +253,13 @@
                     My Orders<mat-icon>list</mat-icon>
                   </button>
               </div>
+
+              <span  *ngIf="posDevice$ | async as device">
+                <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
+                  <div class='search-input'>
+                    <button  mat-raised-button (click)="deviceInfo()">  <mat-icon>device_hub</mat-icon></button>
+                </div>
+              </span>
 
             </span>
 

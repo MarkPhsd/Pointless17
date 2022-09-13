@@ -46,7 +46,7 @@ export class PromptWalkThroughService {
   private _promptTotal         = new BehaviorSubject<number>(null);
   public  promptTotal$         = this._promptTotal.asObservable();
 
-  
+
   private _accordionStep         = new BehaviorSubject<number>(null);
   public  accordionStep$         = this._accordionStep.asObservable();
 
@@ -60,7 +60,7 @@ export class PromptWalkThroughService {
     }
   }
 
-  updateAccordionStep(number) { 
+  updateAccordionStep(number) {
     this._accordionStep.next(number)
   }
 
@@ -68,7 +68,7 @@ export class PromptWalkThroughService {
               private OrderItemService     : POSOrderItemServiceService,
               private promptSubService     : PromptGroupService,
               private promptSubGroupService: PromptSubGroupsService
-              ) { 
+              ) {
                 this._accordionStep.next(0)
               }
 
@@ -104,14 +104,14 @@ export class PromptWalkThroughService {
       }
 
       if (prompt.quantityMet) {
-        console.log('orderPromptGroup.currentAccordionStep', orderPromptGroup.currentAccordionStep)
+        // console.log('orderPromptGroup.currentAccordionStep', orderPromptGroup.currentAccordionStep)
         orderPromptGroup.currentAccordionStep ++;
-        console.log('orderPromptGroup.currentAccordionStep ++;', orderPromptGroup.currentAccordionStep)
+        // console.log('orderPromptGroup.currentAccordionStep ++;', orderPromptGroup.currentAccordionStep)
       }
 
 
       orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups = prompt;
-      console.log('item can be added?', prompt.quantityMet ,  prompt)
+      // console.log('item can be added?', prompt.quantityMet ,  prompt)
 
     }
 

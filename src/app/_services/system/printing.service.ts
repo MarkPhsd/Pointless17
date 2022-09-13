@@ -22,6 +22,8 @@ import { MenuService, OrdersService } from 'src/app/_services';
 import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
 import { HttpBackend, HttpClient } from '@angular/common/http';
+import { UISettingsService } from './settings/uisettings.service';
+import { PrintingAndroidService} from  './printing-android.service';
 
 export interface printOptions {
   silent: true;
@@ -72,12 +74,10 @@ export class PrintingService {
                 private menuItemService   : MenuService,
                 private orderMethodsService: OrderMethodsService,
                 private http              : HttpClient,
+                private uiSettingsService : UISettingsService,
+                private printingAndroidService   : PrintingAndroidService,
                 private dialog            : MatDialog,) {
 
-    // if (this.electronService.remote != null) {
-    //   this.isElectronServiceInitiated = true
-    //   console.log('electron services initiated')
-    // }
   }
 
   getPrintReady(): Observable<boolean> {
@@ -384,7 +384,6 @@ getDomToImage(node: any) {
     return false
   }
 
-
   async printLabel(item: PosOrderItem) {
 
     if (!item) {return}
@@ -437,7 +436,6 @@ getDomToImage(node: any) {
           this.orderMethodsService.refreshOrder(item.orderID);
       })
   }
-
 
   printLabelElectron(printString: string, printerName: string): boolean {
     const fileName = `c:\\pointless\\print.txt`;
@@ -543,12 +541,36 @@ getDomToImage(node: any) {
     return this.settingService.getSettingByNameCached(site, settingName)
   }
 
-
   previewReceipt() {
+    //get device settings;
+    if (this.uiSettingsService.posDeviceInfo) {
+      if (this.platFormService.androidApp) {
+        console.log(this.uiSettingsService.posDeviceInfo)
+        const device = this.uiSettingsService.posDeviceInfo;
+        this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder, null, device.btPrinter);
+        return;
+      }
+    }
+    //if android
+
+    //if
+    if (this.uiSettingsService.posDeviceInfo) {
+      if (this.platFormService.androidApp) {
+        const device = this.uiSettingsService.posDeviceInfo;
+        this.printSub(device.receiptPrinter)
+        return;
+      }
+    }
+
+    this.printSub(null);
+
+  };
+
+  printSub(printerName: string) {
     const dialogRef = this.dialog.open(RecieptPopUpComponent,
       { width: '425px',
         height: '90vh',
-        data: {autoPrint: true}
+        data: {autoPrint: true, printerName: printerName}
       },
     )
     dialogRef.afterClosed().subscribe(result => {

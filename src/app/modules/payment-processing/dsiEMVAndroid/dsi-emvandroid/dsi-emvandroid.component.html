@@ -1,74 +1,101 @@
-<div class="cards" *ngIf="transaction$ | async">
+<div class="cards" *ngIf="(transaction$ | async) as transaction">
+
   <div>
-      <mat-card>
-        <mat-card-title><ng-content  title ></ng-content></mat-card-title>
-        <mat-card-content>
-          <div class="grid-buttons">
-
+    <mat-card>
+      <mat-card-title>
+        <div class="action-center" *ngIf="transaction">
+          <ng-content title></ng-content>
+          <h4>
+            {{transaction?.tranCode}} {{transaction?.amount | currency}}
+            <span *ngIf="payment && payment?.tipAmount">Tip: {{payment?.tipAmount | currency}} Total: {{payment?.amountPaid + payment?.tipAmount | currency}}</span>
+          </h4>
+        </div>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="grid-buttons">
+          <div>
             <div>
-              <div>
-                <button (click)="emvSale()"><mat-icon>money</mat-icon>Transaction</button>
-              </div>
-
-               <div *ngIf="isAdmin || isManager">
-                <button (click)="emvParamDownload()"><mat-icon>download</mat-icon>Param Download</button>
-              </div>
-
-              <div>
-                <button (click)="connectToBTDevice()"><mat-icon>connect</mat-icon>Connect to BT</button>
-              </div>
-
+              <button mat-raised-button (click)="emvSale()">
+                  <mat-icon>credit_card</mat-icon>Process
+              </button>
             </div>
-
-            <div>
-              <button (click)="emvCancel()"><mat-icon>cancel</mat-icon>Cancel</button>
+            <div *ngIf="(isAdmin || isManager) && !saleOnly">
+              <button mat-raised-button color="primary" (click)="connectToBTDevice()"><mat-icon>connect</mat-icon>Connect</button>
             </div>
-
-            <span *ngIf="isAdmin || isManager">
-              <div>
-                <button (click)="getResponse()">Get Response</button>
-              </div>
-
-              <div>
-                <button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>Refresh Info</button>
-              </div>
-
-              <div>
-                <button (click)="checkBTPermission()">Permissions</button>
-              </div>
-            </span>
-
+            <div *ngIf="(isAdmin || isManager) && !saleOnly">
+              <button mat-raised-button  color="primary"  (click)="emvParamDownload()"><mat-icon>download</mat-icon>Param </button>
+            </div>
           </div>
-        </mat-card-content>
+
+          <div>
+            <button mat-raised-button (click)="emvCancel()">
+              <mat-icon>cancel</mat-icon>Cancel
+            </button>
+          </div>
+
+          <div *ngIf="(isAdmin || isManager) && !saleOnly">
+            <div>
+              <button mat-raised-button (click)="getResponse()">Get Response</button>
+            </div>
+
+            <div>
+              <button mat-raised-button (click)="refreshInfo()"><mat-icon>refresh</mat-icon>Refresh Info</button>
+            </div>
+
+            <div>
+              <button mat-raised-button (click)="checkBTPermission()">Permissions</button>
+            </div>
+          </div>
+
+          <div    *ngIf="saleOnly && payment">
+            <button mat-raised-button (click)="close()">
+              <mat-icon>exit_to_app</mat-icon>Close
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <div  [hidden]="hideRequest">
+      <h3>Request:</h3> {{request | json}}
+    </div>
+
+    <div class="response" *ngIf="processRunning && !textResponse">
+      <mat-card>
+        <pointlesscc-dsi-android-results
+            [isAdmin]="isAdmin"
+            [tranResponse]="tranResponse"
+            [textResponse]="textResponse">
+          <h3>Response</h3>
+          <div *ngIf="messageResponse">
+            {{ messageResponse | json}}
+          </div>
+          <div *ngIf="message">
+            {{message | json}}
+          </div>
+          <div *ngIf="processRunning"><mat-spinner [diameter]="50"></mat-spinner></div>
+        </pointlesscc-dsi-android-results>
       </mat-card>
-
-      <div  [hidden]="hideRequest">
-        <h3>Request:</h3> {{request | json}}
-      </div>
-
-      <div class="response">
-        <mat-card>
-          <pointlesscc-dsi-android-results
-            [tranResponse]="tranResponse">
-            <h3>Response</h3>
-            <div>
-              {{ messageResponse | json}}
-            </div>
-            <div>
-              {{message | json}}
-            </div>
-            <div *ngIf="processRunning"><mat-spinner [diameter]="50"></mat-spinner></div>
-            </pointlesscc-dsi-android-results>
+      <div>
+        <mat-card *ngIf="isAdmin">
+          Current transaction
+          <div>
+            {{transaction | json}}
+          </div>
         </mat-card>
       </div>
 
-      <div *ngIf="isAdmin">
-        Current transaction
-        <div>
-          {{dsiAndroidService.transaction | json}}
-        </div>
-      </div>
     </div>
+
+    <div class="tip-container" *ngIf="!processRunning && !textResponse">
+      <tip-entry-amount
+          [payment]            = "payment"
+          (specifiedTipAmount) = "specifiedTip($event)"
+          (outPutTip)          = "customTipAmount($event)"
+      ></tip-entry-amount>
+    </div>
+
+  </div>
 
 </div>
 

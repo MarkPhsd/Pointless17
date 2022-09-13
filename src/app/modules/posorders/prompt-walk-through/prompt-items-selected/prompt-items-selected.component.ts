@@ -100,10 +100,23 @@ export class PromptItemsSelectedComponent implements OnInit {
         this.orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups.itemsSelected.splice(itemIndex, 1)
         this.orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups.quantityMet = false;
         this.promptWalkService.updatePromptGroup(this.orderPromptGroup);
-        // this.promptGroupService.updatePromptGroup(this.orderPromptGroup)
       }
     }
 
+  }
+  applyNo(itemIndex: number, index: number) {
+    const group = this.orderPromptGroup
+    if (group  && group.selected_PromptSubGroups && group.selected_PromptSubGroups[index]) {
+      const selected = group.selected_PromptSubGroups[index]
+      if (selected &&  selected.promptSubGroups && selected.promptSubGroups.itemsSelected) {
+        let item =  this.orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups.itemsSelected[itemIndex];
+        item.menuItem.name = `No ${item.menuItem.name}`
+        item.price = 0;
+        item.menuItem.retail = 0;
+        this.orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups.itemsSelected[itemIndex] = item
+        this.promptWalkService.updatePromptGroup(this.orderPromptGroup);
+      }
+    }
   }
 
 }

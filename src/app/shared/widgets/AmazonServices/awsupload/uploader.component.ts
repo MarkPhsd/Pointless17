@@ -18,9 +18,7 @@ export class UploaderComponent implements OnInit {
   files: File[] = [];
 
   @Input() fileNames: string ; //string array of files
-
   @Output() messageOut = new EventEmitter<string>();
-
   @Input() id:            string;
 
   _logger:                any = "";
@@ -40,12 +38,9 @@ export class UploaderComponent implements OnInit {
             }
 
   async ngOnInit() {
-
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
-
     this.imageRefresh();
-
   }
 
   getItemName(itemName) {

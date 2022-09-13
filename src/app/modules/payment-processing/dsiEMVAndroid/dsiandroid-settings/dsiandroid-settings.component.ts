@@ -8,7 +8,7 @@ import { ITerminalSettings, SettingsService } from 'src/app/_services/system/set
 import { Transaction } from './../../models/models';
 import { PointlessCCDSIEMVAndroidService } from './../../services/index';
 
-@Component({  
+@Component({
   selector: 'pointlesscc-dsiandroid-settings',
   templateUrl: './dsiandroid-settings.component.html',
   styleUrls: ['./dsiandroid-settings.component.scss']
@@ -32,44 +32,29 @@ export class DSIAndroidSettingsComponent implements OnInit {
 
   constructor(private fb                  : FormBuilder,
               private settingsService     : SettingsService,
-              private siteService         : SitesService,  
+              private siteService         : SitesService,
               public  dsiAndroidService: PointlessCCDSIEMVAndroidService) { }
 
   async ngOnInit() {
     this.deviceName = localStorage.getItem('devicename')
-    await this.listBTDevices();
-    this.dsiDeviceList = await this.dsiAndroidService.getDeviceInfo();
-    this.initForm();
-    this.transaction$ = this.dsiAndroidService.getSettings(); 
     await this.checkBTPermission();
-  }
-
-  async checkBTPermission() {
-    await this.dsiAndroidService.listBTDevices()
-    const options = {value: 'test'};
-    const value = dsiemvandroid.getHasPermission(options);
-    console.log('has permissions', value)
-  }
-
-  //deviceName
-  getDeviceInfo() { 
-    const deviceName = localStorage.getItem('devicename')
-    const site = this.siteService.getAssignedSite();
-    this.settingsService.getSettingByName(site,deviceName).subscribe(data => { 
-      this.terminalSetting = data;
-      this.terminalSettingInfo = JSON.parse(data.text)  as ITerminalSettings;
-    })
-  }
-
-  async listBTDevices() { 
-    this.blueToothDeviceList = await this.dsiAndroidService.listBTDevices();
-  }
+    this.dsiDeviceList = await this.dsiAndroidService.getDeviceInfo();
+    await this.listBTDevices();
 
 
-  async initForm() {
     const options = { value: ' value.'}
     const ipValue = await dsiemvandroid.getIPAddressPlugin(options)
     const ipAddress = ipValue?.value;
+    this.initForm(ipAddress);
+  }
+
+
+
+  async listBTDevices() {
+    this.blueToothDeviceList = await this.dsiAndroidService.listBTDevices();
+  }
+
+  initForm(ipAddress) {
     this.inputForm = this.fb.group({
       merchantID: ['CROSSCHAL1GD'],
       userTrace: ['User'],
@@ -88,28 +73,27 @@ export class DSIAndroidSettingsComponent implements OnInit {
     })
 
     this.transaction$ = this.getSettings();
-    this.subscribeChanges();
+
   }
 
-  getSettings() { 
-   
+  getSettings() {
     const result$ =  this.dsiAndroidService.getSettings();
 
     result$.pipe(
-      switchMap(data => { 
+      switchMap(data => {
         this.inputForm.patchValue(data)
         return of(data)
       })
     )
-
     return result$
+
   }
 
-  subscribeChanges() {
-    this.inputForm.valueChanges.subscribe( data => {
-      this.saveSettings();
-    })
-  }
+  // subscribeChanges() {
+  //   this.inputForm.valueChanges.subscribe( data => {
+  //     this.saveSettings();
+  //   })
+  // }
 
   saveSettings() {
     if (this.inputForm && this.inputForm.value) {
@@ -121,9 +105,26 @@ export class DSIAndroidSettingsComponent implements OnInit {
   }
 
   async setSecureDevice(event: any) {
-    if (this.dsiAndroidService.transaction) { 
+    if (this.dsiAndroidService.transaction) {
       this.dsiAndroidService.transaction = event[0];
     }
+  }
+
+  async checkBTPermission() {
+    await this.dsiAndroidService.listBTDevices()
+    const options = {value: 'test'};
+    const value = dsiemvandroid.getHasPermission(options);
+    console.log('has permissions', value)
+  }
+
+  //deviceName
+  getDeviceInfo() {
+    const deviceName = localStorage.getItem('devicename')
+    const site = this.siteService.getAssignedSite();
+    this.settingsService.getSettingByName(site,deviceName).subscribe(data => {
+      this.terminalSetting = data;
+      this.terminalSettingInfo = JSON.parse(data.text)  as ITerminalSettings;
+    })
   }
 
 }

@@ -42,7 +42,7 @@ export interface ProcessItem {
 })
 export class OrderMethodsService implements OnDestroy {
 
-  order                           : IPOSOrder;
+  public order                           : IPOSOrder;
   _order                          : Subscription;
   subscriptionInitialized         : boolean;
 

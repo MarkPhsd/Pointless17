@@ -5,13 +5,16 @@
   // margin: 5px;
 }
 
+
 .tip-button-grid {
   display       : flex;
   flex-wrap     : wrap;
   flex-direction: row;
   margin-top    : 5px;
   margin-bottom : 5px;
-
+  align-content:space-around ;
+  align-items: center;
+  justify-content: center;
   @include for-phone-only  {
     display       : flex;
     flex-wrap     : wrap;
@@ -39,7 +42,7 @@
   justify-content : center ;
   align-items     : baseline;
   align-content   : center;
-  margin-bottom   : 5px;
+  margin          : 5px;
 }
 
 .action-center-column {

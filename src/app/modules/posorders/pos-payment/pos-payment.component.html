@@ -36,42 +36,41 @@
         </mat-card>
       </ng-template>
 
-      <mat-card>
-        <div class="center-items grid-items">
-          <div>
-            <button class="splitbutton"
+      <div class="action-center grid-items">
+        <div>
+          <button class="splitbutton"
+                mat-raised-button
+                color="primary"
+                (click)="storeCredit()">
+            <div *ngIf="!paymentsEqualTotal">
+              <mat-icon>credit_card</mat-icon>Gift Card
+            </div>
+            <div *ngIf="paymentsEqualTotal">
+              <mat-icon>balance</mat-icon>Gift Card Balance
+            </div>
+          </button>
+        </div>
+
+        <div  *ngIf="!paymentsEqualTotal">
+          <button class="splitbutton"
                   mat-raised-button
                   color="primary"
-                  (click)="storeCredit()">
-              <div *ngIf="!paymentsEqualTotal">
-                <mat-icon>credit_card</mat-icon>Gift Card
-              </div>
-              <div *ngIf="paymentsEqualTotal">
-                <mat-icon>balance</mat-icon>Gift Card Balance
-              </div>
-            </button>
-          </div>
-
-          <div  *ngIf="!paymentsEqualTotal">
-            <button class="splitbutton"
-                    mat-raised-button
-                    color="primary"
-                    (click)="splitByItem = !splitByItem">
-              <mat-icon>split</mat-icon>Split By Items
-            </button>
-          </div>
-
-          <div>
-            <store-credit-info
-                [order]        ="order"
-                [clientID]     ="order?.clientID"
-                [accountNumber]="order?.clients_POSOrders?.accountNumber"
-                [userName]     ="order?.clients_POSOrders?.userName"
-                [showPayment]  ="true"
-             ></store-credit-info>
-          </div>
+                  (click)="splitByItem = !splitByItem">
+            <mat-icon>split</mat-icon>Split By Items
+          </button>
         </div>
-      </mat-card>
+
+        <div>
+          <store-credit-info
+              [order]        ="order"
+              [clientID]     ="order?.clientID"
+              [accountNumber]="order?.clients_POSOrders?.accountNumber"
+              [userName]     ="order?.clients_POSOrders?.userName"
+              [showPayment]  ="true"
+            ></store-credit-info>
+        </div>
+      </div>
+
 
       <div *ngIf="!splitByItem && !paymentsEqualTotal && paymentIsReady">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
@@ -104,7 +103,7 @@
               <mat-card-content>
                 <div class="item-container">
                   <!-- {{uiTransactions | json}} -->
-                  <div *ngIf="(uiTransactions?.dsiEMVNeteEpayEnabled || dsiEMVEnabled) && order  && order?.balanceRemaining != 0">
+                  <div *ngIf="devicename && (uiTransactions?.dsiEMVNeteEpayEnabled || dsiEMVEnabled) && order && order?.balanceRemaining != 0">
 
                     <button class="payment-buttons"
                         mat-raised-button
@@ -126,20 +125,25 @@
 
                   </div>
 
-                  <div *ngIf="uiTransactions?.cardPointBoltEnabled && (order && order?.balanceRemaining != 0)">
+                  <div *ngIf="devicename && uiTransactions?.cardPointBoltEnabled && (order && order?.balanceRemaining != 0)">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyBoltPayment(false)">
-                      <mat-icon color="warn">credit_card</mat-icon>Credit Card
+                      <mat-icon color="warn">credit_card</mat-icon>CardPointe <br> Credit Card
                     </button>
                   </div>
 
-                  <div *ngIf="uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining != 0)">
+                  <div *ngIf="(platForm === 'android') && devicename && uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining != 0)">
                     <!-- if is android.
                     Android Payment -->
+                    <button class="payment-buttons"
+                        mat-raised-button
+                        (click)="processDSIEMVAndroidCreditCardPayment(false)">
+                      <mat-icon color="warn">android</mat-icon>Android <br> Credit Card
+                    </button>
                   </div>
 
-                  <div *ngIf="stripeEnabled && order  && order.balanceRemaining  != 0 ">
+                  <div *ngIf="stripeEnabled && order && order.balanceRemaining  != 0 ">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyStripePayment()">

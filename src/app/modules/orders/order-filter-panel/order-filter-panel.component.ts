@@ -101,10 +101,10 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
   )
 
-  initTerminalSettingSubscriber() { 
-    this.settingService.terminalSettings$.subscribe(data => { 
+  initTerminalSettingSubscriber() {
+    this.settingService.terminalSettings$.subscribe(data => {
       this.terminalSetting = data;
-      if (!data) { 
+      if (!data) {
         this.terminalSetting = {} as ITerminalSettings;
       }
     })
@@ -181,8 +181,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
   {
 
     this.initSubscriptions();
-    
-    if ( this.terminalSetting) { 
+
+    if ( this.terminalSetting) {
       if (this.terminalSetting.resetOrdersFilter) {
         this.orderService.updateOrderSearchModel(null)
       }

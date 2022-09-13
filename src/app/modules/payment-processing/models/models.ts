@@ -27,6 +27,7 @@ export interface Transaction {
    secureDevice: string;
    invoiceNo: string;
    amount: string;
+   gratuity: string;
    sequenceNo: string;
    bluetoothDeviceName: string;
    operationMode: string;

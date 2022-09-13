@@ -53,20 +53,20 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       if (this.orderPromptGroup)
       {
         this.panelIndex       = this.orderPromptGroup.currentAccordionStep
-        console.log('this panel update', data.selected_PromptSubGroups[this.index].promptSubGroups.name, this.panelIndex)
+        // console.log('this panel update', data.selected_PromptSubGroups[this.index].promptSubGroups.name, this.panelIndex)
       }
     })
   }
 
   initAccordionSubscriber() {
-    this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => { 
+    this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => {
       this.accordionStep = data;
-      console.log('accordion update', data)
+      // console.log('accordion update', data)
     })
   }
 
   intSubscriptions() {
- 
+
     this.initPOSItemSubscriber
     this.initPromptSubscriber()
     this.initAccordionSubscriber()
@@ -116,7 +116,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   }
 
   setStep(index: number) {
-    if (index == this.accordionStep) { 
+    if (index == this.accordionStep) {
       return true;
     }
     return false;

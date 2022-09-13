@@ -1,9 +1,9 @@
-<mat-card *ngIf="(transaction$ | async)  ; else loading">
+<mat-card *ngIf="(transaction$ | async) as transaction ; else loading">
   <mat-card-title><ng-content></ng-content>
   </mat-card-title>
   <mat-card-subtitle>
-    <mat-icon *ngIf="dsiAndroidService.saving">save</mat-icon>
-    <mat-icon *ngIf="(dsiSettings$ | async) as saving">  </mat-icon>
+    <button mat-raised-button (click)="saveSettings()">Save </button>
+    <mat-icon *ngIf="(dsiSettings$ | async) as saving"> save </mat-icon>
   </mat-card-subtitle>
   <mat-card-content >
     <div>
@@ -61,15 +61,15 @@
             <input formControlName="secureDevice" matInput >
           </mat-form-field>
         </div>
-      
+
         <div >
           <div *ngIf="dsiAndroidService.transaction && dsiAndroidService.transaction?.bluetoothDeviceName">
             Current Device: {{dsiAndroidService?.transaction?.bluetoothDeviceName}}
           </div>
-     
+
            <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0"
               class="device-grid">
-           
+
             <div>
               <mat-form-field style="width: 100px;"   appearance="outline" >
                 <mat-label>Bluetooth Device Name</mat-label>
@@ -176,7 +176,7 @@
 </ng-template>
 
 <div *ngIf="viewSelectDeviceList && dsiDeviceList" class="message">
-  
+
   <mat-selection-list
         [multiple]="false"
         class="example-full-width"

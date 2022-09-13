@@ -9,7 +9,7 @@ import { RStream, TranResponse } from '../dsiEMV/dsiemvtransactions.service';
 import { ProductEditButtonService } from '../menu/product-edit-button.service';
 import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
-import { DSIEMVSettings } from '../system/settings/uisettings.service';
+import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
 
 @Injectable({
@@ -123,6 +123,30 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     this._dialog.next(this.dialogRef)
   }
 
+
+  //once we get back the method 'Card Type'
+  //lookup the payment method.
+  //we can't get the type of payment before we get the PaymentID.
+  //so we just have to request the ID, and then we can establish everything after that.
+  processDSIEMVAndroidCreditVoid ( order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
+    const site = this.sitesService.getAssignedSite();
+    const  posPayment = {} as IPOSPayment;
+    posPayment.orderID = order.id;
+    posPayment.zrun = order.zrun;
+    posPayment.reportRunID = order.reportRunID;
+    posPayment.amountPaid = amount;
+
+    const payment$  = this.paymentService.postPOSPayment(site, posPayment);
+
+    payment$.subscribe(data => {
+
+      this.dialogRef = this.dialogOptions.openDSIEMVAndroidTransaction({payment: data, type: 1});
+      this._dialog.next(this.dialogRef)
+    })
+
+  }
+
+
   validateResponse(response: RStream, payment: IPOSPayment) {
     const rStream = response //.RStream as RStream;
     const cmdResponse       = rStream.CmdResponse;
@@ -203,7 +227,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
-  async processCreditCardResponse(response: any, payment: IPOSPayment, order: IPOSOrder) {
+  async processCreditCardResponse(response: any,  payment: IPOSPayment, order: IPOSOrder) {
 
     const site = this.sitesService.getAssignedSite();
 
@@ -225,16 +249,19 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
       if (this.isApproved(cmdStatus)) {
 
-        const cardType       = trans?.CardType;
+        let cardType       = trans?.CardType;
+        if (!cardType || cardType === '0') {  cardType = 'credit'};
+
         payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
         let paymentMethod    = {} as IPaymentMethod;
 
         this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
-          switchMap( data => {
-            payment.paymentMethodID = data.id;
-            paymentMethod = data;
-            return this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize,paymentMethod)
-          }
+          switchMap(
+            data => {
+              payment.paymentMethodID = data.id;
+              paymentMethod = data;
+              return this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
+            }
         )).subscribe(data => {
           this.orderService.updateOrderSubscription(data.order);
           this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);

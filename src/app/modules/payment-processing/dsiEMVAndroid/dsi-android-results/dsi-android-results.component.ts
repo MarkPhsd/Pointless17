@@ -7,8 +7,9 @@ import { TranResponse, Transaction } from './../../models/models';
   styleUrls: ['./dsi-android-results.component.scss']
 })
 export class DsiAndroidResultsComponent implements OnInit {
-
+  @Input() isAdmin: boolean;
   @Input() tranResponse: TranResponse;
+  @Input() textResponse: string;
 
   constructor() { }
 

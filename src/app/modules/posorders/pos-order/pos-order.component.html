@@ -3,9 +3,8 @@
 
     <div>
       <div>
-        <div
-            class="grid-header-item"
-            (resized)="onResizedorderHeightPanel($event)">
+        <div  class="grid-header-item"
+              (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
               [mainPanel]="mainPanel"
               [order]="order">
@@ -18,16 +17,14 @@
           ></store-credit-info>
         </div>
 
-        <div
-              class="grid-header-item"
+        <div  class="grid-header-item"
               *ngIf="enableLimitsView  && (wideBar || mainPanel)">
           <limit-values-progress-bars
               [order]="order">
           </limit-values-progress-bars>
         </div>
 
-        <div
-              (resized)="onResizedorderCustomerPanel($event)"
+        <div  (resized)="onResizedorderCustomerPanel($event)"
               class="grid-header-item"
               *ngIf="wideBar || mainPanel">
           <app-order-header-demo-graphics
@@ -39,9 +36,8 @@
           </app-order-header-demo-graphics>
         </div>
 
-        <div
-             (resized)="onResizedorderSpecialsPanel($event)"
-             class="specials">
+        <div  (resized)="onResizedorderSpecialsPanel($event)"
+              class="specials">
           <pos-order-price-schedule-info></pos-order-price-schedule-info>
         </div>
 
@@ -103,7 +99,7 @@
 
           <div  >
             <button  mat-raised-button
-              fxFill  
+              fxFill
               class="button"
               color="primary"
               (click)="makePayment()">

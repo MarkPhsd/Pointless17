@@ -1,12 +1,15 @@
 <div *ngIf=" (uiTransactions$ | async) as uiTransactions">
-  <mat-card *ngIf="payment && step == 1">
+
+  <div *ngIf="payment && step == 1">
     <div class="action-center">
+
       <div class="tip-grid">
-        <div class="action-center margin">
-          <h2>
+
+        <div class="action-center">
+          <h3>
             <div *ngIf="!payment.completionDate && payment">Payment: {{ payment.amountPaid }} </div>
             <div *ngIf="payment.completionDate"> Change Due: {{ changeDue | currency }}</div>
-          </h2>
+          </h3>
         </div>
 
         <div class="action-center ">
@@ -28,7 +31,15 @@
         </div>
 
         <div  *ngIf="(payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard)">
-          <div class="action-center">
+
+          <tip-entry-amount
+            [payment]            = "payment"
+            [paymentMethod]      = "paymentMethod"
+            (specifiedTipAmount) = "specifiedTip($event)"
+            (outPutTip)          = "customTipAmount($event)"
+          ></tip-entry-amount>
+
+          <!-- <div class="action-center">
             <app-key-pad
                 [showInput]     ="'true'"
                 [inputForm]     ="inputForm"
@@ -63,15 +74,19 @@
               {{ payment.amountPaid * (22/100) | currency  }}
             </div>
 
-          </div>
+          </div> -->
         </div>
 
       </div>
+
+
+
     </div>
-  </mat-card>
+
+  </div>
 
   <mat-card *ngIf="step == 2">
-    <div class="action-center margin">
+    <div class="action-center">
       <h2>
         Change Due: {{changeDue | currency}}
       </h2>

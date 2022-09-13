@@ -39,11 +39,13 @@ export class PriceCategoriesEditComponent implements OnInit {
     return this.inputForm.get('productPrices') as FormArray;
   }
 
+  priceCategory$          : Observable<any>;
+
   priceTiers$             : Observable<PriceTiers[]>;
   priceTiers              : PriceTiers[];
   unitTypeList            : UnitType[];
-  unitTypes$: Observable<IUnitTypePaged>;
-  unitTypes :  IItemBasic[]
+  unitTypes$              : Observable<IUnitTypePaged>;
+  unitTypes               :  IItemBasic[]
   fieldOptions = { prefix: 'R$ ', thousands: '.', decimal: ',', precision: 2 }
 
   uiTransactions = {} as TransactionUISettings;
@@ -179,17 +181,6 @@ export class PriceCategoriesEditComponent implements OnInit {
     )
   }
 
-  saveAllItems(): Observable<ProductPrice2> {
-    let pricing = this.inputForm.controls['productPrices'] as FormArray;
-    console.log('pricing', pricing)
-    if (pricing) {
-      const site = this.siteService.getAssignedSite();
-      const items = this.productPrices.value  as ProductPrice[];
-      console.log('prices', items)
-      this.saving = false;
-      return this.priceCategoryItemService.savePriceList(site, items)
-    }
-  }
 
   async updateItem(formArray): Promise<boolean> {
     if (!this.inputForm.valid)    { return  }
@@ -236,36 +227,70 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   updateCategory(item): Observable<any> {
-    let result: boolean;
+
+    console.log('item form valid', this.inputForm.valid, item)
     if (!this.inputForm.valid) { return }
     const priceCategory = this.inputForm.value;
 
     if (!priceCategory) {return }
+    this.saving = true;
 
     let  price2 = {} as IPriceCategory2
     price2.id = priceCategory.id
     price2.uid = priceCategory.uid
     price2.name = priceCategory.name
     const site = this.siteService.getAssignedSite()
-    const product$ = this.priceCategoryService.save(site, price2)
+    const result$ = this.priceCategoryService.save(site, price2)
+    console.log('check result');
 
-    product$.pipe(
+    const items$ = result$.pipe(
       switchMap( data => {
+        console.log('result data', data)
+        this.priceCategory = data;
         return this.saveAllItems()
-      }))
-    return product$;
+      })).pipe(
+        switchMap(data => {
+          console.log('saved price category', data)
+          this.saving = false
+          return of('complete')
+        }
+      )
+    );
+
+    this.priceCategory$ = items$
+    // this.priceCategory$.subscribe(data => {
+    //   console.log(data)
+    // })
+
+    // this.saveAllItems().subscribe(data => {
+    //   console.log('save items')
+    // })
   };
 
-  updateCategoryAll(item){
-    const category  = item.value as PriceCategories;
-    this.updateCategory(category).subscribe( {
-      next: data => { this.notifyEvent('Items saved', 'Success') },
-        error: err => {
-          console.log('error', err)
-          this.notifyEvent('Items not saved ' + err, 'Failure')
-        }
-    });
+
+  saveAllItems(): Observable<ProductPrice2> {
+    let pricing = this.inputForm.controls['productPrices'] as FormArray;
+    console.log('saving items', pricing.value)
+    if (pricing) {
+      const site  = this.siteService.getAssignedSite();
+      const items =  pricing.value  as ProductPrice[];
+      console.log('saving', items)
+      return this.priceCategoryItemService.savePriceList(site, items)
+    }
   }
+
+  // updateCategoryAll(item){
+  //   const category  = item.value as PriceCategories;
+
+  //   this.priceCategory$ =  this.updateCategory(category)
+  //   result$.pipe(
+  //     switchMap( data => {
+  //       return this.saveAllItems()
+  //     }))
+
+  //   this.priceCategory$ = result$
+  // }
+
   async updateCategoryExit(item) {
     const category  = item.value as PriceCategories;
     this.updateCategory(category).subscribe( {

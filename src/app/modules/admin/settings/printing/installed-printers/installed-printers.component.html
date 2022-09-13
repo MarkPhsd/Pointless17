@@ -41,7 +41,6 @@
         <mat-label>This feature requires a device is setup under - POS Devices
           <button mat-raised-button (click)="navPosDevices()">Devices</button>
         </mat-label>
-        <!-- <div ngIf="(terminalSetting$ | async)"> -->
           <mat-form-field appearance="outline">
             <mat-label>Bluetooth Printers</mat-label>
               <mat-select
@@ -59,8 +58,8 @@
           </mat-form-field>
           <mat-label>This feature requires a device is setup under - POS Devices
           <button mat-raised-button (click)="saveTerminalSetting()"><mat-icon>save</mat-icon>Save</button>
-          </mat-label>
-        <!-- </div> -->
+        </mat-label>
+
         <div>
           <button mat-raised-button color="primary"
                   (click)="printAndroid()"><mat-icon>print</mat-icon>
@@ -161,9 +160,9 @@
       <mat-form-field appearance="outline">
         <mat-label>Receipt Types</mat-label>
           <mat-select
-                    type="text"
+                    type                ="text"
                     [(ngModel)]         ="receiptID"
-                    formControlNamename ="receiptID"
+
                     (selectionChange)   ="refreshReceipt(receiptID)">
               <div>
               <mat-option *ngFor="let item of list" [value]="item.id">
@@ -172,7 +171,7 @@
           </div>
         </mat-select>
       </mat-form-field>
-
+      <!-- formControlName     ="receiptID" -->
     </div>
 
     <ng-template #loadingReceiptTemplates>

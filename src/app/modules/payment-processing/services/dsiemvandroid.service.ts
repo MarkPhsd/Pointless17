@@ -37,11 +37,11 @@ export class PointlessCCDSIEMVAndroidService {
         return this.settingService.saveSetting(site, data)
       }
     )).pipe(
-      switchMap(data => { 
-        if (data) { 
+      switchMap(data => {
+        if (data) {
           this.transaction = JSON.parse(data.text)  as Transaction;
         }
-        if (!data) { 
+        if (!data) {
           const item = this.defaultTransaction as Transaction;
           this.transaction = this.defaultTransaction  as Transaction;
         }
@@ -51,7 +51,7 @@ export class PointlessCCDSIEMVAndroidService {
 
   }
 
-  get defaultTransaction() { 
+  get defaultTransaction() {
     return {
       merchantID: 'CROSSCHAL1GD',
       userTrace: 'User',
@@ -92,23 +92,22 @@ export class PointlessCCDSIEMVAndroidService {
     if (setting) {
       this.transaction = JSON.parse(setting) as Transaction;
     }
-    const name = 'DSIEMVAndroidSetting';
 
+    const name = 'DSIEMVAndroidSetting';
     const setting$ = this.settingService.getSettingByName(site, name)
 
     const result$ = setting$.pipe(
       switchMap( data => {
-        console.log('setting', data)
-        if (!data) { 
+        if (!data) {
           const name = 'DSIEMVAndroidSetting';
           return this.settingService.saveSettingObservable(site, data)
         }
-        if (data) { 
+        if (data) {
           return of(data)
         }
       }
     )).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         if (!data.text) {
           this.transaction = {} as Transaction;
           return of(this.transaction)

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient  } from '@angular/common/http';
-import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { BehaviorSubject, interval, Observable, of, } from 'rxjs';
+import { BehaviorSubject, Observable, of, } from 'rxjs';
 import { ISetting, ISite, IUser }   from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
@@ -10,8 +9,6 @@ import { AppInitService } from './app-init.service';
 import { IItemBasic } from '..';
 import { DSIEMVSettings, StripeAPISettings, TransactionUISettings, UIHomePageSettings } from './settings/uisettings.service';
 import { EmailModel } from '../twilio/send-grid.service';
-
-import { T } from '@angular/cdk/keycodes';
 import { UserAuthorizationService } from './user-authorization.service';
 
 interface IIsOnline {
@@ -64,10 +61,10 @@ export class SettingsService {
 
   getDeviceSettings(): Observable<ISetting> {
     //this.terminal = JSON.parse(this.setting.text)  as ITerminalSettings;
+    const devicename = localStorage.getItem('devicename')
     const site = {} as ISite;
     site.url = this.apiUrl;
-    const name = this.deviceName;
-    return this.getSettingByName(site, name);
+    return this.getSettingByName(site, devicename);
   }
 
 
@@ -206,6 +203,7 @@ export class SettingsService {
 
   getSettingByName(site: ISite, name: String):  Observable<ISetting> {
 
+    if (!name) { return }
     const user =  JSON.parse(localStorage.getItem('user')) as IUser
     if (!user || !user.roles ||  !user.username ) {
       return this.getSettingByNameNoRoles(site, name)

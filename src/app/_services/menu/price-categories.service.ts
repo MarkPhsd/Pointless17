@@ -109,14 +109,11 @@ export class PriceCategoriesService {
   };
 
   save(site: ISite,  price: IPriceCategory2): Observable<PriceCategories> {
-
-    console.log('save', price)
     if (price.id) {
       return  this.put(site, price.id, price);
-
-    } else {
+    }
+    if (!price.id) {
       return this.post(site, price);
-
     }
   }
 

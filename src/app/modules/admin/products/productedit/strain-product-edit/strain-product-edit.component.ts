@@ -48,7 +48,9 @@ export class StrainProductEditComponent implements OnInit {
   {
     if (data) {
       if (data.product) {
+
         this.product = data.product
+
         if (this.product.id) {
           this.id = this.product.id.toString();
           if (this.product && data.itemType && data.itemType.id) {

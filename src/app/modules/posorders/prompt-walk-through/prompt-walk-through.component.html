@@ -4,9 +4,9 @@
   <mat-card class="mat-card">
     <mat-card-subtitle>
       <h3>
-        {{promptGroup.name}}
+        {{promptGroup?.name}}
         <br>
-        <span *ngIf="orderPromptGroup  && orderPromptGroup.posOrderItem">{{ orderPromptGroup.posOrderItem.productName}}</span>
+        <span *ngIf="orderPromptGroup  && orderPromptGroup.posOrderItem">{{ orderPromptGroup?.posOrderItem?.productName}}</span>
       </h3>
 
     </mat-card-subtitle>
@@ -39,8 +39,4 @@
   </mat-card>
 
 </div>
-
-<!-- <div *ngIf="orderPromptGroup">
-  {{orderPromptGroup | json}}
-</div> -->
 

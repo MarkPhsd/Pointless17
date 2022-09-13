@@ -150,6 +150,9 @@ import { UIHomePageSettingsComponent } from '../modules/admin/settings/software/
 import { ProductSearchSelector2Component } from '../modules/admin/products/productedit/_product-edit-parts/product-search-selector/product-search-selector.component';
 import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fast-user-switch.component';
 import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-button/app-wizard-progress-button.component';
+import { TipEntryComponent } from '../modules/posorders/components/tip-entry/tip-entry.component';
+
+
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -296,6 +299,7 @@ import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-
     UploaderComponent,
     OverLayComponent,
     MyThingComponent,
+    TipEntryComponent,
     LogoComponent,
     IFrameComponent,
     YoutubePlayerComponent,
@@ -437,6 +441,7 @@ import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-
     SummarycardComponent,
     TaxFieldsComponent,
     TiersCardComponent,
+    TipEntryComponent,
     ToggleThemeComponent,
     TruncateTextPipe,
     UIHomePageSettingsComponent,

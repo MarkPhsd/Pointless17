@@ -26,6 +26,14 @@ mat-card {
   align-content: center;
 }
 
+.grid-items {
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+  gap: 10px;
+  margin: 10px;
+}
+
+
 .split-item-button {
   margin: 10px;
   width: 150px;
@@ -86,12 +94,6 @@ mat-card {
   }
 }
 
-.grid-items {
-  display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
-  gap: 10px;
-  margin: 10px;
-}
 
 .grid-header-item {
 
@@ -167,6 +169,16 @@ mat-card {
 .keypad {
   min-height: 400px;
   height: 400px;
+}
+
+.action-center {
+  display         : flex;
+  flex-direction  : row;
+  flex-wrap       : wrap;
+  justify-content : center ;
+  align-items     : baseline;
+  align-content   : center;
+  margin-bottom   : 5px;
 }
 
 .card-dimensions {

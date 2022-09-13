@@ -1,13 +1,17 @@
 
-import { Component,EventEmitter,Inject,Input,OnInit, Output } from '@angular/core';
+import { Component,EventEmitter,Inject,Input,OnInit, Optional, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Capacitor} from '@capacitor/core';
 import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { NgxXml2jsonService } from 'ngx-xml2json';
-import { Observable } from 'rxjs';
+import { Observable,switchMap,of , Subscription} from 'rxjs';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { TranResponse, Transaction } from './../../models/models';
 import { PointlessCCDSIEMVAndroidService } from './../../services/index';
+import {PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
+import {OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { IPOSOrder,} from 'src/app/_interfaces';
+import { OrdersService} from 'src/app/_services/transactions/orders.service';
 
 // https://www.npmjs.com/package/capacitor-plugin-permissions
 // https://capacitorjs.com/docs/v2/plugins/android
@@ -30,6 +34,7 @@ export class DsiEMVAndroidComponent implements OnInit {
   @Input() transaction: Transaction;
   @Output() getTranResponse = new EventEmitter();
   @Output() getCmdResponse = new EventEmitter();
+  @Input() saleOnly: boolean;
 
   request       : string;
   cancelResponse: boolean;
@@ -56,12 +61,16 @@ export class DsiEMVAndroidComponent implements OnInit {
   viewSelectDeviceList = false;
 
   ////////////////////////
+  response: any;
   cmdResponse  :any;
   textResponse : any;
   tranResponse : any;
   responseSuccess = ''
   transaction$ : Observable<Transaction>;
   payment: IPOSPayment;
+  _order       : Subscription;
+  order        : IPOSOrder;
+
   get isAndroid() {
     const platForm =   Capacitor.getPlatform();
     if (platForm === 'android') {
@@ -70,24 +79,71 @@ export class DsiEMVAndroidComponent implements OnInit {
     return false;
   }
 
+  initSubscriptions() {
+    this._order = this.orderService.currentOrder$.subscribe(order => {
+      this.order = order;
+    })
+  }
   constructor(
      private ngxXml2jsonService: NgxXml2jsonService,
      public dsiAndroidService: PointlessCCDSIEMVAndroidService,
-     private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
+     public paymentsMethodsProcessService: PaymentsMethodsProcessService,
+     public orderMethodsService: OrderMethodsService,
+     private orderService: OrdersService,
+     @Optional() private dialogRef: MatDialogRef<DsiEMVAndroidComponent>,
      @Inject(MAT_DIALOG_DATA) public data: any
-  ){  
+  ){
 
-    //data would be the payment 
-    //
-    this.payment = data as IPOSPayment;
-
+    //data would be the payment
+    // console.log('injected payment', data.payment)
+    if (data &&  data.payment ) {
+      this.saleOnly = true;
+      this.payment = data.payment ;
+    }
   }
 
   ngOnInit() {
+    this.initSubscriptions()
     this.resetResponse();// = ''
-    this.message = "...waiting for test results."
+    this.message = "...waiting for results."
     this.getMessageResponse();
-    this.transaction$ = this.dsiAndroidService.getSettings();
+    this.initTransactionObservable()
+  }
+
+  close() {
+    this.emvCancel();
+    if (this.dialogRef) {
+      this.dialogRef.close()
+    }
+  }
+
+  initTransactionObservable() {
+    const process$ = this.dsiAndroidService.getSettings();
+    if (this.payment && this.payment.id) {
+      this.transaction$ = process$.pipe(
+        switchMap(
+          data => {
+          if (data) {
+
+              data.amount = this.payment.amountPaid.toString();
+              data.invoiceNo = this.payment.id.toString();
+              data.userTrace = this.payment?.employeeName
+
+              if (this.payment.amountPaid + this.payment.tipAmount > 0){
+                data.tranCode = 'EMVSale'
+              }
+              if (this.payment.amountPaid + this.payment.tipAmount < 0){
+                data.tranCode = 'EMVRefund'
+              }
+              this.dsiAndroidService.transaction = data;
+              return of(data)
+            }
+          }
+      ))
+    }
+    if (!this.payment) {
+      this.transaction$ = process$
+    }
   }
 
   async checkBTPermission() {
@@ -103,6 +159,7 @@ export class DsiEMVAndroidComponent implements OnInit {
     this.tranResponse = null;
     this.cmdResponse  = '';
     this.textResponse = '';
+    this.message = ''
     if (this.processRunning) {
       this.cancelResponse = true;
     }
@@ -127,18 +184,21 @@ export class DsiEMVAndroidComponent implements OnInit {
   async connectToBTDevice() {
     await this.resetbtResponse();
     this.processRunning = true;
-
-    const item = this.dsiAndroidService.transaction;
-
-    if (!item.bluetoothDeviceName) {
+    const btItem = this.dsiAndroidService.transaction;
+    if (!btItem.bluetoothDeviceName) {
       this.message = 'No Bluetooth Device is selected';
       return;
     }
-    this.message = 'Connecting to device. ' + item.bluetoothDeviceName
-    const options = {'value': item.bluetoothDeviceName};
+    this.message = 'Connecting to device. ' + btItem.bluetoothDeviceName
+
     try {
-      dsiemvandroid.connectToBT(options);
-      this.checkResponse();
+      const options = {'value': btItem.bluetoothDeviceName};
+      const item = await dsiemvandroid.connectToBT(options);
+      await this.checkResponse();
+      const message = {'response': '', value: ''};
+      let value = await dsiemvandroid.getMessageResponse(message);
+      this.message = ''
+      this.messageResponse = value.value;
     } catch (error) {
       console.log('response', error)
     }
@@ -181,7 +241,7 @@ export class DsiEMVAndroidComponent implements OnInit {
 
       const ip = { value: ' value.'}
       options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
-      
+
       options.padPort         = options.padPort;
       const item    = await dsiemvandroid.disconnectFromBt(options)
       this.message  = item;
@@ -205,6 +265,34 @@ export class DsiEMVAndroidComponent implements OnInit {
        const ip = { value: ' value.'}
       options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
 
+      options.padPort         = transaction.padPort;
+      try {
+        const item              = await dsiemvandroid.emvParamDownload(options)
+        this.message = 'Param Download...'
+        await this.checkResponse();
+        const message = {'response': '', value: ''};
+        // let value = await dsiemvandroid.getMessageResponse(message);
+        // this.message = ''
+        // this.messageResponse = value.value;
+      } catch (error) {
+        console.log('response', error)
+      }
+
+    } catch (error) {
+      this.message = error;
+    }
+  }
+
+  async _emvParamDownload() {
+    try {
+      await this.resetResponse();
+      const transaction       = this.dsiAndroidService.transaction
+      this.processRunning     = true;
+      const options           = this.dsiAndroidService.transaction as any;
+      options.BTDevice        = transaction.bluetoothDeviceName
+      options.secureDevice    = transaction.secureDevice;
+      options.merchantID      = transaction.merchantID;
+      options.pinPadIpAddress = transaction.pinPadIpAddress;
       options.padPort         = transaction.padPort;
       const item              = await dsiemvandroid.emvParamDownload(options)
       this.message            = item;
@@ -264,6 +352,7 @@ export class DsiEMVAndroidComponent implements OnInit {
         }
       }
     };
+
   }
 
   async getResponse(){
@@ -277,16 +366,26 @@ export class DsiEMVAndroidComponent implements OnInit {
         item.value =  item?.value.replace('#', '')
         const xml = parser.parseFromString(item.value, 'text/xml');
         const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
-        // console.log( 'obj', obj )
+        console.log( 'getResponseobj', obj )
+
         if (item.value.substring(0, 5) === '<?xml' ) {
+          this.response = obj
           this.cmdResponse = (obj?.RStream?.CmdResponse);
           this.textResponse = (obj?.RStream?.CmdResponse?.TextResponse);
           this.tranResponse =  obj?.RStream?.TranResponse as TranResponse;
+          // console.log('cmdResponse', obj?.RStream?.CmdResponse)
+          // console.log('TextResponse', obj?.RStream?.CmdResponse?.TextResponse)
+          // console.log('TranResponse',  obj?.RStream?.TranResponse)
         }
+
         if (item.value.substring(0, 5) === '<RStr') {
+          this.response = obj
           this.cmdResponse = (obj?.RStream?.CmdResponse);
           this.textResponse = (obj?.RStream?.CmdResponse?.TextResponse);
           this.tranResponse =  obj?.RStream?.TranResponse as TranResponse;
+          // console.log('cmdResponse', obj?.RStream?.CmdResponse)
+          // console.log('TextResponse', obj?.RStream?.CmdResponse?.TextResponse)
+          // console.log('TranResponse',  obj?.RStream?.TranResponse)
         }
 
         if (this.cmdResponse) {
@@ -298,6 +397,8 @@ export class DsiEMVAndroidComponent implements OnInit {
 
         this.cancelResponse  = false;
         this.processRunning  = false;
+
+
         return  item ;
       }
     }
@@ -341,9 +442,7 @@ export class DsiEMVAndroidComponent implements OnInit {
         console.log('item', item)
         return   JSON.parse(item.value)
       }
-
     }
-
     return  item
   }
 
@@ -379,7 +478,7 @@ export class DsiEMVAndroidComponent implements OnInit {
           const obj = this.ngxXml2jsonService.xmlToJson(xml) as any;
           // console.log('cmdResponse', obj?.RStream?.CmdResponse)
           // console.log('cmdResponse', obj?.RStream?.CmdResponse.TextResponse)
-          this.tranResponse =  this.textResponse = obj?.TranResponse;
+          this.tranResponse  = obj?.TranResponse;
 
           if (item.value.substring(0, 5) === '<RStr') {
             this.cmdResponse = obj?.RStream?.CmdResponse.CmdStatus;
@@ -425,17 +524,44 @@ export class DsiEMVAndroidComponent implements OnInit {
     }
   }
 
+  specifiedTip(event) {
+    if (this.payment) {
+      this.payment.tipAmount = event
+    }
+  }
+
+  customTipAmount(event) {
+    if (this.payment) {
+      this.payment.tipAmount = event
+    }
+  }
+
   async emvSale() {
     try {
       await this.resetResponse();
-
       this.processRunning = true;
       let options  = await this.initTransaction();
-      if (this.transaction) {
-        options =  this.transaction;
+      if (options) {
+        this.transaction = options; //for display
+        if (this.payment) {
+          if (this.payment.amountPaid) {
+            this.transaction.amount = (this.payment.amountPaid).toFixed(2);
+          }
+          if (this.payment?.tipAmount) {
+            this.transaction.gratuity =  this.payment?.tipAmount.toFixed(2)
+          }
+        }
+        const item = await dsiemvandroid.processSale(this.transaction);
+        await  this.checkResponse();
+        if (this.textResponse.toLowerCase() === 'approved') {
+          await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment, this.orderMethodsService.order);
+          if (this.dialogRef) {
+            this.dialogRef.close()
+          }
+          return;
+        }
+
       }
-      const item = await dsiemvandroid.processSale(options)
-      await  this.checkResponse();
     } catch (error) {
       this.message = error;
     }

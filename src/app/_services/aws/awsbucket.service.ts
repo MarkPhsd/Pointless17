@@ -38,7 +38,6 @@ export class AWSBucketService {
   async  awsBucket(): Promise<string> {
 
     let bucket = localStorage.getItem('awsbucket')
-    // console.log('bucket from AwsBucket', bucket)
 
     if (!bucket || bucket === '') {
       await this.getBucket();
@@ -55,12 +54,17 @@ export class AWSBucketService {
     return `https://${awsBucket}.s3.amazonaws.com/`
   }
 
-  constructor(private http: HttpClient,
-              private siteService: SitesService,
+  constructor(private http            : HttpClient,
+              private siteService     : SitesService,
               private appInitService  : AppInitService,
-              private httpCache: HttpClientCacheService
+              private httpCache      : HttpClientCacheService
               ) {
-    this.apiUrl =  this.appInitService.apiBaseUrl()
+
+    // this.apiUrl =  this.appInitService.apiBaseUrl();
+    // if (!this.apiUrl) {
+    //   this.apiUrl = this.siteService.getAssignedSite().url;
+    // }
+    this.apiUrl = this.siteService.getAssignedSite().url;
   }
 
   convertToArrayWithUrl(imageString:string, url: string): any[] {

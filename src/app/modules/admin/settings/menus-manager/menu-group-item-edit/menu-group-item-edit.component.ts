@@ -96,12 +96,12 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
       this.item.minimized = this.minimized
       let item$: any;
 
-      if (this.id != undefined && this.id != 0) {
+      if (!this.item.id) {
          item$ = this.menusService.putSubMenuByID(site, this.item.id, this.item)
          this.applyChanges(item$ ,'Item saved.')
       }
 
-      if (this.id == 0 || this.id == undefined) {
+      if (this.item.id) {
         item$ = this.menusService.postSubMenuItem(site, this.item)
         this.applyChanges(item$, 'Item saved.')
       }
@@ -110,8 +110,10 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   }
 
   deleteItem() {
+    console.log('menu item accordion menu', this.id)
     const site = this.siteService.getAssignedSite()
-    if (this.id != undefined && this.id != 0) {
+    console.log('menu item accordion menu')
+    if (this.item.id) {
       const item$ = this.menusService.deleteSubMenu(site, this.item.id)
       this.applyChanges(item$ ,'Item deleted.')
     }
@@ -120,10 +122,10 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
   applyChanges(item$: Observable<SubMenu>, successMesage: string) {
     item$.subscribe(
       {
-          next: data=> {
-          this._snackBar.open(successMesage, 'Success', {duration: 2000})
-          this.outPutRefreshMenu.emit(true)
-        },
+        next: data=> {
+        this._snackBar.open(successMesage, 'Success', {duration: 2000})
+        this.outPutRefreshMenu.emit(true)
+      },
         error : err => {
           this._snackBar.open(successMesage, 'Failure', {duration: 2000})
           console.log(err)

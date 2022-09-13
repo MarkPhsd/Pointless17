@@ -1,10 +1,12 @@
 <mat-card>
-  <mat-card-title *ngIf="priceCategory && !saving">
-    <mat-icon>edit</mat-icon> {{priceCategory.name}}
+  <mat-card-title *ngIf="priceCategory">
+    <mat-icon>edit</mat-icon> {{priceCategory?.name}}
     <mat-divider> </mat-divider>
   </mat-card-title>
 
   <mat-card-subtitle>
+      <div *ngIf="priceCategory$ | async"></div>
+      <mat-icon *ngIf="saving">save</mat-icon>
 
       <div class="grid-simple-price-container grid-width" >
 
@@ -36,6 +38,7 @@
 
       </div>
 
+      <!--  -->
       <div class="buttons-margin">
         <app-edit-buttons-standard
             (outputeupdateItem)     ="updateCategory($event)"
@@ -71,7 +74,6 @@
                         (selectionChange) = "selectRecMedOption($event)">
         <div>Med Rec Option</div>
       </form-select-list>
-
 
       <div class="grid-header-container">
         <div *ngIf="productPrices">
@@ -267,11 +269,13 @@
                     </div>
 
                      <div *ngIf="showTime  ||
-                              (priceCategory.productPrices[i].startDate != undefined ||
-                              priceCategory.productPrices[i].specialDatePrice != undefined ||
-                              priceCategory.productPrices[i].endDate != undefined ||
-                              priceCategory.productPrices[i].startTime != undefined ||
-                              priceCategory.productPrices[i].endTime != undefined) "
+                              (priceCategory.productPrices &&
+                              priceCategory?.productPrices.length > 0 &&
+                              priceCategory?.productPrices[i]?.startDate != undefined ||
+                              priceCategory?.productPrices[i]?.specialDatePrice != undefined ||
+                              priceCategory?.productPrices[i]?.endDate != undefined ||
+                              priceCategory?.productPrices[i]?.startTime != undefined ||
+                              priceCategory?.productPrices[i]?.endTime != undefined) "
                           class="grid-time-container">
 
                       <div>
@@ -507,10 +511,12 @@
                   </div>
 
                   <!---->
-                  <div *ngIf="showConversions  || ((priceCategory.productPrices[i].partMultiplyer != 1
-                        && priceCategory.productPrices[i].partMultiplyer != undefined) ||
-                        (priceCategory.productPrices[i].unitPartRatio !=1
-                        && priceCategory.productPrices[i].partMultiplyer != undefined)) "
+                  <div *ngIf="showConversions ||
+                         priceCategory.productPrices &&
+                        ((priceCategory?.productPrices.length > 0 && priceCategory?.productPrices[i]?.partMultiplyer != 1
+                        && priceCategory?.productPrices[i]?.partMultiplyer != undefined) ||
+                        (priceCategory?.productPrices.length > 0 && priceCategory?.productPrices[i]?.unitPartRatio !=1
+                        && priceCategory?.productPrices[i]?.partMultiplyer != undefined)) "
                        class="grid-conversion-container">
                     <mat-card>
                       <div>
@@ -550,7 +556,7 @@
                   </div>
 
                   <!-- -->
-                  <div *ngIf="showPriceTiers  || (priceCategory.productPrices[i].tierPriceGroup != 0 )" >
+                  <div *ngIf="showPriceTiers  || (priceCategory?.productPrices && priceCategory?.productPrices.length>0 && priceCategory?.productPrices[i]?.tierPriceGroup != 0 )" >
                     <span>
                       <mat-form-field appearance="outline">
                         <mat-label>Tier</mat-label>
@@ -569,7 +575,7 @@
                         </mat-select>
                       </mat-form-field>
                     </span>
-                    <span *ngIf="priceCategory.productPrices[i].tierPriceGroup as itemID">
+                    <span *ngIf="priceCategory?.productPrices[i]?.tierPriceGroup as itemID">
                       <button mat-button
                         (click)="openPriceTier(itemID)">
                         <mat-icon>expand</mat-icon>
