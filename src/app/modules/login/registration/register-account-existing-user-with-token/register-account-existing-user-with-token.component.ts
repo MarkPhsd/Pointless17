@@ -6,6 +6,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register-account-existing-user-with-token',
@@ -14,27 +16,42 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
 })
 export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
 
+  
   @Input() statusMessage: string;
+  compName   : string;
+  company    = {} as ICompany;
+  logo       : string;
+  loading    = false;
+  submitted  = false;
+  returnUrl  : string;
+  error      = '';
+  companyName: string;
+  id         : any;
+
+  bucket: string;
+  loginForm: FormGroup;
   @Input() userName: string;
 
-  compName: string;
-  company = {} as ICompany;
-  logo: string;
-
-  loading = false;
-  submitted = false;
-  returnUrl: string;
-  error = '';
-  companyName: string;
-  id: any;
-
-  loginForm: FormGroup;
   userExists: IUserExists;
 
   userPhoneOrEmail: string;
-  // convenience getter for easy access to form fields
-  get f() { return this.loginForm.controls; }
 
+  get f() { return this.loginForm.controls; }
+  uiHomePageSetting: UIHomePageSettings;
+  _uISettings: Subscription;
+
+  initSubscription() {
+    this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
+      if (data) {
+        const image  = `${this.bucket}${data.backgroundImage}`
+        this.uiHomePageSetting = data;
+        if (data.logoHomePage) {
+          this.logo = `${this.bucket}${data.logoHomePage}`;
+        }
+      }
+    }
+  )
+  }
   constructor(
       private fb: FormBuilder,
       private route: ActivatedRoute,
@@ -42,15 +59,18 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
       private _snackBar: MatSnackBar,
       private authenticationService: AuthenticationService,
       private sitesService: SitesService,
-      private appInitService: AppInitService
+      private appInitService: AppInitService,
+      private uiSettingService     : UISettingsService,
   ) {
-    this.userName =  JSON.parse( this.route.snapshot.paramMap.get('data') )
+    const item =   this.route.snapshot.paramMap.get('data')
+    this.userName =  item
   }
 
   ngOnInit(): void {
     this.initForm();
     this.getCompanyInfo();
     this.initLogo()
+    this.initSubscription();
   }
 
   initForm() {
@@ -112,26 +132,28 @@ export class RegisterAccountExistingUserWithTokenComponent implements OnInit {
         user.type = "phone"
       }
 
-      this.authenticationService.assignUserNameAndPassword(user).subscribe(
-        data =>
-        {
-          this.initForm()
-          if (data.userExists) {
-            this.notifyEvent(`${data} . You may login`, 'Success')
-            this.router.navigate(['/']);
-          } else {
-            this.statusMessage = "User not found."
+      this.authenticationService.assignUserNameAndPassword(user).subscribe( {
+        next: data =>
+            {
+              this.initForm()
+              if (data.userExists) {
+                this.notifyEvent(`You may login`, 'Success')
+                this.router.navigate(['/login']);
+              } else {
+                this.notifyEvent(`${data.message} . `, 'Error Occured')
+                this.statusMessage = "User not found."
+              }
+            },
+            error: error => {
+              this.initForm()
+              this.statusMessage = "Error connecting"
+              this.error = error;
+              console.log(error)
+              this.loading = false;
           }
-        },
-        error => {
-          this.initForm()
-          this.statusMessage = "Error connecting"
-          this.error = error;
-          console.log(error)
-          this.loading = false;
-       });
+        }
+      ) ;
     }
-
   }
 
   notifyEvent(message: string, action: string) {

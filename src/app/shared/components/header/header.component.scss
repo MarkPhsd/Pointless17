@@ -35,7 +35,7 @@
 
 .mat-toolbar-android {
   padding-top   : 10px;
-  margin-top    : 20px  ;
+  margin-top    : 15px  ;
   width         : 100%  ;
   min-width     : 300px ;
   height        : 45px  ;
@@ -54,7 +54,7 @@
   width         : 100%  !important;
   min-width     : 300px;
   height        : 45px !important;
-  overflow       : hidden;
+  overflow      : hidden;
 }
 
 .more-button {
@@ -196,12 +196,10 @@ button {
 }
 
 .grid-margin {
-
   margin-top      : 15px;
   padding-top     : 10px;
 
   @include for-phone-only  {
-    // margin-top: 35px;
     align-content: center;
     justify-content: center;
     margin-top    : 5px  ;
@@ -209,10 +207,28 @@ button {
   }
 
   @include horizontal-tablet  {
-    // margin-top    : 25px  ;
-    // padding-top   : 10px ;
     margin-top    : 5px  ;
     padding-top   : 5px ;
+    align-content: center;
+    justify-content: center;
+  }
+
+}
+
+.grid-margin-nostaff {
+  margin-top         : 10px;
+  // padding-top     : 10px;
+
+  @include for-phone-only  {
+    align-content: center;
+    justify-content: center;
+    margin-top    : 5px  ;
+    // padding-top   : 5px ;
+  }
+
+  @include horizontal-tablet  {
+    margin-top    : 5px  ;
+    // padding-top   : 5px ;
     align-content: center;
     justify-content: center;
   }

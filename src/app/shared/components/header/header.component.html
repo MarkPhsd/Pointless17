@@ -2,7 +2,7 @@
   <mat-toolbar-row>
 
     <div [class]="flexsections">
-      <div class="grid-flow grid-margin">
+      <div [class]="gridlayout">
         <div *ngIf="!smallDevice && isApp">
           <button aria-label="back" mat-button
                   (click)="goBack()">
@@ -56,8 +56,10 @@
           <api-status-display></api-status-display>
         </div>
       </div>
+
       <div class="grid-flow"
           *ngIf="!phoneDevice">
+
         <mat-card class='panel-card'
                   *ngIf="( (isUserStaff && platFormService.platForm !='web' )
                         || (isUserStaff) )">
@@ -140,18 +142,21 @@
           </ul>
         </mat-card>
       </div>
-      <!-- </div> -->
-      <div class="grid-flow grid-margin">
-        <div *ngIf="!smallDevice">
-          <app-toggle-theme></app-toggle-theme>
-        </div>
 
+      <div *ngIf="!smallDevice && !isUserStaff" [class]="gridlayout">
+        <div>
+          <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
+        </div>
+      </div>
+      
+      <div [class]="gridlayout">
+   
         <div *ngIf="!smallDevice && isAdmin">
           <wizard-progress-button></wizard-progress-button>
         </div>
 
         <div *ngIf="!smallDevice">
-          <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
+          <app-toggle-theme></app-toggle-theme>
         </div>
 
         <div *ngIf="!smallDevice"
@@ -265,6 +270,7 @@
 
           </mat-menu>
         </div>
+
       </div>
     </div>
 

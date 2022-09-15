@@ -126,7 +126,7 @@ export class ClientTableService {
 
   };
 
-  saveClient( site: ISite,  client: IClientTable) : Observable<IClientTable> {
+  saveClient( site: ISite,  client: IClientTable) : Observable<any> {
 
     if (client.id !== 0) {
 

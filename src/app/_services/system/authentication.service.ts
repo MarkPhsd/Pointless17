@@ -8,6 +8,7 @@ import { PlatformService } from './platform.service';
 import { OrdersService } from '..';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { LoginComponent } from 'src/app/modules/login';
+import { SitesService} from 'src/app/_services/reporting/sites.service';
 
 export interface IUserExists {
   id:           number;
@@ -21,6 +22,16 @@ export interface IUserExists {
   message:      string;
   employeeID:   number;
 }
+
+
+// Public Property UserExists As Boolean
+// Public Property FirstInitial As String
+// Public Property LastInitial As String
+// Public Property UserName As String
+// Public Property phone As String
+// Public Property email As String
+// Public Property type As String
+// Public Property message As String
 
 @Injectable({ providedIn: 'root' })
 
@@ -53,6 +64,7 @@ export class AuthenticationService {
         private appInitService   : AppInitService,
         private platFormservice  : PlatformService,
         private toolbarUIService : ToolBarUIService,
+        private siteSerivce     : SitesService,
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
@@ -150,53 +162,34 @@ export class AuthenticationService {
     }
 
     requestUserSetupToken(userName: string): Observable<IUserExists> {
-      let url = `${this.apiUrl}/users/RequestUserSetupToken`
+
+      const api = this.siteSerivce.getAssignedSite().url
+      const url = `${api}/users/RequestUserSetupToken`
+
+      console.log(url)
       return  this.http.post<any>(url, {userName: userName})
     };
 
-    requestPasswordResetToken(userName: string): any  {
-      let url = `${this.apiUrl}/users/RequestPasswordResetToken`
-      url = url + "?username=" + userName
-      this.http.post<any>(url, {userName: userName}).subscribe(
-        data => {
-        return data
-      },
-        error => {
-        return error
-      })
+    requestPasswordResetToken(userName: string): Observable<any>  {
+  
+      const api = this.siteSerivce.getAssignedSite().url 
+      const url = `${api}/users/RequestPasswordResetToken`
+
+      return this.http.post<any>(url, {userName: userName})
     };
 
     assignUserNameAndPassword(user: IUser): Observable<IUserExists>  {
-      let url = `${this.apiUrl}/users/CreateNewUserName`
+
+      const api = this.siteSerivce.getAssignedSite().url 
+      const url = `${api}/users/CreateNewUserName`
+
       return  this.http.post<any>(url, user)
     };
 
     updatePassword(user: IUser): any {
-      let url = `${this.apiUrl}/users/updatePassword`
-      return this.http.post<any>(url, { token: user.token, userName: user.username, password: user.password } )
-      .subscribe({
-        next: data => {
-          return "Password updated.";
-        },
-        error:  error => {
-          return error
-        }
-      })
-    }
-
-    _updatePassword(user: IUser) {
-      const url = `${this.apiUrl}/users/updatePassword`
-      return this.http.post<any>(url, { token: user.token, userName: user.username, password: user.password } )
-      .subscribe( {
-        next: data => {
-          return "Password updated.";
-        },
-        error:  error => {
-          return error
-        }
-      }
-
-      )
+      const api = this.siteSerivce.getAssignedSite().url 
+      const url = `${api}/users/updatePassword`
+      return  this.http.post<any>(url, user) 
     }
 
 }

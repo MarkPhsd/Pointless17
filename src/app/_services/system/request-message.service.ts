@@ -51,7 +51,7 @@ export class RequestMessageService {
               private userAuthorization: UserAuthorizationService,
               ) {
 
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
   }
 
   performMessageAction(site: ISite, id: number): Observable<IMessageServiceResponse> {

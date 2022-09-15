@@ -1,57 +1,87 @@
 <div class="container bg">
   <div class="row-height">
    <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <div *ngIf="this.companyName != '' ; else loading">
+    <div *ngIf="uiHomePageSetting; else loading">
       <div fxLayout="row"  fxlayoutGap="20px" class="stat-cards">
         <mat-card fxFlex="100%">
           <mat-card-title>
-            <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                <img  *ngIf="logo" [src]="logo" width="125px" [alt]="company"  class="logo">
-                <h2>{{compName}} </h2>
+            <div fxLayout="column"
+                  fxLayoutAlign="center center"
+                  class="row-height"
+                  >
+
+                <div *ngIf="uiHomePageSetting && uiHomePageSetting.logoHomePage"
+                      class="logo"
+                   >
+                  <app-logo
+                        [uiHomePageSetting] ="uiHomePageSetting"
+                        [logoSize]          ="'large'"
+                        [logo]              ="uiHomePageSetting.logoHomePage"
+                  ></app-logo>
+                </div>
+
+                <h2 *ngIf="uiHomePageSetting">
+                    {{uiHomePageSetting.displayCompanyName}}
+                </h2>
+
             </div>
           </mat-card-title>
 
           <mat-card-subtitle>
             <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-              <h2>Register Account or Request Password Reset</h2>
-              <p>Input your email or phone that you provided us. </p>
-              <p> We will send an email or text with a code to make a password.</p>
+              <div *ngIf="!uiHomePageSetting.smtpEmailEnabled && !uiHomePageSetting.twilioEnabled">Self registration is not allowed. </div>
+            
+              <span *ngIf="uiHomePageSetting.smtpEmailEnabled || uiHomePageSetting.twilioEnabled"> 
+                <h2>Register Account</h2>
+                 <p>
+                  <span *ngIf="uiHomePageSetting.smtpEmailEnabled">  For email input your email. </span>
+                  <span *ngIf="uiHomePageSetting.twilioEnabled">For text messang, only numeric, no spaces for text messaging</span>.
+                 </p>
+                <p> We will send an email or text with a code to make a password.</p>
+              </span>
             </div>
           </mat-card-subtitle>
-            <mat-card-content>
-                <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                  <form [formGroup]="loginForm">
+            <span *ngIf="uiHomePageSetting.smtpEmailEnabled || uiHomePageSetting.twilioEnabled"> 
+              <mat-card-content>
+                  <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                    <div [formGroup]="loginForm">
 
-                      <mat-form-field appearance="fill">
-                          <mat-label>Phone or Email</mat-label>
-                          <input matInput type="text" formControlName="username" class="form-control"
-                              [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
-                          <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
-                              <div *ngIf="f.username.errors.required">Username is required</div>
-                          </div>
-                      </mat-form-field>
-                      <br>
-                      <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
-                        <div>
-                          <button mat-raised-button color="primary" (click)="onSubmit()">Request Code</button>
-                        </div>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Phone or Email</mat-label>
+                            <input matInput type="text" formControlName="username" class="form-control"
+                                [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />
+                            <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                                <div *ngIf="f.username.errors.required">Username is required</div>
+                            </div>
+                        </mat-form-field>
+                        <br>
+                      
+                        <api-status-display>Service may be unavalible</api-status-display>
                       </div>
-                      {{ statusMessage }}
-                      <api-status-display>Service may be unavalible</api-status-display>
-                  </form>
+
+                      <div fxLayout="column" fxLayoutAlign="center center" class="row-height">
+                      <div>
+                        <button mat-raised-button color="primary" (click)="registerToken()">Request Code</button>
+                      </div>
+                    </div>
+
+                    <div *ngIf="submitted && (result$|async) as result; else loading">
+                      {{result | json}}
+                    </div>
+                  </div>
+
+                <br>
+                <mat-divider></mat-divider>
+
+                <br>
+                <div fxLayout="column"
+                      fxLayoutAlign="center center"
+                      class="row-height">
+                  <button mat-raised-button
+                          (click)='goBack()'>Cancel</button>
                 </div>
-
-              <br>
-              <mat-divider></mat-divider>
-
-              <br>
-              <div fxLayout="column"
-                    fxLayoutAlign="center center"
-                    class="row-height">
-                <button mat-raised-button
-                        (click)='goBack()'>Cancel</button>
-              </div>
-            </mat-card-content>
+              </mat-card-content>
+            </span>
           </mat-card>
         </div>
       </div>
@@ -59,8 +89,10 @@
       <br>
 
       <ng-template #loading >
-        <h2>Please wait ...loading.</h2>
-        <mat-spinner></mat-spinner>
+        <div *ngIf="submitted">
+          <h2>Please wait ...loading.</h2>
+          <mat-spinner></mat-spinner>
+        </div>
       </ng-template>
 
     </div>

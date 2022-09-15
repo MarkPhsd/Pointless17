@@ -51,7 +51,8 @@
         <div>
           <mat-form-field appearance="outline">
           <mat-label >Email</mat-label>
-          <input  matInput
+          <input  [disabled]="!isStaff"
+                  matInput
                   type="text"
                   id="title"
                   formControlName="email"
@@ -61,10 +62,11 @@
       </div>
 
       <div class="name-fields">
-        <div *ngIf="isAuthorized" >
+        <div >
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>DOB</mat-label>
             <input matInput
+                  [disabled]="!isStaff"
                   [matDatepicker]="picker"
                   formControlName="dob">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -76,21 +78,25 @@
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>ID EXP</mat-label>
             <input  matInput
+                     [disabled]="!isStaff"
                     [matDatepicker]="picker2"
                     formControlName="dlExp">
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker  #picker2></mat-datepicker>
           </mat-form-field>
         </div>
-        <app-value-fields
-                        [inputForm]="inputForm"
-                        [fieldName]="'dlNumber'">
-                    ID #
-        </app-value-fields>
+
+        <div  class="id-field" *ngIf="isAuthorized" >
+          <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'dlNumber'">
+                      ID #
+          </app-value-fields>
+        </div>
       </div>
 
       <div *ngIf="enableLimitsView" class="counts-container">
-        <div>
+        <div *ngIf="isStaff">
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'medGramLimit'">
@@ -98,7 +104,7 @@
           </app-value-fields>
         </div>
 
-        <div>
+        <div *ngIf="isStaff">
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'medPlantLimit'">
@@ -106,7 +112,7 @@
           </app-value-fields>
         </div>
 
-        <div>
+        <div *ngIf="isStaff">
           <app-value-fields
               [inputForm]="inputForm"
               [fieldName]="'medConcentrateLimit'">
@@ -116,9 +122,9 @@
 
       </div>
 
-      <div>
+      <div *ngIf="isStaff">
         <mat-form-field appearance="outline"
-            >
+           >
           <mat-label>Notes</mat-label>
             <textarea matInput
                       rows="10"
@@ -130,7 +136,7 @@
 
   </div>
 
-  <div *ngIf="enableMEDClients">
+  <div *ngIf="isStaff && enableMEDClients">
     <profile-med-info
         [isAuthorized]="isAuthorized"
         [inputForm]="inputForm"
@@ -168,19 +174,22 @@
         </mat-form-field>
       </div>
     </div>
+
     <div class="points">
       <mat-form-field appearance="outline">
       <mat-label >Reward Points</mat-label>
-      <input  [disabled]="!isAuthorized" matInput
+      <input  [disabled]="!isAuthorized" 
+              matInput
               type="text"
               id="title"
               formControlName="loyaltyPoints"
-              class="form-control" >
+              class="form-control">
       </mat-form-field>
     </div>
 
     <div>
       <mat-button-toggle-group  name="type"
+                                [disabled]="!isAuthorized" 
                                 aria-label="Font Style"
                                 formControlName="taxSales">
         <mat-button-toggle [value]="1">Non Taxable Client</mat-button-toggle>

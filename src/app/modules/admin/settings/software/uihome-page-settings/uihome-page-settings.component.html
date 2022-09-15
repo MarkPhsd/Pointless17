@@ -226,6 +226,18 @@
         </mat-slide-toggle>
       </div>
     </div>
+    <div  *ngIf="inputForm"
+          [formGroup]="inputForm">
+      <h4>Email </h4>
+      <div class="toggle-fields">
+        Requires SMTP Email account. Must be assignged in webconfig.
+        <mat-slide-toggle
+                  formControlName="smtpEmailEnabled"
+                  >
+          <mat-label>SMTP Email Enabled</mat-label>
+        </mat-slide-toggle>
+      </div>
+    </div>
 
   </mat-card-content>
   <mat-card-actions>

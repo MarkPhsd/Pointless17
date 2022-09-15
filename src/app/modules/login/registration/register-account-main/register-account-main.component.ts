@@ -1,11 +1,12 @@
-import { CompanyService,AuthenticationService} from 'src/app/_services';
+import { AuthenticationService} from 'src/app/_services';
 import { ICompany }  from 'src/app/_interfaces';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { environment } from 'src/environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { AppInitService } from 'src/app/_services/system/app-init.service';
+import { Subscription, switchMap,of,Observable } from 'rxjs';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
   selector: 'app-register-account-main',
@@ -14,6 +15,8 @@ import { AppInitService } from 'src/app/_services/system/app-init.service';
 })
 export class RegisterAccountMainComponent implements OnInit {
 
+  backgroundImage: any;
+  result$: Observable<any>;
   @Input() statusMessage: string;
   compName   : string;
   company    = {} as ICompany;
@@ -24,56 +27,106 @@ export class RegisterAccountMainComponent implements OnInit {
   error      = '';
   companyName: string;
   id         : any;
-
+  _uISettings: Subscription;
   loginForm: FormGroup;
+  bucket: string;
+  uiHomePageSetting: UIHomePageSettings
+  initUIService() {
+    this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
+        if (data) {
+          this.uiHomePageSetting  = JSON.parse(data.text) as UIHomePageSettings;
+        }
+      }
+    )
+  }
+
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
   constructor(
       private fb: FormBuilder,
       private route: ActivatedRoute,
+      private uiSettings: UISettingsService,
       private router: Router,
       private authenticationService: AuthenticationService,
-      private appInitService: AppInitService,
-      private sitesService: SitesService,
+      private _snackBar: MatSnackBar,
+      private uiSettingService     : UISettingsService,
   ) {
     if (this.authenticationService.userValue) {
       this.router.navigate(['/app-main-menu']);
     }
-    this.initLogo();
+ 
   }
 
   goBack(){
     this.router.navigate(['/login'])
   }
 
-  initLogo() {
-    const logo        = this.appInitService.logo;
-    if ( logo)  { this.logo   = logo }
+  initSubscription() {
+    this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {
+      if (data) {
+        const image  = `${this.bucket}${data.backgroundImage}`
+        this.assingBackGround(image)
+        this.uiHomePageSetting = data;
+
+        if (data.logoHomePage) {
+          this.logo = `${this.bucket}${data.logoHomePage}`;
+        }
+      }
+    }
+  )
+  }
+  
+  assingBackGround(image: string) {
+    if (!image) {
+      image = 'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
+     }
+    const styles = { 'background-image': `url(${image})`  };
+    this.backgroundImage = styles
+    const i = 1
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
     });
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    this.logo = `${this.appInitService.logo}`
-    this.compName = `${this.appInitService.company}`
+    this.initSubscription()
   }
 
-  async onSubmit(){
+  registerToken(){
     this.submitted = true;
     this.statusMessage = ""
-    // stop here if form is invalid
-    if (this.loginForm.invalid) {
-      return;
-    }
-    const result = await this.authenticationService.requestUserSetupToken(this.f.username.value).pipe().toPromise()
-    if (result)  {
-      this.router.navigate(['/register-token', { data: result.userName } ]);
-    }
+
+    if (this.loginForm.invalid) { return }
+
+    const userName = this.f.username.value;
+    const auth$ =this.authenticationService.requestUserSetupToken(userName);
+
+    const result$ = auth$.pipe(
+      switchMap(data => {
+      if (data)  {
+        console.log('registerToken,', data)
+        if (data.userExists ) {
+          this.notifyEvent("User exists, you must request a new password.", "Alert")
+          this.router.navigate(['/resetpassword'])
+        }
+        this.router.navigate(['/register-token', { data: userName } ]);
+      }
+      this.submitted = false
+      return of(data)
+    }))
+
+    this.result$ = result$;
+
   }
 
+  notifyEvent(message: string, action: string) {
+    this._snackBar.open(message, action, {
+      duration: 2000,
+      verticalPosition: 'top'
+    });
+  }
 
 
 }

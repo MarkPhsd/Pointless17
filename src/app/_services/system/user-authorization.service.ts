@@ -41,7 +41,7 @@ export class UserAuthorizationService {
     requiredArray    = requiredArray.toLowerCase();
     const rolesArray = requiredArray.split(',')
     rolesArray.forEach( data => {
-      if (data === currentRole) {
+      if (data.trim() === currentRole) {
           result = true;
           // console.log('isAuthorized', result)
         }

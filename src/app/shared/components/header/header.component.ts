@@ -41,6 +41,9 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   openOrderBar:                      boolean;
   @HostBinding('class')      className = '';
   mattoolbar                 ='mat-toolbar'
+
+  gridlayout        = 'grid-flow grid-margin'
+  gridlayoutNoStaff = 'grid-flow grid-margin-nostaff'
   isApp                      : boolean;
   company                    = {} as ICompany;
   compName:                  string;
@@ -240,6 +243,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
         }
       ))
     }
+
+    if (!this.isUserStaff) {
+      this.gridlayout = this.gridlayoutNoStaff
+    }
+
+    // gridlayout        = 'grid-flow grid-margin'
+    // gridlayoutNoStaff = 'grid-flow grid-margin-nostaff'
 
   }
 

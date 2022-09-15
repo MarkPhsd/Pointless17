@@ -3,7 +3,7 @@
   "appName": "PointlessPOS",
   "bundledWebRuntime": false,
   "npmClient": "npm",
-  "webDir": "dist/CCSapp",
+  "webDir": "dist/CCSApp",
   "plugins": {
     "SplashScreen": {
       "launchShowDuration": 0

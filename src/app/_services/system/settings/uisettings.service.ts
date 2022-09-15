@@ -145,7 +145,7 @@ export interface UIHomePageSettings {
   outGoingCustomerSupportEmail: string;
   salesReportsEmail  : string;
   twilioEnabled      : string;
-
+  smtpEmailEnabled   : string;
 }
 
 @Injectable({
@@ -488,7 +488,7 @@ export class UISettingsService {
       outGoingCustomerSupportEmail: [''],
       salesReportsEmail: [''],
       twilioEnabled: [''],
-
+      smtpEmailEnabled: [''],
      })
     return fb
   }

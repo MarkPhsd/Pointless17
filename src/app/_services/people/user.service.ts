@@ -19,7 +19,9 @@ export class UserService {
       private appInitService  : AppInitService,
       private siteService: SitesService,
       ) {
-      this.apiUrl   = this.appInitService.apiBaseUrl()
+      // this.apiUrl   = this.appInitService.apiBaseUrl()
+
+      const site = this.siteService.getAssignedSite();
     }
 
   getProfile():  Observable<IUserProfile>  {

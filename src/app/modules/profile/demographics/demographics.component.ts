@@ -2,6 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IUserProfile } from 'src/app/_interfaces';
 import { AuthenticationService, UserService } from 'src/app/_services';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-demographics',
@@ -11,10 +12,11 @@ import { AuthenticationService, UserService } from 'src/app/_services';
 export class DemographicsComponent implements OnInit {
 
   constructor(
-    private route                : ActivatedRoute,
-    private authenticationService: AuthenticationService,
-    private userService          : UserService,
-    private router               : Router,)
+    private route                  : ActivatedRoute,
+    public authenticationService   : AuthenticationService,
+    public userAuthorizationService: UserAuthorizationService,
+    private userService            : UserService,
+    private router                 : Router,)
      { }
 
   @Input()   user = {} as IUserProfile;
@@ -24,10 +26,6 @@ export class DemographicsComponent implements OnInit {
     if (user) {
       this.getCurrentUser(user.id)
     }
-    // if (!this.user || !this.user.id  || this.user.id == undefined || this.user.id == 0) {
-    //   return;
-    // }
-    // this.getCurrentUser(this.user.id)
   }
 
   getCurrentUser(id: number) {

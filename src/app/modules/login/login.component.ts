@@ -361,7 +361,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       .subscribe({
        next: user =>
         {
-
+          // console.log('user', user)
           this.initForm();
           if (user && user.errorMessage) {
             this.notifyEvent(user.errorMessage, 'Failed Login')
@@ -382,7 +382,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
-
               this.userSwitchingService.assignCurrentOrder(user)
               return
             }
@@ -403,7 +402,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   loginApp(user) {
-
     if (this.platformService.isApp()) {
       this.loggedInUser   = user.user
       this.spinnerLoading = false

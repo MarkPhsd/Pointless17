@@ -166,16 +166,17 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
     this.errorMessage = ''
 
     const site = this.siteService.getAssignedSite();
-    this.orderService.putOrder(site, order).subscribe(data => {
+    this.orderService.putOrder(site, order).subscribe(
+      {next: data => {
         this.orderService.updateOrderSubscription(data)
         this.processingUpdate = false;
         this.updateSelectedIndex(2)
-      }, err =>{
+      }, error: err =>{
         // this.notify
         this.processingUpdate = false;
         // this.updateSelectedIndex(2)
         this.errorMessage = "Error occured. Please check your address and save again." + err
-      }
+      }}
     )
   }
 

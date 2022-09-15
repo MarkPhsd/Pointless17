@@ -115,6 +115,8 @@ export class SendGridService {
 
   }
 
+
+
   sendSalesReport(id: number, dateFrom:string, dateTo: string): Observable<any> {
 
     const site = this.siteService.getAssignedSite()

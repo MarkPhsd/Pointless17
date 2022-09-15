@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/_services';
 import { IUser }  from 'src/app/_interfaces';
-
+import { Observable} from 'rxjs'
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 @Component({
   selector: 'app-resetpassword',
   templateUrl: './resetpassword.component.html',
@@ -18,12 +19,24 @@ export class ResetpasswordComponent implements OnInit {
   error = '';
   statusMessage: any;
 
+  request$ : Observable<any>;
+
   @Input() ResetEmail: boolean
   //receive user
   @Input() user: IUser;
+  homePageSetings: UIHomePageSettings
+  initUIService() {
+    this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
+        if (data) {
+          this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
+        }
+      }
+    )
+  }
 
   constructor(
       private formBuilder: FormBuilder,
+      private uiSettings: UISettingsService,
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: AuthenticationService
@@ -36,21 +49,22 @@ export class ResetpasswordComponent implements OnInit {
   }
 
   ngOnInit() {
-      this.loginForm = this.formBuilder.group({
-          username: ['', Validators.required],
-      });
-
-      // get return url from route parameters or default to '/'
+    this.initUIService()
+    this.initForm();
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/changepassword';
   }
 
+  initForm() { 
+    this.loginForm = this.formBuilder.group({
+      username: ['', Validators.required],
+  });
+
+  }
   // convenience getter for easy access to form fields
   get f() { return this.loginForm.controls; }
 
   onSubmit() {
-
     this.requestResetToken();
-
   }
 
   requestResetToken(){
@@ -58,23 +72,25 @@ export class ResetpasswordComponent implements OnInit {
 
       this.submitted = true;
       this.statusMessage = "Waiting"
+ 
       if (this.loginForm.invalid) {
           this.statusMessage = "form fields invalid."
           return;
       }
       this.loading = true;
-
-      this.authenticationService.requestPasswordResetToken(this.f.username.value);
-      this.statusMessage = "Password reset request token, please check your email or phone."
-      this.router.navigate(['/changepassword']);
+      
+      this.request$ = this.authenticationService.requestPasswordResetToken(this.f.username.value)
+      this.initForm();
 
     } catch (error) {
       this.statusMessage = "Password reset request failed."
-
     }
 
   }
 
+  changePassword() { 
+    this.router.navigate(['/changepassword']);
+  }
 
 
 }

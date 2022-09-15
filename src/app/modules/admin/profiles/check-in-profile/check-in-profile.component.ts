@@ -101,11 +101,14 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private uiSettingsService   : UISettingsService,
               private orderMethodsService : OrderMethodsService,
               private dateHelperService         : DateHelperService
-            ) {
+              ) {
     this.id = this.route.snapshot.paramMap.get('id');
-    this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
-    this.isUser       =  this.userAuthorization.isUserAuthorized('user')
+
+   
+
+    this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin,manager');
+    this.isStaff      =  this.userAuthorization.isUserAuthorized('admin,manager,employee');
+    this.isUser       =  this.userAuthorization.isUserAuthorized('user');
     this.initSubscriptions();
     this.refreshOrderSearch(null)
   }
@@ -122,6 +125,7 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.bucketName    = await this.awsBucket.awsBucket();
     this.awsBucketURL  = await this.awsBucket.awsBucketURL();
     this.selectedIndex = 0
+
     this.fillForm( this.id );
     const currentYear                   = new Date().getFullYear();
     this.minumumAllowedDateForPurchases = new Date(currentYear - 21, 0, 1);
@@ -382,6 +386,14 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       client$.pipe(
         switchMap(data =>
           {
+
+            if (data) { 
+              if (data === 'Not authorized.') { 
+                this.notifyEvent('Not authorized', 'Failed')
+                return EMPTY;
+              }
+            }
+
             this.notifyEvent('Account updated', 'Success')
             if (!data) { return EMPTY }
             if (this.currentOrder) {
