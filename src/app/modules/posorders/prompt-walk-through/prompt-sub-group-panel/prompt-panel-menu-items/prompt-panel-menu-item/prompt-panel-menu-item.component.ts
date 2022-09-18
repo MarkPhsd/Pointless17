@@ -85,16 +85,15 @@ export class PromptPanelMenuItemComponent implements OnInit {
     this.intSubscriptions();
     this.bucketName =   await this.awsBucket.awsBucket();
     if (this.promptMenuItem.prompt_Products.name) {
-      this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products.name)
+      this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products)
     }
   }
 
   getItemSrc(prompt_Products) {
     if (!prompt_Products || !prompt_Products.urlImageMain) {
       return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
-    } else {
-      return this.awsBucket.getImageURLPath(this.bucketName, this.promptMenuItem.prompt_Products.urlImageMain)
     }
+    return this.awsBucket.getImageURLPath(this.bucketName, this.promptMenuItem.prompt_Products.urlImageMain)
   }
 
   //promptMenuItem.prompt_Products.name
@@ -125,12 +124,12 @@ export class PromptPanelMenuItemComponent implements OnInit {
     if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
     //can item be added to this sub group.
     let orderPromptGroup = this.getOrderPromptStatus();
-    console.log('orderPromptGroup is it initialized?', orderPromptGroup)
+    // console.log('orderPromptGroup is it initialized?', orderPromptGroup)
 
     if (!orderPromptGroup) { return }
 
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
-    console.log('name', currentSubPrompt.name, currentSubPrompt)
+    // console.log('name', currentSubPrompt.name, currentSubPrompt)
 
     if (currentSubPrompt.quantityMet) {
       console.log('Quantity already met moving on ')
@@ -140,7 +139,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
     //then we can add the item including the reference of the item.
     const item = await this.getMenuItemToApply();
-    console.log('item - adding item', item)
+    // console.log('item - adding item', item)
 
     if (item) {
       if (!currentSubPrompt.itemsSelected) { currentSubPrompt.itemsSelected = [] as MenuItemsSelected[]}
@@ -187,12 +186,12 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   nextStep() {
-    console.log('next step')
+    // console.log('next step')
     this.outputNextStep.emit('true')
   }
 
   prevStep() {
-    console.log('prev step')
+    // console.log('prev step')
     this.outputPrevStep.emit('true')
   }
 }

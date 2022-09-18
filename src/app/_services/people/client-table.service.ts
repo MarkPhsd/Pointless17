@@ -6,6 +6,10 @@ import { IClientTable, ISite, IUserProfile,employee, FlowVendor, ImportFlowVendo
 import { IDriversLicense } from 'src/app/_interfaces/people/drivers-license';
 import { IEmployeeClient } from './employee-service.service';
 
+export interface NamesCities {
+  names: string[];
+  cities: string[];
+}
 @Injectable({
   providedIn: 'root'
 })
@@ -168,4 +172,28 @@ export class ClientTableService {
 
   };
 
+  //namesList As List(Of String), cities As List(Of String)
+  randomizeClientInfo(site, namesCities: NamesCities): Observable<IUserProfile> {
+
+    const controller =  "/ClientTable/"
+
+    const endPoint = `randomizeClientInfo`
+
+    const parameters  = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>(url , namesCities)
+
+  };
+
+  //  https://names.drycodes.com/10000?nameOptions=boy_names
+  // 'https://names.drycodes.com/1000?nameOptions=cities
+  getCitiesList(): Observable<any> {
+    return  this.http.get(`https://names.drycodes.com/1000?nameOptions=cities`)
+  }
+
+  getNamesList(): Observable<any> {
+    return  this.http.get(`https://names.drycodes.com/10000?nameOptions=boy_names`)
+  }
 }

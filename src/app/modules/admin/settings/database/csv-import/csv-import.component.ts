@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
-import { Observable, of, switchMap } from 'rxjs';
+import { combineLatest, Observable, of, switchMap } from 'rxjs';
 import { saveAs } from 'file-saver';
 import { FakeProductsService } from 'src/app/_services/data/fake-products.service';
 import { FakeContactsService } from 'src/app/_services/data/fake-contacts.service';
@@ -13,7 +13,10 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FlowVendor, ImportFlowVendorResults, IProduct } from 'src/app/_interfaces';
 import { ClientTableService } from 'src/app/_services/people/client-table.service';
 import { FlowInventory, ImportFlowInventoryResults } from 'src/app/_interfaces/import_interfaces/inventory-flow';
-
+export interface NamesCities {
+  names: string[];
+  cities: string[];
+}
 @Component({
   selector: 'app-csv-import',
   templateUrl: './csv-import.component.html',
@@ -41,6 +44,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   importFlowStainsResults   : ImportFlowStainsResults;
   productImports            : ImportProductResults;
   resultsMessage            : any;
+  random$                   : Observable<any>;
 
   constructor(
     private fakeProductsService : FakeProductsService,
@@ -137,7 +141,15 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     this.downloadFile(items, name)
 
   }
-
+  // {id: 1, name: 'Products'},
+  // {id: 2, name: 'Inventory'},
+  // {id: 3, name: 'Clients - Vendors'},
+  // {id: 4, name: 'FH Products'},
+  // {id: 5, name: 'FH Prices'},
+  // {id: 6, name: 'FH Inventory'},
+  // {id: 7, name: 'FH Clients'},
+  // {id: 8, name: 'FH Vendors'},
+  // {id: 9, name: 'FH Strains'},
   getSchemaType(): any {
     let items = [] as any;
     let name = 'filename'
@@ -148,13 +160,13 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     }
 
     if (this.schemaValue == 2) {
-      items = this.fakeContactService.getRecords(10);
-      name = 'Import Contacts'
+      items = this.fakeInventoryService.getRecords(10);
+      name = 'Import Inventory'
     }
 
     if (this.schemaValue == 3) {
-      items = this.fakeInventoryService.getRecords(10);
-      name = 'Import Inventory'
+      items = this.fakeContactService.getRecords(10);
+      name = 'Import Contacts'
     }
 
     if (this.schemaValue == 4) {
@@ -297,11 +309,11 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   }
 
   importProducts(){
+    console.log('import products')
     const items =  this.csvRecords  as IProduct[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-
     if (items) {
       this.getProgressCount(true)
       this.menuService.importProducts(site,items).subscribe(data => {
@@ -376,6 +388,25 @@ export class CSVImportComponent implements OnInit, OnDestroy {
         this.progress = data;
         this.progressValue =  +((+data.progress/+data.total ) * 100).toFixed(0)
     })
+  }
+
+  randomizeInfo() {
+    const site  = this.siteService.getAssignedSite()
+    const cities$ = this.clientTableService.getCitiesList();
+    const names$ = this.clientTableService.getCitiesList();
+    const confirm = window.confirm ('This will randomize your user data, are you sure?');
+    if (!confirm) { return };
+
+    this.random$ = combineLatest(cities$,names$).pipe(
+        switchMap( data => {
+          let item : NamesCities;
+          item.cities = data[0];
+          item.names = data[1];
+          return this.clientTableService.randomizeClientInfo(site, item);
+        }
+    ))
+
+
   }
 }
 
