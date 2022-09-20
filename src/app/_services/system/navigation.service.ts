@@ -42,6 +42,9 @@ export class NavigationService {
     this.toolbarUIService.updateOrderBar(openOrderBar)
     this.toolbarUIService.resetOrderBar(false)
 
+    this.toolbarUIService.updateSearchBarSideBar(false)
+    this.toolbarUIService.updateSideBar(false)
+
     let url = 'pos-order-schedule'
     if (!isStaff) {
       url = 'pos-order-schedule'
@@ -54,8 +57,6 @@ export class NavigationService {
        this.router.navigateByUrl(url)
        return
     }
-
-    this.toolbarUIService.updateOrderBar(false)
 
   }
 

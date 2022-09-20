@@ -23,7 +23,8 @@
     "electron-updater": "^4.0.6",
     "fast-xml-parser": "^4.0.3",
     "winax": "3.3.4",
-    "winreg": "^1.2.4"
+    "winreg": "^1.2.4",
+    "yargs": "^17.5.1"
   },
   "devDependencies": {
     "electron": "^11.0.0",

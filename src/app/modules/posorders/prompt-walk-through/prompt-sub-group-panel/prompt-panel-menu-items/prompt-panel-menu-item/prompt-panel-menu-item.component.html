@@ -2,19 +2,15 @@
       class="grid-items">
 
   <div class="grid-items-buttons" >
-    <div>
-      <button mat-button
-        color="primary"
-        class="buttons"
-        (click)="addItem()">
-        <mat-icon>add</mat-icon>
+    <div class='item-text freeze-text'>
+        <button mat-button
+          color="primary"
+          class="buttons"
+          (click)="addItem()">
+          <mat-icon>add</mat-icon>
+        {{promptMenuItem?.prompt_Products?.name}}
       </button>
     </div>
-
-    <div class='item-text freeze-text' (click)="addItem()">
-      {{promptMenuItem.prompt_Products.name}}
-    </div>
-
   </div>
 
   <div *ngIf ="imageURL" class="image" (click)="addItem()">

@@ -112,6 +112,7 @@ import { ManifestStatusComponent } from './modules/admin/inventory/manifest-stat
 import { ManifestTypeComponent } from './modules/admin/inventory/manifest-type/manifest-type.component';
 import { StoreCreditListComponent } from './modules/admin/store-credit/store-credit-list/store-credit-list.component';
 import { FloorPlanComponent } from './modules/floor-plan/floor-plan/floor-plan.component';
+import { QROrderComponent } from './modules/posorders/qrorder/qrorder.component';
 
 const routes: Routes = [
     // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -120,9 +121,7 @@ const routes: Routes = [
       children: [
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
-
         { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },
-
         { path: 'app-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
         { path: 'department-list', component: DepartmentMenuComponent,   data: {  title: 'Department Menu', animation: 'isLeft'}},
@@ -304,6 +303,8 @@ const routes: Routes = [
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
+
+    { path: 'qr-order', component: QROrderComponent, data: { animation: 'isLeft'}},
 
     // { path: '/menu-board/grid-menu-layout',  redirectTo: '/menu-board', pathMatch: 'full' },
 

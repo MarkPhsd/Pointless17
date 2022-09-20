@@ -311,7 +311,9 @@ export class MenuitemComponent implements OnInit, OnDestroy {
         this.menuItem = menuItem;
         const site     = this.siteService.getAssignedSite();
         this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
-        this.brand$ = this.brandService.getClient(site, menuItem.brandID)
+        if (menuItem.brandID) { 
+          this.brand$ = this.brandService.getClient(site, menuItem.brandID)
+        }
         this.packagingMaterial = this.menuService.getPackagingMaterialArray(menuItem)
 
         if (menuItem.priceCategories &&  menuItem.priceCategories.productPrices && menuItem.priceCategories.productPrices.length>0 ) {

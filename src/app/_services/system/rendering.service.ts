@@ -88,6 +88,15 @@ export class RenderingService {
             }
           }
 
+          
+          if (type === 'items') {
+            if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
+              console.log('data %', data?.ItemOrderPercentageDiscount)
+              let disc = `${text} ${this.itemOrderPercentageDiscountText}`;
+              newText = newText + disc;
+            }
+          }
+
           if (type === 'items') {
             if (data.itemCashDiscount && data?.itemCashDiscount != 0) {
               console.log('data %', data?.itemCashDiscount)
@@ -100,14 +109,6 @@ export class RenderingService {
             if (data.itemOrderCashDiscount && data?.itemOrderCashDiscount != 0) {
               console.log('data %', data?.itemOrderCashDiscount)
               let disc = `${text} ${this.itemOrderCashDiscountText}`;
-              newText = newText + disc;
-            }
-          }
-
-          if (type === 'items') {
-            if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
-              console.log('data %', data?.ItemOrderPercentageDiscount)
-              let disc = `${text} ${this.itemOrderPercentageDiscountText}`;
               newText = newText + disc;
             }
           }

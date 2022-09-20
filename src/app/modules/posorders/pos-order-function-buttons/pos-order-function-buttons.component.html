@@ -31,7 +31,8 @@
     </button>
   </div>
 
-  <div *ngIf="emailOption">
+
+  <div *ngIf="ssmsOption && !isUser">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.email) "
             mat-raised-button
             class="button"
@@ -43,7 +44,7 @@
     </button>
   </div>
 
-  <div *ngIf="ssmsOption">
+  <div *ngIf="ssmsOption && !isUser">
     <button  [disabled]="!(order && order.clients_POSOrders && order.clients_POSOrders.phone) "
             mat-raised-button
             class="button"
@@ -61,7 +62,7 @@
             [disabled] = "!((!order.history || !order.completionDate) || isStaff)"
             class="button"
             color="primary"
-            aria-label="Check Out / Pay"
+            aria-label="Check Out"
             (click)="makePayment()">
       <mat-icon>credit_card</mat-icon>
       <span>
@@ -92,7 +93,7 @@
     </button>
   </div>
 
-  <div *ngIf="mainPanel && !order.suspendedOrder">
+  <div *ngIf="!isUser && (mainPanel && !order.suspendedOrder)">
     <span>
       <button mat-raised-button
               [disabled]="( (order.history && !isAuthorized) && order.clientID == 0)  == true"
@@ -101,7 +102,7 @@
     </span>
   </div>
 
-  <div *ngIf="mainPanel && order.suspendedOrder">
+  <div *ngIf="!isUser && (mainPanel && order.suspendedOrder)">
     <span>
       <button mat-raised-button color="warn"
               [disabled]="( (order.history && !isAuthorized) && order.clientID == 0)  == true"
@@ -109,7 +110,7 @@
     </span>
   </div>
 
-  <div>
+  <div  *ngIf="!isUser">
     <button mat-raised-button class="button"
             [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
             color="primary"
@@ -121,7 +122,7 @@
     </button>
   </div>
 
-  <div>
+  <div  *ngIf="!isUser">
     <button mat-raised-button class="button"
             [disabled]=" !refundItemEnabled || ((order.history) && (itemsPrinted || paymentsMade)) == true"
             color="primary"
@@ -133,7 +134,7 @@
     </button>
   </div>
 
-  <div>
+  <div  *ngIf="!isUser">
     <button mat-raised-button class="button"
             color="primary"
             (click)="removeDiscounts()">
@@ -171,17 +172,17 @@
   <div>
     <button   mat-raised-button class="button"
               color="warn"
-              [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0)"
+              [disabled]="(order.history || order.completionDate) || (order.balanceRemaining > 0 && order.balanceRemaining != 0)"
               aria-label="delete"
               (click)="deleteOrder()">
         <mat-icon>delete</mat-icon>
         <span>
-          Delete
+          Cancel
         </span>
     </button>
   </div>
 
-  <div>
+  <div  *ngIf="!isUser">
     <button mat-raised-button class="button"
             [disabled]="  ((order.history) && (itemsPrinted || paymentsMade)) == true"
             color="primary"
@@ -193,7 +194,7 @@
     </button>
   </div>
 
-  <div>
+  <div  *ngIf="!isUser">
     <button mat-raised-button
             class="button"
             color="warn"

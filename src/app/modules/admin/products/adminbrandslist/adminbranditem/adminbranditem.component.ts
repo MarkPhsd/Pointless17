@@ -10,8 +10,6 @@ import { ClientTableService } from 'src/app/_services/people/client-table.servic
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FbContactsService } from 'src/app/_form-builder/fb-contacts.service';
-import { tap } from 'rxjs/operators';
-import { truncateSync } from 'original-fs';
 
 @Component({
   selector: 'app-adminbranditem',

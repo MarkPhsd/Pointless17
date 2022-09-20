@@ -15,9 +15,11 @@ export class FooterComponent implements OnInit, OnDestroy {
 
   @ViewChild('footerMenu') footerMenu: TemplateRef<any>;
   outlet              : TemplateRef<any>;
-
+  phoneDevice : boolean;
   smallDevice: boolean;
+  
   isStaff             =   false;
+
   isAdmin             =   false;
   isUser              =   false;
   user                : IUser;
@@ -32,16 +34,6 @@ export class FooterComponent implements OnInit, OnDestroy {
   currentOrderSusbcriber() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
-      // this.canRemoveClient = true
-      // if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
-      //   this.canRemoveClient = false
-      // }
-      // if (this.order && this.order.posPayments && this.order.posPayments.length > 0)  {
-      //   this.canRemoveClient = false
-      // }
-      // if (!data) { return }
-      // this.checkIfPaymentsMade()
-      // this.checkIfItemsPrinted()
     })
   }
 
@@ -56,7 +48,8 @@ export class FooterComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.updateScreenSize()
     const i = 0
-    this.currentOrderSusbcriber()
+    this.currentOrderSusbcriber();
+    this.getUserInfo();
   }
 
   ngOnDestroy(): void {
@@ -74,7 +67,12 @@ export class FooterComponent implements OnInit, OnDestroy {
     if ( window.innerWidth < 850 ) {
       this.smallDevice = true
       this.outlet = this.footerMenu
-    }
+    };
+    if ( window.innerWidth < 450 ) {
+      this.phoneDevice = true
+      this.outlet = this.footerMenu
+    };
+    
   }
 
   getUserInfo() {
@@ -100,6 +98,11 @@ export class FooterComponent implements OnInit, OnDestroy {
       this.showPOSFunctions = true;
       this.isAdmin          = true
     }
+
+    if (user.roles === 'manager' || user.roles === 'admin' || user.roles === 'employee' ) { 
+      this.isStaff = true
+    }  
+
   }
 
   initUserInfo() {
@@ -117,7 +120,13 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   smallDeviceLimiter() {
-    if (this.smallDevice) { this.toolbarUIService.updateOrderBar(false) }
+    if (this.smallDevice) { 
+      this.toolbarUIService.updateOrderBar(false) 
+    }
+    if (this.phoneDevice) { 
+      this.toolbarUIService.updateOrderBar(false) 
+      this.toolbarUIService.updateSearchBarSideBar(false) 
+    }
   }
 
   toggleOpenOrderBar() {

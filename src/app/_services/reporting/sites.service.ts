@@ -235,7 +235,7 @@ export class SitesService {
     }
 
     if (this.platformSevice.isApp() ) {
-      localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net:4443/api')
+      localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net/api')
       return localStorage.getItem('storedApiUrl')
     }
   }

@@ -31,19 +31,32 @@ export class PromptWalkThroughComponent implements OnInit {
   _posItem         : Subscription;
 
   intSubscriptions() {
-
+    this.initPOSItemSubscription();
+    this.initPromptGroupSubscription();
+    this.initOrderPromptGroupSubscription();
+  }
+  
+  initPOSItemSubscription() { 
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
+      console.log('initPOSItemSubscription', data)
       this.posItem = data;
     })
-
+  }
+    
+  initPromptGroupSubscription() {
     this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
+      console.log('initPromptGroupSubscription', data)
       this.promptGroup = data;
     })
+  }
+
+  initOrderPromptGroupSubscription() {
     //this should be initialized from selecting an item earlier.
     //the order and the prompt will be assigned.
     //the main item should also be included .
     //we might in the future want to use a multiplier. based on size selection
     this._orderPromptGroup = this.promptWalkThroughService.orderPromptGroup$.subscribe( data => {
+      console.log('initOrderPromptGroupSubscription', data)
       this.orderPromptGroup = data;
     })
 
@@ -59,11 +72,11 @@ export class PromptWalkThroughComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
-    this.intSubscriptions()
+
   }
 
   ngOnInit(): void {
-    console.log('')
+    this.intSubscriptions()
   }
 
   reset() {

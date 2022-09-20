@@ -1,7 +1,5 @@
 <div *ngIf="subGroup" class="container">
-  <!-- accordionStep {{accordionStep}}
-  index {{index}}
-  setStep {{setStep(index)}} -->
+
   <mat-expansion-panel  [expanded] = "accordionStep === index"
                         (opened)   = "setStep(index)"
                         hideToggle>

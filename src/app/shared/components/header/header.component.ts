@@ -212,7 +212,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async  ngOnInit() {
-    this.site = this.siteService.getAssignedSite();
+    this.site = await this.siteService.getAssignedSite();
+    console.log(this.site)
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');

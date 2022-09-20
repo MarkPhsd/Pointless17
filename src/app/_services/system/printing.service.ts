@@ -547,7 +547,7 @@ getDomToImage(node: any) {
       if (this.platFormService.androidApp) {
         console.log(this.uiSettingsService.posDeviceInfo)
         const device = this.uiSettingsService.posDeviceInfo;
-        this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder, null, device.btPrinter);
+        this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder, null, device.btPrinter );
         return;
       }
     }
@@ -574,7 +574,7 @@ getDomToImage(node: any) {
       },
     )
     dialogRef.afterClosed().subscribe(result => {
-      if (this.router.url == 'pos-payment') {
+      if (this.router.url == 'pos-payment' ) {
         if (!this.platFormService.isApp()) {
           const user = this.userAuthService.currentUser()
           if (user && user.roles == 'user') {

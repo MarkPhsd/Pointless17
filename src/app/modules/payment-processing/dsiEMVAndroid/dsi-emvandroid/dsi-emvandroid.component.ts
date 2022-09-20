@@ -2,7 +2,7 @@
 import { Component,EventEmitter,Inject,Input,OnInit, Optional, Output } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Capacitor} from '@capacitor/core';
-import { dsiemvandroid } from 'dsiemvandroidplugin';
+// import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { Observable,switchMap,of , Subscription} from 'rxjs';
 import { IPOSPayment } from 'src/app/_interfaces';
@@ -148,7 +148,7 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   async checkBTPermission() {
     const options = {value: 'test'};
-    dsiemvandroid.getHasPermission(options)
+    // dsiemvandroid.getHasPermission(options)
   }
 
   async getDeviceInfo() {
@@ -164,7 +164,7 @@ export class DsiEMVAndroidComponent implements OnInit {
       this.cancelResponse = true;
     }
     const options = {value:''}
-    const result = await dsiemvandroid.setResponse(options);
+    // const result = await dsiemvandroid.setResponse(options);
   }
 
   async resetbtResponse() {
@@ -174,7 +174,7 @@ export class DsiEMVAndroidComponent implements OnInit {
       this.cancelResponse = true;
     }
     const options = {value:''}
-    const result =  await dsiemvandroid.setbtResponse(options);
+    // const result =  await dsiemvandroid.setbtResponse(options);
   }
 
   async refreshInfo() {
@@ -193,12 +193,12 @@ export class DsiEMVAndroidComponent implements OnInit {
 
     try {
       const options = {'value': btItem.bluetoothDeviceName};
-      const item = await dsiemvandroid.connectToBT(options);
+      // const item = await dsiemvandroid.connectToBT(options);
       await this.checkResponse();
       const message = {'response': '', value: ''};
-      let value = await dsiemvandroid.getMessageResponse(message);
+      // let value = await dsiemvandroid.getMessageResponse(message);
       this.message = ''
-      this.messageResponse = value.value;
+      // this.messageResponse = value.value;
     } catch (error) {
       console.log('response', error)
     }
@@ -208,7 +208,7 @@ export class DsiEMVAndroidComponent implements OnInit {
     if (this.btDeviceConnected && this.btDeviceSelected) {
       await this.resetResponse();
       const options = {'value': this.btDeviceSelected};
-      const item = await dsiemvandroid.disconnectFromBt(options);
+      // const item = await dsiemvandroid.disconnectFromBt(options);
       await this.checkbtResponse();
     }
   }
@@ -240,11 +240,11 @@ export class DsiEMVAndroidComponent implements OnInit {
       options.pinPadIpAddress = options.pinPadIpAddress;
 
       const ip = { value: ' value.'}
-      options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
+      // options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
 
       options.padPort         = options.padPort;
-      const item    = await dsiemvandroid.disconnectFromBt(options)
-      this.message  = item;
+      // const item    = await dsiemvandroid.disconnectFromBt(options)
+      // this.message  = item;
       await this.checkResponse();
     } catch (error) {
       this.message = error;
@@ -263,11 +263,11 @@ export class DsiEMVAndroidComponent implements OnInit {
       // options.pinPadIpAddress = transaction.pinPadIpAddress;
 
        const ip = { value: ' value.'}
-      options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
+      // options.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
 
       options.padPort         = transaction.padPort;
       try {
-        const item              = await dsiemvandroid.emvParamDownload(options)
+        // const item            = await dsiemvandroid.emvParamDownload(options)
         this.message = 'Param Download...'
         await this.checkResponse();
         const message = {'response': '', value: ''};
@@ -294,8 +294,8 @@ export class DsiEMVAndroidComponent implements OnInit {
       options.merchantID      = transaction.merchantID;
       options.pinPadIpAddress = transaction.pinPadIpAddress;
       options.padPort         = transaction.padPort;
-      const item              = await dsiemvandroid.emvParamDownload(options)
-      this.message            = item;
+      // const item              = await dsiemvandroid.emvParamDownload(options)
+      // this.message            = item;
       await this.checkResponse();
     } catch (error) {
       this.message = error;
@@ -357,7 +357,8 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   async getResponse(){
     const options = {'response': '', value: ''};
-    const item = await dsiemvandroid.getResponse(options);
+    // const item = await dsiemvandroid.getResponse(options);
+    let item: any;
     this.messageResponse = item.value;
     if (item.value) {
       if (item.value.substring(0, 5) === '<?xml' || item.value.substring(0, 5) === '<RStr') {
@@ -416,14 +417,16 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   async checkMessageResponse() {
     const options = {'response': '', value: ''};
-    let item = await dsiemvandroid.getMessageResponse(options);
+    // let item = await dsiemvandroid.getMessageResponse(options);
+    let item: any;
     // console.log('checkMessageResponse', item)
     this.messageResponse  = item.value;
   }
 
   async getRequest() {
     const options = {'response': '', value: ''};
-    let item = await dsiemvandroid.getRequest(options);
+    let item: any;
+    // let item = await dsiemvandroid.getRequest(options);
     if (item && item.value) {
       try {
         if (item.value.substring(0, 5) === '<?xml' || item.value.substring(0, 5) === '<RStr') {
@@ -466,7 +469,8 @@ export class DsiEMVAndroidComponent implements OnInit {
 
   async getbtResponse(){
     const options = {'response': '', value: ''};
-    const item = await dsiemvandroid.getbtResponse(options);
+    let item: any;
+    // const item = await dsiemvandroid.getbtResponse(options);
     console.log('getbtResponse 1', item)
     try {
       if (item.value) {
@@ -514,7 +518,8 @@ export class DsiEMVAndroidComponent implements OnInit {
       this.cancelResponse = true;
       this.processRunning = false;
       const options = { value: ' value.'}
-      const item    = await dsiemvandroid.cancelTransaction(options)
+      let item: any;
+      // const item    = await dsiemvandroid.cancelTransaction(options)
       this.message  = ''
       this.request  = ''
       this.tranResponse  = ''
@@ -551,7 +556,8 @@ export class DsiEMVAndroidComponent implements OnInit {
             this.transaction.gratuity =  this.payment?.tipAmount.toFixed(2)
           }
         }
-        const item = await dsiemvandroid.processSale(this.transaction);
+        let item: any;
+        // const item = await dsiemvandroid.processSale(this.transaction);
         await  this.checkResponse();
         if (this.textResponse.toLowerCase() === 'approved') {
           await this.paymentsMethodsProcessService.processCreditCardResponse(this.response, this.payment, this.orderMethodsService.order);
@@ -574,7 +580,8 @@ export class DsiEMVAndroidComponent implements OnInit {
     item.pOSPackageID    = value.pOSPackageID
     item.padPort         = value.padPort;
     const ip = { value: ' value.'}
-    item.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
+
+    // item.pinPadIpAddress = await dsiemvandroid.getIPAddressPlugin(ip);
     item.merchantID      = value.merchantID;
     item.secureDevice    = value.secureDevice;
     item.tranCode        = value.tranCode;

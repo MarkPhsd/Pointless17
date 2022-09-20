@@ -703,23 +703,22 @@ export class OrderMethodsService implements OnDestroy {
   deleteOrder(id: number, confirmed: boolean) {
     const site = this.siteService.getAssignedSite();
 
-    if (!confirmed) {
+    if (!confirmed && id) {
       const confirm = window.confirm('Are you sure you want to delete this order?')
       if (!confirm) { return }
     }
 
-    if (this.order) {
-      const orderDelete$ = this.orderService.deleteOrder(site, this.order.id)
+    if (id) {
+
+      const orderDelete$ = this.orderService.deleteOrder(site, id)
       orderDelete$.subscribe(
         {next: data => {
             if (data) {
               this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
               this.clearOrder();
               if (this.router.url == '/pos-orders') {
-                //then refresh orders
                 return
               }
-
               this.router.navigate(['app-main-menu'])
             }
             if (!data) {

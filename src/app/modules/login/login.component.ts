@@ -77,7 +77,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           const image  = `${this.bucket}${data.backgroundImage}`
           this.assingBackGround(image)
           this.uiHomePageSetting = data;
-
           if (data.logoHomePage) {
             this.logo = `${this.bucket}${data.logoHomePage}`;
           }

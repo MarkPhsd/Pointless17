@@ -26,10 +26,10 @@
 
         <mat-tab label="Sale Type"
                 class="sale-type-tab">
-            <posorder-service-type
-              (outPutSelectServiceType)='selectedServiceType($event)'>
-              Select Service Type
-            </posorder-service-type>
+          <posorder-service-type
+            (outPutSelectServiceType)='selectedServiceType($event)'>
+            Select Service Type
+          </posorder-service-type>
         </mat-tab>
 
         <mat-tab *ngIf="serviceType && serviceType.deliveryService"
@@ -45,23 +45,20 @@
         </mat-tab>
 
         <mat-tab (click)="selectedIndex==2"
-                *ngIf="serviceType && serviceType.promptScheduleTime"
-                 label="Schedule Information">
-
+                *ngIf   ="serviceType && serviceType.promptScheduleTime"
+                 label  ="Schedule Information">
           <app-posorder-schedule-form
               [serviceType]="serviceType"
               [order]="order"
               (OutPutSaveShippingTime)="saveShippingTime($event)">
-            </app-posorder-schedule-form>
-
+          </app-posorder-schedule-form>
         </mat-tab>
 
         <mat-tab (click)="selectedIndex == 3" label="Special Requests">
           <pos-order-notes
             [serviceType]="serviceType"
             [order]="order"
-            [inputForm]="inputFormNotes"
-           >
+            [inputForm]="inputFormNotes">
           </pos-order-notes>
         </mat-tab>
 
@@ -70,7 +67,8 @@
 
   <mat-card-actions>
     <div *ngIf="selectedIndex == 3 || (showSaveButton && selectedIndex != 0)">
-      <button mat-raised-button color="primary"
+      <button mat-raised-button 
+              color="primary"
               (click)="save()">
         <mat-icon aria-label="save">save</mat-icon>Save and Continue
       </button>

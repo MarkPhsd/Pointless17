@@ -85,7 +85,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
     this.intSubscriptions();
     this.bucketName =   await this.awsBucket.awsBucket();
     if (this.promptMenuItem.prompt_Products.name) {
-      this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products.name)
+      this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products)
     }
   }
 

@@ -22,6 +22,7 @@ export interface TransactionUISettings {
   closeOrderTimeCutOff   : string;
   ordersRequireCustomer  : boolean;
   validateCustomerLicenseID: boolean;
+  qrDefaultServiceTypeID : number;
   defaultClientTypeID    : number;
   enablMEDClients        : boolean;
   enableLimitsView       : boolean;
