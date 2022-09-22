@@ -134,7 +134,7 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   makePayment() {
-    this.navigationService.makePayment(false, this.smallDevice, this.isStaff)
+    this.navigationService.makePayment(false, this.smallDevice, this.isStaff, this.order.completionDate)
   }
 
 

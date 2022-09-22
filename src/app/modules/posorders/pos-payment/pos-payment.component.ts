@@ -484,19 +484,23 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
 
+    console.log('processResults paymentResponse', paymentResponse)
+    
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
         result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
       } else {
       }
     }
-
-    this.orderService.updateOrderSubscription(paymentResponse.order)
+    
     this.resetPaymentMethod();
+
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
+      this.orderService.updateOrderSubscription(paymentResponse.order)
+      
       this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
-      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something bad happened.',3000)
+      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
     }
   }
 

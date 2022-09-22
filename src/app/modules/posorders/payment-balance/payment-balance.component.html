@@ -9,13 +9,22 @@
         </app-order-header>
       </div>
 
-      <div class="cart-button">
+      <div *ngIf="!order || !order.completionDate" class="cart-button">
         <button
               mat-raised-button
               (click)="editCart()">
           <mat-icon  color="primary"> edit</mat-icon>
           <mat-icon color="primary">shopping_cart</mat-icon>
             Edit
+        </button>
+      </div>
+
+      <div *ngIf="order && order.completionDate" class="cart-button">
+        <button
+              mat-raised-button
+              (click)="exitOrder()">
+          <mat-icon color="primary">exit_to_app</mat-icon>
+            Exit
         </button>
       </div>
 
@@ -59,14 +68,15 @@
             </div>
           </div>
 
-          <div *ngIf="(item?.paymentMethod?.isCreditCard) ||
+          <div *ngIf="!isUser && (item?.paymentMethod?.isCreditCard) ||
                       (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
             <button [disabled]="item.voidReason" color="warn"
                     mat-button (click)="editPayment(item)">
               <mat-icon>edit</mat-icon></button>
           </div>
 
-          <div *ngIf="(item?.paymentMethod?.isCreditCard) ||
+          <div *ngIf="!isUser && item?.applicationLabel != 'stripe'  && 
+                      (item?.paymentMethod?.isCreditCard) ||
                       (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
             <button mat-raised-button color='primary' (click)="capture(item)">Capture</button>
           </div>
@@ -100,7 +110,7 @@
             </button>
           </div>
 
-          <div *ngIg="!item.completionDate">
+          <div *ngIf="isAuthorized && !item.completionDate">
             <button mat-button
                     [disabled]="item.voidReason"
                     class="grid-item-button"
@@ -123,7 +133,7 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <div  *ngIf="paymentsEqualTotal">
+    <div  *ngIf="!isUser && paymentsEqualTotal">
       <button mat-button (click)="closeOrder()">
         <mat-icon >close</mat-icon>Close</button>
     </div>

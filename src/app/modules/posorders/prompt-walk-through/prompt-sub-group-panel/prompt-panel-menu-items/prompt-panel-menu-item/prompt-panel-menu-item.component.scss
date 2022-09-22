@@ -1,5 +1,12 @@
 @import "/src/mixins.scss";
 
+button { 
+  min-width: 75px;
+  @include for-phone-only {
+    min-width: 75px;
+  }
+}
+
 .item-count {
   font-style : italic;
   font-weight: 500;
@@ -51,12 +58,13 @@
 }
 
 
+
 .grid-items-buttons {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-auto-flow: row;
-  grid-template-columns:  repeat( auto-fit, minmax(75px, 1fr) );
+  grid-template-columns: 175px repeat( auto-fit, minmax(175px, 1fr) );
 
   @include for-phone-only {
     --gap: 10px;
@@ -65,19 +73,25 @@
     grid-template-columns: 75px 1f;
   }
 }
+
+.grid-button-text { 
+  
+}
+
 .grid-items {
   --gap: 10px;
   display: grid;
   gap: var(--gap);
   grid-auto-flow: row;
-  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(225px, 1fr) );
 
   @include for-phone-only {
     --gap: 10px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
   }
+
 }
 
 .span-column {

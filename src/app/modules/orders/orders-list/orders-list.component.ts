@@ -114,6 +114,13 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   @Input() height = "84vh"
 
   initSubscriptions() {
+
+    let clientID: number;
+
+    if (this.userAuthorization.user && this.userAuthorization.user.roles === 'user') {
+      clientID = this.userAuthorization.user.id;
+    }
+
     this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
         this.searchModel            = data
         if (!this.searchModel) {
@@ -121,12 +128,19 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           this.currentPage        = 1
           searchModel.pageNumber  = 1;
           searchModel.pageSize    = 50;
-                  this.searchModel        = searchModel
+          this.searchModel        = searchModel
         }
+        if (clientID) { 
+          this.searchModel.clientID = clientID;
+          this.searchModel.suspendedOrder = 0;
+        }
+  
+        console.log('search model updated', data)
         this.refreshSearch()
         return
       }
     )
+
   }
 
   constructor(  private _snackBar               : MatSnackBar,
@@ -310,6 +324,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       this.params.startRow     = 1;
       this.params.endRow       = this.pageSize;
     }
+
     this.onGridReady(this.params)
     return this._searchItems$
   }
@@ -329,6 +344,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
+    console.log('searchModel get row data', searchModel)
     return this.orderService.getOrderBySearchPaged(site, searchModel)
   }
 
@@ -338,7 +354,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     if (params)  {
       this.params  = params
       this.gridApi = params.api;
-      // this.gridColumnApi = params.columnApi;
       params.api.sizeColumnsToFit();
     }
     if (!params.startRow ||  !params.endRow) {

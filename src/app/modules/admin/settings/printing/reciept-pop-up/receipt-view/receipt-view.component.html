@@ -1,21 +1,18 @@
 <div class="buttons-grid">
   <div>
     <button mat-button (click)="print()">
-      <div *ngIf="printerName">
-        <mat-icon>print</mat-icon>
-        Print to  {{printerName}}
-      </div>
-      <div *ngIf="!printerName">
-        <mat-icon>save</mat-icon>
-        Save
-      </div>
+      <span *ngIf="printerName"><mat-icon>print</mat-icon> Print to  {{printerName}}</span>
+      <span *ngIf="!printerName"><mat-icon>save</mat-icon>Save</span>
     </button>
+    <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+  </div>
+
+  <div>
   </div>
 
   <div *ngIf="!hideExit">
     <button mat-button (click)="exit()">
-      <mat-icon>close</mat-icon>
-      Exit
+      <mat-icon>close</mat-icon> Exit
     </button>
   </div>
 </div>

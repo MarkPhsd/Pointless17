@@ -61,12 +61,12 @@
             [inputForm]="inputFormNotes">
           </pos-order-notes>
         </mat-tab>
-
     </mat-tab-group>
+
   </mat-card-content>
 
   <mat-card-actions>
-    <div *ngIf="selectedIndex == 3 || (showSaveButton && selectedIndex != 0)">
+    <div *ngIf="(selectedIndex == 3 || selectedIndex == 2) || (showSaveButton && selectedIndex != 0)">
       <button mat-raised-button 
               color="primary"
               (click)="save()">

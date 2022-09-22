@@ -11,6 +11,7 @@ import { SitesService } from '../reporting/sites.service';
 export interface IStripePaymentIntent {
   clientSecret: string;
   errorMessage: string;
+  message: string;
 }
 
 

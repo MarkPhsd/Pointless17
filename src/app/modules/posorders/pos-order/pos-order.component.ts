@@ -533,7 +533,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.smallDevice) {
       this.openOrderBar = false
     }
-    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff)
+    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff, this.order.completionDate )
   }
 
   //loop the items

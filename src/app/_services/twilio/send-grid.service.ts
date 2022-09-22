@@ -55,6 +55,7 @@ export class SendGridService {
   sendTestEmail(): Observable<any> {
 
     const site = this.siteService.getAssignedSite()
+
     const controller =  "/SendGrid/"
 
     const endPoint = `sendTEstEmail`

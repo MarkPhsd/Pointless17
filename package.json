@@ -145,6 +145,7 @@
     "ngx-pagination": "^5.1.1",
     "ngx-pipes": "^3.0.0",
     "ngx-stripe": "^13.2.1",
+    "ngx-stripe-payment": "^0.0.0",
     "ngx-xml2json": "^1.0.2",
     "node-prune": "^1.0.2",
     "npm": "^7.24.2",

@@ -69,9 +69,10 @@ export class ChangepasswordComponent implements OnInit {
       this.loading = true;
 
       if(this.f.password.value == this.f.confirmpassword.value){
-        let result = this.authenticationService.updatePassword(user);
-        this.statusMessage = "Updated. Routing to login."
-        this.router.navigate(['/login']);
+        this.authenticationService.updatePassword(user).subscribe(data => { 
+          this.statusMessage = "Updated. Routing to login."
+          this.router.navigate(['/login']);
+        })
       }else
       {
         this.statusMessage = "Passwords do not match."

@@ -134,26 +134,44 @@
                       (outputDateRange)="emitDatePickerData($event)">
                     </mat-date-range>
                   </div>
-                  <div >
-                    <app-mat-select
-                                    style="
-                                    margin-top: 5px;
-                                    height: 1em;
-                                    font-size: 1em;"
-                                    class="app-mat-select" [list]="dateRangeList"
-                                    [inputForm] ="selectForm"
-                                    [fieldName]="'rangeSelect'"
-                                    (outputItem)="chooseDateRangeValue($event)">
-                      Select Range</app-mat-select>
+
+                  <div class="grid-selecttype" >
+                    <div>
+                    </div>
+                      <div>
+                        <app-mat-select
+                          style="
+                                      margin-top: 5px;
+                                      height: 1em;
+                                      font-size: 1em;"
+                                      class="app-mat-select" [list]="dateRangeList"
+                                      [inputForm] ="selectForm"
+                                      [fieldName]="'rangeSelect'"
+                                      (outputItem)="chooseDateRangeValue($event)">
+                                      Select Range</app-mat-select>
+                      </div>
                   </div>
-                  <div>
-                    <button
+                  
+                  <div class="filter-buttons">
+                    <div>
+                      <button
+                          mat-raised-button
+                          color="primary"
+                          class="pending-button"
+                          (click)="showOnlyOpenOrders()">Pending Orders
+                      </button>
+                    </div>
+                    
+                    <div>
+                      <button
                         mat-raised-button
                         color="primary"
                         class="pending-button"
-                        (click)="showOnlyOpenOrders()">Pending Orders
-                    </button>
+                        (click)="showClosedOrders()">Closed Orders
+                      </button>
+                    </div>
                   </div>
+                
                 </div>
                 <div>
                    <app-orders-list
@@ -213,10 +231,6 @@
         </div>
       </form>
     </mat-card-content>
-
-
-
-
   </mat-card>
 </div>
 

@@ -151,6 +151,7 @@ import { ProductSearchSelector2Component } from '../modules/admin/products/produ
 import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fast-user-switch.component';
 import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-button/app-wizard-progress-button.component';
 import { TipEntryComponent } from '../modules/posorders/components/tip-entry/tip-entry.component';
+import { EmailEntryComponent } from './widgets/email-entry/email-entry.component';
 
 
 
@@ -201,6 +202,7 @@ import { TipEntryComponent } from '../modules/posorders/components/tip-entry/tip
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
     EmailSettingsComponent,
+    EmailEntryComponent,
     ExitLabelSelectionComponent,
     EditButtonsStandardComponent,
     FacilitySearchSelectorComponent,
@@ -336,6 +338,7 @@ import { TipEntryComponent } from '../modules/posorders/components/tip-entry/tip
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
     AppWizardProgressButtonComponent,
+    EmailEntryComponent,
     UserAuthorizedDirective,
     CashValueCalcComponent,
     ChangeDueComponent,
