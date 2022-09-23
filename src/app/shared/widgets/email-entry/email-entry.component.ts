@@ -1,7 +1,8 @@
+import { O } from '@angular/cdk/keycodes';
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
@@ -15,6 +16,7 @@ export class EmailEntryComponent implements OnInit {
   inputForm: FormGroup;
   order: IPOSOrder;
   email$: Observable<Component>;
+  message: string;
 
   constructor(
       private fb: FormBuilder,
@@ -26,6 +28,7 @@ export class EmailEntryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.message ='Input email and press send.'
     this.inputForm = this.fb.group({
       email: []
     })
@@ -33,14 +36,28 @@ export class EmailEntryComponent implements OnInit {
 
   emailOrder() { 
     if (this.order) {   
-      this.email$ = this.orderMethodService.emailOrder(this.order)
-      // .subscribe(data => { 
-
-      // })
+      const email = this.inputForm.controls['email'].value
+      if (email) { 
+        this.message = 'Sending.'
+        this.email$ = this.orderMethodService.emailOrderFromEntry(this.order, email).pipe(
+          switchMap(data => { 
+            console.log(data)
+            return of(data)
+          })).pipe(
+          switchMap(data => { 
+            console.log(data)
+            this.message = 'Sent.'
+            // this.close()
+            this.dialogRef.close();
+            return of(data)
+        }))
+      }
     }
   }
 
   close() { 
-    this.orderMethodService.clearOrder()
+    
+    this.dialogRef.close();
+    // this.orderMethodService.clearOrder()
   }
 }

@@ -1,26 +1,32 @@
-<mat-card>
-    <mat-card-title>
-        <h3>Enter Email</h3>
-        <div *ngIf="(email$ | async) as email">
-            <button mat-button (click)="close()"><mat-icon>exit_to_app</mat-icon>Close</button>
-        </div>
-    </mat-card-title>
-    <mat-card-content>
-        <div *ngIf="inputForm" [formGroup]="inputForm">
-            <div>
-                <mat-form-field appearance="outline">
-                <mat-label >Enter Email</mat-label>
-                <input matInput
-                        type             ="email"
-                        formControlName  ="email"
-                    >
-                </mat-form-field>
-            </div>
+<div fxLayout="row" fxLayoutAlign="center center" class="row-height" >
 
-          <div>
-            <button mat-raised-button (click)="emailOrder()"><mat-icon>email</mat-icon>Send Email</button>
-          </div>
-        
+    <mat-card>
+        <mat-card-title>
+            <h3>Enter Email</h3>
+            {{message}}
+            <div *ngIf="(email$ | async) as email">
         </div>
-    </mat-card-content>
-</mat-card>
+            <!-- <ng-template #sending></ng-template> -->
+        </mat-card-title>
+        <mat-card-content>
+            <div *ngIf="inputForm" [formGroup]="inputForm">
+                <div>
+                    <mat-form-field appearance="outline">
+                    <mat-label >Enter Email</mat-label>
+                    <input matInput
+                            type             ="email"
+                            formControlName  ="email"
+                        >
+                    </mat-form-field>
+                </div>
+
+            <div>
+                <button mat-raised-button (click)="emailOrder()"><mat-icon>email</mat-icon>Send Email</button>
+                <button mat-raised-button (click)="close()"><mat-icon>exit_to_app</mat-icon>Exit</button>
+            </div>
+            
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+</div>

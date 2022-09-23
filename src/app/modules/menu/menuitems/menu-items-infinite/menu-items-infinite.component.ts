@@ -10,7 +10,6 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
-import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-menu-items-infinite',

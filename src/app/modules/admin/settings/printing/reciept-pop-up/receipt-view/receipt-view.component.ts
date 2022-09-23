@@ -162,10 +162,12 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
           this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
         }
       })
+      this.exit();
       return 
     }
 
     this.orderMethodService.emailOrderByEntry(this.order)
+    this.exit();
 
   }
 

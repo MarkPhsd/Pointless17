@@ -323,10 +323,8 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   emailOrderFromEntry(order: IPOSOrder, email: string) : Observable<any> {
-    if (order && order.clientID) {
-      if (order.clients_POSOrders.email) {
+    if (order && email) {
         return  this.sendGridService.sendOrder(order.id, order.history, email, email  )
-      }
     }
     this.notifyEvent('No email in contact', 'Alert')
     return null
@@ -336,7 +334,6 @@ export class OrderMethodsService implements OnDestroy {
   emailOrder(order: IPOSOrder) : Observable<any> {
     if (order && order.clientID) {
       if (order.clients_POSOrders.email) {
-        console.log(this.userAuthorization.user)
         const clientName = `${order?.clients_POSOrders?.firstName} ${order?.clients_POSOrders?.lastName}`
         return  this.sendGridService.sendOrder(order.id, order.history, order.clients_POSOrders.email, clientName  )
       }
