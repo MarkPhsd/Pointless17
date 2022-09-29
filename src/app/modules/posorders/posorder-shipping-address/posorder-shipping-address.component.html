@@ -2,6 +2,20 @@
     <mat-card>
       <mat-card-subtitle>
         Delivery Address
+
+        <div *ngIf="inputForm.controls?.address.errors?.required && inputForm.controls?.address.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Address required.
+        </div>
+        <div *ngIf="inputForm.controls?.city.errors?.required && inputForm.controls?.city.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> City required.
+        </div>
+        <div *ngIf="inputForm.controls?.state.errors?.required && inputForm.controls?.state.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> State required.
+        </div>
+        <div *ngIf="inputForm.controls?.zip.errors?.required && inputForm.controls?.zip.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Zip required.
+        </div>
+      
       </mat-card-subtitle>
       <mat-card-content>
         <div class="grid-container">

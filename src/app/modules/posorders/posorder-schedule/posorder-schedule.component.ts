@@ -1,5 +1,5 @@
 import { Component, OnInit, Input,OnDestroy } from '@angular/core';
-import { FormGroup,FormBuilder } from '@angular/forms';
+import { FormGroup,FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, IServiceType,  } from 'src/app/_interfaces';
@@ -90,11 +90,11 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
       return
     }
     this.inputForm = this.fb.group({
-      address  :[''],
-      city     :[''],
+      address  :['', Validators.required],
+      city     :['', Validators.required],
       address2 :[''],
-      state    :[''],
-      zip      :[''],
+      state    :['', Validators.required],
+      zip      :['', Validators.required],
     })
     this.errorMessage = ''
   }

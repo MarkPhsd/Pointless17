@@ -24,9 +24,12 @@
           </limit-values-progress-bars>
         </div>
 
+        <!-- (wideBar || mainPanel) {{(wideBar || mainPanel)}}
+        (phoneDevice && !isUser) {{(phoneDevice && !isUser)}} -->
         <div  (resized)="onResizedorderCustomerPanel($event)"
               class="grid-header-item"
-              *ngIf="(wideBar || mainPanel ) && (phoneDevice && !isUser)">
+              *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) && !isUser">
+      
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
             [order]               ="order"

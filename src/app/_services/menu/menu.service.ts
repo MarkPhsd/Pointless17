@@ -510,11 +510,11 @@ export class MenuService {
     const cacheTime = this.sitesService.getCurrentCache()
     
     if ( cacheTime  == 0 ) {
-      console.log('cacheTime', cacheTime)
+      // console.log('cacheTime', cacheTime)
       return  this.httpClient.post<any>(url, productSearchModel )
     }
 
-    console.log('cacheTime2', cacheTime)
+    // console.log('cacheTime2', cacheTime)
     return this.httpCache.post<any>(uri, productSearchModel)
 
   }

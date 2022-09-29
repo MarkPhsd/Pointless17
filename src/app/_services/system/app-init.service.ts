@@ -56,7 +56,7 @@ export class AppInitService  {
   async init() {
     // console.log('app-init.ervice init', )
     this.apiUrl = this.getLocalApiUrl();
-    console.log('apiBaseUrl init',  this.apiUrl);
+    // console.log('apiBaseUrl init',  this.apiUrl);
 
     const rememberMe = localStorage.getItem('rememberMe')
 

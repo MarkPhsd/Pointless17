@@ -22,6 +22,7 @@ export class POSOrderScheduleCardComponent implements OnInit, OnDestroy {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
     })
+    
   }
 
   constructor(

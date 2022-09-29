@@ -155,7 +155,12 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) { 
       this.orderMethodService.emailOrder(this.order).subscribe(data => {
-        if (data && data.isSuccessStatusCode) {
+        if (data === 'Success') { 
+          this.orderMethodService.notifyEvent('Email Sent', 'Success')
+          this.exit();
+          return;
+        }
+        if (data && data.isSuccessStatusCode || data === 'Success') {
           this.orderMethodService.notifyEvent('Email Sent', 'Success')
          }
         if (!data || !data.isSuccessStatusCode) {

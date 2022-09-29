@@ -3,3 +3,19 @@ button {
     height: 50px;
     width:  125px;
 }
+
+.vertical-center {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+  }
+
+  .inputForm { 
+    width: 450px;
+  }
+
+  .input-field {
+    width: 325px;
+  }

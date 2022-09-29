@@ -57,7 +57,12 @@
                   mat-raised-button
                   color="primary"
                   (click)="splitByItem = !splitByItem">
-            <mat-icon>split</mat-icon>Split By Items
+            <span *ngIf="splitByItem">
+              Payment Methods
+            </span>
+            <span *ngIf="!splitByItem">
+              <mat-icon>split</mat-icon>Split By Items
+            </span>
           </button>
         </div>
 

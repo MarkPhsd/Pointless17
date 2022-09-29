@@ -1,68 +1,68 @@
 <div class="container">
 
-<mat-card>
-  <mat-card-subtitle *ngIf="instructions && editField">
-    {{instructions}}
-  </mat-card-subtitle>
+  <mat-card>
+    <mat-card-subtitle *ngIf="instructions && editField">
+      {{instructions}}
+    </mat-card-subtitle>
 
-  <mat-card-content *ngIf="posOrderItem">
+    <mat-card-content *ngIf="posOrderItem">
 
-    <div [formGroup]="inputForm"
-         id="inputForm">
+      <div [formGroup]="inputForm"
+          id="inputForm">
 
-      <div *ngIf="editField == 'modifierNote'">
-        <mat-form-field appearance="outline"  >
-          <mat-label>Item Notes</mat-label>
-          <textarea matInput
-                rows="10"
-                cols="45"
-                formControlName="modifierNote"
-          ></textarea>
-        </mat-form-field>
+        <div *ngIf="editField == 'modifierNote'">
+          <mat-form-field appearance="outline"  >
+            <mat-label>Item Notes</mat-label>
+            <textarea matInput
+                  rows="10"
+                  cols="45"
+                  formControlName="modifierNote"
+            ></textarea>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="menuItem && editField === 'quantity'">
+          <app-key-pad
+                  [inputForm]           = "inputForm"
+                  [inputTypeValue]      = "inputTypeValue"
+                  [decimals]            = decimals
+                  [showInput]           = "true"
+                  [requireWholeNumber]  = "menuItem.itemType?.requireWholeNumber"
+                  (outPutReturnEnter)   = "saveChange($event)"
+                  (closeOnEnterPress)   = "onClose($event)">
+            Enter Quantity
+          </app-key-pad>
+        </div>
+
+        <div *ngIf="menuItem && editField === 'price'">
+          <app-key-pad
+                  [inputForm]           = "inputForm"
+                  [inputTypeValue]      = "inputTypeValue"
+                  [decimals]            = decimals
+                  [showInput]           = "true"
+                  [requireWholeNumber]  = "false"
+                  (outPutReturnEnter)   = "savePriceChange($event)"
+                  (closeOnEnterPress)   = "onClose($event)">
+            Enter Value
+          </app-key-pad>
+        </div>
+
       </div>
+    </mat-card-content>
+    <mat-card-actions >
+      <div class="button-container" fxFlexFill flex>
+        <button *ngIf="editField != 'quantity' && editField != 'price'"
+                mat-raised-button color='primary' (click)="save()">
+                <mat-icon>save</mat-icon>Save
+        </button>
 
-      <div *ngIf="menuItem && editField === 'quantity'">
-        <app-key-pad
-                [inputForm]           = "inputForm"
-                [inputTypeValue]      = "inputTypeValue"
-                [decimals]            = decimals
-                [showInput]           = "true"
-                [requireWholeNumber]  = "menuItem.itemType?.requireWholeNumber"
-                (outPutReturnEnter)   = "saveChange($event)"
-                (closeOnEnterPress)   = "onClose($event)">
-          Enter Quantity
-        </app-key-pad>
+
+        <button mat-raised-button
+                color="primary"
+                (click)="onCancel()"><mat-icon>close</mat-icon>Cancel
+        </button>
       </div>
-
-      <div *ngIf="menuItem && editField === 'price'">
-        <app-key-pad
-                [inputForm]           = "inputForm"
-                [inputTypeValue]      = "inputTypeValue"
-                [decimals]            = decimals
-                [showInput]           = "true"
-                [requireWholeNumber]  = "false"
-                (outPutReturnEnter)   = "savePriceChange($event)"
-                (closeOnEnterPress)   = "onClose($event)">
-          Enter Value
-        </app-key-pad>
-      </div>
-
-    </div>
-  </mat-card-content>
-  <mat-card-actions >
-    <div class="button-container" fxFlexFill flex>
-      <button *ngIf="editField != 'quantity' && editField != 'price'"
-              mat-raised-button color='primary' (click)="save()">
-              <mat-icon>save</mat-icon>Save
-      </button>
-
-
-      <button mat-raised-button
-              color="primary"
-              (click)="onCancel()"><mat-icon>close</mat-icon>Cancel
-      </button>
-    </div>
-  </mat-card-actions>
-</mat-card>
+    </mat-card-actions>
+  </mat-card>
 
 </div>

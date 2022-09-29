@@ -35,13 +35,14 @@ export class SitesService {
 
   constructor( private http            : HttpClient,
                private auth            : AuthenticationService,
+                
                private appInitService  : AppInitService,
                private platformSevice  : PlatformService,
                private httpClient      : HttpClient,
                private snackBar        : MatSnackBar,
 
     ) {
-
+      
     this.apiUrl   = this.appInitService.apiBaseUrl()
 
   }
@@ -227,7 +228,7 @@ export class SitesService {
   //matching code in app-init-service.
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
-    console.log('getLocalAPIURL', result)
+    // console.log('getLocalAPIURL', result)
     const site = {} as ISite;
     site.url = result
     if (result != null && result != '' ) {
@@ -242,8 +243,26 @@ export class SitesService {
 
   getCurrentCache(): number {
 
+    if (this.auth.userValue) { 
+      if (this.auth.userValue.roles === 'user' || this.auth.userValue.roles === '') { 
+        return 10
+      }
+    }
+    if (!this.auth.userValue) { 
+      return 10
+    }
+  
+
+
     try {
       const appCache = JSON.parse(localStorage.getItem('appCache'));
+
+      if (!appCache || appCache == 0) {
+        if (this.auth.userValue.roles  === 'user')  { 
+          return 10
+        }
+      }
+
       return  appCache
 
     } catch (error) {

@@ -162,7 +162,7 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     }
 
     if (window.innerWidth < 500) {
-      this.deviceWidthPercentage = '85%'
+      this.deviceWidthPercentage = '95%'
     }
 
     //the heights of this panel are what control

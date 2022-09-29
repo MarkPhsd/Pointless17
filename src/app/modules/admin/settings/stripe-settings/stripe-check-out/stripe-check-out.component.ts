@@ -138,7 +138,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
 
     if (!this.stripeInstance || !this.stripeInstance.confirmPayment) {
       this.ngxStripeRef = null;
-      this.errorMessage = 'Stripe not initiated. Please contact staff for assistance.'
+      this.errorMessage = 'Initiating.'
       return;
     }
     this.stripeInstance.confirmPayment;
