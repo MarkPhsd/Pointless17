@@ -22,10 +22,10 @@
 
         <div>
           <app-edit-buttons-standard
-                (outputeupdateItem)     ="updateItem($event)"
-                (outputupdateItemExit)  ="updateItemExit($event)"
+                (outputeupdateItem)     ="updateItem($event, false)"
+                (outputupdateItemExit)  ="updateItem($event, true)"
                 (outputupdatedeleteItem)="deleteItem($event)"
-                (outputupdateonCancel)  ="onCancel($event)"
+                (outputupdateonCancel)  ="onCancel($event, false)"
           ></app-edit-buttons-standard>
         </div>
 
@@ -34,143 +34,135 @@
     <mat-divider></mat-divider>
     </mat-card-subtitle>
       <mat-card-content >
-        <div [formGroup]="inputForm">
-            <div class="grid-container" >
+        <div class="item-input">
+          <app-product-search-selector
+              class         = "fields"
+              [itemType]    = 1
+              [productName] = "productName"
+              [searchForm]  = "searchForm"
+              (itemSelect)  = "getItem($event)">
+            >
+          </app-product-search-selector>
+        </div>
 
-              <div class="item-input">
-                <app-product-search-selector
-                    class         = "fields"
-                    [itemType]    = 1
-                    [productName] = "productName"
-                    [searchForm]  = "inputForm"
-                    (itemSelect)  = "getItem($event)">
-                    >
-                </app-product-search-selector>
-              </div>
+        <div [formGroup]="inputForm"  
+             *ngIf="menuItem"
+             class="grid-container">
 
-              <div class="grid-container"
-                   *ngIf="menuItem">
+          <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
+              <app-facility-search-selector
+                  [item]="facility"
+                  [searchForm]="inputForm"
+                  (itemSelect)="getVendor($event)">
+                  >
+              </app-facility-search-selector>
+          </div>
 
-                <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
-                  <app-facility-search-selector
-                      class="fields"
-                      [item]="facility"
-                      [searchForm]="inputForm"
-                      (itemSelect)="getVendor($event)">
-                      >
-                  </app-facility-search-selector>
-                </div>
+          <div>
+            <mat-form-field appearance="outline" >
+              <mat-label>Expiration</mat-label>
+              <input  matInput
+                      type="text"
+                      formControlName="expiration"
+                      name="expiration"
+                      [matDatepicker]="picker">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-                <div>
-                  <mat-form-field appearance="outline"
-                                  class="fields" >
-                    <mat-label>Expiration</mat-label>
-                    <input matInput
-                            type="text"
-                            formControlName="expiration"
-                            name="expiration"
-                            [matDatepicker]="picker">
-                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                    <mat-datepicker #picker></mat-datepicker>
-                  </mat-form-field>
-                </div>
+          <div>
+            <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'invoiceCode'">
+                  Vendor Invoice #
+            </app-value-fields>
+          </div>
 
-                <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
-
-                  <div>
-                    <app-value-fields
-                          type       ="text"
-                          [inputForm]="inputForm"
-                          [fieldName]="'productCategoryName'">
-                          Category Type
-                    </app-value-fields>
-                  </div>
-
-                </div>
-
-                <div>
-                  <app-value-fields
-                        type       ="text"
-                        [inputForm]="inputForm"
-                        [fieldName]="'invoiceCode'">
-                        Vendor Invoice #
-                  </app-value-fields>
-                </div>
-
-
-                <div>
-                  <mat-form-field appearance="outline" class="location-assignment fields">
-                    <mat-label>Locations</mat-label>
-                    <mat-select
-                                type               ="text"
-                                [(ngModel)]        ="inventoryLocationID"
-                                formControlName    ="locationID"
-                                (selectionChange)  ="getLocationAssignment($event.value)"
-                        >
-                      <div *ngIf="(inventoryLocations$ | async) as list">
-                        <mat-option *ngFor="let item of list" [value]="item.id">
-                          {{item.name}}
-                        </mat-option>
-                      </div>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div class="grid-item-span">
-                  <app-key-pad
-                              [inputForm]     ="inputForm"
-                              [fieldName]     ="'packageQuantity'"
-                              [inputTypeValue]="'number'"
-                              (outPutValue)   ="applyQuantity($event)"
-                             >
-                      Quantity
-                  </app-key-pad>
-                  <span *ngIf="scaleInfo">
-                    {{scaleInfo.value}} {{scaleInfo.mode}}
-                    <span><button mat-raised-button (click)="applyWeightQuantity()">
-                      Apply Weight
-                    </button></span>
-                  </span>
-                </div>
-
-                <div>
-                  <app-value-fields
-                        type           ="text"
-                        [inputForm]="inputForm"
-                        [fieldName]="'price'">
-                    Price
-                  </app-value-fields>
-                </div>
-
-                <div>
-                  <app-value-fields
-                        type           ="text"
-                        [inputForm]="inputForm"
-                        [fieldName]="'cost'">
-                    Cost
-                  </app-value-fields>
-                </div>
-
-                <div>
-                  <app-value-fields
-                        type           ="text"
-                        [inputForm]="inputForm"
-                        [fieldName]="'unitOfMeasureName'">
-                    Unit of Measure
-                  </app-value-fields>
-                </div>
-
-                <div >
-                  <mat-slide-toggle
-                          name="notAvalibleForSale"
-                          class="mat-label"
-                          formControlName="notAvalibleForSale">
-                    <mat-label class="mat-label">Disable</mat-label>
-                  </mat-slide-toggle>
-                </div>
-              </div>
-
+          <div *ngIf="menuItem.itemType.useGroups.name === 'cannabis'">
+            <div>
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'productCategoryName'">
+                    Category Type
+              </app-value-fields>
             </div>
+          </div>
+
+          <div>
+            <mat-form-field appearance="outline" class="location-assignment fields">
+              <mat-label>Locations</mat-label>
+              <mat-select
+                          type               ="text"
+                          [(ngModel)]        ="inventoryLocationID"
+                          formControlName    ="locationID"
+                          (selectionChange)  ="getLocationAssignment($event.value)"
+                  >
+                <div *ngIf="(inventoryLocations$ | async) as list">
+                  <mat-option *ngFor="let item of list" [value]="item.id">
+                    {{item.name}}
+                  </mat-option>
+                </div>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div>
+            <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'Price'">
+                  Price
+            </app-value-fields>
+          </div>
+
+          <div>
+            <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'cost'">
+              Cost
+            </app-value-fields>
+          </div>
+
+          <div>
+            <app-value-fields
+                  [inputForm]="inputForm"
+                  [fieldName]="'unitOfMeasureName'">
+              Unit of Measure
+            </app-value-fields>
+          </div>
+
+             <!-- <div class="grid-item-span">
+            <app-key-pad
+                        [inputForm]     ="inputForm"
+                        [fieldName]     ="'packageQuantity'"
+                        [inputTypeValue]="'number'"
+                        (outPutValue)   ="applyQuantity($event)"
+                        >
+                Quantity
+            </app-key-pad>  -->
+            <div>
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'packageQuantity'">
+                Package Quantity
+              </app-value-fields>
+       
+              <span *ngIf="scaleInfo">
+                {{scaleInfo.value}} {{scaleInfo.mode}}
+                <span><button mat-raised-button (click)="applyWeightQuantity()">
+                  Apply Weight
+                </button></span>
+              </span>
+          </div>
+
+          <div>
+            <mat-slide-toggle
+                    name="notAvalibleForSale"
+                    class="mat-label"
+                    formControlName="notAvalibleForSale">
+              <mat-label class="mat-label">Disable</mat-label>
+            </mat-slide-toggle>
+          </div>
         </div>
 
       </mat-card-content>
