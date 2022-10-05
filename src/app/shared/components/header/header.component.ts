@@ -211,14 +211,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.getUserInfo();
   }
 
-  async  ngOnInit() {
-    this.site = await this.siteService.getAssignedSite();
-    console.log(this.site)
+  ngOnInit() {
+    this.site =  this.siteService.getAssignedSite();
+
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');
+
     this.platFormService.getPlatForm();
     this.initSubscriptions();
+    
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -383,33 +385,41 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.refreshUserBar(user)
+    this.isAdmin      = false;
+
+    this.isManager    = false
+    this.showPOSFunctions = false;
 
     if (!user) {  return null }
+    this.userName     = user.username;
 
-    this.isAdmin      = false;
-    this.userName     = user.username
-
-    if (!user.roles) { return }
-
-    this.userRoles    = user.roles.toLowerCase();
-    this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
-
-    if (user.roles === 'admin') {
-      this.showPOSFunctions = true;
-      this.isAdmin          = true
+    if (!user.roles) { 
+      return 
     }
 
+    this.userRoles    = user?.roles.toLowerCase();
+    this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
+  
     this.isUser = false;
     if (user.roles === 'user') {
       this.isUser = true;
     }
-    if (user.roles == 'admin' || user.roles == 'manager' || user.roles == 'employee') {
+
+    if (user.roles === 'admin') {
+      this.showPOSFunctions = true;
+      this.isAdmin          = true
+      this.isUserStaff      = true
+    }
+
+    if (user?.roles === 'employee') {
       this.isUserStaff      = true
       this.showPOSFunctions = true;
     }
 
-    if (user?.roles == 'manager') {
-      this.isManager = true
+    if (user?.roles === 'manager') {
+      this.isManager        = true
+      this.showPOSFunctions = true;
+      this.isUserStaff      = true
     }
 
   }

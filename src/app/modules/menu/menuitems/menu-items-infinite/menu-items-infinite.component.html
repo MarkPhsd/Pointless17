@@ -1,4 +1,7 @@
 <div class="parent-container">
+
+  <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
+
   <div *ngIf="value" class="loader">
     <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
   </div>
@@ -43,5 +46,14 @@
 
 </div>
 
-
-
+<ng-template #searchSelector>
+  <div *ngIf="searchForm">
+    <search-debounce-input
+       [searchForm]="searchForm"
+       [itemNameControl]="'itemName'"
+       (outPutMethod)="refreshSearch($event)">
+      <div #fieldDescription>Search Items</div>
+    </search-debounce-input>
+    <mat-divider></mat-divider>
+  </div>
+</ng-template>

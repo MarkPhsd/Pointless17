@@ -222,6 +222,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   onCancel(event, openEditor) {
     if (this.inventoryAssignment) { 
       this.openInventoryDialog(this.inventoryAssignment.id)
+      this.dialogRef.close(this.inventoryAssignment);
+      return 
     }
     this.dialogRef.close(event);
   }

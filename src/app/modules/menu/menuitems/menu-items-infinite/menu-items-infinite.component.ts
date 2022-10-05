@@ -1,5 +1,5 @@
 import {Component,  HostListener, OnInit, AfterViewInit,OnDestroy,
-        ViewChild, ElementRef, QueryList, ViewChildren, Input}  from '@angular/core';
+        ViewChild, ElementRef, QueryList, ViewChildren, Input, TemplateRef}  from '@angular/core';
 import {IMenuItem} from 'src/app/_interfaces/menu/menu-products';
 import {AWSBucketService, MenuService} from 'src/app/_services';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -10,6 +10,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { Title } from '@angular/platform-browser';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-menu-items-infinite',
@@ -23,7 +24,9 @@ export class MenuItemsInfiniteComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
   @ViewChildren('item') itemElements: QueryList<any>;
-
+  smallDevice: boolean;
+  @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
+  searchForm: FormGroup;
   scrollContainer:   any;
   isNearBottom   :   any;
   webMode        :  boolean;
@@ -98,228 +101,258 @@ constructor(private menuService        : MenuService,
               private toolbarServiceUI : ToolBarUIService,
               private titleService     : Title,
               private platFormService  : PlatformService,
+              private fb: FormBuilder,
        
       )
-{
-  this.isApp = this.platFormService.isApp()
-}
-
-async ngOnInit()  {
-  //this is called on page refresh, or sending the person the link to this page.
-  //this should be called.
-  //the parameters can all be used, however they shouldn't/
-  //categories shouldn' display departments
-  //don't change the local variables based on the search model
-  //change the model based on the variables.
-  //for the most part : the model will be updated
-  //then the page will refresh
-  //the way to make sure we don't show undeseriable items.
-  //is if the model is updated, and adjusted based on variables.
-  //so if the deparment is assigned in the search, then we can accept .
-  //when a new model is provided, it can come in with the current model search
-  //so it's important that when a model is submitted, extraneous values are not accepted.
-  //but if we move from a department search, to show categories, perhaps we have to clear out the depaertment
-  //before we move foward.
-  //but if we move back, and have a category assigned but no department, we can't be
-  //sure if we should accept the model, or the parameter from the page.
-
-
-  this.value      = 1;
-  this.bucketName =   await this.awsBucketService.awsBucket();
-  this.initSearchProcess();
-  this.initSearchFromModel();
-  this.setItemsPerPage();
-
-  this.pageSize = 35;
-  this.currentPage = 1;
-
-  await this.nextPage();
-
-  this.initOrderBarSubscription()
-  this.setTitle()
-}
-
-ngAfterViewInit() {
-  this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
-}
-
-ngOnDestroy(): void {
-  if (this._orderBar) { this._orderBar.unsubscribe(); }
-  if (this._productSearchModel) {this._productSearchModel.unsubscribe();}
-}
-
-setTitle() {
-  if (this.productSearchModelData) {
-    this.titleService.setTitle('Items Search Results')
+  {
+    this.isApp = this.platFormService.isApp()
   }
-}
 
-initSearchProcess() {
-  try {
-      this.departmentID = this.route.snapshot.paramMap.get('departmentID');
-      this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');  // not implemented.
-      this.categoryID   = this.route.snapshot.paramMap.get('categoryID');
-      this.brandID      = this.route.snapshot.paramMap.get('brandID');
-      this.typeID       = this.route.snapshot.paramMap.get('typeID');
-      this.productName  = this.route.snapshot.paramMap.get('productName');
-   
-  } catch (error) {
-    console.log('initSearchProcess Error', error)
+  async ngOnInit()  {
+    //this is called on page refresh, or sending the person the link to this page.
+    //this should be called.
+    //the parameters can all be used, however they shouldn't/
+    //categories shouldn' display departments
+    //don't change the local variables based on the search model
+    //change the model based on the variables.
+    //for the most part : the model will be updated
+    //then the page will refresh
+    //the way to make sure we don't show undeseriable items.
+    //is if the model is updated, and adjusted based on variables.
+    //so if the deparment is assigned in the search, then we can accept .
+    //when a new model is provided, it can come in with the current model search
+    //so it's important that when a model is submitted, extraneous values are not accepted.
+    //but if we move from a department search, to show categories, perhaps we have to clear out the depaertment
+    //before we move foward.
+    //but if we move back, and have a category assigned but no department, we can't be
+    //sure if we should accept the model, or the parameter from the page.
+
+    this.value      = 1;
+    this.bucketName =   await this.awsBucketService.awsBucket();
+    this.initSearchForm();
+    this.initSearchProcess();
+    this.initSearchFromModel();
+    this.setItemsPerPage();
+    this.updateItemsPerPage()
+    this.pageSize = 35;
+    this.currentPage = 1;
+    await this.nextPage();
+    this.initOrderBarSubscription();
+    this.setTitle();
   }
-}
 
-initSearchFromModel() {
-
-  this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
-
-      this.initSearchProcess();
-      if (!model) { return }
-      this.subCategoryID = model.subCategoryID; // not implemented.
-      this.departmentID = model.departmentID
-      this.categoryID   = model.categoryID
-      this.brandID      = model.brandID;
-      this.typeID       = model.itemTypeID
-      this.productName  = model.name
-      model.web         = this.webMode
-      model.webMode     = this.webMode;
-      if (!model.pageNumber) { model.pageNumber = 1}
-      this.currentPage = model.pageNumber
-
-      let  categoryResults = ''
-
-      if (model.categoryName && model.categoryName != undefined ) {
-        categoryResults = model.categoryName;
-        let reRoute = false
-      }
-
-      let  departmentName = ''
-      if (model.departmentName && model.departmentName != undefined ) {
-        departmentName = 'departments ' + model.departmentName;
-        let reRoute = false
-      }
-
-      let  itemTypeName = ''
-      if (model.itemTypeName && model.itemTypeName != undefined) {
-        itemTypeName = 'types ' + model.itemTypeName;
-        let reRoute = false
-      }
-      model.webMode = this.menuService.isWebModeMenu
-      model.active  = true;
-
-      this.productSearchModelData = model;
-      this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
-      return
+  get isSearchSelectorOn() {
+    if (this.smallDevice) {
+      return this.searchSelector
     }
-  )
-}
+    return null;
+  }
 
-async addToList(pageSize: number, pageNumber: number)  {
-    let model   = this.productSearchModelData;
-    if (!model) { model = {} as ProductSearchModel }
-    const value = this.route.snapshot.paramMap.get('value');
-    if (model && !value)  {
-      this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
-      this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
-      model.categoryID   = this.categoryID
-      model.departmentID = this.departmentID
-      this.brandID       = this.route.snapshot.paramMap.get('brandID')
-
-      if (this.brandID) {
-        if (this.brandID) { model.brandID       = this.brandID     }
-      }
-
-      this.typeID       = this.route.snapshot.paramMap.get('typeID')
-      if (this.typeID) {
-        if (this.typeID) { model.itemTypeID     = this.typeID     }
-      }
+  @HostListener("window:resize", [])
+  updateItemsPerPage() {
+    this.smallDevice = false
+    if ( window.innerWidth < 811 ) {
+      this.smallDevice = true
     }
+  }
 
-    if (!pageNumber || pageNumber == null) {pageNumber = 1 }
-    if (!pageSize   || pageSize   == null) {pageSize   = 35}
+  initSearchForm() { 
+    this.searchForm = this.fb.group( {
+      itemName: ''
+    })
+  }
 
-    model.pageNumber  = pageNumber
-    model.pageSize    = pageSize
-    model.active      = true;
-    const site        = this.siteService.getAssignedSite();
-    const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
-    this.loading      = true
+    //this is called from subject rxjs obversablve above constructor.
+  refreshSearch(itemName) {
+    try {
+      this.applyProductSearchModel(itemName);
+      this.menuItems = [];
+      this.nextPage();
 
-    results$.subscribe(data => {
-      this.currentPage += 1;
-      if (data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
-        this.value = 100;
-        this.loading = false;
-        this.endOfRecords = true
-        return
-      }
+    } catch (error) {
+      console.log('error', error)
+    }
+  }
 
-      if (!this.menuItems)  { this.menuItems = [] as IMenuItem[] }
-      this.itemsPerPage = this.itemsPerPage + data.results.length;
-      if (this.menuItems) {
-        data.results.forEach( item => {
-          this.menuItems.push(item)
-        })
 
-        this.totalRecords = data.paging.totalRecordCount;
-        if ( this.menuItems.length == this.totalRecords ) {
-          this.endOfRecords = true;
-          this.loading = false;
-          this.value = 100;
+  ngAfterViewInit() {
+    this.itemElements.changes.subscribe(_ => this.onItemElementsChanged());
+  }
+
+  ngOnDestroy(): void {
+    if (this._orderBar) { this._orderBar.unsubscribe(); }
+    if (this._productSearchModel) {this._productSearchModel.unsubscribe();}
+  }
+
+  setTitle() {
+    if (this.productSearchModelData) {
+      this.titleService.setTitle('Items Search Results')
+    }
+  }
+
+  initSearchProcess() {
+    try {
+        this.departmentID = this.route.snapshot.paramMap.get('departmentID');
+        this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');  // not implemented.
+        this.categoryID   = this.route.snapshot.paramMap.get('categoryID');
+        this.brandID      = this.route.snapshot.paramMap.get('brandID');
+        this.typeID       = this.route.snapshot.paramMap.get('typeID');
+        this.productName  = this.route.snapshot.paramMap.get('productName');
+    
+    } catch (error) {
+      console.log('initSearchProcess Error', error)
+    }
+  }
+
+  initSearchFromModel() {
+    this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
+        this.initSearchProcess();
+        if (!model) { return }
+        this.subCategoryID = model.subCategoryID; // not implemented.
+        this.departmentID = model.departmentID
+        this.categoryID   = model.categoryID
+        this.brandID      = model.brandID;
+        this.typeID       = model.itemTypeID
+        this.productName  = model.name
+        model.web         = this.webMode
+        model.webMode     = this.webMode;
+        if (!model.pageNumber) { model.pageNumber = 1}
+        this.currentPage = model.pageNumber
+
+        let  categoryResults = ''
+
+        if (model.categoryName && model.categoryName != undefined ) {
+          categoryResults = model.categoryName;
+          let reRoute = false
         }
 
-        this.value = ((this.menuItems.length / this.totalRecords ) * 100).toFixed(0)
-        this.loading      = false
+        let  departmentName = ''
+        if (model.departmentName && model.departmentName != undefined ) {
+          departmentName = 'departments ' + model.departmentName;
+          let reRoute = false
+        }
+
+        let  itemTypeName = ''
+        if (model.itemTypeName && model.itemTypeName != undefined) {
+          itemTypeName = 'types ' + model.itemTypeName;
+          let reRoute = false
+        }
+        model.webMode = this.menuService.isWebModeMenu
+        model.active  = true;
+
+        this.productSearchModelData = model;
+        this.searchDescription = `Results from ${ model.name}  ${categoryResults} ${departmentName}  ${itemTypeName}`
         return
       }
+    )
+  }
 
-      this.pagingInfo = data.paging
-      if (data) {
-        this.menuItems    = data.results
-        this.loading      = false
-        this.value = 100;
+  async addToList(pageSize: number, pageNumber: number)  {
+      let model   = this.productSearchModelData;
+      if (!model) { model = {} as ProductSearchModel }
+      const value = this.route.snapshot.paramMap.get('value');
+      if (model && !value)  {
+        this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
+        this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
+        model.categoryID   = this.categoryID
+        model.departmentID = this.departmentID
+        this.brandID       = this.route.snapshot.paramMap.get('brandID')
+
+        if (this.brandID) {
+          if (this.brandID) { model.brandID       = this.brandID     }
+        }
+
+        this.typeID       = this.route.snapshot.paramMap.get('typeID')
+        if (this.typeID) {
+          if (this.typeID) { model.itemTypeID     = this.typeID     }
+        }
       }
-    }
-  )
 
-};
+      if (!pageNumber || pageNumber == null) {pageNumber = 1 }
+      if (!pageSize   || pageSize   == null) {pageSize   = 35}
 
-onScrollDown() {
-  this.scrollingInfo = 'scroll down'
-  this.nextPage();
-}
+      model.pageNumber  = pageNumber
+      model.pageSize    = pageSize
+      model.active      = true;
+      const site        = this.siteService.getAssignedSite();
+      const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
+      this.loading      = true
 
-onScrollUp() {
-  this.scrollingInfo = 'scroll up'
-}
+      results$.subscribe(data => {
+        this.currentPage += 1;
+        if (data.results && data.results.length == 0 || data == null || (!data || !data.results)) {
+          this.value = 100;
+          this.loading = false;
+          this.endOfRecords = true
+          return
+        }
 
-setItemsPerPage() {
+        if (!this.menuItems)  { this.menuItems = [] as IMenuItem[] }
+        this.itemsPerPage = this.itemsPerPage + data.results.length;
+        if (this.menuItems) {
+          data.results.forEach( item => {
+            this.menuItems.push(item)
+          })
 
-}
+          this.totalRecords = data.paging.totalRecordCount;
+          if ( this.menuItems.length == this.totalRecords ) {
+            this.endOfRecords = true;
+            this.loading = false;
+            this.value = 100;
+          }
 
-async nextPage() {
-  await this.addToList(this.pageSize, this.currentPage)
-}
+          this.value = ((this.menuItems.length / this.totalRecords ) * 100).toFixed(0)
+          this.loading      = false
+          return
+        }
 
-scrollDown() {
-  var scrollingElement = (document.scrollingElement || document.body);
-  scrollingElement.scrollTop = scrollingElement.scrollHeight;
-}
+        this.pagingInfo = data.paging
+        if (data) {
+          this.menuItems    = data.results
+          this.loading      = false
+          this.value = 100;
+        }
+      }
+    )
+  };
 
-listItem(id: string) {
-  this.router.navigate(["/menuitem/", {id:id}]);
-}
+  onScrollDown() {
+    this.scrollingInfo = 'scroll down'
+    this.nextPage();
+  }
 
-getItemSrc(item:IMenuItem) {
-  return this.awsBucketService.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
-}
+  onScrollUp() {
+    this.scrollingInfo = 'scroll up'
+  }
+
+  setItemsPerPage() {
+
+  }
+
+  async nextPage() {
+    await this.addToList(this.pageSize, this.currentPage)
+  }
+
+  scrollDown() {
+    var scrollingElement = (document.scrollingElement || document.body);
+    scrollingElement.scrollTop = scrollingElement.scrollHeight;
+  }
+
+  listItem(id: string) {
+    this.router.navigate(["/menuitem/", {id:id}]);
+  }
+
+  getItemSrc(item:IMenuItem) {
+    return this.awsBucketService.getImageURLFromNameArray(this.bucketName, item.urlImageMain)
+  }
 
  onItemElementsChanged(): void {
-  // if (this.isNearBottom()) {
-  //   this.scrollToBottom();
-  // }
- }
+    // if (this.isNearBottom()) {
+    //   this.scrollToBottom();
+    // }
+  }
 
- scrollToBottom(): void {
+  scrollToBottom(): void {
     this.scrollContainer.scroll({
       top: 2000,// this.scrollContainer.scrollHeight,
       left: 0,
@@ -339,6 +372,28 @@ getItemSrc(item:IMenuItem) {
   scrolled(event: any): void {
     this.isNearBottom = this.isUserNearBottom();
   }
+
+  applyProductSearchModel(itemName: string) : ProductSearchModel {
+    let  productSearchModel=  {} as ProductSearchModel
+		productSearchModel.type         = null;
+		productSearchModel.categoryID   = null;
+		productSearchModel.departmentID = null;
+		productSearchModel.name         = null;
+		productSearchModel.barcode      = null;
+		productSearchModel.departmentName = null;
+		if (itemName) {
+		  productSearchModel.name               =  itemName;
+		  productSearchModel.useNameInAllFields = true
+		}
+
+		productSearchModel.barcode    = productSearchModel.name
+		productSearchModel.pageSize   = 50
+		productSearchModel.pageNumber = 1
+		this.menuService.updateMeunuItemData(productSearchModel)
+		return productSearchModel
+
+  }
+
 
 }
 

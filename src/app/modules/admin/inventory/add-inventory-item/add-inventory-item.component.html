@@ -90,7 +90,7 @@
           </div>
 
           <div>
-            <mat-form-field appearance="outline" class="location-assignment fields">
+            <mat-form-field appearance="outline" >
               <mat-label>Locations</mat-label>
               <mat-select
                           type               ="text"
@@ -108,14 +108,16 @@
           </div>
 
           <div>
+            <!-- <mat-label>Leave blank to use default</mat-label> -->
             <app-value-fields
                   [inputForm]="inputForm"
-                  [fieldName]="'Price'">
+                  [fieldName]="'price'">
                   Price
             </app-value-fields>
           </div>
 
           <div>
+            <!-- <mat-label>Leave blank to use default</mat-label> -->
             <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'cost'">
@@ -124,6 +126,7 @@
           </div>
 
           <div>
+            <!-- <mat-label>Leave blank to use default</mat-label> -->
             <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'unitOfMeasureName'">
@@ -163,6 +166,41 @@
               <mat-label class="mat-label">Disable</mat-label>
             </mat-slide-toggle>
           </div>
+
+
+        </div>
+
+        <mat-label 
+              *ngIf="menuItem && menuItem?.itemType?.useGroups?.name != 'cannabis'">
+          Case Information - only for whole case / split case options
+        </mat-label>
+        <div 
+              *ngIf="menuItem &&  menuItem?.itemType?.useGroups?.name != 'cannabis'"
+              class="grid-container">
+          <div>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'caseQuantity'">
+              Case Quantity
+            </app-value-fields>
+          </div>
+
+          <div>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'casePrice'">
+              Case Price
+            </app-value-fields>
+          </div>
+
+          <div>
+            <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'itemSku'">
+              Item Sku
+            </app-value-fields>
+          </div>
+
         </div>
 
       </mat-card-content>
