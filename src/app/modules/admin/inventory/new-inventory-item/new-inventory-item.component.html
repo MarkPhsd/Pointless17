@@ -105,14 +105,14 @@
               </app-price-category-select>
 
               <div>
-                <div  class="header-column">Features</div>
+                <mat-hint>Changing the sku will require re-labeling.</mat-hint>
                 <app-value-fields
                     [fieldType]="'text'"
                     [inputForm]="inputForm"
                     [fieldName]="'sku'"
                   >Change Sku
                 </app-value-fields>
-                <mat-hint>Changing the sku will require re-labeling.</mat-hint>
+               
               </div>
 
             </div>
@@ -125,8 +125,41 @@
               >
               </app-chemical-values>
             </div>
+                
+          <div 
+                *ngIf="menuItem &&  menuItem?.itemType?.useGroups?.name != 'cannabis'"
+                class="grid-container">
+            <mat-hint 
+                  *ngIf="menuItem && menuItem?.itemType?.useGroups?.name != 'cannabis'">
+              Case Information - only for whole case / split case options
+            </mat-hint>
+            <div>
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'caseQuantity'">
+                Case Quantity
+              </app-value-fields>
+            </div>
+
+            <div>
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'casePrice'">
+                Case Price
+              </app-value-fields>
+            </div>
+
+            <div>
+              <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'itemSku'">
+                Item Sku
+              </app-value-fields>
+            </div>
           </div>
 
+          </div>
+            
         </div>
     </mat-card-content>
   </mat-card>

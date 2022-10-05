@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
-import { MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
+import { AuthenticationService, MenuService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
@@ -165,7 +165,7 @@ export class OrderMethodsService implements OnDestroy {
               private uiSettingService        : UISettingsService,
               private textMessagingService    : TextMessagingService,
               private toolbarServiceUI        : ToolBarUIService,
-
+              public authenticationService    : AuthenticationService,
               private floorPlanService        : FloorPlanService,
              ) {
     this.initSubscriptions();
@@ -417,12 +417,17 @@ export class OrderMethodsService implements OnDestroy {
   validateUser(): boolean {
     const valid = this.userAuthorization.validateUser()
     if (!valid) {
+
+      //login prompt
+      this.authenticationService.openLoginDialog()
       this.notifyEvent('Please login, or create your account to place an order. Carts require a registerd user to be created.', 'Alert')
       return false
     } {
       return true
     }
   }
+
+  
 
   validateItem(item, barcode) {
     if (!item && !barcode) {

@@ -2,17 +2,6 @@
   <div>
     <span >
 
-      <button *ngIf="!smallDevice" mat-button (click)="changeView()">
-        <mat-icon>
-          <span *ngIf="viewType == 1">view_list</span>
-          <span *ngIf="viewType == 0">view_module</span>
-          <span *ngIf="viewType == 3">view_module</span>
-        </mat-icon>
-        <span *ngIf="viewType == 1"> List View</span>
-        <span *ngIf="viewType == 0"> Grid View</span>
-        <span *ngIf="viewType == 3"> Grid View</span>
-      </button>
-
       <button *ngIf="smallDevice"  mat-button (click)="filterBottomSheet()">
         <mat-icon>search</mat-icon>
       </button>
@@ -20,7 +9,7 @@
       <span>
         <span *ngIf="!smallDevice || (!smallDevice && hidePanel)">
           <button mat-button (click)="displayPanel($event)">
-            <mat-icon>search</mat-icon>
+            <mat-icon>search</mat-icon>Search
           </button>
         </span>
       </span>
@@ -32,6 +21,17 @@
         <mat-icon>add</mat-icon><span>Other New</span>
       </button>
     </span>
+
+    <button *ngIf="!smallDevice" mat-button (click)="changeView()">
+      <mat-icon>
+        <span *ngIf="viewType == 1">view_list</span>
+        <span *ngIf="viewType == 0">view_module</span>
+        <span *ngIf="viewType == 3">view_module</span>
+      </mat-icon>
+      <span *ngIf="viewType == 1"> List View</span>
+      <span *ngIf="viewType == 0"> Grid View</span>
+      <span *ngIf="viewType == 3"> Grid View</span>
+    </button>
 
     <span *ngIf="!smallDevice && !isUser">
       <button mat-button (click)="setViewType(3)">

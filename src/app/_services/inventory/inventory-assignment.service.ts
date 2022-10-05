@@ -81,6 +81,10 @@ export interface IInventoryAssignment {
   destinationSiteName : string;
   rejected:             string;
   priceCategoryID     : number;
+  caseQuantity        : number;
+  itemSku             : string;
+  casePrice           : number;
+  
   product             : IProduct;
   serials:              Serial[];
 }

@@ -567,8 +567,14 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   addInventoryItem() {
     try {
       const result =   this.inventoryEditButon.addInventoryDialog(0)
-      if (result) {
-        this.refreshSearch();
+      if (result) { 
+        result.afterClosed().subscribe(data => { 
+          if (data && data.sku) { 
+            this.search = data.sku;
+            this.initSearchModel()
+          }
+          this.refreshSearch();
+        }) 
       }
     } catch (error) {
       console.log(error)

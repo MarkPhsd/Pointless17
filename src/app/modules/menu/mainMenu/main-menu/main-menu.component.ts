@@ -109,7 +109,6 @@ export class MainMenuComponent implements OnInit  {
       })
   }
 
-
   @HostListener("window:resize", [])
   updateItemsPerPage() {
     this.smallDevice = false

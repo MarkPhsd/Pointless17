@@ -1,7 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient} from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IUser } from 'src/app/_interfaces';
 import { AppInitService } from './app-init.service';
 import { PlatformService } from './platform.service';
@@ -9,6 +9,7 @@ import { OrdersService } from '..';
 import { ToolBarUIService } from './tool-bar-ui.service';
 import { LoginComponent } from 'src/app/modules/login';
 import { SitesService} from 'src/app/_services/reporting/sites.service';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface IUserExists {
   id:           number;
@@ -64,7 +65,8 @@ export class AuthenticationService {
         private appInitService   : AppInitService,
         private platFormservice  : PlatformService,
         private toolbarUIService : ToolBarUIService,
-        private siteSerivce     : SitesService,
+        private siteSerivce      : SitesService,
+        private dialog           : MatDialog, 
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
@@ -144,6 +146,22 @@ export class AuthenticationService {
       this.clearSubscriptions()
     }
 
+    openLoginDialog() { 
+      let width    = '425px'
+      // if (this.smallDevice) { 
+
+      // }
+      let dialogRef: any;
+      dialogRef = this.dialog.open(LoginComponent,
+        { width    : width,
+          minWidth : width,
+          height   : '650px',
+          minHeight: '650px',
+        },
+      )
+
+    }
+
     clearSubscriptions() {
       // this.orderService.updateOrderSubscription(null)
       // this.orderService.updateOrderSearchModel(null);
@@ -185,6 +203,21 @@ export class AuthenticationService {
 
       return  this.http.post<any>(url, user)
     };
+
+    createTempUser() : Observable<any> { 
+      //check local storage. 
+      //if local user exists then return that as observable
+
+      const user = localStorage.getItem('user');
+      if (user) { 
+        return of(user);
+      }
+
+      const api = this.siteSerivce.getAssignedSite().url 
+      const url = `${api}/users/CreateTempUser`
+      return  this.http.get<any>(url);
+
+    }
 
     updatePassword(user: IUser): Observable<any> {
       const api = this.siteSerivce.getAssignedSite().url 

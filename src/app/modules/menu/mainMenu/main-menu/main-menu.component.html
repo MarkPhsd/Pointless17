@@ -1,8 +1,7 @@
 <div class="canvas">
 
   <div class="overlay-items">
-    <!-- {{connectedToApi
-    }} -->
+
     <div *ngif="connectedToApi; else connected"></div>
     
     <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
@@ -24,7 +23,7 @@
 </div>
 
 <ng-template #searchSelector>
-  <div >
+  <div>
     <search-debounce-input
        [searchForm]="searchForm"
        [itemNameControl]="'itemName'"
