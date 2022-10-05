@@ -19,12 +19,23 @@
               mat-raised-button
               color="primary"
               (click)="toggleOpenOrderBar()" >
+          
           <mat-icon
+            *ngIf="!openOrderBar"
             matBadge="{{ order.itemCount }}"
             matBadgeColor="accent"
             matBadgePosition="before">
             shopping_cart
           </mat-icon>
+
+          <mat-icon
+            *ngIf="openOrderBar"
+            matBadge="{{ order.itemCount }}"
+            matBadgeColor="accent"
+            matBadgePosition="before">
+            close_fullscreen
+          </mat-icon>
+
       </button>
     </div>
 
@@ -34,10 +45,19 @@
             color="primary"
             (click)="toggleOpenOrderBar()" >
         <mat-icon
+          *ngIf="!openOrderBar"
           matBadge="{{ order.itemCount }}"
           matBadgeColor="accent"
           matBadgePosition="before">
           shopping_cart
+        </mat-icon>
+
+        <mat-icon
+          *ngIf="openOrderBar"
+          matBadge="{{ order.itemCount }}"
+          matBadgeColor="accent"
+          matBadgePosition="before">
+          close_fullscreen
         </mat-icon>
       </button>
     </div>

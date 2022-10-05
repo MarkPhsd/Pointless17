@@ -23,7 +23,7 @@
       <div *ngIf="order?.shipCity">{{order?.shipCity}}</div>
 
       <div *ngIf="order?.shipCity">State/Zip</div>
-      <div *ngIf="order?.shipCity">{{order?.shipCity}}, {{order?.shipPostalCode}}  </div>
+      <div *ngIf="order?.shipCity">{{order?.shipState}}, {{order?.shipPostalCode}}  </div>
 
       <div>Phone</div>
       <div> {{order?.clients_POSOrders?.phone}} </div>

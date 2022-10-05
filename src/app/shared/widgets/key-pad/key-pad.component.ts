@@ -53,18 +53,26 @@ export class KeyPadComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (!this.fieldName) {this.fieldName = 'itemName'}
-    // if (!this.inputForm) {
     this.initForm();
-    // }
   }
 
   formSubscriber() {
     if (this.inputForm) {
+
       this.inputForm.controls['itemName'].valueChanges.subscribe(data => {
         if (data) {
           this.onChangeValueUpdate(data)
         }
       })
+
+      if (this.fieldName  && this.fieldName != 'itemName') { 
+        this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
+          if (data) {
+            this.onChangeValueUpdate(data)
+          }
+        })
+      }
+
     }
   }
 
@@ -80,10 +88,10 @@ export class KeyPadComponent implements OnInit, OnChanges {
     this.inputForm = this.fb.group({
       itemName: [],
     })
-
-    this.formSubscriber()
-
-    if (this.inputForm) {
+    
+    if (this.inputForm && this.fieldName) {
+      this.inputForm.addControl( this.fieldName,new FormControl([]) );
+      this.formSubscriber()
       this.inputForm.controls[this.fieldName].valueChanges.subscribe(data => {
         if (data == '' || data == undefined) {
           this.returnEnter(data);
@@ -267,7 +275,7 @@ export class KeyPadComponent implements OnInit, OnChanges {
       //{this.fieldName: this.formatted }
       const fieldName = this.fieldName
       const value     = this.formatted
-      const item      = { itemName:  this.formatted }
+      const item      = { itemName:  this.formatted, packageQuantity: this.formatted, }
       this.inputForm.patchValue(item)
 
     } else {

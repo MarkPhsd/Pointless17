@@ -24,9 +24,12 @@
           </limit-values-progress-bars>
         </div>
 
+        <!-- (wideBar || mainPanel) {{(wideBar || mainPanel)}}
+        (phoneDevice && !isUser) {{(phoneDevice && !isUser)}} -->
         <div  (resized)="onResizedorderCustomerPanel($event)"
               class="grid-header-item"
-              *ngIf="wideBar || mainPanel">
+              *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) && !isUser">
+      
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
             [order]               ="order"
@@ -56,23 +59,23 @@
                 (outPutVoidOrder)   ="voidOrder()"
                 (outPutSuspendOrder)="suspendOrder()"
                 (outPutRemoveSuspension)="removeSuspension()"
-                (outPutClearOrder)  ="clearOrder($event)"
-                (outPutDeleteOrder) ="deleteOrder($event)"
-                (outPutEmailOrder)  = 'emailOrder($event)'
+                (outPutClearOrder)    ="clearOrder($event)"
+                (outPutDeleteOrder)   ="deleteOrder($event)"
+                (outPutEmailOrder)    = 'emailOrder($event)'
                 (outPutRemoveDiscount)='removeDiscount($event)'
-                (outPutRefundItem)  ='refundItem($event)'
-                (outPutRefundOrder) ='refundOrder($event)'
-                [itemsPrinted]      ="itemsPrinted"
-                [paymentsMade]      ="paymentsMade"
-                [isAuthorized]      ="isAuthorized"
-                [isUser]            ="isUser"
-                [isStaff]           ='isStaff'
-                [openBar]           ="openBar"
-                [mainPanel]         ="mainPanel"
-                [order]             ="order"
-                [emailOption]       ="emailOption"
-                [ssmsOption]        ="ssmsOption"
-                [refundItemEnabled] ="refundItemsAvalible"
+                (outPutRefundItem)    ='refundItem($event)'
+                (outPutRefundOrder)   ='refundOrder($event)'
+                [itemsPrinted]        ="itemsPrinted"
+                [paymentsMade]        ="paymentsMade"
+                [isAuthorized]        ="isAuthorized"
+                [isUser]              ="isUser"
+                [isStaff]             ='isStaff'
+                [openBar]             ="openBar"
+                [mainPanel]           ="mainPanel"
+                [order]               ="order"
+                [emailOption]         ="emailOption"
+                [ssmsOption]          ="ssmsOption"
+                [refundItemEnabled]   ="refundItemsAvalible"
           ></pos-order-function-buttons>
         </div>
 

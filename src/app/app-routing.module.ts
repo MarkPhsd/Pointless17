@@ -112,6 +112,10 @@ import { ManifestStatusComponent } from './modules/admin/inventory/manifest-stat
 import { ManifestTypeComponent } from './modules/admin/inventory/manifest-type/manifest-type.component';
 import { StoreCreditListComponent } from './modules/admin/store-credit/store-credit-list/store-credit-list.component';
 import { FloorPlanComponent } from './modules/floor-plan/floor-plan/floor-plan.component';
+import { QROrderComponent } from './modules/posorders/qrorder/qrorder.component';
+import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
+import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
+import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 
 const routes: Routes = [
     // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -120,9 +124,7 @@ const routes: Routes = [
       children: [
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
-
         { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },
-
         { path: 'app-profile', component: ProfileComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
         { path: 'department-list', component: DepartmentMenuComponent,   data: {  title: 'Department Menu', animation: 'isLeft'}},
@@ -135,15 +137,15 @@ const routes: Routes = [
         { path: 'dashboard',  component: DashboardComponent, canActivate: [AuthGuard], data: {  title: 'Dash Board',  animation: 'isLeft'} },
         { path: 'reports',    component: ReportsComponent, canActivate: [AuthGuard], data: { title: 'Reports', animation: 'isLeft'} },
 
-        { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: {  title: 'Admin', animation:  'isLeft'} },
-        { path: 'settings', component: SettingsComponent, canActivate: [AuthGuard], data: {  title: 'Settings',  animation:  'isLeft'} },
-        { path: 'sites',      component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
+        { path: 'admin',     component: AdminComponent, canActivate: [AuthGuard], data: {  title: 'Admin', animation:  'isLeft'} },
+        { path: 'settings',  component: SettingsComponent, canActivate: [AuthGuard], data: {  title: 'Settings',  animation:  'isLeft'} },
+        { path: 'sites',     component: SitesComponent,  canActivate: [AuthGuard], data: {  title: 'Sites',  animation:  'isLeft'} },
         { path: 'site-edit', component: SiteEditComponent,  canActivate: [AuthGuard], data: { animation:  'isLeft'} },
 
         { path: 'store-credit', component: StoreCreditListComponent, canActivate: [AuthGuard], data: {  title: 'Store Credit Search',  animation:  'isLeft'} },
-        { path: 'pos-orders', component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
+        { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
-        { path: 'pos-payment', component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
+        { path: 'pos-payment',  component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
 
         //PosOperationsComponent
         { path: 'operations', component: PosOperationsComponent, canActivate: [AuthGuard], data: {title: 'Operations', animation: 'isLeft'} },
@@ -159,7 +161,7 @@ const routes: Routes = [
         { path: 'prompt-group-edit', component: PromptGroupEditComponent, canActivate: [AuthGuard], data: { title: 'Prompt Group Edit',  animation: 'isLeft'} },
 
         //PromptSubGroupsComponent
-        { path: 'prompt-sub-groups', component: PromptSubGroupsComponent, canActivate: [AuthGuard], data: { title: 'Prompt Sub Groups',  animation: 'isLeft'} },
+        { path: 'prompt-sub-groups',     component: PromptSubGroupsComponent, canActivate: [AuthGuard], data: { title: 'Prompt Sub Groups',  animation: 'isLeft'} },
         { path: 'prompt-item-selection', component: PromptItemSelectionComponent, canActivate: [AuthGuard], data: {title: 'Prompt Item Selection',  animation: 'isLeft'} },
         { path: 'prompt-items-selected', component: PromptSelectedItemsComponent, canActivate: [AuthGuard], data: { title: 'Prompt Items Selected',  animation: 'isLeft'} },
         //prompt-kits
@@ -170,11 +172,11 @@ const routes: Routes = [
         //profile viewing
         { path: 'wishlist', component: WishlistComponent, canActivate: [AuthGuard],data: { animation: 'isLeft'}},
 
-        { path: 'productedit', component: ProducteditComponent, canActivate: [AuthGuard], data: {title: 'Product Edit', animation: 'isLeft'}},
+        { path: 'productedit',       component: ProducteditComponent, canActivate: [AuthGuard], data: {title: 'Product Edit', animation: 'isLeft'}},
         { path: 'product-list-view', component: ProductlistviewComponent, canActivate: [AuthGuard], data: {title: 'Item  List', animation: 'isLeft'}},
-        { path: 'price-categories', component: PriceCategoriesComponent, canActivate: [AuthGuard],data: { title: 'Product Categories',animation: 'isLeft'}},
+        { path: 'price-categories',  component: PriceCategoriesComponent, canActivate: [AuthGuard],data: { title: 'Product Categories',animation: 'isLeft'}},
 
-        { path: 'price-schedule', component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule', animation: 'isLeft'}},
+        { path: 'price-schedule',      component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule', animation: 'isLeft'}},
         { path: 'price-schedule-edit', component: PriceScheduleComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule Edit', animation: 'isLeft'}},
 
         ///price schedule layout menu
@@ -264,8 +266,6 @@ const routes: Routes = [
         { path: 'keypad', component: KeyPadComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
 
         { path: 'hammerjs', component: HammerCardComponent ,data: { animation: 'isLeft'}},
-        // { path: 'pos-order-item', component: PosOrderItemComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-
         { path: 'company-edit', component: CompanyEditComponent,   canActivate: [AuthGuard], data: {  title: 'Company Edit',  animation: 'isLeft'} },
 
         { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
@@ -274,16 +274,14 @@ const routes: Routes = [
       ]
     },
 
-    // { path: '', pathMatch: 'full', redirectTo: 'dashboard/7' },
-    // { path:  'menu-board',            component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
 
-    // { path: 'homepagesettings',   component: UIHomePageSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-    // { path: 'transactionsSettings',   component: UITransactionsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
-    // { path: 'stripesettings ',   component: StripeSettingsComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    { path: 'menu-board', component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
     { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+
     { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+
     { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},
     { path: 'agtest', component: AgGridTestComponent, data: { animation: 'isLeft'}},
     { path: 'printerSettings', component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
@@ -299,14 +297,17 @@ const routes: Routes = [
     { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
     { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
     { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
+    
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
     { path: 'app-widget-card', component: CardComponent, data: { animation: 'isLeft'}},
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
 
-    // { path: '/menu-board/grid-menu-layout',  redirectTo: '/menu-board', pathMatch: 'full' },
+    { path: 'qr-order', component: QROrderComponent, data: { animation: 'isLeft'}},
 
+    { path: '/menu-board/grid-menu-layout',  redirectTo: '/menu-board', pathMatch: 'full' },
+    { path: 'menu-manager', component: GridManagerComponent, data: {animation: 'isLeft'} },
     { path: '**', component: PageNotFoundComponent},
 ];
 

@@ -103,7 +103,7 @@ export class MenuService {
   site: ISite;
   isStaff           = false;
   constructor(
-              private httpCache: HttpClientCacheService,
+              private httpCache               : HttpClientCacheService,
               private httpClient              : HttpClient,
               private sitesService            : SitesService,
               private userAuthorizationService: UserAuthorizationService,
@@ -484,14 +484,14 @@ export class MenuService {
 
     const uri =  this.sitesService.getCacheURI(url)
 
-    return  this.httpClient.post<any>(url, productSearchModel )
+    // return  this.httpClient.post<any>(url, productSearchModel )
 
     // return this.httpClient.post<IMenuItem[]>(uri, productSearchModel)
 
     // const url = { url: uri, cacheMins: 1, body: productSearchModel}
+    console.log('url', uri)
 
-    // return this.httpCache.post<IMenuItem[]>(url)
-
+    return this.httpCache.post<IMenuItem[]>(uri, productSearchModel)
   }
 
    //for customer menu
@@ -508,9 +508,13 @@ export class MenuService {
     const uri =  this.sitesService.getCacheURI(url)
 
     const cacheTime = this.sitesService.getCurrentCache()
+    
     if ( cacheTime  == 0 ) {
+      // console.log('cacheTime', cacheTime)
       return  this.httpClient.post<any>(url, productSearchModel )
     }
+
+    // console.log('cacheTime2', cacheTime)
     return this.httpCache.post<any>(uri, productSearchModel)
 
   }
@@ -597,9 +601,9 @@ export class MenuService {
 
     return this.httpClient.post<IMenuItem[]>(url, productSearchModel)
 
-    // const uri =  this.sitesService.getCacheURI(url)
+    const uri =  this.sitesService.getCacheURI(url)
 
-    // return  this.httpCache.get<any[]>(uri)
+    return  this.httpCache.get<any[]>(uri)
 
   }
 

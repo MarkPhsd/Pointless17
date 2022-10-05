@@ -9,22 +9,23 @@
         </app-payment-balance>
       </div>
 
-      <div class="grid-header-item">
+      <div class="grid-header-item"
+           *ngIf="!isUser">
         <app-order-header-demo-graphics
             [canRemoveClient]="'false'"
             [order]          ="order">
         </app-order-header-demo-graphics>
       </div>
 
-      <div class="grid-header-item">
+      <div *ngIf="serviceIsScheduled" class="grid-header-item">
         <posorder-schedule-card>
         </posorder-schedule-card>
       </div>
     </div>
 
     <div>
-      <div class="order-completed"
-            *ngIf="paymentsEqualTotal || order.completionDate">
+      <div  class="order-completed"
+            *ngIf="(paymentsEqualTotal || order.completionDate)">
           <ng-container [ngTemplateOutlet]="receiptShowTemplate"></ng-container>
       </div>
 
@@ -56,11 +57,16 @@
                   mat-raised-button
                   color="primary"
                   (click)="splitByItem = !splitByItem">
-            <mat-icon>split</mat-icon>Split By Items
+            <span *ngIf="splitByItem">
+              Payment Methods
+            </span>
+            <span *ngIf="!splitByItem">
+              <mat-icon>split</mat-icon>Split By Items
+            </span>
           </button>
         </div>
 
-        <div>
+        <div *ngIf="order && order.clientID">
           <store-credit-info
               [order]        ="order"
               [clientID]     ="order?.clientID"
@@ -70,7 +76,6 @@
             ></store-credit-info>
         </div>
       </div>
-
 
       <div *ngIf="!splitByItem && !paymentsEqualTotal && paymentIsReady">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
@@ -102,7 +107,6 @@
             <mat-card>
               <mat-card-content>
                 <div class="item-container">
-                  <!-- {{uiTransactions | json}} -->
                   <div *ngIf="devicename && (uiTransactions?.dsiEMVNeteEpayEnabled || dsiEMVEnabled) && order && order?.balanceRemaining != 0">
 
                     <button class="payment-buttons"
@@ -134,8 +138,6 @@
                   </div>
 
                   <div *ngIf="(platForm === 'android') && devicename && uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining != 0)">
-                    <!-- if is android.
-                    Android Payment -->
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="processDSIEMVAndroidCreditCardPayment(false)">
@@ -147,7 +149,7 @@
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyStripePayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Stripe Payment
+                      <mat-icon color="warn">credit_card</mat-icon>Pay with Card
                     </button>
                   </div>
 
@@ -255,8 +257,7 @@
                   [alternateClass]   ="'grid-keypad-alternate'"
                   (outPutReturnEnter)="enterPointCashValue($event)">
                   Point Amount
-              </app-key-pad>
-
+                </app-key-pad>
               </div>
             </mat-card-content>
           </mat-card>

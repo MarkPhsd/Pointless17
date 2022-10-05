@@ -3,7 +3,7 @@
       <div *ngFor="let item of list.results ; let i = index">
 
         <mat-card>
-          <mat-card-content>
+          <mat-card-content
               [@listAnimation]="list.length">
             <scheduled-menu-container
               [item]="item">

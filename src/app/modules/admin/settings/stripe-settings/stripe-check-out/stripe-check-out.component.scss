@@ -5,6 +5,12 @@
   padding: 5px;
 }
 
+// .ngx-stripe { 
+//   min-height: 350px;
+//   min-width: 350px;
+//   min-height: 350px;
+// }
+
 .grid-header {
   --gap: 5px;
   display: flex;
@@ -16,34 +22,34 @@
   max-width: 375px;
   margin: 5px;
 }
-button  {
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
+// button  {
+//   margin-top: 5px;
+//   margin-bottom: 5px;
+// }
 
-.card-results-grid {
-  --gap: 5px;
-  margin-top: 2px;
-  margin-right: 2px;
-  display: grid;
-  gap: var(--gap);
-  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
-  overflow-y: visible;
-  max-width: 210px;
-}
+// .card-results-grid {
+//   --gap: 5px;
+//   margin-top: 2px;
+//   margin-right: 2px;
+//   display: grid;
+//   gap: var(--gap);
+//   grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+//   overflow-y: visible;
+//   max-width: 210px;
+// }
 
-mat-input {
-  font-size: small;
-}
+// mat-input {
+//   font-size: small;
+// }
 
-.pay-button {
-  margin: 15px;
-  float: right;
-  height: 60px;
-}
-.cancel-button {
-  margin-top: 15px;
-  height: 60px;
-}
+// .pay-button {
+//   margin: 15px;
+//   float: right;
+//   height: 60px;
+// }
+// .cancel-button {
+//   margin-top: 15px;
+//   height: 60px;
+// }
 
 

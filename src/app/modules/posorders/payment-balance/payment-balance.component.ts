@@ -10,6 +10,7 @@ import { PrintingService } from 'src/app/_services/system/printing.service';
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
@@ -31,6 +32,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   _currentPayment: Subscription;
   posPayment     : IPOSPayment;
   isAuthorized   = false;
+  isUser: boolean;
   hidePrint:      boolean;
   href          : string;
 
@@ -45,10 +47,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   constructor(private orderService: OrdersService,
+              private orderMethodsService: OrderMethodsService,
               private siteService: SitesService,
               private paymentService: POSPaymentService,
               private paymentMethodService: PaymentMethodsService,
-              private userAuthorization: UserAuthorizationService,
+              public userAuthorization: UserAuthorizationService,
               private productEditButtonService: ProductEditButtonService,
               private editDialog      : ProductEditButtonService,
               private methodsService: CardPointMethodsService,
@@ -73,7 +76,11 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
         this.paymentsEqualTotal = false;
       }
     }
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
+
+    if (this.userAuthorization.user.roles === 'user') { 
+      this.isUser = true; 
+    }
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
 
     if (this.href.substring(0, 11 ) === '/pos-payment') {
       this.hidePrint = true;
@@ -129,6 +136,10 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
        this.toolBarUI.updateOrderBar(false)
      })
     }
+   }
+
+   exitOrder() { 
+    this.orderMethodsService.clearOrder()
    }
 
    async getPaymentMethod(id: number) {

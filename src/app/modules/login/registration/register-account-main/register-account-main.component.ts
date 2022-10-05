@@ -110,6 +110,7 @@ export class RegisterAccountMainComponent implements OnInit {
         if (data.userExists ) {
           this.notifyEvent("User exists, you must request a new password.", "Alert")
           this.router.navigate(['/resetpassword'])
+          return;
         }
         this.router.navigate(['/register-token', { data: userName } ]);
       }

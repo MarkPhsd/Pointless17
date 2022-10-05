@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef, Optional} from '@angular/core';
+import { Component, OnInit, ViewChild , OnDestroy, Input, Output,EventEmitter, Inject, TemplateRef, Optional, ElementRef} from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { StripeService, StripeCardComponent, StripeInstance, StripePaymentElementComponent } from 'ngx-stripe';
 import {
@@ -21,9 +21,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
   styleUrls: ['./stripe-check-out.component.scss']
 })
 export class StripeCheckOutComponent implements OnInit, OnDestroy  {
-
+  @ViewChild('ngxStripeComponent') ngxStripeComponent: TemplateRef<any>;
+  ngxStripeRef: TemplateRef<any>;
   @ViewChild(StripePaymentElementComponent) paymentElement: StripePaymentElementComponent;
-
+  @ViewChild('name') name: ElementRef;
   @ViewChild('paymentTemplateRef') paymentTemplateRef: TemplateRef<any>;
   outletTemplate: TemplateRef<any>;
 
@@ -47,6 +48,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   stripeAPISetting : StripeAPISettings;
   stripeInstance   : StripeInstance;
   errorMessage     : string;
+  paymentFormValid : boolean;
 
   elements:  Element;
   paymentStatus: any;
@@ -76,9 +78,10 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     return this.paymentForm.valid && this.stripeCardValid;
   }
 
-  elementsOptions: StripeElementsOptions = {
-    locale: 'en'
-  };
+  elementsOptions: StripeElementsOptions 
+  // = {
+  //   locale: 'en'
+  // };
 
   initSubscriptions(){
     this._posPayment = this.posPaymentService.currentPayment$.subscribe( data => {
@@ -113,22 +116,35 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
       }
     )).subscribe(
       {next: data => {
-        this.outletTemplate = this.paymentTemplateRef;
-        this.elementsOptions.clientSecret =  data.clientSecret;
-        this.errorMessage   = data.errorMessage;
+        console.log('data', data)
+        if (data) { 
+          if (data.clientSecret) { 
+            if (!this.elementsOptions) { 
+              this.elementsOptions = {locale: 'en' } as StripeElementsOptions 
+            }
+            this.outletTemplate = this.paymentTemplateRef;
+            this.elementsOptions.clientSecret =  data.clientSecret;
+            this.ngxStripeRef = this.ngxStripeComponent;
+          }
+          this.errorMessage   = data.errorMessage;
+        }
       },
       error : err => {
+        this.ngxStripeRef = null;
         this.errorMessage   = err.toString()
         this.outletTemplate = null;
       }
     })
 
     if (!this.stripeInstance || !this.stripeInstance.confirmPayment) {
-      this.errorMessage = 'Stripe not initiated. Please contact staff for assistance.'
+      this.ngxStripeRef = null;
+      this.errorMessage = 'Initiating.'
       return;
     }
     this.stripeInstance.confirmPayment;
   }
+
+ 
 
   cancel() {
     if (!this.dialogRef) { return}
@@ -187,15 +203,16 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   }
 
   initForm() {
+
     this.paymentForm = this.fb.group({
       name  : ['', [Validators.required]],
       amount: [this.amount, [Validators.required, Validators.pattern(/\d+/)]],
     });
 
-    this.paymentForm.valueChanges.subscribe(data => {
-      console.log(data)
+    this.paymentForm.controls['amount'].valueChanges.subscribe(data => {
       this.validateAmount();
       this.initStripeIntent();
+      this.paymentFormValid = this.paymentForm.valid;
     })
   }
 
@@ -248,7 +265,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
           if (result.paymentIntent.status === 'succeeded') {
             // Show a success message to your customer
             // alert({ success: true });
-            this.matSnack.open('Process successfull', 'Success')
+            this.matSnack.open('Process successfull', 'Success', {duration: 2000})
           }
         }
 
@@ -257,6 +274,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         const site = this.sitesService.getAssignedSite();
         if (!this.posPayment) { this.posPayment = {} as IPOSPayment}
 
+        this.posPayment.applicationLabel = 'stripe'
         this.posPayment.transactionData = JSON.stringify(result.paymentIntent);
         this.posPayment.approvalCode = this.elementsOptions?.clientSecret
         this.posPayment.amountPaid = this.amount;

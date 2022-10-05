@@ -239,6 +239,18 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
     this.orderService.updateOrderSearchModel(search)
   }
 
+  showClosedOrders() {
+    const search                = {} as IPOSOrderSearchModel
+    search.suspendedOrder       = 0
+    search.greaterThanZero      = 0
+    search.closedOpenAllOrders  = 2;
+    search.suspendedOrder        = 0;
+    search.clientID             = parseInt(this.id)
+    this.searchModel            = search;
+    this.orderService.updateOrderSearchModel(search)
+  }
+
+
   initForm() {
     this.inputForm = this.fbContactsService.initForm(this.inputForm)
     if (this.inputForm) {

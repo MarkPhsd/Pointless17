@@ -210,6 +210,20 @@ export class OrdersService {
     return this.http.post<any>(url, selectedItems);
   }
 
+
+  newOrderFromQR(site: ISite, qr: string): Observable<IPOSOrder> {
+    const controller = "/POSOrders/"
+
+    const endPoint  = "newQROrder"
+
+    const parameters = `?qr=${qr}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url);
+  }
+  
+
   getPOSOrderGroupTotal(site: ISite, id: number, groupID: number) :  Observable<IPOSOrder>  {
     const controller = "/POSOrders/"
 

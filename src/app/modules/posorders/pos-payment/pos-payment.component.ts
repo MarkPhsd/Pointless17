@@ -13,7 +13,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { IPaymentResponse, IPaymentSearchModel, IPOSOrder,
          IPOSPayment, IPOSPaymentsOptimzed,
          IServiceType, ISite } from 'src/app/_interfaces';
-import { IItemBasic, OrdersService } from 'src/app/_services';
+import { AuthenticationService, IItemBasic, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -30,6 +30,8 @@ import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { StoreCreditMethodsService } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { CardPointMethodsService } from '../../payment-processing/services';
 import { Capacitor } from '@capacitor/core';
+import { TouchBarOtherItemsProxy } from 'electron';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-pos-payment',
@@ -68,11 +70,16 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   orderlayout         = 'order-layout'
   smallDevice         = false;
+  phoneDevice:        boolean;
   orderItemsPanel     = ''
 
   orderDefaultType    = false;
   paymentIsReady      : boolean;
   splitByItem         : boolean;
+
+  isAuthorized  : boolean;
+  isUser        : boolean;
+  isStaff       : boolean;
 
   groupPaymentAmount  = 0;
   groupPaymentGroupID = 0;
@@ -81,6 +88,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   uiTransactions$ : Observable<TransactionUISettings>;
   devicename = localStorage.getItem('devicename')
   message: string;
+  serviceIsScheduled: boolean;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.pipe(
@@ -99,12 +107,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     )).subscribe(data => {
       this.serviceType = data
+      if (data.scheduleInstructions || this.order.preferredScheduleDate || data.shippingInstructions ) { 
+        this.serviceIsScheduled = true
+      }
     })
 
     this._currentPayment = this.paymentService.currentPayment$.subscribe( data => {
       this.posPayment = data
     })
   }
+
+  
 
   constructor(private paymentService  : POSPaymentService,
               private orderMethodsService: OrderMethodsService,
@@ -122,10 +135,14 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private dsiProcess      : DSIProcessService,
               private storeCreditMethodsService: StoreCreditMethodsService,
               private cardPointMethodsService: CardPointMethodsService,
+              private userAuthorization : UserAuthorizationService,
+              private authenticationService: AuthenticationService,
               private router          : Router,
               private fb              : FormBuilder) { }
 
   ngOnInit(): void {
+    this.initAuthorization()
+    
     const site = this.sitesService.getAssignedSite();
     this.paymentService.updatePaymentSubscription(this.posPayment)
     this.toolbarUI.updateOrderBar(false)
@@ -148,6 +165,15 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.updateItemsPerPage();
     this.initStripe();
     this.initTransactionUISettings();
+  }
+
+  initAuthorization() {
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
+    this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
+    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+    if (this.isUser) {
+
+    }
   }
 
   initTransactionUISettings() {
@@ -206,6 +232,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (!this.smallDevice) {
       this.orderlayout = 'order-layout'
       this.orderItemsPanel = 'item-list'
+    }
+
+    if (window.innerWidth < 599) {
+      this.phoneDevice = true
     }
   }
 
@@ -454,19 +484,23 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
 
+    console.log('processResults paymentResponse', paymentResponse)
+    
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
         result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
       } else {
       }
     }
-
-    this.orderService.updateOrderSubscription(paymentResponse.order)
+    
     this.resetPaymentMethod();
+
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
+      this.orderService.updateOrderSubscription(paymentResponse.order)
+      
       this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
-      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something bad happened.',3000)
+      this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)
     }
   }
 

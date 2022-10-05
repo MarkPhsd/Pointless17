@@ -155,7 +155,7 @@
         <mat-card-content>
             <mat-divider></mat-divider>
 
-            <div *ngIf="priceSchedule.requiredItemTypes.length>0">
+            <div *ngIf="priceSchedule?.requiredItemTypes?.length>0">
               <div class="itemtype-header">
                 <mat-icon>table_view</mat-icon>Types
               </div>
@@ -169,7 +169,7 @@
               </app-price-schedule-fields>
             </div>
 
-            <div *ngIf="requiredCategories.length>0">
+            <div *ngIf="priceSchedule?.requiredCategories?.length>0">
               <div class="icon-header">
                 <mat-icon>category</mat-icon>Categories
               </div>
@@ -240,14 +240,14 @@
               </div>
               <app-price-schedule-fields
                   [inputForm]     ="inputForm"
-                  [data]          ="priceSchedule.itemTypeDiscounts"
+                  [data]          ="priceSchedule?.itemTypeDiscounts"
                   [formArray]     ="itemTypeDiscounts"
                   [arrayTypeName] ="'itemTypeDiscounts'"
                   [hideDelete]    ="hideDelete">
               </app-price-schedule-fields>
             </div>
 
-            <div *ngIf="priceSchedule.categoryDiscounts.length>0">
+            <div *ngIf="priceSchedule?.categoryDiscounts.length>0">
               <div class="itemtype-header">
                 <mat-icon>category</mat-icon>Categories
               </div>
@@ -261,31 +261,32 @@
               </app-price-schedule-fields>
             </div>
 
-            <div *ngIf="priceSchedule.itemDiscounts.length>0">
+            <div *ngIf="priceSchedule?.itemDiscounts.length>0">
               <div class="icon-header">
                 <mat-icon>inventory_2</mat-icon>Item Discounts
               </div>
               <app-price-schedule-fields
                     [inputForm]     ="inputForm"
-                    [data]          ="priceSchedule.itemDiscounts"
+                    [data]          ="priceSchedule?.itemDiscounts"
                     [formArray]     ="itemDiscounts"
                     [arrayTypeName] ="'itemDiscounts'"
                     [hideDelete]    ="hideDelete">
               </app-price-schedule-fields>
             </div>
 
-            <div *ngIf="priceSchedule.brandDiscounts.length>0">
+            <div >
               <div class="icon-header">
                 <mat-icon>branding_watermark</mat-icon>Brand Discounts
               </div>
-
-              <app-price-schedule-fields
-                    [inputForm]    ="inputForm"
-                    [data]         ="priceSchedule.brandDiscounts"
-                    [formArray]    ="brandDiscounts"
-                    [arrayTypeName]="'brandDiscounts'"
-                    [hideDelete]   ="hideDelete">
-              </app-price-schedule-fields>
+              <span *ngIf="priceSchedule?.brandDiscounts && priceSchedule?.brandDiscounts.length>0">
+                <app-price-schedule-fields
+                      [inputForm]    ="inputForm"
+                      [data]         ="priceSchedule?.brandDiscounts"
+                      [formArray]    ="brandDiscounts"
+                      [arrayTypeName]="'brandDiscounts'"
+                      [hideDelete]   ="hideDelete">
+                </app-price-schedule-fields>
+              </span>
             </div>
 
         </mat-card-content>

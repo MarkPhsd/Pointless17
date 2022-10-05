@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { dsiemvandroid } from 'dsiemvandroidplugin';
+// import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { Observable, of , switchMap} from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -43,11 +43,10 @@ export class DSIAndroidSettingsComponent implements OnInit {
 
 
     const options = { value: ' value.'}
-    const ipValue = await dsiemvandroid.getIPAddressPlugin(options)
-    const ipAddress = ipValue?.value;
-    this.initForm(ipAddress);
+    // const ipValue = await dsiemvandroid.getIPAddressPlugin(options)
+    // const ipAddress = ipValue?.value;
+    // this.initForm(ipAddress);
   }
-
 
 
   async listBTDevices() {
@@ -113,8 +112,8 @@ export class DSIAndroidSettingsComponent implements OnInit {
   async checkBTPermission() {
     await this.dsiAndroidService.listBTDevices()
     const options = {value: 'test'};
-    const value = dsiemvandroid.getHasPermission(options);
-    console.log('has permissions', value)
+    // const value = dsiemvandroid.getHasPermission(options);
+    // console.log('has permissions', value)
   }
 
   //deviceName

@@ -6,7 +6,7 @@
 <ng-template #footerMenu>
   <div class="grid-items">
 
-    <div  class="mat-item">
+    <div  class="mat-item" *ngIf="isStaff">
         <button
               mat-raised-button
               color="primary"
@@ -33,6 +33,7 @@
         fxFill
         color="primary"
         (click)="toggleOpenOrderBar()">
+
         <div *ngIf="order && order.history">
           <mat-icon>view</mat-icon>
           View Cart
@@ -41,29 +42,32 @@
           <mat-icon>edit</mat-icon>
           Edit Cart
         </div>
+      
       </button>
     </div>
 
     <div class="mat-item" *ngIf="order && !smallDevice">
       <button  mat-raised-button
-        fxFill
-        color="primary"
-        (click)="makePayment()">
+            fxFill
+            color="primary"
+            (click)="makePayment()">
         <mat-icon>credit_card</mat-icon>
+
         <span *ngIf="!order.history">
           Check Out
         </span>
         <span *ngIf="order.history">
           Payments
         </span>
+      
       </button>
     </div>
 
     <div class="mat-item" *ngIf="order && !smallDevice">
       <button  mat-raised-button
-        fxFill
-        color="primary"
-        (click)="printingService.previewReceipt()">
+               fxFill
+               color="primary"
+               (click)="printingService.previewReceipt()">
         <mat-icon>print</mat-icon>
         <span >
           Print

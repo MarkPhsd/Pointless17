@@ -79,39 +79,43 @@ export class RenderingService {
         if (data) {
 
           newText = text;
-
+          // console.log('text', text)
+          // console.log('data pre processeds', data) 
           if (type === 'items') {
             if (data.itemPercentageDiscountValue && data?.itemPercentageDiscountValue != 0) {
-              console.log('data %', data?.itemPercentageDiscountValue)
-              let disc = `${text} ${this.itemPercentageDiscountText}`;
-              newText = newText + disc;
+              console.log('data itemPercentageDiscountValue %', data?.itemPercentageDiscountValue)
+              let disc = `${newText} ${this.itemPercentageDiscountText}`;
+              newText = disc;
+            }
+          }
+
+          
+          if (type === 'items') {
+            if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
+              console.log('data ItemOrderPercentageDiscount %', data?.ItemOrderPercentageDiscount)
+              let disc = `${newText} ${this.itemOrderPercentageDiscountText}`;
+              newText = disc;
             }
           }
 
           if (type === 'items') {
             if (data.itemCashDiscount && data?.itemCashDiscount != 0) {
-              console.log('data %', data?.itemCashDiscount)
-              let disc = `${text} ${this.itemCashDiscountText}`;
-              newText = newText + disc;
+              console.log('data itemCashDiscount %', data?.itemCashDiscount)
+              let disc = `${newText} ${this.itemCashDiscountText}`;
+              newText =  disc;
             }
           }
 
           if (type === 'items') {
             if (data.itemOrderCashDiscount && data?.itemOrderCashDiscount != 0) {
-              console.log('data %', data?.itemOrderCashDiscount)
-              let disc = `${text} ${this.itemOrderCashDiscountText}`;
-              newText = newText + disc;
+              console.log('data itemOrderCashDiscount %', data?.itemOrderCashDiscount)
+              let disc = `${newText} ${this.itemOrderCashDiscountText}`;
+              newText =  disc;
             }
           }
 
-          if (type === 'items') {
-            if (data.ItemOrderPercentageDiscount && data?.ItemOrderPercentageDiscount != 0) {
-              console.log('data %', data?.ItemOrderPercentageDiscount)
-              let disc = `${text} ${this.itemOrderPercentageDiscountText}`;
-              newText = newText + disc;
-            }
-          }
-
+          // console.log('new text', newText)
+          // console.log('data', data)
           stringArray.push( this.interpolateText(data, newText))
           // console.log(this.interpolateText(data, newText))
         }

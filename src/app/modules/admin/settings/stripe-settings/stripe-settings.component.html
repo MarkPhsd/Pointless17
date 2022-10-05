@@ -8,7 +8,7 @@
   </ng-template>
 
   <mat-card-content *ngIf="inputForm; else loading">
-
+   
     <div
         [formGroup]="inputForm"
         class="grid-views">
@@ -21,6 +21,15 @@
               formControlName="enabled">
             <mat-label class="mat-label">Enabled</mat-label>
           </mat-slide-toggle>
+        </div>
+        
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >API Key</mat-label>
+            <input matInput type="text"
+                  formControlName="apiKey"
+                  class="form-control" >
+          </mat-form-field>
         </div>
 
         <simple-tinymce cols="50"

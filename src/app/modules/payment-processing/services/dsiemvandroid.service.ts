@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Transaction } from './../models/models'
-import { dsiemvandroid } from 'dsiemvandroidplugin';
+// import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { NgxXml2jsonService } from 'ngx-xml2json';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -121,7 +121,8 @@ export class PointlessCCDSIEMVAndroidService {
 
   async  listBTDevices() {
     const options = {value: 'test'};
-    const items = await dsiemvandroid.plugInSearchForBt(options)
+    // const items = await dsiemvandroid.plugInSearchForBt(options)
+    let items: any;
     const list = items.value.replace('null', '').split(';')
     return list;
   }
@@ -132,7 +133,8 @@ export class PointlessCCDSIEMVAndroidService {
       options.merchantID = options.merchantID;
       options.pinPadIpAddress = options.pinPadIpAddress;
       options.padPort = options.padPort;
-      const item    = await dsiemvandroid.getDeviceInfo(options);
+      let item: any;
+      // const item    = await dsiemvandroid.getDeviceInfo(options);
       const results = item as any;
       const parser = new DOMParser();
       results.value = results.value.replace('#', '')
@@ -147,7 +149,8 @@ export class PointlessCCDSIEMVAndroidService {
   async getIPAddress() {
     try {
       const options = { value: ' value.'}
-      const item = await dsiemvandroid.getIPAddressPlugin(options)
+      // const item = await dsiemvandroid.getIPAddressPlugin(options)
+      let item: any;
       return item?.value;
     } catch (error) {
       return error;
@@ -160,7 +163,8 @@ export class PointlessCCDSIEMVAndroidService {
       let options = {} as any;
       options =  { bluetoothDeviceName: setting.bluetoothDeviceName, secureDevice: setting.secureDevice, merchantID: setting.merchantID,
                    pinPadIpAddress: setting.pinPadIpAddress, padPort: setting.padPort }
-      const item = await dsiemvandroid.emvPadReset(options)
+      // const item = await dsiemvandroid.emvPadReset(options)
+      let item: any;
       return item;
     } catch (error) {
       return error;

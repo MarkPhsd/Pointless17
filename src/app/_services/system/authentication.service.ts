@@ -186,7 +186,7 @@ export class AuthenticationService {
       return  this.http.post<any>(url, user)
     };
 
-    updatePassword(user: IUser): any {
+    updatePassword(user: IUser): Observable<any> {
       const api = this.siteSerivce.getAssignedSite().url 
       const url = `${api}/users/updatePassword`
       return  this.http.post<any>(url, user) 

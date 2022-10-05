@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PromptKitsComponent } from './prompt-kits.component';
+import { QROrderComponent } from './qrorder.component';
 
-describe('PromptKitsComponent', () => {
-  let component: PromptKitsComponent;
-  let fixture: ComponentFixture<PromptKitsComponent>;
+describe('QROrderComponent', () => {
+  let component: QROrderComponent;
+  let fixture: ComponentFixture<QROrderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ PromptKitsComponent ]
+      declarations: [ QROrderComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PromptKitsComponent);
+    fixture = TestBed.createComponent(QROrderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,4 +1,3 @@
-import { T } from '@angular/cdk/keycodes';
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Observable, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, IPurchaseOrderItem, PosOrderItem } from 'src/app/_interfaces';
@@ -107,10 +106,9 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
       const search = {} as IStoreCreditSearchModel;
       search.clientID = this.clientID;
       this.setObservable(search);
+      this.initSubscription()
       return
     }
-
-    this.initSubscription()
 
   }
 
@@ -130,6 +128,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
   }
 
   setObservable(search: IStoreCreditSearchModel ){
+    // console.log('search',search)
     if (search) {
       const site = this.siteService.getAssignedSite();
       this.searchModel = search;
@@ -138,12 +137,11 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
     }
 
     const searchModel = {} as IStoreCreditSearchModel
-
     if (this.order && this.order.clientID && this.order.clientID !=0 ) {
       const site = this.siteService.getAssignedSite();
       searchModel.clientID = this.clientID;
-      this.storeCreditSearch$ = this.storeCreditService.search(site, searchModel)
       this.searchModel = search;
+      this.storeCreditSearch$ = this.storeCreditService.search(site, searchModel)
       return
     };
 
@@ -159,7 +157,6 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
   issueMoney(credit: StoreCredit) {
     if (!credit) { credit = {} as StoreCredit }
 
-    // const site = this.siteService.getAssignedSite();
     if (credit) {
       if (this.order) {
         credit.orderID = this.order.id;

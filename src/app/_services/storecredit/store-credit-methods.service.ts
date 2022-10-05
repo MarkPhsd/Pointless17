@@ -141,10 +141,10 @@ getStoreCreditForm(inputForm:FormGroup): FormGroup {
 
     const item = {clientID: clientID}
     dialogRef = this.dialog.open(StoreCreditPopUpComponent,
-      { width:        '455px',
-        minWidth:     '455px',
-        height:       '450px',
-        minHeight:    '450px',
+      { width:        '100vw',
+        minWidth:     '100vw',
+        height:       '100vh',
+        minHeight:    '100vh',
         data     :    item,
       },
     )

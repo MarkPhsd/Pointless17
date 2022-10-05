@@ -165,6 +165,7 @@ export class OrderMethodsService implements OnDestroy {
               private uiSettingService        : UISettingsService,
               private textMessagingService    : TextMessagingService,
               private toolbarServiceUI        : ToolBarUIService,
+
               private floorPlanService        : FloorPlanService,
              ) {
     this.initSubscriptions();
@@ -316,11 +317,25 @@ export class OrderMethodsService implements OnDestroy {
     this.router.navigate(["/menuitem/", {id:id}]);
   }
 
+
+  emailOrderByEntry(order: IPOSOrder) { 
+    this.editDialog.emailOrderEntry( order)
+  }
+
+  emailOrderFromEntry(order: IPOSOrder, email: string) : Observable<any> {
+    if (order && email) {
+        return  this.sendGridService.sendOrder(order.id, order.history, email, email  )
+    }
+    this.notifyEvent('No email in contact', 'Alert')
+    return null
+  }
+
+
   emailOrder(order: IPOSOrder) : Observable<any> {
     if (order && order.clientID) {
       if (order.clients_POSOrders.email) {
         const clientName = `${order?.clients_POSOrders?.firstName} ${order?.clients_POSOrders?.lastName}`
-        return  this.sendGridService.sendOrder(order.id, order.history,order.clients_POSOrders.email, clientName  )
+        return  this.sendGridService.sendOrder(order.id, order.history, order.clients_POSOrders.email, clientName  )
       }
     }
     this.notifyEvent('No email in contact', 'Alert')
@@ -374,10 +389,10 @@ export class OrderMethodsService implements OnDestroy {
     }
 
     const payment = paymentResponse.payment;
-    console.log('finalizeorder balance greater than 0', order.balanceRemaining > 0)
+    // console.log('finalizeorder balance greater than 0', order.balanceRemaining > 0)
     if (order.balanceRemaining > 0) { return 0 };
 
-    console.log('finalizeorder', payment , paymentMethod)
+    // console.log('finalizeorder', payment , paymentMethod)
     if (payment && paymentMethod) {
 
       if (paymentMethod.isCreditCard) {
@@ -703,23 +718,22 @@ export class OrderMethodsService implements OnDestroy {
   deleteOrder(id: number, confirmed: boolean) {
     const site = this.siteService.getAssignedSite();
 
-    if (!confirmed) {
+    if (!confirmed && id) {
       const confirm = window.confirm('Are you sure you want to delete this order?')
       if (!confirm) { return }
     }
 
-    if (this.order) {
-      const orderDelete$ = this.orderService.deleteOrder(site, this.order.id)
+    if (id) {
+
+      const orderDelete$ = this.orderService.deleteOrder(site, id)
       orderDelete$.subscribe(
         {next: data => {
             if (data) {
               this._snackBar.open('Order deleted.', 'Alert', {verticalPosition: 'top', duration: 1000})
               this.clearOrder();
               if (this.router.url == '/pos-orders') {
-                //then refresh orders
                 return
               }
-
               this.router.navigate(['app-main-menu'])
             }
             if (!data) {
@@ -739,12 +753,18 @@ export class OrderMethodsService implements OnDestroy {
     localStorage.removeItem('orderSubscription')
     this.orderService.updateOrderSubscription(null);
 
+    if (this.userAuthorization.user.roles = 'user') { 
+      this.router.navigate(['/app-main-menu']);
+      return;
+    }
+
     const url = this.router.url;
     if (url === '/currentorder' || url === '/currentorder;mainPanel=true'
         || url === '/pos-payment' || url === '/pos-order-schedule') {
       this.router.navigate(['/pos-orders'])
       return
     }
+
     if (url === '/pos-orders') {
       // this.router.navigate(['app-main-menu'])
     }

@@ -122,6 +122,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     private printingService       : PrintingService,
     private printingAndroidService: PrintingAndroidService,
     private btPrinterService      : BtPrintingService,
+    private orderMethodService    : OrderMethodsService,
     )
   {
   }
@@ -148,6 +149,31 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   async ngAfterViewInit() {
     this.initDefaultLayouts()
+  }
+
+  email() {
+    
+    if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) { 
+      this.orderMethodService.emailOrder(this.order).subscribe(data => {
+        if (data === 'Success') { 
+          this.orderMethodService.notifyEvent('Email Sent', 'Success')
+          this.exit();
+          return;
+        }
+        if (data && data.isSuccessStatusCode || data === 'Success') {
+          this.orderMethodService.notifyEvent('Email Sent', 'Success')
+         }
+        if (!data || !data.isSuccessStatusCode) {
+          this.orderMethodService.notifyEvent('Email not sent. Check email settings', 'Failed')
+        }
+      })
+      this.exit();
+      return 
+    }
+
+    this.orderMethodService.emailOrderByEntry(this.order)
+    this.exit();
+
   }
 
   get currentView() {

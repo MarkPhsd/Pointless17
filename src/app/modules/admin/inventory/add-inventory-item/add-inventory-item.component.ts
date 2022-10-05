@@ -1,5 +1,5 @@
 import { Component,  Inject,  Input,  OnDestroy,  OnInit, Optional, } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
@@ -7,11 +7,12 @@ import { ISite } from 'src/app/_interfaces/site';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { FbInventoryService } from 'src/app/_form-builder/fb-inventory.service';
 import { MenuService } from 'src/app/_services';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ScaleInfo, ScaleService, ScaleSetup } from 'src/app/_services/system/scale-service.service';
+import { NewInventoryItemComponent } from '../new-inventory-item/new-inventory-item.component';
 
 @Component({
   selector: 'app-add-inventory-item',
@@ -36,6 +37,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   scaleSetup          : ScaleSetup;
   displayWeight       : string;
 
+  inventoryAssignment   : IInventoryAssignment;
   inventoryAssignment$:      Observable<IInventoryAssignment>;
   inventoryAssignments  :    IInventoryAssignment[];
   inventoryLocations:        IInventoryLocation[];
@@ -63,6 +65,8 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     private inventoryAssignmentService: InventoryAssignmentService,
     private inventoryLocationsService: InventoryLocationsService,
     private scaleService        : ScaleService,
+    private dialog              : MatDialog,
+    private fb: FormBuilder,
     private dialogRef: MatDialogRef<AddInventoryItemComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
   {
@@ -76,33 +80,38 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   ngOnInit() {
     this.initSubscriptions()
-    try {
-      this.locations$ = this.inventoryLocationsService.getLocations();
-      this.inventoryLocations$ = this.locations$;
-      this.site =  this.siteService.getAssignedSite();
-      this.inputForm = this.fbInventory.initForm(this.inputForm)
 
-      if (this.id !=0) {
-        this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
-        this.inventoryAssignment$.subscribe( data=> {
-          this.item = data
-          this.inputForm = this.fbInventory.initForm(this.inputForm)
-          this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
-          this.productName = this.item.productName
-        })
-      }
+    this.locations$ = this.inventoryLocationsService.getLocations();
+    this.inventoryLocations$ = this.locations$;
+    this.site =  this.siteService.getAssignedSite();
+    this.inputForm = this.fbInventory.initForm(this.inputForm)
+    this.initSearchForm();
+    if (this.id !=0) {
+      this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(this.site, this.id)
+      this.inventoryAssignment$.subscribe( data=> {
+        this.item = data
+        this.inputForm = this.fbInventory.initForm(this.inputForm)
+        this.inputForm = this.fbInventory.intitFormData(this.inputForm, data)
+        this.productName = this.item.productName
+      })
 
       this.locations$.subscribe(data => {
         this.inventoryLocations = data;
       })
-    } catch (error) {
-      console.log(error)
     }
+ 
   }
+
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     if( this._scaleInfo) { this._scaleInfo.unsubscribe()}
+  }
+
+  initSearchForm() { 
+    this.searchForm = this.fb.group( { 
+      productName: []
+    })
   }
 
   applyWeightQuantity() {
@@ -117,7 +126,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     this.inputForm.patchValue(value)
   }
 
-  async updateItem(event) {
+  updateItem(event, exit) {
     if (this.inputForm) {
       if (this.inputForm.valid) {
         const packageQuantity = this.inputForm.controls['packageQuantity'].value
@@ -126,21 +135,25 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         if (this.id != 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
-          this.updateInventory(item$)
+          this.updateInventory(item$,exit)
         }
 
         if (this.id == 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.addInventoryItem(this.site, this.item)
-          this.updateInventory(item$)
+          this.updateInventory(item$,exit)
         }
       }
     }
   }
 
-  private updateInventory(item$: Observable<IInventoryAssignment>) {
+  private updateInventory(item$: Observable<IInventoryAssignment>, exit: boolean) {
     item$.subscribe(data => {
       this.notifySave(data)
+      this.inventoryAssignment = data;
+      if (exit) { 
+        this.onCancel(true, true)
+      }
       return
     })
   }
@@ -149,14 +162,10 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     if (item) {
       this.notifyEvent('Inventory info updated.', 'Success')
       return
-    } console.log('updateitem failed')
+    } 
+    // console.log('updateitem failed')
     this.notifyEvent('Inventory info not  updated.', 'failed')
     return  false
-  }
-
-  async updateItemExit(event) {
-    const result = await this.updateItem(null)
-    this.onCancel(true)
   }
 
   deleteItem(event) {
@@ -176,16 +185,20 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
 
   getItem(event) {
     const item = event
-    if (item) {
-      if (item.id) {
-        this.menuService.getMenuItemByID(this.site, item.id).subscribe(data => {
-            this.menuItem = data
-            this.item = this.inventoryAssignmentService.assignProductToInventory(data, item)
-            this.item = this.inventoryAssignmentService.assignChemicals(data, item)
-            this.inputForm = this.fbInventory.intitFormData(this.inputForm, item)
-          }
-        )
-      }
+    if (item && item.id) {
+      // console.log('get item')
+      this.menuService.getMenuItemByID(this.site, item.id).subscribe(data => {
+          this.menuItem = data
+          // console.log('get item2')
+          this.item = this.inventoryAssignmentService.assignProductToInventory(data, item)
+          // console.log('get item3')
+          this.item = this.inventoryAssignmentService.assignChemicals(data, item)
+          // console.log('get item4')
+          this.inputForm = this.fbInventory.intitFormData(this.inputForm, item)
+          // console.log('get item5')
+          this.initSearchForm();
+        }
+      )
     }
   }
 
@@ -206,7 +219,10 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
     return null
   }
 
-  onCancel(event) {
+  onCancel(event, openEditor) {
+    if (this.inventoryAssignment) { 
+      this.openInventoryDialog(this.inventoryAssignment.id)
+    }
     this.dialogRef.close(event);
   }
 
@@ -215,6 +231,18 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
       duration: 1000,
       verticalPosition: 'top'
     });
+  }
+
+   ///move to inventoryAssignemtnService
+   openInventoryDialog(id: number) {
+    const dialogRef = this.dialog.open(NewInventoryItemComponent,
+      { width:        '800px',
+        minWidth:     '800px',
+        height:       '750px',
+        minHeight:    '750px',
+        data : {id: id}
+      },
+    )
   }
 
 }

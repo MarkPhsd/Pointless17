@@ -272,16 +272,13 @@ export class InventoryHistoryListComponent implements OnInit {
 
     if (dialogRef) {
     dialogRef.afterClosed().subscribe(result => {
-
       if (result && result != 'false') {
         this.outputRefresh.emit('true')
         this.id = 0;
         this.inventoryAssignment = null;
       }
-
       });
     }
-
   }
 
   openProductDialog(id: any) {

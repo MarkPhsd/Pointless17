@@ -1,6 +1,6 @@
 <div class="parent-container">
   <div>
-    <span *ngIf="isAuthorized || isStaff">
+    <span >
 
       <button *ngIf="!smallDevice" mat-button (click)="changeView()">
         <mat-icon>
@@ -17,7 +17,7 @@
         <mat-icon>search</mat-icon>
       </button>
 
-      <span  *ngIf="isAuthorized  || isStaff">
+      <span>
         <span *ngIf="!smallDevice || (!smallDevice && hidePanel)">
           <button mat-button (click)="displayPanel($event)">
             <mat-icon>search</mat-icon>
@@ -25,15 +25,15 @@
         </span>
       </span>
 
-      <button mat-button (click)="newOrder()">
+      <button mat-button (click)="newOrder()" *ngIf="isAuthorized || isStaff">
         <mat-icon>receipt</mat-icon><span>New Order</span>
       </button>
-      <button mat-button (click)="newOrderOptions()">
+      <button mat-button (click)="newOrderOptions()" *ngIf="isAuthorized || isStaff">
         <mat-icon>add</mat-icon><span>Other New</span>
       </button>
     </span>
 
-    <span *ngIf="!smallDevice">
+    <span *ngIf="!smallDevice && !isUser">
       <button mat-button (click)="setViewType(3)">
         <mat-icon>countertops</mat-icon> View Prep
       </button>

@@ -133,8 +133,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   homePageSettingSubscriber() {
     this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
       this.uiSettings = data;
-
-
       if (data) {
         if (data.outGoingCustomerSupportEmail) {
           this.emailOption = true
@@ -241,9 +239,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private siteService       : SitesService,
               private toolbarUIService  : ToolBarUIService,
               private bottomSheet       : MatBottomSheet,
-              private authenticationService: AuthenticationService,
               private orderMethodService: OrderMethodsService,
               private userAuthorization : UserAuthorizationService,
+              private authenticationService: AuthenticationService,
               public uiSettingsService : UISettingsService,
               private settingService: SettingsService,
               private posOrderItemService: POSOrderItemServiceService,
@@ -535,7 +533,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.smallDevice) {
       this.openOrderBar = false
     }
-    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff)
+    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff, this.order.completionDate )
   }
 
   //loop the items

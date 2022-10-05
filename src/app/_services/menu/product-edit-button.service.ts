@@ -43,6 +43,7 @@ import { AppWizardProgressButtonComponent } from 'src/app/shared/widgets/app-wiz
 import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/software/app-wizard-status/app-wizard-status.component';
 import { CardpointeTransactionsComponent } from 'src/app/modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 import { DsiEMVAndroidComponent } from 'src/app/modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
+import { EmailEntryComponent } from 'src/app/shared/widgets/email-entry/email-entry.component';
 
 @Injectable({
   providedIn: 'root'
@@ -277,6 +278,22 @@ export class ProductEditButtonService {
     )
 
   }
+
+  emailOrderEntry(order: IPOSOrder) {
+
+    let dialogRef: any;
+    dialogRef = this.dialog.open(EmailEntryComponent,
+      { width:        '100%',
+        minWidth:     '100%',
+        maxWidth:     'max-width: 100vw !important',
+        height:       '100vh',
+        minHeight:    '100vh',
+        data : order
+      },
+    )
+
+  }
+
 
   openProductEditWindow(product: IProduct, itemType: ItemType) {
 

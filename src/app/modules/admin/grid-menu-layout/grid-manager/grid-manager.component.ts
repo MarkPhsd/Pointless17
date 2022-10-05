@@ -31,18 +31,19 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   isSafari        : any;
   constructor(
               private dialog             : MatDialog,
-              private router            : Router,
-              public layoutService: GridsterLayoutService,
-              private fb: FormBuilder,
-              private auth: AuthenticationService,
-              private navigationService     : NavigationService,
-              private _renderer       : Renderer2,
+              private router             : Router,
+              public  layoutService: GridsterLayoutService,
+              private fb                 : FormBuilder,
+              private auth               : AuthenticationService,
+              private navigationService  : NavigationService,
+              private _renderer          : Renderer2,
               ){};
 
 	// On component init we store Widget Marketplace in a WidgetModel array
 	ngOnInit(): void {
 
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
     this.renderTheme();
     this.inputForm = this.fb.group({type: ['']})
     this.refresh();
@@ -52,6 +53,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
 
 	}
+
   renderTheme() {
     const theme = localStorage.getItem('angularTheme')
     this._renderer.removeClass(document.body, 'dark-theme');
@@ -66,7 +68,6 @@ export class GridManagerComponent implements OnInit, OnDestroy {
   }
 
   goHome() {
-
     this.navigationService.navHome();
   }
 

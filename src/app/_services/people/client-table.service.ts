@@ -14,7 +14,7 @@ export interface NamesCities {
   providedIn: 'root'
 })
 export class ClientTableService {
-
+  
   constructor( private http: HttpClient, private auth: AuthenticationService) { }
 
   pageNumber = 1;
@@ -37,6 +37,19 @@ export class ClientTableService {
 
   }
 
+  newTempClient(site: ISite) : Observable<IClientTable>  {
+    
+    const controller =  "/ClientTable/"
+
+    const endPoint = `getTempClient`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IClientTable>(url)
+
+  }
 
 
   delete(site: ISite, id: number) : Observable<IClientTable> {
@@ -56,7 +69,6 @@ export class ClientTableService {
   }
 
   deleteList(site: ISite, id: number[]) : Observable<IClientTable> {
-
 
     const controller =  "/ClientTable/"
 

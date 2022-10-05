@@ -1,10 +1,9 @@
 <div class="canvas">
 
   <div class="overlay-items">
-
-    <!-- <pointless-room-layout-designer></pointless-room-layout-designer> -->
- 
-    <!-- <pointless-room-layout-view></pointless-room-layout-view> -->
+    <!-- {{connectedToApi
+    }} -->
+    <div *ngif="connectedToApi; else connected"></div>
     
     <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
@@ -70,4 +69,8 @@
   <video autoplay muted  class="video">
     <source [src]="smoke" type="video/mp4">
   </video>
+</ng-template>
+
+<ng-template #connected>
+  Not connected to service, please wait. 
 </ng-template>

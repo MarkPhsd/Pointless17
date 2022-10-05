@@ -9,6 +9,7 @@ import { ResizedEvent } from 'angular-resize-event';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import {  MenuService } from 'src/app/_services';
+import { PollingService } from 'src/app/_services/system/polling.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -38,7 +39,18 @@ export class MainMenuComponent implements OnInit  {
   site: ISite;
 
   _site: Subscription;
+  _poll: Subscription;
+  connectedToApi: boolean;
+
+  initPollSubscriptions() {
+    this._poll = this.pollingService.poll$.subscribe( data => {
+      this.connectedToApi = data;
+    })
+  }
+
+
   initSiteSubscriber() {
+    this.initPollSubscriptions();
     this._site = this.siteService.site$.subscribe( data => {
       if (!data) { return }
       if (!this.site) { this.site = data }
@@ -49,6 +61,7 @@ export class MainMenuComponent implements OnInit  {
   }
 
   constructor(
+    private pollingService: PollingService,
     private uiSettings: UISettingsService,
     private userAuthorizationService: UserAuthorizationService,
     private siteService: SitesService,
