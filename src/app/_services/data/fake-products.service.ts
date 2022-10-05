@@ -10,7 +10,7 @@ export class FakeProductsService {
   products: IProduct[];
   constructor() { }
 
-  getRecords(count: number) { 
+  getRecords(count: number) {
     const products = [] as IProduct[];
     for (var i = 1; i < count; i +=1){
        const item = this.getProduct();
@@ -22,6 +22,15 @@ export class FakeProductsService {
   getProduct(): IProduct {
     const item = {} as IProduct;
 
+    item.productCount = +faker.random.numeric(3);
+    item.retail = +faker.random.numeric(2);
+    item.wholesale  = item.retail * .3;
+    item.active  = true;
+    item.webProduct = 1;
+    item.name =  faker.animal.bird();
+    item.sku = faker.random.alphaNumeric(10)
+    item.categoryName = '';
+    item.departmentName = ''
     item.unit                         = 0;
     item.unitTypeID                   = 0;
     item.xcoordinant                  = 0;
@@ -209,14 +218,7 @@ export class FakeProductsService {
     item.active                       = false;
     item.glutenFree                   = false;
     item.icon                         = 'value'
-    
-    item.productCount = +faker.random.numeric(3);
-    item.retail = +faker.random.numeric(2);
-    item.wholesale  = item.retail * .3;
-    item.active  = true;
-    item.webProduct = 1;
-    item.name =  faker.animal.bird();
-    item.sku = faker.random.alphaNumeric(10)
+
     return item
   }
 
