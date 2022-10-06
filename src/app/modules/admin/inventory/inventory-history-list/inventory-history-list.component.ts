@@ -1,4 +1,4 @@
-import { Component,  EventEmitter,  Inject,  Input,  OnInit, Optional, Output, } from '@angular/core';
+import { Component,  EventEmitter,  Inject,  Input,  OnDestroy,  OnInit, Optional, Output, } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,7 +26,7 @@ import { ManifestInventoryService } from 'src/app/_services/inventory/manifest-i
   templateUrl: './inventory-history-list.component.html',
   styleUrls: ['./inventory-history-list.component.scss']
 })
-export class InventoryHistoryListComponent implements OnInit {
+export class InventoryHistoryListComponent implements OnInit, OnDestroy {
 
   manifestList: IInventoryAssignment[];
 
@@ -78,10 +78,8 @@ export class InventoryHistoryListComponent implements OnInit {
        private inventoryEditButon: InventoryEditButtonService,
        private productEditButton : ProductEditButtonService,
        private _snackBar         : MatSnackBar,
-
        )
   {
-    // this.toggleLabelEvents = false;
     this.listPrinters();
   }
 
@@ -127,7 +125,6 @@ export class InventoryHistoryListComponent implements OnInit {
 
   }
   initForm() {
-
     if (this.inventoryAssignment) {
       this.printForm = this.fb.group({
         printQuantity: [this.inventoryAssignment.packageQuantity]
@@ -203,7 +200,6 @@ export class InventoryHistoryListComponent implements OnInit {
   }
 
   printSku() {
-
     // const item =  this.fakeDataService.getInventoryItemTestData();
     // const printString = this.renderingService.interpolateText(item, zplString )
     if (this.labelSetting && this.inventoryAssignment) {
@@ -223,14 +219,21 @@ export class InventoryHistoryListComponent implements OnInit {
       const id = this.id
       if (this.inventoryAssignment) {
         if (id) {
-          this.openNoteDialog(id)
+          const dialogRef =  this.openNoteDialog(id)
+          dialogRef.afterClosed().subscribe(result => {
+            this.outputRefresh.emit('true')
+            if (result && result != 'false') {
+              this.id = 0;
+              this.inventoryAssignment = null;
+            }
+          })
         }
       }
     }
   }
 
   openNoteDialog(id: any) {
-    this.inventoryEditButon.openNoteDialog(id)
+    return this.inventoryEditButon.openNoteDialog(id)
   }
 
   editInventoryItem() {
@@ -250,8 +253,8 @@ export class InventoryHistoryListComponent implements OnInit {
     )
 
     dialogRef.afterClosed().subscribe(result => {
+      this.outputRefresh.emit('true')
       if (result && result != 'false') {
-        this.outputRefresh.emit('true')
         this.id = 0;
         this.inventoryAssignment = null;
       }
@@ -271,12 +274,12 @@ export class InventoryHistoryListComponent implements OnInit {
     )
 
     if (dialogRef) {
-    dialogRef.afterClosed().subscribe(result => {
-      if (result && result != 'false') {
-        this.outputRefresh.emit('true')
-        this.id = 0;
-        this.inventoryAssignment = null;
-      }
+      dialogRef.afterClosed().subscribe(result => {
+      this.outputRefresh.emit('true')
+        if (result && result != 'false') {
+          this.id = 0;
+          this.inventoryAssignment = null;
+        }
       });
     }
   }

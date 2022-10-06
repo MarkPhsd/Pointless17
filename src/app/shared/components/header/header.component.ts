@@ -220,7 +220,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
     this.platFormService.getPlatForm();
     this.initSubscriptions();
-    
+
     this.getUserInfo();
     this.refreshScannerOption()
     this.searchForm = this.fb.group( {  searchProducts: '' });
@@ -247,9 +247,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       ))
     }
 
-    if (!this.isUserStaff) {
-      this.gridlayout = this.gridlayoutNoStaff
-    }
 
     // gridlayout        = 'grid-flow grid-margin'
     // gridlayoutNoStaff = 'grid-flow grid-margin-nostaff'
@@ -393,13 +390,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     if (!user) {  return null }
     this.userName     = user.username;
 
-    if (!user.roles) { 
-      return 
+    if (!user.roles) {
+      return
     }
 
     this.userRoles    = user?.roles.toLowerCase();
     this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
-  
+
     this.isUser = false;
     if (user.roles === 'user') {
       this.isUser = true;
@@ -422,6 +419,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.isUserStaff      = true
     }
 
+    if (this.isUserStaff) {
+      this.gridlayout = this.gridlayout
+    }
+
+    if (!this.isUserStaff) {
+      this.gridlayout = this.gridlayoutNoStaff
+    }
   }
 
   initUserInfo() {

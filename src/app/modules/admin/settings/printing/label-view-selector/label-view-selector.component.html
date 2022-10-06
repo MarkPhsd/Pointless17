@@ -4,7 +4,7 @@
     <mat-select
               type="text"
               [(ngModel)]="labelID"
-              formControlNamename="labelID"
+              
               (selectionChange)="refreshLabelSettings(labelID)">
 
     <div *ngIf="(labelList$ | async) as list">

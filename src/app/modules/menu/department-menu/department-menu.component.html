@@ -1,7 +1,6 @@
-<div   class="panel"
-       *ngIf="(departments$ | async) as list; else loading">
+<div  *ngIf="(departments$ | async) as list; else loading">
 
-  <div *ngFor="let item of list">
+  <div  class="panel" *ngFor="let item of list">
 
     <div class="fab-container">
       <button mat-fab  class="mat-fab-close" (click)="close()">
@@ -38,7 +37,7 @@
           <div>
             <div class="categories" *ngFor="let item of item.categories">
 
-              <div>
+              <div >
                 <button class="menu-button"
                         mat-raised-button
                         (mouseover)="categoryListDisplay(item)"
@@ -67,7 +66,8 @@
             </div>
           </div>
 
-          <div class="sub-categories" *ngIf="item.categories && categoryID && categoryID != 0 &&  (subCategories$ | async) as list" >
+          <div class="sub-categories"
+               *ngIf="item.categories && categoryID && categoryID != 0 &&  (subCategories$ | async) as list" >
 
               <button  *ngFor="let item of list" class="menu-button" mat-raised-button  color="primary"
                        (mouseover)="subCategoryList(item)" (click)="subCategoryListDisplay(item)">
@@ -85,9 +85,8 @@
 
               </button>
           </div>
+
         </div>
-
-
       </mat-card-content>
     </mat-card>
   </div>

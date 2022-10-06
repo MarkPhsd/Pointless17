@@ -49,7 +49,6 @@ export class MoveInventoryLocationComponent implements OnInit {
     this.metrcLocations$ = this.inventoryLocationsService.getLocations();
     const site =  this.siteService.getAssignedSite();
     this.inventoryAssignment$ = this.inventoryAssignmentService.getInventoryAssignment(site, this.id)
-
   }
 
   ngOnInit() {
@@ -63,7 +62,8 @@ export class MoveInventoryLocationComponent implements OnInit {
 
   initForm() {
     this.searchForm = this.fb.group({
-      quantityMoving: ['']
+      quantityMoving: [''],
+      inventoryLocations: []
     })
   }
 
@@ -93,7 +93,7 @@ export class MoveInventoryLocationComponent implements OnInit {
 
     if ( this.inventoryAssignment.packagedOrBulk == 0 )  {
       if (parseInt(this.quantityMoving.toString()) == this.quantityMoving) {
-        console.log(parseInt(this.quantityMoving.toString()) , this.quantityMoving)
+        // console.log(parseInt(this.quantityMoving.toString()) , this.quantityMoving)
       } else {
         this.notifyEvent('Only whole values allowed.', '')
         this.quantityMoving = 0
@@ -106,8 +106,6 @@ export class MoveInventoryLocationComponent implements OnInit {
       this.quantityMoving =0
       return false
     }
-
-
     return true
   }
 
@@ -129,20 +127,17 @@ export class MoveInventoryLocationComponent implements OnInit {
       this.changeLocation();
       return
     }
-
   }
 
   async getMovingPackageCounts(): Promise<IInventoryAssignment[]> {
 
     this.newItem                       = await this.inventoryAssignment$.pipe().toPromise() //(data=>{ this.newItem = data })
-
     //the new item will start with what the old item currently has
     this.newItem.baseQuantity          = this.newItem.baseQuantityRemaining
     this.newItem.packageQuantity       = this.newItem.packageCountRemaining
 
     //to remove the base of the original package.
     const newBaseQuantity              = this.newItem.baseQuantityRemaining
-
     const  baseCalculated              = (this.newItem.unitMulitplier * this.quantityMoving) * this.newItem.jointWeight;
     const  baseQuantityToMove          = baseCalculated;
     const  newPackageQuantity          = this.quantityMoving;
@@ -153,7 +148,7 @@ export class MoveInventoryLocationComponent implements OnInit {
     this.newItem.packageQuantity       = newPackageQuantity;
     this.newItem.packageCountRemaining = newPackageQuantity;
 
-    console.log('newPackageQuantity', newPackageQuantity)
+    // console.log('newPackageQuantity', newPackageQuantity)
 
     const item = await this.setLocation(this.newItem);
     if (item) {  this.newItem = item; }
@@ -161,11 +156,11 @@ export class MoveInventoryLocationComponent implements OnInit {
     this.newItem.id                         = 0;
     this.existingItem                       = await this.inventoryAssignment$.pipe().toPromise();
     const existingBase                      = this.existingItem.baseQuantity;
-    console.log('Base Quantity', this.existingItem.baseQuantity, existingBase, baseQuantityToMove)
+    // console.log('Base Quantity', this.existingItem.baseQuantity, existingBase, baseQuantityToMove)
     this.existingItem.baseQuantity          = existingBase;
     this.existingItem.baseQuantityRemaining = existingBase - baseQuantityToMove;
 
-    console.log('Package Quantity', this.existingItem.packageQuantity, newPackageQuantity)
+    // console.log('Package Quantity', this.existingItem.packageQuantity, newPackageQuantity)
     this.existingItem.packageQuantity       = this.existingItem.packageQuantity       - newPackageQuantity;
     this.existingItem.packageCountRemaining = this.existingItem.packageCountRemaining - newPackageQuantity;
 
@@ -187,7 +182,6 @@ export class MoveInventoryLocationComponent implements OnInit {
     return item
   }
 
-
   getValue(item: string): number {
     try {
       const f = this.searchForm;
@@ -198,7 +192,6 @@ export class MoveInventoryLocationComponent implements OnInit {
       return 0
     }
   }
-
 
   async copyToNewPackage(){
     const site     =  this.siteService.getAssignedSite();
@@ -211,7 +204,7 @@ export class MoveInventoryLocationComponent implements OnInit {
     })
   }
 
-  async changeLocation() {
+  changeLocation() {
 
     if (this.inventoryLocation) {
       if (!this.changeIsValid) { return }
@@ -230,25 +223,24 @@ export class MoveInventoryLocationComponent implements OnInit {
       //change
       // return;
 
-      this.inventoryAssignmentService.editInventory(site,
-          this.inventoryAssignment.id,
-          this.inventoryAssignment
-
-          ).subscribe( data=> {
-
-            this.notifyEvent('Inventory location changed.', 'Success')
-            this.onCancel(true)
-
-        }, error =>{
-          this.notifyEvent(`Inventory location failed to change. ${error}`, 'failed')
-        }
-
-      )
-
+      this.inventoryAssignmentService.editInventory(
+        site,
+        this.inventoryAssignment.id,
+        this.inventoryAssignment
+          ).subscribe( 
+            {
+              next: data=> {
+                this.notifyEvent('Inventory location changed.', 'Success')
+                this.onCancel(true)
+              }, 
+              error: error =>{
+                this.notifyEvent(`Inventory location failed to change. ${error}`, 'failed')
+              }
+            }
+        ) 
     } else {
       this.notifyEvent('Item not found.', 'failed')
     }
-
   }
 
   onCancel(event) {

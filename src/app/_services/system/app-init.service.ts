@@ -147,7 +147,7 @@ export class AppInitService  {
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
     const site = {} as ISite;
-    console.log('Appinit get local apiurl', result)
+    // console.log('Appinit get local apiurl', result)
     site.url = result
 
     if (result != null && result != '' ) {

@@ -112,27 +112,29 @@
                     [fieldName]="'sku'"
                   >Change Sku
                 </app-value-fields>
-               
               </div>
 
             </div>
+
             <div *ngIf="menuItem && menuItem.itemType.type == 'cannabis' ||
                         menuItem && menuItem.itemType.type == 'med-cannabis'"
                   [formGroup]="inputForm">
-              <app-chemical-values 
+              <app-chemical-values
                 [inputForm]="inputForm"
-                [inventoryItem]="true"
-              >
+                [inventoryItem]="true">
               </app-chemical-values>
             </div>
-                
-          <div 
-                *ngIf="menuItem &&  menuItem?.itemType?.useGroups?.name != 'cannabis'"
+
+          <div *ngIf="inputForm &&
+                      menuItem &&
+                      menuItem?.itemType?.useGroups?.name != 'cannabis'"
                 class="grid-container">
-            <mat-hint 
+
+            <mat-hint
                   *ngIf="menuItem && menuItem?.itemType?.useGroups?.name != 'cannabis'">
               Case Information - only for whole case / split case options
             </mat-hint>
+
             <div>
               <app-value-fields
                 [inputForm]="inputForm"
@@ -159,7 +161,7 @@
           </div>
 
           </div>
-            
+
         </div>
     </mat-card-content>
   </mat-card>

@@ -1,18 +1,18 @@
 h4 {
-  font-size: small !important;
+  font-size: medium !important;
 }
 
 mat-card {
   padding: 3px !important;
 }
 
-.container { 
+.container {
   display: grid;
   grid-template-columns: 75% 100px;
   gap: 10px;
   width:100%
 }
 
-.button-container { 
+.button-container {
   margin: 10px;
 }

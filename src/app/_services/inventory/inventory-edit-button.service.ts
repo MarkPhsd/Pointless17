@@ -92,20 +92,18 @@ export class InventoryEditButtonService {
 
   }
 
-  openNoteDialog(id: any) {
-      const dialogRef = this.dialog.open(InventoryAdjustmentNoteComponent,
-        { width:      '300px',
-          minWidth:   '300px',
-          height:     '500px',
-          minHeight:  '500px',
-          data : {id: id}
-        },
-      )
+  openNoteDialog(id: any): any {
+    const dialogRef = this.dialog.open(InventoryAdjustmentNoteComponent,
+      { width:      '300px',
+        minWidth:   '300px',
+        height:     '500px',
+        minHeight:  '500px',
+        data : {id: id}
+      },
+    )
 
-      dialogRef.afterClosed().subscribe(result => {
-        return result
-      }
-    );
+    return dialogRef;
+    
   }
 
   openMoveInventoryDialog(id: any) {

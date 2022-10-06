@@ -70,6 +70,10 @@ export class FbInventoryService {
       destinationSiteName : [],
       priceCategoryID     : [],
       rejected:             [],
+
+      caseQuantity: [],
+      casePrice: [],
+      itemSku: [],
     })
 
     return fb;

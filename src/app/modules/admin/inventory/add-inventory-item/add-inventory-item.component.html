@@ -45,7 +45,7 @@
           </app-product-search-selector>
         </div>
 
-        <div [formGroup]="inputForm"  
+        <div [formGroup]="inputForm"
              *ngIf="menuItem"
              class="grid-container">
 
@@ -108,7 +108,6 @@
           </div>
 
           <div>
-            <!-- <mat-label>Leave blank to use default</mat-label> -->
             <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'price'">
@@ -117,7 +116,6 @@
           </div>
 
           <div>
-            <!-- <mat-label>Leave blank to use default</mat-label> -->
             <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'cost'">
@@ -126,7 +124,6 @@
           </div>
 
           <div>
-            <!-- <mat-label>Leave blank to use default</mat-label> -->
             <app-value-fields
                   [inputForm]="inputForm"
                   [fieldName]="'unitOfMeasureName'">
@@ -134,22 +131,14 @@
             </app-value-fields>
           </div>
 
-             <!-- <div class="grid-item-span">
-            <app-key-pad
-                        [inputForm]     ="inputForm"
-                        [fieldName]     ="'packageQuantity'"
-                        [inputTypeValue]="'number'"
-                        (outPutValue)   ="applyQuantity($event)"
-                        >
-                Quantity
-            </app-key-pad>  -->
-            <div>
+
+          <div>
               <app-value-fields
                     [inputForm]="inputForm"
                     [fieldName]="'packageQuantity'">
                 Package Quantity
               </app-value-fields>
-       
+
               <span *ngIf="scaleInfo">
                 {{scaleInfo.value}} {{scaleInfo.mode}}
                 <span><button mat-raised-button (click)="applyWeightQuantity()">
@@ -170,12 +159,12 @@
 
         </div>
 
-        <mat-label 
+        <mat-label
               *ngIf="menuItem && menuItem?.itemType?.useGroups?.name != 'cannabis'">
           Case Information - only for whole case / split case options
         </mat-label>
-        <div 
-              *ngIf="menuItem &&  menuItem?.itemType?.useGroups?.name != 'cannabis'"
+        <div
+              *ngIf="inputForm && menuItem &&  menuItem?.itemType?.useGroups?.name != 'cannabis'"
               class="grid-container">
           <div>
             <app-value-fields

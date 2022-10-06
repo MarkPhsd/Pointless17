@@ -33,7 +33,7 @@
           <mat-label>Adjust Type</mat-label>
           <mat-select
                       type="text"
-                      formControlNamename="adjustmentType"
+                      formControlName="adjustmentType"
                       (selectionChange)="getAdjustmentType($event)"
                     >
             <div *ngIf="(adjustmentReasons$ | async) as list">

@@ -1,9 +1,46 @@
 @import "/src/mixins.scss";
 
+mat-card {
+  min-height: calc(100vh - 175px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+mat-card-content {
+  min-height: calc(100vh - 175px);
+  height: calc(100vh - 175px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+
+.category-container {
+  // min-height: calc(100vh - 200px);
+  // overflow-y: auto;
+  // overflow-x: hidden;
+}
+
+.menu-container {
+  display: grid;
+  grid-template-columns: 275px 275px;
+  gap: 5px;
+  // overflow-y: auto;
+  // overflow-x: hidden;
+  // min-height: calc(100vh - 225px);
+
+  @include for-phone-only {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
 .panel {
   overflow-y: auto;
   overflow-x: hidden;
-  min-height: calc(100vh - 100px);
+
   @include for-phone-only {
     min-height: calc(100vh - 165px);
   }
@@ -16,6 +53,9 @@
   grid-template-columns: 225px 45px;
   width     : 335px;
   z-index   : 1005;
+
+  overflow-y: hidden;
+  overflow-x: hidden;
 }
 
 .sub-categories {
@@ -29,21 +69,7 @@
   z-index   : 1005;
 }
 
-.menu-container {
-  display: grid;
-  grid-template-columns: 275px 275px;
-  gap: 5px;
-  overflow-x: hidden;
-  overflow-y: auto;
 
-  @include for-phone-only {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
 
 .fab-container {
   z-index: 1006;
@@ -67,7 +93,7 @@
   padding: 0;
 }
 
-.content-position{
+.content-position {
   z-index: 999;
   margin: 5px;
   margin-right: 15px;
@@ -113,22 +139,6 @@ mat-card {
   overflow-y: auto;
   overflow-x: hidden;
 }
-
-
-// .orders-list {
-//   overflow-x: hidden;
-//   overflow-y: auto;
-//   height: 45vh;
-//   height: calc(100% - 250px);
-// }
-
-// .orders-list-single-page {
-//   overflow-x: hidden;
-//   overflow-y: auto;
-//   height: 75vh;
-//   height: calc(100% - 250px);
-// }
-
 
 mat-raised-button {
   width: 175px;

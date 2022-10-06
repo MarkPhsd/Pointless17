@@ -26,7 +26,7 @@
           <mat-select
                     type="text"
                     (selectionChange)="getAssignedSiteSelection($event)"
-                    formControlNamename="selectedSiteID"
+                    formControlName="selectedSiteID"
                   >
           <div *ngIf="(sites$ | async) as list">
             <mat-option *ngFor="let item of list" [value]="item.id">
@@ -43,7 +43,7 @@
           <mat-select
                     type="text"
                     (selectionChange)="getInventoryStatus($event)"
-                    formControlNamename="activeStatus"
+                    formControlName="activeStatus"
                   >
           <div *ngIf="inventoryActiveList">
             <mat-option *ngFor="let item of inventoryActiveList" [value]="item.name">

@@ -306,6 +306,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   }
 
   refreshSearchOut(event) {
+    console.log('resfresh')
     this.refreshSearch();
   }
 
@@ -567,14 +568,14 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   addInventoryItem() {
     try {
       const result =   this.inventoryEditButon.addInventoryDialog(0)
-      if (result) { 
-        result.afterClosed().subscribe(data => { 
-          if (data && data.sku) { 
+      if (result) {
+        result.afterClosed().subscribe(data => {
+          if (data && data.sku) {
             this.search = data.sku;
             this.initSearchModel()
           }
           this.refreshSearch();
-        }) 
+        })
       }
     } catch (error) {
       console.log(error)
@@ -624,7 +625,7 @@ export class InventoryListComponent implements OnInit, OnDestroy {
   assignMetrcCategory(id: number) {
     this.metrcCategoriesService.getCategory(id).subscribe( data => {
       this.metrcCategory = data
-    
+
     })
   }
 

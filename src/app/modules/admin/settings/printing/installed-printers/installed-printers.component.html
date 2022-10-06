@@ -46,7 +46,7 @@
               <mat-select
                         type="text"
                         [(ngModel)]="btPrinter"
-                        formControlNamename="btPrinter"
+                        formControlName="btPrinter"
                       >
               <div *ngIf="(btPrinters$ | async) as list">
                   <mat-option *ngFor="let item of list"

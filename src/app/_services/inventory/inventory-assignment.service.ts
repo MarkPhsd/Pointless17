@@ -81,10 +81,11 @@ export interface IInventoryAssignment {
   destinationSiteName : string;
   rejected:             string;
   priceCategoryID     : number;
+
   caseQuantity        : number;
   itemSku             : string;
   casePrice           : number;
-  
+
   product             : IProduct;
   serials:              Serial[];
 }
@@ -580,7 +581,7 @@ export class InventoryAssignmentService {
         mGTCH:                            [''],
         mGCBD:                            [''],
         childProof                        :[],
-        
+
         //non data codes
         batchDate:                         [''],
         cost:                              [0],
@@ -590,7 +591,7 @@ export class InventoryAssignmentService {
         active                             : [''],
         hasImported                        : [''],
         priceCategoryID                   :[0],
-     
+
       }
     )
     return inputForm

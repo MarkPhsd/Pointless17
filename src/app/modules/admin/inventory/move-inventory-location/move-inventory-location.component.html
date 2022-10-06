@@ -6,23 +6,22 @@
   </mat-card-title>
   <mat-card-subtitle>
     <div class="mat-form-field">
-        {{item.productName}}
+        {{item?.productName}}
     </div>
     <div>
-      {{item.sku}}
+      {{item?.sku}}
     </div>
   </mat-card-subtitle>
 
-
   <mat-card-content>
-
+    
     <div  *ngIf="inventoryAssignment">
       <h3>Original Values</h3>
       <div class="grid-container">
         <div class="labels">Base QTY </div>
-        <div class="fields">{{inventoryAssignment.baseQuantityRemaining.toFixed(2)}}</div>
+        <div *ngIf="inventoryAssignment && inventoryAssignment.baseQuantityRemaining" class="fields">{{inventoryAssignment?.baseQuantityRemaining.toFixed(2)}}</div>
         <div class="labels">Packages</div>
-        <div class="fields">{{inventoryAssignment.packageCountRemaining.toFixed(2)}}</div>
+        <div *ngIf="inventoryAssignment && inventoryAssignment.packageCountRemaining" class="fields">{{inventoryAssignment?.packageCountRemaining.toFixed(2)}}</div>
       </div>
     </div>
 
@@ -31,9 +30,9 @@
         <h4>Change Existing</h4>
         <div class="grid-container">
           <div class="labels">Base  QTY </div>
-          <div class="fields">{{existingItem.baseQuantityRemaining.toFixed(2)}}</div>
+          <div *ngIf="existingItem && existingItem.baseQuantityRemaining" class="fields">{{existingItem?.baseQuantityRemaining.toFixed(2)}}</div>
           <div class="labels">Packages</div>
-          <div class="fields">{{existingItem.packageCountRemaining.toFixed(2)}}</div>
+          <div *ngIf="existingItem && existingItem.packageCountRemaining" class="fields">{{existingItem?.packageCountRemaining.toFixed(2)}}</div>
         </div>
       </div>
 
@@ -41,26 +40,25 @@
         <h4>New Pack Line</h4>
         <div class="grid-container">
           <div class="labels">Base QTY </div>
-          <div class="fields">{{newItem.baseQuantityRemaining.toFixed(2)}}</div>
+          <div *ngIf="existingItem && existingItem.baseQuantityRemaining" class="fields">{{newItem?.baseQuantityRemaining.toFixed(2)}}</div>
           <div class="labels">Packages</div>
-          <div class="fields">{{newItem.packageCountRemaining.toFixed(2)}}</div>
+          <div *ngIf="existingItem && existingItem.packageCountRemaining" class="fields">{{newItem?.packageCountRemaining.toFixed(2)}}</div>
         </div>
       </div>
 
     </div>
 
-
-    <form  [formGroup]="searchForm" id="searchForm" >
+    <form  [formGroup]="searchForm" 
+           id="searchForm" >
           <mat-form-field appearance="outline">
             <mat-label>Locations</mat-label>
             <mat-select
                       type="text"
                       (selectionChange)="getLocation($event)"
-                      formControlNamename="inventoryLocations"
-                    >
-            <div *ngIf="metrcLocations$| async">
+                      formControlName="inventoryLocations" >
+            <div *ngIf="(metrcLocations$ | async) as locations">
               <mat-option [value]=0>All</mat-option>
-              <mat-option *ngFor="let item of metrcLocations$ | async"
+              <mat-option *ngFor="let item of locations"
                           [value]="item.id">
                 {{ item.name }}
               </mat-option>
@@ -98,11 +96,3 @@
   <mat-spinner></mat-spinner>
 </ng-template>
 
-<!-- <div *ngIf="inventoryAssignment">
-  <div class="grid-container">
-    <div class="labels">pck quantity </div>
-    <div class="fields">  {{inventoryAssignment.packageQuantity}}</div>
-    <div class="labels">base quantity </div>
-    <div class="fields">  {{inventoryAssignment.baseQuantity}}</div>
-  </div>
-</div> -->
