@@ -152,6 +152,7 @@ import { FastUserSwitchComponent } from '../modules/profile/fast-user-switch/fas
 import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-button/app-wizard-progress-button.component';
 import { TipEntryComponent } from '../modules/posorders/components/tip-entry/tip-entry.component';
 import { EmailEntryComponent } from './widgets/email-entry/email-entry.component';
+import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/electron-zoom-control.component';
 
 
 
@@ -306,6 +307,7 @@ import { EmailEntryComponent } from './widgets/email-entry/email-entry.component
     IFrameComponent,
     YoutubePlayerComponent,
     SafeHtmlPipe,
+    ElectronZoomControlComponent,
   ],
 
   imports: [
@@ -359,7 +361,8 @@ import { EmailEntryComponent } from './widgets/email-entry/email-entry.component
     ChipsDisplayComponent,
     ClientTypesLookupComponent,
     CompanyInfoHeaderComponent,
-     EmailSettingsComponent,
+    EmailSettingsComponent,
+    ElectronZoomControlComponent,
     DashboardComponent,
     DepartmentSelectComponent,
     DeviceInfoComponent,

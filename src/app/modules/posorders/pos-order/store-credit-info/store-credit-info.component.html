@@ -2,19 +2,25 @@
   <div class=""
        *ngFor="let item of storeCreditSearch.results">
 
-    <div *ngIf="item && item.cardNum != ''">Card Number</div>
-        <div *ngIf="item && item.cardNum != ''">{{item?.cardNum}} </div>
-    <div *ngIf="item && item.value">   Credit Avalible</div>
-        <div *ngIf="item">{{item?.value | currency}} </div>
-
-    <!-- balance {{ order.balanceRemaining}} <br>
-    showIssueMoney {{showIssueMoney}}
-    value {{ item?.value}} -->
-    <div *ngIf="order && order.balanceRemaining != 0 && showPayment && !showIssueMoney && item?.value>0">
-      <button  mat-raised-button (click)="applyAsPayment(item)">
-          Apply Credit <mat-icon>credit_card</mat-icon>
-      </button>
+    <div class="grid-totals">
+      <div *ngIf="item && item.cardNum && item.cardNum != ''">Card Number</div>
+      <div *ngIf="item && item.cardNum &&  item.cardNum != ''">{{item?.cardNum}} </div>
+      <div *ngIf="item && item.value">   Credit Avalible</div>
+      <div *ngIf="item">{{item?.value | currency}} </div>
+      <div>Balance Remaining</div>
+      <div *ngIf="order">{{order.balanceRemaining | currency}}</div>
+      <div>
+        <div *ngIf="order && order.balanceRemaining != 0 && showPayment && !showIssueMoney && item?.value > 0">
+          <button  mat-raised-button (click)="applyAsPayment(item)">
+              Apply Credit <mat-icon>credit_card</mat-icon>
+          </button>
+        </div>
+      </div>
     </div>
+
+    <!-- showPayment {{showPayment}}
+    showIssueMoney {{showIssueMoney}} -->
+
 
     <div *ngIf="order && order.balanceRemaining != 0 && showPayment && !showIssueMoney && item?.value<=0">
         No credit available.

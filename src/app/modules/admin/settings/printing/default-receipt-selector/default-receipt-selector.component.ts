@@ -1,9 +1,8 @@
 import { Component, EventEmitter, OnInit,Input, Output  } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { SettingsService } from 'src/app/_services/system/settings.service';
-
 @Component({
   selector: 'default-receipt-selector',
   templateUrl: './default-receipt-selector.component.html',
@@ -15,36 +14,41 @@ export class DefaultReceiptSelectorComponent implements OnInit {
   @Input()  receipt           : ISetting;
   @Input()  receiptName       : string;
   @Input()  receiptID         : any;
-  @Input()  receiptList       : Observable<any>;
+  @Input()  receiptList$      : Observable<any>;
+  @Input()  receiptList       : any;
   @Output() outPutReceiptName : EventEmitter<any> = new EventEmitter();
 
-  constructor(private settingsService: SettingsService,
+  inputForm: FormGroup;
+  item$: Observable<ISetting>;
+
+  constructor(
+              private fb: FormBuilder,
               private siteService: SitesService) { }
 
-  async ngOnInit() {
-    //this requires we get the receiptID, then assign it to the item as the default item, selected item.
-    if (this.receiptID) {
-      const site = this.siteService.getAssignedSite();
-      const item$ = this.settingsService.getSetting(site, this.receiptID).subscribe(data=> {
-        if (data) {
-          this.receipt = data;
-          this.receiptName = data?.value
-        }
-      })
+  ngOnInit() {
+    this.inputForm = this.fb.group({
+      receiptID: [this.receiptID]
+    })
+    this.formSubscriber();
+  }
+
+  setReceipt(event) {
+    const site = this.siteService.getAssignedSite();
+    if (this.receipt) {
+      const value = this.inputForm.controls['receiptID'].value;
+      this.receipt.option1 = this.receiptID
+      this.outPutReceiptName.emit(this.receipt)
     }
   }
 
-  setReceipt() {
-    const site = this.siteService.getAssignedSite();
-    const item$ = this.settingsService.getSetting(site, this.receiptID)
-    item$.subscribe(data=> {
-      this.receipt = data;
-      console.log('data', data)
+  formSubscriber() {
+    this.inputForm.valueChanges.subscribe(data => {
+      const value = this.inputForm.controls['receiptID'].value;
+      this.receipt.option1 = value
+      console.log(this.receipt.option1)
       this.outPutReceiptName.emit(this.receipt)
     })
   }
+
 }
 
-// function site(site: any, receiptID: any) {
-//   throw new Error('Function not implemented.');
-// }

@@ -2,7 +2,7 @@
 
   <div    class="grid-container">
 
-    
+
     <div  class="form-width"
           *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
       <search-debounce-input
@@ -61,15 +61,14 @@
         </button>
       </div>
     </div>
-    
-    <div *ngIf="multifilter || ( uiHomePage && (uiHomePage.staffCategoriesEnabled || uiHomePage.sideToolbarEnableCategory) )">
+
+    <div *ngIf="multifilter || ( uiHomePage && ( uiHomePage.sideToolbarEnableCategory) )">
       <mat-accordion multi>
-        <mat-expansion-panel  
+        <mat-expansion-panel
              [expanded]="accordionStep == 0"
              (opened)="setStep(0)"
              hideToggle
-              *ngIf="uiHomePage && (uiHomePage.staffCategoriesEnabled
-                                   || uiHomePage.sideToolbarEnableCategory)">
+              *ngIf="uiHomePage && (uiHomePage.sideToolbarEnableCategory)">
           <mat-expansion-panel-header>
             <mat-panel-title>
               Categories
@@ -95,7 +94,7 @@
             </div>
         </mat-expansion-panel>
 
-        <mat-expansion-panel 
+        <mat-expansion-panel
             [expanded]="accordionStep == 1"
             (opened)="setStep(1)"
             hideToggle

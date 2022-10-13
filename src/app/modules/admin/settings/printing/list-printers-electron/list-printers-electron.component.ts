@@ -25,7 +25,7 @@ export class ListPrintersElectronComponent implements OnInit {
     if (this.isElectronApp) {
       this.listPrinters();
     }
-    console.log('')
+    // console.log('')
   }
 
   listPrinters(): any {

@@ -1,10 +1,8 @@
 <div class="back-ground-override">
-
   <div   *ngIf="!isLabel"
           #printsection
           id="printsection"
-          [class]="setPrinterWidthClass"
-          >
+          [class]="setPrinterWidthClass" >
 
     <div class="receipt-sections" *ngIf="liveEdit">
 
@@ -41,7 +39,8 @@
 
     </div>
 
-    <div *ngIf="!liveEdit" class="background">
+    <div *ngIf="!liveEdit"
+         class="background">
 
       <div   *ngIf="interpolatedHeaderTexts && interpolatedHeaderTexts.length>0"
              class="section-item">
@@ -49,7 +48,7 @@
           <div  [innerHTML]="interpolatedHeaderTexts[i]" >  </div>
         </div>
       </div>
-      <!-- {{interpolatedItemTexts | json}} -->
+
       <div      *ngIf="interpolatedItemTexts  && interpolatedItemTexts.length>0"  class="section-item">
         <div    *ngFor="let item of interpolatedItemTexts; let i = index">
           <div  [class]="gridReceiptClass"
@@ -76,7 +75,6 @@
                 <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
               </div>
             </div>
-
           </div>
       </div>
 
@@ -92,3 +90,16 @@
   </div>
 </div>
 
+<!-- receiptLayoutSetting {{printerWidth}}
+<br>
+headerText {{headerText  | json }} <br>
+itemsText {{ itemText  | json }}<br>
+ orderType {{ orderType | json }}<br>
+items {{items | json}}<br>
+payments {{payments | json}}<br>
+payments {{ paymentsText }}<br> -->
+<!-- subFooterText {{ subFooterText | json }}
+interpolatedHeaderTexts.length {{interpolatedHeaderTexts.length}} -->
+<!-- interpolatedItemTexts.length {{interpolatedItemTexts | json}} -->
+
+<!-- interpolatedFooterTexts.length {{ interpolatedFooterTexts.length }} -->

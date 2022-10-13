@@ -1,6 +1,6 @@
-﻿import { CompanyService, AuthenticationService, AWSBucketService} from 'src/app/_services';
+﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService} from 'src/app/_services';
 import { ICompany, IUser }  from 'src/app/_interfaces';
-import { Component, Input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { fadeInAnimation } from 'src/app/_animations';
@@ -9,8 +9,11 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UserSwitchingService } from 'src/app/_services/system/user-switching.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { AppInitService } from 'src/app/_services/system/app-init.service';
-import { Subscription } from 'rxjs';
+import { Subscription, switchMap , of, Observable} from 'rxjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { takeHeapSnapshot } from 'process';
 
 @Component({
     selector   : 'login-dashboard',
@@ -25,20 +28,22 @@ export class LoginComponent implements OnInit, OnDestroy {
   initApp    = true
   togglePIN: boolean;
 
+  terminalSettings$: Observable<ITerminalSettings>;
+  terminalSettings: ITerminalSettings;
   backgroundImage: any //'https://naturesherbs.s3-us-west-1.amazonaws.com/splash-woman-on-rock-1.jpg'
   bucket         : string;
   spinnerLoading: boolean;
   compName   : string;
   company    = {} as ICompany;
   logo       = `assets/images/logo.png`;
-
+  pinToken : string;
   loading    = false;
   submitted  = false;
   returnUrl  : string;
   error      = '';
   companyName: string;
   id         : any;
-
+  dialogOpen: boolean;
   isApp     : boolean;
   loginForm : FormGroup;
   amI21     : any;
@@ -106,15 +111,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         private appInitService       : AppInitService,
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
-
+        @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
     this.redirects();
+    console.log('data', data)
+    if (data) {
+      this.dialogOpen = true
+    }
   }
 
   async ngOnInit() {
-
     this.bucket = await this.awsBucketService.awsBucketURL()
+    this.pinToken = localStorage.getItem('pinToken');
 
     if (localStorage.getItem('rememberMe') === 'true') {
       this.rememberMe = true;
@@ -130,6 +140,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.statusMessage = ''
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     this.refreshUIHomePageSettings();
+    this.terminalSettings$ = this.refreshElectronZoom();
   }
 
   refreshUIHomePageSettings() {
@@ -138,6 +149,27 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.initCompanyInfo();
       this.initLogo();
     })
+  }
+
+  refreshElectronZoom() {
+    // console.log('refresh electron zoom')
+    if (this.platformService.isAppElectron) {
+      const item$  = this.uiSettingService.getPOSDeviceSettings().pipe(
+          switchMap(data => {
+            // console.log(data)
+            if (data && data.text) {
+              const terminal = JSON.parse(data.text) as ITerminalSettings;
+              if (terminal.electronZoom && terminal.electronZoom != '0') {
+                this.uiSettingService.electronZoom(terminal.electronZoom)
+              }
+              this.terminalSettings = terminal
+              return of(terminal)
+            }
+          }
+        )
+      )
+      return item$
+    }
   }
 
   ngOnDestroy(): void {
@@ -340,13 +372,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     localStorage.setItem('rememberMe', 'false')
   }
 
-  pinLogin(event) { 
+  pinLogin(event) {
     const pin = event.password;
     const user = event.user;
     this.submitLogin(user,pin)
   }
 
   onSubmit() {
+    console.log('login occured -1 ', this.dialogOpen)
     if (!this.validateForm(this.loginForm)) { return }
     this.spinnerLoading = true;
     const userName = this.f.username.value;
@@ -355,12 +388,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submitLogin(userName: string, password: string) {
-
+    console.log('login occured 0 ', this.dialogOpen)
     this.userSwitchingService.login(userName, password)
       .subscribe({
        next: user =>
         {
-          // console.log('user', user)
+          console.log('login occured 1 ', this.dialogOpen)
           this.initForm();
           if (user && user.errorMessage) {
             this.notifyEvent(user.errorMessage, 'Failed Login')
@@ -382,6 +415,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user.message && user.message.toLowerCase() === 'success') {
               this.userSwitchingService.processLogin(user)
               this.userSwitchingService.assignCurrentOrder(user)
+              console.log('login occured ', this.dialogOpen)
+              if (this.dialogOpen) {
+                this.dialogRef.close();
+              }
               return
             }
 
@@ -401,6 +438,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   loginApp(user) {
+    console.log('lloginApp ', this.dialogOpen)
     if (this.platformService.isApp()) {
       this.loggedInUser   = user.user
       this.spinnerLoading = false

@@ -30,9 +30,13 @@ export class PlatformService {
     }
     return false
   }
+
   get platForm()      {
+
     return Capacitor.getPlatform();
+
   }
+
   get webMode()       {
     return Capacitor.getPlatform();
   }

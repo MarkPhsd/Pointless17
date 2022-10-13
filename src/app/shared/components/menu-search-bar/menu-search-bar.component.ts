@@ -72,6 +72,7 @@ brand            : any;
 department       : any;
 departmentID     : number;
 tinyDepartmentFilter= false//for dispaly of icon with text or just icon.
+
 toggleCatHeight         = 'toggle-buttons-height-size-tall'
 toggleDepartmentHeight  = 'toggle-buttons-height-medium'
 toggleTypeHeight        = 'toggle-buttons-height-short'
@@ -171,7 +172,7 @@ constructor(
     this.setStep(0)
   };
 
-  setStep(value: number) { 
+  setStep(value: number) {
     this.accordionStep = value;
   }
 

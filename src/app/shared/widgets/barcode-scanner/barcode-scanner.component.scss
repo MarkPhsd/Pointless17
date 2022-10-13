@@ -1,6 +1,13 @@
-ion-content, body, container {
+ion-content, body, container , .camera-view {
   --background: transparent!important;
 }
+
+.toolbar {
+  margin-top: 15px;
+  top: 10px;
+  padding-top: 10px;
+}
+
 .overlay {
   position: absolute;
   width: 100%;
@@ -31,8 +38,8 @@ ion-content, body, container {
   position: absolute;
   bottom: 75px;
   left: calc(50% - 25px);
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   z-index: 11;
 }
 
@@ -40,8 +47,8 @@ ion-content, body, container {
   position: absolute;
   bottom: 75px;
   left: calc(50% - 175px);
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   z-index: 11;
 }
 
@@ -49,25 +56,30 @@ ion-content, body, container {
   position: absolute;
   bottom: 75px;
   left: calc(50% + 125px);
-  width: 50px;
-  height: 50px;
+  width: 75px;
+  height: 75px;
   z-index: 11;
 }
 
 #close::part(native) {
-  border-radius: 30px;
+  border-radius: 40px;
+  height: 75px;
+  font-size: 1.5em;
 }
 
 #capture::part(native) {
-  border-radius: 30px;
+  border-radius: 40px;
+  font-size: 1.5em;
 }
 
 #flip::part(native) {
-  border-radius: 30px;
+  border-radius: 40px;
+  font-size: 1.5em;
 }
 
 .mat-card {
   opacity: 50%;
+  top: 75px;
 }
 
 .card-text {

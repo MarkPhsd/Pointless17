@@ -495,11 +495,11 @@ export class POSOrderItemServiceService {
 
   voidPOSOrderItem(site: ISite, item: ItemWithAction ): Observable<string> {
 
-
-    if (item.posItem.voidReason)  {
-      this.notificationEvent(`Item already voided: ${item.voidReason}`, 'Item Voided')
-      return
-    }
+    // if (item.posItem.voidReason)  {
+    //   console.log('item.void reason', item.posItem.voidReason)
+    //   this.notificationEvent(`Item already voided: ${item.voidReason}`, 'Item Voided')
+    //   return
+    // }
 
     const controller = "/POSOrderItems/"
 

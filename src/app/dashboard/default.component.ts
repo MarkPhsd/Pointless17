@@ -4,8 +4,8 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          ElementRef,
          ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router, RouterOutlet } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+import { filter, Observable, Subscription } from 'rxjs';
 import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
@@ -14,6 +14,7 @@ import { AuthenticationService, IDepartmentList, ThemesService } from '../_servi
 import { IUser } from '../_interfaces';
 import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 import { isDevMode } from '@angular/core';
+import { EventUtils } from 'src/assets/tinymce/tinymce';
 
 @Component({
   selector: 'app-default',
@@ -39,6 +40,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   sidebarMode    = 'side'
   id             : any;
   smallDevice    : boolean;
+  menuManager    : boolean;
 
   advertisingOutlet : string;
   messageOutlet     : string;
@@ -83,11 +85,11 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   homePageSubscriber(){
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-        this.matorderBar = 'mat-orderBar' 
+        this.matorderBar = 'mat-orderBar'
         if (data) {
           this.uiSettings = data;
-  
-          if (!data.wideOrderBar) { 
+
+          if (!data.wideOrderBar) {
             if (this.smallDevice)  {
               this.matorderBar = 'mat-orderBar'
             }
@@ -162,7 +164,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     try {
       this._searchSideBar = this.toolBarUIService._searchBarWidth$.subscribe(data => {
         this.searchBarWidth = data
-      
+
         if (data) {
           if (data == 55 || this.smallMenu) {
             this.barType =  "mat-drawer-searchbar-tiny"
@@ -223,6 +225,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private authorizationService    : AuthenticationService,
                public toolbarUIService         : ToolBarUIService,
                private uiSettingsService       : UISettingsService,
+               private router                  : Router,
               //  private themesService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
@@ -236,6 +239,19 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.renderTheme();
     this.initSettings();
+    // this.subscribeAddress();
+  }
+
+  subscribeAddress() {
+    //menu-manager
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      console.log(event.url);
+      if (event.url === '/menu-manager'){
+        this.menuManager = true;
+      }
+    });
   }
 
   initSettings() {
@@ -254,7 +270,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           console.log('error', err)
       }
     })
- 
+
   }
 
   initUI() {

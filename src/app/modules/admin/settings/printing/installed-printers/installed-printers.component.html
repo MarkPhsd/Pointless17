@@ -32,6 +32,31 @@
             </button>
           </div>
         </div>
+
+        <div class="receipt-template" *ngIf="(receiptList$ | async) as list; else loadingDefaultReceipt">
+          <div *ngIf="electronPrinter$ | async as defaultSelected">
+
+            <div>
+              <mat-label>Default Receipt Template # {{defaultSelected.option1}}</mat-label>
+            </div>
+
+            <default-receipt-selector
+              [receipt]            = 'defaultSelected'
+              [receiptList]        = "list"
+              [receiptID]          = "defaultSelected.option1"
+              (outPutReceiptName)  = "setElectronReceiptID($event)" >
+              Default Receipt
+            </default-receipt-selector>
+
+          </div>
+
+        </div>
+
+        <div *ngIf="receiptTemplateSaving$  | async as item; else notSaving"></div>
+        <ng-template #notSaving></ng-template>
+
+        <ng-template #loadingDefaultReceipt>...loading default receipts </ng-template>
+
       </ng-template>
 
       <ng-container [ngTemplateOutlet]="isAndroidPrintingTemplate"></ng-container>
@@ -46,8 +71,7 @@
               <mat-select
                         type="text"
                         [(ngModel)]="btPrinter"
-                        formControlName="btPrinter"
-                      >
+                        formControlName="btPrinter" >
               <div *ngIf="(btPrinters$ | async) as list">
                   <mat-option *ngFor="let item of list"
                              [value]="item.address">
@@ -66,6 +90,7 @@
             Print Test
           </button>
         </div>
+
       </ng-template>
 
       <ng-container [ngTemplateOutlet]="isElectronPrintingTemplate"></ng-container>
@@ -74,28 +99,23 @@
 
         <div *ngIf="isElectronApp">
           <h4>Windows Installed Printers</h4>
-
-          <app-list-printers-electron
-              [printerName]      ="electronReceiptPrinter"
-              [printerList]      ="electronPrinterList"
-              (outputPrinterName)="setElectronPrinterName($event)" >
-              Receipt Printer
-          </app-list-printers-electron>
-
-          <div *ngIf="electronReceiptPrinter" class="defaultElectronPrinter">Default Printer: {{electronReceiptPrinter}}</div>
-
-          <div *ngIf="electronSetting && receiptList$">
-            <div *ngIf="(receiptList$ | async) as list; else loadingDefaultReceipt">
-              <default-receipt-selector
-                [receiptList]        = "receiptList$"
-                [receiptID]          = "electronReceiptID"
-                (outPutReceiptName)  = "setElectronReceiptID($event)" >
-                Default Receipt
-              </default-receipt-selector>
-            </div>
+          <div *ngIf="electronPrinter$ | async as item; else loadingWindowsPrinters">
+            <!-- {{item.text | json}} -->
+            <app-list-printers-electron
+                [printerName]      ="item.text"
+                [printerList]      ="electronPrinterList"
+                (outputPrinterName)="setElectronPrinterName($event)" >
+                Receipt Printer
+            </app-list-printers-electron>
           </div>
 
-          <ng-template #loadingDefaultReceipt>...loading default receipts </ng-template>
+          <ng-template #loadingWindowsPrinters>...loading windows printers </ng-template>
+
+          <div class="defaultElectronPrinter">
+              <mat-label>The default printer might not be accessible from this computer.
+                         To ensure you can use a printer on pos computers make sure they are set in the pos device list section.</mat-label>
+               Default Printer:  {{electronReceiptPrinter}}
+          </div>
 
           <h3>Print Test for Windows/Linux</h3>
           <div>
@@ -135,133 +155,125 @@
             </button>
           </div>
 
-          <div class="margin-padding">
+          <div *ngIf="electronLabelPrinter$ | async as label; else loadingLabel" class="margin-padding">
             <app-list-printers-electron
-              [printerName]      ="electronLabelPrinter"
+              [printerName]      ="label.text"
               (outputPrinterName)="setElectronLabelPrinterName($event)" >
               Label Printer
             </app-list-printers-electron>
           </div>
 
+          <div>
+            <ng-template #loadingLabel>...loading labels</ng-template>
+          </div>
+
         </div>
+
       </ng-template>
 
     </div>
   <div>
 
-<h3>Print Templates</h3>
+  <h3>Print Templates</h3>
 
-  <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate"></ng-container>
+    <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate"></ng-container>
 
-  <ng-template #electronPrintingDesignTemplate>
+    <ng-template #electronPrintingDesignTemplate>
 
-    <div  *ngIf="(receiptList$ | async) as list; else loadingReceiptTemplates">
+      <div  *ngIf="(receiptList$ | async) as list; else loadingReceiptTemplates">
 
-      <mat-form-field appearance="outline">
-        <mat-label>Receipt Types</mat-label>
-          <mat-select
-                    type                ="text"
-                    [(ngModel)]         ="receiptID"
+        <mat-form-field appearance="outline">
+          <mat-label>Receipt Types</mat-label>
+            <mat-select
+                      type                ="text"
+                      [(ngModel)]         ="receiptID"
 
-                    (selectionChange)   ="refreshReceipt(receiptID)">
-              <div>
-              <mat-option *ngFor="let item of list" [value]="item.id">
-                {{ item.name }}
-            </mat-option>
+                      (selectionChange)   ="refreshReceipt(receiptID)">
+                <div>
+                <mat-option *ngFor="let item of list" [value]="item.id">
+                  {{ item.name }}
+              </mat-option>
+            </div>
+          </mat-select>
+        </mat-form-field>
+        <!-- formControlName     ="receiptID" -->
+      </div>
+
+      <ng-template #loadingReceiptTemplates>
+        ...loading receipt templates
+      </ng-template>
+
+      <button mat-raised-button
+              color="primary"
+              (click)="openEditor(receiptID)">
+        <mat-icon>edit</mat-icon>Edit
+      </button>
+
+      <div *ngIf="(orderService.currentOrder && !receiptLayoutSetting) || !headerText || !footerText || !itemsText">
+        Loading...
+      </div>
+
+      <div *ngIf="receiptLayoutSetting
+                  && orderService.currentOrder
+                  && headerText
+                  && itemsText
+                  && receiptStyles
+                  && receiptLayoutSetting.option9" >
+        <mat-card>
+          <div class="border-section">
+              <app-receipt-layout
+                                #printsection id="printsection"
+                                [headerText]="headerText"
+                                [footerText]="footerText"
+                                [itemText]="itemsText"
+                                [printerWidth]="receiptLayoutSetting.option9"
+                                [paymentsText]="paymentsText"
+                                [subFooterText]="subFooterText"
+                                [items]="items"
+                                [order]="orderService.currentOrder"
+                                [payments]="payments"
+                                [orderType]="orderTypes"
+                                [testdata]="true"
+                                [liveEdit]="false"
+                                [styles]="receiptStyles">
+              </app-receipt-layout>
           </div>
-        </mat-select>
-      </mat-form-field>
-      <!-- formControlName     ="receiptID" -->
-    </div>
+        </mat-card>
+      </div>
 
-    <ng-template #loadingReceiptTemplates>
-      ...loading receipt templates
+      <h3 class="header-description">Label Templates</h3>
+      <app-label-view-selector
+          [labelList$]="labelList$"
+          [labelImageHeight]="200"
+          (outPutLabelID)="getLabelID($event)">
+      </app-label-view-selector>
+
+      <span>
+        <button mat-raised-button color="primary" (click)="openEditor(labelID)">
+        <mat-icon>edit</mat-icon>Edit</button>
+      </span>
+
+      <div>
+        <button mat-raised-button color="primary" (click)="resetDefaultLayouts()">
+        <mat-icon> restore</mat-icon>Reset Receipts</button>
+      </div>
+
+      <div>
+        <button mat-raised-button color="primary" (click)="editReceiptStyles()">
+        <mat-icon>edit</mat-icon>Edit CSS Styles</button>
+      </div>
+
+      <div>
+        <button mat-raised-button color="primary" (click)="resetStyles()">
+        <mat-icon>restore</mat-icon>Reset CSS Styles</button>
+      </div>
+
+      <div>
+        <button mat-raised-button color="primary" (click)="initDefaultLabel()">
+        <mat-icon>restore</mat-icon>Reset Labels </button>
+      </div>
+
     </ng-template>
-
-    <button mat-raised-button
-            color="primary"
-            (click)="openEditor(receiptID)">
-      <mat-icon>edit</mat-icon>Edit
-    </button>
-
-    <div *ngIf="(orderService.currentOrder && !receiptLayoutSetting) || !headerText || !footerText || !itemsText">
-      Loading...
-    </div>
-
-    <!-- <div *ngIf="orderService.currentOrder">
-      order
-    </div>
-    <div *ngIf="itemsText">
-      itemsText
-    </div>
-    <div *ngIf="headerText ">
-      headertext
-    </div>
-    <div *ngIf="receiptLayoutSetting ">
-      receiptLayoutSetting
-    </div> -->
-    <!-- {{receiptLayoutSetting | json}} -->
-    <div *ngIf="receiptLayoutSetting
-                && orderService.currentOrder
-                && headerText
-                && itemsText
-                && receiptStyles
-                && receiptLayoutSetting.option9"
-                >
-      <mat-card>
-        <div class="border-section">
-            <app-receipt-layout #printsection id="printsection"
-                              [headerText]="headerText"
-                              [footerText]="footerText"
-                              [itemText]="itemsText"
-                              [printerWidth]="receiptLayoutSetting.option9"
-                              [paymentsText]="paymentsText"
-                              [subFooterText]="subFooterText"
-                              [items]="items"
-                              [order]="orderService.currentOrder"
-                              [payments]="payments"
-                              [orderType]="orderTypes"
-                              [testdata]="true"
-                              [liveEdit]="false"
-                              [styles]="receiptStyles">
-            </app-receipt-layout>
-        </div>
-      </mat-card>
-    </div>
-
-    <h3 class="header-description">Label Templates</h3>
-    <app-label-view-selector
-        [labelList$]="labelList$"
-        [labelImageHeight]="200"
-        (outPutLabelID)="getLabelID($event)">
-    </app-label-view-selector>
-
-    <span>
-      <button mat-raised-button color="primary" (click)="openEditor(labelID)">
-      <mat-icon>edit</mat-icon>Edit</button>
-    </span>
-
-    <div>
-      <button mat-raised-button color="primary" (click)="resetDefaultLayouts()">
-      <mat-icon> restore</mat-icon>Reset Receipts</button>
-    </div>
-
-    <div>
-      <button mat-raised-button color="primary" (click)="editReceiptStyles()">
-      <mat-icon>edit</mat-icon>Edit CSS Styles</button>
-    </div>
-
-    <div>
-      <button mat-raised-button color="primary" (click)="resetStyles()">
-      <mat-icon>restore</mat-icon>Reset CSS Styles</button>
-    </div>
-
-    <div>
-      <button mat-raised-button color="primary" (click)="initDefaultLabel()">
-      <mat-icon>restore</mat-icon>Reset Labels </button>
-    </div>
-
-  </ng-template>
 
 </div>
 

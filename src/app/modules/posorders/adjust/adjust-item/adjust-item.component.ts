@@ -83,7 +83,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     const site = this.siteService.getAssignedSite();
     if (!this.itemWithAction) { return }
     if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'VoidOrder'.toLowerCase() ) {
-      this.list$  = this.settingsService.getVoidReasons(site, 1);
+      this.list$  = this.settingsService.getVoidReasons(site, 3);
       return
     }
 
@@ -93,7 +93,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
 
     if (this.itemWithAction?.typeOfAction.toLowerCase()  === 'VoidItem'.toLowerCase() ) {
-      this.list$  = this.settingsService.getVoidReasons(site, 3);
+      this.list$  = this.settingsService.getVoidReasons(site, 1);
       return
     }
 
@@ -196,17 +196,18 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       let response$
 
       const value = this.itemWithAction.action as number;
+      console.log('itemWithAction', this.itemWithAction, value)
 
       if (this.itemWithAction) {
         switch (value) {
           case 1: //void
-
-              break;
+            response$ =  this.itemService.voidPOSOrderItem(site, this.itemWithAction)
+            console.log('void item')
+            break;
           case 2: //priceAdjust
-
               break;
           case 3: //note
-            response$ =  this.itemService.voidPOSOrderItem(site, this.itemWithAction)
+            response$ =  this.orderMethodService.voidOrder(this.itemWithAction.id)
             break;
           case 10:
             this.itemWithAction.order = this.order;

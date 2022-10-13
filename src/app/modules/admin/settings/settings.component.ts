@@ -8,6 +8,7 @@ import { Capacitor } from '@capacitor/core';
 import { SystemManagerService } from 'src/app/_services/system/system-manager.service';
 import { Subscription } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from '../../payment-processing/services';
+import { PlatformService } from 'src/app/_services/system/platform.service';
 
 @Component({
   selector: 'app-settings',
@@ -31,8 +32,12 @@ export class SettingsComponent implements OnInit, OnDestroy {
     @ViewChild('processorItem4') processorItem4: TemplateRef<any>;
     processorSelection: TemplateRef<any>;
     showAndroid: boolean;
-    get platForm() {  return Capacitor.getPlatform(); }
-    blueToothDeviceList: any;
+
+    get platForm() {
+      return this.platFormService.getPlatForm().platForm;
+    }
+
+      blueToothDeviceList: any;
     showPaymentMethods = false;
     user          :  IUser;
     role          :  string;
@@ -83,6 +88,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
         private systemManagerService : SystemManagerService,
         private route                : ActivatedRoute,
         private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
+        private platFormService     : PlatformService,
         private router               : Router)
     {
       this.accordionStep = -1;
@@ -90,8 +96,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
     }
 
     async ngOnInit() {
-      
-      if (this.platForm === 'android') { 
+
+      if (this.platForm === 'android') {
         await this.listBTDevices()
       }
       this.getCurrentUser();
@@ -106,7 +112,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       if (this._accordionStep) { this._accordionStep.unsubscribe()}
     }
 
-    async listBTDevices() { 
+    async listBTDevices() {
       this.blueToothDeviceList = await this.dSIEMVAndroidService.listBTDevices();
     }
 
@@ -118,8 +124,8 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.systemManagerService.updateAccordionStep(index)
     }
 
-    processorselect(index: number) { 
-     
+    processorselect(index: number) {
+
       switch ( index) {
         case 1:
           this.processorSelection  =  this.processorItem1;

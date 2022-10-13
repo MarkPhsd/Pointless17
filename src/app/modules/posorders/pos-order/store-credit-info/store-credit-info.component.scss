@@ -12,3 +12,12 @@ button {
   margin: 10px;
   width:  150px;
 }
+
+
+.grid-totals {
+  display: grid;
+  grid-template-columns: 100px 1fr ;
+  gap: 10px;
+  margin: 10px;
+
+}

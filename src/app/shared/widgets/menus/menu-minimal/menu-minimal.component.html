@@ -3,10 +3,8 @@
      class="row-class"
      *ngIf="isStaff && !displayCategories && menus">
 
-
   <ul id="accordion"
       class="accordion">
-
     <li class="menu-item"
         @fade
         *ngFor="let menu of menus; let i = index"

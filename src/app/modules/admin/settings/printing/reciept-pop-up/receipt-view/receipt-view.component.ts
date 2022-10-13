@@ -43,6 +43,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   paymentsCreditText: string;
   paymentsWICEBTText: string;
   subFooterText     : string;
+  receiptName       : 'defaultElectronReceiptPrinterName';
 
   receiptList$      : Observable<ISetting[]>;
   labelList$        : Observable<ISetting[]>;
@@ -87,12 +88,11 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   autoPrinted       = false;
 
   intSubscriptions() {
-
     if (this.printView == 1 ) {
       this._order       = this.orderService.currentOrder$.subscribe(data => {
         this.order      = data;
         this.orders     = [];
-        if (!data) {return}
+        if (!data)       {return}
         this.orders.push(data)
         if (data.posPayments) {
           this.payments   = data.posPayments
@@ -115,7 +115,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   }
 
   constructor(
-    private orderService          : OrdersService,
+    public orderService          : OrdersService,
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,
@@ -124,14 +124,23 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     private btPrinterService      : BtPrintingService,
     private orderMethodService    : OrderMethodsService,
     )
-  {
-  }
+  {}
 
   async ngOnInit() {
     this.initPrintView()
     this.getPrinterAssignment();
     this.intSubscriptions();
     await this.refreshView()
+  }
+
+
+  ngOnDestroy(): void {
+    this.printingService.updatePrintView(1);
+    if(this._order) { this._order.unsubscribe() }
+  }
+
+  ngAfterViewInit() {
+    this.initDefaultLayouts()
   }
 
   initPrintView() {
@@ -142,20 +151,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     }
   }
 
-  ngOnDestroy(): void {
-    this.printingService.updatePrintView(1);
-    if(this._order) { this._order.unsubscribe()}
-  }
-
-  async ngAfterViewInit() {
-    this.initDefaultLayouts()
-  }
-
   email() {
-    
-    if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) { 
+    if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
       this.orderMethodService.emailOrder(this.order).subscribe(data => {
-        if (data === 'Success') { 
+        if (data === 'Success') {
           this.orderMethodService.notifyEvent('Email Sent', 'Success')
           this.exit();
           return;
@@ -168,7 +167,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
         }
       })
       this.exit();
-      return 
+      return
     }
 
     this.orderMethodService.emailOrderByEntry(this.order)
@@ -187,25 +186,20 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   async refreshView(){
     const receiptID  = await this.getDefaultPrinter();
-
     if (this.printingService.printView  == 2) {
       this.initBalanceSheetDefaultLayouts()
       return;
     }
 
-    const styles     = await this.applyStyles();
+    const styles  = await this.applyStyles();
     if (receiptID && styles ) {
       this.initDefaultLayouts()
     }
   }
 
-  getCurrentView() {
-
-  }
-
   async  initBalanceSheetDefaultLayouts() {
     try {
-      'apply balance sheet style'
+      // 'apply balance sheet style'
       const site = this.siteService.getAssignedSite();
       const setting = {} as ISetting;
       setting.text  = await  this.printingService.appyBalanceSheetStyle()
@@ -223,32 +217,22 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       if (!this.receiptStyles) { this.receiptStyles  = await this.applyStyles(); }
       if (this.receiptStyles)  { this.receiptStyles  = this.applyStyle(this.receiptStyles) };
 
-      const receipt$              = this.settingService.getSettingByName(site, 'Receipt Default')
-      receipt$.subscribe(data => {
+      //could be altered for alternate type
+      this.receiptName =  'defaultElectronReceiptPrinterName'
+
+      const receipt$ = this.settingService.getSettingByNameNoRoles(site, this.receiptName)
+      receipt$.pipe(
+        switchMap(data => {
           this.receiptID = data.id
-          this.initSubComponent(data)
+          console.log('receipt layoutid', data.option1)
+          return this.settingService.getSetting(site, +data.option1)
+      })).subscribe(data => {
+        this.initSubComponent(data)
       })
+
     } catch (error) {
       console.log(error)
     }
-  }
-
-  refreshViewOB() {
-    const site  = this.siteService.getAssignedSite();
-    const style$ =  this.printingService.getStylesCached(site);
-    style$.pipe(
-      switchMap( style => {
-        return this.printingService.setHTMLReceiptStyle(style)
-      })).subscribe()
-  }
-
-  async applyBalanceSheetStyles(): Promise<ISetting> {
-      const value = await  this.printingService.appyBalanceSheetStyle();
-      const style             = document.createElement('style');
-      style.innerHTML         = value;
-      document.head.appendChild(style);
-      return this.receiptStyles
-    return  this.receiptStyles
   }
 
   async applyStyles(): Promise<ISetting> {
@@ -265,6 +249,23 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       document.head.appendChild(style);
       return this.receiptStyles
     }
+  }
+
+  // refreshViewOB() {
+  //   const site  = this.siteService.getAssignedSite();
+  //   const style$ =  this.printingService.getStylesCached(site);
+  //   style$.pipe(
+  //     switchMap( style => {
+  //       return this.printingService.setHTMLReceiptStyle(style)
+  //     })).subscribe()
+  // }
+
+  async applyBalanceSheetStyles(): Promise<ISetting> {
+      const value = await  this.printingService.appyBalanceSheetStyle();
+      const style             = document.createElement('style');
+      style.innerHTML         = value;
+      document.head.appendChild(style);
+      return  this.receiptStyles
   }
 
   async getDefaultPrinter(): Promise<number> {
@@ -298,6 +299,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       this.paymentsCreditText   = this.receiptLayoutSetting.option10;
       this.paymentsWICEBTText    = this.receiptLayoutSetting.option11;
       this.subFooterText        =  this.receiptLayoutSetting.option8
+      console.log('init sub component', this.itemsText)
       return true
     }
   }
@@ -330,8 +332,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     return file
   }
 
- print() {
-
+  print() {
     if (!this.printerName) {
       if (this.platFormService.webMode) { this.convertToPDF();}
       return
@@ -381,7 +382,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
   }
 
-
   async getPrinterAssignment(){
     this.getElectronPrinterAssignent()
     await this.getAndroidPrinterAssignment()
@@ -391,7 +391,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     this.outPutExit.emit('true')
     // this.dialogRef.close();
   }
-
 
   getElectronPrinterAssignent() {
     if (this.platFormService.isAppElectron) {

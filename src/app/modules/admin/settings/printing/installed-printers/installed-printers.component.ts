@@ -78,16 +78,18 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   receiptImage64            : any;
   setting                   : ISetting[];
+
   zplSetting                : ISetting;
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
   zplText                   : string;
-
+  electronLabelPrinter$     : Observable<ISetting>;
   labelImage$               : Observable<any>;
   labelImage64              : string;
   printerList               : any;
   result                    : any;
   isElectronServiceInitiated = false;
+  receiptTemplateSaving$            : Observable<any>;
 
   receiptList$    :  Observable<IItemBasic[]>;
   labelList$      :  Observable<IItemBasic[]>;
@@ -99,7 +101,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   electronReceiptPrinter: string;
   electronReceipt       : string;
   electronReceiptID     : number;
-
+  electronPrinter$ : Observable<any>
   electronLabelPrinter: string;
   electronLabelPrinterSetting: ISetting;
   electrongLabelID     : number;
@@ -140,16 +142,19 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
               private router: Router,
 
   ) {
-    this.printOptions = {} as printOptions;
-    this.platForm = this.platFormService.platForm;
-    this.isElectronApp = this.icpService.isElectronApp;
 
   }
 
   async ngOnInit() {
-    this.getPrinterAssignment();
+
+    this.printOptions = {} as printOptions;
+    this.platForm = this.platFormService.platForm;
+    this.isElectronApp = this.icpService.isElectronApp;
+    this.electronLabelPrinter$ = this.getElectronLabelPrinter();
+    this.electronPrinter$  =  this.getElectronPrinterAssignent()
     this.listPrinters();
     this.deviceName = this.orderService.posName
+    await this.getAndroidPrinterAssignment()
   }
 
   saveTerminalSetting()  {
@@ -176,11 +181,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.electronPrinterList = this.printingService.listPrinters();
   }
 
-  async getPrinterAssignment(){
-    this.getElectronPrinterAssignent()
-    await this.getAndroidPrinterAssignment()
-  }
-
   async  getAndroidPrinterAssignment() {
     if (this.platFormService.androidApp) {
       this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
@@ -189,25 +189,41 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   getElectronPrinterAssignent() {
-    if (this.platFormService.isAppElectron) {
-      this.printingService.getElectronReceiptPrinter().subscribe( data => {
-        this.electronSetting        = data;
-        this.electronReceiptPrinter = data.text;
-        this.electronReceipt        = data.value ;
-        this.electronReceiptID      = +data.option1
-        if (this.printOptions) {
-          this.printOptions.deviceName = data.text
-        }
-      })
+    // if (this.platFormService.isAppElectron) {
+      return this.printingService.getElectronReceiptPrinter().pipe(
+        switchMap( data => {
+          if (data) {
+            this.electronSetting        = data;
+            this.electronReceiptPrinter = data.text;
+            this.electronReceipt        = data.value ;
+            this.electronReceiptID      = +data.option1;
+            if (this.printOptions) {
+              this.printOptions.deviceName = data.text
+            }
+          }
 
-      this.printingService.getElectronLabelPrinter().subscribe( data => {
-          this.electronLabelPrinterSetting        = data;
-          this.electronLabelPrinter               = data.text;
-          this.electrongLabelID                   = +data.option1
-      })
-    }
+          if (!data) {
+            this.electronSetting = {} as ISetting;
+            this.electronSetting.text = 'not defined'
+            this.electronSetting.option1 = '0'
+            this.electronReceiptID    = 0;
+          }
+
+          console.log('data' , this.electronSetting)
+          // this.electronPrinter$ = of(data)
+          return of(this.electronSetting)
+      }))
   }
 
+  getElectronLabelPrinter() {
+    return this.printingService.getElectronLabelPrinter().pipe(
+      switchMap(data => {
+        this.electronLabelPrinterSetting        = data;
+        this.electronLabelPrinter               = data.text;
+        this.electrongLabelID                   = +data.option1
+        return of(data)
+    }))
+  }
 
   async  initDefaultLayouts() {
     try {
@@ -643,30 +659,64 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     )
   }
 
+
   setElectronReceiptID(event) {
-    if (!this.electronSetting) { return }
+    // if (!this.electronSetting) { return }
+    // const site = this.siteService.getAssignedSite();
+    // this.settingService.getSetting(site, event.id).subscribe( data=> {
+    //   this.electronReceipt             = event.name
+    //   this.electronReceiptID           = event.id
+    //   this.electronSetting.value       = this.electronReceipt
+    //   this.electronSetting.option1     = this.electronReceiptID.toString();
+    //   // console.log(this.electronSetting)
+    // })
     const site = this.siteService.getAssignedSite();
-    this.settingService.getSetting(site,event.id).subscribe( data=> {
-      this.electronReceipt             = event.name
-      this.electronReceiptID           = event.id
-      this.electronSetting.value       = this.electronReceipt
-      this.electronSetting.option1     = this.electronReceiptID.toString();
-      console.log(this.electronSetting)
-    })
-    this.setElectronReceipt(this.electronSetting);
+    const item$ = this.settingService.saveSettingObservable(site, event)
+    this.receiptTemplateSaving$ = item$.pipe(
+      switchMap( data=> {
+        // this.receipt = data;
+        return of(data)
+      })
+    )
+    // this.setElectronReceipt(this.electronSetting);
   }
 
   setElectronPrinterName(event) {
     this.electronReceiptPrinter = event
     const site = this.siteService.getAssignedSite();
-    const printerSettingName = 'defaultElectronReceiptPrinter'
-    this.settingService.getSettingByName(site, printerSettingName).subscribe( data => {
-        if (!this.electronSetting) {
-          this.electronSetting = {} as ISetting;
-        }
-        this.electronSetting.text   = event
-        this.electronReceiptPrinter = event;
-        this.setElectronReceipt(this.electronSetting);
+    const printerSettingName = 'defaultElectronReceiptPrinterName'
+    this.settingService.getSettingByNameNoRoles(site, printerSettingName).pipe(
+      switchMap(list  => {
+          const data = list[0]
+          if (data) {
+            this.electronSetting = data;
+          }
+          if (!this.electronSetting) {
+            this.electronSetting = {} as ISetting;
+          }
+          if (data) {
+            this.electronSetting = data;
+          }
+          this.electronSetting.name   = printerSettingName
+          this.electronSetting.text   = event
+          this.electronReceiptPrinter = event;
+          const receipt$ = this.printingService.setElectronReceiptPrinter(this.electronSetting);
+          return receipt$
+      })).subscribe(data => {
+        this.electronReceiptPrinter = data.text;
+        this.electronReceiptID      = +data.option1;
+        this.electronReceipt        = data.value;
+      })
+  }
+
+
+  setElectronReceipt(electronSetting: ISetting) {
+    if (!electronSetting) { return}
+    const receipt$ = this.printingService.setElectronReceiptPrinter(this.electronSetting);
+    receipt$.subscribe(data => {
+      this.electronReceiptPrinter = data.text;
+      this.electronReceiptID      = +data.option1;
+      this.electronReceipt        = data.value;
     })
   }
 
@@ -680,15 +730,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.setElectronLabel(this.electronLabelPrinterSetting);
   }
 
-  setElectronReceipt(electronSetting: ISetting) {
-    if (!electronSetting) { return}
-    const receipt$ = this.printingService.setElectronReceiptPrinter(this.electronSetting);
-    receipt$.subscribe(data => {
-      this.electronReceiptPrinter = data.text;
-      this.electronReceiptID      = +data.option1;
-      this.electronReceipt        = data.value;
-    })
-  }
 
   showElectronPrinterSelection() {
     this.showElectronPrinters = true

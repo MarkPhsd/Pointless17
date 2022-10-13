@@ -28,6 +28,7 @@ export interface ITerminalSettings {
   sSISecureDevice     : string;
   btPrinter           : string;
   bluetoothDeviceName : string;
+  electronZoom        : string;
 }
 
 @Injectable({
@@ -66,7 +67,6 @@ export class SettingsService {
     site.url = this.apiUrl;
     return this.getSettingByName(site, devicename);
   }
-
 
   isAPIOnline(): Observable<any> {
 
@@ -185,7 +185,7 @@ export class SettingsService {
 
   getReceipts(site: ISite):  Observable<IItemBasic[]> {
 
-    return this.getSettingsByDescriptionBasic(site, 'receiptLayouts')
+    return this.getSettingsByDescription(site, 'receiptLayouts')
 
   }
 

@@ -46,7 +46,7 @@ export class PosEditSettingsComponent implements OnInit {
     public  deviceService       : DeviceDetectorService,
     private dSIEMVAndroidService: PointlessCCDSIEMVAndroidService,
     private platFormService     : PlatformService,
-    private btPrinterService      : BtPrintingService,
+    private btPrinterService    : BtPrintingService,
     private printingService     : PrintingService,
       private uiSettingService  : UISettingsService,
     private dialogRef           : MatDialogRef<PosEditSettingsComponent>,
@@ -118,6 +118,7 @@ export class PosEditSettingsComponent implements OnInit {
       cardPointeHSN      : [],
       btPrinter          : [],
       bluetoothDeviceName: [],
+      electronZoom       : [],
     })
 
     if (this.terminal) {
@@ -150,6 +151,10 @@ export class PosEditSettingsComponent implements OnInit {
       }
       this.saving = false
     })
+  }
+
+  setZoomValue(event) {
+    this.inputForm.controls['electronZoom'].setValue(event)
   }
 
   saveSetting(event) {

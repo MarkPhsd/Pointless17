@@ -2,28 +2,28 @@
 
   <mat-card-title>
     <div class="header-container">
-      <div *ngIf='!terminal  && inputForm'>
-        New Terminal.
-      </div>
-      <div>
-        <div  *ngIf='terminal'>
-          {{terminal.name}}
+      <div><mat-icon>computer</mat-icon>
+        <div *ngIf='!terminal  && inputForm'>
+          New Terminal.
         </div>
+        <div>
+          <span *ngIf='terminal'>
+            {{terminal.name}}
+          </span>
+        </div>
+      </div>
+      <div class="edit-buttons" >
+        <app-edit-buttons-standard
+        (outputeupdateItem)     ="saveSetting($event)"
+        (outputupdateItemExit)  ="updateExit($event)"
+        (outputupdatedeleteItem)="delete($event)"
+        (outputupdateonCancel)  ="onCancel($event)"
+        ></app-edit-buttons-standard>
       </div>
     </div>
   </mat-card-title>
 
   <mat-card-subtitle>
-
-    <div class="edit-buttons" >
-      <app-edit-buttons-standard
-      (outputeupdateItem)     ="saveSetting($event)"
-      (outputupdateItemExit)  ="updateExit($event)"
-      (outputupdatedeleteItem)="delete($event)"
-      (outputupdateonCancel)  ="onCancel($event)"
-      ></app-edit-buttons-standard>
-    </div>
-
   </mat-card-subtitle>
 
   <mat-card-content>
@@ -75,71 +75,70 @@
         <div class="toggle-fields">
           <mat-slide-toggle
                     formControlName="resetOrdersFilter">
-            <mat-label>Reset Orders Filter Each Entry</mat-label>
+            <mat-label>Reset Orders Filter Each Login</mat-label>
           </mat-slide-toggle>
         </div>
 
       </div>
 
       <mat-divider></mat-divider>
-      <h2>Optional Settings</h2>
-      <mat-label>Printer assignment can be used here when not the default printer names assigned.</mat-label>
-      <div>
-        <mat-form-field appearance="standard">
-          <mat-label >Receipt Printer Name</mat-label>
-          <input matInput type="text"
-                  formControlName="receiptPrinter"
-                  class="form-control" >
-        </mat-form-field>
+      <h2><mat-icon>printer</mat-icon>Optional Printer Settings</h2><br>
+      <mat-label>Installed Windows App Only</mat-label><br>
+      <mat-label>These settings will overide default assignments. You might want to have the same printer names assigned on each pos to setup things easier.</mat-label>
+      <div class='grid-container'>
+
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >Receipt Printer Name</mat-label>
+            <input matInput type="text"
+                    formControlName="receiptPrinter"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >Label Printer</mat-label>
+            <input matInput type="text"
+                    formControlName="labelPrinter"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >Label Printer 2</mat-label>
+            <input matInput type="text"
+                    formControlName="labelPrinter2"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+       </div>
+
+      <h2><mat-icon>credit_card</mat-icon>Payment Processing Settings</h2>
+      <div class='grid-container'>
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label>Netepay Secure Device</mat-label>
+            <input matInput type="text"
+                    formControlName="dSISecureDevice"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
+
+        <div>
+          <mat-form-field appearance="standard">
+            <mat-label >Cardpointe HSN</mat-label>
+            <input matInput type="text"
+                    formControlName="cardPointeHSN"
+                    class="form-control" >
+          </mat-form-field>
+        </div>
       </div>
 
-      <!-- <mat-label>Select if logged directly into the computer.</mat-label>
-      <app-list-printers-electron
-              [printerName]      ="receiptPrinter"
-              [printerList]      ="electronPrinterList"
-              (outputPrinterName)="setElectronPrinterName($event)" >
-              Receipt Printer
-      </app-list-printers-electron> -->
-
-      <div>
-        <mat-form-field appearance="standard">
-          <mat-label >Label Printer</mat-label>
-          <input matInput type="text"
-                  formControlName="labelPrinter"
-                  class="form-control" >
-        </mat-form-field>
-      </div>
-
-      <div>
-        <mat-form-field appearance="standard">
-          <mat-label >Label Printer 2</mat-label>
-          <input matInput type="text"
-                  formControlName="labelPrinter2"
-                  class="form-control" >
-        </mat-form-field>
-      </div>
-
-      <div>
-        <mat-form-field appearance="standard">
-          <mat-label >EMV Secure Device</mat-label>
-          <input matInput type="text"
-                  formControlName="dSISecureDevice"
-                  class="form-control" >
-        </mat-form-field>
-      </div>
-
-      <div>
-        <mat-form-field appearance="standard">
-          <mat-label >HSN</mat-label>
-          <input matInput type="text"
-                  formControlName="cardPointeHSN"
-                  class="form-control" >
-        </mat-form-field>
-      </div>
-
-      <ng-container [ngTemplateOutlet]="isAndroidPrintingTemplate"></ng-container>
-      <mat-label *ngIf="terminal && terminal.btPrinter">{{terminal.btPrinter}}</mat-label>
       <ng-template #androidPrintingTemplate>
+        <ng-container [ngTemplateOutlet]="isAndroidPrintingTemplate"></ng-container>
+        <mat-label *ngIf="terminal && terminal.btPrinter">{{terminal.btPrinter}}</mat-label>
         <mat-form-field appearance="outline">
           <mat-label>Bluetooth Devices</mat-label>
             <mat-select
@@ -156,23 +155,31 @@
         </mat-form-field>
       </ng-template>
 
-      <h3>Android Secure Device</h3>
       <div *ngIf="blueToothDeviceList && blueToothDeviceList.length>0">
-        <mat-form-field   appearance="outline" >
-          <mat-label>Bluetooth Device Name</mat-label>
+        <h3><mat-icon>android</mat-icon>Android Secure Device</h3>
+         <mat-label>This feature must be set from the device itself.</mat-label>
+         <div>
+           <mat-form-field   appearance="outline" >
+             <mat-label>Bluetooth Device Name</mat-label>
 
-          <mat-select  formControlName="bluetoothDeviceName" >
-            <div *ngFor="let item of blueToothDeviceList">
-              <mat-option  [value]="item">
-                {{item}}
-              </mat-option>
-            </div>
-          </mat-select>
-        </mat-form-field>
-
+             <mat-select  formControlName="bluetoothDeviceName" >
+               <div *ngFor="let item of blueToothDeviceList">
+                 <mat-option  [value]="item">
+                   {{item}}
+                 </mat-option>
+               </div>
+             </mat-select>
+           </mat-form-field>
+         </div>
       </div>
-    </div>
 
+      <h2><mat-icon>grid_view</mat-icon>Inteface Settings </h2>
+      <div>
+        <mat-label>Installed Windows App Only</mat-label><br>
+        <electron-zoom-control (valueEmit)="setZoomValue($event)" [zoomValue]="terminal.electronZoom"></electron-zoom-control>
+      </div>
+
+    </div>
 
   </mat-card-content>
 </mat-card>
@@ -185,3 +192,11 @@
       {{this.deviceService.getDeviceInfo() | json}}
   </mat-card-content>
 </mat-card> -->
+
+      <!-- <mat-label>Select if logged directly into the computer.</mat-label>
+      <app-list-printers-electron
+              [printerName]      ="receiptPrinter"
+              [printerList]      ="electronPrinterList"
+              (outputPrinterName)="setElectronPrinterName($event)" >
+              Receipt Printer
+      </app-list-printers-electron> -->

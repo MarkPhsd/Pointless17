@@ -186,19 +186,19 @@
                   </mat-form-field>
                 </div>
 
-                <div class="filterItem" >
+                <div class="filterItem" *ngIf="itemType_Types">
                   <mat-form-field appearance="outline">
                     <mat-label>Type</mat-label>
                     <mat-select
-                                type               = "number"
-                                [formControlName]  = "'type'"
-                                [(ngModel)]        = "typeName"
-                                name               = "packageType"
+                                type               ="number"
+                                formControlName    = "useGroupID"
                       >
                       <mat-option value= "">Clear</mat-option>
-                      <mat-option *ngFor="let item of itemType_Types"
-                                  [value]="item">
-                        {{item}}
+                      <mat-option
+
+                                  *ngFor="let item of itemType_Types"
+                                  [value]="item.id">
+                        {{item.name}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>
@@ -226,9 +226,9 @@
                   <mat-form-field appearance="outline">
                     <mat-label>Use Type</mat-label>
                     <mat-select
-                                type="number"
-                                [formControlName]  ="'useType'"
-                                name="useType"
+                                type               = "number"
+                                [formControlName]  = "'useType'"
+                                name               = "useType"
                       >
                       <mat-option value= "">Clear</mat-option>
                       <mat-option *ngFor="let item of itemType_UseTypes"

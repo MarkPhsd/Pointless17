@@ -1,0 +1,18 @@
+<mat-label>Zoom Control for Windows App. Value: <b>{{itemValue}} </b></mat-label>
+<mat-label>Less than 1 is a smaller font and items, greater is large font and items.</mat-label>
+<mat-label>To change the zoom, change the value with the slider, then press zoom.</mat-label>
+
+<!-- <div class="button-grid">
+  <div><button class="bt" mat-raised-button (click)="setValueByValue(-.1)"><mat-icon>remove</mat-icon></button></div>
+  <div><button class="bt" mat-raised-button (click)="setValueByValue(.1)"><mat-icon>add</mat-icon></button></div>
+</div> -->
+
+<div>
+  <mat-slider  min="0" max="5" step="0.1" [value]="zoomValue" (change)="setValue($event)" ></mat-slider>
+</div>
+<div>
+  <button mat-raised-button (click)="setZoom()">Zoom</button>
+</div>
+<div>
+  <button mat-raised-button (click)="setZoomDefault()">Set Default</button>
+</div>

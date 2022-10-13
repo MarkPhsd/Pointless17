@@ -41,7 +41,7 @@ export class NewOrderTypeComponent  {
     try {
       this._bottomSheet.dismiss();
     } catch (error) {
-      
+
     }
   }
 
@@ -76,7 +76,7 @@ export class NewOrderTypeComponent  {
   newOrderWithPayload(serviceType: IServiceType){
     const site = this.siteService.getAssignedSite();
     const order$ = this.orderService.newOrderWithPayload(site, serviceType)
-     this.close()
+    this.close()
   }
 
   notifyEvent(message: string, title: string) {

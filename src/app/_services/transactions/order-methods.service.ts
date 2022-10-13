@@ -318,7 +318,7 @@ export class OrderMethodsService implements OnDestroy {
   }
 
 
-  emailOrderByEntry(order: IPOSOrder) { 
+  emailOrderByEntry(order: IPOSOrder) {
     this.editDialog.emailOrderEntry( order)
   }
 
@@ -419,7 +419,7 @@ export class OrderMethodsService implements OnDestroy {
     if (!valid) {
 
       //login prompt
-      this.authenticationService.openLoginDialog()
+      const ref = this.authenticationService.openLoginDialog()
       this.notifyEvent('Please login, or create your account to place an order. Carts require a registerd user to be created.', 'Alert')
       return false
     } {
@@ -427,7 +427,7 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  
+
 
   validateItem(item, barcode) {
     if (!item && !barcode) {
@@ -758,7 +758,7 @@ export class OrderMethodsService implements OnDestroy {
     localStorage.removeItem('orderSubscription')
     this.orderService.updateOrderSubscription(null);
 
-    if (this.userAuthorization.user.roles = 'user') { 
+    if (this.userAuthorization.user.roles = 'user') {
       this.router.navigate(['/app-main-menu']);
       return;
     }

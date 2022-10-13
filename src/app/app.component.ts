@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { Title } from '@angular/platform-browser';
 import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
+import { AppInitService } from './_services/system/app-init.service';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
@@ -32,6 +33,7 @@ export class AppComponent {
 
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
+  appUrl : string;
 
   devMode = false;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -59,11 +61,14 @@ export class AppComponent {
       private cd: ChangeDetectorRef,
       private awsService:            AWSBucketService,
       private electronService      :  ElectronService,
+      private appInitService       : AppInitService,
       // private ipcService          :  IPCService,
 
   ) {
 
+
       this.initSubscription();
+      this.initStyle();
       this.initializeApp();
       this.backButtonEvent();
       this.awsService.awsBucket();
@@ -81,6 +86,21 @@ export class AppComponent {
       // }
 
   }
+
+  initializeApp() {
+    this.appUrl = this.appInitService.apiBaseUrl()
+  }
+
+  initStyle() {
+    try {
+      this.platform.ready().then(() => {
+        this.statusBar.styleLightContent();
+      });
+    } catch (error) {
+
+    }
+  }
+
 
   // initIdleTracking() {
   //   this.idle.setIdle(5); // how long can they be inactive before considered idle, in seconds
@@ -143,15 +163,6 @@ export class AppComponent {
     return data;
   }
 
-  initializeApp() {
-    try {
-      this.platform.ready().then(() => {
-        this.statusBar.styleLightContent();
-      });
-    } catch (error) {
-
-    }
-  }
 
   logout() {
     this.authenticationService.logout();

@@ -14,7 +14,7 @@ import { RenderingService } from './rendering.service';
 import { LabelaryService, zplLabel } from '../labelary/labelary.service';
 import { RecieptPopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/reciept-pop-up.component';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, EMPTY, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, EMPTY, Observable, switchMap, of, catchError } from 'rxjs';
 import { Router } from '@angular/router';
 import { PlatformService } from './platform.service';
 import { UserAuthorizationService } from './user-authorization.service';
@@ -77,7 +77,6 @@ export class PrintingService {
                 private uiSettingsService : UISettingsService,
                 private printingAndroidService   : PrintingAndroidService,
                 private dialog            : MatDialog,) {
-
   }
 
   getPrintReady(): Observable<boolean> {
@@ -515,7 +514,8 @@ getDomToImage(node: any) {
 
   ///
   getElectronLabelPrinter(): Observable<ISetting> {
-    return this.getSetting('electronLabelPrinter')
+    const site = this.siteService.getAssignedSite();
+    return this.settingService.getSettingByNameNoRoles(site,'electronLabelPrinter')
   }
 
   getElectronLabelPrinterCached(): Observable<ISetting> {
@@ -528,7 +528,40 @@ getDomToImage(node: any) {
   }
 
   getElectronReceiptPrinter(): Observable<ISetting> {
-    return this.getSetting('defaultElectronReceiptPrinterName')
+    const site = this.siteService.getAssignedSite();
+    const name = 'defaultElectronReceiptPrinterName'
+    const item$ = this.settingService.getSettingByNameNoRoles(site, name)
+    const printer$ = item$.pipe(
+      switchMap(
+      // {
+        // next:
+        data => {
+          if (!data) {
+            const item = {} as ISetting;
+            item.name = name;
+            // return of(item)
+            const result$ =  this.settingService.saveSetting(site, item)
+            return result$
+          }
+          return of(data)
+            // },
+            // error: err => {
+            //   const item = {} as ISetting;
+            //   item.name = name;
+            //   return of(item)
+            // }
+        }
+      ),
+      catchError((e) => {
+          const item = {} as ISetting;
+          item.name = name;
+          // return of(item)
+          const result$ =  this.settingService.saveSetting(site, item)
+          return result$
+        }
+      )
+    )
+    return printer$;
   }
 
   getSetting(settingName: string) {
@@ -545,7 +578,7 @@ getDomToImage(node: any) {
     //get device settings;
     if (this.uiSettingsService.posDeviceInfo) {
       if (this.platFormService.androidApp) {
-        console.log(this.uiSettingsService.posDeviceInfo)
+        // console.log(this.uiSettingsService.posDeviceInfo)
         const device = this.uiSettingsService.posDeviceInfo;
         this.printingAndroidService.printAndroidPOSReceipt( this.orderService.currentOrder, null, device.btPrinter );
         return;

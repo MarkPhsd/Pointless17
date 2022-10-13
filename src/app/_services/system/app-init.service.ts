@@ -28,19 +28,6 @@ export class AppInitService  {
   public  company    : string;
   // public get appConfig
   private httpClient: HttpClient;
-
-  constructor(handler: HttpBackend,
-              private platFormService: PlatformService,
-              private _snackbar: MatSnackBar,
-              private platformService: PlatformService,
-              private router: Router,) {
-
-    // this.clearUserSettings();
-    this.platFormService.getPlatForm()
-    this.httpClient = new HttpClient(handler);
-    this.init();
-  }
-
   isApp(): boolean {
     if (this.platformService.isAppElectron || this.platformService.androidApp)  {
       return true
@@ -48,59 +35,70 @@ export class AppInitService  {
     return false
   }
 
+  constructor(handler: HttpBackend,
+              private platFormService: PlatformService,
+              private _snackbar: MatSnackBar,
+              private platformService: PlatformService,
+              private router: Router,) {
+    this.platFormService.getPlatForm()
+    this.httpClient = new HttpClient(handler);
+    this.init();
+  }
+
   //for distributed apps.
   //also make a setting that can be applied.
   //that setting can be local storage.
   //and it can override this value.
   //this can be assigned in settings after an initial login.
+
   async init() {
-    // console.log('app-init.ervice init', )
-    this.apiUrl = this.getLocalApiUrl();
-    // console.log('apiBaseUrl init',  this.apiUrl);
 
+    this.apiUrl      = this.getLocalApiUrl();
     const rememberMe = localStorage.getItem('rememberMe')
+    const isApp      = this.platFormService.isApp();
 
-    if (rememberMe != 'true') {
-        if (!this.initialized && this.isApp() ) {
-          this.clearUserSettings();
-          this.initialized = true;
+    if (!rememberMe) {
+      if (!this.initialized && isApp ) {
+        this.clearUserSettings();
+        this.initialized = true;
         this.router.navigate(['/login']);
-        return ;
+        return;
       }
     }
 
-    this.httpClient.get('assets/app-config.json').subscribe( result => {
+    const result = await this.httpClient.get('assets/app-config.json').toPromise() //;( result => {
+    const data = result  as IAppConfig
 
-      const data = result  as IAppConfig
-
-      if ( !this.platFormService.isApp()  ) {
-        if ( this.apiUrl === undefined && this.isApp() ){
-          this.useAppGate = false
-          this.router.navigate(['/apisetting']);
-          return
-        }
-      }
-
-      if ( !this.platFormService.isApp()  ) {
+    if ( !isApp  ) {
         if (data) {
           this.apiUrl     = data.apiUrl
           if (!data.apiUrl) {
             if (!this.platformService.androidApp && !this.platformService.isAppElectron){
-              // this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
             }
             this.apiUrl     = "https://ccsposdemo.ddns.net/api"
             data.apiUrl     = "https://ccsposdemo.ddns.net/api"
             this.setAPIUrl(this.apiUrl)
           }
+
           this.useAppGate = data.useAppGate
           this.logo       = data.logo;
           this.company    = data.company
           this.appConfig  = data ;
+          this.apiUrl     = data.apiUrl
+
           localStorage.setItem('storedApiUrl', data.apiUrl)
+
+          if ( this.apiUrl === undefined ){
+            this.useAppGate = false
+            this.router.navigate(['/apisetting']);
+            return
+          }
+
         }
+        return;
       }
 
-      if ( this.platFormService.isApp()  ) {
+      if ( isApp ) {
         if (!data ) {
           if (!this.platformService.androidApp && !this.platformService.isAppElectron){
             this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
@@ -115,15 +113,16 @@ export class AppInitService  {
           this.appConfig.company= 'Pointless'
           localStorage.setItem('storedApiUrl', data.apiUrl)
         }
+
         if (this.apiUrl) {
         }
 
       }
 
-    })
-
     // this.settingService.setDeviceSettings
+    // }
   }
+
 
   setAPIUrl(apiUrl): string {
 
@@ -147,17 +146,15 @@ export class AppInitService  {
   getLocalApiUrl() {
     const result = localStorage.getItem('storedApiUrl')
     const site = {} as ISite;
-    // console.log('Appinit get local apiurl', result)
     site.url = result
 
-    if (result != null && result != '' ) {
+    if (result != undefined && result != null && result != '' ) {
       return result;
     }
 
     if (this.isApp() && !result ) {
       if (! this.platformService.androidApp){
         try {
-          // this._snackbar.open(`Using demo data  - getLocalApiUrl`, 'Alert', {duration: 3000} )
         } catch (error) {
           console.log('snack bar open error', error)
         }
@@ -171,6 +168,7 @@ export class AppInitService  {
     const site = {} as ISite
     site.url = apiUrl;
     localStorage.setItem("site.url", apiUrl)
+    localStorage.setItem('storedApiUrl', apiUrl)
   }
 
   appInUse() {
@@ -180,14 +178,13 @@ export class AppInitService  {
   apiBaseUrl() {
     this.init();
     const urlSaved = this.getLocalApiUrl();
-    // console.log('apiBaseUrl', urlSaved)
 
     if (this.isApp() && urlSaved != undefined) {
       this.apiUrl =  urlSaved
       return   this.apiUrl
     }
 
-    if (!this.isApp())  {
+    if (!this.isApp() && this.appConfig && this.appConfig.apiUrl)  {
       return this.appConfig.apiUrl;
     }
 
@@ -206,6 +203,8 @@ export class AppInitService  {
 
     return this.appConfig.apiUrl;
   }
+
+
 
   appGateEnabled() {
     if (this.apiUrl) {return false}

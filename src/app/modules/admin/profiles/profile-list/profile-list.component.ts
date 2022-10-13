@@ -361,17 +361,21 @@ export class ProfileListComponent implements OnInit, AfterViewInit, OnDestroy {
       items$.subscribe(data =>
         {
             const resp         = data.paging
-            this.isfirstpage   = resp.isFirstPage
-            this.islastpage    = resp.isFirstPage
-            this.currentPage   = resp.currentPage
-            this.numberOfPages = resp.pageCount
-            this.recordCount   = resp.recordCount
+            if (resp) {
+              this.isfirstpage   = resp.isFirstPage
+              this.islastpage    = resp.isFirstPage
+              this.currentPage   = resp.currentPage
+              this.numberOfPages = resp.pageCount
+              this.recordCount   = resp.recordCount
+            }
             if (this.numberOfPages !=0 && this.numberOfPages) {
               this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
             }
-            let unique = [...new Set(data.results)];
-            let results  =  this.refreshImages(data.results)
-            params.successCallback(unique)
+            if (data.results) {
+              let unique = [...new Set(data.results)];
+              let results  =  this.refreshImages(data.results)
+              params.successCallback(unique)
+            }
 
           }
         );

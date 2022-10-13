@@ -139,11 +139,9 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const payment$  = this.paymentService.postPOSPayment(site, posPayment);
 
     payment$.subscribe(data => {
-
       this.dialogRef = this.dialogOptions.openDSIEMVAndroidTransaction({payment: data, type: 1});
       this._dialog.next(this.dialogRef)
     })
-
   }
 
 

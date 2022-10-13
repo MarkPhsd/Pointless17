@@ -17,6 +17,8 @@
   </div>
 </div>
 
+<!-- headerText {{headerText | json}} -->
+
 <div class="mat-card-white" >
   <ng-container>
     <ng-container [ngTemplateOutlet]="currentView"></ng-container>
@@ -24,28 +26,29 @@
 </div>
 
 <ng-template #receipt>
-  <div *ngIf="receiptLayoutSetting && headerText &&  itemsText"
+
+  <div *ngIf="receiptLayoutSetting && ((headerText &&  itemsText) || order)"
        class="border-section">
     <app-receipt-layout #printsection
-                      id="printsection"
-                      [headerText]="headerText"
-                      [footerText]="footerText"
-                      [itemText]="itemsText"
-                      [printerWidth]="receiptLayoutSetting.option9"
-                      [paymentsText]="paymentsText"
-                      [paymentsWICEBTText]="paymentsCreditText"
-                      [paymentsCreditText]="paymentsWICEBTText"
-                      [subFooterText]="subFooterText"
-                      [items]="items"
-                      [order]="orders"
-                      [payments]="payments"
-                      [orderType]="orderTypes"
-                      [testdata]="false"
-                      [liveEdit]="false"
-                      [styles]="receiptStyles">
+                        [headerText]  ="headerText"
+                        [footerText]  ="footerText"
+                        [itemText]    ="itemsText"
+                        [printerWidth]="receiptLayoutSetting.option9"
+                        [paymentsText]="paymentsText"
+                        [paymentsWICEBTText]="paymentsCreditText"
+                        [paymentsCreditText]="paymentsWICEBTText"
+                        [subFooterText]="subFooterText"
+                        [items]       ="items"
+                        [order]       ="orders"
+                        [payments]    ="payments"
+                        [orderType]   ="orderTypes"
+                        [testdata]    ="false"
+                        [liveEdit]    ="false"
+                        [styles]      ="receiptStyles">
     </app-receipt-layout>
   </div>
 </ng-template>
+
 
 <ng-template #balanceSheet>
   <balance-sheet-view
@@ -53,4 +56,6 @@
       [disableAuditButton]="true">
   </balance-sheet-view>
 </ng-template>
+
+
 

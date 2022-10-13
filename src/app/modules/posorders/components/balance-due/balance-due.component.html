@@ -27,7 +27,8 @@
           <button mat-button
                   *ngIf="payment.completionDate"
                   class="tip-button"
-                  (click)="step = 2"><mat-icon>arrow_forward_ios</mat-icon>Next</button>
+                  (click)="step = 2"><mat-icon>arrow_forward_ios
+                  </mat-icon>Next</button>
         </div>
 
         <div  *ngIf="(payment && payment?.account) || (paymentMethod && paymentMethod?.isCreditCard)">

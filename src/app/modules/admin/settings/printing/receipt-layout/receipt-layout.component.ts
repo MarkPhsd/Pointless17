@@ -123,12 +123,11 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     if ( this._order) {    this._order.unsubscribe()}
-
   }
+
   async refreshData() {
     this.site = this.siteService.getAssignedSite();
     await this.initSubscriptions();
-
     if (!this.order) {  await this.getTestData();  }
     this.getInterpolatedData()
     return
@@ -172,9 +171,7 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
       }
 
       if (this.items && this.itemText) {
-        // console.log('get Interpolated Data', 'items')
         this.interpolatedItemTexts      = this.renderingService.refreshStringArrayData(this.itemText, this.items, 'items')
-        // console.log('items' , this.interpolatedItemTexts)
       }
 
       if (this.payments && this.paymentsText) {

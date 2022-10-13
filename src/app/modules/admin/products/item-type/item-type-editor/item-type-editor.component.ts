@@ -32,7 +32,8 @@ export class ItemTypeEditorComponent   {
   selectedItemsCount: number;
   itemType_PackageTypes = this.itemTypeService.packageType;
   itemType_UseTypes  = this.itemTypeService.useType;
-  itemType_Types     = this.itemTypeService.type;
+  itemType_Types     = this.itemTypeService.typesList;
+  useType  : any;
 
   labelTypes        : ISetting[];
   receiptList$      : Observable<IItemBasic[]>;
@@ -110,13 +111,33 @@ export class ItemTypeEditorComponent   {
     }
   };
 
+  setUseType(event) {
+    console.log(event);
+    this.useType = event;
+    this.inputForm.controls['useGroupID'].setValue(this.useType.id);
+    this.inputForm.controls['type'].setValue(event.name);
+  }
+
+  getUseType(id: any) {
+    this.useType = this.itemType_Types.filter(data => data.id.toString() === id.toString())[0]
+    console.log('getUseType', this.useType)
+    if (this.useType) {
+      this.inputForm.controls['useGroupID'].setValue(this.useType.id);
+      this.inputForm.controls['type'].setValue(this.useType.name);
+      return this.useType;
+    }
+  }
+
   initFormData(itemType: IItemType) {
     this.itemType = itemType;
     if (this.itemType) {
       try {
-        this.inputForm.patchValue(this.itemType)
+        this.useType = {name: this.itemType?.type, id: this.itemType?.useGroupID}
+        this.inputForm.patchValue(this.itemType);
+        this.setUseType({name: this.itemType?.type, id: this.itemType?.useGroupID})
+        console.log(this.inputForm.value)
       } catch (error) {
-            console.log(error)
+        console.log(error)
       }
       try {
         this.labelTypeID     = this.itemType.labelTypeID
@@ -165,7 +186,6 @@ export class ItemTypeEditorComponent   {
       return
     }
 
-
     if (this.inputForm.valid) {
       const itemType =  this.setNonFormValues();
 
@@ -173,6 +193,7 @@ export class ItemTypeEditorComponent   {
         this.itemTypes.forEach( item => {
           const id = item.id;
           item = this.inputForm.value;
+          console.log('item value', item)
           item.id = id;
           item.labelTypeID = this.labelTypeID;
           return  this.updateItem(site, item, optionClose)
@@ -191,12 +212,23 @@ export class ItemTypeEditorComponent   {
     try {
 
       if (!item) {
-        this._snackBar.open(`Update item problem`, 'Succcess', { duration: 2000} )
+        this._snackBar.open(`Update item problem`, 'failed', { duration: 2000} )
         return
       }
 
       if (this.itemType) {  item.imageName = this.itemType.imageName  }
 
+      const temp =  this.inputForm.value
+      const useType = temp.useGroupID;
+      console.log(useType)
+      if (useType) {
+        this.useType = this.getUseType( useType )
+        item.useGroupID = this.useType.id;
+        item.type       = this.useType.name;
+        console.log('this.useType', this.useType)
+      }
+
+      console.log(item)
       const item$ = this.itemTypeService.putItemTypeNoChildren(site, item)
 
       item$.subscribe(

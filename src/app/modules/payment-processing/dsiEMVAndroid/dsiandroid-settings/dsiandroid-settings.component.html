@@ -1,4 +1,5 @@
-<mat-card *ngIf="(transaction$ | async) as transaction ; else loading">
+<mat-card *ngIf="(transaction$ | async) as transaction; else loading ">
+
   <mat-card-title><ng-content></ng-content>
   </mat-card-title>
   <mat-card-subtitle>

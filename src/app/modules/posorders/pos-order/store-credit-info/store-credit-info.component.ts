@@ -31,7 +31,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
   _search             : Subscription;
   _order              : Subscription;
   _issueItem          : Subscription;
-  showIssueMoney      : boolean;
+  @Input()  showIssueMoney      : boolean;
   posIssueItem        : PosOrderItem;
   _posIssuePurchaseItem: Subscription;
   posIssuePurchaseItem : IPurchaseOrderItem;
@@ -45,7 +45,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
         this.search      = data;
         this.showPayment = true;
         if (!data) {
-          this.showPayment         = false;
+
           this.search              = null;
           this.storeCreditSearch$  = null;
         }

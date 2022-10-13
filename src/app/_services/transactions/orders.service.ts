@@ -222,7 +222,7 @@ export class OrdersService {
 
     return this.http.get<IPOSOrder>(url);
   }
-  
+
 
   getPOSOrderGroupTotal(site: ISite, id: number, groupID: number) :  Observable<IPOSOrder>  {
     const controller = "/POSOrders/"
@@ -405,7 +405,7 @@ export class OrdersService {
 
   }
 
-  
+
   getOrderByTableUUID(site: ISite, UUID: string):  Observable<IPOSOrder>  {
 
     // const deviceName = localStorage.getItem('devicename')
@@ -786,14 +786,12 @@ export class OrdersService {
 
   setActiveOrder(site, order: IPOSOrder) {
     if (order) {
-
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
       if (!order.history && this.platFormService.isApp()) {
-        // this.toolbarServiceUI.showSearchSideBar()
+        this.toolbarServiceUI.showSearchSideBar()
         return
       }
-
     }
   }
 

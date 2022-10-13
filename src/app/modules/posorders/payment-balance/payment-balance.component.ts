@@ -77,8 +77,8 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
       }
     }
 
-    if (this.userAuthorization.user.roles === 'user') { 
-      this.isUser = true; 
+    if (this.userAuthorization.user.roles === 'user') {
+      this.isUser = true;
     }
     this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
 
@@ -90,9 +90,9 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   }
 
   editCart() {
-    this.router.navigate(["/currentorder/",{mainPanel:true}]);
     this.toolbarUIService.updateOrderBar(false)
     this.toolbarUIService.resetOrderBar(true)
+    this.router.navigate(["/currentorder/", {mainPanel:true}]);
   }
 
   capture(item: IPOSPayment) {
@@ -138,7 +138,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     }
    }
 
-   exitOrder() { 
+   exitOrder() {
     this.orderMethodsService.clearOrder()
    }
 

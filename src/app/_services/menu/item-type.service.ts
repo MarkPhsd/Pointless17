@@ -234,6 +234,36 @@ type       = [
    'store credit',
    'tobacco'
 ]
+
+typesList = [
+  {name: 'Product', id: 1},
+  {name: 'Adjustment', id: 2},
+  {name: 'Grouping', id: 3},
+  {name: 'Discounts', id: 4},
+  {name: 'Retail', id: 5},
+  {name: 'Tobacco', id: 6},
+  {name: 'Cannabis', id: 7},
+  {name: 'Med-Cannabis', id: 8},
+  {name: 'Retail Liquor', id: 9},
+  {name: 'Grocery', id: 10},
+  {name: 'Generic', id: 11},
+  {name: 'Food', id: 12},
+  {name: 'Restaurant', id: 13},
+]
+// 1	Product
+// 2	Adjustment
+// 3	Grouping
+// 4	Discounts
+// 5	Retail
+// 6	Tobacco
+// 7	Cannabis
+// 8	Med-Cannabis
+// 9	Retail Liquor
+// 10	Grocery
+// 11	Generic
+// 12	Food
+// 13	Restaurant
+
 useType = ['product', 'adjustment', 'category',]
 
 site: ISite;

@@ -34,6 +34,21 @@
     ]
   },
   {
+    "target": "cannabispos",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
     "target": "coconutsfl",
     "public": "dist/CCSApp",
     "ignore": [

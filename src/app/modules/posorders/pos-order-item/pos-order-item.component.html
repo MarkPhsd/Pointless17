@@ -49,20 +49,24 @@
           <span class="discount-description"  *ngIf="orderItem.itemOrderPercentageDiscount>0">
             % Off Savings $ {{orderItem.itemOrderPercentageDiscount}},
           </span>
+
           <span class='status-icon' *ngIf="orderItem.printed && prepScreen && !isModifier">
             <mat-icon color="warn" *ngIf="orderItem.printed && !prepScreen" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
+
           <span  class='ready-icon' *ngIf="orderItem.itemPrepped && prepScreen && !isModifier">
             <mat-icon color="alert" & *ngIf="prepScreen" >done</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.itemPrepped | date: 'shortTime'}} </span>
           </span>
-          <div class="void-icon void-info" *ngIf="orderItem.voidReason && orderItem.itemReturn != 1 && prepScreen && !isModifier">
-            <span *ngIf="orderItem.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
+
+          <div class="void-icon void-info" *ngIf="(orderItem?.voidReason || orderItem?.itemReturn != 1) &&  prepScreen && !isModifier">
+            <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
               <b  style="color:crimson">Item voided:  {{ orderItem.voidReason }}</b>
             </span>
           </div>
+
           <span  *ngIf="(mainPanel || bottomSheetOpen) && !prepScreen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
         </div>
 
@@ -72,12 +76,16 @@
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-info" *ngIf="orderItem.voidReason && orderItem.itemReturn == 1 && !isModifier">
-            <span  >  <mat-icon   color="warn">refresh</mat-icon>  </span>
+          <div class="void-info" *ngIf="(orderItem.voidReason || orderItem.itemReturn == 1) && !isModifier">
+            <span *ngIf="orderItem.itemReturn == 1">  <mat-icon  color="warn">refresh</mat-icon>  </span>
+            <span *ngIf="orderItem.itemReturn != 1">  <mat-icon  color="warn">cancel</mat-icon>  </span>
+
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              <b style="color:crimson">Item Return:  {{ orderItem.voidReason }}</b>
+              <b *ngIf="orderItem.itemReturn == 1" style="color:crimson">Item Return:  {{ orderItem.voidReason }}</b>
+              <b *ngIf="orderItem.itemReturn != 1" style="color:crimson">Voided:       {{ orderItem.voidReason }}</b>
             </span>
           </div>
+
         </div>
       </div>
 

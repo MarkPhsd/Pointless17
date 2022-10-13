@@ -2,6 +2,7 @@
 
 <mat-drawer-container>
   <mat-drawer
+        *ngIf="!menuManager"
         position ="start"
         [class]  ="barType"
         [mode]   ="sidebarMode"

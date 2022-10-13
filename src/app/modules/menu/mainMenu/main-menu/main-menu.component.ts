@@ -143,7 +143,6 @@ export class MainMenuComponent implements OnInit  {
   }
 
   get isCategoryViewOn() {
-
     if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
         (!this.isStaff && this.homePageSetings.categoriesEnabled)) {
       return this.categoryView

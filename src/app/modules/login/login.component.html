@@ -1,17 +1,17 @@
-﻿<div class="bg row-height" 
+﻿<div *ngIf="(terminalSettings$ | async) as terminal"></div>
+
+<div class="bg row-height"
      *ngIf="!platformService.isApp  || (!togglePIN && platformService.isApp)"
      [ngStyle]="backgroundImage">
 
-
-  <div fxLayout="row" fxLayoutAlign="center center" class="row-height" 
-      >
+  <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
     <div  class="login-window">
-     
-      <div  *ngIf="platformService.isApp()" fxLayoutAlign="center center"
-            fxLayout="row"  
-            fxlayoutGap="20px" 
+
+      <div  *ngIf="platformService.isApp() && pinToken" fxLayoutAlign="center center"
+            fxLayout="row"
+            fxlayoutGap="20px"
             class="stat-cards">
-        <button  mat-raised-button 
+        <button  mat-raised-button
                  class="center login"
                  *ngIf="platformService.isApp"
                  (click)="togglePIN = !togglePIN">
@@ -54,7 +54,7 @@
             </div>
           </mat-card-title>
           <mat-card-content>
-       
+
             <div  class="center"
                   *ngIf="loginForm"
                   [formGroup]="loginForm"
@@ -164,3 +164,4 @@
       </mat-card-content>
     </mat-card>
 </div>
+

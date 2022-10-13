@@ -118,10 +118,29 @@ import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-m
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 
 const routes: Routes = [
-    // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+
+    //  data : { title: 'Menu Board Layout', animation: 'isLeft'},
+    //  { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+    { path: 'menu-board',  component: GridManagerComponent,
+        children: [
+          // { path: '', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
+          // { path: 'menu-board', component: GridManagerComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
+          { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
+        ]
+    },
 
     {path: '', component: DefaultComponent,
       children: [
+
+        // { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
+        // { path: '/menu-board',  component: GridManagerComponent, pathMatch: 'full', data : { title: 'Menu Board Layout', animation: 'isLeft'},
+        //     children: [
+        //       { path: '', component: GridManagerComponent, data: {animation: 'isLeft'} },
+        //       { path: 'menu-board', component: GridManagerComponent, data: {animation: 'isLeft'} },
+        //       { path: 'menu-board/grid-menu-layout', component: GridMenuLayoutComponent, data: {animation: 'isLeft'} },
+        //     ]
+        // },
+
         { path: '', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { animation: 'isLeft'} },
         { path: 'swipedelete', component: IonicSwipeToDeleteComponent,   data: { animation: 'isLeft'} },
         { path: 'app-main-menu', component: MainMenuComponent, canActivate: [AgeVerificationGuardService],  data: { title: 'Main Menu', animation: 'isLeft'} },
@@ -270,24 +289,15 @@ const routes: Routes = [
 
         { path: 'view-tier-menu', component: TierMenuComponent, canActivate: [AuthGuard],data: {  title: 'Tier Menu',  animation: 'isLeft'}},
 
-        {path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}}
+        {path: 'pos-order-schedule', component: POSOrderScheduleComponent, canActivate: [AuthGuard], data: {title: 'Schedule Order', animation: 'isLeft'}},
+
       ]
     },
 
-
-    { path: 'menu-board', component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
     { path: 'view-tvpricetiers', component: TvPriceSpecialsComponent ,data: {  title: 'Tiers',  animation: 'isLeft'}},
     { path: 'view-price-tiers', component: TierPricesComponent ,data: {  title: 'Price Tiers', animation: 'isLeft'}},
     { path: 'scale-reader', component: ScaleReaderComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
 
-    { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
-
-    { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},
-    { path: 'agtest', component: AgGridTestComponent, data: { animation: 'isLeft'}},
-    { path: 'printerSettings', component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-    { path: 'brandslist2', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
-    { path: 'catscroll', component: CategoryScrollComponent, data: { animation: 'isLeft'}},
-    { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { title: 'Item Search',  animation: 'isLeft'}},
     { path: 'barcodescanner', component: BarcodeScannerComponent , canActivate: [AuthGuard], data: { animation: 'isLeft'}},
     { path: 'login', component: LoginComponent, data: { title: 'Pointless Login', animation: 'isLeft'}},
     { path: 'resetpassword', component: ResetpasswordComponent,data: {  title: 'Reset Password',  animation: 'isLeft'}},
@@ -297,19 +307,25 @@ const routes: Routes = [
     { path: 'register-token', component: RegisterAccountExistingUserWithTokenComponent, data: { animation: 'isLeft'}},
     { path: 'register-user', component: RegisterAccountMainComponent, data: { animation: 'isLeft'}},
     { path: 'appgate', component: AppGateComponent, data: { animation: 'isLeft'}},
-    
+
     { path: 'menu-modal', component: MenuItemModalComponent, data: { animation: 'isLeft'}},
     { path: 'app-widget-card', component: CardComponent, data: { animation: 'isLeft'}},
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
-
     { path: 'qr-order', component: QROrderComponent, data: { animation: 'isLeft'}},
 
-    { path: '/menu-board/grid-menu-layout',  redirectTo: '/menu-board', pathMatch: 'full' },
-    { path: 'menu-manager', component: GridManagerComponent, data: {animation: 'isLeft'} },
     { path: '**', component: PageNotFoundComponent},
-];
+
+    // { path: 'menu-board', component: MenuBoardComponent,      data : { title: 'Strain Board', animation: 'isLeft'}},
+    // { path: 'client-type-list', component: ClientTypeListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'} },
+    // { path: 'payments', component: DsiEMVPaymentComponent, data: { animation: 'isLeft'}},
+    // { path: 'agtest', component: AgGridTestComponent, data: { animation: 'isLeft'}},
+    // { path: 'printerSettings', component: InstalledPrintersComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
+    // { path: 'brandslist2', component: BrandslistComponent,canActivate: [AgeVerificationGuardService],   data: { animation: 'isLeft'} },
+    // { path: 'catscroll', component: CategoryScrollComponent, data: { animation: 'isLeft'}},
+    // { path: 'product-search-selector', component: ProductSearchSelectorComponent , canActivate: [AuthGuard], data: { title: 'Item Search',  animation: 'isLeft'}},
+  ];
 
 @NgModule({
   imports:[

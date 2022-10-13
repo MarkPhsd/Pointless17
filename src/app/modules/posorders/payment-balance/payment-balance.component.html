@@ -13,7 +13,7 @@
         <button
               mat-raised-button
               (click)="editCart()">
-          <mat-icon  color="primary"> edit</mat-icon>
+          <mat-icon  color="primary">edit</mat-icon>
           <mat-icon color="primary">shopping_cart</mat-icon>
             Edit
         </button>
@@ -69,15 +69,19 @@
           </div>
 
           <div *ngIf="!isUser && (item?.paymentMethod?.isCreditCard) ||
-                      (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
+                      (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)
+
+                      ">
             <button [disabled]="item.voidReason" color="warn"
                     mat-button (click)="editPayment(item)">
               <mat-icon>edit</mat-icon></button>
           </div>
 
-          <div *ngIf="!isUser && item?.applicationLabel != 'stripe'  && 
-                      (item?.paymentMethod?.isCreditCard) ||
-                      (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
+
+          <div *ngIf="!isUser && item?.applicationLabel != 'stripe'  &&
+                      (item?.paymentMethod?.isCreditCard &&  (uiTransactions && uiTransactions.cardPointPreAuth)) ||
+                      (item.account && !item.completionDate &&
+                      (uiTransactions && uiTransactions.cardPointPreAuth))">
             <button mat-raised-button color='primary' (click)="capture(item)">Capture</button>
           </div>
 
@@ -110,13 +114,12 @@
             </button>
           </div>
 
-          <div *ngIf="isAuthorized && !item.completionDate">
+          <div *ngIf="isAuthorized && item.amountPaid > 0">
             <button mat-button
-                    [disabled]="item.voidReason"
+                    [disabled]="item.voidReason && item.voidReason != 0"
                     class="grid-item-button"
                     color="warn"
-                    (click)="voidPayment(item)"
-                    >
+                    (click)="voidPayment(item)"  >
               <mat-icon>delete</mat-icon>Void
             </button>
           </div>

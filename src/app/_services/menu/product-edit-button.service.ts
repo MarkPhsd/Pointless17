@@ -441,7 +441,7 @@ export class ProductEditButtonService {
       if (order) {
 
         let itemWithAction      = {}  as ItemWithAction;
-        itemWithAction.action   = 1;
+        itemWithAction.action   = 3;
         itemWithAction.id       = order.id
         itemWithAction.typeOfAction = 'VoidOrder'
 
@@ -509,7 +509,7 @@ export class ProductEditButtonService {
       if (posOrderItem) {
 
         let itemWithAction      = {}  as ItemWithAction;
-        itemWithAction.action   = 3;
+        itemWithAction.action   = 1;
         itemWithAction.posItem  = posOrderItem;
         itemWithAction.id       = posOrderItem.id
         itemWithAction.typeOfAction = 'VoidItem'

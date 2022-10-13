@@ -225,11 +225,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
                 })
                 return;
             }
-            response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)//.pipe().toPromise();
+            response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
             this.updateVoidPaymentResponse(response$)
 
           } else {
-            response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)//.pipe().toPromise();
+            response$ = this.pOSPaymentService.voidPayment(site, this.resultAction)
             this.updateVoidPaymentResponse(response$)
           }
         }
@@ -289,6 +289,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
 
   updateVoidPaymentResponse(response$: Observable<OperationWithAction>) {
     const site = this.siteService.getAssignedSite();
+
     response$.pipe(
       switchMap(response => {
         if (response && response.result) {
@@ -310,7 +311,6 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     )).subscribe(data => {
       if (data == null) { return }
       this.storeCreditMethodService.updateSearchModel(null)
-
     })
 
   }

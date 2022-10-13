@@ -1,18 +1,24 @@
+<div *ngIf="receiptList as list"  >
+  <div [formGroup]="inputForm" *ngIf="inputForm">
 
-  <mat-form-field appearance="outline">
-    <mat-label><ng-content></ng-content></mat-label>
+    <!-- <div *ngFor="let item of list"
+        >
+      {{ item.name }} - {{ item.id}}
+    </div> -->
+
+    <mat-form-field appearance="outline">
+      <mat-label><ng-content></ng-content></mat-label>
       <mat-select
-                type                  ="text"
-                [(ngModel)]           ="receiptID"
-                formControlName   ="receiptName"
-                (selectionChange)     ="setReceipt()">
-          <div *ngIf="(receiptList | async) as list">
-          <mat-option *ngFor="let item of list"
+                  formControlName       ='receiptID'
+                  >
+        <mat-option *ngFor="let item of list"
                       [value]="item.id">
             {{ item.name }}
         </mat-option>
-      </div>
-    </mat-select>
-  </mat-form-field>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>
+
 
 

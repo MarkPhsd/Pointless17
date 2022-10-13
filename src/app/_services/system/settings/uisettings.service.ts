@@ -10,6 +10,8 @@ import { UserAuthorizationService } from '../user-authorization.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
+import { ElectronService } from 'ngx-electron';
+import { PlatformService } from '../platform.service';
 
 export interface TransactionUISettings {
   id                     : number;
@@ -165,7 +167,6 @@ export class UISettingsService {
   private _totalOrderHeight          = new BehaviorSubject<number>(null);
   public  totalOrderHeight$          = this._totalOrderHeight.asObservable();
 
-
   private  _remainingHeight          = new BehaviorSubject<number>(null);
   public  remainingHeight$          = this._remainingHeight.asObservable();
   private windowHeight: number;
@@ -192,7 +193,6 @@ export class UISettingsService {
   public  orderItemsHeight$         = this._orderItemsHeight.asObservable();
  ////section end.
 
-
   private _emailModel  = new BehaviorSubject<EmailModel>(null);
   public  EmailModel$  = this._emailModel.asObservable();
   emailModel: EmailModel
@@ -216,7 +216,6 @@ export class UISettingsService {
 
   private _StripeAPISettings         = new BehaviorSubject<StripeAPISettings>(null);
   public  stripeAPISettings$        = this._StripeAPISettings.asObservable();
-
 
   updateorderHeaderHeight(item: number, windowHeight: number) {
     this.windowHeight = windowHeight;
@@ -246,7 +245,6 @@ export class UISettingsService {
     this.calcOrderHeight();
   }
 
-
   calcOrderHeight() {
     if (!this.customerOrderHeight) {
       this.customerOrderHeight = 0
@@ -271,7 +269,6 @@ export class UISettingsService {
       const remainder = this.windowHeight - +totalHeight - 100
       this._remainingHeight.next(remainder)
     }
-
   }
 
   updateEmailModel(item: EmailModel) {
@@ -310,8 +307,9 @@ export class UISettingsService {
       private matSnack       : MatSnackBar,
       private userAuthorizationService     : UserAuthorizationService,
       private dialog                : MatDialog,
+      private platFormService   : PlatformService,
+      private electronService: ElectronService,
       private settingsService: SettingsService) {
-
     this.initSecureSettings()
     this.getUIHomePageSettings();
   }
@@ -323,8 +321,6 @@ export class UISettingsService {
       this.getDSSIEmvSettings();
     }
   }
-
-
 
   getTransactionUISettings() {
       if (!this.userAuthorizationService.user) {  this._transactionUISettings.next(null)  }
@@ -395,7 +391,6 @@ export class UISettingsService {
       return this.settingsService.getSettingByName(site, name)
     }
     return this.settingsService.getSettingByNameNoRoles(site, name);
-
   }
 
   getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
@@ -406,11 +401,9 @@ export class UISettingsService {
   }
 
   saveConfig(fb: FormGroup, name: string): Observable<ISetting>  {
-    const setting = fb.value
+    const setting = fb.value;
 
     if (!setting || (!setting?.id || setting?.id === '')) {
-      console.log('setting doesnt exist', fb.value)
-
       this.getSetting(name).pipe(
         switchMap(data => {
           console.log('setting', data)
@@ -421,12 +414,8 @@ export class UISettingsService {
         // console.log('returning Pipe', data)
         return this.setSetting(setting, name)
       }))
-
     }
-
-    console.log('save Config', fb.value)
     return this.setSetting(setting, name)
-
   }
 
   setSetting(uiSetting: any, name: string): Observable<ISetting> {
@@ -668,12 +657,10 @@ export class UISettingsService {
 
     ui.id = setting.id
     return this.setSetting(ui, name)
-
   }
 
   updateUIJSONSetting(name: string, settingText: string) {
     const config = JSON.parse(settingText) // as TransactionUISettings
-
     if (name == 'UITransactionSetting') {
       this.updateUISubscription(config)
     }
@@ -685,6 +672,17 @@ export class UISettingsService {
     }
     if (name == 'StripeAPISettings') {
       this.updateStripeAPISettings(config)
+    }
+  }
+
+  async electronZoom(value) {
+    // console.log('Zoom Occured')
+    if (this.platFormService.isAppElectron) {
+      const electron = this.electronService.remote.require('./index.js');
+      if (!electron) {
+        // console.log('electron is undefined')
+      }
+      await electron.electronZoomControl(value)
     }
   }
 

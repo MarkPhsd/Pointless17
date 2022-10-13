@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-// import { dsiemvandroid } from 'dsiemvandroidplugin';
+import { dsiemvandroid } from 'dsiemvandroidplugin';
 import { Observable, of , switchMap} from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -18,6 +18,7 @@ export class DSIAndroidSettingsComponent implements OnInit {
   @Output() getDSISettings = new EventEmitter();
   // @Input() setDSISettings: Transaction;
 
+  // transaction: Transaction;
   transaction$: Observable<Transaction>;
   deviceName : string;
   inputForm: FormGroup;
@@ -43,9 +44,9 @@ export class DSIAndroidSettingsComponent implements OnInit {
 
 
     const options = { value: ' value.'}
-    // const ipValue = await dsiemvandroid.getIPAddressPlugin(options)
-    // const ipAddress = ipValue?.value;
-    // this.initForm(ipAddress);
+    const ipValue = await dsiemvandroid.getIPAddressPlugin(options)
+    const ipAddress = ipValue?.value;
+    this.initForm(ipAddress);
   }
 
 
@@ -78,14 +79,12 @@ export class DSIAndroidSettingsComponent implements OnInit {
   getSettings() {
     const result$ =  this.dsiAndroidService.getSettings();
 
-    result$.pipe(
+    return result$.pipe(
       switchMap(data => {
         this.inputForm.patchValue(data)
         return of(data)
       })
     )
-    return result$
-
   }
 
   // subscribeChanges() {

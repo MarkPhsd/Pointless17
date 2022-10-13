@@ -82,7 +82,7 @@ export class DSIProcessService {
   }
 
   async emvBatchInquire() : Promise<BatchSummary> {
-    const item  = localStorage.getItem('DSIEMVSettings');
+    const item                = localStorage.getItem('DSIEMVSettings');
     const reset               = await this.pinPadReset(); //ignore response for now.
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()

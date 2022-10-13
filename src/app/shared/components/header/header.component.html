@@ -1,4 +1,4 @@
-<mat-toolbar [class]="mattoolbar" 
+<mat-toolbar [class]="mattoolbar"
              [color]="matToolbarColor">
   <mat-toolbar-row>
 
@@ -131,14 +131,14 @@
 
             <li>
               <div class='search-input'>
-                <button color="warn"
+                <!-- <button color="warn"
                         mat-button
                         aria-label="exit_to_app"
                         class="nav-item nav-link"
                         (click)="logout()">
                     <mat-icon>exit_to_app</mat-icon>
                     <span *ngIf="!user">Log Out</span>
-                </button>
+                </button> -->
               </div>
             </li>
           </ul>
@@ -150,9 +150,9 @@
           <app-company-info-header [isUser]="!isUserStaff"></app-company-info-header>
         </div>
       </div>
-      
+
       <div [class]="gridlayout">
-   
+
         <div *ngIf="!smallDevice && isAdmin">
           <wizard-progress-button></wizard-progress-button>
         </div>
@@ -176,7 +176,7 @@
             <mat-icon>exit_to_app</mat-icon>
           </button>
         </div>
-  
+
         <div *ngIf="user">
             <button aria-label="user menu"
                     mat-button
@@ -202,6 +202,7 @@
                     Log Out
                     <mat-icon>exit_to_app</mat-icon>
                 </button>
+
                 <mat-divider class="mat-divider"></mat-divider>
               </div>
 
@@ -280,13 +281,16 @@
 
 <ng-template #floorPlanTemplate>
   <li>
-    <div *ngIf="floorPlans$ | async"  class='search-input'>
-      <button mat-button
-              color="accent"
-              (click)="navTableService()"
-              aria-label="dining">
-        <mat-icon>restaurant</mat-icon>
-      </button>
-    </div>
+    <span *ngIf="floorPlans$ | async as floorPlan"  class='search-input'>
+      <!-- floorPlan {{floorPlan.length}} -->
+      <div *ngIf="floorPlan.length>0">
+        <button mat-button
+                color="accent"
+                (click)="navTableService()"
+                aria-label="dining">
+          <mat-icon>restaurant</mat-icon>
+        </button>
+      </div>
+    </span>
   </li>
 </ng-template>

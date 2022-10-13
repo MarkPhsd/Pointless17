@@ -91,8 +91,8 @@ export function getIsDebugDevice(): boolean {
   return false
 }
 
-export function init_app(appLoadService: AppInitService) {
-  return () => appLoadService.init();
+export  function init_app(appLoadService: AppInitService) {
+  return () =>  appLoadService.init();
 }
 
 @NgModule({

@@ -66,7 +66,7 @@ export class AuthenticationService {
         private platFormservice  : PlatformService,
         private toolbarUIService : ToolBarUIService,
         private siteSerivce      : SitesService,
-        private dialog           : MatDialog, 
+        private dialog           : MatDialog,
     ) {
 
       this.apiUrl = this.appInitService.apiBaseUrl()
@@ -146,19 +146,24 @@ export class AuthenticationService {
       this.clearSubscriptions()
     }
 
-    openLoginDialog() { 
-      let width    = '425px'
-      // if (this.smallDevice) { 
+    openLoginDialog() {
+      let width    = '455px'
+      // if (this.smallDevice) {
 
       // }
+      console.log('dialog open')
+
       let dialogRef: any;
       dialogRef = this.dialog.open(LoginComponent,
         { width    : width,
           minWidth : width,
           height   : '650px',
           minHeight: '650px',
+          data:    'openLogin'
         },
       )
+
+      return dialogRef;
 
     }
 
@@ -189,8 +194,8 @@ export class AuthenticationService {
     };
 
     requestPasswordResetToken(userName: string): Observable<any>  {
-  
-      const api = this.siteSerivce.getAssignedSite().url 
+
+      const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/RequestPasswordResetToken`
 
       return this.http.post<any>(url, {userName: userName})
@@ -198,31 +203,31 @@ export class AuthenticationService {
 
     assignUserNameAndPassword(user: IUser): Observable<IUserExists>  {
 
-      const api = this.siteSerivce.getAssignedSite().url 
+      const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/CreateNewUserName`
 
       return  this.http.post<any>(url, user)
     };
 
-    createTempUser() : Observable<any> { 
-      //check local storage. 
+    createTempUser() : Observable<any> {
+      //check local storage.
       //if local user exists then return that as observable
 
       const user = localStorage.getItem('user');
-      if (user) { 
+      if (user) {
         return of(user);
       }
 
-      const api = this.siteSerivce.getAssignedSite().url 
+      const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/CreateTempUser`
       return  this.http.get<any>(url);
 
     }
 
     updatePassword(user: IUser): Observable<any> {
-      const api = this.siteSerivce.getAssignedSite().url 
+      const api = this.siteSerivce.getAssignedSite().url
       const url = `${api}/users/updatePassword`
-      return  this.http.post<any>(url, user) 
+      return  this.http.post<any>(url, user)
     }
 
 }

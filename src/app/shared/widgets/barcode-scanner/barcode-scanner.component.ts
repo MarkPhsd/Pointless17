@@ -68,6 +68,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
     if (this.checkPermission()) {
       this.startScan();
     }
+    window.document.body.style.background = "transparent"
+    // this.video.style.background = 'transparent'
   }
 
   ngOnDestroy(): void {
@@ -99,9 +101,17 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   async cameraOff() {
     this.initDisplayResults();
     this.cameraActive = false
-    await CameraPreview.stop();
-    await BarcodeScanner.stopScan();
+    try {
+      await CameraPreview.stop();
+    } catch (error) {
+    }
+    try {
+      await BarcodeScanner.stopScan();
+    } catch (error) {
+    }
     this.stopScan();
+    ///then exit
+    this.goHome();
   }
 
   async checkPermission() {
@@ -116,8 +126,8 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
 
   async startScan() {
 
-    BarcodeScanner.prepare();
-    BarcodeScanner.hideBackground();
+    await BarcodeScanner.prepare();
+    await BarcodeScanner.hideBackground();
     this.scanStatus = 'Scanning Started';
 
     const result = await BarcodeScanner.startScan();
@@ -164,8 +174,13 @@ export class BarcodeScannerComponent implements OnInit, OnDestroy {
   async stopScan() {
     this.initDisplayResults();
     this.scanActive = false;
-    BarcodeScanner.showBackground();
-    BarcodeScanner.stopScan();
+    await BarcodeScanner.showBackground();
+
+    try {
+      await BarcodeScanner.stopScan();
+    } catch (error) {
+    }
+
   }
 
   flipCamera() {
