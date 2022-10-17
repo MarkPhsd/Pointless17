@@ -9,8 +9,6 @@
     <mat-card-subtitle *ngIf="methodsService.connect">
 
       <div class="transaction-buttons-grid" >
-        <!-- cardPointPreAuth  {{methodsService?.transactionUISettings?.cardPointPreAuth}}
-        account {{ methodsService.payment.account }} -->
 
         <div  *ngIf="!methodsService.payment?.account">
           <button [disabled]="!methodsService.amount"

@@ -158,12 +158,12 @@
               </mat-card-content>
             </mat-card>
           </div>
-
+          <!-- paymentMethods {{paymentMethods | json}} -->
           <div>
             <mat-card class="payment-dimensions">
               <app-mat-toggle-selector
                   class              = "card-height"
-                  [list$]            = "paymentMethods$"
+                  [list]             = "paymentMethods"
                   [hideAllOption]    = "'true'"
                   [toggleDimensions] = "'toggle-group-tall'"
                   [buttonDimensions] = "'button-dimensions-tall'"
@@ -314,8 +314,8 @@
           </mat-card>
         </div>
 
-        <div *ngIf="paymentMethod && !platFormService.isApp()">
-          <div *ngFor="let item of (paymentMethods$ | async)">
+        <div *ngIf="paymentMethods">
+          <div *ngFor="let item of paymentMethods">
             <div *ngIf="item.id  == paymentMethod.id &&  item.instructions">
               <h3>{{item.name}}</h3>
               <mat-hint>

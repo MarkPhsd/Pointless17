@@ -1,100 +1,115 @@
 
 <div class="features" *ngIf="role == 'admin'">
+  <div class="grid-buttons">
+  <div class="grid-buttons">
 
-  <div>
-    <button mat-raised-button
+    <div>
+      <button mat-raised-button
+              color  = "primary"
+              class ="grid-image-button-group "
+              (click)="productButtonsService.openAppWizard()">
+        <div class="grid-image-button">
+          <div class="mat-grid-icon">
+            <mat-icon> build_circle</mat-icon>
+          </div>
+          <div>
+            Open App Setup Guide
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button
+              color  = "primary"
+              class ="grid-image-button-group "
+              (click)= "togglePaymentMethodsList()">
+        <div class="grid-image-button">
+          <div class="mat-grid-icon">  <mat-icon>payment</mat-icon> </div>
+          <div>
+            Payment Methods
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button
+              color  = "primary"
+              class ="grid-image-button-group"
+              (click)= "openAdjustmentReasonsDialog()">
+        <div class="grid-image-button">
+          <div class="mat-grid-icon">  <mat-icon>adjust</mat-icon> </div>
+          <div>
+            Adjustment Reasons
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button
+              color  = "primary"
+              class ="grid-image-button-group"
+              (click)="serviceTypeList()">
+        <div class="grid-image-button">
+          <div class="mat-grid-icon">  <mat-icon>add_shopping_cart</mat-icon> </div>
+          <div>
+            Transaction Types
+          </div>
+        </div>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button
+              color  = "primary"
+              class ="grid-image-button-group "
+              (click)="companyEdit()">
+        <div class="grid-image-button">
+          <div class="mat-grid-icon">  <mat-icon>store</mat-icon> </div>
+          <div>
+            Edit Company
+          </div>
+        </div>
+      </button>
+    </div>
+
+
+  </div>
+
+    <div>
+      <div>
+        <button mat-raised-button
             color  = "primary"
             class ="grid-image-button-group "
-            (click)="productButtonsService.openAppWizard()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">
-          <mat-icon> build_circle</mat-icon>
-        </div>
-        <div>
-          Open App Setup Guide
-        </div>
+            (click)="showInitializer = !showInitializer">
+            <mat-icon>settings</mat-icon>
+            Initializer
+        </button>
       </div>
-    </button>
-  </div>
 
-  <div>
-    <button mat-raised-button
-            color  = "primary"
-            class ="grid-image-button-group "
-            (click)= "togglePaymentMethodsList()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">  <mat-icon>payment</mat-icon> </div>
-        <div>
-          Payment Methods
-        </div>
+      <div  *ngIf="showInitializer">
+        <p>This feature is intended for initial setup. It should not be used if you are operating already.</p>
       </div>
-    </button>
-  </div>
-
-  <div>
-    <button mat-raised-button
-            color  = "primary"
-            class ="grid-image-button-group"
-            (click)= "openAdjustmentReasonsDialog()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">  <mat-icon>adjust</mat-icon> </div>
-        <div>
-          Adjustment Reasons
-        </div>
+      <div *ngIf="showInitializer">
+          <button mat-raised-button
+                color  = "warn"
+                class ="grid-image-button-group "
+                (click)="initalizeTypes()">
+          <div class="grid-image-button">
+            <div class="mat-grid-icon">  <mat-icon>warning</mat-icon> </div>
+            <div>
+              Initialize
+            </div>
+          </div>
+          <div  *ngIf="loading_initTypes">
+            <mat-spinner [diameter]="50"></mat-spinner>
+          </div>
+        </button>
       </div>
-    </button>
+    </div>
   </div>
-
-  <div>
-    <button mat-raised-button
-            color  = "primary"
-            class ="grid-image-button-group"
-            (click)="serviceTypeList()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">  <mat-icon>add_shopping_cart</mat-icon> </div>
-        <div>
-          Transaction Types
-        </div>
-      </div>
-    </button>
-  </div>
-
-
-  <div>
-    <button mat-raised-button
-            color  = "primary"
-            class ="grid-image-button-group "
-            (click)="companyEdit()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">  <mat-icon>store</mat-icon> </div>
-        <div>
-          Edit Company
-        </div>
-      </div>
-    </button>
-  </div>
-
-
   <br>
   <mat-divider></mat-divider>
-
-  <p>This feature is intended for initial setup. It should not be used if you are operating already.</p>
-
-  <div class="grid-loader">
-    <button mat-raised-button
-            color  = "primary"
-            class ="grid-image-button-group "
-            (click)="initalizeTypes()">
-      <div class="grid-image-button">
-        <div class="mat-grid-icon">  <mat-icon>warning</mat-icon> </div>
-        <div>
-          Initialize
-        </div>
-      </div>
-      <div  *ngIf="loading_initTypes">
-        <mat-spinner [diameter]="50"></mat-spinner>
-      </div>
-    </button>
-  </div>
-
 </div>

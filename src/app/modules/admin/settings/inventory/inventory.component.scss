@@ -10,8 +10,13 @@
   gap: 10px
 }
 
-button { 
+button {
   margin: 3px;
 }
 
 
+.grid-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px
+}

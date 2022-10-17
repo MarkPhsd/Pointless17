@@ -143,6 +143,9 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
   }
 
   voidPaymentFromSelection(setting) {
+
+
+
     if (setting) {
       const site = this.siteService.getAssignedSite();
       this.resultAction.voidReason = setting.name
@@ -157,9 +160,11 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
             this.voidPayment.voidReason = this.resultAction.voidReason
 
             if (this.isDSIEmvPayment && this.voidPayment) {
+
               this.voidDSIEmvPayment();
               return ;
             }
+
 
             if (this.voidPayment.respstat) {
               const voidByRef$ = this.cardPointMethdsService.voidByRetRef(this.voidPayment.retref);
@@ -254,10 +259,12 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID != 0) {
       const valueToReduce = response.payment.amountPaid
       this.closeDialog(response.payment, response.paymentMethod);
-      this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce).subscribe(data => {
-        if (data == null) { return }
-        this.storeCreditMethodService.updateSearchModel(null)
-      })
+      if (response.purchaseOrderPayment && response.purchaseOrderPayment.giftCardID) {
+        this.storeCreditService.updateCreditValue(site ,response.purchaseOrderPayment.giftCardID, valueToReduce).subscribe(data => {
+          if (data == null) { return }
+          this.storeCreditMethodService.updateSearchModel(null)
+        })
+      }
       return;
     }
 
@@ -280,7 +287,7 @@ export class AdjustPaymentComponent implements OnInit, OnDestroy {
     if (this.voidPayment) {
       const voidPayment = this.voidPayment;
       // if (voidPayment.entryMethod === 'CHIP READ/CONTACT') {
-        if (voidPayment.trancode ===  "EMVSale") {
+        if (voidPayment.trancode.toLowerCase() ===  'EMVSale'.toLowerCase()) {
           return true
         }
       // }

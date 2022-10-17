@@ -27,8 +27,9 @@ export class DefaultReceiptSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.inputForm = this.fb.group({
-      receiptID: [this.receiptID]
+      receiptID: []
     })
+    this.inputForm.patchValue(this.receipt)
     this.formSubscriber();
   }
 

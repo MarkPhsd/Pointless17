@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';
+import { CdkNestedTreeNode } from '@angular/cdk/tree';
 
 export interface TransactionUISettings {
   id                     : number;
@@ -149,6 +150,8 @@ export interface UIHomePageSettings {
   salesReportsEmail  : string;
   twilioEnabled      : string;
   smtpEmailEnabled   : string;
+
+  threecxChatLink    : string;
 }
 
 @Injectable({
@@ -323,7 +326,14 @@ export class UISettingsService {
   }
 
   getTransactionUISettings() {
-      if (!this.userAuthorizationService.user) {  this._transactionUISettings.next(null)  }
+ 
+    if (!this.userAuthorizationService.user) {
+      return;
+    }
+    if (this.userAuthorizationService.user.username === 'Temp') { 
+      return;
+    }
+
     this.settingsService.getUITransactionSetting().subscribe(data => {
       this._transactionUISettings.next(data)
     })
@@ -366,7 +376,10 @@ export class UISettingsService {
   }
 
   getDSSIEmvSettings() {
-    if (!this.userAuthorizationService.user) {  this._DSIEMVSettings.next(null)  }
+    if (!this.userAuthorizationService.user) {  
+      this._DSIEMVSettings.next(null)  
+      return;
+    }
      if (!this.userAuthorizationService.user) { return }
      this.settingsService.getDSIEMVSettings().subscribe(data => {
       this._DSIEMVSettings.next(data)
@@ -374,7 +387,13 @@ export class UISettingsService {
   }
   ////////////// subscribeToStripedCachedConfig
   subscribeToStripedCachedConfig()  {
-    if (!this.userAuthorizationService.user) { return  }
+    if (!this.userAuthorizationService.user) {
+      return;
+    }
+    if (this.userAuthorizationService.user.username === 'Temp') { 
+      return;
+    }
+
    this.settingsService.getStripeAPISetting().subscribe(data => {
       this.updateStripeAPISettings(data);
    });
@@ -394,6 +413,10 @@ export class UISettingsService {
   }
 
   getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
+    if (!this.userAuthorizationService.user) {
+      this._DSIEMVSettings.next(null)  
+      return;
+    }
     this.settingsService.getDSIEMVSettings().subscribe(data => {
       this.updateDSIEMVSettings(data);
    });
@@ -479,6 +502,7 @@ export class UISettingsService {
       salesReportsEmail: [''],
       twilioEnabled: [''],
       smtpEmailEnabled: [''],
+      threecxChatLink: [''],
      })
     return fb
   }

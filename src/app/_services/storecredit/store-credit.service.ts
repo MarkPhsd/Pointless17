@@ -75,6 +75,8 @@ export class StoreCreditService {
 
   postStoreCredit(site: ISite, storeCredit: StoreCredit): Observable<StoreCredit> {
 
+    if (!storeCredit) {return null;}
+
     const controller =  "/StoreCredits/"
 
     const endPoint = "PostStoreCredit"
@@ -88,6 +90,8 @@ export class StoreCreditService {
   };
 
   updateCreditValue(site: ISite, id: number, valueToReduce: number) {
+
+    if (!id) {return null;}
 
     const controller =  "/StoreCredits/"
 
@@ -114,8 +118,6 @@ export class StoreCreditService {
     return null;
 
   }
-
-
 
   // PostStoreCredits
   // PutStoreCredits

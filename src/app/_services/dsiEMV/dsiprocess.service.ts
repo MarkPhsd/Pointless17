@@ -116,7 +116,8 @@ export class DSIProcessService {
       }
 
       transaction.TranType = 'Credit';
-      transaction.TranCode = 'VoidSaleByRecordNo';
+      // transaction.TranCode = 'VoidSaleByRecordNo';
+      transaction.TranCode = 'EMVVoidSale';
 
       if (transaction.SecureDevice.toLowerCase() === 'test') {
         transaction.TranType = 'Credit';

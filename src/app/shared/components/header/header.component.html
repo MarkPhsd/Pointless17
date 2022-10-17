@@ -265,7 +265,9 @@
               <span  *ngIf="posDevice$ | async as device">
                 <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
                   <div class='search-input'>
-                    <button  mat-raised-button (click)="deviceInfo()">  <mat-icon>device_hub</mat-icon></button>
+                    <button  mat-raised-button (click)="deviceInfo()">  
+                      <mat-icon>device_hub</mat-icon>
+                    </button>
                 </div>
               </span>
 

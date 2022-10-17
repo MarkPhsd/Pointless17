@@ -29,7 +29,7 @@
         <div  (resized)="onResizedorderCustomerPanel($event)"
               class="grid-header-item"
               *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) && !isUser">
-      
+
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
             [order]               ="order"

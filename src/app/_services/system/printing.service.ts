@@ -203,8 +203,10 @@ getDomToImage(node: any) {
   listPrinters(): any {
     try {
       let printWindow = new this.electronService.remote.BrowserWindow({ show:false })
-      printWindow.loadURL('http://github.com')
-      return printWindow.webContents.getPrinters();
+      printWindow.loadURL('http://localhost')
+      const printers = printWindow.webContents.getPrinters()
+      printWindow.close();
+      return printers;
     } catch (error) {
       return ['Error Getting Printers']
     }
@@ -539,23 +541,16 @@ getDomToImage(node: any) {
           if (!data) {
             const item = {} as ISetting;
             item.name = name;
-            // return of(item)
+            console.log('save setting from get electorn receipt printer')
             const result$ =  this.settingService.saveSetting(site, item)
             return result$
           }
           return of(data)
-            // },
-            // error: err => {
-            //   const item = {} as ISetting;
-            //   item.name = name;
-            //   return of(item)
-            // }
         }
       ),
       catchError((e) => {
           const item = {} as ISetting;
           item.name = name;
-          // return of(item)
           const result$ =  this.settingService.saveSetting(site, item)
           return result$
         }

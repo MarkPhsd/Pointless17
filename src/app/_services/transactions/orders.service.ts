@@ -17,6 +17,7 @@ import { ItemWithAction } from './posorder-item-service.service';
 import { AuthenticationService } from '../system/authentication.service';
 import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
 import { IPaymentMethod } from './payment-methods.service';
+import { UserAuthorizationService } from '../system/user-authorization.service';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -169,6 +170,7 @@ export class OrdersService {
         private toolbarServiceUI: ToolBarUIService,
         private router: Router,
         private siteService: SitesService,
+        private userAuthorizationService: UserAuthorizationService,
         private authorizationService: AuthenticationService,
     )
   {
@@ -360,6 +362,10 @@ export class OrdersService {
   }
 
   claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
+
+    if (this.userAuthorizationService.user.username === 'Temp') { 
+      return;
+    }
     if (history === undefined) {history = false};
     if (history) { return }
 
@@ -567,6 +573,20 @@ export class OrdersService {
     const endPoint  = 'GetCurrentPOSOrder'
 
     const parameters = `?posName=${posName}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url)
+
+  }
+
+  getQRCodeOrder(site: ISite, tableUUID: string): Observable<IPOSOrder> {
+
+    const controller = '/POSOrders/'
+
+    const endPoint  = 'getQRCodeOrder'
+
+    const parameters = `?tableUUID=${tableUUID}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 

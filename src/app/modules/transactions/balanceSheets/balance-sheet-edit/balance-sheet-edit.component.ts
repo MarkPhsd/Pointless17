@@ -93,7 +93,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.loading = true
     this._sheet = this.sheetMethodsService.balanceSheet$.subscribe( data => {
       this.sheet = data;
-        this.loading = false;
+      this.loading = false;
       if (this.inputForm) {
         this.inputForm.patchValue(this.sheet)
       }

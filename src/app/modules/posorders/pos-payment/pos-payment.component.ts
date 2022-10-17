@@ -80,6 +80,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   isAuthorized  : boolean;
   isUser        : boolean;
   isStaff       : boolean;
+  paymentMethods  : IPaymentMethod[];
 
   groupPaymentAmount  = 0;
   groupPaymentGroupID = 0;
@@ -107,7 +108,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     )).subscribe(data => {
       this.serviceType = data
-      if (data.scheduleInstructions || this.order.preferredScheduleDate || data.shippingInstructions ) { 
+      if (data.scheduleInstructions || this.order.preferredScheduleDate || data.shippingInstructions ) {
         this.serviceIsScheduled = true
       }
     })
@@ -117,7 +118,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     })
   }
 
-  
+
 
   constructor(private paymentService  : POSPaymentService,
               private orderMethodsService: OrderMethodsService,
@@ -142,7 +143,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.initAuthorization()
-    
+
     const site = this.sitesService.getAssignedSite();
     this.paymentService.updatePaymentSubscription(this.posPayment)
     this.toolbarUI.updateOrderBar(false)
@@ -165,6 +166,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.updateItemsPerPage();
     this.initStripe();
     this.initTransactionUISettings();
+
+    const paymentMethods$ = this.getPaymentMethods(site);
+
+    paymentMethods$.subscribe(data => {
+      this.paymentMethods = data;
+    })
+
   }
 
   initAuthorization() {
@@ -209,17 +217,22 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
+
     if (this.platFormService.isApp()) {
-      this.paymentMethods$ = paymentMethods$
-      return
+      return paymentMethods$.pipe(
+        switchMap(data => {
+        const list = data.filter( item => !item.isCreditCard)
+        return  of(list)
+      }))
     }
-    paymentMethods$.subscribe(data => {
-      if (!this.platFormService.isApp()) {
-        const list = data.filter( item => item.enabledOnline == true)
-        this.paymentMethods$ = of(list)
-        return
-      }
-    })
+
+    return paymentMethods$.pipe(
+      switchMap(data => {
+      const list = data.filter( item => item.enabledOnline)
+      const list2 = list.filter( item => !item.isCreditCard)
+      return  of(list2)
+    }))
+
   }
 
   @HostListener("window:resize", [])
@@ -485,19 +498,19 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     let result = 0
 
     console.log('processResults paymentResponse', paymentResponse)
-    
+
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
         result =  this.orderMethodsService.finalizeOrder(paymentResponse, this.paymentMethod, paymentResponse.order)
       } else {
       }
     }
-    
+
     this.resetPaymentMethod();
 
     if (paymentResponse.paymentSuccess || paymentResponse.responseMessage.toLowerCase() === 'success') {
       this.orderService.updateOrderSubscription(paymentResponse.order)
-      
+
       this.notify(`Payment succeeded: ${paymentResponse.responseMessage}`, 'Success', 1000)
     } else {
       this.notify(`Payment failed because: ${paymentResponse.responseMessage}`, 'Something unexpected happened.',3000)

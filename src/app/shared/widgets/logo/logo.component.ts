@@ -4,18 +4,17 @@ import { AWSBucketService } from 'src/app/_services';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
-  selector: 'app-logo',
+  selector   : 'app-logo',
   templateUrl: './logo.component.html',
   styleUrls: ['./logo.component.scss']
 })
 export class LogoComponent implements OnInit, OnDestroy {
-  _uISettings      : Subscription;
+  _uISettings               : Subscription;
   @Input() uiHomePageSetting: UIHomePageSettings;
   @Input() logo   = '';
   @Input() bucket = '';
-  company  = '';
-
   @Input() logoSize = 'small'
+  company  = '';
 
   initSubscriptions() {
       this._uISettings = this.uiSettingService.homePageSetting$.subscribe( data => {

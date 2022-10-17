@@ -244,6 +244,7 @@ export class FloorPlanComponent implements OnInit {
           if (this.userMode) {
             this.orderInfo = item;
             this.tableInfo = event;
+            
             // console.log(item)
             this.setActiveOrder(this.orderInfo.orderID, item.uuid, this.floorPlan.id, item.name )
           }
@@ -262,35 +263,29 @@ export class FloorPlanComponent implements OnInit {
           this.refresh = true;
           return this.orderService.newOrderFromTable(site, null, uuID, floorPlanID, name);
         }
-      
         if (data) {return of(data)}
       }
     )).pipe(
       switchMap(data => {
-
       this.orderService.setActiveOrder(site, data)
-
       if (this.orderInfo) {
         const item = {orderID: data.id, status: 'active'};
       }
-
       if (data && this.floorPlan && this.refresh) { 
-        return this.orderService.getActiveTableOrders(site, this.floorPlan.id)
+        return this.orderService.getActiveTableOrders(site, this.floorPlan.id);
       }
-
       const orders = [] as IPOSOrder[]
       return of(orders)
-
     })).subscribe( orders => { 
 
       if (this.refresh) { 
         if (orders && orders.length>0) {
           try {
-            this.floorPlan.template  = JSON.parse(this.floorPlan.template)
-            this.floorPlan.template  = JSON.parse(this.floorPlan.template)
+            this.floorPlan.template  = JSON.parse(this.floorPlan.template);
+            this.floorPlan.template  = JSON.parse(this.floorPlan.template);
           } catch (error) {
           }
-          this.processActiveItems(orders)
+          this.processActiveItems(orders);
         }
       }
 

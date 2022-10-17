@@ -116,6 +116,7 @@ import { QROrderComponent } from './modules/posorders/qrorder/qrorder.component'
 import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.component';
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
+import { QRCodeTableComponent } from './modules/orders/qrcode-table/qrcode-table.component';
 
 const routes: Routes = [
 
@@ -128,6 +129,10 @@ const routes: Routes = [
           { path: 'grid-menu-layout', component: GridMenuLayoutComponent, data: {  title: 'Menu Board Layout', animation: 'isLeft'} },
         ]
     },
+
+    //'qr-order
+    { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
+
 
     {path: '', component: DefaultComponent,
       children: [
@@ -166,6 +171,7 @@ const routes: Routes = [
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
         { path: 'pos-payment',  component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
 
+   
         //PosOperationsComponent
         { path: 'operations', component: PosOperationsComponent, canActivate: [AuthGuard], data: {title: 'Operations', animation: 'isLeft'} },
 
@@ -313,7 +319,7 @@ const routes: Routes = [
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
-    { path: 'qr-order', component: QROrderComponent, data: { animation: 'isLeft'}},
+    // { path: 'qr-order', component: QROrderComponent, data: { animation: 'isLeft'}},
 
     { path: '**', component: PageNotFoundComponent},
 

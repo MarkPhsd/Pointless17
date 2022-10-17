@@ -9,6 +9,7 @@ import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/pa
 import { TransactionUISettings } from 'src/app/_services/system/settings/uisettings.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
+import { IPOSPayment } from 'src/app/_interfaces';
 
 @Component({
   selector: 'app-cardpointe-transactions',
@@ -52,13 +53,9 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
   saleSubscriber() {
     this._sale.subscribe(data => {
-      // console.log('process sale called', data)
       if (!data) {return }
       if (!this.methodsService.connect) { return }
       if (this.methodsService.connect && !this.methodsService.connect?.xSessionKey)  { return }
-
-      // const item = {request: this.methodsService.request, response: data};
-      // this._sale.next(item)
       const response = data.response;
       const request = data.request;
 
@@ -76,13 +73,11 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
 
   _processSale(auth) {
     const site = this.siteService.getAssignedSite()
-
     const void$ = this.getVoid()
     const processSale$ =  this.methodsService.processSale(auth, site.url);
 
     void$.pipe(
         switchMap(data => {
-          console.log('void' , data)
           return processSale$
         })
       )
@@ -167,6 +162,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
         this._connect.next(true);
       } else {
         //terminal info not initialized.
+        console.log('not initiaited', data)
         this.orderService.notificationEvent('Info not initialized. Please close and reopen window.', 'Alert')
       }
     });
@@ -204,6 +200,7 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
     const sendAuth$ = this.methodsService.sendAuthCard(null, true, manual);
     const tip$  = this.methodsService.getProcessTip(this.methodsService.boltTerminal.xSessionKey);
     this.methodsService.processing = true;
+    this.siteService.getAssignedSite();
 
     sendAuth$.subscribe(data => {
       if (!data || data.errorcode != 0) {
@@ -216,7 +213,18 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
       const item = {request: this.methodsService.request, response: data};
       this._sale.next(item)
     })
+
   }
+
+
+
+  //preserve failed payments
+  getPaymentFailed(): IPOSPayment {
+
+
+    return null
+  }
+
 
   processVoid(retRef) {
     this.methodsService.processing = true;

@@ -73,7 +73,6 @@ export class DSIEMVElectronComponent implements OnInit {
           this.inputForm.patchValue(data)
           const json = JSON.stringify(data);
           localStorage.setItem('DSIEMVSettings', json)
-
         }
       }
     )

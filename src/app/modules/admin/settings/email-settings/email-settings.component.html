@@ -6,83 +6,90 @@
     <mat-card-subtitle>
       <h4>Email Settings</h4>
       <mat-label>To use smtp emailing simply fill out the email address section below. Configure your SMTP email in the webconfig.</mat-label>
-      <mat-label>Tempaltes Emailing requires <a href='https://sendgrid.com'>SendGrid</a> account and key applied in the configuration.</mat-label>
+      <h4><mat-icon>attention</mat-icon>Sendgrid requirements.</h4>
+      <mat-label>Tempate based emailing requires <a href='https://sendgrid.com'>SendGrid</a> account and key applied in the configuration.</mat-label>
       <mat-label>The following fields are the template id's for send grid dynamic templates. They are retrieved from your send grid account</mat-label>
+      <mat-label>The outgoing email accouunt for customer service must be set up in
+                <a href='https://sendgrid.com'>SendGrid</a> and authorized to use the template API's</mat-label>
     </mat-card-subtitle>
 
     <mat-card-content>
+      <div><button mat-raised-button color="primary"
+                  (click)="showSendGridOptions = !showSendGridOptions">
+                  <mat-icon>settings</mat-icon>
+          Send Grid Options</button></div>
+      <div *ngIf="showSendGridOptions">
+        <h4>Send Grid Templates</h4>
+        <div class="grid-items" >
+          <div class="grid-view-sections">
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'sendGridOrderTemplate'">
+                  Order Template
+              </app-value-fields>
+            </div>
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'sendGridSalesReportTemplate'">
+                  Sales Report
+              </app-value-fields>
+            </div>
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'sendGridBalanceSheetTemplate'">
+                Balance Sheet
+              </app-value-fields>
+            </div>
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'sendGridPasswordResetTemplate'">
+                  Password Reset
+              </app-value-fields>
+            </div>
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'sendGridNotificationTemplate'">
+                  Notification
+              </app-value-fields>
+            </div>
+            <div class="grid-item">
+              <app-value-fields
+                  [fieldType]     ="'text'"
+                  [inputForm]     ="inputForm"
+                  [fieldName]     ="'sendGridOrderReadyNotificationTemplate'">
+                  Notification
+              </app-value-fields>
+            </div>
 
-      <div class="grid-items" >
-        <div class="grid-view-sections">
-          <div class="grid-item">
-            <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'sendGridOrderTemplate'">
-                Order Template
-            </app-value-fields>
-          </div>
-          <div class="grid-item">
-            <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'sendGridSalesReportTemplate'">
-                Sales Report
-            </app-value-fields>
-          </div>
-          <div class="grid-item">
-            <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'sendGridBalanceSheetTemplate'">
-              Balance Sheet
-            </app-value-fields>
-          </div>
-          <div class="grid-item">
-            <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'sendGridPasswordResetTemplate'">
-                Password Reset
-            </app-value-fields>
-          </div>
-          <div class="grid-item">
-            <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'sendGridNotificationTemplate'">
-                Notification
-            </app-value-fields>
-          </div>
-          <div class="grid-item">
-            <app-value-fields
-                [fieldType]     ="'text'"
-                [inputForm]     ="inputForm"
-                [fieldName]     ="'sendGridOrderReadyNotificationTemplate'">
-                Notification
-            </app-value-fields>
-          </div>
-
+        </div>
+        </div>
       </div>
-      </div>
-
     </mat-card-content>
 
     <mat-card-actions>
-      <div>
-        <button mat-raised-button
-                color="primary"
-                (click)="sendTestEmail()"><mat-icon>email</mat-icon>Send Test</button>
+      <div *ngIf="showSendGridOptions">
+          <button mat-raised-button
+                  color="primary"
+                  (click)="sendTestEmail()"><mat-icon>email</mat-icon>Send Grid Test</button>
       </div>
-
     </mat-card-actions>
 
   </mat-card>
 
    <mat-card>
     <mat-card-subtitle>
-      Email addresses for Administration, Customer Service, and Management
-      <mat-label>The outgoing email accouunt for customer service must be set up in <a href='https://sendgrid.com'>SendGrid</a> and authorized to use the template API's</mat-label>
+      Email addresses for Administration, Customer Service, and Management. Used by SMPT and Sendgrid.
+
     </mat-card-subtitle>
 
     <mat-card-content>
@@ -118,6 +125,15 @@
           </div>
         </div>
       </div>
+
+      <div>
+        <button mat-raised-button
+                color="primary"
+                (click)="sendSMTPTestEmail()"><mat-icon>email</mat-icon>SMTP Email Test</button>
+      </div>
+
+      <div *ngIf="testEmail$ | async as item">{{message}}</div>
+
     </mat-card-content>
   </mat-card>
 </div>

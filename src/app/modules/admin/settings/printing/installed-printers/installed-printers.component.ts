@@ -52,7 +52,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   @ViewChild('electronPrintingTemplate') electronPrintingTemplate: TemplateRef<any>;
   @ViewChild('electronPrintingDesignTemplate') electronPrintingDesignTemplate: TemplateRef<any>;
 
-
   @Input() printerName     : string;
   @Input() labelID         : number;
   @Input() item            : IInventoryAssignment;
@@ -78,7 +77,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   receiptImage64            : any;
   setting                   : ISetting[];
-
+  receiptSaved              : boolean;
   zplSetting                : ISetting;
   receiptLayoutSetting      : ISetting;
   receiptStyles             : ISetting;
@@ -102,6 +101,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   electronReceipt       : string;
   electronReceiptID     : number;
   electronPrinter$ : Observable<any>
+  electronPrinter  : ISetting;
   electronLabelPrinter: string;
   electronLabelPrinterSetting: ISetting;
   electrongLabelID     : number;
@@ -146,15 +146,31 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   async ngOnInit() {
-
     this.printOptions = {} as printOptions;
     this.platForm = this.platFormService.platForm;
     this.isElectronApp = this.icpService.isElectronApp;
-    this.electronLabelPrinter$ = this.getElectronLabelPrinter();
-    this.electronPrinter$  =  this.getElectronPrinterAssignent()
-    this.listPrinters();
     this.deviceName = this.orderService.posName
-    await this.getAndroidPrinterAssignment()
+
+    this.electronLabelPrinter$ = this.getElectronLabelPrinter();
+    this.getElectronPrinterAssignent().subscribe(data => {
+      this.electronPrinter = data;
+    })
+
+    this.listPrinters();
+
+    if (this.platFormService.androidApp) {
+      await this.getAndroidPrinterAssignment()
+    }
+
+  }
+
+  ngAfterViewInit() {
+    this.initDefaultLayouts()
+  }
+
+  listPrinters(): any {
+    // return;
+    this.electronPrinterList = this.printingService.listPrinters();
   }
 
   saveTerminalSetting()  {
@@ -173,13 +189,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   navPosDevices() {
     this.router.navigate(['posDevies'])
   }
-  async ngAfterViewInit() {
-    this.initDefaultLayouts()
-  }
 
-  listPrinters(): any {
-    this.electronPrinterList = this.printingService.listPrinters();
-  }
+
 
   async  getAndroidPrinterAssignment() {
     if (this.platFormService.androidApp) {
@@ -189,30 +200,25 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   getElectronPrinterAssignent() {
-    // if (this.platFormService.isAppElectron) {
-      return this.printingService.getElectronReceiptPrinter().pipe(
-        switchMap( data => {
-          if (data) {
-            this.electronSetting        = data;
-            this.electronReceiptPrinter = data.text;
-            this.electronReceipt        = data.value ;
-            this.electronReceiptID      = +data.option1;
-            if (this.printOptions) {
-              this.printOptions.deviceName = data.text
-            }
+    return this.printingService.getElectronReceiptPrinter().pipe(
+      switchMap( data => {
+        if (data) {
+          this.electronSetting        = data;
+          this.electronReceiptPrinter = data.text;
+          this.electronReceipt        = data.value ;
+          this.electronReceiptID      = +data.option1;
+          if (this.printOptions) {
+            this.printOptions.deviceName = data.text
           }
-
-          if (!data) {
-            this.electronSetting = {} as ISetting;
-            this.electronSetting.text = 'not defined'
-            this.electronSetting.option1 = '0'
-            this.electronReceiptID    = 0;
-          }
-
-          console.log('data' , this.electronSetting)
-          // this.electronPrinter$ = of(data)
-          return of(this.electronSetting)
-      }))
+        }
+        if (!data) {
+          this.electronSetting = {} as ISetting;
+          this.electronSetting.text = 'not defined'
+          this.electronSetting.option1 = '0'
+          this.electronReceiptID    = 0;
+        }
+        return of(this.electronSetting)
+    }))
   }
 
   getElectronLabelPrinter() {
@@ -242,7 +248,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   async refreshReceipt(id: any) {
     if (!id || id == 0) { return }
-
     try {
       this.receiptLayoutSetting   = null;
       const site                  = this.siteService.getAssignedSite();
@@ -267,10 +272,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     this.receiptList$     =  this.settingService.getReceipts(site);
     this.labelList$       =  this.settingService.getLabels(site);
     this.prepReceiptList$ =  this.settingService.getPrepReceipts(site);
-  }
-
-  saveAsReceiptDefault(id: number) {
-
   }
 
   initSubComponent(receiptPromise: ISetting, receiptStylePromise: ISetting) {
@@ -301,7 +302,7 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
 
   // moved to labvel view selector
   refreshLabelImage(id: any) {
-    const site = this.siteService.getAssignedSite();
+    const site     = this.siteService.getAssignedSite();
     const zplTemp$ = this.settingService.getSetting(site, id);
     zplTemp$.subscribe(data => {
       if (!data) { return }
@@ -334,11 +335,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     return null
   }
 
-    get  isElectronPrintingDesignTemplate() {
-      return this.electronPrintingDesignTemplate
-    // if (this.isElectronApp) {
-    // }
-    // return null
+  get  isElectronPrintingDesignTemplate() {
+    return this.electronPrintingDesignTemplate
   }
 
 
@@ -368,7 +366,6 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
   getReceiptContents() {
-
     const prtContent     = document.getElementById('printsection');
     const content        = `${prtContent.innerHTML}`
 
@@ -393,11 +390,10 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     }));
 
     return file
-
   }
 
   testWindow() {
-    const site = this.siteService.getAssignedSite();
+    const site           = this.siteService.getAssignedSite();
     const prtContent     = document.getElementById('printsection');
     const content        = `${prtContent.innerHTML}`
     const loadView       = ({title,scriptUrl}) => {
@@ -659,26 +655,17 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
     )
   }
 
-
   setElectronReceiptID(event) {
-    // if (!this.electronSetting) { return }
-    // const site = this.siteService.getAssignedSite();
-    // this.settingService.getSetting(site, event.id).subscribe( data=> {
-    //   this.electronReceipt             = event.name
-    //   this.electronReceiptID           = event.id
-    //   this.electronSetting.value       = this.electronReceipt
-    //   this.electronSetting.option1     = this.electronReceiptID.toString();
-    //   // console.log(this.electronSetting)
-    // })
     const site = this.siteService.getAssignedSite();
     const item$ = this.settingService.saveSettingObservable(site, event)
+    console.log('setElectronReceiptID', event)
+    this.receiptSaved = true
     this.receiptTemplateSaving$ = item$.pipe(
       switchMap( data=> {
-        // this.receipt = data;
+        this.receiptSaved = false
         return of(data)
       })
     )
-    // this.setElectronReceipt(this.electronSetting);
   }
 
   setElectronPrinterName(event) {

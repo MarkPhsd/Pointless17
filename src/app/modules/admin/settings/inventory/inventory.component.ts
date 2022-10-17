@@ -15,7 +15,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 export class InventoryComponent  {
 
   @Input() role: string;
-
+  showInitializer: boolean;
   itemTypes : IItemType[];
   itemTypes$: Observable<IItemType[]>;
   loading_initTypes: boolean;
@@ -34,7 +34,7 @@ export class InventoryComponent  {
   initalizeTypes() {
     this.loading_initTypes = true;
     const result = window.confirm('Please confirm. This function will delete all item type settings and re-initialize all options for item types.');
-      
+
     if (!result) { this.loading_initTypes = false;}
 
     if (result) {
@@ -43,7 +43,7 @@ export class InventoryComponent  {
         next: data => {
           this.itemTypeMethodsService.notify(`Items initialized.`, 'Success', 2000)
           this.loading_initTypes = false;
-        }, 
+        },
         error: err => {
           this.itemTypeMethodsService.notify(`Error. ${err}`, 'Failure', 2000)
           this.loading_initTypes = false;

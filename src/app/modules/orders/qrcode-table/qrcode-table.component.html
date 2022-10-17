@@ -1,0 +1,59 @@
+
+<div class="bg row-height">
+  
+  <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+    <div  class="login-window">
+
+      <div *ngIf="(uiHomePageSetting$ | async) as uiHomePageSetting">
+        <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+          <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
+        </div>
+        <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+          <img
+            onerror   = "this.src='../assets/images/logo.png'"
+            [src]     = "uiHomePageSetting?.logoHomePage"
+            [alt]     = "uiHomePageSetting?.displayCompanyName"
+            class     = "large">
+        </div>
+      </div>
+
+      <ng-template #loadingOrder>...loading your order.</ng-template>
+      <div class="navigating order-message" 
+            *ngIf="(order$ | async) as order; else loadingOrder">
+
+          <mat-card>
+            <mat-card>
+              <div class="transaction-data" *ngIf="order" >
+                <div class="total-headers foreground-color">Table   </div>
+                <div class="totals foreground-color"> {{ order?.tableName }}</div>
+                <div>
+                  <button mat-raised-button color="warn" (click)="requestService()">
+                    <mat-icon>alert</mat-icon> <mat-icon>staff</mat-icon> 
+                    <br>Alert Staff
+                  </button>
+                </div>
+              </div>
+            </mat-card>
+            <mat-card-content>
+              <app-order-total
+                [mainPanel]="false"
+                [order]="order">
+              </app-order-total>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card>
+            <pos-order-items
+                  [mainPanel] ="true"
+                  [qrOrder]   = 'true'
+                  [order]     ="order">
+            </pos-order-items>
+          </mat-card>
+        </div>
+
+    </div>
+    
+  </div>
+
+</div>
+

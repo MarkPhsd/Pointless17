@@ -1,16 +1,22 @@
 <div class="values-container">
+  <!-- <ng-content></ng-content> -->
+
   <div *ngIf="inputForm && formControlName"
        [formGroup]="inputForm"  >
-        <mat-form-field appearance="outline" class="grid-item">
-          <mat-label ><ng-content></ng-content></mat-label>
-          <input matInput
-                 type               = "number"
-                 [formControlName]  = "formControlName"
-                 (ngModelChange)    = "refreshValues"
-                >
-        </mat-form-field>
-      </div>
+    <!-- <ng-content></ng-content> -->
+    <mat-form-field appearance="outline" class="grid-item">
+      <!-- <mat-label ><ng-content></ng-content></mat-label> -->
+      <input matInput
+              type               = "number"
+              [formControlName]  = "formControlName"
+              (ngModelChange)    = "refreshValues"
+            >
+    </mat-form-field>
+  </div>
 
-  <div class="calc">  {{inputForm.get(formControlName).value * multiplier | currency}} </div>
+  <div class="calc">
+    <div><ng-content></ng-content></div>
+    <div>{{inputForm.get(formControlName).value * multiplier | currency}}</div>
+  </div>
 
 </div>

@@ -126,6 +126,7 @@ export  function init_app(appLoadService: AppInitService) {
     CategoryItemsBoardItemComponent,
     GridcomponentPropertiesDesignComponent,
     ClientTypeSelectionComponent,
+    
   ],
 
   imports: [

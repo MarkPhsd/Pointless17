@@ -60,6 +60,7 @@
             </span>
           </div>
 
+
         </div>
       </div>
 
@@ -69,7 +70,11 @@
 
           <div class="header"
               *ngIf="!item.shiftStarted || isAuthorized">
-              <h4> Start {{ getSummaryOfCashStart() | currency }} </h4>
+              <h4> Start {{ getSummaryOfCashStart() | currency }}
+              </h4>
+              <div>
+                <mat-label>Enter in quantity of currencies.</mat-label>
+              </div>
             <div class="grid-container">
               <div >
 
@@ -182,6 +187,9 @@
           <div class="header"
                *ngIf="item.shiftStarted || isAuthorized">
             <h4> End {{ getSummaryOfCashEnd() | currency }} </h4>
+            <div>
+              <mat-label>Enter in quantity of currencies.</mat-label>
+            </div>
             <div class="grid-container">
               <div class="grid-item">
 

@@ -27,13 +27,24 @@ export interface EmailModel {
   alertAddresses   : string[];
 
 }
-
 export interface EmailContent {
   subject : string;
 	emailTo : string;
 	emailToName : string;
 	plainText : string;
 	htmlContent : string;
+}
+
+export interface  emailSMTP {
+  name : string;
+  subject : string;
+  body : string;
+  emailTo : string;
+  id : number;
+  type : string;
+  history : true;
+  dateFrom : string;
+  dateTo : string;
 }
 
 
@@ -116,6 +127,27 @@ export class SendGridService {
 
   }
 
+  sendSMTPTest( emailTo: string, customerName: string): Observable<any> {
+
+    const site = this.siteService.getAssignedSite()
+
+    const controller =  "/FluentMail/"
+
+    const endPoint = `sendSMTPTest`
+
+    const item = {} as emailSMTP
+    item.emailTo = emailTo;
+    item.name = customerName;
+    item.subject = 'Test email'
+    item.type = 'test';
+    item.body = 'This is a test email from PointlessPOS.'
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<any>(url, item)
+
+  }
 
 
   sendSalesReport(id: number, dateFrom:string, dateTo: string): Observable<any> {

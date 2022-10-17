@@ -149,8 +149,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     )
   }
 
-
-
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.

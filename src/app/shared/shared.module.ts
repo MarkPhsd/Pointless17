@@ -153,8 +153,8 @@ import { AppWizardProgressButtonComponent } from './widgets/app-wizard-progress-
 import { TipEntryComponent } from '../modules/posorders/components/tip-entry/tip-entry.component';
 import { EmailEntryComponent } from './widgets/email-entry/email-entry.component';
 import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/electron-zoom-control.component';
-
-
+import { QROrderComponent } from '../modules/posorders/qrorder/qrorder.component';
+import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-table.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -246,6 +246,7 @@ import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/el
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
     OrderHeaderComponent,
+    QROrderComponent,
     PagerBlobComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
@@ -296,6 +297,7 @@ import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/el
     UIHomePageSettingsComponent,
     UserAuthorizedDirective,
     MatSpinnerOverlayComponent,
+    QRCodeTableComponent,
     ValueSpinnerComponent,
     ProgressBarComponent,
     SearchDebounceInputComponent,
@@ -409,6 +411,8 @@ import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/el
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
     OrderHeaderComponent,
+    QROrderComponent,
+    QRCodeTableComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
     PieComponent,

@@ -73,7 +73,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     })
 
     const i = 0;
-    this.message  = 'Press Process to use Card'
+    this.message  = 'Press process to complete transaction.'
     this.processing = false;
     this.displayAction(this.action)
 
@@ -119,12 +119,12 @@ export class DSIEMVTransactionComponent implements OnInit {
       }
     }
 
-    if (this.action == 0 || this.action == 1) {
+    if (this.action == 0 || this.action == 1 || this.type === 'sale') {
       this.processSaleCard();
       return
     }
 
-    if (this.action == 2) {
+    if (this.action == 2 || this.type === 'void') {
       this.processVoidCard();
       return
     }

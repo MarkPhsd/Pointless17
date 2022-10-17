@@ -73,6 +73,14 @@ export class PosOrderItemEditComponent  {
           itemName: [],
         })
       }
+
+      if (this.editField == 'serialCode') {
+        this.inputForm = this._fb.group({
+          quantity: [this.posOrderItem.serialCode],
+          itemName: [],
+        })
+      }
+
       if (this.editField == 'price') {
         this.inputForm = this._fb.group({
           quantity: [this.posOrderItem.quantity],
@@ -90,14 +98,14 @@ export class PosOrderItemEditComponent  {
       this.decimals = 2
       return
     }
-  
+
     if (this.editField == 'quantity') {
       if (this.menuItem?.itemType?.requireWholeNumber) {
         this.inputTypeValue = 'number'
         this.decimals = 0
         return
       }
-      
+
       if (!this.menuItem?.itemType?.requireWholeNumber) {
         this.inputTypeValue = 'decimal'
         this.decimals = 2
@@ -132,8 +140,8 @@ export class PosOrderItemEditComponent  {
        if (this.editField == 'price') {
           if (item) {
             this.posOrderItemService.changeItemPrice(site, item).subscribe( data => {
-              if (data) { 
-                if (data.resultMessage) { 
+              if (data) {
+                if (data.resultMessage) {
                   this.siteService.notify(data.resultMessage, 'Alert', 1500)
                 }
               }
@@ -182,12 +190,12 @@ export class PosOrderItemEditComponent  {
       // item.unitPrice = value;
       // console.log('value', value)
     }
-  
+
     return item
   }
 
-  // 
- 
+  //
+
 
   onCancel() {
     this.closeOnEnterPress.emit('true')

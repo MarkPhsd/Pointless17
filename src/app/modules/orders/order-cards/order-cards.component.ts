@@ -233,7 +233,6 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
-        // console.log('data', data)
         this.orderService.setActiveOrder(site, data)
       }
     )
@@ -319,13 +318,13 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     this.invisibleOrders.push(i)
   }
 
-  isOrderVisible(i) { 
+  isOrderVisible(i) {
 
-    if (!i) { 
+    if (!i) {
       return true
     }
 
-    const items = this.invisibleOrders.filter(p => { 
+    const items = this.invisibleOrders.filter(p => {
       if  (p == i) { return p }
     })
 

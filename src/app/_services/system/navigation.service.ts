@@ -47,6 +47,7 @@ export class NavigationService {
 
     let url = 'pos-order-schedule'
 
+    console.log('is staff ', isStaff)
     if (!isStaff && !completionDate) {
       url = 'pos-order-schedule'
       this.router.navigateByUrl(url)

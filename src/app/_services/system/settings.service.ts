@@ -415,7 +415,7 @@ export class SettingsService {
 
   saveSettingObservable(site: ISite, setting: ISetting): Observable<ISetting>  {
     if (setting.id  == 0 || setting.id == undefined)  {
-      return  this.postSetting(site,setting)
+      return  this.postSetting(site, setting)
     }
     if (setting.id) {
       return  this.putSetting(site, setting.id, setting)

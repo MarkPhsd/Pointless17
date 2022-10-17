@@ -88,6 +88,12 @@ pos-order-item {
   }
 }
 
+.qr-style { 
+  height: calc(100vh - 600px);
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
 .item-list-prep {
 
   margin-bottom: 25px;

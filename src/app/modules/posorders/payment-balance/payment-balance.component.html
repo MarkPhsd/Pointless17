@@ -137,7 +137,7 @@
 
   <mat-card-actions>
     <div  *ngIf="!isUser && paymentsEqualTotal">
-      <button mat-button (click)="closeOrder()">
+      <button mat-raised-button color="warn"  (click)="closeOrder()">
         <mat-icon >close</mat-icon>Close</button>
     </div>
   </mat-card-actions>

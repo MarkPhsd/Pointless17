@@ -1,8 +1,10 @@
+
+  
 <div  #scrollMe
-      [style.width]="deviceWidthPercentage"
-      [style.height]="panelHeight"
+      [style.width]  ="deviceWidthPercentage"
       *ngIf="order && order.posOrderItems && order.posOrderItems.length>0"
-      [class]="orderItemsPanel" >
+      [class]="mainStyle" >
+      <!-- {{panelHeight}} -->
     <ion-item-sliding
               class="nopadd"
               *ngFor="let item of order.posOrderItems; let i = index;trackBy: trackByFN"
@@ -41,7 +43,7 @@
 
       </div>
 
-      <ion-item-options *ngIf="item.printed && !prepScreen">
+      <ion-item-options *ngIf="item?.printed && !prepScreen">
         <ion-item-option color="accent">
           <button mat-button color="primary" (click)="removeItemFromList(i)" >
             <mat-icon>remove_shopping_cart</mat-icon>
@@ -59,7 +61,7 @@
         </ion-item-option>
       </ion-item-options>
 
-      <ion-item-options *ngIf="!item.printed && !prepScreen">
+      <ion-item-options *ngIf="!item?.printed && !prepScreen">
         <ion-item-option color="warn">
           <button mat-button color="primary" (click)="removeItemFromList(i)" >
             <mat-icon>delete</mat-icon>
@@ -69,5 +71,3 @@
       </ion-item-options>
     </ion-item-sliding>
 </div>
-
-

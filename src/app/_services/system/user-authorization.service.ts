@@ -33,7 +33,7 @@ export class UserAuthorizationService {
     const currentRole = user?.roles.toLowerCase();
     // console.log('isUserAuthorized', user?.roles.toLowerCase() )
     if (!currentRole) { return }
-    if (!user || !user.roles) { return false}
+    if (!user || !user?.roles) { return false}
     if (!this.validateUser)   { return false }
     if (!requiredArray)       { return false }
 
@@ -43,12 +43,10 @@ export class UserAuthorizationService {
     rolesArray.forEach( data => {
       if (data.trim() === currentRole) {
           result = true;
-          // console.log('isAuthorized', result)
         }
       }
     )
 
-    // console.log('isAuthorized', result)
     return result
   }
 

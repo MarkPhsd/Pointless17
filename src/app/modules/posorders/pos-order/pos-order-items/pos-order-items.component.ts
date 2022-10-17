@@ -28,6 +28,9 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input() prepScreen     : boolean;
   @Input() site:            ISite;
   @Input() disableActions = false;
+  @Input() qrOrder        = false;
+  qrCodeStyle = ''
+  mainStyle   = ''
   deviceWidthPercentage = '100%'
   _uiConfig      : Subscription;
   uiConfig       = {} as TransactionUISettings;
@@ -113,7 +116,10 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    let uiHomePage =  this.uiSettingService.homePageSetting;
+    this.initStyles()
+
+    let uiHomePage = this.uiSettingService.homePageSetting;
+    this.wideBar   = true;
 
     if (!uiHomePage) {
       this.settingService.getUIHomePageSettings().subscribe(data => {
@@ -141,6 +147,12 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
   }
 
+  initStyles() { 
+    this.qrCodeStyle = ''
+    if (this.qrOrder) { this.qrCodeStyle = 'qr-style'  }
+    this.mainStyle = `${this.qrCodeStyle} orderItemsPanel`
+  }
+  
   getTransactionUI() {
     this.uiSettingsService.getSetting('UITransactionSetting').subscribe(data => {
       if (data) {

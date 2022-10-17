@@ -9,61 +9,63 @@
     <div class="grid-items">
       <div *ngIf="orderItem">
         <div >
+
           <span *ngIf="!isModifier  && !prepScreen">
             {{index+1}}:
           </span>
           <span [class]="productnameClass" >
             {{ orderItem?.productName }}
           </span>
-          <span class="product-name" *ngIf="orderItem.itemType">
+          <span class="product-name" *ngIf="orderItem?.itemType">
             ( {{orderItem?.itemType?.name}} )
           </span>
           <span  *ngIf="quantity && !prepScreen">
             <div *ngIf="subTotal>0">
-              {{ quantity }} {{orderItem.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+              {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
             <div *ngIf="subTotal<0"  style="color:crimson">
-              {{ quantity }} {{orderItem.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
+              {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
-
           </span>
-          <span  *ngIf="( mainPanel || wideBar) && orderItem.serialCode && !prepScreen">
-            SN#/({{ orderItem.serialCode }})
-          </span>
-          <span class="notes"  *ngIf="( mainPanel || wideBar )
-                        && orderItem
-                        && orderItem.modifierNote
-                        && (orderItem.modifierNote != orderItem.serialCode)
-                        && orderItem.modifierNote != ''">
-            {{ orderItem.modifierNote }} |
-          </span>
-          <span class="discount-description" *ngIf="orderItem.itemCashDiscount>0">
-            Cash Savings $ {{orderItem.itemCashDiscount}},
-          </span>
-         <span class="discount-description"  *ngIf="orderItem.itemOrderCashDiscount>0">
-            Cash Savings $ {{orderItem.itemOrderCashDiscount}},
-          </span>
-          <span class="discount-description"  *ngIf="orderItem.itemPercentageDiscountValue>0">
-            % Off Savings $ {{orderItem.itemPercentageDiscountValue}},
-          </span>
-          <span class="discount-description"  *ngIf="orderItem.itemOrderPercentageDiscount>0">
-            % Off Savings $ {{orderItem.itemOrderPercentageDiscount}},
+          <span  *ngIf="( mainPanel || wideBar) && orderItem?.serialCode && !prepScreen">
+            SN#/({{ orderItem?.serialCode }})
           </span>
 
-          <span class='status-icon' *ngIf="orderItem.printed && prepScreen && !isModifier">
-            <mat-icon color="warn" *ngIf="orderItem.printed && !prepScreen" >print</mat-icon>
+          <span class="notes"
+                        *ngIf="( mainPanel || wideBar )
+                                && orderItem
+                                && orderItem?.modifierNote
+                                ">
+            | {{ orderItem?.modifierNote.replace(orderItem?.serialCode, '') }} |
+          </span>
+
+          <span class="discount-description" *ngIf="orderItem?.itemCashDiscount>0">
+            Cash Savings $ {{orderItem?.itemCashDiscount}},
+          </span>
+         <span class="discount-description"  *ngIf="orderItem?.itemOrderCashDiscount>0">
+            Cash Savings $ {{orderItem?.itemOrderCashDiscount}},
+          </span>
+          <span class="discount-description"  *ngIf="orderItem?.itemPercentageDiscountValue>0">
+            % Off Savings $ {{orderItem?.itemPercentageDiscountValue}},
+          </span>
+          <span class="discount-description"  *ngIf="orderItem?.itemOrderPercentageDiscount>0">
+            % Off Savings $ {{orderItem?.itemOrderPercentageDiscount}},
+          </span>
+
+          <span class='status-icon' *ngIf="orderItem?.printed && prepScreen && !isModifier">
+            <mat-icon color="warn" *ngIf="orderItem?.printed && !prepScreen" >print</mat-icon>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
           </span>
 
-          <span  class='ready-icon' *ngIf="orderItem.itemPrepped && prepScreen && !isModifier">
+          <span  class='ready-icon' *ngIf="orderItem?.itemPrepped && prepScreen && !isModifier">
             <mat-icon color="alert" & *ngIf="prepScreen" >done</mat-icon>
-            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.itemPrepped | date: 'shortTime'}} </span>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
           </span>
 
           <div class="void-icon void-info" *ngIf="(orderItem?.voidReason || orderItem?.itemReturn != 1) &&  prepScreen && !isModifier">
             <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              <b  style="color:crimson">Item voided:  {{ orderItem.voidReason }}</b>
+              <b  style="color:crimson">Item voided:  {{ orderItem?.voidReason }}</b>
             </span>
           </div>
 
@@ -73,16 +75,16 @@
         <div class="grid-item-span" *ngIf="!prepScreen && !isModifier">
           <span *ngIf="orderItem.printed">
             <mat-icon color="warn" >print</mat-icon>
-            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem.printed | date: 'shortTime'}} </span>
+            <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.printed | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-info" *ngIf="(orderItem.voidReason || orderItem.itemReturn == 1) && !isModifier">
+          <div class="void-info" *ngIf="(orderItem?.voidReason || orderItem?.itemReturn == 1) && !isModifier">
             <span *ngIf="orderItem.itemReturn == 1">  <mat-icon  color="warn">refresh</mat-icon>  </span>
             <span *ngIf="orderItem.itemReturn != 1">  <mat-icon  color="warn">cancel</mat-icon>  </span>
 
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              <b *ngIf="orderItem.itemReturn == 1" style="color:crimson">Item Return:  {{ orderItem.voidReason }}</b>
-              <b *ngIf="orderItem.itemReturn != 1" style="color:crimson">Voided:       {{ orderItem.voidReason }}</b>
+              <b *ngIf="orderItem?.itemReturn == 1" style="color:crimson">Item Return:  {{ orderItem?.voidReason }}</b>
+              <b *ngIf="orderItem?.itemReturn != 1" style="color:crimson">Voided:       {{ orderItem?.voidReason }}</b>
             </span>
           </div>
 
@@ -104,7 +106,7 @@
           <span (mouseleave)="menuTrigger.closeMenu()">
 
             <div class="button-list">
-              <div *ngIf="!userAuthService.isUser">
+              <div *ngIf="!userAuthService?.isUser">
                 <button mat-button  color="accent"  (click)="printLabel(orderItem)"><mat-icon>print</mat-icon>Label</button>
               </div>
 
@@ -120,7 +122,7 @@
                 </button>
               </div>
 
-              <div *ngIf="orderItem && orderItem.serialCode && !userAuthService.isUser">
+              <div *ngIf="orderItem && orderItem.serialCode && !userAuthService?.isUser">
                 <button mat-button  color="accent"  (click)="editSerial()"><mat-icon>edit</mat-icon>Serial Edit</button>
               </div>
 
@@ -146,7 +148,9 @@
                 </button>
               </div>
               <div>
+
               </div>
+
               <div *ngIf="itemHasDiscount">
                 <button mat-button  color="accent"  (click)="removeDiscount()"><mat-icon>edit</mat-icon>Clear Discount</button>
               </div>

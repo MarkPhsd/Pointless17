@@ -304,7 +304,6 @@ import { DsiAndroidResultsComponent } from '../modules/payment-processing/dsiEMV
 import { DSIAndroidSettingsComponent } from '../modules/payment-processing/dsiEMVAndroid/dsiandroid-settings/dsiandroid-settings.component';
 import { DsiEMVAndroidComponent } from '../modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 import { ZoomFloorPlanComponent } from '../modules/floor-plan/zoom-floor-plan/zoom-floor-plan.component';
-import { QROrderComponent } from '../modules/posorders/qrorder/qrorder.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -512,7 +511,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ReviewEditComponent,
     RewardTypeFilterComponent,
     RewardTypeResultsSelectorComponent,
-    QROrderComponent,
+  
     SearchPanelComponent,
     ScrollableDirective,
     ScheduledMenuContainerComponent,

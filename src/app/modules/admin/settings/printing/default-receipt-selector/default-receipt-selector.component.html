@@ -1,18 +1,10 @@
 <div *ngIf="receiptList as list"  >
   <div [formGroup]="inputForm" *ngIf="inputForm">
-
-    <!-- <div *ngFor="let item of list"
-        >
-      {{ item.name }} - {{ item.id}}
-    </div> -->
-
     <mat-form-field appearance="outline">
       <mat-label><ng-content></ng-content></mat-label>
-      <mat-select
-                  formControlName       ='receiptID'
-                  >
+      <mat-select formControlName       ='receiptID' >
         <mat-option *ngFor="let item of list"
-                      [value]="item.id">
+                    [value]="item.id">
             {{ item.name }}
         </mat-option>
       </mat-select>

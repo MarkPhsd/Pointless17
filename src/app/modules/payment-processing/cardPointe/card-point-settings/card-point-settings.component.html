@@ -4,14 +4,13 @@
   </mat-card-title>
   <mat-card-subtitle>
     <div>
-
+       <div *ngIf="methodType$ | async as item"></div>
     </div>
 
   </mat-card-subtitle>
   <mat-card-content>
     <div *ngIf="inputForm"
          [formGroup]="inputForm" >
-
       <div>
         <mat-form-field appearance="outline">
         <mat-label >Device Name</mat-label>
