@@ -11,6 +11,20 @@
 //   min-height: 350px;
 // }
 
+.gratuity { 
+  margin-bottom: 10px;
+  font-size: large;
+  font-weight: 500;
+}
+
+.grid-values { 
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 10px;
+  margin: 5px;
+
+}
+
 .grid-header {
   --gap: 5px;
   display: flex;

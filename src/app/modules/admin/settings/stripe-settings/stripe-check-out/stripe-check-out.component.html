@@ -17,19 +17,17 @@
       
     </div>
     <div></div>
-    <div>Name on card is required.</div>
+
+    <div *ngIf="paymentForm && !paymentForm.controls['name'].value">Name on card is required.</div>
+    
+
   </mat-card-title>
 
   <mat-card-content>
     <ng-template #loading>....loading stripe</ng-template>
     <ng-template #confirm>Confirm name and amount.</ng-template>
+    <div *ngIf="errorMessage"><mat-icon>alert</mat-icon>{{errorMessage}}</div>
     <div class="grid-header">
-
-      <div *ngIf="errorMessage"><mat-icon>alert</mat-icon>{{errorMessage}}</div>
-      <div *ngIf="result?.error">
-        Message {{result?.error?.message | json}}
-      </div>
-
       <mat-divider></mat-divider>
     
       <div *ngIf="elementsOptions
@@ -54,17 +52,28 @@
               required>
               Customer Name
           </app-value-fields>
-    
-          <app-value-fields
-              [enabled]    = "true"
+       
+          <!-- <app-value-fields
+              [enabled]    = "false"
               [fieldType]  = "'number'"
               [inputForm]  = "paymentForm"
               [fieldName]  = "'amount'"
               [fieldsClass]= "'fields-small'"
               required>
               Amount
-          </app-value-fields>
-    
+          </app-value-fields> -->
+          
+          <div fxLayout="row" fxLayoutAlign="center center" >
+            <div class="grid-values">
+              <div class="gratuity">Payment</div>
+              <div class="gratuity"> {{amount | currency}} </div>
+              <div class="gratuity">Gratuity</div>
+              <div class="gratuity">{{this.stripeTipValue | currency}}</div>
+              <div class="gratuity">Total</div>
+              <div class="gratuity">{{paymentForm.controls['amount'].value | currency}}</div>
+            </div>
+          </div>
+
           <div *ngIf="elementsOptions?.clientSecret as clientSecret">
             <div *ngIf="!clientSecret">
               <button mat-raised-button (click)="setAmount()">Set Amount</button>

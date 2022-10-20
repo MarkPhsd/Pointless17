@@ -15,13 +15,58 @@ body {
   width: 125px;
 }
 
+.small-button { 
+  height: 35px;
+}
+.message-grid { 
+  display: grid;
+  grid-template-columns: 1fr 45px;
+  width: 100%;
+  gap: 10px;
+}
 mat-card  {
   width: 100%;
+}
+
+.buttons-header { 
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 5px;
+  width        : 100%;
+}
+
+button { 
+  height: 75px;
+  min-width: 75px;
+  width: 100px;
+  margin: 5px;
 }
 
 mat-card-content {
   margin: 5px;
   padding: 5px;
+}
+
+.loading { 
+  margin-top: 50px;
+  top: 450px;
+  position: absolute;
+}
+
+.sendingMessage { 
+  margin-top: 70px;
+  // top: 450px;
+}
+
+.pointless-logo { 
+  width: 25px;
+}
+
+.grid-about { 
+  display: grid;
+  grid-template-columns: 45px 1fr;
+  gap: 10px;
+  margin: 5px;
 }
 
 .transaction-data-side-panel-small {
@@ -51,12 +96,18 @@ mat-card-content {
 
 .transaction-data {
   display: grid;
-  grid-template-columns: 95px 125px;
+  grid-template-columns: 65px 75px 50px 155px;
   width         : 100%;
-  overflow-y    : auto;
-  overflow-x    : hidden;
   font-size     : large;
   margin-bottom : 5px;
+  gap: 5px;
+}
+
+.user-name { 
+  max-width: 155px;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .totals {

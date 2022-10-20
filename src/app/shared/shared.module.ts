@@ -155,6 +155,7 @@ import { EmailEntryComponent } from './widgets/email-entry/email-entry.component
 import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/electron-zoom-control.component';
 import { QROrderComponent } from '../modules/posorders/qrorder/qrorder.component';
 import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-table.component';
+import { RequestMessageComponent } from '../modules/admin/profiles/request-messages/request-message/request-message.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -273,7 +274,7 @@ import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-tabl
     ProgressBarComponent,
     PriceCategorySearchComponent,
     RetailProductEditComponent,
-    RequestMessagesComponent,
+ 
     SalesTaxReportComponent,
     ScaleReaderComponent,
     ScaleSettingsComponent,
@@ -310,6 +311,8 @@ import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-tabl
     YoutubePlayerComponent,
     SafeHtmlPipe,
     ElectronZoomControlComponent,
+    RequestMessageComponent,
+    RequestMessagesComponent,
   ],
 
   imports: [
@@ -436,6 +439,7 @@ import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-tabl
     ProfileShippingAddressComponent,
     ProgressBarComponent,
     RetailProductEditComponent,
+    RequestMessageComponent,
     RequestMessagesComponent,
     QuantiySelectorComponent,
     SalesTaxReportComponent,

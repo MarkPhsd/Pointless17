@@ -267,15 +267,25 @@ export class UserSwitchingService implements  OnDestroy {
     )
   }
 
-  processLogin(user: IUser) {
+  processLogin(user: IUser, path : string) {
     //login the user based on the message response of the user.
-    // console.log('user from Process login', user)
+    console.log('user from Process login', user, path)
+    console.log('loginAction', localStorage.getItem('loginAction'))
     if (user && user.message == undefined) {
       return 'user undefined'
+    }
+    //if account loccked out then change here.
+    if (user.message.toLowerCase() === 'failed') {
+      return user.errorMessage
     }
 
     if (user && !user.message) {
       return 'No message response from API.'
+    }
+
+    if (path) { 
+      this.router.navigate([path]);
+      return 'success'
     }
 
     if (user.message === 'success') {
@@ -283,14 +293,26 @@ export class UserSwitchingService implements  OnDestroy {
       return 'success'
     }
 
-    //if account loccked out then change here.
-    if (user.message.toLowerCase() === 'failed') {
-      return user.errorMessage
-    }
-
     this.setAppUser()
   }
 
+  loginToURL(path) { 
+    
+    let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    console.log('returnUrl', returnUrl)
+    console.log('path', path)
+
+    if (path) { 
+      this.router.navigate([path])
+    }
+    
+    if (returnUrl) { 
+      this.router.navigate([returnUrl])
+    }
+
+
+    this.loginToReturnUrl()
+  }
   assignCurrentOrder(user: IUserProfile)  {
     const site = this.siteService.getAssignedSite()
     if (user.roles == 'user' && user.id) {
@@ -323,6 +345,7 @@ export class UserSwitchingService implements  OnDestroy {
       if (returnUrl === '/login') {  returnUrl = '/app-main-menu'}
     }
 
+    console.log('loginToReturnUrl', returnUrl)
     this.router.navigate([returnUrl]);
 
   }

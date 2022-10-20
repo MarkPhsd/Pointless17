@@ -1,0 +1,40 @@
+
+<div class="grid-header">
+  <div>
+    <h4>
+      <ng-content select="[subject]"></ng-content>
+    </h4>
+  </div>
+
+  <div>
+    <ng-content select="[subject | date:'shortTime']"></ng-content>
+  </div>
+</div>
+
+<p>
+  <ng-content select="[message]"></ng-content>
+</p>
+
+<mat-card-actions>
+  <div class="grid-buttons">
+    <div>
+      <button mat-raised-button (click)="toggleArchive()">
+        <div *ngIf="message?.archived">
+          <mat-icon>activate</mat-icon>Activate
+        </div>
+        <div *ngIf="!message?.archived">
+          <mat-icon>archive</mat-icon>Archive
+        </div>
+      </button>
+    </div>
+
+    <div>
+      <button mat-raised-button color="primary" (click)="action()">
+        <mat-icon>done</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
+</mat-card-actions>
+

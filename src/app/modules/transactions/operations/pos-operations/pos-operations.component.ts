@@ -12,12 +12,13 @@ import { PrintingService, printOptions } from 'src/app/_services/system/printing
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
-import { BatchClose, BatchSummary, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { BatchClose, Transaction } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { ICanCloseOrder } from 'src/app/_interfaces/transactions/transferData';
-import { Tray } from 'electron';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransactionUISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ThisReceiver } from '@angular/compiler';
+import { OrdersService } from 'src/app/_services';
 
 @Component({
   selector: 'pos-operations',
@@ -48,7 +49,7 @@ export class PosOperationsComponent implements OnInit {
   dsiEMVSettings      : Transaction;
   batchSummary: any;
   batchClose: BatchClose;
-
+  email$:         Observable<any>;
   closingCheck$ : Observable<ICanCloseOrder>;
   uiTransactions: TransactionUISettings;
   uiTransactions$: Observable<TransactionUISettings>;
@@ -66,10 +67,10 @@ export class PosOperationsComponent implements OnInit {
     private platFormService    : PlatformService,
     private printingService    : PrintingService,
     private dsiProcess         : DSIProcessService,
-    private printingAndroidService: PrintingAndroidService,
     private sendGridService     :   SendGridService,
     private matSnack           : MatSnackBar,
     private uISettingsService: UISettingsService,
+    private orderService        : OrdersService,
     // private AuthService       : UserAuth
   ) {
     if (!this.site) {
@@ -106,27 +107,38 @@ export class PosOperationsComponent implements OnInit {
 
   refreshClosingCheck() {
     const site = this.siteService.getAssignedSite();
-    this.closingCheck$ = this.transferDataService.canCloseDay(site)
+
+    const item$ = this._email()
+    this.closingCheck$ = item$.pipe(
+      switchMap( data => { 
+        return this.transferDataService.canCloseDay(site)
+      }
+    ))
+
   }
 
-  email() {
+  _email() {
     const site = this.siteService.getAssignedSite();
     const zRun$ =  this.balanceSheetService.getZRUNBalanceSheet(site);
 
-    zRun$.pipe(
+    const item$ = zRun$.pipe(
       switchMap( data => {
         if (data && data.id) {
           return this.sendGridService.sendSalesReport(data.id, null,null)
         }
         return null;
-    })).subscribe(
-      {next: data => {
-      this.matSnack.open('Email Sent', 'Success', {duration: 1500})
-      }, error: err => {
-        this.matSnack.open('Email Not sent, check with administrator', 'Alert', {duration: 1500})
+    })).pipe(
+     switchMap( data => {
+        this.matSnack.open('Email Sent', 'Success', {duration: 1500})
+        return of(data)
       }
-    })
+    ))
+    
+    return item$
+  }
 
+  email() { 
+    this.email$ = this._email()
   }
 
   refreshInfo(){
@@ -208,7 +220,8 @@ export class PosOperationsComponent implements OnInit {
     }
 
     const closingCheck$ = this.transferDataService.canCloseDay(site)
-
+    this.orderService.clearOrderSubscription();
+    
     this.balanceSheetsClosed = ''
     closingCheck$.pipe(
       switchMap( data => {

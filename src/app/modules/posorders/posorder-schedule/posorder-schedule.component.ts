@@ -109,11 +109,18 @@ export class POSOrderScheduleComponent implements OnInit,OnDestroy {
 
       if (this.order) {
 
-        // const scheduledDate = this.datepipe.transform( this.scheduledDate, 'mm/dd/yyyy');
-        const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
-        this.order.suspendedOrder        = true;
+        if (!this.order.tableName) {
+          this.order.suspendedOrder = true;
+        }
+        
+        try {
+          const notes                      = this.inputFormNotes.controls['productOrderMemo'].value;
+          this.order.productOrderMemo      = notes;
+        } catch (error) {
+        }
+
         this.order.preferredScheduleDate = this.scheduledDate;
-        this.order.productOrderMemo      = notes;
+
         if (this.serviceType) {
           this.order.serviceType   = this.serviceType.name;
           this.order.serviceTypeID = this.serviceType.id

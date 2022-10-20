@@ -19,6 +19,14 @@ mat-card {
 .order-layout-empty {
 }
 
+.grid-tip-buttons { 
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin: 5px;
+}
+
 .center-items {
   display: flex;
   justify-content: center;

@@ -76,9 +76,8 @@
                     mat-button (click)="editPayment(item)">
               <mat-icon>edit</mat-icon></button>
           </div>
-
-
-          <div *ngIf="!isUser && item?.applicationLabel != 'stripe'  &&
+        
+          <div *ngIf="!isUser && item?.paymentMethod?.name.toLowerCase() != 'stripe'  &&
                       (item?.paymentMethod?.isCreditCard &&  (uiTransactions && uiTransactions.cardPointPreAuth)) ||
                       (item.account && !item.completionDate &&
                       (uiTransactions && uiTransactions.cardPointPreAuth))">

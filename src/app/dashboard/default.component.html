@@ -24,6 +24,11 @@
       <app-menu-search-bar>
       </app-menu-search-bar>
     </div>
+
+    <div *ngIf="chatURL">
+      <button mat-fab-button (click)="getHelp()"><mat-icon>chat</mat-icon></button>
+    </div>
+
   </mat-drawer>
 
   <mat-drawer-content>

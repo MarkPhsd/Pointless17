@@ -134,7 +134,13 @@ export class FooterComponent implements OnInit, OnDestroy {
   }
 
   makePayment() {
-    this.navigationService.makePayment(false, this.smallDevice, this.isStaff, this.order.completionDate)
+    let path =''
+    if (this.order) { 
+      if (this.order.tableName && this.order.tableName.length>0) { 
+        path = 'pos-payment'
+      }
+    }
+    this.navigationService.makePayment(false, this.smallDevice, this.isStaff, this.order.completionDate, path)
   }
 
 

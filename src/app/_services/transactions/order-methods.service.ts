@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, Observable, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -417,7 +417,6 @@ export class OrderMethodsService implements OnDestroy {
   validateUser(): boolean {
     const valid = this.userAuthorization.validateUser()
     if (!valid) {
-
       //login prompt
       const ref = this.authenticationService.openLoginDialog()
       this.notifyEvent('Please login, or create your account to place an order. Carts require a registerd user to be created.', 'Alert')
@@ -1107,6 +1106,29 @@ export class OrderMethodsService implements OnDestroy {
     } else {
       return false
     }
+  }
+
+  getLoginActions(): Observable<IPOSOrder> { 
+    const site = this.siteService.getAssignedSite()
+    const item = localStorage.getItem('loginAction') //., JSON.stringify(loginAction))
+
+    if (!item) { return }
+    const action = JSON.parse(item)
+    
+    // console.log('get login actions', action)/
+    if (action?.name === 'setActiveOrder') { 
+      // console.log('get login actions 2', action)
+      return this.orderService.getOrder(site, action.id, false).pipe(
+        switchMap(order => {
+          this.orderService.updateOrderSubscriptionLoginAction(order)
+          localStorage.removeItem('loginAction')
+          this.router.navigate(['pos-payment'])
+          return of(order)
+        })
+      )
+    }
+    // const order = {} as IPOSOrder
+    return null
   }
 
 

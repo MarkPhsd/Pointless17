@@ -1,1 +1,69 @@
-<p>request-messages works!</p>
+<ng-template #loading>
+  <div class="simple-icon">
+    <mat-icon
+      matBadge="0"
+      matBadgeColor="accent"
+      matBadgePosition="before">
+      mail_outline
+    </mat-icon>
+  </div>
+</ng-template>
+
+<div *ngIf="(messages$ | async) as messages; else loading">
+  <button 
+          mat-raised-button
+          color="primary"
+          (click)="hideshowMessages = !hideshowMessages" >
+
+      <mat-icon
+            *ngIf="!hideshowMessages"
+            matBadge=" {{messages.length}}"
+            matBadgeColor="accent"
+            matBadgePosition="before">
+            mail
+      </mat-icon>
+
+      <mat-icon
+            *ngIf="hideshowMessages"
+            matBadge=" {{messages.length}}"
+            matBadgeColor="accent"
+            matBadgePosition="before">
+            mail
+      </mat-icon>
+      
+  </button>
+
+  <div *ngIf="hideshowMessages">
+    
+    <mat-card *ngIf="!messages || messages.length == 0">
+      <h3>You have no messages</h3>
+    </mat-card>
+
+    <mat-card *ngIf="messages && messages.length>0">
+      <mat-card-subtitle>
+ 
+      </mat-card-subtitle>
+
+      <mat-card-content>
+        <div *ngFor = "let item of messages"
+              class = "message-list">
+          <app-request-message
+            (archiveEvent)="toggleArchive(item)"
+            (actionEvent)="activeEvent(item)">
+            <div requested >{{item?.message}}</div>
+            <div subject >{{item?.subject}}</div>
+            <div body >{{item?.message}}</div>
+            [message]="item">
+          </app-request-message>
+        </div>    
+        <div *ngIf="(message$ | async) as message">
+          {{message?.message}}
+          <button mat-raised-button (click)="clearMessage()">Clear</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  
+  </div>  
+</div>
+
+<div *ngIf="(order$ | async) as order"></div>

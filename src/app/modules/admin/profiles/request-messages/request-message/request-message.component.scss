@@ -1,0 +1,17 @@
+.grid-header { 
+  display: grid;
+  grid-template-columns: 1fr 75px;
+}
+
+.grid-buttons { 
+  display: flex;
+  flex-direction: row;
+  justify-content:  space-between;
+}
+
+button { 
+  width:  100px;
+  height: 50px;
+  // margin: 15px;
+  margin: auto;
+}

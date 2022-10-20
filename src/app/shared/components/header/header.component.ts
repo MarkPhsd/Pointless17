@@ -34,7 +34,7 @@ interface IIsOnline {
 })
 
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
-
+  @ViewChild('userActions')       userActions: TemplateRef<any>;
   @ViewChild('floorPlanTemplate') floorPlanTemplate: TemplateRef<any>;
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
   @Output() outPutToggleSearchBar:    EventEmitter<any> = new EventEmitter();
@@ -117,6 +117,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   floorPlans$     : Observable<IFloorPlan[]>;
   posDevice$      : Observable<ITerminalSettings>;
   terminalSetting : any;
+
+  mailCount  = 0;
 
   _site: Subscription;
   initSiteSubscriber() {
@@ -297,6 +299,10 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  emailMailCount(event) { 
+    this.mailCount = event
+  }
+
   refreshTheme() {
     if ( localStorage.getItem('angularTheme') === 'dark-theme') {
       this._renderer.addClass(document.body, 'dark-theme');
@@ -332,6 +338,20 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       return this.floorPlanTemplate
     }
     return null;
+  }
+
+  get userInfoScreen() {
+    if (!this.smallDevice) { 
+      return this.userActions
+    }
+    return null
+  }
+
+  get userActionsSmallDevice() { 
+    if (this.smallDevice) { 
+      return this.userActions
+    }
+    return null
   }
 
   @HostListener("window:resize", [])
@@ -395,14 +415,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.userRoles    = user?.roles.toLowerCase();
-    this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
+    if (user.firstName) { 
+      this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
+    }
 
     this.isUser = false;
-    if (user.roles === 'user') {
+    if (user?.roles === 'user') {
       this.isUser = true;
     }
 
-    if (user.roles === 'admin') {
+    if (user?.roles === 'admin') {
       this.showPOSFunctions = true;
       this.isAdmin          = true
       this.isUserStaff      = true

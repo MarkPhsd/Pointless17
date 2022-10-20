@@ -1,3 +1,16 @@
+<div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+  <div class="grid-about">
+    <div>
+      <img class="pointless-logo"
+          onerror   = "this.src='../assets/images/logo.png'"
+          src       = '../assets/images/logo.png'
+          >
+    </div>
+    <div>Powered By pointlesspos.com</div>
+  </div>
+</div>
+
+<mat-divider></mat-divider>
 
 <div class="bg row-height">
   
@@ -9,31 +22,78 @@
           <h3>{{uiHomePageSetting?.displayCompanyName}}</h3>
         </div>
         <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-          <img
-            onerror   = "this.src='../assets/images/logo.png'"
-            [src]     = "uiHomePageSetting?.logoHomePage"
-            [alt]     = "uiHomePageSetting?.displayCompanyName"
-            class     = "large">
+          <app-logo [logoSize]="'large'" ></app-logo>
+        </div> 
+      </div>
+
+      <div *ngIf="(action$ | async) as order">
+     
+      </div>
+
+      <div class="order-message" *ngIf="goingToPay">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ...going to payment
+      </div>
+
+      <div class="message-grid" 
+           *ngIf="(message$ | async) as message">
+        <div>
+          {{message?.message}}
+        </div>
+        <div *ngIf="message.result">
+          <button class="small-button" mat-raised-button (click)="cancelMessage()">Clear</button>
         </div>
       </div>
 
-      <ng-template #loadingOrder>...loading your order.</ng-template>
+      <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+        <div class="sendingMessage" *ngIf="sendingMessage">
+          <mat-spinner [diameter]="50"></mat-spinner>
+          ...sending
+          <button mat-raised-button (click)="cancelMessage()"><mat-icon>cancel</mat-icon>Cancel</button>
+        </div>
+      </div>
+
       <div class="navigating order-message" 
             *ngIf="(order$ | async) as order; else loadingOrder">
 
           <mat-card>
-            <mat-card>
+            <mat-card-subtitle>
               <div class="transaction-data" *ngIf="order" >
-                <div class="total-headers foreground-color">Table   </div>
-                <div class="totals foreground-color"> {{ order?.tableName }}</div>
+                <div class="">Table   </div>
+                <div class=""> {{ order?.tableName }}</div>
+                <div class=""> User</div>
+                <div class="user-name"> {{ userAuth.user?.username }}</div>
+              </div>
+              <!-- {{userAuth.user | json}} -->
+
+              <div class="buttons-header">
                 <div>
                   <button mat-raised-button color="warn" (click)="requestService()">
-                    <mat-icon>alert</mat-icon> <mat-icon>staff</mat-icon> 
-                    <br>Alert Staff
+                    <mat-icon>hail</mat-icon>
+                    <br>Call Staff
+                  </button>
+                </div>
+                <div>
+                  <button mat-raised-button color="primary" (click)="requestCheck()">
+                    <mat-icon>payment</mat-icon>
+                    <br>Get Check
+                  </button>
+                </div>
+                <div>
+                  <button mat-raised-button color="primary" (click)="payOrder()">
+                    <div *ngIf="!userAuth.user || userAuth.user?.username.toLowerCase() === 'temp'">
+                      Login to Pay
+                    </div>
+
+                    <div *ngIf="userAuth.user && userAuth.user?.username.toLowerCase() != 'temp'">
+                      <mat-icon>payment</mat-icon>
+                      <br>Pay
+                    </div>
                   </button>
                 </div>
               </div>
-            </mat-card>
+
+            </mat-card-subtitle>
             <mat-card-content>
               <app-order-total
                 [mainPanel]="false"
@@ -44,16 +104,27 @@
 
           <mat-card>
             <pos-order-items
-                  [mainPanel] ="true"
-                  [qrOrder]   = 'true'
-                  [order]     ="order">
+                  [mainPanel]      ="true"
+                  [qrOrder]        ='true'
+                  [panelHeight]    ="orderItemsHeightStyle"
+                  [disableActions] ='true'
+                  [order]          ="order">
             </pos-order-items>
           </mat-card>
-        </div>
+      </div>
 
     </div>
     
   </div>
 
 </div>
+
+
+
+<ng-template #loadingOrder>
+  <div class="loading">
+    <mat-spinner [diameter]="50"></mat-spinner>
+    ...loading your order.
+  </div>
+</ng-template>
 

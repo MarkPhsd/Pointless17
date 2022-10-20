@@ -1,5 +1,5 @@
-﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService} from 'src/app/_services';
-import { ICompany, IUser }  from 'src/app/_interfaces';
+﻿import { CompanyService, AuthenticationService, AWSBucketService, ThemesService, OrdersService} from 'src/app/_services';
+import { ICompany, IPOSOrder, IUser }  from 'src/app/_interfaces';
 import { Component, Inject, Input, OnDestroy, OnInit, Optional, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -14,6 +14,8 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { takeHeapSnapshot } from 'process';
+import { runInThisContext } from 'vm';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
     selector   : 'login-dashboard',
@@ -55,9 +57,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   _uISettings: Subscription;
   uiHomePageSetting: UIHomePageSettings;
 
+  action$: Observable<any>;
   _loginStatus    : Subscription;
   loginStatusvalue: number;
-
+  loginAction: any;
   rememberMe: boolean;
 
   async initSubscriptions() {
@@ -111,18 +114,27 @@ export class LoginComponent implements OnInit, OnDestroy {
         private appInitService       : AppInitService,
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
+        private orderService         : OrdersService,
+        private orderMethodsService:   OrderMethodsService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
     )
   {
-    this.redirects();
-    console.log('data', data)
     if (data) {
       this.dialogOpen = true
+    }
+
+    if (!data) { 
+      this.redirects();
     }
   }
 
   async ngOnInit() {
+
+    const item = localStorage.getItem('loginAction')
+    this.loginAction = JSON.parse(item)
+    console.log(this.loginAction)
+
     this.bucket = await this.awsBucketService.awsBucketURL()
     this.pinToken = localStorage.getItem('pinToken');
 
@@ -138,7 +150,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.refreshTheme()
     this.statusMessage = ''
+
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+
     this.refreshUIHomePageSettings();
     this.terminalSettings$ = this.refreshElectronZoom();
   }
@@ -192,7 +206,9 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirects() {
+    
     if (this.redirectAPIUrlRequired()){ return }
+    // console.log('redirects')
     if (this.redirectUserLoggedIn())  { return }
   }
 
@@ -223,6 +239,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
   redirectUserLoggedIn() {
+    console.log('redirectUserLoggedIn')
     const user = this.authenticationService.userValue;
     if (user) {
       this.router.navigate(['/app-main-menu']);
@@ -379,7 +396,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    console.log('login occured -1 ', this.dialogOpen)
+    // console.log('login occured -1 ', this.dialogOpen)
     if (!this.validateForm(this.loginForm)) { return }
     this.spinnerLoading = true;
     const userName = this.f.username.value;
@@ -388,63 +405,103 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   submitLogin(userName: string, password: string) {
-    console.log('login occured 0 ', this.dialogOpen)
-    this.userSwitchingService.login(userName, password)
-      .subscribe({
-       next: user =>
-        {
-          console.log('login occured 1 ', this.dialogOpen)
-          this.initForm();
-          if (user && user.errorMessage) {
-            this.notifyEvent(user.errorMessage, 'Failed Login')
-            return;
-          }
+    // console.log('login occured 0 ', this.dialogOpen)
+    this.action$ = this.userSwitchingService.login(userName, password).pipe(
+        switchMap(user =>
+  
+           {
+            // console.log('login occured 1 ', user, this.dialogOpen)
+            this.initForm();
 
-          if (user) {
-            this.spinnerLoading = false;
-            if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
-              this.authenticationService.updateUser(null);
-              return
+            if (user && user.errorMessage) {
+              this.notifyEvent(user.errorMessage, 'Failed Login');
+              return of('failed')
+              return of(user);
             }
 
-            if (this.platformService.isApp()) {
-              if (this.loginApp(user)) {
-              return
-            } }
+            if (user) {
 
-            if (user.message && user.message.toLowerCase() === 'success') {
-              this.userSwitchingService.processLogin(user)
-              this.userSwitchingService.assignCurrentOrder(user)
-              console.log('login occured ', this.dialogOpen)
-              if (this.dialogOpen) {
-                this.dialogRef.close();
+              this.spinnerLoading = false;
+              
+              if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
+                this.authenticationService.updateUser(null);
+                return of('failed')
               }
-              return
-            }
 
+              if (this.platformService.isApp()) {
+                if (this.loginApp(user)) {
+                  return of('success')
+                } 
+              }
+
+              if (user.message && user.message.toLowerCase() === 'success') {
+
+                if (!this.loginAction) { 
+                  this.userSwitchingService.assignCurrentOrder(user)
+                }
+                
+                let pass = false
+      
+                if (this.loginAction) { 
+                  if (this.loginAction.name === 'setActiveOrder') {
+                    this.userSwitchingService.processLogin(user, '/pos-payment')
+                    pass = true
+                  }
+                } 
+                     
+                if (!pass) { 
+                  this.userSwitchingService.processLogin(user, '')
+                }
+
+                if (this.dialogOpen) {
+                  try {
+                    this.dialogRef.close();
+                  } catch (error) {
+                  }
+                }
+                return of('success')
+              }
+
+            }
           }
-        },
-       error: error => {
-          this.updateLoginStatus(6)
-          const message = `Login failed. ${error.errorMessage}. Service is not accesible. Check Internet.`
-          this.statusMessage = message
-          this.notifyEvent(message, 'error')
-          this.initForm();
-          return
-        }
-      })
-    ;
+        // ,
+        // error: error => {
+        //     this.updateLoginStatus(6)
+        //     const message = `Login failed. ${error.errorMessage}. Service is not accesible. Check Internet.`
+        //     this.statusMessage = message
+        //     this.notifyEvent(message, 'error')
+        //     this.initForm();
+        //     return
+        // }
+      ))
+      // .pipe(
+      //   switchMap( data => { 
+      //      console.log('switch to set login action')
+      //      if ( typeof data === "string") { 
+      //       if (data === 'success') {
+      //         return  this.setloginAction()
+      //       }
+      //      } 
+      //      return of('Login did not occur.')
+      //   }
+      // ))
+        
+  }
+
+  setloginAction(): Observable<IPOSOrder> { 
+
+    return this.orderMethodsService.getLoginActions()
 
   }
 
   loginApp(user) {
-    console.log('lloginApp ', this.dialogOpen)
+
     if (this.platformService.isApp()) {
       this.loggedInUser   = user.user
       this.spinnerLoading = false
       const currentUser   = user.user
       const sheet         = user.sheet
-      this.userSwitchingService.processLogin(currentUser)
+      this.userSwitchingService.processLogin(currentUser, null)
       if (sheet) {
         if (sheet.message) {
           this.notifyEvent(`Message ${sheet.message}`, `Error`)
@@ -458,10 +515,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  testCredit() {
-    // this.router.navigate('payments')
-    this.router.navigate(['/payments'])
-  }
+  // testCredit() {
+  //   // this.router.navigate('payments')
+  //   this.router.navigate(['/payments'])
+  // }
 
   assingBackGround(image: string) {
     if (!image) {

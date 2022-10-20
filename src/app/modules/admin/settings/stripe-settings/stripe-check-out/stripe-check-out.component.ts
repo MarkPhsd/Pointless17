@@ -7,11 +7,11 @@ import {
 } from '@stripe/stripe-js';
 import { StripeAPISettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IStripePaymentIntent, StripePaymentService } from 'src/app/_services/stripe/stripe-payment.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
+import { IPaymentResponse, IPOSOrder, IPOSPayment } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -28,8 +28,8 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   @ViewChild('paymentTemplateRef') paymentTemplateRef: TemplateRef<any>;
   outletTemplate: TemplateRef<any>;
 
-  @Input() amount  : number;
-  @Input() testMode: boolean;
+  @Input() amount    = 0;
+  @Input() testMode : boolean;
   @Input() maxAmount: number;
   @Output() outPutPayment: EventEmitter<any> = new EventEmitter();
   posPayment:  IPOSPayment;
@@ -55,6 +55,8 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
   submitted: any;
   paymentIntent$ : Observable<IStripePaymentIntent>;
   paying = false;
+
+  stripeTipValue = 0;
 
   @ViewChild(StripeCardComponent) card: StripeCardComponent;
 
@@ -112,11 +114,11 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
           if (!this.amount) { this.amount = 1 }
         }
         this.validateAmount()
-        return  this.createPaymentIntent(this.amount)
+        return  this.createPaymentIntent(this.amount + this.stripeTipValue)
       }
     )).subscribe(
       {next: data => {
-        console.log('data', data)
+        // console.log('data', data)
         if (data) { 
           if (data.clientSecret) { 
             if (!this.elementsOptions) { 
@@ -144,7 +146,6 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     this.stripeInstance.confirmPayment;
   }
 
- 
 
   cancel() {
     if (!this.dialogRef) { return}
@@ -175,6 +176,8 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     if (this.data) {
       this.amount = data?.amount;
       this.maxAmount = data?.amount;
+      this.stripeTipValue = +data?.tip;
+      console.log(data, data?.tip)
       this.title = data?.title;
     }
   }
@@ -190,23 +193,29 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
     //Add 'implements OnInit' to the class.
     if (this._apiSetting)  {this._apiSetting.unsubscribe()}
-    if (this._order)      { this._order.unsubscribe()}
-    if (this._posPayment) { this._posPayment.unsubscribe()}
-
+    if (this._order)       { this._order.unsubscribe()}
+    if (this._posPayment)  { this._posPayment.unsubscribe()}
   }
 
-  private createPaymentIntent(amount: number): Observable<IStripePaymentIntent> {
-    if (!this.testMode) {
-      return this.stripePaymentService.createPaymentIntentOrderBalance(this.order.id , 'usd')
-    }
-    return this.stripePaymentService.createPaymentIntent(amount,'usd')
+  private createPaymentIntent(amount: any): Observable<IStripePaymentIntent> {
+    // if (!this.testMode) {
+    //   return this.stripePaymentService.createPaymentIntentOrderBalance(this.order.id , 'usd')
+    // }
+    console.log('amount', amount)
+    return this.stripePaymentService.createPaymentIntentByTotal(this.order.id,'usd', amount)
   }
 
   initForm() {
 
+    if (!this.stripeTipValue)  { this.stripeTipValue = 0}
+    if (!this.amount)          { this.amount   = 0 }
+
+    const value = +(this.amount + this.stripeTipValue)
+    const amount = (value).toFixed(2)
+    
     this.paymentForm = this.fb.group({
       name  : ['', [Validators.required]],
-      amount: [this.amount, [Validators.required, Validators.pattern(/\d+/)]],
+      amount: [ amount, [Validators.required, Validators.pattern(/\d+/)]],
     });
 
     this.paymentForm.controls['amount'].valueChanges.subscribe(data => {
@@ -254,7 +263,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         this.paying = false;
         this.result = result;
 
-        if (result.error) {
+        if (result?.error) {
           // Show error to your customer (e.g., insufficient funds)
           // alert({ success: false, error: result.error.message });
           this.errorMessage = result?.error?.message;
@@ -277,7 +286,12 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
         this.posPayment.applicationLabel = 'stripe'
         this.posPayment.transactionData = JSON.stringify(result.paymentIntent);
         this.posPayment.approvalCode = this.elementsOptions?.clientSecret
-        this.posPayment.amountPaid = this.amount;
+
+        console.log('amount', this.amount, 'tip', this.stripeTipValue)
+
+        // const amount = this.paymentForm.controls['amount'].value
+        this.posPayment.amountPaid   = this.amount
+        this.posPayment.tipAmount    = this.stripeTipValue;
         return this.posPaymentService.makeStripePayment(site, this.posPayment , this.order)
 
       })).subscribe( data => {

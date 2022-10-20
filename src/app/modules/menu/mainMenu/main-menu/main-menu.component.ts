@@ -1,15 +1,16 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
-import { ISite } from 'src/app/_interfaces';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ResizedEvent } from 'angular-resize-event';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import {  MenuService } from 'src/app/_services';
+import {  MenuService, OrdersService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
+import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
   selector: 'app-main-menu',
@@ -25,6 +26,7 @@ export class MainMenuComponent implements OnInit  {
   panelHeightSize : string;
   smallDevice =false;
 
+  orderAction$ : Observable<IPOSOrder>;
   @ViewChild('brandView') brandView: TemplateRef<any>;
   @ViewChild('categoryView') categoryView: TemplateRef<any>;
   @ViewChild('departmentView') departmentView: TemplateRef<any>;
@@ -67,6 +69,8 @@ export class MainMenuComponent implements OnInit  {
     private siteService: SitesService,
     private router: Router,
     private menuService: MenuService,
+    private orderService: OrdersService,
+    private orderMethodsService: OrderMethodsService,
     private fb: FormBuilder,
   ) {
   }
@@ -107,6 +111,11 @@ export class MainMenuComponent implements OnInit  {
           this.setPanelHeight( this.homePageSetings )
         }
       })
+
+    console.log('main menu user:', this.userAuthorizationService.user)
+    if (this.userAuthorizationService.user) { 
+      this.orderAction$ = this.orderMethodsService.getLoginActions()
+    }
   }
 
   @HostListener("window:resize", [])
@@ -116,6 +125,8 @@ export class MainMenuComponent implements OnInit  {
       this.smallDevice = true
     }
   }
+
+ 
 
   reloadComponent() {
     let currentUrl = this.router.url;

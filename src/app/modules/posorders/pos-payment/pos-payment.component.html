@@ -1,3 +1,5 @@
+<div *ngIf="(orderAction$ | async)"></div>
+
 <div *ngIf="order  && (uiTransactions$ | async) as uiTransactions">
   <div [class]="orderlayout">
     <div class="transaction-data">
@@ -37,6 +39,22 @@
         </mat-card>
       </ng-template>
 
+      <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+        <div class="action-center grid-items">
+          <div>
+            <h4>Payment Amount: {{paymentAmount | currency}}</h4>
+          </div>
+          <div>
+            <button class="splitbutton"
+                    mat-raised-button
+                    color="primary"
+                    (click)="changeAmount()">
+              <mat-icon>edit</mat-icon>Change
+            </button>
+          </div>
+        </div>
+
+      </div>
       <div class="action-center grid-items">
         <div>
           <button class="splitbutton"
@@ -146,12 +164,37 @@
                     </button>
                   </div>
 
+
                   <div *ngIf="stripeEnabled && order && order.balanceRemaining  != 0 ">
-                    <button class="payment-buttons"
-                        mat-raised-button
-                        (click)="applyStripePayment()">
-                      <mat-icon color="warn">credit_card</mat-icon>Pay with Card
-                    </button>
+                    <div *ngIf="!this.platFormService.isApp()">
+                      <h3>Apply tip to Stripe Payment</h3>
+                      <div class="grid-tip-buttons">
+                        <div><button mat-raised-button (click)="addStripeTipPercent(15)">15 % Tip</button></div>
+                        <div><button mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
+                        <div><button mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
+                      </div>
+                      <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+                        <div>
+                          <mat-form-field appearance="outline">
+                              <input matInput
+                                [(ngModel)]="stripeTipValue"
+                                ngDefaultControl
+                                type="text"
+                              >
+                             <mat-label>
+                              Custom Tip Amount
+                             </mat-label> 
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+                      <button class="payment-buttons"
+                          mat-raised-button
+                          (click)="applyStripePayment()">
+                        <mat-icon color="warn">credit_card</mat-icon>Pay with Card
+                      </button>
+                    </div>
                   </div>
 
                 </div>
@@ -316,10 +359,10 @@
 
         <div *ngIf="paymentMethods">
           <div *ngFor="let item of paymentMethods">
-            <div *ngIf="item.id  == paymentMethod.id &&  item.instructions">
-              <h3>{{item.name}}</h3>
+            <div *ngIf="item?.id  == paymentMethod?.id &&  item?.instructions">
+              <h3>{{item?.name}}</h3>
               <mat-hint>
-                <div [innerHTML]="item.instructions" ></div>
+                <div [innerHTML]="item?.instructions" ></div>
               </mat-hint>
               <mat-divider></mat-divider>
             </div>

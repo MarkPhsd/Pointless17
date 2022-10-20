@@ -88,6 +88,22 @@ export class StripePaymentService {
 
   }
 
+  createPaymentIntentByTotal(id: number, currency: string, total: string): Observable<IStripePaymentIntent> {
+
+    const site = this.siteService.getAssignedSite();
+
+    const controller = '/StripeEvents/'
+
+    const endPoint = 'createPaymentIntentByTotal'
+
+    const parameters = `?id=${id}&currency=${currency}&total=${total}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<IStripePaymentIntent>(url)
+
+  }
+
   pay(name: string , paymentElement ) {
 
     this.paying = true;

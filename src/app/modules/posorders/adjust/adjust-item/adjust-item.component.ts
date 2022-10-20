@@ -3,9 +3,9 @@ import { Component, Inject, OnInit,OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription,Observable } from 'rxjs';
+import { Subscription,Observable, switchMap, of } from 'rxjs';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
-import { IItemBasic, OrdersService } from 'src/app/_services';
+import { IItemBasic, OrderActionResult, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -30,7 +30,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
   inventoryReturnDiscard  : boolean;
   value: any;
   order: IPOSOrder;
-
+  actionResponse$ : Observable<any>;
   initSubscriptions() {
     this._ItemWithAction = this.itemService.itemWithAction$.subscribe(data=> {
       this.itemWithAction = data
@@ -180,7 +180,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
     }
   }
 
-  async selectItem(setting) {
+  selectItem(setting) {
 
     if (this.itemWithAction.typeOfAction.toLowerCase() === 'VoidOrder'.toLowerCase()) {
       this.voidOrder(setting)
@@ -202,7 +202,18 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
         switch (value) {
           case 1: //void
             response$ =  this.itemService.voidPOSOrderItem(site, this.itemWithAction)
-            console.log('void item')
+            console.log('this.action', this.itemWithAction)
+            this.actionResponse$ = response$.pipe(switchMap(
+              data => { 
+                  if (data === 'Item voided') {
+                  this.updateSubscription()
+                  this.notifyEvent('Item voided', 'Result')
+                  this.closeDialog();
+                  }
+                  return of(data)
+                }
+              )
+            )
             break;
           case 2: //priceAdjust
               break;
@@ -211,13 +222,44 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             break;
           case 10:
             this.itemWithAction.order = this.order;
-            response$ =  this.orderMethodService.refundOrder(this.itemWithAction )
+            const item = {} as OrderActionResult
+            this.actionResponse$ = this.orderMethodService.refundOrder(this.itemWithAction).pipe(
+              switchMap( data => { 
+                  this.orderService.updateOrderSubscription(data.order)
+                  if (data?.errorMessage) {
+                    this.notifyEvent(data.errorMessage, 'Result')
+                  }
+                  if (data.message) {
+                    this.notifyEvent(data.message, 'Result')
+                  }
+                  const url = 'pos-payment'
+                  this.router.navigateByUrl(url)
+                  this.closeDialog();
+                  return of(data)
+                }
+              )
+            )
+            return;
+
             break;
           case 11:
             this.itemWithAction.order = this.order;
             this.itemWithAction.items = this.posItems;
-            console.log(this.itemWithAction)
-            response$ =  this.orderMethodService.refundItem(this.itemWithAction)
+            this.actionResponse$      = this.orderMethodService.refundItem(this.itemWithAction).pipe(
+              switchMap( data =>{ 
+                if (data?.errorMessage) {
+                  this.notifyEvent(data?.errorMessage, 'Result')
+                }
+                if (!data?.errorMessage) {
+                  this.notifyEvent(data?.message, 'Result')
+                }
+    
+                this.orderService.updateOrderSubscription(data?.order)
+    
+                this.closeDialog();
+                return of(data)
+              })
+            )
             break;
         }
 
@@ -226,44 +268,6 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
           return;
         }
 
-        response$.subscribe(data => {
-
-          if (value == 10) {
-            this.orderService.updateOrderSubscription(data.order)
-
-            if (!data.errorMessage) {
-              this.notifyEvent(data.errorMessage, 'Result')
-            }
-            if (!data.errorMessage) {
-              this.notifyEvent(data.message, 'Result')
-            }
-
-            const url = 'pos-payment'
-            this.router.navigateByUrl(url)
-            this.closeDialog();
-            return
-          }
-          if (value == 11) {
-
-            if (data.errorMessage) {
-              this.notifyEvent(data.errorMessage, 'Result')
-            }
-            if (!data.errorMessage) {
-              this.notifyEvent(data.message, 'Result')
-            }
-
-            this.orderService.updateOrderSubscription(data.order)
-
-            this.closeDialog();
-            return
-          }
-
-          if (data === 'Item voided') {
-            this.updateSubscription()
-            this.notifyEvent('Item voided', 'Result')
-            this.closeDialog();
-          }
-        })
       }
     }
 

@@ -103,7 +103,7 @@
                           mat-raised-button color="primary"
                           (click)='browseMenu()'>Guest</button>
                 </div>
-
+                <div *ngIf="(action$ | async)"></div>
             </div>
             <div class="center">
                 <div>

@@ -38,7 +38,8 @@ export class NavigationService {
     });
   }
 
-  makePayment(openOrderBar: boolean , smallDevive: boolean, isStaff: boolean, completionDate: string) {
+  makePayment(openOrderBar: boolean , smallDevive: boolean, 
+              isStaff: boolean, completionDate: string, path: string) {
     this.toolbarUIService.updateOrderBar(openOrderBar)
     this.toolbarUIService.resetOrderBar(false)
 
@@ -47,7 +48,11 @@ export class NavigationService {
 
     let url = 'pos-order-schedule'
 
-    console.log('is staff ', isStaff)
+    if (path) { 
+      this.router.navigate([path])
+      return
+    }
+
     if (!isStaff && !completionDate) {
       url = 'pos-order-schedule'
       this.router.navigateByUrl(url)

@@ -1,0 +1,13 @@
+.simple-icon { 
+  // margin-top: 5px;
+  margin: 5px;
+  margin-left: 10px;
+}
+
+.message-list { 
+  max-height: 400px;
+  min-height: 150px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}

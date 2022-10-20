@@ -32,6 +32,7 @@ import { CardPointMethodsService } from '../../payment-processing/services';
 import { Capacitor } from '@capacitor/core';
 import { TouchBarOtherItemsProxy } from 'electron';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 
 @Component({
   selector: 'app-pos-payment',
@@ -45,6 +46,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   @Input() order  :   IPOSOrder;
 
+  loginAction     : any;
   id              :   number;
   _currentPayment :   Subscription; //    = new BehaviorSubject<IPOSPayment>(null);
   currentPayment$ :   Observable<IPOSPayment>;//     = this._currentPayment.asObservable();
@@ -82,14 +84,20 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   isStaff       : boolean;
   paymentMethods  : IPaymentMethod[];
 
+  stripeTipValue  : any;
+
   groupPaymentAmount  = 0;
   groupPaymentGroupID = 0;
+  _paymentAmount       = 0;
+  enterCustomAmount   = false;
+
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
   devicename = localStorage.getItem('devicename')
   message: string;
   serviceIsScheduled: boolean;
+  orderAction$  : Observable<any>;
 
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.pipe(
@@ -118,8 +126,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     })
   }
 
-
-
   constructor(private paymentService  : POSPaymentService,
               private orderMethodsService: OrderMethodsService,
               private sitesService    : SitesService,
@@ -142,6 +148,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
               private fb              : FormBuilder) { }
 
   ngOnInit(): void {
+
     this.initAuthorization()
 
     const site = this.sitesService.getAssignedSite();
@@ -173,6 +180,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.paymentMethods = data;
     })
 
+    console.log('setting order actions', this.authenticationService.userValue)
+    this.authenticationService.updateUser(this.authenticationService.userValue)
+    if (this.authenticationService.userValue) { 
+      // console.log('setting order actions')
+      this.orderAction$ = this.orderMethodsService.getLoginActions()
+    }
+  }
+
+  setLoginAction() { 
+    const item = localStorage.getItem('loginAction')
+    this.loginAction = JSON.parse(item)
   }
 
   initAuthorization() {
@@ -215,8 +233,27 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     });
   }
 
+  addStripeTipPercent(value) { 
+    if (value) { 
+      
+      this.stripeTipValue = ( this.paymentAmount * (value/100) ).toFixed(2);
+    }
+  }
+
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
+
+    if (this.userAuthorization.user.roles = 'user') {
+      return paymentMethods$.pipe(
+        switchMap(data => {
+          let list = data.filter( item => !item.isCreditCard)
+          list = list.filter( item => !item.isCash)
+          list = list.filter( item => !item.wic)
+          list = list.filter( item => !item.ebt)
+          list = list.filter( item => item.enabledOnline)
+        return  of(list)
+      }))
+    }
 
     if (this.platFormService.isApp()) {
       return paymentMethods$.pipe(
@@ -253,6 +290,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   refreshIsOrderPaid() {
+    if (!this.order) { return }
     this.paymentsEqualTotal  = this.paymentsMethodsService.isOrderBalanceZero(this.order)
     if (this.order.completionDate) {
       return true;
@@ -375,7 +413,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyStripePayment() {
     const order = this.order;
     if (order) {
-      const data = {title: 'Payment', amount: order.balanceRemaining}
+      const data = {title: 'Payment', amount: this.paymentAmount, tip: this.stripeTipValue}
       this.openStripePayment(data)
     }
   }
@@ -383,22 +421,21 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyBoltPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      // console.log(this.uiTransactions)
-      this.cardPointMethodsService.processSubCreditPayment(order, order.balanceRemaining, false, this.uiTransactions)
+      this.cardPointMethodsService.processSubCreditPayment(order, this.paymentAmount, false, this.uiTransactions)
     }
   }
 
   processDSICreditCardPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, order.balanceRemaining, manual)
+      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, this.paymentAmount, manual)
     }
   }
 
   processDSIEMVAndroidCreditCardPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, order.balanceRemaining, manual, this.uiTransactions)
+      this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, this.paymentAmount, manual, this.uiTransactions)
     }
   }
 
@@ -411,11 +448,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     let dialogRef: any;
     const site = this.sitesService.getAssignedSite();
     dialogRef = this.dialog.open(StripeCheckOutComponent,
-      { width:        '75vw',
-        minWidth:     '375px',
-        maxWidth:     '450px',
-        height:       '675px',
-        minHeight:    '675px',
+      { width:        '100vw',
+        minWidth:     '100vw',
+        maxWidth:     '100vw',
+        height:       '800px',
+        minHeight:    '800px',
         data: data,
       },
     )
@@ -425,9 +462,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     });
   }
 
+  inputPartialAmount() {
+    this.enterCustomAmount = true;
+  }
+
+  changeAmount() { 
+    this.enterCustomAmount = true;
+    this.stepSelection = 3
+  }
+
   applyPaymentAmount(event) {
 
-    console.log(event)
     if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm();
       return
@@ -456,7 +501,17 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
                                   this.paymentMethod.isCash,
                                   this.order.balanceRemaining);
 
-        if (!isValidAmount) { return }
+        if (!isValidAmount) { 
+          this.paymentAmountForm  = this.fb.group({fieldname: []})
+          return 
+        }
+
+        if (this.enterCustomAmount) { 
+          this.enterCustomAmount = false
+          this._paymentAmount    = amount;
+          this.stepSelection     = 1;
+          return
+        }
 
         const processResults$ = this.processGetResults(amount, this.posPayment)
 
@@ -599,7 +654,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   applyPointBalance() {
     let  amountPaid = this.paymentsMethodsService.getPointsRequiredToPayBalance(
-                    this.order.balanceRemaining,
+                    this.paymentAmount,
                     this.order.clients_POSOrders.loyaltyPointValue);
     this.pointValueForm = this.fb.group( { itemName: [amountPaid] } );
     const paymentResponse$ = this.processGetResults(amountPaid, this.posPayment);
@@ -644,6 +699,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
+  get paymentAmount() { 
+    if (!this._paymentAmount || this._paymentAmount ==0) { 
+      return  this.order.balanceRemaining;
+    }
+    return this._paymentAmount;
+  }
   applyBalance() {
     this.applyPaymentAmount(this.order.balanceRemaining)
   }

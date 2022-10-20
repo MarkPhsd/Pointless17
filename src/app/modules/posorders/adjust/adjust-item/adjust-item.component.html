@@ -1,17 +1,19 @@
 
 <!-- Adjusts Item Container -->
 <!-- itemWithAction {{value | json}} -->
+
+<div *ngIf="(actionResponse$  | async) as action">
+  {{action}}
+</div>
 <div *ngIf="itemWithAction">
   <mat-card>
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <h4>Action: {{itemWithAction?.typeOfAction}} </h4>
+      <h4>Action: {{itemWithAction?.typeOfAction}} ({{itemWithAction?.action}})</h4>
       <h4>
         {{itemWithAction?.posItem?.productName}}
       </h4>
-
-      <!-- {{message}} -->
     </mat-card-subtitle>
     <mat-card-content>
       <div *ngIf="!list$">

@@ -116,8 +116,6 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.initStyles()
-
     let uiHomePage = this.uiSettingService.homePageSetting;
     this.wideBar   = true;
 
@@ -145,12 +143,37 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
       this.orderItemsPanel = 'item-list';
     }
     this.initSubscriptions();
+
+    this.initStyles()
   }
 
   initStyles() { 
     this.qrCodeStyle = ''
-    if (this.qrOrder) { this.qrCodeStyle = 'qr-style'  }
-    this.mainStyle = `${this.qrCodeStyle} orderItemsPanel`
+
+    if (!this.mainPanel && !this.qrOrder) { 
+      //get the hieght of the components. this is got from the subscription to the 
+      //UI Service.
+      // this.panelHeight = 'calc(100vh - 450px)'
+      this.mainStyle = `main-panel orderItemsPanel`
+      return;
+    }
+    
+    if (this.qrOrder) { 
+      this.panelHeight = 'calc(100vh - 550px)'
+      this.qrCodeStyle = 'qr-style'  
+      this.mainStyle = `${this.qrCodeStyle} orderItemsPanel`
+      return;
+    }
+
+    if (this.mainPanel) {
+      this.mainStyle = `main-panel orderItemsPanel`
+      this.panelHeight = 'calc(100vh - 100px)'
+      if (window.innerWidth < 768) { 
+        this.panelHeight = 'calc(100vh - 200px)'
+      }
+    }
+  
+  
   }
   
   getTransactionUI() {

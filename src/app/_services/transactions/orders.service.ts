@@ -41,8 +41,8 @@ export interface IVoidOrder {
 }
 
 export interface OrderActionResult {
-  message : String;
-  errorMessage : String;
+  message : string;
+  errorMessage : string;
   order : IPOSOrder;
 }
 
@@ -115,9 +115,24 @@ export class OrdersService {
       const site = this.siteService.getAssignedSite();
       this.releaseOrder(site, id).subscribe()
     }
+    this.clearOrderSubscription()
+  }
+
+  clearOrderSubscription() {
     localStorage.removeItem('orderSubscription')
     this.toolbarServiceUI.updateOrderBar(false)
     this.updateOrderSubscription(null);
+  }
+
+  updateOrderSubscriptionLoginAction(order: IPOSOrder) {
+    this._currentOrder.next(order);
+    this.currentOrder = order;
+    if (order == null) {
+      order = this.getStateOrder();
+      if (order) {
+        return;
+      }
+    }
   }
 
   updateOrderSubscription(order: IPOSOrder) {

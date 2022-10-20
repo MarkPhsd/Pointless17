@@ -314,9 +314,11 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.uiSettings = data;
     })
 
-    this.settingService.getUITransactionSetting().subscribe(data => {
-      this.uiTransactionSettings = data;
-    })
+    if (this.userAuthorization.user) { 
+      this.settingService.getUITransactionSetting().subscribe(data => {
+        this.uiTransactionSettings = data;
+      })
+    }
   }
 
   initAuthorization() {
@@ -533,7 +535,14 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.smallDevice) {
       this.openOrderBar = false
     }
-    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, this.isStaff, this.order.completionDate )
+    let path = ''
+    if (this.order) { 
+      if (this.order.tableName && this.order.tableName.length>0) { 
+        path = 'pos-payment'
+      }
+    }
+    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, 
+                                      this.isStaff, this.order.completionDate, path )
   }
 
   //loop the items

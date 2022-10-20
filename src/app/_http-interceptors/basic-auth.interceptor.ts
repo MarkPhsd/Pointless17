@@ -23,6 +23,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
               private authenticationService: AuthenticationService)
   {
     this.initSubscription();
+    
   }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
