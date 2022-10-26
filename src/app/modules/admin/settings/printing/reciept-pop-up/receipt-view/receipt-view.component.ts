@@ -3,7 +3,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
 import { PrintingAndroidService } from 'src/app/_services/system/printing-android.service';
 import { OrdersService } from 'src/app/_services';
@@ -27,7 +27,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   @Input() printerName      : string;
   @Input() options           : printOptions;
 
-
   _printView: Subscription;
   printView               = 1;
 
@@ -49,6 +48,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   labelList$        : Observable<ISetting[]>;
   prepReceiptList$  : Observable<ISetting[]>;
   receiptID         : number;
+
+  refreshView$      : Observable<any>;
 
   items             : any[];
   orders            : any;
@@ -190,24 +191,56 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       this.initBalanceSheetDefaultLayouts()
       return;
     }
-
     const styles  = await this.applyStyles();
     if (receiptID && styles ) {
       this.initDefaultLayouts()
     }
   }
 
-  async  initBalanceSheetDefaultLayouts() {
-    try {
-      // 'apply balance sheet style'
-      const site = this.siteService.getAssignedSite();
-      const setting = {} as ISetting;
-      setting.text  = await  this.printingService.appyBalanceSheetStyle()
-      this.receiptStyles =  setting;
-      this.applyStyle( this.receiptStyles)
-    } catch (error) {
-      console.log(error)
-    }
+   refreshViewObservable(){
+    const receipt$  =  this.getDefaultPrinterOb();
+    this.refreshView$ = receipt$.pipe(
+      switchMap(data => {
+        if (!data) { return}
+        this.electronReceiptSetting = data;
+        this.receiptID   =  +data.option1;
+        this.printerName =  data.text;
+        if (this.printingService.printView  == 2) {
+          this.initBalanceSheetDefaultLayouts()
+          return;
+        }
+        const styles  =  this.applyStyles();
+        if (this.receiptID && styles ) {
+          this.initDefaultLayouts()
+        }
+        return of(data)
+      })
+    )
+  }
+
+
+  initDefaultLayoutsObservable() {
+    // try {
+    //   const site = this.siteService.getAssignedSite();
+    //   await this.printingService.initDefaultLayouts();
+    //   if (!this.receiptStyles) { this.receiptStyles  = await this.applyStyles(); }
+    //   if (this.receiptStyles)  { this.receiptStyles  = this.applyStyle(this.receiptStyles) };
+
+    //   //could be altered for alternate type
+    //   this.receiptName =  'defaultElectronReceiptPrinterName'
+
+    //   const receipt$ = this.settingService.getSettingByNameNoRoles(site, this.receiptName)
+    //   receipt$.pipe(
+    //     switchMap(data => {
+    //       this.receiptID = data.id
+    //       return this.settingService.getSetting(site, +data.option1)
+    //   })).subscribe(data => {
+    //     this.initSubComponent(data)
+    //   })
+
+    // } catch (error) {
+    //   console.log(error)
+    // }
   }
 
   async  initDefaultLayouts() {
@@ -224,7 +257,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       receipt$.pipe(
         switchMap(data => {
           this.receiptID = data.id
-          console.log('receipt layoutid', data.option1)
           return this.settingService.getSetting(site, +data.option1)
       })).subscribe(data => {
         this.initSubComponent(data)
@@ -234,6 +266,21 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       console.log(error)
     }
   }
+
+  async  initBalanceSheetDefaultLayouts() {
+    try {
+      // 'apply balance sheet style'
+      const site = this.siteService.getAssignedSite();
+      const setting = {} as ISetting;
+      setting.text  = await  this.printingService.appyBalanceSheetStyle()
+      this.receiptStyles =  setting;
+      this.applyStyle( this.receiptStyles)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+
 
   async applyStyles(): Promise<ISetting> {
     const site  = this.siteService.getAssignedSite();

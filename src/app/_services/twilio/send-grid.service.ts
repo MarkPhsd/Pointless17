@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
+import { ISite } from 'src/app/_interfaces';
 import { SitesService } from '../reporting/sites.service';
 
 export interface EmailModel {
@@ -150,9 +151,7 @@ export class SendGridService {
   }
 
 
-  sendSalesReport(id: number, dateFrom:string, dateTo: string): Observable<any> {
-
-    const site = this.siteService.getAssignedSite()
+  sendSalesReport(site: ISite, id: number, dateFrom:string, dateTo: string): Observable<any> {
 
     const controller =  "/SendGrid/"
 

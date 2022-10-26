@@ -1,0 +1,65 @@
+
+    .splashScreenFadeHide {
+      opacity: 0;
+      transition: opacity 1s linear;
+    }
+
+    .align-splash {
+      top: calc(100vh - 50%);
+      left: calc(100vw - 50% - 400px);
+      display: flex;
+      justify-self: center;
+      align-items: center;
+      align-content: center;
+    }
+
+    .app-splash-screen {
+      background: #3a36d1;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      opacity: 1;
+   }
+
+   .index-top {
+    z-index: 1;
+   }
+   .index-bottom {
+    z-index: -100;
+   }
+   .loading-text {
+      position: relative;
+      color: rgba(0, 0, 0, 0.3);
+      font-size: 5em;
+   }
+   .loading-text:before {
+      content: attr(data-text);
+      position: absolute;
+      overflow: hidden;
+      max-width: 7em;
+      white-space: nowrap;
+      color: #fff;
+      animation: loading 8s linear;
+   }
+   @keyframes loading {
+      0% {
+         max-width: 0;
+      }
+   }
+
+   .grid-items {
+    display: grid;
+    grid-template-columns: 1fr;
+   }
+
+   .grid-item {
+    display: flex;
+    justify-self: center;
+   }

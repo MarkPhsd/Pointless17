@@ -1,0 +1,20 @@
+<ng-container [ngTemplateOutlet]="splashScreen"></ng-container>
+
+<ng-template #splashScreen>
+  <div class="app-splash-screen indexvalue"
+       [ngStyle]="{'opacity': opacityChange, 'transition': splashTransition}">
+
+    <div class="grid-items">
+      <div>
+        <img height="400px"
+              width="400px"
+              src="./assets/images/logo.png"
+              alt="pointlesspos">
+      </div>
+
+      <div class="grid-item">Powered by pointlesspos.com</div>
+      <div class="grid-item loading">...Loading</div>
+    </div>
+
+  </div>
+</ng-template>

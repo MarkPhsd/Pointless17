@@ -313,6 +313,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
 @NgModule({
   declarations: [
+
     AppWizardStatusComponent,
     AccordionMenuItemEditComponent,
     ActivityTogglesComponent,
@@ -324,8 +325,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     AddInventoryItemComponent,
     AddItemByTypeComponent,
     AgPaginationComponent,
+
     ArrayFilterPipe,
     ArraySortPipe,
+
     BalanceSheetsComponent,
     BalanceSheetFilterComponent,
     BalanceSheetEditComponent,
@@ -333,6 +336,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     BalanceSheetHeaderViewComponent,
     BalanceSheetQuickViewComponent,
     BalanceSheetViewComponent,
+
     BrandslistComponent,
     BrandTypeSelectComponent,
     CacheSettingsComponent,
@@ -511,7 +515,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     ReviewEditComponent,
     RewardTypeFilterComponent,
     RewardTypeResultsSelectorComponent,
-  
+
     SearchPanelComponent,
     ScrollableDirective,
     ScheduledMenuContainerComponent,

@@ -171,7 +171,7 @@ const routes: Routes = [
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
         { path: 'pos-payment',  component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
 
-   
+
         //PosOperationsComponent
         { path: 'operations', component: PosOperationsComponent, canActivate: [AuthGuard], data: {title: 'Operations', animation: 'isLeft'} },
 

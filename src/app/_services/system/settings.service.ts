@@ -490,13 +490,28 @@ export class SettingsService {
     setting.option6    =  await this.getDefaultReceiptHeaderLayout()
     setting.option5    =  await this.getDefaultReceiptFooterLayout()
     setting.option7    =  await this.getDefaultReceiptPaymentLayout()
-    setting.option11    =  await this.getDefaultReceiptCreditPaymentLayout()
+    setting.option11   =  await this.getDefaultReceiptCreditPaymentLayout()
     setting.option10   =  await this.getDefaultReceiptWICEBTPaymentLayout()
     setting.option8    =  await this.getDefaultReceiptsubFooterLayout()
 
     setting.description = 'ReceiptLayouts'
     return await this.setText(site, setting)
   }
+
+  // setDefaultReceiptLayoutObservable(site: ISite): Promise<ISetting> {
+  //   // let setting        =  {} as ISetting;
+  //   // setting.name       =  'Receipt Default'
+  //   // setting.text       =  await this.getDefaultReceiptItemLayout()
+  //   // setting.option6    =  await this.getDefaultReceiptHeaderLayout()
+  //   // setting.option5    =  await this.getDefaultReceiptFooterLayout()
+  //   // setting.option7    =  await this.getDefaultReceiptPaymentLayout()
+  //   // setting.option11   =  await this.getDefaultReceiptCreditPaymentLayout()
+  //   // setting.option10   =  await this.getDefaultReceiptWICEBTPaymentLayout()
+  //   // setting.option8    =  await this.getDefaultReceiptsubFooterLayout()
+
+  //   // setting.description = 'ReceiptLayouts'
+  //   // return await this.setText(site, setting)
+  // }
 
   async getDefaultReceiptItemLayout() {
     const oberservable$ = this.http.get('assets/htmlTemplates/receiptTemplateItems.html', {responseType: 'text'});

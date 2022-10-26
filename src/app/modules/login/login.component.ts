@@ -16,6 +16,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { takeHeapSnapshot } from 'process';
 import { runInThisContext } from 'vm';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 
 @Component({
     selector   : 'login-dashboard',
@@ -114,6 +115,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private appInitService       : AppInitService,
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
+        private splashScreenStateService: SplashScreenStateService,
         private orderService         : OrdersService,
         private orderMethodsService:   OrderMethodsService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
@@ -124,7 +126,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.dialogOpen = true
     }
 
-    if (!data) { 
+    if (!data) {
       this.redirects();
     }
   }
@@ -155,7 +157,14 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.refreshUIHomePageSettings();
     this.terminalSettings$ = this.refreshElectronZoom();
+
+    setTimeout(() => {
+      this.splashScreenStateService.stop();
+    }, 1000);
+
   }
+
+
 
   refreshUIHomePageSettings() {
     this.uiSettingService.getSetting('UIHomePageSettings').subscribe(data =>  {
@@ -206,7 +215,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirects() {
-    
+
     if (this.redirectAPIUrlRequired()){ return }
     // console.log('redirects')
     if (this.redirectUserLoggedIn())  { return }
@@ -408,7 +417,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // console.log('login occured 0 ', this.dialogOpen)
     this.action$ = this.userSwitchingService.login(userName, password).pipe(
         switchMap(user =>
-  
+
            {
             // console.log('login occured 1 ', user, this.dialogOpen)
             this.initForm();
@@ -422,7 +431,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user) {
 
               this.spinnerLoading = false;
-              
+
               if (user.message === 'failed' || (user.errorMessage || (user.user && user.user.errorMessage))) {
                 this.authenticationService.updateUser(null);
                 return of('failed')
@@ -431,25 +440,25 @@ export class LoginComponent implements OnInit, OnDestroy {
               if (this.platformService.isApp()) {
                 if (this.loginApp(user)) {
                   return of('success')
-                } 
+                }
               }
 
               if (user.message && user.message.toLowerCase() === 'success') {
 
-                if (!this.loginAction) { 
+                if (!this.loginAction) {
                   this.userSwitchingService.assignCurrentOrder(user)
                 }
-                
+
                 let pass = false
-      
-                if (this.loginAction) { 
+
+                if (this.loginAction) {
                   if (this.loginAction.name === 'setActiveOrder') {
                     this.userSwitchingService.processLogin(user, '/pos-payment')
                     pass = true
                   }
-                } 
-                     
-                if (!pass) { 
+                }
+
+                if (!pass) {
                   this.userSwitchingService.processLogin(user, '')
                 }
 
@@ -475,20 +484,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         // }
       ))
       // .pipe(
-      //   switchMap( data => { 
+      //   switchMap( data => {
       //      console.log('switch to set login action')
-      //      if ( typeof data === "string") { 
+      //      if ( typeof data === "string") {
       //       if (data === 'success') {
       //         return  this.setloginAction()
       //       }
-      //      } 
+      //      }
       //      return of('Login did not occur.')
       //   }
       // ))
-        
+
   }
 
-  setloginAction(): Observable<IPOSOrder> { 
+  setloginAction(): Observable<IPOSOrder> {
 
     return this.orderMethodsService.getLoginActions()
 

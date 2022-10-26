@@ -63,9 +63,7 @@ export class AppComponent {
       private electronService      :  ElectronService,
       private appInitService       : AppInitService,
       // private ipcService          :  IPCService,
-
   ) {
-
 
       this.initSubscription();
       this.initStyle();

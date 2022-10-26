@@ -172,8 +172,6 @@ export class DSIProcessService {
         transaction.TranCode = 'EMVVoidSale';
         const result = this.testVoid(transaction.TranCode, +transaction.Amount, posPayment.id, false, false,  transaction.TranType)
         result.TranResponse.TranCode = 'EMVVoidSale';
-        // console.log('CmdResponse', result?.CmdResponse)
-        // console.log('TranResponse', result?.TranResponse)
         return result
       }
 

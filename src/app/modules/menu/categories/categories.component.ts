@@ -11,7 +11,7 @@ import { trigger, transition, animate, style, query, stagger } from '@angular/an
 import { Capacitor, Plugins } from '@capacitor/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent } from 'rxjs';
+import { Observable, Subject ,fromEvent,of } from 'rxjs';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IPagedList } from 'src/app/_services/system/paging.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -129,6 +129,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   get itemName()   { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
   placeHolderImage   : String = "assets/images/placeholderimage.png"
+  bucket$:    Observable<any>;
 
   searchModel: ProductSearchModel
   searchItems$     : Subject<IProductSearchResults> = new Subject();
@@ -186,15 +187,12 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     this.isApp = this.platFormService.isApp();
     this.section = 1
     this.href = this.router.url;
-
   }
 
-
-
-  async  ngOnInit() {
-   await this.getBucket()
-   this.init();
-   this.setPanelSyle();
+  ngOnInit() {
+    this.getBucket()
+    this.init();
+    this.setPanelSyle();
   }
 
   getPlaceHolder() {
@@ -284,8 +282,16 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     }
   }
 
-  async getBucket() {
-    this.bucket =   await this.awsBucket.awsBucket();
+  getBucket() {
+    // this.bucket =   await this.awsBucket.awsBucket();
+
+    this.bucket$ = this.awsBucket.getAWSBucketObservable().pipe(
+      switchMap( data => {
+        this.bucket = data.preassignedURL;
+        return of(data)
+      })
+    )
+
   }
 
   refreshMouseMove(pageX: any) {
@@ -302,9 +308,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
   }
 
   listItems(id:number) {
-
     this.initProductSearchModel(id)
-
     if (this.itemTypeID == 4) {
       this.router.navigate(["/menuitems-infinite/", {categoryID:id }]);
     }
@@ -405,6 +409,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
         }
       }
     )
+
   };
 
 

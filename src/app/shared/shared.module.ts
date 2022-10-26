@@ -156,6 +156,7 @@ import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/el
 import { QROrderComponent } from '../modules/posorders/qrorder/qrorder.component';
 import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-table.component';
 import { RequestMessageComponent } from '../modules/admin/profiles/request-messages/request-message/request-message.component';
+import { SplashLoadingComponent } from './widgets/splash-loading/splash-loading.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -274,7 +275,7 @@ import { RequestMessageComponent } from '../modules/admin/profiles/request-messa
     ProgressBarComponent,
     PriceCategorySearchComponent,
     RetailProductEditComponent,
- 
+
     SalesTaxReportComponent,
     ScaleReaderComponent,
     ScaleSettingsComponent,

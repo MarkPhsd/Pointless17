@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType, HttpHeaders, HttpRequest, HttpResponse  } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { error, promise } from 'protractor';
 import { SitesService } from '../reporting/sites.service';
 import { AppInitService } from '../system/app-init.service';
@@ -44,7 +44,6 @@ export class AWSBucketService {
     }
 
     bucket =  localStorage.getItem('awsbucket');
-    // console.log('Bucket from AWS Storage', bucket)
     return bucket
 
   }
@@ -236,6 +235,21 @@ export class AWSBucketService {
 
     return ''
 
+  }
+
+  getAWSBucketObservable(): Observable<any> {
+    const site = this.siteService.getAssignedSite();
+    const controller = '/aws/'
+    const parameter = "getAWSBucket"
+    const url = `${site.url}${controller}${parameter}`
+    const uri = {url: url, cacheMins: 60}
+    return this.httpCache.get<IAWS_Temp_Key>( uri )
+      .pipe(
+        switchMap( data => {
+          localStorage.setItem('awsbucket', `${data.preassignedURL}`)
+          return of(data)
+        })
+      )
   }
 
 

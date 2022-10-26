@@ -27,6 +27,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
 
+
   searchPhrase:  Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
   private readonly onDestroy = new Subject<void>();
@@ -56,9 +57,15 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   // )
 
   initSubscriptions() {
-    // this._order = this.orderService.currentOrder$.subscribe( data => {
-    //   this.order = data
-    // })
+    this._order = this.orderService.currentOrder$.subscribe( data => {
+      if ( data ) {
+        if ( (this.order && this.order?.id != data.id) || !this.order ) {
+          this.input.nativeElement.focus();
+        }
+      }
+
+      this.order = data
+    })
     this.uiSettingService.transactionUISettings$.subscribe(data => {
       if (!data) { return}
       this.requireEnter = data.requireEnterTabBarcodeLookup;

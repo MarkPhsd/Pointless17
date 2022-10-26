@@ -38,7 +38,7 @@
             <mat-icon >home</mat-icon>
           </button>
         </div>
-        
+
         <div *ngIf="smallDevice">
           <ng-container [ngTemplateOutlet]="userActionsSmallDevice"></ng-container>
         </div>
@@ -79,7 +79,7 @@
                 <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
               </div>
             </li>
-   
+
 
             <li *ngIf="!smallDevice">
               <div class="pos-name"
@@ -210,7 +210,7 @@
   </div>
 
   <div *ngIf="user">
-     
+
       <button aria-label="user menu"
               mat-raised-button
               [matMenuTriggerFor]="menu"
@@ -232,7 +232,7 @@
               [overlapTrigger]="false"
               #menu="matMenu">
 
-      <div>
+      <div  class="mat-item">
         <app-request-messages
           [user]="user"
           [hideshowMessages]="true"
@@ -314,7 +314,7 @@
         <span  *ngIf="posDevice$ | async as device">
           <li *ngIf="device  && (isAdmin || isManager) && !smallDevice">
             <div class='search-input'>
-              <button  mat-raised-button (click)="deviceInfo()">  
+              <button  mat-raised-button (click)="deviceInfo()">
                 <mat-icon>device_hub</mat-icon>
               </button>
           </div>

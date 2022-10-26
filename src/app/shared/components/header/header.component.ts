@@ -255,6 +255,13 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
+  // showSearch(){
+  //   this.show = !this.show;
+  //   setTimeout(()=>{ // this will make the execution after the above boolean has changed
+  //     this.searchElement.nativeElement.focus();
+  //   },0);
+  // }
+
   ngOnDestroy() {
     if (this._searchSideBar) { this._searchSideBar.unsubscribe()}
     if (this._openOrderBar) {  this._openOrderBar.unsubscribe(); }
@@ -299,7 +306,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  emailMailCount(event) { 
+  emailMailCount(event) {
     this.mailCount = event
   }
 
@@ -341,14 +348,14 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   get userInfoScreen() {
-    if (!this.smallDevice) { 
+    if (!this.smallDevice) {
       return this.userActions
     }
     return null
   }
 
-  get userActionsSmallDevice() { 
-    if (this.smallDevice) { 
+  get userActionsSmallDevice() {
+    if (this.smallDevice) {
       return this.userActions
     }
     return null
@@ -415,7 +422,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     this.userRoles    = user?.roles.toLowerCase();
-    if (user.firstName) { 
+    if (user.firstName) {
       this.employeeName = `${user?.lastName}, ${user?.firstName.substring(1,1)}`
     }
 

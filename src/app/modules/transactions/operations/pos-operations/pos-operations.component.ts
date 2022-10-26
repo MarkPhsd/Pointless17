@@ -50,6 +50,7 @@ export class PosOperationsComponent implements OnInit {
   batchSummary: any;
   batchClose: BatchClose;
   email$:         Observable<any>;
+  emailSending   = false;
   closingCheck$ : Observable<ICanCloseOrder>;
   uiTransactions: TransactionUISettings;
   uiTransactions$: Observable<TransactionUISettings>;
@@ -108,10 +109,12 @@ export class PosOperationsComponent implements OnInit {
   refreshClosingCheck() {
     const site = this.siteService.getAssignedSite();
 
-    const item$ = this._email()
-    this.closingCheck$ = item$.pipe(
-      switchMap( data => { 
-        return this.transferDataService.canCloseDay(site)
+
+    this.closingCheck$ = this.transferDataService.canCloseDay(site).pipe(
+      switchMap( data => {
+        console.log('closingCheck', data)
+        // return this.transferDataService.canCloseDay(site)
+        return of(data)
       }
     ))
 
@@ -120,24 +123,27 @@ export class PosOperationsComponent implements OnInit {
   _email() {
     const site = this.siteService.getAssignedSite();
     const zRun$ =  this.balanceSheetService.getZRUNBalanceSheet(site);
-
+    this.emailSending = true;
     const item$ = zRun$.pipe(
       switchMap( data => {
         if (data && data.id) {
-          return this.sendGridService.sendSalesReport(data.id, null,null)
+          console.log('data', data)
+          return this.sendGridService.sendSalesReport(site,data.id, null,null)
         }
         return null;
     })).pipe(
      switchMap( data => {
+        console.log('email ', data)
+        this.emailSending = false;
         this.matSnack.open('Email Sent', 'Success', {duration: 1500})
         return of(data)
       }
     ))
-    
+
     return item$
   }
 
-  email() { 
+  email() {
     this.email$ = this._email()
   }
 
@@ -219,10 +225,17 @@ export class PosOperationsComponent implements OnInit {
       if (!answer) { return }
     }
 
-    const closingCheck$ = this.transferDataService.canCloseDay(site)
+    const item$ = this._email()
+    const  closingCheck$ = item$.pipe(switchMap(
+        data => {
+          return  this.transferDataService.canCloseDay(site)
+        }
+    ))
+    // const closingCheck$ = this.transferDataService.canCloseDay(site)
     this.orderService.clearOrderSubscription();
-    
+
     this.balanceSheetsClosed = ''
+
     closingCheck$.pipe(
       switchMap( data => {
         //determine if the day can be closed.
@@ -246,10 +259,6 @@ export class PosOperationsComponent implements OnInit {
             this.closeResult = 'Day closed. Closing balance Sheets.'
             this.runningClose = false;
             return this.balanceSheetService.closeAllSheets(site)
-          // },
-          // error: error => {
-          //   return of ('Error Occured')
-          // }
         }
       )).subscribe(data => {
         // if (data === 'Error Occured') {

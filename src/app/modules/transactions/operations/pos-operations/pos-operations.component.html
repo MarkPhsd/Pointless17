@@ -75,9 +75,19 @@
       </mat-card>
     </div>
 
+    <div *ngIf="(email$ | async) as item; emailing"></div>
+    <ng-template #emailing>
+      <div *ngIf="emailSending">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ...emailing
+      </div>
+    </ng-template>
+
+
     <div *ngIf="closingCheck$ | async as closing">
       <div>
-        <close-day-validation [closeDayValidation]="closing">
+        <close-day-validation
+          [closeDayValidation]="closing">
         </close-day-validation>
       </div>
     </div>
@@ -96,7 +106,6 @@
   <mat-card>
     <mat-card-content>
       <div class="grid-sales-cards ">
-
         <div>
           <div>
             Start {{iBalanceSheet.startTime | date: 'short'}}
@@ -112,27 +121,24 @@
 
 <div #printsection class="container">
   <div class=" grid-sales-cards " *ngIf="iBalanceSheet && localSite">
-
-      <div >
+      <div>
         <sales-tax-report
               [site]="localSite"
               [dateFrom]="dateFrom"
               [dateTo]="dateTo"
-              [zrunID]="zrunID"
-              >
+              [zrunID]="zrunID" >
             <mat-icon>receipt</mat-icon>  Sales
             <mat-divider></mat-divider>
         </sales-tax-report>
       </div>
 
-     <div >
+     <div>
        <item-sales-card
               [site]="localSite"
               [dateFrom]="dateFrom"
               [dateTo]="dateTo"
               [zrunID]="zrunID"
-              [groupBy]="'items'"
-              >
+              [groupBy]="'items'">
             <mat-icon>menu</mat-icon>  Items
             <mat-divider></mat-divider>
         </item-sales-card>

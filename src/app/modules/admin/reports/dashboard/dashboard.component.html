@@ -1,16 +1,35 @@
 <div class="container" >
-    <div  class="grid-charts">
+    <div  class="grid-buttons">
       <div>
         <app-widget-filter
           (messageOut)="receiveData($event)">
         </app-widget-filter>
       </div>
       <div>
+        <button mat-raised-button (click)="email()">
+          <mat-icon>email</mat-icon>
+        </button>
+      </div>
+      <div>
         <button mat-raised-button (click)="showValues=!showValues">
-          <mat-icon color="primary">analytics</mat-icon>Toggle Reports
+          <span *ngIf="showValues">
+            <mat-icon color="primary">analytics</mat-icon>Hide List Reports
+          </span>
+          <span *ngIf="!showValues">
+            <mat-icon color="primary">analytics</mat-icon>Show List Reports
+          </span>
         </button>
       </div>
     </div>
+
+    <div *ngIf="(email$ | async) as email; else emailing"></div>
+
+    <ng-template #emailing>
+      <div class="emailing" *ngIf="emailSending">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ...emailing
+      </div>
+    </ng-template>
 
     <br> <mat-divider  class="section-gap"></mat-divider> <br>
 

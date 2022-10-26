@@ -14,8 +14,8 @@ import { AuthenticationService, IDepartmentList, ThemesService } from '../_servi
 import { IUser } from '../_interfaces';
 import { UIHomePageSettings, UISettingsService } from '../_services/system/settings/uisettings.service';
 import { isDevMode } from '@angular/core';
-import { EventUtils } from 'src/assets/tinymce/tinymce';
 import { SitesService } from '../_services/reporting/sites.service';
+import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 
 @Component({
   selector: 'app-default',
@@ -231,6 +231,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private uiSettingsService       : UISettingsService,
                private router                  : Router,
                private siteService             : SitesService,
+               private splashLoader            : SplashScreenStateService,
               //  private themesService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
@@ -246,21 +247,21 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.initSettings();
 
     const site = this.siteService.getAssignedSite();
-
-    if (this.uiSettings && this.uiSettings.threecxChatLink) { 
+    this.splashLoader.stop()
+    if (this.uiSettings && this.uiSettings.threecxChatLink) {
       this.chatURL = this.uiSettings.threecxChatLink
       if (site.url === 'https://ccsposdemo.ddns.net/api' || site.url === 'https://ccsposdemo.ddns.net:4444/api' ||
           site.url ==='https://ccsposdemo.ddns.net:4445/api' || site.url ==='https://ccsposdemo.ddns.net:4446/api' ||
           site.url === 'https://localhost:44309/api') {
         this.chatURL = 'https://pointlesspos.ca.3cx.us:6001/LiveChat702266'
       }
-      
+
     }
     // if this.nav
 
   }
 
-  getHelp() { 
+  getHelp() {
     this.router.navigateByUrl(this.chatURL)
   }
   subscribeAddress() {

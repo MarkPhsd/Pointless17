@@ -27,19 +27,19 @@ export class RequestMessagesComponent implements OnInit {
   message$: Observable<IRequestResponse>;
   refreshTime = 1
   order$: Observable<IPOSOrder>;
-  
+
   refreshMessagingService(user) {
     if (!user) { return }
     const seconds = 6000 * this.refreshTime;
     const site = this.siteService.getAssignedSite();
     const search = {} as IRequestMessageSearchModel;
-    if (user?.id) { 
+    if (user?.id) {
       console.log('refreshing user')
       search.userID = user.id;
       this.messages$  = this.getMessages().pipe(
-        repeatWhen(notifications => 
+        repeatWhen(notifications =>
           notifications.pipe(
-            delay(seconds * 1)),
+            delay(seconds * 10)),
         ),
         catchError((err: any) => {
           // return of(null);
@@ -56,24 +56,24 @@ export class RequestMessagesComponent implements OnInit {
     search.userID   = this.authenticationService.userValue.id;
     return this.requestMessageService.getRequestMessagesByCurrentUser(site, search).pipe(
       switchMap(data => {
-        this.emitCount.emit(data.length) 
+        this.emitCount.emit(data.length)
         return of(data)
       })
     )
   }
 
-  forceRefreshMessage()  { 
-    this.refreshMessagingService(this.authenticationService.userValue) 
+  forceRefreshMessage()  {
+    this.refreshMessagingService(this.authenticationService.userValue)
     // this.messages$ = this.getMessages()
   }
 
-  initUserSubscriber() { 
-    if (this.user) { 
+  initUserSubscriber() {
+    if (this.user) {
       return;
     }
-    this.authenticationService.user$.subscribe(data => { 
+    this.authenticationService.user$.subscribe(data => {
       this.messages$ = null;
-      this.refreshMessagingService(data) 
+      this.refreshMessagingService(data)
     })
   }
 
@@ -89,7 +89,7 @@ export class RequestMessagesComponent implements OnInit {
 
   ngOnInit(): void {
     let user = this.userAuthService.user
-    if (this.user) { 
+    if (this.user) {
       user = this.user;
     }
     this.refreshMessagingService(user)
@@ -100,54 +100,54 @@ export class RequestMessagesComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     message.archived = !message.archived;
     this.message$ = this.requestMessageService.saveMessage(site, message).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         // this.forceRefreshMessage();
         return of(data)
       })
     )
 
   }
-  
+
   addMenuItem(message) {
     const site = this.siteService.getAssignedSite();
     message.archived = !message.archived;
     this.message$ = this.requestMessageService.saveMessage(site, message).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         // this.forceRefreshMessage();
         return of(data)
       })
     )
   }
 
-  archiveMessage(message){ 
+  archiveMessage(message){
     const site = this.siteService.getAssignedSite();
     message.archived = !message.archived;
     this.message$ = this.requestMessageService.saveMessage(site, message).pipe(
-      switchMap(data => { 
+      switchMap(data => {
         // this.forceRefreshMessage();
         return of(data)
       })
     )
   }
 
-  activeEvent(event: IRequestMessage) { 
+  activeEvent(event: IRequestMessage) {
     if (!event) { return  }
     if (!event.type) { return  }
 
-    if (event.type === "IR") { 
+    if (event.type === "IR") {
       this.router.navigate(['menuitems',{id: event.method}])
     }
 
-    if (event.type === "CSR") { 
+    if (event.type === "CSR") {
       //navigate to order
       this.archiveMessage(event)
     }
 
-    if (event.type === "payment") { 
+    if (event.type === "payment") {
       //navigate to order
       const site = this.siteService.getAssignedSite()
       this.order$ =  this.orderService.getOrder(site, event.method, false).pipe(
-        switchMap(data => { 
+        switchMap(data => {
           this.orderService.setActiveOrder(site, data)
           this.router.navigate(['pos-payment'])
           return of(data)
@@ -156,11 +156,11 @@ export class RequestMessagesComponent implements OnInit {
       this.archiveMessage(event)
     }
 
-    if (event.type === "TSR") { 
+    if (event.type === "TSR") {
       //navigate to order
       const site = this.siteService.getAssignedSite()
       this.order$ =  this.orderService.getOrder(site, event.method, false).pipe(
-        switchMap(data => { 
+        switchMap(data => {
           this.orderService.setActiveOrder(site, data)
           return of(data)
         })
@@ -170,7 +170,7 @@ export class RequestMessagesComponent implements OnInit {
 
   }
 
-  clearMessage() { 
+  clearMessage() {
     this.message$ = null;
   }
 

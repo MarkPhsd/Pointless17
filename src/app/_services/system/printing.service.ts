@@ -156,9 +156,9 @@ export class PrintingService {
   applyStylesObservable(site: ISite): Observable<ISetting> {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
     return receiptStyle$
-//   return this.setHTMLReceiptStyle(receiptStyle)
   }
 
+  //convert instances to appyBalanceSheetStyleObservable
   async  appyBalanceSheetStyle(): Promise<string> {
     const style = document.createElement('style');
     const oberservable$ = this.http.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'});
@@ -166,6 +166,17 @@ export class PrintingService {
     style.innerHTML = value;
     document.head.appendChild(style);
     return value
+  }
+
+  appyBalanceSheetStyleObservable(): Observable<string> {
+    const style = document.createElement('style');
+    const oberservable$ = this.http.get('assets/htmlTemplates/balancesheetStyles.txt', {responseType: 'text'});
+    return oberservable$.pipe(
+      switchMap(data => {
+        style.innerHTML = data;
+        document.head.appendChild(style);
+        return of(data)
+    }))
   }
 
   async  appyStylesCached(site: ISite): Promise<ISetting> {

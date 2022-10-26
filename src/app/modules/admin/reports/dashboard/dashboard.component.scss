@@ -6,8 +6,31 @@
   height: 100%;
 }
 
+button {
+  margin-top: 5px;
+}
+
 mat-drawer {
   width: 200px;
+}
+
+.emailing {
+  width: 100px;
+}
+.grid-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: left;
+  flex-direction: row;
+
+  // @include for-tablet-landscape-up {
+  //    grid-template-columns: 225px  repeat( auto-fit, minmax(100px, 1fr) );
+  // }
+
+  // @include for-phone-only {
+  //   grid-template-columns: 225px  repeat( auto-fit, minmax(100px, 1fr) );
+  // }
+
 }
 
 .grid-flow {
@@ -19,8 +42,8 @@ mat-drawer {
 
 .grid-charts {
   --gap: 15px;
-  display: grid;
   gap: var(--gap);
+  display: grid;
   grid-template-columns: repeat( auto-fit, minmax(800px, 1fr) );
 
   @include for-tablet-landscape-up {

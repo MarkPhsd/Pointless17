@@ -62,6 +62,7 @@ import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/c
 import { DashBoardRoutingModule } from './dash-board-routing.module';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
+import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
 
 // Sentry.init({
 //   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
@@ -126,7 +127,7 @@ export  function init_app(appLoadService: AppInitService) {
     CategoryItemsBoardItemComponent,
     GridcomponentPropertiesDesignComponent,
     ClientTypeSelectionComponent,
-    
+    SplashLoadingComponent,
   ],
 
   imports: [

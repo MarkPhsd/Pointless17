@@ -235,8 +235,16 @@ constructor(
 
   refreshSearchPhrase(event) {
     this.itemName = event;
+    this.initBasicSearch();
     this.initProductSearchModel()
     this.refreshSearch();
+  }
+
+  initBasicSearch() {
+    this.category = null;
+    this.department = null;
+    this.productTypeSearch = null;
+    this.brand = null;
   }
 
   toggleKeyboard() {
