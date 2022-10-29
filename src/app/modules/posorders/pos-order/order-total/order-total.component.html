@@ -1,24 +1,25 @@
 <mat-card>
-<div [class]="transactionDataClass" *ngIf="order" >
+  <div [class]="transactionDataClass" *ngIf="order" >
 
-  <div class="total-headers foreground-color">Sub   </div>
-  <div class="totals foreground-color"> {{ order.subTotal | currency }}</div>
-  <div class="total-headers foreground-color">Tax  </div>
-  <div class="totals foreground-color"> {{ order.taxTotal | currency }}</div>
-  <div class="total-headers foreground-color">Total </div>
-  <div class="totals foreground-color"> {{ order.total | currency }}</div>
+    <div class="total-headers foreground-color">Sub   </div>
+    <div class="totals foreground-color"> {{ order.subTotal | currency }}</div>
+    <div class="total-headers foreground-color">Tax  </div>
+    <div class="totals foreground-color"> {{ order.taxTotal | currency }}</div>
+    <div class="total-headers foreground-color">Total </div>
+    <div class="totals foreground-color"> {{ order.total | currency }}</div>
 
-  <div class="total-headers foreground-color" *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
-  <div class="totals foreground-color" *ngIf="order.wicTotal && order.wicTotal != 0"> {{ order?.wicTotal | currency }}</div>
+    <div class="total-headers foreground-color" *ngIf="order.wicTotal && order.wicTotal != 0">WIC  </div>
+    <div class="totals foreground-color" *ngIf="order.wicTotal && order.wicTotal != 0"> {{ order?.wicTotal | currency }}</div>
 
-  <div class="total-headers foreground-color" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
-  <div class="totals foreground-color" *ngIf="order.wicTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
+    <div class="total-headers foreground-color" *ngIf="order.ebtTotal && order.ebtTotal != 0">EBT  </div>
+    <div class="totals foreground-color" *ngIf="order.wicTotal && order.ebtTotal != 0"> {{ order?.ebtTotal | currency }}</div>
 
-  <div class="total-headers foreground-color" *ngIf="order.gratuity && order.gratuity != 0">Service %{{ ( (order?.gratuity / order?.subTotal) * 100 ).toFixed(0) }} </div>
-  <div class="totals foreground-color" *ngIf="order.gratuity && order.gratuity != 0"> {{ order?.gratuity | currency }}</div>
+    <div class="total-headers foreground-color" *ngIf="order.gratuity && order.gratuity != 0">Service %{{ ( (order?.gratuity / order?.subTotal) * 100 ).toFixed(0) }} </div>
+    <div class="totals foreground-color" *ngIf="order.gratuity && order.gratuity != 0"> {{ order?.gratuity | currency }}</div>
 
-  <div class="total-headers foreground-color">Items </div>
-  <div class="totals foreground-color">{{ order.itemCount }}</div>
+    <div class="total-headers foreground-color">Items </div>
+    <div class="totals foreground-color">{{ order.itemCount }}</div>
 
-</div>
+  </div>
 </mat-card>
+

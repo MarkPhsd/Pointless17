@@ -2,8 +2,8 @@ import { Component, ElementRef, EventEmitter, Input,
          OnInit, Output, OnDestroy,  ViewChild, HostListener, Renderer2 } from '@angular/core';
 import { AuthenticationService, AWSBucketService, OrdersService, TextMessagingService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem,   }  from 'src/app/_interfaces/transactions/posorder';
-import { Observable, Subscription } from 'rxjs';
-import { delay,  repeatWhen  } from 'rxjs/operators';
+import { Observable, of, Subscription } from 'rxjs';
+import { delay,  repeatWhen, switchMap  } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -108,6 +108,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   assignedItems:  PosOrderItem[];
 
   refundItemsAvalible;
+  uiTransactionSetting$: Observable<TransactionUISettings>;
+  uiTransactionSetting : TransactionUISettings;
 
   initAssignedItemsSubscriber() {
     this._items = this.orderMethodService.assignedPOSItems$.subscribe(data => {
@@ -121,13 +123,22 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   // item$ = this.orderMethodService.assignedPOSItems$;
 
   transactionUISettingsSubscriber() {
-    this._uiTransactionSettings  = this.uiSettingsService.transactionUISettings$.subscribe(data => {
-      this.enableLimitsView  =false;
+    this.uiSettingsService.transactionUISettings$.subscribe( data => {
+      this.enableLimitsView  = false;
       if (data) {
         this.uiTransactionSettings = data;
         this.enableLimitsView = data.enableLimitsView
       }
     });
+  }
+
+  gettransactionUISettingsSubscriber() {
+    this.uiTransactionSetting$ = this.settingService.getUITransactionSetting().pipe(
+      switchMap( data => {
+        this.uiSettingsService.updateUITransactionSubscription(data);
+        return of(data)
+      })
+    )
   }
 
   homePageSettingSubscriber() {
@@ -166,17 +177,18 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   onResizedorderHeightPanel(event: ResizedEvent) {
 
-    this.uiSettingsService.updateorderHeaderHeight(event.newRect.height,this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
+    this.uiSettingsService.updateorderHeaderHeight(event.newRect.height, this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
     this.resizePanel()
+
   }
 
   onResizedorderLimitsPanel(event: ResizedEvent) {
-    this.uiSettingsService.updateLimitOrderHeight(event.newRect.height,this.windowHeight) //(this.orderLimitsPanel.nativeElement.offsetHeight)
+    this.uiSettingsService.updateLimitOrderHeight(event.newRect.height, this.windowHeight) //(this.orderLimitsPanel.nativeElement.offsetHeight)
     this.resizePanel()
   }
 
   onResizedorderSpecialsPanel(event: ResizedEvent) {
-    this.uiSettingsService.updatespecialOrderHeight(event.newRect.height,this.windowHeight) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
+    this.uiSettingsService.updatespecialOrderHeight(event.newRect.height, this.windowHeight) //(this.orderSpecialsPanel.nativeElement.offsetHeight)
     this.resizePanel()
   }
 
@@ -240,10 +252,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private toolbarUIService  : ToolBarUIService,
               private bottomSheet       : MatBottomSheet,
               private orderMethodService: OrderMethodsService,
-              private userAuthorization : UserAuthorizationService,
+              public userAuthorization : UserAuthorizationService,
               private authenticationService: AuthenticationService,
-              public uiSettingsService : UISettingsService,
-              private settingService: SettingsService,
+              public  uiSettingsService  : UISettingsService,
+              private settingService    : SettingsService,
               private posOrderItemService: POSOrderItemServiceService,
               private productEditButtonService: ProductEditButtonService,
               private el                : ElementRef) {
@@ -295,6 +307,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   async ngOnInit() {
     this.initAuthorization();
+    console.log('get transaction u settings')
+    this.gettransactionUISettingsSubscriber();
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
     this.awsBucketURL = await this.awsBucket.awsBucketURL();
@@ -310,15 +324,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
 
     this.toolbarUIService.hidetoolBars();
-    this.settingService.getUIHomePageSettings().subscribe(data => {
-      this.uiSettings = data;
-    })
 
-    if (this.userAuthorization.user) { 
-      this.settingService.getUITransactionSetting().subscribe(data => {
-        this.uiTransactionSettings = data;
-      })
-    }
+
+
   }
 
   initAuthorization() {
@@ -420,8 +428,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.orderMethodService.clearOrder()
   }
 
-
-
   voidOrder() {
      this.productEditButtonService.openVoidOrderDialog(this.order)
   }
@@ -448,7 +454,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.orderService.updateBottomSheetOpen(false)
     if (this._user) { this._user.unsubscribe()}
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
-     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
+    if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
+    this.uiTransactionSetting$  = null;
   }
 
   suspendOrder() {
@@ -536,12 +543,12 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.openOrderBar = false
     }
     let path = ''
-    if (this.order) { 
-      if (this.order.tableName && this.order.tableName.length>0) { 
+    if (this.order) {
+      if (this.order.tableName && this.order.tableName.length>0) {
         path = 'pos-payment'
       }
     }
-    this.navigationService.makePayment(this.openOrderBar, this.smallDevice, 
+    this.navigationService.makePayment(this.openOrderBar, this.smallDevice,
                                       this.isStaff, this.order.completionDate, path )
   }
 

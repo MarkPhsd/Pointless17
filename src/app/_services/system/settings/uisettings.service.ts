@@ -12,7 +12,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { PosEditSettingsComponent } from 'src/app/modules/admin/settings/pos-list/pos-edit-settings/pos-edit-settings.component';
 import { ElectronService } from 'ngx-electron';
 import { PlatformService } from '../platform.service';
-import { CdkNestedTreeNode } from '@angular/cdk/tree';
 
 export interface TransactionUISettings {
   id                     : number;
@@ -326,11 +325,12 @@ export class UISettingsService {
   }
 
   getTransactionUISettings() {
- 
+
     if (!this.userAuthorizationService.user) {
       return;
     }
-    if (this.userAuthorizationService.user.username === 'Temp') { 
+
+    if (this.userAuthorizationService.user.username === 'Temp') {
       return;
     }
 
@@ -376,8 +376,8 @@ export class UISettingsService {
   }
 
   getDSSIEmvSettings() {
-    if (!this.userAuthorizationService.user) {  
-      this._DSIEMVSettings.next(null)  
+    if (!this.userAuthorizationService.user) {
+      this._DSIEMVSettings.next(null)
       return;
     }
      if (!this.userAuthorizationService.user) { return }
@@ -390,7 +390,7 @@ export class UISettingsService {
     if (!this.userAuthorizationService.user) {
       return;
     }
-    if (this.userAuthorizationService.user.username === 'Temp') { 
+    if (this.userAuthorizationService.user.username === 'Temp') {
       return;
     }
 
@@ -414,7 +414,7 @@ export class UISettingsService {
 
   getDSIEMVSettings(name: string): Observable<DSIEMVSettings> {
     if (!this.userAuthorizationService.user) {
-      this._DSIEMVSettings.next(null)  
+      this._DSIEMVSettings.next(null)
       return;
     }
     this.settingsService.getDSIEMVSettings().subscribe(data => {

@@ -127,13 +127,13 @@ export class PosOperationsComponent implements OnInit {
     const item$ = zRun$.pipe(
       switchMap( data => {
         if (data && data.id) {
-          console.log('data', data)
+          // console.log('data', data)
           return this.sendGridService.sendSalesReport(site,data.id, null,null)
         }
         return null;
     })).pipe(
      switchMap( data => {
-        console.log('email ', data)
+        // console.log('email ', data)
         this.emailSending = false;
         this.matSnack.open('Email Sent', 'Success', {duration: 1500})
         return of(data)

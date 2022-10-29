@@ -84,6 +84,15 @@
       </button>
     </div>
 
+    <div class="grid-item">
+      <button mat-button
+              class="assign-button"
+              (click)="onExportToCsv()">
+        <mat-icon>download</mat-icon>
+        Download
+      </button>
+    </div>
+
     <div *ngIf="!hideAdd" class="header-items">
       <button mat-button
               (click)="childAddItem()">

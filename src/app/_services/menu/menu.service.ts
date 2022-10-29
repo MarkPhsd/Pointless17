@@ -281,6 +281,54 @@ export class MenuService {
 
   };
 
+
+  getInventoryValues(site: ISite): Observable<any> {
+
+    const post = {count: '0'};
+
+    const controller =  "/Products/"
+
+    const endPoint   = "GetInventoryValues"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.post<any>(url, post);
+
+  };
+
+  getDepartmentValues(site: ISite): Observable<any> {
+
+    const post = {count: '0'};
+
+    const controller =  "/Products/"
+
+    const endPoint   = "GetDepartmentValues"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.post<any>(url, post);
+
+  };
+
+  getCategoryValues(site: ISite): Observable<any> {
+
+    const post = {count: '0'};
+
+    const controller =  "/Products/"
+
+    const endPoint   = "GetCategoryValues"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.post<any>(url, post);
+
+  };
   getCategoryList(site: ISite): Observable<IProductCategory[]> {
 
     const controller =  "/MenuCategories/"
@@ -508,7 +556,7 @@ export class MenuService {
     const uri =  this.sitesService.getCacheURI(url)
 
     const cacheTime = this.sitesService.getCurrentCache()
-    
+
     if ( cacheTime  == 0 ) {
       // console.log('cacheTime', cacheTime)
       return  this.httpClient.post<any>(url, productSearchModel )

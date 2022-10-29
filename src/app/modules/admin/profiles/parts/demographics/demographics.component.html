@@ -37,7 +37,8 @@
       </div>
 
       <div class="name-fields">
-        <div>
+
+        <!-- <div>
           <mat-form-field appearance="outline">
           <mat-label >Phone</mat-label>
           <input  matInput
@@ -47,23 +48,49 @@
                   class="form-control" >
           </mat-form-field>
         </div>
+         -->
+        <div
+              *ngIf="isAuthorized" >
+          <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'phone'">
+              Phone
+          </app-value-fields>
+        </div>
+
+        <div
+              *ngIf="isAuthorized" >
+          <app-value-fields
+                          [inputForm]="inputForm"
+                          [fieldName]="'dlNumber'">
+                      ID #
+          </app-value-fields>
+        </div>
 
         <div>
-          <mat-form-field appearance="outline">
-          <mat-label >Email</mat-label>
-          <input  [disabled]="!isStaff"
-                  matInput
-                  type="text"
-                  id="title"
-                  formControlName="email"
-                  class="form-control" >
-          </mat-form-field>
+          <!-- <mat-form-field appearance="outline">
+            <mat-label >Email</mat-label>
+            <input  [disabled]="!isStaff"
+                    matInput
+                    type="text"
+                    id="title"
+                    formControlName="email"
+                    class="form-control" >
+          </mat-form-field> -->
+
+          <app-value-fields
+                    [enabled]="!isStaff"
+                    [inputForm]="inputForm"
+                    [fieldName]="'email'">
+              Email
+          </app-value-fields>
         </div>
       </div>
 
       <div class="name-fields">
-        <div >
-          <mat-form-field class="example-full-width" appearance="outline">
+
+        <div>
+          <mat-form-field  appearance="outline">
             <mat-label>DOB</mat-label>
             <input matInput
                   [disabled]="!isStaff"
@@ -75,7 +102,7 @@
         </div>
 
         <div *ngIf="isAuthorized" >
-          <mat-form-field class="example-full-width" appearance="outline">
+          <mat-form-field appearance="outline">
             <mat-label>ID EXP</mat-label>
             <input  matInput
                      [disabled]="!isStaff"
@@ -86,13 +113,16 @@
           </mat-form-field>
         </div>
 
-        <div  class="id-field" *ngIf="isAuthorized" >
-          <app-value-fields
-                          [inputForm]="inputForm"
-                          [fieldName]="'dlNumber'">
-                      ID #
-          </app-value-fields>
-        </div>
+      </div>
+
+      <div class="name-fields">
+        <!-- {{clientTable?.accountNumber}}; -->
+        <app-value-fields
+                [enabled]="!isStaff"
+                [inputForm]="inputForm"
+                [fieldName]="'accountNumber'">
+          Account #
+        </app-value-fields>
       </div>
 
       <div *ngIf="enableLimitsView" class="counts-container">
@@ -178,7 +208,7 @@
     <div class="points">
       <mat-form-field appearance="outline">
       <mat-label >Reward Points</mat-label>
-      <input  [disabled]="!isAuthorized" 
+      <input  [disabled]="!isAuthorized"
               matInput
               type="text"
               id="title"
@@ -189,7 +219,7 @@
 
     <div>
       <mat-button-toggle-group  name="type"
-                                [disabled]="!isAuthorized" 
+                                [disabled]="!isAuthorized"
                                 aria-label="Font Style"
                                 formControlName="taxSales">
         <mat-button-toggle [value]="1">Non Taxable Client</mat-button-toggle>

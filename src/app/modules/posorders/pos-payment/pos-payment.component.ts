@@ -182,13 +182,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
     console.log('setting order actions', this.authenticationService.userValue)
     this.authenticationService.updateUser(this.authenticationService.userValue)
-    if (this.authenticationService.userValue) { 
+    if (this.authenticationService.userValue) {
       // console.log('setting order actions')
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
   }
 
-  setLoginAction() { 
+  setLoginAction() {
     const item = localStorage.getItem('loginAction')
     this.loginAction = JSON.parse(item)
   }
@@ -233,9 +233,9 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     });
   }
 
-  addStripeTipPercent(value) { 
-    if (value) { 
-      
+  addStripeTipPercent(value) {
+    if (value) {
+
       this.stripeTipValue = ( this.paymentAmount * (value/100) ).toFixed(2);
     }
   }
@@ -243,7 +243,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   getPaymentMethods(site: ISite) {
     const paymentMethods$ = this.paymentMethodService.getCacheList(site);
 
-    if (this.userAuthorization.user.roles = 'user') {
+    if (this.userAuthorization?.user?.roles === 'user') {
       return paymentMethods$.pipe(
         switchMap(data => {
           let list = data.filter( item => !item.isCreditCard)
@@ -466,7 +466,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.enterCustomAmount = true;
   }
 
-  changeAmount() { 
+  changeAmount() {
     this.enterCustomAmount = true;
     this.stepSelection = 3
   }
@@ -501,12 +501,12 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
                                   this.paymentMethod.isCash,
                                   this.order.balanceRemaining);
 
-        if (!isValidAmount) { 
+        if (!isValidAmount) {
           this.paymentAmountForm  = this.fb.group({fieldname: []})
-          return 
+          return
         }
 
-        if (this.enterCustomAmount) { 
+        if (this.enterCustomAmount) {
           this.enterCustomAmount = false
           this._paymentAmount    = amount;
           this.stepSelection     = 1;
@@ -699,8 +699,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
   }
 
-  get paymentAmount() { 
-    if (!this._paymentAmount || this._paymentAmount ==0) { 
+  get paymentAmount() {
+    if (!this._paymentAmount || this._paymentAmount ==0) {
       return  this.order.balanceRemaining;
     }
     return this._paymentAmount;

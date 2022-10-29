@@ -1,8 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { NgxCsvParser, NgxCSVParserError } from 'ngx-csv-parser';
-import { combineLatest, Observable, of, switchMap } from 'rxjs';
-import { saveAs } from 'file-saver';
+import { combineLatest, Observable,  switchMap } from 'rxjs';
 import { FakeProductsService } from 'src/app/_services/data/fake-products.service';
 import { FakeContactsService } from 'src/app/_services/data/fake-contacts.service';
 import { FakeInventoryService } from 'src/app/_services/data/fake-inventory.service';
@@ -141,15 +140,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     this.downloadFile(items, name)
 
   }
-  // {id: 1, name: 'Products'},
-  // {id: 2, name: 'Inventory'},
-  // {id: 3, name: 'Clients - Vendors'},
-  // {id: 4, name: 'FH Products'},
-  // {id: 5, name: 'FH Prices'},
-  // {id: 6, name: 'FH Inventory'},
-  // {id: 7, name: 'FH Clients'},
-  // {id: 8, name: 'FH Vendors'},
-  // {id: 9, name: 'FH Strains'},
+
   getSchemaType(): any {
     let items = [] as any;
     let name = 'filename'
@@ -198,14 +189,14 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   }
 
   downloadFile(data: any, name: string) {
-      const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
-      const header = Object.keys(data[0]);
-      let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
-      csv.unshift(header.join(','));
-      let csvArray = csv.join('\r\n');
-
-      var blob = new Blob([csvArray], {type: 'text/csv' })
-      saveAs(blob, `${name}.csv`);
+      // const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
+      // const header = Object.keys(data[0]);
+      // let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer)).join(','));
+      // csv.unshift(header.join(','));
+      // let csvArray = csv.join('\r\n');
+      // var blob = new Blob([csvArray], {type: 'text/csv' })
+      // saveAs(blob, `${name}.csv`);
+      this.exportDataService.downloadFile(data,name)
   }
 
   reset() {
@@ -309,7 +300,6 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   }
 
   importProducts(){
-    console.log('import products')
     const items =  this.csvRecords  as IProduct[];
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'

@@ -183,7 +183,7 @@
                               >
                              <mat-label>
                               Custom Tip Amount
-                             </mat-label> 
+                             </mat-label>
                           </mat-form-field>
                         </div>
                       </div>
@@ -201,6 +201,7 @@
               </mat-card-content>
             </mat-card>
           </div>
+
           <!-- paymentMethods {{paymentMethods | json}} -->
           <div>
             <mat-card class="payment-dimensions">
@@ -374,7 +375,8 @@
         <ng-container [ngTemplateOutlet]="splitItemsTemplate"></ng-container>
       </div>
 
-      <div *ngIf="!splitByItem && !paymentsEqualTotal && !platFormService.isApp() && !paymentIsReady">
+      <div *ngIf="!splitByItem && !paymentsEqualTotal &&
+                  !platFormService.isApp() && !paymentIsReady">
         <div *ngIf="message">
           <mat-icon>alert</mat-icon>{{message}}
         </div>

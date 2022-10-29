@@ -8,7 +8,7 @@
   width: 100%;
 }
 
-button { 
+button {
   margin: 5px;
 }
 
@@ -21,7 +21,7 @@ mat-card {
   padding:4px;
 }
 
-.client-selector { 
+.client-selector {
   width: 200px;
 }
 
@@ -49,4 +49,8 @@ mat-card {
   grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
   overflow-y: visible;
 
+}
+
+.saving-container {
+  width: 200px;
 }

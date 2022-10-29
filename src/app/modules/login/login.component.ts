@@ -283,6 +283,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async  forgetMe() {
     this.initForm();
+    localStorage.clear()
     await this.clearUserSettings();
     this.notifyEvent("Your settings have been removed from this device.", "Bye!");
     this.statusMessage = ''

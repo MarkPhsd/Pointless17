@@ -19,8 +19,8 @@ import { PollingService } from 'src/app/_services/system/polling.service';
 import { Router } from '@angular/router';
 import { IFloorPlan } from 'pointless-room-layout/src/app/app.component';
 import { FloorPlanService } from 'src/app/_services/floor-plan.service';
-import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
-import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 
 
 interface IIsOnline {
@@ -114,6 +114,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   siteName        : string;
   bucket          = '';
   homePageSetings : UIHomePageSettings;
+  uiTransactionSetting  : TransactionUISettings;
+  uiTransactionSetting$ : Observable<TransactionUISettings>;
   floorPlans$     : Observable<IFloorPlan[]>;
   posDevice$      : Observable<ITerminalSettings>;
   terminalSetting : any;
@@ -203,8 +205,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
-
               private floorPlanSevice       : FloorPlanService,
+              private settingsService       : SettingsService,
               private uiSettings            : UISettingsService,
               private fb                    : FormBuilder ) {
   }
@@ -216,6 +218,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {
     this.site =  this.siteService.getAssignedSite();
 
+    this.getUITransactionsSettings();
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');
@@ -249,18 +252,17 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       ))
     }
 
-
-    // gridlayout        = 'grid-flow grid-margin'
-    // gridlayoutNoStaff = 'grid-flow grid-margin-nostaff'
-
   }
 
-  // showSearch(){
-  //   this.show = !this.show;
-  //   setTimeout(()=>{ // this will make the execution after the above boolean has changed
-  //     this.searchElement.nativeElement.focus();
-  //   },0);
-  // }
+  getUITransactionsSettings() {
+    this.uiTransactionSetting$ = this.settingsService.getUITransactionSetting().pipe(
+      switchMap( data => {
+        this.uiSettings.updateUITransactionSubscription(data);
+        return of(data)
+      })
+    )
+  }
+
 
   ngOnDestroy() {
     if (this._searchSideBar) { this._searchSideBar.unsubscribe()}

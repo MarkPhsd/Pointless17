@@ -25,19 +25,18 @@
  }
 
  .side-panel-buttons-container  {
-   width: 99%;
+   width: 95%;
+
    display: grid;
    gap: 5px;
-   grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
+   grid-template-columns: repeat( auto-fit, minmax(65px, 1fr) );
    margin-bottom : 1px;
    margin-top    : 1px;
-   margin-left   : -2px;
+   margin-left   : 2px;
    height: 75px;
    overflow: hidden;
 
-   // if (window.innerWidth < 500) {
-   //   this.deviceWidthPercentage = '85%'
-   // }
+
 
  }
 
@@ -71,12 +70,17 @@
   margin : 3px;
 }
 
-.buttons-container {
-  width: 100%;
+.button {
+  width: 95%;
   margin: 5px;
-  align-content: center;
-  overflow: auto;
+}
+
+.buttons-container {
+  width: 98%;
+  margin: 2px;
+  overflow: hidden;
   display: flex;
+  align-content: center;
   flex-direction: column;
   justify-content:  space-between;
 

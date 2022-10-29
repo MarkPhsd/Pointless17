@@ -180,7 +180,7 @@ constructor(  private _snackBar              : MatSnackBar,
       this.refreshSearch(1);
     }
   }
-  
+
   ngOnDestroy(): void {
     if(this._promptSubGroup){this._promptSubGroup.unsubscribe()}
   }
@@ -266,6 +266,86 @@ constructor(  private _snackBar              : MatSnackBar,
     const item = { itemName: event }
     this.searchForm.patchValue(item)
     this.refreshSearch(1);
+  }
+
+  listInventoryValues() {
+    const  site =  this.siteService.getAssignedSite()
+    this.menuService.getInventoryValues(site).subscribe (data => {
+      this.initAgGridInventoryValues(data.count);
+      this.gridApi.setDatasource(data);
+    })
+  }
+
+  initAgGridInventoryValues(pageSize: number) {
+    this.frameworkComponents = {
+      btnCellRenderer: ButtonRendererComponent
+    };
+
+    this.defaultColDef = {
+      flex: 2,
+      // minWidth: 100,
+    };
+
+    this.columnDefs =  [
+
+      {
+      field: 'id',
+      cellRenderer: "btnCellRenderer",
+                    cellRendererParams: {
+                      onClick: this.editProductFromGrid.bind(this),
+                      label: this.buttonName,
+                      getLabelFunction: this.getLabel.bind(this),
+                      btnClass: 'btn btn-primary btn-sm'
+                    },
+                    minWidth: 125,
+                    maxWidth: 125,
+                    flex: 2,
+      },
+      {headerName: 'Name',     field: 'name',         sortable: true,
+                  width   : 175,
+                  minWidth: 175,
+                  maxWidth: 275,
+                  flex    : 1,
+      },
+      {headerName: 'Barcode',  field: 'barcode',      sortable: true,
+                  width: 75,
+                  minWidth: 125,
+                  maxWidth: 150,
+                  // flex: 1,
+      },
+      {headerName: 'Count',    field: 'productCount', sortable: true,
+                  width: 90,
+                  minWidth: 90,
+                  maxWidth: 90,
+                  // flex: 2,
+      },
+      {headerName: 'Category', field: 'category',     sortable: true,
+                  width: 140,
+                  minWidth: 140,
+                  maxWidth: 200,
+                // flex: 2,
+      },
+      {
+                  headerName: "Active",
+                  width:    100,
+                  minWidth: 100,
+                  maxWidth: 100,
+                  flex: 1,
+                  field: "active",
+                  cellRenderer: function(params) {
+                    var input = document.createElement('input');
+                    input.type="checkbox";
+                    input.checked=params.value;
+                    input.disabled = true;
+                    input.addEventListener('click', function (event) {
+                        params.value=!params.value;
+                        params.node.data.fieldName = params.value;
+                    });
+                    return input;
+                  }
+        },
+    ]
+    this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
   //ag-grid
@@ -365,8 +445,6 @@ constructor(  private _snackBar              : MatSnackBar,
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
-
-
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
@@ -411,6 +489,7 @@ constructor(  private _snackBar              : MatSnackBar,
   }
 
   refreshSearch(page: number) {
+    this.initAgGrid(this.pageSize)
     const site               = this.siteService.getAssignedSite()
     if (page != 0) { this.currentPage         = page}
     const productSearchModel = this.initSearchModel();

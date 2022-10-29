@@ -28,6 +28,7 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDe
       this.processOrder(order);
     })
   }
+
   constructor(private ordermethodsService: OrderMethodsService,
               private orderService            : OrdersService,
     ) { }
@@ -43,10 +44,11 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDe
     if (this._order) { this._order.unsubscribe()}
   }
 
-  expand() { 
-    this.expanded = !this.expanded
+  expand() {
+    this.expanded      = !this.expanded
     this.showSchedules = !this.showSchedules;
   }
+
   ngOnChanges(): void {
     //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
     //Add '${implements OnChanges}' to the class.
@@ -59,11 +61,12 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDe
     const items = order.posOrderItems;
 
     const scheduleAry = []
-    if (items) { 
+    if (items) {
       items.forEach(data => {
         scheduleAry.push(data.scheduleID)
       })
     }
+
     if (!scheduleAry) { return }
 
     const schedules = [... new Set(scheduleAry)]

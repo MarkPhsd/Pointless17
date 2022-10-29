@@ -3,6 +3,11 @@
 
     <div>
       <div>
+        <!-- <div *ngIf="(uiTransactionSetting$ | async) as item">
+
+           view {{item | json}}
+         </div> -->
+
         <div  class="grid-header-item"
               (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
@@ -17,6 +22,7 @@
           ></store-credit-info>
         </div>
 
+        <!-- enableLimitsView: {{enableLimitsView}} -->
         <div  class="grid-header-item"
               *ngIf="enableLimitsView  && (wideBar || mainPanel)">
           <limit-values-progress-bars
@@ -24,8 +30,6 @@
           </limit-values-progress-bars>
         </div>
 
-        <!-- (wideBar || mainPanel) {{(wideBar || mainPanel)}}
-        (phoneDevice && !isUser) {{(phoneDevice && !isUser)}} -->
         <div  (resized)="onResizedorderCustomerPanel($event)"
               class="grid-header-item"
               *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) && !isUser">
@@ -41,14 +45,14 @@
 
         <div  (resized)="onResizedorderSpecialsPanel($event)"
               class="specials">
-          <pos-order-price-schedule-info></pos-order-price-schedule-info>
+          <pos-order-price-schedule-info>
+          </pos-order-price-schedule-info>
         </div>
 
       </div>
 
       <div class="buttons-container">
         <div *ngIf="mainPanel">
-
           <pos-order-function-buttons
                 (outPutSendToPrep)  ="sendToPrep()"
                 (outPutPrintLabel)  ="printLabels()"
@@ -85,9 +89,8 @@
 
           <div *ngIf="!phoneDevice">
             <button mat-raised-button
-              class="button"
-              fxFill
               color="primary"
+              class="button"
               (click)="toggleOpenOrderBar()">
               <div *ngIf="order && order.history">
                 <mat-icon>view</mat-icon>
@@ -100,11 +103,10 @@
             </button>
           </div>
 
-          <div  >
+          <div>
             <button  mat-raised-button
-              fxFill
-              class="button"
               color="primary"
+              class="button"
               (click)="makePayment()">
               <mat-icon>credit_card</mat-icon>
                Check Out
@@ -127,6 +129,8 @@
     </div>
   </div>
 </div>
+
+
 
     <!-- orderItemsHeightStyle {{orderItemsHeightStyle}} -->
     <!-- orderItemsHeightStyle {{orderItemsHeightStyle}}

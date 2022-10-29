@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-title>
-    <mat-icon>file_upload</mat-icon>
-    Export</mat-card-title>
+    <mat-icon>file_download</mat-icon>
+    Download </mat-card-title>
 
   <mat-card-content>
     <div class="grid-item"
@@ -15,39 +15,25 @@
         </form-select-list>
     </div>
 
-    <!-- <mat-card-subtitle>
-      <button *ngIf="schemaValue"
-              mat-raised-button
-              color="primary"
-              (click)="selectSchema()"><mat-icon>download</mat-icon>
-          Data Export Type {{schemaValue}}
+    <!-- schemaValue {{schemaValue | json}} -->
+    <div *ngIf="schemaValue">
+      <button mat-raised-button (click)="export()">
+        <mat-icon>file_download</mat-icon>Download
       </button>
-    </mat-card-subtitle> -->
-
-    <div *ngIf="schemaValue==1">
-      <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
     </div>
 
-    <div *ngIf="schemaValue==2">
-      <div *ngIf="schemaValue==1">
-        <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
-      </div>
-
+    <div class="message"
+         *ngIf="(exporting$ | async) as item; exportProgress">
+      {{message}}
     </div>
 
-    <div *ngIf="schemaValue==3">
-      <div *ngIf="schemaValue==1">
-        <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
-      </div>
-
+    <div *ngIf="exporting">
+      <mat-spinner [diameter]="50"></mat-spinner>
+      ...generating
     </div>
 
-    <div *ngIf="schemaValue==4">
-      <div *ngIf="schemaValue==1">
-        <button mat-raise-button (click)="export()"><mat-icon>export</mat-icon>Export {{name}} </button>
-      </div>
-
-    </div>
   </mat-card-content>
 
 </mat-card>
+
+

@@ -61,7 +61,6 @@ export class SettingsService {
   }
 
   getDeviceSettings(): Observable<ISetting> {
-    //this.terminal = JSON.parse(this.setting.text)  as ITerminalSettings;
     const devicename = localStorage.getItem('devicename')
     const site = {} as ISite;
     site.url = this.apiUrl;
@@ -344,7 +343,6 @@ export class SettingsService {
     const user = this.userAuthorizationService.user;
     if (!user || !user.roles ) {return  of(null) };
 
-    // console.log('getUITransactionSetting user', user)
     const site =  this.siteService.getAssignedSite();
 
     const controller = "/settings/"

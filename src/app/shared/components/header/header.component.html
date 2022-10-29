@@ -45,7 +45,7 @@
 
         <div *ngIf="!smallDevice" >
           <div class="site-name" *ngIf="site && site.name && site.name != undefined">
-            <h2 > {{ site?.name.toUpperCase()  }} </h2>
+            <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
           </div>
         </div>
 
@@ -85,7 +85,7 @@
               <div class="pos-name"
                     *ngIf="(orderService && orderService.posName && showSearchForm) "
                     id="pos-name">
-                <h2 > | {{ orderService?.posName.toUpperCase()  }} | </h2>
+                <h2 > | {{ orderService?.posName.toUpperCase() | truncateText : 6 }} | </h2>
               </div>
             </li>
 
@@ -162,9 +162,6 @@
           <wizard-progress-button></wizard-progress-button>
         </div>
 
-        <div *ngIf="!smallDevice">
-          <app-toggle-theme></app-toggle-theme>
-        </div>
 
         <div *ngIf="!smallDevice"
               class="cart-button" >
@@ -274,8 +271,7 @@
           <mat-divider class="mat-divider"></mat-divider>
         </div>
 
-        <div class="mat-item"
-              *ngIf="smallDevice">
+        <div class="mat-item"  >
             <app-toggle-theme></app-toggle-theme>
         </div>
 
@@ -325,3 +321,5 @@
     </mat-menu>
   </div>
 </ng-template>
+
+<div *ngIf="(uiTransactionSetting$ | async) as item"></div>

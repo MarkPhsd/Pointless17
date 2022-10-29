@@ -1,17 +1,17 @@
 
-<mat-card>
+<ng-template #loading>... loading
+  <mat-spinner [diameter]="25"></mat-spinner>
+</ng-template>
+
+<mat-card *ngIf="(uiTransactions$ | async) as uiTransactions; else loading">
   <mat-card-subtitle>
     <h4>
       <ng-content></ng-content>
     </h4>
   </mat-card-subtitle>
 
-  <ng-template #loading>... loading
-    <mat-spinner [diameter]="25"></mat-spinner>
-  </ng-template>
-
   <mat-card-content
-          *ngIf="inputForm && uiTransactions; else loading"
+          *ngIf="inputForm"
           [formGroup]="inputForm"  >
 
     <div class="grid-items">
@@ -124,8 +124,8 @@
                       formControlName   = "defaultClientTypeID" >
               <mat-option
                   *ngFor="let item of clientTypes"
-                  [value]="item.id">
-                  {{item.name}}
+                  [value]="item?.id">
+                  {{item?.name}}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -289,6 +289,19 @@
               color="primary"
               (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
     </div>
+
+    <div *ngIf="(saving$ | async) as item; else saving">
+      {{message}}
+    </div>
+
+    <ng-template #saving>
+      <div class="saving-container">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ..saving
+      </div>
+
+    </ng-template>
+
   </mat-card-actions>
 </mat-card>
 

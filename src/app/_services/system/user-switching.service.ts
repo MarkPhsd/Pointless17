@@ -269,8 +269,8 @@ export class UserSwitchingService implements  OnDestroy {
 
   processLogin(user: IUser, path : string) {
     //login the user based on the message response of the user.
-    console.log('user from Process login', user, path)
-    console.log('loginAction', localStorage.getItem('loginAction'))
+    // console.log('user from Process login', user, path)
+    // console.log('loginAction', localStorage.getItem('loginAction'))
     if (user && user.message == undefined) {
       return 'user undefined'
     }
@@ -283,7 +283,7 @@ export class UserSwitchingService implements  OnDestroy {
       return 'No message response from API.'
     }
 
-    if (path) { 
+    if (path) {
       this.router.navigate([path]);
       return 'success'
     }
@@ -296,17 +296,17 @@ export class UserSwitchingService implements  OnDestroy {
     this.setAppUser()
   }
 
-  loginToURL(path) { 
-    
+  loginToURL(path) {
+
     let returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     console.log('returnUrl', returnUrl)
     console.log('path', path)
 
-    if (path) { 
+    if (path) {
       this.router.navigate([path])
     }
-    
-    if (returnUrl) { 
+
+    if (returnUrl) {
       this.router.navigate([returnUrl])
     }
 

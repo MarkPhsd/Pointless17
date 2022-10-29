@@ -37,12 +37,16 @@ mat-divider {
     width: 175px;
     height: 175px;
   }
- 
-  mat-action-buttons { 
+
+  mat-action-buttons {
     padding: 5px;
   }
 
 
-  mat-card-actions { 
+  mat-card-actions {
     padding:5px;
+  }
+
+  .saving-container {
+    width: 200px;
   }

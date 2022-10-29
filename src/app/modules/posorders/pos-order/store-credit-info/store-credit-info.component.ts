@@ -128,7 +128,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
   }
 
   setObservable(search: IStoreCreditSearchModel ){
-    // console.log('search',search)
+
     if (search) {
       const site = this.siteService.getAssignedSite();
       this.searchModel = search;
@@ -136,7 +136,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
       return
     }
 
-    const searchModel = {} as IStoreCreditSearchModel
+    const searchModel = {} as IStoreCreditSearchModel;
     if (this.order && this.order.clientID && this.order.clientID !=0 ) {
       const site = this.siteService.getAssignedSite();
       searchModel.clientID = this.clientID;

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
@@ -18,6 +18,8 @@ export class UIHomePageSettingsComponent implements OnInit {
   uiSettings  : ISetting;
   uiSettings$ : Observable<ISetting>;
   uiHomePage  : UIHomePageSettings;
+  saving$     : Observable<any>;
+  message     : string;
 
   showEmailSettings = false;
 
@@ -82,14 +84,14 @@ export class UIHomePageSettingsComponent implements OnInit {
   }
 
   updateSetting(){
-    try {
-      this.uISettingsService.saveConfig(this.inputForm, 'UIHomePageSettings').subscribe(data => {
+    this.message = ''
+    this.saving$ = this.uISettingsService.saveConfig(this.inputForm, 'UIHomePageSettings').pipe(
+      switchMap(data => {
         this.uiHomePage = JSON.parse(data.text) as UIHomePageSettings;
+        this.message    = 'Saved'
         this.uISettingsService.notify('Saved', 'Success')
-      })
-    } catch (error) {
-      this.uISettingsService.notify(`Saved ${error}`, 'Success')
-    }
+        return of(this.uiHomePage)
+    }))
   }
 
   //image data

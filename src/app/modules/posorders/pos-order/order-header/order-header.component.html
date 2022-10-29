@@ -10,7 +10,7 @@
       <div class="total-card">
         <div  *ngIf="order.employeeName">{{order?.employeeName}}  </div>
       </div>
-    
+
       <div  class="total-card">
         Started  {{order.orderDate | date: 'shortDate'}} - {{order?.orderDate | date: 'shortTime'}}
       </div>
@@ -18,11 +18,11 @@
         Completed  {{order.completionDate | date: 'shortDate'}} - {{order?.completionDate | date: 'shortTime'}}
       </div>
     </div>
- 
+
     <div *ngIf="!mainPanel && !hidePrint">
       <div class="button-container">
         <button color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
       </div>
-    </div> 
+    </div>
   </div>
 </span>
