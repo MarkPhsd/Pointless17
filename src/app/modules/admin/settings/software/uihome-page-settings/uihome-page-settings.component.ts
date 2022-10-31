@@ -29,6 +29,8 @@ export class UIHomePageSettingsComponent implements OnInit {
 
   ngOnInit() {
 
+    this.saving$  = null;
+
     this.settingsService.getUIHomePageSettingsNoCache().subscribe(
       {next:
         data => {

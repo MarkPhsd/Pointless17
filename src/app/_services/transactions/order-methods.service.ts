@@ -516,10 +516,11 @@ export class OrderMethodsService implements OnDestroy {
       if (data) {
 
       }
-        if (data.message) {  this.notifyEvent(`Process Result: ${data.message}`, 'Alert ')};
+        if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
+
 
         if (data && data.resultErrorDescription) {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
           return;
         }
 
@@ -530,7 +531,7 @@ export class OrderMethodsService implements OnDestroy {
             this.toolbarServiceUI.updateOrderBar(true)
           }
         } else {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription} ${data.message}`, 'Alert');
+          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
         }
 
         if (this.openDialogsExist) {
@@ -1108,15 +1109,15 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-  getLoginActions(): Observable<IPOSOrder> { 
+  getLoginActions(): Observable<IPOSOrder> {
     const site = this.siteService.getAssignedSite()
     const item = localStorage.getItem('loginAction') //., JSON.stringify(loginAction))
 
     if (!item) { return }
     const action = JSON.parse(item)
-    
+
     // console.log('get login actions', action)/
-    if (action?.name === 'setActiveOrder') { 
+    if (action?.name === 'setActiveOrder') {
       // console.log('get login actions 2', action)
       return this.orderService.getOrder(site, action.id, false).pipe(
         switchMap(order => {

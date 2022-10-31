@@ -1,6 +1,6 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable} from 'rxjs';
+import { Observable, switchMap , of} from 'rxjs';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
@@ -38,6 +38,7 @@ export class AdjustmentReasonsComponent implements OnInit {
   ccsSite$: Observable<ISite>
   imgName: string;
   adjustmentReason: AdjustmentReason;
+  dataSource$: Observable<any>;
 
   columnsToDisplay = ['id', 'name',  'edit'];
 
@@ -92,15 +93,18 @@ export class AdjustmentReasonsComponent implements OnInit {
       this.filterDescription = 'Refund Item'
       this.filter = 11
     }
-    this.refreshTable(filter)
+    this.dataSource$  = this.refreshTable(filter)
   }
 
-  refreshTable(filter: number): void {
+  refreshTable(filter: number) {
 
     const site = this.siteService.getAssignedSite();
-
-    this.adjustmentReasonsService.getReasonsByFilter(site,filter).subscribe(
-      data => {
+    this.ccsSite = {} as ISite;
+    console.log('refreshTable')
+    return this.adjustmentReasonsService.getReasonsByFilter(site, filter).pipe(
+      switchMap(
+        data => {
+          console.log('refreshTable', data)
           this.pageSize = 10
           this.length = data.length
           this.pageSizeOptions = [5, 10]
@@ -108,14 +112,10 @@ export class AdjustmentReasonsComponent implements OnInit {
           if (this.dataSource) {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
+            return of(data)
           }
-        },
-        error => {
-          this.notifyEvent("Error, see console for details.", "Error")
-          console.log("refreshTable", error)
         }
-      );
-      this.ccsSite = {} as ISite;
+      ))
   };
 
   editItem(id:number) {

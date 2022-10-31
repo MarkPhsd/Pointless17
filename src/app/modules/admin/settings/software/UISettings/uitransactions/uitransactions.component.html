@@ -10,6 +10,31 @@
     </h4>
   </mat-card-subtitle>
 
+  <mat-card-actions>
+
+
+    <div  *ngIf="inputForm && uiTransactions">
+      <button mat-raised-button
+              color="primary"
+              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
+    </div>
+
+    <div *ngIf="saving$">
+      <div *ngIf="(saving$ | async) as item; else saving">
+        {{message}}
+      </div>
+    </div>
+
+    <ng-template #saving>
+      <div class="saving-container">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ..saving
+      </div>
+    </ng-template>
+
+    <mat-divider></mat-divider>
+  </mat-card-actions>
+
   <mat-card-content
           *ngIf="inputForm"
           [formGroup]="inputForm"  >
@@ -283,25 +308,6 @@
     </div>
   </mat-card-content>
 
-  <mat-card-actions>
-    <div  *ngIf="inputForm && uiTransactions">
-      <button mat-raised-button
-              color="primary"
-              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
-    </div>
 
-    <div *ngIf="(saving$ | async) as item; else saving">
-      {{message}}
-    </div>
-
-    <ng-template #saving>
-      <div class="saving-container">
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ..saving
-      </div>
-
-    </ng-template>
-
-  </mat-card-actions>
 </mat-card>
 

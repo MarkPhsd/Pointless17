@@ -1,4 +1,9 @@
-<div  class="container" *ngIf="clientType">
+<ng-template #loading>
+  <mat-spinner [diameter]="50"></mat-spinner>
+  ...loading.
+</ng-template>
+
+<div class="container" *ngIf="(clientType$ | async) as clientType; else loading">
 
   <mat-card class="mat-card">
 
@@ -23,10 +28,21 @@
       </div>
     </mat-card-title>
 
+    <mat-card-subtitle>
+
+      <div *ngIf="action$">
+        <div *ngIf="action$ | async as action; else event">{{message}}</div>
+        <ng-template #event>
+          <mat-spinner [diameter]="50"></mat-spinner>
+          ...processsing
+        </ng-template>
+      </div>
+
+    </mat-card-subtitle>
+
     <mat-card-content>
 
-      <div >
-
+      <div>
         <mat-tab-group
               mat-align-tabs="start"
               md-stretch-tabs>
@@ -145,14 +161,20 @@
               </div>
 
               <div>
-                <mat-form-field appearance="outline">
-                    <mat-label>Auth Code Number</mat-label>
-                    <input matInput
-                          type             ="text"
-                          formControlName="authorizationGroupID"
-                          class="form-control" >
-                  </mat-form-field>
-                  <mat-label>1 Admin, 2 Manager, 3 Employee, 4 API</mat-label>
+                <mat-label>Primary Auth Type</mat-label>
+                <br>
+                <mat-label>Only admin may change client type features.</mat-label>
+                <mat-button-toggle-group
+                      [disabled] ='!userAuthService.isAdmin'
+                      name="type"
+                      formControlName="authorizationGroupID">
+                  <div *ngFor="let item of authCodes">
+                    <mat-button-toggle [value]="item.id">
+                      {{ item.name }}
+                    </mat-button-toggle>
+                  </div>
+                </mat-button-toggle-group>
+
               </div>
             </div>
         </mat-tab>
@@ -374,9 +396,11 @@
           </div>
 
         </mat-tab>
+
       </mat-tab-group>
-      </div>
+    </div>
     </mat-card-content>
   </mat-card>
 
 </div>
+

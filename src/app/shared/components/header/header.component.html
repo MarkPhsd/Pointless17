@@ -39,10 +39,6 @@
           </button>
         </div>
 
-        <div *ngIf="smallDevice">
-          <ng-container [ngTemplateOutlet]="userActionsSmallDevice"></ng-container>
-        </div>
-
         <div *ngIf="!smallDevice" >
           <div class="site-name" *ngIf="site && site.name && site.name != undefined">
             <h2 > {{ site?.name.toUpperCase() | truncateText : 8 }} </h2>
@@ -64,7 +60,7 @@
       </div>
 
       <div class="grid-flow"
-          *ngIf="!phoneDevice">
+           *ngIf="!phoneDevice">
 
         <mat-card class='panel-card'
                   *ngIf="( (isUserStaff && platFormService.platForm !='web' )
@@ -79,7 +75,6 @@
                 <h2>  {{employeeName.toUpperCase() | truncateText : 8}} </h2>
               </div>
             </li>
-
 
             <li *ngIf="!smallDevice">
               <div class="pos-name"
@@ -133,21 +128,9 @@
                 </button>
               </div>
             </li>
-
-            <li>
-              <div class='search-input'>
-                <!-- <button color="warn"
-                        mat-button
-                        aria-label="exit_to_app"
-                        class="nav-item nav-link"
-                        (click)="logout()">
-                    <mat-icon>exit_to_app</mat-icon>
-                    <span *ngIf="!user">Log Out</span>
-                </button> -->
-              </div>
-            </li>
           </ul>
         </mat-card>
+
       </div>
 
       <div *ngIf="!smallDevice && !isUserStaff" [class]="gridlayout">
@@ -162,10 +145,13 @@
           <wizard-progress-button></wizard-progress-button>
         </div>
 
-
         <div *ngIf="!smallDevice"
               class="cart-button" >
           <app-cart-button> </app-cart-button>
+        </div>
+
+        <div *ngIf="smallDevice">
+          <ng-container [ngTemplateOutlet]="userActionsSmallDevice"></ng-container>
         </div>
 
         <div>
@@ -322,4 +308,5 @@
   </div>
 </ng-template>
 
-<div *ngIf="(uiTransactionSetting$ | async) as item"></div>
+<span *ngIf="(uiTransactionSetting$ | async) as item"></span>
+<span *ngIf="(uiHomePageSetting$ | async) as item"></span>

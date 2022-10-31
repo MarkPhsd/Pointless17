@@ -157,6 +157,8 @@ import { QROrderComponent } from '../modules/posorders/qrorder/qrorder.component
 import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-table.component';
 import { RequestMessageComponent } from '../modules/admin/profiles/request-messages/request-message/request-message.component';
 import { SplashLoadingComponent } from './widgets/splash-loading/splash-loading.component';
+import { ThreeCXFabComponent } from './widgets/three-cxfab/three-cxfab.component';
+import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-selector.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -314,6 +316,8 @@ import { SplashLoadingComponent } from './widgets/splash-loading/splash-loading.
     ElectronZoomControlComponent,
     RequestMessageComponent,
     RequestMessagesComponent,
+    ThreeCXFabComponent,
+    CallUsSelectorComponent,
   ],
 
   imports: [
@@ -354,6 +358,7 @@ import { SplashLoadingComponent } from './widgets/splash-loading/splash-loading.
     ButtonRendererComponent,
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
+    CallUsSelectorComponent,
     CardComponent,
     CardDashboardComponent,
     ColorPickerModule,
@@ -457,6 +462,7 @@ import { SplashLoadingComponent } from './widgets/splash-loading/splash-loading.
     TaxFieldsComponent,
     TiersCardComponent,
     TipEntryComponent,
+    ThreeCXFabComponent,
     ToggleThemeComponent,
     TruncateTextPipe,
     UIHomePageSettingsComponent,

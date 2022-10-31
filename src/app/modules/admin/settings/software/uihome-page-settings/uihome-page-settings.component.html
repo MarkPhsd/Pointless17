@@ -4,11 +4,65 @@
     <mat-divider></mat-divider>
   </mat-card-subtitle>
 
+  <mat-card-actions>
+
+
+    <div>
+      <button mat-raised-button
+              color="primary"
+              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
+    </div>
+
+    <ng-template #saving>
+      <div class="saving-container">
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ..saving
+      </div>
+    </ng-template>
+
+    <div *ngIf="saving$">
+      <div *ngIf="(saving$ | async) as item; else saving">
+        {{message}}
+      </div>
+    </div>
+
+
+
+    <mat-divider></mat-divider>
+  </mat-card-actions>
+
   <ng-template #loading>... loading
     <mat-spinner [diameter]="25"></mat-spinner>
   </ng-template>
 
   <mat-card-content *ngIf="inputForm && uiHomePage; else loading">
+
+    <mat-divider></mat-divider>
+    <div  *ngIf="inputForm">
+      <button mat-raised-button color="primary"
+              (click)="showEmailSettings = !showEmailSettings">
+        <mat-icon mat-icon>email</mat-icon>Email Settings
+      </button>
+
+      <app-email-settings
+          *ngIf="showEmailSettings"
+          [inputForm]="inputForm">
+      </app-email-settings>
+
+      <div  *ngIf="inputForm && showEmailSettings"
+            [formGroup]="inputForm">
+        <h4>Email </h4>
+        <div class="toggle-fields">
+          Requires SMTP Email account. Must be assignged in webconfig.
+          <mat-slide-toggle
+                    formControlName="smtpEmailEnabled"
+                    >
+            <mat-label>SMTP Email Enabled</mat-label>
+          </mat-slide-toggle>
+        </div>
+      </div>
+
+    </div>
 
     <div
         *ngIf="inputForm"
@@ -23,14 +77,15 @@
         </app-value-fields>
       </div>
 
-      <div><h4>3CX Chat</h4></div>
+      <div><h4> Chat</h4></div>
       <div><mat-label> Allows you to incorporate a chat bubble for vistors and users.</mat-label></div>
+      <div><mat-label> Requires chat subscription.</mat-label></div>
       <div class="grid-item">
         <app-value-fields
             [fieldType]     ="'text'"
             [inputForm]     ="inputForm"
             [fieldName]     ="'threecxChatLink'">
-            3CX Chat Link
+         Chat Server
         </app-value-fields>
       </div>
 
@@ -213,21 +268,10 @@
       </div>
     </div>
 
-    <mat-divider></mat-divider>
-    <div>
-      <button mat-raised-button color="primary"
-              (click)="showEmailSettings = !showEmailSettings">
-        <mat-icon>email</mat-icon>Email Settings</button>
-
-      <app-email-settings
-          *ngIf="showEmailSettings"
-          [inputForm]="inputForm">
-      </app-email-settings>
-    </div>
-
     <div  *ngIf="inputForm"
           [formGroup]="inputForm">
       <h4>SSMS</h4>
+      <mat-divider></mat-divider>
       <div class="toggle-fields">
         Requires Twilio SSMS Message account. Secret APIKey must be assigned in configuration.
         <mat-slide-toggle
@@ -237,39 +281,11 @@
         </mat-slide-toggle>
       </div>
     </div>
-    <div  *ngIf="inputForm"
-          [formGroup]="inputForm">
-      <h4>Email </h4>
-      <div class="toggle-fields">
-        Requires SMTP Email account. Must be assignged in webconfig.
-        <mat-slide-toggle
-                  formControlName="smtpEmailEnabled"
-                  >
-          <mat-label>SMTP Email Enabled</mat-label>
-        </mat-slide-toggle>
-      </div>
-    </div>
+
+
 
   </mat-card-content>
-  <mat-card-actions>
-    <mat-divider></mat-divider>
-    <div>
-      <button mat-raised-button
-              color="primary"
-              (click)="updateSetting()"><mat-icon>save</mat-icon>Save</button>
-    </div>
 
-    <div *ngIf="(saving$ | async) as item; else saving">
-      {{message}}
-    </div>
 
-    <ng-template #saving>
-      <div class="saving-container">
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ..saving
-      </div>
-
-    </ng-template>
-  </mat-card-actions>
 
 </mat-card>

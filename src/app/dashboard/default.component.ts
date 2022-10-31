@@ -5,7 +5,7 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          ViewChild} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { filter, Observable, Subscription } from 'rxjs';
+import { filter, Observable, of, Subscription,switchMap } from 'rxjs';
 import { fader } from 'src/app/_animations/route-animations';
 import { ToolBarUIService } from '../_services/system/tool-bar-ui.service';
 import { Capacitor } from '@capacitor/core';
@@ -25,6 +25,7 @@ import { SplashScreenStateService } from 'src/app/_services/system/splash-screen
 })
 
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
+
   @ViewChild("footer") footer: ElementRef;
   departmentID     =0
   get platForm() {  return Capacitor.getPlatform(); }
@@ -81,17 +82,24 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
+  homePageSetting$: Observable<UIHomePageSettings>;
+
   devMode     : boolean;
   chatURL     : string;
-
+  phoneDevice : boolean;
   pointlessPOSDemo: boolean;
 
   homePageSubscriber(){
     try {
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-        this.matorderBar = 'mat-orderBar'
+        this.matorderBar = 'mat-orderBar-wide'
         if (data) {
           this.uiSettings = data;
+
+          if (this.phoneDevice)  {
+            this.matorderBar = 'mat-orderBar'
+            return
+          }
 
           if (!data.wideOrderBar) {
             if (this.smallDevice)  {
@@ -101,7 +109,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           }
 
           if (data.wideOrderBar) {
-            if (this.smallDevice)  { this.matorderBar = 'mat-orderBar'  }
+
             if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
           }
         }
@@ -277,21 +285,18 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSettings() {
-    this.uiSettingsService.getSetting('UIHomePageSettings').subscribe(
-      { next: data => {
+    this.homePageSetting$ = this.uiSettingsService.getSetting('UIHomePageSettings').pipe(
+        switchMap(  data => {
           const ui = {} as UIHomePageSettings
           if (data && data.text) {
             const ui = JSON.parse(data.text)
             this.uiSettingsService.updateHomePageSetting(ui);
             this.initUI();
-            return
+            this.uiSettings = ui;
+            return of(ui)
           }
-      },
-        error : err => {
-          this.initUI();
-          console.log('error', err)
-      }
-    })
+          return of(null)
+    }))
 
   }
 
@@ -361,6 +366,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.toolbarTiny = false
     }
+
     if (window.innerWidth > 811) {
       this.sidebarMode = 'side'
       this.smallDevice = false;
@@ -368,6 +374,13 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
       this.sidebarMode = 'side'
       this.smallDevice = true;
     }
+
+   if (window.innerWidth <=600) {
+    this.phoneDevice = true
+   } else {
+    this.phoneDevice = false
+   }
+
   }
 
   renderTheme() {

@@ -171,17 +171,15 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode);
 
     item$.subscribe(data => {
-      if (data) {
-
-        if (data.length == 0 || !data) {
+      console.log('data from scan', data)
+      if ( !data ) {
+        this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+      } else
+      {
+        if (data.length == 1) {
           this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
-        } else
-        {
-          if (data.length == 1) {
-            this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
-          } else {
-            this.listBarcodeItems(data, this.order)
-          }
+        } else {
+          this.listBarcodeItems(data, this.order)
         }
       }
     })

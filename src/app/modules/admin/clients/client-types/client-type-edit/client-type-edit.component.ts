@@ -8,6 +8,8 @@ import { clientType } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.service';
+import { Observable, switchMap , of} from 'rxjs';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-client-type-edit',
@@ -18,17 +20,23 @@ export class ClientTypeEditComponent implements OnInit {
 
   id                     :any;
   clientType             :clientType;
+  clientType$             :Observable<clientType>;
+  action$                : Observable<any>;
+  message                = ''
   bucketName             :string;
   awsBucketURL           :string;
   inputForm              :FormGroup;
   jsonObjectForm         : FormGroup;
 
+
+  authCodes = [ { id: 1, name: 'Admin'}, {id: 2, name: 'Manager'}, {id: 3, name: 'Employee'}, {id: 4, name: 'User'}, {id: 5, name: 'API'}]
   constructor(
     private clientTypeService       : ClientTypeService,
     private siteService             : SitesService,
     private snack                   : MatSnackBar,
     private awsBucket               : AWSBucketService,
-    private fbClientTypesService    : FbClientTypesService,
+    public fbClientTypesService    : FbClientTypesService,
+    public userAuthService         : UserAuthorizationService,
     private dialogRef: MatDialogRef<ClientTypeEditComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any)
 
@@ -38,10 +46,11 @@ export class ClientTypeEditComponent implements OnInit {
     }
   }
 
-  async ngOnInit() {
-    this.bucketName =       await this.awsBucket.awsBucket();
-    this.awsBucketURL =     await this.awsBucket.awsBucketURL();
+  ngOnInit() {
+    // this.bucketName =       await this.awsBucket.awsBucket();
+    // this.awsBucketURL =     await this.awsBucket.awsBucketURL();
     this.initializeForm()
+    this.userAuthService.isAdmin
   };
 
   initializeForm()  {
@@ -50,24 +59,32 @@ export class ClientTypeEditComponent implements OnInit {
 
     if (this.inputForm && this.id) {
       const site = this.siteService.getAssignedSite();
-      this.clientTypeService.getClientType(site, this.id).subscribe(data =>
-        {
-          this.clientType = data
-          this.id         = data.id
-          this.inputForm.patchValue(data)
-          // console.log('initialied form', data, this.inputForm.value)
-          this.initJSONObjectForm(data.jsonObject)
+      this.clientType$ = this.clientTypeService.getClientType(site, this.id).pipe(
+        switchMap( data => {
+          if (data) {
+            this.clientType = data
+            this.id         = data.id
+            this.inputForm.patchValue(data)
+            this.initJSONObjectForm(data.jsonObject)
+            return of(data)
+          }
+          if (!data) {
+            return this.initEmptyClientType();
+          }
         }
-      )
-    } else {
-      this.clientType = {} as clientType
-      this.inputForm.patchValue(this.clientType)
-      const object = {} as IUserAuth_Properties;
-      this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
-      this.jsonObjectForm.patchValue(object);
+      ))
     }
 
   };
+
+  initEmptyClientType() {
+    this.clientType = {} as clientType
+    this.inputForm.patchValue(this.clientType)
+    const object = {} as IUserAuth_Properties;
+    this.jsonObjectForm =  this.fbClientTypesService.initUserAuthForm(this.jsonObjectForm)
+    this.jsonObjectForm.patchValue(object);
+    return of(this.clientType)
+  }
 
   initFormFields() {
     this.inputForm  = this.fbClientTypesService.initForm(this.inputForm)
@@ -79,7 +96,6 @@ export class ClientTypeEditComponent implements OnInit {
 
     if (jsonObject) {
       let object = JSON.parse(jsonObject) as IUserAuth_Properties;
-      // console.log(object)
       object = this.initUserAuth(object)
       this.jsonObjectForm.patchValue(object);
     }
@@ -103,19 +119,26 @@ export class ClientTypeEditComponent implements OnInit {
       clientType.jsonObject = JSON.stringify(item);
 
       const item$ = this.clientTypeService.saveClientType(site, clientType)
-      item$.subscribe( {
-          next: data => {
+
+      this.message =  ''
+      this.action$ =  item$.pipe(
+        switchMap( data =>  {
+            this.message = "Saved"
             this.clientType = data;
             this.snack.open('Item Updated', 'Success', {duration:2000, verticalPosition: 'top'})
               if (close) {this.onCancel(null); }
-            },
-          error: error => {
-            this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
-
+              return of(data)
             }
-          }
-        )
+          // ,
+          // error: error => {
+          //   this.snack.open(`Update item. ${error}`, "Failure", {duration:2000, verticalPosition: 'top'})
+          //   }
+          // }
+        ));
+
       }
+
+
   };
 
   initUserAuth(item: IUserAuth_Properties) : IUserAuth_Properties{
@@ -163,14 +186,20 @@ export class ClientTypeEditComponent implements OnInit {
       return
     }
 
-    this.clientTypeService.delete(site,this.clientType.id).subscribe( data => {
+    this.action$ = this.clientTypeService.delete(site,this.clientType.id).pipe(
+      switchMap( data => {
       if (!data.id) {
+        this.message = 'Item not deleted.'
+        this.action$ = null;
+        this.message =''
         this.snack.open(`Delete failed. ${data}`, "Failed", {duration:2000, verticalPosition: 'top'})
         return
       }
+      this.message = 'Item deleted.'
       this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
       this.onCancel(event)
-    })
+      return of(data)
+    }))
   }
 
   copyItem(event) {

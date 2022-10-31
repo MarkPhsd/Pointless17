@@ -116,6 +116,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   homePageSetings : UIHomePageSettings;
   uiTransactionSetting  : TransactionUISettings;
   uiTransactionSetting$ : Observable<TransactionUISettings>;
+  uiHomePageSetting$    : Observable<UIHomePageSettings>;
   floorPlans$     : Observable<IFloorPlan[]>;
   posDevice$      : Observable<ITerminalSettings>;
   terminalSetting : any;
@@ -170,14 +171,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     })
   }
 
-  initUIService() {
-    this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
-        if (data) {
-          this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
-        }
-      }
-    )
-  }
+
 
   initSubscriptions() {
     this.initOrderSubscriber()
@@ -219,6 +213,8 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     this.site =  this.siteService.getAssignedSite();
 
     this.getUITransactionsSettings();
+    this.initUIService();
+
     this.scaleSetup = this.scaleService.getScaleSetup(); //get before subscriptions;
     this.initSearchObservable();
     this.messageService.sendMessage('show');
@@ -263,6 +259,28 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
     )
   }
 
+  initUIService() {
+
+    this.uiHomePageSetting$ =  this.uiSettings.getSetting('UIHomePageSettings').pipe(
+      switchMap( data => {
+        if (data) {
+          this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
+          this.uiSettings.updateHomePageSetting(this.homePageSetings)
+          return of(this.homePageSetings)
+        }
+        return of(null)
+      }
+    ))
+
+    this.uiSettings.homePageSetting$.subscribe(data => {
+        if (data) {
+          this.homePageSetings = data
+        }
+      }
+    )
+
+  }
+
 
   ngOnDestroy() {
     if (this._searchSideBar) { this._searchSideBar.unsubscribe()}
@@ -275,7 +293,12 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   refreshUserBar(user: IUser) {
-    if (user && user.roles === 'user') {
+    if (!user) {
+      this.flexsections = 'flex-sections-nouser'
+      // this.flexsections = 'flex-sections'
+      return
+    }
+    if (user && user?.roles === 'user') {
       this.flexsections = 'flex-sections-user'
       return
     }
@@ -283,11 +306,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
       this.flexsections = 'flex-sections'
       return
     }
-    if (!user) {
-      this.flexsections = 'flex-sections-nouser'
-      this.flexsections = 'flex-sections'
-      return
-    }
+
   }
 
   //if there is a current order for this user, then we can assign it here.

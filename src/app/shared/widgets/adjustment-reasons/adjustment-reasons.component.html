@@ -14,13 +14,15 @@
           <button mat-raised-button class="form-button" color="primary" (click)="onCancel()"><mat-icon>close</mat-icon>Exit</button>
       </div>
     </mat-card-subtitle>
-    <mat-card-content>
-      <div *ngIf="dataSource">
+    <mat-card-content >
+      <ng-template #loading>
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ...loading.
+      </ng-template>
+
+      <div *ngIf="(dataSource$ | async) as item; else loading">
         <div  class="table-container">
           <div class="table-container mat-elevation-z2">
-
-            <div *ngIf="dataSource">
-
               <table mat-table #outerSort="matSort" [dataSource]="dataSource"
                     multiTemplateDataRows matSort>
 
@@ -57,7 +59,7 @@
                             [pageSizeOptions]="pageSizeOptions"
                           ></mat-paginator>
           </div>
-        </div>
+
       </div>
 
       <form [formGroup]="inputForm" >

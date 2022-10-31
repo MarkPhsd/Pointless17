@@ -38,6 +38,7 @@ export class UITransactionsComponent implements OnInit {
     const site           = this.sitesService.getAssignedSite();
     this.clientTypes$    = this.clientTypeService.getClientTypes(site);
     this.initUITransactionSettings()
+    this.saving$  = null;
   }
 
   initUITransactionSettings() {
