@@ -34,7 +34,7 @@ export class RequestMessagesComponent implements OnInit {
     const site = this.siteService.getAssignedSite();
     const search = {} as IRequestMessageSearchModel;
     if (user?.id) {
-      console.log('refreshing user')
+      // console.log('refreshing user')
       search.userID = user.id;
       this.messages$  = this.getMessages().pipe(
         repeatWhen(notifications =>

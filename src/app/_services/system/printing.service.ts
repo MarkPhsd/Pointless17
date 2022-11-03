@@ -185,6 +185,17 @@ export class PrintingService {
     return this.setHTMLReceiptStyle(receiptStyle)
   }
 
+  appyStylesCachedObservable(site: ISite): Observable<ISetting> {
+    const receiptStyle$ = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+    return  receiptStyle$.pipe(
+      switchMap( data => {
+          return of(this.setHTMLReceiptStyle(data))
+        }
+      )
+    )
+  }
+
+
   getStylesCached(site){
     return this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
   }
@@ -196,6 +207,7 @@ export class PrintingService {
       document.head.appendChild(style);
       return receiptStyle
     }
+    return null;
   }
 
 

@@ -96,11 +96,12 @@ export class MenuitemComponent implements OnInit, OnDestroy {
     initMenuItemWindow() {
       const site = this.siteService.getAssignedSite();
 
+      console.log(this.id, this.menuItem)
+
       this.tierPriceService.tierFlowerMenu$.pipe(
         switchMap( data => {
           if (data) {
             this.flowerMenu = data;
-            console.log('retrieved Tier Flower Menu')
             return  this.priceTierService.getPriceTier(site,  data.priceTierID)
           }
           return EMPTY
@@ -119,6 +120,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
           this.setMenuItem(data)
           return
         }
+        this.getItem(this.id);
       })
 
       if ( this.route.snapshot.paramMap.get('id') ) {
@@ -311,7 +313,7 @@ export class MenuitemComponent implements OnInit, OnDestroy {
         this.menuItem = menuItem;
         const site     = this.siteService.getAssignedSite();
         this.titleService.setTitle(`${this.menuItem.name} by ${this.appInitService.company}`)
-        if (menuItem.brandID) { 
+        if (menuItem.brandID) {
           this.brand$ = this.brandService.getClient(site, menuItem.brandID)
         }
         this.packagingMaterial = this.menuService.getPackagingMaterialArray(menuItem)

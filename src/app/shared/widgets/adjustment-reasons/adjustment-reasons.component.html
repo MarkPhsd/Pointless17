@@ -15,9 +15,12 @@
       </div>
     </mat-card-subtitle>
     <mat-card-content >
+
       <ng-template #loading>
-        <mat-spinner [diameter]="50"></mat-spinner>
-        ...loading.
+        <div *ngIf="filter">
+          <mat-spinner [diameter]="50"></mat-spinner>
+          ...loading.
+        </div>
       </ng-template>
 
       <div *ngIf="(dataSource$ | async) as item; else loading">

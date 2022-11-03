@@ -1,9 +1,15 @@
-<div class="container">
-
-  <app-menuitem
-    (outputExitForm) ="exit($event)"
-    [showCloseButton]="true"
-    >
-  </app-menuitem>
-
+<div class="container" *ngIf="(menuItem$ | async) as menuItem; else loading">
+  <div class="appMenuItem">
+    <app-menuitem
+      (outputExitForm) ="exit($event)"
+      [showCloseButton]="true" >
+    </app-menuitem>
+  </div>
 </div>
+
+<ng-template #loading>
+  <div class="loading">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
+

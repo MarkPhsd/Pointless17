@@ -221,6 +221,8 @@ export class OrderMethodsService implements OnDestroy {
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const searchResults = this.updateMenuSearchModel(item)
+
+    console.log('searchresults', searchResults)
     if (searchResults) { return }
 
     if (add) {
@@ -253,19 +255,30 @@ export class OrderMethodsService implements OnDestroy {
   updateMenuSearchModel(item: IMenuItem) : boolean {
     if (!item) {   return false }
     const model =  {} as ProductSearchModel;
-    if (item.itemType.name.toLowerCase() == 'category') {
+
+
+    if (item?.itemType?.name?.toLowerCase() == 'category') {
+
+      console.log(item?.itemType?.name, item.categoryID.toString())
       model.categoryID   = item.categoryID.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
       return true
     }
-    if (item.prodModifierType == 5) {
+
+    if (item?.prodModifierType == 4) {
+      model.subCategory  = item.id.toString()
+      this.menuService.updateMeunuItemData(model)
+      this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
+      return true
+    }
+    if (item?.prodModifierType == 5) {
       model.subCategory  = item.id.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
       return true
     }
-    if (item.prodModifierType == 6) {
+    if (item?.prodModifierType == 6) {
       model.departmentID = item.id.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {departmentID:item.id }])
@@ -512,7 +525,11 @@ export class OrderMethodsService implements OnDestroy {
 
     this.priceCategoryID = 0;
 
+    console.log('processItemPostResults');
+
     addItem$.subscribe(data => {
+
+      console.log('processItemPostResults', data);
       if (data) {
 
       }
@@ -1141,7 +1158,7 @@ export class OrderMethodsService implements OnDestroy {
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
-      duration: 2000,
+      duration: 4000,
       verticalPosition: 'bottom'
     });
   }

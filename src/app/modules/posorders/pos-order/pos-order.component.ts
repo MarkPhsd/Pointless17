@@ -23,6 +23,7 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 import { ResizedEvent } from 'angular-resize-event';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { NavigationService } from 'src/app/_services/system/navigation.service';
+import { NewOrderTypeComponent } from '../components/new-order-type/new-order-type.component';
 
 @Component({
 selector: 'app-pos-order',
@@ -106,6 +107,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   private _items : Subscription
   assignedItems:  PosOrderItem[];
+  bottomSheet$: Observable<any>;
 
   refundItemsAvalible;
   uiTransactionSetting$: Observable<TransactionUISettings>;
@@ -256,6 +258,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private authenticationService: AuthenticationService,
               public  uiSettingsService  : UISettingsService,
               private settingService    : SettingsService,
+              private _bottomSheet     : MatBottomSheet,
               private posOrderItemService: POSOrderItemServiceService,
               private productEditButtonService: ProductEditButtonService,
               private el                : ElementRef) {
@@ -307,7 +310,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   async ngOnInit() {
     this.initAuthorization();
-    console.log('get transaction u settings')
+    // console.log('get transaction u settings')
     this.gettransactionUISettingsSubscriber();
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
@@ -349,6 +352,15 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.order) {
       this.orderMethodService.refreshOrder(this.order.id)
     }
+  }
+
+  changeTransactionType(event) {
+    this.orderService.toggleChangeOrderType = true;
+    const bottomSheet = this._bottomSheet.open(NewOrderTypeComponent)
+    this.bottomSheet$ = bottomSheet.afterDismissed()
+    this.bottomSheet$.subscribe(data => {
+      this.orderService.toggleChangeOrderType = false;
+    })
   }
 
   checkIfItemsPrinted() {
@@ -456,6 +468,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
     if (this._uiTransactionSettings) { this._uiTransactionSettings.unsubscribe()}
     this.uiTransactionSetting$  = null;
+
+    if (this.bottomSheet$) {
+      this.bottomSheet$ = null;
+    }
   }
 
   suspendOrder() {

@@ -134,6 +134,18 @@
     </button>
   </div>
 
+  <div  *ngIf="isStaff">
+    <button mat-raised-button class="button"
+            color="primary"
+            (click)="changeTransactionType()">
+            <mat-icon>refresh</mat-icon>
+      <span>
+        Change Type
+      </span>
+    </button>
+  </div>
+
+
   <div  *ngIf="!isUser">
     <button mat-raised-button class="button"
             color="primary"

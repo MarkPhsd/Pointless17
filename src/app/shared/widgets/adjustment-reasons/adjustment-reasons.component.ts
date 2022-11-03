@@ -57,7 +57,7 @@ export class AdjustmentReasonsComponent implements OnInit {
     this.metrcEnabled = true
     this.pageSize = 10
     this.initForm()
-    this.refreshTable(1);
+    this.dataSource$  =  this.refreshTable(1);
   }
 
   // ngAfterViewInit(){

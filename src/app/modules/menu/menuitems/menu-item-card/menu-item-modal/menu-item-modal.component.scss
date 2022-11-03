@@ -4,4 +4,17 @@
 }
 mat-dialog-container {
   padding: 0  !important;
+  overflow: hidden  ;
+}
+
+.loading {
+  align-items: center;
+  justify-content: center;
+  vertical-align:middle;
+}
+
+.appMenuItem {
+  // margin: 5px;
+  // padding: 2px;
+  height: 99%;
 }

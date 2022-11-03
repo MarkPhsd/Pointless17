@@ -176,7 +176,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
       } else
       {
-        if (data.length == 1) {
+        if (data.length == 1 || data.length == 0) {
           this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
         } else {
           this.listBarcodeItems(data, this.order)
@@ -189,7 +189,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
 
   //this.orderMethodService.processAddItem
   listBarcodeItems(items: IMenuItem[], order: IPOSOrder) {
-    // const data = {items: items , order: order}
+    if (items.length == 0) { return }
     this.orderMethodService.openProductsByBarcodeList(items, order)
   }
 

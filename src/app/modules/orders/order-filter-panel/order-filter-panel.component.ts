@@ -15,7 +15,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Plugins } from '@capacitor/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { Observable, Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
 import { IPrinterLocation } from 'src/app/_services/menu/printer-locations.service';
@@ -368,7 +368,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       search.prepStatus         = 1//this.prepStatus
     }
     this.initOrderSearch(search)
-    // console.log(search)
+    return of('')
     return this._searchItems$
   }
 
@@ -382,8 +382,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     search.greaterThanZero     = parseInt(this.toggleOrdersGreaterThanZero)
     search.closedOpenAllOrders = parseInt(this.toggleOpenClosedAll)
     this.initOrderSearch(search)
-    // console.log(search)
-    return this._searchItems$
+    // return this._searchItems$
   }
 
   setServiceType(event) {

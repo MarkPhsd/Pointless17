@@ -87,6 +87,7 @@ export interface IItemBasicB{
   id  : number;
   type: string;
   icon: string
+  image: string;
 }
 
 @Injectable({
@@ -97,8 +98,8 @@ export class MenuService {
   private _menuItemsData       = new BehaviorSubject<ProductSearchModel>(null);
   public  menuItemsData$       = this._menuItemsData.asObservable();
 
-  private _currentMeuItem  = new BehaviorSubject<IMenuItem>(null);
-  public currentMeuItem$          = this._currentMeuItem.asObservable();
+  private _currentMeuItem      = new BehaviorSubject<IMenuItem>(null);
+  public currentMeuItem$       = this._currentMeuItem.asObservable();
 
   site: ISite;
   isStaff           = false;
@@ -612,6 +613,25 @@ export class MenuService {
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return this.httpClient.post<IItemBasic[]>(url, productSearchModel)
+
+  }
+
+
+  getItemBasicImage(site: ISite, id: number ): Observable<IItemBasicB> {
+
+    const controller =  "/MenuItems/"
+
+    const endPoint = "GetItemBasicImage"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.get<IItemBasicB>(url)
+
+    const uri = { url: url, cacheMins: 480}
+
+    return this.httpCache.get<IItemBasicB>(uri)
 
   }
 

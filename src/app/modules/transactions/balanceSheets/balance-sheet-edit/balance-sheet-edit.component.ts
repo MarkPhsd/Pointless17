@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormControl, FormGroup } from '@angular/forms';
 import { IItemBasic } from 'src/app/_services/menu/menu.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { Capacitor, } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { BalanceSheetSearchModel, BalanceSheetService, IBalanceSheet } from 'src/app/_services/transactions/balance-sheet.service';
@@ -14,7 +14,6 @@ import { IUser } from 'src/app/_interfaces';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { BalanceSheetMethodsService } from 'src/app/_services/transactions/balance-sheet-methods.service';
 import { SendGridService } from 'src/app/_services/twilio/send-grid.service';
-import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
@@ -50,7 +49,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
 
   get platForm()          { return Capacitor.getPlatform(); }
 
-  value           : any;
+
+  balanceSheet$:   Observable<any>;
   searchForm      : FormGroup;
   inputForm       : FormGroup;
   urlPath         : string;
@@ -134,12 +134,16 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.isAuthorized  = this.userAuthorization.isUserAuthorized('admin, manager')
     this.isStaff       = this.userAuthorization.isUserAuthorized('admin, manager, employee')
     this.id            = this.route.snapshot.paramMap.get('id');
-    if (this.id) {
-      await  this.getSheet(this.id)
-    }
+
+    console.log('balancesheet', this.id)
     if(!this.id) {
       this.newBalanceSheet();
     }
+    if (this.id) {
+      this.getSheet(this.id)
+    }
+
+
   };
 
   ngOnDestroy() {
@@ -154,7 +158,11 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
   newBalanceSheet() {
     //we have to initialize the balance sheet.
     //we should just be sending maybe the device, and the user.
-    this.sheetMethodsService.getCurrentBalanceSheet()
+    this.balanceSheet$ = this.sheetMethodsService.getCurrentBalanceSheet().pipe(
+      switchMap(data => {
+      this.sheet = data;
+      return of(data)
+    }))
   }
 
   hideToolbars() {
@@ -169,8 +177,8 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.getSheet(this.id)
   }
 
-  async getSheet(id: string) {
-    this.sheetMethodsService.getSheet(id)
+  getSheet(id: string) {
+    this.balanceSheet$ = this.sheetMethodsService.getSheetObservable(id)
   }
 
   getSheetType(sheet: IBalanceSheet) {

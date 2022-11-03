@@ -13,6 +13,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
 
   isApp = false;
+  @Output() outPutchangeTransactionType = new EventEmitter();
   @Output() outPutSendToPrep    = new EventEmitter();
   @Output() outPutPrint         = new EventEmitter();
   @Output() outPutPrintLabel    = new EventEmitter();
@@ -83,6 +84,10 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
      }
      this.order.balanceRemaining
    }
+
+  changeTransactionType() {
+    this.outPutchangeTransactionType.emit(true)
+  }
 
   refundItem() {
     this.outPutRefundItem.emit(true)

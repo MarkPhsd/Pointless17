@@ -22,7 +22,6 @@ import { FloorPlanService } from 'src/app/_services/floor-plan.service';
 import { TransactionUISettings, UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
 
-
 interface IIsOnline {
   result: string;
 }
@@ -187,6 +186,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private userSwitchingService  : UserSwitchingService,
               private pollingService        : PollingService,
               private dialog:                 MatDialog,
+              public platformService       : PlatformService,
               private companyService:         CompanyService,
               private _renderer:              Renderer2,
               public  orderService:           OrdersService,
@@ -195,7 +195,7 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
               private siteService:            SitesService,
               public  toolbarUIService:       ToolBarUIService,
               private location:               Location,
-              private scaleService          : ScaleService,
+              public  scaleService          : ScaleService,
               private navigationService     : NavigationService,
               public  platFormService       : PlatformService,
               private router                : Router,
@@ -243,11 +243,16 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
           this.terminalSetting = data;
           const posDevice = JSON.parse(data.text) as ITerminalSettings;
           this.uiSettings.updatePOSDevice(posDevice)
+
+          if (this.platformService.isAppElectron) {
+            if (posDevice && posDevice.electronZoom && posDevice.electronZoom != '0') {
+              this.uiSettings.electronZoom(posDevice.electronZoom)
+            }
+          }
           return of(posDevice)
         }
       ))
     }
-
   }
 
   getUITransactionsSettings() {

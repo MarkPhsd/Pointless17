@@ -58,6 +58,7 @@ export class FbClientTypesService {
       refundItem     : [],
       refundOrder    : [],
       refundPayment  : [],
+      userAssignedBalanceSheet: [],
     })
     return fb
 

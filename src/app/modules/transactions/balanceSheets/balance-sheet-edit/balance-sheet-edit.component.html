@@ -1,14 +1,18 @@
-<div class="container" *ngIf="sheet; else loading">
+<div class="container" *ngIf="(balanceSheet$ | async) as sheet; else loading">
   <mat-card *ngIf="sheet as item" >
     <mat-card-title>
       <div>
         Balance Sheet
+
       </div>
     </mat-card-title>
     <mat-card-subtitle>
-      <div class="header-grid">
+      <div *ngIf="sheet.message">
+        {{sheet.message }}
+      </div>
 
-        <div>
+      <div class="header-grid">
+        <div *ngIf="sheet">
           <balance-sheet-header-view
             [sheetType]="sheetType"
             [sheet]    ="sheet">

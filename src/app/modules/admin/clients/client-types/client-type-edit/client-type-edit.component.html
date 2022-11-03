@@ -179,11 +179,12 @@
             </div>
         </mat-tab>
 
-        <mat-tab label="Authorizations">
+        <mat-tab label="Authorizations"
+                 *ngIf="jsonObjectForm"
+                 [formGroup]="jsonObjectForm">
 
-          <div class="grid-auths"
-               *ngIf="jsonObjectForm"
-               [formGroup]="jsonObjectForm">
+          <div class="grid-auths"    >
+
             <div>
 
                 <h4>Admin</h4>
@@ -397,6 +398,26 @@
 
         </mat-tab>
 
+        <mat-tab label="Behaviors"
+                 *ngIf="jsonObjectForm"
+                 [formGroup]="jsonObjectForm">
+
+          <mat-label>This section dictates certain behaviors imposed on users.</mat-label>
+
+          <div class="grid-auths">
+
+            <div>
+              <h4>Server or Delivery type Users</h4>
+              <div class="toggle-fields">
+                <mat-slide-toggle
+                          formControlName="userAssignedBalanceSheet" >
+                  <mat-label>User Defined Balance Sheets</mat-label>
+                </mat-slide-toggle>
+              </div>
+
+            </div>
+          </div>
+        </mat-tab>
       </mat-tab-group>
     </div>
     </mat-card-content>

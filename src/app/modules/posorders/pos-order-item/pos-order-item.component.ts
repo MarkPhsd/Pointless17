@@ -1,15 +1,16 @@
 import { AfterViewInit, Component, ElementRef,  HostListener,
-         Input, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
+         Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPurchaseOrderItem } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
+import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces/transactions/posorder';
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
@@ -38,7 +39,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   interface = {}
   payload: payload;
-
+  @ViewChild('imageDisplay') imageDisplay: TemplateRef<any>;
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
   @Input() uiConfig : TransactionUISettings
@@ -97,6 +98,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   assignedPOSItems      : PosOrderItem[];
   _assignedPOSItems      : Subscription;
 
+  basicItem$: Observable<any>;
+  gridItems             = 'grid-items'
   // transactionUISettings$ = this.uiSettingService.getSetting('UITransactionSetting');
   productnameClass       = 'product-name'
   isModifier            : boolean;
@@ -195,9 +198,21 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       this.itemName   =  this.getItemName(this.menuItem.name)
       this.imagePath  =  this.getItemSrc(this.menuItem)
     }
+
+    if (!this.menuItem) {
+      this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
+        switchMap( data => {
+          // console.log('basic item', data)
+          this.imagePath  =  this.getItemSrcBasic(data?.image)
+          return of(data)
+        })
+      )
+    }
+
     if (this.orderItem && this.orderItem.id != this.orderItem.idRef )  {
 
     }
+
     const item = this.orderItem;
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
@@ -205,6 +220,14 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
     this.updateCardStyle(this.mainPanel)
   }
+
+  get isDisplayMenuItemOn() {
+    if (this.mainPanel) {
+      return this.imageDisplay
+    }
+    return null;
+  }
+
 
   ngAfterViewInit() {
     this.resizeCheck();
@@ -334,9 +357,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         this.sidePanelPercentAdjust = 80
         this.updateCardStyle(true)
       }
+
       if (this.onlineShortDescription) {
-        this.onlineShortDescription =  this.truncateTextPipe.transform(this.onlineShortDescription.replace(/<[^>]+>/g, ''), 200)
-      }
+      this.onlineShortDescription =  this.truncateTextPipe.transform(this.onlineShortDescription.replace(/<[^>]+>/g, ''), 200)
+    }
+
+    this.gridItems = 'grid-items';
+    if (this.mainPanel) {
+      this.gridItems ='grid-items-main-panel'
+    }
+
   }
 
   listItem() {
@@ -431,7 +461,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     const data = { id: item.productID }
     const dialogRef = this.dialog.open(MenuItemModalComponent,
       { width: '90vw',
-        height: '70vh',
+        height: '90vh',
         data :  data ,
       },
     )
@@ -458,10 +488,18 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   getItemSrc(item:IMenuItem) {
-    if (!item.urlImageMain) {
+    if (!item?.urlImageMain) {
       return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
     } else {
       return this.awsBucket.getImageURLPath(this.bucketName, item.urlImageMain)
+    }
+  }
+
+  getItemSrcBasic(image: string) {
+    if (!image) {
+      return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
+    } else {
+      return this.awsBucket.getImageURLPath(this.bucketName, image)
     }
   }
 

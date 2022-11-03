@@ -180,10 +180,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
       this.paymentMethods = data;
     })
 
-    console.log('setting order actions', this.authenticationService.userValue)
     this.authenticationService.updateUser(this.authenticationService.userValue)
     if (this.authenticationService.userValue) {
-      // console.log('setting order actions')
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
   }
@@ -473,6 +471,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   applyPaymentAmount(event) {
 
+    console.log(event)
     if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm();
       return
@@ -543,7 +542,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyGroupPayment(event) {
     if (!event || event.amount == 0) { return }
     this.splitByItem = false;
-    // this.paymentAmountForm
+    this._paymentAmount = event.amount;
     this.groupPaymentAmount = event.amount;
     this.groupPaymentGroupID = event.groupID;
     this.applyPaymentAmount(event.amount)
@@ -552,7 +551,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   processResults(paymentResponse: IPaymentResponse) {
     let result = 0
 
-    console.log('processResults paymentResponse', paymentResponse)
+    // console.log('processResults paymentResponse', paymentResponse)
 
     if (paymentResponse.paymentSuccess || paymentResponse.orderCompleted) {
       if (paymentResponse.orderCompleted) {
@@ -705,6 +704,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
     return this._paymentAmount;
   }
+
   applyBalance() {
     this.applyPaymentAmount(this.order.balanceRemaining)
   }

@@ -107,18 +107,16 @@ export class BalanceSheetMethodsService {
     this.router.navigate(['/balance-sheet', {id: id}]);
   }
 
-  getCurrentBalanceSheet() {
+  getCurrentBalanceSheet(): Observable<IBalanceSheet> {
 
     const deviceName = this.getDeviceName();
     const site = this.sitesService.getAssignedSite()
-    this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
+    return   this.sheetService.getCurrentUserBalanceSheet(site, deviceName).pipe(
       switchMap(sheet => {
+        console.log('get current balance sheet ', sheet)
         this.updateBalanceSheet(sheet)
         return  this.sheetService.getSheetCalculations(site, sheet)
-    })).subscribe( sheet => {
-      // this.notify('Balance Sheet Calculated')
-      this.updateBalanceSheet(sheet)
-    })
+    }))
 
   }
 
@@ -136,6 +134,20 @@ export class BalanceSheetMethodsService {
       sheet => {
         this.updateBalanceSheet(sheet)
       }
+    )
+  }
+
+  getSheetObservable(sheetID: string) {
+
+    if(!sheetID) { return }
+    const deviceName = this.getDeviceName()
+    const id = parseInt(sheetID)
+    const site = this.sitesService.getAssignedSite()
+    return this.sheetService.getSheet(site, id).pipe(
+      switchMap(sheet => {
+        this.updateBalanceSheet(sheet)
+        return this.sheetService.getSheetCalculations(site, sheet)
+      })
     )
   }
 

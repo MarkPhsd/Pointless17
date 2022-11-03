@@ -1,7 +1,7 @@
 
 <ng-template #loading>
   <mat-spinner [diameter]="50"></mat-spinner>
-  ... getting inventory
+  <b>... getting inventory</b>
 </ng-template>
 
 <mat-card *ngIf="!refresh || (productID && productID !=0 && results) ; else loading ">
@@ -58,7 +58,7 @@
           </div>
           </button>
       </div>
-      
+
       <div *ngIf="showAddButton">
         <button mat-raised-button (click)="addItem()">
           <mat-icon>add</mat-icon><ng-content #name></ng-content>

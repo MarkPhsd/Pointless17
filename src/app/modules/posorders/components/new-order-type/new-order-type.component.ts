@@ -1,7 +1,7 @@
 import { Component,Input, OnInit, Optional } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { IPOSOrder, IPOSPayment,IServiceType } from 'src/app/_interfaces';
@@ -17,17 +17,19 @@ import { ChangeDueComponent } from '../balance-due/balance-due.component';
 })
 export class NewOrderTypeComponent  {
 
+  process$: Observable<any>;
+  message: string;
   @Input() paymentMethod: IPaymentMethod;
   @Input() order: IPOSOrder;
   @Input() payment: IPOSPayment;
   @Input() showCancel = true;
-
+  updateItems = false;
   serviceType  : IServiceType;
   serviceTypes$: Observable<IServiceType[]>;
 
   constructor(private siteService       : SitesService,
               private serviceTypeService: ServiceTypeService,
-              private orderService      : OrdersService,
+              public orderService      : OrdersService,
               private snackBar          : MatSnackBar,
               private _bottomSheet      : MatBottomSheet,
               @Optional() private dialogRef  : MatDialogRef<ChangeDueComponent>,
@@ -39,6 +41,7 @@ export class NewOrderTypeComponent  {
 
   onCancel() {
     try {
+      this.orderService.toggleChangeOrderType = false;
       this._bottomSheet.dismiss();
     } catch (error) {
 
@@ -53,6 +56,7 @@ export class NewOrderTypeComponent  {
 
   close() {
     try {
+      this.orderService.toggleChangeOrderType = false;
       if (this.dialogRef) {
         this.dialogRef.close();
         return
@@ -69,9 +73,38 @@ export class NewOrderTypeComponent  {
     this.orderService.setActiveOrder(site,order)
   }
 
-  newOrderByType(event) {
+  orderByType(event) {
+    if (this.orderService.toggleChangeOrderType) {
+      this.changeOrderType(event);
+      return
+    }
+
     this.newOrderWithPayload(event);
    }
+
+  changeOrderType(event) {
+    const site = this.siteService.getAssignedSite();
+    const item$ = this.orderService.changeOrderType(site, this.orderService.currentOrder.id, event.id, this.updateItems)
+    this.process$ = item$.pipe(
+      switchMap(data => {
+        this.message = 'Processed';
+        this.orderService.updateOrderSubscription(data)
+        this.orderService.toggleChangeOrderType = false
+        try {
+          this.close()
+        } catch (error) {
+
+        }
+        try {
+          this.onCancel();
+        } catch (error) {
+
+        }
+        return of(data)
+      })
+    )
+    return
+  }
 
   newOrderWithPayload(serviceType: IServiceType){
     const site = this.siteService.getAssignedSite();

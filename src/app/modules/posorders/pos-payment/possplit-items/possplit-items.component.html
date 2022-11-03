@@ -39,7 +39,8 @@
 
             <h3> Group {{currentGroup}}  </h3>
             <br>
-            <mat-label>Apply all splits before making payments. Once payments are made splits can not be.</mat-label>
+            <mat-label>Apply all splits before making payments. </mat-label>
+            <mat-label>Once payments are made more splits can not be done.</mat-label>
 
             <mat-card *ngIf="(orderGroupTotal$ | async) as order; else calculating">
               <mat-card-content>

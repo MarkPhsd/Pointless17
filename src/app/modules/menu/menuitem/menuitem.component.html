@@ -3,15 +3,16 @@
           [diameter]="75"></mat-spinner>
 </ng-template>
 
-<div *ngIf="menuItem; else loading"
-      >
+<div *ngIf="menuItem; else loading" >
     <mat-card>
       <mat-card-title>
-        <button *ngIf="showCloseButton"
-                mat-raised-button
-                (click)="exit()">
-            <mat-icon>close</mat-icon>
-        </button>
+        <div >
+          <button *ngIf="showCloseButton"
+                  mat-raised-button
+                  (click)="exit()">
+              <mat-icon>close</mat-icon>
+          </button>
+        </div>
       </mat-card-title>
 
       <mat-card-subtitle >

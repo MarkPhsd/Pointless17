@@ -179,8 +179,8 @@ export class UISettingsService {
   private orderItemsHeight    : number;
   private limitOrderHeight: number;
 
-  private _orderSpecialsHeight          = new BehaviorSubject<number>(null);
-  public  orderSpecialsHeight$          = this._orderSpecialsHeight.asObservable();
+  private _orderSpecialsHeight        = new BehaviorSubject<number>(null);
+  public  orderSpecialsHeight$        = this._orderSpecialsHeight.asObservable();
 
   private _orderHeaderHeight          = new BehaviorSubject<number>(null);
   public  orderHeaderHeight$          = this._orderHeaderHeight.asObservable();
@@ -188,11 +188,11 @@ export class UISettingsService {
   private _customerOrderHeight        = new BehaviorSubject<number>(null);
   public  customerOrderHeight$        = this._customerOrderHeight.asObservable();
 
-  private _limitOrderHeight         = new BehaviorSubject<number>(null);
-  public  limitOrderHeight$         = this._limitOrderHeight.asObservable();
+  private _limitOrderHeight           = new BehaviorSubject<number>(null);
+  public  limitOrderHeight$           = this._limitOrderHeight.asObservable();
 
-  private _orderItemsHeight         = new BehaviorSubject<number>(null);
-  public  orderItemsHeight$         = this._orderItemsHeight.asObservable();
+  private _orderItemsHeight           = new BehaviorSubject<number>(null);
+  public  orderItemsHeight$           = this._orderItemsHeight.asObservable();
  ////section end.
 
   private _emailModel  = new BehaviorSubject<EmailModel>(null);
@@ -699,14 +699,14 @@ export class UISettingsService {
     }
   }
 
-  async electronZoom(value) {
+   electronZoom(value) {
     // console.log('Zoom Occured')
     if (this.platFormService.isAppElectron) {
       const electron = this.electronService.remote.require('./index.js');
       if (!electron) {
         // console.log('electron is undefined')
       }
-      await electron.electronZoomControl(value)
+      electron.electronZoomControl(value)
     }
   }
 

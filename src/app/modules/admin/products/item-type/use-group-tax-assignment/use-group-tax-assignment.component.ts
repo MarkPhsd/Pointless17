@@ -8,6 +8,7 @@ import { IProductCategory, ISite, TaxRate } from 'src/app/_interfaces';
 import { UseGroupsService, Taxes, UseGroupTax, UseGroups } from 'src/app/_services/menu/use-groups.service';
 import { UseGroupTaxesService } from 'src/app/_services/menu/use-group-taxes.service';
 import { TaxesService, UseGroupTaxAssigned, UseGroupTaxAssignedList } from 'src/app/_services/menu/taxes.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-use-group-tax-assignment',
@@ -67,7 +68,8 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
     private useGroupService   : UseGroupsService,
     private useGroupTaxService: UseGroupTaxesService,
     private taxService        : TaxesService,
-    private siteService: SitesService,
+    private siteService       : SitesService,
+    private matSnack          : MatSnackBar,
     public fb: FormBuilder) {
     this.listBoxForm = this.fb.group({
       availableSearchInput: [''],
@@ -81,11 +83,11 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
     this.useGroupsList$ = this.initGroups(site)
   }
 
-  resetUseGroups() { 
+  resetUseGroups() {
     ///resetUseGroups
     const site = this.siteService.getAssignedSite()
     const removeItems$ = this.useGroupService.resetUseGroups(site);
-    this.useGroupsList$ = removeItems$.pipe(data => { 
+    this.useGroupsList$ = removeItems$.pipe(data => {
       return this.initGroups(site);
     })
   }
@@ -93,7 +95,7 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
   initGroups(site: ISite) {
     return  this.useGroupService.restoreGroups(site)
   }
-  
+
   // only call this when the tax is selected.
   // pass the taxID, this will show the
   //Group Types that have been assigned on the right, and the taxes that
@@ -165,9 +167,15 @@ export class UseGroupTaxAssignmentComponent implements OnInit {
         useGroups = selected.map(item => ({ id: 0, useGroupID: parseInt(item.value), taxID: taxID,  }));
         //push the list even if it's undefined. This way the list will be deleted if no items are assigned to it.
         const groups$ = this.useGroupTaxService.saveList(site, taxID, useGroups)
-        groups$.subscribe( data => {
-          console.log('saved')
-        })
+        groups$.subscribe( {
+          next:  data => {
+            this.matSnack.open(`${data}`, 'Result', {duration: 2000})
+          },
+            error: error => {
+              this.matSnack.open(`Error occured ${error}`, 'Error', {duration: 4000})
+            }
+          }
+        )
       }
     }
   }

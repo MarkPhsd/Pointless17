@@ -80,7 +80,7 @@
               <div class="pos-name"
                     *ngIf="(orderService && orderService.posName && showSearchForm) "
                     id="pos-name">
-                <h2 > | {{ orderService?.posName.toUpperCase() | truncateText : 6 }} | </h2>
+                <h2 > | {{ orderService?.posName.substr(0, 5) }} | </h2>
               </div>
             </li>
 
@@ -112,9 +112,9 @@
               <list-product-search-input></list-product-search-input>
             </li>
 
-            <li *ngIf="scaleInfo">
+            <li *ngIf="scaleInfo && (platFormService && platFormService.isAppElectron)">
               <div class='search-input'>
-                {{scaleInfo.value}} {{scaleInfo.mode}}
+                {{scaleInfo?.value}} {{scaleInfo?.mode}}
               </div>
             </li>
 

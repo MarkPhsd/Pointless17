@@ -26,19 +26,21 @@ export class ScaleService  {
 
   // private scaleSetup        = {} as ScaleSetup;
   // private scaleInfo         = {} as ScaleInfo;
+  public scaleInfo : ScaleInfo;
   private _scaleInfo          = new BehaviorSubject<ScaleInfo>(null);
   public scaleInfo$           = this._scaleInfo.asObservable();
   isApp                       = false;
   isElectronServiceInitiated  = false
 
   updateSubscription(scaleInfo: ScaleInfo) {
+    this.scaleInfo = scaleInfo;
     this._scaleInfo.next(scaleInfo);
   }
 
   constructor(
     private electronService: ElectronService,
     private platformService: PlatformService,
-    private IPCService :     IPCService,
+    public IPCService :     IPCService,
     ) {
       if (!this.IPCService.isElectronApp) { return }
       this.readScaleEvent();
@@ -124,6 +126,7 @@ export class ScaleService  {
     let scaleSetup                  = {}  as ScaleSetup;
     scaleSetup.decimalPlaces      = 2;
     scaleSetup.timer              = 500;
+
     scaleSetup.enabled            = true;
     this.updateScaleSetup(scaleSetup);
     return scaleSetup;

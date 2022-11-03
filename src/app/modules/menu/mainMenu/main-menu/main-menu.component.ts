@@ -112,8 +112,8 @@ export class MainMenuComponent implements OnInit  {
         }
       })
 
-    console.log('main menu user:', this.userAuthorizationService.user)
-    if (this.userAuthorizationService.user) { 
+    // console.log('main menu user:', this.userAuthorizationService.user)
+    if (this.userAuthorizationService.user) {
       this.orderAction$ = this.orderMethodsService.getLoginActions()
     }
   }
@@ -126,7 +126,7 @@ export class MainMenuComponent implements OnInit  {
     }
   }
 
- 
+
 
   reloadComponent() {
     let currentUrl = this.router.url;

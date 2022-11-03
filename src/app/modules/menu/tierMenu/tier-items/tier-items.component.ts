@@ -47,16 +47,21 @@ export class TierItemsComponent implements OnInit {
   }
 
   navMenuItem(flower: IFlowerMenu) {
+
     if (flower) {
       this.tvMenuPriceTierService.updateTierFlowerMenu(flower)
       if (!flower.id) { return }
+
       const site = this.siteService.getAssignedSite();
       this.menuService.getMenuItemByID(site, flower.id).subscribe(data => {
+        console.log('menu item', data?.name)
         if (!data) { return }
         this.menuService.updateCurrentMenuItem(data)
         this.orderMethodsService.menuItemActionPopUp(null, data, false)
       })
+
     }
+
   }
 
   // this.imageUrl = this.getItemSrc(data.image)

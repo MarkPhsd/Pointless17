@@ -153,6 +153,34 @@ font-style: italic;
   grid-template-columns: 1fr auto;
 }
 
+.displayimage {
+  width: 100%;
+
+  margin-left: 4px;
+  margin-right: 4px;
+  object-fit: cover;
+}
+
+.image {
+  border-radius: 10px;
+  min-height: 50px;
+  max-height: 50px;
+
+  height: 50px;
+}
+.grid-items-main-panel {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 1fr 65px auto;
+}
+
+.menu-buttons {
+  position: relative;
+  top: 10px;
+  vertical-align: middle;
+  margin: 5px;
+}
+
 .status-icon {
   right: 0px;
   top: 2px;

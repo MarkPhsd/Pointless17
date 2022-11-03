@@ -52,6 +52,9 @@ export interface OrderActionResult {
 })
 
 export class OrdersService {
+
+  public toggleChangeOrderType: boolean;
+
   get platForm() {  return Capacitor.getPlatform(); }
 
   //applies to order filter for POS
@@ -378,7 +381,7 @@ export class OrdersService {
 
   claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
 
-    if (this.userAuthorizationService.user.username === 'Temp') { 
+    if (this.userAuthorizationService.user.username === 'Temp') {
       return;
     }
     if (history === undefined) {history = false};
@@ -828,6 +831,20 @@ export class OrdersService {
         return
       }
     }
+  }
+
+  changeOrderType(site: ISite, id: number, orderTypeID: number, updateItems: boolean): Observable<IPOSOrder> {
+
+    const controller = "/POSOrders/";
+
+    const endPoint = "changeOrderType";
+
+    const parameters = `?id=${id}&orderTypeID=${orderTypeID}&updateItems=${updateItems}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.get<any>( url )
+
   }
 
   notificationEvent(description, title){

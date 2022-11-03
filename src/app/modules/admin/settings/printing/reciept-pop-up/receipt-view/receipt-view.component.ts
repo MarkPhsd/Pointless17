@@ -128,10 +128,11 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   {}
 
   async ngOnInit() {
+
     this.initPrintView()
     this.getPrinterAssignment();
     this.intSubscriptions();
-    await this.refreshView()
+    this.refreshViewObservable()
   }
 
 
@@ -186,6 +187,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   }
 
   async refreshView(){
+    // getDefaultPrinterOb
+
     const receiptID  = await this.getDefaultPrinter();
     if (this.printingService.printView  == 2) {
       this.initBalanceSheetDefaultLayouts()
@@ -201,46 +204,52 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     const receipt$  =  this.getDefaultPrinterOb();
     this.refreshView$ = receipt$.pipe(
       switchMap(data => {
+
         if (!data) { return}
+
         this.electronReceiptSetting = data;
         this.receiptID   =  +data.option1;
         this.printerName =  data.text;
+
         if (this.printingService.printView  == 2) {
-          this.initBalanceSheetDefaultLayouts()
-          return;
+          return this.initBalanceSheetDefaultLayoutsObservable()
         }
-        const styles  =  this.applyStyles();
-        if (this.receiptID && styles ) {
-          this.initDefaultLayouts()
-        }
-        return of(data)
-      })
-    )
+
+        return of(this.applyStylesObservable());
+
+      })).pipe(
+        switchMap( data => {
+          if (this.receiptID && data ) {
+            this.initDefaultLayoutsObservable()
+          }
+          return of(data)
+        })
+      )
   }
 
 
   initDefaultLayoutsObservable() {
-    // try {
-    //   const site = this.siteService.getAssignedSite();
-    //   await this.printingService.initDefaultLayouts();
-    //   if (!this.receiptStyles) { this.receiptStyles  = await this.applyStyles(); }
-    //   if (this.receiptStyles)  { this.receiptStyles  = this.applyStyle(this.receiptStyles) };
+    try {
+      const site = this.siteService.getAssignedSite();
+      this.printingService.initDefaultLayouts();
 
-    //   //could be altered for alternate type
-    //   this.receiptName =  'defaultElectronReceiptPrinterName'
+      if (this.receiptStyles)  { this.receiptStyles  = this.applyStyle(this.receiptStyles) };
 
-    //   const receipt$ = this.settingService.getSettingByNameNoRoles(site, this.receiptName)
-    //   receipt$.pipe(
-    //     switchMap(data => {
-    //       this.receiptID = data.id
-    //       return this.settingService.getSetting(site, +data.option1)
-    //   })).subscribe(data => {
-    //     this.initSubComponent(data)
-    //   })
+      //could be altered for alternate type
+      this.receiptName =  'defaultElectronReceiptPrinterName'
 
-    // } catch (error) {
-    //   console.log(error)
-    // }
+      const receipt$ = this.settingService.getSettingByNameNoRoles(site, this.receiptName)
+      receipt$.pipe(
+        switchMap(data => {
+          this.receiptID = data.id
+          return this.settingService.getSetting(site, +data.option1)
+      })).subscribe(data => {
+        this.initSubComponent(data)
+      })
+
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   async  initDefaultLayouts() {
@@ -280,6 +289,19 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     }
   }
 
+  initBalanceSheetDefaultLayoutsObservable() {
+      // 'apply balance sheet style'
+      const site = this.siteService.getAssignedSite();
+      const setting = {} as ISetting;
+      return this.printingService.appyBalanceSheetStyleObservable().pipe(
+        switchMap(data => {
+          setting.text  = data;
+          this.receiptStyles =  setting;
+          this.applyStyle( this.receiptStyles)
+          return of(this.receiptStyles)
+        })
+       )
+  }
 
 
   async applyStyles(): Promise<ISetting> {
@@ -287,6 +309,18 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     this.receiptStyles  = await  this.printingService.appyStylesCached(site)
     this.applyStyle(this.receiptStyles)
     return  this.receiptStyles
+  }
+
+  applyStylesObservable(): Observable<ISetting> {
+    const site  = this.siteService.getAssignedSite();
+    return this.printingService.appyStylesCachedObservable(site).pipe(
+        switchMap( data => {
+          this.receiptStyles  =  data
+          this.applyStyle(this.receiptStyles)
+          return of(data)
+        }
+      )
+    )
   }
 
   applyStyle(receiptStyles) {

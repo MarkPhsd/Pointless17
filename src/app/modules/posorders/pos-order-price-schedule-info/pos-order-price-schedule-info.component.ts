@@ -11,9 +11,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 })
 export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDestroy {
   //subscribe to the current order
-
   //get the unique scheduleID's from the order ITems
-
   //get each subscription. - the json object saved?
   _order : Subscription;
   order  : IPOSOrder;
@@ -73,6 +71,11 @@ export class PosOrderPriceScheduleInfoComponent implements OnInit,OnChanges,OnDe
     if (!schedules || schedules[0] == null) {
       this.schedules = null;
       return
+    }
+
+    if (schedules[0] == 0) {
+      this.schedules = null;
+      return;
     }
 
     this.schedules = schedules

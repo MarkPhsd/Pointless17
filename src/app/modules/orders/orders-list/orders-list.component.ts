@@ -130,11 +130,11 @@ export class OrdersListComponent implements OnInit,OnDestroy {
           searchModel.pageSize    = 50;
           this.searchModel        = searchModel
         }
-        if (clientID) { 
+        if (clientID) {
           this.searchModel.clientID = clientID;
           this.searchModel.suspendedOrder = 0;
         }
-  
+
         console.log('search model updated', data)
         this.refreshSearch()
         return
@@ -344,7 +344,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
     const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
-    console.log('searchModel get row data', searchModel)
+    // console.log('searchModel get row data', searchModel)
     return this.orderService.getOrderBySearchPaged(site, searchModel)
   }
 

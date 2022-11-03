@@ -1,13 +1,7 @@
 <div  *ngIf="order" class="container">
   <div [class]="orderlayout">
-
     <div>
       <div>
-        <!-- <div *ngIf="(uiTransactionSetting$ | async) as item">
-
-           view {{item | json}}
-         </div> -->
-
         <div  class="grid-header-item"
               (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
@@ -24,7 +18,8 @@
 
         <!-- enableLimitsView: {{enableLimitsView}} -->
         <div  class="grid-header-item"
-              *ngIf="enableLimitsView  && (wideBar || mainPanel)">
+              *ngIf="enableLimitsView  && (wideBar || mainPanel)"
+              (resized)="onResizedorderLimitsPanel($event)">
           <limit-values-progress-bars
               [order]="order">
           </limit-values-progress-bars>
@@ -41,8 +36,10 @@
             (outPutRemoveClient)  ="removeClient()"
             (outPutAssignCustomer)="assignCustomer($event)" >
           </app-order-header-demo-graphics>
+
         </div>
 
+        <!-- height is not fixed -->
         <div  (resized)="onResizedorderSpecialsPanel($event)"
               class="specials">
           <pos-order-price-schedule-info>
@@ -51,6 +48,7 @@
 
       </div>
 
+      <!-- height is fixed -->
       <div class="buttons-container">
         <div *ngIf="mainPanel">
           <pos-order-function-buttons
@@ -69,6 +67,7 @@
                 (outPutRemoveDiscount)='removeDiscount($event)'
                 (outPutRefundItem)    ='refundItem($event)'
                 (outPutRefundOrder)   ='refundOrder($event)'
+                (outPutchangeTransactionType)="changeTransactionType($event)"
                 [itemsPrinted]        ="itemsPrinted"
                 [paymentsMade]        ="paymentsMade"
                 [isAuthorized]        ="isAuthorized"
@@ -116,6 +115,7 @@
       </div>
     </div>
 
+    <!-- height is not fixed -->
     <div    [style.height]="orderItemsHeightStyle"
             class="order-items"
             *ngIf="(!smallDevice && mainPanel)
@@ -130,9 +130,3 @@
   </div>
 </div>
 
-
-
-    <!-- orderItemsHeightStyle {{orderItemsHeightStyle}} -->
-    <!-- orderItemsHeightStyle {{orderItemsHeightStyle}}
-    remainingHeight {{remainingHeight$ | async}}
-    totalOrderHeight  {{totalOrderHeight$ | async}} -->

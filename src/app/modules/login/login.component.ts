@@ -156,7 +156,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
 
     this.refreshUIHomePageSettings();
-    this.terminalSettings$ = this.refreshElectronZoom();
 
     setTimeout(() => {
       this.splashScreenStateService.stop();
@@ -174,26 +173,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     })
   }
 
-  refreshElectronZoom() {
-    // console.log('refresh electron zoom')
-    if (this.platformService.isAppElectron) {
-      const item$  = this.uiSettingService.getPOSDeviceSettings().pipe(
-          switchMap(data => {
-            // console.log(data)
-            if (data && data.text) {
-              const terminal = JSON.parse(data.text) as ITerminalSettings;
-              if (terminal.electronZoom && terminal.electronZoom != '0') {
-                this.uiSettingService.electronZoom(terminal.electronZoom)
-              }
-              this.terminalSettings = terminal
-              return of(terminal)
-            }
-          }
-        )
-      )
-      return item$
-    }
-  }
+
+//  async waitForOneSecond() {
+//     return new Promise(resolve => {
+//       setTimeout(() => {
+
+//         await this.uiSettingService.electronZoom(terminal.electronZoom)
+//         resolve("I promise to return after one second!");
+//       }, 1000);
+//     });
+//   }
 
   ngOnDestroy(): void {
     this.statusMessage = ''

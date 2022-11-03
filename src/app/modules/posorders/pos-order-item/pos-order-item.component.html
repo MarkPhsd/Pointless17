@@ -1,3 +1,4 @@
+
 <mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
@@ -6,7 +7,8 @@
         >
 
   <mat-card-content>
-    <div class="grid-items">
+
+    <div [class]="gridItems">
       <div *ngIf="orderItem">
         <div >
 
@@ -69,7 +71,7 @@
             </span>
           </div>
 
-          <span  *ngIf="(mainPanel || bottomSheetOpen) && !prepScreen"> <img *ngIf="imagePath" [src]="imagePath" />  </span>
+
         </div>
 
         <div class="grid-item-span" *ngIf="!prepScreen && !isModifier">
@@ -91,7 +93,11 @@
         </div>
       </div>
 
-      <div *ngIf="!disableActions && !prepScreen" >
+      <div  *ngIf="(mainPanel && !bottomSheetOpen) && !prepScreen">
+        <ng-container [ngTemplateOutlet]="isDisplayMenuItemOn"></ng-container>
+      </div>
+
+      <div class="menu-buttons" *ngIf="!disableActions && !prepScreen" >
         <button aria-label="user menu"
                   mat-button
                   class="more-button"
@@ -164,3 +170,8 @@
   </mat-card-content>
 </mat-card>
 
+<ng-template #imageDisplay>
+  <button mat-button (click)="openDialog()" class='displayimage' *ngIf="(basicItem$ | async) as item">
+    <img class="image" *ngIf="imagePath" [src]="imagePath" />
+  </button>
+</ng-template>

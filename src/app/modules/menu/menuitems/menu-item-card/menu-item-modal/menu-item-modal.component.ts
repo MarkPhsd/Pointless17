@@ -2,7 +2,7 @@ import { Component,  Inject,  Input,  OnInit, Optional,OnDestroy } from '@angula
 import { AWSBucketService, MenuService, OrdersService } from 'src/app/_services';
 import { IMenuItem  }  from 'src/app/_interfaces/menu/menu-products';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subject, Subscription } from 'rxjs';
+import { Observable, of, Subject, Subscription } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -66,13 +66,10 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
 
     this.isApp =  this.platFormService.isApp();
 
-    if (data) {
-      if (data.id) {
-        this.id = data.id
-      }
+    if (data && data.id) {
+      this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
-      if (!this.id) { return }
     }
 
     this.getItem(this.id);
@@ -131,18 +128,37 @@ export class MenuItemModalComponent implements OnInit, OnDestroy {
 
     const site = this.siteService.getAssignedSite();
 
+    if (!this.id) {
+      this.menuItem$ =  this.menuService.currentMeuItem$.pipe(
+        switchMap( data => {
+          console.log('menu item current', data)
+          if (data) {
+              this.menuItem = data;
+              // if (data.brandID) {
+              //   this.brand$    =  this.brandService.getClient(site, data.brandID)
+              // }
+              return of(data)
+            }
+          }
+        )
+      )
+      return
+    }
+
     if (!id || id == 0) {     return ; }
 
-    this.menuItem$ = this.menuService.getMenuItemByID(site,id)
-
-    this.menuItem$.subscribe(data => {
-      if (data) {
-        this.menuItem = data;
-        if (data.brandID) {
-          this.brand$    =  this.brandService.getClient(site, data.brandID)
+    const item$ = this.menuService.getMenuItemByID(site, id)
+    this.menuItem$ = item$.pipe(
+      switchMap(data => {
+        if (data) {
+          this.menuItem = data;
+          this.menuService.updateCurrentMenuItem(data)
+          if (data.brandID) {
+            this.brand$    =  this.brandService.getClient(site, data.brandID)
+          }
+          return of(data)
         }
-      }
-    })
+      }))
   };
 
   goBackToList() {
