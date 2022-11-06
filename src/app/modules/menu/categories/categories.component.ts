@@ -222,7 +222,7 @@ export class CategoriesComponent implements OnInit, AfterViewInit{
     if ( !this.singlePage ) {
       this.panelHeightStyle =  `calc(25vh - 95px)`
       if (this.panelHeightValue !=0) {
-        this.panelHeightStyle =  `calc(${this.panelHeightValue}vh - 95px)`
+        this.panelHeightStyle =  `calc(${this.panelHeightValue}vh - 300px)`
       }
     }
   }

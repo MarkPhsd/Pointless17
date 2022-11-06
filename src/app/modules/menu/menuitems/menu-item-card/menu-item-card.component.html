@@ -2,23 +2,24 @@
   <div fxLayout="row"
        fxLayoutAlign="space-around center">
     <div fxLayout="column"
-      fxLayoutAlign="start center">
+         fxLayoutAlign="start center">
 
       <div *ngIf="isDiscountItem && !isApp">
         <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
                     menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
-            {{menuItem.itemType.name }} - {{ menuItem.cannabisType }}
+            {{menuItem?.itemType?.name }} - {{ menuItem?.cannabisType }}
         </div>
         <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
                     menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
-            {{menuItem.itemType.name }} - {{menuItem.cannabisType | currency}}
+            {{menuItem?.itemType?.name }} - {{menuItem?.cannabisType | currency}}
         </div>
       </div>
 
       <div *ngIf="(isApp && !imageUrl) || !imageUrl"
-           class="product-name-only">
+           class="product-name-only" >
         <button mat-raised-button
                 class="image-button"
+                fxFill
                 (click)="menuItemAction(true)">
           {{ menuItem.name  | truncateText: 30  }}
           <mat-icon>{{menuItem?.itemType?.icon}}</mat-icon>
@@ -47,7 +48,6 @@
 
         <div class="round-container">
           <img  *ngIf="isCategory"
-
             [src]="imageUrl"
             onerror   = "this.src='assets/images/placeholderimage.png'"
             class="product-image"

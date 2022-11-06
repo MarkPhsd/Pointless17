@@ -9,8 +9,9 @@
               [order]="order">
           </pos-order-transaction-data>
           <store-credit-info
-            [clientID]     ="order?.clientID"
-            [showPayment]  = "true"
+            [clientID]     = "order?.clientID"
+            [showPayment]  = "false"
+            [showBalance]  = 'false'
             [accountNumber]="order?.clients_POSOrders?.accountNumber"
             [userName]     ="order?.clients_POSOrders?.userName"
           ></store-credit-info>

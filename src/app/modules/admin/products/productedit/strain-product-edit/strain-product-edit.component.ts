@@ -4,7 +4,7 @@ import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar} from '@angular/material/snack-bar';
 import { IProduct } from 'src/app/_interfaces/raw/products';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
@@ -22,7 +22,9 @@ export class StrainProductEditComponent implements OnInit {
   productForm: FormGroup;
 
   get f() { return this.productForm;}
-
+  action$             :  Observable<any>;
+  performingAction    : boolean;
+  message             = ""
   bucketName:             string;
   awsBucketURL:           string;
   id:                     string;
@@ -127,32 +129,61 @@ export class StrainProductEditComponent implements OnInit {
     }
   }
 
-  async  updateItem(event): Promise<boolean> {
+  copyItem($event) {
+    //do confirm of delete some how.
+    //then
+    const site = this.siteService.getAssignedSite()
+
+    if (this.product) {
+
+      this.performingAction= true;
+      this.product.name = this.product.name + ' Copy'
+      this.message = ''
+
+      this.action$ = this.menuService.postProduct(site, this.product).pipe(
+        switchMap(data => {
+          this.product = data;
+          this.message = 'Saved'
+          this.performingAction= false;
+          return of(data)
+        })
+      )
+    }
+
+  }
+
+  updateItem(event) {
     const site = this.siteService.getAssignedSite()
     if (this.setValues())  {
 
       if (this.product.webProduct) { this.product.webProduct = -1     }
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
 
+      this.message = ""
+      this.performingAction= true;
       const product$ = this.menuService.saveProduct(site, this.product);
-      product$.pipe(switchMap(
+      return product$.pipe(switchMap(
           data => {
             this.product = data;
+            this.notifyEvent('Item Updated', 'Success')
+            this.message = 'Saved'
+            this.performingAction = false;
             return this.itemTypeService.getItemType(site,this.product.prodModifierType)
           }
-      )).subscribe(data => {
-        this.notifyEvent('Item Updated', 'Success')
-        this.itemType = data;
-      })
+      ))
     }
-    return false
   };
 
-  updateItemExit(event) {
-    if  (this.updateItem(event)) {
-      this.onCancel(event);
-    }
+  updateSave(event) {
+    this.action$ = this.updateItem(event);
+  }
 
+  updateItemExit(event) {
+    this.updateItem(event).pipe(switchMap ( data => {
+      this.performingAction = false;
+      this.onCancel(event);
+      return of(data);
+    }));
   };
 
   openPriceCategory() {
@@ -181,10 +212,7 @@ export class StrainProductEditComponent implements OnInit {
     })
   }
 
-  copyItem(event) {
-    //do confirm of delete some how.
-    //then
-  }
+
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

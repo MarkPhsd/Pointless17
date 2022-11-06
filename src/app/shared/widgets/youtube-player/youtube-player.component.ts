@@ -19,7 +19,7 @@ export class YoutubePlayerComponent implements OnInit {
   @Input() url       : string;
   @Input() autoPlay  : boolean;
   @Input() autoRepeat: boolean;
-  @Input() chartHeight =  '600px';
+  @Input() chartHeight = '600px';
   @Input() chartWidth  = '100%';
   @Input() disableActions: boolean;
 
@@ -31,6 +31,7 @@ export class YoutubePlayerComponent implements OnInit {
       this.playerConfig = playerConfig;
       this.url = ''
     }
+    this.chartWidth = '100%'
     this.enableVideo();
   }
 
@@ -41,6 +42,9 @@ export class YoutubePlayerComponent implements OnInit {
       const playerConfig = {controls: 0, mute: 1, autoplay: autoPlay}
       this.playerConfig  = playerConfig;
       const i = 0
+
+      this.chartWidth = '100%'
+
       if (!apiLoaded) {
         // This code loads the IFrame Player API code asynchronously, according to the instructions at
         // https://developers.google.com/youtube/iframe_api_reference#Getting_Started

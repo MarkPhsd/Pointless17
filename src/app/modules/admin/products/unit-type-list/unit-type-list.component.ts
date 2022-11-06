@@ -342,7 +342,6 @@ export class UnitTypeListComponent implements OnInit, AfterViewInit {
   }
 
   async delete() {
-
     if (this.selected)  {
       const answer = window.confirm('Please confirm, this will remove settings that may be important.');
       if (answer) {

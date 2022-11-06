@@ -13,7 +13,7 @@
 
       <p>
         <span *ngIf="priceSchedule.requiredCategories && priceSchedule.requiredCategories.length>0">
-          This reward is provided when items out of these categories are chosen.
+           Reward is provided when items out of these categories are chosen.
         <span *ngFor="let item of priceSchedule.requiredCategories
                       ;let last = last
                       ;let nextLast = count; let i = index">
@@ -26,7 +26,7 @@
 
       <p>
         <span *ngIf="priceSchedule.requiredItemTypes && priceSchedule.requiredItemTypes.length>0">
-          This reward is provided when items out of these Types are chosen.
+          Reward is provided when items out of these Types are chosen.
         <span *ngFor="let item of priceSchedule.requiredItemTypes
                       ;let last = last
                       ;let nextLast = count; let i = index">
@@ -39,7 +39,7 @@
 
       <p>
         <span *ngIf="priceSchedule.requiredItems && priceSchedule.requiredItems.length>0">
-          This reward is provided when items out of these items are chosen.
+          Reward is provided when items out of these items are chosen.
         <span *ngFor="let item of priceSchedule.requiredItems
                       ;let last = last
                       ;let nextLast = count; let i = index">
@@ -52,7 +52,7 @@
 
       <p>
         <span *ngIf="priceSchedule.requiredBrands && priceSchedule.requiredBrands.length>0">
-          This reward is provided when items out of these brands are chosen.
+          Reward is provided when items out of these brands are chosen.
         <span *ngFor="let item of priceSchedule.requiredBrands
                       ;let last = last
                       ;let nextLast = count; let i = index">
@@ -95,7 +95,7 @@
       <!-- <span *ngIf="priceSchedule.clientTypes">This can be used any day of the week.</span> -->
 
       <span *ngIf="!priceSchedule.allWeekdaysDays && priceSchedule.weekDays && priceSchedule.weekDays.length>0">
-        It can be only used on the following day(s)
+        Availible on the following day(s)
       <span *ngFor="let item of priceSchedule.weekDays
                   ;let last = last
                   ;let nextLast = count; let i = index">
@@ -110,7 +110,7 @@
       <!-- <span *ngIf="priceSchedule.dateFrames">This reward is usable until further notice.</span> -->
 
       <span *ngIf="!priceSchedule.allDates && priceSchedule.dateFrames && priceSchedule.dateFrames.length>0">
-        This reward has a limited time offering. It can be used from
+        Limited Time Offer!
       <span *ngFor="let item of priceSchedule.dateFrames
                   ;let last = last
                   ;let nextLast = count; let i = index">
@@ -125,7 +125,7 @@
     <p>
       <span *ngIf="priceSchedule.timeFrameAlways">This reward is available all day.</span>
       <span *ngIf="!priceSchedule.timeFrameAlways && priceSchedule.timeFrames">
-        This reward is only avalible during specific hours:
+        Available during:
       <span *ngFor="let item of priceSchedule.timeFrames
                   ;let last = last
                   ;let nextLast = count; let i = index">

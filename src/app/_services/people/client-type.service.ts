@@ -46,6 +46,7 @@ export interface IUserAuth_Properties {
   refundPayment   : boolean;
 
   userAssignedBalanceSheet : boolean;
+  searchBalanceSheets      : boolean;
 }
 
 @Injectable({

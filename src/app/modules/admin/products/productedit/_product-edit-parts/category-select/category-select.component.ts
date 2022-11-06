@@ -1,7 +1,7 @@
 import { Component, OnInit, Input , Output, EventEmitter} from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Observable } from 'rxjs';
+import { Observable, of,switchMap } from 'rxjs';
 import { MenuService } from 'src/app/_services';
 import { FormGroup } from '@angular/forms';
 
@@ -11,6 +11,7 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./category-select.component.scss']
 })
 export class CategorySelectComponent implements OnInit {
+  loadingItems: boolean;
 
   @Input()  inputForm:      FormGroup;
   categories$:              Observable<IMenuItem[]>;
@@ -21,7 +22,13 @@ export class CategorySelectComponent implements OnInit {
 
   ngOnInit(): void {
     const site =            this.sitesService.getAssignedSite();
-    this.categories$ =      this.menuService.getListOfCategoriesAll(site);
+    this.loadingItems = true;
+    this.categories$ =      this.menuService.getListOfCategoriesAll(site).pipe(
+      switchMap(data => {
+        this.loadingItems = false;
+        return of(data)
+      })
+    )
   }
 
   getCategory(event) {

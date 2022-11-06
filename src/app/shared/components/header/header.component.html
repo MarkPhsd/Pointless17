@@ -167,7 +167,6 @@
 <ng-template #floorPlanTemplate>
   <li>
     <span *ngIf="floorPlans$ | async as floorPlan"  class='search-input'>
-      <!-- floorPlan {{floorPlan.length}} -->
       <div *ngIf="floorPlan.length>0">
         <button mat-button
                 color="accent"

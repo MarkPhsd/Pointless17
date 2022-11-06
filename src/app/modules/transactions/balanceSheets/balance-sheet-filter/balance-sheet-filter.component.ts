@@ -122,7 +122,6 @@ export class BalanceSheetFilterComponent implements  OnInit, OnDestroy {
         });
       }
       if (this.toggleOpenClosedAll != '1') {
-
           if (search.completionDate_From || search.completionDate_To) {
           try {
             this.dateRangeForm =  this.fb.group({

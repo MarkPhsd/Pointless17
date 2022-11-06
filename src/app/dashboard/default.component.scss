@@ -6,8 +6,6 @@
   height: 100%;
 }
 
-
-
 router-outlet {
   z-index: 1;
 }
@@ -81,11 +79,12 @@ mat-sidebar {
 }
 
 .mat-orderBar-wide {
-  // min-width: 350px !important;
-  // max-width: 350px;
   border-right: 1px solid #eee;
   box-shadow: 6px 0px 6px 6px rgb(115, 118, 124);
   overflow: hidden;
+  max-width: 355px;
+  min-width: 355px;
+  width    : 355px;
   @include for-phone-only  {
     width: 55px;
     box-shadow: 3px 0 3px rgba(0,0,0,.24);
@@ -147,7 +146,6 @@ mat-sidebar {
   right: 45px;
   font-size: 60px;
 }
-
 
 .fab-chat-button {
   position: fixed;

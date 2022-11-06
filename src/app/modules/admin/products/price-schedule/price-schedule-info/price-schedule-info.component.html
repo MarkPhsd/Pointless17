@@ -93,7 +93,7 @@
           <div  class="item-name" *ngIf="priceSchedule.allWeekdaysDays">
             All days of week.
           </div>
-<!-- 
+<!--
           <div *ngIf="!priceSchedule.allWeekdaysDays">
             <div *ngFor="let item of priceSchedule.weekDays" class="slidein item-name">
                 {{item.name  }}
@@ -233,7 +233,7 @@
 
         <mat-card-content>
 
-            <div *ngIf="itemTypeDiscounts.length>0">
+            <div *ngIf="(itemTypeDiscounts  && priceSchedule?.itemTypeDiscounts.length != null) && itemTypeDiscounts.length>0">
 
               <div class="icon-header">
                 <mat-icon>table_view</mat-icon>Item Types
@@ -247,7 +247,7 @@
               </app-price-schedule-fields>
             </div>
 
-            <div *ngIf="priceSchedule?.categoryDiscounts.length>0">
+            <div *ngIf="(priceSchedule && priceSchedule?.categoryDiscounts.length != null) && priceSchedule?.categoryDiscounts.length>0">
               <div class="itemtype-header">
                 <mat-icon>category</mat-icon>Categories
               </div>
@@ -261,7 +261,7 @@
               </app-price-schedule-fields>
             </div>
 
-            <div *ngIf="priceSchedule?.itemDiscounts.length>0">
+            <div *ngIf="(priceSchedule && priceSchedule?.itemDiscounts.length != null) && priceSchedule?.itemDiscounts.length>0">
               <div class="icon-header">
                 <mat-icon>inventory_2</mat-icon>Item Discounts
               </div>
@@ -278,7 +278,7 @@
               <div class="icon-header">
                 <mat-icon>branding_watermark</mat-icon>Brand Discounts
               </div>
-              <span *ngIf="priceSchedule?.brandDiscounts && priceSchedule?.brandDiscounts.length>0">
+              <span *ngIf="(priceSchedule && priceSchedule?.itemTypeDiscounts.length != null) && priceSchedule?.brandDiscounts.length>0">
                 <app-price-schedule-fields
                       [inputForm]    ="inputForm"
                       [data]         ="priceSchedule?.brandDiscounts"

@@ -7,22 +7,19 @@
 
   <mat-card-content>
 
-      <div class="center" *ngIf="prices">
-        <div *ngFor="let item of prices;let i = index">
-          <button
-              class="buttonPrices"
-              mat-raised-button
-              (click)="addItemPrice(item)"
-          >
-            <span *ngIf="item.unitType">
-              {{item.unitType.name}}
-            </span>
-          {{item.retail | currency}}
-          </button>
-          <!-- {{item | json }} -->
-        </div>
-
+    <div class="center" *ngIf="prices">
+      <div *ngFor="let item of prices;let i = index">
+        <button
+            class="buttonPrices"
+            mat-raised-button
+            (click)="addItemPrice(item)">
+          <span *ngIf="item.unitType">
+            {{item.unitType.name}}
+          </span>
+        {{item.retail | currency}}
+        </button>
       </div>
+    </div>
 
   <mat-card-actions>
     <div class="center" >

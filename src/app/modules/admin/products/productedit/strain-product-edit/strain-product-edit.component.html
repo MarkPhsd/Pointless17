@@ -22,13 +22,16 @@
         </div>
 
         <div >
-          <app-edit-buttons-standard
-                (outputeupdateItem)     ="updateItem($event)"
-                (outputupdateItemExit)  ="updateItemExit($event)"
-                (outputupdatedeleteItem)="deleteItem($event)"
-                (outputupdateonCancel)  ="onCancel($event)"
-                (outputCopy)            ="copyItem($event)"
-          ></app-edit-buttons-standard>
+          <div>
+            <app-edit-buttons-standard
+                  [enableCopy]            ="true"
+                  (outputeupdateItem)     ="updateSave($event)"
+                  (outputupdateItemExit)  ="updateItemExit($event)"
+                  (outputupdatedeleteItem)="deleteItem($event)"
+                  (outputupdateonCancel)  ="onCancel($event)"
+                  (outputCopy)            ="copyItem($event)"
+            ></app-edit-buttons-standard>
+          </div>
 
           <app-activity-toggles
               [inputForm]="productForm">
@@ -37,6 +40,18 @@
 
       </div>
     </mat-card-title>
+
+    <mat-card-subtitle>
+      <div *ngIf="(action$ | async) as item; else action">
+      </div>
+
+      <ng-template #action>
+        <div *ngIf="message != '' && message != undefined">
+          <mat-spinner [diameter]="50"></mat-spinner>
+          <button mat-button (click)="message = ''">Clear</button>
+        </div>
+      </ng-template>
+    </mat-card-subtitle>
 
     <mat-divider> </mat-divider>
 

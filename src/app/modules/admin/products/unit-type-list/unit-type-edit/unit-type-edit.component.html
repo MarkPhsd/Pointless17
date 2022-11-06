@@ -9,6 +9,8 @@
 
   <mat-card-subtitle>
 
+    <div *ngIf="action$ | async as item"></div>
+
     <div class="grid-header-container">
       <div>
         <div>
@@ -17,7 +19,7 @@
 
         <div>
           <app-edit-buttons-standard
-              (outputeupdateItem)     ="update($event)"
+              (outputeupdateItem)     ="updateOnly($event)"
               (outputupdateItemExit)  ="updateExit($event)"
               (outputupdatedeleteItem)="delete($event)"
               (outputupdateonCancel)  ="onCancel($event)"

@@ -135,7 +135,7 @@ export class BalanceSheetEditComponent implements OnInit, OnDestroy  {
     this.isStaff       = this.userAuthorization.isUserAuthorized('admin, manager, employee')
     this.id            = this.route.snapshot.paramMap.get('id');
 
-    console.log('balancesheet', this.id)
+    // console.log('balancesheet', this.id)
     if(!this.id) {
       this.newBalanceSheet();
     }

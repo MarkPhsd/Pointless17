@@ -96,7 +96,7 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 
   reset() {
     this.layoutService.refreshCollection()
-    const path = "/menu-manager/"
+    const path = "/menu-board"
     this.layoutService.stateChanged = false
     this.router.navigate([path]);
   }
@@ -112,23 +112,23 @@ export class GridManagerComponent implements OnInit, OnDestroy {
 	}
 
   toggleDesignMode() {
-   
-    if (!this.layoutService.designerMode){ 
+
+    if (!this.layoutService.designerMode){
       console.log(this.layoutService.designerMode)
       localStorage.setItem('dashBoardDesignerMode', 'true')
       this.layoutService.toggleDesignerMode(true)
       return
     }
 
-    if (this.layoutService.designerMode){ 
+    if (this.layoutService.designerMode){
       localStorage.setItem('dashBoardDesignerMode', 'false')
       this.layoutService.toggleDesignerMode(false)
       return
     }
-    
+
   }
 
-  hide() { 
+  hide() {
     this.hideMenu = true;
   }
 

@@ -6,6 +6,7 @@ import {  UnitType,  } from 'src/app/_interfaces/menu/price-categories';
 import { UnitTypesService } from 'src/app/_services/menu/unit-types.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FbUnitTypeService } from 'src/app/_form-builder/fb-unit-type.service';
+import { Observable, of, switchMap} from 'rxjs';
 
 @Component({
   selector: 'app-unit-type-edit',
@@ -19,6 +20,7 @@ export class UnitTypeEditComponent implements OnInit {
   showMore                :  boolean;
   showTime                :  boolean;
   showConversions         :  boolean;
+  action$                 : Observable<any>;
 
   // get productPrices() : FormArray {
   //   return this.inputForm.get('productPrices') as FormArray;
@@ -41,19 +43,36 @@ export class UnitTypeEditComponent implements OnInit {
     if (data) {
       this.refreshData_Sub(data)
     }
+    if (!data) {
+      this.refreshData();
+    }
   }
 
   ngOnInit() {
     console.log('')
   };
 
-  async refreshData() {
+  refreshData() {
     const site          = this.siteService.getAssignedSite()
-    const item$         = this.unitTypeService.get(site, this.unitType.id);
-    const data          = await item$.pipe().toPromise()
-    if (data) {
-      this.refreshData_Sub(data)
+
+    if (!this.unitType || this.unitType.id) {
+      const item = {} as UnitType;
+      this.refreshData_Sub(item);
+      return;
     }
+    const item$         = this.unitTypeService.get(site, this.unitType.id);
+
+    this.action$ = item$.pipe(
+      switchMap(data => {
+      if (!data) {
+        const item = {} as UnitType;
+        this.refreshData_Sub(item)
+        return of(item)
+      }
+      this.refreshData_Sub(data)
+      return of(data)
+    }))
+
   }
 
   refreshData_Sub(item: UnitType) {
@@ -78,29 +97,31 @@ export class UnitTypeEditComponent implements OnInit {
     console.log(item.value)
   }
 
-  async update(item): Promise<boolean> {
+  updateOnly(item) {
+    this.action$ = this.update(item)
+  }
+
+  update(item): Observable<any>{
     let result: boolean;
     if (!this.inputForm.valid) { return }
     const unitType = this.inputForm.value;
-    return new Promise(resolve => {
-      const site = this.siteService.getAssignedSite()
-      const product$ = this.unitTypeService.save(site, unitType)
-      product$.subscribe( data => {
+    const site = this.siteService.getAssignedSite()
+    const item$ = this.unitTypeService.save(site, unitType)
+    return  item$.pipe(
+       switchMap( data => {
         this.notifyEvent('Item Updated', 'Success')
-        resolve(true)
-        }, error => {
-          this.notifyEvent(`Update item. ${error}`, "Failure")
-          resolve(false)
-        })
-      }
+        return of(data)
+      })
     )
   };
 
-  async updateExit(item) {
-    const result = await this.update(this.inputForm.value)
-    if (result) {
-      this.onCancel(item);
-    }
+  updateExit(item) {
+    this.action$ = this.update(this.inputForm.value).pipe(
+      switchMap( data => {
+        this.onCancel(item);
+        return of(null)
+      })
+    )
   }
 
   onCancel(event) {

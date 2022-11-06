@@ -158,13 +158,26 @@ export class MenusService {
     {
       id:             0,
       name:          'Reporting',
+      icon:          'chart',
+      active:        true,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getManagers(),
+      routerLink:       '/dashboard',
+      routerLinkActive: 'dashboard',
+      method:           '',
+      submenus: [ ]
+    },
+    {
+      id:             0,
+      name:          'Dashboard',
       icon:          'dashboard',
       active:        true,
       sortOrder:      2,
       menuGroupID:    0,
-      userType:       this.getUsers(),
-      routerLink:       '/dashboard',
-      routerLinkActive: 'dashboard',
+      userType:       this.getStaff(),
+      routerLink:       '/menu-board',
+      routerLinkActive: 'menu-board',
       method:           '',
       submenus: [ ]
     },
@@ -311,15 +324,15 @@ export class MenusService {
   }
 
   createMainMenu(user: IUser, site: ISite): Observable<MenuGroup> {
-    // console.log('createMainMenu', user) 
+    // console.log('createMainMenu', user)
     if (!user || !user.roles) {
       return null
     }
-    // console.log('createMainMenu2', user) 
+    // console.log('createMainMenu2', user)
 
     if (user.roles != 'admin') { return }
 
-    const  menuGroup =  {name: 'main', id: 0, userType: user.roles, 
+    const  menuGroup =  {name: 'main', id: 0, userType: user.roles,
                          accordionMenus: this.accordionMenus }  as MenuGroup;
 
     const controller = "/MenuGroups/"

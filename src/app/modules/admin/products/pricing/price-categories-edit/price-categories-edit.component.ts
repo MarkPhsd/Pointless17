@@ -2,7 +2,7 @@ import { Component,  Inject,  Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap,  } from 'rxjs';
 import { IItemBasic } from 'src/app/_services';
-import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl } from '@angular/forms';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PriceCategories, IPriceCategory2,
@@ -17,6 +17,7 @@ import { SearchModel } from 'src/app/_services/system/paging.service';
 import { PriceTierService } from 'src/app/_services/menu/price-tier.service';
 import { PriceTierMethodsService } from 'src/app/_services/menu/price-tier-methods.service';
 import { TransactionUISettings,UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 
 @Component({
   selector: 'app-price-categories-edit',
@@ -34,13 +35,14 @@ export class PriceCategoriesEditComponent implements OnInit {
   showPriceTiers          :  boolean;
   toggleSearchSize        = [] as  boolean[];
   saving                  : boolean;
+  toggle                  : any;
 
   get productPrices() : FormArray {
     return this.inputForm.get('productPrices') as FormArray;
   }
-
+  itemAction$            : Observable<any>;
   priceCategory$          : Observable<any>;
-
+  actionMessage           : string;
   priceTiers$             : Observable<PriceTiers[]>;
   priceTiers              : PriceTiers[];
   unitTypeList            : UnitType[];
@@ -61,11 +63,13 @@ export class PriceCategoriesEditComponent implements OnInit {
     private priceTiersService       : PriceTierService,
     private priceTierMethods        : PriceTierMethodsService,
     private uiSettingsService       : UISettingsService,
+    private productEditButtonService  : ProductEditButtonService,
     private dialogRef               : MatDialogRef<PriceCategoriesEditComponent>,
     private unitTypeService: UnitTypesService,
     @Inject(MAT_DIALOG_DATA) public data: PriceCategories
     )
   {
+
     if (data) {
       this.priceCategory = data;
     }
@@ -78,7 +82,6 @@ export class PriceCategoriesEditComponent implements OnInit {
     const search$ = this.unitTypeService.getBasicTypes(site, unitSearchModel)
     search$.subscribe(data => {
       this.unitTypes = data.results;
-     // console.log('init sizes', data.results)
     })
     this.unitTypes$ = this.unitTypeService.getBasicTypes(site, unitSearchModel);
 
@@ -151,17 +154,14 @@ export class PriceCategoriesEditComponent implements OnInit {
     item.priceCategoryID = this.priceCategory.id;
     item.webEnabled      = 1;
     item.retail          = 0;
-
+    item.unitType        = {} as UnitType;
     let priceForm        =  this.fbPriceCategory.addPriceArray()
-    try {
-      if (priceForm) {
-        priceForm.patchValue(item);
-        pricing.push(priceForm);
-        if (!this.priceCategory.productPrices) { this.priceCategory.productPrices = [] as ProductPrice[] }
-        this.priceCategory.productPrices.push(item)
-      }
-    } catch (error) {
-      console.log('error', error)
+
+    if (priceForm) {
+      priceForm.patchValue(item);
+      pricing.push(priceForm);
+      if (!this.priceCategory.productPrices) { this.priceCategory.productPrices = [] as ProductPrice[] }
+      this.priceCategory.productPrices.push(item)
     }
 
   }
@@ -223,14 +223,19 @@ export class PriceCategoriesEditComponent implements OnInit {
         this.toggleSearchSize.push(false)
       })
     }
+    this.toggle = i
     this.toggleSearchSize[i] = !this.toggleSearchSize[i];
   }
 
   updateCategory(item): Observable<any> {
 
-    console.log('item form valid', this.inputForm.valid, item)
     if (!this.inputForm.valid) { return }
     const priceCategory = this.inputForm.value;
+    this.updatePriceCategory(priceCategory)
+
+  };
+
+  updatePriceCategory(priceCategory: PriceCategories) {
 
     if (!priceCategory) {return }
     this.saving = true;
@@ -241,68 +246,53 @@ export class PriceCategoriesEditComponent implements OnInit {
     price2.name = priceCategory.name
     const site = this.siteService.getAssignedSite()
     const result$ = this.priceCategoryService.save(site, price2)
-    console.log('check result');
 
     const items$ = result$.pipe(
       switchMap( data => {
-        console.log('result data', data)
         this.priceCategory = data;
         return this.saveAllItems()
       })).pipe(
         switchMap(data => {
-          console.log('saved price category', data)
+          this.refreshData_Sub(this.priceCategory);
           this.saving = false
-          return of('complete')
+          const priceCategory$ = this.priceCategoryService.getPriceCategory(site,this.priceCategory.id)
+          return priceCategory$
         }
+      )).pipe(
+        switchMap( data => {
+          this.priceCategory = data;
+          this.refreshData_Sub(data)
+          return of(data)
+        })
       )
-    );
+    ;
 
-    this.priceCategory$ = items$
-    // this.priceCategory$.subscribe(data => {
-    //   console.log(data)
-    // })
-
-    // this.saveAllItems().subscribe(data => {
-    //   console.log('save items')
-    // })
-  };
-
+    this.itemAction$ = items$
+  }
 
   saveAllItems(): Observable<ProductPrice2> {
     let pricing = this.inputForm.controls['productPrices'] as FormArray;
-    console.log('saving items', pricing.value)
     if (pricing) {
       const site  = this.siteService.getAssignedSite();
       const items =  pricing.value  as ProductPrice[];
-      console.log('saving', items)
       return this.priceCategoryItemService.savePriceList(site, items)
     }
   }
 
-  // updateCategoryAll(item){
-  //   const category  = item.value as PriceCategories;
+  openAddSize() {
+    this.productEditButtonService.openUnitTypeEditor(null)
+  }
 
-  //   this.priceCategory$ =  this.updateCategory(category)
-  //   result$.pipe(
-  //     switchMap( data => {
-  //       return this.saveAllItems()
-  //     }))
-
-  //   this.priceCategory$ = result$
-  // }
-
-  async updateCategoryExit(item) {
+  updateCategoryExit(item) {
     const category  = item.value as PriceCategories;
-    this.updateCategory(category).subscribe( {
-      next: data => {
-        this.notifyEvent('Items saved', 'Success')
-        this.onCancel(null)},
-      error: err => {
-        console.log('error', err)
-        this.notifyEvent('Items not saved ' + err, 'Failure')
-      }
-    });
-
+    this.itemAction$ = this.updateCategory(category).pipe(
+      switchMap( data => {
+          this.notifyEvent('Items saved', 'Success')
+          this.onCancel(null)
+          return of(data)
+        }
+      )
+    );
   }
 
   onCancel(event) {
@@ -331,18 +321,23 @@ export class PriceCategoriesEditComponent implements OnInit {
     if (!item.id) {
       this.removeItem(i)
       this.toggleSearchSize.splice(i)
+      this.actionMessage = 'Deleted'
       return
     }
 
     const productPrice  = item as ProductPrice
     const site = this.siteService.getAssignedSite()
     if (!productPrice) { return }
-      this.priceCategoryItemService.delete(site, productPrice.id).subscribe( data =>{
-        this.removeItem(i)
-        this.notifyEvent("Item deleted", "Success")
+      this.actionMessage = 'Deleting'
+      this.itemAction$ = this.priceCategoryItemService.delete(site, productPrice.id).pipe(
+        switchMap( data =>{
+          this.priceCategory.productPrices.splice(i, 1)
+          this.removeItem(i)
+          this.actionMessage = 'Deleted'
+          this.notifyEvent("Item deleted", "Success")
+          return of(data)
       }
-    )
-
+    ))
   }
 
   removeItem(i) {
@@ -362,28 +357,98 @@ export class PriceCategoriesEditComponent implements OnInit {
   assignItem(data) {
     if (data) {
       const unitTypeID = data.unitTypeID
-      const index      = data.index;
+      let index      = data.index;
       const unitName   = data.unitName
       const unitType   = data.unitType;
-      console.log(data)
+
       if (data) {
         let pricing = this.inputForm.controls['productPrices'] as FormArray;
-        // console.log('this.priceCategory.productPrices', this.priceCategory.productPrices)
-        if (this.priceCategory.productPrices.length>=index) {
-          this.priceCategory.productPrices[index].unitType   = unitType;
-          this.priceCategory.productPrices[index].unitTypeID = unitTypeID;
+
+        // console.log('pricing gotten', pricing)
+        let lines = pricing.value;
+        let line =  pricing.value[index] as ProductPrice;
+
+        index = index -1;
+
+        if (!line) {
+          if(pricing.length >= (index)) {
+            let priceForm        =  this.fbPriceCategory.addPriceArray()
+            pricing.at(index).patchValue(priceForm)
+            line = pricing.controls[index].value;
+          }
         }
 
+        line.unitType        = {} as UnitType;
+        line.unitType        = unitType;
+        line.unitTypeID      = unitType.id;
+        line.partMultiplyer  = unitType.itemMultiplier;
+
+        if (this.priceCategory.productPrices.length >= index) {
+          let newIndex = index
+          if (!this.priceCategory.productPrices[index]) {
+            newIndex =  this.priceCategory.productPrices.push(line)
+          }
+          if (unitType) {
+            this.priceCategory.productPrices[newIndex + 1].unitType   = unitType;
+            this.priceCategory.productPrices[newIndex + 1].unitTypeID = unitTypeID;
+            // this.toggleSearchSize[newIndex + 1] = !this.toggleSearchSize[index];
+
+          }
+        }
+        this.toggleSearchSize[this.toggle] = !this.toggleSearchSize[this.toggle];
+        this.itemAction$ = this.updateCategory(this.priceCategory);
+
+        return;
         if (pricing && pricing.length>=index) {
-          // console.log('pricing patchvalue', pricing.at(index).value)
+          pricing.at(index).patchValue(line)
           pricing.at(index).patchValue({unitTypeID: unitTypeID})
-          // console.log('pricing patchvalue', pricing.at(index).value)
-
         }
-        this.toggleSearchSize[index] = !this.toggleSearchSize[index]
+
+          this.toggleSearchSize[index] = !this.toggleSearchSize[index]
       }
     }
   }
+
+
+  // assignItem(data) {
+
+  //   console.log('data', data)
+  //   if (data) {
+  //     const unitTypeID = data.unitTypeID
+  //     let index        = data.index;
+  //     const unitName   = data.unitName
+  //     const unitType   = data.unitType as UnitType;
+
+  //     if (data) {
+  //       let pricing = this.inputForm.controls['productPrices'] as FormArray;
+  //       index = index - 1
+
+  //       console.log('current line',  pricing.value[index])
+  //       let lines = pricing.value;
+  //       let line =  pricing.value[index] as ProductPrice;
+
+  //       if (!line.unitType ||
+  //         line.unitType == undefined) {
+  //         line.unitType        = {} as UnitType;
+  //         line.unitType        = unitType;
+  //         line.unitTypeID      = unitType.id;
+  //         line.partMultiplyer  = unitType.itemMultiplier;
+  //       }
+
+  //       pricing.at(index).patchValue(line);
+  //       pricing.at(index).patchValue({unitTypeID: unitTypeID});
+  //       this.inputForm.controls['productPrices'] = pricing;
+
+  //       if (this.priceCategory.productPrices) {
+  //         if (this.priceCategory.productPrices[index]){
+  //           this.priceCategory.productPrices[index].unitType = unitTypeID;
+  //         }
+  //       }
+
+  //       this.toggleSearchSize[index] = !this.toggleSearchSize[index]
+  //     }
+  //   }
+  // }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

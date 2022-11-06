@@ -166,6 +166,8 @@ export class ClientTypeEditComponent implements OnInit {
     if (!item.refundOrder) { item.refundOrder = false }
     if (!item.refundPayment) { item.refundPayment = false }
     if (!item.userAssignedBalanceSheet) { item.userAssignedBalanceSheet = false}
+    if (!item.searchBalanceSheets) { item.searchBalanceSheets = false}
+
     return item;
   }
 

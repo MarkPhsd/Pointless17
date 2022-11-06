@@ -1,8 +1,7 @@
-<div *ngIf="item">
+<div *ngIf="item" class="menu-container">
 
   <mat-card>
-    <div *ngIf="item">
-
+    <div>
       <scheduled-menu-image
           [hideButton]="true"
           [url]="bucket+item?.image"
@@ -28,8 +27,8 @@
   </mat-card>
 
   <div>
-    <mat-card class="items-container">
-      <mat-card-content  *ngIf="item">
+    <mat-card>
+      <mat-card-content >
         <scheduled-menu-items
           [schedule]="item"
           [showAllFlag]="showAllFlag"

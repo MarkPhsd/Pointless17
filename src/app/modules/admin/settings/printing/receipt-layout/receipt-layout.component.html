@@ -71,7 +71,7 @@
                 <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
               </div>
 
-              <div *ngIf=" payment.paymentMethod.isCash ">
+              <div *ngIf=" !payment.paymentMethod.isCreditCard ">
                 <div [innerHTML]="getInterpolatedHTML(paymentsText, payment)" >  </div>
               </div>
             </div>

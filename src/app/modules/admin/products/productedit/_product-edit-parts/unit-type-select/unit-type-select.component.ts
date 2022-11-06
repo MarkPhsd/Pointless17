@@ -20,7 +20,7 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
   unitType$                   : Observable<UnitType[]>;
   unitTypes                   : UnitType[]
   @Input()  index             : number;
-
+  @Input()  outputType        = ''
   formfieldValue: FormGroup;
 
   @ViewChild('input', {static: true}) input: ElementRef;
@@ -139,13 +139,21 @@ export class UnitTypeSelectComponent implements OnInit, AfterViewInit {
 
 
   displayFn(item) {
-    if (!item) { return }
-    this.itemSelect.emit(item)
 
-    this.productPrice.unitTypeID = item.id;
-    this.productPrice.unitType = item.name;
-    this.itemSelect.emit({index: this.index , unitType: item,
-                          unitTypeID: item.id, unitName: item.name})
+    if (!item) { return }
+
+    if (this.productPrice) {
+      this.productPrice.unitTypeID = item.id;
+      this.productPrice.unitType = item.name;
+    }
+
+    if (this.outputType === 'priceLine') {
+      this.itemSelect.emit({index: this.index , unitType: item,
+                            unitTypeID: item.id, unitName: item.name})
+      return
+    }
+
+    this.itemSelect.emit(item)
 
   }
 

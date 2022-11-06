@@ -101,17 +101,18 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
             return
           }
 
-          if (!data.wideOrderBar) {
-            if (this.smallDevice)  {
-              this.matorderBar = 'mat-orderBar'
-            }
-            if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-          }
+          this.matorderBar = 'mat-orderBar-wide'
 
-          if (data.wideOrderBar) {
+          // if (!data.wideOrderBar) {
+          //   if (this.smallDevice)  {
+          //     this.matorderBar = 'mat-orderBar'
+          //   }
+          //   if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
+          // }
 
-            if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-          }
+          // if (data.wideOrderBar) {
+          //   if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
+          // }
         }
       })
     } catch (error) {

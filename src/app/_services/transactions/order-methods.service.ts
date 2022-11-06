@@ -222,7 +222,7 @@ export class OrderMethodsService implements OnDestroy {
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const searchResults = this.updateMenuSearchModel(item)
 
-    console.log('searchresults', searchResults)
+    // console.log('searchresults', searchResults)
     if (searchResults) { return }
 
     if (add) {
@@ -525,11 +525,11 @@ export class OrderMethodsService implements OnDestroy {
 
     this.priceCategoryID = 0;
 
-    console.log('processItemPostResults');
+    // console.log('processItemPostResults');
 
     addItem$.subscribe(data => {
 
-      console.log('processItemPostResults', data);
+      // console.log('processItemPostResults', data);
       if (data) {
 
       }

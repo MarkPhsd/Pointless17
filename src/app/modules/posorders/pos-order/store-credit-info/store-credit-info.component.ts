@@ -1,12 +1,14 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { Observable, Subscription, switchMap } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PaymentMethod } from '@stripe/stripe-js';
+import { Observable, of, Subscription, switchMap,catchError } from 'rxjs';
 import { IPOSOrder, IPOSPayment, IPurchaseOrderItem, PosOrderItem } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IStoreCreditSearchModel, StoreCredit, StoreCreditMethodsService, StoreCreditResultsPaged } from 'src/app/_services/storecredit/store-credit-methods.service';
 import { StoreCreditService } from 'src/app/_services/storecredit/store-credit.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
-import { PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
+import { IPaymentMethod, PaymentMethodsService } from 'src/app/_services/transactions/payment-methods.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 
 @Component({
@@ -16,7 +18,7 @@ import { POSPaymentService } from 'src/app/_services/transactions/pospayment.ser
 })
 
 export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy {
-
+  @Input() showBalance   : boolean;
   @Input() clientID     : number;
   @Input() accountNumber: string;
   @Input() userName     : string;
@@ -24,7 +26,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
   @Input() order        : IPOSOrder;
   @Output() closeDialog = new EventEmitter();
   @Output() issueToStoreCredit = new EventEmitter();
-
+  action$ : Observable<any>
   searchModel: IStoreCreditSearchModel
 
   search              : IStoreCreditSearchModel
@@ -43,9 +45,8 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
     try {
       this._search       = this.storeCreditMethodService.searchModel$.subscribe(data => {
         this.search      = data;
-        this.showPayment = true;
+        // this.showPayment = true;
         if (!data) {
-
           this.search              = null;
           this.storeCreditSearch$  = null;
         }
@@ -54,7 +55,6 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
     } catch (error) {
 
     }
-
 
     try {
       this._posIssuePurchaseItem = this.orderMethodService.posIssuePurchaseItem$.subscribe(data => {
@@ -76,7 +76,6 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
           this.order = null;
         }
         if (data) {
-
           this.order = data
         }
       })
@@ -95,26 +94,23 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
     private paymentMethodService     : PaymentMethodsService,
     private orderMethodService       : OrderMethodsService,
     private storeCreditMethodService : StoreCreditMethodsService,
+    private matSnack    : MatSnackBar,
 
   ) { }
 
   ngOnInit(): void {
-
     const i = 0;
-
     if (this.clientID) {
       const search = {} as IStoreCreditSearchModel;
       search.clientID = this.clientID;
+      console.log(search)
       this.setObservable(search);
       this.initSubscription()
       return
     }
-
   }
 
   ngOnDestroy(): void {
-    //Called once, before the instance is destroyed.
-    //Add 'implements OnDestroy' to the class.
     if (this._search) {
       this.storeCreditMethodService.updateSearchModel(null)
       this._search.unsubscribe()
@@ -122,9 +118,7 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
   }
 
   ngAfterViewInit(): void {
-    // this.setObservable()
     const i = 0;
-    // console.log(storeCreditSearch)
   }
 
   setObservable(search: IStoreCreditSearchModel ){
@@ -204,13 +198,26 @@ export class StoreCreditInfoComponent implements OnInit,AfterViewInit,OnDestroy 
         // payment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod
 
         const payment = {} as IPOSPayment;
-        const paymentMethod$ = this.paymentMethodService.getPaymentMethodByName(site,type)
+        const paymentMethod$ = this.paymentMethodService.getPaymentMethodByName(site, type)
 
         paymentMethod$.pipe(
           switchMap( paymentMethod => {
+            if (!paymentMethod) {
+              const paymentMethod = { name: 'Store Credit', companyCredit: true} as IPaymentMethod
+               this.action$ =   this.paymentMethodService.saveItem(site, paymentMethod);
+              this.matSnack.open('Store Credit payment not configured. Please setup store credit and gift card payments.')
+              return of(null)
+            }
             payment.giftCardID = credit.id;
             return this.paymentService.makePayment(site, payment, order, creditAmount, paymentMethod);
-          })
+          }),
+          catchError((e) => {
+            // handle e and return a safe value or re-throw
+            const paymentMethod = { name: 'Store Credit', companyCredit: true} as IPaymentMethod
+            this.action$ =   this.paymentMethodService.saveItem(site, paymentMethod);
+            this.matSnack.open('Store Credit payment not configured. Please try again and if it does not work, please setup store credit and gift card payments.')
+            return of(null)
+         })
         ).pipe(
           switchMap( data => {
             if (data.paymentSuccess) {

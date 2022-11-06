@@ -35,17 +35,17 @@ export class PromptWalkThroughComponent implements OnInit {
     this.initPromptGroupSubscription();
     this.initOrderPromptGroupSubscription();
   }
-  
-  initPOSItemSubscription() { 
+
+  initPOSItemSubscription() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
-      console.log('initPOSItemSubscription', data)
+      // console.log('initPOSItemSubscription', data)
       this.posItem = data;
     })
   }
-    
+
   initPromptGroupSubscription() {
     this._promptGroup = this.promptGroupService.promptGroup$.subscribe(data => {
-      console.log('initPromptGroupSubscription', data)
+      // console.log('initPromptGroupSubscription', data)
       this.promptGroup = data;
     })
   }
@@ -56,7 +56,7 @@ export class PromptWalkThroughComponent implements OnInit {
     //the main item should also be included .
     //we might in the future want to use a multiplier. based on size selection
     this._orderPromptGroup = this.promptWalkThroughService.orderPromptGroup$.subscribe( data => {
-      console.log('initOrderPromptGroupSubscription', data)
+      // console.log('initOrderPromptGroupSubscription', data)
       this.orderPromptGroup = data;
     })
 

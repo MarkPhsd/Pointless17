@@ -1,21 +1,25 @@
 <div *ngIf="inputForm" [formGroup]="inputForm">
-  <mat-form-field appearance="outline">
-    <mat-label>Category</mat-label>
-    <mat-select
-                type="number"
-                [formControlName] = "'categoryID'"
-                name="categoryID"
-                (selectionChange)="getCategory($event)"
-      >
-      <div *ngIf="(categories$ | async) as list" >
-        <mat-option *ngFor="let item of list" [value]="item.id">
-            {{item.name}}
-            <!-- <span  *ngIf="item.active"><mat-icon>toggle_on</mat-icon></span>
-            <span *ngIf="!item.active"><mat-icon>toggle_off</mat-icon></span> -->
-        </mat-option>
-      </div>
-    </mat-select>
-  </mat-form-field>
+    <div *ngIf="(categories$ | async) as list; else loading" >
+      <mat-form-field appearance="outline">
+      <mat-label>Category</mat-label>
+      <mat-select
+                  type="number"
+                  [formControlName] = "'categoryID'"
+                  name="categoryID"
+                  (selectionChange)="getCategory($event)"
+        >
+          <mat-option *ngFor="let item of list" [value]="item.id">
+              {{item.name}}
+          </mat-option>
+
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <ng-template #loading>
+    <mat-label>Categories</mat-label>
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </ng-template>
 </div>
 
 

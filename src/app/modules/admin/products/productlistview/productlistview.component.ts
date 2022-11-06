@@ -11,7 +11,7 @@ import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Observable, of } from 'rxjs';
+import { Observable, of, switchMap } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams, GridApi } from 'ag-grid-community';
@@ -95,7 +95,7 @@ viewOptions$     = of(
     {name: 'Inactive', id: 2}
   ]
 )
-
+action$         : Observable<any>;
 //search form filters
 inputForm        : FormGroup;
 categoryID       : number;
@@ -160,6 +160,7 @@ constructor(  private _snackBar              : MatSnackBar,
     this.productTypes$  = this.itemTypeService.getBasicTypes(site)
 
     const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
+
     brandResults$.subscribe(data => {
       this.brands = data.results
     })
@@ -232,11 +233,8 @@ constructor(  private _snackBar              : MatSnackBar,
     if (platForm === 'electron')  { this.gridDimensions = 'width: 100%; height: 90%;' }
 
     //height: 72vh; 1180
-
     //greater than 900 and less than  should be 73vh
-
     //less than 900 should be 67vh
-
     //393  < 42vh
 
   }
@@ -600,20 +598,23 @@ constructor(  private _snackBar              : MatSnackBar,
     this.selected = selected
     this.id = selectedRows[0].id;
     this.getItem(this.id)
-    this.getItemHistory(this.id)
+    // this.getItemHistory(this.id)
   }
 
   getItem(id: number) {
     if (id) {
       const site = this.siteService.getAssignedSite();
-      this.menuService.getProduct(site, this.id).subscribe(data => {
-         this.product = data;
-        }
+      this.action$  = this.menuService.getProduct(site, this.id).pipe(
+        switchMap(data => {
+          this.product = data;
+          return of(data)
+        })
       )
+
     }
   }
 
-  async getItemHistory(id: any) {
+  getItemHistory(id: any) {
     const site = this.siteService.getAssignedSite();
   }
 

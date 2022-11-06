@@ -49,14 +49,14 @@
                         <div class="text">{{item.name  | truncateText: 15  }}</div>
                           <div class="grid-item">
                             <img
-                                  loading   = "lazy"
-                                  draggable = "false"
-                                  [src]     = "getItemSrc(item?.urlImageMain)"
-                                  err-SRC   = "getPlaceHolder()"
-                                  onerror   = "this.src='assets/images/placeholderimage.png'"
-                                  (click)   = "listItems(item.id)"
-                                  class     = "grid-item shine"
-                                  [alt]     = "item?.description">
+                                loading   = "lazy"
+                                draggable = "false"
+                                [src]     = "getItemSrc(item?.urlImageMain)"
+                                err-SRC   = "getPlaceHolder()"
+                                onerror   = "this.src='assets/images/placeholderimage.png'"
+                                (click)   = "listItems(item.id)"
+                                class     = "grid-item shine"
+                                [alt]     = "item?.description">
                           </div>
                       </div>
                     </div>

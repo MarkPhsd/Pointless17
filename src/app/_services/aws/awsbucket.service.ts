@@ -53,6 +53,7 @@ export class AWSBucketService {
     return `https://${awsBucket}.s3.amazonaws.com/`
   }
 
+
   constructor(private http            : HttpClient,
               private siteService     : SitesService,
               private appInitService  : AppInitService,

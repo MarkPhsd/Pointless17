@@ -8,6 +8,13 @@
       <div *ngIf="priceCategory$ | async"></div>
       <mat-icon *ngIf="saving">save</mat-icon>
 
+      <div *ngIf="itemAction$ | async as item">
+      </div>
+
+      <div *ngIf="actionMessage">
+        {{actionMessage}} <button mat-button (click)="actionMessage = null"><mat-icon>clear</mat-icon></button>
+      </div>
+
       <div class="grid-simple-price-container grid-width" >
 
         <div *ngIf="!showMore">
@@ -102,8 +109,8 @@
                     <div class="grid-2col-items">
 
                       <div class="unit-label"
-                           *ngIf="!toggleSearchSize[i]">
-                        {{ priceCategory.productPrices[i]?.unitType?.name }}
+                           *ngIf="!toggleSearchSize[i] && priceCategory?.productPrices ">
+                        {{ priceCategory?.productPrices[i]?.unitType?.name }}
                       </div>
 
                       <div  *ngIf="!toggleSearchSize[i]">
@@ -114,19 +121,30 @@
                       </div>
 
                       <div  class="unit-lookup"
-                            *ngIf="toggleSearchSize[i]">
-                        <unit-type-select
-                            [inputForm]     ='inputForm'
-                            [index]         ='i'
-                            [productPrice]  ='priceCategory.productPrices[i]'
-                            (itemSelect)    ='assignItem($event)'
-                        ></unit-type-select>
-                      </div>
+                            *ngIf="toggleSearchSize[i]  && priceCategory?.productPrices">
 
-                      <div *ngIf="toggleSearchSize[i]">
-                        <button mat-button (click)="toggleSearchSize[i]=!toggleSearchSize[i]">
-                          <mat-icon>close</mat-icon>
-                        </button>
+                        <div>
+                          <unit-type-select
+                              [inputForm]     ='inputForm'
+                              [index]         ='i'
+                              [outputType]    = "'priceLine'"
+                              [productPrice]  ='priceCategory.productPrices[i]'
+                              (itemSelect)    ='assignItem($event)'
+                          ></unit-type-select>
+                        </div>
+
+                        <div>
+                          <button mat-button (click)="openAddSize()">
+                            <mat-icon>expand</mat-icon>
+                          </button>
+                        </div>
+
+                        <div>
+                          <button mat-button (click)="toggleSearchSize[i]=!toggleSearchSize[i]">
+                            <mat-icon>close</mat-icon>
+                          </button>
+                        </div>
+
                       </div>
 
                     </div>
@@ -264,7 +282,6 @@
                                 class="form-control" >
                         </mat-form-field>
                       </div>
-
 
                     </div>
 
@@ -445,8 +462,6 @@
                         </mat-form-field>
                       </div>
                     </div>
-
-
                   </div>
 
                   <div *ngIf="showWeightPrices" class="grid-time-container">

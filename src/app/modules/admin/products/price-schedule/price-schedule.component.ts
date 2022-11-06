@@ -59,7 +59,7 @@ export class PriceScheduleComponent {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       if (data) {
           this.priceSchedule = data
-          console.log('price schedule data scheudle service', data)
+          // console.log('price schedule data scheudle service', data)
           this.isMenuList = false
           if (data.type == 'Menu List') {
           this.isMenuList = true
@@ -119,7 +119,6 @@ export class PriceScheduleComponent {
           this.description   = data.description;
           this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
           this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
-
         }
       )
     }
@@ -183,24 +182,20 @@ export class PriceScheduleComponent {
   }
 
   getItemValueFromForm(value: any): IPriceSchedule {
-
     const newSchedule = {} as IPriceSchedule;
     const orderTypes = newSchedule.orderTypes as OrderType[]
     const clientTypes = newSchedule.clientTypes as ClientType[]
     const itemDiscounts = newSchedule.itemDiscounts as DiscountInfo[]
- 
     return value
   }
 
   save() {
     const site = this.siteService.getAssignedSite();
     if (this.inputForm.valid) {
-
       const item = this.inputForm.value as IPriceSchedule;
       item.id = this.id;
       const item$ = this.priceScheduleService.save(site, item)
       this.saveNotification = true
-
       item$.subscribe( {
         next:  data => {
           this.saveNotification = false
@@ -228,5 +223,5 @@ export class PriceScheduleComponent {
       this.snack.open('Item Deleted', 'Success', {duration: 2000})
     })
   }
-   
+
 }
