@@ -62,6 +62,13 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
         if ( (this.order && this.order?.id != data.id) || !this.order ) {
           this.input.nativeElement.focus();
         }
+        if (this.order.clientID != data.clientID) {
+          this.input.nativeElement.focus();
+        }
+        if (this.order.customerName != data.customerName) {
+          this.input.nativeElement.focus();
+        }
+
       }
 
       this.order = data

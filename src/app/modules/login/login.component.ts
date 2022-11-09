@@ -111,7 +111,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         private _snackBar            : MatSnackBar,
         private companyService       : CompanyService,
         private siteService          : SitesService,
-        public platformService       : PlatformService,
+        public  platformService       : PlatformService,
         private appInitService       : AppInitService,
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
@@ -138,6 +138,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log(this.loginAction)
 
     this.bucket = await this.awsBucketService.awsBucketURL()
+
     this.pinToken = localStorage.getItem('pinToken');
 
     if (localStorage.getItem('rememberMe') === 'true') {
