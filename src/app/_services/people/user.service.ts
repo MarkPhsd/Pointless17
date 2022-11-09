@@ -6,7 +6,6 @@ import { AuthenticationService } from '../system/authentication.service';
 import { AppInitService } from '../system/app-init.service';
 import { SitesService } from '../reporting/sites.service';
 
-
 @Injectable({
     providedIn: 'root'
   })
@@ -37,7 +36,9 @@ export class UserService {
   }
 
   getProfileOfUSerByID(id: number):  Observable<IUserProfile>  {
-    const url = `${this.apiUrl}/clients/getClientByID?=${id}`;
+    const site = this.siteService.getAssignedSite();
+
+    const url = `${site.url}/clients/getClientByID?=${id}`;
     return this.http.get<IUserProfile>(url);
   }
 

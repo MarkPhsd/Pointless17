@@ -286,15 +286,16 @@ export class PackageListComponent implements OnInit {
   }
 
   getMetrcCategory(event) {
-    this.metrcCategoryID = event.value
+    this.metrcCategoryID = event
+    console.log(this.metrcCategory, event)
     if (this.metrcCategoryID == 0) {
       this.metrcCategory = null
       this.refreshSearch()
       return
     }
 
-    if (event.value) {
-      this.metrcCategoryID = event.value
+    if (event) {
+      this.metrcCategoryID = event
       this.assignMetrcCategory(this.metrcCategoryID);
     }
   }

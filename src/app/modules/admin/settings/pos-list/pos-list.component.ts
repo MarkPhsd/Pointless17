@@ -92,18 +92,20 @@ export class PosListComponent implements OnInit, OnDestroy {
     return dialogRef;
   }
 
-  setPOSName(name: string) {
-    if (this.platForm.isApp()) {
-      this.notifyEvent(`${this.posName} has not been assigned!`, "Failure")
-      return
-    }
+  setPOSName(event) {
+    // if (this.platForm.isApp()) {
+    //   this.notifyEvent(`${this.posName} has not been assigned!: Is App: ${this.platForm.isApp()}`, "Failure")
+    // }
 
-    if (this.orderService.setPOSName(name)) {
-      this.posName = this.orderService.posName;
+    console.log(event)
+    // return;
+    if (this.orderService.setPOSName(event?.name)) {
+      this.posName = event?.name;
       this.notifyEvent(`${this.posName} has been assigned.`, "success")
     } else {
-      this.notifyEvent(`${this.posName} has not been assigned!`, "Failure")
+      this.notifyEvent(`${this.posName} has not been assigned. Please assign names less than 5 characters.`, "Failure")
     }
+
   }
 
   clearPOS() {

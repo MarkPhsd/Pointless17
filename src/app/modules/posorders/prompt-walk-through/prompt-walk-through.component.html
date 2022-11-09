@@ -11,8 +11,9 @@
       <div
           [innerHTML]="promptGroup?.instructions">
       </div>
+      <div *ngIf="(action$ | async) as item"></div>
     </mat-card-content>
-  
+
   </mat-card>
   <mat-divider></mat-divider>
 
@@ -25,16 +26,17 @@
         <prompt-items-selected></prompt-items-selected>
       </div>
     </div>
-    
+
     <mat-card-actions>
-      <div class="grid-list">
-        <button mat-button (click)="reset()"><mat-icon>refresh</mat-icon>Restart</button>
-        <button mat-button (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel</button>
-        <button mat-button (click)="applyChoices()"><mat-icon>approval</mat-icon>Finish</button>
-      </div>
+
     </mat-card-actions>
 
   </mat-card>
-
+  <div class="grid-list">
+    <button class="item-button" mat-raised-button (click)="reset()"><mat-icon>refresh</mat-icon>Restart</button>
+    <button class="item-button" mat-raised-button (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel <br> All Items</button>
+    <button class="item-button" mat-raised-button (click)="close()"><mat-icon>close</mat-icon>Close <br> Without Saving</button>
+    <button class="item-button" mat-raised-button (click)="applyChoices()"><mat-icon>approval</mat-icon>Apply Choices</button>
+  </div>
 </div>
 

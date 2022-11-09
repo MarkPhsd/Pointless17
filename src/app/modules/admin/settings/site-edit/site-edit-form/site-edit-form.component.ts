@@ -123,11 +123,16 @@ export class SiteEditFormComponent implements OnInit {
   applyChanges(data) {
     if (data.id) {
         data.imgName = this.imgName
-        this.sitesService.updateSite(data.id, data).subscribe(data => {
-        this.notifyEvent(`updated`, `Success` )
-      }, error => {
-        this.notifyEvent(`update ${error}`, `failure` )
-      })
+        this.sitesService.updateSite(data.id, data).subscribe(
+          {
+          next: data => {
+              this.notifyEvent(`updated`, `Success` )
+            },
+          error: error => {
+              this.notifyEvent(`update ${error}`, `failure` )
+          }
+        }
+       )
     } else {
       this.sitesService.addSite(data).subscribe(
       {

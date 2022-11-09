@@ -24,14 +24,29 @@
   </mat-card-title>
 
   <mat-card-subtitle>
+
+    <div *ngIf="inputForm && inputForm.controls?.name.invalid && (inputForm.controls?.name.dirty || inputForm.controls?.name.touched)">
+
+      <!-- {{inputForm.controls?.name.errors | json}} -->
+      <div *ngIf="inputForm && inputForm.controls?.name.errors?.['required']">
+        <mat-icon color="warn">warning</mat-icon>  Name is required.
+      </div>
+      <div *ngIf="inputForm && inputForm.controls?.name.errors?.['maxlength']">
+        <mat-icon color="warn">warning</mat-icon>   Name must be 5 or less characters long.
+      </div>
+
+    </div>
+
   </mat-card-subtitle>
 
   <mat-card-content>
     <div *ngIf="inputForm && terminal" [formGroup]="inputForm" >
       <div class='grid-container'>
+
         <div>
           <mat-form-field appearance="standard">
-            <mat-label >Name</mat-label>
+            <mat-label >Name assinged in Pointless</mat-label>
+            <mat-label >Name </mat-label>
             <input matInput type="text"
                     formControlName="name"
                     class="form-control" >
@@ -40,7 +55,7 @@
 
         <div>
           <mat-form-field appearance="standard">
-            <mat-label >Device Name</mat-label>
+            <mat-label >Physical Device Name</mat-label>
             <input matInput type="text"
                     formControlName="deviceName"
                     class="form-control" >

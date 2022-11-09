@@ -200,11 +200,16 @@ export class OrdersService {
   }
 
   setPOSName(name: string): boolean {
+
+    console.log('name.length <= 5', name.length)
     if (name.length) {
-      if (name.length >= 5) {
-        const realName = name.substring(0, name.length - 4)
-        localStorage.setItem(`devicename`, realName)
-        if (localStorage.getItem(`devicename`) === realName  ) {
+
+      if (name.length <= 5) {
+        localStorage.setItem(`devicename`, name)
+        console.log('set name', name);
+
+
+        if (localStorage.getItem(`devicename`) === name  ) {
           return true
         } else {
           return false

@@ -1,13 +1,11 @@
 import { Component,  Inject,  OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable  } from 'rxjs';
+import { Observable ,switchMap,of  } from 'rxjs';
 import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ActivatedRoute, Router } from '@angular/router';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
-import { TaxesService } from 'src/app/_services/menu/taxes.service';
-import { AWSBucketService  } from 'src/app/_services';
-import { tap } from 'rxjs/operators';
+
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { DomSanitizer } from '@angular/platform-browser';
 import { FormBuilder, FormGroup} from '@angular/forms';
@@ -21,6 +19,7 @@ import {
   METRCItemsUpdate
 } from 'src/app/_interfaces/metrcs/items';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
+import { InvokeFunctionExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-item-categories-edit',
@@ -34,40 +33,40 @@ export class ItemCategoriesEditComponent implements OnInit {
   category$: Observable<METRCItemsCategories>;
   category: METRCItemsCategories;
 
-  public categoryForm: FormGroup;
+  public inputForm: FormGroup;
 
   constructor(
     private conversionService: ConversionsService,
     private metrcItemsCategoriesService: MetrcItemsCategoriesService,
-    private router: Router,
     public route: ActivatedRoute,
     public fb: FormBuilder,
-    private sanitizer : DomSanitizer,
-    private awsBucket: AWSBucketService,
-    private _snackBar: MatSnackBar,
-    private menuPricingService: PriceCategoriesService,
-    private taxes: TaxesService,
     private dialogRef: MatDialogRef<METRCItemsCategories>,
     @Inject(MAT_DIALOG_DATA) public data: any
     )
   {
-
     if (data) {
       this.id = data.id
     } else {
       this.id = this.route.snapshot.paramMap.get('id');
     }
-
   }
 
   ngOnInit() {
-
     this.initForm();
-
+    this.initCategory()
   }
 
+  initCategory() {
+    this.category$ = this.metrcItemsCategoriesService.getCategory(this.id).pipe(
+      switchMap(data =>{
+        this.category = data
+        this.inputForm.patchValue(data)
+        return of(data)
+      })
+    )
+  }
   initForm() {
-    this.categoryForm = this.fb.group({
+    this.inputForm = this.fb.group({
         id:                           [''],
         name:                         [''],
         productCategoryType:          [''],
@@ -96,15 +95,6 @@ export class ItemCategoriesEditComponent implements OnInit {
         lastModified:                 [''],
     })
 
-    this.category = {} as METRCItemsCategories;
-
-    try {
-      this.category$ = this.metrcItemsCategoriesService.getCategory(this.id).pipe(
-        tap(data => this.categoryForm.patchValue(data))
-      );
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   update(event) {

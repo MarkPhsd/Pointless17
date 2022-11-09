@@ -84,7 +84,7 @@ export class FacilitiesListComponent {
     if (event) {
       this.siteID = event.id
       this.site = event;
-      // this.assignSite(event);
+      this.assignSite(event);
     }
   }
 
@@ -159,45 +159,35 @@ export class FacilitiesListComponent {
 
     this.importing = true;
 
-    mETRCFacilities$.subscribe(data =>{
-      this.searchItems();
-      this.importing = false;
-    }, err => {
-      this.importing = false
+    mETRCFacilities$.subscribe(
+      {next: data =>{
+        this.searchItems();
+        this.importing = false;
+       }, error: err => {
+        this.importing = false
+      }
     })
 
   }
 
   getValidSite() {
-
     const site   = this.site;
-
-    if (!site.metrcURL) {
-      this.notifyEvent('No URL Defined', 'Failed');
+    if (!site) {
+      this.notifyEvent('Please select a site first', 'Failed');
       return
     }
-
     return site
   }
 
   searchItems() {
-    let siteID = this.siteID
-    if (!siteID) {
-      const site = this.siteService.getAssignedSite()
-      siteID = site.id
+    if (!this.site) {
+      this.site = this.siteService.getAssignedSite()
     }
-    if (!siteID) {return}
-
-    const site$ =  this.siteService.getSite(siteID)
-
-    site$.pipe(
-      switchMap(data => {
-       return  this.metrcFacilitiesService.getFacilities(data)
-      }
-    )).subscribe(data =>  {
-      this.mETRCFacilities = data;
-    })
-
+    if (this.site) {
+      this.metrcFacilitiesService.getFacilities(this.site).subscribe(data =>  {
+        this.mETRCFacilities = data;
+      })
+    }
   }
 
   onSearchgridReady({ api } : {api: GridApi}) {

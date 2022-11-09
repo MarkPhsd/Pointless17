@@ -1,47 +1,218 @@
 
 <mat-card >
     <mat-card-title>
-    <app-edit-buttons-standard
-          (outputeupdateItem)     ="update($event)"
-          (outputupdatedeleteItem)="delete($event)"
-          (outputupdateonCancel)  ="cancel($event)"
-    ></app-edit-buttons-standard>
+      <div class="header-grid">
+
+        <div>
+          METRC Category
+        </div>
+        <div>
+          <app-edit-buttons-standard
+            (outputeupdateItem)     ="update($event)"
+            (outputupdatedeleteItem)="delete($event)"
+            (outputupdateonCancel)  ="cancel($event)"
+          ></app-edit-buttons-standard>
+        </div>
+
+      </div>
    </mat-card-title>
 
-   <mat-divider>
-   </mat-divider>
 
    <mat-card-content *ngIf="category$ | async; else loading"
-      [formGroup]="categoryForm">
+      [formGroup]="inputForm">
 
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label >Name</mat-label>
-          <input matInput
-                type="text"
-                formControlName="name"
-                class="form-control" >
-        </mat-form-field>
-      </div>
+      <div class="grid-fields">
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label >Name</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="name"
+                  class="form-control" >
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label >Category Type</mat-label>
-          <input matInput
-                type="text"
-                formControlName="productCategoryType"
-                class="form-control" >
-        </mat-form-field>
-      </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label >Category Type</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="productCategoryType"
+                  class="form-control" >
+          </mat-form-field>
+        </div>
 
-      <div>
-        <mat-form-field appearance="outline">
-          <mat-label >Quantity Type</mat-label>
-          <input matInput
-                type="text"
-                formControlName="quantityType"
-                class="form-control" >
-        </mat-form-field>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label >Quantity Type</mat-label>
+            <input matInput
+                  type="text"
+                  formControlName="quantityType"
+                  class="form-control" >
+
+          </mat-form-field>
+        </div>
+
+         <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresStrain'"
+            >
+           requires Strain
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresItemBrand'"
+            >
+            requires Item Brand
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresAdministrationMethod'"
+            >
+            requires Administration Method
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitCbdPercent'"
+            >
+            requires Unit Cbd Percent
+        </app-value-fields>
+
+        <app-value-fields
+           [inputForm]="inputForm"
+            [fieldName]="'requiresUnitCbdContent'"
+            >
+            requires Unit Cbd Content
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitCbdContentDose'"
+            >
+            requires Unit Cbd Content Dose
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitThcPercent'"
+            >
+            requires Unit Thc Percent
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitThcContent'"
+            >
+            requires Unit Thc Content
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitThcContentDose'"
+            >
+            requires Unit Thc ContentDose
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitVolume'"
+            >
+            requires Unit Volume
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitWeight'"
+            >
+            requires Unit Weight
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresServingSize'"
+            >
+            requires Serving Size
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresUnitWeight'"
+            >
+            requires Unit Weight
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresSupplyDurationDays'"
+            >
+            requires Supply Duration Days
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresNumberOfDoses'"
+            >
+            requires Number Of Doses
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresIngredients'"
+            >
+            requires Ingredients
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresDescription'"
+            >
+            requires Description
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresProductPhotos'"
+            >
+            requires Product Photos
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresLabelPhotos'"
+            >
+            requires Label Photos
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'requiresPackagingPhotos'"
+            >
+            requires Packaging Photos
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'canContainSeeds'"
+            >
+            can Contain Seeds
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'canBeRemediated'"
+            >
+            can Be Remediated
+        </app-value-fields>
+
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'lastModified'"
+            >
+            last Modified
+        </app-value-fields>
       </div>
 
       <mat-divider></mat-divider>
@@ -50,6 +221,6 @@
 </mat-card>
 
 <ng-template class="center-item" #loading>
-  <mat-spinner></mat-spinner>
+  <mat-spinner [diameter]="50"></mat-spinner>
 </ng-template>
 

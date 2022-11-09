@@ -81,6 +81,7 @@ export class StrainsAddComponent implements OnInit {
       this.initProductSearchModel();
 
       const site        = this.siteService.getAssignedSite();
+      this.site         = this.siteService.getAssignedSite();
 
       const item$       = this.metrcPackagesService.getPackagesByID(this.id, site) //.pipe().toPromise();
       this.bucketName   =  await this.awsBucket.awsBucket();
@@ -91,8 +92,9 @@ export class StrainsAddComponent implements OnInit {
           next: data => {
             this.package = data;
             if (this.package) {
-              this.site         =  this.siteService.getAssignedSite();
-              this.assignMenItem(+this.package.productID)
+              if (this.package.productID) {
+                this.assignMenItem(+this.package.productID)
+              }
               this.initForm();
               this.initPriceForm();
             }

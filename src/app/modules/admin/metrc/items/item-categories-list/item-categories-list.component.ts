@@ -268,8 +268,8 @@ export class ItemCategoriesListComponent implements OnInit {
     ]
 
     const dialogRef = this.dialog.open(ItemCategoriesEditComponent,
-      { width: '60vw',
-        height: '60vh',
+      { width: '700px',
+        height: '700px',
         data : {id: id}
       },
     )

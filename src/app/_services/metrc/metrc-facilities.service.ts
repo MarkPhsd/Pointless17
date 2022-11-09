@@ -56,7 +56,6 @@ export class MetrcFacilitiesService {
   importFacilities(site: ISite): Observable<METRCFacilities[]> {
 
     const controller = '/MetrcFacilities/'
-    console.log('importFacilities', site.name)
 
     const parameters = `GetImportFacilities?siteName=${site.name}`
 

@@ -6,7 +6,12 @@
           [class]="fieldsClass"
           appearance="outline">
 
-        <mat-label><ng-content></ng-content></mat-label>
+        <mat-label>
+          <div #itemText>
+             <ng-content></ng-content>
+          </div>
+          {{itemHeader | titlecase}}
+        </mat-label>
         <div *ngIf="type === 'input' && passwordMask">
           <input matInput
                 [disabled] ='!enabled'

@@ -6,9 +6,10 @@ import { IPromptGroup } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
 import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
-import { Subscription } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { Observable } from 'rxjs';
 @Component({
   selector: 'app-prompt-walk-through',
   templateUrl: './prompt-walk-through.component.html',
@@ -18,6 +19,7 @@ import { POSOrderItemServiceService } from 'src/app/_services/transactions/posor
 
 export class PromptWalkThroughComponent implements OnInit {
 
+  action$:          Observable<any>;
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
 
@@ -83,29 +85,40 @@ export class PromptWalkThroughComponent implements OnInit {
     // this.orderPromptGroup.prompts.
   }
 
+  close() {
+    this.dialogRef.close()
+  }
+
   cancel() {
     //cancel prompt and item being applied to.
-    const result = window.confirm("Do you want to cancel this prompt? This will not apply any selections")
-    this.dialogRef.close()
+    const result = window.confirm("Do you want to cancel this prompt? This will  apply all selections")
+
     if (result) {
-      this.dialogRef.close()
+
+      const site = this.sitesService.getAssignedSite();
+
+      if (this.orderPromptGroup) {
+
+        const item = this.orderPromptGroup.posOrderItem;
+        const orderID = this.orderPromptGroup.orderID.toString()
+
+        if (item) {
+          this.action$ = this.posOrderItemService.deletePOSOrderItem(site, item.id).pipe(
+            switchMap(data => {
+              return  this.orderService.getOrder(site, orderID, false)
+            }
+              )
+            ).pipe(
+              switchMap( data => {
+                this.orderService.updateOrderSubscription(data)
+                this.dialogRef.close()
+                return of('success')
+              }
+            )
+          )
+        }
+      }
     }
-    //   //delete all items referencing the item.
-    //   console.log('delete all items')
-    //   const site = this.sitesService.getAssignedSite();
-    //   if (this.orderPromptGroup && this.orderPromptGroup.posOrderItem) {
-    //     const postItem = this.orderPromptGroup.posOrderItem;
-    //     this.posOrderItemService.deletePOSOrderItem(site, postItem.id).pipe(
-    //           switchMap(data => {
-    //             return  this.orderService.getOrder(site, postItem.id.toString())
-    //           }
-    //         )
-    //       ).subscribe(data => {
-    //         this.orderService.updateOrderSubscription(data)
-    //         this.dialogRef.close()
-    //     })
-    //   }
-    // }
   }
 
   applyChoices() {
@@ -113,19 +126,18 @@ export class PromptWalkThroughComponent implements OnInit {
       const site = this.sitesService.getAssignedSite();
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
 
-      prompt$.pipe(
-            switchMap( data  => {
+      this.action$ =  prompt$.pipe(
+          switchMap( data  => {
               return  this.orderService.getOrder(site, data.orderID.toString(), false)
-            },
+             }
           )
-        ).subscribe(data => {
-          if (!data) {
+          ).pipe(
+            switchMap( data => {
             this.dialogRef.close(false)
-            return;
-          }
-          this.orderService.updateOrderSubscription(data)
-          this.dialogRef.close(true)
-      })
+            this.orderService.updateOrderSubscription(data)
+            return of('success')
+        })
+      )
     }
   }
 

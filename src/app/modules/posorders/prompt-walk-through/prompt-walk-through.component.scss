@@ -11,6 +11,23 @@
   }
 }
 
+.item-button {
+  height: 75px;
+  min-width: 150px;
+  width: 150px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+  @include for-phone-only {
+    display: grid;
+    width: 150px;
+    min-width: 150px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+}
+
 mat-card {
 
   margin: 5px;
@@ -27,16 +44,24 @@ mat-card {
 
 
 .grid-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  // display: grid;
+  // grid-template-columns: repeat(4, 1fr);
+  // gap: 10px;
 
-  @include for-phone-only {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 5px;
-    margin-bottom: 5px;
-  }
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px ;
+  flex-wrap: wrap;
+  // @include for-phone-only {
+  //   display: grid;
+  //   grid-template-columns: repeat(4, 1fr);
+  //   gap: 5px;
+  //   margin-bottom: 5px;
+  // }
 }
 
 .grid-prompt {

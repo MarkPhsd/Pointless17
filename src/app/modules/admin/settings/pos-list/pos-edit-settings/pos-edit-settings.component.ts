@@ -106,13 +106,13 @@ export class PosEditSettingsComponent implements OnInit {
 
   initForm() {
     this.inputForm = this.fb.group({
-      medicalRecSales : [''],
-      receiptPrinter  : [],
+      medicalRecSales    : [''],
+      receiptPrinter     : [],
       labelPrinter       : [],
       labelPrinter2      : [],
       enabled            : [],
       resetOrdersFilter  : [],
-      name:                [],
+      name:                ['', [ Validators.required, Validators.maxLength(5) ]],
       deviceName         : [],
       dSISecureDevice    : [],
       cardPointeHSN      : [],
@@ -137,11 +137,11 @@ export class PosEditSettingsComponent implements OnInit {
     const site = this.sitesService.getAssignedSite()
     const item = this.inputForm.value as ITerminalSettings;
     const text = JSON.stringify(item);
-    console.log(text, item)
-    this.setting.name = item.name;
-    this.setting.text = text;
+    this.setting.name   = item.name;
+    this.setting.text   = text;
     this.setting.filter = 421
     this.uiSettingService.posDevice.next(item);
+    console.log(text, this.setting.id)
 
     this.saving$ = this.settingsService.putSetting(site, this.setting.id, this.setting)
     this.saving = true;

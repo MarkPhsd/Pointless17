@@ -9,7 +9,7 @@ import { PrintingAndroidService } from 'src/app/_services/system/printing-androi
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-
+import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
@@ -202,11 +202,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
    refreshViewObservable(){
     const receipt$  =  this.getDefaultPrinterOb();
+
     this.refreshView$ = receipt$.pipe(
       switchMap(data => {
-
-        if (!data) { return}
-
+        if (!data) { return };
         this.electronReceiptSetting = data;
         this.receiptID   =  +data.option1;
         this.printerName =  data.text;
@@ -222,9 +221,32 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
           if (this.receiptID && data ) {
             this.initDefaultLayoutsObservable()
           }
+          return this.getDeviceInfo()
+        })
+      ).pipe(
+        switchMap( data => {
+          // console.log('getting terminal settings', data)
+          if (data && data.text) {
+            const item  = JSON.parse(data.text) as ITerminalSettings
+            // console.log('getting terminal settings', item)
+            if (item) {
+              if (this.platFormService.isAppElectron) {
+                if (item.receiptPrinter) {
+                  this.printerName = item.receiptPrinter
+                }
+              }
+            }
+          }
           return of(data)
+
         })
       )
+  }
+
+  getDeviceInfo(): Observable<ISetting> {
+    const site = this.siteService.getAssignedSite();
+    const device = localStorage.getItem('devicename');
+    return  this.settingService.getSettingByName(site, device)
   }
 
 
@@ -349,8 +371,18 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       return  this.receiptStyles
   }
 
+  getDefaultPrinterOb(): Observable<any> {
+    return this.printingService.getElectronReceiptPrinterCached()
+  }
+
   async getDefaultPrinter(): Promise<number> {
-    const item       = await this.printingService.getElectronReceiptPrinterCached().toPromise()
+    const item  = await this.printingService.getElectronReceiptPrinterCached().toPromise()
+    if (!item) { return}
+    return  this.setDefaultPrinter(item)
+  }
+
+
+  setDefaultPrinter(item: ISetting) {
     if (!item) { return}
     this.electronReceiptSetting = item;
     this.receiptID   =  +item.option1;
@@ -358,17 +390,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     return this.receiptID;
   }
 
-  getDefaultPrinterOb(): Observable<any> {
-    return this.printingService.getElectronReceiptPrinterCached()
+  getPrinterName()  {
+
   }
 
-  setDefaultPrinter(electronPrinter: ISetting) {
-    if (!electronPrinter) { return}
-    this.electronReceiptSetting = electronPrinter;
-    this.receiptID   =  +electronPrinter.option1;
-    this.printerName =  electronPrinter.text;
-    return this.receiptID;
-  }
 
   initSubComponent(receiptPromise: ISetting): boolean {
     if (receiptPromise ) {

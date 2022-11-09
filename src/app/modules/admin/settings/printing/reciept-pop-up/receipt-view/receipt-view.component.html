@@ -1,6 +1,6 @@
 <div class="buttons-grid">
-  <div>
-    <button mat-button (click)="print()">
+  <div >
+    <button *ngIf="refreshView$ | async" mat-button (click)="print()">
       <span *ngIf="printerName"><mat-icon>print</mat-icon> Print to {{printerName}}</span>
       <span *ngIf="!printerName"><mat-icon>save</mat-icon>Save</span>
     </button>
