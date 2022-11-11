@@ -11,6 +11,7 @@ import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { PriceCategoriesService } from 'src/app/_services/menu/price-categories.service';
 import { switchMap } from 'rxjs/operators';
+import { T } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-strain-product-edit',
@@ -179,7 +180,7 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   updateItemExit(event) {
-    this.updateItem(event).pipe(switchMap ( data => {
+    this.action$ = this.updateItem(event).pipe(switchMap ( data => {
       this.performingAction = false;
       this.onCancel(event);
       return of(data);
