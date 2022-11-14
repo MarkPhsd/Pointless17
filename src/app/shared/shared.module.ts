@@ -90,7 +90,6 @@ import { PosOrderTransactionDataComponent } from '../modules/posorders/pos-order
 import { PaymentBalanceComponent } from '../modules/posorders/payment-balance/payment-balance.component';
 import { DeviceInfoComponent } from '../modules/admin/settings/device-info/device-info.component';
 import { CannabisItemEditComponent } from '../modules/admin/products/productedit/cannabis-item-edit/cannabis-item-edit.component';
-// import { FoodProductEditComponent } from '../modules/admin/products/productedit/food-product-edit/food-product-edit.component';
 import { LiquorProductEditComponent } from '../modules/admin/products/productedit/liquor-product-edit/liquor-product-edit.component';
 import { RetailProductEditComponent } from '../modules/admin/products/productedit/retail-product-edit/retail-product-edit.component';
 import { ChangeDueComponent } from '../modules/posorders/components/balance-due/balance-due.component';
@@ -156,9 +155,12 @@ import { ElectronZoomControlComponent } from './widgets/electron-zoom-control/el
 import { QROrderComponent } from '../modules/posorders/qrorder/qrorder.component';
 import { QRCodeTableComponent } from '../modules/orders/qrcode-table/qrcode-table.component';
 import { RequestMessageComponent } from '../modules/admin/profiles/request-messages/request-message/request-message.component';
-import { SplashLoadingComponent } from './widgets/splash-loading/splash-loading.component';
 import { ThreeCXFabComponent } from './widgets/three-cxfab/three-cxfab.component';
 import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-selector.component';
+import { SimpleTinyComponent } from '../_components/tinymce/tinymce.component';
+import { TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
+import { NumericDirective } from '../_directives/numeric-directive.directive';
+import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -170,6 +172,9 @@ import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-sele
 // }
 @NgModule({
   declarations: [
+    SafeHtmlPipe,
+    ArrayFilterPipe,
+    ArraySortPipe,
     AccordionComponent,
     AdjustmentReasonsComponent,
     AdjustPaymentComponent,
@@ -247,6 +252,7 @@ import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-sele
     MenuTinyComponent,
     MoveInventoryLocationComponent,
     NewOrderTypeComponent,
+    NumericDirective,
     OrderHeaderDemoGraphicsComponent,
     OrderTotalComponent,
     OrderHeaderComponent,
@@ -277,7 +283,7 @@ import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-sele
     ProgressBarComponent,
     PriceCategorySearchComponent,
     RetailProductEditComponent,
-
+    SimpleTinyComponent,
     SalesTaxReportComponent,
     ScaleReaderComponent,
     ScaleSettingsComponent,
@@ -342,6 +348,9 @@ import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-sele
   ],
 
   exports: [
+    SafeHtmlPipe,
+    ArrayFilterPipe,
+    ArraySortPipe,
     AccordionComponent,
     AdjustPaymentComponent,
     AreaComponent,
@@ -470,20 +479,15 @@ import { CallUsSelectorComponent } from './widgets/call-us-selector/call-us-sele
     UploaderComponent,
     ValueFieldsComponent,
     WebEnabledComponent,
+    SimpleTinyComponent,
+    NumericDirective,
   ],
 
   providers: [
-   // { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
-   // { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
-   // { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-   { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover' }},
-  //  {
-  //     provide: HAMMER_GESTURE_CONFIG,
-  //     useClass: MyHammerConfig
-  //   }
+    { provide: GALLERY_CONFIG, useValue: { dots: true, imageSize: 'cover' } },
+    { provide: TINYMCE_SCRIPT_SRC, useValue: 'tinymce/tinymce.min.js' },
   ]
 
 })
 
 export class SharedModule { }
-

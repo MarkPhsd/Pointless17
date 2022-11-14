@@ -44,6 +44,7 @@ import { AppWizardStatusComponent } from 'src/app/modules/admin/settings/softwar
 import { CardpointeTransactionsComponent } from 'src/app/modules/payment-processing/cardPointe/cardpointe-transactions/cardpointe-transactions.component';
 import { DsiEMVAndroidComponent } from 'src/app/modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 import { EmailEntryComponent } from 'src/app/shared/widgets/email-entry/email-entry.component';
+import { AdminDisplayMenuComponent } from 'src/app/modules/admin/products/display-menu/display-menu/display-menu.component';
 
 @Injectable({
   providedIn: 'root'
@@ -209,6 +210,20 @@ export class ProductEditButtonService {
         minHeight:    '650px',
       },
     )
+  }
+
+  openDisplayMenuEditor(data) {
+    let dialogRef: any;
+
+    dialogRef = this.dialog.open(AdminDisplayMenuComponent,
+      { width:        '90vw',
+        minWidth:     '1000px',
+        height:       '850px',
+        minHeight:    '850px',
+        data:          data
+      },
+    )
+    return dialogRef;
   }
 
   getItemForNewEditor(id: number, productTypeID: number) : Observable<IProduct> {

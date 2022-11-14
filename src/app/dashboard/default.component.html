@@ -2,7 +2,7 @@
 
 <mat-drawer-container>
   <mat-drawer
-        *ngIf="!menuManager"
+        *ngIf    ="!menuManager"
         position ="start"
         [class]  ="barType"
         [mode]   ="sidebarMode"
@@ -53,17 +53,20 @@
               [opened]  ="orderBarOpen"
               [class]   ="matorderBar"
               >
+
     <app-order-bar>
     </app-order-bar>
+
   </mat-drawer>
 
 </mat-drawer-container>
 
 <app-footer></app-footer>
 
+
 <div *ngIf="(homePageSetting$ | async) as setting">
   <div class="fab-chat-button" *ngIf="setting.threecxChatLink">
-    <call-us-selector></call-us-selector>
+    <app-three-cxfab></app-three-cxfab>
   </div>
 </div>
 

@@ -4,7 +4,7 @@ import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/dr
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
 import { Observable} from 'rxjs';
 
-import {  IItemBasicB } from 'src/app/_services/menu/menu.service';
+import { IItemBasicB } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { IDisplayAssignment, ItemTypeDisplayAssignmentService } from 'src/app/_services/menu/item-type-display-assignment.service';

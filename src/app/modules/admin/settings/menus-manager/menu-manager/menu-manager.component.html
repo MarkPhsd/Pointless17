@@ -54,7 +54,7 @@
         <div *ngIf="(accordionMenuItem$ | async) as accordionMenu">
           <app-accordion-menu-item-edit
               (outPutRefreshMenu)="refreshMenu()"
-              [id]  ="accordionMenu.id"
+              [id]  ="accordionMenu?.id"
               [item]="accordionMenu">
           </app-accordion-menu-item-edit>
         </div>
@@ -72,4 +72,7 @@
 </div>
 
 
-
+<!--
+Menu: {{ this.accordionMenu | json }}
+<mat-divider></mat-divider>
+Sub: {{ this.accordionMenu?.submenus | json }} -->

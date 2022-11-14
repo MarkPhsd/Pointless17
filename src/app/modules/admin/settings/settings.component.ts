@@ -4,7 +4,6 @@ import { AdjustmentReasonsComponent } from 'src/app/shared/widgets/adjustment-re
 import { IUser } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Capacitor } from '@capacitor/core';
 import { SystemManagerService } from 'src/app/_services/system/system-manager.service';
 import { Subscription } from 'rxjs';
 import { PointlessCCDSIEMVAndroidService } from '../../payment-processing/services';

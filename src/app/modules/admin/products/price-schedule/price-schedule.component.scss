@@ -159,6 +159,12 @@ img {
   z-index      : 100;
   padding-right: 10px;
   overflow-x   : visible;
+
+  position:fixed;
+  top: opx;
+  right: 0px;
+  max-width: 350px;
+  width: 350px;
 }
 
 .schedule-info {

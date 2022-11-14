@@ -117,6 +117,9 @@ import { MenuBoardComponent } from './modules/tv-menu/menu-board/menu-board.comp
 import { GridMenuLayoutComponent } from './modules/admin/grid-menu-layout/grid-menu-layout.component';
 import { GridManagerComponent } from './modules/admin/grid-menu-layout/grid-manager/grid-manager.component';
 import { QRCodeTableComponent } from './modules/orders/qrcode-table/qrcode-table.component';
+import { DisplayMenuListComponent } from './modules/display-menu/display-menu-list/display-menu-list.component';
+import { ThreeCXFabComponent } from './shared/widgets/three-cxfab/three-cxfab.component';
+import { AdminDisplayMenuListComponent } from './modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
 
 const routes: Routes = [
 
@@ -203,6 +206,10 @@ const routes: Routes = [
 
         { path: 'price-schedule',      component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule', animation: 'isLeft'}},
         { path: 'price-schedule-edit', component: PriceScheduleComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule Edit', animation: 'isLeft'}},
+
+        { path: 'display-menu',      component: DisplayMenuListComponent ,canActivate: [AuthGuard], data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'admin-display-menu',      component: AdminDisplayMenuListComponent ,canActivate: [AuthGuard], data: { title: 'Display Menu', animation: 'isLeft'}},
+        //DisplayMenuListComponent
 
         ///price schedule layout menu
         {path: 'psmenu-group-list', component: PSMenuGroupListComponent, canActivate: [AuthGuard], data: { animation: 'isLeft'}},
@@ -319,7 +326,8 @@ const routes: Routes = [
     { path: 'overLay', component: OverLayComponent, data: { animation: 'isLeft'}},
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
-    // { path: 'qr-order', component: QROrderComponent, data: { animation: 'isLeft'}},
+    { path: 'chat-app', component: ThreeCXFabComponent, data: { animation: 'isLeft'}},
+
 
     { path: '**', component: PageNotFoundComponent},
 

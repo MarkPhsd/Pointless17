@@ -1,0 +1,102 @@
+@import "/src/mixins.scss";
+
+.mat-input-element {
+  font-size: small;
+}
+
+mat-form-field {
+  font-size: 1em;
+}
+
+.mat-label {
+  font-size: .8em;
+}
+
+.grid-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+  max-height:600px;
+  height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.container {
+  height:  100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+.info-container {
+  max-height:600px;
+  height: 600px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.grid-container-small {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 100px auto;
+}
+
+.grid-container-sections {
+  padding-top: 10px;
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 600px 1fr;
+}
+
+.header-container {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 200px 1fr;
+
+  @include for-phone-only  {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    justify-content: space-between;
+  }
+}
+
+.grid-order-header {
+  --gap: 10px;
+  display: grid;
+  gap: var(--gap);
+  // grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat( auto-fit, minmax(185px, 1fr) );
+  grid-auto-flow:dense;
+}
+
+.grid-item {
+  align-items: flex-end;
+  width      : 200px;
+
+}
+
+.image-container {
+  margin:  5px;
+  height: 235px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.basic-fields {
+  margin-left: 3px;
+}
+
+.mat-toggle  {
+  margin-bottom: 10px;
+}
+
+.col-span {
+  column-span: all;
+}

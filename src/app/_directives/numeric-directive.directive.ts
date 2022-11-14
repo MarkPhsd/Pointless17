@@ -5,8 +5,6 @@ import {
   Input
 } from "@angular/core";
 
-// https://gist.github.com/ahmeti/5ca97ec41f6a48ef699ee6606560d1f7
-
 @Directive({
   selector: "[numeric]"
 })

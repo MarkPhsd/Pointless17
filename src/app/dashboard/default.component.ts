@@ -91,28 +91,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   homePageSubscriber(){
     try {
+      this.matorderBar = 'mat-orderBar-wide'
       this._uiSettings = this.uiSettingsService.homePageSetting$.subscribe ( data => {
-        this.matorderBar = 'mat-orderBar-wide'
         if (data) {
           this.uiSettings = data;
-
           if (this.phoneDevice)  {
             this.matorderBar = 'mat-orderBar'
             return
           }
-
           this.matorderBar = 'mat-orderBar-wide'
-
-          // if (!data.wideOrderBar) {
-          //   if (this.smallDevice)  {
-          //     this.matorderBar = 'mat-orderBar'
-          //   }
-          //   if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-          // }
-
-          // if (data.wideOrderBar) {
-          //   if (!this.smallDevice) { this.matorderBar = 'mat-orderBar-wide'  }
-          // }
         }
       })
     } catch (error) {
@@ -196,6 +183,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   leftSideBarToggleSubscriber() {
     this._leftSideBarToggle = this.toolbarUIService.leftSideBarToggle$.subscribe(data => {
+      console.log('leftSideToggle update', data)
       this.leftSideBarToggle = data;
     })
   }
@@ -217,18 +205,49 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSubscriptions() {
+    console.log('init Subscriptions')
     this.matorderBar = 'mat-orderBar-wide'
     this.style = ""
-    this.homePageSubscriber();
-    this.userSubscriber();
-    this.orderBarSubscriber();
-    this.toolbarSideBarSubscriber();
-    this.departmentMenuSubscriber();
-    this.searchSideBarSubscriber();
-    this.searchBarWidthSubscriber();
-    this.barSizeSubscriber();
-    this.leftSideBarToggleSubscriber();
-  }
+    try {
+      this.leftSideBarToggleSubscriber();
+    } catch (error) {
+    }
+
+    try {
+      this.homePageSubscriber();
+    } catch (error) {
+    }
+
+    try {
+      this.userSubscriber();
+    } catch (error) {
+    }
+    try {
+      this.orderBarSubscriber();
+    } catch (error) {
+    }
+    try {
+      this.toolbarSideBarSubscriber();
+    } catch (error) {
+    }
+    try {
+      this.departmentMenuSubscriber();
+    } catch (error) {
+    }
+    try {
+      this.searchSideBarSubscriber();
+    } catch (error) {
+    }
+    try {
+      this.searchBarWidthSubscriber();
+    } catch (error) {
+    }
+    try {
+      this.barSizeSubscriber();
+    } catch (error) {
+    }
+
+}
 
   constructor(
                private toolBarUIService: ToolBarUIService,
@@ -254,25 +273,14 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
     this.renderTheme();
     this.initSettings();
-
     const site = this.siteService.getAssignedSite();
     this.splashLoader.stop()
-    if (this.uiSettings && this.uiSettings.threecxChatLink) {
-      this.chatURL = this.uiSettings.threecxChatLink
-      if (site.url === 'https://ccsposdemo.ddns.net/api' || site.url === 'https://ccsposdemo.ddns.net:4444/api' ||
-          site.url ==='https://ccsposdemo.ddns.net:4445/api' || site.url ==='https://ccsposdemo.ddns.net:4446/api' ||
-          site.url === 'https://localhost:44309/api') {
-        this.chatURL = 'https://pointlesspos.ca.3cx.us:6001/LiveChat702266'
-      }
-
-    }
-    // if this.nav
-
   }
 
   getHelp() {
     this.router.navigateByUrl(this.chatURL)
   }
+
   subscribeAddress() {
     //menu-manager
     this.router.events.pipe(
@@ -286,6 +294,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSettings() {
+
     this.homePageSetting$ = this.uiSettingsService.getSetting('UIHomePageSettings').pipe(
         switchMap(  data => {
           const ui = {} as UIHomePageSettings
@@ -298,7 +307,6 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
           }
           return of(null)
     }))
-
   }
 
   initUI() {

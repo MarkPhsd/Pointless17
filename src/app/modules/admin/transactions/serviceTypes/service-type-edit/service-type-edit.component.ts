@@ -8,7 +8,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { FbServiceTypeService } from 'src/app/_form-builder/fb-service-type.service';
-import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-service-type-edit',

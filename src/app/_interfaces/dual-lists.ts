@@ -2,11 +2,14 @@
  * Helper interface for listbox items
  */
  export interface IListBoxItem {
-  // id: string;
-  // name: string;
   value: string;
   text: string;
   groupID: number;
+}
+
+export interface IListBoxItemB {
+  id: string;
+  name: string;
 }
 /**
 * Helper interface to emit event when

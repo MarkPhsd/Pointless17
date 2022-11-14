@@ -85,6 +85,19 @@ export class FbPriceScheduleService {
       image:           [],
       description    : [],
 
+      showMetaTags: [],
+      showCBD     : [],
+      showTCH     : [],
+      showProof   : [],
+      showABV     : [],
+      showGlueten : [],
+      showImage   : [],
+      showDescription : [],
+      showInfo    : [],
+      title       : [],
+      subTitle    : [],
+      showAddress : [],
+
       orderTypes:           this.fb.array([ ]),
       clientTypes:          this.fb.array([ ]),
       weekDays:             this.fb.array([ ]),
@@ -161,7 +174,7 @@ export class FbPriceScheduleService {
   }
 
   initFormData(inputForm: FormGroup, priceSchedule: IPriceSchedule) {
- 
+
     inputForm.patchValue(priceSchedule)
     this.updateDiscountInfos(inputForm, priceSchedule)
     this.addDateRanges(inputForm, priceSchedule.dateFrames)
@@ -228,6 +241,7 @@ export class FbPriceScheduleService {
             itemID:     [info.itemID],
             name:       [info.name],
             sort:       [info.sort],
+            andOr:      [info.andOr],
           }))
         })
       } catch (error) {
@@ -290,6 +304,7 @@ export class FbPriceScheduleService {
         itemID:     info.itemID,
         name:       info.name,
         sort:       [info.sort],
+        andOr:      [info.andOr],
       }))
       return
     }
@@ -300,6 +315,7 @@ export class FbPriceScheduleService {
       quantity:   '0',
       itemID:     '',
       name:       '',
+      andOr     : '',
       sort:       [info.sort],
     }))
 
@@ -361,7 +377,7 @@ export class FbPriceScheduleService {
       if (!inputForm) { return }
       const control = inputForm.get('timeFrames') as FormArray;
       control.clear()
-      console.log('addTimeRanges', items)
+      // console.log('addTimeRanges', items)
 
       if (!control)   { return }
       items.forEach( info =>  {
@@ -508,7 +524,7 @@ export class FbPriceScheduleService {
   deleteArrayItem(i: number, inputForm: FormGroup, controlName: string) {
     const control = inputForm.get(controlName) as FormArray;
     control.removeAt(i)
-    console.log(inputForm.value)
+    // console.log(inputForm.value)
     this.priceScheduledataService.updatePriceSchedule(inputForm.value)
   }
 

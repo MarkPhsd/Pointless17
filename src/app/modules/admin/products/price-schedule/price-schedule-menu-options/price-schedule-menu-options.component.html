@@ -1,0 +1,86 @@
+<div *ngIf="inputForm"
+     [formGroup]="inputForm" >
+
+  <h4>Menu Features</h4>
+  <mat-label>Show these headings on your dislplay menu.</mat-label>
+  <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'title'">
+    Title
+  </app-value-fields>
+  <app-value-fields
+      [inputForm]="inputForm"
+      [fieldName]="'subTitle'">
+    Sub Title
+  </app-value-fields>
+
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showDescription">
+      <mat-label class="mat-label">Description</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showInfo">
+      <mat-label class="mat-label">Features of Time, Date Etc</mat-label>
+    </mat-slide-toggle>
+  </div>
+
+  <h4>Menu Column</h4>
+  <mat-label>Show additional features in this section on your display menu. These features refer to each item in the menu.</mat-label>
+
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showCBD">
+      <mat-label class="mat-label">CBD</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showTCH">
+      <mat-label class="mat-label">THC</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showProof">
+      <mat-label class="mat-label">Proof</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showABV">
+      <mat-label class="mat-label">ABV</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showGlueten">
+      <mat-label class="mat-label">Glueten</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+          class="mat-label"
+          formControlName="showImage">
+      <mat-label class="mat-label">Image</mat-label>
+    </mat-slide-toggle>
+  </div>
+  <div  class="mat-label">
+    <mat-slide-toggle
+        name="showMetaTags"
+        class="mat-label"
+        formControlName="showMetaTags">
+      <mat-label class="mat-label">Meta Tags</mat-label>
+    </mat-slide-toggle>
+  </div>
+
+</div>

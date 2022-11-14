@@ -66,6 +66,40 @@ export interface IPriceSearchModel {
   currentPage       : number;
 }
 
+
+export interface IDisplayMenu {
+  id : number;
+  name: string;
+  title: string;
+  subTitle: string;
+  description: string;
+  footer: string;
+  backcolor: string;
+  backcolorOpacity: string;
+  menuSections: any;
+  template: string;
+  css: string;
+  logo: string;
+  backGroundImage: string;
+}
+
+export interface IDisplayMenuSearchModel {
+  name:                         string;
+  pageSize:                     number;
+  pageNumber:                   number;
+  pageCount:                    number;
+  currentPage:                  number;
+  lastPage:                     number;
+  recordCount:                  number;
+}
+
+export interface IDisplayMenuSearchResults{
+ results: IDisplayMenu[]
+ paging:  IPagedList;
+ message: string;
+ errorMessage: string;
+}
+
 export interface IPriceSchedule {
   id:                 number;
   allEligible:        boolean;
@@ -95,6 +129,21 @@ export interface IPriceSchedule {
   requiredBrands:     DiscountInfo[];
   requiredItemTypes:  DiscountInfo[];
   requiredItems:      DiscountInfo[];
+
+  showMetaTags: boolean;
+  showCBD: boolean;
+  showTCH: boolean;
+  showProof: boolean;
+  showABV: boolean;
+  showGlueten: boolean;
+  showImage: boolean;
+  showDescription: boolean;
+  showInfo: boolean;
+
+  title: string;
+  subTitle: string;
+  showAddress: string;
+
 }
 
 export interface DiscountInfo {

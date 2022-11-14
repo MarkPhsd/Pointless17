@@ -39,6 +39,20 @@ export class MenusService {
     //     { name: 'Search',     minimized: true,  method: '', routerLink: '/searchproducts',   routerLinkActive: 'searchproducts',   icon: 'search',   onClick: '', id: 4, sortOrder: 0, submenuID:0, menuID: 0, submenus: this.submenu, userType:  this.getUsers(), meunyType: 0},
     //   ]
     // },
+
+    {
+      id:             0,
+      name:          'Menus',
+      icon:          'menu',
+      active:        false,
+      sortOrder:      2,
+      menuGroupID:    0,
+      userType:       this.getUsers(),
+      routerLink:       '/menu-display',
+      routerLinkActive: 'menu-display',
+      method:           '',
+      submenus: [  ]
+    },
     {
       id:             0,
       name:          'Profile',
@@ -147,6 +161,7 @@ export class MenusService {
         { name: 'Brands',         method: '' ,  minimized: true, routerLink: '/adminbrandslist',       routerLinkActive:  'adminbrandslist', icon: 'list', onClick: '', id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Price Categories',method: '' , minimized: true, routerLink: '/price-categories' ,     routerLinkActive: 'price-categories', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Catalog Schedule', method: '' ,  minimized: true, routerLink: '/price-schedule' ,       routerLinkActive: 'price-schedule', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'TV Print Menu', method: '' ,  minimized: true, routerLink:  '/admin-display-menu' ,       routerLinkActive: 'admin-display-menu', icon: 'monitor', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Price Tiers',    method: '' ,  minimized: true, routerLink: '/price-tier-list-edit' ,       routerLinkActive: 'price-schedule', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Unit Types',     method: '' ,  minimized: true, routerLink: '/unit-types',            routerLinkActive: 'unit-types', onClick: '', icon: 'list', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Taxes and Fees', method: '' ,  minimized: true, routerLink: '/taxes' ,                routerLinkActive: 'taxes', icon: 'price_change', onClick: '', id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},

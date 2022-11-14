@@ -151,6 +151,7 @@ export interface UIHomePageSettings {
   smtpEmailEnabled   : string;
 
   threecxChatLink    : string;
+  threeParty         : string;
 }
 
 @Injectable({
@@ -503,6 +504,7 @@ export class UISettingsService {
       twilioEnabled: [''],
       smtpEmailEnabled: [''],
       threecxChatLink: [''],
+      threeParty: [''],
      })
     return fb
   }

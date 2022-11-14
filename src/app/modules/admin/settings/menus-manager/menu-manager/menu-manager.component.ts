@@ -112,12 +112,9 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
 
   assignSubMenu(item: AccordionMenu, submenu: SubMenu[]) {
     const site         =  this.siteService.getAssignedSite();
-    this.submenu       = submenu;
-    if (!item) { return }
     this.accordionMenu = item;
-    if (item && item.id) {
-      this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id)
-    }
+    this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id)
+    this.submenu       = submenu;
   }
 
   initMenu() {

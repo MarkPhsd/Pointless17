@@ -98,10 +98,10 @@ export class PromptGroupsComponent  implements OnInit, AfterViewInit {
                 private agGridFormatingService : AgGridFormatingService,
                 private awsService             : AWSBucketService,
               )
-  {
-    this.initForm();
-    this.initAgGrid(this.pageSize);
-  }
+{
+  this.initForm();
+  this.initAgGrid(this.pageSize);
+}
 
 
 async ngOnInit() {

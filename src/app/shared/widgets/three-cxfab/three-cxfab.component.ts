@@ -1,33 +1,62 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { CallUsSelectorComponent } from '../call-us-selector/call-us-selector.component';
+import { Renderer2, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { UIHomePageSettings } from 'src/app/_services/system/settings/uisettings.service';
+import { SettingsService } from 'src/app/_services/system/settings.service';
+import { of, switchMap,Observable } from 'rxjs';
 
 @Component({
   selector: 'app-three-cxfab',
-  templateUrl: './three-cxfab.component.html',
+  templateUrl: './three-cxfab.component.html', // `<call-us-selector phonesystem-url="{{server}}" party="{{party}}">  </call-us-selector>`,
   styleUrls: ['./three-cxfab.component.scss']
 })
-export class ThreeCXFabComponent implements OnInit {
+export class ThreeCXFabComponent {
+  message: string;
 
+templateString: string;
+  chatApp = ``
   dialogRef: any;
+  settings: UIHomePageSettings;
 
-  constructor(private dialog: MatDialog) { }
+  server: string;
+  party: string;
 
-  ngOnInit() {
-    console.log('')
- }
-
- toggleChatDisplay() {
-    let dialogRef: any;
-    dialogRef = this.dialog.open(CallUsSelectorComponent,
-      { width:        '500px',
-        minWidth:     '500px',
-        height:       '650px',
-        minHeight:    '650px',
-      },
+  // action$ : Observable<any>;
+  action$ = this.settingsService.getUIHomePageSettings().pipe(
+    switchMap(
+      data => {
+        this.settings = data;
+        if (data.threeParty && data.threecxChatLink) {
+          const server  = data.threecxChatLink
+          const party   = data.threeParty;
+          this.chatApp = `<call-us-selector phonesystem-url="${server}" party="${party}">  </call-us-selector>`
+          this.loadJsScript(this.render, this.chatApp)
+        }
+        return of(data)
+      }
     )
-    return dialogRef
-  }
+  )
+  constructor(
+    private render: Renderer2,
+    private settingsService: SettingsService,
+    @Inject(DOCUMENT) private document: Document,
+   ) { }
 
+
+  loadJsScript(renderer: Renderer2, src: string) {
+    // const script = renderer.createElement('script');
+    // script.type = 'text/javascript';
+    // script.src = src;
+    // this.message = 'loaded ' + src;
+    this.message = src
+
+    let script = renderer.createElement('html');
+    script.type = 'text/html';
+    script.src = src;
+
+    // render  er.(this.document.body, script);
+
+  }
 
 }

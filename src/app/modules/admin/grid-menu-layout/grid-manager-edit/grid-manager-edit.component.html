@@ -6,14 +6,14 @@
       <mat-tab label="Settings"
           (swipeleft)="swipe(1, $event.type)"
           (swiperight)="swipe(1, $event.type)">
-                
+
         <mat-card>
           <mat-title>
             <div class="grid-title">
               <div>
                 Edit Dashboard
               </div>
-        
+
               <div class="buttons">
                 <app-edit-buttons-standard
                   (outputeupdateItem)     ="update($event)"
@@ -28,7 +28,7 @@
           <mat-card-content >
             <div class="grid" [formGroup]="inputForm"
                   *ngIf="inputForm && dashboardModel; else loading;" >
-        
+
                 <div>
                   <app-value-fields
                     [inputForm]="inputForm"
@@ -37,7 +37,7 @@
                       Name
                   </app-value-fields>
                 </div>
-        
+
                 <div>
                   <mat-slide-toggle
                       name="active"
@@ -45,7 +45,7 @@
                     <mat-label class="mat-label">Enabled</mat-label>
                   </mat-slide-toggle>
                 </div>
-        
+
                 <div class="span-col-all">
                   <mat-button-toggle-group name="type"
                             aria-label="item Type"
@@ -58,15 +58,15 @@
                     </mat-button-toggle>
                   </mat-button-toggle-group>
                 </div>
-        
+
             </div>
-        
+
             <mat-divider></mat-divider>
-        
+
             <h4>Features </h4>
             <div class="grid"
                 *ngIf="inputProperties" >
-        
+
               <div>
                 <app-value-fields
                   [inputForm]="inputProperties"
@@ -75,13 +75,12 @@
                   Icon - (Use mdi icons)
                 </app-value-fields>
               </div>
-        
+
               <div class="span-col-2">
-                backgroundColor {{backgroundColor}}
-                <input [(colorPicker)]="backgroundColor"
-                      [style.background]="backgroundColor"/>
+                <input type="color" [(colorPicker)]="backgroundColor"
+                        [style.background]="backgroundColor"/>
               </div>
-        
+
               <div class="span-col-all">
                 Opacity {{opacity}}
                 <mat-slider
@@ -95,9 +94,9 @@
                             aria-label="units"
                 ></mat-slider>
               </div>
-        
+
               <div></div>
-        
+
               <div class="span-col-2"
                   *ngIf="backgroundBlendModes">
                 <mat-form-field  appearance="outline">
@@ -113,14 +112,14 @@
                     </mat-select>
                 </mat-form-field>
               </div>
-        
+
               <div></div>
-        
+
               <div>Input Expected Pixel Height and Width to ensure layout dimensions fit the type of screen that will use this dashboard (for TV's and Customer displays.).
                 <app-info-instructions></app-info-instructions>
               </div>
               <div></div>
-        
+
               <div class="span-col-2">
                 <app-value-fields
                     [inputForm]="inputProperties"
@@ -129,7 +128,7 @@
                     Width
                 </app-value-fields>
               </div>
-        
+
               <div class="span-col-2">
                 <app-value-fields
                   [inputForm]="inputProperties"
@@ -138,7 +137,7 @@
                   Height
                 </app-value-fields>
               </div>
-        
+
               <div>Grid Column and Rows (Determines Size of Grid Blocks)
                 <app-info-instructions></app-info-instructions>
               </div>
@@ -151,7 +150,7 @@
                     Columns
                 </app-value-fields>
               </div>
-        
+
               <div class="span-col-2">
                 <app-value-fields
                   [inputForm]="inputProperties"
@@ -160,7 +159,7 @@
                   Rows
                 </app-value-fields>
               </div>
-        
+
               <div></div>
               <div class="grid-items span-col-all">
                 <mat-card class="image-container">
@@ -171,7 +170,7 @@
                   </app-widget-uploader>
                 </mat-card>
               </div>
-        
+
             </div>
           </mat-card-content>
         </mat-card>
@@ -181,23 +180,23 @@
       <mat-tab label="Permissions"
           (swipeleft)="swipe(1, $event.type)"
           (swiperight)="swipe(1, $event.type)">
-      
+
         <mat-card *ngIf="dashboardModel" class="widgets-selection">
           <mat-card-title>
-            Permissions 
+            Permissions
             <mat-lable>Leave unchecked for anyone to see. (permissions still apply to data access)</mat-lable>
           </mat-card-title>
           <mat-card-content>
-             
-            <dashboard-client-type-selection  
+
+            <dashboard-client-type-selection
                 [dashboardModel]        ="dashboardModel"
                 (outputClientTypesJSON) ="setRolesJSON($event)"
                 (outputClientTypes)     ="setRoles($event)">
             </dashboard-client-type-selection>
           </mat-card-content>
         </mat-card>
-        
-      </mat-tab>  
+
+      </mat-tab>
 
   </mat-tab-group>
 

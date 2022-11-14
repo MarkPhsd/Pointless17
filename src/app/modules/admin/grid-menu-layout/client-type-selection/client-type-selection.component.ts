@@ -19,7 +19,7 @@ export interface ClientType {
   templateUrl: './client-type-selection.component.html',
   styleUrls: ['./client-type-selection.component.scss']
 })
-export class ClientTypeSelectionComponent implements OnInit, OnDestroy {
+export class DashboardClientTypeSelectionComponent implements OnInit, OnDestroy {
 
   @Output() outputClientTypesJSON:      EventEmitter<any> = new EventEmitter();
   @Output() outputClientTypes    :      EventEmitter<any> = new EventEmitter();
@@ -51,9 +51,9 @@ export class ClientTypeSelectionComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    if (this.dashboardModel && this.dashboardModel.widgetRolesJSON) { 
+    if (this.dashboardModel && this.dashboardModel.widgetRolesJSON) {
       this.savedClientTypes = JSON.parse(this.dashboardModel.widgetRolesJSON);
-      if (this.savedClientTypes ) { 
+      if (this.savedClientTypes ) {
         this.initForm()
       }
     }
@@ -72,9 +72,9 @@ export class ClientTypeSelectionComponent implements OnInit, OnDestroy {
       clientTypes.forEach( data=> {
         this.clientTypeList.push( { name: data.name, id: data.id })
       })
-      if ( this.dashboardModel) { 
+      if ( this.dashboardModel) {
         this.setValues()
-      }    
+      }
     })
   }
 

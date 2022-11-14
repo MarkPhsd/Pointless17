@@ -1,4 +1,8 @@
-<button mat-fab  (click)="toggleChatDisplay()">
-  <mat-icon>chat</mat-icon>
-</button>
+ <div *ngIf="action$ | async as item">
+  <div *ngIf="item">
+     <mat-card-content [innerHTML]="chatApp | safeHtml"></mat-card-content>
+  </div>
+</div>
+
+
 

@@ -11,8 +11,6 @@ export class SafeHtmlPipe implements PipeTransform {
 }
 
 
-
-
 // public transform(value: any, type: string): SafeHtml | SafeStyle | SafeScript | SafeUrl | SafeResourceUrl {
 //   console.log(type);
 //   switch (type) {

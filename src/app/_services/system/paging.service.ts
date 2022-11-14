@@ -12,6 +12,7 @@ export interface SearchModel {
   isFirstPage:           number;
   loadChildren     :     boolean;
 }
+
 export interface IPagedList {
   pageCount:       number;
   currentPage:     number;

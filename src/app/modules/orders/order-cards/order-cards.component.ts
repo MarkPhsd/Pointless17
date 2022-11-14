@@ -233,7 +233,9 @@ export class OrderCardsComponent implements OnInit,OnDestroy {
     const order$ =  this.orderService.getOrder(site, order.id, order.history )
     order$.subscribe(data =>
       {
-        this.orderService.setActiveOrder(site, data)
+        if (data) {
+          this.orderService.setActiveOrder(site, data)
+        }
       }
     )
   }

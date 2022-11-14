@@ -1,17 +1,13 @@
 
-import { Component, Input, OnDestroy, DoCheck, HostListener, ElementRef, HostBinding,
-         ViewChild, ChangeDetectionStrategy, OnInit,  } from '@angular/core';
+import { Component,  HostListener, ElementRef, HostBinding,
+         OnInit,  } from '@angular/core';
 import { IProductCategory }  from 'src/app/_interfaces';
 import { AWSBucketService, MenuService} from 'src/app/_services';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { fromEvent, Subject} from 'rxjs';
-import { takeUntil, switchMapTo, tap} from 'rxjs/operators';
+import {  Subject} from 'rxjs';
 
-import { trigger, transition, animate, style, query, stagger } from '@angular/animations';
-import { NgSwitchCase } from '@angular/common';
-import { ThisReceiver } from '@angular/compiler';
 // https://codeburst.io/how-to-create-horizontal-scrolling-containers-d8069651e9c6
 //we are only using one section now.
 // https://dev.to/angular/ain-t-nobody-needs-hostlistener-fg4

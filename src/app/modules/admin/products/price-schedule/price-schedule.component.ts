@@ -22,6 +22,7 @@ import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 })
 export class PriceScheduleComponent {
 
+
   @Output() outPutToggleSideBar:      EventEmitter<any> = new EventEmitter();
 
   inputForm:            FormGroup;
@@ -194,6 +195,7 @@ export class PriceScheduleComponent {
     if (this.inputForm.valid) {
       const item = this.inputForm.value as IPriceSchedule;
       item.id = this.id;
+
       const item$ = this.priceScheduleService.save(site, item)
       this.saveNotification = true
       item$.subscribe( {

@@ -1,0 +1,139 @@
+<div *ngIf="action$ | async; else action"></div>
+
+<ng-template #action>
+  <div *ngIf="performingAction">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
+
+<mat-card>
+
+  <mat-card-title>
+    <div class="header-container">
+      <div *ngIf="displayMenu">
+        {{displayMenu?.name}}
+      </div>
+      <div>
+        <app-edit-buttons-standard
+            [enableCopy]            ="true"
+            (outputeupdateItem)     ="updateSave($event)"
+            (outputupdateItemExit)  ="updateItemExit($event)"
+            (outputupdatedeleteItem)="deleteItem($event)"
+            (outputupdateonCancel)  ="onCancel($event)"
+            (outputCopy)            ="copyItem($event)"
+         ></app-edit-buttons-standard>
+      </div>
+
+    </div>
+  </mat-card-title>
+
+  <mat-card-content  *ngIf="displayMenu && inputForm">
+    <div class="header">
+      <h4><mat-icon>subject</mat-icon> Features
+
+      </h4>
+    </div>
+    <mat-divider></mat-divider>
+    <div class="grid-container-sections">
+
+      <div class="grid-container">
+          <div class="grid-item">
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'name'">
+                Name
+              </app-value-fields>
+          </div>
+          <div class="grid-item">
+              <app-value-fields
+                    [inputForm]="inputForm"
+                    [fieldName]="'title'">
+                Title
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'subTitle'">
+              SubTitle
+            </app-value-fields>
+          </div>
+
+
+          <div class="grid-item">
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'footer'">
+              Footer
+            </app-value-fields>
+          </div>
+
+          <div class="grid-item">
+            <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'backcolorOpacity'">
+              Back color Opacity
+            </app-value-fields>
+          </div>
+
+          <!-- <div class="grid-item"> -->
+            <!-- <mat-form-field
+                appearance="outline">
+              <mat-label>Back Color</mat-label>
+              <input
+                      type="color"
+                      formControlName="backcolor">
+            </mat-form-field> -->
+          <!-- </div> -->
+          <div></div>
+          <div class="grid-item">
+            <div class="header">
+              <h4><mat-icon>image</mat-icon>Background</h4>
+              <mat-label>Use One Image for the Background</mat-label>
+            </div>
+            <app-widget-uploader
+                [(fileNames)]="backGroundImage"
+                (messageOut) ="setBackgroundImage($event)"
+                >
+            </app-widget-uploader>
+          </div>
+
+          <div class="grid-item">
+            <div class="header">
+              <h4><mat-icon>image</mat-icon>Logo</h4>
+              <mat-label>Use One Image for the logo</mat-label>
+            </div>
+
+            <app-widget-uploader
+                [(fileNames)]="logo"
+                (messageOut) ="setLogo($event)"
+                >
+            </app-widget-uploader>
+          </div>
+
+          <div></div>
+          <div></div>
+          <div class="col-span">
+            <simple-tinymce
+                    cols="50" rows="15"
+                    [(ngModel)]="description"
+                   >
+            </simple-tinymce>
+          </div>
+      </div>
+
+
+      <div class="menus-selection" >
+        <h4>Menu Assignment</h4>
+
+        <display-menu-selctor
+          [listOfMenus]= "menuList"
+          (outPutList) = "outPutList($event)"
+          >
+        </display-menu-selctor>
+      </div>
+
+    </div>
+  </mat-card-content>
+</mat-card>
+

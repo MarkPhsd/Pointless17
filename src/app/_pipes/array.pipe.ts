@@ -79,6 +79,7 @@ export class ArrayFilterPipe implements PipeTransform {
       return array;
     }
 
-    return array.filter((item: {}) => item[key].toString().toLowerCase().search(searchTerm.toLowerCase().trim()) >= 0);
+    return array.filter((item: {}) =>
+                        item[key].toString().toLowerCase().search(searchTerm.toLowerCase().trim()) >= 0);
   }
 }

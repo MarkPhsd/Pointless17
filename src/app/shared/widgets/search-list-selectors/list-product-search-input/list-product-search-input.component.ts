@@ -59,16 +59,20 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   initSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       if ( data ) {
-        if ( (this.order && this.order?.id != data.id) || !this.order ) {
+        if (!this.order) {
           this.input.nativeElement.focus();
-        }
-        if (this.order.clientID != data.clientID) {
-          this.input.nativeElement.focus();
-        }
-        if (this.order.customerName != data.customerName) {
-          this.input.nativeElement.focus();
-        }
+          this.order = data
+        } else
 
+          if ( (this.order && this.order?.id != data.id) || !this.order ) {
+            this.input.nativeElement.focus();
+          }
+          if (this.order.clientID != data.clientID) {
+            this.input.nativeElement.focus();
+          }
+          if (this.order.customerName != data.customerName) {
+            this.input.nativeElement.focus();
+          }
       }
 
       this.order = data

@@ -58,11 +58,12 @@ import { OrderTotalBoardComponent } from './modules/posorders/pos-order/order-to
 import { OrderHeaderDemographicsBoardComponent } from './modules/posorders/pos-order/order-header-demographics-board/order-header-demographics-board.component';
 import { LimitValuesCardComponent } from './modules/posorders/limit-values-card/limit-values-card.component';
 import { GridcomponentPropertiesDesignComponent } from './modules/admin/grid-menu-layout/grid-component-properties/gridcomponent-properties-design/gridcomponent-properties-design.component';
-import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
+// import { ClientTypeSelectionComponent } from './modules/admin/grid-menu-layout/client-type-selection/client-type-selection.component';
 import { DashBoardRoutingModule } from './dash-board-routing.module';
 import * as Sentry from "@sentry/angular";
 import { BrowserTracing } from "@sentry/tracing";
 import { SplashLoadingComponent } from './shared/widgets/splash-loading/splash-loading.component';
+// import { AdminModule } from './modules/admin/admin.module';
 
 // Sentry.init({
 //   dsn: "https://ba163a19cdcf43ca80217e835d0f06bc@o1342227.ingest.sentry.io/6616061",
@@ -126,7 +127,6 @@ export  function init_app(appLoadService: AppInitService) {
     CategoryItemsBoardComponent,
     CategoryItemsBoardItemComponent,
     GridcomponentPropertiesDesignComponent,
-    ClientTypeSelectionComponent,
     SplashLoadingComponent,
   ],
 
@@ -154,13 +154,14 @@ export  function init_app(appLoadService: AppInitService) {
   ],
 
   exports: [
+
     AppMaterialModule,
     EditorModule,
     FormsModule,
     IonicModule,
     AgGridImageFormatterComponent,
     AgGridToggleComponent,
-    NGXMaterialModule,
+    // NGXMaterialModule,
     SharedModule,
   ],
 
@@ -177,16 +178,6 @@ export  function init_app(appLoadService: AppInitService) {
     PagerService,
     StatusBar,
     AppInitService,
-    // {
-    //   provide: ErrorHandler,
-    //   useValue: Sentry.createErrorHandler({
-    //     showDialog: getIsDebugDevice()
-    //   }),
-    // },
-    // {
-    //   provide: Sentry.TraceService,
-    //   deps: [Router],
-    // },
     {
       provide: APP_INITIALIZER,
       useFactory: init_app,

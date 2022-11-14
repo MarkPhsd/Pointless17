@@ -21,7 +21,6 @@ import { NewItem } from 'src/app/_services/transactions/posorder-item-service.se
 import { AvalibleInventoryResults, IInventoryAssignment, InventoryAssignmentService } from 'src/app/_services/inventory/inventory-assignment.service';
 
 // https://www.npmjs.com/package/ngx-gallery
-
 // Possible additional info options
 // https://levelup.gitconnected.com/help-popup-with-angular-material-cdk-overlay-babc2ab127a
 
