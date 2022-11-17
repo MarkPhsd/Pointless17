@@ -115,11 +115,13 @@ export interface CmdResponse{
 
 export interface UIHomePageSettings {
   id                : number;
+  menuEnabled       : boolean;
   brandsEnabled     : boolean;
   categoriesEnabled : boolean;
   typesEnabled      : boolean;
   departmentsEnabled: boolean;
   tierMenuEnabled   : boolean;
+  staffMenuEnabled       : boolean;
   staffBrandsEnabled : boolean;
   staffCategoriesEnabled: boolean;
   staffDepartmentsEnabled: boolean;
@@ -505,6 +507,8 @@ export class UISettingsService {
       smtpEmailEnabled: [''],
       threecxChatLink: [''],
       threeParty: [''],
+      menuEnabled: [''],
+      staffMenuEnabled: [''],
      })
     return fb
   }

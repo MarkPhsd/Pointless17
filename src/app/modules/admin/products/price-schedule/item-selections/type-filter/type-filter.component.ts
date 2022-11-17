@@ -140,7 +140,12 @@ export class TypeFilterComponent implements OnInit {
   }
 
   addItemType(item) {
-    console.log(item)
+    console.log(this.requiredItemTypes, item)
+
+    if (!this.requiredItemTypes) {
+      this.requiredItemTypes = []
+    }
+
     if (item && item.id != undefined) {
       const index = this.requiredItemTypes.findIndex(data => data.itemID == item.id)
       if (index == -1){
@@ -148,6 +153,7 @@ export class TypeFilterComponent implements OnInit {
         mainType.itemID           =  item.id;
         mainType.name             =  item.name;
         mainType.quantity         =  1;
+        mainType.andOr            = 'And';
         this.requiredItemTypes.push(mainType);
         this.updateItems();
         this.lastSelectedItemType = mainType;
@@ -165,6 +171,10 @@ export class TypeFilterComponent implements OnInit {
       let categoryID = '';
       if (sub.categoryID == undefined) { categoryID = sub.itemID}
       if (sub.categoryID != undefined) { categoryID = sub.categoryID}
+
+      if (!this.requiredCategories) {
+        this.requiredCategories = []
+      }
       const array = this.requiredCategories
       const index = array.findIndex( data =>   data.itemID === parseInt( categoryID ))
 
@@ -191,6 +201,11 @@ export class TypeFilterComponent implements OnInit {
     if (sub) {
       const brandID = sub.id
       const array = this.requiredBrands
+
+      if (!this.requiredBrands) {
+        this.requiredBrands = []
+      }
+
       const index = array.findIndex( data =>   data.itemID === parseInt( brandID ))
 
       if (index == -1){
@@ -234,14 +249,19 @@ export class TypeFilterComponent implements OnInit {
 
   toggleItemTypeSelected(item: IItemType) {
 
-    console.log('toggleItemTypeSelected')
+
     this.lastSelectedItemType = null
 
     if (!item) {return}
     if (item.id == undefined)  { return }
 
+    if (!this.requiredItemTypes) {
+      this.requiredItemTypes = []
+    }
+
     // //check the array of the form.
     const array = this.requiredItemTypes;
+
     const index = array.findIndex( data => data.itemID == item.id );
 
     if (index == -1){

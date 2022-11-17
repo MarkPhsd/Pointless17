@@ -116,7 +116,7 @@ export class ToolBarUIService {
     this.searchBar         = false;
     this.mainMenuSideBar   =  !this.mainMenuSideBar;
 
-    console.log('this.mainMenuSideBar', this.mainMenuSideBar)
+    // console.log('this.mainMenuSideBar', this.mainMenuSideBar)
 
     this._mainMenuSideBar.next(this.mainMenuSideBar);
     this._searchSideBar.next(false);

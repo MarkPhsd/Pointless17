@@ -197,6 +197,13 @@
 
                 <div class="toggle-fields">
                   <mat-slide-toggle
+                            formControlName="deleteEmployee" >
+                    <mat-label>Delete employees</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
+                <div class="toggle-fields">
+                  <mat-slide-toggle
                             formControlName="changeClientType" >
                     <mat-label>Change User Type</mat-label>
                   </mat-slide-toggle>
@@ -389,10 +396,27 @@
                   </mat-slide-toggle>
                 </div>
 
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="deleteInventory" >
+                    <mat-label>Delete Inventory</mat-label>
+                  </mat-slide-toggle>
+                </div>
+
               </div>
 
               <div>
-                <h4>Delete</h4>
+                <h4>Products</h4>
+                <div class="toggle-fields">
+                  <mat-slide-toggle
+                            formControlName="deleteProduct" >
+                    <mat-label>Delete Product</mat-label>
+                  </mat-slide-toggle>
+                </div>
+              </div>
+
+              <div>
+                <h4>Client Types</h4>
 
                 <div class="toggle-fields">
                   <mat-slide-toggle

@@ -1,4 +1,6 @@
-<app-header> </app-header>
+<div *ngIf="!hideAppHeader">
+  <app-header> </app-header>
+</div>
 
 <mat-drawer-container>
   <mat-drawer

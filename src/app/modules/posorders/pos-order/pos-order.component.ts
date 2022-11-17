@@ -378,6 +378,9 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
   }
 
+  applyDiscount(event) {
+
+  }
 
   checkIfPaymentsMade() {
     this.paymentsMade = false

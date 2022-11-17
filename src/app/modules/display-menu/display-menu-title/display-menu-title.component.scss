@@ -1,0 +1,66 @@
+@import "/src/mixins.scss";
+
+mat-card {
+  opacity: 95%;
+  width: calc(99% );
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding: 10px;
+  padding-bottom: 40px;
+  overflow: hidden;
+}
+
+.menu-item-image {
+  width: 75%;
+  object-fit: cover;
+  border-radius: 20px;
+  max-width: 150px;
+}
+
+.grid-items {
+  margin-top: 5px;
+  padding-top: 5px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  @include for-phone-only {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.info {
+  min-width: 400px;
+  max-width: 400px;
+  width    : 400px;
+  overflow : auto;
+}
+
+.title {
+  font-size  : clamp(1.5rem, 2.5vw, 2rem);
+  line-height: 1.5em;
+}
+
+.subtTitle {
+  font-size: clamp(1rem, 2.5vw, 2rem);
+  // line-height: 1rem
+  line-height: 1.5em;
+}
+
+.item-span {
+  // grid-column: span 3;
+  grid-column: 1 /span 2;
+}
+
+.description {
+  margin-top: 15px;
+  font-size: clamp(1rem, 1vw, 1.5rem); ;
+  font-weight: 500;
+  line-height: 1.5em;
+  margin: 0.2em;
+}
+
+button {
+  border-radius: 10px;
+}
+

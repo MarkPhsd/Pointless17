@@ -1,5 +1,5 @@
 import { Component,  Output, OnInit,
-  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, HostListener, } from '@angular/core';
+  ViewChild ,ElementRef, AfterViewInit, EventEmitter,OnDestroy, HostListener, TemplateRef, } from '@angular/core';
 import { Router } from '@angular/router';
 import { AWSBucketService, ContactsService, MenuService, OrdersService } from 'src/app/_services';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
@@ -17,7 +17,8 @@ import { isDevMode } from '@angular/core';
 import { ToolBarUIService } from 'src/app/_services/system/tool-bar-ui.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 const { Keyboard } = Plugins;
 
 @Component({
@@ -32,8 +33,11 @@ isOpen = false;
 
 get platForm() {  return Capacitor.getPlatform(); }
 
+//    this.uiHomePage.staffMenuEnabled
+  //  this.uiHomePage.menuen
 @ViewChild('input', {static: true}) input: ElementRef;
 @Output() itemSelect  = new EventEmitter();
+@ViewChild('displayMenu') displayMenu: TemplateRef<any>;
 
 searchPhrase:         Subject<any> = new Subject();
 itemName: string //() { return this.searchForm.get("itemName") as FormControl;}
@@ -122,8 +126,10 @@ smallDevice         : boolean;
 isDepartmentOpen    = false;
 
 _uiHomePage         : Subscription;
-uiHomePage          : any;
+uiHomePage          : UIHomePageSettings;
 accordionStep       : number;
+isStaff = this.userAuthorizationService.isCurrentUserStaff()
+isUser  = this.userAuthorizationService.isUser;
 
 initSubscriptions() {
   this._order = this.orderService.currentOrder$.subscribe( data => {
@@ -133,6 +139,7 @@ initSubscriptions() {
     this.uiHomePage = data;
     if (data) {
       if (!data.sideToolbarDefaultBrand) { this.multifilter = false }
+      this.isDisplayMenuOn;
     }
   })
 }
@@ -149,11 +156,12 @@ constructor(
     private toolBarUIService    : ToolBarUIService,
     public  platFormService     : PlatformService,
     public  uiSettingsService   : UISettingsService,
+    private userAuthorizationService: UserAuthorizationService,
   )
   {
     this.initForm();
     if (this.platForm.toLowerCase() === 'android') {  this.keyboardDisplayOn = true }
-    this.isApp = this.platFormService.isApp()
+    this.isApp = this.platFormService.isApp();
   }
 
   async ngOnInit() {
@@ -232,6 +240,20 @@ constructor(
       }, 200 )
     }
   }
+
+  get isDisplayMenuOn() {
+
+    if (!this.uiHomePage) { return };
+
+    if ((this.isStaff && this.uiHomePage.staffMenuEnabled) ||
+        (!this.isUser && this.uiHomePage.menuEnabled)) {
+      return this.displayMenu
+    }
+
+    return null;
+
+  }
+
 
   refreshSearchPhrase(event) {
     this.itemName = event;

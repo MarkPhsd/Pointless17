@@ -88,6 +88,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   chatURL     : string;
   phoneDevice : boolean;
   pointlessPOSDemo: boolean;
+  hideAppHeader: boolean;
 
   homePageSubscriber(){
     try {
@@ -183,7 +184,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   leftSideBarToggleSubscriber() {
     this._leftSideBarToggle = this.toolbarUIService.leftSideBarToggle$.subscribe(data => {
-      console.log('leftSideToggle update', data)
+      // console.log('leftSideToggle update', data)
       this.leftSideBarToggle = data;
     })
   }

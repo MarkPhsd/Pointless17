@@ -98,5 +98,6 @@ mat-form-field {
 }
 
 .col-span {
-  column-span: all;
+  grid-column: 1 /span 2;
+
 }

@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DisplayMenuSelctorComponent } from './display-menu-selctor.component';
+import { RewardsAvailibleComponent } from './rewards-availible.component';
 
-describe('DisplayMenuSelctorComponent', () => {
-  let component: DisplayMenuSelctorComponent;
-  let fixture: ComponentFixture<DisplayMenuSelctorComponent>;
+describe('RewardsAvailibleComponent', () => {
+  let component: RewardsAvailibleComponent;
+  let fixture: ComponentFixture<RewardsAvailibleComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DisplayMenuSelctorComponent ]
+      declarations: [ RewardsAvailibleComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DisplayMenuSelctorComponent);
+    fixture = TestBed.createComponent(RewardsAvailibleComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

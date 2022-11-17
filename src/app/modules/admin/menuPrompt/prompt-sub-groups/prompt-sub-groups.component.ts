@@ -416,6 +416,7 @@ initAgGrid(pageSize: number) {
       const site = this.siteService.getAssignedSite();
       this.promptService.getPromptSub(site, this.id).subscribe(data => {
          this.prompt = data;
+         this.promptService.updatePromptSubGroup(data);
         }
       )
     }

@@ -110,7 +110,8 @@ export class AWSBucketService {
   }
 
   getPlaceHolderImage(): string {
-    return   encodeURI(`${this.awsBucketURL}placeholderproduct.png`);
+    // "assets/images/placeholderimage.png"
+    return "assets/images/placeholderimage.png" //  encodeURI(`${this.awsBucketURL}placeholderproduct.png`);
   }
 
   getImageURLPathAlt(bucket: string, imageName: string ): string {

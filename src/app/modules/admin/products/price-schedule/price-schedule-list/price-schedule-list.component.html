@@ -1,5 +1,13 @@
 <div  class="grid-container" >
 
+  <div *ngIf="(action$ | async) as action; else action"></div>
+  <ng-template #action>
+    <div *ngIf="performingAction">
+      ...loading
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </div>
+  </ng-template>
+
   <div  class="item-label item-fields" [formGroup]="searchForm" >
     <mat-form-field appearance="outline" class="form-fields">
       <mat-label >Search Items</mat-label>

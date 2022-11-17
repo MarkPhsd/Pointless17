@@ -6,10 +6,10 @@
 
   <mat-card-subtitle>
     Any changes to this window will update all selected items.
-    <button mat-button (click)="updateItems()"><mat-icon>update</mat-icon>Update</button>
-    <button mat-button (click)="exit()"><mat-icon>close</mat-icon>Close</button>
+    <button mat-raised-button color="primary"  (click)="updateItems()"><mat-icon>update</mat-icon>Update</button>
+    <button mat-raised-button color="warn" (click)="delete()"><mat-icon>delete</mat-icon>Delete</button>
+    <button mat-raised-button color="primary" (click)="exit()"><mat-icon>close</mat-icon>Close</button>
     <div *ngIf="selected">
-      <!-- {{selected | json}} -->
     </div>
   </mat-card-subtitle>
 
@@ -31,6 +31,10 @@
       </div>
       <div>
         <app-species-list        [inputForm]="inputForm"></app-species-list>
+      </div>
+
+      <div>
+       <prompt-group-select      [inputForm]="inputForm"    ></prompt-group-select>
       </div>
 
       <div>

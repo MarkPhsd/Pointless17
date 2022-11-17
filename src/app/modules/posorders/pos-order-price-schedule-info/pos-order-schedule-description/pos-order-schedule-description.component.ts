@@ -1,4 +1,4 @@
-import { Component, OnInit,Input,OnChanges,OnDestroy } from '@angular/core';
+import { Component, OnInit,Input,OnChanges,OnDestroy, Output, EventEmitter } from '@angular/core';
 import { Observable, Subscription } from 'rxjs';
 import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
@@ -14,7 +14,8 @@ import { OrdersService } from 'src/app/_services';
 })
 export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,OnDestroy {
 
-  @Input() scheduleID: number;
+  @Output() outPutDiscount = new EventEmitter();
+  @Input()  scheduleID: number;
   schedule$: Observable<IPriceSchedule>
   schedule : IPriceSchedule;
 
@@ -62,6 +63,10 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
 
   ngOnDestroy(): void {
     if (this._order) { this._order.unsubscribe()}
+  }
+
+  discount(event) {
+    this.outPutDiscount.emit(event)
   }
 
   processItemsInSchedule(id: number, order: IPOSOrder) {

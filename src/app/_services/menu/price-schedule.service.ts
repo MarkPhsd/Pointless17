@@ -91,6 +91,24 @@ export class PriceScheduleService {
 
   };
 
+  getMenuList(site: ISite): Observable<PS_SearchResultsPaged> {
+
+    const search =  {type: "Menu List"};
+
+    const controller = "/PriceSchedules/"
+
+    const endPoint = "getMenuList"
+
+    const parameters = ''
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    // const url = { url: uri, cacheMins: 0}
+
+    return  this.httpClient.post<PS_SearchResultsPaged>(url, search)
+
+  };
+
   getListBySearch(site: ISite, searchModel: IPriceSearchModel): Observable<PS_SearchResultsPaged> {
 
     const controller = "/PriceSchedules/"
@@ -120,6 +138,25 @@ export class PriceScheduleService {
     // const url = { url: uri, cacheMins: 0}
 
     return  this.httpClient.get<IPriceSchedule>(uri)
+
+  };
+
+  getPriceScheduleFull(site: ISite, id: number): Observable<IPriceSchedule> {
+
+    const controller = "/PriceSchedules/"
+
+    const endPoint = "getPriceScheduleFull"
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.get<IPriceSchedule>(url)
+    const uri = { url: url, cacheMins: 30}
+
+    return this.httpCache.get(uri);
+
+
 
   };
 

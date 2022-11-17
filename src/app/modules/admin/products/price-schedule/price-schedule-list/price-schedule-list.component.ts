@@ -5,8 +5,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, switchMap,filter,tap } from 'rxjs/operators';
-import { Observable, Subject ,fromEvent, Subscription } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, filter, tap } from 'rxjs/operators';
+import { Observable, Subject ,fromEvent, Subscription,  of } from 'rxjs';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
 import "ag-grid-community/dist/styles/ag-grid.css";
@@ -30,6 +30,9 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
   //search with debounce: also requires AfterViewInit()
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
+
+  action$: Observable<any>;
+  performingAction = false;
 
   searchPhrase               :  Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
@@ -553,8 +556,12 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
     if (id) { this.router.navigate(['/price-schedule-edit', {id : id}]) }
   }
 
+  // navPriceScheduleGroups() {
+  //   this.router.navigate(['/psmenu-group-list'])
+  // }
+
   navPriceScheduleGroups() {
-    this.router.navigate(['/psmenu-group-list'])
+    this.router.navigate(['/admin-display-menu'])
   }
 
   selectAdjustScheduleTypes(item) {
@@ -573,9 +580,14 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
   addSchedule() {
     const site = this.siteService.getAssignedSite();
     const priceSchedule = {} as IPriceSchedule;
-    this.priceScheduleService.save(site, priceSchedule).subscribe(data => {
-      this.editItem(data.id)
-    })
+    this.performingAction = true;
+    this.action$ = this.priceScheduleService.save(site, priceSchedule).pipe(
+      switchMap(data => {
+        this.editItem(data.id)
+        this.performingAction = false;
+        return of(data)
+      }
+    ))
   }
 
   deleteSelected() {

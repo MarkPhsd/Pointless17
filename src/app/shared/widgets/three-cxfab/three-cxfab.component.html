@@ -1,5 +1,5 @@
  <div *ngIf="action$ | async as item">
-  <div *ngIf="item">
+  <div *ngIf="item && !hide">
      <mat-card-content [innerHTML]="chatApp | safeHtml"></mat-card-content>
   </div>
 </div>

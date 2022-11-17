@@ -62,10 +62,18 @@
 }
 
 .orders-list {
+
   overflow-x: hidden;
   overflow-y: auto;
   height: 85vh;
   padding: 3px;
+
+  @include  for-desktop-up {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 85vh;
+    padding: 3px;
+  }
 
   @include for-phone-only {
     overflow-x: hidden;
@@ -75,6 +83,13 @@
   }
 
   @include for-tablet-landscape-up {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 85vh;
+    padding: 3px;
+  }
+
+  @include horizontal-tablet  {
     overflow-x: hidden;
     overflow-y: auto;
     height: 75vh;

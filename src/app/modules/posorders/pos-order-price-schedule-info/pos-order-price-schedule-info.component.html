@@ -5,23 +5,14 @@
 </div>
 
 <mat-card *ngIf="schedules && schedules.length>0 && showSchedules">
-  <div>
-    <h5>
-      Price Specials
-      <span>
-        <div><button mat-raised-button
-                     *ngIf="expanded"
-                     (click)="expand()">
-            <mat-icon>collapse</mat-icon>Specials </button></div>
-      </span>
-    </h5>
-  </div>
-
   <div *ngFor="let item of schedules" class="grid-flow">
     <div class="grid-schedule" *ngIf="schedules">
-      <div>Schedule</div>
-      <div>Amount</div>
+      <div>Description</div>
+      <div>QTY</div>
+      <div></div>
     </div>
-    <pos-order-schedule-description [scheduleID]="item"></pos-order-schedule-description>
+    <pos-order-schedule-description
+        [scheduleID]="item">
+    </pos-order-schedule-description>
   </div>
 </mat-card>

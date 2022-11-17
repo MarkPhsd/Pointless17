@@ -27,8 +27,8 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
   @Input() id             : number;
   @Input() item           : AccordionMenu;
 
-  _accordionMenu: Subscription;
-   accordionMenu : AccordionMenu;
+  _accordionMenu          : Subscription;
+   accordionMenu          : AccordionMenu;
   inputForm               : FormGroup;
   active                  : boolean;
   menuGroupID             : number;
@@ -44,8 +44,6 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
     }
    )
   }
-
-
 
   constructor(
     private fbNavService    : FbNavMenuService,
@@ -64,8 +62,8 @@ export class AccordionMenuItemEditComponent implements OnInit, OnDestroy {//, On
 
   ngOnInit() {
     this.initSubscriptions();
-    if (this.accordionMenu) {
-      this.item = this.accordionMenu;
+    if (this.item) {
+      this.accordionMenu = this.item
     }
     this.refreshData();
   }

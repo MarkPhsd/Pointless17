@@ -67,11 +67,37 @@
                     </div>
 
                     <div *ngIf="!isMenuList">
+
                       <mat-tab label="Offers and Rewards">
-                        <app-reward-type-filter
-                          [inputForm]="inputForm"
-                          [item]     ="priceSchedule">
-                        </app-reward-type-filter>
+                        <!-- {{inputForm.controls['type'].value}} -->
+                         <div class="value-field"  *ngIf="inputForm.controls['type'].value === 'Money Off'">
+                            <app-value-fields
+                              [fieldType]="'text'"
+                              [inputForm]="inputForm"
+                              [fieldName]="'value'"
+                            >
+                              Value
+                          </app-value-fields>
+                         </div>
+                         <div class="value-field" *ngIf="inputForm.controls['type'].value === 'Percent Off'">
+                            <app-value-fields
+                              [fieldType]="'text'"
+                              [inputForm]="inputForm"
+                              [fieldName]="'value'"
+                            >
+                              Value
+                          </app-value-fields>
+                        </div>
+                         <div *ngIf="inputForm.controls['type'].value &&
+                                     inputForm.controls['type'].value != 'Money Off' &&
+                                     inputForm.controls['type'].value != 'Percent Off'
+                                    ">
+
+                          <app-reward-type-filter
+                            [inputForm]="inputForm"
+                            [item]     ="priceSchedule">
+                          </app-reward-type-filter>
+                        </div>
                       </mat-tab>
                     </div>
 

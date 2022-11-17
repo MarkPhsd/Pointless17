@@ -161,6 +161,9 @@ import { SimpleTinyComponent } from '../_components/tinymce/tinymce.component';
 import { TINYMCE_SCRIPT_SRC } from '@tinymce/tinymce-angular';
 import { NumericDirective } from '../_directives/numeric-directive.directive';
 import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
+import { BackgroundUrlPipe } from '../_pipes/background-url.pipe';
+import { DisplayMenuMenuComponent } from '../modules/display-menu/display-menu-menu/display-menu-menu.component';
+import { RewardsAvailibleComponent } from '../modules/posorders/rewards-availible/rewards-availible.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -175,6 +178,8 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
+    BackgroundUrlPipe,
+
     AccordionComponent,
     AdjustmentReasonsComponent,
     AdjustPaymentComponent,
@@ -192,6 +197,7 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
     BtPOSPrinterComponent,
     DashboardComponent,
     DisableControlDirective,
+    DisplayMenuMenuComponent,
     CashValueCalcComponent,
     CardComponent,
     CardDashboardComponent,
@@ -282,6 +288,7 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
     ProfileMedInfoComponent,
     ProgressBarComponent,
     PriceCategorySearchComponent,
+    RewardsAvailibleComponent,
     RetailProductEditComponent,
     SimpleTinyComponent,
     SalesTaxReportComponent,
@@ -351,6 +358,7 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
     SafeHtmlPipe,
     ArrayFilterPipe,
     ArraySortPipe,
+    BackgroundUrlPipe,
     AccordionComponent,
     AdjustPaymentComponent,
     AreaComponent,
@@ -387,6 +395,7 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
     DepartmentSelectComponent,
     DeviceInfoComponent,
     DisableControlDirective,
+    DisplayMenuMenuComponent,
     DSIEMVElectronComponent,
     DsiEMVPaymentComponent,
     DepartmentMenuComponent,
@@ -453,6 +462,7 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
     ProfileBillingAddressComponent,
     ProfileShippingAddressComponent,
     ProgressBarComponent,
+    RewardsAvailibleComponent,
     RetailProductEditComponent,
     RequestMessageComponent,
     RequestMessagesComponent,

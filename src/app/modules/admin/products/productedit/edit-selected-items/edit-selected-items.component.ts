@@ -2,25 +2,25 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Observable } from 'rxjs';
 import { FbProductsService } from 'src/app/_form-builder/fb-products.service';
 import { MenuService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { ProducteditComponent } from '../productedit.component';
-
 @Component({
   selector: 'app-edit-selected-items',
   templateUrl: './edit-selected-items.component.html',
   styleUrls: ['./edit-selected-items.component.scss']
 })
 export class EditSelectedItemsComponent implements OnInit {
-
-  inputForm: FormGroup;
+  action$   : Observable<any>;
+  inputForm : FormGroup;
   get categoryID()    { return this.inputForm.get("categoryID") as FormControl;}
   get departmentID()  { return this.inputForm.get("departmentID") as FormControl;}
   get itemTypeID()    { return this.inputForm.get("prodModifierType") as FormControl;}
   get species()       { return this.inputForm.get("species") as FormControl;}
   get brandID()       { return this.inputForm.get("brandID") as FormControl;}
-  get active()       { return this.inputForm.get("active") as FormControl;}
+  get active()        { return this.inputForm.get("active") as FormControl;}
   get webProduct()       { return this.inputForm.get("webProduct") as FormControl;}
   get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as FormControl;}
 
@@ -62,6 +62,7 @@ export class EditSelectedItemsComponent implements OnInit {
       categoryID:       [],
       departmentID:     [],
       prodModifierType: [],
+      promptGroupID   : [],
       species:          [],
       brandID:          [],
       active:           [],
@@ -71,6 +72,12 @@ export class EditSelectedItemsComponent implements OnInit {
 
   }
 
+  delete() {
+    const warn = window.confirm('Plase confirm. You can not reverse this decision');
+    if (!warn) { return }
+    const site   =  this.siteService.getAssignedSite();
+    this.action$ = this.menuService.deleteProducts(site, this.selected)
+  }
   exit () {
     this.dialogRef.close()
   }
@@ -78,6 +85,12 @@ export class EditSelectedItemsComponent implements OnInit {
     if (this.selected) {
 
       const selected = this.selected
+      const promptGroupID = this.inputForm.controls['promptGroupID'].value;
+
+      if (promptGroupID !=0 &&  promptGroupID != undefined) {
+        // this.updateCategoryID(this.categoryID.value, this.selected)
+        this.updateField(promptGroupID, this.selected, 'promptGroupID');
+      }
 
       if (this.categoryID.value !=0 && this.categoryID.value != undefined) {
         // this.updateCategoryID(this.categoryID.value, this.selected)
@@ -115,6 +128,7 @@ export class EditSelectedItemsComponent implements OnInit {
 
   updateField(id: number, listOfItems: any, name: string) {
     const site   =  this.siteService.getAssignedSite();
+    console.log(name, id, listOfItems);
     const items$ =  this.menuService.updateField(site, name, id, listOfItems)
     this.updates(items$)
   }

@@ -1,14 +1,17 @@
 <div class="canvas">
-
+  <!-- value {{panels}}
+  panelHeightSize {{panelHeightSize}}
+  panelHeightValue {{panelHeightValue}} -->
   <div class="overlay-items">
 
     <div *ngif="connectedToApi; else connected"></div>
-    
+
     <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
-    <scheduled-menu-list></scheduled-menu-list>
+    <!-- <scheduled-menu-list></scheduled-menu-list> -->
 
     <div *ngIf="homePageSetings && panelHeightSize; else loading">
+      <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
       <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
@@ -21,6 +24,12 @@
 
   </div>
 </div>
+
+<ng-template #displayMenu>
+  <div fxLayout="row" fxLayoutAlign="center center" >
+    <display-menu-main></display-menu-main>
+  </div>
+</ng-template>
 
 <ng-template #searchSelector>
   <div>
@@ -37,7 +46,7 @@
 <ng-template #departmentView>
   <div [style.height]="panelHeightSize">
     <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
-        Department Search
+        Departments
     </app-categories>
     <mat-divider></mat-divider>
   </div>
@@ -46,7 +55,7 @@
 <ng-template #categoryView>
   <div [style.height]="panelHeightSize">
     <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="4">
-      Category Search
+      Categories
     </app-categories>
     <mat-divider></mat-divider>
   </div>
@@ -71,7 +80,7 @@
 </ng-template>
 
 <ng-template #connected>
-  Not connected to service, please wait. 
+  Not connected to service, please wait.
 </ng-template>
 
 <div *ngIf="(orderAction$ | async)"></div>

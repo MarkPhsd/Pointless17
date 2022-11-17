@@ -17,6 +17,12 @@
       </search-debounce-input>
     </div>
 
+    <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
+
+    <ng-template #displayMenu>
+      <display-menu-menu></display-menu-menu>
+    </ng-template>
+
     <div  *ngIf="!isApp && (!smallDevice && !tinyDepartmentFilter)"
           class="search-buttons">
       <div *ngIf="keyboardDisplayOn">

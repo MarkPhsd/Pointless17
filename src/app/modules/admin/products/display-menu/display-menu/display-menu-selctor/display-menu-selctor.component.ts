@@ -10,7 +10,7 @@ import { UseGroupTaxesService } from 'src/app/_services/menu/use-group-taxes.ser
 import { TaxesService, UseGroupTaxAssigned, UseGroupTaxAssignedList } from 'src/app/_services/menu/taxes.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
-import { IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
+import { IPriceSchedule, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 
 export interface ISelectedMenu {
@@ -60,7 +60,7 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
   selectedMenu    : ISelectedMenu;
   ISelectedMenus  = [] as ISelectedMenu[];
   //useGroups lists on the left.
-  priceSchedules$  : Observable<IPriceSchedule[]>;
+  action$  : Observable<any>;
   priceSchedules   : IPriceSchedule[];
   assignedStatic   : any;
   allAssigned      : any;
@@ -93,8 +93,9 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
 
   initListMenuList(){
     const site = this.siteService.getAssignedSite()
-    this.priceSchedules$ = this.priceScheduleService.getList(site).pipe(
-      switchMap(data => {
+    this.action$ = this.priceScheduleService.getMenuList(site).pipe(
+      switchMap(schedule => {
+        const data = schedule.results;
         this.availableItems = []
         data.forEach(item =>
           {
@@ -106,7 +107,9 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
 
             const items = this.availableItems
             const remove = this.selectedItems
-            this.availableItems = items.filter(ar => !remove.find(rm => (rm.name === ar.name && ar.id === rm.id) ))
+            this.availableItems = items.filter(ar => !remove.find(rm => (rm.name === ar.name && ar.id === rm.id) ));
+
+
           }
         )
 

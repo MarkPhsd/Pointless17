@@ -1,0 +1,24 @@
+.grid-schedule {
+  grid-template-columns: 150px 70px 70px;
+  gap: 10px;
+  display: grid;
+  margin:3px;
+  border-radius: 5px;
+  border-style: dashed;
+  border-color: cornflowerblue;
+  border-width: 1px;
+  padding: 4px;
+  min-height: 55px;
+
+}
+
+.grid-schedule:hover {
+  border-color: crimson;
+}
+
+.container {
+  max-height: 165px;
+  overflow-y: auto;
+  width: 300px;
+  overflow-x: hidden;
+}

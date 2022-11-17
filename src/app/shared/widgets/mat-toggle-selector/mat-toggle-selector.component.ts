@@ -98,7 +98,7 @@ export class MatToggleSelectorComponent implements OnChanges {
 
   setItemMouseOver(item) {
     if (this.mouseOver != true) {
-      console.log(this.mouseOver)
+      // console.log(this.mouseOver)
       return
     }
     this.outPutID.emit(item)

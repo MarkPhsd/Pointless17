@@ -851,6 +851,9 @@ export class OrderMethodsService implements OnDestroy {
       this.itemProcessSection = 4;
     }
 
+    // console.log('this.processItem.posItem', this.processItem.posItem)
+    // console.log('this.priceCategoryID ', this.priceCategoryID )
+
     switch(process) {
       case  0: {
           if (this.priceCategoryID == 0) {

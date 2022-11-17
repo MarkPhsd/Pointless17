@@ -59,8 +59,11 @@ export class PromptSelectedItemsComponent implements OnInit,OnDestroy {
     if (!this.index && !this.promptMenuItem) {return}
     const site = this.siteService.getAssignedSite();
     this.promptItems.deleteMenuItemSelected(site, this.promptMenuItem.id).subscribe( data=> {
-      this.promptMenuItems.splice( this.index, 1);
-      this.promptSubGroup.promptMenuItems = this.promptMenuItems;
+      if (data) {
+        this.promptMenuItems.splice( this.index, 1);
+        this.promptSubGroup.promptMenuItems = this.promptMenuItems;
+        return;
+      }
     })
     this.promptMenuItem = {} as PromptMenuItem
   }

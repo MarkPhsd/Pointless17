@@ -7,6 +7,7 @@ import { Observable, switchMap, of, ignoreElements} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
 import { IListBoxItemB } from 'src/app/_interfaces/dual-lists';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'Admin-display-menu',
@@ -23,21 +24,34 @@ export class AdminDisplayMenuComponent  {
   performingAction =false;
   menuList = [] as IListBoxItemB[];
   logo: string;
-  backGroundImage: string;
+  backgroundImage: string;
   fileNames: any;
-  description;
+  description: string;
+  ccs: string;
 
   constructor(private fb: FormBuilder,
               private displayMenuService: DisplayMenuService,
               private siteService: SitesService,
               private _snackBar: MatSnackBar,
+              private router: Router,
               private dialogRef: MatDialogRef<AdminDisplayMenuComponent>,
               @Inject(MAT_DIALOG_DATA) public data: any) {
 
     const site = siteService.getAssignedSite();
+
+    if (!data || !data.id) {
+      this.displayMenu = {} as IDisplayMenu;
+      this.initForm(this.displayMenu)
+      return;
+    }
+
     this.action$ = this.displayMenuService.getMenu(site, data.id).pipe(
       switchMap(data => {
         this.displayMenu = data;
+        this.logo = data.logo;
+        this.backgroundImage = data.backgroundImage;
+        // console.log(data)
+        this.ccs = data.css;
         this.initForm(data)
         return of(data)
       })
@@ -61,12 +75,15 @@ export class AdminDisplayMenuComponent  {
         css: [],
         logo: [],
         backGroundImage: [],
+        interactive: [],
+        enabled: [],
       }
     )
 
     this.displayMenu = data as IDisplayMenu;
     this.inputForm.patchValue(data);
     this.description = data?.description;
+
     this.setMenuSelections(data);
   }
 
@@ -107,23 +124,33 @@ export class AdminDisplayMenuComponent  {
         return;
       }
 
-
-      this.displayMenu = this.inputForm.value as IDisplayMenu;
+      this.displayMenu             = this.inputForm.value as IDisplayMenu;
       this.displayMenu.description = this.description;
+      this.displayMenu.css         = this.ccs;
 
+      console.log(this.inputForm.value, this.displayMenu.css)
+      // console.log(this.displayMenu, this.inputForm.value)
       const item$ = this.displayMenuService.save(site, this.displayMenu);
       return item$.pipe(switchMap(
           data => {
             this.displayMenu = data;
             this.notifyEvent('Item Updated', 'Success');
             this.logo = data.logo;
-            this.backGroundImage = data.backGroundImage;
+            this.ccs = data.css;
+            this.backgroundImage = data.backgroundImage;
             this.performingAction = false;
             return of(data);
           }
       ))
 
   };
+
+  openDisplayMenu() {
+    //  <!--     this.router.navigate(["/menuitem/", {id:id}]); -->
+    if (!this.displayMenu) { return }
+    const url = this.router.serializeUrl(this.router.createUrlTree(['/display-menu', { id: this.displayMenu.id  }]));
+    window.open(url, '_blank');
+  }
 
   copyItem(event)  {
 
@@ -143,11 +170,13 @@ export class AdminDisplayMenuComponent  {
 
 
   setLogo(event) {
+    this.logo = event;
     this.inputForm.patchValue({logo: event})
   }
 
   setBackgroundImage(event) {
-    this.inputForm.patchValue({backgroundImage: event})
+    this.backgroundImage = event;
+    this.inputForm.patchValue( { backgroundImage: event } )
   }
 
   onCancel(event) {

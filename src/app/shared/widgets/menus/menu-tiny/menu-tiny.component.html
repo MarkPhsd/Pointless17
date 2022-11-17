@@ -13,9 +13,9 @@
     <li class="menu-item"
         @fade
         *ngFor="let menu of menus; let i = index"
-        [class.active]="menu.active">
+        [class.active]="menu?.active">
 
-        <div class="menu" *ngIf="isAuthorized(menu.userType)"
+        <div class="menu" *ngIf="isAuthorized(menu?.userType)"
               (click)="toggle(menu, i)">
 
           <div   class="grid-toggle-tiny">
@@ -23,7 +23,7 @@
               <mat-icon>{{ menu.icon }}</mat-icon>
             </div>
             <div  class ="item-name" *ngIf="!tinyMenu">
-              {{menu.name | truncateText : 20}}
+              {{menu?.name | truncateText : 20}}
             </div>
           </div>
 
@@ -84,11 +84,11 @@
           <mat-menu #menu="matMenu">
             <div  *ngFor="let item of submenu">
                 <div *ngIf="item.minimized">
-                  <div *ngIf="isAuthorized(item.userType)">
+                  <div *ngIf="isAuthorized(item?.userType)">
                     <button mat-menu-item
                             color=""
-                            routerLinkActive={{item.routerLinkActive}}
-                            routerLink=      {{item.routerLink}}>
+                            routerLinkActive={{item?.routerLinkActive}}
+                            routerLink=      {{item?.routerLink}}>
 
                       <div class="grid-toggle-tiny">
                         <div class="item-font" *ngIf="item.icon">

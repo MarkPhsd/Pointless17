@@ -2,6 +2,7 @@
   <mat-spinner [diameter]="80"></mat-spinner>
 </ng-template>
 
+
 <div class="container">
   <mat-card>
     <mat-card-title>
@@ -9,19 +10,31 @@
         <mat-icon>menu</mat-icon>
       </div>
       <h3>Menu Manager</h3>
+      <!-- message {{message}} -->
     </mat-card-title>
 
     <mat-card-subtitle>
       Sort and edit menus.
       <h2>Drag menus to sort. Click on to edit.</h2>
+
       <button mat-button (click)="initMenu()">Initialize Menu</button>
       <button color="primary" *ngIf="accordionMenu" mat-button (click)="addAccordionMenu()">Add Menu</button>
       <button color="primary" *ngIf="submenu"       mat-button (click)="addSubMenu()">Add Sub Item</button>
     </mat-card-subtitle>
+
     <mat-divider></mat-divider>
 
+    <ng-template #action>
+      <div>
+        <mat-spinner [diameter]="50"></mat-spinner>
+        ...loading
+      </div>
+    </ng-template>
+
+    <div *ngIf="(action$ | async) as item; else action"></div>
+
     <div class="grid-container">
-      <div *ngIf="accordionMenus; else loading">
+      <div *ngIf="accordionMenus">
         <div  cdkDropList
               #accordionList="cdkDropList"
               (cdkDropListDropped)="dropAccordion($event)">
@@ -51,11 +64,12 @@
       </div>
 
       <div class="cards">
-        <div *ngIf="(accordionMenuItem$ | async) as accordionMenu">
+        <div *ngIf="(accordionMenuItem$ | async) as item">
+          {{item.name}}
           <app-accordion-menu-item-edit
               (outPutRefreshMenu)="refreshMenu()"
-              [id]  ="accordionMenu?.id"
-              [item]="accordionMenu">
+              [id]  ="item?.id"
+              [item]="item">
           </app-accordion-menu-item-edit>
         </div>
 
@@ -66,6 +80,7 @@
               [item]="submenuItem">
           </app-menu-group-item-edit>
         </div>
+
       </div>
     </div>
   </mat-card>

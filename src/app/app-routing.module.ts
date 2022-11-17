@@ -120,6 +120,7 @@ import { QRCodeTableComponent } from './modules/orders/qrcode-table/qrcode-table
 import { DisplayMenuListComponent } from './modules/display-menu/display-menu-list/display-menu-list.component';
 import { ThreeCXFabComponent } from './shared/widgets/three-cxfab/three-cxfab.component';
 import { AdminDisplayMenuListComponent } from './modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
+import { DisplayMenuMainComponent } from './modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
 
 const routes: Routes = [
 
@@ -207,7 +208,8 @@ const routes: Routes = [
         { path: 'price-schedule',      component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule', animation: 'isLeft'}},
         { path: 'price-schedule-edit', component: PriceScheduleComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule Edit', animation: 'isLeft'}},
 
-        { path: 'display-menu',      component: DisplayMenuListComponent ,canActivate: [AuthGuard], data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'display-menu-main',      component: DisplayMenuMainComponent , data: { title: 'Display Menu', animation: 'isLeft'}},
+        { path: 'display-menu',      component: DisplayMenuListComponent ,   data: { title: 'Display Menu', animation: 'isLeft'}},
         { path: 'admin-display-menu',      component: AdminDisplayMenuListComponent ,canActivate: [AuthGuard], data: { title: 'Display Menu', animation: 'isLeft'}},
         //DisplayMenuListComponent
 
@@ -327,7 +329,6 @@ const routes: Routes = [
     { path: 'logo',       component: LogoComponent, data: { animation: 'isLeft'}},
     { path: 'background', component: BackgroundCoverComponent, data: { animation: 'isLeft'}},
     { path: 'chat-app', component: ThreeCXFabComponent, data: { animation: 'isLeft'}},
-
 
     { path: '**', component: PageNotFoundComponent},
 

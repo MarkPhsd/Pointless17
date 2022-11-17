@@ -1,6 +1,11 @@
 .grid-schedule {
-  grid-template-columns: 125px 100px;
+  grid-template-columns: 100px 70px 70px;
   gap: 10px;
   display: grid;
-  margin:3px
+  margin:3px;
+  font-size: small;
+}
+
+button {
+  margin: 5px;
 }

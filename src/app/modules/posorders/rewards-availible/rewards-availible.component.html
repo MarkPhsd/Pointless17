@@ -1,0 +1,17 @@
+<div *ngIf="(action$ | async) as items" class="container">
+  <div  *ngFor="let item of items">
+    <div class="grid-schedule"  *ngIf="item">
+      <div>
+        {{item?.name | truncateText : 20}}
+      </div>
+      <div>
+         {{item?.retail | currency}}
+      </div>
+      <div >
+
+      </div>
+    </div>
+  </div>
+</div>
+
+

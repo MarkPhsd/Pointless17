@@ -11,6 +11,7 @@ import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-se
 import {  MenuService, OrdersService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
+import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-main-menu',
@@ -25,23 +26,23 @@ export class MainMenuComponent implements OnInit  {
   panelHeightValue = 100;
   panelHeightSize : string;
   smallDevice =false;
+  panels = 0;
 
   orderAction$ : Observable<IPOSOrder>;
-  @ViewChild('brandView') brandView: TemplateRef<any>;
-  @ViewChild('categoryView') categoryView: TemplateRef<any>;
+  @ViewChild('brandView')      brandView: TemplateRef<any>;
+  @ViewChild('categoryView')   categoryView: TemplateRef<any>;
   @ViewChild('departmentView') departmentView: TemplateRef<any>;
-  @ViewChild('tierMenuView') tierMenuView: TemplateRef<any>;
+  @ViewChild('tierMenuView')   tierMenuView: TemplateRef<any>;
   @ViewChild('searchSelector') searchSelector: TemplateRef<any>;
-  @ViewChild('viewOverlay') viewOverlay: TemplateRef<any>;
+  @ViewChild('viewOverlay')    viewOverlay: TemplateRef<any>;
+  @ViewChild('displayMenu')    displayMenu: TemplateRef<any>;
 
   homePageSetings: UIHomePageSettings;
-  smoke  = "./assets/video/smoke.mp4"
+  smoke   = "./assets/video/smoke.mp4"
   isStaff : boolean;
-
-  site: ISite;
-
-  _site: Subscription;
-  _poll: Subscription;
+  site    : ISite;
+  _site   : Subscription;
+  _poll   : Subscription;
   connectedToApi: boolean;
 
   initPollSubscriptions() {
@@ -49,7 +50,6 @@ export class MainMenuComponent implements OnInit  {
       this.connectedToApi = data;
     })
   }
-
 
   initSiteSubscriber() {
     this.initPollSubscriptions();
@@ -69,7 +69,6 @@ export class MainMenuComponent implements OnInit  {
     private siteService: SitesService,
     private router: Router,
     private menuService: MenuService,
-    private orderService: OrdersService,
     private orderMethodsService: OrderMethodsService,
     private fb: FormBuilder,
   ) {
@@ -77,14 +76,34 @@ export class MainMenuComponent implements OnInit  {
 
   setPanelHeight(item: UIHomePageSettings) {
     let value = 0
-    if(item.categoriesEnabled) {value = value + 1}
-    if(item.departmentsEnabled) {value = value + 1}
-    if(item.brandsEnabled) {value = value + 1}
+
+    if (this.userAuthorizationService.isUser) {
+      if(item.menuEnabled  ) {value = value + 1}
+      if(item.categoriesEnabled  ) {value = value + 1}
+      if(item.departmentsEnabled  ) {value = value + 1}
+      if(item.brandsEnabled ) {value = value + 1}
+    }
+
+    if (this.userAuthorizationService.isStaff) {
+      if ( item.staffBrandsEnabled)      { value = value + 1 }
+      if ( item.staffMenuEnabled)        {value = value + 1}
+      if ( item.staffCategoriesEnabled)  {value = value + 1}
+      if ( item.staffDepartmentsEnabled) {value = value + 1}
+    }
+
+    this.panels = value;
+    if (value == undefined) {
+      value = 1;
+    }
+
+    if (value > 1) {value = 2;}
+
     if (value != 0) {
       const height = (100 / value).toFixed(0);
       this.panelHeightValue  =  +height;
       this.panelHeightSize   = `calc(${height}vh - 65px)`
     }
+    console.log('panelHeightSize',this.panelHeightSize)
   }
 
   ngOnInit(): void {
@@ -95,10 +114,9 @@ export class MainMenuComponent implements OnInit  {
       this.initSiteSubscriber();
       this.isStaff = false;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
-      //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-      //Add 'implements OnInit' to the class.
       this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
-        if (data) {
+
+        if (data && data.text) {
           this.homePageSetings  = JSON.parse(data.text) as UIHomePageSettings;
           this.setPanelHeight( this.homePageSetings )
         }
@@ -126,13 +144,21 @@ export class MainMenuComponent implements OnInit  {
     }
   }
 
-
-
   reloadComponent() {
     let currentUrl = this.router.url;
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
     this.router.onSameUrlNavigation = 'reload';
     this.router.navigate([currentUrl]);
+  }
+
+
+  get isDisplayMenuOn() {
+
+    if ((this.isStaff && this.homePageSetings.staffMenuEnabled) ||
+        (!this.isStaff && this.homePageSetings.menuEnabled)) {
+      return this.displayMenu
+    }
+    return null;
   }
 
   get isBrandListViewOn() {
@@ -160,6 +186,8 @@ export class MainMenuComponent implements OnInit  {
     }
     return null;
   }
+
+
 
   get isDepartmentViewOn() {
 

@@ -11,7 +11,7 @@
   <mat-card-title>
     <div class="header-container">
       <div *ngIf="displayMenu">
-        {{displayMenu?.name}}
+        <button mat-button color="primary" (click)="openDisplayMenu()"> {{displayMenu?.name}} <mat-icon>open_in_new</mat-icon></button>
       </div>
       <div>
         <app-edit-buttons-standard
@@ -51,6 +51,7 @@
                 Title
             </app-value-fields>
           </div>
+
           <div class="grid-item">
             <app-value-fields
                 [inputForm]="inputForm"
@@ -58,7 +59,6 @@
               SubTitle
             </app-value-fields>
           </div>
-
 
           <div class="grid-item">
             <app-value-fields
@@ -85,14 +85,35 @@
                       formControlName="backcolor">
             </mat-form-field> -->
           <!-- </div> -->
-          <div></div>
+
+          <div class="grid-item"
+               *ngIf="inputForm"
+               [formGroup]="inputForm">
+
+            <mat-slide-toggle
+                name="interactive"
+                formControlName="interactive">
+              <mat-label class="mat-label">Interactive</mat-label>
+            </mat-slide-toggle>
+
+
+            <mat-slide-toggle
+                name="enabled"
+                formControlName="enabled">
+              <mat-label class="mat-label">Enabled</mat-label>
+            </mat-slide-toggle>
+
+          </div>
+
           <div class="grid-item">
             <div class="header">
               <h4><mat-icon>image</mat-icon>Background</h4>
               <mat-label>Use One Image for the Background</mat-label>
             </div>
+
+            <!-- {{backGroundImage}} -->
             <app-widget-uploader
-                [(fileNames)]="backGroundImage"
+                [(fileNames)]="backgroundImage"
                 (messageOut) ="setBackgroundImage($event)"
                 >
             </app-widget-uploader>
@@ -104,6 +125,7 @@
               <mat-label>Use One Image for the logo</mat-label>
             </div>
 
+            <!-- {{logo}} -->
             <app-widget-uploader
                 [(fileNames)]="logo"
                 (messageOut) ="setLogo($event)"
@@ -112,7 +134,21 @@
           </div>
 
           <div></div>
-          <div></div>
+
+          <div class="col-span">
+            <mat-form-field appearance="outline"
+                            class="description">
+              <mat-label>CSS</mat-label>
+              <textarea
+                        matInput
+                        type             ="text"
+                        [(ngModel)]      ="ccs"
+                        columns="40"
+                        rows="10">
+              </textarea>
+            </mat-form-field>
+          </div>
+
           <div class="col-span">
             <simple-tinymce
                     cols="50" rows="15"

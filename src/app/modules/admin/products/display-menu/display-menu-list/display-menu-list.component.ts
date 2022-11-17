@@ -341,7 +341,10 @@ export class AdminDisplayMenuListComponent implements OnInit {
 
 
     addNew()  {
-      this.editItem(null)
+      const dialog =  this.productEditButtonService.openDisplayMenuEditor(null);
+      dialog.afterClosed(data => {
+        this.refreshSearch()
+      })
     }
 
     editSelectedItems() {

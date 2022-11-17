@@ -6,4 +6,7 @@
   <div>
     {{purchasedCount}}
   </div>
+  <div *ngIf="schedule.value && schedule.value != 0">
+    Redeem:  {{ schedule.value | currency }}
+  </div>
 </div>

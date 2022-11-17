@@ -42,19 +42,6 @@ export class MenusService {
 
     {
       id:             0,
-      name:          'Menus',
-      icon:          'menu',
-      active:        false,
-      sortOrder:      2,
-      menuGroupID:    0,
-      userType:       this.getUsers(),
-      routerLink:       '/menu-display',
-      routerLinkActive: 'menu-display',
-      method:           '',
-      submenus: [  ]
-    },
-    {
-      id:             0,
       name:          'Profile',
       icon:          'face',
       active:        false,
@@ -160,14 +147,14 @@ export class MenusService {
         { name: 'Items',          method: '' ,  minimized: false,routerLink: '/product-list-view',     routerLinkActive:  'product-list-view', icon: 'list', onClick: '', id: 0, sortOrder: 2, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Brands',         method: '' ,  minimized: true, routerLink: '/adminbrandslist',       routerLinkActive:  'adminbrandslist', icon: 'list', onClick: '', id: 0, sortOrder: 4, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Price Categories',method: '' , minimized: true, routerLink: '/price-categories' ,     routerLinkActive: 'price-categories', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Catalog Schedule', method: '' ,  minimized: true, routerLink: '/price-schedule' ,       routerLinkActive: 'price-schedule', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Catalog Schedule', method: '' ,  minimized: true, routerLink: '/price-schedule' ,       routerLinkActive: 'price-schedule', icon: 'calendar_month', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'TV Print Menu', method: '' ,  minimized: true, routerLink:  '/admin-display-menu' ,       routerLinkActive: 'admin-display-menu', icon: 'monitor', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Price Tiers',    method: '' ,  minimized: true, routerLink: '/price-tier-list-edit' ,       routerLinkActive: 'price-schedule', icon: 'price_change', onClick: '', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Unit Types',     method: '' ,  minimized: true, routerLink: '/unit-types',            routerLinkActive: 'unit-types', onClick: '', icon: 'list', id: 0, sortOrder: 5, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Taxes and Fees', method: '' ,  minimized: true, routerLink: '/taxes' ,                routerLinkActive: 'taxes', icon: 'price_change', onClick: '', id: 0, sortOrder: 6, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Flat Tax',       method: '' ,  minimized: true, routerLink: '/flat-rate-taxes',       routerLinkActive: 'flat-rate-taxes', onClick: '', icon: 'list', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
         { name: 'Print Locations',method: '' ,  minimized: true, routerLink: '/printer-locations',     routerLinkActive: 'printer-locations', onClick: '', icon: 'printer', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
-        { name: 'Prompts & Kits', method: '' ,  minimized: true, routerLink: '/prompt-kits',          routerLinkActive: 'speaker-group', onClick: '', icon: 'kit', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
+        { name: 'Prompts & Kits', method: '' ,  minimized: true, routerLink: '/prompt-kits',          routerLinkActive: 'speaker-group', onClick: '', icon: 'chat', id: 0, sortOrder: 7, submenuID:0, menuID: 0, submenus: this.submenu, userType: this.getManagers(), meunyType: 0},
       ]
     },
     {

@@ -30,10 +30,16 @@
           <mat-icon color="warn">warning</mat-icon> Name required.
         </div>
 
-        <div *ngIf="inputForm.controls.type.errors?.required &&
-                    inputForm.controls.type.touched" class="error">
+        <div *ngIf="inputForm.controls.useType.errors?.required &&
+                    inputForm.controls.useType.touched" class="error">
           <mat-icon color="warn">warning</mat-icon> Type required.
         </div>
+
+        <div *ngIf="inputForm.controls.useGroupID.errors?.required &&
+                inputForm.controls.useGroupID.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Use Type required.
+        </div>
+
 
         <!-- <div *ngIf="inputForm.controls.useGroupID.errors?.required &&
                     inputForm.controls.useGroupID.touched" class="error">
@@ -85,6 +91,41 @@
             </div>
 
             <div class="grid-flow">
+
+                <div class="filterItem" *ngIf="itemType_Types">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Type</mat-label>
+                    <mat-select
+                                type               ="number"
+                                formControlName    = "useGroupID"
+                      >
+                      <mat-option value= "">Clear</mat-option>
+                      <mat-option
+
+                                  *ngFor="let item of itemType_Types"
+                                  [value]="item.id">
+                        {{item.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+
+                <div class="filterItem" >
+                  <mat-form-field appearance="outline">
+                    <mat-label>Use Type</mat-label>
+                    <mat-select
+                                type               = "number"
+                                [formControlName]  = "'useType'"
+                                name               = "useType"
+                      >
+                      <mat-option value= "">Clear</mat-option>
+                      <mat-option *ngFor="let item of itemType_UseTypes"
+                                  [value]="item">
+                        {{item}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </div>
 
                 <div>
                   <mat-label>Input portion types, separated by comma.</mat-label>
@@ -186,24 +227,6 @@
                   </mat-form-field>
                 </div>
 
-                <div class="filterItem" *ngIf="itemType_Types">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Type</mat-label>
-                    <mat-select
-                                type               ="number"
-                                formControlName    = "useGroupID"
-                      >
-                      <mat-option value= "">Clear</mat-option>
-                      <mat-option
-
-                                  *ngFor="let item of itemType_Types"
-                                  [value]="item.id">
-                        {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
                 <div class="filterItem"
                   *ngIf="metrcCategories$ &&  typeName === 'cannabis'"  >
                   <mat-form-field appearance="outline">
@@ -217,23 +240,6 @@
                       <mat-option *ngFor="let item of (metrcCategories$ |async)"
                                   [value]="item.id">
                         {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div class="filterItem" >
-                  <mat-form-field appearance="outline">
-                    <mat-label>Use Type</mat-label>
-                    <mat-select
-                                type               = "number"
-                                [formControlName]  = "'useType'"
-                                name               = "useType"
-                      >
-                      <mat-option value= "">Clear</mat-option>
-                      <mat-option *ngFor="let item of itemType_UseTypes"
-                                  [value]="item">
-                        {{item}}
                       </mat-option>
                     </mat-select>
                   </mat-form-field>

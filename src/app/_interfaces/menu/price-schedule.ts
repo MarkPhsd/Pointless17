@@ -80,7 +80,9 @@ export interface IDisplayMenu {
   template: string;
   css: string;
   logo: string;
-  backGroundImage: string;
+  backgroundImage: string;
+  interactive: boolean;
+  enabled: boolean;
 }
 
 export interface IDisplayMenuSearchModel {
@@ -151,7 +153,7 @@ export interface DiscountInfo {
   value:    number;
   quantity: number;
   itemID:   number;
-  andOr:    AndOr;
+  andOr:    string;
   name:     string;
   allItems: boolean;
   typeID?:  number;
@@ -161,8 +163,8 @@ export interface DiscountInfo {
 }
 
 export enum AndOr {
-  SampleString4 = "sample string 4",
-  SampleString5 = "sample string 5",
+  SampleString4 = "And",
+  SampleString5 = "Or",
 }
 
 export interface ClientType {

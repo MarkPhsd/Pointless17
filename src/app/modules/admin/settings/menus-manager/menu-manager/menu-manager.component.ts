@@ -2,7 +2,7 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { Component, OnInit,OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { AccordionMenu, IUser, MenuGroup, SubMenu } from 'src/app/_interfaces';
 import { AuthenticationService } from 'src/app/_services';
@@ -21,6 +21,7 @@ import { AccordionMenuItemEditComponent } from '../accordion-menu-item-edit/acco
 })
 export class MenuManagerComponent implements OnInit,OnDestroy  {
 
+  action$            :  Observable<any>;
   menu$              :  Observable<MenuGroup[]>;
   accordionMenu$     :  Observable<AccordionMenu[]>;
   accordionMenuItem$ :  Observable<AccordionMenu>;
@@ -30,6 +31,8 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   submenuItem        :  SubMenu;
   user               :  IUser;
   _user              :  Subscription;
+
+  message: string;
 
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe( data => {
@@ -63,12 +66,17 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
     const site  =  this.siteService.getAssignedSite();
     if (!this.user) {return}
     const accordionMenu$ = this.menusService.getMainMenu(site);
-    accordionMenu$.subscribe( data => {
-      this.accordionMenus = data
-    })
+    this.action$ =  accordionMenu$.pipe(
+      switchMap( data => {
+        this.accordionMenus = data
+        return of(data)
+      }
+    ))
   }
 
   refreshMenu() {
+    this.accordionMenus = null;
+    this.accordionMenu  = null;
     this.getMainMenu();
   }
 
@@ -111,10 +119,21 @@ export class MenuManagerComponent implements OnInit,OnDestroy  {
   }
 
   assignSubMenu(item: AccordionMenu, submenu: SubMenu[]) {
+
+    if (!item) { return }
+
     const site         =  this.siteService.getAssignedSite();
-    this.accordionMenu = item;
-    this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id)
-    this.submenu       = submenu;
+
+    this.accordionMenuItem$ = this.menusService.getAccordionMenuByID(site,item.id).pipe(
+      switchMap(data => {
+        this.accordionMenu = data;
+        console.log(data, data.submenus)
+        this.submenu = data.submenus
+        return of(data)
+      })
+    )
+
+
   }
 
   initMenu() {

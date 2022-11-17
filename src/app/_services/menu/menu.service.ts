@@ -170,6 +170,20 @@ export class MenuService {
     return  this.httpClient.put<any[]>(url, listofItems)
 
   }
+  // this.menuService.updateField('DepartmentID', id, listOfItems)
+  deleteProducts(site: ISite,  listofItems: any[] ) {
+
+    const controller ="/products/"
+
+    const endPoint = `deleteProducts`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.post<any>(url, listofItems)
+
+  }
 
   deleteProduct(site: ISite, id: number): Observable<IMenuItem> {
 

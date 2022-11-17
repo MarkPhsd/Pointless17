@@ -47,6 +47,11 @@ export interface IUserAuth_Properties {
 
   userAssignedBalanceSheet : boolean;
   searchBalanceSheets      : boolean;
+  deleteInventory: boolean;
+  deleteProduct: boolean;
+  deleteEmployee: boolean;
+
+
 }
 
 @Injectable({

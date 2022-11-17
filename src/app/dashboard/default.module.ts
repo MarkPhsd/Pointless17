@@ -327,8 +327,10 @@ import { PriceScheduleMenuOptionsComponent } from '../modules/admin/products/pri
 import { AdminDisplayMenuListComponent } from '../modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
 import { AdminDisplayMenuComponent } from '../modules/admin/products/display-menu/display-menu/display-menu.component';
 import { DisplayMenuListComponent } from '../modules/display-menu/display-menu-list/display-menu-list.component';
-import { DisplayMenuComponent } from '../modules/display-menu/display-menu/display-menu.component';
+// import { DisplayMenuComponent } from '../modules/display-menu/display-menu/display-menu.component';
 import { AdminDisplayMenuSelctorComponent } from '../modules/admin/products/display-menu/display-menu/display-menu-selctor/display-menu-selctor.component';
+import { DisplayMenuMainComponent } from '../modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
+import { DisplayMenuTitleComponent } from '../modules/display-menu/display-menu-title/display-menu-title.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -374,6 +376,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     CloseDayValidationComponent,
     CreditCardPaymentsPrintListComponent,
+
 
     //adminModule
     AdminbranditemComponent,
@@ -432,9 +435,11 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     ///end admin
 
+    DisplayMenuMainComponent,
     DisplayMenuListComponent,
-    DisplayMenuComponent,
+    DisplayMenuTitleComponent,
 
+    // DisplayMenuComponent,
 
     DefaultComponent,
     DiscountOptionsComponent,
