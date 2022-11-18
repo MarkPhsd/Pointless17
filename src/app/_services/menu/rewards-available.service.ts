@@ -70,17 +70,19 @@ export class RewardsAvailableService {
   };
 
 
-  useReward(site: ISite, id: number): Observable<RewardsAvailable> {
+  useReward(site: ISite, id: number, orderID: number): Observable<RewardsAvailable> {
 
     const controller = "/RewardsAvailable/"
 
-    const endPoint = "GetClientAvailableItems"
+    const endPoint = "UseReward"
 
-    const parameters = ''
+    const parameters = `?id=${id}&orderID=${orderID}`
 
     const uri = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.httpClient.get<RewardsAvailable>(uri)
 
   };
+
+
 }

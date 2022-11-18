@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { IPriceSchedule, PriceAdjustScheduleTypes } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription,switchMap,of } from 'rxjs';
 import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-data.service';
 
 @Component({
@@ -54,11 +54,12 @@ export class DiscountTypeSelectionComponent implements OnInit {
 
   initPriceScheduleAdjustments() {
     const site = this.siteService.getAssignedSite();
-    this.priceAdjustScheduleTypes$ = this.priceScheduleService.getPriceAdjustList(site)
-    this.priceAdjustScheduleTypes$.subscribe( data =>  {
-      console.log('data', data)
-      this.priceAdjustScheduleTypes = data;
-    })
+    this.priceAdjustScheduleTypes$ =   this.priceScheduleService.getPriceAdjustList(site).pipe(
+        switchMap(data =>  {
+          this.priceAdjustScheduleTypes = data;
+          return of(data)
+      })
+    )
   }
 
   selectAdjustScheduleTypes(item) {

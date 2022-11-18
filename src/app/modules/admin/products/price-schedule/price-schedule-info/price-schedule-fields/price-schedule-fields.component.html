@@ -29,18 +29,16 @@
         <div *ngIf="!isMenuList && (andOrOption == true)"
               class="slidein">
           <mat-form-field appearance="flat" class="andor-listbox">
-            <mat-label>And/Or</mat-label>
+            <mat-label>Group</mat-label>
             <mat-select  class="grid-item-and-or"
                           type="text"
                           formControlName="andOr"
                       >
-                <mat-option [value]="'And'">
-                  And
-                </mat-option>
-                <mat-option [value]="'Or'">
-                  Or
-                </mat-option>
-
+                <div *ngFor="let item of andOrGroup">
+                  <mat-option [value]="item">
+                    {{item}}
+                  </mat-option>
+                </div>
             </mat-select>
           </mat-form-field>
         </div>

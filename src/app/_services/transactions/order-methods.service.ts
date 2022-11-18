@@ -520,43 +520,96 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
+  processItemPOSObservable( order : IPOSOrder ,
+                          barcode: string,
+                          item: IMenuItem,
+                          quantity: number,
+                          input: any,
+                          rewardAvailableID: number,
+                          rewardGroupApplied: number,) : Observable<ItemPostResults> {
+
+      const valid = this.validateUser();
+
+      if (!valid) { return };
+
+      this.initItemProcess();
+
+      if (quantity === 0 ) { quantity = 1};
+
+      if (!this.validateItem(item, barcode)) { return }
+
+      let passAlongItem;
+      if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
+
+      order = this.validateOrder();
+
+      if (order) {
+        const site       = this.siteService.getAssignedSite();
+
+        if (barcode)  {
+          return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
+        }
+
+        try {
+          let packaging      = '';
+          let portionValue   = '';
+          let itemNote       = '';
+          if (input) {
+            packaging        = input?.packaging;
+            portionValue     = input?.portionValue;
+            itemNote         = input?.itemNote;
+          }
+
+          if (item) {
+            const deviceName  = localStorage.getItem('devicename')
+            const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
+                                  packaging: packaging, portionValue: portionValue, barcode: '',
+                                  weight: 1, itemNote: itemNote, deviceName: deviceName, rewardAvailableID: rewardAvailableID, rewardGroupApplied: rewardGroupApplied } as NewItem
+            return  this.posOrderItemService.postItem(site, newItem)
+          }
+
+        } catch (error) {
+          console.log('error', error)
+        }
+      }
+  }
+
   // tslint:disable-next-line: typedef
   processItemPostResults(addItem$: Observable<ItemPostResults>) {
-
     this.priceCategoryID = 0;
-
-    // console.log('processItemPostResults');
-
     addItem$.subscribe(data => {
+        this.processItemPostResultsPipe(data)
+      }
+    )
+  }
 
+  processItemPostResultsPipe(data) {
       // console.log('processItemPostResults', data);
       if (data) {
 
       }
-        if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
+      if (data?.message) {  this.notifyEvent(`Process Result: ${data?.message}`, 'Alert ')};
 
-
-        if (data && data.resultErrorDescription) {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
-          return;
-        }
-
-        if (data.order) {
-          this.orderService.updateOrderSubscription(data.order);
-          this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
-          if (data.order.posOrderItems.length == 1 ) {
-            this.toolbarServiceUI.updateOrderBar(true)
-          }
-        } else {
-          this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
-        }
-
-        if (this.openDialogsExist) {
-          this.notification('Item added to cart.', 'Check Cart');
-        }
-
+      if (data && data.resultErrorDescription) {
+        this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
+        return;
       }
-    )
+
+      if (data.order) {
+        this.orderService.updateOrderSubscription(data.order);
+        this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
+        if (data.order.posOrderItems.length == 1 ) {
+          this.toolbarServiceUI.updateOrderBar(true)
+        }
+      } else {
+        this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
+        return;
+      }
+
+      if (this.openDialogsExist) {
+        this.notification('Item added to cart.', 'Check Cart');
+      }
+
   }
 
   notification(message: string, title: string)  {

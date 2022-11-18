@@ -2,7 +2,7 @@
   <div [formGroup]="inputForm">
     <div class="grid-container ">
       <mat-label>Type</mat-label>
-      <div *ngIf="priceAdjustScheduleTypes">
+      <div  class="toggle-list" *ngIf="(priceAdjustScheduleTypes$ | async) as priceAdjustScheduleTypes ">
         <div *ngIf="priceAdjustScheduleTypes as list" >
           <mat-button-toggle-group name="type"
                                   aria-label="iTem Type"

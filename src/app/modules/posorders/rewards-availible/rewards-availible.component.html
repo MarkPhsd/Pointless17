@@ -1,11 +1,16 @@
-<div *ngIf="(action$ | async) as items" class="container">
-  <div  *ngFor="let item of items">
-    <div class="grid-schedule"  *ngIf="item">
+<!-- <div *ngIf="(action$ | async) as items" class="container"> -->
+<div *ngIf="results as items" class="container">
+  <!-- <div  *ngFor="let item of items; let i = index; trackBy: identify" @myInsertRemoveTrigger> -->
+  <div *ngFor="let item of items;
+                let i = index;
+                trackBy: trackByRewards"
+                @myInsertRemoveTrigger>
+    <div class="grid-schedule"  *ngIf="item" (click)="menuItemAction(true, item, i)">
       <div>
         {{item?.name | truncateText : 20}}
       </div>
       <div>
-         {{item?.retail | currency}}
+         {{item?.value | currency}}
       </div>
       <div >
 
@@ -13,5 +18,21 @@
     </div>
   </div>
 </div>
+<!-- <div *ngIf="results" class="container">
+  <div  *ngFor="let item of results; let i = index;" @myInsertRemoveTrigger>
+    <div class="grid-schedule"   *ngIf="item" (click)="menuItemAction(true, item, i)">
+      <div>
+        {{item?.name | truncateText : 20}}
+      </div>
+      <div>
+         {{item?.value | currency}}
+      </div>
+      <div >
 
+      </div>
+    </div>
+  </div>
+</div> -->
 
+<div *ngIf="(reward$ | async) as item"></div>
+<div *ngIf="(action$ | async) as items"></div>
