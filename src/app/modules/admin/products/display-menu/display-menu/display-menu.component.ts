@@ -127,9 +127,10 @@ export class AdminDisplayMenuComponent  {
       this.displayMenu             = this.inputForm.value as IDisplayMenu;
       this.displayMenu.description = this.description;
       this.displayMenu.css         = this.ccs;
+      console.log(this.backgroundImage)
+      console.log('Saved', this.displayMenu)
+      this.displayMenu.backgroundImage = this.backgroundImage;
 
-      console.log(this.inputForm.value, this.displayMenu.css)
-      // console.log(this.displayMenu, this.inputForm.value)
       const item$ = this.displayMenuService.save(site, this.displayMenu);
       return item$.pipe(switchMap(
           data => {
@@ -176,6 +177,7 @@ export class AdminDisplayMenuComponent  {
 
   setBackgroundImage(event) {
     this.backgroundImage = event;
+    console.log('event', event)
     this.inputForm.patchValue( { backgroundImage: event } )
   }
 
@@ -185,7 +187,6 @@ export class AdminDisplayMenuComponent  {
 
 
   deleteItem(event) {
-
     // const result = window.confirm('Are you sure you want to delete this item?')
     // if (!result) { return }
 

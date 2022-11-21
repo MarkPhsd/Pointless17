@@ -29,9 +29,8 @@ export class UserAuthorizationService {
   isUserAuthorized(requiredArray: string): boolean {
 
     const user = this.currentUser();
-
     const currentRole = user?.roles.toLowerCase();
-    // console.log('isUserAuthorized', user?.roles.toLowerCase() )
+
     if (!currentRole) { return }
     if (!user || !user?.roles) { return false}
     if (!this.validateUser)   { return false }

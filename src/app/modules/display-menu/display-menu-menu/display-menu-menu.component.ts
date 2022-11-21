@@ -12,15 +12,15 @@ export class DisplayMenuMenuComponent implements OnInit {
 
   id: number;
   phoneSize: boolean;
-
   menu$: Observable<any>;
+
   constructor(private siteService: SitesService,
               private router: Router,
               private displayMenu: DisplayMenuService) { }
 
   ngOnInit(): void {
     const site = this.siteService.getAssignedSite()
-    this.menu$ = this.displayMenu.getMenus(site);
+    this.menu$ = this.displayMenu.getMenus(site)
   }
 
   setItem(event) {

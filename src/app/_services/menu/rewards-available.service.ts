@@ -84,5 +84,17 @@ export class RewardsAvailableService {
 
   };
 
+  getReward(site: ISite, id: number): Observable<RewardsAvailable> {
 
+    const controller = "/RewardsAvailable/"
+
+    const endPoint = "getReward"
+
+    const parameters = `?id=${id}`
+
+    const uri = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.httpClient.get<RewardsAvailable>(uri)
+
+  };
 }

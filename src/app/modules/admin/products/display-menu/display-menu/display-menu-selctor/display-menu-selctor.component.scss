@@ -59,6 +59,17 @@
   box-shadow: 0 8px 6px -6px #000;
 }
 
+.mat-button {
+  margin-left: 15px;
+}
+
+.menu-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  flex-wrap:  wrap;
+}
+
 .type-list {
   height: 65vh;
   overflow-y: scroll;

@@ -331,6 +331,8 @@ import { DisplayMenuListComponent } from '../modules/display-menu/display-menu-l
 import { AdminDisplayMenuSelctorComponent } from '../modules/admin/products/display-menu/display-menu/display-menu-selctor/display-menu-selctor.component';
 import { DisplayMenuMainComponent } from '../modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
 import { DisplayMenuTitleComponent } from '../modules/display-menu/display-menu-title/display-menu-title.component';
+import { OrderMethodsService } from '../_services/transactions/order-methods.service';
+import { PriceScheduleMenuItemsComponent } from '../modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -563,6 +565,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceScheduleInfoComponent,
     PriceScheduleFieldsComponent,
     PriceScheduleMenuOptionsComponent,
+    PriceScheduleMenuItemsComponent,
 
     ProfileRolesComponent,
     ProfileListComponent,
@@ -739,6 +742,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     MenuService,
     MetrcFacilitiesService,
     OrdersService,
+    // OrderMethodsService,
     PrintingService,
     ReportingService,
     ReviewsService,

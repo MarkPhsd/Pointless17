@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { Subscription } from 'rxjs';
+import { catchError, of, Subscription, switchMap , Observable} from 'rxjs';
 import { CdkDragDrop, moveItemInArray,  } from '@angular/cdk/drag-drop';
 import { DiscountInfo, IPriceSchedule } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
@@ -16,19 +16,20 @@ import { PriceScheduleDataService } from 'src/app/_services/menu/price-schedule-
 })
 export class ItemSortComponent  {
 
+  action$ : Observable<any>;
   priceSchedule            : IPriceSchedule;
   @Input() inputForm       : FormGroup;
   discountInfos            : DiscountInfo[];
   discountInfo             : DiscountInfo;
-  // _priceSchedule           : Subscription;
+
   index                    : number;
 
   _priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
     this.priceSchedule = data
-    console.log('received datea for item sort', data)
     if (data) {
       this.priceSchedule = data;
       if (data.itemDiscounts) {
+        data.itemDiscounts.sort(data => data.sort)
         this.initList(data.itemDiscounts);
       }
      }
@@ -62,14 +63,33 @@ export class ItemSortComponent  {
     }
   }
 
-  deleteSelected(item) {
-    if (!item) {return}
+  deleteSelected(item, index) {
+
+    if (!item  && item.id) {
+      console.log('id not provided')
+      return
+    }
+
+    if (!item.id || item.id == 0) {
+      this.discountInfos.splice( index , 1);
+      return;
+    }
     const site = this.siteService.getAssignedSite();
-    this.priceScheduleService.deleteItemDiscountSelected(site, item.id).subscribe( data=> {
-      this.discountInfos.splice( this.index, 1);
-      this.priceSchedule.itemDiscounts = this.discountInfos;
-    })
+    this.action$ = this.priceScheduleService.deleteItemDiscountSelected(site, item.id).pipe(
+      switchMap( data=> {
+        this.discountInfos.splice( index , 1);
+        this.priceSchedule.itemDiscounts = this.discountInfos;
+        return of(null)
+      }),
+      catchError( err => {
+        // this.discountInfos.splice( index , 1);
+        this.notifyEvent('Oh no ' + err, 'failured')
+        return of(null)
+      })
+    )
+
     this.discountInfo = {} as DiscountInfo
+
   }
 
   drop(event: CdkDragDrop<string[]>) {
@@ -82,11 +102,16 @@ export class ItemSortComponent  {
   saveMenu() {
     const site = this.siteService.getAssignedSite();
     if (this.discountInfos) {
+
+       this.discountInfos.forEach( (data, index) => {
+        this.discountInfos[index].priceScheduleID  = this.priceSchedule.id;
+      })
+
       const schedule$ = this.priceScheduleService.postItemList(site, this.discountInfos)
       schedule$.subscribe(data => {
           this.priceSchedule.itemDiscounts = data;
           this.priceScheduleService.updateItemPriceSchedule(this.priceSchedule);
-          this.fbPriceScheduleService.addDiscountItemTypes(this.inputForm, data)
+          this.fbPriceScheduleService.addDiscountItems(this.inputForm, data)
         }
       )
     }

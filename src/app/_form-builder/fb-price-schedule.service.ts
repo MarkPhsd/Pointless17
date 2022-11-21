@@ -97,7 +97,7 @@ export class FbPriceScheduleService {
       title       : [],
       subTitle    : [],
       showAddress : [],
-
+      autoApplyRewards: [],
       orderTypes:           this.fb.array([ ]),
       clientTypes:          this.fb.array([ ]),
       weekDays:             this.fb.array([ ]),
@@ -358,6 +358,7 @@ export class FbPriceScheduleService {
     const control = inputForm.get('orderTypes') as FormArray;
     if (!control)  { return }
     control.clear()
+    if (!items) { return }
     if (items) {
       items.forEach( info =>  {
           control.push(this.fb.group({
@@ -376,10 +377,9 @@ export class FbPriceScheduleService {
     try {
       if (!inputForm) { return }
       const control = inputForm.get('timeFrames') as FormArray;
-      control.clear()
-      // console.log('addTimeRanges', items)
-
       if (!control)   { return }
+      control.clear()
+      if (!items) { return }
       items.forEach( info =>  {
         const pipe = new DatePipe('en-US');
         // const startTime =  this.datePipe.transform(info.startTime, 'HH:mm');
@@ -400,8 +400,9 @@ export class FbPriceScheduleService {
     try {
       if (!inputForm) { return }
       const control = inputForm.get('dateFrames') as FormArray;
-      control.clear()
       if (!control)   { return }
+      control.clear()
+      if (!items) { return }
       const pipe = new DatePipe('en-US');
       items.forEach( info =>  {
         control.push(this.fb.group({
@@ -426,6 +427,7 @@ export class FbPriceScheduleService {
       const control = inputForm.get('weekDays') as FormArray;
       if (!control)   { return }
       control.clear();
+      if (!items) { return }
       items.forEach( data =>  {
         control.push(this.fb.control({
             name: data.name

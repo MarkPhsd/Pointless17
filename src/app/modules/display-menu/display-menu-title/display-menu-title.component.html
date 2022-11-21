@@ -1,25 +1,41 @@
-<mat-card *ngIf="menu" (click)="navItem(menu)">
-  <div class="grid-items"  *ngIf="menu?.enabled">
+<div
+  [style.background]="backgroundURL"
+  style.background-repeat="repeat"
+  [style.height]="'calc(120% + 200px)'"
+  [style.width]="'100vw'"
+  [style.opacity]="menu.backcolorOpacity"
+  >
 
-    <div class="info">
-      <div class="title">{{menu?.title}}</div>
-      <div class="subTitle">
-        {{menu?.subTitle}}
+  <mat-card *ngIf="menu" (click)="navItem(menu)"
+            [style.background]="backgroundURL"
+            style.background-repeat="repeat"
+            [style.height]="'calc(120% + 200px)'"
+            [style.width]="'100%'"
+            [style.opacity]="menu.backcolorOpacity"
+            [style.opacity]="menu.backcolorOpacity">
+    <div class="grid-items"  *ngIf="menu?.enabled">
+
+      <div class="info">
+        <div class="title">{{menu?.title}}</div>
+        <div class="subTitle">
+          {{menu?.subTitle}}
+        </div>
+        <div [innerHtml]="menu?.description"></div>
       </div>
-      <div [innerHtml]="menu?.description"></div>
-    </div>
 
-    <div class="logo">
-      <button >
-        <img
-            loading   = "lazy"
-            draggable = "false"
-            [src]     = "getItemSrc(menu?.logo)"
-            err-SRC   = "getPlaceHolder()"
-            onerror   = "this.src='assets/images/placeholderimage.png'"
-            class     = "menu-item-image"
-            [alt]     = "menu?.description">
-      </button>
+      <div class="logo">
+        <button >
+          <img
+              loading   = "lazy"
+              draggable = "false"
+              [src]     = "getItemSrc(menu?.logo)"
+              err-SRC   = "getPlaceHolder()"
+              onerror   = "this.src='assets/images/placeholderimage.png'"
+              class     = "menu-item-image"
+              [alt]     = "menu?.description">
+        </button>
+      </div>
     </div>
-  </div>
-</mat-card>
+  </mat-card>
+
+</div>

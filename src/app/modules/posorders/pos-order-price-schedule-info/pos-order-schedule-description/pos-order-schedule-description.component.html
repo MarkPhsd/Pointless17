@@ -7,6 +7,17 @@
     {{purchasedCount}}
   </div>
   <div *ngIf="schedule.value && schedule.value != 0">
-    Redeem:  {{ schedule.value | currency }}
+    <div  *ngIf=" schedule?.type === 'Order $ Off' ||
+                  schedule?.type === 'Item $ Off'  ||
+                  schedule?.type === 'Money Off'
+                  ">
+        Redeem:  {{ schedule.value | currency }}
+    </div>
+    <div  *ngIf="schedule?.type === 'Percent Off' ||
+                 schedule?.type === 'Item % Off' ||
+                 schedule?.type === 'Order % Off'
+                ">
+          Redeem:  %{{ schedule?.value/100 }}
+      </div>
   </div>
 </div>

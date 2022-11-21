@@ -161,7 +161,7 @@ export class GridComponentPropertiesComponent implements OnInit {
       if (item.id) {
         const site = this.siteService.getAssignedSite();
         this.menuService.getMenuItemByID(site, item.id).subscribe(data => {
-            this.listItemID  = data.id
+            this.listItemID  = data.id.toString()
             this.productName = data.name;
             this.inputForm.patchValue({productName: data.name})
             this.inputForm.patchValue({listItemID: data.id})

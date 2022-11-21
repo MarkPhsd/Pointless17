@@ -1,6 +1,6 @@
 import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Observable} from 'rxjs';
+import { Observable, of, switchMap} from 'rxjs';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
 import { ISite } from 'src/app/_interfaces';
 import { InventoryLocationsService , IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
@@ -19,7 +19,8 @@ import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/men
 export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChanges {
 
   locationForm: FormGroup;
-
+  action$: Observable<any>;
+  locationTable$ : Observable<any>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   dataSource: any;
@@ -62,8 +63,13 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   }
 
   refreshTable(): void {
-    this.printerLocationsService.getLocations().subscribe(
-      data => {
+    this.locationTable$ = this.getLocations()
+    this.ccsSite = {} as ISite;
+  };
+
+  getLocations() {
+      return this.printerLocationsService.getLocations().pipe(
+      switchMap(data => {
           this.pageSize = 10
           this.length = data.length
           this.pageSizeOptions = [5, 10]
@@ -72,14 +78,10 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
           }
-        },
-        error => {
-          // this.notifyEvent("Error, see console for details.", "Error")
-          // console.log("refreshTable", error)
+        return of('')
         }
-      );
-      this.ccsSite = {} as ISite;
-  };
+      ));
+  }
 
   editItem(id:number) {
     this.initFormData(id)
@@ -96,14 +98,13 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   }
 
   initFormData(id: number) {
-    this.printerLocationsService.getLocation(id).subscribe(
-      data=> {
+    this.action$ = this.printerLocationsService.getLocation(id).pipe(
+      switchMap(data=> {
         this.locationForm.patchValue(data)
         this.location = data
-      }, err => {
-        // console.log(err)
+        return of('')
       }
-    )
+    ))
   }
 
   notifyEvent(message: string, action: string) {
@@ -117,12 +118,13 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   addLocation() {
     if (this.locationForm.valid) {
       const data = this.locationForm.value
-      this.printerLocationsService.addLocation(data).subscribe(data => {
-        this.notifyEvent(`${data.name} Added`, `Success` )
-        this.refreshTable();
-       }, error => {
-        this.notifyEvent(`error ${error}`, `failure` )
-      })
+      this.printerLocationsService.addLocation(data).pipe(
+        switchMap(data => {
+          this.notifyEvent(`${data.name} Added`, `Success` )
+          this.refreshTable();
+          return of("")
+        })
+      )
     }
     this.initForm()
   }
@@ -132,20 +134,18 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     this.initForm()
   }
 
-  async delete() {
-
+ delete() {
     const result = window.confirm('Are you sure you want to delete this item?')
     if (!result) { return }
-
     if (this.location) {
       this.initForm()
-      let site$ =  await this.printerLocationsService.deleteLocation(this.location.id)
-      site$.subscribe(data=>{
-        this.refreshTable();
-        // this.notifyEvent("site deleted", "Deleted")
-      }, err => {
-        this.notifyEvent("Error deleting: " + err, "Error")
-      })
+      let site$ =  this.printerLocationsService.deleteLocation(this.location.id)
+      this.action$ = site$.pipe(
+        switchMap(data=>{
+            this.refreshTable();
+            return of('')
+        })
+      );
     }
   }
 
@@ -155,13 +155,14 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
         if (!data.id) { return }
         this.notifyEvent(`Data ${data.name}`, `Data` )
         data.imgName = this.imgName
-        this.printerLocationsService.updateLocation( data.id, data).subscribe(data => {
+        this.action$ = this.printerLocationsService.updateLocation( data.id, data).pipe(
+          switchMap(data => {
           this.notifyEvent(`Updated`, `Success` )
           this.refreshTable();
-        }, error => {
-          // this.notifyEvent(`update ${error} and id: ${data.id}`, `failure` )
-      })
-    }
+          return this.getLocations()
+          })
+        )
+      }
   }
 
 }

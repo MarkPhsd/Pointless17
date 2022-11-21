@@ -167,12 +167,9 @@ export class ClientTypeEditComponent implements OnInit {
     if (!item.refundPayment) { item.refundPayment = false }
     if (!item.userAssignedBalanceSheet) { item.userAssignedBalanceSheet = false}
     if (!item.searchBalanceSheets) { item.searchBalanceSheets = false}
-
     if (!item.deleteEmployee) { item.deleteEmployee = false}
     if (!item.deleteInventory) { item.deleteInventory = false}
     if (!item.deleteProduct) { item.deleteProduct = false}
-
-
     return item;
   }
 

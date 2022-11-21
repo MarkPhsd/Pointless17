@@ -54,7 +54,6 @@ export class UIHomePageSettingsComponent implements OnInit {
     });
   }
 
-
   initializeImages(data: UIHomePageSettings) {
     try {
       if (data.backgroundImage) {

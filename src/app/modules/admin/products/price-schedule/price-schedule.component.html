@@ -6,9 +6,12 @@
       <mat-card>
         <div class="header-grid">
           <div>
-            {{priceSchedule.name}}
-          </div>
-          <div>
+            <span>
+              <button mat-button
+                      (click)="listSchedules()">
+                <mat-icon>list</mat-icon>Schedules
+              </button>
+            </span>
             <span>
               <button mat-button
                       (click)="save()">
@@ -48,7 +51,7 @@
                       </mat-tab>
                     </div>
 
-                    <div>
+                    <div *ngIf="inputForm.controls['type'].value !=  'Menu List'">
                       <mat-tab label="Category & Items">
                         <app-type-filter
                           [inputForm]="inputForm"
@@ -57,8 +60,8 @@
                       </mat-tab>
                     </div>
 
-                    <div *ngIf="isMenuList">
-                      <mat-tab label="Selected Menu Items">
+                    <div class="value-field"  *ngIf="inputForm.controls['type'].value === 'Menu List'">
+                      <mat-tab label="Menu Item Selection">
                         <app-reward-type-filter
                           [inputForm]="inputForm"
                           [item]     ="priceSchedule">
@@ -66,20 +69,26 @@
                       </mat-tab>
                     </div>
 
-                    <div *ngIf="!isMenuList">
-
+                    <div class="value-field"  *ngIf="inputForm.controls['type'].value !=  'Menu List'">
                       <mat-tab label="Offers and Rewards">
-                        <!-- {{inputForm.controls['type'].value}} -->
-                         <div class="value-field"  *ngIf="inputForm.controls['type'].value === 'Money Off'">
-                            <app-value-fields
-                              [fieldType]="'text'"
-                              [inputForm]="inputForm"
-                              [fieldName]="'value'"
-                            >
-                              Value
-                          </app-value-fields>
-                         </div>
-                         <div class="value-field" *ngIf="inputForm.controls['type'].value === 'Percent Off'">
+                         <div class="value-field" *ngIf="inputForm.controls['type'].value === 'Percent Off' ||
+                                                         inputForm.controls['type'].value === 'Item % Off' ||
+                                                         inputForm.controls['type'].value === 'Order % Off' ||
+                                                         inputForm.controls['type'].value === 'Item $ Off'  ||
+                                                         inputForm.controls['type'].value === 'Money Off'
+                                                         ">
+                            <div *ngIf="inputForm.controls['type'].value === 'Item % Off'">
+                              <mat-label>Enter percentage as whole number</mat-label>
+                            </div>
+                            <div *ngIf="inputForm.controls['type'].value === 'Order % Off'">
+                              <mat-label>Enter percentage as whole number</mat-label>
+                            </div>
+                            <div *ngIf="inputForm.controls['type'].value === 'Item $ Off' ||
+                                        inputForm.controls['type'].value === 'Order $ Off' ||
+                                        inputForm.controls['type'].value === 'Money Off'">
+                              <mat-label>Enter cash as number</mat-label>
+                            </div>
+
                             <app-value-fields
                               [fieldType]="'text'"
                               [inputForm]="inputForm"
@@ -92,12 +101,14 @@
                                      inputForm.controls['type'].value != 'Money Off' &&
                                      inputForm.controls['type'].value != 'Percent Off'
                                     ">
-
-                          <app-reward-type-filter
+                          <!-- <app-reward-type-filter
                             [inputForm]="inputForm"
                             [item]     ="priceSchedule">
-                          </app-reward-type-filter>
+                          </app-reward-type-filter> -->
                         </div>
+
+
+
                       </mat-tab>
                     </div>
 

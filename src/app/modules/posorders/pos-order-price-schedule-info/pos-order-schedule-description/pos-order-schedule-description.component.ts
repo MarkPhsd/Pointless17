@@ -31,9 +31,7 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
     this._order = this.orderService.currentOrder$.subscribe(order => {
       this.order = order;
       this.processItemsInSchedule(this.scheduleID, order);
-
     })
-
     const site = this.siteService.getAssignedSite();
     this.priceScheduleService.getPriceSchedule(site, this.scheduleID).subscribe( data => {
       this.schedule = data
@@ -42,7 +40,6 @@ export class PosOrderScheduleDescriptionComponent implements OnInit,OnChanges,On
       }
     })
     const i = 0;
-
   }
 
   constructor( private priceScheduleService: PriceScheduleService,

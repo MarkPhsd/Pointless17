@@ -167,6 +167,9 @@ export class PriceScheduleComponent {
     this.requiredItemTypes = requiredItemTypes
   }
 
+  listSchedules() {
+    this.router.navigate(['price-schedule'])
+  }
   getPriceSchedule(data: FormGroup): IPriceSchedule {
     if (data) {
        if (data.valid) {
@@ -195,7 +198,6 @@ export class PriceScheduleComponent {
     if (this.inputForm.valid) {
       const item = this.inputForm.value as IPriceSchedule;
       item.id = this.id;
-
       const item$ = this.priceScheduleService.save(site, item)
       this.saveNotification = true
       item$.subscribe( {
@@ -207,12 +209,13 @@ export class PriceScheduleComponent {
         error:  err => {
             this.snack.open(err, 'Error', {duration: 4000, verticalPosition: 'top'})
           }
-        })
+        }
+      )
     }
 
     if (!this.inputForm.valid) {
       this.snack.open('Missing values', 'Alert', {duration: 2000, verticalPosition: 'top'})
-    }
+    };
   }
 
   delete() {

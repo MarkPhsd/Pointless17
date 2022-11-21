@@ -118,6 +118,7 @@ export class AWSBucketService {
     if (imageName) {
       return   encodeURI(`https://${bucket}.s3.amazonaws.com/${imageName}`);
     } else {
+      return this.getPlaceHolderImage();
       return   encodeURI(`https://${bucket}.s3.amazonaws.com/placeholderproduct.png`);
     }
   }

@@ -278,7 +278,7 @@
               <div class="icon-header">
                 <mat-icon>branding_watermark</mat-icon>Brand Discounts
               </div>
-              <span *ngIf="(priceSchedule && priceSchedule.itemTypeDiscounts && priceSchedule?.itemTypeDiscounts.length != null) && priceSchedule?.brandDiscounts.length>0">
+              <span *ngIf="(priceSchedule && priceSchedule?.brandDiscounts && priceSchedule?.brandDiscounts.length != null) && priceSchedule?.brandDiscounts.length>0">
                 <app-price-schedule-fields
                       [inputForm]    ="inputForm"
                       [data]         ="priceSchedule?.brandDiscounts"

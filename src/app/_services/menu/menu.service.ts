@@ -573,11 +573,11 @@ export class MenuService {
     const cacheTime = this.sitesService.getCurrentCache()
 
     if ( cacheTime  == 0 ) {
-      // console.log('cacheTime', cacheTime)
+      console.log('cacheTime', cacheTime)
       return  this.httpClient.post<any>(url, productSearchModel )
     }
 
-    // console.log('cacheTime2', cacheTime)
+    console.log('cacheTime2', cacheTime)
     return this.httpCache.post<any>(uri, productSearchModel)
 
   }
@@ -740,7 +740,7 @@ export class MenuService {
 
   };
 
-  getMenuItemByID(site: ISite, id: any): Observable<any> {
+  getMenuItemByID(site: ISite, id: any): Observable<IMenuItem> {
 
     if (!id)  { return EMPTY };
 
@@ -752,16 +752,7 @@ export class MenuService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return  this.httpClient.get<any>(url)
-
-    // const uri =  this.sitesService.getCacheURI(url)
-
-    // return  this.httpCache.get<any>(uri)
-
-    // const url = { url: uri, cacheMins: 0}
-
-    // return  this.httpClient.get<IMenuItem>(uri  )
-
+    return  this.httpClient.get<IMenuItem>(url)
   };
 
   getMenuItemByBarcode(site: ISite, barcode:any): Observable<IMenuItem[]> {

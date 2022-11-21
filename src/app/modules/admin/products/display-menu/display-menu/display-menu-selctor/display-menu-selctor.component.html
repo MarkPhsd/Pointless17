@@ -28,7 +28,10 @@
               <div nbButton outline status='primary'
                   class="drag-drop-box"
                   *ngFor="let item of availableItems " cdkDrag>
-                  {{ item.name }}
+                  <div  fxLayoutAlign="space-between" fxLayoutWrap>
+                    <div>{{ item.name }}</div>
+                    <div class="mat-button" mat-button (click)="openScheduleMenu(item)"><mat-icon>open_in_new</mat-icon></div>
+                  </div>
               </div>
           </div>
         </div>
@@ -55,15 +58,11 @@
                   class="drag-drop-box"
                   *ngFor="let item of selectedItems"
                   cdkDrag>
-                  {{ item.name }}
+                  <div  fxLayoutAlign="space-between" fxLayoutWrap>
+                    <div>{{ item.name }}</div>
+                    <div class="mat-button" mat-button (click)="openScheduleMenu(item)"><mat-icon>open_in_new</mat-icon></div>
+                  </div>
               </div>
-
-              <!-- <div nbButton outline status='primary'
-                  class="drag-drop-box"
-                  *ngFor="let item of selectedItems | arrayFilter:['name', selectedSearchInput.id]"
-                  cdkDrag>
-                  {{ item.name }}
-              </div> -->
             </div>
         </div>
       </div>

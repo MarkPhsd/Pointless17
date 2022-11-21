@@ -12,6 +12,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { PriceCategories } from 'src/app/_interfaces/menu/price-categories';
 import { IPriceSchedule, PS_SearchResultsPaged } from 'src/app/_interfaces/menu/price-schedule';
 import { PriceScheduleService } from 'src/app/_services/menu/price-schedule.service';
+import { Router } from '@angular/router';
 
 export interface ISelectedMenu {
   name: string;
@@ -71,6 +72,7 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
 
   constructor(
     private siteService         : SitesService,
+    private router: Router,
     private priceScheduleService: PriceScheduleService,
     public  fb                  : FormBuilder
     ) {
@@ -129,6 +131,21 @@ export class AdminDisplayMenuSelctorComponent implements OnInit {
     }
 
     return true
+  }
+
+  openScheduleMenu(event) {
+    if (!event) {return}
+    // this.router.navigate(['price-schedule-edit', {id: event?.id}]);
+
+    const url    =  ['price-schedule-edit']
+    const params = {id: event?.id}
+
+    // const link = this.router.serializeUrl(this.router.createUrlTree(routerCommands, { queryParams }));
+    // window.open(link, '_blank');
+
+    this.router.navigate([]).then(result => {  window.open( `price-schedule-edit;id=${event.id}`, '_blank'); });
+    // const link = this.router.serializeUrl(this.router.createUrlTree( [url, params] ));
+    // window.open(url, '_blank');
   }
 
   drop(event: CdkDragDrop<IListBoxItem[]>) {

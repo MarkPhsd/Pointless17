@@ -157,7 +157,7 @@ export interface DiscountInfo {
   name:     string;
   allItems: boolean;
   typeID?:  number;
-  privateScheduleID: number;
+  priceScheduleID: number;
   sort:     number;
   menuItem: IMenuItem;
 }
@@ -172,7 +172,6 @@ export interface ClientType {
   priceScheduleID: number;
   clientTypeID:    number;
   name:            string;
-  privateScheduleID: number;
 }
 
 export interface DateFrame {
@@ -180,7 +179,7 @@ export interface DateFrame {
   priceScheduleID: number;
   startDate:       string;
   endDate:         string;
-  privateScheduleID: number;
+
 }
 
 export interface OrderType {
@@ -188,7 +187,7 @@ export interface OrderType {
   priceScheduleID: number;
   orderTypeID:     number;
   name:            string;
-  privateScheduleID: number;
+
 }
 
 export interface TimeFrame {
@@ -196,14 +195,14 @@ export interface TimeFrame {
   priceScheduleID: number;
   startTime:       string;
   endTime:         string;
-  privateScheduleID: number;
+
 }
 
 export interface WeekDay {
   id:              number;
   priceScheduleID: number;
   name:            string;
-  privateScheduleID: number;
+
 }
 
 

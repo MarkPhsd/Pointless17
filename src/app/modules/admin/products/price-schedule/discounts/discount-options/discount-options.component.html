@@ -21,15 +21,34 @@
       </mat-card-content>
 
       <div class="item-label">
-        <mat-label>Enabled</mat-label>
-        <mat-slide-toggle
-                class           ="price-values"
-                formControlName ="active"
-                [(ngModel)]     ="active"
-                (change)        = "onToggleChange($event)"
-                >
-        </mat-slide-toggle>
+
+        <span class="item-label">
+          <mat-label>Enabled</mat-label>
+          <mat-slide-toggle
+                  class           ="price-values"
+                  formControlName ="active"
+                  [(ngModel)]     ="active"
+                  (change)        = "onToggleChange($event)"
+                  >
+          </mat-slide-toggle>
+        </span>
+
+        <span>
+          <mat-label>Auto Apply to Order</mat-label>
+          <mat-slide-toggle
+                  class           ="price-values"
+                  formControlName ="autoApplyRewards"
+                  [(ngModel)]     ="autoApplyRewards"
+                  (change)        = "onToggleChange($event)"
+                  >
+          </mat-slide-toggle>
+        </span>
+
       </div>
+      <div class="item-label">
+
+      </div>
+
     </mat-card>
 
   </div>

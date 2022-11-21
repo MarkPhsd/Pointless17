@@ -164,6 +164,7 @@ import { ArrayFilterPipe, ArraySortPipe } from '../_pipes/array.pipe';
 import { BackgroundUrlPipe } from '../_pipes/background-url.pipe';
 import { DisplayMenuMenuComponent } from '../modules/display-menu/display-menu-menu/display-menu-menu.component';
 import { RewardsAvailibleComponent } from '../modules/posorders/rewards-availible/rewards-availible.component';
+import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-schedule-menu-list/price-schedule-menu-list.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -288,6 +289,8 @@ import { RewardsAvailibleComponent } from '../modules/posorders/rewards-availibl
     ProfileMedInfoComponent,
     ProgressBarComponent,
     PriceCategorySearchComponent,
+
+    PriceScheduleMenuListComponent,
     RewardsAvailibleComponent,
     RetailProductEditComponent,
     SimpleTinyComponent,
@@ -449,6 +452,7 @@ import { RewardsAvailibleComponent } from '../modules/posorders/rewards-availibl
     PriceTierScheduleComponent,
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
+    PriceScheduleMenuListComponent,
     ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,

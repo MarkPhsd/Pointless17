@@ -139,6 +139,9 @@ export interface UIHomePageSettings {
   sideToolbarEnableType    : boolean;
   sideToolbarEnableCategory: boolean;
 
+  scheduleSubMenu: boolean;
+  staffscheduleSubMenu: boolean;
+
   sendGridOrderTemplate: string;
   sendGridSalesReportTemplate : string;
   sendGridBalanceSheetTemplate : string;
@@ -487,6 +490,10 @@ export class UISettingsService {
       staffTypesEnabled     : [''],
       backgroundImage       : [''],
       logoHomePage          : [''],
+
+      scheduleSubMenu       : [],
+      staffscheduleSubMenu  : [],
+
       displayCompanyName    : [''],
       tinyLogo              : [''],
       wideOrderBar          : [''],

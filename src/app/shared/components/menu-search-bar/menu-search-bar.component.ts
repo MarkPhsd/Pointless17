@@ -38,6 +38,7 @@ get platForm() {  return Capacitor.getPlatform(); }
 @ViewChild('input', {static: true}) input: ElementRef;
 @Output() itemSelect  = new EventEmitter();
 @ViewChild('displayMenu') displayMenu: TemplateRef<any>;
+@ViewChild('displaySubMenu') displaySubMenu: TemplateRef<any>;
 
 searchPhrase:         Subject<any> = new Subject();
 itemName: string //() { return this.searchForm.get("itemName") as FormControl;}
@@ -142,6 +143,8 @@ initSubscriptions() {
       this.isDisplayMenuOn;
     }
   })
+
+
 }
 
 constructor(
@@ -246,8 +249,21 @@ constructor(
     if (!this.uiHomePage) { return };
 
     if ((this.isStaff && this.uiHomePage.staffMenuEnabled) ||
-        (!this.isUser && this.uiHomePage.menuEnabled)) {
+        (this.isUser && this.uiHomePage.menuEnabled)) {
       return this.displayMenu
+    }
+
+    return null;
+
+  }
+
+  get isDisplaySubMenuOn() {
+
+    if (!this.uiHomePage) { return };
+
+    if ((this.isStaff && this.uiHomePage.staffscheduleSubMenu) ||
+        (this.isUser && this.uiHomePage.scheduleSubMenu)) {
+      return this.displaySubMenu
     }
 
     return null;

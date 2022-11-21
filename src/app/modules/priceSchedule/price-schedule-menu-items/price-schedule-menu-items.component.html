@@ -1,0 +1,15 @@
+<button mat-button (click)="toggleSort()">Toggle {{sort}}</button>
+order {{order?.id}}
+<div   class="grid-flow" *ngIf="(menus$ | async) as menuItems"></div>
+<div class="grid-flow"  *ngIf="menuItems">
+  <div *ngFor="let item of menuItems; let i = index">
+      <button mat-raised-button
+              class="image-button"
+              (click)="menuItemAction(item)">
+          {{ item?.name  | truncateText: 30  }}
+        <mat-icon></mat-icon>
+      </button>
+  </div>
+</div>
+
+<div *ngIf="(addItem$ | async) as item"></div>

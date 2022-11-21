@@ -23,7 +23,7 @@ export class MenuItemCardDashboardComponent implements OnInit {
   ngOnInit(): void {
     if (this.listItemID) {
       const site = this.siteService.getAssignedSite();
-      this.menu$ = this.menuService.getMenuItemByID(site,this.listItemID)
+      this.menu$ = this.menuService.getMenuItemByID(site, this.listItemID)
     }
   }
 

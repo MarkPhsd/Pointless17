@@ -121,6 +121,8 @@ import { DisplayMenuListComponent } from './modules/display-menu/display-menu-li
 import { ThreeCXFabComponent } from './shared/widgets/three-cxfab/three-cxfab.component';
 import { AdminDisplayMenuListComponent } from './modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
 import { DisplayMenuMainComponent } from './modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
+import { PosPaymentsFilterComponent } from './modules/transactions/pos-payments-main/pos-payments-filter/pos-payments-filter.component';
+import { PriceScheduleMenuItemsComponent } from './modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
 
 const routes: Routes = [
 
@@ -207,6 +209,8 @@ const routes: Routes = [
 
         { path: 'price-schedule',      component: PriceScheduleListComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule', animation: 'isLeft'}},
         { path: 'price-schedule-edit', component: PriceScheduleComponent,canActivate: [AuthGuard], data: { title: 'Catalog Schedule Edit', animation: 'isLeft'}},
+
+        { path: 'price-schedule-menu-items',      component: PriceScheduleMenuItemsComponent , data: { title: 'Menu Items', animation: 'isLeft'}},
 
         { path: 'display-menu-main',      component: DisplayMenuMainComponent , data: { title: 'Display Menu', animation: 'isLeft'}},
         { path: 'display-menu',      component: DisplayMenuListComponent ,   data: { title: 'Display Menu', animation: 'isLeft'}},

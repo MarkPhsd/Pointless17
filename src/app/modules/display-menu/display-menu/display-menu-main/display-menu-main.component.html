@@ -4,7 +4,7 @@
     <div *ngIf="menus">
       <div  *ngFor="let menu of menus">
         <display-menu-title
-          (click)="navMenu(menu)"
+            (click)="navMenu(menu)"
             [bucket]="bucket"
             [menu]="menu">
         </display-menu-title>

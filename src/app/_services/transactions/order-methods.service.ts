@@ -42,7 +42,7 @@ export interface ProcessItem {
 })
 export class OrderMethodsService implements OnDestroy {
 
-  public order                           : IPOSOrder;
+  public order                    : IPOSOrder;
   _order                          : Subscription;
   subscriptionInitialized         : boolean;
 
@@ -54,7 +54,7 @@ export class OrderMethodsService implements OnDestroy {
 
   private _assingedPOSItems = new BehaviorSubject<PosOrderItem[]>(null);
   public  assignedPOSItems$ = this._assingedPOSItems.asObservable();
-  private assignPOSItems    : PosOrderItem[];
+  public assignPOSItems    : PosOrderItem[];
 
   private _posIssuePurchaseItem   = new BehaviorSubject<IPurchaseOrderItem>(null);
   public  posIssuePurchaseItem$ = this._posIssuePurchaseItem.asObservable();
@@ -384,10 +384,11 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number, portionValue: string, packaging: string): Observable<ItemPostResults> {
-    if (!barcode) {return null;}
+    if (!barcode) { return null;}
     if (!order) {const order = {} as IPOSOrder}
+    const passAlongItem = this.assignPOSItems[0];
     const deviceName = localStorage.getItem('devicename')
-    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue, deviceName: deviceName  } as NewItem
+    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,  } as NewItem
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
@@ -521,28 +522,33 @@ export class OrderMethodsService implements OnDestroy {
   }
 
   processItemPOSObservable( order : IPOSOrder ,
-                          barcode: string,
-                          item: IMenuItem,
-                          quantity: number,
-                          input: any,
-                          rewardAvailableID: number,
-                          rewardGroupApplied: number,) : Observable<ItemPostResults> {
+                            barcode: string,
+                            item: IMenuItem,
+                            quantity: number,
+                            input: any,
+                            rewardAvailableID: number,
+                            rewardGroupApplied: number,
+                            passAlongItem: PosOrderItem) : Observable<ItemPostResults> {
 
       const valid = this.validateUser();
 
-      if (!valid) { return };
+      if (!valid) {
+        this.notifyEvent(`Invalid user.`, 'Alert ')
+        return
+      };
 
       this.initItemProcess();
 
-      if (quantity === 0 ) { quantity = 1};
+      if (quantity === 0 ) { quantity = 1 };
 
-      if (!this.validateItem(item, barcode)) { return }
+      if (!this.validateItem(item, barcode)) {
+        this.notifyEvent(`Invalid item`, 'Alert ')
+        return
+      }
 
-      let passAlongItem;
-      if (this.assignedPOSItem) {  passAlongItem  = this.assignedPOSItem; };
+      if (this.assignedPOSItem && !passAlongItem) {  passAlongItem  = this.assignedPOSItem[0]; };
 
       order = this.validateOrder();
-
       if (order) {
         const site       = this.siteService.getAssignedSite();
 
@@ -569,6 +575,7 @@ export class OrderMethodsService implements OnDestroy {
           }
 
         } catch (error) {
+          this.notifyEvent(error, 'Alert ')
           console.log('error', error)
         }
       }

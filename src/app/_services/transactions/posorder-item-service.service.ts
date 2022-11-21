@@ -55,6 +55,7 @@ export interface NewItem            {
   packaging: string,
   itemNote: string,
   deviceName: string,
+  passAlongItem: any,
 }
 export interface NewInventoryItem   { orderID: number, quantity: number, menuItem: IInventoryAssignment, barcode: string,  weight: number, portionValue: string, packaging: string,  itemNote: string}
 export interface NewSerializedItem  { orderID: number, quantity: number, menuItem: Serial, barcode: string,  weight: number, portionValue: string, packaging:string,  itemNote: string}
@@ -167,7 +168,10 @@ export class POSOrderItemServiceService {
 
   addItemToOrderWithBarcode(site: ISite, newItem: NewItem):  Observable<ItemPostResults> {
 
-    if (!newItem ) { return }
+    if (!newItem ) {
+      console.log('no item for add item to order with barcode')
+
+      return }
     // console.log('menuItem', newItem.menuItem)
     // console.log('menuItem itemType', newItem.menuItem.itemType)
 

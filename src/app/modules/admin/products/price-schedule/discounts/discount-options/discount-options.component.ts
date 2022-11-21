@@ -17,6 +17,8 @@ export class DiscountOptionsComponent implements OnInit, OnChanges {
   @Input()  inputForm:           FormGroup;
   name    : string;
   active  : boolean;
+  autoApplyRewards: boolean;
+
   priceAdjustScheduleTypes$:     Observable<PriceAdjustScheduleTypes[]>;
 
   _priceSchedule              : Subscription;
@@ -27,6 +29,7 @@ export class DiscountOptionsComponent implements OnInit, OnChanges {
       this.priceScheduleTracking = data
       this.name = this.priceScheduleTracking.name
       this.active = this.priceScheduleTracking.active
+      this.autoApplyRewards = this.priceScheduleTracking.autoApplyRewards;
     })
   }
 
@@ -48,7 +51,6 @@ export class DiscountOptionsComponent implements OnInit, OnChanges {
     }
   }
 
-
   ngOnChanges() {
     this.updateInfo();
   }
@@ -57,6 +59,7 @@ export class DiscountOptionsComponent implements OnInit, OnChanges {
     if (this.priceScheduleTracking) {
       this.priceScheduleTracking.name   = this.name
       this.priceScheduleTracking.active = this.active
+      this.priceScheduleTracking.autoApplyRewards = this.autoApplyRewards
       this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     }
   }

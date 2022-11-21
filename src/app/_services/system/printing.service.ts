@@ -420,32 +420,27 @@ getDomToImage(node: any) {
 
       const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
       printer$.pipe(data => {
-        printer = data;
+          printer = data;
           if (!printer || !printer.text) {
-            return EMPTY;
+            return of(null)
           }
           return  menuItem$
         }).pipe(
           switchMap(data => {
-            if ( !data  || data == "No Records" || !data.itemType) {
-              // console.log('no data')
-              return EMPTY
+            if ( !data || !data.itemType) {
+              return of(null)
             }
-
-            // console.log('data.itemType', data.itemType)
             if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
                 if (data.itemType.labelTypeID !=0 ) {
                   return   this.settingService.getSetting(site, data.itemType.labelTypeID)
                 }
             } else {
-              // console.log('No print option')
               return this.orderItemService.setItemAsPrinted(site, item )
             }
 
         })).pipe(
           switchMap( data => {
-            // //get the PrintString Format
-            // console.log('getting Text From label setting',  data)
+            if (!data) { return of(null) }
             const content = this.renderingService.interpolateText(item, data.text)
             if (printer.text) {
               const result  = this.printLabelElectron(content, printer.text)

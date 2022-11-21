@@ -1,0 +1,68 @@
+@import "/src/mixins.scss";
+
+button {
+  margin: 10px;
+}
+
+.grid-flow {
+  --gap: 5px;
+  margin-top: 2px;
+  margin-right: 2px;
+  margin-left: 10px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+
+  // @include for-tablet-landscape-up {
+  //   grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+  // }
+
+  @include for-phone-only {
+    grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+  }
+}
+
+
+.grid-item {
+  // align-items: flex-end;
+  height: 125px;
+  width:  125px;
+  overflow-x: scroll;
+}
+
+// .mat-card {
+//   height: 200px;
+//   width:  250px;
+// }
+
+.image-button {
+  white-space: pre-wrap !important;
+  object-fit    : cover;
+  transition    : box-shadow 400ms;
+  border-radius : 5px;
+
+  margin        : 0px;
+  padding       : 5px;
+
+  height: 125px;
+  width:  125px;
+  font-weight: 400;
+  font-size: 1em;
+  white-space:normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-transform: capitalize;
+  font-size: 1.2em;
+
+  line-height: 1em !important;
+  // display: flex;
+
+  align-items: center;
+  justify-content: center;
+
+  @include for-phone-only {
+    width:  125px;
+    height: 125px;
+  }
+
+}

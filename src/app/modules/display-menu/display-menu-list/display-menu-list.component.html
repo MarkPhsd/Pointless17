@@ -5,7 +5,14 @@
   </div>
 </ng-template>
 
-<div class="bg" *ngIf="(action$ | async) as items; else loading" >
+<div class="bg" *ngIf="(action$ | async) as items; else loading"
+                style.border-radius="10px"
+                [style.background]="backgroundURL"
+                [style.height]="'calc(120% + 200px)'"
+                [style.width]="'100%'"
+                [ngStyle]="{
+                'background-repeat': 'repeat'
+                }" >
 
   <display-menu-title
       *ngIf="menu"
@@ -13,16 +20,23 @@
       [menu]="menu">
   </display-menu-title>
 
-  <div *ngFor="let category of items" class="categories-grid">
-    <mat-card class="category-view" >
-      <mat-card-subtitle>
+  <div *ngFor="let category of items" class="categories-grid" >
+    <mat-card class="category-view"
+              [style.background]="backgroundURL"
+              style.background-repeat="repeat"
+              [style.height]="'calc(120% + 200px)'"
+              [style.width]="'100%'"
+              [style.opacity]="menu.backcolorOpacity">
+      <mat-card-subtitle >
         <div class="category">
           <h1>{{ category?.name }}</h1>
           <mat-divider></mat-divider>
         </div>
       </mat-card-subtitle>
 
-      <mat-card-content>
+      <mat-card-content
+          [style.opacity]="menu.backcolorOpacity"
+          >
         <div *ngIf="category">
           <div class="item-container">
             <div class="grid-container">
@@ -49,8 +63,6 @@
                 </div>
 
                 <div *ngIf="item?.menuItem?.urlImageMain && item?.image != '' && category?.showImage">
-                  <!-- <img [src]="getImage(item?.menuItem?.urlImageMain)" class="menu-item-image" /> -->
-                  <!-- class     = "grid-item shine" -->
                     <img
                       loading   = "lazy"
                       draggable = "false"
@@ -94,15 +106,23 @@
             <div *ngIf="item?.menuItem?.description" class="item-description-row">
               {{  item?.description | slice: 0:200 }}
             </div>
-          <!-- </div> -->
+
         </div>
 
       </mat-card-content>
     </mat-card>
   </div>
 
-  <mat-card>
-    <div *ngIf="menu">
+  <!-- [style.background]="backgroundURL" -->
+  <!-- [style.opacity]="menu?.backcolorOpacity" -->
+  <mat-card class="category-view"
+            [style.background]="backgroundURL"
+            style.background-repeat="repeat"
+            [style.height]="'calc(120% + 200px)'"
+            [style.width]="'100%'"
+            [style.opacity]="menu.backcolorOpacity"
+      >
+    <div *ngIf="menu && menu.footer">
     {{ menu?.footer }}
     </div>
   </mat-card>

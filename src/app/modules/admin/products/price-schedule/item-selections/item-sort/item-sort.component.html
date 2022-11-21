@@ -1,6 +1,6 @@
 
+<div *ngIf="(action$ | async) as item"></div>
 <div fxFlex fxLayout="column start" >
-
   <div
        *ngIf="discountInfos">
     <h5>Drag / Drop to Sort</h5>
@@ -22,8 +22,8 @@
               </div>
               <div>
                 <button  mat-button
-                  (click)="deleteSelected(item)">
-                  Remove {{discountInfo?.name | truncateText: 8}}
+                  (click)="deleteSelected(item, index)">
+                      Remove {{discountInfo?.name | truncateText: 8}}
                   <mat-icon>delete</mat-icon>
                 </button>
               </div>

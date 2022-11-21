@@ -17,6 +17,8 @@ export class DisplayMenuMainComponent implements OnInit {
   placeHolderImage   : String = this.awsBucket.getPlaceHolderImage()
   menus: IDisplayMenu[];
 
+  xstyle = ''
+
   constructor(
     private displayMenuService: DisplayMenuService,
     private siteService       : SitesService,
@@ -28,17 +30,18 @@ export class DisplayMenuMainComponent implements OnInit {
     const i = 0
     const site = this.siteService.getAssignedSite()
     this.action$ = this.getBucket().pipe(
-      switchMap(data =>{
+      switchMap(data => {
         this.bucket = data.preassignedURL;
         return this.displayMenuService.getMenus(site);
       })
     ).pipe(
       switchMap(data => {
-        console.log(data)
-        this.menus = data;
-        return of(data)
-      })
+          this.menus = data;
+          return of(data)
+        }
+      )
     )
+
   }
 
   getBucket() {

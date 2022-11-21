@@ -16,8 +16,16 @@
 
 </div>
 
-<div >
+<div *ngIf="errorMessage"><mat-icon>warning</mat-icon><mat-label>{{errorMessage}}</mat-label></div>
+<div *ngIf="(upload$ | async) as action;else  loading"></div>
+<ng-template #loading>
+  <div *ngIf="uploading">
+    ...uploading
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
 
+<div>
     <div *ngIf="fileNames">
       <div *ngFor="let item of fileNames.split(','); let i = index ">
         <div *ngIf="item != ''"  class="container">
@@ -31,8 +39,6 @@
           <div class="delete" >
             <button mat-button (click)="deleteFile(item)"> <mat-icon>delete_forever</mat-icon></button>
           </div>
-
-
         </div>
       </div>
     </div>

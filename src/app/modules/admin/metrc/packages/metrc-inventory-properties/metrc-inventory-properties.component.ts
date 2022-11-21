@@ -95,10 +95,10 @@ export class MetrcInventoryPropertiesComponent implements OnInit {
           if (data) {
               const item = {} as IMenuItem;
               if (this.dataIsMenuItem(data)) {
-                this.menuItem = data;
+                this.menuItem = data as IMenuItem;
                 this.inputForm.patchValue({
-                  productName: [`${data.name}`],
-                  productID  : [data.productID]
+                  productName: [ this.menuItem.name ],
+                  productID  : [ this.menuItem.id]
                 })
                 this.outputMenuItem.emit(data)
                 return

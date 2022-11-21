@@ -19,47 +19,50 @@ export class FbClientTypesService {
   initUserAuthForm(fb: FormGroup): FormGroup {
     fb = this._fb.group({
 
+      voidOrder            : [],
+      voidItem             : [],
+      voidPayment          : [],
 
-      voidOrder           : [],
-      voidItem            : [],
-      voidPayment         : [],
-
-      changeItemPrice     : [],
-      changeInventoryValue: [],
-      blindBalanceSheet   : [],
-      blindClose          : [],
+      changeItemPrice      : [],
+      changeInventoryValue : [],
+      blindBalanceSheet    : [],
+      blindClose           : [],
 
       // 'admin section
-      closeDay            : [],
-      sendTextBlast       : [],
-      sendEmailBlast      : [],
-      deleteClientType    : [],
+      closeDay             : [],
+      sendTextBlast        : [],
+      sendEmailBlast       : [],
+      deleteClientType     : [],
 
-      accessHistoryReports: [],
-      accessDailyReport   : [],
+      accessHistoryReports : [],
+      accessDailyReport    : [],
 
       // 'metrc work
-      importMETRCPackages: [],
+      importMETRCPackages : [],
 
     // 'inventory work
-      adjustInventory    : [],
+      adjustInventory     : [],
 
     // 'product work
       adjustInventoryCount: [],
-      adjustProductCount : [],
+      adjustProductCount  : [],
 
       // 'add non customer types
-      addEmployee        : [],
-      changeClientType   : [],
+      addEmployee         : [],
+      changeClientType    : [],
 
-      changeAuths        : [],
-      accessAdmins       : [],
+      changeAuths         : [],
+      accessAdmins        : [],
 
-      refundItem     : [],
-      refundOrder    : [],
-      refundPayment  : [],
-      userAssignedBalanceSheet: [],
-      searchBalanceSheets: [],
+      refundItem      : [],
+      refundOrder     : [],
+      refundPayment   : [],
+
+      userAssignedBalanceSheet : [],
+      searchBalanceSheets      : [],
+      deleteInventory: [],
+      deleteProduct: [],
+      deleteEmployee: [],
     })
     return fb
 

@@ -395,6 +395,8 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
       const array = this.itemDiscounts
       const index = array.findIndex( data =>  data.itemID === itemID)
 
+      console.table(array)
+      console.log('index', index)
       if (index == -1){
         const newItem    =  {} as DiscountInfo;
         newItem.itemID   =  itemID;
@@ -404,18 +406,18 @@ export class RewardTypeResultsSelectorComponent implements OnInit, OnChanges,Aft
         this.applyChanges(newItem);
         this.lastSelectedItem = newItem
       } else {
-        this.itemDiscounts = this.itemDiscounts.splice(index, 1)
-        this.applyChanges(null);
-        this.lastSelectedItem = null
-      }
-    }
 
+        // this.itemDiscounts = this.itemDiscounts.splice(index, 1)
+        // this.applyChanges(null);
+        // this.lastSelectedItem = null
+      }
+
+    }
   }
 
   applyChanges(item: DiscountInfo) {
-    // console.log('Discounts', this.itemDiscounts)
-    // console.log('item to add', item)
     this.priceScheduleTracking.itemDiscounts = this.itemDiscounts;
+    console.log('')
     this.fbPriceScheduleService.addDiscountItems(this.inputForm, this.itemDiscounts)
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     this.lastSelectedItem  = item

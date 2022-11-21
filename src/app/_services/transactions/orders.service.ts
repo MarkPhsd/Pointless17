@@ -94,8 +94,6 @@ export class OrdersService {
 
   get IsOrderClaimed() { return this.orderClaimed};
 
-
-
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);
   }

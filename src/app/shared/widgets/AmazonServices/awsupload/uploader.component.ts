@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AWSBucketService, IAWS_Temp_Key, IKey } from 'src/app/_services';
 import { MatSnackBar, } from '@angular/material/snack-bar';
 import { HttpClient, } from '@angular/common/http';
-import { EMPTY, Observable,  } from 'rxjs';
+import { EMPTY, Observable, of,  } from 'rxjs';
 
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-widget-uploader',
@@ -16,6 +16,8 @@ import { switchMap } from 'rxjs/operators';
 export class UploaderComponent implements OnInit {
 
   files: File[] = [];
+  upload$: Observable<any>;
+  errorMessage: string;
 
   @Input() fileNames: string ; //string array of files
   @Output() messageOut = new EventEmitter<string>();
@@ -95,12 +97,82 @@ export class UploaderComponent implements OnInit {
 
      } catch (error) {
        this.notifyEvent(`Failed to upload ${error}`, 'Error')
-      this.uploading = false;
-      console.log(error)
+       this.uploading = false;
      }
   };
 
-  async uploadFile_alt(file: any) {
+  _confirmFileUpload(file: any ){
+    this.uploading = true;
+    this.errorMessage = ''
+    this.imageUrlToCheck = this.getImageURL(file.name)
+    const presign$ = this.awsBucket.getPresignedURLObservable(file)
+
+    this.upload$ = presign$.pipe(switchMap(data => {
+        if (!data || !data?.preassignedURL) {
+          this.notifyEvent(`Failed to get presigned url.`, 'Error')
+          this.uploading = false;
+          return of(null)
+        }
+        if (data?.preassignedURL) {
+          return this.awsBucket.uploadFile(file,  data?.preassignedURL)
+        }
+       return of(null)
+    }),
+    catchError( e => {
+      console.log('get assigned url', e)
+      this.errorMessage = e.toString()
+      return of(null)
+    })
+    ).pipe(switchMap( data => {
+          console.log(data)
+          if (!data) {
+            this.notifyEvent(`Failed to upload.`, 'Error')
+            this.uploading = false;
+            return of('not uploaded')
+          }
+          this.uploading = false;
+          this.uploadFile_alt(file)
+          return of('')
+        }
+      ),
+      catchError( e => {
+        console.log(e)
+        this.errorMessage = 'uploading error' + e.toString()
+        return of(null)
+      })
+    )
+
+    // this.upload$ = presign$.pipe(
+    //   switchMap( data => {
+    //       if (!data || !data?.preassignedURL) {
+    //         this.notifyEvent(`Failed to upload.`, 'Error')
+    //         this.uploading = false;
+    //         return of(null)
+    //       }
+    //       if (data?.preassignedURL) {
+    //         return this.awsBucket.uploadFile(file,  data?.preassignedURL)
+    //       }
+    //       return of(null)
+    //     )
+    //   ).pipe(
+    //   switchMap(data => {
+    //     if (!data) { return of('not uploaded')}
+    //     this.uploading = false;
+    //     this.uploadFile_alt(file)
+    //     return of('')
+    //     }
+    //   )
+    // )
+
+    //  } catch (error) {
+    //    this.notifyEvent(`Failed to upload ${error}`, 'Error')
+    //   this.uploading = false;
+    //   console.log(error)
+    //  }
+
+  };
+
+  uploadFile_alt(file: any) {
     if (!this.files) {this.files = []  as File[] }
     this.files.push(file);
     this.removeDuplicateFileNames()

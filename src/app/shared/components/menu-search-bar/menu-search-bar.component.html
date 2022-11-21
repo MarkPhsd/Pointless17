@@ -17,6 +17,12 @@
       </search-debounce-input>
     </div>
 
+    <ng-container [ngTemplateOutlet]="isDisplaySubMenuOn"></ng-container>
+
+    <ng-template #displaySubMenu>
+      <price-schedule-menu-list></price-schedule-menu-list>
+    </ng-template>
+
     <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
 
     <ng-template #displayMenu>

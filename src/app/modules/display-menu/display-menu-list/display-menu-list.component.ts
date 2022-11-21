@@ -25,13 +25,13 @@ export class DisplayMenuListComponent implements OnInit {
 
   containerStyle = ``
   containerBackground = 'cemement.png';
+  backgroundURL = `url(backgroundURL.png)`;
 
   getContainerBackground(backgroundImage: string) {
     this.containerStyle = ''
-    const background = this.getItemSrc(backgroundImage);
-    if (!background || background == undefined) { return }
-    this.containerStyle =`{background: ${background},
-                          'background-repeat': 'repeat', height: '500vh'`;
+    const image =    this.awsBucket.getImageURLPathAlt(this.bucket, backgroundImage)
+    this.backgroundURL = `url(${image})`
+    return this.backgroundURL;
   }
 
   getItemSrc(nameArray: string) {
@@ -51,10 +51,7 @@ export class DisplayMenuListComponent implements OnInit {
       private displayMenuService: DisplayMenuService, ) {
 
     this.id = +this.route.snapshot.paramMap.get('id');
-    // this.id = 2;
   }
-
-  // <!-- {{containerStyle}} -->
 
   loadStyles() {
     const styles = this.menu.css;
@@ -76,7 +73,7 @@ export class DisplayMenuListComponent implements OnInit {
       })).pipe(
       switchMap(data => {
 
-        if (data.backgroundImage) {
+        if (data && data.backgroundImage) {
           this.getContainerBackground(data.backgroundImage)
         }
 
@@ -91,7 +88,7 @@ export class DisplayMenuListComponent implements OnInit {
         });
 
         this.menu = data;
-        this.loadStyles();
+        // this.loadStyles();
 
         forkJoin(this.obs$)
         return  forkJoin(this.obs$)

@@ -206,13 +206,14 @@ export class StrainProductEditComponent implements OnInit {
        return
     }
 
-    this.menuService.deleteProduct(site, this.product.id).subscribe( data =>{
-      this._snackBar.open("Item deleted", "Success")
-      this.onCancel(event)
-    })
+    this.action$ =  this.menuService.deleteProduct(site, this.product.id).pipe(
+      switchMap( data =>{
+        this.notifyEvent(data.toString(), "Result")
+        this.onCancel(event)
+        return of(data)
+      })
+    )
   }
-
-
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {
