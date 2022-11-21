@@ -141,7 +141,7 @@ export interface IPriceSchedule {
   showImage: boolean;
   showDescription: boolean;
   showInfo: boolean;
-
+  autoApplyRewards: boolean;
   title: string;
   subTitle: string;
   showAddress: string;
