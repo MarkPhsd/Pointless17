@@ -6,12 +6,13 @@ import { MenuItemsSelected, PromptSubGroups, SelectedPromptSubGroup } from 'src/
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IPromptGroup, PromptMenuItem } from 'src/app/_interfaces/menu/prompt-groups';
 import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-walk-through.service';
-import { Subscription } from 'rxjs';
+import { of, Subscription, switchMap } from 'rxjs';
 import { AWSBucketService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'prompt-panel-menu-item',
@@ -45,6 +46,11 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
   posItem          : PosOrderItem;
   _posItem         : Subscription;
+
+  bucket$ : Observable<any>;
+  menuItem$: Observable<MenuItemsSelected>;
+  newItem$ : Observable<MenuItemsSelected>;
+  removeItem$: Observable<MenuItemsSelected>;
 
   intSubscriptions() {
     this._order = this.orderService.currentOrder$.subscribe(data => {
@@ -81,12 +87,17 @@ export class PromptPanelMenuItemComponent implements OnInit {
      private awsBucket                : AWSBucketService,
      ) { }
 
-  async ngOnInit() {
+   ngOnInit() {
     this.intSubscriptions();
-    this.bucketName =   await this.awsBucket.awsBucket();
-    if (this.promptMenuItem.prompt_Products.name) {
-      this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products)
-    }
+    this.bucket$ = this.awsBucket.getAWSBucketObservable().pipe(
+      switchMap(data => {
+        this.bucketName =  data.preassignedURL;
+        if (this.promptMenuItem.prompt_Products.name) {
+          this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products)
+          return of(data)
+        }
+      })
+    )
   }
 
   getItemSrc(prompt_Products) {
@@ -97,78 +108,100 @@ export class PromptPanelMenuItemComponent implements OnInit {
   }
 
   //promptMenuItem.prompt_Products.name
-  getOrderPromptStatus(): IPromptGroup {
-    return   this.promptWalkService.canItemBeAdded(
-       this.menuItem, this.orderPromptGroup, this.index, this.subGroupInfo
-    )
+  validateAddingItem(): IPromptGroup {
+    return   this.promptWalkService.canItemBeAdded( this.orderPromptGroup, this.index, this.subGroupInfo)
   }
 
-  async removeItem() {
-    let orderPromptGroup = this.getOrderPromptStatus();
+  removeItem() {
+    let orderPromptGroup = this.validateAddingItem();
     if (!orderPromptGroup) { return }
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index]
-    const item = await this.getMenuItemToApply();
-
-    if (item) {
-      currentSubPrompt.promptSubGroups.itemsSelected.push(item)
-      orderPromptGroup.selected_PromptSubGroups[this.index] = currentSubPrompt
-      //update subscription
-      this.promptWalkService.updatePromptGroup(orderPromptGroup)
-    }
+    this.removeItem$ =  this.getMenuItemToApply().pipe(switchMap(
+      data => {
+        if (data) {
+          currentSubPrompt.promptSubGroups.itemsSelected.push(data)
+          orderPromptGroup.selected_PromptSubGroups[this.index] = currentSubPrompt
+          this.promptWalkService.updatePromptGroup(orderPromptGroup)
+        }
+        return of(data)
+      }
+    ))
   }
 
-  async addItem() {
+  addItem() {
+
+    // if (!this.menuItem) {
+    //   this.orderService.notificationEvent('No menu item.', 'Info')
+    //   return;
+    // }
 
     this.orderPromptGroup = this.promptWalkService.initPromptWalkThrough(this.order, this.promptGroup)
 
-    if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
+    // console.log('orderPromptGroup', this.orderPromptGroup);
     //can item be added to this sub group.
-    let orderPromptGroup = this.getOrderPromptStatus();
-    // console.log('orderPromptGroup is it initialized?', orderPromptGroup)
+    if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
 
-    if (!orderPromptGroup) { return }
+    let orderPromptGroup = this.validateAddingItem();
+    // console.log('init group', orderPromptGroup);
 
+    if (!orderPromptGroup) {
+      this.orderService.notificationEvent('No prompt group assigned..', 'Info')
+      return
+    }
+
+    console.log('item', orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups)
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
-    // console.log('name', currentSubPrompt.name, currentSubPrompt)
 
     if (currentSubPrompt.quantityMet) {
-      console.log('Quantity already met moving on ')
+      this.orderService.notificationEvent('Quantity already met moving on.', 'Info')
+      // console.log('Quantity already met moving on ')
       this.nextStep()
       return
     }
 
-    //then we can add the item including the reference of the item.
-    const item = await this.getMenuItemToApply();
-    // console.log('item - adding item', item)
-
-    if (item) {
-      if (!currentSubPrompt.itemsSelected) { currentSubPrompt.itemsSelected = [] as MenuItemsSelected[]}
-      currentSubPrompt.itemsSelected.push(item)
-      orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected = currentSubPrompt.itemsSelected
-      this.promptWalkService.updatePromptGroup(orderPromptGroup)
-    }
-
-    //do check again after item has been added.
-    orderPromptGroup = this.getOrderPromptStatus();
-    if (!orderPromptGroup) { return }
-    if (currentSubPrompt.quantityMet) {
-      this.nextStep()
-      return
-    }
+    // then we can add the item including the reference of the item.
+    // const item = await this.getMenuItemToApply();
+    this.newItem$ = this.getMenuItemToApply().pipe(
+      switchMap(data => {
+        if (data) {
+          if (!currentSubPrompt.itemsSelected) {
+            currentSubPrompt.itemsSelected = [] as MenuItemsSelected[]
+          }
+          currentSubPrompt.itemsSelected.push(data)
+          orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected = currentSubPrompt.itemsSelected;
+          this.promptWalkService.updatePromptGroup(orderPromptGroup)
+        }
+        //do check again after item has been added.
+        orderPromptGroup = this.validateAddingItem();
+        if (!orderPromptGroup) { return }
+        if (currentSubPrompt.quantityMet) {
+          // console.log('add new item, quantity met')
+          this.nextStep()
+        }
+        return of(data)
+      })
+    )
   }
 
- async getMenuItemToApply(): Promise<MenuItemsSelected> {
+
+
+  getMenuItemToApply(): Observable<MenuItemsSelected> {
+
     if (this.promptMenuItem) {
-      const site = this.siteService.getAssignedSite();
-      const menuItemsSelected    = {} as MenuItemsSelected
-      const menuItem             =  await this.menuService.getMenuItemByID(site,this.promptMenuItem.menuItemID ).pipe().toPromise();
-      menuItemsSelected.menuItem = menuItem;
-      menuItemsSelected.price    = menuItem.retail;
-      menuItemsSelected.quantity = 1
-      return menuItemsSelected
+        const site = this.siteService.getAssignedSite();
+        const menuItemsSelected    = {} as MenuItemsSelected
+        return this.menuService.getMenuItemByID(site, this.promptMenuItem.menuItemID ).pipe(switchMap(data => {
+          menuItemsSelected.menuItem = data;
+          menuItemsSelected.price    = data.retail;
+          menuItemsSelected.quantity = 1
+          this.menuItem = data;
+          return of(menuItemsSelected);
+        })
+      )
     }
-    return null
+    return of(null);
   }
+
 
   // menuItem         : IMenuItem;
   // unitTypeID       : number;
@@ -187,11 +220,13 @@ export class PromptPanelMenuItemComponent implements OnInit {
 
   nextStep() {
     // console.log('next step')
-    this.outputNextStep.emit('true')
+    // this.outputNextStep.emit('true')
+    this.promptWalkService.nextStep()
   }
 
   prevStep() {
     // console.log('prev step')
-    this.outputPrevStep.emit('true')
+    // this.outputPrevStep.emit('true')
+    this.promptWalkService.previousStep()
   }
 }

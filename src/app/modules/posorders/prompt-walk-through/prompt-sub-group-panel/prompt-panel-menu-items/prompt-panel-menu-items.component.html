@@ -1,9 +1,10 @@
 <div *ngIf="subGroup" class="container">
+  <!-- accordionStep {{accordionStep}}
+  index {{ index }} -->
   <mat-expansion-panel  [expanded] = "accordionStep === index"
                         (opened)   = "setStep(index)"
                         hideToggle>
-
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header (click)="setAccordionStep(index)">
         <mat-panel-title>
           <h4>
             {{subGroup.name}}
@@ -29,7 +30,7 @@
     <div [innerHTML]="subGroup.instructions"></div>
 
     <div  class="grid-items">
-      <div       *ngFor="let item of subGroup.promptMenuItems;
+      <div   *ngFor="let item of subGroup.promptMenuItems;
               let i = index;">
         <prompt-panel-menu-item
           [promptMenuItem] = "item"
