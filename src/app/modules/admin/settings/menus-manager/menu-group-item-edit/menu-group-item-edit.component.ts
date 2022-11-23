@@ -92,7 +92,10 @@ export class MenuGroupItemEditComponent implements OnInit, OnChanges {
     const site = this.siteService.getAssignedSite()
     if (this.inputForm.valid) {
       this.item = this.inputForm.value
-      this.item.menuID = this.accordionMenu.id;
+
+      // console.table(this.inputForm.value);
+      // return;
+      // this.item.menuID = this.accordionMenu?.id;
       this.item.minimized = this.minimized
       let item$: any;
 

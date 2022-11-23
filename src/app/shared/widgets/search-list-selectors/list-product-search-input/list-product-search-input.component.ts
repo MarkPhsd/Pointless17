@@ -5,7 +5,7 @@ import { Component,Output,OnInit,
 import { MenuService, OrdersService } from 'src/app/_services';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap,filter,tap, map } from 'rxjs/operators';
-import { Subject ,fromEvent, Subscription } from 'rxjs';
+import { Subject ,fromEvent, Subscription, of } from 'rxjs';
 import { IPOSOrder,  } from 'src/app/_interfaces';
 import { Capacitor, Plugins } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -13,6 +13,8 @@ import { TransactionUISettings, UISettingsService } from 'src/app/_services/syst
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { Observable } from 'rxjs'
+import { E } from '@angular/cdk/keycodes';
 // https://github.com/rednez/angular-user-idle
 const { Keyboard } = Plugins;
 
@@ -26,7 +28,7 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
   get platForm() {  return Capacitor.getPlatform(); }
   @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
+  action$: Observable<any>;
 
   searchPhrase:  Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}
@@ -163,32 +165,30 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     }
   }
 
-  async refreshSearch() {
+  refreshSearch() {
     const barcode =  this.input.nativeElement.value
-    await this.addItemToOrder(barcode)
+    this.action$ =  this.addItemToOrderObs(barcode)
   }
 
-  async onUpdate() {
+   onUpdate() {
     if (this.requireEnter) {
       const barcode =  this.input.nativeElement.value
-      await this.addItemToOrder(barcode)
+      this.action$ =  this.addItemToOrderObs(barcode)
     }
   }
 
   async addItemToOrder(barcode: string) {
-
     const site = this.siteService.getAssignedSite();
-
     const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode);
 
     item$.subscribe(data => {
       console.log('data from scan', data)
       if ( !data ) {
-        this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+        this.orderMethodService.processAddItem(this.order, barcode, null, 1, this.input);
       } else
       {
         if (data.length == 1 || data.length == 0) {
-          this.orderMethodService.scanBarcodeAddItem(barcode, 1, this.input)
+          this.orderMethodService.processAddItem(this.order, barcode, null, 1, this.input);
         } else {
           this.listBarcodeItems(data, this.order)
         }
@@ -196,6 +196,27 @@ export class ListProductSearchInputComponent implements  OnDestroy, OnInit {
     })
 
     this.initForm()
+  }
+
+  addItemToOrderObs(barcode: string) {
+    const site = this.siteService.getAssignedSite();
+    const item$ = this.menuItemService.getMenuItemByBarcode(site, barcode);
+    this.initForm()
+    return  item$.pipe( switchMap( data => {
+        if ( !data ) {
+          return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, null)
+        } else
+        {
+          if (data.length == 1 || data.length == 0) {
+            return this.orderMethodService.processItemPOSObservable(this.order, barcode, null, 1, this.input, 0, 0, null)
+          } else {
+            this.listBarcodeItems(data, this.order)
+          }
+        }
+        return of(data);
+      })
+    )
+
   }
 
   //this.orderMethodService.processAddItem

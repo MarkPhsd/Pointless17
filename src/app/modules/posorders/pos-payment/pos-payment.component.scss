@@ -19,10 +19,18 @@ mat-card {
 .order-layout-empty {
 }
 
-.grid-tip-buttons { 
+.action-buttons {
+  height: 60px;
+  width: 90px;
+  margin: 5px;
+}
+
+.grid-tip-buttons {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  row-gap: 5px;
+  column-gap: 5px;
   justify-content: space-between;
   margin: 5px;
 }
@@ -158,8 +166,11 @@ mat-card {
 .item-container {
   display: flex;
   flex-wrap: wrap;
+  flex-direction: row;
   align-content: center;
-  justify-content: center;
+  row-gap: 5px;
+  column-gap: 5px;
+  justify-content: space-evenly;
   width: 100%;
 }
 
@@ -170,7 +181,7 @@ mat-card {
 
 .payment-buttons {
   height: 75px;
-  width: 155px;
+  width: 120px;
   margin: 10px;
 }
 

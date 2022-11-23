@@ -27,8 +27,7 @@ export class PriceScheduleMenuListComponent implements OnInit {
     const i = 0;
     const site = this.siteService.getAssignedSite();
     this.menus$ = this.priceScheduleService.getSimpleMenuList(site).pipe(switchMap(data => {
-      console.log(data.results)
-      this.menus = data.results;
+      this.menus = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
       return (data.results)
     }))
   }

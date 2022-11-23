@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div *ngIf="footerText && orders && order.length>0">
+      <div *ngIf="footerText && orders && orders.length>0">
         <div *ngFor="let order of orders">
             <div [innerHTML]="getInterpolatedHTML(footerText, order)" >  </div>
         </div>
@@ -67,7 +67,7 @@
           <div *ngFor="let payment of payments">
             <div *ngIf=" payment.paymentMethod">
 
-              <div *ngIf=" payment.paymentMethod.isCreditCard">
+              <div *ngIf="payment.paymentMethod.isCreditCard">
                 <div [innerHTML]="getInterpolatedHTML(paymentsCreditText, payment)" >  </div>
               </div>
 

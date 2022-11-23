@@ -16,6 +16,13 @@ export class DisplayMenuTitleComponent implements OnInit {
   backgroundURL: string
   style: string;
 
+  @Input() backgroundImage : string;
+  @Input() hideLogo: boolean;
+  @Input() repeat = 'repeat'
+  @Input() styleWidth = '100vw';
+  @Input() styleHeight ='calc(120% + 200px)';
+  @Input() styleMinWidth = '450px'
+  @Input() objectfit = 'cover';
   getItemSrc(nameArray: string) {
     if (!this.bucket) { return }
     return this.awsBucket.getImageURLFromNameArray(this.bucket, nameArray)
@@ -29,9 +36,24 @@ export class DisplayMenuTitleComponent implements OnInit {
 
   ngOnInit(): void {
     const i = 0
-    this.loadStyles()
+    if (this.menu) {
+      if (this.menu.backcolorOpacity) {
+        this.menu.backcolorOpacity = "1"
+      }
+
+    }
+    this.loadStyles();
+    this.applyBackground();
+  }
+
+  applyBackground() {
+    if (this.backgroundImage) {
+      const image =    this.awsBucket.getImageURLPathAlt(this.bucket, this.backgroundImage)
+      this.backgroundURL = `url(${image})`
+      return;
+    }
+
     if (this.menu?.backgroundImage) {
-      // this.menu.backcolorOpacity
       const image =    this.awsBucket.getImageURLPathAlt(this.bucket, this.menu?.backgroundImage)
       this.backgroundURL = `url(${image})`
     }

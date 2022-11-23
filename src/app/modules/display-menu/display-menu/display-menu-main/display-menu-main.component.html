@@ -1,16 +1,23 @@
 <mat-card>
   <mat-card-content>
-    <div *ngFor="(action$ | async) as items"></div>
-    <div *ngIf="menus">
-      <div  *ngFor="let menu of menus">
+    <div   class="menu-grid" *ngIf="menus">
+
         <display-menu-title
+            *ngFor="let menu of menus"
             (click)="navMenu(menu)"
             [bucket]="bucket"
+            [styleWidth]="'100%'"
+            [styleHeight]="'100%'"
+            [backgroundImage]="menu?.logo"
+            [hideLogo]="true"
+            [styleMinWidth]="'375px'"
+            [repeat]="'no-repeat'"
+            [objectfit]="'fill'"
             [menu]="menu">
         </display-menu-title>
-        <mat-divider></mat-divider>
-      </div>
+
     </div>
   </mat-card-content>
 </mat-card>
 
+<div  *ngFor="(action$ | async) as items"></div>

@@ -67,11 +67,25 @@
 }
 
 .toggle-buttons-height-medium {
-  // max-height: 350px;
+  max-height: 450px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 100%;
+  @include for-phone-only  {
+    max-width: 350px;
+    width: 100%;
+  }
 }
 
 .toggle-buttons-height-short {
-  // max-height: 250px;
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-width: 100%;
+  @include for-phone-only  {
+    max-width: 350px;
+    width: 100%;
+  }
 }
 
 .toggle-buttons {

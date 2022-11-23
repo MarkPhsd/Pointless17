@@ -111,6 +111,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   itemsPerPage      = 20
   smallDevice : boolean;
   //list height
+
+  message = ''
   @Input() height = "84vh"
 
   initSubscriptions() {
@@ -363,6 +365,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
       const items$ =  this.getRowData(params, params.startRow, params.endRow)
+      this.message = '...loading'
       items$.subscribe(data =>
         {
             if (!data || !data.paging) { return }
@@ -377,6 +380,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
               }
             }
+            this.message = ''
             if (data.results) {
               //not applicable to all lists, but leave for ease of use.
               let results  =  this.refreshImages(data.results)

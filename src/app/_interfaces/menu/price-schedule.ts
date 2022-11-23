@@ -64,6 +64,7 @@ export interface IPriceSearchModel {
   pageNumber:         number;
   pageSize:           number;
   currentPage       : number;
+  sort: number;
 }
 
 
@@ -83,6 +84,7 @@ export interface IDisplayMenu {
   backgroundImage: string;
   interactive: boolean;
   enabled: boolean;
+  sort: number;
 }
 
 export interface IDisplayMenuSearchModel {
@@ -145,7 +147,7 @@ export interface IPriceSchedule {
   title: string;
   subTitle: string;
   showAddress: string;
-
+  sort: number;
 }
 
 export interface DiscountInfo {

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { FlexOrderDirective } from '@angular/flex-layout';
 import { BehaviorSubject } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
@@ -46,11 +45,12 @@ export class PromptWalkThroughService {
   private _promptTotal         = new BehaviorSubject<number>(null);
   public  promptTotal$         = this._promptTotal.asObservable();
 
-
   private _accordionStep         = new BehaviorSubject<number>(null);
   public  accordionStep$         = this._accordionStep.asObservable();
+  accordionStep : number;
 
   updatePromptGroup(orderPromptGroup:  IPromptGroup) {
+
      this._orderPromptGroup.next(orderPromptGroup);
      if (!orderPromptGroup) {
       this._promptTotal.next(0)
@@ -61,7 +61,20 @@ export class PromptWalkThroughService {
   }
 
   updateAccordionStep(number) {
+    this.accordionStep = number;
     this._accordionStep.next(number)
+  }
+
+  nextStep() {
+    if (!this.accordionStep) { this.accordionStep }
+    this.accordionStep ++;
+    this._accordionStep.next(this.accordionStep)
+  }
+
+  previousStep() {
+    if (!this.accordionStep) { this.accordionStep = 0 }
+    this.accordionStep --;
+    this._accordionStep.next(this.accordionStep)
   }
 
   constructor(private orderService         : OrdersService,
@@ -69,10 +82,10 @@ export class PromptWalkThroughService {
               private promptSubService     : PromptGroupService,
               private promptSubGroupService: PromptSubGroupsService
               ) {
-                this._accordionStep.next(0)
-              }
+    this._accordionStep.next(0)
+  }
 
-  canItemBeAdded(item: IMenuItem, orderPromptGroup: IPromptGroup,
+  canItemBeAdded(orderPromptGroup: IPromptGroup,
                  index: number, subGroupInfo : PromptSubGroups): IPromptGroup {
 
     let prompt = orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups
@@ -81,45 +94,51 @@ export class PromptWalkThroughService {
     if (prompt) {
       prompt.quantityMet = false;
 
-      // currentOrderPrompt.
-      if ( prompt.itemsSelected && prompt.itemsSelected.length >= prompt.maxQuantity) {
-        if ( prompt.maxQuantity != 0 ) {
-          prompt.quantityMet = true
-        }
+      // if (!this.accordionStep) {
+      //   console.log('sets accordion setup 1')
+      //   this._accordionStep.next(orderPromptGroup.currentAccordionStep);
+      //   orderPromptGroup.currentAccordionStep = 0;
+      // }
+
+      if (!prompt?.itemsSelected) {
+        return orderPromptGroup;
       }
 
-      if ( prompt.itemsSelected &&
-           prompt.itemsSelected.length != 0 &&
-           prompt.minQuantity != 0 &&
-           prompt.minQuantity >= prompt.itemsSelected.length ) {
-        if ( prompt.maxQuantity != 0 ) {
-          prompt.quantityMet = true
-        } else {
-
-        }
-      }
-
-      if (!orderPromptGroup.currentAccordionStep) {
-        orderPromptGroup.currentAccordionStep = 0;
-      }
+      prompt = this.setQuantityCheck(prompt)
 
       if (prompt.quantityMet) {
-        // console.log('orderPromptGroup.currentAccordionStep', orderPromptGroup.currentAccordionStep)
+        console.log('sets accordion setup 2')
         orderPromptGroup.currentAccordionStep ++;
-        // console.log('orderPromptGroup.currentAccordionStep ++;', orderPromptGroup.currentAccordionStep)
+        this._accordionStep.next(orderPromptGroup.currentAccordionStep);
+        console.log('increment', orderPromptGroup.currentAccordionStep)
       }
 
-
       orderPromptGroup.selected_PromptSubGroups[index].promptSubGroups = prompt;
-      // console.log('item can be added?', prompt.quantityMet ,  prompt)
 
     }
 
-    console.log('updating prompt group')
-
     this.updatePromptGroup(orderPromptGroup);
     return orderPromptGroup;
+  }
 
+  setQuantityCheck(prompt) {
+    if ( prompt.itemsSelected &&
+          prompt.itemsSelected.length >= prompt.maxQuantity) {
+      if ( prompt.maxQuantity != 0 ) {
+        prompt.quantityMet = true
+      }
+    }
+
+    if ( prompt.itemsSelected &&
+          prompt.itemsSelected.length != 0 &&
+          prompt.minQuantity != 0 &&
+          prompt.minQuantity >= prompt.itemsSelected.length ) {
+
+      if ( prompt.maxQuantity != 0 ) {
+        prompt.quantityMet = true
+      }
+    }
+    return prompt;
   }
 
   ///this process initalizes the object  orderPromptGroup {
@@ -131,14 +150,10 @@ export class PromptWalkThroughService {
   }
 
   getPromptTotal(prompt: IPromptGroup): number {
-
     let total = 0 ;
-
     if (prompt) {
-
       if (prompt.selected_PromptSubGroups) {
         prompt.selected_PromptSubGroups.forEach(data => {
-          // console.log('getPromptTotal', data)
           if (data.promptSubGroups && data.promptSubGroups.itemsSelected) {
             data.promptSubGroups.itemsSelected.forEach( items => {
               total = items.price + total
@@ -147,9 +162,8 @@ export class PromptWalkThroughService {
         })
       }
     }
-    // console.log('getPromptTotal items',total)
-    return total;
 
+    return total;
   }
 
 }

@@ -49,28 +49,31 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   initPromptSubscriber() {
       this._orderPromptGroup  = this.promptWalkService.orderPromptGroup$.subscribe( data => {
-      this.orderPromptGroup = data;
-      if (this.orderPromptGroup)
-      {
-        this.panelIndex       = this.orderPromptGroup.currentAccordionStep
-        // console.log('this panel update', data.selected_PromptSubGroups[this.index].promptSubGroups.name, this.panelIndex)
-      }
+        this.orderPromptGroup = data;
+        if (this.orderPromptGroup)
+        {
+
+          //this.accordionStep = data;
+
+          this.panelIndex       = this.orderPromptGroup.currentAccordionStep
+          // console.log('this panel update', data.selected_PromptSubGroups[this.index].promptSubGroups.name, this.panelIndex)
+        }
     })
   }
 
   initAccordionSubscriber() {
     this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => {
+      console.log('accordiona data updated', data)
       this.accordionStep = data;
-      // console.log('accordion update', data)
+      // this.index = this.accordionStep;
+      this.setStep(this.accordionStep)
     })
   }
 
   intSubscriptions() {
-
-    this.initPOSItemSubscriber
+    this.initPOSItemSubscriber()
     this.initPromptSubscriber()
     this.initAccordionSubscriber()
-
   }
 
   constructor(
@@ -96,23 +99,17 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   getItemSrc(prompt_Products) {
     if (!this.subGroupInfo || !this.subGroupInfo.image) {
-      // return this.awsBucket.getImageURLPath(this.bucketName, "placeholderproduct.jpg")
-    } else {
+      } else {
       return this.awsBucket.getImageURLPath(this.bucketName, this.subGroupInfo.image)
     }
   }
 
   nextStep(event) {
-    this.accordionStep++;
-    this.promptWalkService.updateAccordionStep(this.accordionStep)
-    this.setStep(this.accordionStep )
+    this.promptWalkService.nextStep();
   }
 
   prevStep(event) {
-    this.accordionStep --;
-    this.promptWalkService.updateAccordionStep(this.accordionStep)
-    this.setStep(this.accordionStep )
-
+    this.promptWalkService.previousStep()
   }
 
   setStep(index: number) {
@@ -120,5 +117,9 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       return true;
     }
     return false;
+  }
+
+  setAccordionStep(index) {
+    this.promptWalkService.updateAccordionStep(index)
   }
 }

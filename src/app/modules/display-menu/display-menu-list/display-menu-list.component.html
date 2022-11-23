@@ -21,20 +21,20 @@
   </display-menu-title>
 
   <div *ngFor="let category of items" class="categories-grid" >
-    <mat-card class="category-view"
+    <div class="category-view"
               [style.background]="backgroundURL"
               style.background-repeat="repeat"
               [style.height]="'calc(120% + 200px)'"
               [style.width]="'100%'"
               [style.opacity]="menu.backcolorOpacity">
-      <mat-card-subtitle >
+      <div >
         <div class="category">
           <h1>{{ category?.name }}</h1>
           <mat-divider></mat-divider>
         </div>
-      </mat-card-subtitle>
+      </div>
 
-      <mat-card-content
+      <div
           [style.opacity]="menu.backcolorOpacity"
           >
         <div *ngIf="category">
@@ -109,13 +109,13 @@
 
         </div>
 
-      </mat-card-content>
-    </mat-card>
+      </div>
+    </div>
   </div>
 
   <!-- [style.background]="backgroundURL" -->
   <!-- [style.opacity]="menu?.backcolorOpacity" -->
-  <mat-card class="category-view"
+  <div class="category-view"
             [style.background]="backgroundURL"
             style.background-repeat="repeat"
             [style.height]="'calc(120% + 200px)'"
@@ -125,6 +125,6 @@
     <div *ngIf="menu && menu.footer">
     {{ menu?.footer }}
     </div>
-  </mat-card>
+  </div>
 
 </div>

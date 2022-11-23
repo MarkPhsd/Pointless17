@@ -147,6 +147,11 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
 
     }
 
+    refreshItemTypesAssociation() {
+      const site = this.siteService.getAssignedSite()
+      this.itemTypes$    = this.itemTypeService.getItemTypes(site);
+    }
+
     //we are saving the Whole List of assigned or
     //we are saving the added.
     // i feel like it's easier to push the whole list,

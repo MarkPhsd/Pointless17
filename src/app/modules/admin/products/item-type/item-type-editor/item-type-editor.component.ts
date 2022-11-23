@@ -32,7 +32,7 @@ export class ItemTypeEditorComponent   {
   selectedItemsCount: number;
   itemType_PackageTypes = this.itemTypeService.packageType;
   itemType_UseTypes  = this.itemTypeService.useType;
-  itemType_Types     = this.itemTypeService.typesList;
+  itemType_Types     = this.itemTypeService.typesList.sort((a, b) => (a.name > b.name) ? 1 : -1);
   useType  : any;
 
   labelTypes        : ISetting[];
@@ -201,7 +201,7 @@ export class ItemTypeEditorComponent   {
       }
 
       if (itemType) {
-        this._snackBar.open(itemType.name, 'Oops', { duration: 2000} )
+        // this._snackBar.open(itemType.name, 'Added', { duration: 2000} )
         return  this.updateItem(site, itemType, optionClose)
       }
     }

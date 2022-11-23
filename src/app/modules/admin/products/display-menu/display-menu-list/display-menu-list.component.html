@@ -17,7 +17,10 @@
       class="assign-button"
       (click)="listAll()"> <mat-icon>list</mat-icon>List All</button>
   </div>
-
+  <button mat-button
+     class="assign-button"
+     (click)="sortList = !sortList"> <mat-icon>sort_by_alpha</mat-icon>Sort
+  </button>
   <div class="grid-item">
     <button mat-button
       class="assign-button"
@@ -30,7 +33,11 @@
 <mat-divider></mat-divider>
 
 <div class="grid-list-container">
-  <div>
+
+  <div *ngIf="sortList">
+    <display-menu-sort></display-menu-sort>
+  </div>
+  <div *ngIf="!sortList">
     <div *ngIf="value" class="loader">
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>

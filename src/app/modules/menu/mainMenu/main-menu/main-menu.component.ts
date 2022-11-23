@@ -78,7 +78,7 @@ export class MainMenuComponent implements OnInit  {
     let value = 0
 
     if (this.userAuthorizationService.isUser) {
-      if(item.menuEnabled  ) {value = value + 1}
+      // if(item.menuEnabled  ) {value = value + 1}
       if(item.categoriesEnabled  ) {value = value + 1}
       if(item.departmentsEnabled  ) {value = value + 1}
       if(item.brandsEnabled ) {value = value + 1}
@@ -86,7 +86,7 @@ export class MainMenuComponent implements OnInit  {
 
     if (this.userAuthorizationService.isStaff) {
       if ( item.staffBrandsEnabled)      { value = value + 1 }
-      if ( item.staffMenuEnabled)        {value = value + 1}
+      // if ( item.staffMenuEnabled)        {value = value + 1}
       if ( item.staffCategoriesEnabled)  {value = value + 1}
       if ( item.staffDepartmentsEnabled) {value = value + 1}
     }

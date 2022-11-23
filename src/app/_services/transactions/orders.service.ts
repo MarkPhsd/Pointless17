@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
 import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
@@ -385,10 +385,13 @@ export class OrdersService {
   claimOrder(site: ISite, id: string, history: boolean):  Observable<any>  {
 
     if (this.userAuthorizationService.user.username === 'Temp') {
-      return;
+      return of('')
     }
     if (history === undefined) {history = false};
-    if (history) { return }
+    if (history) {
+      return of('')
+      return
+    }
 
     const posName = localStorage.getItem('devicename')
 

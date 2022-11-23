@@ -333,6 +333,8 @@ import { DisplayMenuMainComponent } from '../modules/display-menu/display-menu/d
 import { DisplayMenuTitleComponent } from '../modules/display-menu/display-menu-title/display-menu-title.component';
 import { OrderMethodsService } from '../_services/transactions/order-methods.service';
 import { PriceScheduleMenuItemsComponent } from '../modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
+import { PriceScheduleSortComponent } from '../modules/admin/products/price-schedule/price-schedule-sort/price-schedule-sort.component';
+import { DisplayMenuSortComponent } from '../modules/admin/products/display-menu/display-menu-sort/display-menu-sort.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -440,7 +442,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     DisplayMenuMainComponent,
     DisplayMenuListComponent,
     DisplayMenuTitleComponent,
-
+    DisplayMenuSortComponent,
     // DisplayMenuComponent,
 
     DefaultComponent,
@@ -566,6 +568,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PriceScheduleFieldsComponent,
     PriceScheduleMenuOptionsComponent,
     PriceScheduleMenuItemsComponent,
+    PriceScheduleSortComponent,
 
     ProfileRolesComponent,
     ProfileListComponent,

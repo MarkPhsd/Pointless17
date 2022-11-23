@@ -8,7 +8,7 @@ import { clientType } from 'src/app/_interfaces';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FbClientTypesService } from 'src/app/_form-builder/fb-client-types.service';
-import { Observable, switchMap , of} from 'rxjs';
+import { Observable, switchMap , of, catchError} from 'rxjs';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
@@ -47,8 +47,6 @@ export class ClientTypeEditComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.bucketName =       await this.awsBucket.awsBucket();
-    // this.awsBucketURL =     await this.awsBucket.awsBucketURL();
     this.initializeForm()
     this.userAuthService.isAdmin
   };
@@ -56,6 +54,17 @@ export class ClientTypeEditComponent implements OnInit {
   initializeForm()  {
 
     this.inputForm = this.initFormFields();
+    console.log('id', this.id)
+    if (this.inputForm && (!this.id || this.id == undefined)) {
+      // const data = {} as clientType;
+      // this.clientType = data;
+      // this.inputForm.patchValue(data)
+      // this.initJSONObjectForm(data.jsonObject)
+
+      this.clientType$= this.initEmptyClientType();
+      return ;
+    }
+
 
     if (this.inputForm && this.id) {
       const site = this.siteService.getAssignedSite();
@@ -191,7 +200,12 @@ export class ClientTypeEditComponent implements OnInit {
       return
     }
 
-    this.action$ = this.clientTypeService.delete(site,this.clientType.id).pipe(
+    if (this.clientType.id == undefined) {
+      this.snack.open(`Delete failed id not found`, "Failed", {duration:2000, verticalPosition: 'top'})
+      return;
+    }
+
+    this.action$ = this.clientTypeService.delete(site, this.clientType.id).pipe(
       switchMap( data => {
       if (!data.id) {
         this.message = 'Item not deleted.'
@@ -204,6 +218,11 @@ export class ClientTypeEditComponent implements OnInit {
       this.snack.open("Item deleted", "Success", {duration:2000, verticalPosition: 'top'})
       this.onCancel(event)
       return of(data)
+    }),
+    catchError(error => {
+      console.log('error', error)
+      this.snack.open("Item not deleted" + error, "Check again", {duration:2000, verticalPosition: 'top'})
+      return of(null)
     }))
   }
 

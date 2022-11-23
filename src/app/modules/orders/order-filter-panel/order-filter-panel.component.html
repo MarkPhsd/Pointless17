@@ -74,19 +74,22 @@
     </div>
 
     <div *ngIf="(isAuthorized || isUser) && toggleOpenClosedAll == '2'" class="fields">
-      <button mat-raised-button class="button"
-              (click)="toggleDateRangeFilter()">Dates<mat-icon>date_range</mat-icon></button>
+      <button mat-raised-button
+              class="date-filter-buttton"
+              (click)="toggleDateRangeFilter()">
+              Completed Dates<mat-icon>date_range</mat-icon>
+            </button>
       <mat-date-range
         [inputForm]      ="dateRangeForm"
         (outputDateRange)="emitDatePickerData($event)">
       </mat-date-range>
     </div>
 
-    <div *ngIf="isAuthorized || isUser" class="fields">
+    <div class="date-filter-buttton" *ngIf="isAuthorized || isUser" class="fields">
       <button mat-raised-button
-              class="button"
+              class="date-filter-buttton"
               (click)="toggleScheduleDateRangeFilter()">
-              Schedule Dates
+              Scheduled Dates
         <mat-icon>date_range</mat-icon>
       </button>
     </div>
@@ -99,13 +102,21 @@
       </mat-date-range>
     </div>
 
-    <!-- <div *ngIf="isAuthorized || isUser" class="fields">
+    <!-- <div   *ngIf="isAuthorized || isUser" class="fields">
       <button mat-raised-button
-              class="button"
-              (click)="toggleOrderDateRangeFilter()">
+              class="date-filter-buttton"
+              (click)="toggleDateRangeFilter()">
               Order Dates
         <mat-icon>date_range</mat-icon>
       </button>
+    </div>
+
+    <div *ngIf="showDateFilter && dateRangeForm">
+      <mat-date-range
+          [inputForm]      ="dateRangeForm"
+          (outputDateRange)="emitDatePickerData($event)">
+          Order Dates
+      </mat-date-range>
     </div> -->
 
     <mat-button-toggle-group

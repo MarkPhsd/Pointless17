@@ -240,7 +240,7 @@ export class AWSBucketService {
 
   }
 
-  getAWSBucketObservable(): Observable<any> {
+  getAWSBucketObservable(): Observable<IAWS_Temp_Key> {
     const site = this.siteService.getAssignedSite();
     const controller = '/aws/'
     const parameter = "getAWSBucket"

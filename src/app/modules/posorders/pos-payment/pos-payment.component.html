@@ -170,9 +170,9 @@
                     <div *ngIf="!this.platFormService.isApp()">
                       <h3>Apply tip to Stripe Payment</h3>
                       <div class="grid-tip-buttons">
-                        <div><button mat-raised-button (click)="addStripeTipPercent(15)">15 % Tip</button></div>
-                        <div><button mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
-                        <div><button mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
+                        <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(15)">15 % Tip</button></div>
+                        <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
+                        <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
                       </div>
                       <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
                         <div>
@@ -193,7 +193,7 @@
                       <button class="payment-buttons"
                           mat-raised-button
                           (click)="applyStripePayment()">
-                        <mat-icon color="warn">credit_card</mat-icon>Pay with Card
+                        <mat-icon color="warn">credit_card</mat-icon>Credit Card
                       </button>
                     </div>
                   </div>
@@ -276,23 +276,29 @@
                 </div>
               </div>
 
-              <div class="item-container item-buttons-container">
-                <span class ="action-buttons">
-                  <button mat-button (click)="goToPaymentMethod()" >
+              <!-- <div class="item-container item-buttons-container">
+                <div>
+                  <button  mat-raised-button  class="payment-buttons" (click)="goToPaymentMethod()" >
                     Start Over
                     <mat-icon>back</mat-icon>
                   </button>
-                </span>
-                <span>
-                  <button mat-button (click)="initCheckForm()">Clear <mat-icon>refresh</mat-icon></button>
-                </span>
-                <span class ="action-buttons">
-                  <button mat-button (click)="applyPointBalance()">
+                </div>
+                <div>
+                  <button  mat-raised-button  class="payment-buttons" (click)="initCheckForm()">
+                    Clear <mat-icon>refresh</mat-icon></button>
+                </div>
+                <div >
+                  <button  mat-raised-button  class="payment-buttons" (click)="applyPointBalance()">
                     Apply Balance
                     <mat-icon>credit_card</mat-icon>
                   </button>
-                </span>
-              </div>
+                </div>
+              </div> -->
+              <!-- <div class="grid-tip-buttons">
+                <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(15)">15 % Tip</button></div>
+                <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(18)">18 % Tip</button></div>
+                <div><button class="payment-buttons" mat-raised-button (click)="addStripeTipPercent(20)">20 % Tip</button></div>
+              </div> -->
 
               <div class="item-container keypad">
                 <app-key-pad
@@ -322,7 +328,7 @@
                   </h4>
                 </div>
               </div>
-              <div class="item-container  item-buttons-container">
+              <!-- <div class="item-container  item-buttons-container">
                 <span class ="action-buttons">
                   <button mat-button (click)="goToPaymentMethod()" >
                     Start Over
@@ -341,7 +347,27 @@
                     <mat-icon>credit_card</mat-icon>
                   </button>
                 </span>
+              </div> -->
+
+             <div class="item-container item-buttons-container">
+                <div>
+                  <button  mat-raised-button  class="payment-buttons" (click)="goToPaymentMethod()" >
+                    Start Over
+                    <mat-icon>back</mat-icon>
+                  </button>
+                </div>
+                <div>
+                  <button  mat-raised-button  class="payment-buttons" (click)="initPaymentForm()">
+                    Clear <mat-icon>refresh</mat-icon></button>
+                </div>
+                <div >
+                  <button  mat-raised-button  class="payment-buttons" (click)="applyBalance()">
+                    Pay Balance
+                    <mat-icon>credit_card</mat-icon>
+                  </button>
+                </div>
               </div>
+
               <div *ngIf="platFormService.isApp">
                 <div class="item-container ">
                   <app-key-pad

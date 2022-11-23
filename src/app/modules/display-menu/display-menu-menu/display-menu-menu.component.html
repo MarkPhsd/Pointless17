@@ -1,5 +1,4 @@
-<div *ngIf="(menu$ | async) as menus"
-   >
+<div *ngIf="(menu$ | async) as menus" >
 
   <div *ngFor = "let menu of menus">
      <div fxLayout="row" fxLayoutAlign="center center" *ngIf="menu.enabled">
@@ -7,8 +6,7 @@
           class="button-toggle"
           type="button"
           [value]="menu"
-          (click)="setItem(menu)"
-        >
+          (click)="setItem(menu)">
 
         <div class="grid-toggle-tiny">
           <div *ngIf="!phoneSize">

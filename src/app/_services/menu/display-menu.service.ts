@@ -60,6 +60,23 @@ delete(site: ISite, id: number): Observable<IDisplayMenu> {
 
 }
 
+postMenusList(site: ISite, list: IDisplayMenu[]): Observable<IDisplayMenu[]> {
+
+  const controller = "/displaymenu/"
+
+  const endPoint = `PostMenusList`;
+
+  const parameters= ``;
+
+  const url = `${site.url}${controller}${endPoint}${parameters}`
+
+  return this.http.post<IDisplayMenu[]>(url, list)
+
+}
+
+// /PostMenusList
+
+
 save(site: ISite,  price: IDisplayMenu): Observable<IDisplayMenu> {
   if (price.id) {
     return  this.put(site, price.id, price);

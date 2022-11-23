@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import * as _  from "lodash";
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { BehaviorSubject, Observable, of, Subscription, switchMap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { IClientTable, IPaymentResponse, IPOSOrder, IPurchaseOrderItem, PosOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ItemPostResults, ItemWithAction, NewItem, POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
@@ -192,31 +192,64 @@ export class OrderMethodsService implements OnDestroy {
     return true;
   }
 
+  doesOrderExistObs(site: ISite): Observable<IPOSOrder> {
+
+    if (!this.subscriptionInitialized) { this.initSubscriptions(); }
+    if (!this.order || (this.order.id === undefined)) {
+      const order$ = this.orderService.newOrderWithPayloadMethod(site, null);
+      return  order$.pipe(switchMap(data => {
+        this.order = data;
+        this.orderService.updateOrderSubscription(this.order);
+        return of(data)
+      }),
+      catchError(err => {
+        return of(err)
+      })
+      );
+    }
+    return of(this.order)
+  }
   appylySerial(id: number, serialCode: string) {
     const site = this.siteService.getAssignedSite();
     return this.posOrderItemService.appylySerial(site, id, serialCode, null)
   }
 
-  async addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,  quantity: number, itemID: number) {
+  addPriceToItem(order: IPOSOrder,  menuItem: IMenuItem, price: ProductPrice,
+                 quantity: number, itemID: number): Observable<any> {
+
     const site          = this.siteService.getAssignedSite();
     if (!order)         { order = this.order };
-    const result        = await this.doesOrderExist(site);
-    if (!result) { return }
-    if (order) {
-      const newItem     = { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price };
-      const itemResult$ = this.posOrderItemService.putItem(site, newItem)
-      itemResult$.subscribe(data => {
-          if (data.order) {
-            this.order = data.order
-            this.orderService.updateOrderSubscription(data.order)
-            this.updateProcess()
-          } else {
-            this.notifyEvent(`Error occured, this item was not changed. ${data.resultErrorDescription}`, 'Alert')
-          }
+
+    return this.doesOrderExistObs(site).pipe(
+      switchMap(order => {
+        this.order = order;
+        this.orderService.updateOrderSubscription(order)
+        const newItem     =  { orderID: order.id, itemID: itemID, quantity: quantity, menuItem: menuItem, price: price };
+        return this.posOrderItemService.putItem(site, newItem);
+      })
+    ).pipe(
+      switchMap(data => {
+        if (data.order) {
+          this.order = data.order
+          this.orderService.updateOrderSubscription(data.order)
+          this.updateProcess()
+          return of(data)
+        } else {
+          this.notifyEvent(`Error occured, this item was not changed. ${data.resultErrorDescription}`, 'Alert')
+          return of(null)
         }
-      )
-    }
+      }
+    ),
+    catchError(err => {
+      this.notifyEvent(`Error occured, this item was not changed. ${err}`, 'Error');
+      console.log('error occured', err)
+      return of(err)
+    }))
+
+
   }
+
+
 
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
@@ -386,7 +419,14 @@ export class OrderMethodsService implements OnDestroy {
   scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number, portionValue: string, packaging: string): Observable<ItemPostResults> {
     if (!barcode) { return null;}
     if (!order) {const order = {} as IPOSOrder}
-    const passAlongItem = this.assignPOSItems[0];
+
+    // console.table(this.assignPOSItems)
+
+    let passAlongItem = {} as any;
+    if (this.assignPOSItems) {
+      passAlongItem =  this.assignPOSItems[0];
+    }
+
     const deviceName = localStorage.getItem('devicename')
     const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,  } as NewItem
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
@@ -553,7 +593,12 @@ export class OrderMethodsService implements OnDestroy {
         const site       = this.siteService.getAssignedSite();
 
         if (barcode)  {
-          return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
+          return this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue).pipe(switchMap(
+            data=> {
+              this.processItemPostResultsPipe(data)
+              return of(data);
+            }
+          ))
         }
 
         try {
@@ -571,7 +616,12 @@ export class OrderMethodsService implements OnDestroy {
             const newItem     = { orderID: order.id, quantity: quantity, menuItem: item, passAlongItem: passAlongItem,
                                   packaging: packaging, portionValue: portionValue, barcode: '',
                                   weight: 1, itemNote: itemNote, deviceName: deviceName, rewardAvailableID: rewardAvailableID, rewardGroupApplied: rewardGroupApplied } as NewItem
-            return  this.posOrderItemService.postItem(site, newItem)
+            return  this.posOrderItemService.postItem(site, newItem).pipe(switchMap(
+              data=> {
+                this.processItemPostResultsPipe(data)
+                return of(data);
+              }
+            ))
           }
 
         } catch (error) {

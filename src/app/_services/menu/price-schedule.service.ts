@@ -238,6 +238,21 @@ export class PriceScheduleService {
 
   }
 
+  postSchedulesList(site: ISite, list: IPriceSearchModel[]): Observable<IPriceSearchModel[]> {
+
+    const controller = "/PriceSchedules/"
+
+    const endPoint = `postSchedulesList`;
+
+    const parameters= ``;
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.httpClient.post<IPriceSearchModel[]>(url, list)
+
+  }
+
+
   save(site: ISite, priceSchedule: IPriceSchedule): Observable<IPriceSchedule> {
 
     if (priceSchedule.id == undefined) {priceSchedule.id = 0}

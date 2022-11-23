@@ -25,7 +25,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   constructor(private salesPaymentService: SalesPaymentsService) { }
 
   ngOnInit(): void {
-
+    const i = 0;
     // console.log(this.groupBy);
   }
 

@@ -2,13 +2,18 @@
 
   <div class="type-list">
     <h4 class="text-center listbox-title">Types</h4>
-    <div *ngIf="(itemTypes$ | async) as list"  >
+    <button mat-button (click)="refreshItemTypesAssociation()"><mat-icon>refresh</mat-icon></button>
+    <div *ngIf="(itemTypes$ | async) as list; else refreshingItemTypes"  >
       <mat-button-toggle-group name="fontStyle" aria-label="Font Style" vertical >
         <mat-button-toggle (click)="setItemType(item)" *ngFor="let item of list" [value]="item.id">
            {{ item.name }} <mat-icon>{{item.icon}}</mat-icon>
         </mat-button-toggle>
       </mat-button-toggle-group>
     </div>
+
+    <ng-template #refreshingItemTypes>
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
   </div>
 
   <div>

@@ -1,6 +1,6 @@
-<button mat-button (click)="toggleSort()">Toggle {{sort}}</button>
-order {{order?.id}}
-<div   class="grid-flow" *ngIf="(menus$ | async) as menuItems"></div>
+<button mat-raised-button (click)="toggleSort()"><mat-icon>sort_by_alpha</mat-icon>{{sort}}</button>
+
+<div   *ngIf="(menus$ | async) as menuItems"></div>
 <div class="grid-flow"  *ngIf="menuItems">
   <div *ngFor="let item of menuItems; let i = index">
       <button mat-raised-button

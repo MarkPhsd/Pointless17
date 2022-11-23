@@ -33,6 +33,7 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
 
   action$: Observable<any>;
   performingAction = false;
+  sortList: boolean;
 
   searchPhrase               :  Subject<any> = new Subject();
   get itemName() { return this.searchForm.get("itemName") as FormControl;}

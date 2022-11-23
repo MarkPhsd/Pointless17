@@ -33,6 +33,7 @@ export interface IItemTypesList {
   portionValue        : boolean;
   instructions        : string;
   enableCustomNote    : boolean;
+  autoAddJSONProductList: string;
 }
 
 export interface BrandItemCount {

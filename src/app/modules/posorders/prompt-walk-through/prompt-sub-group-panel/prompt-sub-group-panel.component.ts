@@ -32,6 +32,7 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
   _order           : Subscription;
 
   intSubscriptions() {
+
     this._order = this.orderService.currentOrder$.subscribe(data => {
       this.order = data;
     })
@@ -50,8 +51,13 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
     this._orderPromptGroup     = this.promptWalkService.orderPromptGroup$.subscribe( data => {
       this.orderPromptGroup    = data;
       if (this.orderPromptGroup) {
-        this.accordionStep       = this.orderPromptGroup.currentAccordionStep
-        // console.log('accordion from parent updated', this.accordionStep)
+
+        if (!this.promptWalkService.accordionStep) {
+          this.promptWalkService.updateAccordionStep(0)
+        } else {
+          this.accordionStep       = this.promptWalkService.accordionStep
+        }
+        console.log('accordion from parent updated', this.accordionStep)
       }
     })
 
@@ -75,7 +81,6 @@ export class PromptSubGroupPanelComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-
     this.promptWalkService.updateAccordionStep(0)
   }
   ngOnInit(): void {

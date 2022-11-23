@@ -31,7 +31,7 @@ export class AdjustmentReasonsComponent implements OnInit {
   length: number;
   pageSize: number;
   pageSizeOptions: any;
-
+  action$: Observable<any>;
   ccsSite: ISite;
   ccsSites$: Observable<ISite[]>
   ccsSites: ISite[]
@@ -100,11 +100,10 @@ export class AdjustmentReasonsComponent implements OnInit {
 
     const site = this.siteService.getAssignedSite();
     this.ccsSite = {} as ISite;
-    console.log('refreshTable')
+
     return this.adjustmentReasonsService.getReasonsByFilter(site, filter).pipe(
       switchMap(
         data => {
-          console.log('refreshTable', data)
           this.pageSize = 10
           this.length = data.length
           this.pageSizeOptions = [5, 10]
@@ -154,22 +153,23 @@ export class AdjustmentReasonsComponent implements OnInit {
     if (data.id) {
       data.imgName = this.imgName
       data.filter= this.filter
-      this.adjustmentReasonsService.editReason(site, data).subscribe(data => {
+      this.action$ = this.adjustmentReasonsService.editReason(site, data).pipe(
+        switchMap(data => {
         this.notifyEvent(`updated`, `Success` )
-        this.refreshTable(this.filter);
-      }, error => {
-        // this.notifyEvent(`update ${error} and id: ${data.id}`, `failure` )
-      })
+        return  this.refreshTable(this.filter)
+      }))
 
     } else {
       data.filter = this.filter
       data.id = 0
-      this.adjustmentReasonsService.addReason(site, data).subscribe(data => {
-        this.notifyEvent(`${data.name} Added`, `Success` )
-        this.refreshTable(this.filter);
-       }, error => {
-        this.notifyEvent(`error ${error}`, `failure` )
-      })
+      this.action$ =  this.adjustmentReasonsService.addReason(site, data).pipe(
+        switchMap(data => {
+          this.notifyEvent(`${data.name} Added`, `Success` )
+          return  this.refreshTable(this.filter)
+        }
+      )).pipe(switchMap( data => {
+        return of('null')
+      }))
     }
 
     this.adjustmentReason = {}  as AdjustmentReason;

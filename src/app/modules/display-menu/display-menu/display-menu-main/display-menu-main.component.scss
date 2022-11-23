@@ -1,11 +1,11 @@
 mat-card {
-  opacity: 95%;
-  width: calc(99% );
-  margin-bottom: 5px;
-  margin-top: 5px;
-  padding: 10px;
-  padding-bottom: 40px;
-  overflow: hidden;
+  // opacity: 95%;
+  // width: calc(99% );
+  // margin-bottom: 5px;
+  // margin-top: 5px;
+  // padding: 10px;
+  // padding-bottom: 40px;
+  // overflow: hidden;
 }
 
 .menu-item-image {
@@ -21,23 +21,36 @@ mat-card {
   display: grid;
   gap: 15px;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
 
+.menu-grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 10px;
+    row-gap: 10px;
+  // --gap: 5px;
+  // margin-top: 2px;
+  // margin-right: 2px;
+  // margin-left: 10px;
+  // display: grid;
+  // gap: var(--gap);
+  // grid-template-columns: repeat( auto-fit, minmax(325px, 1fr) );
+
+  // grid-auto-flow:  dense;
 }
 
 .title {
   font-size  : clamp(1.5rem, 2.5vw, 2rem);
-  // line-height: 1rem;
   line-height: 1.5em;
 }
 
 .subtTitle {
   font-size: clamp(1rem, 2.5vw, 2rem);
-  // line-height: 1rem
   line-height: 1.5em;
 }
 
 .item-span {
-  // grid-column: span 3;
   grid-column: 1 /span 2;
 }
 

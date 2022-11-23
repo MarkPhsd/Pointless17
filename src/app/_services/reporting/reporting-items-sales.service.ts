@@ -138,7 +138,7 @@ export class ReportingItemsSalesService {
   getItemSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
     IReportingSearchModel.productsOnly = true;
-   
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `getItemSalesReport`
@@ -152,7 +152,7 @@ export class ReportingItemsSalesService {
   getCategorySalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
 
     IReportingSearchModel.productsOnly = true;
-   
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `getCategorySalesReport`
@@ -164,9 +164,9 @@ export class ReportingItemsSalesService {
   }
 
   getDepartmentSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
-   
+
     IReportingSearchModel.productsOnly = true;
-    
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `getDepartmentSalesReport`
@@ -178,9 +178,9 @@ export class ReportingItemsSalesService {
 }
 
   getTypeSalesReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
-   
+
     IReportingSearchModel.productsOnly = true;
-   
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `getTypeSalesReport`
@@ -191,9 +191,9 @@ export class ReportingItemsSalesService {
 
   }
   searchItemReport(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSales[]> {
-    
+
     IReportingSearchModel.productsOnly = true;
-    
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `searchItemReport`
@@ -204,13 +204,13 @@ export class ReportingItemsSalesService {
 
   }
 
-//https://localhost:44309/api/ReportItemSales/GroupItemSales
+  //https://localhost:44309/api/ReportItemSales/GroupItemSales
   //https://ccsposdemo.ddns.net:4444/api/ReportItemSales/GroupItemSales
   //{ "startdate": "07/01/2018", "enddate": "12/10/2020", "groupByProduct": "true" }
   groupItemSales(site: ISite, IReportingSearchModel: IReportingSearchModel): Observable<IReportItemSaleSummary> {
 
     IReportingSearchModel.productsOnly = true;
-    
+
     const controller = `/ReportItemSales/`
 
     const endPoint = `GroupItemSales`

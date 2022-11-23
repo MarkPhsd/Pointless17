@@ -1,7 +1,5 @@
 <mat-sidenav-container>
-
-  <div    class="grid-container">
-
+  <div class="grid-container">
 
     <div  class="form-width"
           *ngIf="searchForm && !smallDevice && !tinyDepartmentFilter">
@@ -20,13 +18,19 @@
     <ng-container [ngTemplateOutlet]="isDisplaySubMenuOn"></ng-container>
 
     <ng-template #displaySubMenu>
-      <price-schedule-menu-list></price-schedule-menu-list>
+      <!-- <div *ngIf="!hideMenu"> -->
+        <price-schedule-menu-list></price-schedule-menu-list>
+      <!-- </div> -->
+      <!-- <button mat-button (click)="hideMenu = !hideMenu">
+        <div *ngIf="hideMenu">Show Menu</div>
+        <div *ngIf="!hideMenu">Hide Menu</div>
+      </button> -->
     </ng-template>
 
     <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
 
     <ng-template #displayMenu>
-      <display-menu-menu></display-menu-menu>
+      <!-- <display-menu-menu></display-menu-menu> -->
     </ng-template>
 
     <div  *ngIf="!isApp && (!smallDevice && !tinyDepartmentFilter)"
@@ -95,7 +99,8 @@
                   *ngIf             = "(categories$ | async) as list"
                   [mouseOver]       = "false"
                   [showIcon]        = "true"
-                  [toggleDimensions]="'toggle-group-tall'"
+                  [toggleDimensions]="toggleCatHeight"
+
                   [textLength]      = "21"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
@@ -127,8 +132,8 @@
                 [mouseOver]      = "false"
                 [showIcon]       ="showIcon"
                 [textLength]     = "21"
-                [toggleDimensions]="'toggle-group-tall'"
-                [toggleHeight]   = "toggleDepartmentHeight"
+                [toggleDimensions]="toggleCatHeight"
+
                 (setItem)        = "refreshTypeSearch($event)"
                 [textLength]     = "21"
                 [fieldName]      = "'company'"
@@ -159,8 +164,8 @@
                   [mouseOver]       = "false"
                   [showIcon]        = "showIcon"
                   [textLength]      = "21"
-                  [toggleDimensions]= "'toggle-group-tall'"
-                  [toggleHeight]    = "toggleCatHeight"
+                  [toggleDimensions]= "toggleDimensions"
+                  [toggleHeight]    = "toggleDimensions"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
                   [id]              = "productTypeID"
@@ -190,7 +195,6 @@
       </ng-container>
     </div>
   </div>
-
 </mat-sidenav-container>
 
 

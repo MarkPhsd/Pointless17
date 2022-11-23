@@ -1,41 +1,48 @@
-<div
-  [style.background]="backgroundURL"
-  style.background-repeat="repeat"
-  [style.height]="'calc(120% + 200px)'"
-  [style.width]="'100vw'"
-  [style.opacity]="menu.backcolorOpacity"
-  >
+<div  class="title"
+      style.background-repeat="repeat"
+      [style.height]="styleHeight"
+      [style.width]="styleWidth"
+      [style.min-width]="styleMinWidth"
+      [style.opacity]="menu?.backcolorOpacity" >
 
-  <mat-card *ngIf="menu" (click)="navItem(menu)"
-            [style.background]="backgroundURL"
-            style.background-repeat="repeat"
-            [style.height]="'calc(120% + 200px)'"
-            [style.width]="'100%'"
-            [style.opacity]="menu.backcolorOpacity"
-            [style.opacity]="menu.backcolorOpacity">
-    <div class="grid-items"  *ngIf="menu?.enabled">
+      <!-- [style.background]="backgroundURL" -->
+      <!-- [style.height]="'calc(120% + 200px)'" -->
+    <mat-card *ngIf="menu"
+              class="image-class"
+              (click)="navItem(menu)"
+              [style.background]="backgroundURL"
+              [style.background-repeat]="repeat"
+              [style.height]="'100%'"
+              [style.width]="'100%'"
+              [style.object-fit]="objectfit"
+              [style.opacity]="menu.backcolorOpacity"
+              [style.opacity]="menu.backcolorOpacity">
 
-      <div class="info">
-        <div class="title">{{menu?.title}}</div>
-        <div class="subTitle">
-          {{menu?.subTitle}}
+
+       <div class="grid-items image-text-background"  *ngIf="menu?.enabled">
+        <div class="info image-text ">
+          <div>{{menu?.title}}</div>
+          <div class="subTitle">
+            {{menu?.subTitle}}
+          </div>
+          <div [innerHtml]="menu?.description"></div>
         </div>
-        <div [innerHtml]="menu?.description"></div>
+
+        <div class="logo" *ngIf="!hideLogo">
+          <button >
+            <img
+                loading   = "lazy"
+                draggable = "false"
+                [src]     = "getItemSrc(menu?.logo)"
+                err-SRC   = "getPlaceHolder()"
+                onerror   = "this.src='assets/images/placeholderimage.png'"
+                class     = "menu-item-image"
+                [alt]     = "menu?.description">
+          </button>
+        </div>
+
       </div>
 
-      <div class="logo">
-        <button >
-          <img
-              loading   = "lazy"
-              draggable = "false"
-              [src]     = "getItemSrc(menu?.logo)"
-              err-SRC   = "getPlaceHolder()"
-              onerror   = "this.src='assets/images/placeholderimage.png'"
-              class     = "menu-item-image"
-              [alt]     = "menu?.description">
-        </button>
-      </div>
-    </div>
-  </mat-card>
-
+    </mat-card>
 </div>
+

@@ -20,6 +20,7 @@ import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NewOrderTypeComponent } from '../../posorders/components/new-order-type/new-order-type.component';
 import { IPrinterLocation } from 'src/app/_services/menu/printer-locations.service';
 import { ITerminalSettings, SettingsService } from 'src/app/_services/system/settings.service';
+import { DateHelperService } from 'src/app/_services/reporting/date-helper.service';
 
 const { Keyboard } = Plugins;
 
@@ -29,8 +30,6 @@ const { Keyboard } = Plugins;
   styleUrls: ['./order-filter-panel.component.scss']
 })
 export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewInit {
-
-
 
   terminalSetting : ITerminalSettings;
   //auth - suspended orders, employee selection
@@ -100,6 +99,20 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       this.refreshSearch()
     )
   )
+
+  searchDates:      Subject<any> = new Subject();
+  searchDate$  : Subject<IPOSOrderSearchModel[]> = new Subject();
+  _searchDate$ = this.searchDates.pipe(
+    debounceTime(250),
+      distinctUntilChanged(),
+      switchMap(searchPhrase =>
+      {
+        this.refreshSearch()
+        return searchPhrase
+      }
+    )
+  )
+
 
   initTerminalSettingSubscriber() {
     this.settingService.terminalSettings$.subscribe(data => {
@@ -175,7 +188,7 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
       private matSnack        : MatSnackBar,
       private fb              : FormBuilder,
       private userAuthorization  : UserAuthorizationService,
-
+      private dateHelper: DateHelperService,
       private _bottomSheet    : MatBottomSheet
   )
   {
@@ -454,7 +467,9 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
 
     this.searchModel.completionDate_From = this.dateRangeForm.get("start").value;
     this.searchModel.completionDate_To   = this.dateRangeForm.get("end").value;
+
     this.subscribeToDatePicker();
+
   }
 
    initScheduledDateForm() {
@@ -504,13 +519,23 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
     )
 
     this.dateRangeForm.valueChanges.subscribe(res=>{
-        if (this.dateRangeForm.get("start").value && this.dateRangeForm.get("start").value) {
-          this.refreshDateSearch()
-        }
+        const start = this.dateRangeForm.get("start").value;
+        const end = this.dateRangeForm.get("end").value;
+        if (this.dateRangeForm.valid) {
+
+          console.log('start is date', this.dateHelper.isValidDate(start))
+          console.log('end is date', this.dateHelper.isValidDate(end))
+
+          if (start && end ) {
+            if (this.dateHelper.isValidDate(start) && this.dateHelper.isValidDate(end))
+              this.refreshDateSearch()
+            }
+          }
         }
       )
     }
   }
+
 
   subscribeToScheduledDatePicker()
   {
@@ -569,9 +594,15 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         return
       }
 
-      this.searchModel.completionDate_From = this.dateFrom.toISOString()
-      this.searchModel.completionDate_To   = this.dateTo.toISOString()
+      const start  = this.dateHelper.format(this.dateFrom, 'short')
+      const end = this.dateHelper.format(this.dateTo, 'short')
+      this.searchModel.completionDate_From = start // this.dateFrom.toLocaleDateString()
+      this.searchModel.completionDate_To   = end // this.dateTo.toLocaleDateString()
+      console.log('searchmodel', this.searchModel)
+
+
       this.refreshSearch()
+
   }
 
 
@@ -588,8 +619,8 @@ export class OrderFilterPanelComponent implements OnDestroy, OnInit, AfterViewIn
         return
       }
 
-      this.searchModel.scheduleDate_From = this.scheduleDateFrom.toISOString()
-      this.searchModel.scheduleDate_To   = this.scheduleDateTo.toISOString()
+      this.searchModel.scheduleDate_From = this.scheduleDateFrom.toLocaleDateString()
+      this.searchModel.scheduleDate_To   = this.scheduleDateTo.toLocaleDateString()
       this.refreshSearch()
   }
 

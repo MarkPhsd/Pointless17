@@ -1,5 +1,6 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Observable, of, startWith, switchMap } from 'rxjs';
 import { IPOSOrder, IPurchaseOrderItem, ProductPrice } from 'src/app/_interfaces';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
@@ -22,6 +23,7 @@ export class PriceOptionsComponent  {
   prices  : ProductPrice[];
   menuItem: IMenuItem;
   price   : ProductPrice;
+  action$ : Observable<any>;
 
   constructor(
     private orderMethodService       : OrderMethodsService,
@@ -42,11 +44,18 @@ export class PriceOptionsComponent  {
       }
   }
 
-  async addItemPrice(price: ProductPrice) {
-    await this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item,
+  addItemPrice(price: ProductPrice) {
+    console.table(price)
+    const item$ = this.orderMethodService.addPriceToItem(this.newItem.order, this.newItem.item,
                                                  price, this.newItem.posItem.quantity,
                                                  this.newItem.posItem.id)
-    this.dialogRef.close(true);
+
+    this.action$ = item$.pipe(
+      switchMap( data => {
+        this.dialogRef.close(true);
+        return of(null)
+    }))
+
   }
 
   cancel() {

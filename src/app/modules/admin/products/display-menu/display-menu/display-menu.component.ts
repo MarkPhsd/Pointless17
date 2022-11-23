@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IDisplayMenu } from 'src/app/_interfaces/menu/price-schedule';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
-import { Observable, switchMap, of, ignoreElements} from 'rxjs';
+import { Observable, switchMap, of, ignoreElements, catchError} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
 import { IListBoxItemB } from 'src/app/_interfaces/dual-lists';
@@ -119,16 +119,15 @@ export class AdminDisplayMenuComponent  {
 
       this.message = ""
       this.performingAction= true;
+
       if (!this.inputForm.valid) {
         this.notifyEvent('Something is wrong with the form. Please confirm', 'Alert')
-        return;
+        return of(null)
       }
 
       this.displayMenu             = this.inputForm.value as IDisplayMenu;
       this.displayMenu.description = this.description;
       this.displayMenu.css         = this.ccs;
-      console.log(this.backgroundImage)
-      console.log('Saved', this.displayMenu)
       this.displayMenu.backgroundImage = this.backgroundImage;
 
       const item$ = this.displayMenuService.save(site, this.displayMenu);
@@ -147,7 +146,6 @@ export class AdminDisplayMenuComponent  {
   };
 
   openDisplayMenu() {
-    //  <!--     this.router.navigate(["/menuitem/", {id:id}]); -->
     if (!this.displayMenu) { return }
     const url = this.router.serializeUrl(this.router.createUrlTree(['/display-menu', { id: this.displayMenu.id  }]));
     window.open(url, '_blank');
@@ -162,11 +160,20 @@ export class AdminDisplayMenuComponent  {
   }
 
   updateItemExit(event) {
-    this.action$ = this.updateItem(event).pipe(switchMap ( data => {
-      this.performingAction = false;
-      this.onCancel(event);
-      return of(data);
-    }));
+    this.action$ = this.updateItem(event).pipe(
+      switchMap ( data => {
+        this.performingAction = false;
+        this.onCancel(event);
+        return of(data);
+      }),
+      catchError(
+          switchMap( error => {
+            this.notifyEvent('Error ' + error, 'Error')
+            return of(Error)
+          }
+        )
+      )
+    );
   };
 
 
@@ -177,7 +184,6 @@ export class AdminDisplayMenuComponent  {
 
   setBackgroundImage(event) {
     this.backgroundImage = event;
-    console.log('event', event)
     this.inputForm.patchValue( { backgroundImage: event } )
   }
 
@@ -187,8 +193,6 @@ export class AdminDisplayMenuComponent  {
 
 
   deleteItem(event) {
-    // const result = window.confirm('Are you sure you want to delete this item?')
-    // if (!result) { return }
 
     const site = this.siteService.getAssignedSite()
     if (!this.displayMenu) {

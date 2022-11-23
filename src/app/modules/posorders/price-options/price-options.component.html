@@ -1,8 +1,9 @@
-<mat-card>
+<!-- {{newItem.posItem?.id | json}}
+{{newItem.posItem?.productName | json}} -->
+
+<mat-card class="mat-card">
   <mat-card-subtitle>
-    <div *ngIf="menuItem">
-      {{menuItem.name}}
-    </div>
+    {{newItem.posItem?.productName}}
   </mat-card-subtitle>
 
   <mat-card-content>
@@ -36,3 +37,5 @@
   </mat-card-content>
 
 </mat-card>
+
+<div *ngIf="(action$ | async) as item"></div>

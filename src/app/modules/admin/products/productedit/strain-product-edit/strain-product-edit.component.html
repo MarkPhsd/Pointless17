@@ -183,13 +183,24 @@
 
             <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
                                                          itemType.type?.toLowerCase() === 'tobacco' ||
-                                                         itemType.type?.toLowerCase() === 'restaurant')">
+                                                         itemType.type?.toLowerCase() === 'restaurant' ||
+                                                         itemType.type?.toLowerCase() === 'food')">
 
               <app-value-fields
                 [inputForm]="productForm"
                 [fieldName]="'countryOfOrigin'">
                 Country Of Origin
               </app-value-fields>
+
+              <div *ngIf="itemType && itemType.type">
+                <prompt-group-select
+                  [inputForm]="productForm"
+                ></prompt-group-select>
+              </div>
+
+            </div>
+            <div *ngIf="itemType && itemType.useType && (itemType.type?.toLowerCase() === 'grocery' ||
+                          itemType.type?.toLowerCase() === 'restaurant')">
 
               <div  class="mat-toggle">
                 <mat-slide-toggle
@@ -202,7 +213,8 @@
 
             </div>
 
-            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' || itemType.type?.toLowerCase() === 'service fee' )">
+            <div *ngIf="itemType && itemType.name && ( itemType.type?.toLowerCase() === 'discounts' ||
+                                                       itemType.type?.toLowerCase() === 'service fee' )">
               <div class="header">
                 <mat-icon>coupon</mat-icon>
               </div>
@@ -219,22 +231,25 @@
               </app-value-fields>
             </div>
 
-            <div *ngIf="itemType && itemType.type">
-              <prompt-group-select
-                 [inputForm]="productForm"
-              ></prompt-group-select>
-            </div>
-
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'retail' )">
+
               <retail-product-edit
                 [inputForm]="productForm">
               </retail-product-edit>
+
               <app-value-fields
                 [inputForm]="productForm"
                 [fieldName]="'countryOfOrigin'"
                 >
                 Country Of Origin
               </app-value-fields>
+
+              <div *ngIf="itemType && itemType.type">
+                <prompt-group-select
+                  [inputForm]="productForm"
+                ></prompt-group-select>
+              </div>
+
             </div>
 
             <div *ngIf="itemType && itemType.type &&  (itemType.type?.toLowerCase() === 'modifier' )">
@@ -275,11 +290,11 @@
                   Re-Order Amount
                 </app-value-fields>
 
-            <app-value-fields
-                [inputForm]="productForm"
-                [fieldName]="'reOrderLevel'"
-              >
-                Re Order Level
+              <app-value-fields
+                  [inputForm]="productForm"
+                  [fieldName]="'reOrderLevel'"
+                >
+                  Re Order Level
               </app-value-fields>
 
 

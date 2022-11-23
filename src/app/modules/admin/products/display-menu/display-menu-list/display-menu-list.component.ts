@@ -56,6 +56,7 @@ export class AdminDisplayMenuListComponent implements OnInit {
   params               : any;
   private gridApi      : GridApi;
   gridOptions : any;
+  sortList: boolean;
 
   columnDefs           = [];
   defaultColDef        ;
@@ -335,7 +336,8 @@ export class AdminDisplayMenuListComponent implements OnInit {
     editItem(data) {
       const dialog =   this.productEditButtonService.openDisplayMenuEditor(data);
       dialog.afterClosed(data => {
-        this.refreshSearch()
+        console.log('updated')
+        this.listAll()
       })
     }
 
@@ -343,7 +345,8 @@ export class AdminDisplayMenuListComponent implements OnInit {
     addNew()  {
       const dialog =  this.productEditButtonService.openDisplayMenuEditor(null);
       dialog.afterClosed(data => {
-        this.refreshSearch()
+        console.log('added')
+        this.listAll()
       })
     }
 

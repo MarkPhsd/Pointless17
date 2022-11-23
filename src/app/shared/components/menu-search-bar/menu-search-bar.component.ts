@@ -29,8 +29,9 @@ const { Keyboard } = Plugins;
 export class MenuSearchBarComponent implements OnInit, AfterViewInit, OnDestroy {
 @ViewChild('departmentMenuTrigger') departmentMenuTrigger: MatMenuTrigger;
 
+toggleDimensions = 'toggle-group-tall'
 isOpen = false;
-
+hideMenu: boolean;
 get platForm() {  return Capacitor.getPlatform(); }
 
 //    this.uiHomePage.staffMenuEnabled
@@ -197,9 +198,11 @@ constructor(
     this.smallDevice = false
     if (window.innerWidth < 768) {
       this.smallDevice = true
+
       this.toggleCatHeight         = 'toggle-buttons-height-short'
       this.toggleDepartmentHeight  = 'toggle-buttons-height-short'
       this.toggleTypeHeight        = 'toggle-buttons-height-short'
+
       this.showIcon = false;
       return
     }
@@ -250,6 +253,11 @@ constructor(
 
     if ((this.isStaff && this.uiHomePage.staffMenuEnabled) ||
         (this.isUser && this.uiHomePage.menuEnabled)) {
+
+      this.toggleCatHeight         = 'toggle-buttons-height-medium'
+      this.toggleDepartmentHeight  = 'toggle-buttons-height-medium'
+      this.toggleTypeHeight        = 'toggle-buttons-height-medium'
+
       return this.displayMenu
     }
 
@@ -263,6 +271,9 @@ constructor(
 
     if ((this.isStaff && this.uiHomePage.staffscheduleSubMenu) ||
         (this.isUser && this.uiHomePage.scheduleSubMenu)) {
+          this.toggleCatHeight         = 'toggle-buttons-height-medium'
+          this.toggleDepartmentHeight  = 'toggle-buttons-height-medium'
+          this.toggleTypeHeight        = 'toggle-buttons-height-medium'
       return this.displaySubMenu
     }
 
