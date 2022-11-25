@@ -552,7 +552,7 @@ export class MenuService {
     // return this.httpClient.post<IMenuItem[]>(uri, productSearchModel)
 
     // const url = { url: uri, cacheMins: 1, body: productSearchModel}
-    console.log('url', uri)
+    // console.log('url', uri)
 
     return this.httpCache.post<IMenuItem[]>(uri, productSearchModel)
   }

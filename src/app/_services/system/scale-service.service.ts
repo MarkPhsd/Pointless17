@@ -42,18 +42,23 @@ export class ScaleService  {
     private platformService: PlatformService,
     public IPCService :     IPCService,
     ) {
-      if (!this.IPCService.isElectronApp) { return }
-      this.readScaleEvent();
+    if (!this.IPCService.isElectronApp) { return }
+    this.readScaleEvent();
   }
 
   readScaleEvent() {
     try {
       const scaleSetup = this.getScaleSetup()
-      console.log('scale setup', scaleSetup)
+      console.log('scale setup', scaleSetup, this.platformService.isAppElectron)
       if (!scaleSetup || !scaleSetup.enabled) { return }
+      console.log('active')
       if (this.platformService.isAppElectron) {
-      this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+
+        console.log('electron ')
+        this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
+
           {
+            console.log('events', event, args)
             const info         = {} as ScaleInfo;
             info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
             info.type          = args.type;

@@ -176,9 +176,8 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     })
   }
 
-
   onResizedorderHeightPanel(event: ResizedEvent) {
-
+    // console.log('order header event', event)
     this.uiSettingsService.updateorderHeaderHeight(event.newRect.height, this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
     this.resizePanel()
 

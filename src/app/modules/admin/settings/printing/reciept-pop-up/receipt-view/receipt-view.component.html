@@ -1,3 +1,8 @@
+<div *ngIf="(email$ | async) as emailAction"></div>
+<div *ngIf="(layout$ | async) as emailAction"></div>
+<div *ngIf="(printAction$ | async) as emailAction"></div>
+
+
 <div class="buttons-grid">
   <div >
     <button *ngIf="refreshView$ | async" mat-button (click)="print()">

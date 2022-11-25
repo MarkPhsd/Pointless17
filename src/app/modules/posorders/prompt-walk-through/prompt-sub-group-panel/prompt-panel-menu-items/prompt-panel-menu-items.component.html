@@ -29,12 +29,68 @@
 
     <div [innerHTML]="subGroup.instructions"></div>
 
+    <!-- <div class="option-buttons">
+
+      <div>
+        <button mat-button
+                color="primary"
+                class="buttons"
+                (click)="setOption(1)">
+          <mat-icon></mat-icon>
+          Whole
+        </button>
+      </div>
+
+      <div>
+        <button mat-button
+                color="primary"
+                class="buttons"
+                (click)="setOption(2)">
+          <mat-icon></mat-icon>
+          Lft 1/2
+        </button>
+      </div>
+
+      <div>
+        <button mat-button
+                color="primary"
+                class="buttons"
+                (click)="setOption(3)">
+          Rt 1/2
+        </button>
+      </div>
+
+      <div>
+        <button mat-button
+                color="primary"
+                class="buttons"
+                (click)="setOption(4)">
+          No
+        </button>
+      </div>
+
+    </div> -->
+
+    <mat-button-toggle-group
+        name="type"
+        [(ngModel)]="itemOption">
+          <mat-button-toggle
+          *ngFor="let item of itemOptions"
+            class="button-toggle"
+            [value]="item.id">
+            {{ item.name }}
+          </mat-button-toggle>
+    </mat-button-toggle-group>
+
     <div  class="grid-items">
+
       <div   *ngFor="let item of subGroup.promptMenuItems;
               let i = index;">
         <prompt-panel-menu-item
           [promptMenuItem] = "item"
           [index]          = "index"
+          [itemOption]     = 'itemOption'
+          (resetItemOption)= "resetItemOption($event)"
           (outputNextStep) = "nextStep('true')"
           (outputPrevStep) = "prevStep('true')">
         </prompt-panel-menu-item>

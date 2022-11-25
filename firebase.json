@@ -64,6 +64,36 @@
     ]
   },
   {
+    "target": "liquorpointofsale",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
+    "target": "restaurantpointofsale",
+    "public": "dist/CCSApp",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  {
     "target": "highplainzstrains1",
     "public": "dist/CCSApp",
     "ignore": [

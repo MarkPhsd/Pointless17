@@ -156,7 +156,7 @@ export class PromptWalkThroughService {
         prompt.selected_PromptSubGroups.forEach(data => {
           if (data.promptSubGroups && data.promptSubGroups.itemsSelected) {
             data.promptSubGroups.itemsSelected.forEach( items => {
-              total = items.price + total
+              total = ( (items.price *100 * items.quantity)/100) + total
             })
           }
         })

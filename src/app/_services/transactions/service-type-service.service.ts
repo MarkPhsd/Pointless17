@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { IServiceType, ISite }   from 'src/app/_interfaces';
+import { IServiceType, ISetting, ISite }   from 'src/app/_interfaces';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
 
@@ -44,7 +44,15 @@ export class ServiceTypeService {
 
     const uri = { url: url, cacheMins: 120}
 
-    return this.httpCache.get<IServiceType>(uri);
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as ISetting
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const url = { url: uri, cacheMins: appCache.value}
+        return  this.httpCache.get<IServiceType>(uri)
+      }
+    }
+
+    return this.http.get<IServiceType>(url);
 
   }
 

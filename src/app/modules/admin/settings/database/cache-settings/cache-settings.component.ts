@@ -20,7 +20,9 @@ export class CacheSettingsComponent implements OnInit {
   cacheForm         : FormGroup;
   currentCache      : ISetting;
   cacheSizeCurrent  : string;
-  cacheSize
+
+  cacheSize : number;
+
   constructor(
               private settingsService:   SettingsService,
               private sitesService:      SitesService,
@@ -34,7 +36,8 @@ export class CacheSettingsComponent implements OnInit {
     this.currentCache = await this.settingsService.initAppCache();
     await this.initCacheTime();
     this.cacheSizeCurrent = this.systemService.getUsedLocalStorageSpace()
-    // this.cacheSize        = this.cacheSizeCurrent.toFixed(2)
+    const item = this.cacheSizeCurrent.replace('KB', '');
+    this.cacheSize        = +item
   }
 
   async initCacheTime(){
@@ -57,7 +60,7 @@ export class CacheSettingsComponent implements OnInit {
       this.cacheTimeSetting = this.cacheForm.value;
       this.settingsService.putSetting(site, this.cacheTimeSetting.id, this.cacheTimeSetting ).subscribe( data => {
         this.cacheTimeSetting = data
-        localStorage.setItem('appCache', JSON.stringify(this.cacheTimeSetting.value));
+        localStorage.setItem('appCache', JSON.stringify(data));
         this.currentCache = data
       })
     }

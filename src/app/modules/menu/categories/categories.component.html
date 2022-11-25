@@ -1,9 +1,8 @@
 <mat-card [class]="classcontainer">
+
     <mat-card-subtitle>
       <div class="header-grid" >
-
         <div  class="grid-title" >
-
           <div class="header-title" ><ng-content></ng-content></div>
         </div>
 
@@ -22,7 +21,6 @@
               *ngIf="loading" >
           <mat-spinner diameter="30"></mat-spinner>
         </div>
-
       </div>
 
       <div *ngIf="value"
@@ -30,7 +28,6 @@
         <mat-progress-bar mode="determinate"
                           [value]="value"></mat-progress-bar>
       </div>
-
     </mat-card-subtitle>
 
     <mat-card-content *ngIf="(bucket$ | async) as bucketItem">
@@ -64,10 +61,11 @@
             </div>
       </div>
     </mat-card-content>
-  <mat-card-actions>
-    <ng-template *ngIf="loading" >
-      <mat-spinner></mat-spinner>
-    </ng-template>
-  </mat-card-actions>
+
+    <mat-card-actions>
+      <ng-template *ngIf="loading" >
+        <mat-spinner></mat-spinner>
+      </ng-template>
+    </mat-card-actions>
 
 </mat-card>

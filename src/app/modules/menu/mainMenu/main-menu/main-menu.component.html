@@ -1,28 +1,20 @@
 <div class="canvas">
-  <!-- value {{panels}}
-  panelHeightSize {{panelHeightSize}}
-  panelHeightValue {{panelHeightValue}} -->
   <div class="overlay-items">
+      <div *ngif="connectedToApi; else connected"></div>
+      <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
 
-    <div *ngif="connectedToApi; else connected"></div>
+      <div *ngIf="homePageSetings && panelHeightSize; else loading">
+        <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
+        <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
+        <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
+        <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
+        <ng-container [ngTemplateOutlet]="isTierMenuViewOn"></ng-container>
+      </div>
 
-    <ng-container [ngTemplateOutlet]="isSearchSelectorOn"></ng-container>
-
-    <!-- <scheduled-menu-list></scheduled-menu-list> -->
-
-    <div *ngIf="homePageSetings && panelHeightSize; else loading">
-      <ng-container [ngTemplateOutlet]="isDisplayMenuOn"></ng-container>
-      <ng-container [ngTemplateOutlet]="isDepartmentViewOn"></ng-container>
-      <ng-container [ngTemplateOutlet]="isCategoryViewOn"></ng-container>
-      <ng-container [ngTemplateOutlet]="isBrandListViewOn"></ng-container>
-      <ng-container [ngTemplateOutlet]="isTierMenuViewOn"></ng-container>
-    </div>
-
-    <ng-template #loading>
-      <mat-spinner [diameter]="50"></mat-spinner>
-    </ng-template>
-
-  </div>
+      <ng-template #loading>
+        <mat-spinner [diameter]="50"></mat-spinner>
+      </ng-template>
+  <div>
 </div>
 
 <ng-template #displayMenu>

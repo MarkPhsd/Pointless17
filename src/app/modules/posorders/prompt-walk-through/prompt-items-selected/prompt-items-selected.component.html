@@ -18,20 +18,17 @@
       <!-- <mat-card color="warn"> -->
         <div class="sub-group">
           <h5>
-            {{selectedSubPrompts?.promptSubGroups?.name}} 
+            {{selectedSubPrompts?.promptSubGroups?.name}}
           </h5>
         </div>
       <!-- </mat-card> -->
        <div class="grid-list"
             *ngFor="let item of selectedSubPrompts?.promptSubGroups?.itemsSelected; let itemIndex = index">
           <div>
-            {{item?.menuItem?.name}} <br> {{item?.menuItem?.retail | currency}}
+            {{item?.menuItem?.name}} <br> {{ (item?.menuItem?.retail * item?.quantity)  | currency}}
           </div>
           <div>
-            <button mat-button (click)="remove( itemIndex, index)"><mat-icon>delete</mat-icon></button>
-          </div>
-          <div>
-            <button mat-button (click)="applyNo( itemIndex, index)"><mat-icon>+</mat-icon>NO</button>
+            <button class="button" color="warn" mat-button (click)="remove( itemIndex, index)"><mat-icon>delete</mat-icon></button>
           </div>
         </div>
       </div>

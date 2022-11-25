@@ -9,7 +9,7 @@ mat-card {
 
   @include for-phone-only  {
     width     : 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
   }
 }
@@ -17,7 +17,7 @@ mat-card {
 .transaction-data {
   display: grid;
   grid-template-columns: repeat( auto-fit, minmax(265px, 1fr) );
-  overflow-y: auto;
+  overflow-y: hidden;
   overflow-x: hidden;
 }
 

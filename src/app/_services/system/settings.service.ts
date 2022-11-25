@@ -234,6 +234,30 @@ export class SettingsService {
 
   }
 
+  // getSettingByNameCached(site: ISite, name: String):  Observable<ISetting> {
+
+  //   if (!name) { return }
+  //   const user =  JSON.parse(localStorage.getItem('user')) as IUser
+  //   if (!user || !user.roles ||  !user.username ) {
+  //     return this.getSettingByNameNoRoles(site, name)
+  //   }
+
+  //   const controller = "/settings/"
+
+  //   const endPoint = 'getSettingByName';
+
+  //   const parameters = `?name=${name}`
+
+  //   const url = `${site.url}${controller}${endPoint}${parameters}`
+
+  //   const uri = { url: url, cacheMins: 120}
+
+  //   return this.httpCache.get<ISetting>(uri);
+
+  //   return this.http.get<ISetting>(url);
+
+  // }
+
   getSettingByNameNoRoles(site: ISite, name: String):  Observable<ISetting> {
 
     const controller = "/settings/"
@@ -619,7 +643,7 @@ export class SettingsService {
 
   getCacheURI(url: string) {
     const  cache = this.getCurrentCache();
-    if (cache == null) {
+    if (!cache || cache == null) {
       return  { url: url, cacheMins: 0 }
     }
     return { url: url, cacheMins: parseInt(cache.value) }
@@ -638,7 +662,6 @@ export class SettingsService {
   }
 
   getSettingByNameCached(site: ISite, name: String):  Observable<ISetting> {
-    let appCache =  JSON.parse(localStorage.getItem('appCache'))
 
     const controller = "/settings/"
 
@@ -646,21 +669,21 @@ export class SettingsService {
 
     const parameters = `?name=${name}`
 
-    const uri = `${site.url}${controller}${endPoint}${parameters}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
     if (appCache) {
-      if (appCache.value) {
-        const url = { url: uri, cacheMins: 0}
-        return  this.httpCache.get<ISetting>(url)
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return  this.httpCache.get<ISetting>(uri)
       }
     }
 
-    return this.http.get<ISetting>(uri);
+    return this.http.get<ISetting>(url);
 
   }
 
   getSettingByNameCachedNoRoles(site: ISite, name: String):  Observable<ISetting> {
-    let appCache =  JSON.parse(localStorage.getItem('appCache'))
 
     const controller = "/settings/"
 
@@ -668,49 +691,19 @@ export class SettingsService {
 
     const parameters = `?name=${name}`
 
-    const uri = `${site.url}${controller}${endPoint}${parameters}`
+    const url = `${site.url}${controller}${endPoint}${parameters}`
 
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
     if (appCache) {
-      if (appCache.value) {
-        const url = { url: uri, cacheMins: 0}
-        return  this.httpCache.get<ISetting>(url)
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return  this.httpCache.get<ISetting>(uri)
       }
     }
 
-    return this.http.get<ISetting>(uri);
+    return this.http.get<ISetting>(url);
 
   }
-
-  // async initSetting(){
-
-  //   if (!this.settingName) {return};
-  //   if (!this.settingFieldName) {return};
-
-  //   const site = this.sitesService.getAssignedSite();
-  //   this.setting = await this.settingService.getSettingByName(site, this.settingName).pipe().toPromise();
-
-  //   if (this.setting) {
-  //     this.settingValue = this.setting.boolean;
-  //     this.inputForm  = this.fbSettingsService.initForm(this.inputForm)
-  //     this.inputForm  = this.fbSettingsService.intitFormData(this.inputForm, this.setting)
-  //   }
-
-
-  // }
-
-  // updateSetting() {
-  //   if (this.setting && this.inputForm) {
-  //     const site = this.sitesService.getAssignedSite();
-  //     this.setting = this.inputForm.value;
-  //     this.settingService.putSetting(site, this.setting.id, this.setting ).subscribe( data => {
-  //       this.setting = data
-  //       if (this.cacheSettingLocal) {
-  //         localStorage.setItem(this.settingName, JSON.stringify(data));
-  //       }
-  //     })
-  //   }
-  // }
-
 
 }
 

@@ -1,6 +1,6 @@
 @import "/src/mixins.scss";
 
-button { 
+button {
   min-width: 75px;
   @include for-phone-only {
     min-width: 75px;
@@ -58,13 +58,12 @@ button {
 }
 
 
-
 .grid-items-buttons {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
   grid-auto-flow: row;
-  grid-template-columns: 175px repeat( auto-fit, minmax(175px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
 
   @include for-phone-only {
     --gap: 10px;
@@ -74,8 +73,8 @@ button {
   }
 }
 
-.grid-button-text { 
-  
+.grid-button-text {
+
 }
 
 .grid-items {
@@ -83,7 +82,7 @@ button {
   display: grid;
   gap: var(--gap);
   grid-auto-flow: row;
-  grid-template-columns: repeat( auto-fit, minmax(225px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(100PX, 1fr) );
 
   @include for-phone-only {
     --gap: 10px;

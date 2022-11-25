@@ -14,6 +14,10 @@ import { OrdersService } from 'src/app/_services/transactions/orders.service';
 import { MenuService } from 'src/app/_services/menu/menu.service';
 import { Observable } from 'rxjs';
 
+interface itemOption {
+  name: string;
+  quantity: number;
+}
 @Component({
   selector: 'prompt-panel-menu-item',
   templateUrl: './prompt-panel-menu-item.component.html',
@@ -27,10 +31,10 @@ export class PromptPanelMenuItemComponent implements OnInit {
   @Input() promptMenuItem   : PromptMenuItem;
   @Input() subGroupInfo     : PromptSubGroups;
   @Input() index            : number; //this is not the index of the menu item, but of it's parent.
-
+  @Input() itemOption       = 1;
   @Output() outputNextStep = new EventEmitter();
   @Output() outputPrevStep = new EventEmitter();
-
+  @Output() resetItemOption = new EventEmitter();
   bucketName       : string;
   imageURL         : string;
   chosenCount      : string;
@@ -128,59 +132,110 @@ export class PromptPanelMenuItemComponent implements OnInit {
     ))
   }
 
-  addItem() {
+  // addLFTHalf() {
+  //   this.newItem$ = this.addItemSub(.5, 'LFT Half')
+  // }
 
-    // if (!this.menuItem) {
-    //   this.orderService.notificationEvent('No menu item.', 'Info')
-    //   return;
-    // }
+  // addRTHalf() {
+  //   this.newItem$ = this.addItemSub(.5, 'RT Half')
+  // }
+
+  addItem() {
+    this.newItem$ = this.addItemSub()
+  }
+
+  addItemSub():Observable<MenuItemsSelected> {
+
+    const quantityItem = this.getQuantity()
 
     this.orderPromptGroup = this.promptWalkService.initPromptWalkThrough(this.order, this.promptGroup)
-
-    // console.log('orderPromptGroup', this.orderPromptGroup);
     //can item be added to this sub group.
     if (!this.orderPromptGroup) { this.orderPromptGroup = {} as IPromptGroup}
-
     let orderPromptGroup = this.validateAddingItem();
-    // console.log('init group', orderPromptGroup);
 
     if (!orderPromptGroup) {
       this.orderService.notificationEvent('No prompt group assigned..', 'Info')
       return
     }
-
-    console.log('item', orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups)
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
 
     if (currentSubPrompt.quantityMet) {
       this.orderService.notificationEvent('Quantity already met moving on.', 'Info')
-      // console.log('Quantity already met moving on ')
       this.nextStep()
       return
     }
 
+    this.resetItemOption.emit('')
     // then we can add the item including the reference of the item.
-    // const item = await this.getMenuItemToApply();
-    this.newItem$ = this.getMenuItemToApply().pipe(
-      switchMap(data => {
-        if (data) {
+    return this.getApplyNewItem(quantityItem.quantity, quantityItem.name, currentSubPrompt, orderPromptGroup)
+
+  }
+
+  getApplyNewItem(value: number, prefix: string, currentSubPrompt, orderPromptGroup): Observable<MenuItemsSelected> {
+    return this.getMenuItemToApply().pipe(
+      switchMap(item => {
+        if (item) {
           if (!currentSubPrompt.itemsSelected) {
             currentSubPrompt.itemsSelected = [] as MenuItemsSelected[]
           }
-          currentSubPrompt.itemsSelected.push(data)
+
+          if (!prefix) { prefix = ''}
+          item.quantity = value;
+          item.menuItem.order_Quantity = value.toString();
+
+          if (prefix.toLowerCase() === 'no') {
+            item.price = 0;
+            item.quantity = value;
+            item.menuItem.retail = 0;
+          }
+
+          item.menuItem.name = `${prefix} ${item.menuItem.name}`.trim()
+
+          currentSubPrompt.itemsSelected.push(item)
           orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected = currentSubPrompt.itemsSelected;
+
           this.promptWalkService.updatePromptGroup(orderPromptGroup)
         }
         //do check again after item has been added.
         orderPromptGroup = this.validateAddingItem();
         if (!orderPromptGroup) { return }
         if (currentSubPrompt.quantityMet) {
-          // console.log('add new item, quantity met')
           this.nextStep()
         }
-        return of(data)
+        return of(item)
       })
     )
+  }
+
+  getQuantity() {
+    let quantity = 1;
+    let item = {} as itemOption;
+    if (this.itemOption == 1) {
+      item.name = '';
+      item.quantity = 1;
+    }
+
+    if (this.itemOption == 2) {
+      item.name = 'Lft 1/2';
+      item.quantity = .5;
+    }
+
+    if (this.itemOption == 3) {
+      item.name = 'Rt 1/2';
+      item.quantity = .5;
+    }
+
+    if (this.itemOption == 4) {
+      item.name = 'No';
+      item.quantity = 0;
+    }
+
+    return item;
+  }
+
+
+  applyItem(value) {
+
   }
 
 

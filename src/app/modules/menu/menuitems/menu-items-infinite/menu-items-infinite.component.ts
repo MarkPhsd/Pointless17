@@ -102,7 +102,7 @@ constructor(private menuService        : MenuService,
               private titleService     : Title,
               private platFormService  : PlatformService,
               private fb: FormBuilder,
-       
+
       )
   {
     this.isApp = this.platFormService.isApp()
@@ -156,7 +156,7 @@ constructor(private menuService        : MenuService,
     }
   }
 
-  initSearchForm() { 
+  initSearchForm() {
     this.searchForm = this.fb.group( {
       itemName: ''
     })
@@ -198,7 +198,7 @@ constructor(private menuService        : MenuService,
         this.brandID      = this.route.snapshot.paramMap.get('brandID');
         this.typeID       = this.route.snapshot.paramMap.get('typeID');
         this.productName  = this.route.snapshot.paramMap.get('productName');
-    
+
     } catch (error) {
       console.log('initSearchProcess Error', error)
     }
@@ -247,6 +247,13 @@ constructor(private menuService        : MenuService,
     )
   }
 
+  getNextMenuItem() {
+    let menuItem = {} as IMenuItem
+    menuItem.id = -1;
+    menuItem.name = 'Load More'
+    return menuItem;
+  }
+
   async addToList(pageSize: number, pageNumber: number)  {
       let model   = this.productSearchModelData;
       if (!model) { model = {} as ProductSearchModel }
@@ -290,9 +297,19 @@ constructor(private menuService        : MenuService,
         if (!this.menuItems)  { this.menuItems = [] as IMenuItem[] }
         this.itemsPerPage = this.itemsPerPage + data.results.length;
         if (this.menuItems) {
+
+          try {
+            // console.log('menu length', this.menuItems.length)
+            if (this.menuItems[this.menuItems.length -1 ].name.toLowerCase() === 'load more') {
+              this.menuItems.splice(this.menuItems.length-1,1)
+            };
+          } catch (error) {
+
+          }
           data.results.forEach( item => {
             this.menuItems.push(item)
           })
+
 
           this.totalRecords = data.paging.totalRecordCount;
           if ( this.menuItems.length == this.totalRecords ) {
@@ -300,6 +317,15 @@ constructor(private menuService        : MenuService,
             this.loading = false;
             this.value = 100;
           }
+
+
+          if ( this.value != 100) {
+            const lastItem = this.getNextMenuItem();
+            this.loading = false;
+            this.menuItems.push(lastItem)
+          }
+
+
 
           this.value = ((this.menuItems.length / this.totalRecords ) * 100).toFixed(0)
           this.loading      = false
@@ -315,6 +341,12 @@ constructor(private menuService        : MenuService,
       }
     )
   };
+
+  moveNext(event) {
+    this.menuItems.splice(this.menuItems.length,1)
+    this.onScrollDown();
+  }
+
 
   onScrollDown() {
     this.scrollingInfo = 'scroll down'

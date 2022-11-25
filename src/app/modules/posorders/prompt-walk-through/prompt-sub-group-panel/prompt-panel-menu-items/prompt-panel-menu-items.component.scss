@@ -1,3 +1,5 @@
+@import "/src/mixins.scss";
+
 mat-action-row {
   place-content: start;
 }
@@ -6,10 +8,37 @@ mat-expansion-panel {
   margin: 3px;
 }
 
+mat-button-toggle-group {
+  width: 95%;
+  margin: 5px;
+  border: 0px;
+}
 
-.grid-items { 
+.button-toggle, mat-button-toggle {
+  width : 85px;
+  height: 60px;
+  margin: 10px;
+}
+
+.grid-items {
   max-height: 400px;
   // height:     400px;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+
+.option-buttons {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-auto-flow: row;
+  grid-template-columns: repeat( auto-fit, minmax(100px, 1fr) );
+
+  @include for-phone-only {
+    --gap: 10px;
+    display: grid;
+    gap: var(--gap);
+    grid-template-columns: 75px 1f;
+  }
 }

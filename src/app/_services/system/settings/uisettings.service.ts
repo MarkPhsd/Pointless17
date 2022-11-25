@@ -50,7 +50,8 @@ export interface TransactionUISettings {
   dsiEMVAndroidEnabled   : boolean;
   dsiEMVNeteEpayEnabled  : boolean;
   dsiEMVIP               : boolean;
-
+  payPalEnabled          : boolean;
+  payPayClientID        : string;
 }
 
 export interface StripeAPISettings {
@@ -272,7 +273,6 @@ export class UISettingsService {
     this._totalOrderHeightVal = +totalHeight.toFixed(0);
     this._totalOrderHeight.next(+totalHeight.toFixed(0));
 
-    // console.log('windowHeight', this.windowHeight)
     if (this.windowHeight != 0) {
       const remainder = this.windowHeight - +totalHeight - 100
       this._remainingHeight.next(remainder)
@@ -645,7 +645,8 @@ export class UISettingsService {
       dsiEMVAndroidEnabled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
-
+      payPalEnabled         : [ ],
+      payPayClientID:         ['']
      })
   }
 

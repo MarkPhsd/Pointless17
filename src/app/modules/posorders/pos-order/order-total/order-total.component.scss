@@ -1,7 +1,7 @@
-
-
 mat-card  {
   width: 100%;
+  overflow-y   : hidden;
+  overflow-x   : hidden;
 }
 
 .transaction-data-side-panel-small {
@@ -11,7 +11,7 @@ mat-card  {
   overflow-y   : auto;
   overflow-x   : hidden;
   font-size    : large;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   margin-right : 5px;
 }
 
@@ -22,7 +22,7 @@ mat-card  {
   overflow-y   : auto;
   overflow-x   : hidden;
   font-size    : large;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
   margin-right : 5px;
 }
 
@@ -39,7 +39,7 @@ mat-card  {
   overflow-x    : hidden;
   font-size     : large;
   margin-bottom : 5px;
-  margin-left: 4px;
+  margin-left   : 4px;
 }
 
 .totals {

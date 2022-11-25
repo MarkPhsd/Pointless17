@@ -36,7 +36,8 @@
 
   <div>
     <div class="fields">
-      Estimated cache size: {{cacheSizeCurrent}}
+      <!-- Estimated cache size: {{ cacheSizeCurrent  }} -->
+      Estimated cache size: {{ cacheSize  | number:'1.0-3' }}
     </div>
     <div class="fields">
       <button mat-raised-button

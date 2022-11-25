@@ -195,7 +195,6 @@ export class PrintingService {
     )
   }
 
-
   getStylesCached(site){
     return this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
   }
@@ -211,17 +210,17 @@ export class PrintingService {
   }
 
 
-getDomToImage(node: any) {
-    domtoimage.toPng(node)
-  .then(function (dataUrl) {
-      var img = new Image();
-      img.src = dataUrl;
-      document.body.appendChild(img);
-  })
-  .catch(function (error) {
-      console.error('oops, something went wrong!', error);
-  });
-}
+  getDomToImage(node: any) {
+      domtoimage.toPng(node)
+    .then(function (dataUrl) {
+        var img = new Image();
+        img.src = dataUrl;
+        document.body.appendChild(img);
+    })
+    .catch(function (error) {
+        console.error('oops, something went wrong!', error);
+    });
+  }
 
   listPrinters(): any {
     try {
@@ -535,7 +534,7 @@ getDomToImage(node: any) {
   ///
   getElectronLabelPrinter(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
-    return this.settingService.getSettingByNameNoRoles(site,'electronLabelPrinter')
+    return this.settingService.getSettingByNameCachedNoRoles(site,'electronLabelPrinter')
   }
 
   getElectronLabelPrinterCached(): Observable<ISetting> {
@@ -550,7 +549,7 @@ getDomToImage(node: any) {
   getElectronReceiptPrinter(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     const name = 'defaultElectronReceiptPrinterName'
-    const item$ = this.settingService.getSettingByNameNoRoles(site, name)
+    const item$ = this.settingService.getSettingByNameCachedNoRoles(site, name)
     const printer$ = item$.pipe(
       switchMap(
       // {
@@ -579,7 +578,7 @@ getDomToImage(node: any) {
 
   getSetting(settingName: string) {
     const site = this.siteService.getAssignedSite();
-    return this.settingService.getSettingByName(site, settingName)
+    return this.settingService.getSettingByNameCachedNoRoles(site, settingName)
   }
 
   getSettingCached(settingName: string): Observable<ISetting> {

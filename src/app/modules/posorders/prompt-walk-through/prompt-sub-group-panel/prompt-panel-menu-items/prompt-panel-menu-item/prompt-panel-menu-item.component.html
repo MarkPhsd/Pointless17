@@ -11,39 +11,16 @@
         color="primary"
         class="buttons"
         (click)="addItem()">
-      <div class="grid-image-button">
-        <!-- <div><mat-icon>add</mat-icon></div> -->
+
         <div>
           {{promptMenuItem?.prompt_Products?.name}}
         </div>
-      </div>
+
     </button>
   </div>
 
   <div *ngIf ="imageURL" class="image" (click)="addItem()">
     <img class="image" [src]="imageURL">
-  </div>
-
-  <div>
-    <button mat-button
-        color="primary"
-        class="buttons"
-        (click)="addLFTHalf()">
-      <div class="grid-image-button">
-        <mat-icon>Lft 1/2</mat-icon>
-      </div>
-    </button>
-  </div>
-
-  <div>
-    <button mat-button
-        color="primary"
-        class="buttons"
-        (click)="addRTHalf()">
-      <div class="grid-image-button">
-        <mat-icon>Rt 1/2</mat-icon>
-      </div>
-    </button>
   </div>
 
   <div  *ngIf="chosenCount || (chosenCount != '' && chosenCount != undefined)"

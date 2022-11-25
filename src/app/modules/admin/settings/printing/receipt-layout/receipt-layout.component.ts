@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
 import { lte } from 'lodash';
-import { EMPTY, Subscription } from 'rxjs';
+import { EMPTY, of, Subscription, Observable } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
 import { OrdersService } from 'src/app/_services';
@@ -11,16 +11,19 @@ import { RenderingService } from 'src/app/_services/system/rendering.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { DatePipe } from '@angular/common';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap,  } from 'rxjs/operators';
+
 @Component({
   selector: 'app-receipt-layout',
   templateUrl: './receipt-layout.component.html',
   styleUrls: ['./receipt-layout.component.scss']
 })
-export class ReceiptLayoutComponent implements OnInit,OnDestroy {
+export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
   //we use these because it makes formating easier
   //during design process. so don't use saved seettings.
+
+  action$ : Observable<any>;
 
   @Input() headerText  : string;
   @Input() itemText    : string;
@@ -61,19 +64,14 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
   @Input() interpolatedCreditPaymentsTexts = [] as string[];
   @Input() interpolatedWICEBTPaymentsTexts = [] as string[];
 
-      // [interpolatedCreditPaymentsTexts] ="interpolatedCreditPaymentsTexts"
-      //                           [interpolatedWICEBTPaymentsTexts] ="interpolatedWICEBTPaymentsTexts"
-      //                           [interpolatedSubFooterTexts] ="interpolatedSubFooterTexts"
-
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
-
   _order: Subscription;
 
-  async initSubscriptions() {
+  initSubscriptions() {
 
     this.site = this.siteService.getAssignedSite();
-    this._order = this.orderService.currentOrder$.pipe(
+    return this.orderService.currentOrder$.pipe(
       switchMap(
         data => {
           if (!data)  {return EMPTY   }
@@ -86,21 +84,23 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
           if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
           if ( this.payments) { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
-          return this.serviceTypeService.getType(this.site, data.serviceTypeID)
+           return this.serviceTypeService.getTypeCached(this.site, data.serviceTypeID)
         }
       )
-    ).subscribe(data   => {
-        if (!data) { return }
+     ).pipe(
+      switchMap(data   => {
+        if (!data) { return of(this.order) }
         this.orderType = data
         this.orderTypes = []
         this.orderTypes.push(this.orderType)
         if (this.subFooterText) {
           this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
         }
+        this.getInterpolatedData()
         this.printingService.updatePrintReady(true)
-        return this.order
+        return of(this.order)
       }
-    )
+    ))
   }
 
   constructor(
@@ -112,24 +112,40 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
     private orderService    : OrdersService,
     private fakeDataService : FakeDataService) { }
 
-  async ngOnInit() {
-    this.initSubscriptions();
+  ngOnInit() {
+
     this.getReceiptWidth()
-    await this.applyStyles();
-    await this.refreshData();
+    this.action$ = this.initSubscriptions().pipe(
+        switchMap(data => {
+          return of(data)
+          }
+        )
+      ).pipe(
+        switchMap( data => {
+           return this.getStyles()
+          }
+        )
+      ).pipe(
+        switchMap(data => {
+          this.refreshData();
+          return of(data)
+        }
+      )
+    )
+
   }
 
-  ngOnDestroy(): void {
+  ngOnDestroy() {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    if ( this._order) {    this._order.unsubscribe()}
+    if ( this._order) {  this._order.unsubscribe()}
   }
 
-  async refreshData() {
+ refreshData() {
     this.site = this.siteService.getAssignedSite();
-    await this.initSubscriptions();
-    if (!this.order) {  await this.getTestData();  }
-    this.getInterpolatedData()
+     this.initSubscriptions();
+    if (!this.order) {  this.getTestData();  }
+    // this.service$ = this.getOrderTypeInfo(this.order.serviceTypeID)
     return
   }
 
@@ -158,7 +174,7 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
     }
   }
 
-  async getInterpolatedData() {
+  getInterpolatedData() {
 
     if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
@@ -187,15 +203,7 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
       }
 
       if (this.orders && this.orders[0].serviceTypeID) {
-          this.serviceTypeService.getType(this.site, this.orders[0].serviceTypeID).subscribe(data => {
-            if (data) {
-              this.orderType = data
-              this.orderTypes = []
-              this.orderTypes.push(this.orderType)
-              this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
-            }
-          }
-        )
+
       } else {
         // console.log('you knew this was going to happen')
       }
@@ -205,7 +213,21 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
     }
   }
 
-  async getTestData() {
+  getOrderTypeInfo(serviceTypeID: number) {
+    return this.serviceTypeService.getTypeCached(this.site, this.orders[0].serviceTypeID).pipe(
+      switchMap(data => {
+      if (data) {
+        this.orderType = data
+        this.orderTypes = []
+        this.orderTypes.push(this.orderType)
+        this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
+      }
+      return of(data)
+    }));
+
+  }
+
+ getTestData() {
     if (!this.order) {
       this.orders      = this.fakeDataService.getOrder();
       this.items       = this.fakeDataService.getItemData();
@@ -224,18 +246,30 @@ export class ReceiptLayoutComponent implements OnInit,OnDestroy {
     return  this.renderingService.interpolateText(item, html)
   }
 
-  async applyStyles() {
+  getStyles() {
     const site                = this.siteService.getAssignedSite();
-    const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-    receiptStyle$.subscribe( receiptStyles => {
-      if (receiptStyles) {
-        const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
-        const style = document.createElement('style');
-        style.innerHTML = styles;
-        document.head.appendChild(style);
-      }}
+    const receiptStyle$       = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+    return receiptStyle$.pipe(
+      switchMap( receiptStyles => {
+          if (receiptStyles) {
+            const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
+            const style = document.createElement('style');
+            style.innerHTML = styles;
+            document.head.appendChild(style);
+          }
+          return of(receiptStyles)
+        }
+      ),
+      catchError(err => {
+        this.orderService.notificationEvent('Error getting styles for receipt', 'Error')
+        return of(null)
+      })
     )
+
   }
+
+
+
 }
 
 

@@ -67,13 +67,5 @@ export class DatabaseSchemaComponent implements AfterViewInit {
     });
   }
 
-  //   let carNumbers = [1, 2, 3];
-  // let observables = carNumbers.map(carNumber => this.carService.getCarByNumerator(carNumber));
-
-  // // forkJoin the array/collection of observables
-  // let source = Rx.Observable.forkJoin(observables);
-
-  // // subscribe and sort combined array/collection prior to additional processing
-  // source.subscribe(x => console.log(x.sort((a, b) => a - b));
 
 }

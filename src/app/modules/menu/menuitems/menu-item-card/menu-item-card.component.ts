@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output,EventEmitter} from '@angular/core';
 import { IMenuItem }  from 'src/app/_interfaces/menu/menu-products';
 import { AWSBucketService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute,  } from '@angular/router';
@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+
 
 // https://stackoverflow.com/questions/54687522/best-practice-in-angular-material-to-reuse-component-in-dialog
 export interface DialogData {
@@ -24,6 +25,7 @@ export interface DialogData {
 })
 export class MenuItemCardComponent implements OnInit, OnDestroy {
 
+  @Output() outPutLoadMore = new EventEmitter()
   @Input() id        : number;
   @Input() retail    : number;
   @Input() name      : string;
@@ -117,6 +119,11 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   }
 
   menuItemAction(add: boolean) {
+    if (this.menuItem?.name.toLowerCase() === 'load more') {
+      this.outPutLoadMore.emit('true')
+      return ;
+    }
+    // console.log('add', add)
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
   }
 

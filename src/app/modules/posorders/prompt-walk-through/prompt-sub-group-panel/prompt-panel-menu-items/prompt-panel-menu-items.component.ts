@@ -26,7 +26,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   _accordionStep     : Subscription;
   @Input()  accordionStep      : number
-
+  itemOption = 1;
   @Output() outputSetStep  = new EventEmitter();
   @Output() outputNextStep = new EventEmitter();
   @Output() outputPrevStep = new EventEmitter(); //:   EventEmitter<any> = new EventEmitter();
@@ -40,6 +40,12 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   orderPromptGroup : IPromptGroup;
   _orderPromptGroup: Subscription;
+  itemOptions = [
+    {name: 'whole', id: 1},
+    {name: 'LFT 1/2', id: 2},
+    {name: 'RT 1/2', id: 3},
+    {name: 'No', id: 4},
+  ]
 
   initPOSItemSubscriber() {
     this._posItem = this.posOrderItemService.posOrderItem$.subscribe(data => {
@@ -47,25 +53,23 @@ export class PromptPanelMenuItemsComponent implements OnInit {
     })
   }
 
+  resetItemOption(event) {
+    this.itemOption = 1;
+  }
+
   initPromptSubscriber() {
       this._orderPromptGroup  = this.promptWalkService.orderPromptGroup$.subscribe( data => {
         this.orderPromptGroup = data;
         if (this.orderPromptGroup)
         {
-
-          //this.accordionStep = data;
-
           this.panelIndex       = this.orderPromptGroup.currentAccordionStep
-          // console.log('this panel update', data.selected_PromptSubGroups[this.index].promptSubGroups.name, this.panelIndex)
         }
     })
   }
 
   initAccordionSubscriber() {
     this._accordionStep = this.promptWalkService.accordionStep$.subscribe( data => {
-      console.log('accordiona data updated', data)
       this.accordionStep = data;
-      // this.index = this.accordionStep;
       this.setStep(this.accordionStep)
     })
   }
@@ -102,6 +106,10 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       } else {
       return this.awsBucket.getImageURLPath(this.bucketName, this.subGroupInfo.image)
     }
+  }
+
+  setOption(event) {
+    this.itemOption = event
   }
 
   nextStep(event) {

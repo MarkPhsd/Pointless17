@@ -254,8 +254,6 @@ export class OrderMethodsService implements OnDestroy {
   ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
   menuItemAction(order: IPOSOrder, item: IMenuItem, add: boolean) {
     const searchResults = this.updateMenuSearchModel(item)
-
-    // console.log('searchresults', searchResults)
     if (searchResults) { return }
 
     if (add) {
@@ -1064,15 +1062,23 @@ export class OrderMethodsService implements OnDestroy {
     if (prompt) {
       prompt.posOrderItem = posItem;
       this.promptGroupService.updatePromptGroup(prompt);
-      // encapsulation: ViewEncapsulation.None
+
+      // {
+      //   width:     '90vw',
+      //   maxWidth:  '1000px',
+      //   height:    '90vh',
+      //   maxHeight: '90vh',
+      //   panelClass: 'foo'
+      // }
+
+
       const dialogRef = this.dialog.open(PromptWalkThroughComponent,
-        {
-          width:     '90vw',
-          maxWidth:  '1000px',
-          height:    '90vh',
-          maxHeight: '90vh',
-          panelClass: 'foo'
-        }
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
+        },
       )
       dialogRef.afterClosed().subscribe(result => {
         this.promptGroupService.updatePromptGroup(null)

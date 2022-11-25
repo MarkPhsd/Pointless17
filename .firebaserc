@@ -31,6 +31,12 @@
         ],
         "pointlesspos": [
           "pointlesspos"
+        ],
+        "liquorpointofsale": [
+          "liquorpointofsale"
+        ],
+        "restaurantpointofsale": [
+          "restaurantpointofsale"
         ]
       }
     }

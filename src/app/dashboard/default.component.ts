@@ -206,7 +206,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   initSubscriptions() {
-    console.log('init Subscriptions')
+    // console.log('init Subscriptions')
     this.matorderBar = 'mat-orderBar-wide'
     this.style = ""
     try {

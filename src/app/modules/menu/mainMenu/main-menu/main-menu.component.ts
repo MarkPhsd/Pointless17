@@ -28,6 +28,8 @@ export class MainMenuComponent implements OnInit  {
   smallDevice =false;
   panels = 0;
 
+  departmentViewOn: boolean;
+
   orderAction$ : Observable<IPOSOrder>;
   @ViewChild('brandView')      brandView: TemplateRef<any>;
   @ViewChild('categoryView')   categoryView: TemplateRef<any>;
@@ -39,7 +41,9 @@ export class MainMenuComponent implements OnInit  {
 
   homePageSetings: UIHomePageSettings;
   smoke   = "./assets/video/smoke.mp4"
-  isStaff : boolean;
+  isStaff = false;
+  isUser  = false;
+
   site    : ISite;
   _site   : Subscription;
   _poll   : Subscription;
@@ -77,7 +81,7 @@ export class MainMenuComponent implements OnInit  {
   setPanelHeight(item: UIHomePageSettings) {
     let value = 0
 
-    if (this.userAuthorizationService.isUser) {
+    if (!this.userAuthorizationService.isStaff) {
       // if(item.menuEnabled  ) {value = value + 1}
       if(item.categoriesEnabled  ) {value = value + 1}
       if(item.departmentsEnabled  ) {value = value + 1}
@@ -103,7 +107,7 @@ export class MainMenuComponent implements OnInit  {
       this.panelHeightValue  =  +height;
       this.panelHeightSize   = `calc(${height}vh - 65px)`
     }
-    console.log('panelHeightSize',this.panelHeightSize)
+    // console.log('panelHeightSize',this.panelHeightSize)
   }
 
   ngOnInit(): void {
@@ -113,6 +117,7 @@ export class MainMenuComponent implements OnInit  {
       })
       this.initSiteSubscriber();
       this.isStaff = false;
+      this.isUser = this.userAuthorizationService.isUser;
       this.isStaff = this.userAuthorizationService.isCurrentUserStaff()
       this.uiSettings.getSetting('UIHomePageSettings').subscribe( data => {
 
@@ -153,27 +158,24 @@ export class MainMenuComponent implements OnInit  {
 
 
   get isDisplayMenuOn() {
-
     if ((this.isStaff && this.homePageSetings.staffMenuEnabled) ||
-        (!this.isStaff && this.homePageSetings.menuEnabled)) {
+        (this.isStaff == false &&  this.homePageSetings.menuEnabled)) {
       return this.displayMenu
     }
     return null;
   }
 
   get isBrandListViewOn() {
-
     if ((this.isStaff && this.homePageSetings.staffBrandsEnabled) ||
-                  (!this.isStaff && this.homePageSetings.brandsEnabled)){
+         (this.isStaff == false &&  this.homePageSetings.brandsEnabled)){
       return this.brandView
     }
     return null;
   }
 
   get isTierMenuViewOn() {
-
     if ((this.isStaff && this.homePageSetings.staffTierMenuEnabled) ||
-        (!this.isStaff && this.homePageSetings.tierMenuEnabled)) {
+        (this.isStaff == false &&  this.homePageSetings.tierMenuEnabled)) {
       return this.tierMenuView
     }
     return null;
@@ -181,20 +183,24 @@ export class MainMenuComponent implements OnInit  {
 
   get isCategoryViewOn() {
     if ((this.isStaff && this.homePageSetings.staffCategoriesEnabled) ||
-        (!this.isStaff && this.homePageSetings.categoriesEnabled)) {
+        (this.isStaff == false &&  this.homePageSetings.categoriesEnabled)) {
       return this.categoryView
     }
     return null;
   }
 
-
-
   get isDepartmentViewOn() {
-
     if ((this.isStaff && this.homePageSetings.staffDepartmentsEnabled) ||
-        (!this.isStaff && this.homePageSetings.departmentsEnabled)) {
+         (this.isStaff == false &&  this.homePageSetings.departmentsEnabled)) {
+          return this.departmentView
+    }
+
+    // console.log('is staff', this.isStaff)
+
+    if  (this.isStaff == false &&  this.homePageSetings.departmentsEnabled) {
       return this.departmentView
     }
+
     return null;
   }
 

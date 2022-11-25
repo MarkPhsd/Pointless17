@@ -50,22 +50,46 @@ export class UserAuthorizationService {
   }
 
   isCurrentUserStaff(): boolean {
-    return  this.isUserAuthorized('admin,manager,employee')
+    const item =    this.isUserAuthorized('admin,manager,employee')
+    if (item == undefined) {
+      return false
+    }
+    return item
   }
 
   get isStaff(): boolean {
-    return  this.isUserAuthorized('admin,manager,employee')
+    const item =  this.isUserAuthorized('admin,manager,employee')
+    if (item == undefined) {
+      return false
+    }
+    return item
   }
   get isUser(): boolean {
-    return  this.isUserAuthorized('user')
+    const item =   this.isUserAuthorized('user')
+    if (item == undefined) {
+      return false
+    }
+    return item
   }
   get isManagement(): boolean {
-    return  this.isUserAuthorized('admin,manager')
+    const item =   this.isUserAuthorized('admin,manager')
+    if (item == undefined) {
+      return false
+    }
+    return item
   }
   get isManager(): boolean {
-    return  this.isUserAuthorized('admin,manager')
+    const item =   this.isUserAuthorized('admin,manager')
+    if (item == undefined) {
+      return false
+    }
+    return item
   }
   get isAdmin(): boolean {
-    return  this.isUserAuthorized('admin')
+    const item =   this.isUserAuthorized('admin')
+    if (item == undefined) {
+      return false
+    }
+    return item
   }
 }
