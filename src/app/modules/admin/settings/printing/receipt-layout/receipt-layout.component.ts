@@ -77,7 +77,9 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           if (!data)  {return EMPTY   }
           this.order      = data
           this.items      = this.order.posOrderItems
-          this.payments   = this.order.posPayments
+          if (!this.payments) {
+            this.payments   = this.order.posPayments
+          }
           this.orders     = []
           if (this.order) { this.orders.push(this.order)}
           const datepipe: DatePipe = new DatePipe('en-US')

@@ -1,0 +1,37 @@
+<button mat-button color="primary" (click)="refresh()">
+  <mat-icon>refresh</mat-icon>
+</button>
+
+<div *ngIf="(save$ | async) as list"></div>
+<div *ngIf="(blogs$ | async) as item"></div>
+
+<ng-template #saving>
+  <mat-spinner [diameter]="50"></mat-spinner>
+</ng-template>
+<button mat-button (click)="refreshList()"><mat-icon>refresh</mat-icon></button>
+
+<div fxFlex fxLayout="column start" >
+  <div
+       *ngIf="displayMenus">
+    <h5>Drag / Drop to Sort</h5>
+    <div class="drag-container">
+
+      <div  class="drag-list "
+            cdkDropList
+            #accordionList="cdkDropList"
+            (cdkDropListDropped)  ="drop($event)"
+          >
+        <div *ngFor="let item of displayMenus; let index = index;"
+            class="pop"
+            cdkDrag
+            (click)="assignItem(item, index)"
+          >
+          <div>
+            {{item?.name}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

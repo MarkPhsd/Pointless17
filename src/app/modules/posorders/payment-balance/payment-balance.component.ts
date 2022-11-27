@@ -1,7 +1,7 @@
 import { Component, OnInit, Input , OnDestroy} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { IPOSOrder, IPOSPayment, ISite } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-button.service';
@@ -25,6 +25,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
   @Input() order : IPOSOrder;
   @Input() mainPanel = true;
   @Input() uiTransactions: TransactionUISettings;
+  void$: Observable<any>;
 
   paymentsEqualTotal: boolean;
   site           : ISite;
@@ -142,23 +143,29 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.orderMethodsService.clearOrder()
    }
 
-   async getPaymentMethod(id: number) {
-      const method = await this.paymentMethodService.getCacheMethod(this.site ,id).pipe().toPromise();
-      console.log('method name', method.name)
-      if (method) {
-        return method.name
-      }
-      return ''
+   getPaymentMethod(id: number) {
+      return this.paymentMethodService.getCacheMethod(this.site ,id)
    }
 
    voidPayment(payment) {
     //run void method.
-    if (payment) {
-      //only manager can void.
-      this.productEditButtonService.openVoidPaymentDialog(payment)
-      return
-    }
-   }
+    const message = 'Paypal can be voided from the POS Sales, but must be completed in the paypal account itself.'
+
+    const method$ = this.getPaymentMethod(payment.paymentMethodID)
+
+    this.void$ = method$.pipe(switchMap( data=> {
+        if (payment && data.name != 'paypal') {
+          this.notify(message, 'Alert', 2000)
+          //only manager can void.
+          this.productEditButtonService.openVoidPaymentDialog(payment)
+        }
+        return of(data)
+
+        }
+      )
+    )
+
+  }
 
 
    requestVoidPayment(payment) {
@@ -172,6 +179,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
    printPaymentReceipt(item) {
     if (item) {
+      this.orderService.selectedPayment = item;
       this.printingService.previewReceipt()
     }
    }

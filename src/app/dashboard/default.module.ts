@@ -335,6 +335,9 @@ import { OrderMethodsService } from '../_services/transactions/order-methods.ser
 import { PriceScheduleMenuItemsComponent } from '../modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
 import { PriceScheduleSortComponent } from '../modules/admin/products/price-schedule/price-schedule-sort/price-schedule-sort.component';
 import { DisplayMenuSortComponent } from '../modules/admin/products/display-menu/display-menu-sort/display-menu-sort.component';
+import { NgxPayPalModule } from 'ngx-paypal';
+import { PayPalTransactionComponent } from '../modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
+import { SiteFooterComponent } from '../shared/components/site-footer/site-footer.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -410,6 +413,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
 
+    PayPalTransactionComponent,
+
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,
     PriceCategoryConversionsComponent,
@@ -431,6 +436,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     SiteEditComponent,
     SiteEditFormComponent,
 
+    SiteFooterComponent,
     ServiceTypeEditComponent,
     ServiceTypeListComponent,
 
@@ -529,6 +535,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     OrderPanelComponent,
     PackageListComponent,
     PackageSearchSelectorComponent,
+
 
     POSSplitItemsComponent,
     PrepOrderComponent,
@@ -715,6 +722,7 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
       SharedModule,
       NgxStripeModule.forRoot(),
       NgxCsvParserModule,
+      NgxPayPalModule,
     ],
 
   exports: [

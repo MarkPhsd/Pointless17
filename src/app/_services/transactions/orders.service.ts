@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { IProductPostOrderItem, IServiceType, ISite, IUserProfile }   from 'src/app/_interfaces';
-import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
+import { IOrdersPaged, IPOSOrder, IPOSOrderSearchModel, IPOSPayment, PosOrderItem,  } from 'src/app/_interfaces/transactions/posorder';
 import { IPagedList } from '../system/paging.service';
 import { IItemBasic } from '../menu/menu.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -81,6 +81,7 @@ export class OrdersService {
   private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
   public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
 
+  selectedPayment             : IPOSPayment;
 
   isApp                       = false;
   private orderClaimed                : boolean;
@@ -94,6 +95,11 @@ export class OrdersService {
 
   get IsOrderClaimed() { return this.orderClaimed};
 
+  getSelectedPayment() {
+    const payment = this.selectedPayment ;
+    this.selectedPayment = null
+    return of(payment);
+  }
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);
   }
@@ -199,7 +205,7 @@ export class OrdersService {
 
   setPOSName(name: string): boolean {
 
-    console.log('name.length <= 5', name.length)
+    // console.log('name.length <= 5', name.length)
     if (name.length) {
 
       if (name.length <= 5) {
@@ -298,8 +304,7 @@ export class OrdersService {
   }
 
 
-
-  completeOrder(site: ISite , id: number) {
+  completeOrder(site: ISite , id: number): Observable<IPOSOrder> {
     const controller = "/POSOrders/"
 
     const endPoint  = "completeOrder"

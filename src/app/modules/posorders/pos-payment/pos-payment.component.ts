@@ -256,8 +256,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     if (this.platFormService.isApp()) {
       return paymentMethods$.pipe(
         switchMap(data => {
-        const list = data.filter( item => !item.isCreditCard)
-        return  of(list)
+          const list = data.filter( item => !item.isCreditCard)
+          return  of(list)
       }))
     }
 
@@ -420,6 +420,13 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     const order = this.order;
     if (order) {
       this.cardPointMethodsService.processSubCreditPayment(order, this.paymentAmount, false, this.uiTransactions)
+    }
+  }
+
+  applyPayPalPayment(manual: boolean) {
+    const order = this.order;
+    if (order) {
+      this.paymentsMethodsService.processPayPalCreditPayment(order, this.paymentAmount, false, this.uiTransactions)
     }
   }
 

@@ -1,7 +1,6 @@
-<mat-card>
-  <mat-card-content>
-    <div   class="menu-grid" *ngIf="menus">
-
+<div   class="menu-grid" *ngIf="menus">
+  <mat-card *ngIf="menus.length>0">
+    <mat-card-content>
         <display-menu-title
             *ngFor="let menu of menus"
             (click)="navMenu(menu)"
@@ -15,9 +14,7 @@
             [objectfit]="'fill'"
             [menu]="menu">
         </display-menu-title>
-
-    </div>
-  </mat-card-content>
-</mat-card>
-
+      </mat-card-content>
+    </mat-card>
+</div>
 <div  *ngFor="(action$ | async) as items"></div>

@@ -70,17 +70,20 @@ export class DSIEMVTransactionComponent implements OnInit {
 
     this.orderService.currentOrder$.subscribe(data  => {
       this.order = data;
+
+      const i = 0;
+      this.message  = 'Press process to complete transaction.'
+      this.processing = false;
+      this.displayAction(this.action)
+
+      if (this.action == 0 || this.action == 1) {
+        this.process();
+        return
+      }
+
     })
 
-    const i = 0;
-    this.message  = 'Press process to complete transaction.'
-    this.processing = false;
-    this.displayAction(this.action)
 
-    if (this.action == 0 || this.action == 1) {
-      this.process();
-      return
-    }
 
   }
 
@@ -128,6 +131,12 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.processVoidCard();
       return
     }
+
+    if (this.action == 3 || this.type === 'return' || this.type === 'refund') {
+      this.processRefundCard();
+      return
+    }
+
     // if (this.action == 3) {
     //   this.processRefundCard();
     //   return
@@ -174,7 +183,7 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount  = this.amount
     const payment = this.payment
     if (!this.order) { return }
-    const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    const response  = await this.dsiProcess.emvReturn(amount, payment.id,  this.manualPrompt );
     this.processResults(response)
   }
 

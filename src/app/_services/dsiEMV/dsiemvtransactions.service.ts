@@ -400,6 +400,10 @@ export class DSIEMVTransactionsService implements OnDestroy {
           rStream.TranResponse = tran;
         }
 
+        if (transaction.TranCode.toLowerCase() === 'EMVReturn'.toLowerCase()) {
+          const tran = this.getFakeSaleReponse(transaction)
+          rStream.TranResponse = tran;
+        }
         return rStream
       }
 
@@ -407,7 +411,6 @@ export class DSIEMVTransactionsService implements OnDestroy {
       console.log('error', error)
       return  error
     }
-
 
     try {
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
@@ -423,6 +426,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
       this.dsiResponse = 'Pin Pad Reset Failed'
       return  this.dsiResponse
     }
+
     if (response) {
       const parser  = new XMLParser(null);
       let dsiResponse =  parser.parse(response)

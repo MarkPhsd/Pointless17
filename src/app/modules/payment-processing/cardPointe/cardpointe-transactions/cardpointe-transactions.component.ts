@@ -28,7 +28,6 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   settings: TransactionUISettings;
   private _sale               = new BehaviorSubject<any>(null);
   public itemProcessSection$  = this._sale.asObservable();
-
   public _connect     = new BehaviorSubject<any>(null);
 
   initConnectSubscriber() {
@@ -97,13 +96,13 @@ export class CardpointeTransactionsComponent implements OnInit, OnDestroy {
   }
 
   initFinalizer() {
-  this._finalizeSale.subscribe(data => {
-    if (!data) {return}
-    this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
-                                                          this.orderService.currentOrder)
-    this.methodsService.initValues();
-    this.dialogRef.close(null)
-  })
+    this._finalizeSale.subscribe(data => {
+      if (!data) {return}
+      this.paymentMethodsService.processCardPointResponse( data, this.methodsService.payment,
+                                                            this.orderService.currentOrder)
+      this.methodsService.initValues();
+      this.dialogRef.close(null)
+    })
   }
 
   getVoid() {

@@ -72,6 +72,9 @@ import { StoreCreditEditorComponent } from "./store-credit/store-credit-editor/s
 import { StoreCreditListComponent } from "./store-credit/store-credit-list/store-credit-list.component";
 import { ServiceTypeEditComponent } from "./transactions/serviceTypes/service-type-edit/service-type-edit.component";
 import { ServiceTypeListComponent } from "./transactions/serviceTypes/service-type-list/service-type-list.component";
+import { BlogListEditComponent } from './blogEditor/blog-list-edit/blog-list-edit.component';
+import { BlogPostEditComponent } from './blogEditor/blog-post-edit/blog-post-edit.component';
+import { BlogPostSortComponent } from './blogEditor/blog-post-sort/blog-post-sort.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -123,6 +126,10 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     // StoreCreditEditorComponent,
     // StoreCreditListComponent,
+  
+    BlogListEditComponent,
+    BlogPostEditComponent,
+    BlogPostSortComponent
   ],
 
   imports: [

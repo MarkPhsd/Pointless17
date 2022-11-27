@@ -45,6 +45,7 @@ import { CardpointeTransactionsComponent } from 'src/app/modules/payment-process
 import { DsiEMVAndroidComponent } from 'src/app/modules/payment-processing/dsiEMVAndroid/dsi-emvandroid/dsi-emvandroid.component';
 import { EmailEntryComponent } from 'src/app/shared/widgets/email-entry/email-entry.component';
 import { AdminDisplayMenuComponent } from 'src/app/modules/admin/products/display-menu/display-menu/display-menu.component';
+import { PayPalTransactionComponent } from 'src/app/modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
 
 @Injectable({
   providedIn: 'root'
@@ -210,6 +211,21 @@ export class ProductEditButtonService {
         minHeight:    '650px',
       },
     )
+  }
+
+
+  openBlogEditor(data) {
+    let dialogRef: any;
+
+    dialogRef = this.dialog.open(AdminDisplayMenuComponent,
+      { width:        '90vw',
+        minWidth:     '1000px',
+        height:       '850px',
+        minHeight:    '850px',
+        data:          data
+      },
+    )
+    return dialogRef;
   }
 
   openDisplayMenuEditor(data) {
@@ -567,6 +583,25 @@ export class ProductEditButtonService {
           })
         })
       }
+  }
+
+  openPayPalTransaction(options: any ) {
+    let dialogRef: any;
+    // const site = this.siteService.getAssignedSite();
+    // this.menuService.getProduct(site, id).subscribe( data=> {
+    //   const productTypeID = data.prodModifierType
+    //   this.openProductEditor(id, productTypeID)
+    if (options) {
+      dialogRef = this.dialog.open(PayPalTransactionComponent,
+        { width:        '100%',
+          minWidth:     '100%',
+          maxWidth:     'max-width: 100vw !important',
+          height:       '100vh',
+          minHeight:    '100vh',
+          data : options
+      })
+      return dialogRef
+    }
   }
 
   openCardPointBoltTransaction(options: any ) {

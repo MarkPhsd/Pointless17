@@ -85,6 +85,9 @@ export interface IDisplayMenu {
   interactive: boolean;
   enabled: boolean;
   sort: number;
+  timeFrames: any;
+  dateFrames: any;
+  weekDays  : any;
 }
 
 export interface IDisplayMenuSearchModel {

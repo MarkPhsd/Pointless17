@@ -51,7 +51,8 @@ export interface TransactionUISettings {
   dsiEMVNeteEpayEnabled  : boolean;
   dsiEMVIP               : boolean;
   payPalEnabled          : boolean;
-  payPayClientID        : string;
+  payPalClientID        : string;
+  payPalCurrency        : string;
 }
 
 export interface StripeAPISettings {
@@ -645,8 +646,9 @@ export class UISettingsService {
       dsiEMVAndroidEnabled   : [''],
       dsiEMVNeteEpayEnabled  : [''],
       dsiEMVIP               : [''],
-      payPalEnabled         : [ ],
-      payPayClientID:         ['']
+      payPalEnabled          : [ ],
+      payPalClientID         : [''],
+      payPalCurrency         : [ ],
      })
   }
 

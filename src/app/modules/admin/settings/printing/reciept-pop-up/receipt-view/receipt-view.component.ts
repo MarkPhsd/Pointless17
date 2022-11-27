@@ -1,7 +1,7 @@
 import { Component, ElementRef, OnInit,  ViewChild, Input,AfterViewInit, Output, EventEmitter, TemplateRef, OnDestroy } from '@angular/core';
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
-import { IPOSOrder,  ISetting } from 'src/app/_interfaces';
+import { IPOSOrder,  IPOSPayment,  ISetting, PosPayment } from 'src/app/_interfaces';
 import { PrintingService, printOptions } from 'src/app/_services/system/printing.service';
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { BtPrintingService } from 'src/app/_services/system/bt-printing.service';
@@ -90,22 +90,46 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   email$: Observable<any>;
   printAction$: Observable<any>;
   layout$: Observable<any>;
+  order$ : Observable<any>;
+
+  tempPayments: PosPayment[];
 
   intSubscriptions() {
     if (this.printView == 1 ) {
-      this._order       = this.orderService.currentOrder$.subscribe(data => {
-        this.order      = data;
-        this.orders     = [];
-        if (!data)       {return}
-        this.orders.push(data)
-        if (data.posPayments) {
-          this.payments   = data.posPayments
-        }
-        if (data.posOrderItems) {
-          this.items      = data.posOrderItems
-        }
-      })
+      this.order$ = this.orderService.currentOrder$.pipe(
+        switchMap(data => {
+            this.order      = data;
+            this.orders     = [];
+            if (!data)       {return}
+            this.orders.push(data)
+            if (data.posPayments) {
+              this.tempPayments   = data.posPayments
+            }
+            if (data.posOrderItems) {
+              this.items      = data.posOrderItems
+            }
+
+            return  this.orderService.getSelectedPayment()
+          }
+        )
+      ).pipe(switchMap(payment => {
+          console.log(payment)
+          if (payment) {
+            // this.tempPayments.filter((data) => {
+            //   return data.id == payment.id;
+            // });
+            this.payments = [];
+            this.payments.push(payment)
+          } else {
+            this.payments = this.tempPayments;
+          }
+
+          return of(payment)
+        })
+      )
     }
+
+
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
       if (status) {

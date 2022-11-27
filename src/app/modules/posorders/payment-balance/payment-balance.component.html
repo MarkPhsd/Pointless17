@@ -1,3 +1,5 @@
+
+<div *ngIf="(void$ | async) as void"></div>
 <mat-card *ngIf="order">
   <mat-card-subtitle>
     <ng-content></ng-content>
@@ -69,15 +71,16 @@
           </div>
 
           <div *ngIf="!isUser && (item?.paymentMethod?.isCreditCard) ||
-                      (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)
-
-                      ">
+                      item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
+                      item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
+                      (item.account && !item.completionDate && uiTransactions?.cardPointPreAuth)">
             <button [disabled]="item.voidReason" color="warn"
                     mat-button (click)="editPayment(item)">
               <mat-icon>edit</mat-icon></button>
           </div>
-        
-          <div *ngIf="!isUser && item?.paymentMethod?.name.toLowerCase() != 'stripe'  &&
+
+          <div *ngIf="!isUser && item?.paymentMethod?.name.toLowerCase() != 'stripe' &&
+                      !isUser && item?.paymentMethod?.name.toLowerCase() != 'paypal' &&
                       (item?.paymentMethod?.isCreditCard &&  (uiTransactions && uiTransactions.cardPointPreAuth)) ||
                       (item.account && !item.completionDate &&
                       (uiTransactions && uiTransactions.cardPointPreAuth))">

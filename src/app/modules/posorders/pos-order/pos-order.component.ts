@@ -304,12 +304,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.gridspan3       = ''
       this.gridRight       = 'grid-header-order-total'
     }
-
   }
 
   async ngOnInit() {
     this.initAuthorization();
-    // console.log('get transaction u settings')
     this.gettransactionUISettingsSubscriber();
     this.updateItemsPerPage();
     this.bucketName =   await this.awsBucket.awsBucket();
@@ -326,9 +324,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     }
 
     this.toolbarUIService.hidetoolBars();
-
-
-
   }
 
   initAuthorization() {
@@ -336,7 +331,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.isStaff  = this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser  = this.userAuthorization.isUserAuthorized('user');
     if (this.isUser) {
-
     }
   }
 

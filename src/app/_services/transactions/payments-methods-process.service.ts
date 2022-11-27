@@ -89,6 +89,43 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     return payment$
   }
 
+  processPayPalCreditPayment(order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
+      //once we get back the method 'Card Type'
+      //lookup the payment method.
+      //we can't get the type of payment before we get the PaymentID.
+      //so we just have to request the ID, and then we can establish everything after that.
+      const site = this.sitesService.getAssignedSite();
+      const  posPayment = {} as IPOSPayment;
+      posPayment.orderID = order.id;
+      posPayment.zrun = order.zrun;
+      posPayment.reportRunID = order.reportRunID;
+      posPayment.amountPaid = amount;
+
+      // this.order    = data.order;
+      // this.payment  = data.payment;
+      // this.settings = data.settings;
+      // this.amount   = this.payment.amountPaid.toString();
+      // this.clientID = this.settings.payPalClientID;
+      // this.currencyCode = this.settings.payPalCurrency;
+
+      console.log('processPayPalCreditPayment settings', settings)
+      const payment$  = this.paymentService.postPOSPayment(site, posPayment)
+      payment$.subscribe(data =>
+        {
+          data.amountPaid = amount;
+          this.dialogRef = this.dialogOptions.openPayPalTransaction({order: order,
+                                                                    amount: amount,
+                                                                    payment: data,
+                                                                    settings: settings});
+          this._dialog.next(this.dialogRef)
+          return of(data)
+        }
+      )
+      return null
+  }
+
+
+
   processSubDSIEMVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean) {
     //once we get back the method 'Card Type'
     //lookup the payment method.

@@ -547,13 +547,6 @@ export class MenuService {
 
     const uri =  this.sitesService.getCacheURI(url)
 
-    // return  this.httpClient.post<any>(url, productSearchModel )
-
-    // return this.httpClient.post<IMenuItem[]>(uri, productSearchModel)
-
-    // const url = { url: uri, cacheMins: 1, body: productSearchModel}
-    // console.log('url', uri)
-
     return this.httpCache.post<IMenuItem[]>(uri, productSearchModel)
   }
 
@@ -571,13 +564,10 @@ export class MenuService {
     const uri =  this.sitesService.getCacheURI(url)
 
     const cacheTime = this.sitesService.getCurrentCache()
-
     if ( cacheTime  == 0 ) {
-      console.log('cacheTime', cacheTime)
       return  this.httpClient.post<any>(url, productSearchModel )
     }
 
-    console.log('cacheTime2', cacheTime)
     return this.httpCache.post<any>(uri, productSearchModel)
 
   }
@@ -595,10 +585,6 @@ export class MenuService {
     // console.log(url)
 
     return this.httpClient.post<IProductSearchResultsPaged>(url, productSearchModel)
-
-    // const uri = { url: url, cacheMins: 10, body: productSearchModel}
-
-    // return this.httpCache.post<IProductSearchResults[]>(uri)
 
   }
 
@@ -641,11 +627,15 @@ export class MenuService {
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
-    return this.httpClient.get<IItemBasicB>(url)
-
     const uri = { url: url, cacheMins: 480}
 
-    return this.httpCache.get<IItemBasicB>(uri)
+    const cacheTime = this.sitesService.getCurrentCache()
+    if ( cacheTime  == 0 ) {
+      return  this.httpCache.get<IItemBasicB>(uri)
+    }
+
+    return this.httpClient.get<IItemBasicB>(url)
+
 
   }
 

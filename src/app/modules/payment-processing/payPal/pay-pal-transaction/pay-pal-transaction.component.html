@@ -1,0 +1,16 @@
+<h1>PayPal</h1>
+<div *ngIf="(sale$ | async) as item">
+  <!-- {{item | json}} -->
+</div>
+<div>
+  <ngx-paypal [config]="payPalConfig"></ngx-paypal>
+</div>
+
+<div>
+  <button mat-raised-button (click)="cancel()">Cancel</button>
+  <br>
+  <!-- {{clientID}}<br>
+  {{currencyCode}}<br>
+  {{amount}}<br>
+  {{message}} -->
+</div>

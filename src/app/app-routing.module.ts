@@ -123,8 +123,10 @@ import { AdminDisplayMenuListComponent } from './modules/admin/products/display-
 import { DisplayMenuMainComponent } from './modules/display-menu/display-menu/display-menu-main/display-menu-main.component';
 import { PosPaymentsFilterComponent } from './modules/transactions/pos-payments-main/pos-payments-filter/pos-payments-filter.component';
 import { PriceScheduleMenuItemsComponent } from './modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
+import { PayPalTransactionComponent } from './modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
 
 const routes: Routes = [
+    { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
 
     //  data : { title: 'Menu Board Layout', animation: 'isLeft'},
     //  { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -138,7 +140,6 @@ const routes: Routes = [
 
     //'qr-order
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
-
 
     {path: '', component: DefaultComponent,
       children: [

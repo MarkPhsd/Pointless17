@@ -19,6 +19,7 @@ export class UITransactionsComponent implements OnInit {
   uiSettings      : ISetting
   uiSettings$     : Observable<ISetting>;
   message         : string;
+  payPalEnabled   : boolean;
 
   uiTransactions  = {} as TransactionUISettings;
   uiTransactions$  : Observable<ISetting>;
@@ -42,17 +43,18 @@ export class UITransactionsComponent implements OnInit {
   }
 
   initUITransactionSettings() {
-    console.log('init Ui Transaction Settings')
     this.uiTransactions$ = this.uISettingsService.getSetting('UITransactionSetting').pipe(
       switchMap( data => {
         this.inputForm = this.uISettingsService.initForm(this.inputForm);
         try {
           if (data && data.text) {
             this.uiTransactions = JSON.parse(data.text) as TransactionUISettings
+            this.payPalEnabled = this.uiTransactions.payPalEnabled
             this.inputForm.patchValue( this.uiTransactions)
           } else {
             this.uiTransactions  = {} as TransactionUISettings;
             this.inputForm.patchValue( this.uiTransactions)
+            this.payPalEnabled = this.uiTransactions.payPalEnabled
           }
         } catch (error) {
           console.log('error', error)

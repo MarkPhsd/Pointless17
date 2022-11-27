@@ -11,15 +11,6 @@
       <div class="dualListLeft">
         <div class="drag-drop-container">
 
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>{{availableText}}</mat-label>
-            <input matInput
-                  class="form-control vertical-spacing-5"
-                  placeholder="{{availableFilterPlaceholder}}"
-                  formControlName="availableSearchInput"
-                  #availableSearchInput />
-          </mat-form-field> -->
-
           <div cdkDropList #availables="cdkDropList"
               [cdkDropListData] ="availableItems"
               [cdkDropListConnectedTo] ="[selects]"

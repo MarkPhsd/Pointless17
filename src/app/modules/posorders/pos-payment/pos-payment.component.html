@@ -84,6 +84,17 @@
           </button>
         </div>
 
+        <div *ngIf="(platForm === 'web') &&
+                    uiTransactions?.payPalEnabled &&
+                    (order && order?.balanceRemaining != 0)">
+            <button class="payment-buttons"
+                mat-raised-button
+                color="primary"
+                (click)="applyPayPalPayment(false)">
+                Paypal
+            </button>
+        </div>
+
         <div *ngIf="order && order.clientID">
           <store-credit-info
               [order]        ="order"
@@ -149,7 +160,9 @@
 
                   </div>
 
-                  <div *ngIf="devicename && uiTransactions?.cardPointBoltEnabled && (order && order?.balanceRemaining != 0)">
+                  <div *ngIf="devicename &&
+                             uiTransactions?.cardPointBoltEnabled &&
+                             (order && order?.balanceRemaining != 0)">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="applyBoltPayment(false)">
@@ -157,7 +170,10 @@
                     </button>
                   </div>
 
-                  <div *ngIf="(platForm === 'android') && devicename && uiTransactions?.cardPointAndroidEnabled && (order && order?.balanceRemaining != 0)">
+                  <div *ngIf="(platForm === 'android') &&
+                               devicename &&
+                               uiTransactions?.cardPointAndroidEnabled &&
+                               (order && order?.balanceRemaining != 0)">
                     <button class="payment-buttons"
                         mat-raised-button
                         (click)="processDSIEMVAndroidCreditCardPayment(false)">
@@ -203,7 +219,6 @@
             </mat-card>
           </div>
 
-          <!-- paymentMethods {{paymentMethods | json}} -->
           <div>
             <mat-card class="payment-dimensions">
               <app-mat-toggle-selector
@@ -328,26 +343,6 @@
                   </h4>
                 </div>
               </div>
-              <!-- <div class="item-container  item-buttons-container">
-                <span class ="action-buttons">
-                  <button mat-button (click)="goToPaymentMethod()" >
-                    Start Over
-                    <mat-icon>back</mat-icon>
-                  </button>
-                </span>
-                <span class ="action-buttons">
-                  <button mat-button (click)="initPaymentForm()">
-                    Clear
-                    <mat-icon>refresh</mat-icon>
-                  </button>
-                </span>
-                <span class ="action-buttons">
-                  <button mat-button (click)="applyBalance()">
-                    Apply Balance
-                    <mat-icon>credit_card</mat-icon>
-                  </button>
-                </span>
-              </div> -->
 
              <div class="item-container item-buttons-container">
                 <div>

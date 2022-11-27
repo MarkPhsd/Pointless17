@@ -257,14 +257,26 @@
     <div class="toggle-fields">
       <mat-slide-toggle
                 formControlName="payPalEnabled"
+                [(ngModel)]="payPalEnabled"
                 >
         <mat-label>PayPal Enabled</mat-label>
       </mat-slide-toggle>
     </div>
 
-    <div *ngIf="inputForm.controls['payPalEnabled'].value">
+    <div *ngIf="payPalEnabled">
       <div>
-        <mat-label>PayPal ClientID.</mat-label>
+        <mat-label>Currency Code.</mat-label>
+        <app-value-fields
+            [inputForm]="inputForm"
+            [fieldName]="'payPalCurrency'">
+          PayPal Currency Code
+        </app-value-fields>
+      </div>
+    </div>
+
+    <div *ngIf="payPalEnabled">
+      <div>
+        <mat-label>PayPal ClientID</mat-label>
         <app-value-fields
             [inputForm]="inputForm"
             [fieldName]="'payPalClientID'">
