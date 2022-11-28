@@ -6,7 +6,6 @@ import { IUser  } from '../_interfaces';
 
 export const InterceptorSkipHeader = 'X-Skip-Interceptor';
 
-
 @Injectable()
 export class BasicAuthInterceptor implements HttpInterceptor {
 
@@ -23,10 +22,10 @@ export class BasicAuthInterceptor implements HttpInterceptor {
               private authenticationService: AuthenticationService)
   {
     this.initSubscription();
-    
+
   }
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
       const user = this.authenticationService.userValue;
 
       if (request.headers.has(InterceptorSkipHeader)) {
@@ -47,13 +46,12 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         return next.handle(request);
       }
 
-
       {
         const metrcURL = localStorage.getItem('site.metrcURL')
         if (metrcURL) {
           const ismetrcURL = request.url.startsWith(metrcURL);
           if (ismetrcURL) {
-            const metrcKey = 'EBROdy-NDUFhhL6M8xQv9y4gxc6VkGkiOlBSjUG8YBvr6ssm' // localStorage.getItem('user.metrcKey')
+            const metrcKey  = 'EBROdy-NDUFhhL6M8xQv9y4gxc6VkGkiOlBSjUG8YBvr6ssm' // localStorage.getItem('user.metrcKey')
             const metrcUser = 'rdh-NDqpGuklR36rQqNkUzSOSU3I95Ey7Go1D0bbYw2O1MI5' // localStorage.getItem('user.metrcUser')
             try {
               const authdata = window.btoa( `${metrcUser}:${metrcKey}`);

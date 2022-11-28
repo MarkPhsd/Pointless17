@@ -124,9 +124,14 @@ import { DisplayMenuMainComponent } from './modules/display-menu/display-menu/di
 import { PosPaymentsFilterComponent } from './modules/transactions/pos-payments-main/pos-payments-filter/pos-payments-filter.component';
 import { PriceScheduleMenuItemsComponent } from './modules/priceSchedule/price-schedule-menu-items/price-schedule-menu-items.component';
 import { PayPalTransactionComponent } from './modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
+import { BlogListEditComponent } from './modules/admin/blogEditor/blog-list-edit/blog-list-edit.component';
+import { BlogPostListComponent } from './shared/widgets/blog-post-list/blog-post-list.component';
 
 const routes: Routes = [
-    { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
+    // { path: 'payPalTest',  component: PayPalTransactionComponent, data: { title: 'Pay Pal', animation: 'isLeft'} },
+
+
+    { path: 'blog-post-list',  component: BlogPostListComponent, data: { title: 'BlogPosts', animation: 'isLeft'} },
 
     //  data : { title: 'Menu Board Layout', animation: 'isLeft'},
     //  { path:  'menu-board',   component: GridManagerComponent, data : { title: 'Menu Board Layout', animation: 'isLeft'}},
@@ -177,6 +182,9 @@ const routes: Routes = [
         { path: 'pos-orders',   component: OrdersMainComponent, canActivate: [AuthGuard], data: {  title: 'Orders',  animation:  'isLeft'} },
         { path: 'currentorder', component: PosOrderComponent, canActivate: [AuthGuard], data: { title: 'Current Order', animation: 'isLeft'} },
         { path: 'pos-payment',  component: PosPaymentComponent, canActivate: [AuthGuard], data: { title: 'Payment', animation: 'isLeft'} },
+
+        //content
+        { path: 'content',  component: BlogListEditComponent, canActivate: [AuthGuard], data: { title: 'Content List', animation: 'isLeft'} },
 
 
         //PosOperationsComponent

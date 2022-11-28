@@ -8,6 +8,14 @@
 //     -webkit-overflow-scrolling: touch;
 // }
 
+container { 
+  overflow: auto;
+}
+
+.container-app { 
+  overflow: auto;
+}
+
 // mat-drawer {
 //     width: 200px;
 // }

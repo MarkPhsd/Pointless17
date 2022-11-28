@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./site-footer.component.scss']
 })
 export class SiteFooterComponent implements OnInit {
+  matToolbarColor = 'primary';
+  mattoolbar      = 'mat-toolbar';
 
   constructor() { }
 
   ngOnInit(): void {
+    const i = 0;
   }
 
 }

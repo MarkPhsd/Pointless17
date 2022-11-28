@@ -34,7 +34,7 @@
   </mat-drawer>
 
   <mat-drawer-content>
-
+    
     <div *ngIf="departmentID && departmentID !=0"
         class="overlay">
       <app-department-menu
@@ -42,10 +42,9 @@
       </app-department-menu>
     </div>
 
-    <div class="animations"
-        [@routeAnimations]="prepareRoute(outlet)" >
-        <router-outlet #outlet="outlet"></router-outlet>
-    </div>
+    <div  [@routeAnimations]="prepareRoute(outlet)" >
+      <router-outlet #outlet="outlet"></router-outlet>
+    </div>  
 
   </mat-drawer-content>
 
@@ -55,21 +54,22 @@
               [opened]  ="orderBarOpen"
               [class]   ="matorderBar"
               >
-
     <app-order-bar>
     </app-order-bar>
-
   </mat-drawer>
 
 </mat-drawer-container>
 
 <app-footer></app-footer>
 
+<ng-container [ngTemplateOutlet]="appSiteFooterOn"></ng-container>
+
+<ng-template #appSiteFooter>
+  <app-site-footer></app-site-footer>
+</ng-template>
 
 <div *ngIf="(homePageSetting$ | async) as setting">
   <div class="fab-chat-button" *ngIf="setting.threecxChatLink">
     <app-three-cxfab></app-three-cxfab>
   </div>
 </div>
-
-

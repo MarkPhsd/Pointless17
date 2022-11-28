@@ -56,6 +56,10 @@ export class InventoryComponent  {
     this.router.navigate([url]);
   }
 
+  blogListEdit() {
+    this.routerNavigation('content')
+  }
+
   clientTypesList() {
     this.routerNavigation('client-type-list')
   }

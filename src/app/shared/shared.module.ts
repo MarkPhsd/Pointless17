@@ -165,6 +165,9 @@ import { BackgroundUrlPipe } from '../_pipes/background-url.pipe';
 import { DisplayMenuMenuComponent } from '../modules/display-menu/display-menu-menu/display-menu-menu.component';
 import { RewardsAvailibleComponent } from '../modules/posorders/rewards-availible/rewards-availible.component';
 import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-schedule-menu-list/price-schedule-menu-list.component';
+import { BlogPostListComponent } from './widgets/blog-post-list/blog-post-list.component';
+import { BlogPostComponent } from './widgets/blog-post/blog-post.component';
+import { TagChipsProductsComponent } from '../modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -190,6 +193,8 @@ import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-s
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
     AutofocusDirective,
+    BlogPostListComponent,
+    BlogPostComponent,
     ChangeDueComponent,
     BackgroundCoverComponent,
     AgIconFormatterComponent,
@@ -305,6 +310,7 @@ import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-s
     StrainIndicatorComponent,
     StoreCreditSearchComponent,
     SummarycardComponent,
+    TagChipsProductsComponent,
     TaxFieldsComponent,
     TiersCardComponent,
     QuantiySelectorComponent,
@@ -370,6 +376,8 @@ import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-s
     ApiStoredValueComponent,
     ApiStatusDisplayComponent,
     AppWizardProgressButtonComponent,
+    BlogPostListComponent,
+    BlogPostComponent,
     EmailEntryComponent,
     UserAuthorizedDirective,
     CashValueCalcComponent,
@@ -482,6 +490,7 @@ import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-s
     StoreCreditInfoComponent,
     StoreCreditSearchComponent,
     SummarycardComponent,
+    TagChipsProductsComponent,
     TaxFieldsComponent,
     TiersCardComponent,
     TipEntryComponent,

@@ -103,7 +103,6 @@ export class DepartmentMenuComponent implements OnInit, OnDestroy {
   }
 
   initDepartment() {
-    // console.log(this.departmentID)
     if ( this.route.snapshot.paramMap.get('id') ) {
       const id = this.route.snapshot.paramMap.get('id');
       this.id = id;

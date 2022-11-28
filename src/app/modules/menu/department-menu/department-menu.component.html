@@ -8,11 +8,18 @@
     </div>
 
     <div class="content-position">
-      <div  class="description">
-        <div [innerHtml]="item.onlineShortDescription"></div>
+      <div *ngIf="item?.slug">
+  
+        <app-blog-post [slug]="item?.slug"></app-blog-post>
       </div>
-      <div class="image-layout">
-        <img [src]="getItemSrc(item.urlImageMain)">
+      <div *ngIf="!item?.slug">
+        <div  class="description">
+          <div [innerHtml]="item?.onlineShortDescription"></div>
+        </div>
+
+        <div class="image-layout">
+          <img [src]="getItemSrc(item?.urlImageMain)">
+        </div>
       </div>
     </div>
 
@@ -23,9 +30,8 @@
             <span class="item-font">
               <span [class]="'mdi ' + item.icon"></span>
             </span>
-
             <span class="item-text">
-               {{item.name}}
+               {{item?.name}}
             </span>
           </div>
         </div>
@@ -41,7 +47,7 @@
                 <button class="menu-button"
                         mat-raised-button
                         (mouseover)="categoryListDisplay(item)"
-                        (click)="categoryList(item)">
+                        (click)="categoryListNavigate(item)">
                     <div class="grid-toggle-tiny">
                       <div>
                         <span class="item-font-category" *ngIf="item.icon && item.icon !=''">
@@ -70,7 +76,8 @@
                *ngIf="item.categories && categoryID && categoryID != 0 &&  (subCategories$ | async) as list" >
 
               <button  *ngFor="let item of list" class="menu-button" mat-raised-button  color="primary"
-                       (mouseover)="subCategoryList(item)" (click)="subCategoryListDisplay(item)">
+                       (mouseover)="subCategoryList(item)" 
+                       (click)="subCategoryListDisplay(item)">
 
                 <div class="grid-toggle-tiny">
                   <div>

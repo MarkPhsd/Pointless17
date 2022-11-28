@@ -3,16 +3,17 @@
             mat-button
             class="menu-button"
             (click)="switchTheme()">
-      <mat-icon>light_mode</mat-icon>
+      <mat-icon color="primary">light_mode</mat-icon>
     </button>
   </div>
 
   <div *ngIf="toggleTheme === 'dark-theme'">
     <button aria-label="theme"
             mat-button
+            
             class="menu-button"
             (click)="switchTheme()">
-      <mat-icon >
+      <mat-icon color="primary">
         dark_mode
       </mat-icon>
     </button>

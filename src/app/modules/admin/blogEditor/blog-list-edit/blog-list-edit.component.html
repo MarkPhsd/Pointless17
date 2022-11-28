@@ -17,10 +17,12 @@
       class="assign-button"
       (click)="listAll()"> <mat-icon>list</mat-icon>List All</button>
   </div>
+
   <button mat-button
      class="assign-button"
      (click)="sortList = !sortList"> <mat-icon>sort_by_alpha</mat-icon>Sort
   </button>
+
   <div class="grid-item">
     <button mat-button
       class="assign-button"
@@ -28,16 +30,23 @@
       Add </button>
   </div>
 
+  <mat-button-toggle-group
+      (change)        = "filter($event)"
+      [(ngModel)]     = "group">
+      <mat-button-toggle class="discount-type-button"
+                    [value]="item"
+                    *ngFor="let item of groups" >
+        {{item}}
+      </mat-button-toggle>
+  </mat-button-toggle-group>
+
 </div>
 
 <mat-divider></mat-divider>
 
 <div class="grid-list-container">
 
-  <div *ngIf="sortList">
-    <display-menu-sort></display-menu-sort>
-  </div>
-  <div *ngIf="!sortList">
+  <div class="grid-list-dimensions" *ngIf="!sortList">
     <div *ngIf="value" class="loader">
       <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
     </div>
@@ -59,10 +68,13 @@
     </ag-grid-angular>
   </div>
 
-  <div>
-    <blog-post-sort  *ngIf= "group"
-                      class="grid-list-item"
-                      [group]="group">
+  <div fxLayout="row"
+       fxLayoutAlign="center center"
+       >
+    <blog-post-sort
+                class="grid-list-item"
+                [_Blogs]="_blogs"
+                [group]="group">
     </blog-post-sort>
   </div>
 

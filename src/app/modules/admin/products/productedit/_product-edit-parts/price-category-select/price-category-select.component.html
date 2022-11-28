@@ -1,11 +1,12 @@
 <div *ngIf="inputForm"
+
      [formGroup]="inputForm"
      class="grid-container" >
 
   <div>
     <app-value-fields
       *ngIf="!isInventory"
-      [fieldsClass]="'font-smaller'"
+      [fieldsClass]="'font-medium'"
       [inputForm]= "inputForm"
       [fieldName]="'retail'">
       Price
@@ -13,7 +14,7 @@
 
     <app-value-fields
         *ngIf="!isInventory"
-        [fieldsClass]="'font-smaller'"
+        [fieldsClass]="'font-medium'"
         [inputForm]= "inputForm"
         [fieldName]="'wholesale'">
       Cost
@@ -21,7 +22,7 @@
 
     <app-value-fields
       *ngIf="isInventory"
-      [fieldsClass]="'font-smaller'"
+      [fieldsClass]="'font-medium'"
       [inputForm]= "inputForm"
       [fieldName]="'price'">
       Price
@@ -29,7 +30,7 @@
 
     <app-value-fields
         *ngIf="isInventory"
-        [fieldsClass]="'font-smaller'"
+        [fieldsClass]="'font-medium'"
         [inputForm]= "inputForm"
         [fieldName]="'cost'">
       Cost
@@ -71,14 +72,14 @@
 
       <app-value-fields
         [inputForm]="inputForm"
-        [fieldsClass]="'font-smaller'"
+        [fieldsClass]="'font-medium'"
         [fieldName]="'caseRetail'"
         >
         Case Price
       </app-value-fields>
       <app-value-fields
         [inputForm]="inputForm"
-        [fieldsClass]="'font-smaller'"
+        [fieldsClass]="'font-medium'"
         [fieldName]="'caseQty'"
         >
         Case Quantity

@@ -1,1 +1,12 @@
-<p>blog-post works!</p>
+<div *ngIf="(action$ | async) as item">
+  <mat-card>
+    <mat-card-title>
+      {{item?.title}}
+    </mat-card-title>
+    <!-- <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div> -->
+    <mat-card-content>
+      <div [innerHtml]="item[0]?.content?.rendered"></div>
+    </mat-card-content>
+  </mat-card>
+
+</div>

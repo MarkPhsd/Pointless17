@@ -103,6 +103,7 @@ export interface IMenuItem {
   itemType:                 ItemType;
   productPrice:             ProductPrice;
   priceCategories:          PriceCategories;
+  slug: string;
 }
 
 //also in itemtype service - should consolidate

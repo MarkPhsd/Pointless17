@@ -25,8 +25,8 @@ export class MetaTagChipsComponent implements AfterViewInit, OnInit  {
   @ViewChild('metaTag') metaTag: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete ;
   // @Output() itemSelect  = new EventEmitter();
-  @Input()  inputForm  :      FormGroup;
-  @Input()  metaTagList:    string;
+  @Input()  inputForm  :        FormGroup;
+  @Input()  metaTagList:        string;
   @Input()  product    :        IProduct;
 
   // @Output() outPutItemTags = new EventEmitter()

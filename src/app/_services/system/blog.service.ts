@@ -8,12 +8,13 @@ export interface ISearchBlogs {
   name: string;
   type: string;
   blogID: string;
-  id: string;
+  id: number;
   pageSize: number;
   pageNumber: number;
   currentPage: number;
   recordCount: number;
   group: string;
+  enabled: boolean;
 }
 
 export interface IBlog {
@@ -22,6 +23,7 @@ export interface IBlog {
   sort: number;
   group: string;
   link: string;
+  enabled: boolean;
 }
 
 export interface IBlogResults {
@@ -36,6 +38,7 @@ export interface IBlogResults {
 export class BlogService {
 
   apiUrl: any;
+  groups = ['Footer', 'Brand Head',  'Category Head', 'Department Head', 'Menu Head', 'Main Page', 'Tier Head'];
 
   constructor( private http: HttpClient,
                private appInitService  : AppInitService,
@@ -47,7 +50,7 @@ export class BlogService {
 
     const controller  = '/blogs/'
 
-    const endPoint    = 'getBlogs'
+    const endPoint    = 'searchBlogs'
 
     const parameters  = ''
 
@@ -61,13 +64,28 @@ export class BlogService {
 
     const controller  = '/blogs/'
 
-    const endPoint    = 'getBlogs'
+    const endPoint    = 'getBlog'
 
     const parameters  = `?id=${id}`
 
     const url = `${site.url}${controller}${endPoint}${parameters}`
 
     return  this.http.get<any>(url)
+
+  };
+
+
+  delete(site: ISite, id: number): Observable<any> {
+
+    const controller  = '/blogs/'
+
+    const endPoint    = 'DeleteBlog'
+
+    const parameters  = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.delete<any>(url)
 
   };
 
@@ -99,11 +117,18 @@ export class BlogService {
 
   };
 
+  save(site: ISite, blogs: IBlog): Observable<IBlog> {
+    if (blogs.id) {
+      return this.putBlog(site, blogs)
+    }
+    return this.postBlog(site, blogs)
+  }
+
   putBlogList(site: ISite, blogs: IBlog[]): Observable<IBlog[]> {
 
     const controller  = '/blogs/'
 
-    const endPoint    = 'postBlog'
+    const endPoint    = 'postBlogList'
 
     const parameters  = ''
 
@@ -112,4 +137,12 @@ export class BlogService {
     return  this.http.post<IBlog[]>(url, blogs)
 
   };
+
+  getBlogPost(blogURL: string, slug: string): Observable<any> {
+
+    const url =  `${blogURL}${slug}`
+
+    return  this.http.get<any>(url)
+
+  }
 }

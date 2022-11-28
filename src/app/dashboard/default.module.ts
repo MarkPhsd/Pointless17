@@ -338,6 +338,9 @@ import { DisplayMenuSortComponent } from '../modules/admin/products/display-menu
 import { NgxPayPalModule } from 'ngx-paypal';
 import { PayPalTransactionComponent } from '../modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
 import { SiteFooterComponent } from '../shared/components/site-footer/site-footer.component';
+import { BlogListEditComponent } from '../modules/admin/blogEditor/blog-list-edit/blog-list-edit.component';
+import { BlogPostEditComponent } from '../modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
+import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sort/blog-post-sort.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -384,13 +387,16 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     CloseDayValidationComponent,
     CreditCardPaymentsPrintListComponent,
 
-
     //adminModule
     AdminbranditemComponent,
     AdminbrandslistComponent,
     AdminDisplayMenuListComponent,
     AdminDisplayMenuComponent,
     AdminDisplayMenuSelctorComponent,
+
+    BlogListEditComponent,
+    BlogPostEditComponent,
+    BlogPostSortComponent,
 
     ClientTypeListComponent,
     ClientTypeEditComponent,

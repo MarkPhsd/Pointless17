@@ -59,266 +59,263 @@
            [formGroup]="inputForm"
            *ngIf="itemType && inputForm">
 
+        <div class="grid-flow">
+          <div>
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label>Name</mat-label>
+                      <input matInput
+                      type             ="text"
+                      name             ="name"
+                      formControlName  ="name"
+                    class="form-control" >
+                </mat-form-field>
+              </div>
+
+              <item-type-toggles-edit
+                  [inputForm]="inputForm">
+              </item-type-toggles-edit>
+
+              <div>
+                <h4>Image / Icon</h4>
+                  <div class="app-widget-uploader">
+                      <app-widget-uploader
+                      [(fileNames)]="itemType.imageName"
+                      (messageOut) ="received_URLImage($event)"
+                      (imageUrl)   ="received_URLImage($event)">
+                      </app-widget-uploader>
+                  </div>
+              </div>
+
+          </div>
           <div class="grid-flow">
 
-            <div>
+              <div class="filterItem" *ngIf="itemType_Types">
+                <mat-form-field appearance="outline">
+                  <mat-label>Type</mat-label>
+                  <mat-select
+                              type               ="number"
+                              formControlName    = "useGroupID"
+                    >
+                    <mat-option value= "">Clear</mat-option>
+                    <mat-option
+
+                                *ngFor="let item of itemType_Types"
+                                [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="filterItem" >
+                <mat-form-field appearance="outline">
+                  <mat-label>Use Type</mat-label>
+                  <mat-select
+                              type               = "number"
+                              [formControlName]  = "'useType'"
+                              name               = "useType"
+                    >
+                    <mat-option value= "">Clear</mat-option>
+                    <mat-option *ngFor="let item of itemType_UseTypes"
+                                [value]="item">
+                      {{item}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div>
+                <mat-label>Input portion types, separated by comma.</mat-label>
+                <mat-form-field appearance="outline">
+                  <mat-label>Portion Options</mat-label>
+                      <input matInput
+                      type             ="text"
+                      name             ="portionValue"
+                      formControlName  ="portionValue"
+                    class="form-control" >
+                  </mat-form-field>
+                  <br>
+              </div>
+
+              <div>
+                <mat-label>Input package material types, separated by comma.</mat-label>
+                <mat-form-field appearance="outline">
+                  <mat-label>Package Materials</mat-label>
+                      <input matInput
+                      type             ="text"
+                      name             ="packagingMaterial"
+                      formControlName  ="packagingMaterial"
+                    class="form-control" >
+                  </mat-form-field>
+                  <br>
+              </div>
+
+              <div >
                 <div>
                   <mat-form-field appearance="outline">
-                    <mat-label>Name</mat-label>
+                    <mat-label>Minumum Age Required</mat-label>
                         <input matInput
-                        type             ="text"
-                        name             ="name"
-                        formControlName  ="name"
+                        type             ="number"
+                        name             ="ageRequirement"
+                        formControlName  ="ageRequirement"
                       class="form-control" >
                   </mat-form-field>
                 </div>
+              </div>
 
-                <item-type-toggles-edit
-                    [inputForm]="inputForm">
-                </item-type-toggles-edit>
-
-                <div>
-                  <h4>Image / Icon</h4>
-                    <div class="app-widget-uploader">
-                        <app-widget-uploader
-                        [(fileNames)]="itemType.imageName"
-                        (messageOut) ="received_URLImage($event)"
-                        (imageUrl)   ="received_URLImage($event)">
-                        </app-widget-uploader>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="grid-flow">
-
-                <div class="filterItem" *ngIf="itemType_Types">
-                  <mat-form-field appearance="outline">
-                    <mat-label>Type</mat-label>
-                    <mat-select
-                                type               ="number"
-                                formControlName    = "useGroupID"
-                      >
-                      <mat-option value= "">Clear</mat-option>
-                      <mat-option
-
-                                  *ngFor="let item of itemType_Types"
-                                  [value]="item.id">
-                        {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div class="filterItem" >
-                  <mat-form-field appearance="outline">
-                    <mat-label>Use Type</mat-label>
-                    <mat-select
-                                type               = "number"
-                                [formControlName]  = "'useType'"
-                                name               = "useType"
-                      >
-                      <mat-option value= "">Clear</mat-option>
-                      <mat-option *ngFor="let item of itemType_UseTypes"
-                                  [value]="item">
-                        {{item}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div>
-                  <mat-label>Input portion types, separated by comma.</mat-label>
-                  <mat-form-field appearance="outline">
-                    <mat-label>Portion Options</mat-label>
-                        <input matInput
+              <div>
+                <mat-form-field appearance="outline">
+                  <mat-label >Icon</mat-label>
+                  <input matInput
                         type             ="text"
-                        name             ="portionValue"
-                        formControlName  ="portionValue"
-                      class="form-control" >
-                    </mat-form-field>
-                    <br>
-                </div>
-
-                <div>
-                  <mat-label>Input package material types, separated by comma.</mat-label>
-                  <mat-form-field appearance="outline">
-                    <mat-label>Package Materials</mat-label>
-                        <input matInput
-                        type             ="text"
-                        name             ="packagingMaterial"
-                        formControlName  ="packagingMaterial"
-                      class="form-control" >
-                    </mat-form-field>
-                    <br>
-                </div>
-
-                <div >
-                  <div>
-                    <mat-form-field appearance="outline">
-                      <mat-label>Minumum Age Required</mat-label>
-                          <input matInput
-                          type             ="number"
-                          name             ="ageRequirement"
-                          formControlName  ="ageRequirement"
+                        formControlName  ="icon"
                         class="form-control" >
-                    </mat-form-field>
-                  </div>
-                </div>
+                </mat-form-field>
+              </div>
 
-                <div>
+              <div class="filterItem" >
+                <mat-form-field appearance="outline">
+                  <mat-label>Tax Setting</mat-label>
+                  <mat-select
+                              type="number"
+                              [formControlName]  ="'taxable'"
+                              name="taxable"
+                    >
+                    <mat-option value=0>Clear</mat-option>
+                    <mat-option *ngFor="let item of taxesSetting"
+                                [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="filterItem"  *ngIf="itemType && (itemType.type === 'grocery' || itemType.useType === 'grocery')">
+                <mat-form-field appearance="outline">
+                  <mat-label>WIC & EBT Option</mat-label>
+                  <mat-select
+                              type="number"
+                              [formControlName]  ="'wicEBT'"
+                              name="taxable"
+                    >
+                    <mat-option *ngFor="let item of wicEBTList"
+                                [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="filterItem" *ngIf="itemType && (itemType.type === 'cannabis' || itemType.type === 'med-cannabis')"  >
+                <mat-form-field appearance="outline">
+                  <mat-label>Package Type</mat-label>
+                  <mat-select
+                              type="number"
+                              [formControlName]  ="'packageType'"
+                              name="packageType"
+                    >
+                    <mat-option value= "">Clear</mat-option>
+                    <mat-option *ngFor="let item of itemType_PackageTypes"
+                                [value]="item">
+                      {{item}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div class="filterItem"
+                *ngIf="metrcCategories$ &&  typeName === 'cannabis'"  >
+                <mat-form-field appearance="outline">
+                  <mat-label>METRC Category</mat-label>
+                  <mat-select
+                              type             ="number"
+                              formControlName  ="metrcCategoryID"
+                              name             ="metrcCategoryID"
+                    >
+                    <mat-option value= "">Clear</mat-option>
+                    <mat-option *ngFor="let item of (metrcCategories$ |async)"
+                                [value]="item.id">
+                      {{item.name}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+
+              <div *ngIf="inputForm && (itemType && itemType.type != 'adjustment')">
+                <div *ngIf="(receiptList$ | async) as receiptList; else loadingPrep">
                   <mat-form-field appearance="outline">
-                    <mat-label >Icon</mat-label>
-                    <input matInput
-                          type             ="text"
-                          formControlName  ="icon"
-                          class="form-control" >
+                    <mat-label>Prep Ticket</mat-label>
+                    <mat-select
+                        type="text"
+                        [(ngModel)]        ="prepTicketID"
+                        [formControlName]  = "'prepTicketID'"
+                        (selectionChange)="setPrepTicketID(prepTicketID)">
+                        <mat-option value=0>Clear</mat-option>
+                        <mat-option *ngFor="let item of receiptList" [value]="item.id">
+                        {{ item.name }}
+                      </mat-option>
+                    </mat-select>
                   </mat-form-field>
                 </div>
+              </div>
 
-                <div class="filterItem" >
-                  <mat-form-field appearance="outline">
-                    <mat-label>Tax Setting</mat-label>
-                    <mat-select
-                                type="number"
-                                [formControlName]  ="'taxable'"
-                                name="taxable"
-                      >
+              <ng-template #loadingPrep>
+                ...loading prep printer locations
+              </ng-template>
+
+              <div *ngIf="(printerLocations$ | async) as locations; else loadingLocation">
+                <mat-form-field appearance="outline">
+                  <mat-label>Print item to a Location</mat-label>
+                  <mat-select
+                      type="text"
+                      [(ngModel)]        = "printLocationID"
+                      [formControlName]  = "'printLocationID'"
+                      (selectionChange)  ="setLocationID(printLocationID)">
                       <mat-option value=0>Clear</mat-option>
-                      <mat-option *ngFor="let item of taxesSetting"
-                                  [value]="item.id">
-                        {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-
-                <div class="filterItem"  *ngIf="itemType && (itemType.type === 'grocery' || itemType.useType === 'grocery')">
-                  <mat-form-field appearance="outline">
-                    <mat-label>WIC & EBT Option</mat-label>
-                    <mat-select
-                                type="number"
-                                [formControlName]  ="'wicEBT'"
-                                name="taxable"
-                      >
-                      <mat-option *ngFor="let item of wicEBTList"
-                                  [value]="item.id">
-                        {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div class="filterItem" *ngIf="itemType && (itemType.type === 'cannabis' || itemType.type === 'med-cannabis')"  >
-                  <mat-form-field appearance="outline">
-                    <mat-label>Package Type</mat-label>
-                    <mat-select
-                                type="number"
-                                [formControlName]  ="'packageType'"
-                                name="packageType"
-                      >
-                      <mat-option value= "">Clear</mat-option>
-                      <mat-option *ngFor="let item of itemType_PackageTypes"
-                                  [value]="item">
-                        {{item}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div class="filterItem"
-                  *ngIf="metrcCategories$ &&  typeName === 'cannabis'"  >
-                  <mat-form-field appearance="outline">
-                    <mat-label>METRC Category</mat-label>
-                    <mat-select
-                                type             ="number"
-                                formControlName  ="metrcCategoryID"
-                                name             ="metrcCategoryID"
-                      >
-                      <mat-option value= "">Clear</mat-option>
-                      <mat-option *ngFor="let item of (metrcCategories$ |async)"
-                                  [value]="item.id">
-                        {{item.name}}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-
-                <div *ngIf="inputForm && (itemType && itemType.type != 'adjustment')">
-                  <div *ngIf="(receiptList$ | async) as receiptList; else loadingPrep">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Prep Ticket</mat-label>
-                      <mat-select
-                          type="text"
-                          [(ngModel)]        ="prepTicketID"
-                          [formControlName]  = "'prepTicketID'"
-                          (selectionChange)="setPrepTicketID(prepTicketID)">
-                          <mat-option value=0>Clear</mat-option>
-                          <mat-option *ngFor="let item of receiptList" [value]="item.id">
+                      <mat-option *ngFor="let item of locations"
+                                    [value]="item.id">
                           {{ item.name }}
-                        </mat-option>
-                      </mat-select>
-                    </mat-form-field>
+                      </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
 
-                  </div>
+              <ng-template #loadingLocation>
+                ..loading printer Locations
+              </ng-template>
 
-                  <ng-template #loadingPrep>
-                    ...loading prep printer locations
-                  </ng-template>
-
-
-                  <div *ngIf="(printerLocations$ | async) as locations; else loadingLocation">
-                    <mat-form-field appearance="outline">
-                      <mat-label>Print item to a Location</mat-label>
-                      <mat-select
-                          type="text"
-                          [(ngModel)]        = "printLocationID"
-                          [formControlName]  = "'printLocationID'"
-                          (selectionChange)  ="setLocationID(printLocationID)">
-                          <mat-option value=0>Clear</mat-option>
-                          <mat-option *ngFor="let item of locations"
-                                        [value]="item.id">
-                              {{ item.name }}
-                          </mat-option>
-                      </mat-select>
-                    </mat-form-field>
-                  </div>
-
-                  <ng-template #loadingLocation>
-                    ..loading printer Locations
-                  </ng-template>
-
-                  <div>
-                    <div>
-                      <app-label-view-selector
-                        [labelList$]      ="labelList$"
-                        [labelID]         ="itemType.labelTypeID"
-                        [labelImageHeight]="200"
-                        (outPutLabelID)   ="setLabelID($event)">
-                        Exit Label Selection
-                      </app-label-view-selector>
-                    </div>
-                  </div>
-
+              <div>
+                <div>
+                  <app-label-view-selector
+                    [labelList$]      ="labelList$"
+                    [labelID]         ="itemType.labelTypeID"
+                    [labelImageHeight]="200"
+                    (outPutLabelID)   ="setLabelID($event)">
+                    Exit Label Selection
+                  </app-label-view-selector>
                 </div>
+              </div>
 
+              <div class="fields-width">
+                <mat-label>Auto Attach Products</mat-label>
+                <app-product-search-selector
+                    class         = "fields"
+                    [productName] = "productName"
+                    [searchForm]  = "searchForm"
+                    (itemSelect)  = "getItem($event)">
+                  >
+                </app-product-search-selector>
+              </div>
 
-            </div>
-
-
-
-        </div>
-        <div>
-          <mat-hint>Input item instructions</mat-hint>
-          <simple-tinymce
-            cols            ="50"
-            rows            ="25"
-            style           ="height: 400px;"
-            name            ="onlineDescription"
-            formControlName ="instructions"
-            [ngModel]       ="instructions">
-          </simple-tinymce>
+              <div class="meta-tags"
+                    *ngIf="addOnItems">
+                  <tag-chips-products (remove)="remove($event)" 
+                                      [addOnItems]="addOnItems">
+                  </tag-chips-products>
+              </div>   
+      
+          </div>
         </div>
 
       </div>

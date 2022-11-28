@@ -230,6 +230,7 @@ export class FbProductsService {
         mGCBD                  :   [''],
         mGTHC                  :   [''],
         parLevel               :   [''],
+        slug                   :   [''],
       })
       return fb;
     }

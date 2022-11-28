@@ -1,7 +1,7 @@
 
 <div *ngIf="priceSchedule && !saveNotification; else loading">
   <div class="container"
-      *ngIf="priceSchedule; loading">
+       *ngIf="priceSchedule; loading">
     <div class="schedule-info">
       <mat-card>
         <div class="header-grid">
@@ -45,8 +45,8 @@
                     <div>
                         <mat-tab label="Constraints">
                           <app-price-schedule-constraints
-                          [inputForm]="inputForm"
-                          [item]="priceSchedule">
+                            [inputForm]="inputForm"
+                            [item]="priceSchedule">
                         </app-price-schedule-constraints>
                       </mat-tab>
                     </div>

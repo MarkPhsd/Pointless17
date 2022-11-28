@@ -1,4 +1,4 @@
- import { Component, Inject, } from '@angular/core';
+import { Component, Inject, OnInit, } from '@angular/core';
 import { FbItemTypeService } from 'src/app/_form-builder/fb-item-type.service';
 import { IItemType, ItemTypeService } from 'src/app/_services/menu/item-type.service';
 import { FormBuilder, FormControl, FormGroup,} from '@angular/forms';
@@ -12,14 +12,18 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
-import { IItemBasic } from 'src/app/_services';
+import { IItemBasic, MenuService } from 'src/app/_services';
+import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
+import { MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
   selector: 'app-item-type-editor',
   templateUrl: './item-type-editor.component.html',
   styleUrls: ['./item-type-editor.component.scss']
 })
-export class ItemTypeEditorComponent   {
+export class ItemTypeEditorComponent implements OnInit  {
+  searchForm:                FormGroup;
+
   wicEBTList        = [{id: 0, name: 'NONE'},{id: 1, name: 'WIC'},{id: 2, name: 'EBT'},{id: 2, name: 'WIC and EBT'}]
   taxesSetting      = [{id: 0, name: 'Never'},{id: 1, name: 'Taxable'},{id: 2, name: 'According To Transaction'}]
   something         : any;
@@ -49,14 +53,16 @@ export class ItemTypeEditorComponent   {
 	// this.receiptList$     =  this.settingService.getReceipts(site);
   //   this.labelList$       =  this.settingService.getLabels(site);
   //   this.prepReceiptList$ =  this.settingService.getPrepReceipts(site);
-
+  productName: string;
+  addOnItems = [] as IItemBasic[]
   typeName         : string;
   metrcCategories$ : Observable<METRCItemsCategories[]>;
-
+  
   constructor(
       private fb: FormBuilder,
       private fbItemTypeService: FbItemTypeService,
       private itemTypeService: ItemTypeService,
+      private menuService: MenuService,
       public  route: ActivatedRoute,
       private _snackBar: MatSnackBar,
       private settingService: SettingsService,
@@ -92,6 +98,37 @@ export class ItemTypeEditorComponent   {
         this.itemTypes.push(item)
       })
     }
+  }
+
+  ngOnInit() { 
+    this.initSearchForm();
+  }
+  
+  initSearchForm() { 
+    this.searchForm = this.fb.group( { 
+      productName: []
+    })
+    this.searchForm.patchValue({productName: ''})
+    this.productName = ''
+  }
+
+  getItem(event) {
+    const item = {} as IItemBasic;
+    item.name = event?.name;
+    item.id = event?.id;
+    if (!  this.addOnItems) {   this.addOnItems= [] as IItemBasic[]}
+    this.addOnItems.push(item);
+    this.initSearchForm();
+    // console.log(item)
+    // if (item && item.id) {
+    //    const site =  this.siteService.getAssignedSite();
+    //   this.menuService.getMenuItemByID(site, item.id).subscribe(data => {
+   
+    //       this.addOnItems.push(data);
+    //       this.initSearchForm();
+    //     }
+    //   )
+    // }
   }
 
   initializeForm(id: any, form: FormGroup)  {
@@ -135,7 +172,6 @@ export class ItemTypeEditorComponent   {
         this.useType = {name: this.itemType?.type, id: this.itemType?.useGroupID}
         this.inputForm.patchValue(this.itemType);
         this.setUseType({name: this.itemType?.type, id: this.itemType?.useGroupID})
-        console.log(this.inputForm.value)
       } catch (error) {
         console.log(error)
       }
@@ -146,6 +182,8 @@ export class ItemTypeEditorComponent   {
         this.printLocationID = this.itemType.printLocationID
         this.packageType     = this.itemType.packageType;
         this.typeName        = this.itemType.type;
+        this.addOnItems      = JSON.parse(this.itemType.autoAddJSONProductList) as IItemBasic[];
+        
       } catch (error) {
         console.log(error)
       }
@@ -193,7 +231,8 @@ export class ItemTypeEditorComponent   {
         this.itemTypes.forEach( item => {
           const id = item.id;
           item = this.inputForm.value;
-          console.log('item value', item)
+
+
           item.id = id;
           item.labelTypeID = this.labelTypeID;
           return  this.updateItem(site, item, optionClose)
@@ -220,15 +259,17 @@ export class ItemTypeEditorComponent   {
 
       const temp =  this.inputForm.value
       const useType = temp.useGroupID;
-      console.log(useType)
+      
       if (useType) {
         this.useType = this.getUseType( useType )
         item.useGroupID = this.useType.id;
         item.type       = this.useType.name;
-        console.log('this.useType', this.useType)
       }
+      
+      console.log('addOnItems', this.addOnItems)
+      item.autoAddJSONProductList = JSON.stringify(this.addOnItems);
+      console.table(item)
 
-      console.log(item)
       const item$ = this.itemTypeService.putItemTypeNoChildren(site, item)
 
       item$.subscribe(
@@ -301,6 +342,13 @@ export class ItemTypeEditorComponent   {
     })
   }
 
+  remove(item: IItemBasic): void {
+    const index = this.addOnItems.indexOf(item);
+
+    if (index >= 0) {
+      this.addOnItems.splice(index, 1);
+    }
+  }
 
   copyItem() {
     //do confirm of delete some how.

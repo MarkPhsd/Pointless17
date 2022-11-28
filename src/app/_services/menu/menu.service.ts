@@ -33,6 +33,7 @@ export interface IDepartmentList {
   urlImageMain:           string;
   prodModifierType:       number;
   icon:                   string | string;
+  slug                :   string;
 }
 
 export interface Category {

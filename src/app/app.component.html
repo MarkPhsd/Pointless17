@@ -1,11 +1,13 @@
-<app-splash-loading></app-splash-loading>
-
-<div *ngIf="appUrl; else loading">
-
-  <ion-app>
-    <ion-router-outlet></ion-router-outlet>
-  </ion-app>
-
+<div [class]="container">
+  
+  <app-splash-loading></app-splash-loading>
+  
+  <div *ngIf="appUrl; else loading">
+    <ion-app>
+      <ion-router-outlet></ion-router-outlet>
+    </ion-app>
+  </div>
+  
+  <ng-template #loading>....loading.</ng-template>
+  
 </div>
-
-<ng-template #loading>....loading.</ng-template>

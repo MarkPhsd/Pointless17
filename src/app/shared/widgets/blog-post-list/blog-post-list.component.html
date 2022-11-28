@@ -1,7 +1,4 @@
-
-<div *ngIf="(blogs$ | async) as blogs; else loading"></div>
-
-<ng-container [ngTemplateOutlet]="viewType"></ng-container>
+<ng-container [ngTemplateOutlet]="blogView"></ng-container>
 
 <ng-template #loading>
   <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
@@ -9,20 +6,23 @@
   </div>
 </ng-template>
 
-<ng-template #cardView>
-  <div *ngFor="let item of blogs">
-    <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
-        Departments
-    </app-categories>
-    <mat-divider></mat-divider>
+<ng-template #gridView>
+  <div class="grid-view" *ngIf="(blogs$ | async) as blogs">
+    <div  *ngFor="let item of blogs">
+      <mat-card [class]="class" [style.height]="height" >
+        <mat-card-title>
+          {{item?.title}}
+        </mat-card-title>
+        <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div>
+      </mat-card>
+    </div>
   </div>
 </ng-template>
 
 <ng-template #listView>
-  <div *ngFor="let item of blogs">
-    <app-categories [panelHeightValue]="panelHeightValue" [itemTypeID]="6">
-        Departments
-    </app-categories>
-    <mat-divider></mat-divider>
+  <div *ngIf="(blogs$ | async) as blogs">
+    <ul class="list-view" *ngFor="let item of blogs">
+      <li [innerHtml]="item[0]?.content?.rendered"></li>
+    </ul>
   </div>
 </ng-template>

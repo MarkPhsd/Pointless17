@@ -88,7 +88,6 @@ export class DisplayMenuListComponent implements OnInit {
         });
 
         this.menu = data;
-        // this.loadStyles();
 
         forkJoin(this.obs$)
         return  forkJoin(this.obs$)

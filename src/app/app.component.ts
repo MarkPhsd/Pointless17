@@ -12,6 +12,7 @@ import { Title } from '@angular/platform-browser';
 import { ElectronService } from 'ngx-electron';
 import { isDevMode } from '@angular/core';
 import { AppInitService } from './_services/system/app-init.service';
+import { Capacitor } from '@capacitor/core';
 // import { Idle, DEFAULT_INTERRUPTSOURCES } from '@ng-idle/core';
 
 LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,LicensedApplication=mark phillips,LicenseType=SingleApplication,LicensedConcurrentDeveloperCount=1,LicensedProductionInstancesCount=0,AssetReference=AG-013203,ExpiryDate=27_January_2022_[v2]_MTY0MzI0MTYwMDAwMA==9a56570f874eeebd37fa295a0c672df1');
@@ -22,7 +23,7 @@ LicenseManager.setLicenseKey('CompanyName=Coast To Coast Business Solutions,Lice
   animations: [ fadeInAnimation ],
 })
 export class AppComponent {
-
+  get capPlatForm() {  return Capacitor.getPlatform(); }
   idleState = "NOT_STARTED";
   countdown?: number = null;
   lastPing?: Date = null;
@@ -34,6 +35,7 @@ export class AppComponent {
   lastTimeBackPress = 0;
   timePeriodToExit = 2000;
   appUrl : string;
+  container: string;
 
   devMode = false;
   @ViewChildren(IonRouterOutlet) routerOutlets: QueryList<IonRouterOutlet>;
@@ -53,7 +55,7 @@ export class AppComponent {
 
   // private idle: Idle,
   constructor(
-      private platform:              Platform,
+      private platForm              : Platform,
       private router:                Router,
       private titleService          :Title,
       private authenticationService: AuthenticationService,
@@ -83,6 +85,12 @@ export class AppComponent {
       //   console.log('NodeJS childProcess', this.ipcService.childProcess);
       // }
 
+      this.container = 'container-app'
+      if (this.capPlatForm === 'web') { 
+        this.container = 'container'
+      }
+      
+
   }
 
   initializeApp() {
@@ -91,7 +99,7 @@ export class AppComponent {
 
   initStyle() {
     try {
-      this.platform.ready().then(() => {
+      this.platForm.ready().then(() => {
         this.statusBar.styleLightContent();
       });
     } catch (error) {
@@ -167,7 +175,7 @@ export class AppComponent {
   }
 
   backButtonEvent() {
-    this.platform.backButton.subscribe(outlet => {
+    this.platForm.backButton.subscribe(outlet => {
       this.routerOutlets.forEach(async (outlet: IonRouterOutlet) => {
         // console.log(outlet.getLastUrl)
         if (outlet && outlet.canGoBack()) {

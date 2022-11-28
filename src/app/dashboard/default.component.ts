@@ -2,7 +2,8 @@ import { Component, HostBinding, OnInit, AfterViewInit,
          Renderer2, OnDestroy, HostListener,
          ChangeDetectorRef,
          ElementRef,
-         ViewChild} from '@angular/core';
+         ViewChild,
+         TemplateRef} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { filter, Observable, of, Subscription,switchMap } from 'rxjs';
@@ -26,6 +27,7 @@ import { SplashScreenStateService } from 'src/app/_services/system/splash-screen
 
 export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
+  @ViewChild('appSiteFooter')  appSiteFooter: TemplateRef<any>;
   @ViewChild("footer") footer: ElementRef;
   departmentID     =0
   get platForm() {  return Capacitor.getPlatform(); }
@@ -184,9 +186,15 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
 
   leftSideBarToggleSubscriber() {
     this._leftSideBarToggle = this.toolbarUIService.leftSideBarToggle$.subscribe(data => {
-      // console.log('leftSideToggle update', data)
       this.leftSideBarToggle = data;
     })
+  }
+
+  get appSiteFooterOn() {
+    if ( this.platForm === 'web' ) {
+      return this.appSiteFooter
+    }
+    return null;
   }
 
   barSizeSubscriber() {
@@ -256,7 +264,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private cd              : ChangeDetectorRef,
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
-               public toolbarUIService         : ToolBarUIService,
+               public  toolbarUIService         : ToolBarUIService,
                private uiSettingsService       : UISettingsService,
                private router                  : Router,
                private siteService             : SitesService,

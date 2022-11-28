@@ -159,6 +159,8 @@ export interface UIHomePageSettings {
 
   threecxChatLink    : string;
   threeParty         : string;
+
+  wordpressHeadless: string;
 }
 
 @Injectable({
@@ -517,6 +519,7 @@ export class UISettingsService {
       threeParty: [''],
       menuEnabled: [''],
       staffMenuEnabled: [''],
+      wordpressHeadless: [],
      })
     return fb
   }

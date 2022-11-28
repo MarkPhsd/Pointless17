@@ -38,11 +38,11 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   displayWeight       : string;
 
   inventoryAssignment   : IInventoryAssignment;
-  inventoryAssignment$:      Observable<IInventoryAssignment>;
-  inventoryAssignments  :    IInventoryAssignment[];
-  inventoryLocations:        IInventoryLocation[];
-  locations$               : Observable<IInventoryLocation[]>;
-  inventoryLocations$  :     Observable<IInventoryLocation[]>;
+  inventoryAssignment$  : Observable<IInventoryAssignment>;
+  inventoryAssignments  : IInventoryAssignment[];
+  inventoryLocations    : IInventoryLocation[];
+  locations$            : Observable<IInventoryLocation[]>;
+  inventoryLocations$   : Observable<IInventoryLocation[]>;
 
   inventoryLocationID:       number;
   facilityLicenseNumber:     string;

@@ -171,7 +171,6 @@ export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-
   initSubscriptions() {
     this.initOrderSubscriber()
     this.initScaleSubscriber();

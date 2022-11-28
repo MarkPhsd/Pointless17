@@ -77,8 +77,8 @@
         </button>
       </div>
     </div>
-
-    <div *ngIf="multifilter || ( uiHomePage && ( uiHomePage.sideToolbarEnableCategory) )">
+  
+    <div *ngIf="( uiHomePage && ( uiHomePage.sideToolbarEnableCategory) )">
       <mat-accordion multi>
         <mat-expansion-panel
              [expanded]="accordionStep == 0"
@@ -99,8 +99,7 @@
                   *ngIf             = "(categories$ | async) as list"
                   [mouseOver]       = "false"
                   [showIcon]        = "true"
-                  [toggleDimensions]="toggleCatHeight"
-
+                  [toggleDimensions]= "toggleCatHeight"
                   [textLength]      = "21"
                   (outPutItem)      = "refreshCategorySearch($event)"
                   [textLength]      = "21"
@@ -127,17 +126,14 @@
 
           <div  class="mat-toggle-list" >
             <app-mat-toggle-selector
-
                 *ngIf="(clientSearchResults$ | async) as listbrands"
                 [mouseOver]      = "false"
                 [showIcon]       ="showIcon"
                 [textLength]     = "21"
                 [toggleDimensions]="toggleCatHeight"
-
                 (setItem)        = "refreshTypeSearch($event)"
                 [textLength]     = "21"
                 [fieldName]      = "'company'"
-
                 [list]           = "listbrands.results">
             </app-mat-toggle-selector>
           </div>
@@ -176,9 +172,9 @@
         </mat-expansion-panel>
       </mat-accordion>
     </div>
-
+   
    <div class="grid-item-departments"
-         *ngIf="!multifilter || (uiHomePage && uiHomePage.sideToolbarDefaultBrand)">
+         *ngIf="(uiHomePage && uiHomePage.sideToolbarDefaultBrand)">
       <ng-container>
         <app-mat-toggle-selector
             *ngIf            = "(departments$ | async) as list"

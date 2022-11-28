@@ -1,0 +1,37 @@
+.container {
+margin: 0px;
+  // padding: 10px;
+  background-color: rgb(74, 104, 148);
+  color: rgb(74, 104, 148);
+}
+
+.grid-view {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
+  overflow-y: auto;
+  overflow-x: hidden;
+  // margin: 10px;
+  padding: 15px;
+  padding-left: 20px;
+  padding-right: 20px;
+  // min-height: 300px;
+  width: 100%;
+  // background-color: #cfe1ea;
+  border-top: 15px;
+  border-color: rgb(48, 53, 116);
+  // border-radius: 10px;
+}
+
+.footer-cards { 
+  overflow-y: auto;
+}
+
+.list-view {
+  list-style: none;
+}
+
+.gridClass {
+  max-width: 300px;
+  // height: 300px;
+}

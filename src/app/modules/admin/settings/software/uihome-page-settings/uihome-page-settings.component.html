@@ -92,6 +92,20 @@
         </app-value-fields>
       </div>
 
+      <div><h4> Wordpress Content</h4></div>
+      <div><mat-label> Connect your data from Wordpress to Your POS</mat-label></div>
+      <div><mat-label> Must be filled out in the following format:</mat-label></div>
+      <div><mat-label> https://yourdomain.com/wp-json/wp/v2/posts?slug=</mat-label></div>
+
+      <div class="grid-item">
+        <app-value-fields
+            [fieldType]     ="'text'"
+            [inputForm]     ="inputForm"
+            [fieldName]     ="'wordpressHeadless'">
+          CMS - Wordpress
+        </app-value-fields>
+      </div>
+
       <div class="grid-view-sections">
         <div class="grid-views">
           <div>Customer View </div>

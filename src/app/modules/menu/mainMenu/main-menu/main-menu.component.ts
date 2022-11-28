@@ -1,17 +1,15 @@
 import { Component, OnInit, ChangeDetectionStrategy, ViewChild, TemplateRef, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, of, Subscription, switchMap } from 'rxjs';
+import { Observable, of, Subscription } from 'rxjs';
 import { IPOSOrder, ISite } from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
-import { ResizedEvent } from 'angular-resize-event';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProductSearchModel } from 'src/app/_interfaces/search-models/product-search';
-import {  MenuService, OrdersService } from 'src/app/_services';
+import { MenuService } from 'src/app/_services';
 import { PollingService } from 'src/app/_services/system/polling.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
-import { Template } from '@angular/compiler/src/render3/r3_ast';
 
 @Component({
   selector: 'app-main-menu',

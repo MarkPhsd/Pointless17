@@ -47,10 +47,9 @@ export class PageNotFoundComponent implements OnInit {
           localStorage.setItem('company/compName', JSON.stringify(this.company.compName))
           localStorage.setItem('company/phone', JSON.stringify(this.company.phone))
           localStorage.setItem('company/address', JSON.stringify(this.company.compAddress1))
-
         }, error  => {
         }
-        );
+      );
 
     } catch (error) {
 

@@ -210,6 +210,8 @@ constructor(
     this.toggleCatHeight         = 'toggle-buttons-height-size-tall'
     this.toggleDepartmentHeight  = 'toggle-buttons-height-medium'
     this.toggleTypeHeight        = 'toggle-buttons-height-short'
+
+    // this.toggleCatHeight = 'toggle-buttons-height-medium'
   }
 
   initForm() {

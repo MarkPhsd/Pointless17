@@ -46,6 +46,7 @@ import { DsiEMVAndroidComponent } from 'src/app/modules/payment-processing/dsiEM
 import { EmailEntryComponent } from 'src/app/shared/widgets/email-entry/email-entry.component';
 import { AdminDisplayMenuComponent } from 'src/app/modules/admin/products/display-menu/display-menu/display-menu.component';
 import { PayPalTransactionComponent } from 'src/app/modules/payment-processing/payPal/pay-pal-transaction/pay-pal-transaction.component';
+import { BlogPostEditComponent } from 'src/app/modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 
 @Injectable({
   providedIn: 'root'
@@ -217,7 +218,7 @@ export class ProductEditButtonService {
   openBlogEditor(data) {
     let dialogRef: any;
 
-    dialogRef = this.dialog.open(AdminDisplayMenuComponent,
+    dialogRef = this.dialog.open(BlogPostEditComponent,
       { width:        '90vw',
         minWidth:     '1000px',
         height:       '850px',

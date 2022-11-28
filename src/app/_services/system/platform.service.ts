@@ -40,6 +40,7 @@ export class PlatformService {
   get webMode()       {
     return Capacitor.getPlatform();
   }
+  
   get apiUrl()        {
     return localStorage.getItem('storedApiUrl');
   }

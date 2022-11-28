@@ -1,6 +1,5 @@
 import { Platform } from '@angular/cdk/platform';
-import { Component, OnInit, Input } from '@angular/core';
-import { PlatformPath } from 'path';
+import { Component,  Input } from '@angular/core';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 
 @Component({

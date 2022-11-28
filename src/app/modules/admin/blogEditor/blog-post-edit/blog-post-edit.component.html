@@ -1,1 +1,104 @@
-<p>blog-post-edit works!</p>
+<div *ngIf="(action$ | async) as item; else action"></div>
+<div *ngIf="blogPost$ | async"></div>
+
+
+<ng-template #action>
+  <div *ngIf="performingAction">
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
+
+<mat-card>
+  <mat-card-title>
+    <div class="header-container">
+      <div *ngIf="blog">
+         {{blog?.name}}
+      </div>
+      <div>
+        <app-edit-buttons-standard
+            [enableCopy]            ="true"
+            (outputeupdateItem)     ="updateSave($event)"
+            (outputupdateItemExit)  ="updateItemExit($event)"
+            (outputupdatedeleteItem)="deleteItem($event)"
+            (outputupdateonCancel)  ="onCancel($event)"
+            (outputCopy)            ="copyItem($event)"
+         ></app-edit-buttons-standard>
+      </div>
+    </div>
+  </mat-card-title>
+
+  <mat-card-content  *ngIf="blog && inputForm" >
+    <div class="header">
+      <h4><mat-icon>subject</mat-icon> Features
+      </h4>
+    </div>
+    <mat-divider></mat-divider>
+
+    <div class="grid-container-sections">
+
+      <div class="grid-item">
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'name'">
+            Name
+          </app-value-fields>
+      </div>
+      <div class="grid-item">
+          <app-value-fields
+                [inputForm]="inputForm"
+                [fieldName]="'link'">
+            Slug
+        </app-value-fields>
+      </div>
+
+      <div *ngIf="inputForm"
+          [formGroup]="inputForm" >
+        <mat-slide-toggle
+              name="webProduct"
+              class="mat-label"
+              formControlName="enabled">
+            <mat-label  >Enabled</mat-label>
+        </mat-slide-toggle>
+      </div>
+    </div>
+
+    <!-- <mat-button-toggle-group
+          [(ngModel)]="group">
+      <mat-button-toggle *ngFor="let item of groups"
+                          [value]="group"
+                          class="discount-type-button">
+        {{item}}
+      </mat-button-toggle>
+    </mat-button-toggle-group> -->
+
+    <div *ngIf="groups">
+      <div *ngIf="inputForm"
+           [formGroup]="inputForm" >
+        <mat-button-toggle-group name="type"
+                                  aria-label="Item Type"
+                                  formControlName="group">
+          <mat-button-toggle class="discount-type-button"
+                [value]="item"
+                (click)="setType(item)"
+                *ngFor="let item of groups">
+            {{item}}
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+    </div>
+
+  </mat-card-content>
+
+</mat-card>
+
+<mat-card >
+  <div *ngIf="homePageSetings?.wordpressHeadless">
+    {{homePageSetings.wordpressHeadless}}{{slug}}
+  </div>
+  <div class="blog-container">
+    <div *ngIf="blogContent">
+      <div [innerHtml]="blogContent"></div>
+    </div>
+  </div>
+</mat-card>
+
