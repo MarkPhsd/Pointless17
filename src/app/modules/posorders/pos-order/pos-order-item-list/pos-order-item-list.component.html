@@ -1,0 +1,24 @@
+<div>
+  <div>
+    {{message}}
+    <div *ngIf="(action$ | async) as item"></div>
+  </div>
+  <div *ngIf="value" class="loader">
+    <mat-progress-bar mode="determinate" [value]="value"></mat-progress-bar>
+  </div>
+
+  <ag-grid-angular
+        #agGrid
+        [style]              ="gridDimensions"
+        id                   ="myGrid"
+        [class]              ="agtheme"
+        [columnDefs]         ="columnDefs"
+        [defaultColDef]      ="defaultColDef"
+        [gridOptions]        ="gridOptions"
+        [rowSelection]       ="rowSelection"
+        [frameworkComponents]="frameworkComponents"
+        (selectionChanged)   ="onSelectionChanged($event)"
+        (cellValueChanged)   ='cellValueChanged($event)'
+        (gridReady)          ="onGridReady($event)">
+  </ag-grid-angular>
+</div>

@@ -13,8 +13,6 @@ import { Subscription, switchMap , of, Observable} from 'rxjs';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { takeHeapSnapshot } from 'process';
-import { runInThisContext } from 'vm';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
 
@@ -116,7 +114,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         private uiSettingService     : UISettingsService,
         private awsBucketService     : AWSBucketService,
         private splashScreenStateService: SplashScreenStateService,
-        private orderService         : OrdersService,
         private orderMethodsService:   OrderMethodsService,
         @Optional() private dialogRef  : MatDialogRef<LoginComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,
@@ -205,9 +202,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   redirects() {
-
     if (this.redirectAPIUrlRequired()){ return }
-    // console.log('redirects')
     if (this.redirectUserLoggedIn())  { return }
   }
 
@@ -225,7 +220,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
   }
 
-  async initCompanyInfo() {
+ initCompanyInfo() {
     this.compName    = this.appInitService.company;
   }
 
@@ -238,7 +233,6 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
   redirectUserLoggedIn() {
-    console.log('redirectUserLoggedIn')
     const user = this.authenticationService.userValue;
     if (user) {
       this.router.navigate(['/app-main-menu']);

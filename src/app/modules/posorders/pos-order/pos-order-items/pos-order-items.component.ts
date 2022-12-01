@@ -22,7 +22,8 @@ export class PosOrderItemsComponent implements OnInit, OnDestroy {
   @Input()  order          : IPOSOrder;
   @Input()  mainPanel      : boolean;
   @Output() outputRemoveItem  = new EventEmitter();
-
+  @Input() purchaseOrderEnabled: boolean;
+  
   @Input() printLocation  : number;
   @Input() prepStatus     : boolean;
   @Input() prepScreen     : boolean;

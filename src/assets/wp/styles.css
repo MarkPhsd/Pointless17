@@ -42,10 +42,10 @@ body:after {
     background: rgba(0,0,0,.4);
     z-index: -1;
 }
-h1, h2 { margin: 16px 0; }
+/* h1, h2 { margin: 16px 0; }
 h1 { font-size: 24px; }
-h2 { color: rgba(255,255,255,.85); }
-.container {
+h2 { color: rgba(255,255,255,.85); } */
+/* .container {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -56,7 +56,7 @@ h2 { color: rgba(255,255,255,.85); }
     flex: 1 0 auto;
     max-width: 640px;
     padding: 0 20px;
-}
+} */
 .header { margin: auto 0 16px; }
 .timer {
     display: -webkit-box;

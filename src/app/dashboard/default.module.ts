@@ -341,6 +341,7 @@ import { SiteFooterComponent } from '../shared/components/site-footer/site-foote
 import { BlogListEditComponent } from '../modules/admin/blogEditor/blog-list-edit/blog-list-edit.component';
 import { BlogPostEditComponent } from '../modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sort/blog-post-sort.component';
+import { PosOrderItemListComponent } from '../modules/posorders/pos-order/pos-order-item-list/pos-order-item-list.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -418,8 +419,8 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
     PaymentMethodListComponent,
     PaymentMethodSettingsComponent,
     PaymentMethodEditComponent,
-
     PayPalTransactionComponent,
+    PosOrderItemListComponent,
 
     PriceCategoriesEditComponent,
     PriceCategoryPriceFieldsComponent,

@@ -164,6 +164,17 @@
             </mat-form-field>
           </div>
 
+          <div>
+            <mat-form-field appearance="outline">
+              <mat-label >Filter Type </mat-label>
+              <input matInput
+                    type             ="number"
+                    formControlName  ="filterType"
+                    class="form-control" >
+              <mat-hint>Set zero for sales, 1 for Purchase Orders</mat-hint>
+            </mat-form-field>
+          </div>
+
         </div>
 
         <mat-divider [vertical]="true"></mat-divider>

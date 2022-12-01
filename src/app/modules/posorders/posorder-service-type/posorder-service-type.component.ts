@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Observable, of, Subscription } from 'rxjs';
-import { IPOSOrder, IServiceType, ISite } from 'src/app/_interfaces';
+import { IPOSOrder, IServiceType, ISite, ServiceType } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 
 @Component({
@@ -31,6 +32,7 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
   constructor(
     private orderService      : OrdersService,
     private sitesService      : SitesService,
+    private userAuthorization: UserAuthorizationService,
     public platFormService   : PlatformService,
     private serviceTypeService: ServiceTypeService, ) {
 
@@ -55,11 +57,17 @@ export class POSOrderServiceTypeComponent implements OnDestroy  {
     }
     serviceTypes$.subscribe(data => {
       if (!this.platFormService.isApp()) {
-        const list = data.filter( item => item.onlineOrder == true)
+        let list = data.filter( item => item.onlineOrder == true ) as IServiceType[]
+        
+        if (!this.userAuthorization.isManagement) { 
+          list = list.filter.call(item => item.managerRequired )
+        }
+
         this.serviceTypes$ = of(list)
         this.serviceTypes  = list;
         return
       }
+
       if (!data) {
         this.serviceTypes$ = of(data)
       }

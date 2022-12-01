@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { catchError, Observable, of, Subscription, switchMap } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
 import { IPriceSchedule, ClientType, DateFrame, DiscountInfo,
   TimeFrame, WeekDay, OrderType
@@ -40,7 +40,7 @@ export class PriceScheduleComponent {
   timeFrameAlways:      boolean;
   allDates:             boolean;
   active:               boolean;
-
+  schedule$           : Observable<IPriceSchedule>;
   priceSchedule$      : Observable<IPriceSchedule>;
 
   id                  : number;
@@ -60,7 +60,6 @@ export class PriceScheduleComponent {
     this._priceSchedule = this.priceScheduleDataService.priceSchedule$.subscribe( data => {
       if (data) {
           this.priceSchedule = data
-          // console.log('price schedule data scheudle service', data)
           this.isMenuList = false
           if (data.type == 'Menu List') {
           this.isMenuList = true
@@ -99,30 +98,36 @@ export class PriceScheduleComponent {
       public  route                   : ActivatedRoute,
       private toolBarUIService        : ToolBarUIService,
       private router                  : Router,
-      private devModeService                 : DevService
+      private devModeService          : DevService
     )
 
   {
-    // this.devMode = true ; // this.devModeService.getdevMode();
     this.initForm()
     this.toggleSideBar()
     const id = this.route.snapshot.paramMap.get('id');
     this.id = +id;
-    this.getItem(+id)
+    this.schedule$ = this.getItem(+id)
   }
 
     getItem(id: number) {
-    if (id) {
-        const site = this.siteService.getAssignedSite();
-        const item$ = this.priceScheduleService.getPriceSchedule(site, id)
-        item$.subscribe(data => {
-          this.priceSchedule = data
-          this.description   = data.description;
-          this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
-          this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
-        }
+      if (id) {
+          const site = this.siteService.getAssignedSite();
+          return this.priceScheduleService.getPriceSchedule(site, id).pipe(switchMap(data => {
+            this.priceSchedule = data
+            this.description   = data.description;
+            this.fbPriceScheduleService.initFormData(this.inputForm, this.priceSchedule)
+            this.priceScheduleDataService.updatePriceSchedule( this.priceSchedule )
+            return of(data)
+          }
+        ),catchError(err => {
+          this.siteService.notify('Error ' + err, 'Alert', 2000)
+          return of(err)
+        })
       )
+      return;
     }
+    this.siteService.notify('Error: No ID', 'Alert', 2000)
+    return of(null)
   }
 
   ngDestroy() {

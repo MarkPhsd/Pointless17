@@ -2,7 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { moveItemInArray, CdkDragDrop, transferArrayItem } from '@angular/cdk/drag-drop';
 import { IListBoxItem, IItemsMovedEvent } from 'src/app/_interfaces/dual-lists';
-import { Observable,  } from 'rxjs';
+import { Observable, switchMap,  } from 'rxjs';
 import { of } from 'rxjs';
 import { IItemBasic, IItemBasicB, MenuService } from 'src/app/_services/menu/menu.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -27,6 +27,8 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
     assignedStatic   : any;
     allAssigned      : any;
 
+    tempCategoryList: any;
+    assignedList$ : Observable<any>
     // array of items to display in left box
     @Input() set availables(items: Array<{}>) {
       this.availableItems = [...(items || []).map((item: {}, index: number) => ({
@@ -75,31 +77,30 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
     }
 
     async ngOnInit() {
-
       const site = this.siteService.getAssignedSite()
-
       this.productTypes$ = this.itemTypeService.getBasicTypes(site);
-      this.itemTypes$    = this.itemTypeService.getItemTypes(site);
-
-      this.availableItems =  await this.initCategoryList();
-
+      this.itemTypes$    = this.refreshItemTypesAssociation()
+      this.assignedList$ = this.initCategoryList();
     }
 
-    async initCategoryList(): Promise<IListBoxItem[]> {
+    initCategoryList() {
 
       //initialize list of categories.
       //init list of assigned categeogires
       //remove assigned categories from list of categories.
       //use list repeatedly without re fetching.
+      const site            =  this.siteService.getAssignedSite();
 
-      const site            =  this.siteService.getAssignedSite()
-      const categories      =  await this.menuService.getCategoryListNoChildren(site).pipe().toPromise();
-      const assigned        =  await this.itemTypeService.getItemTypeCategoriesAll(site).pipe().toPromise();
-      const availableItems  =  this.removeSelectedFromAvailable(categories, assigned)
+      const categories$ = this.menuService.getCategoryListNoChildren(site)
+      const assigned$ = this.menuService.getCategoryListNoChildren(site)
 
-      this.categoriesStatic =  categories
-
-      return availableItems;
+      return categories$.pipe(switchMap(categories => { 
+        this.categoriesStatic =  categories
+        return this.itemTypeService.getItemTypeCategoriesAll(site)
+      })).pipe(switchMap(assigned => { 
+        this.availableItems  =  this.removeSelectedFromAvailable(this.categoriesStatic, assigned)
+        return of(assigned)
+      }))
 
     }
 
@@ -149,7 +150,11 @@ export class ItemTypeCategoryAssignmentComponent implements OnInit {
 
     refreshItemTypesAssociation() {
       const site = this.siteService.getAssignedSite()
-      this.itemTypes$    = this.itemTypeService.getItemTypes(site);
+      this.itemTypes$    = this.itemTypeService.getItemTypes(site).pipe(switchMap(data => { 
+        data =  data.sort((a, b) => (a.name > b.name) ? 1 : -1)
+        return of(data)
+      }))
+      return this.itemTypes$
     }
 
     //we are saving the Whole List of assigned or

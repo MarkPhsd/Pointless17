@@ -6,7 +6,7 @@
 
       <div *ngIf="homePageSetings && panelHeightSize; else loading">
         
-        <div >
+        <div>
           <blog-post-list [homePageSettings]="homePageSetings" 
                           [group]    ="'Main Page'" 
                           [height]    ="'100%'" 
@@ -29,7 +29,7 @@
 
 <ng-template #displayMenu>
   <div fxLayout="row" fxLayoutAlign="center center" >
-    <display-menu-main></display-menu-main>
+    <display-menu-main [gridItemWidth]="'275px'"></display-menu-main>
   </div>
 </ng-template>
 

@@ -55,11 +55,9 @@ export class PlatformService {
   constructor(
       private ipcService          : IPCService,
      ) {
-
     this.initAPIUrl();
     if (!this._apiUrl) {this._apiUrl =''};
     this.getPlatForm();
-
   }
 
   initAPIUrl() {

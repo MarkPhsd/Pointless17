@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef,  HostListener,
          Input, OnInit, Output, EventEmitter, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ThemePalette } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
@@ -37,13 +38,18 @@ export interface payload{
 })
 export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
+  inputForm: FormGroup;
+  itemEdit: boolean;
+
   interface = {}
   payload: payload;
+
   @ViewChild('imageDisplay') imageDisplay: TemplateRef<any>;
   @Output() outputDelete   :  EventEmitter<any> = new EventEmitter();
   @Output() outputSelectedItem : EventEmitter<any> = new EventEmitter();
-  @Input() uiConfig : TransactionUISettings
+  @Input() uiConfig : TransactionUISettings;
 
+  @Input() purchaseOrderEnabled : boolean;
   @Input() index          = 0;
   @Input() orderItem      : PosOrderItem;
   @Input() order          : IPOSOrder;
@@ -52,6 +58,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   @Input() placeHolderImage = 'productPlaceHolder.jpg';
   @Input() quantity       : number;
   @Input() unitPrice      : number;
+  @Input() wholeSale      : number;
   @Input() subTotal       : number;
   @Input() total          : number;
   @Input() printed        : string;
@@ -105,6 +112,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   isModifier            : boolean;
   isItemKitItem         : boolean;
 
+  action$: Observable<any>;
+
   panel  ='string'
   @HostListener("window:resize", [])
    updateItemsPerPage() {
@@ -127,6 +136,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.initAssignedItemSubscriber();
     this.initBottomSheetSubscriber();
   }
+
   initBottomSheetSubscriber() {
     this._bottomSheetOpen = this.orderService.bottomSheetOpen$.subscribe(data => {
       this.bottomSheetOpen = data
@@ -137,6 +147,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
       }
     })
   }
+
   initAssignedItemSubscriber() {
     //disabled  class style when added button for item functions
     this._assignedPOSItems = this.orderMethodsService.assignedPOSItems$.subscribe( data => {
@@ -159,7 +170,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.orderMethodsService.clearAssignedItems();
     if (this._bottomSheetOpen) { this._bottomSheetOpen.unsubscribe()}
     if (this._assignedPOSItems) { this._assignedPOSItems.unsubscribe()}
-
   }
 
   constructor(  private orderService: OrdersService,
@@ -167,9 +177,9 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private awsBucket          : AWSBucketService,
                 private _snackBar          : MatSnackBar,
                 private sanitizer          : DomSanitizer,
-                public  el:            ElementRef,
-                private router:       Router,
-                public  route:         ActivatedRoute,
+                public  el:                 ElementRef,
+                private router:             Router,
+                public  route:              ActivatedRoute,
                 private truncateTextPipe   : TruncateTextPipe,
                 private siteService        : SitesService,
                 private dialog             : MatDialog,
@@ -178,6 +188,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
                 private promptGroupservice : PromptGroupService,
                 private printingService    : PrintingService,
                 public  userAuthService    : UserAuthorizationService,
+                private fb: FormBuilder,
               )
   {
   }
@@ -202,7 +213,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (!this.menuItem) {
       this.basicItem$ = this.menuService.getItemBasicImage(site, this.orderItem?.productID).pipe(
         switchMap( data => {
-          // console.log('basic item', data)
           this.imagePath  =  this.getItemSrcBasic(data?.image)
           return of(data)
         })
@@ -221,6 +231,42 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.updateCardStyle(this.mainPanel)
   }
 
+  initEdit() { 
+    if (this.purchaseOrderEnabled && !this.itemEdit) { 
+      this.itemEdit = true;
+      try {
+        this.inputForm = this.fb.group( this.orderItem )
+        this.inputForm.patchValue(this.orderItem)
+        this.inputForm.valueChanges.subscribe(item => { 
+          this.action$ = this.updateValues(item)
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    }
+  }
+
+  destroyEdit() { 
+    // if (this.lockEdit) { return } 
+    if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) { return }
+    this.itemEdit = false;
+    this.inputForm = null;
+  }
+
+  updateValues(item: PosOrderItem) {
+    const site = this.siteService.getAssignedSite();
+    
+    return this.posOrderItemService.changeItemValues(site, item ).pipe(
+      switchMap(data => {
+        if (data) { 
+          this.orderService.updateOrderSubscription(data)
+          return of(data)
+        }
+        return of(null)
+      })
+    )
+  }
+
   get isDisplayMenuItemOn() {
     if (this.mainPanel) {
       return this.imageDisplay
@@ -228,12 +274,22 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     return null;
   }
 
-
   ngAfterViewInit() {
     this.resizeCheck();
   }
 
   assignItem() {
+    const result = this.orderMethodsService.updateAssignedItems(this.orderItem);
+    if (result) { 
+      this.initEdit()
+    }
+    if (!result) { 
+      this.destroyEdit()
+    }
+    
+  }
+
+  preventUnAssigned() { 
     this.orderMethodsService.updateAssignedItems(this.orderItem)
   }
 
@@ -261,6 +317,11 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   editPrice() {
     this.editProperties('price' , 'Change Price')
   }
+
+  editCost() {
+    this.editProperties('wholeSale' , 'Change Cost')
+  }
+
 
   selectItem() {
     if (this.productnameClass != 'product-name-alt') {
@@ -298,6 +359,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         if (editField == 'quantity') {
           requireWholeNumber = this.menuItem.itemType.requireWholeNumber
         }
+
         console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
 
         const item = {orderItem: this.orderItem,

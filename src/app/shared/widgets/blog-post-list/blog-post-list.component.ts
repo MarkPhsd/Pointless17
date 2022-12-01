@@ -1,6 +1,6 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, Input, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { platform } from 'os';
 import { switchMap, of, catchError, Observable, forkJoin } from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { BlogService, IBlog, ISearchBlogs } from 'src/app/_services/system/blog.service';
@@ -14,7 +14,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
   // encapsulation: ViewEncapsulation.None,
 })
 export class BlogPostListComponent implements OnInit {
-
+  @ViewChild('styleElement') private styleElement: ElementRef;
   @ViewChild('listView')      listView: TemplateRef<any>;
   @ViewChild('gridView')      gridView: TemplateRef<any>;
 
@@ -22,11 +22,13 @@ export class BlogPostListComponent implements OnInit {
   @Input() group = '';
   @Input() class = 'cards';
   @Input() height = '400px';
-  
+
+  styles$: Observable<any>;
   blogs: IBlog[];
   blogs$: Observable<any>;
   obs$ : Observable<any>[];
   uiHomePageSetting$    : Observable<UIHomePageSettings>;
+
   @Input() homePageSettings : UIHomePageSettings;
   blogPost$ : Observable<any>;
   blogContent: string;
@@ -39,6 +41,7 @@ export class BlogPostListComponent implements OnInit {
                public route            : ActivatedRoute,
                private platformService: PlatformService,
                private uiSettings : UISettingsService,
+               private http            : HttpClient,
   ) {
     const group = this.route.snapshot.paramMap.get('group');
     if (group) { 
@@ -51,6 +54,7 @@ export class BlogPostListComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loadStyles()
     if (this.platformService.isApp()) { return }
     this.refreshList()
   }
@@ -88,7 +92,9 @@ export class BlogPostListComponent implements OnInit {
           return this.blogService.searchBlogs( site, search )
         })).pipe(
           switchMap( data => {
+              // console.log('unfiltered', data)
               data.results.filter(item => { return item.enabled == true});
+              // console.log('filtered', data)
               this.blogs = data.results.sort((a, b) => (a.sort > b.sort ? 1 : -1));
               return of(this.blogs)
             }
@@ -103,14 +109,17 @@ export class BlogPostListComponent implements OnInit {
               return of('no menu')
             }
             const list  = data;
-            const url = this.homePageSettings.wordpressHeadless
-            list.forEach(item => {
-              if (item.link) {
-                this.obs$.push(this.blogService.getBlogPost(url, item.link))
-              }
-            });
-            forkJoin(this.obs$)
-            return  forkJoin(this.obs$)
+            if (this.homePageSettings?.wordpressHeadless) {
+              const url = this.homePageSettings?.wordpressHeadless;
+              list.forEach(item => {
+                if (item.link) {
+                  this.obs$.push(this.blogService.getBlogPost(url, item.link))
+                }
+              });
+              forkJoin(this.obs$)
+              return  forkJoin(this.obs$)
+            }
+            return of(null);
         }))
       }
 
@@ -123,4 +132,39 @@ export class BlogPostListComponent implements OnInit {
     }
     return null;
   }
+
+  ngDestroy() { 
+    // document.body.destroyemp('style')
+    this.styleElement.nativeElement.remove();
+  }
+
+  loadStyles() {
+    const  styles$ = this.getAssestsStyles()
+
+    this.getAssestsStyles().subscribe(
+      // data => console.log('styles file', data), 
+    );
+
+    this.styles$ = styles$.pipe(switchMap( data => { 
+        if (!data) {return }
+          const styles    = data;
+          const style = document.createElement('styleElement'); // is a node
+          style.innerHTML = styles;
+          document.body.appendChild(style);
+          return of('');
+        }
+      ),catchError(err => { 
+        console.log(err)
+        return of('')
+      })
+    )
+
+  }
+
+  //    const result = await this.httpClient.get('assets/app-config.json').toPromise() //;( result => {
+  getAssestsStyles(): Observable<any> { 
+    const data  =  this.http.get('assets/wp/styles.css', {responseType: 'text'})
+    return data
+  }
+
 }

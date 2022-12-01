@@ -391,6 +391,42 @@ export class POSOrderItemServiceService {
 
   }
 
+  changeItemCost(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
+
+    // const result = this.validateItemchange(posOrderItem)
+    // if (!result) {
+    //   this.notificationEvent(`Error ${result}`, 'Failure' )
+    //   return
+    // }
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "changeItemCost";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const payLoad = { posOrderItem: posOrderItem, menuItem: null}
+
+    return  this.http.post<IPOSOrder>(url, payLoad)
+
+  }
+
+  changeItemValues(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
+
+    const controller = "/POSOrderItems/";
+
+    const endPoint = "changeItemValues";
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return  this.http.post<IPOSOrder>(url, posOrderItem)
+
+  }
+  
   changeItemQuantity(site: ISite, posOrderItem: PosOrderItem): Observable<IPOSOrder> {
 
     // const result = this.validateItemchange(posOrderItem)

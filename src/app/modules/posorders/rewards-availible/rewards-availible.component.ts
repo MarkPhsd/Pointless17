@@ -124,9 +124,9 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
 
   menuItemAction(add: boolean, item, index) {
     if (!this.order ) {
-      console.log('No Order')
+      // console.log('No Order')
       return; }
-    const site = this.siteService.getAssignedSite()
+    const site   = this.siteService.getAssignedSite()
     this.reward$ = this.processReward(site, item, this.order.id)
   }
 
@@ -135,17 +135,21 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
     this.groupID  = item.groupID
     this.rewardID = item.id;
 
-
     return  this.menuService.getMenuItemByID(site, item.productID).pipe( switchMap(item => {
-
         if (!item) {  return of(item)   }
-
         let passAlongItem;
-
-        if (item.itemType.name === 'Discount % One Item') {
+        if (item.itemType.name.toLowerCase() === 'Discount % One Item'.toLowerCase() ||
+            item.itemType.name.toLowerCase() === 'Free Item Off'.toLowerCase() ||
+            item.itemType.name.toLowerCase() === 'Cash Discount on Item'.toLowerCase()) {
           if (!this.orderMethodsService.assignedPOSItem) {
             passAlongItem = this.order.posOrderItems[this.order.posOrderItems.length-1];
             this.orderMethodsService.addAssignedItem(passAlongItem)
+          }
+
+         
+          if  (!passAlongItem)  { 
+            passAlongItem = this.order.posOrderItems[this.order.posOrderItems.length-1];
+            return of(null)
           }
         }
 

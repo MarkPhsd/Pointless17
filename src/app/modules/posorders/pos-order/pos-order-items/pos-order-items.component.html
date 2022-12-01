@@ -19,6 +19,7 @@
                       [quantity]   ="item?.quantity"
                       [unitPrice]  ="item?.unitPrice"
                       [total]      ="item?.total"
+                      [wholeSale]  ="item?.wholeSale"
                       [subTotal]   ="item?.subTotal"
                       [id]         ="item?.id"
                       [orderItem]  ="item"
@@ -37,6 +38,7 @@
                       [wideBar]  ="wideBar"
                       [prepScreen]="prepScreen"
                       [disableActions]="disableActions"
+                      [purchaseOrderEnabled]="purchaseOrderEnabled"
                       (outputDelete)="removeItemFromList($event)"
           ></pos-order-item>
         </ion-item>

@@ -137,8 +137,8 @@ export class EmployeeListComponent implements OnInit , OnDestroy, AfterViewInit{
     this.urlPath            = await this.awsService.awsBucketURL();
     this.rowSelection       = 'multiple'
 
-    this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.isAuthorized =  this.userAuthorization.isManagement// //('admin, manager')
+    this.isStaff =  this.userAuthorization.isStaff // ('admin, manager, employee')
 
     this.updateItemsPerPage(); //run last in this process!
   };

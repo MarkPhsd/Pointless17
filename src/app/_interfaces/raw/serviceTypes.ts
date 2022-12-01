@@ -29,4 +29,5 @@ export interface IServiceType {
   functionChoice3     : number;
   requireNumOfGuests  : number;
   promptForOrderName  : number;
+  filterType          : number;
 }

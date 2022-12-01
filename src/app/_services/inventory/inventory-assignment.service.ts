@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { AuthenticationService } from '../system/authentication.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { IProduct, ISite, IUser, Paging}  from 'src/app/_interfaces';
+import { IPOSOrder, IProduct, ISite, IUser, Paging}  from 'src/app/_interfaces';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { METRCPackage } from 'src/app/_interfaces/metrcs/packages';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { InventoryManifest } from './manifest-inventory.service';
 export interface InventorySearchResultsPaged {
   results     : IInventoryAssignment[];
   paging      : Paging;
@@ -85,7 +86,6 @@ export interface IInventoryAssignment {
   caseQuantity        : number;
   itemSku             : string;
   casePrice           : number;
-
   product             : IProduct;
   serials:              Serial[];
 }
@@ -156,6 +156,20 @@ export class InventoryAssignmentService {
   {
   }
 
+  createManifestFromOrder(site: ISite, manifest: InventoryManifest, order: IPOSOrder): Observable<InventoryManifest> {
+
+    const controller =  `/InventoryAssignments/`
+
+    const endPoint = `createManifestFromOrder`
+
+    const parameters = ``
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    const item = {manifest: manifest, order: order}
+
+    return  this.http.post<InventoryManifest>(url, item )
+  }
 
   rejectItemsInManifest(site: ISite, id: number, items: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
 
@@ -337,7 +351,9 @@ export class InventoryAssignmentService {
   postInventoryAssignmentList(site: ISite, id: number, iInventoryAssignment: IInventoryAssignment[]): Observable<IInventoryAssignment[]> {
 
     if (id == null) { return null}
+    
     if (iInventoryAssignment == null) { return null}
+
     if (site == null) { return null}
 
     const controller =  `/InventoryAssignments/`

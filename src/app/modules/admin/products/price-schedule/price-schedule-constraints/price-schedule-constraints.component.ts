@@ -21,7 +21,6 @@ export class PriceScheduleConstraintsComponent implements OnInit {
     console.log('')
   }
 
-
   setOrderTypeValues(orderTypes: any[]) {
     this.fbPriceScheduleService.setOrderTypeValues(this.inputForm, orderTypes)
   }

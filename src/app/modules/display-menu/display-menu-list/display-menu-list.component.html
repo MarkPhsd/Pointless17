@@ -6,7 +6,8 @@
 </ng-template>
 
 <div class="bg" *ngIf="(action$ | async) as items; else loading"
-                style.border-radius="10px"
+                [style.border-radius]="'10px'"
+                [style.margin-right]="'5px'"
                 [style.background]="backgroundURL"
                 [style.height]="'calc(120% + 200px)'"
                 [style.width]="'100%'"

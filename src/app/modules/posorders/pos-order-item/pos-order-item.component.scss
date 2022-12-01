@@ -111,6 +111,7 @@ font-style: italic;
   flex-wrap: wrap;
   border: 1px solid #f00;
   min-height: 70px;
+
   $breakpoint: 600px;
   --multiplier: calc( #{$breakpoint} - 100%);
 
@@ -147,10 +148,26 @@ font-style: italic;
   grid-template-columns: repeat( auto-fit, minmax(300px, 1fr) );
 }
 
+.field-grid { 
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 10px ;
+  row-gap: 10px;
+}
+
+.field-values { 
+  width: 100px;
+}
+
+.field-values-long { 
+  width: 200px;
+}
 .grid-items {
   display: grid;
   gap: 10px;
   grid-template-columns: 1fr auto;
+  max-width: 300px;
 }
 
 .displayimage {

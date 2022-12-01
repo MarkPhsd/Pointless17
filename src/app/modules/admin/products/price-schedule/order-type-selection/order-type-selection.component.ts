@@ -8,6 +8,7 @@ import { PriceScheduleDataService,  } from 'src/app/_services/menu/price-schedul
 import { IItemBasic } from 'src/app/_services';
 import { Subscription } from 'rxjs';
 import { FbPriceScheduleService } from 'src/app/_form-builder/fb-price-schedule.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-order-type-selection',
@@ -42,6 +43,7 @@ export class OrderTypeSelectionComponent implements OnInit {
     private siteService             : SitesService,
     private fbPriceScheduleService  : FbPriceScheduleService,
     private priceScheduleDataService: PriceScheduleDataService,
+    private userAuthorizationService: UserAuthorizationService,
   ) { }
 
   async ngOnInit() {
@@ -58,8 +60,21 @@ export class OrderTypeSelectionComponent implements OnInit {
 
   async initForm() {
     const site = this.siteService.getAssignedSite();
-    const serviceTypes$  = this.serviceTypeService.getSaleTypes(site)
-    serviceTypes$.subscribe(serviceTypes => {
+
+    if (this.userAuthorizationService.isManagement) { 
+      const serviceTypes$  = this.serviceTypeService.getAllServiceTypes(site)
+      serviceTypes$.subscribe(serviceTypes => {
+            serviceTypes.forEach( data => {
+              this.orderTypelist.push( { name: data.name, id: data.id })
+            }
+          )
+        }
+      )
+      return; 
+    }
+
+    const serviceTypesSales$  = this.serviceTypeService.getSaleTypes(site)
+    serviceTypesSales$.subscribe(serviceTypes => {
       serviceTypes.forEach( data => {
         this.orderTypelist.push( { name: data.name, id: data.id })
       })

@@ -11,6 +11,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
 })
 export class OrderTotalComponent implements OnInit {
   smallDevice = false;
+  cost: number;
 
   @Input() order: IPOSOrder
   @Input() mainPanel = false;
@@ -20,6 +21,25 @@ export class OrderTotalComponent implements OnInit {
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   transactionDataClass ="transaction-data"
+
+  @Input()  purchaseOrderEnabled: boolean;
+
+  // initPurchaseOrderOption(id: number) {
+  //   if (!id) { return }
+  //   if (this.userAuthorization.isManagement) { 
+  //     const site = this.siteService.getAssignedSite()
+  //     this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
+  //       switchMap(data => { 
+  //         this.purchasOrderEnabled = false
+  //         if ( data.filterType  && data.filterType != 0 ) {
+  //           this.purchasOrderEnabled = true
+  //         }
+  //         return of(null)
+  //       })
+  //     )
+  //   }
+  // }
+
 
   homePageSubscriber(){
     try {
@@ -64,7 +84,22 @@ export class OrderTotalComponent implements OnInit {
   ngOnInit(): void {
     this.updateScreenSize()
     this.homePageSubscriber()
+    this.getCost();
+  }
 
+  getCost() {
+
+    this.cost = 0
+    if (this.order) { 
+      if (this.order.posOrderItems && this.order.posOrderItems.length>0) { 
+        this.order.posOrderItems.forEach(data => { 
+          const itemCost =  (+data.quantity * +data.wholeSale)
+          this.cost = itemCost + this.cost
+          console.log(itemCost)
+          console.log('cost', this.cost)
+        })
+      }
+    }
   }
 
   @HostListener("window:resize", [])
@@ -76,3 +111,4 @@ export class OrderTotalComponent implements OnInit {
   }
 
 }
+

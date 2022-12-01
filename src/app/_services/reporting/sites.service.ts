@@ -35,7 +35,6 @@ export class SitesService {
 
   constructor( private http            : HttpClient,
                private auth            : AuthenticationService,
-
                private appInitService  : AppInitService,
                private platformSevice  : PlatformService,
                private httpClient      : HttpClient,

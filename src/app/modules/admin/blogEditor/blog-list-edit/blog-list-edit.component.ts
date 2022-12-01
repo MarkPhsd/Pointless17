@@ -90,7 +90,6 @@ export class BlogListEditComponent implements OnInit {
   constructor( private siteService           : SitesService,
               private fb                     : FormBuilder,
               private _snackBar              : MatSnackBar,
-              private agGridService          : AgGridService,
               private agGridFormatingService : AgGridFormatingService,
               private blogService     : BlogService,
               private productEditButtonService: ProductEditButtonService,

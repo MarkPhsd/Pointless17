@@ -581,6 +581,13 @@ export class PriceScheduleListComponent implements OnInit, AfterViewInit {
   addSchedule() {
     const site = this.siteService.getAssignedSite();
     const priceSchedule = {} as IPriceSchedule;
+    priceSchedule.allDates = true;
+    priceSchedule.allEligible = true;
+    priceSchedule.allOrderTypes = true;
+    priceSchedule.allWeekdaysDays = true;
+    priceSchedule.timeFrameAlways = true;
+    priceSchedule.orderTotal = 0;
+
     this.performingAction = true;
     this.action$ = this.priceScheduleService.save(site, priceSchedule).pipe(
       switchMap(data => {

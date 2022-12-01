@@ -58,6 +58,19 @@
           </app-key-pad>
         </div>
 
+        <div *ngIf="menuItem && editField === 'wholeSale'">
+          <app-key-pad
+                  [inputForm]           = "inputForm"
+                  [inputTypeValue]      = "inputTypeValue"
+                  [decimals]            =  decimals
+                  [showInput]           = "true"
+                  [requireWholeNumber]  = "false"
+                  (outPutReturnEnter)   = "savePriceChange($event)"
+                  (closeOnEnterPress)   = "onClose($event)">
+            Enter Cost
+          </app-key-pad>
+        </div>
+
       </div>
     </mat-card-content>
     <mat-card-actions >

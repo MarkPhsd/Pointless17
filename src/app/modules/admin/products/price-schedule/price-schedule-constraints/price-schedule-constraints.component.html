@@ -14,9 +14,7 @@
 
           <app-order-type-selection
                 (outputOrderTypes)  = "setOrderTypeValues($event)"
-                [inputForm]         = "inputForm"
-
-                                >
+                [inputForm]         = "inputForm">
           </app-order-type-selection >
 
           <div class="headers">
@@ -26,9 +24,7 @@
 
           <app-client-type-selection
                 (outputClientTypes)   =  "setClientTypeValues($event)"
-                [inputForm]           =  "inputForm"
-
-                                >
+                [inputForm]           =  "inputForm">
           </app-client-type-selection >
 
           <div class="headers">
@@ -54,6 +50,26 @@
               [inputForm]               = "inputForm"
               [item]                    = "item">
           </app-date-schedule>
+          <div class="item-label">
+            <mat-label>All items are applicable.</mat-label>
+            <mat-slide-toggle
+                    class           ="price-values"
+                    formControlName ="allItems"  >
+            </mat-slide-toggle>
+          </div>
+
+          <div>
+            <h2>Order Total Constraint (before tax)</h2>
+            <mat-label>If left empty or 0 it will not be used.</mat-label>
+            <div [style.width]="'105px'">
+              <app-value-fields
+                  [fieldType]="'text'"
+                  [inputForm]="inputForm"
+                  [fieldName]="'orderTotal'">
+                  Order Total Required
+              </app-value-fields>
+            </div>
+          </div>
 
     </mat-card>
   </div>

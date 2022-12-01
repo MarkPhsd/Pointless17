@@ -2,6 +2,7 @@ import { Component, OnInit, Output, Input,EventEmitter, HostListener, OnDestroy 
 import { Subscription } from 'rxjs';
 import { IPOSOrder, IUserProfile } from 'src/app/_interfaces';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 
 @Component({
@@ -33,6 +34,8 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Output() outPutRemoveDiscount = new EventEmitter();
   @Output() outPutRefundItem         = new EventEmitter();
   @Output() outPutRefundOrder         = new EventEmitter();
+  @Output() outPutPurchaseOrder         = new EventEmitter();
+  @Output() outPutListView         = new EventEmitter();
 
   @Input() user        : IUserProfile;
   @Input() itemsPrinted: boolean;
@@ -46,17 +49,26 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
   @Input() emailOption : boolean;
   @Input() ssmsOption : boolean;
   @Input() refundItemEnabled: boolean;
+  @Input() purchasOrderEnabled: boolean;
+
+  listView: Boolean;
 
   assignedItems   : Subscription;
   refundItems     : boolean;
   smallDevice     : boolean;
-
+  
   constructor(private platFormService: PlatformService,
+              public userAuthorizationService: UserAuthorizationService,
               private orderMethodsService: OrderMethodsService ) { }
 
   ngOnInit() {
     this.isApp = this.platFormService.isApp();
     // this.initSubscriptions();
+  }
+
+  toggleListView() { 
+    this.listView = !this.listView;
+    this.outPutListView.emit(this.listView)
   }
 
   // initSubscriptions() {
@@ -89,6 +101,9 @@ export class PosOrderFunctionButtonsComponent implements OnInit, OnDestroy {
     this.outPutchangeTransactionType.emit(true)
   }
 
+  makeManifest() { 
+    this.outPutPurchaseOrder.emit(true)
+  }
   refundItem() {
     this.outPutRefundItem.emit(true)
   }

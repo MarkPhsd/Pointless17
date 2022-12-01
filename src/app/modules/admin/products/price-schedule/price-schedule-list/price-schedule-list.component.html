@@ -59,7 +59,7 @@
       <mat-label class="item-label">Time Frame Always</mat-label>
       <mat-slide-toggle
               class           = "price-values"
-              formControlName     = "timeFrameAlways"
+              formControlName = "timeFrameAlways"
               [(ngModel)]     = "timeFrameAlways"
               (change)        = "onToggleChange($event)"
               >
@@ -83,8 +83,7 @@
               class           = "price-values"
               formControlName = "active"
               [(ngModel)]     = "active"
-              (change)        = "onToggleChange($event)"
-              >
+              (change)        = "onToggleChange($event)">
       </mat-slide-toggle>
     </div>
 
@@ -94,9 +93,7 @@
     <div class="item-label" *ngIf="priceAdjustScheduleTypes as list" >
       <mat-button-toggle-group
                                 (change)        = "onToggleChange($event.value)"
-                                [(ngModel)]     = "type"
-                              >
-
+                                [(ngModel)]     = "type" >
         <mat-button-toggle class="discount-type-button"
                             [value]="item.name"
                             *ngFor="let item of list" >

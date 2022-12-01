@@ -102,8 +102,10 @@ export class OrderMethodsService implements OnDestroy {
 
     if (this.isItemAssigned(item.id)) {
       this.removeAssignedItem(item)
+      return false;
     } else {
       this.addAssignedItem(item)
+      return true;
     }
   }
 

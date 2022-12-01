@@ -1,28 +1,32 @@
-<ng-container [ngTemplateOutlet]="blogView"></ng-container>
+<!-- <div *ngIf="(styles$ | async) as styles"></div> -->
 
-<ng-template #loading>
-  <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-    <mat-spinner [diameter]="50"></mat-spinner>
-  </div>
-</ng-template>
+  <ng-container [ngTemplateOutlet]="blogView"></ng-container>
 
-<ng-template #gridView>
-  <div class="grid-view" *ngIf="(blogs$ | async) as blogs">
-    <div  *ngFor="let item of blogs">
-      <mat-card [class]="class" [style.height]="height" >
-        <mat-card-title>
-          {{item?.title}}
-        </mat-card-title>
-        <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div>
-      </mat-card>
+  <ng-template #loading>
+    <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
+      <mat-spinner [diameter]="50"></mat-spinner>
     </div>
-  </div>
-</ng-template>
+  </ng-template>
 
-<ng-template #listView>
-  <div *ngIf="(blogs$ | async) as blogs">
-    <ul class="list-view" *ngFor="let item of blogs">
-      <li [innerHtml]="item[0]?.content?.rendered"></li>
-    </ul>
-  </div>
-</ng-template>
+  <ng-template #gridView>
+    <div class="grid-view" *ngIf="(blogs$ | async) as blogs">
+      <div  *ngFor="let item of blogs">
+        <mat-card [class]="class" [style.height]="height" >
+          <mat-card-title>
+            {{item?.title}}
+          </mat-card-title>
+          <div [class]="gridClass"  [innerHtml]="item[0]?.content?.rendered"></div>
+        </mat-card>
+      </div>
+    </div>
+  </ng-template>
+
+  <ng-template #listView>
+    <div *ngIf="(blogs$ | async) as blogs">
+      <ul class="list-view" *ngFor="let item of blogs">
+        <li [innerHtml]="item[0]?.content?.rendered"></li>
+      </ul>
+    </div>
+  </ng-template>
+
+

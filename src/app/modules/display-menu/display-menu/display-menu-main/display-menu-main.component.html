@@ -1,19 +1,22 @@
 <div   class="menu-grid" *ngIf="menus">
   <mat-card *ngIf="menus.length>0">
-    <mat-card-content>
-        <display-menu-title
-            *ngFor="let menu of menus"
-            (click)="navMenu(menu)"
-            [bucket]="bucket"
-            [styleWidth]="'100%'"
-            [styleHeight]="'100%'"
-            [backgroundImage]="menu?.logo"
-            [hideLogo]="true"
-            [styleMinWidth]="'375px'"
-            [repeat]="'no-repeat'"
-            [objectfit]="'fill'"
-            [menu]="menu">
-        </display-menu-title>
+    <mat-card-content >
+        <div class="menu-grid" >
+            <display-menu-title
+                [style.width]="gridItemWidth"
+                *ngFor="let menu of menus"
+                (click)="navMenu(menu)"
+                [bucket]="bucket"
+                [styleWidth]="'100%'"
+                [styleHeight]="'100%'"
+                [backgroundImage]="menu?.logo"
+                [hideLogo]="true"
+                [styleMinWidth]="gridItemWidth"
+                [repeat]="'no-repeat'"
+                [objectfit]="'fill'"
+                [menu]="menu">
+            </display-menu-title>
+        </div>
       </mat-card-content>
     </mat-card>
 </div>

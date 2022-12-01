@@ -172,9 +172,11 @@ export class MainfestFilterComponent implements OnInit, OnDestroy {
   }
 
   initAuthorization() {
-    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff  = this.userAuthorization.isUserAuthorized('admin, manager, employee');
-    this.isUser  = this.userAuthorization.isUserAuthorized('user');
+
+    this.isAuthorized =  this.userAuthorization.isManagement// //('admin, manager')
+    this.isStaff =  this.userAuthorization.isStaff // ('admin, manager, employee')
+    this.isUser = this.userAuthorization.isUser //
+
     if (this.isAuthorized) {
       this.showDateFilter = true;
     }

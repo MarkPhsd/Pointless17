@@ -110,9 +110,9 @@ export class EmployeeFilterPanelComponent implements OnInit, OnDestroy  {
   }
 
   initAuthorization() {
-    this.isAdmin =  this.userAuthorization.isUserAuthorized('admin')
-    this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.isAdmin =  this.userAuthorization.isAdmin//('admin')
+    this.isAuthorized =  this.userAuthorization.isUser //('admin, manager')
+    this.isStaff =  this.userAuthorization.isStaff // ('admin, manager, employee')
   }
 
   initPlatForm()  {

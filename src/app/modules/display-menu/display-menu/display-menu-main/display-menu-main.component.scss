@@ -24,20 +24,10 @@ mat-card {
 }
 
 .menu-grid {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    column-gap: 10px;
-    row-gap: 10px;
-  // --gap: 5px;
-  // margin-top: 2px;
-  // margin-right: 2px;
-  // margin-left: 10px;
-  // display: grid;
-  // gap: var(--gap);
-  // grid-template-columns: repeat( auto-fit, minmax(325px, 1fr) );
-
-  // grid-auto-flow:  dense;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 10px;
 }
 
 .title {

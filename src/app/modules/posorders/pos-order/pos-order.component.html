@@ -1,3 +1,5 @@
+<div *ngIf="(serviceType$ | async) as item"></div>
+<div *ngIf="(action$ | async) as item"></div>
 <div  *ngIf="order" class="container">
   <div [class]="orderlayout">
     <div>
@@ -6,6 +8,7 @@
         <div  class="grid-header-item"
               (resized)="onResizedorderHeightPanel($event)">
           <pos-order-transaction-data
+              [purchaseOrderEnabled]="purchaseOrderEnabled"
               [mainPanel]="mainPanel"
               [order]="order">
           </pos-order-transaction-data>
@@ -54,6 +57,7 @@
 
       <!-- height is fixed -->
       <div class="buttons-container">
+        <!-- purchasOrderEnabled{{purchasOrderEnabled}} -->
         <div *ngIf="mainPanel">
           <pos-order-function-buttons
                 (outPutSendToPrep)  ="sendToPrep()"
@@ -71,7 +75,9 @@
                 (outPutRemoveDiscount)='removeDiscount($event)'
                 (outPutRefundItem)    ='refundItem($event)'
                 (outPutRefundOrder)   ='refundOrder($event)'
+                (outPutPurchaseOrder) ="makeManifest($event)"
                 (outPutchangeTransactionType)="changeTransactionType($event)"
+                (outPutListView)="toggleListView($event)"
                 [itemsPrinted]        ="itemsPrinted"
                 [paymentsMade]        ="paymentsMade"
                 [isAuthorized]        ="isAuthorized"
@@ -80,9 +86,11 @@
                 [openBar]             ="openBar"
                 [mainPanel]           ="mainPanel"
                 [order]               ="order"
+                [purchasOrderEnabled] ="userAuthorization.isManagement"
                 [emailOption]         ="emailOption"
                 [ssmsOption]          ="ssmsOption"
                 [refundItemEnabled]   ="refundItemsAvalible"
+             
           ></pos-order-function-buttons>
         </div>
 
@@ -125,12 +133,20 @@
             *ngIf="(!smallDevice && mainPanel)
                 || (!mainPanel && smallDevice)
                 || (!mainPanel && !smallDevice)">
-      <pos-order-items
-                [mainPanel] ="mainPanel"
-                [panelHeight]="orderItemsHeightStyle"
-                [order]     ="order">
-      </pos-order-items>
+        <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div>
   </div>
 </div>
 
+<ng-template #itemViewType>
+  <pos-order-items
+    [purchaseOrderEnabled]="purchaseOrderEnabled"
+    [mainPanel]   ="mainPanel"
+    [panelHeight] ="orderItemsHeightStyle"
+    [order]       ="order">
+  </pos-order-items>
+</ng-template>
+
+<ng-template #listViewType>
+  <pos-order-item-list></pos-order-item-list>
+</ng-template>

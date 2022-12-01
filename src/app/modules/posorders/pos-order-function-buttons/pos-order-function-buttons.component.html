@@ -134,6 +134,31 @@
     </button>
   </div>
 
+  <div  *ngIf="purchasOrderEnabled && userAuthorizationService.isManagement">
+    <button mat-raised-button class="button"
+            color="primary"
+            (click)="makeManifest()">
+            <mat-icon>list</mat-icon>
+      <span>
+        Inventory Manifest
+      </span>
+    </button>
+  </div>
+
+  <div  *ngIf="userAuthorizationService.isManagement">
+    <button mat-raised-button class="button"
+            color="primary"
+            (click)="toggleListView()">
+            <mat-icon>list</mat-icon>
+      <span>
+        List View
+      </span>
+      <span *ngIf="listView">
+        Item View
+      </span>
+    </button>
+  </div>
+
   <div  *ngIf="isStaff">
     <button mat-raised-button class="button"
             color="primary"

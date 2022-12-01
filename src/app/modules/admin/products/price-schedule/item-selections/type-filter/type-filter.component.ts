@@ -183,6 +183,7 @@ export class TypeFilterComponent implements OnInit {
         cat.itemID   = parseInt( categoryID );
         cat.name     = sub.name;
         cat.quantity = 1;
+        cat.andOr    = 'And';
         this.requiredCategories.push(cat)
         this.updateItems()
         this.lastSelectedCategory = cat
@@ -213,6 +214,7 @@ export class TypeFilterComponent implements OnInit {
         item.itemID   = parseInt( brandID );
         item.name     = sub.name;
         item.quantity = 1;
+        item.andOr    = 'And';
         this.requiredBrands.push(item)
         this.updateItems()
         this.lastSelectedBrand = item

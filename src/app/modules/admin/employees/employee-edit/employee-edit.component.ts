@@ -68,8 +68,8 @@ export class EmployeeEditComponent implements OnInit {
       this.employee$ = this.employeeService.getEmployee(site, this.id)
       this.fillForm(this.id);
     }
-    this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin, manager')
-    this.isStaff      =  this.userAuthorization.isUserAuthorized('admin, manager, employee')
+    this.isAuthorized =  this.userAuthorization.isManagement //('admin, manager')
+    this.isStaff      =  this.userAuthorization.isStaff //('admin,manager, employee')
     this.initConfirmPassword()
     
   }

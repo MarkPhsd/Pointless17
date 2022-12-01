@@ -1,6 +1,6 @@
 import { Component,  Inject,  Input,  OnDestroy,  OnInit, Optional, } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { InventoryLocationsService, IInventoryLocation } from 'src/app/_services/inventory/inventory-locations.service';
 import { InventoryAssignmentService, IInventoryAssignment, Serial } from 'src/app/_services/inventory/inventory-assignment.service';
 import { ISite } from 'src/app/_interfaces/site';
@@ -81,7 +81,11 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   ngOnInit() {
     this.initSubscriptions()
 
-    this.locations$ = this.inventoryLocationsService.getLocations();
+    this.locations$ = this.inventoryLocationsService.getLocations().pipe(switchMap(data => { 
+      this.inventoryLocations = data;
+      return of(data)
+    }))
+
     this.inventoryLocations$ = this.locations$;
     this.site =  this.siteService.getAssignedSite();
     this.inputForm = this.fbInventory.initForm(this.inputForm)
@@ -132,6 +136,7 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         const packageQuantity = this.inputForm.controls['packageQuantity'].value
         const baseQuantity = { baseQuantity: packageQuantity}
         this.inputForm.patchValue(baseQuantity)
+        
         if (this.id != 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.editInventory(this.site,this.item.id, item)
@@ -141,8 +146,9 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
         if (this.id == 0) {
           let item = this.inventoryAssignmentService.setItemValues(this.inputForm, this.item)
           const item$ = this.inventoryAssignmentService.addInventoryItem(this.site, this.item)
-          this.updateInventory(item$,exit)
+          this.updateInventory(item$, exit)
         }
+
       }
     }
   }
@@ -163,7 +169,6 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
       this.notifyEvent('Inventory info updated.', 'Success')
       return
     } 
-    // console.log('updateitem failed')
     this.notifyEvent('Inventory info not  updated.', 'failed')
     return  false
   }
@@ -211,12 +216,14 @@ export class AddInventoryItemComponent implements OnInit, OnDestroy    {
   }
 
   getLocationAssignment(id): IInventoryLocation {
-    const item =  this.inventoryLocations.find(data => id == data.id  )
-    if (item) {
-      this.inputForm.patchValue({locationID: item.id, location: item.name})
-      return item
+    if (this.inventoryLocations) {
+      const item =  this.inventoryLocations.find(data => id == data.id  )
+      if (item) {
+        this.inputForm.patchValue( {locationID: item.id, location: item.name })
+        return item
+      }
+      return null
     }
-    return null
   }
 
   onCancel(event, openEditor) {

@@ -9,6 +9,7 @@ import { OrdersService } from 'src/app/_services';
 import { IPaymentMethod } from 'src/app/_services/transactions/payment-methods.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { ChangeDueComponent } from '../balance-due/balance-due.component';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'new-order-type',
@@ -32,11 +33,19 @@ export class NewOrderTypeComponent  {
               public orderService      : OrdersService,
               private snackBar          : MatSnackBar,
               private _bottomSheet      : MatBottomSheet,
+              private userAuthorizationService: UserAuthorizationService,
               @Optional() private dialogRef  : MatDialogRef<ChangeDueComponent>,
               )
   {
     const site = this.siteService.getAssignedSite();
-    this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
+
+    if (this.userAuthorizationService.isManagement) { 
+      this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site)
+    }
+    if (!this.userAuthorizationService.isManagement) { 
+      this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
+    }
+
   }
 
   onCancel() {
@@ -84,6 +93,10 @@ export class NewOrderTypeComponent  {
 
   changeOrderType(event) {
     const site = this.siteService.getAssignedSite();
+
+    if (event && event.filterType && event.filterType != 0 ) { 
+      this.updateItems = true;
+    }
     const item$ = this.orderService.changeOrderType(site, this.orderService.currentOrder.id, event.id, this.updateItems)
     this.process$ = item$.pipe(
       switchMap(data => {

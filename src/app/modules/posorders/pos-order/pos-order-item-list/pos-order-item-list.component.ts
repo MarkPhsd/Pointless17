@@ -1,12 +1,12 @@
 import { Component, Output, OnInit,
-         ViewChild ,ElementRef, EventEmitter,
-         OnDestroy, QueryList, ViewChildren, Input, HostListener } from '@angular/core';
+  ViewChild ,ElementRef, EventEmitter,
+  OnDestroy, QueryList, ViewChildren, Input, HostListener, TemplateRef } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AWSBucketService, OrdersService, POSOrdersPaged} from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FormGroup } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
-import { Observable, Subject ,Subscription } from 'rxjs';
+import { Observable, of, Subject ,Subscription } from 'rxjs';
 import { AgGridFormatingService } from 'src/app/_components/_aggrid/ag-grid-formating.service';
 // import { GridAlignColumnsDirective } from '@angular/flex-layout/grid/typings/align-columns/align-columns';
 import { IGetRowsParams,  GridApi } from 'ag-grid-community';
@@ -14,19 +14,21 @@ import "ag-grid-community/dist/styles/ag-grid.css";
 import "ag-grid-community/dist/styles/ag-theme-alpine.css";
 import { ButtonRendererComponent } from 'src/app/_components/btn-renderer.component';
 import { AgGridService } from 'src/app/_services/system/ag-grid-service';
-import { IPOSOrder, IPOSOrderSearchModel } from 'src/app/_interfaces';
+import { IPOSOrder, IPOSOrderSearchModel, PosOrderItem } from 'src/app/_interfaces';
 import 'ag-grid-community/dist/styles/ag-theme-material.css';
 import { Capacitor } from '@capacitor/core';
 import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { DatePipe } from '@angular/common';
+import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
+import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 
 @Component({
-  selector: 'app-orders-list',
-  templateUrl: './orders-list.component.html',
-  styleUrls: ['./orders-list.component.scss']
+  selector: 'pos-order-item-list',
+  templateUrl: './pos-order-item-list.component.html',
+  styleUrls: ['./pos-order-item-list.component.scss']
 })
-export class OrdersListComponent implements OnInit,OnDestroy {
+export class PosOrderItemListComponent  implements OnInit,OnDestroy {
 
   @ViewChild('nextPage', {read: ElementRef, static:false}) elementView: ElementRef;
   // @ViewChild('scrollframe', {static: false}) scrollFrame: ElementRef;
@@ -36,28 +38,18 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //search with debounce: also requires AfterViewInit()
   // @ViewChild('input', {static: true}) input: ElementRef;
   @Output() itemSelect  = new EventEmitter();
-
-  searchPhrase:         Subject<any> = new Subject();
-  // get itemName() { return this.searchForm.get("itemName") as FormControl;}
-  private readonly onDestroy = new Subject<void>();
-
-  // //search with debounce
-  searchItems$              : Subject<IPOSOrderSearchModel[]> = new Subject();
-  _searchItems$ = this.searchPhrase.pipe(
-    debounceTime(250),
-      distinctUntilChanged(),
-      switchMap(searchPhrase =>
-        this.refreshSearch()
-    )
-  )
-
+ 
+  _order: Subscription;
+  order: IPOSOrder;
+  
   get platForm()         {  return Capacitor.getPlatform(); }
   get PaginationPageSize(): number {return this.pageSize;  }
-  get gridAPI(): GridApi {  return this.gridApi;  }
+  // get gridAPI(): GridApi {  return this.gridApi;  }
+  private gridApi      : GridApi;
 
+  action$: Observable<any>;
   //AgGrid
   params               : any;
-  private gridApi      : GridApi;
   // private gridColumnApi: GridAlignColumnsDirective;
   gridOptions          : any
   urlPath              : string;
@@ -90,10 +82,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
 
   isAuthorized   : boolean;
 
-  _searchModel   : Subscription;
-  searchModel    : IPOSOrderSearchModel;
-
-  // _posOrders     : Subscription;
   posOrders      : IPOSOrder[];
   posOrder       : IPOSOrder;
   id             : number;
@@ -123,23 +111,18 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       clientID = this.userAuthorization.user.id;
     }
 
-    this._searchModel = this.orderService.posSearchModel$.subscribe( data => {
-        this.searchModel            = data
-        if (!this.searchModel) {
-          const searchModel       = {} as IPOSOrderSearchModel;
-          this.currentPage        = 1
-          searchModel.pageNumber  = 1;
-          searchModel.pageSize    = 50;
-          this.searchModel        = searchModel
-        }
-        if (clientID) {
-          this.searchModel.clientID = clientID;
-          this.searchModel.suspendedOrder = 0;
-        }
-        this.refreshSearch()
-        return
-      }
-    )
+    this.currentOrderSusbcriber();
+  }
+
+  currentOrderSusbcriber() {
+    this._order = this.orderService.currentOrder$.subscribe(
+      data => {
+      this.order = data
+      this.refreshSearch()
+      console.log('pos', data.posOrderItems)
+      return of(data.posOrderItems)
+    })
+
   }
 
   constructor(  private _snackBar               : MatSnackBar,
@@ -151,6 +134,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
                 private _bottomSheet            : MatBottomSheet,
                 private readonly datePipe       : DatePipe,
                 private orderService            : OrdersService,
+                private posOrderItemService    : POSOrderItemServiceService,
               )
   {
   }
@@ -165,8 +149,8 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   };
 
   ngOnDestroy(): void {
-    if (this._searchModel) {
-      this._searchModel.unsubscribe()
+    if (this._order) {
+      this._order.unsubscribe()
     }
     if (this._menuBar) {
       this._menuBar.unsubscribe()
@@ -175,7 +159,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   }
 
   initAuthorization() {
-    this.isAuthorized = this.userAuthorization.isManagement //('admin, manager')
+    this.isAuthorized = this.userAuthorization.isUserAuthorized('admin,manager')
   }
 
   initClasses()  {
@@ -192,7 +176,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   }
 
   @HostListener("window:resize", [])
-    updateItemsPerPage() {
+  updateItemsPerPage() {
       this.smallDevice = false
       if (window.innerWidth < 768) {
         this.smallDevice = true
@@ -200,8 +184,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       this.initClasses();
   }
 
-  //ag-grid
-  //standard formating for ag-grid.
+  //ag-grid standard formating for ag-grid.
   //requires addjustment of column defs, other sections can be left the same.
   initAgGrid(pageSize: number) {
     this.frameworkComponents = {
@@ -211,86 +194,71 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       flex: 2,
       // minWidth: 100,
     };
-    this.columnDefs =  [
-      {
-      field: 'id',
-      cellRenderer: "btnCellRenderer",
-                    cellRendererParams: {
-                        label: 'Edit',
-                        getLabelFunction: this.getLabel.bind(this),
-                        btnClass: 'btn btn-primary btn-sm'
-                      },
-                      minWidth: 125,
-                      maxWidth: 125,
-                      flex: 2,
-      },
-      {headerName: 'ID',     field: 'id',         sortable: true,
+    
+    let  columnDefs =  [];
+
+    let column = {
+          headerName: 'ID',     field: 'id',         
+          sortable: true,
           width   : 100,
           minWidth: 100,
           maxWidth: 100,
           flex    : 2,
-      },
-      {headerName: 'Date',     field: 'orderDate', sortable: true,
-          cellRenderer: this.agGridService.dateCellRendererUSD,
-          width   : 150,
-          minWidth: 150,
-          maxWidth: 150,
+          hide: true,
+    }
+    columnDefs.push(column);
+
+    let textColumn = {headerName: 'Name',   field: 'productName', 
+              sortable: true,
+              width   : 225,
+              minWidth: 225,
+              flex    : 2,
+    }
+    columnDefs.push(textColumn);
+
+    let nextColumn =  {headerName: 'Quantity',     field: 'quantity', 
+          sortable: true,
+          width   : 100,
+          minWidth: 100,
+          maxWidth: 100,
           flex    : 2,
-      },
-      {headerName: 'Completed',     field: 'completionDate', sortable: true,
-          cellRenderer: this.agGridService.dateCellRendererUSD,
-          width   : 150,
-          minWidth: 150,
-          maxWidth: 150,
-          flex    : 2,
-      },
-      {headerName: 'Total',     field: 'total',         sortable: true,
-                   cellRenderer: this.agGridService.currencyCellRendererUSD,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 150,
-                  flex    : 1,
-      },
-      {headerName: 'Tax',    field: 'taxTotal', sortable: true,
-                  cellRenderer: this.agGridService.currencyCellRendererUSD,
-                  width   : 100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  // flex: 2,
-      },
-      {headerName: 'Items',    field: 'itemCount', sortable: true,
-            width   : 100,
-            minWidth: 100,
-            maxWidth: 100,
-            // flex: 2,
-      },
-      {headerName: 'Customer',  field: 'customerName',      sortable: true,
-                  width: 100,
-                  minWidth: 100,
-                  maxWidth: 100,
-                  // flex: 1,
-      },
-      {headerName: 'Type',    field: 'serviceType', sortable: true,
-            width   : 100,
-            minWidth: 100,
-            maxWidth: 100,
-            // flex: 2,
-      },
-      //
-      {headerName: 'Employee', field: 'employee',     sortable: true,
-            width   : 150,
-            minWidth: 150,
-            maxWidth: 150,
-            flex: 2,
-      },
-      {headerName: 'History', field: 'history', sortable: true,
-            visible : false,
-            width   : 0,
-            minWidth: 0,
-            maxWidth: 0,
-            // flex: 2,
-        },
-    ]
+          editable: true,
+          singleClickEdit: true
+    }
+    columnDefs.push(nextColumn);
+
+    let currencyColumn = {headerName: 'Price',     field: 'unitPrice', sortable: true,
+                    cellRenderer: this.agGridService.currencyCellRendererUSD,
+                    width   : 100,
+                    minWidth: 100,
+                    maxWidth: 150,
+                    flex    : 1,
+                    editable: true,
+                    singleClickEdit: true
+                  }
+    columnDefs.push(currencyColumn);
+
+    currencyColumn = {headerName: 'Cost',     field: 'wholeSale', sortable: true,
+        cellRenderer: this.agGridService.currencyCellRendererUSD,
+        width   : 100,
+        minWidth: 100,
+        maxWidth: 150,
+        flex    : 1,
+        editable: true,
+        singleClickEdit: true
+    }
+    columnDefs.push(currencyColumn);
+
+    let currencyTotalColumn = {headerName: 'Total',    field: 'total', sortable: true,
+                cellRenderer: this.agGridService.currencyCellRendererUSD,
+                width   : 100,
+                minWidth: 100,
+                maxWidth: 100,
+                flex: 2,
+    }
+    columnDefs.push(currencyTotalColumn);
+
+    this.columnDefs = columnDefs;
     this.gridOptions = this.agGridFormatingService.initGridOptions(pageSize, this.columnDefs);
   }
 
@@ -305,26 +273,17 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   //initialize filter each time before getting data.
   //the filter fields are stored as variables not as an object since forms
   //and other things are required per grid.
-  initSearchModel(): IPOSOrderSearchModel {
-    let searchModel        = {} as IPOSOrderSearchModel;
-    if (this.searchModel) { searchModel = this.searchModel }
-    searchModel.pageSize   = this.pageSize
-    searchModel.pageNumber = this.currentPage
-    return searchModel
-  }
 
   refreshSearchAny(event) {
     this.refreshSearch();
   }
 
-  refreshSearch(): Observable<IPOSOrderSearchModel> {
+  refreshSearch() {
     if (this.params) {
       this.params.startRow     = 1;
-      this.params.endRow       = this.pageSize;
+      this.params.endRow       = 500;
     }
-
     this.onGridReady(this.params)
-    return this._searchItems$
   }
 
   //this doesn't change the page, but updates the properties for getting data from the server.
@@ -338,78 +297,40 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   }
 
   //ag-grid standard method
-  getRowData(params, startRow: number, endRow: number):  Observable<POSOrdersPaged>  {
+  getRowData(params, startRow: number, endRow: number):  Observable<PosOrderItem[]>  {
     this.currentPage          = this.setCurrentPage(startRow, endRow)
-    const searchModel         = this.initSearchModel();
     const site                = this.siteService.getAssignedSite()
-    // console.log('searchModel get row data', searchModel)
-    return this.orderService.getOrderBySearchPaged(site, searchModel)
+    return of(this.order.posOrderItems)
   }
 
   //ag-grid standard method
   async onGridReady(params: any) {
-    if (params == undefined) { return }
-    if (params)  {
-      this.params  = params
-      this.gridApi = params.api;
-      params.api.sizeColumnsToFit();
+
+    console.log('calling params', params);
+    if (!params) { return };
+
+    this.params = params;
+    params.startRow = 1;
+    params.endRow = 1000;
+
+    // console.log(this.order.posOrderItems);
+
+    if (!this.order || !this.order.posOrderItems)   { 
+      console.log('exiting')
+      return
     }
-    if (!params.startRow ||  !params.endRow) {
-      params.startRow = 1
-      params.endRow = this.pageSize;
-    }
+
     let datasource =  {
       getRows: (params: IGetRowsParams) => {
-      const items$ =  this.getRowData(params, params.startRow, params.endRow)
-      this.message = '...loading'
-      items$.subscribe(data =>
-        {
-            if (!data || !data.paging) { return }
-            const resp         =  data.paging
-            if (resp) {
-              this.isfirstpage   = resp.isFirstPage
-              this.islastpage    = resp.isFirstPage
-              this.currentPage   = resp.currentPage
-              this.numberOfPages = resp.pageCount
-              this.recordCount   = resp.recordCount
-              if (this.numberOfPages !=0 && this.numberOfPages) {
-                this.value = ((this.currentPage / this.numberOfPages ) * 100).toFixed(0)
-              }
-            }
-            this.message = ''
-            if (data.results) {
-              //not applicable to all lists, but leave for ease of use.
-              let results  =  this.refreshImages(data.results)
-              params.successCallback(results)
-              this.rowData = results
-            }
-          }
-        );
+        params.successCallback(this.order.posOrderItems)
       }
-    };
-
-    if (!datasource)   { return }
-    if (!this.gridApi) { return }
-    this.gridApi.setDatasource(datasource);
-    this.autoSizeAll(true)
-  }
-
-  //not called on all lists, but leave for functional use.
-  refreshImages(data) {
-    const urlPath = this.urlPath
-    if (urlPath) {
-      data.forEach( item =>
-        {
-          if (item.urlImageMain) {
-            const list = item.urlImageMain.split(',')
-            if (list[0]) {
-              item.imageName = `${urlPath}${list[0]}`
-            }
-          }
-        }
-      )
     }
-    return data;
+
+    params.api.setDatasource(datasource);
+    this.autoSizeAll(true)
+    this.gridApi = params.api 
+    if (!this.gridApi) { return }
+
   }
 
   //search method for debounce on form field
@@ -422,8 +343,42 @@ export class OrdersListComponent implements OnInit,OnDestroy {
   selectItem(search){
     if (search) {
       this.currentPage = 1
-      this.searchPhrase.next(search)
+      // this.searchPhrase.next(search)
     }
+  }
+
+  cellValueChanged(event) {
+    console.log(event.column)
+    const colName = event?.column?.colId
+    
+    console.log(colName)
+    console.log(event.data)
+    const item = event.data as PosOrderItem
+
+    if (colName === 'unitPrice') {
+      item.unitPrice = event.value;
+    }
+    if (colName === 'quantity') {
+      item.quantity = event.value;
+    }
+    if (colName === 'wholeSale') {
+      item.wholeSale = event.wholeSale;
+    }
+
+    this.action$ = this.updateValues(item)
+  }
+
+  updateValues(item: PosOrderItem) {
+    const site = this.siteService.getAssignedSite();
+    return this.posOrderItemService.changeItemValues(site, item ).pipe(
+      switchMap(data => {
+        if (data) { 
+          this.orderService.updateOrderSubscription(data)
+          return of(data)
+        }
+        return of(null)
+      })
+    )
   }
 
   onSelectionChanged(event) {
@@ -451,7 +406,7 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       const item = selectedRows[0];
       this.id = item.id;
       const history = item.history
-      this.editItemWithId(item)
+      // this.editItemWithId(item)
     }
   }
 
@@ -465,14 +420,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
     }
   }
 
-  async editItemWithId(order:any) {
-    this.setActiveOrder(order)
-  }
-
-  async getItemHistory(id: any) {
-    const site = this.siteService.getAssignedSite();
-  }
-
   onExportToCsv() {
     this.gridApi.exportDataAsCsv();
   }
@@ -483,15 +430,6 @@ export class OrdersListComponent implements OnInit,OnDestroy {
       else return 'Edit';
   }
 
-  setActiveOrder(order) {
-    const site  = this.siteService.getAssignedSite();
-    const order$ =  this.orderService.getOrder(site, order.id, order.history )
-    order$.subscribe(data =>
-      {
-        this.orderService.setActiveOrder(site, data)
-      }
-    )
-  }
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

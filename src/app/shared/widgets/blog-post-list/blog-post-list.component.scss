@@ -31,7 +31,17 @@ margin: 0px;
   list-style: none;
 }
 
-.gridClass {
+.gridClass,.grid-class {
   max-width: 300px;
   // height: 300px;
+  padding: 5px;
+}
+
+
+.cards {
+  padding: 5px;
+}
+
+li { 
+  padding: 5px;
 }

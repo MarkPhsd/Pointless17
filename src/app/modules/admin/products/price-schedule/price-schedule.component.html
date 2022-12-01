@@ -1,4 +1,4 @@
-
+<div *ngIf="(schedule$ | async) as schedule"></div>
 <div *ngIf="priceSchedule && !saveNotification; else loading">
   <div class="container"
        *ngIf="priceSchedule; loading">
@@ -33,7 +33,7 @@
               <mat-tab-group>
                   <div class="tab-group-grid">
                     <div>
-                        <mat-tab label="Name & Type">
+                      <mat-tab label="Name & Type">
                         <mat-card>
                           <app-discount-options
                               [inputForm]="inputForm">
@@ -65,21 +65,29 @@
                         <app-reward-type-filter
                           [inputForm]="inputForm"
                           [item]     ="priceSchedule">
+                          
                         </app-reward-type-filter>
                       </mat-tab>
                     </div>
 
                     <div class="value-field"  *ngIf="inputForm.controls['type'].value !=  'Menu List'">
                       <mat-tab label="Offers and Rewards">
+            
                          <div class="value-field" *ngIf="inputForm.controls['type'].value === 'Percent Off' ||
                                                          inputForm.controls['type'].value === 'Item % Off' ||
                                                          inputForm.controls['type'].value === 'Order % Off' ||
                                                          inputForm.controls['type'].value === 'Item $ Off'  ||
+                                                         inputForm.controls['type'].value === 'Quantity Off'  ||
                                                          inputForm.controls['type'].value === 'Money Off'
                                                          ">
                             <div *ngIf="inputForm.controls['type'].value === 'Item % Off'">
                               <mat-label>Enter percentage as whole number</mat-label>
                             </div>
+                            
+                            <div *ngIf="inputForm.controls['type'].value === 'Quantity Off' ">
+                              <mat-label>Enter Quantity to Discount</mat-label>
+                            </div>
+
                             <div *ngIf="inputForm.controls['type'].value === 'Order % Off'">
                               <mat-label>Enter percentage as whole number</mat-label>
                             </div>
@@ -92,23 +100,21 @@
                             <app-value-fields
                               [fieldType]="'text'"
                               [inputForm]="inputForm"
-                              [fieldName]="'value'"
-                            >
+                              [fieldName]="'value'">
                               Value
-                          </app-value-fields>
+                            </app-value-fields>
                         </div>
+
                          <div *ngIf="inputForm.controls['type'].value &&
-                                     inputForm.controls['type'].value != 'Money Off' &&
-                                     inputForm.controls['type'].value != 'Percent Off'
+                                     inputForm.controls['type'].value === 'Free Item Off'
                                     ">
-                          <!-- <app-reward-type-filter
-                            [inputForm]="inputForm"
-                            [item]     ="priceSchedule">
-                          </app-reward-type-filter> -->
+                            <app-reward-type-filter
+                              [inputForm]="inputForm"
+                              [item]     ="priceSchedule">
+                              Info
+                            </app-reward-type-filter>
                         </div>
-
-
-
+                      
                       </mat-tab>
                     </div>
 

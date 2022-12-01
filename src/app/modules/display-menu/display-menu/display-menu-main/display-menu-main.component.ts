@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 import { DisplayMenuService } from 'src/app/_services/menu/display-menu.service';
 import {Observable, of, switchMap} from 'rxjs';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -16,8 +16,8 @@ export class DisplayMenuMainComponent implements OnInit {
   bucket  : string;
   placeHolderImage   : String = this.awsBucket.getPlaceHolderImage()
   menus: IDisplayMenu[];
-
-  xstyle = ''
+  @Input() gridItemWidth = '100%'
+  style = ''
 
   constructor(
     private displayMenuService: DisplayMenuService,

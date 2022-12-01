@@ -136,7 +136,7 @@ export interface IPriceSchedule {
   requiredBrands:     DiscountInfo[];
   requiredItemTypes:  DiscountInfo[];
   requiredItems:      DiscountInfo[];
-
+  orderTotal: number;
   showMetaTags: boolean;
   showCBD: boolean;
   showTCH: boolean;

@@ -107,6 +107,7 @@ export class RewardTypeFilterComponent  implements OnInit {
       this._priceSchedule.unsubscribe();
     }
   }
+
   isItemToggled(item) {
 
     if (item.id == undefined || !this.lastSelectedItemType)  { return false}
@@ -137,43 +138,61 @@ export class RewardTypeFilterComponent  implements OnInit {
 
   }
 
+  getIndex(item) { 
+    if (!this.itemTypeDiscounts) { 
+      this.itemTypeDiscounts = []
+      return 0
+    }
+    return this.itemTypeDiscounts.findIndex(data => data.itemID == item.id)
+  }
   addItemType(item) {
     console.log(item)
-    if (item && item.id != undefined) {
-      const index = this.itemTypeDiscounts.findIndex(data => data.itemID == item.id)
-      if (index == -1){
-        const mainType            = {} as DiscountInfo;
-        mainType.itemID           =  item.id;
-        mainType.name             =  item.name;
-        mainType.quantity         =  1;
-        this.itemTypeDiscounts.push(mainType);
-        this.updateItems();
-        this.lastSelectedItemType = mainType;
-      } else {
-        this.itemTypeDiscounts.splice(index, 1);
-        this.updateItems();
-        this.lastSelectedItemType  = null
-      }
+    if (!item) { return } 
+
+    console.log('this happened')
+    const index = this.getIndex(item)
+    console.log(item , index)
+
+    if (!this.itemTypeDiscounts) { this.itemTypeDiscounts = [] }
+    if (index == -1){
+      const mainType            = {} as DiscountInfo;
+      mainType.itemID           =  item.id;
+      mainType.name             =  item.name;
+      mainType.quantity         =  1;
+      mainType.andOr            =  "OR";
+      
+      this.itemTypeDiscounts.push(mainType);
+      this.updateItems();
+      this.lastSelectedItemType = mainType;
+    } else {
+      this.itemTypeDiscounts.splice(index, 1);
+      this.updateItems();
+      this.lastSelectedItemType  = null
     }
+   
   }
 
   addCategory(sub) {
+
     this.lastSelectedCategory = null
     if (sub) {
       let categoryID = '';
       if (sub.categoryID == undefined) { categoryID = sub.itemID}
       if (sub.categoryID != undefined) { categoryID = sub.categoryID}
+      if (!this.categoriesDiscounts) { this.categoriesDiscounts = []}
       const array = this.categoriesDiscounts
+      
       const index = array.findIndex( data =>   data.itemID === parseInt( categoryID ))
 
       if (index == -1){
-        const cat    = {} as DiscountInfo;
-        cat.itemID   = parseInt( categoryID );
-        cat.name     = sub.name;
-        cat.quantity = 1;
-        this.categoriesDiscounts.push(cat)
+        const item    = {} as DiscountInfo;
+        item.itemID   = parseInt( categoryID );
+        item.name     = sub.name;
+        item.quantity = 1;
+        item.andOr            =  "OR";
+        this.categoriesDiscounts.push(item)
         this.updateItems()
-        this.lastSelectedCategory = cat
+        this.lastSelectedCategory = item
       }
 
       if (index != -1){
@@ -188,6 +207,7 @@ export class RewardTypeFilterComponent  implements OnInit {
     this.lastSelectedBrand = null
     if (sub) {
       const brandID = sub.id
+      if (!this.brandsDiscounts) { this.brandsDiscounts = []}
       const array = this.brandsDiscounts
       const index = array.findIndex( data =>   data.itemID === parseInt( brandID ))
 
@@ -196,6 +216,7 @@ export class RewardTypeFilterComponent  implements OnInit {
         item.itemID   = parseInt( brandID );
         item.name     = sub.name;
         item.quantity = 1;
+        item.andOr     =  "OR";
         this.brandsDiscounts.push(item)
         this.updateItems()
         this.lastSelectedBrand = item
@@ -228,7 +249,7 @@ export class RewardTypeFilterComponent  implements OnInit {
 
   toggleItemTypeSelected(item: IItemType) {
 
-    console.log('toggleItemTypeSelected')
+    // console.log('toggleItemTypeSelected')
     this.lastSelectedItemType = null
 
     if (!item) {return}
@@ -239,12 +260,13 @@ export class RewardTypeFilterComponent  implements OnInit {
     const index = array.findIndex( data => data.itemID == item.id );
 
     if (index == -1){
-      const mainType       = {} as DiscountInfo;
-      mainType.itemID      =  item.id;
-      mainType.name        =  item.name;
-      mainType.quantity    =  1
-      // this.requiredItemTypes.push(mainType);
-      this.lastSelectedItemType = mainType;
+      const item       = {} as DiscountInfo;
+      item.itemID      =  item.id;
+      item.name        =  item.name;
+      item.quantity    =  1
+      item.andOr       = "OR"
+      this.itemTypeDiscounts.push(item);
+      this.lastSelectedItemType = item;
     } else {
       this.lastSelectedItemType = null
       // this.requiredItemTypes.splice(index, 1);
@@ -253,7 +275,6 @@ export class RewardTypeFilterComponent  implements OnInit {
     //make sure only unique items are being added. no dupes.
     const unique           = [...new Map(this.itemTypeDiscounts.map(item => [item['itemID'], item])).values()]
     this.itemTypeDiscounts = unique;
-
   }
 
   toggleCategory(item) {

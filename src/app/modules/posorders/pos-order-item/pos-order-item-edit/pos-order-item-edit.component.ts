@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Output, } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output, } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -15,6 +15,7 @@ import { IonItem } from '@ionic/angular';
 })
 export class PosOrderItemEditComponent  {
 
+  @Input() purchaseOrderEnabled: boolean;
   @Output() closeOnEnterPress = new EventEmitter();
   inputForm   : FormGroup;
   posOrderItem: PosOrderItem;
@@ -23,8 +24,8 @@ export class PosOrderItemEditComponent  {
   menuItem    : IMenuItem;
   decimals    = 2;
   requireWholeNumber: boolean;
-
   inputTypeValue = 'decimal'
+  
   constructor(
       private posOrderItemService : POSOrderItemServiceService,
       private orderService        : OrdersService,
@@ -70,6 +71,13 @@ export class PosOrderItemEditComponent  {
       if (this.editField == 'quantity') {
         this.inputForm = this._fb.group({
           quantity: [this.posOrderItem.quantity],
+          itemName: [],
+        })
+      }
+
+      if (this.editField == 'wholeSale') {
+        this.inputForm = this._fb.group({
+          wholeSale: [this.posOrderItem.wholeSale],
           itemName: [],
         })
       }
@@ -126,6 +134,12 @@ export class PosOrderItemEditComponent  {
     this.save()
   }
 
+  saveCostChange(event) { 
+    const item = this.getItemValue();
+    item.wholeSale = event;
+    this.save()
+  }
+
   save() {
     if (this.posOrderItem) {
       const site = this.siteService.getAssignedSite();
@@ -138,6 +152,21 @@ export class PosOrderItemEditComponent  {
         }
 
        if (this.editField == 'price') {
+          if (item) {
+            this.posOrderItemService.changeItemPrice(site, item).subscribe( data => {
+              if (data) {
+                if (data.resultMessage) {
+                  this.siteService.notify(data.resultMessage, 'Alert', 1500)
+                }
+              }
+              this.orderService.updateOrderSubscription(data)
+              this.onCancel();
+            })
+          }
+          return
+        }
+
+        if (this.editField == 'wholeSale') {
           if (item) {
             this.posOrderItemService.changeItemPrice(site, item).subscribe( data => {
               if (data) {

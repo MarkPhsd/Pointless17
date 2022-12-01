@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { tap } from 'rxjs/operators';
 import { IServiceType } from '../_interfaces';
 import { SitesService } from '../_services/reporting/sites.service';
@@ -21,7 +21,7 @@ export class FbServiceTypeService {
     // const serializedDate = new Date(user?.dob)
          fb = this._fb.group({
             id:                    [''], //
-            name:                  [''], //
+            name:                  ['', [Validators.required, Validators.maxLength(25)]], //
             positiveNegative:      [''], //number;
             isRegisterTransaction: [''], //boolean;
             taxItems:              [''], //boolean;
@@ -42,12 +42,13 @@ export class FbServiceTypeService {
             apiOrder:              [''], // number;
             onlineOrder:           [''], //string;
             description:           [''],
-            instructions         : [''],
-            deliveryService      : [''],
-            promptScheduleTime   : [''],
-            orderMinimumTotal    : [''],
-            scheduleInstructions: [''],
-            shippingInstructions: [''],
+            instructions          : [''],
+            deliveryService       : [''],
+            promptScheduleTime    : [''],
+            orderMinimumTotal     : [''],
+            scheduleInstructions  : [''],
+            shippingInstructions  : [''],
+            filterType            : [''],
           }
         )
         return fb

@@ -12,6 +12,7 @@ export class PosOrderTransactionDataComponent{
 
   @Input() order    : IPOSOrder;
   @Input() mainPanel: boolean;
+  @Input() purchaseOrderEnabled: boolean;
   isAuthorized      : boolean;
   isUserStaff       : boolean;
 
