@@ -168,6 +168,7 @@ import { PriceScheduleMenuListComponent } from '../modules/priceSchedule/price-s
 import { BlogPostListComponent } from './widgets/blog-post-list/blog-post-list.component';
 import { BlogPostComponent } from './widgets/blog-post/blog-post.component';
 import { TagChipsProductsComponent } from '../modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
+import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/cash-drawer-settings/cash-drawer-settings.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -205,6 +206,7 @@ import { TagChipsProductsComponent } from '../modules/admin/products/productedit
     DisableControlDirective,
     DisplayMenuMenuComponent,
     CashValueCalcComponent,
+    CashDrawerSettingsComponent,
     CardComponent,
     CardDashboardComponent,
     CompanyInfoHeaderComponent,
@@ -277,6 +279,7 @@ import { TagChipsProductsComponent } from '../modules/admin/products/productedit
     PieComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,
+
     IonicSwipeToDeleteComponent,
     PosOrderFunctionButtonsComponent,
     PosOrderTransactionDataComponent,
@@ -386,6 +389,7 @@ import { TagChipsProductsComponent } from '../modules/admin/products/productedit
     ButtonRendererComponent,
     BtBlueToothScannerComponent,
     BtPOSPrinterComponent,
+    CashDrawerSettingsComponent,
     CallUsSelectorComponent,
     CardComponent,
     CardDashboardComponent,
@@ -461,6 +465,7 @@ import { TagChipsProductsComponent } from '../modules/admin/products/productedit
     PrinterLocationSelectionComponent,
     PrinterLocationsComponent,
     PriceScheduleMenuListComponent,
+
     ProfileMedInfoComponent,
     PaymentReportComponent,
     PosOrderItemComponent,

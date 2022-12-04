@@ -410,7 +410,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (user && user.errorMessage) {
               this.notifyEvent(user.errorMessage, 'Failed Login');
               return of('failed')
-              return of(user);
             }
 
             if (user) {
@@ -451,12 +450,14 @@ export class LoginComponent implements OnInit, OnDestroy {
                   try {
                     this.dialogRef.close();
                   } catch (error) {
+                    return of('error')
                   }
                 }
                 return of('success')
               }
-
+              
             }
+            return of('error')
           }
         // ,
         // error: error => {

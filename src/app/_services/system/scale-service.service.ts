@@ -49,16 +49,16 @@ export class ScaleService  {
   readScaleEvent() {
     try {
       const scaleSetup = this.getScaleSetup()
-      console.log('scale setup', scaleSetup, this.platformService.isAppElectron)
+      // console.log('scale setup', scaleSetup, this.platformService.isAppElectron)
       if (!scaleSetup || !scaleSetup.enabled) { return }
-      console.log('active')
+      // console.log('active')
       if (this.platformService.isAppElectron) {
 
-        console.log('electron ')
+        // console.log('electron ')
         this.electronService.ipcRenderer.on('scaleInfo', (event, args) =>
 
           {
-            console.log('events', event, args)
+            // console.log('events', event, args)
             const info         = {} as ScaleInfo;
             info.value         = this.getScaleWeighFormat(args.weight, scaleSetup.decimalPlaces);
             info.type          = args.type;
@@ -66,7 +66,7 @@ export class ScaleService  {
             info.scaleStatus   = args.status;
             info.valueToDivide = args.valueToDivide
 
-            console.log('scale info', info)
+            // console.log('scale info', info)
             this.updateSubscription(info)
           },
         );

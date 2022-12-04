@@ -227,8 +227,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.showEdit = !item.printed && (this.quantity && !item.voidReason) &&  item.promptGroupID != 0 && item.id != item.idRef
     this.showView = this.mainPanel && ( (  item.promptGroupID === 0) || ( item.promptGroupID != 0 && item.id != item.idRef ) )
     this.promptOption = (item.promptGroupID != undefined && item.promptGroupID != 0)
-
     this.updateCardStyle(this.mainPanel)
+    this.refreshSidePanel()
   }
 
   initEdit() { 
@@ -286,7 +286,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     if (!result) { 
       this.destroyEdit()
     }
-    
   }
 
   preventUnAssigned() { 
@@ -360,7 +359,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
           requireWholeNumber = this.menuItem.itemType.requireWholeNumber
         }
 
-        console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
+        // console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
 
         const item = {orderItem: this.orderItem,
                       editField: editField,
@@ -410,6 +409,12 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   refreshSidePanel() {
+
+    this.gridItems = 'grid-items';
+    if (this.mainPanel) {
+      this.gridItems ='grid-items-main-panel'
+    }
+
     if (this.sidePanelWidth == undefined) { return }
       if (this.sidePanelWidth < 200 || this.mainPanel ) {
         this.isNotInSidePanel = false
@@ -422,11 +427,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
       if (this.onlineShortDescription) {
       this.onlineShortDescription =  this.truncateTextPipe.transform(this.onlineShortDescription.replace(/<[^>]+>/g, ''), 200)
-    }
-
-    this.gridItems = 'grid-items';
-    if (this.mainPanel) {
-      this.gridItems ='grid-items-main-panel'
     }
 
   }

@@ -145,6 +145,7 @@ const routes: Routes = [
 
     //'qr-order
     { path: 'qr-order-table',  component: QRCodeTableComponent, data: { title: 'Order Table', animation: 'isLeft'} },
+    { path: 'qr-receipt',  component: QRCodeTableComponent, data: { title: 'Order', animation: 'isLeft'} },
 
     {path: '', component: DefaultComponent,
       children: [

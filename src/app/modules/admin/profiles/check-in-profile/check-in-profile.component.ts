@@ -103,9 +103,6 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
               private dateHelperService         : DateHelperService
               ) {
     this.id = this.route.snapshot.paramMap.get('id');
-
-   
-
     this.isAuthorized =  this.userAuthorization.isUserAuthorized('admin,manager');
     this.isStaff      =  this.userAuthorization.isUserAuthorized('admin,manager,employee');
     this.isUser       =  this.userAuthorization.isUserAuthorized('user');

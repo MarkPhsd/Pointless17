@@ -13,7 +13,7 @@
       <div *ngIf="voidPayment">{{voidPayment.amountPaid | currency}}</div>
 
       <div *ngIf="!voidPayment">Amount</div>
-      <div *ngIf="!voidPayment"> {{amount | currency}}</div>
+      <div *ngIf="!voidPayment">{{amount | currency}}</div>
     </div>
 
   </mat-card-title>
@@ -35,9 +35,11 @@
   </mat-card-content>
 
   <mat-card-actions>
-    <div class="action-buttons">
-      <div *ngIf="!processing"><button mat-raised-button
-          (click)="process()"><mat-icon>credit_card</mat-icon>Process</button></div>
+      <div class="action-buttons">
+        <div *ngIf="!processing"><button mat-raised-button
+            (click)="process()"><mat-icon>credit_card</mat-icon>Process
+        </button>
+      </div>
       <div><button mat-raised-button
                    (click)="cancel()">
         <mat-icon>close</mat-icon>Cancel</button>

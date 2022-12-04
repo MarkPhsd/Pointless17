@@ -1,0 +1,13 @@
+
+<div *ngFor="let item of printOrders">
+  order {{item.order.id}}
+  item count {{item.order.posOrderItems.length}}
+  <app-print-template
+      [order]        ="item.order"
+      [templateID]   ="item.location.templateID"
+      [printerName]  ="item.location.printer"
+      [autoPrint]    ="true"
+      (outPutPrinted)="printingCompleted($event)"
+  ></app-print-template>
+
+</div>

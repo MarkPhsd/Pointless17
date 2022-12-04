@@ -51,8 +51,6 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.getUser();
-    console.log('current user', this.userAuth.currentUser())
-    console.log('is user', this.userAuth.isUser)
     this.uiHomePageSetting$ = this.settingsService.getUIHomePageSettings();
     this.order$ = this.navigateToOrder();
     this.action$ = null;
@@ -71,7 +69,6 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
   setLoginActions() { 
     const loginAction = {name: 'setActiveOrder', id: this.order.id}
     localStorage.setItem('loginAction', JSON.stringify(loginAction))
-    // console.log('setLoginaction', loginAction)
   }
 
   cancelMessage() { 
@@ -132,24 +129,37 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
 
   }
 
-  navigateToOrder() { 
-     const id = this.route.snapshot.paramMap.get('id');
-     const site = this.siteService.getAssignedSite();
+  getOrder(): Observable<IPOSOrder> { 
+    let item$: Observable<IPOSOrder>;
+    const id = this.route.snapshot.paramMap.get('id');
+    const orderCode = this.route.snapshot.paramMap.get('orderCode');
+    const site = this.siteService.getAssignedSite();
+    if (id) { 
+      item$ = this.orderService.getQRCodeOrder(site, id);
+    }
+    if (orderCode) { 
+      item$ = this.orderService.getQROrder(site, orderCode);
+    }
+    return item$;
+  }
 
-     return this.orderService.getQRCodeOrder(site, id).pipe(
-        switchMap(data => { 
-          this.order = data;
-          this.orderService.setActiveOrder(site, data)
-          return of(data)
-        })
-     )
+  navigateToOrder() { 
+    const site = this.siteService.getAssignedSite();
+    const item$ = this.getOrder()
+    return item$.pipe(
+      switchMap(data => { 
+        this.order = data;
+        this.orderService.setActiveOrder(site, data)
+        return of(data)
+      })
+    )
   }
 
   goPay() { 
-     const id = this.route.snapshot.paramMap.get('id');
      const site = this.siteService.getAssignedSite();
      this.goingToPay = true
-     return this.orderService.getQRCodeOrder(site, id).pipe(
+     const item$ = this.getOrder()
+     return item$.pipe(
         switchMap(data => { 
           this.order = data;
           this.orderService.setActiveOrder(site, data)
@@ -162,7 +172,6 @@ export class QRCodeTableComponent implements OnInit, OnDestroy {
 
   getUser() { 
     let user = this.userAuth.currentUser();
-  
     if (!user) { 
       user = {} as IUser;
       user.username = 'Temp'

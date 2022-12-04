@@ -1,17 +1,23 @@
+<div *ngIf="(action$ | async) as item; else loading"></div>
+<ng-template #loading>
+  <div *ngIf="processing">
+    ..sending
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
 
 <div *ngIf="promptGroup">
   <mat-card class="mat-card">
     <mat-card-subtitle>
-      <h3>
+      <h4>
           {{promptGroup?.name}}
-        <!-- <span *ngIf="orderPromptGroup  && orderPromptGroup.posOrderItem">{{ orderPromptGroup?.posOrderItem?.productName }} Choices</span> -->
-      </h3>
+      </h4>
     </mat-card-subtitle>
     <mat-card-content>
       <div
           [innerHTML]="promptGroup?.instructions">
       </div>
-      <div *ngIf="(action$ | async) as item"></div>
+  
     </mat-card-content>
 
   </mat-card>
@@ -28,12 +34,21 @@
     </div>
 
     <mat-card-actions>
-
+      <div>
+        <mat-form-field  class="notes" appearance="outline">
+          <mat-label>Notes</mat-label>
+            <textarea matInput
+                      rows="4"
+                      columns="40"
+                      [(ngModel)]="modifierNote"
+            ></textarea>
+        </mat-form-field>
+      </div>
     </mat-card-actions>
 
   </mat-card>
   <div class="grid-list">
-    <button class="item-button" mat-raised-button (click)="reset()"><mat-icon>refresh</mat-icon>Restart</button>
+    <button class="item-button" mat-raised-button (click)="reset()"><mat-icon>refresh</mat-icon>Start Over</button>
     <button class="item-button" mat-raised-button (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel <br> All Items</button>
     <button class="item-button" mat-raised-button (click)="close()"><mat-icon>close</mat-icon>Close <br> Without Saving</button>
     <button class="item-button" mat-raised-button (click)="applyChoices()"><mat-icon>approval</mat-icon>Apply Choices</button>

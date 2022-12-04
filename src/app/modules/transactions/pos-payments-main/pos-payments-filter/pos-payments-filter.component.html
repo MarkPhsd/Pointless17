@@ -112,6 +112,7 @@
          class="toggle-selector">
       <app-mat-toggle-selector
             *ngIf="searchModel"
+            [styleHeight]="'calc(65vh - 150px)'"
             [id]="searchModel.serviceTypeID"
             [list$]="serviceTypes$"
             (outPutID)="setServiceType($event)">
@@ -123,6 +124,7 @@
           class="toggle-selector">
       <app-mat-toggle-selector
             *ngIf="searchModel"
+            [styleHeight]="'calc(65vh - 150px)'"
             [id]="searchModel.paymentMethodID"
             [list$]="paymentMethod$"
             (outPutID)="setPaymentMethod($event)">
@@ -146,8 +148,8 @@
     <div *ngIf="electronEnabled || printingEnabled || capacitorEnabled">
       <div class="grid-container">
         <button class="info-buttons"
-                mat-raised-button color="primary"
-                ><mat-icon>print</mat-icon>
+                mat-raised-button color="primary" >
+          <mat-icon>print</mat-icon>
         </button>
       </div>
     </div>

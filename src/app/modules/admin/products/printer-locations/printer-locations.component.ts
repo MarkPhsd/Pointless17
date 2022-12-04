@@ -1,4 +1,4 @@
-import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject} from '@angular/core';
+import { Component, OnInit, SimpleChange, ViewChild, AfterViewInit , OnChanges, Inject, TemplateRef} from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable, of, switchMap} from 'rxjs';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
@@ -10,6 +10,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { MatSort } from '@angular/material/sort';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/menu/printer-locations.service';
+import { IItemBasic } from 'src/app/_services';
+import { SettingsService } from 'src/app/_services/system/settings.service';
 
 @Component({
   selector: 'app-printer-locations',
@@ -17,6 +19,8 @@ import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/men
   styleUrls: ['./printer-locations.component.scss']
 })
 export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChanges {
+  @ViewChild('electronPrintingTemplate') electronPrintingTemplate: TemplateRef<any>;
+  @ViewChild('electronPrintingDesignTemplate') electronPrintingDesignTemplate: TemplateRef<any>;
 
   locationForm: FormGroup;
   action$: Observable<any>;
@@ -37,21 +41,24 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   imgName: string;
   location = {} as IPrinterLocation;
 
-  columnsToDisplay = ['id', 'name', 'printer', 'edit'];
-
+  columnsToDisplay = ['id', 'name', 'printer', 'templateID', 'address', 'edit'];
+  receiptList$    :  Observable<IItemBasic[]>;
   constructor(
             private _snackBar: MatSnackBar,
             private fb: FormBuilder,
+            private settingService: SettingsService,
             private printerLocationsService: PrinterLocationsService,
             private siteService: SitesService,
   )
   {  }
 
   ngOnInit(): void {
+    const site = this.siteService.getAssignedSite()
     this.metrcEnabled = true
     this.pageSize = 10
     this.initForm()
     this.refreshTable();
+    this.receiptList$     =  this.settingService.getReceipts(site);
   }
 
   ngAfterViewInit(){
@@ -87,11 +94,18 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
     this.initFormData(id)
   }
 
+  get  isElectronPrintingDesignTemplate() {
+    return this.electronPrintingDesignTemplate
+  }
+
+
   initForm() {
     this.locationForm = this.fb.group({
       name: ['', Validators.required],
       printer: [''],
+      templateID: [''],
       id: [''],
+      address: [],
     })
     this.locationForm.patchValue(this.location)
     this.imgName = ""

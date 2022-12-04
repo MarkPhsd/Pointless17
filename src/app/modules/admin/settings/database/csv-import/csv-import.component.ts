@@ -44,6 +44,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   productImports            : ImportProductResults;
   resultsMessage            : any;
   random$                   : Observable<any>;
+  importing:  boolean;
 
   constructor(
     private fakeProductsService : FakeProductsService,
@@ -75,6 +76,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
+    console.log('on destroy')
     clearInterval(this.timerInterval)
   }
 
@@ -256,6 +258,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
 
   getProgress() {
     const site  = this.siteService.getAssignedSite()
+    if (!this.importing) { return }
     this.menuService.getImportCountProgress(site).subscribe(data => {
       try {
         this.progress = data;
@@ -271,10 +274,12 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
+    this.importing = true;
     if (items) {
       this.getProgressCount(true)
       this.menuService.importFlowProducts(site,items).subscribe(data => {
         this.flowProductImportresults = data;
+        this.importing = false;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
         this.getProgressCount(false)
@@ -288,9 +293,11 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
+    this.importing = true;
     if (items) {
       this.getProgressCount(true)
       this.menuService.importFlowStrains(site,items).subscribe(data => {
+        this.importing = true;
         this.importFlowStainsResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -304,10 +311,12 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
+    this.importing = true;
     if (items) {
       this.getProgressCount(true)
       this.menuService.importProducts(site,items).subscribe(data => {
         this.importProductResults = data;
+        this.importing = false;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
         this.getProgressCount(false)
@@ -320,9 +329,11 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
+    this.importing = true;
     if (items) {
       this.getProgressCount(true)
       this.clientTableService.importFlowVendors(site,items).subscribe(data => {
+        this.importing = false;
         this.importFlowVendorResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";
@@ -352,10 +363,11 @@ export class CSVImportComponent implements OnInit, OnDestroy {
     if (!items) { this.resultsMessage  = 'No files read'}
     this.resultsMessage = 'Processing.'
     const site  = this.siteService.getAssignedSite()
-
+    this.importing = true;
     if (items) {
       this.getProgressCount(true)
       this.menuService.importFlowInventory(site,items).subscribe(data => {
+        this.importing = false;
         this.importFlowInventoryResults = data;
         this.csvRecords = 'Operation complete';
         this.fileImportInput.nativeElement.value = "";

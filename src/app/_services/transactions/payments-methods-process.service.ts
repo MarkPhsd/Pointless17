@@ -11,6 +11,7 @@ import { OrderMethodsService } from './order-methods.service';
 import { OrdersService } from './orders.service';
 import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
+import { BalanceSheetService } from './balance-sheet.service';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     private orderMethodsService : OrderMethodsService,
     public  printingService     : PrintingService,
     private dialogOptions       : ProductEditButtonService,
+    private balanceSheetService : BalanceSheetService,
     private matSnackBar         : MatSnackBar) {
   }
 
@@ -72,10 +74,20 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
   }
 
+  //openDrawerFromBalanceSheet
+
   processCashPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder,
                      amount: number, paymentMethod: IPaymentMethod): Observable<IPaymentResponse> {
+
+    const balance$ =  this.balanceSheetService.openDrawerFromBalanceSheet()
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    return payment$
+    
+    return balance$.pipe(switchMap(data => { 
+      return payment$
+    })).pipe(switchMap(data => { 
+      return of(data)
+    }))
+
   }
 
   processCreditPayment(site: ISite, posPayment: IPOSPayment,
@@ -123,8 +135,6 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       )
       return null
   }
-
-
 
   processSubDSIEMVCreditPayment( order: IPOSOrder, amount: number, manualPrompt: boolean) {
     //once we get back the method 'Card Type'

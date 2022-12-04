@@ -7,7 +7,7 @@ import { PromptWalkThroughService } from 'src/app/_services/menuPrompt/prompt-wa
 import { OrdersService } from 'src/app/_services';
 import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { of, Subscription } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { POSOrderItemServiceService } from 'src/app/_services/transactions/posorder-item-service.service';
 import { Observable } from 'rxjs';
 @Component({
@@ -18,7 +18,8 @@ import { Observable } from 'rxjs';
 })
 
 export class PromptWalkThroughComponent implements OnInit {
-
+  modifierNote     : string;
+  processing       : boolean;
   action$:          Observable<any>;
   _promptGroup     : Subscription;
   promptGroup      : IPromptGroup
@@ -124,8 +125,11 @@ export class PromptWalkThroughComponent implements OnInit {
   applyChoices() {
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
+      this.setNotes();
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
 
+      this.processing = true;
+  
       this.action$ =  prompt$.pipe(
           switchMap( data  => {
               return  this.orderService.getOrder(site, data.orderID.toString(), false)
@@ -133,16 +137,31 @@ export class PromptWalkThroughComponent implements OnInit {
           )
           ).pipe(
             switchMap( data => {
-            this.dialogRef.close(false)
-            this.orderService.updateOrderSubscription(data)
-            return of('success')
-        })
+              this.processing = false
+              this.dialogRef.close(false)
+              this.orderService.updateOrderSubscription(data)
+              return of('success')
+            }),
+            catchError(data => { 
+              this.processing = false;
+              return of('false')
+            })
       )
+    }
+  }
+
+  setNotes() { 
+    if (this.modifierNote && this.orderPromptGroup.posOrderItem) {
+      this.orderPromptGroup.posOrderItem.modifierNote = this.modifierNote;
     }
   }
 
 }
 
+
+// function catchErrors(arg0: (data: any) => void) {
+//   throw new Error('Function not implemented.');
+// }
 // this.orderService.getOrder(site, this.order.id.toString()).subscribe( data => {
 //   this.orderService.updateOrderSubscription(data)
 //   console.log('posted')

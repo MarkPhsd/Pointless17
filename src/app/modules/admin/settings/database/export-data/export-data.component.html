@@ -8,7 +8,7 @@
           *ngIf="exportDataService.schemas$ && inputForm">
         <form-select-list [searchForm]      = "inputForm"
                           [formFieldName]   ="'name'"
-                          [list$]           = "exportDataService.schemas$"
+                          [list$]           = "schema$"
                           [showActiveInactive]="false"
                           (selectionChange) = "selectSchema($event)">
         <div fieldSearchDescription>Schema Type Selection</div>

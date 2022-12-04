@@ -299,7 +299,7 @@ export class POSOrderItemServiceService {
   }
 
   postPromptItems(site: ISite, iPrompt: IPromptGroup): Observable<IPromptGroup> {
-
+    
     const controller = "/POSOrderItems/";
 
     const endPoint = "PostPostPrompGroup";

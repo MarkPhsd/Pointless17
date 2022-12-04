@@ -17,6 +17,7 @@ import { UIHomePageSettings, UISettingsService } from '../_services/system/setti
 import { isDevMode } from '@angular/core';
 import { SitesService } from '../_services/reporting/sites.service';
 import { SplashScreenStateService } from 'src/app/_services/system/splash-screen-state.service';
+import { PlatformService } from '../_services/system/platform.service';
 
 @Component({
   selector: 'app-default',
@@ -191,7 +192,7 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get appSiteFooterOn() {
-    if ( this.platForm === 'web' ) {
+    if ( !this.platFormService.isApp() ) {
       return this.appSiteFooter
     }
     return null;
@@ -264,15 +265,16 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
                private cd              : ChangeDetectorRef,
                private appInitService          : AppInitService,
                private authorizationService    : AuthenticationService,
-               public  toolbarUIService         : ToolBarUIService,
+               public  toolbarUIService        : ToolBarUIService,
                private uiSettingsService       : UISettingsService,
                private router                  : Router,
                private siteService             : SitesService,
                private splashLoader            : SplashScreenStateService,
+               private platFormService         : PlatformService, 
               //  private themesService           : ThemesService,
                ) {
     this.apiUrl   = this.appInitService.apiBaseUrl()
-    if (this.platForm == 'web') {
+    if (!this.platFormService.isApp()) {
       this.sidebarMode   =  'side'
     }
     this.devMode = isDevMode()
@@ -384,21 +386,23 @@ export class DefaultComponent implements OnInit, OnDestroy, AfterViewInit {
     } else {
       this.toolbarTiny = false
     }
+      if (window.innerWidth > 811) {
+        this.sidebarMode = 'side'
+        this.smallDevice = false;
+        this.siteService.smallDevice = false
+      } else {
+        this.sidebarMode = 'side'
+        this.smallDevice = true;
+        this.siteService.smallDevice = true
+      }
 
-    if (window.innerWidth > 811) {
-      this.sidebarMode = 'side'
-      this.smallDevice = false;
+    if (window.innerWidth <=600) {
+      this.phoneDevice = true
+      this.siteService.phoneDevice = true
     } else {
-      this.sidebarMode = 'side'
-      this.smallDevice = true;
+      this.phoneDevice = false
+      this.siteService.phoneDevice = false
     }
-
-   if (window.innerWidth <=600) {
-    this.phoneDevice = true
-   } else {
-    this.phoneDevice = false
-   }
-
   }
 
   renderTheme() {

@@ -24,9 +24,9 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   @Input() index                  : number;
   panelIndex                      = 0;
 
-  _accordionStep     : Subscription;
+  _accordionStep               : Subscription;
   @Input()  accordionStep      : number
-  itemOption = 1;
+  itemOption                   = 1;
   @Output() outputSetStep  = new EventEmitter();
   @Output() outputNextStep = new EventEmitter();
   @Output() outputPrevStep = new EventEmitter(); //:   EventEmitter<any> = new EventEmitter();
@@ -52,7 +52,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       this.posItem = data;
     })
   }
-
+  
   resetItemOption(event) {
     this.itemOption = 1;
   }
@@ -60,6 +60,7 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   initPromptSubscriber() {
       this._orderPromptGroup  = this.promptWalkService.orderPromptGroup$.subscribe( data => {
         this.orderPromptGroup = data;
+
         if (this.orderPromptGroup)
         {
           this.panelIndex       = this.orderPromptGroup.currentAccordionStep
@@ -90,6 +91,8 @@ export class PromptPanelMenuItemsComponent implements OnInit {
 
   async ngOnInit() {
     if (this.subGroup) {
+
+      this.resetHideOptions()
       // this.subGroup.promptSubGroups.name
       // this.subGroup.promptSubGroups.promptMenuItems
       // this.subGroupInfo = this.subGroup.promptSubGroups
@@ -99,6 +102,24 @@ export class PromptPanelMenuItemsComponent implements OnInit {
       this.imageURL = this.getItemSrc(this.subGroupInfo.image)
     }
     this.intSubscriptions();
+  }
+
+  resetHideOptions() { 
+    if (this.subGroup.hideSplitOptions) { 
+      this.itemOptions = [
+        {name: 'No', id: 4},
+      ]
+      return;
+    }
+    if (!this.subGroup.hideSplitOptions) { 
+      this.itemOptions = [
+        {name: 'whole', id: 1},
+        {name: 'LFT 1/2', id: 2},
+        {name: 'RT 1/2', id: 3},
+        {name: 'No', id: 4},
+      ]
+      return;
+    }
   }
 
   getItemSrc(prompt_Products) {
@@ -128,6 +149,6 @@ export class PromptPanelMenuItemsComponent implements OnInit {
   }
 
   setAccordionStep(index) {
-    this.promptWalkService.updateAccordionStep(index)
+    this.promptWalkService.updateAccordionStep(index);
   }
 }

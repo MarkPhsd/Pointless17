@@ -25,6 +25,9 @@ export class SitesService {
   private _site    = new BehaviorSubject<ISite>(null);
   public  site$    = this._site.asObservable();
 
+  smallDevice: boolean;
+  phoneDevice: boolean;
+  
   updateSitesSubscriber(site: ISite[]) {
     this._sites.next(site)
   }

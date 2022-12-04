@@ -480,8 +480,6 @@ export class OrderMethodsService implements OnDestroy {
     }
   }
 
-
-
   validateItem(item, barcode) {
     if (!item && !barcode) {
       this.notifyEvent(`Item not found`, 'Alert');
@@ -530,7 +528,8 @@ export class OrderMethodsService implements OnDestroy {
       const site       = this.siteService.getAssignedSite();
 
       if (barcode)  {
-        const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,  input?.portionValue)
+        const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging, 
+                                               input?.portionValue)
         this.processItemPostResults(addItem$)
         return false;
       }
@@ -655,9 +654,14 @@ export class OrderMethodsService implements OnDestroy {
       if (data.order) {
         this.orderService.updateOrderSubscription(data.order);
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
-        if (data.order.posOrderItems.length == 1 ) {
-          this.toolbarServiceUI.updateOrderBar(true)
+
+        if (this.siteService.phoneDevice) { 
+        } else {
+          if (data.order.posOrderItems.length == 1 ) {
+            this.toolbarServiceUI.updateOrderBar(true)
+          }
         }
+
       } else {
         this.notifyEvent(`Error occured, this item was not added. ${data.resultErrorDescription}`, 'Alert');
         return;
@@ -936,6 +940,9 @@ export class OrderMethodsService implements OnDestroy {
 
   //, pricing:  priceList[]
   async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
+
+    console.log('prompt', item.promptGroupID)
+
     const processItem    = {} as ProcessItem;
     processItem.item     = item;
     processItem.order    = order;
@@ -946,6 +953,7 @@ export class OrderMethodsService implements OnDestroy {
     this.order           = order;
     this.priceCategoryID = priceCategoryID;
     this.handleProcessItem();
+    
   }
 
   async handleProcessItem() {
@@ -1077,7 +1085,7 @@ export class OrderMethodsService implements OnDestroy {
       const dialogRef = this.dialog.open(PromptWalkThroughComponent,
         { width:        '100%',
           minWidth:     '100%',
-          maxWidth:     'max-width: 100vw !important',
+          maxWidth:     'max-width: 100% !important',
           height:       '100vh',
           minHeight:    '100vh',
         },

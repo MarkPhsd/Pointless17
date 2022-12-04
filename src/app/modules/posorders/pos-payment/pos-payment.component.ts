@@ -700,8 +700,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   storeCredit() {
-    if (this.order) {
-      this.storeCreditMethodsService.openStoreCreditPopUp(0, this.order.clientID)
+    if (this.order && this.order.clientID) {
+      this.storeCreditMethodsService.openStoreCreditPopUp(0, this.order?.clientID)
     }
   }
 

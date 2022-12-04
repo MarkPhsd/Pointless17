@@ -22,7 +22,17 @@
             <th mat-header-cell *matHeaderCellDef> Printer </th>
             <td mat-cell *matCellDef="let element"> {{element.printer}} </td>
           </ng-container>
+          
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef> Address </th>
+            <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+          </ng-container>
 
+          <ng-container matColumnDef="templateID">
+            <th mat-header-cell *matHeaderCellDef> Template </th>
+            <td mat-cell *matCellDef="let element"> {{element.templateID}} </td>
+          </ng-container>
+          
           <ng-container matColumnDef="edit">
               <th mat-header-cell *matHeaderCellDef> Edit </th>
               <td mat-cell *matCellDef="let element">
@@ -58,6 +68,7 @@
         </div>
         <div  fxLayout="row">
           <div  fxLayout="column">
+
             <h2>Edit Add</h2>
             <div>
               <mat-form-field appearance="outline">
@@ -68,6 +79,7 @@
                       class="form-control" >
               </mat-form-field>
             </div>
+
             <div>
               <mat-form-field appearance="outline">
                 <mat-label >Printer</mat-label>
@@ -77,6 +89,45 @@
                       class="form-control" >
               </mat-form-field>
             </div>
+
+            <div>
+              <mat-form-field appearance="outline">
+                <mat-label >Address</mat-label>
+                <input matInput
+                      type="text"
+                      formControlName="address"
+                      class="form-control" >
+              </mat-form-field>
+            </div>
+
+
+            <ng-container [ngTemplateOutlet]="isElectronPrintingDesignTemplate">
+            </ng-container>
+
+            <ng-template #electronPrintingDesignTemplate>
+          
+               <div  *ngIf="(receiptList$ | async) as list; else loadingReceiptTemplates">
+                <mat-form-field appearance="outline">
+                  <mat-label>Receipt Types</mat-label>
+                    <mat-select
+                              type                ="text"
+                              formControlName    ='templateID'
+                              >
+                        <div>
+                        <mat-option *ngFor="let item of list" [value]="item.id">
+                          {{ item.name }}
+                      </mat-option>
+                    </div>
+                  </mat-select>
+                </mat-form-field>
+                
+              </div>
+            </ng-template>
+
+            <ng-template #loadingReceiptTemplates>
+              ...loading receipt templates
+            </ng-template>
+          
           </div>
         </div>
 
@@ -108,7 +159,7 @@
           <div>
             <button  mat-button  color="primary" (click)="delete()">
               <mat-icon>delete</mat-icon>
-              Delete  <span *ngIf="location">{{location.id}}</span> </button>
+              Delete  <span *ngIf="location">{{location?.name}}</span> </button>
           </div>
 
         </div>

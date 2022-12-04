@@ -10,13 +10,14 @@
         [mode]   ="sidebarMode"
         [opened] ="leftSideBarToggle">
 
+     
     <div    [hidden]="searchSideBar">
       <div  [hidden]="toolbarTiny">
         <app-menu-minimal>
         </app-menu-minimal>
       </div>
 
-      <div  [hidden]="!toolbarTiny" >
+      <div  [hidden]="!toolbarTiny" class="menu-tiny" >
         <app-menu-tiny>
         </app-menu-tiny>
       </div>

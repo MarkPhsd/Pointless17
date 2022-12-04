@@ -16,6 +16,10 @@ app-header {
   height: 50px;
 }
 
+.app-menu-tiny { 
+  height: calc(100vh - 165px);
+}
+
 app-sticky-header {
   z-index: 1000;
   height : 55px;
@@ -55,7 +59,7 @@ mat-drawer-content {
 
 mat-drawer-inner-container {
   width: 100%;
-  height: calc(100% - 65px);
+  height: calc(100vh - 75px);
   overflow-x: hidden;
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
@@ -113,6 +117,7 @@ mat-sidebar {
 
 .mat-drawer-searchbar-tiny {
   width: 55px;
+  // height: calc(100vh - 165px);
   box-shadow: 3px 0 3px rgba(0,0,0,.24);
 }
 

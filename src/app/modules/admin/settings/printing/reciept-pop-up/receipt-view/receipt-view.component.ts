@@ -10,6 +10,7 @@ import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { ITerminalSettings } from 'src/app/_services/system/settings.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-receipt-view',
   templateUrl: './receipt-view.component.html',
@@ -67,6 +68,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   imageConversion   : any;
 
   @Input() order    : IPOSOrder;
+
   _order            : Subscription;
   subscriptionInitialized: boolean;
   electronReceiptSetting: ISetting;
@@ -108,7 +110,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
             if (data.posOrderItems) {
               this.items      = data.posOrderItems
             }
-
             return  this.orderService.getSelectedPayment()
           }
         )
@@ -128,8 +129,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
         })
       )
     }
-
-
 
     this._printReady = this.printingService.printReady$.subscribe(status => {
       if (status) {
@@ -151,10 +150,12 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     private printingAndroidService: PrintingAndroidService,
     private btPrinterService      : BtPrintingService,
     private orderMethodService    : OrderMethodsService,
+    private router: Router
     )
   {}
 
   async ngOnInit() {
+    this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
 
     await this.getAndroidPrinterAssignment()
@@ -171,6 +172,12 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   ngAfterViewInit() {
     this.layout$ = this.initDefaultLayoutsObservable()
+  }
+
+  //this.router.navigate(["/profileEditor/", {id:clientID, miles:clientID }]);
+  openLink() { 
+    this.router.navigate(['/qr-receipt/',  {orderCode: this.order.orderCode}])
+    this.exit();
   }
 
   initPrintView() {
@@ -200,7 +207,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
           }
         )
       )
-
       this.exit();
       return
     }
@@ -221,22 +227,17 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   refreshViewObservable(){
     const receipt$  =  this.getDefaultPrinterOb();
-
-    if (!this.isElectronApp) { return of(null)};
-
+    if (!this.isElectronApp) { return of(null) };
     this.refreshView$ = receipt$.pipe(
       switchMap(data => {
         if (!data) { return };
         this.electronReceiptSetting = data;
         this.receiptID   =  +data.option1;
         this.printerName =  data.text;
-
         if (this.printingService.printView  == 2) {
           return this.initBalanceSheetDefaultLayoutsObservable()
         }
-
         return of(this.applyStylesObservable());
-
       })).pipe(
         switchMap( data => {
           if (this.receiptID && data ) {
@@ -246,10 +247,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
         })
       ).pipe(
         switchMap( data => {
-          // console.log('getting terminal settings', data)
           if (data && data.text) {
             const item  = JSON.parse(data.text) as ITerminalSettings
-            // console.log('getting terminal settings', item)
             if (item) {
               if (this.platFormService.isAppElectron) {
                 if (item.receiptPrinter) {
@@ -259,7 +258,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
             }
           }
           return of(data)
-
         })
     )
     return of(null)
@@ -271,19 +269,17 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     return  this.settingService.getSettingByNameCached(site, device)
   }
 
+  //Step 1
   initDefaultLayoutsObservable() {
     try {
       const site = this.siteService.getAssignedSite();
       this.printingService.initDefaultLayouts();
-
       if (this.receiptStyles)  {
         this.receiptStyles  = this.applyStyle(this.receiptStyles)
         return of(this.receiptStyles)
       };
-
       //could be altered for alternate type
       this.receiptName =  'defaultElectronReceiptPrinterName'
-
       const receipt$ = this.settingService.getSettingByNameCachedNoRoles(site, this.receiptName)
       return receipt$.pipe(
         switchMap(data => {
@@ -298,59 +294,34 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     } catch (error) {
       console.log(error)
     }
-
     return of(null)
   }
 
-  // async  initDefaultLayouts() {
+  // async  initBalanceSheetDefaultLayouts() {
   //   try {
+  //     // 'apply balance sheet style'
   //     const site = this.siteService.getAssignedSite();
-  //     await this.printingService.initDefaultLayouts();
-  //     if (!this.receiptStyles) { this.receiptStyles  = await this.applyStyles(); }
-  //     if (this.receiptStyles)  { this.receiptStyles  = this.applyStyle(this.receiptStyles) };
-
-  //     //could be altered for alternate type
-  //     this.receiptName =  'defaultElectronReceiptPrinterName'
-
-  //     const receipt$ = this.settingService.getSettingByNameNoRoles(site, this.receiptName)
-  //     receipt$.pipe(
-  //       switchMap(data => {
-  //         this.receiptID = data.id
-  //         return this.settingService.getSetting(site, +data.option1)
-  //     })).subscribe(data => {
-  //       this.initSubComponent(data)
-  //     })
-
+  //     const setting = {} as ISetting;
+  //     setting.text  = await  this.printingService.appyBalanceSheetStyle()
+  //     this.receiptStyles =  setting;
+  //     this.applyStyle( this.receiptStyles)
   //   } catch (error) {
   //     console.log(error)
   //   }
   // }
 
-  async  initBalanceSheetDefaultLayouts() {
-    try {
-      // 'apply balance sheet style'
-      const site = this.siteService.getAssignedSite();
-      const setting = {} as ISetting;
-      setting.text  = await  this.printingService.appyBalanceSheetStyle()
-      this.receiptStyles =  setting;
-      this.applyStyle( this.receiptStyles)
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   initBalanceSheetDefaultLayoutsObservable() {
-      // 'apply balance sheet style'
-      const site = this.siteService.getAssignedSite();
-      const setting = {} as ISetting;
-      return this.printingService.appyBalanceSheetStyleObservable().pipe(
-        switchMap(data => {
-          setting.text  = data;
-          this.receiptStyles =  setting;
-          this.applyStyle( this.receiptStyles)
-          return of(this.receiptStyles)
-        })
-       )
+    // 'apply balance sheet style'
+    const site = this.siteService.getAssignedSite();
+    const setting = {} as ISetting;
+    return this.printingService.appyBalanceSheetStyleObservable().pipe(
+      switchMap(data => {
+        setting.text  = data;
+        this.receiptStyles =  setting;
+        this.applyStyle( this.receiptStyles)
+        return of(this.receiptStyles)
+      })
+    )
   }
 
   // async applyStyles(): Promise<ISetting> {
@@ -373,20 +344,16 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
   }
 
   applyStyle(receiptStyles) {
-    if (receiptStyles && receiptStyles.text) {
-      const style             = document.createElement('style');
-      style.innerHTML         =  receiptStyles.text;
-      document.head.appendChild(style);
-      return this.receiptStyles
-    }
+    return this.printingService.applyStyle(receiptStyles)
   }
 
   async applyBalanceSheetStyles(): Promise<ISetting> {
-      const value = await  this.printingService.appyBalanceSheetStyle();
-      const style             = document.createElement('style');
-      style.innerHTML         = value;
-      document.head.appendChild(style);
-      return  this.receiptStyles
+    // const value = await  this.printingService.appyBalanceSheetStyle();
+    // const style             = document.createElement('style');
+    // style.innerHTML         = value;
+    // document.head.appendChild(style);
+    // return  this.receiptStyles
+    return this.printingService.applyBalanceSheetStyles()
   }
 
   getDefaultPrinterOb(): Observable<any> {
@@ -401,10 +368,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     return this.receiptID;
   }
 
-  getPrinterName()  {
-
+  getPrinterName() {
   }
 
+  ///step 1B
   initSubComponent(receiptPromise: ISetting): boolean {
     if (receiptPromise ) {
       this.receiptLayoutSetting =  receiptPromise
@@ -412,8 +379,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       this.footerText           =  this.receiptLayoutSetting.option5
       this.itemsText            =  this.receiptLayoutSetting.text
       this.paymentsText         =  this.receiptLayoutSetting.option7
-      this.paymentsCreditText   = this.receiptLayoutSetting.option10;
-      this.paymentsWICEBTText    = this.receiptLayoutSetting.option11;
+      this.paymentsCreditText   =  this.receiptLayoutSetting.option10;
+      this.paymentsWICEBTText   =  this.receiptLayoutSetting.option11;
       this.subFooterText        =  this.receiptLayoutSetting.option8
       return true
     }
@@ -425,8 +392,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     const content        = `${prtContent.innerHTML}`
     if (!content) { return }
 
-    const  title = 'Receipt';
-    const loadView       = ({ title }) => {
+    const  title   = 'Receipt';
+    const loadView = ({ title }) => {
       return (`
         <!DOCTYPE html>
         <html>
@@ -449,22 +416,18 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   print() {
     if (!this.printerName) {
-      if (this.platFormService.webMode) { this.convertToPDF();}
+      if (this.platFormService.webMode) { this.convertToPDF() }
       return
     }
     if (this.platFormService.isAppElectron) {
       const result = this.printElectron()
       return
     }
-    if (this.platFormService.androidApp) {this.printAndroid();}
-    if (this.platFormService.webMode) { this.convertToPDF();}
+    if (this.platFormService.androidApp) {this.printAndroid() }
+    if (this.platFormService.webMode)    {this.convertToPDF() }
   }
 
-  convertToPDF() {
-    this.printingService.convertToPDF( document.getElementById('printsection') )
-  }
-
-  async printElectron() {
+  printElectron() {
     const styles   = this.receiptStyles.text;
     const contents = this.getReceiptContents(styles)
     const options  = {
@@ -484,6 +447,10 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   savePDF() {
     this.printingService.savePDF(this.printsection.nativeElement, this)
+  }
+
+  convertToPDF() {
+    this.printingService.convertToPDF( document.getElementById('printsection') )
   }
 
   async printAndroid() {
@@ -514,15 +481,16 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     if (this.platFormService.isAppElectron) {
        this.printingService.getElectronReceiptPrinter().pipe(
           switchMap(data => {
-          this.electronSetting        = data;
-          this.electronReceiptPrinter = data.text;
-          this.electronReceipt        = data.value ;
-          this.electronReceiptID      = +data.option1
-          if (this.printOptions) {
-            this.printOptions.deviceName = data.text
+            this.electronSetting        = data;
+            this.electronReceiptPrinter = data.text;
+            this.electronReceipt        = data.value ;
+            this.electronReceiptID      = +data.option1
+            if (this.printOptions) {
+              this.printOptions.deviceName = data.text
+            }
+            return of(data)
           }
-          return of(data)
-        })
+        )
       )
     }
     return of(null)

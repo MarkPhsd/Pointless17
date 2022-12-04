@@ -70,11 +70,13 @@
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-icon void-info" *ngIf="(orderItem?.voidReason || orderItem?.itemReturn != 1) &&  prepScreen && !isModifier">
+          <div class="void-icon void-info" *ngIf="(orderItem.voidReason || (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&  prepScreen && !isModifier">
             <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
+
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
-              <b  style="color:crimson">Item voided:  {{ orderItem?.voidReason }}</b>
+              <b  style="color:crimson">return {{ orderItem?.itemReturn }} Item voided:  {{ orderItem?.voidReason }}</b>
             </span>
+
           </div>
 
         </div>

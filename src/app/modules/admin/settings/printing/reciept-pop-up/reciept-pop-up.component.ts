@@ -15,6 +15,7 @@ export class RecieptPopUpComponent implements OnInit {
   @Input() order    : IPOSOrder;
 
   printOptions = {} as printOptions;
+  
   items             : any[];
   orders            : any;
   payments          : any[];

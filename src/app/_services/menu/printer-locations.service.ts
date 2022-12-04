@@ -10,6 +10,8 @@ export interface IPrinterLocation {
   name: string;
   activeLocation: boolean;
   printer: string;
+  templateID: number;
+  address: string;
 }
 
 @Injectable({
@@ -19,7 +21,6 @@ export interface IPrinterLocation {
 export class PrinterLocationsService {
 
   site: ISite;
-
 
   constructor(
       private http: HttpClient,

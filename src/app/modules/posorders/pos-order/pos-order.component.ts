@@ -29,6 +29,7 @@ import { InventoryAssignmentService } from 'src/app/_services/inventory/inventor
 import { InventoryManifest, ManifestInventoryService } from 'src/app/_services/inventory/manifest-inventory.service';
 import { IServiceType } from 'src/app/_interfaces';
 import { coerceStringArray } from '@angular/cdk/coercion';
+import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 
 @Component({
 selector: 'app-pos-order',
@@ -71,7 +72,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   id: any = '';
   order$: Observable<IPOSOrder>;
   serviceType$: Observable<IServiceType>;
-
+  printAction$:  Observable<any>;
   isNotInSidePanel: boolean
   sidePanelWidth: number
   sidePanelPercentAdjust: number
@@ -239,16 +240,15 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (!id) { return }
     if (this.userAuthorization.isManagement) { 
       const site = this.siteService.getAssignedSite()
-      console.log(id)
+      // console.log(id)
 
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => { 
           this.purchaseOrderEnabled = false
-          if ( data.filterType  && data.filterType != 0 ) {
+          if ( data.filterType == 1  ||  data.filterType == -1 ) {
+            // console.log('data filter', data.filterType)
             this.purchaseOrderEnabled = true
           }
-          console.log('report')
-          console.log('data,', data)
           return of(data)
         })
       )
@@ -300,6 +300,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
               private posOrderItemService: POSOrderItemServiceService,
               private manifestService: ManifestInventoryService,
               private productEditButtonService: ProductEditButtonService,
+              private prepPrintingService: PrepPrintingServiceService,
               private el                : ElementRef) {
 
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
@@ -307,8 +308,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.mainPanel = true
     }
     this.refreshOrder();
-    
-   
   }
 
   @HostListener("window:resize", [])
@@ -352,7 +351,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this.listView = event;
   }
 
-
   get getListViewType() { 
     if (this.listView) { 
       return this.listViewType
@@ -361,6 +359,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       return this.itemViewType;
     }
   }
+  
   async ngOnInit() {
     this.initAuthorization();
     this.gettransactionUISettingsSubscriber();
@@ -475,6 +474,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (this.order) {
       const site = this.siteService.getAssignedSite()
       this.orderMethodService.prepPrintUnPrintedItems(this.order.id)
+      this.printAction$ = this.prepPrintingService.printLocations(this.order)
     }
   }
 

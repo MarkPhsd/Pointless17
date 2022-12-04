@@ -54,9 +54,7 @@ export class PayPalTransactionComponent implements OnInit {
   }
 
   constructor(private orderService        : OrdersService,
-              private orderMethodService  : OrderMethodsService,
               public  uiSettingsService   : UISettingsService,
-              private settingService      : SettingsService,
               public  userAuthorization    : UserAuthorizationService,
               private paymentMethodService: PaymentMethodsService,
               public paymentService       : POSPaymentService,
@@ -116,7 +114,6 @@ export class PayPalTransactionComponent implements OnInit {
     const method$ = this.paymentMethodService.getPaymentMethodByName(site, 'PayPal');
     method$.pipe(
       switchMap(data => {
-        console.log("getPaymentMethodByName" )
         this.payment.paymentMethodID = data.id;
         const payment = this.setPaymentValues(this.payment, payPal)
         const sale$ = this.paymentService.putPOSPayment(site, payment)

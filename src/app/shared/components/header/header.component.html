@@ -197,7 +197,7 @@
               mat-raised-button
               [matMenuTriggerFor]="menu"
               #menuTrigger="matMenuTrigger"
-              (mouseenter)="menuTrigger.openMenu()"
+              (click)="menuTrigger.openMenu()"
               >
         <mat-icon *ngIf="mailCount == 0 ">person</mat-icon>
 

@@ -6,7 +6,7 @@ import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-c
 import { IPagedList } from '../system/paging.service';
 import { ISite } from 'src/app/_interfaces';
 import { IPromptGroup, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface MenuSubPromptSearchModel {
   name:                         string;
@@ -46,7 +46,7 @@ export class  PromptSubGroupsService {
 
     inputForm = this.fb.group({
       id             : [],
-      name           : [],
+      name           : ['', Validators.required],
       minQuantity    : [],
       maxQuantity    : [],
       moveOnQuantity : [],
@@ -54,6 +54,7 @@ export class  PromptSubGroupsService {
       lastEdited     : [],
       image          : [],
       instructions   : [],
+      hideSplitOptions: [],
     })
 
     return inputForm

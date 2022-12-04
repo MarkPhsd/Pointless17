@@ -100,6 +100,7 @@ export class PromptPanelMenuItemComponent implements OnInit {
           this.imageURL = this.getItemSrc(this.promptMenuItem.prompt_Products)
           return of(data)
         }
+        return of('')
       })
     )
   }

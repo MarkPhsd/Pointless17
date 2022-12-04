@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Observable,switchMap,of } from 'rxjs';
+import { Observable,switchMap,of, catchError } from 'rxjs';
 import { ExportDataService } from 'src/app/_services/data/export-data.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 
@@ -16,6 +16,7 @@ export class ExportDataComponent implements OnInit {
   exporting$: Observable<any>;
   exporting : boolean;
   message   = ''
+  schema$: Observable<any>;
   constructor(
     private fb: FormBuilder,
     private siteService: SitesService,
@@ -27,6 +28,8 @@ export class ExportDataComponent implements OnInit {
       id: [],
       name: [],
     })
+
+    this.schema$ = this.exportDataService. exportSchema$
   }
 
   selectSchema(event) {
@@ -46,11 +49,11 @@ export class ExportDataComponent implements OnInit {
   _export() {
     this.initDownload();
     const schemaValue = this.schemaValue;
-    this.exporting = true;
+    console.log('inventory values', schemaValue);
 
-    if (schemaValue == 10) {
+    if (schemaValue == 10 || schemaValue == 2) {
+      this.exporting = true;
       const site = this.siteService.getAssignedSite();
-
       const invValues$ = this.exportDataService.listProductValues(site);
 
       const item$ = invValues$.pipe(
@@ -60,7 +63,12 @@ export class ExportDataComponent implements OnInit {
           this.exportDataService.downloadFile(data, 'Inventory List')
           return of('succeed')
         }
-      ))
+        ),
+        catchError( err => { 
+          this.siteService.notify(`Error : ${err}`, 'Alert' , 2000)
+          return of('failed')
+        })
+      )
 
       return item$
     }
@@ -77,7 +85,12 @@ export class ExportDataComponent implements OnInit {
           this.exportDataService.downloadFile(data, 'Department Count List')
           return of('succeed')
         }
-      ))
+      ),
+        catchError( err => { 
+          this.siteService.notify(`Error : ${err}`, 'Alert' , 2000)
+          return of('failed')
+        })
+      )
 
       return item$
     }
@@ -94,7 +107,12 @@ export class ExportDataComponent implements OnInit {
           this.exportDataService.downloadFile(data, 'Category Count List')
           return of('succeed')
         }
-      ))
+      ),
+        catchError( err => { 
+          this.siteService.notify(`Error : ${err}`, 'Alert' , 2000)
+          return of('failed')
+        })
+      )
 
       return item$
     }

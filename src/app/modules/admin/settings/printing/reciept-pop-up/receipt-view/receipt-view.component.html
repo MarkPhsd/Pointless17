@@ -8,9 +8,15 @@
   <div >
     <button *ngIf="refreshView$ | async" mat-button (click)="print()">
       <span *ngIf="printerName"><mat-icon>print</mat-icon> Print to {{printerName}}</span>
-      <span *ngIf="!printerName"><mat-icon>save</mat-icon>Save</span>
     </button>
     <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+    <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
+    <button mat-button 
+            [disabled]="!order?.orderCode" 
+            *ngIf="!isElectronApp" 
+            (click)="openLink()">
+        <mat-icon>link</mat-icon>Link
+    </button>
   </div>
 
   <div>
@@ -23,8 +29,6 @@
   </div>
 </div>
 
-<!-- headerText {{headerText | json}} -->
-
 <div class="mat-card-white" >
   <ng-container>
     <ng-container [ngTemplateOutlet]="currentView"></ng-container>
@@ -32,7 +36,6 @@
 </div>
 
 <ng-template #receipt>
-
   <div *ngIf="receiptLayoutSetting && ((headerText &&  itemsText) || order)"
        class="border-section">
     <app-receipt-layout #printsection
@@ -54,7 +57,6 @@
     </app-receipt-layout>
   </div>
 </ng-template>
-
 
 <ng-template #balanceSheet>
   <balance-sheet-view

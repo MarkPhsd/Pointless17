@@ -78,6 +78,10 @@ export class OrdersService {
   public currentOrder$        = this._currentOrder.asObservable();
   public currentOrder         = {} as IPOSOrder
 
+  private _templateOrder       = new BehaviorSubject<IPOSOrder>(null);
+  public templateOrder$        = this._currentOrder.asObservable();
+  public templateOrder         = {} as IPOSOrder
+
   private _bottomSheetOpen    = new BehaviorSubject<boolean>(null);
   public bottomSheetOpen$     = this._bottomSheetOpen.asObservable();
 
@@ -95,11 +99,16 @@ export class OrdersService {
 
   get IsOrderClaimed() { return this.orderClaimed};
 
+  updateTemplateOrder(order: IPOSOrder) { 
+    this._templateOrder.next(order)
+  }
+
   getSelectedPayment() {
     const payment = this.selectedPayment ;
     this.selectedPayment = null
     return of(payment);
   }
+
   updateBottomSheetOpen(open: boolean) {
     this._bottomSheetOpen.next(open);
   }
@@ -204,15 +213,11 @@ export class OrdersService {
   }
 
   setPOSName(name: string): boolean {
-
     // console.log('name.length <= 5', name.length)
     if (name.length) {
-
       if (name.length <= 5) {
         localStorage.setItem(`devicename`, name)
         console.log('set name', name);
-
-
         if (localStorage.getItem(`devicename`) === name  ) {
           return true
         } else {
@@ -622,6 +627,21 @@ export class OrdersService {
     return this.http.get<IPOSOrder>(url)
 
   }
+
+  getQROrder(site: ISite, orderCode: string): Observable<IPOSOrder> {
+
+    const controller = '/POSOrders/'
+
+    const endPoint  = 'getQROrder'
+
+    const parameters = `?orderCode=${orderCode}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<IPOSOrder>(url)
+
+  }
+
 
   getOrdersPrepBySearchPaged(site: ISite, POSOrderSearchModel: IPOSOrderSearchModel): Observable<POSOrdersPaged> {
 

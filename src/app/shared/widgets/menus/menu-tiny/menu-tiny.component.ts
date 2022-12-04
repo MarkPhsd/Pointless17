@@ -37,7 +37,13 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
   _barSize: Subscription
   barSize: boolean;
 
-  gridtoggletiny = "grid-toggle-tiny"
+  submenuposition = '';
+  toolbarTiny: boolean;
+  sidebarMode: boolean;
+  phoneDevice: boolean;
+  smallDevice: boolean;
+  gridtoggletiny = "grid-toggle-tiny";
+
   initSubscription() {
     this._user = this.authenticationService.user$.subscribe(
         user => {
@@ -67,6 +73,37 @@ export class MenuTinyComponent implements OnInit, OnDestroy {
                 private authenticationService   : AuthenticationService,
     ) {
     this.site  =  this.siteService.getAssignedSite();
+
+    this.refreshToolBarType();
+    if (this.siteService.phoneDevice) { 
+      this.submenuposition = 'submenu-position-tiny'
+    }
+    if (!this.siteService.phoneDevice) { 
+      this.submenuposition = 'submenu-position'
+    }
+
+  }
+
+  refreshToolBarType() {
+    if (window.innerHeight >= 750) {
+      this.toolbarTiny = true
+    } else {
+      this.toolbarTiny = false
+    }
+      if (window.innerWidth > 811) {
+        this.smallDevice = false;
+        this.siteService.smallDevice = false
+      } else {
+        this.smallDevice = true;
+        this.siteService.smallDevice = true
+      }
+    if (window.innerWidth <=600) {
+      this.phoneDevice = true
+      this.siteService.phoneDevice = true
+    } else {
+      this.phoneDevice = false
+      this.siteService.phoneDevice = false
+    }
   }
 
   setSmallMenu() {

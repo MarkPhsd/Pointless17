@@ -321,7 +321,7 @@ import { UnitTypeEditComponent } from '../modules/admin/products/unit-type-list/
 import { UnitTypeListComponent } from '../modules/admin/products/unit-type-list/unit-type-list.component';
 import { SiteEditFormComponent } from '../modules/admin/settings/site-edit/site-edit-form/site-edit-form.component';
 import { StoreCreditEditorComponent } from '../modules/admin/store-credit/store-credit-editor/store-credit-editor.component';
-import { StoreCreditListComponent } from '../modules/admin/store-credit/store-credit-list/store-credit-list.component';
+import { StoreCreditListComponent} from '../modules/admin/store-credit/store-credit-list/store-credit-list.component';
 import { ServiceTypeListComponent } from '../modules/admin/transactions/serviceTypes/service-type-list/service-type-list.component';
 import { PriceScheduleMenuOptionsComponent } from '../modules/admin/products/price-schedule/price-schedule-menu-options/price-schedule-menu-options.component';
 import { AdminDisplayMenuListComponent } from '../modules/admin/products/display-menu/display-menu-list/display-menu-list.component';
@@ -342,6 +342,8 @@ import { BlogListEditComponent } from '../modules/admin/blogEditor/blog-list-edi
 import { BlogPostEditComponent } from '../modules/admin/blogEditor/blog-post-edit/blog-post-edit.component';
 import { BlogPostSortComponent } from '../modules/admin/blogEditor/blog-post-sort/blog-post-sort.component';
 import { PosOrderItemListComponent } from '../modules/posorders/pos-order/pos-order-item-list/pos-order-item-list.component';
+import { PrintTemplateComponent } from '../modules/admin/settings/printing/reciept-pop-up/print-template/print-template.component';
+import { PrintTemplatePopUpComponent } from '../modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 
 const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
   provide: HTTP_INTERCEPTORS ,
@@ -449,7 +451,9 @@ const LOGGING_INTERCEPTOR_PROVIDER: ClassProvider = {
 
     StoreCreditEditorComponent,
     StoreCreditListComponent,
-
+    
+    PrintTemplatePopUpComponent,
+    PrintTemplateComponent,
     ///end admin
 
     DisplayMenuMainComponent,

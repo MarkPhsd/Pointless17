@@ -63,7 +63,7 @@ button {
   display: grid;
   gap: var(--gap);
   grid-auto-flow: row;
-  grid-template-columns: repeat( auto-fit, minmax(175px, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(75px, 1fr) );
 
   @include for-phone-only {
     --gap: 10px;
@@ -82,13 +82,13 @@ button {
   display: grid;
   gap: var(--gap);
   grid-auto-flow: row;
-  grid-template-columns: repeat( auto-fit, minmax(100PX, 1fr) );
+  grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
 
   @include for-phone-only {
     --gap: 10px;
     display: grid;
     gap: var(--gap);
-    grid-template-columns: repeat( auto-fit, minmax(125px, 1fr) );
+    grid-template-columns: repeat( auto-fit, minmax(105px, 1fr) );
   }
 
 }

@@ -52,7 +52,6 @@ export class DSIEMVTransactionComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {
-
     if (data)  {
       this.payment = data?.data;
       this.amount  = data?.amount;
@@ -67,24 +66,17 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     this.orderService.currentOrder$.subscribe(data  => {
       this.order = data;
-
       const i = 0;
       this.message  = 'Press process to complete transaction.'
       this.processing = false;
       this.displayAction(this.action)
-
       if (this.action == 0 || this.action == 1) {
         this.process();
         return
       }
-
     })
-
-
-
   }
 
   displayAction(action: number) {
@@ -112,7 +104,6 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   processTransation() {
-
     if (this.order) {
       if (this.order.balanceRemaining < 0) {
         this.action == 3
@@ -175,7 +166,6 @@ export class DSIEMVTransactionComponent implements OnInit {
     const payment = this.voidPayment
     if (!this.order) { return }
     const response  = await this.dsiProcess.emvVoid(payment);
-
     this.processVoidResults(response)
   }
 

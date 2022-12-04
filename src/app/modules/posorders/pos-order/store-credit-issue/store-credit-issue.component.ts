@@ -113,7 +113,9 @@ export class StoreCreditIssueComponent implements OnInit, OnDestroy {
     if (!credit) {
       credit = {} as StoreCredit
       credit.orderID = this.order.id;
-      credit.clientID= this.order.clientID;
+      if (this.order.clientID) { 
+        credit.clientID= this.order?.clientID;
+      }
       if (cardNum) {
         credit.cardNum = cardNum
       }

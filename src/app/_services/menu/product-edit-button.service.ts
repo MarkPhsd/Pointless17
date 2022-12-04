@@ -323,17 +323,12 @@ export class ProductEditButtonService {
         data : order
       },
     )
-
   }
 
-
   openProductEditWindow(product: IProduct, itemType: ItemType) {
-
     const data = { product, itemType}
     let dialogRef: any;
-
     switch ( itemType.id ) {
-
       case 1 :
       case 2 :
       case 3 :

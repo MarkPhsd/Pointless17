@@ -80,6 +80,8 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   receiptSaved              : boolean;
   zplSetting                : ISetting;
   receiptLayoutSetting      : ISetting;
+
+  receiptStyles$            : Observable<any>;
   receiptStyles             : ISetting;
   zplText                   : string;
   electronLabelPrinter$     : Observable<ISetting>;
@@ -340,14 +342,20 @@ export class InstalledPrintersComponent implements OnInit, AfterViewInit {
   }
 
 
-  async applyStyles() {
-    const site                = this.siteService.getAssignedSite();
-    this.receiptStyles = await  this.printingService.applyStyles(site)
-    if (this.receiptStyles) {
-      const style     = document.createElement('style');
-      style.innerHTML = this.receiptStyles.text;
-      document.head.appendChild(style);
-    }
+  applyStyles() {
+    const site         = this.siteService.getAssignedSite();
+    this.receiptStyles$ =   this.printingService.applyStylesObservable(site)
+    
+    this.receiptStyles$.pipe(switchMap(data => { 
+      if (data) {
+        this.receiptStyles = data;
+        const style     = document.createElement('style');
+        style.innerHTML = this.receiptStyles.text;
+        document.head.appendChild(style);
+        return of(data)
+      }
+
+    }))
   }
 
   sendElectron() {

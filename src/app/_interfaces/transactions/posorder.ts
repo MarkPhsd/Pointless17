@@ -111,6 +111,7 @@ export interface IPOSOrder {
   tableUUID            : string;
   floorPlanID           : number;
   tableName             : string;
+  orderCode:             string;
 }
 
 export interface ClientsPOSOrders {

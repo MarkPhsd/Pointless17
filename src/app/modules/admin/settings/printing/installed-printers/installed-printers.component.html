@@ -1,3 +1,4 @@
+<div *ngIf="(receiptStyles$ | async) as styles"></div>
 <div class="header">
   <h2>Print Settings </h2>
   <p>
@@ -191,6 +192,7 @@
           </div>
         </mat-select>
       </mat-form-field>
+      
     </div>
 
     <ng-template #loadingReceiptTemplates>

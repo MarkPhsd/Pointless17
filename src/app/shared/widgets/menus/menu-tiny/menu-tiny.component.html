@@ -33,7 +33,7 @@
 
 </div>
 
-<div class="submenu-position">
+<div [class]="submenuposition">
   <div fxLayout="row"
        class="submenu-sections"
        *ngIf="displayCategories" >
@@ -75,9 +75,11 @@
         <mat-icon>more_vert</mat-icon>
       </button>
 
-  </div>
+    </div>
 
-  <div class="submenu-position" *ngIf="submenu"></div>
+  <div 
+       *ngIf="submenu"></div>
+
     <ul id="accordion"
         class="accordion">
         <li>
@@ -106,6 +108,7 @@
           </mat-menu>
         </li>
     </ul>
+
   </div>
 
   <button mat-icon-button

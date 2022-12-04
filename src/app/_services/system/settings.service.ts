@@ -601,7 +601,7 @@ export class SettingsService {
   //////////////////
   async initCacheTime(site: ISite): Promise<ISetting> {
     const data = await this.getSettingByName(site,"CacheTime").pipe().toPromise()
-    if (data) {return data }
+    if (data) { return data }
     let setting = {} as ISetting;
     setting.name = "CacheTime"
     setting.value = '10000'

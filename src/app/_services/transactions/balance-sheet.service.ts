@@ -1,9 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient,  } from '@angular/common/http';
-import { BehaviorSubject, Observable, } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 
 import { ISite } from 'src/app/_interfaces';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { ElectronService } from 'ngx-electron';
+import { SitesService } from '../reporting/sites.service';
+import { PlatformService } from '../system/platform.service';
 
 export interface IBalanceSheetPagedResults {
   results:      BalanceSheetOptimized[];
@@ -193,13 +196,52 @@ export interface BalanceSheetSearchModel {
 
 export class BalanceSheetService {
 
-
   constructor(
+    private electronService: ElectronService,
+    private platFormService: PlatformService,
+    private siteService: SitesService,
     private http: HttpClient,
     private _fb: FormBuilder,
   )
   {
+  }
 
+  openDrawerFromBalanceSheet(): Observable<IBalanceSheet> { 
+    let deviceName = localStorage.getItem('devicename');
+    if (!deviceName) { 
+       deviceName = localStorage.getItem('deviceName');
+    }
+    const site = this.siteService.getAssignedSite()
+    const item$ =  this.getCurrentUserBalanceSheet(site, deviceName).pipe(switchMap(data => { 
+      if (data.drawerAB == 2) { 
+        if (this.platFormService.isAppElectron){ 
+          this.openDrawerTwo()
+        }
+        return of(data)
+      }
+      if (data.drawerAB == 1 || data.drawerAB == 0) { 
+        if (this.platFormService.isAppElectron){ 
+          this.openDrawerOne()
+        }
+        return of(data)
+      }
+      if (!data) { 
+        if (this.platFormService.isAppElectron){ 
+          this.openDrawerOne()
+        }
+        return of(data)
+      }
+    }))
+    return item$
+  }
+
+  async  openDrawerOne() { 
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response        = await emvTransactions.openCashDrawerOne()
+  }
+  async  openDrawerTwo() { 
+    const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
+    const response        = await emvTransactions.openCashDraweTwo()
   }
 
   getSheetType(sheet: IBalanceSheet) {

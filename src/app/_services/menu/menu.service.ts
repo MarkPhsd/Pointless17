@@ -564,12 +564,24 @@ export class MenuService {
 
     const uri =  this.sitesService.getCacheURI(url)
 
-    const cacheTime = this.sitesService.getCurrentCache()
-    if ( cacheTime  == 0 ) {
-      return  this.httpClient.post<any>(url, productSearchModel )
+    const cacheTime = this.sitesService.getCurrentCache();
+ 
+    let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
+    console.log('appCache getMenuItemsBySearchPaged', appCache);
+
+    if (appCache) {
+      if (appCache?.value && appCache?.boolean) {
+        const uri = { url: url, cacheMins: appCache.value}
+        return this.httpCache.post<any>(uri, productSearchModel)
+      }
     }
 
-    return this.httpCache.post<any>(uri, productSearchModel)
+    return  this.httpClient.post<any>(url, productSearchModel )
+    // if ( cacheTime  == 0 ) {
+      
+    // }
+
+    // return this.httpCache.post<any>(uri, productSearchModel)
 
   }
 

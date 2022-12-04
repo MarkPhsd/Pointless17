@@ -69,7 +69,13 @@ ul {
 
 .submenu-position  {
   position: fixed;
-  bottom: 0;
+  bottom: 0px;
+  left: 0;
+}
+
+.submenu-position-tiny { 
+  position: fixed;
+  bottom: 55px;
   left: 0;
 }
 

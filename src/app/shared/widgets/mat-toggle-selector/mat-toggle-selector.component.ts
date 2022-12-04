@@ -33,7 +33,7 @@ export class MatToggleSelectorComponent implements OnChanges {
   // @Input()  sideBar : boolean;
   departmentID: number;
   subscribed : boolean;
-
+  @Input() styleHeight = ''
   constructor() {
   }
 

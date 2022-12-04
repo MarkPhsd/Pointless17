@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
-import { lte } from 'lodash';
+
 import { EMPTY, of, Subscription, Observable } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
@@ -12,6 +12,7 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { DatePipe } from '@angular/common';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { catchError, switchMap,  } from 'rxjs/operators';
+import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 
 @Component({
   selector: 'app-receipt-layout',
@@ -25,6 +26,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
   action$ : Observable<any>;
 
+  @Input() templateInit: boolean;
   @Input() headerText  : string;
   @Input() itemText    : string;
   @Input() footerText  : string;
@@ -69,7 +71,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   _order: Subscription;
 
   initSubscriptions() {
-
     this.site = this.siteService.getAssignedSite();
     return this.orderService.currentOrder$.pipe(
       switchMap(
@@ -105,6 +106,39 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     ))
   }
 
+  initTemplateData(order) { 
+    if (!order) { return null }
+    this.items      = this.order.posOrderItems;
+
+    if (!this.payments) {
+      this.payments   = this.order.posPayments
+    }
+
+    this.orders     = [];
+    if (this.order) { this.orders.push(this.order)}
+    const datepipe: DatePipe = new DatePipe('en-US');
+
+    if (order.orderDate) { this.order.orderTime = datepipe.transform( order.orderDate, 'HH:mm')     }
+    if (this.items)      { this.items           = this.items.filter( item => item.quantity != 0  );     }
+    if ( this.payments)  { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
+
+    const site = this.siteService.getAssignedSite()
+    return this.serviceTypeService.getTypeCached(site, order.serviceTypeID).pipe(
+      switchMap(data   => {
+        if (!data) { return of(this.order) }
+        this.orderType = data
+        this.orderTypes = []
+        this.orderTypes.push(this.orderType)
+        if (this.subFooterText) {
+          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, 
+                                                                                         this.orderTypes, 'ordertypes')
+        }
+        this.getInterpolatedData()
+        this.printingService.updatePrintReady(true)
+        return of(this.order)
+      }
+    ))
+  }
   constructor(
     private settingService  : SettingsService,
     private serviceTypeService: ServiceTypeService,
@@ -116,10 +150,14 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+    if (this.templateInit) { 
+      this.action$ = this.initTemplateData(this.order)
+      return ;
+    }
     this.getReceiptWidth()
     this.action$ = this.initSubscriptions().pipe(
         switchMap(data => {
-          return of(data)
+            return of(data)
           }
         )
       ).pipe(
@@ -145,9 +183,8 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
  refreshData() {
     this.site = this.siteService.getAssignedSite();
-     this.initSubscriptions();
+    this.initSubscriptions();
     if (!this.order) {  this.getTestData();  }
-    // this.service$ = this.getOrderTypeInfo(this.order.serviceTypeID)
     return
   }
 
@@ -180,6 +217,18 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
     if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
+
+    if (this.items) { 
+      this.items = this.items.filter(data => {
+        const item = data as IPOSOrderItem; 
+        if (data?.productName.trim() === 'Gratuity') {
+          const order = this.order as IPOSOrder;
+          order.gratuity = +(item.unitPrice * item.quantity).toFixed(2)
+        }
+        console.log(data.productName, data.unitPrice)
+        return data?.productName.trim() != 'Gratuity'
+      })
+    }
 
     try {
 

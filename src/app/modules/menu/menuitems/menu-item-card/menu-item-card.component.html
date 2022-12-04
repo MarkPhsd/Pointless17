@@ -1,73 +1,90 @@
+
 <mat-card>
-  <div fxLayout="row"
-       fxLayoutAlign="space-around center">
-    <div fxLayout="column"
-         fxLayoutAlign="start center">
+    <div fxLayout="row"
+        fxLayoutAlign="space-around center">
+      <div fxLayout="column"
+          fxLayoutAlign="start center">
 
-      <div *ngIf="isDiscountItem && !isApp">
-        <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
-                    menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
-            {{menuItem?.itemType?.name }} - {{ menuItem?.cannabisType }}
+        <div *ngIf="isDiscountItem && !isApp">
+          <div *ngIf="menuItem.itemType.name.toLowerCase() == 'Discount % Entire Order' ||
+                      menuItem.itemType.name.toLowerCase() == 'Discount % One Item'">
+              {{menuItem?.itemType?.name }} - {{ menuItem?.cannabisType }}
+          </div>
+          <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
+                      menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
+              {{menuItem?.itemType?.name }} - {{menuItem?.cannabisType | currency}}
+          </div>
         </div>
-        <div *ngIf="menuItem.itemType.name.toLowerCase() == 'cash discount on order'.toLowerCase() ||
-                    menuItem.itemType.name.toLowerCase() == 'Cash Discount on Item'.toLowerCase()">
-            {{menuItem?.itemType?.name }} - {{menuItem?.cannabisType | currency}}
+
+        <div *ngIf=" menuItem.name != 'Load More'">
+          <div *ngIf="(isApp && !imageUrl) || !imageUrl"
+              class="product-name-only" >
+            <button mat-raised-button
+                    class="image-button"
+                    fxFill
+                    (click)="menuItemAction(true)">
+              {{ menuItem.name  | truncateText: 30  }}
+              <mat-icon>{{menuItem?.itemType?.icon}}</mat-icon>
+            </button>
+          </div>
         </div>
-      </div>
 
-      <div *ngIf="(isApp && !imageUrl) || !imageUrl"
-           class="product-name-only" >
-        <button mat-raised-button
-                class="image-button"
-                fxFill
-                (click)="menuItemAction(true)">
-          {{ menuItem.name  | truncateText: 30  }}
-          <mat-icon>{{menuItem?.itemType?.icon}}</mat-icon>
-        </button>
-      </div>
-
-      <!-- <div *ngIf="!isDiscountItem && !imageUrl" >
-        <div class="description-text"  (click)="menuItemAction(true)">
-           {{ menuItem.name  }}
+        <div *ngIf=" menuItem.name === 'Load More'">
+          <div *ngIf="(isApp && !imageUrl) || !imageUrl"
+              class="product-name-only" >
+            <button mat-raised-button
+                    class="image-button"
+                    color="warn"
+                    fxFill
+                    (click)="menuItemAction(true)">
+              {{ menuItem.name  | truncateText: 30  }}
+              <mat-icon>refresh</mat-icon>
+            </button>
+          </div>
         </div>
-      </div> -->
 
-      <div *ngIf="!isDiscountItem && imageUrl" >
+        <!-- <div *ngIf="!isDiscountItem && !imageUrl" >
+          <div class="description-text"  (click)="menuItemAction(true)">
+            {{ menuItem.name  }}
+          </div>
+        </div> -->
 
-        <img *ngIf="isApp && !isCategory"
+        <div *ngIf="!isDiscountItem && imageUrl" >
+
+          <img *ngIf="isApp && !isCategory"
+                [src]="imageUrl"
+                onerror   = "this.src='assets/images/placeholderimage.png'"
+                class="product-image"
+                (click)="menuItemAction(true)"/>
+
+          <img  *ngIf="!isApp && !isCategory"
+                [src]="imageUrl"
+                onerror   = "this.src='assets/images/placeholderimage.png'"
+                class="product-image"
+                (click)="menuItemAction(false)"/>
+
+          <div class="round-container">
+            <img  *ngIf="isCategory"
               [src]="imageUrl"
               onerror   = "this.src='assets/images/placeholderimage.png'"
               class="product-image"
               (click)="menuItemAction(true)"/>
+          </div>
 
-        <img  *ngIf="!isApp && !isCategory"
-              [src]="imageUrl"
-              onerror   = "this.src='assets/images/placeholderimage.png'"
-              class="product-image"
-              (click)="menuItemAction(false)"/>
-
-        <div class="round-container">
-          <img  *ngIf="isCategory"
-            [src]="imageUrl"
-            onerror   = "this.src='assets/images/placeholderimage.png'"
-            class="product-image"
-            (click)="menuItemAction(true)"/>
         </div>
 
       </div>
-
     </div>
-  </div>
 
-  <div *ngIf="!isDiscountItem && imageUrl" >
-    {{ menuItem.name  | truncateText: 30   }}
-  </div>
-
-  <span *ngIf="menuItem?.id != -1">
-    <div  class="product-name" *ngIf="!menuItem.itemType" >
-      Type Required.
+    <div *ngIf="!isDiscountItem && imageUrl" >
+      {{ menuItem.name  | truncateText: 30   }}
     </div>
-  </span>
+
+    <span *ngIf="menuItem?.id != -1">
+      <div  class="product-name" *ngIf="!menuItem.itemType" >
+        Type Required.
+      </div>
+    </span>
 
   <div>
 

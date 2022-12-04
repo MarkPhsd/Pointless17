@@ -95,8 +95,8 @@ export class OrderTotalComponent implements OnInit {
         this.order.posOrderItems.forEach(data => { 
           const itemCost =  (+data.quantity * +data.wholeSale)
           this.cost = itemCost + this.cost
-          console.log(itemCost)
-          console.log('cost', this.cost)
+          // console.log(itemCost)
+          // console.log('cost', this.cost)
         })
       }
     }

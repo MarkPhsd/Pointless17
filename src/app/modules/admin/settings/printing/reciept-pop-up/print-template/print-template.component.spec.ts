@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MenuTinyComponent } from './menu-tiny.component';
+import { PrintTemplateComponent } from './print-template.component';
 
-describe('MenuTinyComponent', () => {
-  let component: MenuTinyComponent;
-  let fixture: ComponentFixture<MenuTinyComponent>;
+describe('PrintTemplateComponent', () => {
+  let component: PrintTemplateComponent;
+  let fixture: ComponentFixture<PrintTemplateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MenuTinyComponent ]
+      declarations: [ PrintTemplateComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(MenuTinyComponent);
+    fixture = TestBed.createComponent(PrintTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -142,8 +142,14 @@ export class OrderHeaderDemoGraphicsComponent implements OnInit,OnChanges  {
   assignClientID(client) {
     if (this.order) {
       const site = this.siteService.getAssignedSite();
-      this.order.clientID = client.id;
-      this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
+      if (client) { 
+        try {
+          this.order.clientID = client?.id;
+          this.order.customerName = client?.lastName.substr(0,2) + ', ' + client?.firstName
+        } catch (error) {
+          
+        }
+      }
       this.orderService.putOrder(site, this.order).subscribe(data => {
         this.orderService.updateOrderSubscription(data)
       })

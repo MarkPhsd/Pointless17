@@ -67,19 +67,19 @@
               <!-- {{userAuth.user | json}} -->
 
               <div class="buttons-header">
-                <div>
+                <div *ngIf="order.balanceRemaining != 0">
                   <button mat-raised-button color="warn" (click)="requestService()">
                     <mat-icon>hail</mat-icon>
                     <br>Call Staff
                   </button>
                 </div>
-                <div>
+                <div *ngIf="order.balanceRemaining != 0">
                   <button mat-raised-button color="primary" (click)="requestCheck()">
                     <mat-icon>payment</mat-icon>
                     <br>Get Check
                   </button>
                 </div>
-                <div>
+                <div *ngIf="order.balanceRemaining != 0">
                   <button mat-raised-button color="primary" (click)="payOrder()">
                     <div *ngIf="!userAuth.user || userAuth.user?.username.toLowerCase() === 'temp'">
                       Login to Pay
@@ -99,6 +99,11 @@
                 [mainPanel]="false"
                 [order]="order">
               </app-order-total>
+              <h3>Order Balance : {{order.balanceRemaining | currency}}</h3>
+              <app-payment-balance
+                [mainPanel]="true"
+                [order]="order">
+              </app-payment-balance>
             </mat-card-content>
           </mat-card>
 

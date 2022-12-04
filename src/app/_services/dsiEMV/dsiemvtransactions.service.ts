@@ -255,6 +255,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     if (response) {
       const parser  = new XMLParser(null);
       this.dsiResponse =  parser.parse(response)
+      console.log('xml - response', this.dsiResponse)
       return this.dsiResponse;
     }
     const dsiResponse = {} as RStream;
@@ -382,8 +383,6 @@ export class DSIEMVTransactionsService implements OnDestroy {
 
     try {
       if (transaction.SecureDevice.toLowerCase() === 'test') {
-
-        console.log('EMVTransaction Point')
         const cmdResponse = {} as CmdResponse;
         cmdResponse.TextResponse = 'Approved';
         const rStream = {} as RStream;
@@ -430,6 +429,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     if (response) {
       const parser  = new XMLParser(null);
       let dsiResponse =  parser.parse(response)
+      console.log('dsiResponse', dsiResponse)
       return dsiResponse;
     }
   }
@@ -459,6 +459,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     const xml = this.getResetXML()
     const winax = this.electronService.remote.require('./datacap/transactions.js');
     const response = winax.EMVPadReset(xml);
+    console.log('xml - response', xml, response)
     return response
   }
 

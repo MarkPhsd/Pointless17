@@ -24,10 +24,12 @@ import { OrderMethodsService } from '../transactions/order-methods.service';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { UISettingsService } from './settings/uisettings.service';
 import { PrintingAndroidService} from  './printing-android.service';
+import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
+import { PrintTemplatePopUpComponent } from 'src/app/modules/admin/settings/printing/reciept-pop-up/print-template-pop-up/print-template-pop-up.component';
 
 export interface printOptions {
-  silent: true;
-  printBackground: false;
+  silent: boolean;
+  printBackground: boolean;
   deviceName: string;
 }
 
@@ -47,10 +49,11 @@ export class PrintingService {
   private _printReady       = new BehaviorSubject<boolean>(null);
   public printReady$        = this._printReady.asObservable();
 
-  private _printView          = new BehaviorSubject<number>(null);
+  public _printView          = new BehaviorSubject<number>(null);
   public printView$           = this._printView.asObservable();
-  private __printView         : number;
+  public __printView         : number;
 
+  image: string;
   get printView() {
     return this.__printView;
   }
@@ -97,9 +100,27 @@ export class PrintingService {
     }
   }
 
+  //     this.printingService.printElectronTemplateOrder(location.printer, order, location.templateID )
+  printElectronTemplateOrder(printOrderList): Observable<any> {
+    const site = this.siteService.getAssignedSite()
+    const styles$ = this.appyStylesCachedObservable(site)
+  
+    return styles$.pipe(switchMap(data => { 
+      return this.dialog.open(PrintTemplatePopUpComponent, 
+        { width:        '450px',
+          minWidth:     '450px',
+          height:       '600px',
+          minHeight:    '600px',
+          data : printOrderList
+        },
+        ).afterClosed()
+    }))
+
+  }
+
   async initDefaultLabel() {
-    const site = this.siteService.getAssignedSite();
-    this.zplSetting           = await this.settingService.setDefaultZPLText(site);
+    const site        = this.siteService.getAssignedSite();
+    this.zplSetting   = await this.settingService.setDefaultZPLText(site);
   }
 
   async refreshInventoryLabel(zplText: string, data: IInventoryAssignment): Promise<string> {
@@ -124,8 +145,7 @@ export class PrintingService {
     }
   }
 
-  async refreshProductLabel(zplText: string, data: IInventoryAssignment): Promise<string> {
-
+  refreshProductLabel(zplText: string, data: IInventoryAssignment): Observable<string> {
     const site        =  this.siteService.getAssignedSite();
     if (!zplText) {return}
 
@@ -141,21 +161,40 @@ export class PrintingService {
 
     if (zpl) {
       const labelImage$  =  this.labelaryService.postZPL(site, zpl)
-      const img = await labelImage$.pipe().toPromise()
-      return  `data:image/jpeg;base64,${img}`
+      const img$ =  labelImage$.pipe(switchMap(data => { 
+        this.image =  `data:image/jpeg;base64,${data}`
+        return of(data)
+      }))
     }
   }
 
-
-  async applyStyles(site: ISite): Promise<ISetting> {
-    const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-    const receiptStyle = await receiptStyle$.pipe().toPromise()
-    return this.setHTMLReceiptStyle(receiptStyle)
-  }
+  // async applyStyles(site: ISite): Promise<ISetting> {
+  //   const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
+  //   const receiptStyle = await receiptStyle$.pipe().toPromise()
+  //   return this.setHTMLReceiptStyle(receiptStyle)
+  // }
 
   applyStylesObservable(site: ISite): Observable<ISetting> {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
     return receiptStyle$
+  }
+
+  applyStyle(receiptStyles: ISetting): ISetting {
+    if (receiptStyles && receiptStyles.text) {
+      const style             = document.createElement('style');
+      style.innerHTML         = receiptStyles.text;
+      document.head.appendChild(style);
+      return this.receiptStyles
+    }
+    return null
+  }
+
+  async applyBalanceSheetStyles(): Promise<ISetting> {
+    const value =   await  this.appyBalanceSheetStyle();
+    const style             = document.createElement('style');
+    style.innerHTML         = value;
+    document.head.appendChild(style);
+    return  this.receiptStyles
   }
 
   //convert instances to appyBalanceSheetStyleObservable
@@ -209,7 +248,6 @@ export class PrintingService {
     return null;
   }
 
-
   getDomToImage(node: any) {
       domtoimage.toPng(node)
     .then(function (dataUrl) {
@@ -235,8 +273,7 @@ export class PrintingService {
   }
 
    // const node = document.getElementById('printsection');
-  public convertToPDF(node: any)
-  {
+  public convertToPDF(node: any)  {
     try {
       const options = { background: 'white', height: 845, width: 595 };
       domtoimage.toPng(node, options).then(
@@ -256,7 +293,7 @@ export class PrintingService {
     }
   }
 
-  async convertToPNG(node: any)
+  convertToPNG(node: any)
   {
     try {
       const options = { background: 'white', height: 845, width: 300 };
@@ -296,11 +333,9 @@ export class PrintingService {
     let printWindow = new this.electronService.remote.BrowserWindow({ width: 350, height: 600 })
     printWindow.loadURL(contents)
       .then( e => {
-
         if (options.silent) {
           printWindow.hide();
         }
-
         if (!options) {
           options = {
             silent: true,
@@ -335,6 +370,25 @@ export class PrintingService {
     )
     return false;
 
+  }
+
+  printDocuments(printOrderList: any): Observable<any> { 
+    const printOrders = printOrderList as IPrintOrders[]
+    return this.printElectronTemplateOrder(printOrderList)
+    // printOrders.forEach(data => { 
+    //   const location = data.location;
+    //   const order = data.order;
+    //   //we can get the document and we can get the printer
+    //   //then we can print to electron
+    //   if (this.platFormService.isAppElectron) { 
+    //     console.log(`print to ${location.printer} and ${location.name} and item Count 
+    //                           ${order.posOrderItems.length}`)
+    //   }
+    //   return of(null)
+    //   // if (this.platFormService.androidApp) { 
+    //   //   // this.printingService.printAndroidTemplateOrder(location.address, document )
+    //   // }
+    // })
   }
 
   getPrintContent(htmlContent: any, styles: any) {
@@ -420,15 +474,11 @@ export class PrintingService {
       const menuItem$ = this.menuItemService.getMenuItemByID(site, item.productID)
       printer$.pipe(data => {
           printer = data;
-          if (!printer || !printer.text) {
-            return of(null)
-          }
+          if (!printer || !printer.text) {return of(null)}
           return  menuItem$
         }).pipe(
           switchMap(data => {
-            if ( !data || !data.itemType) {
-              return of(null)
-            }
+            if ( !data || !data.itemType) {return of(null)}
             if ( data.itemType && ( (data.itemType.labelTypeID != 0 ) && printer.text ) ) {
                 if (data.itemType.labelTypeID !=0 ) {
                   return   this.settingService.getSetting(site, data.itemType.labelTypeID)
@@ -436,7 +486,6 @@ export class PrintingService {
             } else {
               return this.orderItemService.setItemAsPrinted(site, item )
             }
-
         })).pipe(
           switchMap( data => {
             if (!data) { return of(null) }

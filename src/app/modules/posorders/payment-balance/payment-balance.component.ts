@@ -152,15 +152,12 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     const message = 'Paypal can be voided from the POS Sales, but must be completed in the paypal account itself.'
 
     const method$ = this.getPaymentMethod(payment.paymentMethodID)
-
     this.void$ = method$.pipe(switchMap( data=> {
-        if (payment && data.name != 'paypal') {
+        if (payment && data.name === 'paypal') {
           this.notify(message, 'Alert', 2000)
-          //only manager can void.
-          this.productEditButtonService.openVoidPaymentDialog(payment)
         }
+        this.productEditButtonService.openVoidPaymentDialog(payment)
         return of(data)
-
         }
       )
     )

@@ -1,5 +1,7 @@
 <div *ngIf="(serviceType$ | async) as item"></div>
 <div *ngIf="(action$ | async) as item"></div>
+<div *ngIf="(printAction$ | async) as item"></div>
+
 <div  *ngIf="order" class="container">
   <div [class]="orderlayout">
     <div>
@@ -86,7 +88,7 @@
                 [openBar]             ="openBar"
                 [mainPanel]           ="mainPanel"
                 [order]               ="order"
-                [purchasOrderEnabled] ="userAuthorization.isManagement"
+                [purchasOrderEnabled] ="userAuthorization.isManagement && purchaseOrderEnabled"
                 [emailOption]         ="emailOption"
                 [ssmsOption]          ="ssmsOption"
                 [refundItemEnabled]   ="refundItemsAvalible"
@@ -133,6 +135,7 @@
             *ngIf="(!smallDevice && mainPanel)
                 || (!mainPanel && smallDevice)
                 || (!mainPanel && !smallDevice)">
+               
         <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div>
   </div>

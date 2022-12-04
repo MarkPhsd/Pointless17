@@ -10,6 +10,12 @@ import { ISite } from 'src/app/_interfaces';
 
 export class ExportDataService {
 
+  public exportSchema$ =of([
+    {id: 10, name: 'Products Counts - Export only'},
+    {id: 11, name: 'Inventory Counts - Export only'},
+    {id: 12, name: 'Department Counts - Export only'},
+    {id: 13, name: 'Category Counts - Export only'},
+  ])
 
   public  schemas$  = of([
     {id: 1, name: 'Products'},
