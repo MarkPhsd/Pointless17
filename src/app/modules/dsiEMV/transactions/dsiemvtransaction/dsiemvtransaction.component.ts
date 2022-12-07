@@ -8,7 +8,8 @@ import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { OrderMethodsService } from 'src/app/_services/transactions/order-methods.service';
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
-import { switchMap, } from 'rxjs';
+import { switchMap, Observable, of, pipe} from 'rxjs';
+
 @Component({
   selector: 'app-dsiemvtransaction',
   templateUrl: './dsiemvtransaction.component.html',
@@ -16,6 +17,10 @@ import { switchMap, } from 'rxjs';
 })
 export class DSIEMVTransactionComponent implements OnInit {
 
+  processingResults: boolean;
+  response: any;
+
+  action$: Observable<any>
   payment   : any;
   amount    : number;
   message   : string;
@@ -72,10 +77,11 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.message  = 'Press process to complete transaction.'
       this.processing = false;
       this.displayAction(this.action)
-      if (this.action == 0 || this.action == 1) {
-        this.process();
-        return
-      }
+      // if (this.action == 0 || this.action == 1) {
+      //   setTimeout(()=>{
+      //     this.process();
+      //   },50);
+      // }
     })
   }
 
@@ -94,13 +100,26 @@ export class DSIEMVTransactionComponent implements OnInit {
       //action = 7 = WIC
   }
 
-  async process() {
+  process() {
     this.processing = true;
     this.message  = 'Please check the device for input if required.'
     this.resultMessage = '';
-    setTimeout(()=>{
-      this.processTransation();
-    },50);
+    this.processTransation();
+  }
+
+  async testProcess() {
+    const amount = this.amount
+    const payment = this.payment
+    if (!this.order) { return }
+    this.processingResults = true;
+    this.processing = true;
+    this.response = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processing = true;
+    this.processingResults = false;
+  }
+
+  testSaveTransaction() {
+    this.processResults(this.response)
   }
 
   processTransation() {
@@ -123,8 +142,10 @@ export class DSIEMVTransactionComponent implements OnInit {
       return
     }
 
-    if (this.action == 3 || this.type === 'return' || this.type === 'refund') {
-      this.processRefundCard();
+    if (this.action == 3 ||
+        this.type === 'return' ||
+        this.type === 'refund') {
+        this.processRefundCard();
       return
     }
 
@@ -157,7 +178,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount = this.amount
     const payment = this.payment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processingResults = false;
     this.processResults(response)
   }
 
@@ -165,7 +188,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount = this.amount
     const payment = this.voidPayment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvVoid(payment);
+    this.processingResults = false;
     this.processVoidResults(response)
   }
 
@@ -173,7 +198,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount  = this.amount
     const payment = this.payment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvReturn(amount, payment.id,  this.manualPrompt );
+    this.processingResults = false;
     this.processResults(response)
   }
 
@@ -181,7 +208,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount = this.amount
     const payment = this.payment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processingResults = false;
     this.processResults(response)
   }
 
@@ -189,7 +218,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount = this.amount
     const payment = this.payment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processingResults = false;
     this.processResults(response)
   }
 
@@ -197,7 +228,9 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount = this.amount
     const payment = this.payment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processingResults = false;
     this.processResults(response)
   }
 
@@ -205,136 +238,147 @@ export class DSIEMVTransactionComponent implements OnInit {
     const amount = this.amount
     const payment = this.payment
     if (!this.order) { return }
+    this.processingResults = true;
     const response  = await this.dsiProcess.emvSale(amount, payment.id,  this.manualPrompt, false );
+    this.processingResults = false;
     this.processResults(response)
   }
 
-  async processVoidResults(response: RStream) {
+  processVoidResults(response: RStream) {
 
     try {
+      console.log('processVoidResults RStream', response.CmdResponse)
+      const cmdResponse = response?.CmdResponse;
+      const result =  this.readResult(cmdResponse);
 
-    console.log('RStream', response.CmdResponse)
-    const cmdResponse = response?.CmdResponse;
-
-    const result =  this.readResult(cmdResponse);
-    if (!result) {
-      this.processing = false;
-      return;
-    }
-
-    if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
-      return;
-    }
-
-    if (response) {
-
-      const item = {} as OperationWithAction;
-
-      item.action  = this.action;
-      item.payment = this.voidPayment;
-      try {
-        item.payment.textResponse     = response?.CmdResponse?.TextResponse;
-      } catch (error) {
-
-      }
-      try {
-        item.payment.amountPaid      = +response.TranResponse?.Amount?.Purchase;
-      } catch (error) {
+      if (!result) {
+        this.processing = false;
+        return;
       }
 
-      try {
-        item.payment.tipAmount       = +response?.TranResponse?.Amount?.Gratuity;
-      } catch (error) {
-      }
-      try {
-        item.payment.captureStatus   = response?.TranResponse?.CaptureStatus;
-      } catch (error) {
-      }
-      try {
-        item.payment.entryMethod     = response?.TranResponse?.EntryMethod;
-      } catch (error) {
-      }
-      try {
-        item.payment.applicationLabel= response?.TranResponse?.ApplicationLabel;
-      } catch (error) {
-      }
-      try {
-        item.payment.captureStatus   = response?.TranResponse?.CaptureStatus;
-      } catch (error) {
-      }
-      try {
-        item.payment.amountReceived  = +response?.TranResponse?.Amount?.Purchase;
-      } catch (error) {
-      }
-      try {
-        item.payment.processData     = response?.TranResponse?.ProcessData;
-      } catch (error) {
-      }
-      try {
-        item.payment.trancode        = response?.TranResponse?.TranCode
-        item.payment.tranType        = response?.TranResponse?.TranCode
-      } catch (error) {
+      if (!response) {
+        this.message = 'Processing failed, reason uknown.'
+        this.processing = false;
+        return;
       }
 
-      const site = this.siteService.getAssignedSite()
-      const response$ = this.pOSPaymentService.voidPayment(site, item)
+      if (response) {
 
-      response$.pipe(
-        switchMap(response => {
-          const id = item.payment.orderID.toString()
-          const item$ = this.orderService.getOrder(site, id, false)
-          return item$
+        const item = {} as OperationWithAction;
+
+        item.action  = this.action;
+        item.payment = this.voidPayment;
+        try {
+          item.payment.textResponse     = response?.CmdResponse?.TextResponse;
+        } catch (error) {
+
         }
-      )).subscribe( order => {
-        this.orderService.updateOrderSubscription(order)
-        this.orderMethodService.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
-        this.message = 'Payment voided. Press cancel to continue. Order is re-opened if closed.'
-      })
+        try {
+          item.payment.amountPaid      = +response.TranResponse?.Amount?.Purchase;
+        } catch (error) {
+        }
 
-      // // const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment, this.order)
-      // this.readResult(cmdResponse);
+        try {
+          item.payment.tipAmount       = +response?.TranResponse?.Amount?.Gratuity;
+        } catch (error) {
+        }
+        try {
+          item.payment.captureStatus   = response?.TranResponse?.CaptureStatus;
+        } catch (error) {
+        }
+        try {
+          item.payment.entryMethod     = response?.TranResponse?.EntryMethod;
+        } catch (error) {
+        }
+        try {
+          item.payment.applicationLabel= response?.TranResponse?.ApplicationLabel;
+        } catch (error) {
+        }
+        try {
+          item.payment.captureStatus   = response?.TranResponse?.CaptureStatus;
+        } catch (error) {
+        }
+        try {
+          item.payment.amountReceived  = +response?.TranResponse?.Amount?.Purchase;
+        } catch (error) {
+        }
+        try {
+          item.payment.processData     = response?.TranResponse?.ProcessData;
+        } catch (error) {
+        }
+        try {
+          item.payment.trancode        = response?.TranResponse?.TranCode
+          item.payment.tranType        = response?.TranResponse?.TranCode
+        } catch (error) {
+        }
+
+        const site = this.siteService.getAssignedSite()
+        const response$ = this.pOSPaymentService.voidPayment(site, item)
+
+        this.action$ = response$.pipe(
+          switchMap(response => {
+            const id = item.payment.orderID.toString()
+            return this.orderService.getOrder(site, id, false)
+          }
+        )).pipe(switchMap( order => {
+            this.orderService.updateOrderSubscription(order)
+            this.orderMethodService.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
+            this.message = 'Payment voided. Press cancel to continue. Order is re-opened if closed.'
+          return of(order)
+        }))
+
       }
+
     } catch (error) {
       console.log('Process Void Error', error)
     }
   }
 
-  async processResults(response:RStream) {
+ processResults(response: RStream) {
+    this.processing = false;
     if (!response) {
-      this.message = 'Processing failed, reason uknown.'
-      this.processing = false;
+      this.message = 'Processing failed, reason unknown.'
+      return
     }
-    if (response) {
-      const cmdResponse =  await this.paymentsMethodsProcess.processCreditCardResponse(response, this.payment, this.order)
-      this.readResult(cmdResponse);
+    if (this.readResult(response?.CmdResponse)) {
+      const item$ = this.paymentsMethodsProcess.processCreditCardResponse(response,
+                    this.payment,
+                    this.order);
+      this.action$ =  item$.pipe(
+          switchMap(data => {
+          if (data) {
+            return of(data)
+          }
+          return of(null)
+          }
+        )
+      )
     }
   }
 
   readResult(cmdResponse: CmdResponse): boolean {
-    console.log('cmdResponse', cmdResponse)
     if (!cmdResponse) {
       this.message = 'Processing failed, no command response.'
+      console.log('readResult', cmdResponse, this.message)
       return false;
     }
     if (!cmdResponse.TextResponse) {
       this.message = 'Processing failed, no text ressponse.'
+      console.log('readResult', cmdResponse, this.message)
       return false;
     }
     if (!cmdResponse.CmdStatus) {
       this.message = 'Processing failed, no cmdStatus.'
+      console.log('readResult', cmdResponse, this.message)
       return false;
     }
 
     this.message        = cmdResponse?.TextResponse;
     this.resultMessage  = cmdResponse?.CmdStatus;
-
     this.processing     = false;
 
     //"AP*", "Approved", "Approved, Partial AP"
-
-    const response = cmdResponse.TextResponse.toLowerCase();
+    const response = cmdResponse?.TextResponse.toLowerCase();
     const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
     if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
       this.cancel();

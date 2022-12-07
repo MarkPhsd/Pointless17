@@ -1,13 +1,11 @@
+<ng-container [ngTemplateOutlet]="templateCurrent"></ng-container>
 
-<div *ngFor="let item of printOrders">
-  order {{item.order.id}}
-  item count {{item.order.posOrderItems.length}}
+<button mat-raised-button (click)="exit()"><mat-icon>close</mat-icon>Exit</button>
+
+<ng-template #printTemplate>
   <app-print-template
-      [order]        ="item.order"
-      [templateID]   ="item.location.templateID"
-      [printerName]  ="item.location.printer"
-      [autoPrint]    ="true"
-      (outPutPrinted)="printingCompleted($event)"
+    [index]        ="index"
+    [autoPrint]    ="true"
+    (outPutPrinted)="printingCompleted($event)"
   ></app-print-template>
-
-</div>
+</ng-template>

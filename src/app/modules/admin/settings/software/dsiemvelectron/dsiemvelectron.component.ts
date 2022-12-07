@@ -3,9 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ElectronService } from 'ngx-electron';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of, switchMap } from 'rxjs';
 import { ISetting } from 'src/app/_interfaces';
-import { RStream, DSIEMVTransactionsService, TranResponse, Transaction,TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
+import { RStream, DSIEMVTransactionsService, TranResponse, Transaction, TStream } from 'src/app/_services/dsiEMV/dsiemvtransactions.service';
 import { DSIProcessService } from 'src/app/_services/dsiEMV/dsiprocess.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { SettingsService } from 'src/app/_services/system/settings.service';
@@ -28,6 +28,9 @@ export class DSIEMVElectronComponent implements OnInit {
   responseObject: any;
   cmdResponse: RStream;
   tranResponse: TranResponse;
+  dsiSettings$: Observable<any>;
+  action$     : Observable<any>;
+  deviceName: string;
 
   pathName = 'default'
   get f() {return this.pathForm.controls}
@@ -43,19 +46,14 @@ export class DSIEMVElectronComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.electronService.remote) {this.isElectron = true  }
-
-    this.initializeDeviceSettings()
-    this.pathForm = this.fb.group({
-      pathName: ['']
-    })
-
+    this.deviceName = this.settingsService.deviceName;
     this.amountForm = this.fb.group({
       amount: ['1.00']
     })
-  }
-
-  initializeDeviceSettings() {
-    this.initForm();
+    this.pathForm = this.fb.group({
+      pathName: ['']
+    })
+    this.initForm()
   }
 
   initForm() {
@@ -65,22 +63,22 @@ export class DSIEMVElectronComponent implements OnInit {
 
   loadSettings() {
     if (!this.inputForm) { return }
-    const dsiDevice = `DSIEMVSettings/${this.settingsService.deviceName}`
     const dsiSettings$ =  this.settingsService.getDSIEMVSettings()
-    dsiSettings$.subscribe(data =>
+    this.dsiSettings$ =  dsiSettings$.pipe(
+      switchMap(data =>
        {
         if (data) {
-          this.inputForm.patchValue(data)
           const json = JSON.stringify(data);
           localStorage.setItem('DSIEMVSettings', json)
+          this.inputForm.patchValue(data)
+          return of(data)
         }
+        return of(null)
       }
-    )
-
+    ))
   }
 
   saveSettings() {
-
     if (!this.settingsService.deviceName) {
       this.siteService.notify('Device name must be set in the device info tab.', 'Alert', 2000)
       return
@@ -97,18 +95,24 @@ export class DSIEMVElectronComponent implements OnInit {
     const setting = {} as ISetting;
 
     setting.text = json;
-    setting.name = `dSIEMVSettings/${this.settingsService.deviceName}`;
+    setting.name = `dSIEMVSettings/${this.deviceName}`;
     setting.id   = item.id;
 
-    this.settingsService.saveSettingObservable(site, setting).subscribe(
-      {next: data => {
+    console.log(setting)
+    const item$ = this.settingsService.saveSettingObservable(site, setting);
+    this.action$ =  item$.pipe(
+      switchMap( data => {
+        console.log('dsi', JSON.parse(data.text))
         this.siteService.notify('Saved', 'Success', 2000)
-      },
-      error : err => {
-        this.siteService.notify('Error ' + err.toString(), 'Alert', 2000)
-      }
-    })
-
+        return of(data)
+      }),
+      catchError(
+        err => {
+         this.siteService.notify('Error ' + err.toString(), 'Alert', 2000)
+          return of(err)
+        }
+      )
+    )
   }
 
   initParamDownload_Transaction() {
@@ -149,14 +153,14 @@ export class DSIEMVElectronComponent implements OnInit {
   }
 
   deleteSettings() {
-    const device = `DSIEMVSettings/${this.settingsService.deviceName}`
+    const device = `DSIEMVSettings/${this.deviceName}`
     localStorage.removeItem(device) //, json)
     this.initForm();
   }
 
   updateSetting(){
     this.saveSettings();
-    const device = `DSIEMVSettings/${this.settingsService.deviceName}`
+    const device = `DSIEMVSettings/${this.deviceName}`
     this.uISettingsService.saveConfig(this.inputForm, device).subscribe(data => {
       this.matSnack.open('Saved', 'success', {duration: 2000})
     })
@@ -164,19 +168,22 @@ export class DSIEMVElectronComponent implements OnInit {
 
   async pinPadReset(){
     const transactiontemp = this.inputForm.value as Transaction;
+    console.log(this.inputForm.value, transactiontemp)
     const transaction     = {} as Transaction // {...transactiontemp, id: undefined}
     transaction.MerchantID    =transactiontemp.MerchantID;
     transaction.TerminalID    =transactiontemp.TerminalID;;
     transaction.OperatorID    =transactiontemp.OperatorID;
     transaction.IpPort        =transactiontemp.IpPort;
-    transaction.UserTrace     = 'PointlessPOS';
-    transaction.TranCode      =transactiontemp.TranCode;
+    transaction.UserTrace     ='PointlessPOS';
+    transaction.SequenceNo    ='0010010010'
+    transaction.TranCode      ='EMVPadReset';
     transaction.SecureDevice  =transactiontemp.SecureDevice;
     transaction.ComPort       =transactiontemp.ComPort;
-    transaction.SequenceNo    ='0010010010'
+
     transaction.HostOrIP      = transactiontemp.HostOrIP;
 
     try {
+      console.log('request', transaction)
       const response    = await this.dsiEMVService.pinPadReset(transaction);
       console.log('response', response)
       this.responseMessage = 'failed'
@@ -200,7 +207,11 @@ export class DSIEMVElectronComponent implements OnInit {
   }
 
   async downloadParams(){
-    const response         = await this.dsiEMVService.mercuryPinPadTest();
+    let transaction       = this.inputForm.value as Transaction;
+    transaction.UserTrace     ='PointlessPOS';
+    transaction.SequenceNo    ='0010010010'
+    transaction.TranCode      = 'EMVParamDownload'
+    const response         = await this.dsiEMVService.emvTransaction(transaction);
     this.responseMessage = 'waiting'
     if (response) {
       this.responseObject = response
@@ -208,16 +219,17 @@ export class DSIEMVElectronComponent implements OnInit {
     }
    }
 
-  async  dollarSaleTest(){
+  async  saleTest(){
 
     const amount = this.amountForm.controls['amount'].value;
     if (!amount) {
       return
     }
 
-    const testAmount       = amount*100
-    const response         = await this.dsiProcess.emvSale(testAmount, this.getRandomInt(1, 300), false, false );
+    const testAmount       = amount
     this.responseMessage   = 'waiting'
+
+    const response         = await this.dsiProcess.emvSale(testAmount, this.getRandomInt(1, 300), false, false );
 
     if (response) {
       this.responseObject  = response

@@ -137,8 +137,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
   // item$ = this.orderMethodService.assignedPOSItems$;
 
-  
-
   transactionUISettingsSubscriber() {
     this.uiSettingsService.transactionUISettings$.subscribe( data => {
       this.enableLimitsView  = false;
@@ -198,7 +196,6 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     // console.log('order header event', event)
     this.uiSettingsService.updateorderHeaderHeight(event.newRect.height, this.windowHeight) //this.orderHeightPanel.nativeElement.offsetHeight)
     this.resizePanel()
-
   }
 
   onResizedorderLimitsPanel(event: ResizedEvent) {
@@ -240,13 +237,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     if (!id) { return }
     if (this.userAuthorization.isManagement) { 
       const site = this.siteService.getAssignedSite()
-      // console.log(id)
-
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => { 
           this.purchaseOrderEnabled = false
           if ( data.filterType == 1  ||  data.filterType == -1 ) {
-            // console.log('data filter', data.filterType)
             this.purchaseOrderEnabled = true
           }
           return of(data)

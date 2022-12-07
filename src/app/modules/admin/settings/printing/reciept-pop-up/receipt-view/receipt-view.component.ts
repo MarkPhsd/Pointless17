@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
   templateUrl: './receipt-view.component.html',
   styleUrls: ['./receipt-view.component.scss']
 })
-export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
+export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   @ViewChild('receipt')      receiptTemplate: TemplateRef<any>;
   @ViewChild('balanceSheet') balanceSheetTemplate: TemplateRef<any>;
@@ -98,6 +98,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
 
   intSubscriptions() {
     if (this.printView == 1 ) {
+   
       this.order$ = this.orderService.currentOrder$.pipe(
         switchMap(data => {
             this.order      = data;
@@ -114,7 +115,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
           }
         )
       ).pipe(switchMap(payment => {
-          console.log(payment)
+          // console.log('this.order', this.order)
+          // console.log( 'payment', payment)
           if (payment) {
             // this.tempPayments.filter((data) => {
             //   return data.id == payment.id;
@@ -124,7 +126,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
           } else {
             this.payments = this.tempPayments;
           }
-
           return of(payment)
         })
       )
@@ -146,23 +147,21 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     private settingService        : SettingsService,
     private siteService           : SitesService,
     private platFormService       : PlatformService,
-    private printingService       : PrintingService,
-    private printingAndroidService: PrintingAndroidService,
-    private btPrinterService      : BtPrintingService,
+    public  printingService       : PrintingService,
     private orderMethodService    : OrderMethodsService,
     private router: Router
     )
   {}
 
-  async ngOnInit() {
+  //this.router.navigate(["/profileEditor/", {id:clientID, miles:clientID }]);
+  // await this.getAndroidPrinterAssignment()
+
+  ngOnInit() {
     this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
-
-    await this.getAndroidPrinterAssignment()
-    this.getElectronPrinterAssignent()
-
+    
     this.intSubscriptions();
-    this.refreshViewObservable()
+    this.refreshView$ =  this.refreshViewObservable()
   }
 
   ngOnDestroy(): void {
@@ -170,11 +169,66 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     if(this._order) { this._order.unsubscribe() }
   }
 
-  ngAfterViewInit() {
-    this.layout$ = this.initDefaultLayoutsObservable()
+  refreshViewObservable(){
+    const defaultReceipt$ = this.getDefaultReceipt()
+    const receipt$    =  this.getDefaultPrinterOb();
+    const styles$     =  this.getStylesForPrintOut()
+    const deviceInfo$ = this.getDeviceInfo()
+    
+    return receipt$.pipe(
+      switchMap(data => {  return defaultReceipt$ })).pipe(
+      switchMap(data => {  return styles$ })).pipe(
+      switchMap(data => { return deviceInfo$})).pipe(
+      switchMap(data => { 
+        this.printingService.updatePrintView(1) 
+        return of(data)
+      }))
   }
 
-  //this.router.navigate(["/profileEditor/", {id:clientID, miles:clientID }]);
+  getDefaultPrinterOb(): Observable<any> {
+    return this.printingService.getElectronReceiptPrinterCached().pipe(
+      switchMap(data => {
+        if (!data) { return };
+        this.electronReceiptSetting = data;
+        this.receiptID   =  +data.option1;
+        this.printerName =  data.text;
+        return of(data) 
+      })
+    )
+  }
+
+  getStylesForPrintOut() { 
+    let ob$ : Observable<any>
+    if (this.printingService.printView  == 2) {
+      ob$ = this.initBalanceSheetDefaultLayoutsObservable()
+    }
+    if (this.printingService.printView  == 1) {
+      ob$ = this.applyStylesObservable()
+    }
+    return ob$
+  }
+
+  //Step 1
+  getDefaultReceipt() {
+    const site = this.siteService.getAssignedSite();
+    this.receiptName =  'defaultElectronReceiptPrinterName'
+    const defaultReceipt$ = this.settingService.getSettingByNameCachedNoRoles(site, this.receiptName)
+    return defaultReceipt$.pipe(
+      switchMap(data => {
+        this.receiptID = data.id
+        return this.settingService.getSetting(site, +data.option1)
+    })).pipe(
+      switchMap(data => {
+      // console.log('sub component', data)
+      this.initSubComponent(data)
+      return of(data)
+    }))
+  }
+
+  applyStyle(receiptStyles: ISetting) {
+    return this.printingService.applyStyle(receiptStyles)
+  }
+  
   openLink() { 
     this.router.navigate(['/qr-receipt/',  {orderCode: this.order.orderCode}])
     this.exit();
@@ -210,10 +264,8 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       this.exit();
       return
     }
-
     this.orderMethodService.emailOrderByEntry(this.order)
     this.exit();
-
   }
 
   get currentView() {
@@ -225,90 +277,22 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     }
   }
 
-  refreshViewObservable(){
-    const receipt$  =  this.getDefaultPrinterOb();
-    if (!this.isElectronApp) { return of(null) };
-    this.refreshView$ = receipt$.pipe(
-      switchMap(data => {
-        if (!data) { return };
-        this.electronReceiptSetting = data;
-        this.receiptID   =  +data.option1;
-        this.printerName =  data.text;
-        if (this.printingService.printView  == 2) {
-          return this.initBalanceSheetDefaultLayoutsObservable()
-        }
-        return of(this.applyStylesObservable());
-      })).pipe(
-        switchMap( data => {
-          if (this.receiptID && data ) {
-            this.initDefaultLayoutsObservable()
-          }
-          return this.getDeviceInfo()
-        })
-      ).pipe(
-        switchMap( data => {
-          if (data && data.text) {
-            const item  = JSON.parse(data.text) as ITerminalSettings
-            if (item) {
-              if (this.platFormService.isAppElectron) {
-                if (item.receiptPrinter) {
-                  this.printerName = item.receiptPrinter
-                }
-              }
-            }
-          }
-          return of(data)
-        })
-    )
-    return of(null)
-  }
-
   getDeviceInfo(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     const device = localStorage.getItem('devicename');
-    return  this.settingService.getSettingByNameCached(site, device)
+    return  this.settingService.getSettingByNameCached(site, device).pipe(switchMap(data => { 
+      const item  = JSON.parse(data.text) as ITerminalSettings
+      if (item) {
+        if (this.platFormService.isAppElectron) {
+          if (item.receiptPrinter) {
+            this.printerName = item.receiptPrinter
+          }
+        }
+      }
+      return of(data)
+    }))
+
   }
-
-  //Step 1
-  initDefaultLayoutsObservable() {
-    try {
-      const site = this.siteService.getAssignedSite();
-      this.printingService.initDefaultLayouts();
-      if (this.receiptStyles)  {
-        this.receiptStyles  = this.applyStyle(this.receiptStyles)
-        return of(this.receiptStyles)
-      };
-      //could be altered for alternate type
-      this.receiptName =  'defaultElectronReceiptPrinterName'
-      const receipt$ = this.settingService.getSettingByNameCachedNoRoles(site, this.receiptName)
-      return receipt$.pipe(
-        switchMap(data => {
-          this.receiptID = data.id
-          return this.settingService.getSetting(site, +data.option1)
-      })).pipe(
-        switchMap(data => {
-        this.initSubComponent(data)
-        return of(data)
-      }))
-
-    } catch (error) {
-      console.log(error)
-    }
-    return of(null)
-  }
-
-  // async  initBalanceSheetDefaultLayouts() {
-  //   try {
-  //     // 'apply balance sheet style'
-  //     const site = this.siteService.getAssignedSite();
-  //     const setting = {} as ISetting;
-  //     setting.text  = await  this.printingService.appyBalanceSheetStyle()
-  //     this.receiptStyles =  setting;
-  //     this.applyStyle( this.receiptStyles)
-  //   } catch (error) {
-  //     console.log(error)
-  //   }
-  // }
 
   initBalanceSheetDefaultLayoutsObservable() {
     // 'apply balance sheet style'
@@ -324,28 +308,18 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     )
   }
 
-  // async applyStyles(): Promise<ISetting> {
-  //   const site  = this.siteService.getAssignedSite();
-  //   this.receiptStyles  = await  this.printingService.appyStylesCached(site)
-  //   this.applyStyle(this.receiptStyles)
-  //   return  this.receiptStyles
-  // }
-
   applyStylesObservable(): Observable<ISetting> {
     const site  = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(
         switchMap( data => {
           this.receiptStyles  =  data
-          this.applyStyle(this.receiptStyles)
+          this.applyStyle(data)
           return of(data)
         }
       )
     )
   }
 
-  applyStyle(receiptStyles) {
-    return this.printingService.applyStyle(receiptStyles)
-  }
 
   async applyBalanceSheetStyles(): Promise<ISetting> {
     // const value = await  this.printingService.appyBalanceSheetStyle();
@@ -354,10 +328,6 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     // document.head.appendChild(style);
     // return  this.receiptStyles
     return this.printingService.applyBalanceSheetStyles()
-  }
-
-  getDefaultPrinterOb(): Observable<any> {
-    return this.printingService.getElectronReceiptPrinterCached()
   }
 
   setDefaultPrinter(item: ISetting) {
@@ -423,25 +393,26 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
       const result = this.printElectron()
       return
     }
-    if (this.platFormService.androidApp) {this.printAndroid() }
+    // if (this.platFormService.androidApp) {this.printAndroid() }
     if (this.platFormService.webMode)    {this.convertToPDF() }
   }
 
   printElectron() {
-    const styles   = this.receiptStyles.text;
-    const contents = this.getReceiptContents(styles)
-    const options  = {
-      silent: true,
-      printBackground: false,
-      deviceName: this.printerName
-    } as printOptions;
-
-    if (!contents) { console.log('no contents in print electron')}
-    if (!options) { console.log('no options in print electron')}
-
-    if (!this.printerName) { console.log('no printerName in print electron')}
-    if (contents && this.printerName, options) {
-        this.printingService.printElectron( contents, this.printerName, options)
+    let styles 
+    if (this.receiptStyles) { 
+      styles = this.receiptStyles.text;
+      const contents = this.getReceiptContents(styles)
+      const options  = {
+        silent: true,
+        printBackground: false,
+        deviceName: this.printerName
+      } as printOptions;
+      if (!contents) { console.log('no contents in print electron')}
+      if (!options) { console.log('no options in print electron')}
+      if (!this.printerName) { console.log('no printerName in print electron')}
+      if (contents && this.printerName, options) {
+          this.printingService.printElectron( contents, this.printerName, options)
+      }
     }
   }
 
@@ -453,33 +424,21 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     this.printingService.convertToPDF( document.getElementById('printsection') )
   }
 
-  async printAndroid() {
-    //create fake date for order. - get order info from postman to use.
-    //passorder info to new method PrintAndroidReceipt.'
-    //save selected printer to local storage
-    //set saved printer name /bt id to selection on load.
-    // const order = this.fakeData.getPOSOrderContents()
-    // this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-    // this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
-    this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
-  }
 
   exit() {
     this.outPutExit.emit('true')
   }
 
-  getElectronPrinterAssignent() {
-    if (this.platFormService.isAppElectron) {
-      const receipt$ = this.getElectronReceiptPrinterAssignentOBS();
-      receipt$.subscribe(data =>{})
-      const label$ = this.getLabelPrinterOBS()
-      label$.subscribe(data =>{})
-    }
+
+  getLabelPrinterAssignment() { 
+    const label$ = this.getLabelPrinterOBS()
+    label$.subscribe(data =>{})
+    return label$
   }
 
   getElectronReceiptPrinterAssignentOBS() {
     if (this.platFormService.isAppElectron) {
-       this.printingService.getElectronReceiptPrinter().pipe(
+      return this.printingService.getElectronReceiptPrinter().pipe(
           switchMap(data => {
             this.electronSetting        = data;
             this.electronReceiptPrinter = data.text;
@@ -488,7 +447,7 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
             if (this.printOptions) {
               this.printOptions.deviceName = data.text
             }
-            return of(data)
+            return of(data);
           }
         )
       )
@@ -508,12 +467,43 @@ export class ReceiptViewComponent implements OnInit , AfterViewInit,OnDestroy{
     )
   }
 
-  async  getAndroidPrinterAssignment() {
-    if (this.platFormService.androidApp) {
-      this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
-      this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
-    }
-  }
-
 }
 
+  // async printAndroid() {
+  //   //create fake date for order. - get order info from postman to use.
+  //   //passorder info to new method PrintAndroidReceipt.'
+  //   //save selected printer to local storage
+  //   //set saved printer name /bt id to selection on load.
+  //   // const order = this.fakeData.getPOSOrderContents()
+  //   // this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+  //   // this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+  //   this.printingAndroidService.printTestAndroidReceipt( this.btPrinter)
+  // }
+
+  // async  getAndroidPrinterAssignment() {
+  //   if (this.platFormService.androidApp) {
+  //     this.btPrinters   = await this.btPrinterService.searchBluetoothPrinter()
+  //     this.btPrinters$  = this.btPrinterService.searchBluetoothPrinter();
+  //   }
+  // }
+
+
+  // async applyStyles(): Promise<ISetting> {
+  //   const site  = this.siteService.getAssignedSite();
+  //   this.receiptStyles  = await  this.printingService.appyStylesCached(site)
+  //   this.applyStyle(this.receiptStyles)
+  //   return  this.receiptStyles
+  // }
+
+    // async  initBalanceSheetDefaultLayouts() {
+  //   try {
+  //     // 'apply balance sheet style'
+  //     const site = this.siteService.getAssignedSite();
+  //     const setting = {} as ISetting;
+  //     setting.text  = await  this.printingService.appyBalanceSheetStyle()
+  //     this.receiptStyles =  setting;
+  //     this.applyStyle( this.receiptStyles)
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }

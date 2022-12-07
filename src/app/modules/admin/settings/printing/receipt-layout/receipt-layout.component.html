@@ -5,7 +5,7 @@
             #printsection
             id="printsection"
             [class]="setPrinterWidthClass" >
-
+      index {{index}}
       <div class="receipt-sections" *ngIf="liveEdit">
 
         <div     *ngIf="headerText && orders">
@@ -43,8 +43,7 @@
 
       <div *ngIf="!liveEdit"
           class="background">
-
-          <div   *ngIf="interpolatedHeaderTexts && interpolatedHeaderTexts.length>0"
+        <div   *ngIf="interpolatedHeaderTexts && interpolatedHeaderTexts.length>0"
               class="section-item">
           <div *ngFor="let item of interpolatedHeaderTexts; let i = index">
             <div  [innerHTML]="interpolatedHeaderTexts[i]" >  </div>

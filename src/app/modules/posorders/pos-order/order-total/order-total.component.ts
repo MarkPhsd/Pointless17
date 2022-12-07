@@ -1,7 +1,8 @@
-import { Component, OnInit,Input, HostListener } from '@angular/core';
+import { Component, OnInit,Input, HostListener, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
+import { OrdersService } from 'src/app/_services';
 import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/settings/uisettings.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { UIHomePageSettings, UISettingsService } from 'src/app/_services/system/
   templateUrl: './order-total.component.html',
   styleUrls: ['./order-total.component.scss']
 })
-export class OrderTotalComponent implements OnInit {
+export class OrderTotalComponent implements OnInit, OnDestroy {
   smallDevice = false;
   cost: number;
 
@@ -21,6 +22,7 @@ export class OrderTotalComponent implements OnInit {
   _uiSettings : Subscription;
   uiSettings  : UIHomePageSettings;
   transactionDataClass ="transaction-data"
+  _order: Subscription;
 
   @Input()  purchaseOrderEnabled: boolean;
 
@@ -72,9 +74,19 @@ export class OrderTotalComponent implements OnInit {
     }
   }
 
+  orderSubscriber() { 
+    this._order = this.orderService.currentOrder$.subscribe(data => { 
+      this.cost = 0;
+      if (data) { 
+        this.order = data;
+        this.getCost()
+      }
+    })
+  }
   constructor(
-      private uiSettingsService       : UISettingsService,
-      public  route: ActivatedRoute) {
+      private uiSettingsService   : UISettingsService,
+      private orderService        : OrdersService,
+      public  route               : ActivatedRoute) {
     const outPut = this.route.snapshot.paramMap.get('mainPanel');
     if (outPut) {
       this.mainPanel = true
@@ -87,16 +99,19 @@ export class OrderTotalComponent implements OnInit {
     this.getCost();
   }
 
-  getCost() {
+  ngOnDestroy() { 
+    if (this._uiSettings) { this._uiSettings.unsubscribe()}
+    if (this._order) { this._order.unsubscribe()}
+    
+  }
 
+  getCost() {
     this.cost = 0
     if (this.order) { 
       if (this.order.posOrderItems && this.order.posOrderItems.length>0) { 
         this.order.posOrderItems.forEach(data => { 
           const itemCost =  (+data.quantity * +data.wholeSale)
           this.cost = itemCost + this.cost
-          // console.log(itemCost)
-          // console.log('cost', this.cost)
         })
       }
     }

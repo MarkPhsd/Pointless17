@@ -236,8 +236,8 @@ export class DSIEMVTransactionsService implements OnDestroy {
     if (!transaction) { return }
     const tstream       = {} as TStream;
     tstream.Transaction = transaction
-    const topLevel = {} as topLevel;
-    topLevel.TStream = tstream;
+    const topLevel      = {} as topLevel;
+    topLevel.TStream    = tstream;
     const builder       = new XMLBuilder(this.options)
     const xml           = builder.build(topLevel);
     let response        : any;
@@ -255,7 +255,7 @@ export class DSIEMVTransactionsService implements OnDestroy {
     if (response) {
       const parser  = new XMLParser(null);
       this.dsiResponse =  parser.parse(response)
-      console.log('xml - response', this.dsiResponse)
+      console.log('pinPadReset response', this.dsiResponse)
       return this.dsiResponse;
     }
     const dsiResponse = {} as RStream;
@@ -272,7 +272,6 @@ export class DSIEMVTransactionsService implements OnDestroy {
       const xml = builder.build(tstream);
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       const response = await emvTransactions.MercuryPinPadTest(xml)
-      console.log('response', response)
       return response
     }
   }
@@ -361,7 +360,11 @@ export class DSIEMVTransactionsService implements OnDestroy {
   async getBatchInquireValues(transaction: Transaction): Promise<any> {
     const dsiResponse     = await this.emvBatchInquire(transaction)
     try {
-      if (dsiResponse?.CmdResponse?.TextResponse.toLowerCase() != 'success'.toLowerCase()) {
+      if (!dsiResponse || dsiResponse.CmdResponse || !dsiResponse.CmdResponse.TextResponse) {
+        this.matSnack.open(`Batch inquire problem: ${dsiResponse.CmdResponse.TextResponse}`, 'Check Batching Info')
+        return null;
+      }
+      if (dsiResponse?.CmdResponse?.TextResponse && dsiResponse?.CmdResponse?.TextResponse.toLowerCase() != 'success'.toLowerCase()) {
         this.matSnack.open(`Batch inquire problem: ${dsiResponse.CmdResponse.TextResponse}`, 'Check Batching Info')
         return null;
       }
@@ -403,6 +406,12 @@ export class DSIEMVTransactionsService implements OnDestroy {
           const tran = this.getFakeSaleReponse(transaction)
           rStream.TranResponse = tran;
         }
+
+        if (transaction.TranCode.toLowerCase() === 'EMVParamDownload'.toLowerCase()) {
+          const tran = this.getFakeSaleReponse(transaction)
+          rStream.TranResponse = tran;
+        }
+
         return rStream
       }
 
@@ -414,11 +423,11 @@ export class DSIEMVTransactionsService implements OnDestroy {
     try {
       const emvTransactions = this.electronService.remote.require('./datacap/transactions.js');
       response              = await emvTransactions.EMVTransaction(xml)
-      console.log('EMVTransaction response', response);
+      // console.log('EMVTransaction response (dsiEMVTransaction.service)', response);
 
     } catch (error) {
       console.log('error', error)
-      return  error
+      return  error;
     }
 
     if (response === 'reset failed') {
@@ -429,9 +438,11 @@ export class DSIEMVTransactionsService implements OnDestroy {
     if (response) {
       const parser  = new XMLParser(null);
       let dsiResponse =  parser.parse(response)
-      console.log('dsiResponse', dsiResponse)
+      console.log('Parser Response (dsiEMVTransaction.service)', dsiResponse)
+      console.log('if dsiResponse includes RStream as an object, then instead return dsiResponse.RStream')
       return dsiResponse;
     }
+
   }
 
   async testADODBConnection() {
@@ -477,14 +488,14 @@ export class DSIEMVTransactionsService implements OnDestroy {
   }
 
   private getPadSettings(transaction: Transaction)  {
-      transaction.OperatorID    = this.dsiEMVSettings.operatorID
-      transaction.UserTrace     = this.dsiEMVSettings.userTrace
-      transaction.TranCode      = this.dsiEMVSettings.tranCode
-      transaction.SecureDevice  = this.dsiEMVSettings.secureDevice
-      transaction.ComPort       = this.dsiEMVSettings.comPort
-      transaction.PinPadIpPort  = this.dsiEMVSettings.pinPadIpPort
+      transaction.OperatorID    = this.dsiEMVSettings.OperatorID
+      transaction.UserTrace     = this.dsiEMVSettings.UserTrace
+      transaction.TranCode      = this.dsiEMVSettings.TranCode
+      transaction.SecureDevice  = this.dsiEMVSettings.SecureDevice
+      transaction.ComPort       = this.dsiEMVSettings.ComPort
+      transaction.PinPadIpPort  = this.dsiEMVSettings.PinPadIpPort
       transaction.SequenceNo    = '0010010010'
-      transaction.HostOrIP      = this.dsiEMVSettings.hostOrIP;
+      transaction.HostOrIP      = this.dsiEMVSettings.HostOrIP;
       return transaction
   }
 

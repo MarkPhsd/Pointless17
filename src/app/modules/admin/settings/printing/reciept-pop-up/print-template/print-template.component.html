@@ -1,37 +1,39 @@
 <div *ngIf="(layout$ | async) as layout">
-    <div *ngIf="order">
-        <div class="mat-card-white" >
-          <ng-container>
-            <ng-container [ngTemplateOutlet]="currentView"></ng-container>
-            <ng-template #printTemplate>
-              <div *ngIf="receiptLayoutSetting && 
-                          ((headerText &&  itemsText) || order)"
-                   class="border-section">
-                <app-receipt-layout #printsection
-                                    [headerText]  ="headerText"
-                                    [footerText]  ="footerText"
-                                    [itemText]    ="itemsText"
-                                    [printerWidth]="receiptLayoutSetting.option9"
-                                    [paymentsText]="paymentsText"
-                                    [paymentsWICEBTText]="paymentsCreditText"
-                                    [paymentsCreditText]="paymentsWICEBTText"
-                                    [subFooterText]="subFooterText"
-                                    [items]       ="order.posOrderItems"
-                                    [order]       ="order"
-                                    [payments]    ="order.posPayments"
-                                    [orderType]   ="orderTypes"
-                                    [testdata]    ="false"
-                                    [liveEdit]    ="false"
-                                    [templateInit]="true"
-                                    [styles]      ="receiptStyles">
-                </app-receipt-layout>
-                </div>
-            </ng-template>
-          </ng-container>
-        <!-- </div> -->
+  <!-- <div *ngIf="printOrder">  -->
+  <!-- <div *ngIf="(printOrder$ | async) as printOrder"> -->
+  <div *ngIf="order" class="mat-card-white" >
+    <!-- <ng-container [ngTemplateOutlet]="currentView"></ng-container>
+    <ng-template #printTemplate> -->
+      <div  *ngIf="receiptLayoutSetting &&
+                  ((headerText &&  itemsText) || order)"
+            class="border-section">
+          <app-receipt-layout #printsection
+                              [index]       ="index"
+                              [headerText]  ="headerText"
+                              [footerText]  ="footerText"
+                              [itemText]    ="itemsText"
+                              [printerWidth]="receiptLayoutSetting.option9"
+                              [paymentsText]="paymentsText"
+                              [paymentsWICEBTText]="paymentsCreditText"
+                              [paymentsCreditText]="paymentsWICEBTText"
+                              [subFooterText]  ="subFooterText"
+                              [items]          ="order.posOrderItems"
+                              [order]          ="order"
+                              [payments]       ="order.posPayments"
+                              [orderType]      ="orderTypes"
+                              [testdata]       ="false"
+                              [liveEdit]       ="false"
+                              [templateInit]   ="true"
+                              [styles]         ="receiptStyles"
+                              (outPutPrintReady)="printHTML($event)"
+                            >
+          </app-receipt-layout>
       </div>
-    </div>
+    <!-- </ng-template> -->
+
+  </div>
 </div>
+
 
 
 <!-- <div class="buttons-grid">
@@ -41,9 +43,9 @@
     </button>
     <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
     <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
-    <button mat-button 
-            [disabled]="!order?.orderCode" 
-            *ngIf="!isElectronApp" 
+    <button mat-button
+            [disabled]="!order?.orderCode"
+            *ngIf="!isElectronApp"
             (click)="openLink()">
         <mat-icon>link</mat-icon>Link
     </button>

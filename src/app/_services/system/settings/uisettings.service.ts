@@ -65,19 +65,19 @@ export interface StripeAPISettings {
 
 export interface DSIEMVSettings {
   id        : number;
-  hostOrIP  : string;
-  ipPort    : string;
-  merchantID: string;
-  terminalID: string;
-  operatorID: string;
-  userTrace : string;
-  tranCode  : string;
-  secureDevice: string;
-  comPort   : string;
-  pinPadIpAddress: string;
-  pinPadIpPort: string;
-  sequenceNo: string;
-  displayTextHandle: string;
+  HostOrIP  : string;
+  IpPort    : string;
+  MerchantID: string;
+  TerminalID: string;
+  OperatorID: string;
+  UserTrace : string;
+  TranCode  : string;
+  SecureDevice: string;
+  ComPort   : string;
+  PinPadIpAddress: string;
+  PinPadIpPort: string;
+  SequenceNo: string;
+  DisplayTextHandle: string;
   enabled: boolean;
 }
 
@@ -524,26 +524,7 @@ export class UISettingsService {
     return fb
   }
 
-  initDSIEMVForm(fb: FormGroup): FormGroup {
-    fb = this._fb.group({
-      id        : [''],
-      hostOrIP  : [''],
-      ipPort    : [''],
-      merchantID: [''],
-      terminalID: [''],
-      operatorID: [''],
-      userTrace : [''],
-      tranCode  : [''],
-      secureDevice: [''],
-      comPort   : [''],
-      pinPadIpAddress: [''],
-      pinPadIpPort:[''],
-      sequenceNo:  [''],
-      displayTextHandle: [''],
-      enabled:     [''],
-    })
-    return fb
-  }
+
 
   initStripeAPISettingsForm(config: any, fb: FormGroup): FormGroup {
     fb = this._fb.group({
@@ -600,6 +581,28 @@ export class UISettingsService {
       PinPadIpPort     : [config.PinPadIpPort],
       SequenceNo       : [config.SequenceNo],
       DisplayTextHandle: [config.DisplayTextHandle]
+    })
+    return fb
+  }
+
+
+  initDSIEMVForm(fb: FormGroup): FormGroup {
+    fb = this._fb.group({
+      id        : [''],
+      MerchantID: [''],
+      TerminalID: [''],
+      OperatorID: [''],
+      IpPort    : [''],
+      UserTrace : ['PointlessPOS'],
+      TranCode  : [''],
+      SecureDevice: [''],
+      ComPort   : [''],
+      PinPadIpAddress: [''],
+      PinPadIpPort:[''],
+      HostOrIP  : [''],
+      SequenceNo:  ['0010010010'],
+      DisplayTextHandle: [''],
+      enabled:     [''],
     })
     return fb
   }

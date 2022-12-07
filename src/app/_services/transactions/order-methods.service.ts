@@ -528,7 +528,7 @@ export class OrderMethodsService implements OnDestroy {
       const site       = this.siteService.getAssignedSite();
 
       if (barcode)  {
-        const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging, 
+        const addItem$ = this.scanItemForOrder(site, order, barcode, quantity,  input?.packaging,
                                                input?.portionValue)
         this.processItemPostResults(addItem$)
         return false;
@@ -655,7 +655,7 @@ export class OrderMethodsService implements OnDestroy {
         this.orderService.updateOrderSubscription(data.order);
         this.addedItemOptions(data.order, data.posItemMenuItem, data.posItem, data.priceCategoryID);
 
-        if (this.siteService.phoneDevice) { 
+        if (this.siteService.phoneDevice) {
         } else {
           if (data.order.posOrderItems.length == 1 ) {
             this.toolbarServiceUI.updateOrderBar(true)
@@ -941,7 +941,7 @@ export class OrderMethodsService implements OnDestroy {
   //, pricing:  priceList[]
   async addedItemOptions(order: IPOSOrder, item: IMenuItem, posItem: IPurchaseOrderItem, priceCategoryID : number) {
 
-    console.log('prompt', item.promptGroupID)
+    console.log('prompt', item?.promptGroupID)
 
     const processItem    = {} as ProcessItem;
     processItem.item     = item;
@@ -953,7 +953,7 @@ export class OrderMethodsService implements OnDestroy {
     this.order           = order;
     this.priceCategoryID = priceCategoryID;
     this.handleProcessItem();
-    
+
   }
 
   async handleProcessItem() {
@@ -974,12 +974,11 @@ export class OrderMethodsService implements OnDestroy {
 
     switch(process) {
       case  0: {
-          if (this.priceCategoryID == 0) {
+          if (!this.priceCategoryID || this.priceCategoryID == 0) {
             this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
             return
           }
           this.processInventoryPrice(this.order,this.processItem.item,this.processItem.posItem, this.priceCategoryID)
-          // console.log('Handle Process Item openPriceOptionPrompt', 0)
           break;
       }
       case  1: {

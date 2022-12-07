@@ -1,41 +1,47 @@
-<div *ngIf="(email$ | async) as emailAction"></div>
-<div *ngIf="(layout$ | async) as emailAction"></div>
-<div *ngIf="(printAction$ | async) as emailAction"></div>
+<div *ngIf="(email$ | async) as email"></div>
+<div *ngIf="(printAction$ | async) as printAction"></div>
 
 <div *ngIf="(order$ | async) as order"></div>
+  <div *ngIf="(refreshView$ | async) as layout">
 
-<div class="buttons-grid">
-  <div >
-    <button *ngIf="refreshView$ | async" mat-button (click)="print()">
-      <span *ngIf="printerName"><mat-icon>print</mat-icon> Print to {{printerName}}</span>
-    </button>
-    <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
-    <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
-    <button mat-button 
-            [disabled]="!order?.orderCode" 
-            *ngIf="!isElectronApp" 
-            (click)="openLink()">
-        <mat-icon>link</mat-icon>Link
-    </button>
+    <div>
+      <div class="buttons-grid">
+        <button  mat-button (click)="print()">
+          <span *ngIf="printerName"><mat-icon>print</mat-icon>{{printerName}}</span>
+        </button>
+
+        <div *ngIf="!hideExit">
+          <button mat-button (click)="exit()">
+            <mat-icon>close</mat-icon> Exit
+          </button>
+        </div>
+      </div>
+      <div class="buttons-grid">
+        <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
+        <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
+        <button mat-button 
+                [disabled]="!order?.orderCode" 
+                *ngIf="!isElectronApp" 
+                (click)="openLink()">
+            <mat-icon>link</mat-icon>Link
+        </button>
+      </div>
+
+      <div>
+      </div>
+   
+      <div class="mat-card-white">
+    
+        <ng-container>
+          <ng-container [ngTemplateOutlet]="currentView"></ng-container>
+        </ng-container>
+      </div>
+    </div>
+
   </div>
-
-  <div>
-  </div>
-
-  <div *ngIf="!hideExit">
-    <button mat-button (click)="exit()">
-      <mat-icon>close</mat-icon> Exit
-    </button>
-  </div>
-</div>
-
-<div class="mat-card-white" >
-  <ng-container>
-    <ng-container [ngTemplateOutlet]="currentView"></ng-container>
-  </ng-container>
-</div>
 
 <ng-template #receipt>
+  
   <div *ngIf="receiptLayoutSetting && ((headerText &&  itemsText) || order)"
        class="border-section">
     <app-receipt-layout #printsection
@@ -67,3 +73,12 @@
 
 
 
+<!-- receiptLayoutSetting   <br>{{ receiptLayoutSetting | json }}
+  <br>
+  headerText   <br> {{ headerText | json }}
+  <br>
+  itemsText   <br> {{ itemsText | json }}
+  <br>
+  itemsText   <br> {{ order.id }}
+  <br> -->
+  

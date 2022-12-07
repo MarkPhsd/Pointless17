@@ -6,17 +6,20 @@ import { PrintingService, printOptions } from 'src/app/_services/system/printing
 import { Observable, of, Subscription, switchMap } from 'rxjs';
 import { OrdersService } from 'src/app/_services';
 import { PlatformService } from 'src/app/_services/system/platform.service';
+import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 
 @Component({
   selector: 'app-print-template',
   templateUrl: './print-template.component.html',
   styleUrls: ['./print-template.component.scss']
 })
+
 export class PrintTemplateComponent implements OnInit, OnDestroy {
 
-  @ViewChild('printTemplate')      printTemplate: TemplateRef<any>;
-  @ViewChild('balanceSheet') balanceSheetTemplate: TemplateRef<any>;
-
+  @ViewChild('printSection')  printSection: TemplateRef<any>;
+  @ViewChild('printTemplate') printTemplate: TemplateRef<any>;
+  @ViewChild('balanceSheet')  balanceSheetTemplate: TemplateRef<any>;
+  @Input() index            : number;
   @Input() autoPrint        : boolean;
   @Input() hideExit         = false;
   @Output() outPutExit      = new EventEmitter();
@@ -30,12 +33,8 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   isElectronApp         : boolean;
   electronSetting       : ISetting;
-  // electronReceiptPrinter: string;
-  // electronReceipt       : string;
-  // electronReceiptID     : number;
-
-  _printView              : Subscription;
-  printView               = 1;
+  _printView            : Subscription;
+  printView             = 1;
 
   receiptLayoutSetting    : ISetting;
   receiptStyles           : ISetting;
@@ -48,7 +47,6 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
   paymentsCreditText: string;
   paymentsWICEBTText: string;
   subFooterText     : string;
-
   // receiptID         : number;
 
   refreshView$      : Observable<any>;
@@ -78,21 +76,47 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
   autoPrinted          = false;
   printAction$         : Observable<any>;
   layout$              : Observable<any>;
-  content$             : Observable<any>; 
+  content$             : Observable<any>;
   tempPayments         : PosPayment[];
+  _printOrder          : Subscription;
+
+  printOrder$: Observable<any>;
+  printOrder: IPrintOrders;
 
   intSubscriptions() {
-    // if (this.printView == 1 ) {
-    // }
-    this._printReady = this.printingService.printReady$.subscribe(status => {
-      if (status) {
-          if ((this.options && this.options.silent) || this.autoPrint) {
-            this.print();
-            this.autoPrinted = true;
+
+    this._printOrder = this.orderService.printOrder$.subscribe(
+      data => {
+        if (data) {
+          this.order         = data.order;
+          this.templateID    = data.location.templateID;
+          this.printerName   = data.location.printer;
+          this.printOrder    = data;
+          // console.log(data)
+          if (this.templateID) {
+            return this.initStyles()
           }
+          return of(null)
         }
       }
     )
+
+    this._printReady = this.printingService.printReady$.subscribe(status => {
+      if (this.index == null) { return };
+      if (this.options) {
+        // {autoPrint: true, printerName: printerName}
+      }
+
+      if (status) {
+        if (this.autoPrinted) { return }
+        if (status.index == this.index) {
+            if (status.ready) {
+              this.outPutPrinted.emit()
+              this.autoPrinted = true;
+            }
+          }
+        }
+    })
   }
 
   constructor(
@@ -105,9 +129,9 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
   {}
 
   ngOnInit() {
-  
+    this.layout$ = this.initStyles()
     this.intSubscriptions();
-    this.layout$ = this.initStyles();
+    const i = 0;
   }
 
   ngOnDestroy(): void {
@@ -131,24 +155,34 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
 
   //Step 1
   initStyles() {
+    let styles
     const site = this.siteService.getAssignedSite();
     return this.printingService.appyStylesCachedObservable(site).pipe(switchMap(data => {
-      this.receiptStyles = data ; 
-      this.receiptStyles  = this.applyStyle(this.receiptStyles)
-      console.log('data', data)
+      this.receiptStyles = data ;
+      styles = data
+      this.applyStyle(this.receiptStyles)
       return this.settingService.getSetting(site, this.templateID)
     })).pipe(
       switchMap(data => {
+        if (!data) { return of(null) }
         this.initSubComponent(data)
         this.printingService.__printView = 1;
+        this.receiptStyles = styles
         return of(data)
     }))
 
-    // this.printingService.initDefaultLayouts();
-    // if (this.receiptStyles)  {
-    //   this.receiptStyles  = this.applyStyle(this.receiptStyles)
-    //   return of(this.receiptStyles)
-    // };
+  }
+
+  applyStylesObservable(): Observable<ISetting> {
+    const site  = this.siteService.getAssignedSite();
+    return this.printingService.appyStylesCachedObservable(site).pipe(
+        switchMap( data => {
+          this.receiptStyles  =  data
+          this.printingService.applyStyle(data)
+          return of(data)
+        }
+      )
+    )
   }
 
    ///step 1B
@@ -166,40 +200,35 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     }
   }
 
-  applyStylesObservable(): Observable<ISetting> {
-    const site  = this.siteService.getAssignedSite();
-    return this.printingService.appyStylesCachedObservable(site).pipe(
-        switchMap( data => {
-          this.receiptStyles  =  data
-          this.printingService.applyStyle(data)
-          return of(data)
-        }
-      )
-    )
-  }
-
   applyStyle(receiptStyles) {
     return this.printingService.applyStyle(receiptStyles)
   }
- 
-  getReceiptContents(styles: string) {
+
+  formattedCompleted(event) {
+    this.printElectron()
+  }
+
+  getReceiptHTML(styles: string) {
     const prtContent     = document.getElementById('printsection');
     if (!prtContent) { return  }
     const content        = `${prtContent.innerHTML}`
     if (!content) { return }
+    this.printHtmlWindow(content, this.receiptStyles.text)
+  }
 
+  printHtmlWindow(contentHTML, style) {
     const  title   = 'Receipt';
     const loadView = ({ title }) => {
       return (`
         <!DOCTYPE html>
         <html>
           <head>
-            <style>${styles}</style>
+            <style>${style}</style>
             <title>${title}</title>
             <meta charset="UTF-8">
           </head>
           <body>
-            <div id="view">${content}</div>
+            <div id="view">${contentHTML}</div>
           </body>
         </html>
       `)
@@ -207,6 +236,7 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     const file = 'data:text/html;charset=UTF-8,' + encodeURIComponent(loadView({
       title: "Receipt"
     }));
+
     return file
   }
 
@@ -218,25 +248,51 @@ export class PrintTemplateComponent implements OnInit, OnDestroy {
     }
   }
 
-  printElectron() {
-    if (this.receiptStyles?.text) { 
-
+  printHTML(html) {
+    if (!html) {
+      console.log('no html', this.index)
     }
-    const styles   = this.receiptStyles?.text;
-    const contents = this.getReceiptContents(styles)
+    if (!this.receiptStyles) {
+      console.log('no receipt styles', this.index)
+    }
+
+    if (this.receiptStyles) {
+      const file = this.printHtmlWindow(html, this.receiptStyles.text)
+      this.printElectronHTML(file)
+      this.outPutPrinted.emit('true')
+    }
+  }
+
+  printElectron() {
+    if (this.receiptStyles) {
+      const file = this.getReceiptHTML(this.receiptStyles.text)
+      this.printElectronHTML(file)
+      this.outPutPrinted.emit('true')
+    }
+  }
+
+  printElectronHTML(contents) {
     const options  = {
       silent: true,
       printBackground: false,
       deviceName: this.printerName
     } as printOptions;
 
-    if (!contents) { console.log('no contents in print electron')}
-    if (!options) { console.log('no options in print electron')}
-
-    if (!this.printerName) { console.log('no printerName in print electron')}
+    if (!contents) {
+      console.log('no contents in print electron')
+      return;
+    }
+    if (!options) {
+      console.log('no options in print electron')
+      return;
+    }
+    if (!this.printerName) {
+      console.log('no printerName in print electron')
+      return;
+    }
+    console.log('All good to print')
     if (contents && this.printerName, options) {
-      this.printingService.printElectron( contents, this.printerName, options)
-      this.outPutPrinted.emit('true')
+        this.printingService.printElectron( contents, this.printerName, options)
     }
   }
 

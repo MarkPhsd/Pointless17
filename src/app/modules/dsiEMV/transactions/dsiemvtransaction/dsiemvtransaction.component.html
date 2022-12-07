@@ -1,3 +1,12 @@
+<div *ngIf="(action$ | async) as emvTransaction; else emvTransation"></div>
+
+<ng-template #emvTransation>
+  <div *ngIf="processingResults">
+    ...processing.
+    <mat-spinner [diameter]="50"></mat-spinner>
+  </div>
+</ng-template>
+
 <mat-card>
   <mat-card-title>
     <div>Transaction Type: {{type}} - {{action}}
@@ -45,5 +54,30 @@
         <mat-icon>close</mat-icon>Cancel</button>
       </div>
     </div>
+
+    <!-- <div class="action-buttons">
+      <h2>Testing</h2>
+      <div>
+        <button mat-raised-button
+          (click)="process()"><mat-icon>credit_card</mat-icon>Process
+        </button>
+      </div>
+
+      <div>
+        <button mat-raised-button
+          (click)="testProcess()">Test Process
+        </button>
+      </div>
+
+
+      <div *ngIf="response">
+        <button mat-raised-button
+            (click)="testSaveTransaction()">
+            <mat-icon>save</mat-icon>
+            Save Results
+        </button>
+      </div>
+    </div> -->
+
   </mat-card-actions>
 </mat-card>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Output } from '@angular/core';
 import * as _ from "lodash";
 import { SettingsService } from 'src/app/_services/system/settings.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -46,7 +46,7 @@ export class PrintingService {
   order                 : IPOSOrder
   isElectronServiceInitiated = false
 
-  private _printReady       = new BehaviorSubject<boolean>(null);
+  private _printReady       = new BehaviorSubject<any>(null);
   public printReady$        = this._printReady.asObservable();
 
   public _printView          = new BehaviorSubject<number>(null);
@@ -86,8 +86,10 @@ export class PrintingService {
     return this.printReady$
   }
 
-  updatePrintReady(status: boolean) {
-    this._printReady.next(status)
+  updatePrintReady(data) {
+
+    this._printReady.next(data)
+    // this.output.emit(true)
   }
 
   async initDefaultLayouts() {
@@ -104,9 +106,9 @@ export class PrintingService {
   printElectronTemplateOrder(printOrderList): Observable<any> {
     const site = this.siteService.getAssignedSite()
     const styles$ = this.appyStylesCachedObservable(site)
-  
-    return styles$.pipe(switchMap(data => { 
-      return this.dialog.open(PrintTemplatePopUpComponent, 
+
+    return styles$.pipe(switchMap(data => {
+      return this.dialog.open(PrintTemplatePopUpComponent,
         { width:        '450px',
           minWidth:     '450px',
           height:       '600px',
@@ -161,18 +163,13 @@ export class PrintingService {
 
     if (zpl) {
       const labelImage$  =  this.labelaryService.postZPL(site, zpl)
-      const img$ =  labelImage$.pipe(switchMap(data => { 
+      const img$ =  labelImage$.pipe(switchMap(data => {
         this.image =  `data:image/jpeg;base64,${data}`
         return of(data)
       }))
     }
   }
 
-  // async applyStyles(site: ISite): Promise<ISetting> {
-  //   const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
-  //   const receiptStyle = await receiptStyle$.pipe().toPromise()
-  //   return this.setHTMLReceiptStyle(receiptStyle)
-  // }
 
   applyStylesObservable(site: ISite): Observable<ISetting> {
     const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
@@ -184,7 +181,7 @@ export class PrintingService {
       const style             = document.createElement('style');
       style.innerHTML         = receiptStyles.text;
       document.head.appendChild(style);
-      return this.receiptStyles
+      return receiptStyles
     }
     return null
   }
@@ -225,7 +222,7 @@ export class PrintingService {
   }
 
   appyStylesCachedObservable(site: ISite): Observable<ISetting> {
-    const receiptStyle$ = this.settingService.getSettingByNameCached(site, 'ReceiptStyles')
+    const receiptStyle$ = this.settingService.getSettingByNameCachedNoRoles(site, 'ReceiptStyles')
     return  receiptStyle$.pipe(
       switchMap( data => {
           return of(this.setHTMLReceiptStyle(data))
@@ -239,6 +236,7 @@ export class PrintingService {
   }
 
   setHTMLReceiptStyle(receiptStyle) {
+    // console.log('setHtmlReceiptStyle', receiptStyle)
     if (receiptStyle) {
       const style = document.createElement('style');
       style.innerHTML = receiptStyle.text;
@@ -372,20 +370,20 @@ export class PrintingService {
 
   }
 
-  printDocuments(printOrderList: any): Observable<any> { 
+  printDocuments(printOrderList: any): Observable<any> {
     const printOrders = printOrderList as IPrintOrders[]
     return this.printElectronTemplateOrder(printOrderList)
-    // printOrders.forEach(data => { 
+    // printOrders.forEach(data => {
     //   const location = data.location;
     //   const order = data.order;
     //   //we can get the document and we can get the printer
     //   //then we can print to electron
-    //   if (this.platFormService.isAppElectron) { 
-    //     console.log(`print to ${location.printer} and ${location.name} and item Count 
+    //   if (this.platFormService.isAppElectron) {
+    //     console.log(`print to ${location.printer} and ${location.name} and item Count
     //                           ${order.posOrderItems.length}`)
     //   }
     //   return of(null)
-    //   // if (this.platFormService.androidApp) { 
+    //   // if (this.platFormService.androidApp) {
     //   //   // this.printingService.printAndroidTemplateOrder(location.address, document )
     //   // }
     // })
@@ -682,3 +680,8 @@ export class PrintingService {
   }
 
 }
+  // async applyStyles(site: ISite): Promise<ISetting> {
+  //   const receiptStyle$       = this.settingService.getSettingByName(site, 'ReceiptStyles')
+  //   const receiptStyle = await receiptStyle$.pipe().toPromise()
+  //   return this.setHTMLReceiptStyle(receiptStyle)
+  // }

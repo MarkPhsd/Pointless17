@@ -39,10 +39,10 @@ export class NewOrderTypeComponent  {
   {
     const site = this.siteService.getAssignedSite();
 
-    if (this.userAuthorizationService.isManagement) { 
+    if (this.userAuthorizationService.isManagement) {
       this.serviceTypes$ = this.serviceTypeService.getAllServiceTypes(site)
     }
-    if (!this.userAuthorizationService.isManagement) { 
+    if (!this.userAuthorizationService.isManagement) {
       this.serviceTypes$ = this.serviceTypeService.getSaleTypesCached(site)
     }
 
@@ -53,7 +53,7 @@ export class NewOrderTypeComponent  {
       this.orderService.toggleChangeOrderType = false;
       this._bottomSheet.dismiss();
     } catch (error) {
-
+      console.log(error)
     }
   }
 
@@ -68,13 +68,13 @@ export class NewOrderTypeComponent  {
       this.orderService.toggleChangeOrderType = false;
       if (this.dialogRef) {
         this.dialogRef.close();
-        return
-      }  else {
-        this.onCancel();
       }
     } catch (error) {
+
       console.log(error)
     }
+
+    this.onCancel();
   }
 
   setActiveOrder(order) {
@@ -94,7 +94,7 @@ export class NewOrderTypeComponent  {
   changeOrderType(event) {
     const site = this.siteService.getAssignedSite();
 
-    if (event && event.filterType && event.filterType != 0 ) { 
+    if (event && event.filterType && event.filterType != 0 ) {
       this.updateItems = true;
     }
     const item$ = this.orderService.changeOrderType(site, this.orderService.currentOrder.id, event.id, this.updateItems)

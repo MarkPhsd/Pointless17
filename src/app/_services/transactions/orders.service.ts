@@ -18,6 +18,7 @@ import { AuthenticationService } from '../system/authentication.service';
 import { IListBoxItem } from 'src/app/_interfaces/dual-lists';
 import { IPaymentMethod } from './payment-methods.service';
 import { UserAuthorizationService } from '../system/user-authorization.service';
+import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 export interface POSOrdersPaged {
   paging : IPagedList
   results: IPOSOrder[]
@@ -56,6 +57,9 @@ export class OrdersService {
   public toggleChangeOrderType: boolean;
 
   get platForm() {  return Capacitor.getPlatform(); }
+
+  public _printOrder        = new BehaviorSubject<IPrintOrders>(null);
+  public printOrder$         = this._printOrder.asObservable();
 
   //applies to order filter for POS
   private _prepStatus        = new BehaviorSubject<number>(null);
@@ -99,7 +103,7 @@ export class OrdersService {
 
   get IsOrderClaimed() { return this.orderClaimed};
 
-  updateTemplateOrder(order: IPOSOrder) { 
+  updateTemplateOrder(order: IPOSOrder) {
     this._templateOrder.next(order)
   }
 

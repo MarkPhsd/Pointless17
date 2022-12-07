@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Result } from 'electron/main';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
@@ -17,41 +18,40 @@ export class DSIProcessService {
   initTransaction(): Transaction {
     const item = localStorage.getItem('DSIEMVSettings');
     if (!item) { return null }
-    const dsiSettings     = JSON.parse(item) as DSIEMVSettings;
+    const dsiSettings         = JSON.parse(item) as DSIEMVSettings;
     const transaction         ={} as Transaction // {...transactiontemp, id: undefined}
-    transaction.MerchantID    =dsiSettings.merchantID;
-    transaction.TerminalID    =dsiSettings.terminalID;;
-    transaction.OperatorID    =dsiSettings.operatorID;
-    transaction.HostOrIP      =dsiSettings.hostOrIP;
-    transaction.IpPort        =dsiSettings.ipPort;
+    transaction.MerchantID    =dsiSettings.MerchantID;
+    transaction.TerminalID    =dsiSettings.TerminalID;;
+    transaction.OperatorID    =dsiSettings.OperatorID;
+    transaction.HostOrIP      =dsiSettings.HostOrIP;
+    transaction.IpPort        =dsiSettings.IpPort;
     transaction.UserTrace     ='PointlessPOS1.0';
-    transaction.SecureDevice  =dsiSettings.secureDevice;
-    transaction.ComPort       =dsiSettings.comPort;
+    transaction.SecureDevice  =dsiSettings.SecureDevice;
+    transaction.ComPort       =dsiSettings.ComPort;
     transaction.SequenceNo    ='0010010010'
     return transaction
   }
 
-  pinPadReset(): Promise<RStream> {
+  async pinPadReset(): Promise<RStream> {
     const item = localStorage.getItem('DSIEMVSettings')
     if (!item) { return }
     const transactiontemp     = JSON.parse(item) as DSIEMVSettings;
-    if (transactiontemp?.secureDevice.toLowerCase() === 'test') { return null; }
+    if (transactiontemp?.SecureDevice.toLowerCase() === 'test') { return null; }
 
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
-    transaction.TranCode      = transactiontemp?.tranCode;
-    return this.dsi.pinPadReset(transaction)
+    transaction.TranCode      = 'EMVPadReset';
+    const response            = await  this.dsi.pinPadReset(transaction)
+    return response
   }
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
-    const commandResponse = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
-    console.log('emvSale', commandResponse)
-    return commandResponse;
+    return await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
   }
 
   async  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
     const commandResponse = await this.emvTransaction('Return', amount, paymentID, manual, false, 'credit');
-    console.log('emvReturn', commandResponse)
+    // console.log('emvReturn', commandResponse)
     return commandResponse;
   }
 
@@ -138,8 +138,18 @@ export class DSIProcessService {
       console.log('void transaction ', transaction)
       if (transaction.SecureDevice.toLowerCase() != 'test') {
         transaction.Amount = amount;
-        const transResult = await this.dsi.emvTransaction(transaction)
-        return transResult.RStream
+
+        console.log('pre transaction', transaction)
+        const result =  await this.dsi.emvTransaction(transaction)
+
+        console.log(result)
+        // console.log('CmdResponse', result?.CmdResponse)
+        // console.log('TranResponse', result?.TranResponse)
+        // console.log('RStream', result?.RStream)
+        // console.log('RStream2', result?.rStream)
+        console.log('result', result)
+        console.log('RStream', result?.RStream)
+        return result?.RStream
       }
 
     } catch (error) {
@@ -153,29 +163,29 @@ export class DSIProcessService {
     const commandResponse = this.emvReset()
     return commandResponse;
   }
- 
+
   async emvTransaction(tranCode: string, amount: number,
                        paymentID: number, manual: boolean,
                        tipPrompt: boolean, TranType: string ): Promise<any> {
 
     const item  = localStorage.getItem('DSIEMVSettings');
-    if (!item) { 
-      return 'no dsiemvSettings' 
+    if (!item) {
+      return 'no dsiemvSettings'
     }
 
-    if (!amount) { 
+    if (!amount) {
       const result  = 'Failed, no amount given.'
       return result
     }
 
     const transactiontemp     = JSON.parse(item) as Transaction;
 
-    if (!transactiontemp){ 
+    if (!transactiontemp){
       const result  = 'Failed, transaction settings not found.'
       return result
     }
-    
-    if (transactiontemp.SecureDevice === 'test') {
+
+    if (transactiontemp.SecureDevice.toLowerCase() === 'test') {
       const result = this.testSale(tranCode, amount,paymentID, manual, tipPrompt, TranType)
       return result;
     }
@@ -204,15 +214,10 @@ export class DSIProcessService {
       transaction.Amount.Gratuity = 'Prompt'
     }
 
-    console.log('transaction', transaction)
+    console.log('request', transaction)
     const result =  await this.dsi.emvTransaction(transaction)
-
-    console.log(result)
-    console.log('CmdResponse', result?.CmdResponse)
-    console.log('TranResponse', result?.TranResponse)
     console.log('RStream', result?.RStream)
-    console.log('RStream2', result?.rStream)
-    return result
+    return result?.RStream;
   }
 
   applyAmount(amount: number, gratuity: number): Amount {
@@ -249,7 +254,7 @@ export class DSIProcessService {
     return null
   }
 
-  testSale(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {
+  testSale(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): any {
     const stream = {} as RStream;
     stream.CmdResponse = {} as CmdResponse
     stream.TranResponse = {} as TranResponse
@@ -277,7 +282,12 @@ export class DSIProcessService {
 		stream.TranResponse.Date        ="05/04/2022"//</Date>
 		stream.TranResponse.Time        ="15:00:14"//</Time>
 
-    return stream;
+    const item =   {RStream: stream}
+    // console.log('CmdResponse', result?.CmdResponse)
+    // console.log('TranResponse', result?.TranResponse)
+    // console.log('RStream', item?.RStream)
+
+    return item;
   }
 
   testVoid(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {

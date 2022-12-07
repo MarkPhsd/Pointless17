@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, AfterViewInit, OnChanges, OnDestroy } from '@angular/core';
-
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { EMPTY, of, Subscription, Observable } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
@@ -12,7 +11,8 @@ import { SettingsService } from 'src/app/_services/system/settings.service';
 import { DatePipe } from '@angular/common';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { catchError, switchMap,  } from 'rxjs/operators';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
+import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
+
 
 @Component({
   selector: 'app-receipt-layout',
@@ -21,11 +21,11 @@ import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 })
 export class ReceiptLayoutComponent implements OnInit, OnDestroy {
 
+  @Output() outPutPrintReady = new EventEmitter()
   //we use these because it makes formating easier
   //during design process. so don't use saved seettings.
-
   action$ : Observable<any>;
-
+  @Input() index  : number;
   @Input() templateInit: boolean;
   @Input() headerText  : string;
   @Input() itemText    : string;
@@ -35,6 +35,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   @Input() paymentsWICEBTText: string;
     // [paymentsWICEBTText]="setting.option10"
     // [paymentsCreditText]="setting.option11"
+
 
   @Input() subFooterText: string;
   @Input() testdata    : boolean
@@ -66,24 +67,34 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   @Input() interpolatedCreditPaymentsTexts = [] as string[];
   @Input() interpolatedWICEBTPaymentsTexts = [] as string[];
 
+  autoPrinted = false;
   setPrinterWidthClass = "receipt-width-80"
   gridReceiptClass     = 'receipt-width-85'
   _order: Subscription;
+
+  _printOrder          : Subscription;
+
+  printOrder$: Observable<any>;
+  printOrder: IPrintOrders;
+
 
   initSubscriptions() {
     this.site = this.siteService.getAssignedSite();
     return this.orderService.currentOrder$.pipe(
       switchMap(
         data => {
-          if (!data)  {return EMPTY   }
+          if (!data)  {
+            console.log('no data', this.index)
+            return of(null);
+          }
           this.order      = data
           this.items      = this.order.posOrderItems
           if (!this.payments) {
             this.payments   = this.order.posPayments
           }
           this.orders     = []
-          if (this.order) { this.orders.push(this.order)}
-          const datepipe: DatePipe = new DatePipe('en-US')
+          if (this.order) { this.orders.push(this.order)};
+          const datepipe: DatePipe = new DatePipe('en-US');
           if (data.orderDate) { this.order.orderTime = datepipe.transform( data.orderDate, 'HH:mm')     }
           if (this.items)     { this.items           = this.items.filter( item => item.quantity != 0  );     }
           if ( this.payments) { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
@@ -99,46 +110,90 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         if (this.subFooterText) {
           this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
         }
+
         this.getInterpolatedData()
-        this.printingService.updatePrintReady(true)
+        this.printingService.updatePrintReady({ready: true, index: this.index})
         return of(this.order)
       }
     ))
   }
 
-  initTemplateData(order) { 
-    if (!order) { return null }
-    this.items      = this.order.posOrderItems;
+  initTemlplateSubscription() {
+    this._printOrder = this.orderService.printOrder$.subscribe(
+      data => {
+        if (data) {
+          this.printOrder    = data;
+          this.order = data.order
+          console.log('template Subscription', data.order.posOrderItems.length)
+          this.action$ = this.initTemplateData(data.order)
+        }
+      }
+    )
+  }
 
+  initTemplateData(order) {
+
+    if (!order) {
+      console.log('initTemplateData order update null')
+      return null
+    }
+
+    this.items      = order.posOrderItems;
     if (!this.payments) {
-      this.payments   = this.order.posPayments
+      this.payments   = order.posPayments
     }
 
     this.orders     = [];
-    if (this.order) { this.orders.push(this.order)}
-    const datepipe: DatePipe = new DatePipe('en-US');
+    if (this.order) { this.orders.push(order) }
 
-    if (order.orderDate) { this.order.orderTime = datepipe.transform( order.orderDate, 'HH:mm')     }
+    const datepipe: DatePipe = new DatePipe('en-US');
+    if (order.orderDate) { order.orderTime = datepipe.transform( order.orderDate, 'HH:mm')     }
     if (this.items)      { this.items           = this.items.filter( item => item.quantity != 0  );     }
     if ( this.payments)  { this.payments        = this.payments.filter(item => item.amountPaid != 0 ); }
 
-    const site = this.siteService.getAssignedSite()
+    const site = this.siteService.getAssignedSite();
     return this.serviceTypeService.getTypeCached(site, order.serviceTypeID).pipe(
       switchMap(data   => {
-        if (!data) { return of(this.order) }
+        if (!data)  {
+          console.log('no data', this.index, order)
+        }
+
         this.orderType = data
         this.orderTypes = []
         this.orderTypes.push(this.orderType)
         if (this.subFooterText) {
-          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, 
+          this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText,
                                                                                          this.orderTypes, 'ordertypes')
         }
         this.getInterpolatedData()
-        this.printingService.updatePrintReady(true)
-        return of(this.order)
+        this.outputPrint();
+        return of(order)
       }
     ))
+
   }
+
+  outputPrint() {
+    // if (this.autoPrinted) { return }
+    // this.autoPrinted = true;
+
+    setTimeout(() => {
+      const prtContent     = document.getElementById('printsection');
+      if (!prtContent) {
+        console.log('no prtContent', this.index)
+        return
+      }
+      const content        = `${prtContent.innerHTML}`
+      if (!content) {
+        console.log('not out put in content', this.index)
+        return
+      }
+
+      console.log('content output', this.index, content.length)
+      this.outPutPrintReady.emit(content)
+    }, 500)
+  }
+
   constructor(
     private settingService  : SettingsService,
     private serviceTypeService: ServiceTypeService,
@@ -149,12 +204,13 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     private fakeDataService : FakeDataService) { }
 
   ngOnInit() {
-
-    if (this.templateInit) { 
-      this.action$ = this.initTemplateData(this.order)
+    if (this.templateInit) {
+      // this.action$ = this.initTemplateData(this.order)
+      this.initTemlplateSubscription();
       return ;
     }
-    this.getReceiptWidth()
+
+    this.getReceiptWidth();
     this.action$ = this.initSubscriptions().pipe(
         switchMap(data => {
             return of(data)
@@ -172,7 +228,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         }
       )
     )
-
   }
 
   ngOnDestroy() {
@@ -214,21 +269,19 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   }
 
   getInterpolatedData() {
-
     if (!this.orders || !this.orders[0]) { return }
     this.scrubOrders(this.orders[0])
 
-    if (this.items) { 
-      this.items = this.items.filter(data => {
-        const item = data as IPOSOrderItem; 
-        if (data?.productName.trim() === 'Gratuity') {
-          const order = this.order as IPOSOrder;
-          order.gratuity = +(item.unitPrice * item.quantity).toFixed(2)
-        }
-        console.log(data.productName, data.unitPrice)
-        return data?.productName.trim() != 'Gratuity'
-      })
-    }
+    // if (this.items) {
+    //   this.items = this.items.filter(data => {
+    //     const item = data as IPOSOrderItem;
+    //     if (data?.productName.trim() === 'Gratuity') {
+    //       const order = this.order as IPOSOrder;
+    //       order.gratuity = +(item.unitPrice * item.quantity).toFixed(2)
+    //     }
+    //     return data?.productName.trim() != 'Gratuity'
+    //   })
+    // }
 
     try {
 
@@ -258,7 +311,6 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       } else {
         // console.log('you knew this was going to happen')
       }
-
     } catch (error) {
       // console.log(error)
     }
@@ -275,10 +327,9 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
       }
       return of(data)
     }));
-
   }
 
- getTestData() {
+  getTestData() {
     if (!this.order) {
       this.orders      = this.fakeDataService.getOrder();
       this.items       = this.fakeDataService.getItemData();
@@ -303,8 +354,8 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     return receiptStyle$.pipe(
       switchMap( receiptStyles => {
           if (receiptStyles) {
-            const styles = this.renderingService.interporlateFromDB(receiptStyles.text)
-            const style = document.createElement('style');
+            const styles    = this.renderingService.interporlateFromDB(receiptStyles.text)
+            const style     = document.createElement('style');
             style.innerHTML = styles;
             document.head.appendChild(style);
           }
@@ -316,10 +367,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         return of(null)
       })
     )
-
   }
-
-
 
 }
 

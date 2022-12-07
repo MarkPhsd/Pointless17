@@ -150,6 +150,20 @@ export class SettingsService {
 
   }
 
+  getSettingCached(site: ISite, id: number):  Observable<ISetting> {
+
+    const controller = "/settings/"
+
+    const endPoint = 'getSetting';
+
+    const parameters = `?id=${id}`
+
+    const url = `${site.url}${controller}${endPoint}${parameters}`
+
+    return this.http.get<ISetting>(url);
+
+  }
+
   deleteSetting(site: ISite, id: number):  Observable<ISetting> {
 
     const controller = "/settings/"
@@ -287,7 +301,7 @@ export class SettingsService {
 
     const site =  this.siteService.getAssignedSite()
 
-    const controller = "/settings/"
+    const controller = "/DSISettings/"
 
     const endPoint = 'getDSIEMVSettings';
 

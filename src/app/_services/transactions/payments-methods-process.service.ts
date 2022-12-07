@@ -12,7 +12,6 @@ import { OrdersService } from './orders.service';
 import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -30,6 +29,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   initSubscriptions() {
      this.dialogSubject = this.dialogRef.afterClosed().subscribe(result => {
+      console.log('dialog ref result (payment-methods.process.service)', result)
       if (result) {
 
       }
@@ -81,10 +81,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
     const balance$ =  this.balanceSheetService.openDrawerFromBalanceSheet()
     const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    
-    return balance$.pipe(switchMap(data => { 
+
+    return balance$.pipe(switchMap(data => {
       return payment$
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       return of(data)
     }))
 
@@ -150,12 +150,13 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     payment$.subscribe(data =>
       {
         data.amountPaid = amount;
-        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: 1, manualPrompt: manualPrompt});
+        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: 1,
+                                                                   manualPrompt: manualPrompt});
         this._dialog.next(this.dialogRef)
         return of(data)
       }
     )
-    return null
+    return null;
   }
 
   processDSIEMVCreditVoid( payment: IPOSPayment) {
@@ -166,10 +167,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     const site = this.sitesService.getAssignedSite();
     const  posPayment = {} as IPOSPayment;
     posPayment.id = payment.id;
-    this.dialogRef = this.dialogOptions.openDSIEMVTransaction({payment: payment, voidPayment: payment, action: 2});
+    this.dialogRef = this.dialogOptions.openDSIEMVTransaction({payment: payment,
+                                                              voidPayment: payment,
+                                                              action: 2});
     this._dialog.next(this.dialogRef)
   }
-
 
   //once we get back the method 'Card Type'
   //lookup the payment method.
@@ -182,11 +184,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     posPayment.zrun = order.zrun;
     posPayment.reportRunID = order.reportRunID;
     posPayment.amountPaid = amount;
-
     const payment$  = this.paymentService.postPOSPayment(site, posPayment);
 
     payment$.subscribe(data => {
-      this.dialogRef = this.dialogOptions.openDSIEMVAndroidTransaction({payment: data, type: 1});
+      this.dialogRef = this.dialogOptions.openDSIEMVAndroidTransaction({payment: data,
+                                                                        type: 1});
       this._dialog.next(this.dialogRef)
     })
   }
@@ -194,8 +196,10 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   validateResponse(response: RStream, payment: IPOSPayment) {
     const rStream = response //.RStream as RStream;
-    const cmdResponse       = rStream.CmdResponse;
-    const trans             = rStream.TranResponse;
+    const cmdResponse       = rStream?.CmdResponse;
+    const trans             = rStream?.TranResponse;
+
+    console.log('validateResponse,', response, payment);
 
     if (!cmdResponse) {
       this.notify(`Error no response`, 'Transaction not Complete', 3000);
@@ -272,17 +276,19 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
-  async processCreditCardResponse(response: any,  payment: IPOSPayment, order: IPOSOrder) {
+  processCreditCardResponse(response: any,  payment: IPOSPayment, order: IPOSOrder) {
 
     const site = this.sitesService.getAssignedSite();
 
     if (response) {
+      const rStream  = response.RStream as RStream;
 
-      const rStream      = response.RStream as RStream;
-      const validate = this.validateResponse(rStream, payment)
+      const validate = this.validateResponse( rStream, payment)
+
+      console.log('validate', validate);
 
       if (!validate) {
-        return rStream?.CmdResponse;
+        return of(null);
       }
 
       const cmdResponse  = rStream.CmdResponse;
@@ -295,28 +301,31 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       if (this.isApproved(cmdStatus)) {
 
         let cardType       = trans?.CardType;
+
         if (!cardType || cardType === '0') {  cardType = 'credit'};
 
         payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
         let paymentMethod    = {} as IPaymentMethod;
 
-        this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
+        return  this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
           switchMap(
             data => {
               payment.paymentMethodID = data.id;
-              paymentMethod = data;
+              paymentMethod           = data;
               return this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
             }
-        )).subscribe(data => {
-          this.orderService.updateOrderSubscription(data.order);
-          this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
-          this.printingService.previewReceipt();
-          return cmdResponse;
+        )).pipe(
+          switchMap(data => {
+            this.orderService.updateOrderSubscription(data.order);
+            this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
+            this.printingService.previewReceipt();
+            return of(cmdResponse);
         })
+        )
       }
 
-      return cmdResponse;
     }
+    return of(null)
   }
 
   applyCardPointResponseToPayment(response: any, payment: IPOSPayment) {

@@ -1,6 +1,8 @@
+<div *ngIf="(action$ | async) as item"></div>
+
 <mat-card>
   <mat-card-title>
-    <ng-content></ng-content>
+    <ng-content></ng-content> for : {{deviceName}}
   </mat-card-title>
 
   <ng-template #loading>... loading
@@ -12,10 +14,12 @@
     <div class="dsi-response" *ngIf="tranResponse">
       <mat-card>
         <mat-card-title>
-          <h3>Response Data</h3>
+          <h3>Response Data for </h3>
         </mat-card-title>
+
         <mat-card-content>
           <div class="results-grid">
+
             <div>Transaction Code</div>
             <div>{{tranResponse?.TranCode}}</div>
 
@@ -42,6 +46,7 @@
 
             <div>Amount </div>
             <div>{{tranResponse?.Amount?.Purchase | currency}}</div>
+
             <div>Authorized </div>
             <div>{{tranResponse?.Amount?.Authorize | currency}}</div>
 
@@ -55,116 +60,123 @@
 
     </div>
 
-    <div  *ngIf="inputForm; else loading"
-          [formGroup]="inputForm"
-          class="grid-views">
+    <div *ngIf="(dsiSettings$ | async) as dsi; else loading">
+      <div  *ngIf="inputForm; else loading"
+            [formGroup]="inputForm"
+            class="grid-views">
 
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'merchantID'">
-              MerchantID
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'terminalID'">
-              TerminalID
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'operatorID'">
-              OperatorID
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'ipPort'">
-              IpPort
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'userTrace'">
-              UserTrace
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'tranCode'">
-              TranCode
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'secureDevice'">
-              SecureDevice
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'text'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'comPort'">
-              ComPort
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'test'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'pinPadIpPort'">
-              PinPadIpPort
-          </app-value-fields>
-        </div>
-        <div class="grid-item">
-          <app-value-fields
-              [fieldsClass]   ="'field-small'"
-              [fieldType]     ="'test'"
-              [inputForm]     ="inputForm"
-              [fieldName]     ="'hostOrIP'">
-              Host Or IP
-          </app-value-fields>
-        </div>
-
-        <div class="toggle-fields">
-          <div>
-            <mat-slide-toggle
-              formControlName="enabled"
-              >
-              <mat-label>Enable</mat-label>
-            </mat-slide-toggle>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'MerchantID'">
+                MerchantID
+            </app-value-fields>
           </div>
-          <div>Enabled on each device.</div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'TerminalID'">
+                TerminalID
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'OperatorID'">
+                OperatorID
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'IpPort'">
+                IpPort
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'UserTrace'">
+                UserTrace
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'TranCode'">
+                TranCode
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'SecureDevice'">
+                SecureDevice
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'text'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'ComPort'">
+                ComPort
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'test'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'PinPadIpPort'">
+                PinPadIpPort
+            </app-value-fields>
+          </div>
+          <div class="grid-item">
+            <app-value-fields
+                [fieldsClass]   ="'field-small'"
+                [fieldType]     ="'test'"
+                [inputForm]     ="inputForm"
+                [fieldName]     ="'HostOrIP'">
+                Host Or IP
+            </app-value-fields>
+          </div>
 
-        </div>
+          <div class="toggle-fields">
+            <div>
+              <mat-slide-toggle
+                formControlName="enabled"
+                >
+                <mat-label>Enable</mat-label>
+              </mat-slide-toggle>
+            </div>
+            <div>Enabled on each device.</div>
 
+          </div>
+
+      </div>
     </div>
-    <div  class="grid-views">
 
+    <ng-template #loading>
+      ...loading
+      <mat-spinner [diameter]="50"></mat-spinner>
+    </ng-template>
+
+    <div  class="grid-views">
       <div *ngIf="isElectron" class="grid-item">
         <button mat-raised-button
                 color="primary"
@@ -182,7 +194,7 @@
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
               color="primary"
-              (click)="dollarSaleTest()">Dollar Sale Test
+              (click)="saleTest()">Sale Test
         </button>
       </div>
 
@@ -196,14 +208,14 @@
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
-                (click)="initPinPadResetForm()">Set Pin Pad Reset Values
+                (click)="initPinPadResetForm()">Reset Form Values
         </button>
       </div>
 
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
-                (click)="pinPadReset()">Test Reset
+                (click)="pinPadReset()">Device Reset
         </button>
       </div>
 
@@ -257,6 +269,7 @@
           </app-value-fields>
         </div>
       </div>
+
       <div *ngIf="isElectron"  class="grid-item">
         <button mat-raised-button
                 color="primary"
@@ -270,6 +283,8 @@
         </button>
       </div>
     </div>
+
+
   </mat-card-content>
 
 </mat-card>
