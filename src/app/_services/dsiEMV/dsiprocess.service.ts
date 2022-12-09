@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Result } from 'electron/main';
 import { IPOSPayment } from 'src/app/_interfaces';
 import { DSIEMVSettings } from '../system/settings/uisettings.service';
 import { OrderMethodsService } from '../transactions/order-methods.service';
@@ -46,13 +45,14 @@ export class DSIProcessService {
   }
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
-    return await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
+    const response = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
+    return response
   }
 
-  async  emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
-    const commandResponse = await this.emvTransaction('Return', amount, paymentID, manual, false, 'credit');
-    // console.log('emvReturn', commandResponse)
-    return commandResponse;
+  async emvReturn(amount: number, paymentID: number, manual: boolean): Promise<RStream> {
+    const respsonse = await this.emvTransaction('EMVReturn', amount, paymentID, manual, false, '');
+    console.log('respsonse', respsonse)
+    return respsonse;
   }
 
   async emvVoid(posPayment: IPOSPayment): Promise<RStream> {
@@ -135,21 +135,12 @@ export class DSIProcessService {
         return result
       }
 
-      console.log('void transaction ', transaction)
       if (transaction.SecureDevice.toLowerCase() != 'test') {
         transaction.Amount = amount;
-
-        console.log('pre transaction', transaction)
+        console.log('void request', transaction)
         const result =  await this.dsi.emvTransaction(transaction)
-
-        console.log(result)
-        // console.log('CmdResponse', result?.CmdResponse)
-        // console.log('TranResponse', result?.TranResponse)
-        // console.log('RStream', result?.RStream)
-        // console.log('RStream2', result?.rStream)
-        console.log('result', result)
-        console.log('RStream', result?.RStream)
-        return result?.RStream
+        console.log('DSIProcess.service EMVVoid Resposne RStream', result?.RStream)
+        return result?.RStream;
       }
 
     } catch (error) {
@@ -186,11 +177,14 @@ export class DSIProcessService {
     }
 
     if (transactiontemp.SecureDevice.toLowerCase() === 'test') {
-      const result = this.testSale(tranCode, amount,paymentID, manual, tipPrompt, TranType)
+      const result = this.testSale(tranCode, amount, paymentID, manual, tipPrompt, TranType)
       return result;
     }
 
-    const reset               = await this.pinPadReset(); //ignore response for now.
+    if (transactiontemp.SecureDevice.toLowerCase() != 'test') {
+      const reset =  await this.pinPadReset(); //ignore response for now.
+    }
+
     let transaction           = {} as Transaction // {...transactiontemp, id: undefined}
     transaction               = this.initTransaction()
     transaction.TranCode      = tranCode;
@@ -216,7 +210,7 @@ export class DSIProcessService {
 
     console.log('request', transaction)
     const result =  await this.dsi.emvTransaction(transaction)
-    console.log('RStream', result?.RStream)
+    console.log('DSIProcess.service EMVTransaction Response RStream', result?.RStream)
     return result?.RStream;
   }
 
@@ -254,7 +248,7 @@ export class DSIProcessService {
     return null
   }
 
-  testSale(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): any {
+  testSale(TranCode: string, amount: number, paymentID: number, manual: boolean, tipPrompt: boolean, TranType: string): RStream {
     const stream = {} as RStream;
     stream.CmdResponse = {} as CmdResponse
     stream.TranResponse = {} as TranResponse
@@ -263,26 +257,26 @@ export class DSIProcessService {
     stream.CmdResponse.CmdStatus = "Approved"
     stream.CmdResponse.TextResponse = "APPROVED"
 
-    stream.TranResponse.CardType = "VISA"
+    stream.TranResponse.CardType = "AMEX"
 
     stream.TranResponse.AuthCode     = "00421D" //</AuthCode>
 		stream.TranResponse.CaptureStatus= "Captured" //</CaptureStatus>
 		stream.TranResponse.RefNo        = "212442535014"//</RefNo>
-    stream.TranResponse.InvoiceNo    = "249571"//</InvoiceNo>
+    stream.TranResponse.InvoiceNo    = "263757"//</InvoiceNo>
 		stream.TranResponse.OperatorID   =" Wolf Wolverson"//</OperatorID>
 
     stream.TranResponse.Amount.Authorize = amount.toString();
     stream.TranResponse.Amount.Purchase = amount.toString();
 
-    stream.TranResponse.AcqRefData  ="|1623410529|95985"//</AcqRefData>
-    stream.TranResponse.AVSResult   ="Z"//</AVSResult>
-		stream.TranResponse.CVVResult   ="M"//</CVVResult>
-		stream.TranResponse.RecordNo    ="1623410529"//</RecordNo>
-		stream.TranResponse.EntryMethod ="CHIP READ/MANUAL"//</EntryMethod>
-		stream.TranResponse.Date        ="05/04/2022"//</Date>
-		stream.TranResponse.Time        ="15:00:14"//</Time>
-
-    const item =   {RStream: stream}
+    stream.TranResponse.AcqRefData  = "|1623410529|95985"//</AcqRefData>
+    stream.TranResponse.AVSResult   = "Z"//</AVSResult>
+		stream.TranResponse.CVVResult   = "M"//</CVVResult>
+		stream.TranResponse.RecordNo    = "1623410529"//</RecordNo>
+		stream.TranResponse.EntryMethod = "CHIP READ/MANUAL"//</EntryMethod>
+		stream.TranResponse.Date        = "05/04/2022"//</Date>
+		stream.TranResponse.Time        = "15:00:14"//</Time>
+    stream.TranResponse.TranCode    = TranCode
+    const item =  stream
     // console.log('CmdResponse', result?.CmdResponse)
     // console.log('TranResponse', result?.TranResponse)
     // console.log('RStream', item?.RStream)

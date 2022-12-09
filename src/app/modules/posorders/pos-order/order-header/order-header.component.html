@@ -4,7 +4,7 @@
       <div class="total-card">
         <h4>
           <span  *ngIf="!isOrderClaimed" > <mat-icon color="warn">lock</mat-icon>
-         </span> Order {{order?.id}} - {{order?.serviceType}}
+         </span> Order {{order?.id}} - {{order?.serviceType | truncateText: 8}}
         </h4>
       </div>
       <div class="total-card">
@@ -22,6 +22,9 @@
     <div *ngIf="!mainPanel && !hidePrint">
       <div class="button-container">
         <button color="primary" mat-raised-button (click)="printingService.previewReceipt()"><mat-icon>print</mat-icon></button>
+      </div>
+      <div class="button-container" *ngIf="platFormService.isApp()">
+        <button color="primary" mat-raised-button (click)="prepPrintingServiceService.sendToPrep(order)"><mat-icon>countertops</mat-icon></button>
       </div>
     </div>
   </div>

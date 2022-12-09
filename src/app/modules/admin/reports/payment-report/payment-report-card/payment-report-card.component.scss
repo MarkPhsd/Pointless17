@@ -56,6 +56,7 @@
   text-overflow  : ellipsis;
   text-transform : capitalize;
   overflow       : clip;
+  max-width: 65px;
 }
 
 .product-name  {
@@ -65,13 +66,14 @@
   overflow      : clip;
   text-overflow : ellipsis;
   white-space   : nowrap;
+  max-width: 65px;
 }
 
 .grid-headerfooter {
   --gap: 5px;
   display: grid;
   gap: var(--gap);
-  grid-template-columns: 55px 85px 85px 65px 55px;
+  grid-template-columns: 75px 65px 65px 55px 45px;
   margin-left: 15px;
   white-space   : nowrap;
   overflow      : hidden;
@@ -79,7 +81,7 @@
   text-transform: capitalize;
 
   @include for-phone-only {
-    grid-template-columns: 55px 85px 85px 65px 55px;
+    grid-template-columns:  75px 65px 65px 55px 45px;
   }
 
 }

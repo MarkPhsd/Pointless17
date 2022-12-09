@@ -2,6 +2,8 @@ import { Component, Input , OnInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { OrdersService } from 'src/app/_services';
+import { PlatformService } from 'src/app/_services/system/platform.service';
+import { PrepPrintingServiceService } from 'src/app/_services/system/prep-printing-service.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
 
 @Component({
@@ -20,6 +22,8 @@ export class OrderHeaderComponent implements OnInit  {
              private  ordersService:   OrdersService,
              private router: Router,
              public printingService: PrintingService,
+             public platFormService: PlatformService,
+             public prepPrintingServiceService: PrepPrintingServiceService,
     ) {
 
     this.ordersService.currentOrder$.subscribe(data => {

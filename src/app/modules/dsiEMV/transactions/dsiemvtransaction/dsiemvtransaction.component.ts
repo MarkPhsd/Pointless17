@@ -9,6 +9,7 @@ import { OrderMethodsService } from 'src/app/_services/transactions/order-method
 import { PaymentsMethodsProcessService } from 'src/app/_services/transactions/payments-methods-process.service';
 import { POSPaymentService } from 'src/app/_services/transactions/pospayment.service';
 import { switchMap, Observable, of, pipe} from 'rxjs';
+import { UserAuthorizationService } from 'src/app/_services/system/user-authorization.service';
 
 @Component({
   selector: 'app-dsiemvtransaction',
@@ -29,7 +30,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   type      : string;
   action    : number ;
   transactiondata: any;
-  voidPayment: IPOSPayment;
+  voidPayment : IPOSPayment;
   manualPrompt: boolean;
   //action = 0 or 1 = sale
   //action = 2 = void
@@ -53,20 +54,26 @@ export class DSIEMVTransactionComponent implements OnInit {
     private orderMethodService    : OrderMethodsService,
     private pOSPaymentService     : POSPaymentService,
     private siteService           : SitesService,
+    private userAuthorization     : UserAuthorizationService,
     private dialogRef             : MatDialogRef<DSIEMVTransactionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {
     if (data)  {
+
       this.payment = data?.data;
       this.amount  = data?.amount;
       this.action  = data?.action
       this.transactiondata = data;
-      this.manualPrompt = data?.manualPrompt
+      this.manualPrompt = data?.manualPrompt;
+
       if (data?.action == 2) {
         this.payment = data.voidPayment;
         this.voidPayment = data.voidPayment
       }
+
+      console.log('data', data);
+
     }
   }
 
@@ -77,12 +84,37 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.message  = 'Press process to complete transaction.'
       this.processing = false;
       this.displayAction(this.action)
-      // if (this.action == 0 || this.action == 1) {
-      //   setTimeout(()=>{
-      //     this.process();
-      //   },50);
-      // }
+
+      if (this.amount < 0) {
+        if (this.isAuthorized) {
+          this.action = 3;
+          this.type = 'EMVReturn'
+          this.processing = false;
+          // this.message  = 'Please check the device for input if required.'
+          // setTimeout(()=>{
+          //   this.process();
+          //   return;
+          // },100);
+        }
+      }
+
+      if (this.action == 0 || this.action == 1) {
+        this.processing = false;
+        this.action = 1
+        this.type = 'EMVSale'
+        // this.message  = 'Please check the device for input if required.'
+        // setTimeout(()=>{
+        //   this.process();
+        // },100);
+      }
     })
+  }
+
+  get isAuthorized() {
+    if (this.amount>0) {return true}
+    if (this.amount<0) {
+      return this.userAuthorization.isManagement
+    }
   }
 
   displayAction(action: number) {
@@ -100,11 +132,11 @@ export class DSIEMVTransactionComponent implements OnInit {
       //action = 7 = WIC
   }
 
-  process() {
+  async process() {
     this.processing = true;
     this.message  = 'Please check the device for input if required.'
     this.resultMessage = '';
-    this.processTransation();
+    await this.processTransation();
   }
 
   async testProcess() {
@@ -132,19 +164,20 @@ export class DSIEMVTransactionComponent implements OnInit {
       }
     }
 
-    if (this.action == 0 || this.action == 1 || this.type === 'sale') {
+    if (this.action == 0 || this.action == 1 || this.type.toLowerCase() === 'sale') {
       this.processSaleCard();
       return
     }
 
-    if (this.action == 2 || this.type === 'void') {
+    if (this.action == 2 || this.type.toLowerCase() === 'void') {
       this.processVoidCard();
       return
     }
 
     if (this.action == 3 ||
-        this.type === 'return' ||
-        this.type === 'refund') {
+        this.type.toLowerCase() === 'return' ||
+        this.type.toLowerCase() === 'emvreturn' ||
+        this.type.toLowerCase() === 'refund') {
         this.processRefundCard();
       return
     }
@@ -245,17 +278,14 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   processVoidResults(response: RStream) {
-
     try {
       console.log('processVoidResults RStream', response.CmdResponse)
       const cmdResponse = response?.CmdResponse;
       const result =  this.readResult(cmdResponse);
-
       if (!result) {
         this.processing = false;
         return;
       }
-
       if (!response) {
         this.message = 'Processing failed, reason uknown.'
         this.processing = false;
@@ -263,9 +293,7 @@ export class DSIEMVTransactionComponent implements OnInit {
       }
 
       if (response) {
-
         const item = {} as OperationWithAction;
-
         item.action  = this.action;
         item.payment = this.voidPayment;
         try {
@@ -282,30 +310,37 @@ export class DSIEMVTransactionComponent implements OnInit {
           item.payment.tipAmount       = +response?.TranResponse?.Amount?.Gratuity;
         } catch (error) {
         }
+
         try {
           item.payment.captureStatus   = response?.TranResponse?.CaptureStatus;
         } catch (error) {
         }
+
         try {
           item.payment.entryMethod     = response?.TranResponse?.EntryMethod;
         } catch (error) {
         }
+
         try {
           item.payment.applicationLabel= response?.TranResponse?.ApplicationLabel;
         } catch (error) {
         }
+
         try {
           item.payment.captureStatus   = response?.TranResponse?.CaptureStatus;
         } catch (error) {
         }
+
         try {
           item.payment.amountReceived  = +response?.TranResponse?.Amount?.Purchase;
         } catch (error) {
         }
+
         try {
           item.payment.processData     = response?.TranResponse?.ProcessData;
         } catch (error) {
         }
+
         try {
           item.payment.trancode        = response?.TranResponse?.TranCode
           item.payment.tranType        = response?.TranResponse?.TranCode
@@ -341,12 +376,17 @@ export class DSIEMVTransactionComponent implements OnInit {
       return
     }
     if (this.readResult(response?.CmdResponse)) {
+      console.log('processing');
+
       const item$ = this.paymentsMethodsProcess.processCreditCardResponse(response,
                     this.payment,
                     this.order);
+
       this.action$ =  item$.pipe(
           switchMap(data => {
           if (data) {
+            console.log('completed')
+            this.cancel();
             return of(data)
           }
           return of(null)
@@ -357,6 +397,7 @@ export class DSIEMVTransactionComponent implements OnInit {
   }
 
   readResult(cmdResponse: CmdResponse): boolean {
+
     if (!cmdResponse) {
       this.message = 'Processing failed, no command response.'
       console.log('readResult', cmdResponse, this.message)
@@ -381,15 +422,15 @@ export class DSIEMVTransactionComponent implements OnInit {
     const response = cmdResponse?.TextResponse.toLowerCase();
     const len = 'Transaction rejected because the referenced original transaction is invalid'.length;
     if (response.substring(0, len) === 'Transaction rejected because the referenced original transaction is invalid.') {
-      this.cancel();
-      return true;
+      // this.cancel();
+      return false;
     }
 
     if (response === 'Approved'.toLowerCase() || response === 'AP*'.toLowerCase()
        || response === 'Approved, Partial AP'.toLowerCase()
 
     ) {
-      this.cancel();
+      // this.cancel();
       return true;
     }
 

@@ -1,5 +1,5 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { BehaviorSubject, Observable, of, Subscription, switchMap, } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, of, Subscription, switchMap, } from 'rxjs';
 import { IPaymentResponse, IPOSOrder,  IPOSPayment,   ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SitesService } from '../reporting/sites.service';
@@ -97,8 +97,7 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       this.processSubDSIEMVCreditPayment(order, amount, true)
       return
     }
-    const payment$ = this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
-    return payment$
+    return this.paymentService.makePayment(site, posPayment, order, amount, paymentMethod)
   }
 
   processPayPalCreditPayment(order: IPOSOrder, amount: number, manualPrompt: boolean, settings: TransactionUISettings) {
@@ -146,11 +145,17 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     posPayment.orderID = order.id;
     posPayment.zrun = order.zrun;
     posPayment.reportRunID = order.reportRunID;
-    const payment$  = this.paymentService.postPOSPayment(site, posPayment)
+    const payment$  = this.paymentService.postPOSPayment(site, posPayment);
+
     payment$.subscribe(data =>
       {
         data.amountPaid = amount;
-        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: 1,
+        let action = 1;
+        if (amount < 0) {
+          action = 3;
+        }
+
+        this.dialogRef = this.dialogOptions.openDSIEMVTransaction({data, amount, action: action,
                                                                    manualPrompt: manualPrompt});
         this._dialog.next(this.dialogRef)
         return of(data)
@@ -194,12 +199,12 @@ export class PaymentsMethodsProcessService implements OnDestroy {
   }
 
 
-  validateResponse(response: RStream, payment: IPOSPayment) {
-    const rStream = response //.RStream as RStream;
+  validateResponse(rStream: RStream, payment: IPOSPayment) {
+
     const cmdResponse       = rStream?.CmdResponse;
     const trans             = rStream?.TranResponse;
 
-    console.log('validateResponse,', response, payment);
+    console.log('validateResponse,', cmdResponse, payment);
 
     if (!cmdResponse) {
       this.notify(`Error no response`, 'Transaction not Complete', 3000);
@@ -217,10 +222,11 @@ export class PaymentsMethodsProcessService implements OnDestroy {
     }
 
     if (cmdResponse.CmdStatus.toLowerCase() === 'Error'.toLowerCase() ) {
-      this.notify(`Error: ${status} , `, `Transaction not Complete`, 3000);
+      this.notify(`Error: ${'error'} , `, `Transaction not Complete`, 3000);
       return false
     }
 
+    console.log('valid', true)
     return true;
 
   }
@@ -276,19 +282,16 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
   }
 
-  processCreditCardResponse(response: any,  payment: IPOSPayment, order: IPOSOrder) {
+  processCreditCardResponse(rStream: RStream,  payment: IPOSPayment, order: IPOSOrder) {
 
     const site = this.sitesService.getAssignedSite();
 
-    if (response) {
-      const rStream  = response.RStream as RStream;
+    if (rStream) {
 
       const validate = this.validateResponse( rStream, payment)
-
-      console.log('validate', validate);
-
       if (!validate) {
-        return of(null);
+        console.log('processCreditCardResponse - not valid')
+        return of(null)
       }
 
       const cmdResponse  = rStream.CmdResponse;
@@ -306,22 +309,21 @@ export class PaymentsMethodsProcessService implements OnDestroy {
 
         payment.textResponse =  cmdResponse.CmdStatus.toLowerCase();
         let paymentMethod    = {} as IPaymentMethod;
+        paymentMethod.name = cardType;
 
-        return  this.paymentMethodService.getPaymentMethodByName(site, cardType).pipe(
-          switchMap(
-            data => {
-              payment.paymentMethodID = data.id;
-              paymentMethod           = data;
-              return this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
-            }
-        )).pipe(
+        const payment$ =   this.paymentService.makePayment(site, payment, order, +trans.Amount.Authorize, paymentMethod)
+
+        return  payment$.pipe(
           switchMap(data => {
+            console.log('processCreditCardResponse makePayment data', data)
             this.orderService.updateOrderSubscription(data.order);
             this.orderMethodsService.finalizeOrder(data,  paymentMethod, data.order);
             this.printingService.previewReceipt();
             return of(cmdResponse);
-        })
-        )
+        }),catchError( err => {
+          this.sitesService.notify('Error: ' + err, 'Alert', 4000)
+          return of(null)
+        }))
       }
 
     }

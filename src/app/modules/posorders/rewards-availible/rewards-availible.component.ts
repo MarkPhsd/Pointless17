@@ -146,8 +146,7 @@ export class RewardsAvailibleComponent implements OnInit, OnDestroy {
             this.orderMethodsService.addAssignedItem(passAlongItem)
           }
 
-         
-          if  (!passAlongItem)  { 
+          if  (!passAlongItem)  {
             passAlongItem = this.order.posOrderItems[this.order.posOrderItems.length-1];
             return of(null)
           }

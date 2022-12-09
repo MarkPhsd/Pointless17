@@ -16,7 +16,7 @@ export class PaymentReportComponent implements OnInit, OnChanges {
   @Input() notifier: Subject<boolean>
   @Input() groupBy = "paymentMethod"
   @Input() zrunID  : string;
-
+  refunds$           : Observable<IPaymentSalesSummary>;
   sales$             : Observable<IPaymentSalesSummary>;
   sales              : PaymentSummary[];
   paymentSalesSummary: IPaymentSalesSummary;
@@ -26,11 +26,11 @@ export class PaymentReportComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     const i = 0;
-    // console.log(this.groupBy);
   }
 
   ngOnChanges() {
     this.refreshSales();
+    this.refreshRefunds();
   }
 
   refreshSales() {
@@ -40,5 +40,15 @@ export class PaymentReportComponent implements OnInit, OnChanges {
     searchModel.groupBy   = this.groupBy;
     searchModel.zrunID    = this.zrunID;
     this.sales$  = this.salesPaymentService.getPaymentSales(this.site, searchModel);
+  }
+
+  refreshRefunds() {
+    const searchModel = {} as IPaymentSalesSearchModel;
+    searchModel.startDate = this.dateFrom;
+    searchModel.endDate   = this.dateTo;
+    searchModel.groupBy   = this.groupBy;
+    searchModel.zrunID    = this.zrunID;
+    searchModel.refunds     = true;
+    this.refunds$  = this.salesPaymentService.getPaymentSales(this.site, searchModel);
   }
 }

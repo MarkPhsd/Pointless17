@@ -169,6 +169,7 @@ export class OrderMethodsService implements OnDestroy {
               private toolbarServiceUI        : ToolBarUIService,
               public authenticationService    : AuthenticationService,
               private floorPlanService        : FloorPlanService,
+
              ) {
     this.initSubscriptions();
 
@@ -416,7 +417,8 @@ export class OrderMethodsService implements OnDestroy {
     return await this.posOrderItemService.addItemToOrderWithBarcode(site, newItem).pipe().toPromise();
   }
 
-  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number, portionValue: string, packaging: string): Observable<ItemPostResults> {
+  scanItemForOrder(site: ISite, order: IPOSOrder, barcode: string, quantity: number,
+                   portionValue: string, packaging: string): Observable<ItemPostResults> {
     if (!barcode) { return null;}
     if (!order) {const order = {} as IPOSOrder}
 
@@ -427,8 +429,11 @@ export class OrderMethodsService implements OnDestroy {
       passAlongItem =  this.assignPOSItems[0];
     }
 
-    const deviceName = localStorage.getItem('devicename')
-    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging, portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,  } as NewItem
+    const deviceName = localStorage.getItem('devicename');
+
+    const newItem = { orderID: order.id, quantity: quantity, barcode: barcode, packaging: packaging,
+                      portionValue: portionValue, deviceName: deviceName, passAlongItem: passAlongItem,  } as NewItem;
+
     return this.posOrderItemService.addItemToOrderWithBarcode(site, newItem)
   }
 
@@ -657,9 +662,19 @@ export class OrderMethodsService implements OnDestroy {
 
         if (this.siteService.phoneDevice) {
         } else {
-          if (data.order.posOrderItems.length == 1 ) {
+
+          const order = data.order as IPOSOrder;
+
+          if (order && order.service && order.service.retailServiceType) {
+            this.toggleOpenOrderBar(this.userAuthorization.isStaff)
+            this.toolbarServiceUI.updateOrderBar(false)
+            return;
+          }
+
+          if (order && order.posOrderItems.length == 1 ) {
             this.toolbarServiceUI.updateOrderBar(true)
           }
+
         }
 
       } else {
@@ -671,6 +686,14 @@ export class OrderMethodsService implements OnDestroy {
         this.notification('Item added to cart.', 'Check Cart');
       }
 
+  }
+
+  toggleOpenOrderBar(isStaff: boolean) {
+    let schedule = 'currentorder'
+    if (isStaff) { schedule = '/currentorder/' }
+    this.router.navigate([ schedule , {mainPanel:true}]);
+    this.toolbarServiceUI.updateOrderBar(false)
+    this.toolbarServiceUI.resetOrderBar(true)
   }
 
   notification(message: string, title: string)  {

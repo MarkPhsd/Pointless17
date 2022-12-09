@@ -1,0 +1,171 @@
+@import "/src/mixins.scss";
+
+.mat-card-container {
+  max-width: 375px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.mat-divider {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.totals_label {
+  font-size     : .9em;
+  margin        : 0px 5px 5px 5px;
+  padding       : 0px 5px 5px 5px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  align-items   : baseline;
+  line-height   : 1em;
+  float         : left;
+  align-items   : flex-end;
+  text-align    : left;
+}
+
+.center-container {
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  flex-direction: row;
+  flex-grow: inherit;
+}
+
+.spacer {
+  margin-bottom: 10px;
+}
+
+.totals {
+  font-size      : .9em;
+  margin         : 0px 5px 5px 5px;
+  padding        : 0px 5px 5px 5px;
+  white-space    : nowrap;
+  // text-align     : right;
+  text-overflow  : ellipsis;
+  text-transform : capitalize;
+
+  float         : right;
+  align-items   : flex-end;
+  text-align    : right;
+}
+
+.grid-item {
+  align-items    : flex-start;
+  text-align     : left;
+  text-overflow  : ellipsis;
+  text-transform : capitalize;
+  margin-bottom  : 2px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr auto ;
+  grid-template-rows: auto;
+  grid-gap: 2px;
+}
+
+.grid-headerfooter {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 55px 75px 85px 85px 85px  ;
+  margin-left: 15px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+
+  @include for-phone-only {
+    grid-template-columns:  55px 75px 85px 85px 85px  ;
+  }
+
+}
+
+.grid-order-employeecount {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 55px 85px 55px 65px 55px;
+  margin-left: 15px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+
+  @include for-phone-only {
+    grid-template-columns: 100px 50px 50px 65px 65px;
+  }
+
+}
+
+.grid-items {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: repeat( auto-fit, minmax(60px, 1fr) );
+  margin-left: -15px;
+}
+
+.grid-footer {
+  --gap: 5px;
+  display: grid;
+  gap: var(--gap);
+  grid-template-columns: 55px 75px 85px 85px 85px;
+  margin-left: 30px;
+  font-size: .9em;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.headers {
+  margin-bottom: 10px;
+  align-content: center;
+  justify-content: center;
+}
+
+.footerheader-margin {
+  margin-left: 5px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+}
+
+.header-labels {
+  font-size     : 12px;
+  margin        : 0px 5px 5px 5px;
+  padding       : 0px 5px 5px 5px;
+  white-space   : nowrap;
+  overflow      : hidden;
+  text-overflow : ellipsis;
+  text-transform: capitalize;
+  float         : left;
+  align-items   : baseline;
+  line-height   : 1em;
+}
+
+.calculation {
+  // grid-column: 2/3;
+  text-align: left;
+}
+
+.employeeName {
+  text-align     : left;
+  font-size      : .9em;
+  white-space    : nowrap;
+  text-align     : left;
+  text-overflow  : ellipsis;
+  text-transform : capitalize;
+  overflow       : clip;
+}
+
+.product-name  {
+  float         : left;
+  align-items   : flex-start;
+  text-align    : left;
+  overflow      : clip;
+  text-overflow : ellipsis;
+  white-space   : nowrap;
+}

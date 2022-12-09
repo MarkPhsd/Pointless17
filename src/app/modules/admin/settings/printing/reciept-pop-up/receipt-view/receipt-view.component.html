@@ -19,9 +19,10 @@
       <div class="buttons-grid">
         <button mat-button (click)="email()"><mat-icon>email</mat-icon>Email </button>
         <button mat-button (click)="convertToPDF()"><mat-icon>pdf</mat-icon> PDF </button>
-        <button mat-button 
-                [disabled]="!order?.orderCode" 
-                *ngIf="!isElectronApp" 
+
+        <button mat-button
+                [disabled]="!order?.orderCode"
+                *ngIf="!isElectronApp"
                 (click)="openLink()">
             <mat-icon>link</mat-icon>Link
         </button>
@@ -29,9 +30,9 @@
 
       <div>
       </div>
-   
+
       <div class="mat-card-white">
-    
+
         <ng-container>
           <ng-container [ngTemplateOutlet]="currentView"></ng-container>
         </ng-container>
@@ -41,7 +42,7 @@
   </div>
 
 <ng-template #receipt>
-  
+
   <div *ngIf="receiptLayoutSetting && ((headerText &&  itemsText) || order)"
        class="border-section">
     <app-receipt-layout #printsection
@@ -81,4 +82,3 @@
   <br>
   itemsText   <br> {{ order.id }}
   <br> -->
-  

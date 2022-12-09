@@ -861,11 +861,26 @@ export class OrdersService {
     if (order) {
       this.updateOrderSubscription(order)
       this.toolbarServiceUI.updateOrderBar(true)
+
+      // if (order && order.service && order.service.retailServiceType) {
+      //   this.toggleOpenOrderBar(this.userAuthorizationService.isStaff)
+      //   return
+      // }
+
       if (!order.history && this.platFormService.isApp()) {
         this.toolbarServiceUI.showSearchSideBar()
         return
       }
+
     }
+  }
+
+  toggleOpenOrderBar(isStaff: boolean) {
+    let schedule = 'currentorder'
+    if (isStaff) { schedule = '/currentorder/' }
+    this.router.navigate([ schedule , {mainPanel:true}]);
+    this.toolbarServiceUI.updateOrderBar(false)
+    this.toolbarServiceUI.resetOrderBar(true)
   }
 
   changeOrderType(site: ISite, id: number, orderTypeID: number, updateItems: boolean): Observable<IPOSOrder> {

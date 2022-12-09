@@ -34,7 +34,8 @@
 
         <div  (resized)="onResizedorderCustomerPanel($event)"
               class="grid-header-item"
-              *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) && !isUser">
+              *ngIf="((wideBar || mainPanel) || (phoneDevice && !isUser)) &&
+                     !isUser">
 
           <app-order-header-demo-graphics
             [canRemoveClient]     ="canRemoveClient"
@@ -92,7 +93,7 @@
                 [emailOption]         ="emailOption"
                 [ssmsOption]          ="ssmsOption"
                 [refundItemEnabled]   ="refundItemsAvalible"
-             
+
           ></pos-order-function-buttons>
         </div>
 
@@ -135,7 +136,7 @@
             *ngIf="(!smallDevice && mainPanel)
                 || (!mainPanel && smallDevice)
                 || (!mainPanel && !smallDevice)">
-               
+
         <ng-container [ngTemplateOutlet]="getListViewType"></ng-container>
     </div>
   </div>

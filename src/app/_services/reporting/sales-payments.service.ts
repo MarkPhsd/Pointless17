@@ -16,6 +16,7 @@ export interface IPaymentSalesSearchModel {
   groupBy:      string;
   siteID:       number;
   zrunID       :string;
+  refunds     : boolean;
 }
 
 export interface IPaymentSalesSummary {

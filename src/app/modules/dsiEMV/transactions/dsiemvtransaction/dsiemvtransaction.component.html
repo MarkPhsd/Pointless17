@@ -1,6 +1,6 @@
-<div *ngIf="(action$ | async) as emvTransaction; else emvTransation"></div>
+<div *ngIf="(action$ | async) as emvTransaction; else emvTransaction"></div>
 
-<ng-template #emvTransation>
+<ng-template #emvTransaction>
   <div *ngIf="processingResults">
     ...processing.
     <mat-spinner [diameter]="50"></mat-spinner>
@@ -45,8 +45,11 @@
 
   <mat-card-actions>
       <div class="action-buttons">
-        <div *ngIf="!processing"><button mat-raised-button
-            (click)="process()"><mat-icon>credit_card</mat-icon>Process
+        <div *ngIf="!processing">
+          <button mat-raised-button
+            [disabled]="!isAuthorized"
+            (click)="process()">
+          <mat-icon>credit_card</mat-icon>Process
         </button>
       </div>
       <div><button mat-raised-button

@@ -10,6 +10,7 @@ export class PaymentReportCardComponent implements OnInit {
 
   @Input()  groupBy: string;
   @Input()  payments: any;
+  @Input()  refunds: true;
   constructor() { }
 
   ngOnInit(): void {

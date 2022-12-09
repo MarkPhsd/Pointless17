@@ -1,4 +1,4 @@
-@font-face {
+/* @font-face {
     font-family:'Open Sans';font-style:normal;font-weight:300;
     src: local('Open Sans Light'), local('OpenSans-Light'),
     url('fonts/open-sans-300.woff2') format('woff2'),
@@ -9,7 +9,7 @@
     src: local('Open Sans'), local('OpenSans'),
     url('fonts/open-sans-regular.woff2') format('woff2'),
     url('fonts/open-sans-regular.woff') format('woff');
-}
+} */
 a,body,div,footer,h1,h2,h3,header,html,img,span{margin:0;padding:0;border:0;font:inherit;vertical-align:baseline}
 article,aside,footer,header,nav,section{display:block}
 html,body{height:100%;min-height:100%}
@@ -19,7 +19,7 @@ body{
     font-size: 14px;
     font-weight: 300;
     color: #fff;
-    background: url(images/bg.jpg) no-repeat;
+    /* background: url(images/bg.jpg) no-repeat; */
     background-size: cover;
     display: -webkit-box;
     display: -ms-flexbox;

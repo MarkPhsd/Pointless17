@@ -169,6 +169,7 @@ import { BlogPostListComponent } from './widgets/blog-post-list/blog-post-list.c
 import { BlogPostComponent } from './widgets/blog-post/blog-post.component';
 import { TagChipsProductsComponent } from '../modules/admin/products/productedit/_product-edit-parts/tag-chips-products/tag-chips-products.component';
 import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/cash-drawer-settings/cash-drawer-settings.component';
+import { PaymentReportDataComponent } from '../modules/admin/reports/payment-report/payment-report-data/payment-report-data.component';
 
 // import { QuicklinkStrategy } from 'ngx-quicklink';
 // import { QuicklinkModule } from 'ngx-quicklink';
@@ -276,6 +277,7 @@ import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/
     PaymentBalanceComponent,
     PaymentReportComponent,
     PaymentReportCardComponent,
+    PaymentReportDataComponent,
     PieComponent,
     PosOrderItemComponent,
     PosOrderItemsComponent,
@@ -457,6 +459,7 @@ import { CashDrawerSettingsComponent } from '../modules/admin/settings/software/
     QRCodeTableComponent,
     PageNotFoundComponent,
     PaymentBalanceComponent,
+    PaymentReportDataComponent,
     PieComponent,
     PriceCategorySearchComponent,
     PriceCategorySelectComponent,

@@ -15,8 +15,6 @@ export class ServiceTypeService {
                 private httpCache  : HttpClientCacheService,
                 private siteService: SitesService) { }
 
-
-
   getType(site: ISite, id: number):  Observable<IServiceType> {
 
     const controller = '/ServiceType/'

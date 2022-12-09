@@ -32,15 +32,13 @@ export class PlatformService {
   }
 
   get platForm()      {
-
     return Capacitor.getPlatform();
-
   }
 
   get webMode()       {
     return Capacitor.getPlatform();
   }
-  
+
   get apiUrl()        {
     return localStorage.getItem('storedApiUrl');
   }
@@ -51,6 +49,8 @@ export class PlatformService {
     }
     return false
   }
+
+
 
   constructor(
       private ipcService          : IPCService,

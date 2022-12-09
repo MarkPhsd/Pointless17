@@ -34,7 +34,7 @@ export class ToolBarUIService {
   private barSize   : boolean;
 
   public  mainMenuSideBar   : boolean;
-  private leftSideBarToggle        : boolean;
+  private leftSideBarToggle : boolean;
   public searchBar : boolean;
   public orderBar  : boolean;
 
@@ -99,7 +99,6 @@ export class ToolBarUIService {
     this.mainMenuSideBar = value
     this.searchBar = false;
     this._mainMenuSideBar.next(value);
-    console.log(value, this.mainMenuSideBar)
     this._leftSideBarToggle.next(this.mainMenuSideBar);
     this.resizeWindow();
   }
@@ -115,9 +114,6 @@ export class ToolBarUIService {
   switchToolBarSideBar() {
     this.searchBar         = false;
     this.mainMenuSideBar   =  !this.mainMenuSideBar;
-
-    // console.log('this.mainMenuSideBar', this.mainMenuSideBar)
-
     this._mainMenuSideBar.next(this.mainMenuSideBar);
     this._searchSideBar.next(false);
 
@@ -202,7 +198,6 @@ export class ToolBarUIService {
       this.resizeWindow();
       return
     }
-
   }
 
   showToolbarHideSearchBar() {

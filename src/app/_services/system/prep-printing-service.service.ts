@@ -4,7 +4,7 @@ import { IPOSOrder, PosOrderItem } from 'src/app/_interfaces';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
 import { IPrinterLocation, PrinterLocationsService } from '../menu/printer-locations.service';
 import { SitesService } from '../reporting/sites.service';
-import { OrdersService } from '../transactions/orders.service';
+import { OrderMethodsService } from '../transactions/order-methods.service';
 import { PlatformService } from './platform.service';
 import { PrintingService } from './printing.service';
 
@@ -18,33 +18,34 @@ export class PrepPrintingServiceService {
   constructor(
               private locationsService: PrinterLocationsService,
               private siteService: SitesService,
+              private orderMethodsService: OrderMethodsService,
               private printingService: PrintingService) { }
 
-  printLocations(order: IPOSOrder): Observable<any> { 
+  printLocations(order: IPOSOrder): Observable<any> {
     const site = this.siteService.getAssignedSite();
     const locations$ = this.locationsService.getLocations();
     const printOrders = [] as IPrintOrders[]
     const posItems  = order.posOrderItems;
 
-    const result$ = locations$.pipe(switchMap(data => { 
+    const result$ = locations$.pipe(switchMap(data => {
       return of(data);
-    })).pipe(switchMap(data => { 
-        data.forEach(location => { 
+    })).pipe(switchMap(data => {
+        data.forEach(location => {
           const newItems = [] as PosOrderItem[];
           posItems.forEach(data =>
-            {if(data.printLocation == location.id) { 
+            {if(data.printLocation == location.id) {
                 newItems.push(data)
             }}
           )
-          
-          if (newItems.length > 0) { 
+
+          if (newItems.length > 0) {
             const item = this.setOrder(newItems, order, location)
             printOrders.push(item)
           }
         }
       )
       return of(printOrders)
-    })).pipe(switchMap(sections => { 
+    })).pipe(switchMap(sections => {
       return this.printingService.printDocuments(sections)
     }))
     return result$
@@ -52,11 +53,19 @@ export class PrepPrintingServiceService {
 
   setOrder(newItems: PosOrderItem[], order: IPOSOrder, location: IPrinterLocation): IPrintOrders {
     let newOrder = { ...order };
-    newOrder.posOrderItems = newItems 
+    newOrder.posOrderItems = newItems
     const item = {} as IPrintOrders;
     item.location = location;
     item.order = newOrder;
     return item
+  }
+
+  sendToPrep(order: IPOSOrder) {
+    if (order) {
+      const site = this.siteService.getAssignedSite()
+      this.orderMethodsService.prepPrintUnPrintedItems(order.id)
+      return this.printLocations(order)
+    }
   }
 
 

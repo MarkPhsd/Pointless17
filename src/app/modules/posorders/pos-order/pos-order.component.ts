@@ -177,7 +177,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
     this._order = this.orderService.currentOrder$.subscribe( data => {
       this.order = data
       this.canRemoveClient = true
-      if (this.order) { 
+      if (this.order) {
         this.initPurchaseOrderOption(this.order?.serviceTypeID);
       }
       if (this.order && this.order.posOrderItems && this.order.posOrderItems.length > 0) {
@@ -235,10 +235,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   initPurchaseOrderOption(id: number) {
     if (!id) { return }
-    if (this.userAuthorization.isManagement) { 
+    if (this.userAuthorization.isManagement) {
       const site = this.siteService.getAssignedSite()
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
-        switchMap(data => { 
+        switchMap(data => {
           this.purchaseOrderEnabled = false
           if ( data.filterType == 1  ||  data.filterType == -1 ) {
             this.purchaseOrderEnabled = true
@@ -341,19 +341,19 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
   }
 
   toggleListView(event) {
-    console.log(event) 
+    console.log(event)
     this.listView = event;
   }
 
-  get getListViewType() { 
-    if (this.listView) { 
+  get getListViewType() {
+    if (this.listView) {
       return this.listViewType
     }
-    if (!this.listView) {   
+    if (!this.listView) {
       return this.itemViewType;
     }
   }
-  
+
   async ngOnInit() {
     this.initAuthorization();
     this.gettransactionUISettingsSubscriber();
@@ -423,27 +423,27 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   }
 
-  makeManifest(event) { 
+  makeManifest(event) {
     const site = this.siteService.getAssignedSite()
-    const action$ = this.serviceTypeService.getType(site, this.order.serviceTypeID).pipe(switchMap(data => { 
+    const action$ = this.serviceTypeService.getType(site, this.order.serviceTypeID).pipe(switchMap(data => {
 
-      if (data.filterType == 1 || data.filterType == -1) { 
+      if (data.filterType == 1 || data.filterType == -1) {
         const manifest = {} as InventoryManifest
 
         manifest.description = this.order.id.toString()
         manifest.type = this.order.serviceType
-        manifest.sourceSiteID = site.id 
+        manifest.sourceSiteID = site.id
         manifest.sourceSiteName = site.name
         manifest.sourceSiteURL = site.url
-        manifest.destinationID = site.id 
+        manifest.destinationID = site.id
         manifest.destinationSiteName = site.name
         manifest.destinationURL = site.url
         return this.inventoryAssignmentService.createManifestFromOrder( site, manifest, this.order  )
-      
+
       }
       this.notifyEvent('Order must be of a purchase order type to create a manifest.', 'Alert')
       return of(null)
-    })).pipe(switchMap(data => { 
+    })).pipe(switchMap(data => {
       //navigate to inventory open manifest.
       // this.openManifestEditor(data)
       if (!data) { return  of(null)}
@@ -466,9 +466,7 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
 
   sendToPrep() {
     if (this.order) {
-      const site = this.siteService.getAssignedSite()
-      this.orderMethodService.prepPrintUnPrintedItems(this.order.id)
-      this.printAction$ = this.prepPrintingService.printLocations(this.order)
+      this.printAction$ = this.prepPrintingService.sendToPrep(this.order)
     }
   }
 

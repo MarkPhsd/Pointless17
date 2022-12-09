@@ -161,6 +161,7 @@ export interface UIHomePageSettings {
   threeParty         : string;
 
   wordpressHeadless: string;
+  displaySendButton: boolean;
 }
 
 @Injectable({
@@ -520,6 +521,8 @@ export class UISettingsService {
       menuEnabled: [''],
       staffMenuEnabled: [''],
       wordpressHeadless: [],
+
+      displaySendButton: [],
      })
     return fb
   }
