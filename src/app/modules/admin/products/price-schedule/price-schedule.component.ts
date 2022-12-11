@@ -175,6 +175,7 @@ export class PriceScheduleComponent {
   listSchedules() {
     this.router.navigate(['price-schedule'])
   }
+
   getPriceSchedule(data: FormGroup): IPriceSchedule {
     if (data) {
        if (data.valid) {

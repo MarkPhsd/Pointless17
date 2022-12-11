@@ -99,6 +99,7 @@ action$         : Observable<any>;
 //search form filters
 inputForm        : FormGroup;
 categoryID       : number;
+subCategoryID    : number;
 productTypeSearch: number;
 productTypeID    : number;
 departmentID     : number;
@@ -117,6 +118,10 @@ id              : number;
 product         : IProduct;
 smallDevice: boolean;
 listHeight : string;
+
+categories: IMenuItem[];
+subCategories: IMenuItem[];
+subCategories$ : Observable<IMenuItem[]>;
 
 @Output() outputPromptItem = new EventEmitter();
 _promptSubGroup : Subscription;
@@ -155,10 +160,21 @@ constructor(  private _snackBar              : MatSnackBar,
 
     this.urlPath        = await this.awsService.awsBucketURL();
     const site          = this.siteService.getAssignedSite()
-    this.categories$    = this.menuService.getListOfCategoriesAll(site)
+
+    this.categories$    = this.menuService.getListOfCategoriesAll(site).pipe(
+      switchMap(data => {
+        return of(data)
+      })
+    )
+
+    this.subCategories$    = this.menuService.getListOfSubCategories(site).pipe(
+      switchMap(data => {
+        return of(data)
+      })
+    )
+
     this.departments$   = this.menuService.getListOfDepartmentsAll(site)
     this.productTypes$  = this.itemTypeService.getBasicTypes(site)
-
     const brandResults$       = this.contactsService.getBrands(site, clientSearchModel)
 
     brandResults$.subscribe(data => {
@@ -256,6 +272,7 @@ constructor(  private _snackBar              : MatSnackBar,
       brandID           : [this.brandID],
       categoryID        : [this.categoryID],
       departmentID      : [this.departmentID],
+      subCategoryID:      [this.subCategoryID],
       viewAll           : [1],
     });
   }
@@ -452,7 +469,7 @@ constructor(  private _snackBar              : MatSnackBar,
     if (this.itemName) {
       if (this.itemName.value)          { searchModel.name        = this.itemName.value  }
     }
-
+    if (this.subCategoryID )            { searchModel.subCategoryID  = this.subCategoryID.toString(); }
     if (this.categoryID )               { searchModel.categoryID  = this.categoryID.toString(); }
     if (this.productTypeSearch)         { searchModel.itemTypeID  = this.productTypeSearch.toString(); }
     if (this.brandID)                   { searchModel.brandID     = this.brandID.toString(); }
@@ -463,7 +480,13 @@ constructor(  private _snackBar              : MatSnackBar,
     searchModel.pageSize   = this.pageSize
     searchModel.pageNumber = this.currentPage
 
+    console.log('searchmodel', searchModel)
     return searchModel;
+  }
+
+  refreshSubCategoryChange(event) {
+    this.subCategoryID = event;
+    this.refreshSearch(1);
   }
 
   refreshCategoryChange(event) {

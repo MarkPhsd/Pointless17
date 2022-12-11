@@ -130,16 +130,18 @@ export class PrinterLocationsComponent implements OnInit, AfterViewInit, OnChang
   }
 
   addLocation() {
-    if (this.locationForm.valid) {
-      const data = this.locationForm.value
-      this.printerLocationsService.addLocation(data).pipe(
-        switchMap(data => {
-          this.notifyEvent(`${data.name} Added`, `Success` )
-          this.refreshTable();
-          return of("")
-        })
-      )
+    if (!this.locationForm.valid) {
+      this.notifyEvent('Form not valid', 'Alert')
     }
+
+    const data = this.locationForm.value
+    this.action$ =  this.printerLocationsService.addLocation(data).pipe(
+      switchMap(data => {
+        this.notifyEvent(`${data.name} Added`, `Success` )
+        this.refreshTable();
+        return of("")
+      })
+    )
     this.initForm()
   }
 

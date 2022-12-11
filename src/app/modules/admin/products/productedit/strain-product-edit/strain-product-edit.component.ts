@@ -50,9 +50,7 @@ export class StrainProductEditComponent implements OnInit {
   {
     if (data) {
       if (data.product) {
-
         this.product = data.product
-
         if (this.product.id) {
           this.id = this.product.id.toString();
           if (this.product && data.itemType && data.itemType.id) {
@@ -86,16 +84,14 @@ export class StrainProductEditComponent implements OnInit {
 
     if (this.itemType) {
       this.product.prodModifierType = this.itemType.id;
-      console.log('current item type, product.itemType', this.itemType.id)
     }
 
     if (!this.itemType) {
       if (this.product && this.product.prodModifierType && this.product.prodModifierType != 0) {
-        this.itemTypeService.getItemType(site, this.product.prodModifierType).subscribe(itemType=> {
-          this.itemType = itemType
-        }, catchError  => {
-          console.log('err', catchError)
-        }
+        this.itemTypeService.getItemType(site, this.product.prodModifierType).subscribe(
+          itemType => {
+              this.itemType = itemType
+          }
         )
       }
     }
@@ -105,16 +101,13 @@ export class StrainProductEditComponent implements OnInit {
 
 
   initializeForm()  {
-
     const site = this.siteService.getAssignedSite();
     this.initFormFields();
-
     if (this.productForm && this.product) {
       this.productForm.patchValue(this.product)
-      // this.productForm.controls['brandID'].setValue(this.product.brandID);
+      console.log('product', this.product)
       this.urlImageMain = this.product.urlImageMain;
     }
-
   };
 
   initFormFields() {
@@ -133,13 +126,10 @@ export class StrainProductEditComponent implements OnInit {
     //do confirm of delete some how.
     //then
     const site = this.siteService.getAssignedSite()
-
     if (this.product) {
-
       this.performingAction= true;
       this.product.name = this.product.name + ' Copy'
       this.message = ''
-
       this.action$ = this.menuService.postProduct(site, this.product).pipe(
         switchMap(data => {
           this.product = data;
@@ -155,7 +145,6 @@ export class StrainProductEditComponent implements OnInit {
   updateItem(event) {
     const site = this.siteService.getAssignedSite()
     if (this.setValues())  {
-
       if (this.product.webProduct) { this.product.webProduct = -1     }
       if (!this.product.webProduct) {  this.product.webProduct = 0    }
 
@@ -196,10 +185,6 @@ export class StrainProductEditComponent implements OnInit {
   }
 
   deleteItem(event) {
-
-    // const result = window.confirm('Are you sure you want to delete this item?')
-    // if (!result) { return }
-
     const site = this.siteService.getAssignedSite()
     if (!this.product) {
       this._snackBar.open("No Product Selected", "Success")

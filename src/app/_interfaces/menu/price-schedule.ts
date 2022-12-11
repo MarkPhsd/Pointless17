@@ -1,4 +1,5 @@
 import { Type } from "@angular/core";
+import { NumberFilterModel } from "ag-grid-community";
 import { IPagedList } from "src/app/_services/system/paging.service";
 import { IMenuItem } from "./menu-products";
 
@@ -165,6 +166,7 @@ export interface DiscountInfo {
   priceScheduleID: number;
   sort:     number;
   menuItem: IMenuItem;
+  filter: number;
 }
 
 export enum AndOr {

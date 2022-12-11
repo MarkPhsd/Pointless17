@@ -104,6 +104,7 @@ export class OrdersService {
   get IsOrderClaimed() { return this.orderClaimed};
 
   updateTemplateOrder(order: IPOSOrder) {
+    order = this.getCost(order)
     this._templateOrder.next(order)
   }
 
@@ -145,17 +146,35 @@ export class OrdersService {
   }
 
   updateOrderSubscriptionLoginAction(order: IPOSOrder) {
+    this.getCost(order)
     this._currentOrder.next(order);
     this.currentOrder = order;
     if (order == null) {
       order = this.getStateOrder();
+      order = this.getCost(order)
       if (order) {
         return;
       }
     }
   }
 
+  getCost(order: IPOSOrder) {
+    if (order) {
+      order.cost = 0
+      if (order.posOrderItems && order.posOrderItems.length>0) {
+        order.posOrderItems.forEach(data => {
+          const itemCost =  (+data.quantity * +data.wholeSale)
+          order.cost = itemCost + order.cost
+        })
+      }
+      return order
+    }
+  }
+
+
   updateOrderSubscription(order: IPOSOrder) {
+
+    order = this.getCost(order)
     this._currentOrder.next(order);
     if (order == null) {
       order = this.getStateOrder();
@@ -184,13 +203,16 @@ export class OrdersService {
   }
 
   setStateOrder(order) {
+    order = this.getCost(order);
     const orderJson = JSON.stringify(order);
     localStorage.setItem('orderSubscription', orderJson);
   }
 
   getStateOrder(){
-    const order = localStorage.getItem('orderSubscription');
-    return JSON.parse(order) as IPOSOrder;
+    let stringorder = localStorage.getItem('orderSubscription');
+    let order = JSON.parse(stringorder) as IPOSOrder;
+    order = this.getCost(order)
+    return order;
   }
 
 
@@ -221,7 +243,6 @@ export class OrdersService {
     if (name.length) {
       if (name.length <= 5) {
         localStorage.setItem(`devicename`, name)
-        console.log('set name', name);
         if (localStorage.getItem(`devicename`) === name  ) {
           return true
         } else {

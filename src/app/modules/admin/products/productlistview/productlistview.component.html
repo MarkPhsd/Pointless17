@@ -16,17 +16,28 @@
       </search-debounce-input>
     </div>
 
-    <div class="grid-item"
-        *ngIf="categories$">
-      <form-select-list [searchForm]      = "searchForm"
-                        [formFieldName]   ="'categoryID'"
-                        [list$]           = "categories$"
-                        [showActiveInactive]="true"
-                        (selectionChange) = "refreshCategoryChange($event)">
-      <div fieldSearchDescription>Category</div>
-      </form-select-list>
-    </div>
-
+    <span *ngIf="(subCategories$ | async) as lists">
+      <div class="grid-item">
+        <form-select-list [searchForm]      = "searchForm"
+                          [formFieldName]   ="'subCategoryID'"
+                          [list]            = "lists"
+                          [showActiveInactive]="true"
+                          (selectionChange) = "refreshSubCategoryChange($event)">
+        <div fieldSearchDescription>Sub Category</div>
+        </form-select-list>
+      </div>
+    </span>
+    <span *ngIf="(categories$ | async) as lists">
+      <div class="grid-item">
+        <form-select-list [searchForm]      = "searchForm"
+                          [formFieldName]   ="'categoryID'"
+                          [list]           = "lists"
+                          [showActiveInactive]="true"
+                          (selectionChange) = "refreshCategoryChange($event)">
+        <div fieldSearchDescription>Category</div>
+        </form-select-list>
+      </div>
+    </span>
     <div class="grid-item"
           *ngIf="departments$">
         <form-select-list [searchForm]      = "searchForm"

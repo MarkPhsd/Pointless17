@@ -174,11 +174,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     this.initStripe();
     this.initTransactionUISettings();
 
-    const paymentMethods$ = this.getPaymentMethods(site);
-
-    paymentMethods$.subscribe(data => {
-      this.paymentMethods = data;
-    })
+    this.paymentMethods$ = this.getPaymentMethods(site)
+    this.paymentMethods$.subscribe(data =>  { this.paymentMethods = data; })
 
     this.authenticationService.updateUser(this.authenticationService.userValue)
     if (this.authenticationService.userValue) {
@@ -254,9 +251,11 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     }
 
     if (this.platFormService.isApp()) {
+      console.log('getting payments')
       return paymentMethods$.pipe(
         switchMap(data => {
           const list = data.filter( item => !item.isCreditCard)
+          console.log('list', list)
           return  of(list)
       }))
     }

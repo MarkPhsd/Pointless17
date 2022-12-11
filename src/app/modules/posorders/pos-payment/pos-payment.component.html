@@ -181,7 +181,6 @@
                     </button>
                   </div>
 
-
                   <div *ngIf="stripeEnabled && order && order.balanceRemaining  != 0 ">
                     <div *ngIf="!this.platFormService.isApp()">
                       <h3>Apply tip to Stripe Payment</h3>
@@ -196,8 +195,7 @@
                               <input matInput
                                 [(ngModel)]="stripeTipValue"
                                 ngDefaultControl
-                                type="text"
-                              >
+                                type="text">
                              <mat-label>
                               Custom Tip Amount
                              </mat-label>
@@ -205,6 +203,7 @@
                         </div>
                       </div>
                     </div>
+
                     <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
                       <button class="payment-buttons"
                           mat-raised-button
@@ -381,7 +380,9 @@
           </mat-card>
         </div>
 
-        <div *ngIf="paymentMethods">
+        <div *ngIf="(paymentMethods$ | async) as paymentMethods">
+
+
           <div *ngFor="let item of paymentMethods">
             <div *ngIf="item?.id  == paymentMethod?.id &&  item?.instructions">
               <h3>{{item?.name}}</h3>

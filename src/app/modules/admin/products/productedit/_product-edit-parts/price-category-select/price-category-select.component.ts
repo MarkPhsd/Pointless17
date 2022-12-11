@@ -42,6 +42,11 @@ export class PriceCategorySelectComponent implements OnInit {
     this.priceCategoryService.openPriceCategoryEditor(this.priceCategoryID)
   }
 
+  clearPriceCategory() {
+    this.priceCategoryID = 0;
+    this.inputForm.patchValue({priceCategoryID: 0})
+  }
+
   getPriceCategory(event) {
     const item = event
     if (item) {

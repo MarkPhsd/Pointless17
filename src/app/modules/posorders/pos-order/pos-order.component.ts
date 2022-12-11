@@ -240,8 +240,10 @@ export class PosOrderComponent implements OnInit ,OnDestroy {
       this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
         switchMap(data => {
           this.purchaseOrderEnabled = false
-          if ( data.filterType == 1  ||  data.filterType == -1 ) {
-            this.purchaseOrderEnabled = true
+          if (data) {
+            if ( data?.filterType == 1  ||  data.filterType == -1 ) {
+              this.purchaseOrderEnabled = true
+            }
           }
           return of(data)
         })

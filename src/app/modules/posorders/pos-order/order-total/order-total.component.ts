@@ -28,10 +28,10 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
 
   // initPurchaseOrderOption(id: number) {
   //   if (!id) { return }
-  //   if (this.userAuthorization.isManagement) { 
+  //   if (this.userAuthorization.isManagement) {
   //     const site = this.siteService.getAssignedSite()
   //     this.serviceType$ = this.serviceTypeService.getType (site,id).pipe(
-  //       switchMap(data => { 
+  //       switchMap(data => {
   //         this.purchasOrderEnabled = false
   //         if ( data.filterType  && data.filterType != 0 ) {
   //           this.purchasOrderEnabled = true
@@ -51,7 +51,6 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
         if (!this.mainPanel) {
           this.transactionDataClass ="transaction-data-side-panel"
         }
-
 
         if (!data?.wideOrderBar) {
           this.transactionDataClass = 'transaction-data-side-panel-small'
@@ -74,15 +73,16 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
     }
   }
 
-  orderSubscriber() { 
-    this._order = this.orderService.currentOrder$.subscribe(data => { 
+  orderSubscriber() {
+    this._order = this.orderService.currentOrder$.subscribe(data => {
       this.cost = 0;
-      if (data) { 
+      if (data) {
         this.order = data;
-        this.getCost()
       }
     })
   }
+
+
   constructor(
       private uiSettingsService   : UISettingsService,
       private orderService        : OrdersService,
@@ -96,25 +96,11 @@ export class OrderTotalComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.updateScreenSize()
     this.homePageSubscriber()
-    this.getCost();
   }
 
-  ngOnDestroy() { 
+  ngOnDestroy() {
     if (this._uiSettings) { this._uiSettings.unsubscribe()}
     if (this._order) { this._order.unsubscribe()}
-    
-  }
-
-  getCost() {
-    this.cost = 0
-    if (this.order) { 
-      if (this.order.posOrderItems && this.order.posOrderItems.length>0) { 
-        this.order.posOrderItems.forEach(data => { 
-          const itemCost =  (+data.quantity * +data.wholeSale)
-          this.cost = itemCost + this.cost
-        })
-      }
-    }
   }
 
   @HostListener("window:resize", [])

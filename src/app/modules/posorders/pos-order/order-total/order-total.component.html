@@ -4,7 +4,7 @@
   <div class="totals foreground-color"> {{ order.subTotal | currency }}</div>
 
   <div class="total-headers foreground-color" *ngIf="purchaseOrderEnabled">Cost</div>
-  <div class="totals foreground-color" *ngIf="purchaseOrderEnabled"> {{ cost | currency }}</div>
+  <div class="totals foreground-color" *ngIf="purchaseOrderEnabled"> {{ order.cost | currency }}</div>
 
   <div class="total-headers foreground-color">Tax  </div>
   <div class="totals foreground-color"> {{ order.taxTotal | currency }}</div>

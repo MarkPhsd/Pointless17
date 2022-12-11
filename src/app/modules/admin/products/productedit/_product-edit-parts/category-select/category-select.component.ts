@@ -13,6 +13,8 @@ import { FormGroup } from '@angular/forms';
 export class CategorySelectComponent implements OnInit {
   loadingItems: boolean;
 
+  @Input() fieldName = 'categoryID'
+  @Input() type = 'category'
   @Input()  inputForm:      FormGroup;
   categories$:              Observable<IMenuItem[]>;
   @Output() outputCategoryID   :      EventEmitter<any> = new EventEmitter();
@@ -23,7 +25,18 @@ export class CategorySelectComponent implements OnInit {
   ngOnInit(): void {
     const site =            this.sitesService.getAssignedSite();
     this.loadingItems = true;
-    this.categories$ =      this.menuService.getListOfCategoriesAll(site).pipe(
+    const type = this.type;
+    const item$ = this.menuService.getGetCategoriesListAll(site, type)
+
+    if (this.type.toLowerCase() == 'subCategory') {
+      this.fieldName = 'subCategoryID'
+    }
+
+    if (this.type.toLowerCase() == 'category') {
+      this.fieldName = 'categoryID'
+    }
+
+    this.categories$ =  item$ .pipe(
       switchMap(data => {
         this.loadingItems = false;
         return of(data)

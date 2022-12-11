@@ -36,7 +36,7 @@
       Cost
     </app-value-fields>
 
-  <div class="grid-container-2col" >
+  <div class="grid-container-3col" >
     <div>
       <app-price-category-search
           [isInventory]="isInventory"
@@ -50,6 +50,13 @@
               color="accent"
               (click)="openPriceCategory()">
         <mat-icon>expand</mat-icon>
+      </button>
+    </div>
+    <div *ngIf="priceCategoryID  && priceCategoryID != 0">
+      <button mat-button
+              color="warn"
+              (click)="clearPriceCategory()">
+        <mat-icon>delete</mat-icon>
       </button>
     </div>
   </div>

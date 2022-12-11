@@ -77,6 +77,7 @@ export interface IPOSOrder {
   taxColumn3Description : string;
   barTax:                number;
   crv:                   number;
+  cost                 :  number;
   orderPercentDiscount:  number;
   orderCashDiscount:     number;
   itemCashDiscount:      number;

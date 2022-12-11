@@ -43,10 +43,10 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   @Input()  searchForm: FormGroup;
   @Input()  inputForm : FormGroup;
-  @Input() item       : IPriceSchedule;
+  @Input()  item      : IPriceSchedule;
   lastSelectedItem    : DiscountInfo;
   requiredItems       : DiscountInfo[] = [];
-
+  requiredCategories  : DiscountInfo[] = [];
   accordionStep = 0;
   //AgGrid
   params               : any;
@@ -81,6 +81,10 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
   get requiredItemsControl() : FormArray {
     return this.inputForm.get('requiredItems') as FormArray;
   }
+  get requiredCategoriesControl() : FormArray {
+    return this.inputForm.get('requiredCategories') as FormArray;
+  }
+
   _priceSchedule              : Subscription;
   priceScheduleTracking       : IPriceSchedule;
 
@@ -366,6 +370,8 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
 
   selectItemFromGrid(e) {
     if (e.rowData.id)  {
+
+      console.log( 'row data', e.rowData)
       this.enableItem(e.rowData);
       this.lastSelectedItem = e.rowData;
     }
@@ -381,34 +387,77 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     const itemID = parseInt( item.id );
 
     if (this.requiredItemsControl) {
-      const array = this.requiredItems
-      const index = array.findIndex( data =>  data.itemID === itemID)
 
-      if (this.requiredItems) {
-        this.requiredItems = []
+      console.log('item type.', item?.prodModifierType)
+
+      if (item.prodModifierType != 5 && item.prodModifierType != 4) {
+        if (!this.requiredItems) {
+          this.requiredItems = []
+        }
+        const array = this.requiredItems;
+        const index = array.findIndex( data =>  data.itemID === itemID)
+        this.pushRequiredItems(index, itemID, item, this.requiredItems )
       }
 
-
-      if (index == -1){
-        const newItem    =  {} as DiscountInfo;
-        newItem.itemID   =  itemID;
-        newItem.name     =  item.name;
-        newItem.quantity =  1;
-        this.requiredItems.push(newItem)
-        this.applyChanges(newItem);
-        this.lastSelectedItem = newItem
-      } else {
-        this.requiredItems = this.requiredItems.splice(index, 1)
-        this.applyChanges(null);
-        this.lastSelectedItem = null
+      if (item.prodModifierType == 5 || item.prodModifierType == 4 ) {
+        if (!this.requiredCategories) {
+          this.requiredCategories = []
+        }
+        const array = this.requiredCategories;
+        const index = array.findIndex( data =>  data.itemID === itemID)
+        this.pushCategory(index, itemID, item, this.requiredCategories )
       }
 
+    }
+  }
+
+
+  pushRequiredItems(index, itemID, item,  requiredItems) {
+
+    if (index == -1){
+      const newItem    =  {} as DiscountInfo;
+      newItem.itemID   =  itemID;
+      newItem.name     =  item.name;
+      newItem.quantity =  1;
+      this.requiredItems.push(newItem)
+      this.applyChanges(newItem);
+      this.lastSelectedItem = newItem
+      console.log(newItem)
+    } else {
+      this.requiredItems = this.requiredItems.splice(index, 1)
+      this.applyChanges(null);
+      this.lastSelectedItem = null
+    }
+
+  }
+
+  pushCategory(index, itemID, item,  requiredItems) {
+    if (index == -1){
+      const newItem    =  {} as DiscountInfo;
+      newItem.itemID   =  itemID;
+      newItem.name     =  item.name;
+      newItem.quantity =  1;
+      this.requiredCategories.push(newItem)
+      this.applyCategoryChanges(newItem);
+      this.lastSelectedItem = newItem
+      console.log(newItem)
+    } else {
+      this.requiredItems = this.requiredCategories.splice(index, 1)
+      this.applyCategoryChanges(null);
+      this.lastSelectedItem = null
     }
   }
 
   applyChanges(item: DiscountInfo) {
     this.priceScheduleTracking.requiredItems = this.requiredItems;
     console.table(this.requiredItems)
+    this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
+    this.lastSelectedItem  = item
+  }
+
+  applyCategoryChanges(item: DiscountInfo) {
+    this.priceScheduleTracking.requiredCategories = this.requiredCategories;
+    console.table(this.requiredCategories)
     this.priceScheduleDataService.updatePriceSchedule(this.priceScheduleTracking)
     this.lastSelectedItem  = item
   }
@@ -420,7 +469,6 @@ export class TypeResultsSelectorComponent implements OnInit, OnChanges,AfterView
     if ( index != -1 ) {
       this.fbPriceScheduleService.deleteItem(index, this.inputForm)
       this.lastSelectedItem = null
-
       this.priceScheduleDataService.updatePriceSchedule(this.inputForm.value)
       return
     }

@@ -1,7 +1,7 @@
 <div *ngIf="(action$ | async) as item"></div>
 <!-- {{itemEdit}} -->
 <!-- (mouseover)="initEdit()" (mouseout)="destroyEdit()" -->
-<mat-card 
+<mat-card
           id="panel"
           (swipeleft)="swipeOutItem()"
           (click)="assignItem()"
@@ -9,7 +9,7 @@
           >
 <mat-card-content >
   <!-- <div *ngIf="inputForm">{{inputForm.value | json}}</div> -->
-  
+
     <div  [class]="gridItems">
       <div *ngIf="orderItem">
         <div>
@@ -22,12 +22,13 @@
           </span>
           <span class="product-name" *ngIf="orderItem?.itemType">
             ( {{orderItem?.itemType?.name}} )
-          </span>          
+          </span>
+
           <span  *ngIf="quantity && !prepScreen">
-            <div *ngIf="subTotal>0">
+            <div *ngIf="subTotal > 0">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
-            <div *ngIf="subTotal<0"  style="color:crimson">
+            <div *ngIf="subTotal < 0"  style="color:crimson">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
             </div>
           </span>
@@ -42,8 +43,7 @@
           <span class="notes"
                         *ngIf="( mainPanel || wideBar )
                                 && orderItem
-                                && orderItem?.modifierNote
-                                ">
+                                && orderItem?.modifierNote">
             | {{ orderItem?.modifierNote.replace(orderItem?.serialCode, '') }} |
           </span>
 
@@ -70,7 +70,9 @@
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">{{orderItem?.itemPrepped | date: 'shortTime'}} </span>
           </span>
 
-          <div class="void-icon void-info" *ngIf="(orderItem.voidReason || (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&  prepScreen && !isModifier">
+          <div class="void-icon void-info" *ngIf="(orderItem.voidReason ||
+                                                  (orderItem?.itemReturn != 1 && orderItem?.itemReturn != 0) ) &&
+                                                  prepScreen && !isModifier">
             <span *ngIf="orderItem?.printed && !prepScreen">  <mat-icon color="warn">lock</mat-icon>  </span>
 
             <span  *ngIf="( mainPanel || wideBar) || bottomSheetOpen">
