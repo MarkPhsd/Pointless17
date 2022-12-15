@@ -40,7 +40,7 @@
       </ng-template>
 
       <div fxLayout="row" fxLayoutAlign="center center" class="row-height">
-        <div class="action-center grid-items" *ngIf="order?.balanceRemaining != 0">
+        <div class="action-center grid-items" *ngIf="!order.completionDate && order?.balanceRemaining != 0">
           <div>
             <h4>Payment Amount: {{paymentAmount | currency}}</h4>
           </div>
@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <div class="action-center grid-items"  *ngIf="order?.balanceRemaining != 0">
+      <div class="action-center grid-items"  *ngIf="!order.completionDate && order?.balanceRemaining != 0">
         <div >
           <button class="splitbutton"
                 mat-raised-button
@@ -108,7 +108,7 @@
         </div>
       </div>
 
-      <div *ngIf="!splitByItem && !paymentsEqualTotal && paymentIsReady &&  order?.balanceRemaining != 0">
+      <div *ngIf="!order.completionDate && !splitByItem && !paymentsEqualTotal && paymentIsReady &&  order?.balanceRemaining != 0">
         <div class="grid-header-item" *ngIf="stepSelection == 1">
           <div>
             <mat-card *ngIf="order.wicTotal !=0 && order.ebtTotal != 0" >

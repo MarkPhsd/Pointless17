@@ -99,7 +99,7 @@ export class FbPriceScheduleService {
       showAddress : [],
       autoApplyRewards: [],
       allItems    : [],
-      orderTotal: [],
+      orderTotal  : [],
       orderTypes:           this.fb.array([ ]),
       clientTypes:          this.fb.array([ ]),
       weekDays:             this.fb.array([ ]),

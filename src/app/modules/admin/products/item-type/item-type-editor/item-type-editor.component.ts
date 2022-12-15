@@ -13,8 +13,6 @@ import { IPrinterLocation, PrinterLocationsService } from 'src/app/_services/men
 import { MetrcItemsCategoriesService } from 'src/app/_services/metrc/metrc-items-categories.service';
 import { METRCItemsCategories } from 'src/app/_interfaces/metrcs/items';
 import { IItemBasic, MenuService } from 'src/app/_services';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
-import { MatChipInputEvent} from '@angular/material/chips';
 
 @Component({
   selector: 'app-item-type-editor',
@@ -50,14 +48,11 @@ export class ItemTypeEditorComponent implements OnInit  {
   printLocationID   : number;
   instructions      : string;
   packageType: string;
-	// this.receiptList$     =  this.settingService.getReceipts(site);
-  //   this.labelList$       =  this.settingService.getLabels(site);
-  //   this.prepReceiptList$ =  this.settingService.getPrepReceipts(site);
   productName: string;
   addOnItems = [] as IItemBasic[]
   typeName         : string;
   metrcCategories$ : Observable<METRCItemsCategories[]>;
-  
+
   constructor(
       private fb: FormBuilder,
       private fbItemTypeService: FbItemTypeService,
@@ -100,12 +95,12 @@ export class ItemTypeEditorComponent implements OnInit  {
     }
   }
 
-  ngOnInit() { 
+  ngOnInit() {
     this.initSearchForm();
   }
-  
-  initSearchForm() { 
-    this.searchForm = this.fb.group( { 
+
+  initSearchForm() {
+    this.searchForm = this.fb.group( {
       productName: []
     })
     this.searchForm.patchValue({productName: ''})
@@ -116,19 +111,9 @@ export class ItemTypeEditorComponent implements OnInit  {
     const item = {} as IItemBasic;
     item.name = event?.name;
     item.id = event?.id;
-    if (!  this.addOnItems) {   this.addOnItems= [] as IItemBasic[]}
+    if (!this.addOnItems) { this.addOnItems= [] as IItemBasic[] }
     this.addOnItems.push(item);
     this.initSearchForm();
-    // console.log(item)
-    // if (item && item.id) {
-    //    const site =  this.siteService.getAssignedSite();
-    //   this.menuService.getMenuItemByID(site, item.id).subscribe(data => {
-   
-    //       this.addOnItems.push(data);
-    //       this.initSearchForm();
-    //     }
-    //   )
-    // }
   }
 
   initializeForm(id: any, form: FormGroup)  {
@@ -149,7 +134,6 @@ export class ItemTypeEditorComponent implements OnInit  {
   };
 
   setUseType(event) {
-    console.log(event);
     this.useType = event;
     this.inputForm.controls['useGroupID'].setValue(this.useType.id);
     this.inputForm.controls['type'].setValue(event.name);
@@ -183,7 +167,7 @@ export class ItemTypeEditorComponent implements OnInit  {
         this.packageType     = this.itemType.packageType;
         this.typeName        = this.itemType.type;
         this.addOnItems      = JSON.parse(this.itemType.autoAddJSONProductList) as IItemBasic[];
-        
+
       } catch (error) {
         console.log(error)
       }
@@ -259,13 +243,13 @@ export class ItemTypeEditorComponent implements OnInit  {
 
       const temp =  this.inputForm.value
       const useType = temp.useGroupID;
-      
+
       if (useType) {
         this.useType = this.getUseType( useType )
         item.useGroupID = this.useType.id;
         item.type       = this.useType.name;
       }
-      
+
       console.log('addOnItems', this.addOnItems)
       item.autoAddJSONProductList = JSON.stringify(this.addOnItems);
       console.table(item)

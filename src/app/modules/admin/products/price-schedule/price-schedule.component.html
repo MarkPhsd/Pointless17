@@ -52,7 +52,8 @@
                       </mat-tab>
                     </div>
 
-                    <div *ngIf="inputForm.controls['type'].value !=  'Menu List'">
+                    <div *ngIf="inputForm.controls['type'].value !=  'Menu List' &&
+                                inputForm.controls['allItems'].value == true">
                       <mat-tab label="Category & Items">
                         <app-type-filter
                           [inputForm]="inputForm"
@@ -75,11 +76,13 @@
                          <div class="value-field" *ngIf="inputForm.controls['type'].value === 'Percent Off' ||
                                                          inputForm.controls['type'].value === 'Item % Off' ||
                                                          inputForm.controls['type'].value === 'Order % Off' ||
+                                                         inputForm.controls['type'].value === 'Order $ Off' ||
                                                          inputForm.controls['type'].value === 'Item $ Off'  ||
                                                          inputForm.controls['type'].value === 'Quantity Off'  ||
                                                          inputForm.controls['type'].value === 'Money Off' ||
                                                          inputForm.controls['type'].value === 'Equal To'
                                                          ">
+
                             <div *ngIf="inputForm.controls['type'].value === 'Item % Off'">
                               <mat-label>Enter percentage as whole number</mat-label>
                             </div>
@@ -111,8 +114,7 @@
                         </div>
 
                          <div *ngIf="inputForm.controls['type'].value &&
-                                     inputForm.controls['type'].value === 'Free Item Off'
-                                    ">
+                                     inputForm.controls['type'].value === 'Free Item Off'">
                             <app-reward-type-filter
                               [inputForm]="inputForm"
                               [item]     ="priceSchedule">
@@ -131,7 +133,6 @@
                               [inputForm]="inputForm">
                             </price-schedule-menu-options>
                           </div>
-
                           <div class="grid-item">
                             <div>
                               <mat-card>
@@ -145,7 +146,6 @@
                           </div>
                       </mat-tab>
                     </div>
-
                 </div>
               </mat-tab-group>
               <div  [formGroup]="inputForm"

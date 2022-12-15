@@ -1,5 +1,5 @@
 <div *ngIf="prompt && inputForm; else loading"
-     [formGroup]="inputForm" 
+     [formGroup]="inputForm"
      class="container">
 
     <mat-card  class="mat-card" >
@@ -33,7 +33,6 @@
         <mat-card-content >
           <div class="info-group">
             <div>
-
                 <div>
                   <mat-form-field appearance="outline">
                     <mat-label >Name</mat-label>
@@ -69,7 +68,7 @@
           </div>
         </mat-card-content>
     </mat-card>
- 
+
 </div>
 
 <ng-template #loading >

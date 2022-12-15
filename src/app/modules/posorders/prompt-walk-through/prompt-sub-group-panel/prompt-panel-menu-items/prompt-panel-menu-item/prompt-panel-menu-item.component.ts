@@ -161,9 +161,10 @@ export class PromptPanelMenuItemComponent implements OnInit {
     const currentSubPrompt = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups
 
     if (currentSubPrompt.quantityMet) {
-      this.orderService.notificationEvent('Quantity already met moving on.', 'Info')
-      this.nextStep()
-      return
+      const lastIndex = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected.length
+      orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected.pop()
+      // this.orderService.notificationEvent('Quantity already met moving on.', 'Info')
+      // this.nextStep()
     }
 
     this.resetItemOption.emit('')

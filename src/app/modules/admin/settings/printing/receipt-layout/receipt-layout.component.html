@@ -59,8 +59,9 @@
 
         <div   *ngIf="interpolatedFooterTexts && interpolatedFooterTexts.length>0"   class="section-item">
           <div *ngFor="let order of interpolatedFooterTexts; let i = index">
-            <div
-              [innerHTML]="interpolatedFooterTexts[i]" >  </div>
+
+            <div [innerHTML]="interpolatedFooterTexts[i]" >  </div>
+
           </div>
         </div>
 

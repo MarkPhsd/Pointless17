@@ -24,6 +24,9 @@
             ( {{orderItem?.itemType?.name}} )
           </span>
 
+          <!-- quantity {{quantity}}<br>
+          subTotal {{subTotal}} -->
+
           <span  *ngIf="quantity && !prepScreen">
             <div *ngIf="subTotal > 0">
               {{ quantity }} {{orderItem?.unitName}}  @  {{ unitPrice | currency }} = {{ subTotal | currency}}
@@ -48,10 +51,10 @@
           </span>
 
           <span class="discount-description" *ngIf="orderItem?.itemCashDiscount>0">
-            Cash Savings $ {{orderItem?.itemCashDiscount}},
+            Cash Savings $ {{orderItem?.itemCashDiscount | currency}},
           </span>
          <span class="discount-description"  *ngIf="orderItem?.itemOrderCashDiscount>0">
-            Cash Savings $ {{orderItem?.itemOrderCashDiscount}},
+            Cash Savings $ {{orderItem?.itemOrderCashDiscount | currency}},
           </span>
           <span class="discount-description"  *ngIf="orderItem?.itemPercentageDiscountValue>0">
             % Off Savings $ {{orderItem?.itemPercentageDiscountValue}},

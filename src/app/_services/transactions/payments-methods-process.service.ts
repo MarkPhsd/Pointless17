@@ -12,6 +12,7 @@ import { OrdersService } from './orders.service';
 import { DSIEMVSettings, TransactionUISettings } from '../system/settings/uisettings.service';
 import { PrintingService } from '../system/printing.service';
 import { BalanceSheetService } from './balance-sheet.service';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -503,10 +504,14 @@ export class PaymentsMethodsProcessService implements OnDestroy {
       return null;
   }
 
-  validatePaymentAmount(amount, isCash: boolean, balanceRemaining: number): boolean {
+  validatePaymentAmount(amount, paymentMethod: IPaymentMethod, balanceRemaining: number, creditBalanceRemaining): boolean {
     if (  +amount > + balanceRemaining ) {
-      if (!isCash) {
+      if (!paymentMethod.isCreditCard) {
         this.notify(`Enter amount smaller than ${balanceRemaining}.`, 'Try Again', 3000)
+        return false
+      }
+      if (paymentMethod.isCreditCard) {
+        this.notify(`Enter amount smaller than ${creditBalanceRemaining}.`, 'Try Again', 3000)
         return false
       }
     }

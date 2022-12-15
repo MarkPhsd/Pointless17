@@ -53,6 +53,8 @@ export interface TransactionUISettings {
   payPalEnabled          : boolean;
   payPalClientID        : string;
   payPalCurrency        : string;
+  creditCardFee         : string;
+  updateInventoryOnScan : boolean;
 }
 
 export interface StripeAPISettings {
@@ -658,6 +660,8 @@ export class UISettingsService {
       payPalEnabled          : [ ],
       payPalClientID         : [''],
       payPalCurrency         : [ ],
+      creditCardFee          : [ ],
+      updateInventoryOnScan: [ ],
      })
   }
 

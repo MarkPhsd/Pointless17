@@ -21,7 +21,7 @@
         </div>
       </div>
 
-      <div *ngIf="!priceSchedule.allOrderTypes">
+      <div *ngIf="priceSchedule && !priceSchedule.allOrderTypes && orderTypelist">
         <mat-selection-list   #list
                               [compareWith]   = "compareFunction"
                               [(ngModel)]     = "savedOrderTypes">

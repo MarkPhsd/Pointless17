@@ -239,6 +239,17 @@
         </div>
 
         <div>
+          <mat-label>Cash Discount - Credit Card Percentage fee. </mat-label>
+          <mat-label>Enter as Whole Number.</mat-label>
+          <app-value-fields
+              [inputForm]="inputForm"
+              [fieldName]="'creditCardFee'">
+               Credit Card Fee
+          </app-value-fields>
+        </div>
+
+
+        <div>
           <mat-label>High tip warning on percentage compared of payment.</mat-label>
           <app-value-fields
               [inputForm]="inputForm"

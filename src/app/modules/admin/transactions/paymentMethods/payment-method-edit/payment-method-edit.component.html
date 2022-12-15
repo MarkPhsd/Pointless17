@@ -18,6 +18,14 @@
           ></app-edit-buttons-standard>
         </div>
       </div>
+
+      <div>
+
+        <div *ngIf="inputForm.controls?.name.errors?.required && inputForm.controls?.name.touched" class="error">
+          <mat-icon color="warn">warning</mat-icon> Name required.
+        </div>
+
+      </div>
     </mat-card-subtitle>
 
     <mat-card-content>
@@ -59,6 +67,22 @@
             </mat-form-field>
           </div>
         </div>
+      </div>
+
+      <div>
+        <div class="instructions">
+          If you want to offer a fee that is associated with credit cards.
+          The phrase 'Cash Discount' applies to the amount of the fee that will be charged when using a credit card.
+        </div>
+        <div>
+          <mat-form-field appearance="outline">
+            <mat-label >Cash Discount Fee</mat-label>
+            <input matInput
+                  type             ="number"
+                  formControlName  ="addedPercentageFee" >
+          </mat-form-field>
+        </div>
+
       </div>
 
       <div class="item-options">

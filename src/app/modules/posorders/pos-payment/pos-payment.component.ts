@@ -91,6 +91,8 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   _paymentAmount       = 0;
   enterCustomAmount   = false;
 
+  _creditPaymentAmount = 0;
+
   SWIPE_ACTION = { LEFT: 'swipeleft', RIGHT: 'swiperight' };
   uiTransactions: TransactionUISettings
   uiTransactions$ : Observable<TransactionUISettings>;
@@ -364,6 +366,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         this.message = `Address  required.`
         return false
       }
+
       if (serviceType.promptScheduleTime && !this.order.preferredScheduleDate) {
         this.paymentIsReady = false;
         this.message = `Schedule date required.`
@@ -410,7 +413,7 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyStripePayment() {
     const order = this.order;
     if (order) {
-      const data = {title: 'Payment', amount: this.paymentAmount, tip: this.stripeTipValue}
+      const data = {title: 'Payment', amount: this.creditPaymentAmount, tip: this.stripeTipValue}
       this.openStripePayment(data)
     }
   }
@@ -418,28 +421,28 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   applyBoltPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.cardPointMethodsService.processSubCreditPayment(order, this.paymentAmount, false, this.uiTransactions)
+      this.cardPointMethodsService.processSubCreditPayment(order, this.creditPaymentAmount, false, this.uiTransactions)
     }
   }
 
   applyPayPalPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processPayPalCreditPayment(order, this.paymentAmount, false, this.uiTransactions)
+      this.paymentsMethodsService.processPayPalCreditPayment(order, this.creditPaymentAmount, false, this.uiTransactions)
     }
   }
 
   processDSICreditCardPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, this.paymentAmount, manual)
+      this.paymentsMethodsService.processSubDSIEMVCreditPayment(order, this.creditPaymentAmount, manual)
     }
   }
 
   processDSIEMVAndroidCreditCardPayment(manual: boolean) {
     const order = this.order;
     if (order) {
-      this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, this.paymentAmount, manual, this.uiTransactions)
+      this.paymentsMethodsService.processDSIEMVAndroidCreditVoid(order, this.creditPaymentAmount, manual, this.uiTransactions)
     }
   }
 
@@ -477,7 +480,6 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
 
   applyPaymentAmount(event) {
 
-    console.log(event)
     if (!event && this.groupPaymentAmount != 0) {
       this.initPaymentForm();
       return
@@ -503,8 +505,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         }
 
         const isValidAmount = this.paymentsMethodsService.validatePaymentAmount(amount,
-                                  this.paymentMethod.isCash,
-                                  this.order.balanceRemaining);
+                              this.paymentMethod,
+                              this.order.balanceRemaining,
+                              this.order.creditBalanceRemaining
+                              );
 
         if (!isValidAmount) {
           this.paymentAmountForm  = this.fb.group({fieldname: []})
@@ -514,11 +518,14 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
         if (this.enterCustomAmount) {
           this.enterCustomAmount = false
           this._paymentAmount    = amount;
+          this._creditPaymentAmount = amount;
           this.stepSelection     = 1;
           return
         }
 
-        const processResults$ = this.processGetResults(amount, this.posPayment)
+        let processResults$
+        processResults$ = this.processGetResults(amount, this.posPayment)
+
 
         if (!processResults$) {
           this.notify('Error getting values for payment.', 'Alert', 2000);
@@ -711,8 +718,21 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
     return this._paymentAmount;
   }
 
+  get creditPaymentAmount() {
+    if (!this._creditPaymentAmount || this._creditPaymentAmount == 0) {
+      return  this.order.creditBalanceRemaining;
+    }
+    return this._creditPaymentAmount;
+  }
+
+
   applyBalance() {
-    this.applyPaymentAmount(this.order.balanceRemaining)
+    if (!this.paymentMethod.isCreditCard) {
+      this.applyPaymentAmount(this.order.balanceRemaining)
+    }
+    if (this.paymentMethod.isCreditCard) {
+      this.applyPaymentAmount(this.order.creditBalanceRemaining)
+    }
   }
 
   async processCheckPayment(site: ISite, posPayment: IPOSPayment, order: IPOSOrder, amount: number, paymentMethod: IPaymentMethod): Promise<IPOSPayment> {

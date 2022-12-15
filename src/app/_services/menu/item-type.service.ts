@@ -221,7 +221,9 @@ export interface Tax {
 export class ItemTypeService {
 
 packageType = ['Not-Specified', 'Marijuana Weighed',
-               'Marijuana - Packaged', 'Medicine - Weighed', 'Medicine Each', 'Seeds', 'Plants', 'Concentrates', 'Solid', 'Liquid', 'Extract']
+               'Marijuana - Packaged', 'Medicine - Weighed',
+               'Medicine Each', 'Seeds', 'Plants', 'Concentrates',
+               'Solid', 'Liquid', 'Extract']
 type       = [
    'grouping',
    'cannabis',
@@ -251,6 +253,7 @@ typesList = [
   {name: 'Generic', id: 11},
   {name: 'Food', id: 12},
   {name: 'Restaurant', id: 13},
+  {name: 'Service Fee', id: 14}
 ]
 // 1	Product
 // 2	Adjustment

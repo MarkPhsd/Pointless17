@@ -72,6 +72,8 @@ export class UserAuthorizationService {
     return item
   }
   get isManagement(): boolean {
+
+    // console.log('is management', this.isUserAuthorized('admin,manager'))
     const item =   this.isUserAuthorized('admin,manager')
     if (item == undefined) {
       return false

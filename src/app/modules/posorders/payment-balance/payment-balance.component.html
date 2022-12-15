@@ -37,20 +37,39 @@
       [order]="order">
     </app-order-total>
 
-    <div class="transaction-data" >
+    <div class="transaction-data" *ngIf="order?.creditBalanceRemaining > 0" >
+      <div>
+        Credit Balance
+      </div>
+      <div class="totals">
+        {{ order?.creditBalanceRemaining  | currency }}
+      </div>
+      <div>
+        Cash Or Other
+      </div>
+      <div class="totals">
+        {{ order?.balanceRemaining | currency }}
+      </div>
+    </div>
+
+    <div class="transaction-data" *ngIf="order?.creditBalanceRemaining == 0" >
       <div>
         Remaining Balance
       </div>
       <div class="totals">
         {{ order?.balanceRemaining | currency }}
       </div>
+    </div>
+
+    <div class="transaction-data" >
       <div>
         Payments
       </div>
       <div class="totals">
-        {{ order?.totalPayments | currency }}
+        {{ order?.totalPayments  | currency }}
       </div>
     </div>
+
   </mat-card-subtitle>
 
   <mat-card-content *ngIf="order.posPayments">
@@ -97,13 +116,13 @@
           </div>
 
           <div>
-            {{item.amountPaid | currency}}
+            {{item.amountPaid + +item.addedPercentageFee | currency}}
             <div  *ngIf="item?.tipAmount > 0">
               Tip {{item.tipAmount  | currency}}
             </div>
             <div class="totals" *ngIf="item?.paymentMethod?.isCash && item?.amountPaid != 0">
               <span  *ngIf="item.amountPaid - item.amountReceived !=0">
-                   {{  (item.amountReceived - item.amountPaid)  | currency }}
+                   {{  (item.amountReceived + +item.addedPercentageFee - item.amountPaid)  | currency }}
               </span>
             </div>
           </div>

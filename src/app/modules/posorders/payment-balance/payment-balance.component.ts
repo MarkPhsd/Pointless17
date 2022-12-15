@@ -70,6 +70,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
     this.initSubscriptions();
     this.paymentsEqualTotal = false;
     if (this.order) {
+
       if ( this.order.balanceRemaining == 0)  {
         this.paymentsEqualTotal = true;
       }
@@ -98,7 +99,7 @@ export class PaymentBalanceComponent implements OnInit, OnDestroy {
 
   capture(item: IPOSPayment) {
     if (this.order) {
-      this.methodsService.processCapture(item, this.order.balanceRemaining,
+      this.methodsService.processCapture(item, this.order.creditBalanceRemaining,
                                                    this.uiTransactions)
     }
   }

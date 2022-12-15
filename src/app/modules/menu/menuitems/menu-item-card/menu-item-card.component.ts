@@ -4,7 +4,7 @@ import { AWSBucketService, OrdersService } from 'src/app/_services';
 import { ActivatedRoute,  } from '@angular/router';
 import * as _  from "lodash";
 import { TruncateTextPipe } from 'src/app/_pipes/truncate-text.pipe';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Capacitor } from '@capacitor/core';
@@ -35,6 +35,8 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
   placeHolderImage   : String = "assets/images/placeholderimage.png"
   _order             : Subscription;
   order              : IPOSOrder;
+
+  action$ : Observable<any>;
 
   isApp     = false;
   isProduct : boolean;
@@ -126,6 +128,16 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
     // console.log('add', add)
    this.orderMethodService.menuItemAction(this.order,this.menuItem, add)
   }
+
+  menuItemActionObs(add: boolean) {
+    if (this.menuItem?.name.toLowerCase() === 'load more') {
+      this.outPutLoadMore.emit('true')
+      return ;
+    }
+    // console.log('add', add)
+    this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add)
+  }
+
 
   notifyEvent(message: string, action: string) {
     this._snackBar.open(message, action, {

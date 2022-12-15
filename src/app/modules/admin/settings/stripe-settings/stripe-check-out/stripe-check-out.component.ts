@@ -80,7 +80,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     return this.paymentForm.valid && this.stripeCardValid;
   }
 
-  elementsOptions: StripeElementsOptions 
+  elementsOptions: StripeElementsOptions
   // = {
   //   locale: 'en'
   // };
@@ -119,10 +119,10 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
     )).subscribe(
       {next: data => {
         // console.log('data', data)
-        if (data) { 
-          if (data.clientSecret) { 
-            if (!this.elementsOptions) { 
-              this.elementsOptions = {locale: 'en' } as StripeElementsOptions 
+        if (data) {
+          if (data.clientSecret) {
+            if (!this.elementsOptions) {
+              this.elementsOptions = {locale: 'en' } as StripeElementsOptions
             }
             this.outletTemplate = this.paymentTemplateRef;
             this.elementsOptions.clientSecret =  data.clientSecret;
@@ -177,7 +177,6 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
       this.amount = data?.amount;
       this.maxAmount = data?.amount;
       this.stripeTipValue = +data?.tip;
-      console.log(data, data?.tip)
       this.title = data?.title;
     }
   }
@@ -212,7 +211,7 @@ export class StripeCheckOutComponent implements OnInit, OnDestroy  {
 
     const value = +(this.amount + this.stripeTipValue)
     const amount = (value).toFixed(2)
-    
+
     this.paymentForm = this.fb.group({
       name  : ['', [Validators.required]],
       amount: [ amount, [Validators.required, Validators.pattern(/\d+/)]],

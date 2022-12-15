@@ -5,7 +5,7 @@ import { ISite }   from 'src/app/_interfaces';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpClientCacheService } from 'src/app/_http-interceptors/http-client-cache.service';
 import { SitesService } from '../reporting/sites.service';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface IPaymentMethod {
   id:              number;
@@ -23,6 +23,7 @@ export interface IPaymentMethod {
   enabledOnline:   boolean;
   preAuth     :    boolean;
   instructions:    string;
+  addedPercentageFee: number;
 }
 
 @Injectable({
@@ -186,7 +187,7 @@ export class PaymentMethodsService {
     // const serializedDate = new Date(user?.dob)
          fb = this._fb.group({
             id:              [''], //
-            name:            [''], //
+            name:            ['', Validators.required], //
             isCreditCard:    [''], //
             companyCredit:   [''], //
             reverseCharge:   [''], //
@@ -199,7 +200,8 @@ export class PaymentMethodsService {
             state:           [''], //
             preAuth:         [''],
             enabledOnline:   [''],
-            instructions  :  ['']
+            instructions  :  [''],
+            addedPercentageFee :  ['']
           }
         )
         return fb

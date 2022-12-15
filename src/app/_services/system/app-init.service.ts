@@ -75,8 +75,8 @@ export class AppInitService  {
           if (!data.apiUrl) {
             if (!this.platformService.androidApp && !this.platformService.isAppElectron){
             }
-            this.apiUrl     = "https://ccsposdemo.ddns.net/api"
-            data.apiUrl     = "https://ccsposdemo.ddns.net/api"
+            this.apiUrl     = "https://pointlessposdemo.com/api"
+            data.apiUrl     = "https://pointlessposdemo.com/api"
             this.setAPIUrl(this.apiUrl)
           }
 
@@ -103,9 +103,9 @@ export class AppInitService  {
           if (!this.platformService.androidApp && !this.platformService.isAppElectron){
             this._snackbar.open('Using demo data', 'Alert', {duration: 3000} )
           }
-          this.apiUrl           = "https://ccsposdemo.ddns.net/api"
+          this.apiUrl           = "https://pointlessposdemo.com/api"
           this.useAppGate       = false;
-          this.logo             = "http://cafecartel.com/temp/logo.png";
+          this.logo             = "http://pointlesspos.com/temp/logo.png";
           this.company          = 'Pointless'
           this.appConfig.apiUrl = this.apiUrl;
           this.useAppGate       = false;
@@ -159,7 +159,7 @@ export class AppInitService  {
           console.log('snack bar open error', error)
         }
       }
-      localStorage.setItem('storedApiUrl', 'https://ccsposdemo.ddns.net/api')
+      localStorage.setItem('storedApiUrl', 'https://pointlessposdemo.com/api')
       return localStorage.getItem('storedApiUrl')
     }
   }

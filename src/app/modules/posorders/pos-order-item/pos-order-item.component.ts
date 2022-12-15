@@ -231,13 +231,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     this.refreshSidePanel()
   }
 
-  initEdit() { 
-    if (this.purchaseOrderEnabled && !this.itemEdit) { 
+  initEdit() {
+    if (this.purchaseOrderEnabled && !this.itemEdit) {
       this.itemEdit = true;
       try {
         this.inputForm = this.fb.group( this.orderItem )
         this.inputForm.patchValue(this.orderItem)
-        this.inputForm.valueChanges.subscribe(item => { 
+        this.inputForm.valueChanges.subscribe(item => {
           this.action$ = this.updateValues(item)
         })
       } catch (error) {
@@ -246,8 +246,8 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     }
   }
 
-  destroyEdit() { 
-    // if (this.lockEdit) { return } 
+  destroyEdit() {
+    // if (this.lockEdit) { return }
     if ( this.orderMethodsService.isItemAssigned( this.orderItem.id ) ) { return }
     this.itemEdit = false;
     this.inputForm = null;
@@ -255,17 +255,16 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   updateValues(item: PosOrderItem) {
     const site = this.siteService.getAssignedSite();
-    
     return this.posOrderItemService.changeItemValues(site, item ).pipe(
       switchMap(data => {
-        if (data) { 
+        if (data) {
           this.orderService.updateOrderSubscription(data)
           return of(data)
         }
         return of(null)
       })
     )
-  }
+ }
 
   get isDisplayMenuItemOn() {
     if (this.mainPanel) {
@@ -280,15 +279,15 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
 
   assignItem() {
     const result = this.orderMethodsService.updateAssignedItems(this.orderItem);
-    if (result) { 
+    if (result) {
       this.initEdit()
     }
-    if (!result) { 
+    if (!result) {
       this.destroyEdit()
     }
   }
 
-  preventUnAssigned() { 
+  preventUnAssigned() {
     this.orderMethodsService.updateAssignedItems(this.orderItem)
   }
 
@@ -298,7 +297,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   private resizeCheck(): void {
-   this.sidePanelWidth = this.el.nativeElement.offsetWidth;
+    this.sidePanelWidth = this.el.nativeElement.offsetWidth;
     if (this.sidePanelWidth == 0) {
       this.sidePanelWidth = this.el.nativeElement.scrollWdith;
     }
@@ -320,7 +319,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   editCost() {
     this.editProperties('wholeSale' , 'Change Cost')
   }
-
 
   selectItem() {
     if (this.productnameClass != 'product-name-alt') {
@@ -344,30 +342,22 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   editProperties(editField: string, instructions: string) {
     let dialogRef: any;
     if (!this.orderItem) {return}
-
     const site = this.siteService.getAssignedSite();
-
     this.menuService.getMenuItemByID(site, this.orderItem.productID).subscribe(data => {
         this.menuItem = data;
         if (!this.menuItem.itemType) {
           this.notifyEvent('Item type not defined', 'Alert')
           return;
         }
-
         let requireWholeNumber = false;
         if (editField == 'quantity') {
           requireWholeNumber = this.menuItem.itemType.requireWholeNumber
         }
-
-        // console.log('requireWholeNumber', this.menuItem.itemType.requireWholeNumber)
-
         const item = {orderItem: this.orderItem,
                       editField: editField,
                       menuItem: this.menuItem,
                       requireWholeNumber: requireWholeNumber,
                       instructions: instructions}
-
-        //a little formating
         let height  = '600px';
         let width   = '455px'
         if (editField == 'quantity') {
@@ -376,14 +366,13 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
         }
 
         dialogRef = this.dialog.open(PosOrderItemEditComponent,
-        { width     : width,
-          minWidth  : '300px',
-          height    : height,
-          minHeight : height,
-          data      : item
-        },
+          { width     : width,
+            minWidth  : '300px',
+            height    : height,
+            minHeight : height,
+            data      : item
+          },
         )
-
         dialogRef.afterClosed().subscribe(result => {
         // this.refreshData();
         // update order
@@ -409,7 +398,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
   }
 
   refreshSidePanel() {
-
     this.gridItems = 'grid-items';
     if (this.mainPanel) {
       this.gridItems ='grid-items-main-panel'
@@ -451,7 +439,6 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     let payload = {} as payload
     payload.index = index;
     payload.item  = orderItem;
-    // console.log(payload)
     this.outputDelete.emit(payload)
   }
 
@@ -569,7 +556,7 @@ export class PosOrderItemComponent implements OnInit, AfterViewInit,OnDestroy {
     let imageUrl: string
     let ary: any[]
     if ( imageName ) {
-      ary = this.awsBucket.convertToArrayWithUrl( imageName, this.awsBucketURL)
+      ary = this.awsBucket.convertToArrayWithUrl( imageName, this.awsBucketURL )
       imageUrl = ary[0]
     }
     return imageUrl

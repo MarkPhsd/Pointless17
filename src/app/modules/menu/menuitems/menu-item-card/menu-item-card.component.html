@@ -1,3 +1,4 @@
+<div *ngIf="(action$  | async) as action"></div>
 
 <mat-card>
     <div fxLayout="row"
@@ -22,7 +23,7 @@
             <button mat-raised-button
                     class="image-button"
                     fxFill
-                    (click)="menuItemAction(true)">
+                    (click)="menuItemActionObs(true)">
               {{ menuItem.name  | truncateText: 30  }}
               <mat-icon>{{menuItem?.itemType?.icon}}</mat-icon>
             </button>

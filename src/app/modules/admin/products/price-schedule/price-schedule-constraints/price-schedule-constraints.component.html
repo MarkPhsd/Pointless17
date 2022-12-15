@@ -63,12 +63,15 @@
             <mat-label>If left empty or 0 it will not be used.</mat-label>
             <div [style.width]="'105px'">
               <app-value-fields
-                  [fieldType]="'text'"
+                  [fieldType]="'number'"
                   [inputForm]="inputForm"
                   [fieldName]="'orderTotal'">
                   Order Total Required
               </app-value-fields>
             </div>
+
+            <!-- {{ inputForm.value | json }} -->
+
           </div>
 
     </mat-card>

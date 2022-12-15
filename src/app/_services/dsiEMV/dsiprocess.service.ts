@@ -46,6 +46,7 @@ export class DSIProcessService {
 
   async emvSale(amount: number, paymentID: number, manual: boolean, tipPrompt: boolean): Promise<RStream>  {
     const response = await this.emvTransaction('EMVSale', amount, paymentID, manual, tipPrompt, '');
+    console.log('response', response)
     return response
   }
 
@@ -61,22 +62,27 @@ export class DSIProcessService {
       const item     = localStorage.getItem('DSIEMVSettings') ;
       const device   = JSON.parse(item) as DSIEMVSettings;
       const reset    = await this.pinPadReset(); //ignore response for now.
+
       if (!item) {
         this.orderMethodsService.notification('Could not initialized DSI Settings', 'Error')
         return null
       }
       let transaction      = this.initTransaction();
+
+      transaction.TranType = 'Credit';
+      transaction.TranCode = 'VoidSale';
+
       if (!transaction) {
         this.orderMethodsService.notification('Could not Initialize Transaction Settings', 'Error')
         return null
       }
 
-      transaction.TranType = 'Credit';
-      transaction.TranCode = 'VoidSale';
-
+      console.log('emvVoid', transaction)
       if (transaction.SecureDevice.toLowerCase() === 'test') {
         transaction.TranType = 'Credit';
         transaction.TranCode = 'VoidSale';
+        const result = this.testSale(transaction.TranCode, posPayment.amountPaid + posPayment.addedPercentageFee, posPayment.id, false, false, transaction.TranType)
+        return result;
       }
 
       if (transaction.SecureDevice.toLowerCase() === 'EMV_ISC250_HEARTLAND'.toLowerCase()) {
@@ -155,33 +161,48 @@ export class DSIProcessService {
     return commandResponse;
   }
 
+  getRStreamAsResponse(response: string) {
+    const rStream  = {} as RStream;
+    rStream.CmdResponse = {} as CmdResponse
+    rStream.CmdResponse.TextResponse = response;
+    rStream.CmdResponse.CmdStatus    = "Failed"
+    return rStream
+  }
+
   async emvTransaction(tranCode: string, amount: number,
                        paymentID: number, manual: boolean,
                        tipPrompt: boolean, TranType: string ): Promise<any> {
 
     const item  = localStorage.getItem('DSIEMVSettings');
     if (!item) {
-      return 'no dsiemvSettings'
+      const response = 'no dsiemvSettings'
+      return this.getRStreamAsResponse(response)
     }
 
     if (!amount) {
       const result  = 'Failed, no amount given.'
-      return result
+      return this.getRStreamAsResponse(result)
     }
 
     const transactiontemp     = JSON.parse(item) as Transaction;
 
     if (!transactiontemp){
       const result  = 'Failed, transaction settings not found.'
-      return result
+      return this.getRStreamAsResponse(result)
     }
 
-    if (transactiontemp.SecureDevice.toLowerCase() === 'test') {
+    if (!transactiontemp.SecureDevice) {
+      const result  = 'Failed, no secure device entered.'
+      return this.getRStreamAsResponse(result)
+    }
+
+    if (transactiontemp?.SecureDevice.toLowerCase() === 'test') {
+      console.log('test sale')
       const result = this.testSale(tranCode, amount, paymentID, manual, tipPrompt, TranType)
       return result;
     }
 
-    if (transactiontemp.SecureDevice.toLowerCase() != 'test') {
+    if (transactiontemp?.SecureDevice != 'test') {
       const reset =  await this.pinPadReset(); //ignore response for now.
     }
 
@@ -276,6 +297,7 @@ export class DSIProcessService {
 		stream.TranResponse.Date        = "05/04/2022"//</Date>
 		stream.TranResponse.Time        = "15:00:14"//</Time>
     stream.TranResponse.TranCode    = TranCode
+
     const item =  stream
     // console.log('CmdResponse', result?.CmdResponse)
     // console.log('TranResponse', result?.TranResponse)

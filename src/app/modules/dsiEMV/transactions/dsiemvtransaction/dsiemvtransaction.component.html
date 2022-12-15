@@ -9,9 +9,11 @@
 
 <mat-card>
   <mat-card-title>
-    <div>Transaction Type: {{type}} - {{action}}
-      <!-- {{action}} -->
+    <div>
+      Transaction Type: {{type}}
+       <!-- - {{action}} -->
     </div>
+
     <div class="grid-totals">
       <div>Payment # </div>
       <div>{{payment?.id}}</div>
@@ -47,7 +49,7 @@
       <div class="action-buttons">
         <div *ngIf="!processing">
           <button mat-raised-button
-            [disabled]="!isAuthorized"
+            [disabled]="!this.userAuthorization.isManagement"
             (click)="process()">
           <mat-icon>credit_card</mat-icon>Process
         </button>

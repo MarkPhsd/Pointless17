@@ -2,7 +2,7 @@ import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angu
 import { EMPTY, of, Subscription, Observable } from 'rxjs';
 import { ISetting, ISite } from 'src/app/_interfaces';
 import { IPOSOrder } from 'src/app/_interfaces/transactions/posorder';
-import { OrdersService } from 'src/app/_services';
+import { MenuService, OrdersService } from 'src/app/_services';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
 import { FakeDataService } from 'src/app/_services/system/fake-data.service';
 import { PrintingService } from 'src/app/_services/system/printing.service';
@@ -12,7 +12,6 @@ import { DatePipe } from '@angular/common';
 import { ServiceTypeService } from 'src/app/_services/transactions/service-type-service.service';
 import { catchError, switchMap,  } from 'rxjs/operators';
 import { IPrintOrders } from 'src/app/_interfaces/transactions/printServiceOrder';
-
 
 @Component({
   selector: 'app-receipt-layout',
@@ -77,14 +76,12 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
   printOrder$: Observable<any>;
   printOrder: IPrintOrders;
 
-
   initSubscriptions() {
     this.site = this.siteService.getAssignedSite();
     return this.orderService.currentOrder$.pipe(
       switchMap(
         data => {
           if (!data)  {
-            console.log('no data', this.index)
             return of(null);
           }
           this.order      = data
@@ -92,6 +89,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
           if (!this.payments) {
             this.payments   = this.order.posPayments
           }
+          console.log('payments', this.payments)
           this.orders     = []
           if (this.order) { this.orders.push(this.order)};
           const datepipe: DatePipe = new DatePipe('en-US');
@@ -110,12 +108,20 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
         if (this.subFooterText) {
           this.interpolatedSubFooterTexts = this.renderingService.refreshStringArrayData(this.subFooterText, this.orderTypes, 'ordertypes')
         }
-
         this.getInterpolatedData()
         this.printingService.updatePrintReady({ready: true, index: this.index})
+        if (this.order?.service?.defaultProductID1) {
+          return this.menuService.getMenuItemByID(this.site,this.order.service.defaultProductID1)
+        }
         return of(this.order)
       }
-    ))
+    )).pipe(switchMap(data => {
+      if (data && data.name) {
+        this.order.service.menuItem1 = data;
+      }
+
+      return of(data)
+    }))
   }
 
   initTemlplateSubscription() {
@@ -201,6 +207,7 @@ export class ReceiptLayoutComponent implements OnInit, OnDestroy {
     private printingService : PrintingService,
     private renderingService: RenderingService,
     private orderService    : OrdersService,
+    private menuService:     MenuService,
     private fakeDataService : FakeDataService) { }
 
   ngOnInit() {

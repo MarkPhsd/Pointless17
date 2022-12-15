@@ -268,7 +268,21 @@ export class OrderMethodsService implements OnDestroy {
       return
     }
     this.listItem(item.id);
+  }
 
+  ///1. List item. 2. Add Item 3. View Sub Groups of Items.   //either move to s
+  menuItemActionObs(order: IPOSOrder, item: IMenuItem, add: boolean): Observable<ItemPostResults> {
+    const searchResults = this.updateMenuSearchModel(item)
+    if (searchResults) { return }
+    if (add) {
+      if (item && item.itemType.requireInStock) {
+        this.listItem(item.id);
+        return of(null)
+      }
+      return  this.addItemToOrderObs(order, item, 1, 0)
+    }
+    this.listItem(item.id);
+    return of(null)
   }
 
   clearOrderFromFloorPlan(site, floorPlanID: number, tableUUID: string): Observable<any> {
@@ -439,6 +453,11 @@ export class OrderMethodsService implements OnDestroy {
 
   async addItemToOrder(order: IPOSOrder, item: IMenuItem, quantity: number) {
     await this.processAddItem(order, null, item, quantity, null);
+  }
+
+  addItemToOrderObs(order: IPOSOrder, item: IMenuItem, quantity: number, rewardAvailableID: number) {
+    // return this.processItemPOSObservable(order, null, item, quantity, null);
+    return this.processItemPOSObservable(order, null, item, 1, null , 0, 0, null )
   }
 
   finalizeOrder(paymentResponse: IPaymentResponse, paymentMethod: IPaymentMethod, order: IPOSOrder): number {

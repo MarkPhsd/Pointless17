@@ -1,7 +1,6 @@
-<!-- 
+<!--
 <div *ngIf="clientTypeList">client true </div>
 <div *ngIf="dashboardModel">dashboardModel true </div> -->
-
 
 <div *ngIf="dashboardModel && clientTypeList">
   <mat-card>
@@ -12,11 +11,11 @@
     </mat-card-subtitle>
     <mat-divider></mat-divider>
 
-    <div *ngIf="dashboardModel">
+    <div *ngIf="dashboardModel && clientTypeList">
         <mat-selection-list #list
                             [compareWith] ="compareFunction"
                             [(ngModel)]   ="savedClientTypes" >
-          <mat-list-option *ngFor         ="let itemType of clientTypeList; 
+          <mat-list-option *ngFor         ="let itemType of clientTypeList;
                                            let i =index;"
                             [value]       ="itemType"
                             (click)       ="setValues()"

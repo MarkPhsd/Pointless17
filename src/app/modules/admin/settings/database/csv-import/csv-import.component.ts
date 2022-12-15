@@ -76,7 +76,7 @@ export class CSVImportComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    console.log('on destroy')
+    // console.log('on destroy')
     clearInterval(this.timerInterval)
   }
 

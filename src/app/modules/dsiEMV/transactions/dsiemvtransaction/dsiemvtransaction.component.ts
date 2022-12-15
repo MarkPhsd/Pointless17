@@ -54,13 +54,12 @@ export class DSIEMVTransactionComponent implements OnInit {
     private orderMethodService    : OrderMethodsService,
     private pOSPaymentService     : POSPaymentService,
     private siteService           : SitesService,
-    private userAuthorization     : UserAuthorizationService,
+    public userAuthorization      : UserAuthorizationService,
     private dialogRef             : MatDialogRef<DSIEMVTransactionComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   )
   {
     if (data)  {
-
       this.payment = data?.data;
       this.amount  = data?.amount;
       this.action  = data?.action
@@ -73,7 +72,6 @@ export class DSIEMVTransactionComponent implements OnInit {
       }
 
       console.log('data', data);
-
     }
   }
 
@@ -135,7 +133,9 @@ export class DSIEMVTransactionComponent implements OnInit {
   async process() {
     this.processing = true;
     this.message  = 'Please check the device for input if required.'
+
     this.resultMessage = '';
+
     await this.processTransation();
   }
 
@@ -359,6 +359,7 @@ export class DSIEMVTransactionComponent implements OnInit {
             this.orderService.updateOrderSubscription(order)
             this.orderMethodService.notifyEvent('Voided - this order has been re-opened if closed.', 'Result')
             this.message = 'Payment voided. Press cancel to continue. Order is re-opened if closed.'
+            this.cancel();
           return of(order)
         }))
 
@@ -385,7 +386,6 @@ export class DSIEMVTransactionComponent implements OnInit {
       this.action$ =  item$.pipe(
           switchMap(data => {
           if (data) {
-            console.log('completed')
             this.cancel();
             return of(data)
           }
