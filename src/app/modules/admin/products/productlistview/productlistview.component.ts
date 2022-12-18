@@ -621,7 +621,7 @@ constructor(  private _snackBar              : MatSnackBar,
     this.selected = selected
     this.id = selectedRows[0].id;
     this.getItem(this.id)
-    // this.getItemHistory(this.id)
+
   }
 
   getItem(id: number) {
@@ -634,6 +634,13 @@ constructor(  private _snackBar              : MatSnackBar,
         })
       )
 
+    }
+  }
+
+  editSelectedItem() {
+    if (this.product) {
+      this.id = this.product.id
+      this.editItemWithId( this.id);
     }
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders  } from '@angular/common/http';
 import { AuthenticationService } from 'src/app/_services/system/authentication.service';
-import { BehaviorSubject, Observable, } from 'rxjs';
+import { BehaviorSubject, Observable, of, switchMap, } from 'rxjs';
 import { ISite, IUser }   from 'src/app/_interfaces';
 
 import { InterceptorSkipHeader } from 'src/app/_http-interceptors/basic-auth.interceptor';
@@ -27,7 +27,7 @@ export class SitesService {
 
   smallDevice: boolean;
   phoneDevice: boolean;
-  
+
   updateSitesSubscriber(site: ISite[]) {
     this._sites.next(site)
   }
@@ -170,26 +170,28 @@ export class SitesService {
 
   }
 
- async setDefaultSite(): Promise<ISite> {
+  setDefaultSite(): Observable<ISite> {
     let site = {} as ISite
     this.clearAssignedSite();
 
     //if is app and is installed, then it's going to be stored in
-    if (!this.platformSevice.isApp()) {
-      const data  = await this.httpClient.get('./assets/app-config.json').pipe().toPromise() as IAppConfig
-      site.url    = data.apiUrl
-      localStorage.setItem("site.url"    ,  site.url)
-      localStorage.setItem("storedApiUrl",  site.url)
-      localStorage.setItem("site.name",  site.name)
-      return site;
+    if ( !this.platformSevice.isApp()) {
+      return this.httpClient.get('./assets/app-config.json').pipe(
+        switchMap(value => {
+          const data = value as IAppConfig
+          site.url    = data?.apiUrl
+          localStorage.setItem("site.url"    ,  site.url)
+          localStorage.setItem("storedApiUrl",  site.url)
+          localStorage.setItem("site.name",  site.name)
+          return of(site);
+        }))
     }
 
     if ( this.platformSevice.isApp() ) {
       site.url   = localStorage.getItem('storedApiUrl')
       this.snackBar.open('Set Default Site site.url ' + site.url, 'Success', {duration: 3000})
       localStorage.setItem("site.url", site.url)
-      // this.snackBar.open(site.url, 'Default Site', {duration: 3000})
-      return site
+      return of(site)
      }
 
   }
@@ -277,6 +279,7 @@ export class SitesService {
 
     const  cache = this.getCurrentCache();
 
+    console.log('cache info', cache)
     if (cache == null) {  return  { url: url, cacheMins: 0 }   }
 
     return { url: url, cacheMins: cache }

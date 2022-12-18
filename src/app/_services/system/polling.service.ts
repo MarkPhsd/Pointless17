@@ -5,7 +5,9 @@ import {
   BehaviorSubject,
   ReplaySubject,
   timer,
-  NEVER
+  NEVER,
+  of,
+  Observable
 } from 'rxjs';
 import {
   takeWhile,
@@ -17,6 +19,8 @@ import {
 } from 'rxjs/operators';
 
 import { SitesService } from '../reporting/sites.service';
+import { IAppConfig } from './app-init.service';
+import { ISite } from 'src/app/_interfaces';
 
 export const POLLING_INTERVAL  = (60 * 1000) * 1;                   // <-- poll every 1 min
 
@@ -33,7 +37,7 @@ export class PollingService   {
   close$            = new ReplaySubject<any>(1);         // <-- close open subscriptions
   sub               : Subscription;
   apiUrl             = '';
-
+  action$: Observable<ISite>;
   private _poll          = new BehaviorSubject<boolean>(null);
   public poll$           = this._poll.asObservable();
 
@@ -42,15 +46,23 @@ export class PollingService   {
               private http: HttpClient) {
   }
 
-  getCurrentUrl() {
+  getCurrentUrl(): Observable<ISite> {
+
     let site = this.siteService.getAssignedSite();
     this.apiUrl = site.url;
     if (this.apiUrl == undefined) {
-      this.siteService.setDefaultSite()
+      this.action$ = this.siteService.setDefaultSite().pipe(
+        switchMap(data => {
+          this.apiUrl = site.url;
+          return of(data)
+        })
+      )
+      return;
     }
+
     site = this.siteService.getAssignedSite();
     this.apiUrl = site.url;
-    return site;
+    return of(site);
   }
 
   poll() {

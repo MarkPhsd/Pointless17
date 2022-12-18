@@ -1,3 +1,4 @@
+<div *ngIf="(action$  | async) as action"></div>
 <mat-card>
   <mat-card-title *ngIf="priceCategory">
     <mat-icon>edit</mat-icon> {{priceCategory?.name}}
@@ -25,22 +26,26 @@
         </div>
 
         <div *ngIf="!showTime">
-          <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon> Show Schedule</button>
+          <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Schedule</button>
         </div>
         <div *ngIf="showTime">
-          <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Hide Schedule</button>
+          <button mat-button (click)="toggleShowTime()"><mat-icon>schedule</mat-icon>Schedule</button>
         </div>
 
         <div *ngIf="!showConversions">
-          <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Show Conversions</button>
+          <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Conversions</button>
         </div>
 
         <div *ngIf="showConversions">
-          <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Hide Conversions</button>
+          <button mat-button (click)="toggleShowConversion()"><mat-icon>convert</mat-icon>Conversions</button>
         </div>
 
         <div>
-          <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Toggle Tiers</button>
+          <button mat-button (click)="toggleWeightPrices()"><mat-icon>scale</mat-icon>Tiers</button>
+        </div>
+
+        <div>
+          <button mat-button (click)="toggleModifier()"><mat-icon>keyboard_option_key</mat-icon>Modifier</button>
         </div>
 
       </div>
@@ -522,10 +527,8 @@
                               class="form-control" >
                       </mat-form-field>
                     </div>
-
                   </div>
 
-                  <!---->
                   <div *ngIf="showConversions ||
                          priceCategory.productPrices &&
                         ((priceCategory?.productPrices.length > 0 && priceCategory?.productPrices[i]?.partMultiplyer != 1
@@ -543,15 +546,15 @@
                       </div>
                       <mat-card-content>
                         <div class="grid-conversion-items">
-                        <div>
-                          <mat-form-field appearance="outline" class="conversion-fields">
-                            <mat-label >Multiplier</mat-label>
-                            <input matInput
-                                  type="text"
-                                  formControlName="partMultiplyer"
-                                  class="form-control" >
-                          </mat-form-field>
-                        </div>
+                          <div>
+                            <mat-form-field appearance="outline" class="conversion-fields">
+                              <mat-label >Multiplier</mat-label>
+                              <input matInput
+                                    type="text"
+                                    formControlName="partMultiplyer"
+                                    class="form-control" >
+                            </mat-form-field>
+                          </div>
 
                         <div>
                           <mat-form-field appearance="outline" class="conversion-fields">
@@ -565,21 +568,21 @@
                       </div>
 
                       </mat-card-content>
-
                     </mat-card>
 
                   </div>
 
-                  <!-- -->
-                  <div *ngIf="showPriceTiers  || (priceCategory?.productPrices && priceCategory?.productPrices.length>0 && priceCategory?.productPrices[i]?.tierPriceGroup != 0 )" >
+
+                  <div *ngIf="showPriceTiers  || (priceCategory?.productPrices && priceCategory?.productPrices.length>0
+                                                  && (priceCategory?.productPrices[i]?.tierPriceGroup != 0 &&
+                                                      priceCategory?.productPrices[i]?.tierPriceGroup != undefined) )" >
                     <span>
                       <mat-form-field appearance="outline">
                         <mat-label>Tier</mat-label>
                       <mat-select
                                   type="number"
                                   formControlName = "tierPriceGroup"
-                                  name="tierPriceGroup"
-                                >
+                                  name="tierPriceGroup" >
                         <div *ngIf="priceTiers as list" >
                             <mat-option [value]="0"><mat-icon>clear</mat-icon></mat-option>
                             <mat-option *ngFor="let item of list"
@@ -596,11 +599,25 @@
                         <mat-icon>expand</mat-icon>
                       </button>
                     </span>
+                  </div>
 
+                  <div *ngIf="(showModifiers || ( priceCategory?.productPrices[i]?.priceType != 0 &&
+                                                  priceCategory?.productPrices[i]?.priceType != undefined )
+                                                  ) &&
+                                                 priceModifierOptions as list ">
+                    <mat-form-field class="category-list" appearance="outline">
+                      <mat-label>Modiifer Option</mat-label>
+                      <mat-select
+                                  formControlName = "priceType"
+                                  name="priceType">
+                          <mat-option *ngFor="let item of list" [value]="item.id">
+                              {{item.name}}
+                          </mat-option>
+                      </mat-select>
+                    </mat-form-field>
                   </div>
 
                 </div>
-
               </mat-card-content>
             </mat-card>
           </div>

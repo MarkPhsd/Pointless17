@@ -36,6 +36,8 @@ export interface PromptSubGroups {
   promptMenuItems  : PromptMenuItem[];
   itemsSelected    : MenuItemsSelected[];
   quantityMet      : boolean;
+  minQuantityMet   : boolean;
+  maxQuantityMet   : boolean;
   hideSplitOptions : boolean;
 }
 

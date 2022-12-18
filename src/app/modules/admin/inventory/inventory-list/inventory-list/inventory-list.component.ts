@@ -475,7 +475,6 @@ export class InventoryListComponent implements OnInit, OnDestroy {
     this.brandID           = 0
     this.currentPage       = 1;
     this.inventoryStatusID = 0;
-    // this.currentManifest = null;
     this.metrcCategory = null;
     this.refreshSearch()
   }

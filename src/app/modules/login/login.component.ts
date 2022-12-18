@@ -287,7 +287,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async clearUserSettings() {
     this.authenticationService.clearUserSettings();
-    await this.siteService.setDefaultSite();
+    // await this.siteService.setDefaultSite();
   }
 
   getCompanyInfo() {
@@ -455,7 +455,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 }
                 return of('success')
               }
-              
+
             }
             return of('error')
           }

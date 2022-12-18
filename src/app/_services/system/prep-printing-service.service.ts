@@ -37,7 +37,6 @@ export class PrepPrintingServiceService {
                 newItems.push(data)
             }}
           )
-
           if (newItems.length > 0) {
             const item = this.setOrder(newItems, order, location)
             printOrders.push(item)

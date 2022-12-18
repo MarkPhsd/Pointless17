@@ -63,6 +63,7 @@ export class FbClientTypesService {
       deleteInventory: [],
       deleteProduct: [],
       deleteEmployee: [],
+      uploadPictures: [],
     })
     return fb
 

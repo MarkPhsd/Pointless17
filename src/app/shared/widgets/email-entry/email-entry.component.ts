@@ -23,7 +23,7 @@ export class EmailEntryComponent implements OnInit {
       private orderMethodService: OrderMethodsService,
       private dialogRef: MatDialogRef<EmailEntryComponent>,
       @Inject(MAT_DIALOG_DATA) public data: IPOSOrder
-      ) { 
+      ) {
         this.order = data;
   }
 
@@ -34,20 +34,17 @@ export class EmailEntryComponent implements OnInit {
     })
   }
 
-  emailOrder() { 
-    if (this.order) {   
+  emailOrder() {
+    if (this.order) {
       const email = this.inputForm.controls['email'].value
-      if (email) { 
+      if (email) {
         this.message = 'Sending.'
         this.email$ = this.orderMethodService.emailOrderFromEntry(this.order, email).pipe(
-          switchMap(data => { 
-            console.log(data)
+          switchMap(data => {
             return of(data)
           })).pipe(
-          switchMap(data => { 
-            console.log(data)
+          switchMap(data => {
             this.message = 'Sent.'
-            // this.close()
             this.dialogRef.close();
             return of(data)
         }))
@@ -55,8 +52,8 @@ export class EmailEntryComponent implements OnInit {
     }
   }
 
-  close() { 
-    
+  close() {
+
     this.dialogRef.close();
     // this.orderMethodService.clearOrder()
   }

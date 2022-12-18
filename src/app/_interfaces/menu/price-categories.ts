@@ -67,6 +67,8 @@ export interface IPriceCategory2 {
 //   ouncePrice:       number;
 // }
 
+
+
 export interface PriceCategories {
   id:            number;
   name:          string;

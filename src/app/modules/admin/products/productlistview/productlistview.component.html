@@ -110,6 +110,12 @@
         <mat-icon>add_box</mat-icon>Add</button>
     </div>
 
+    <div *ngIf="editOff" class="header-items">
+      <button mat-button
+              (click)="editSelectedItem()">
+        <mat-icon>edit</mat-icon>Edit</button>
+    </div>
+
     <div *ngIf="!hideEditSelected"  class="header-items">
       <button mat-button
               (click)="editSelectedItems()">

@@ -102,7 +102,6 @@ constructor(private menuService        : MenuService,
               private titleService     : Title,
               private platFormService  : PlatformService,
               private fb: FormBuilder,
-
       )
   {
     this.isApp = this.platFormService.isApp()
@@ -192,12 +191,12 @@ constructor(private menuService        : MenuService,
 
   initSearchProcess() {
     try {
-        this.departmentID = this.route.snapshot.paramMap.get('departmentID');
-        this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');  // not implemented.
-        this.categoryID   = this.route.snapshot.paramMap.get('categoryID');
-        this.brandID      = this.route.snapshot.paramMap.get('brandID');
-        this.typeID       = this.route.snapshot.paramMap.get('typeID');
-        this.productName  = this.route.snapshot.paramMap.get('productName');
+        this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
+        this.subCategoryID = this.route.snapshot.paramMap.get('subCategoryID');
+        this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
+        this.brandID       = this.route.snapshot.paramMap.get('brandID');
+        this.typeID        = this.route.snapshot.paramMap.get('typeID');
+        this.productName   = this.route.snapshot.paramMap.get('productName');
 
     } catch (error) {
       console.log('initSearchProcess Error', error)
@@ -208,10 +207,11 @@ constructor(private menuService        : MenuService,
     this._productSearchModel = this.menuService.menuItemsData$.subscribe( model => {
         this.initSearchProcess();
         if (!model) { return }
-        this.subCategoryID = model.subCategoryID; // not implemented.
+        this.subCategoryID = model.subCategoryID;
         this.departmentID = model.departmentID
         this.categoryID   = model.categoryID
         this.brandID      = model.brandID;
+        this.subCategoryID= model.subCategoryID;
         this.typeID       = model.itemTypeID
         this.productName  = model.name
         model.web         = this.webMode
@@ -259,15 +259,21 @@ constructor(private menuService        : MenuService,
       if (!model) { model = {} as ProductSearchModel }
       const value = this.route.snapshot.paramMap.get('value');
       if (model && !value)  {
+
+        console.log('department source', this.route.snapshot.paramMap.get('departmentID'))
+        console.log('subCategory', this.route.snapshot.paramMap.get('subCategoryID'))
+
         this.departmentID  = this.route.snapshot.paramMap.get('departmentID');
         this.categoryID    = this.route.snapshot.paramMap.get('categoryID');
-        model.categoryID   = this.categoryID
-        model.departmentID = this.departmentID
+        this.subCategoryID    = this.route.snapshot.paramMap.get('subCategoryID');
         this.brandID       = this.route.snapshot.paramMap.get('brandID')
-
         if (this.brandID) {
           if (this.brandID) { model.brandID       = this.brandID     }
         }
+
+        model.categoryID   = this.categoryID
+        model.departmentID = this.departmentID
+        model.subCategoryID = this.subCategoryID;
 
         this.typeID       = this.route.snapshot.paramMap.get('typeID')
         if (this.typeID) {
@@ -282,6 +288,7 @@ constructor(private menuService        : MenuService,
       model.pageSize    = pageSize
       model.active      = true;
       const site        = this.siteService.getAssignedSite();
+      console.log('Search Model', model)
       const results$    = this.menuService.getMenuItemsBySearchPaged(site, model);
       this.loading      = true
 

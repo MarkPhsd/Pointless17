@@ -396,8 +396,8 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
         switchMap(data =>
           {
 
-            if (data) { 
-              if (data === 'Not authorized.') { 
+            if (data) {
+              if (data === 'Not authorized.') {
                 this.notifyEvent('Not authorized', 'Failed')
                 return EMPTY;
               }
@@ -475,16 +475,16 @@ export class CheckInProfileComponent implements OnInit, OnDestroy {
       return
     }
 
-    const result =  window.confirm('Are you sure you want to delete this profile?')
+    // const result =  window.confirm('Are you sure you want to delete this profile?')
 
-    if (result == true && this.clientTable) {
+    // if (result == true && this.clientTable) {
       const site = this.siteService.getAssignedSite();
       const client$ = this.contactservice.deleteClient(site, this.clientTable.id)
       client$.subscribe( data => {
         this.notifyEvent('This profile has been removed.', 'Success')
         this.goBackToList()
       })
-    }
+    // }
   }
 
   startOrder(event) {

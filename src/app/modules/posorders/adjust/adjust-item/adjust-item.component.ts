@@ -196,15 +196,15 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
       let response$
 
       const value = this.itemWithAction.action as number;
-      console.log('itemWithAction', this.itemWithAction, value)
+      // console.log('itemWithAction', this.itemWithAction, value)
 
       if (this.itemWithAction) {
         switch (value) {
           case 1: //void
             response$ =  this.itemService.voidPOSOrderItem(site, this.itemWithAction)
-            console.log('this.action', this.itemWithAction)
+            // console.log('this.action', this.itemWithAction)
             this.actionResponse$ = response$.pipe(switchMap(
-              data => { 
+              data => {
                   if (data === 'Item voided') {
                   this.updateSubscription()
                   this.notifyEvent('Item voided', 'Result')
@@ -224,7 +224,7 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             this.itemWithAction.order = this.order;
             const item = {} as OrderActionResult
             this.actionResponse$ = this.orderMethodService.refundOrder(this.itemWithAction).pipe(
-              switchMap( data => { 
+              switchMap( data => {
                   this.orderService.updateOrderSubscription(data.order)
                   if (data?.errorMessage) {
                     this.notifyEvent(data.errorMessage, 'Result')
@@ -246,16 +246,16 @@ export class AdjustItemComponent implements OnInit, OnDestroy {
             this.itemWithAction.order = this.order;
             this.itemWithAction.items = this.posItems;
             this.actionResponse$      = this.orderMethodService.refundItem(this.itemWithAction).pipe(
-              switchMap( data =>{ 
+              switchMap( data =>{
                 if (data?.errorMessage) {
                   this.notifyEvent(data?.errorMessage, 'Result')
                 }
                 if (!data?.errorMessage) {
                   this.notifyEvent(data?.message, 'Result')
                 }
-    
+
                 this.orderService.updateOrderSubscription(data?.order)
-    
+
                 this.closeDialog();
                 return of(data)
               })

@@ -306,8 +306,6 @@ export class OrderMethodsService implements OnDestroy {
 
 
     if (item?.itemType?.name?.toLowerCase() == 'category') {
-
-      console.log(item?.itemType?.name, item.categoryID.toString())
       model.categoryID   = item.categoryID.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
@@ -320,12 +318,14 @@ export class OrderMethodsService implements OnDestroy {
       this.router.navigate(["/menuitems-infinite/", {categoryID:item.id }])
       return true
     }
+
     if (item?.prodModifierType == 5) {
       model.subCategory  = item.id.toString()
       this.menuService.updateMeunuItemData(model)
       this.router.navigate(["/menuitems-infinite/", {subCategoryID:item.id }])
       return true
     }
+
     if (item?.prodModifierType == 6) {
       model.departmentID = item.id.toString()
       this.menuService.updateMeunuItemData(model)
@@ -790,8 +790,11 @@ export class OrderMethodsService implements OnDestroy {
     //the pop up will occur and prompt with options.
     //the function will return true once complete.
 
+    item =  this.menuService.getPricesFromProductPrices(item)
+    console.log('item price', item)
     if (item && item.priceCategories && item.priceCategories.productPrices.length > 1 ) {
-      // remove unused prices if they exist?
+
+
       const  newItem = {order: order, item: item, posItem: posItem}
       const dialogRef = this.dialog.open(PriceOptionsComponent,
         {
@@ -860,7 +863,7 @@ export class OrderMethodsService implements OnDestroy {
     if (id) {
       this.posOrderItemService.deletePOSOrderItem(site, id).subscribe(result => {
         if (result.scanResult) {
-          this.notifyWithOption('Item Deleted', 'Notice', notify)
+          // this.notifyWithOption('Item Deleted', 'Notice', notify)
         } else  {
           this.notifyWithOption('Item must be voided', 'Notice', notify)
         }
@@ -1016,13 +1019,15 @@ export class OrderMethodsService implements OnDestroy {
 
     switch(process) {
       case  0: {
+
           if (!this.priceCategoryID || this.priceCategoryID == 0) {
             this.promptOpenPriceOption(this.order,this.processItem.item,this.processItem.posItem)
             return
           }
           this.processInventoryPrice(this.order,this.processItem.item,this.processItem.posItem, this.priceCategoryID)
           break;
-      }
+
+        }
       case  1: {
           if (!this.processItem.posItem.serialCode) {
             if  (!this.promptSerial(this.processItem.item, this.processItem.posItem.id, false, '')) {
@@ -1168,7 +1173,7 @@ export class OrderMethodsService implements OnDestroy {
         const orderID = orderItem.orderID
         this.posOrderItemService.deletePOSOrderItem(site, orderItem.id).subscribe( item=> {
           if (item) {
-            this.notifyEvent('Item Deleted', "Success")
+            // this.notifyEvent('Item Deleted', "Success")
             this.order.posOrderItems.splice(index, 1)
             this.orderService.updateOrderSubscription(item.order)
           }
@@ -1206,7 +1211,7 @@ export class OrderMethodsService implements OnDestroy {
   prepPrintUnPrintedItems(id: number) {
     if (id) {
       const site = this.siteService.getAssignedSite()
-      this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
+      return  this.posOrderItemService.setUnPrintedItemsAsPrinted(site, id).pipe(
         switchMap(data => {
           return this.orderService.getOrder(site, id.toString(), false)
         })).subscribe( order => {

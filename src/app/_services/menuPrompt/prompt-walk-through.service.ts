@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { IPOSOrder } from 'src/app/_interfaces';
-import { IMenuItem } from 'src/app/_interfaces/menu/menu-products';
 import { IPromptGroup, PromptSubGroups } from 'src/app/_interfaces/menu/prompt-groups';
-import { IPOSOrderItem } from 'src/app/_interfaces/transactions/posorderitems';
 import { OrdersService } from '..';
 import { POSOrderItemServiceService } from '../transactions/posorder-item-service.service';
 import { PromptGroupService } from './prompt-group.service';
@@ -106,8 +104,7 @@ export class PromptWalkThroughService {
 
       prompt = this.setQuantityCheck(prompt)
 
-      if (prompt.quantityMet) {
-        console.log('sets accordion setup 2')
+      if (prompt.minQuantity || prompt.maxQuantityMet) {
         orderPromptGroup.currentAccordionStep ++;
         this._accordionStep.next(orderPromptGroup.currentAccordionStep);
         console.log('increment', orderPromptGroup.currentAccordionStep)
@@ -121,24 +118,47 @@ export class PromptWalkThroughService {
     return orderPromptGroup;
   }
 
-  setQuantityCheck(prompt) {
+  setQuantityCheck(prompt: PromptSubGroups) {
+
     if ( prompt.itemsSelected &&
           prompt.itemsSelected.length >= prompt.maxQuantity) {
+
       if ( prompt.maxQuantity != 0 ) {
+        prompt.maxQuantityMet = true;
         prompt.quantityMet = true
+        return prompt;
       }
+
     }
 
+    prompt.maxQuantityMet = false;
     if ( prompt.itemsSelected &&
           prompt.itemsSelected.length != 0 &&
           prompt.minQuantity != 0 &&
           prompt.minQuantity >= prompt.itemsSelected.length ) {
 
-      if ( prompt.maxQuantity != 0 ) {
+      if ( prompt.minQuantity != 0 ) {
         prompt.quantityMet = true
+        return prompt;
       }
+
     }
+
+    if ( prompt.itemsSelected &&
+          prompt.itemsSelected.length != 0 &&
+          prompt.moveOnQuantity != 0 &&
+          prompt.moveOnQuantity >= prompt.itemsSelected.length ) {
+
+      if ( prompt.moveOnQuantity != 0 ) {
+        console.log('move on quantity reached.')
+        prompt.quantityMet = true
+        return prompt;
+      }
+
+    }
+
     return prompt;
+
   }
 
   ///this process initalizes the object  orderPromptGroup {

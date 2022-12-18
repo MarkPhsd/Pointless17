@@ -11,8 +11,14 @@
   }
 }
 
-.notes { 
+.notes {
   width: 300px;
+}
+
+.grid-menu {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: 175px auto;
 }
 
 .item-button {

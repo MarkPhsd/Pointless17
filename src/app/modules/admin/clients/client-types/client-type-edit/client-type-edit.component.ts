@@ -196,7 +196,7 @@ export class ClientTypeEditComponent implements OnInit {
 
     const site = this.siteService.getAssignedSite()
     if (!this.clientType) {
-      this.snack.open("Item note initiated", "Success", {duration:2000, verticalPosition: 'top'})
+      this.snack.open("Item does not exist.", "Success", {duration:2000, verticalPosition: 'top'})
       return
     }
 

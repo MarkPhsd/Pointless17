@@ -26,6 +26,13 @@ import { ProductEditButtonService } from 'src/app/_services/menu/product-edit-bu
 })
 export class PriceCategoriesEditComponent implements OnInit {
 
+  priceModifierOptions = [
+    {id: 1, name: 'product'},
+    {id: 2, name: 'default modifier'},
+    {id: 3, name: 'modifier'},
+    {id: 4, name: 'weighed'},
+  ]
+
   @Input() priceCategory  :  PriceCategories;
   inputForm               :  FormGroup;
   showMore                :  boolean;
@@ -33,6 +40,7 @@ export class PriceCategoriesEditComponent implements OnInit {
   showWeightPrices        :  boolean;
   showConversions         :  boolean;
   showPriceTiers          :  boolean;
+  showModifiers           :  boolean;
   toggleSearchSize        = [] as  boolean[];
   saving                  : boolean;
   toggle                  : any;
@@ -40,7 +48,9 @@ export class PriceCategoriesEditComponent implements OnInit {
   get productPrices() : FormArray {
     return this.inputForm.get('productPrices') as FormArray;
   }
-  itemAction$            : Observable<any>;
+
+  action$                 : Observable<any>;
+  itemAction$             : Observable<any>;
   priceCategory$          : Observable<any>;
   actionMessage           : string;
   priceTiers$             : Observable<PriceTiers[]>;
@@ -102,13 +112,14 @@ export class PriceCategoriesEditComponent implements OnInit {
     console.log('')
   };
 
-  async refreshData() {
+  refreshData() {
     const site          = this.siteService.getAssignedSite()
-    const item$         = this.priceCategoryService.getPriceCategory(site, this.priceCategory.id);
-    const data          = await item$.pipe().toPromise()
-    if (data) {
-      this.refreshData_Sub(data)
-    }
+    this.action$         = this.priceCategoryService.getPriceCategory(site, this.priceCategory.id).pipe(
+      switchMap(data => {
+        this.refreshData_Sub(data)
+        return of(data)
+      })
+    )
   }
 
   refreshData_Sub(priceCategory: PriceCategories) {
@@ -144,6 +155,11 @@ export class PriceCategoriesEditComponent implements OnInit {
   toggleWeightPrices() {
     this.showPriceTiers = !this.showPriceTiers
   }
+
+  toggleModifier() {
+    this.showModifiers = !this.showModifiers
+  }
+
 
   addPrice() {
 
@@ -228,8 +244,10 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   updateCategory(item): Observable<any> {
-
-    if (!this.inputForm.valid) { return }
+    if (!this.inputForm.valid) {
+      console.log('update category')
+      return
+    }
     const priceCategory = this.inputForm.value;
     this.updatePriceCategory(priceCategory)
 
@@ -283,6 +301,12 @@ export class PriceCategoriesEditComponent implements OnInit {
     this.productEditButtonService.openUnitTypeEditor(null)
   }
 
+  setProdModifier(event) {
+    if (event.value) {
+
+    }
+  }
+
   updateCategoryExit(item) {
     const category  = item.value as PriceCategories;
     this.itemAction$ = this.updateCategory(category).pipe(
@@ -300,10 +324,6 @@ export class PriceCategoriesEditComponent implements OnInit {
   }
 
   deleteCategory(item) {
-
-    // const result = window.confirm('Are you sure you want to delete this item?')
-    // if (!result) { return }
-
     const site = this.siteService.getAssignedSite()
     if (!this.priceCategory) { return }
       this.priceCategoryService.delete(site, this.priceCategory.id).subscribe( data =>{

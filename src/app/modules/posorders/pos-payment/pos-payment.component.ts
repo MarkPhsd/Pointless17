@@ -719,7 +719,10 @@ export class PosPaymentComponent implements OnInit, OnDestroy {
   }
 
   get creditPaymentAmount() {
-    if (!this._creditPaymentAmount || this._creditPaymentAmount == 0) {
+    if (!this._creditPaymentAmount || this._creditPaymentAmount != 0) {
+      if (this.order.creditBalanceRemaining == 0) {
+        return  this.order.balanceRemaining;
+      }
       return  this.order.creditBalanceRemaining;
     }
     return this._creditPaymentAmount;

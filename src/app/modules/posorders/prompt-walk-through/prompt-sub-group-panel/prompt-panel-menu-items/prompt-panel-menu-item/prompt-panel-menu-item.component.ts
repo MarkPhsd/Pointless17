@@ -163,12 +163,9 @@ export class PromptPanelMenuItemComponent implements OnInit {
     if (currentSubPrompt.quantityMet) {
       const lastIndex = orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected.length
       orderPromptGroup.selected_PromptSubGroups[this.index].promptSubGroups.itemsSelected.pop()
-      // this.orderService.notificationEvent('Quantity already met moving on.', 'Info')
-      // this.nextStep()
     }
 
     this.resetItemOption.emit('')
-    // then we can add the item including the reference of the item.
     return this.getApplyNewItem(quantityItem.quantity, quantityItem.name, currentSubPrompt, orderPromptGroup)
 
   }
@@ -247,16 +244,28 @@ export class PromptPanelMenuItemComponent implements OnInit {
     if (this.promptMenuItem) {
         const site = this.siteService.getAssignedSite();
         const menuItemsSelected    = {} as MenuItemsSelected
-        return this.menuService.getMenuItemByID(site, this.promptMenuItem.menuItemID ).pipe(switchMap(data => {
+        return this.menuService.getMenuItemByID( site, this.promptMenuItem.menuItemID ).pipe(switchMap(data => {
           menuItemsSelected.menuItem = data;
           menuItemsSelected.price    = data.retail;
           menuItemsSelected.quantity = 1
           this.menuItem = data;
+          this.menuItem = this.getPrice(this.menuItem)
           return of(menuItemsSelected);
         })
       )
     }
     return of(null);
+  }
+
+  // priceModifierOptions = [
+  //   {id: 1, name: 'product'},
+  //   {id: 2, name: 'default modifier'},
+  //   {id: 3, name: 'modifier'},
+  //   {id: 4, name: 'weighed'},
+  // ]
+
+  getPrice(menuItem: IMenuItem) {
+    return this.menuService.getModiferPrices(menuItem)
   }
 
 

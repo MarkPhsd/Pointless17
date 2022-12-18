@@ -14,9 +14,9 @@ export class CategorySelectComponent implements OnInit {
   loadingItems: boolean;
 
   @Input() fieldName = 'categoryID'
-  @Input() type = 'category'
-  @Input()  inputForm:      FormGroup;
-  categories$:              Observable<IMenuItem[]>;
+  @Input() type      = 'category'
+  @Input() inputForm :    FormGroup;
+  categories$        :    Observable<IMenuItem[]>;
   @Output() outputCategoryID   :      EventEmitter<any> = new EventEmitter();
 
   constructor(private menuService: MenuService,
@@ -25,8 +25,8 @@ export class CategorySelectComponent implements OnInit {
   ngOnInit(): void {
     const site =            this.sitesService.getAssignedSite();
     this.loadingItems = true;
-    const type = this.type;
-    const item$ = this.menuService.getGetCategoriesListAll(site, type)
+    const type        = this.type;
+    const item$       = this.menuService.getGetCategoriesListAll(site, type)
 
     if (this.type.toLowerCase() == 'subCategory') {
       this.fieldName = 'subCategoryID'
@@ -45,8 +45,21 @@ export class CategorySelectComponent implements OnInit {
   }
 
   getCategory(event) {
-    console.log(event)
     this.outputCategoryID.emit(event.value)
   }
+
+  clearItem() {
+
+    if (this.type.toLowerCase() == 'subCategory') {
+      this.inputForm.patchValue({subCategoryID: 0})
+    }
+
+    if (this.type.toLowerCase() == 'category') {
+      this.inputForm.patchValue({categoryID: 0})
+    }
+
+    this.outputCategoryID.emit(0)
+  }
+
 
 }

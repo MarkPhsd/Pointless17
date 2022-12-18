@@ -15,6 +15,7 @@ import { ProducteditComponent } from '../productedit.component';
 export class EditSelectedItemsComponent implements OnInit {
   action$   : Observable<any>;
   inputForm : FormGroup;
+  get subCategoryID()    { return this.inputForm.get("subCategoryID") as FormControl;}
   get categoryID()    { return this.inputForm.get("categoryID") as FormControl;}
   get departmentID()  { return this.inputForm.get("departmentID") as FormControl;}
   get itemTypeID()    { return this.inputForm.get("prodModifierType") as FormControl;}
@@ -23,6 +24,7 @@ export class EditSelectedItemsComponent implements OnInit {
   get active()        { return this.inputForm.get("active") as FormControl;}
   get webProduct()       { return this.inputForm.get("webProduct") as FormControl;}
   get webWorkRequired()       { return this.inputForm.get("webWorkRequired") as FormControl;}
+
 
   // constructor(
   //   private fb: FormBuilder) { }
@@ -61,6 +63,7 @@ export class EditSelectedItemsComponent implements OnInit {
     this.inputForm = this.fb.group( {
       categoryID:       [],
       departmentID:     [],
+      subCategoryID    :[],
       prodModifierType: [],
       promptGroupID   : [],
       species:          [],
@@ -95,6 +98,10 @@ export class EditSelectedItemsComponent implements OnInit {
       if (this.categoryID.value !=0 && this.categoryID.value != undefined) {
         // this.updateCategoryID(this.categoryID.value, this.selected)
         this.updateField(this.categoryID.value, this.selected, 'categoryID')
+      }
+      if (this.subCategoryID.value !=0 && this.subCategoryID.value != undefined) {
+        // this.updateCategoryID(this.categoryID.value, this.selected)
+        this.updateField(this.subCategoryID.value, this.selected, 'subCategoryID')
       }
       if (this.departmentID.value !=0 && this.departmentID.value != undefined) {
         // this.updateDeparmentID(this.departmentID.value, this.selected)

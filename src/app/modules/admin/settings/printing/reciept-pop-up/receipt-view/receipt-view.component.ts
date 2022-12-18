@@ -98,7 +98,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   intSubscriptions() {
     if (this.printView == 1 ) {
-   
+
       this.order$ = this.orderService.currentOrder$.pipe(
         switchMap(data => {
             this.order      = data;
@@ -159,7 +159,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   ngOnInit() {
     this.isElectronApp = this.platFormService.isAppElectron
     this.initPrintView() //done
-    
+
     this.intSubscriptions();
     this.refreshView$ =  this.refreshViewObservable()
   }
@@ -174,13 +174,13 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
     const receipt$    =  this.getDefaultPrinterOb();
     const styles$     =  this.getStylesForPrintOut()
     const deviceInfo$ = this.getDeviceInfo()
-    
+
     return receipt$.pipe(
       switchMap(data => {  return defaultReceipt$ })).pipe(
       switchMap(data => {  return styles$ })).pipe(
       switchMap(data => { return deviceInfo$})).pipe(
-      switchMap(data => { 
-        this.printingService.updatePrintView(1) 
+      switchMap(data => {
+        this.printingService.updatePrintView(1)
         return of(data)
       }))
   }
@@ -192,12 +192,12 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
         this.electronReceiptSetting = data;
         this.receiptID   =  +data.option1;
         this.printerName =  data.text;
-        return of(data) 
+        return of(data)
       })
     )
   }
 
-  getStylesForPrintOut() { 
+  getStylesForPrintOut() {
     let ob$ : Observable<any>
     if (this.printingService.printView  == 2) {
       ob$ = this.initBalanceSheetDefaultLayoutsObservable()
@@ -228,8 +228,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   applyStyle(receiptStyles: ISetting) {
     return this.printingService.applyStyle(receiptStyles)
   }
-  
-  openLink() { 
+
+  openLink() {
     this.router.navigate(['/qr-receipt/',  {orderCode: this.order.orderCode}])
     this.exit();
   }
@@ -244,7 +244,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
 
   email() {
     if (this.order && this.order.clients_POSOrders && this.order.clients_POSOrders.email) {
-      this.email$ =  this.orderMethodService.emailOrder(this.order).pipe(
+        const email = this.order.clients_POSOrders.email;
+        this.email$ =  this.orderMethodService.emailOrderFromEntry(this.order, email).pipe(
           switchMap(data => {
             if (data === 'Success') {
               this.orderMethodService.notifyEvent('Email Sent', 'Success')
@@ -280,7 +281,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   getDeviceInfo(): Observable<ISetting> {
     const site = this.siteService.getAssignedSite();
     const device = localStorage.getItem('devicename');
-    return  this.settingService.getSettingByNameCached(site, device).pipe(switchMap(data => { 
+    return  this.settingService.getSettingByNameCached(site, device).pipe(switchMap(data => {
       const item  = JSON.parse(data.text) as ITerminalSettings
       if (item) {
         if (this.platFormService.isAppElectron) {
@@ -398,8 +399,8 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
   printElectron() {
-    let styles 
-    if (this.receiptStyles) { 
+    let styles
+    if (this.receiptStyles) {
       styles = this.receiptStyles.text;
       const contents = this.getReceiptContents(styles)
       const options  = {
@@ -430,7 +431,7 @@ export class ReceiptViewComponent implements OnInit , OnDestroy{
   }
 
 
-  getLabelPrinterAssignment() { 
+  getLabelPrinterAssignment() {
     const label$ = this.getLabelPrinterOBS()
     label$.subscribe(data =>{})
     return label$

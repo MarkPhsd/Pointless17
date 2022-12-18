@@ -9,17 +9,23 @@
 <div *ngIf="promptGroup">
   <mat-card class="mat-card">
     <mat-card-subtitle>
-      <h4>
-          {{promptGroup?.name}}
-      </h4>
+      <div class="grid-menu">
+        <div>
+          <h4>
+              {{promptGroup?.name}}
+          </h4>
+        </div>
+        <div>
+          <ng-container [ngTemplateOutlet]="largeScreenButtons"></ng-container>
+        </div>
+      </div>
+
     </mat-card-subtitle>
     <mat-card-content>
       <div
           [innerHTML]="promptGroup?.instructions">
       </div>
-  
     </mat-card-content>
-
   </mat-card>
   <mat-divider></mat-divider>
 
@@ -47,12 +53,16 @@
     </mat-card-actions>
 
   </mat-card>
+  <ng-container [ngTemplateOutlet]="smallScreenButtons"></ng-container>
+</div>
+
+<ng-template #buttonDisplay>
   <div class="grid-list">
     <button class="item-button" mat-raised-button (click)="reset()"><mat-icon>refresh</mat-icon>Start Over</button>
     <button class="item-button" mat-raised-button (click)="cancel()"><mat-icon>cancel</mat-icon>Cancel <br> All Items</button>
     <button class="item-button" mat-raised-button (click)="close()"><mat-icon>close</mat-icon>Close <br> Without Saving</button>
     <button class="item-button" mat-raised-button (click)="applyChoices()"><mat-icon>approval</mat-icon>Apply Choices</button>
   </div>
-</div>
+</ng-template>
 
 <!-- {{orderPromptGroup | json}} -->

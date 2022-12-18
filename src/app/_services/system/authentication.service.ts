@@ -176,7 +176,7 @@ export class AuthenticationService {
       localStorage.removeItem("ami21");
       localStorage.removeItem('user');
       localStorage.removeItem('userx');
-      localStorage.removeItem('site')
+      // localStorage.removeItem('site')
       localStorage.removeItem('orderSubscription');
       // localStorage.removeItem('loginAction')
       // https://localhost:44309  /api

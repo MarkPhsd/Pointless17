@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Inject, ViewChild, TemplateRef, HostListener } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {  PromptGroupService } from 'src/app/_services/menuPrompt/prompt-group.service';
 import { SitesService } from 'src/app/_services/reporting/sites.service';
@@ -18,6 +18,10 @@ import { Observable } from 'rxjs';
 })
 
 export class PromptWalkThroughComponent implements OnInit {
+
+  @ViewChild('buttonDisplay')    buttonDisplay: TemplateRef<any>;
+
+
   modifierNote     : string;
   processing       : boolean;
   action$:          Observable<any>;
@@ -32,6 +36,8 @@ export class PromptWalkThroughComponent implements OnInit {
 
   posItem          : PosOrderItem;
   _posItem         : Subscription;
+  smallDevice: boolean;
+  phoneDevice: boolean;
 
   intSubscriptions() {
     this.initPOSItemSubscription();
@@ -80,7 +86,22 @@ export class PromptWalkThroughComponent implements OnInit {
 
   ngOnInit(): void {
     this.intSubscriptions()
+    this.updateScreenSize()
   }
+
+
+  @HostListener("window:resize", [])
+  updateScreenSize() {
+    this.smallDevice = false
+    this.phoneDevice = false;
+    if ( window.innerWidth < 811 ) {
+      this.smallDevice = true
+    }
+    if ( window.innerWidth < 600 ) {
+      this.phoneDevice = true
+    }
+  }
+
 
   reset() {
     // this.orderPromptGroup.prompts.
@@ -122,6 +143,22 @@ export class PromptWalkThroughComponent implements OnInit {
     }
   }
 
+
+  get  largeScreenButtons(){
+    if (!this.phoneDevice) {
+      return this.buttonDisplay;
+    }
+  }
+
+  get smallScreenButtons() {
+    if (this.phoneDevice) {
+      return this.buttonDisplay;
+    }
+  }
+
+  // @ViewChild('largeDisplay')    largeDisplay: TemplateRef<any>;
+  // @ViewChild('smallDisplay')    smallDisplay: TemplateRef<any>;
+
   applyChoices() {
     if (this.orderPromptGroup) {
       const site = this.sitesService.getAssignedSite();
@@ -129,7 +166,7 @@ export class PromptWalkThroughComponent implements OnInit {
       const prompt$ = this.posOrderItemService.postPromptItems(site, this.orderPromptGroup);
 
       this.processing = true;
-  
+
       this.action$ =  prompt$.pipe(
           switchMap( data  => {
               return  this.orderService.getOrder(site, data.orderID.toString(), false)
@@ -142,7 +179,7 @@ export class PromptWalkThroughComponent implements OnInit {
               this.orderService.updateOrderSubscription(data)
               return of('success')
             }),
-            catchError(data => { 
+            catchError(data => {
               this.processing = false;
               return of('false')
             })
@@ -150,7 +187,7 @@ export class PromptWalkThroughComponent implements OnInit {
     }
   }
 
-  setNotes() { 
+  setNotes() {
     if (this.modifierNote && this.orderPromptGroup.posOrderItem) {
       this.orderPromptGroup.posOrderItem.modifierNote = this.modifierNote;
     }

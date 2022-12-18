@@ -88,11 +88,7 @@ export class DSIEMVTransactionComponent implements OnInit {
           this.action = 3;
           this.type = 'EMVReturn'
           this.processing = false;
-          // this.message  = 'Please check the device for input if required.'
-          // setTimeout(()=>{
-          //   this.process();
-          //   return;
-          // },100);
+
         }
       }
 

@@ -24,8 +24,14 @@
         <app-department-select   [inputForm]="inputForm"></app-department-select>
       </div>
       <div>
-        <app-category-select     [inputForm]="inputForm"></app-category-select>
+        <app-category-select     [inputForm]="inputForm">Category</app-category-select>
       </div>
+      <div>
+        <app-category-select  [inputForm]="inputForm"
+                              [fieldName]="'subCategoryID'"
+                              [type]     ="'subcategory'">Sub Category</app-category-select>
+      </div>
+
       <div>
         <app-brand-type-select   [inputForm]="inputForm"> </app-brand-type-select>
       </div>

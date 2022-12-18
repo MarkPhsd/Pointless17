@@ -209,10 +209,16 @@ export class OrdersService {
   }
 
   getStateOrder(){
-    let stringorder = localStorage.getItem('orderSubscription');
-    let order = JSON.parse(stringorder) as IPOSOrder;
-    order = this.getCost(order)
-    return order;
+    try {
+      let stringorder = localStorage.getItem('orderSubscription');
+      let order = JSON.parse(stringorder) as IPOSOrder;
+      if (order) {
+        order = this.getCost(order)
+      }
+      return order;
+    } catch (error) {
+      return null;
+    }
   }
 
 

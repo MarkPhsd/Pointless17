@@ -37,7 +37,7 @@
                     class="image-button"
                     color="warn"
                     fxFill
-                    (click)="menuItemAction(true)">
+                    (click)="menuItemActionObs(true)">
               {{ menuItem.name  | truncateText: 30  }}
               <mat-icon>refresh</mat-icon>
             </button>
@@ -49,27 +49,28 @@
             {{ menuItem.name  }}
           </div>
         </div> -->
-
+        <!-- cat: {{isCategory}}
+        type: {{menuItem.itemType.type}} -->
         <div *ngIf="!isDiscountItem && imageUrl" >
 
           <img *ngIf="isApp && !isCategory"
                 [src]="imageUrl"
                 onerror   = "this.src='assets/images/placeholderimage.png'"
                 class="product-image"
-                (click)="menuItemAction(true)"/>
+                (click)="menuItemActionObs(true)"/>
 
           <img  *ngIf="!isApp && !isCategory"
                 [src]="imageUrl"
                 onerror   = "this.src='assets/images/placeholderimage.png'"
                 class="product-image"
-                (click)="menuItemAction(false)"/>
+                (click)="menuItemActionObs(false)"/>
 
           <div class="round-container">
             <img  *ngIf="isCategory"
               [src]="imageUrl"
               onerror   = "this.src='assets/images/placeholderimage.png'"
               class="product-image"
-              (click)="menuItemAction(true)"/>
+              (click)="menuItemActionObs(true)"/>
           </div>
 
         </div>

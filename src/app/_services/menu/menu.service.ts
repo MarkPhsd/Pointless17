@@ -565,7 +565,7 @@ export class MenuService {
     const uri =  this.sitesService.getCacheURI(url)
 
     const cacheTime = this.sitesService.getCurrentCache();
- 
+
     let appCache =  JSON.parse(localStorage.getItem('appCache')) as any;
     console.log('appCache getMenuItemsBySearchPaged', appCache);
 
@@ -578,7 +578,7 @@ export class MenuService {
 
     return  this.httpClient.post<any>(url, productSearchModel )
     // if ( cacheTime  == 0 ) {
-      
+
     // }
 
     // return this.httpCache.post<any>(uri, productSearchModel)
@@ -834,6 +834,42 @@ export class MenuService {
       return menuItem.itemType.packagingMaterial.split(',')
     }
     return null
+  }
+
+  getModiferPrices(menuItem: IMenuItem) {
+    if (menuItem.priceCategories && menuItem.priceCategories.productPrices && menuItem.priceCategories.productPrices) {
+      const items = menuItem.priceCategories.productPrices;
+      if ( items.length>0 ) {
+        //  console.log('unfilteredd', items)
+         items.filter(prices => { return prices.priceType == 2})
+         let list =  items.filter( prices =>{ return prices.priceType == 2;})
+         if (list.length>0){
+           menuItem.retail = list[0].retail;
+           menuItem.unitTypeID = list[0].unitTypeID;
+           menuItem.productPrice = list[0];
+           return menuItem
+        }
+      }
+    }
+    return menuItem;
+  }
+
+  getPricesFromProductPrices(menuItem: IMenuItem) {
+    if (menuItem.priceCategories && menuItem.priceCategories.productPrices && menuItem.priceCategories.productPrices) {
+      const items = menuItem.priceCategories.productPrices;
+      if ( items.length>0 ) {
+         items.filter(prices => { return prices.priceType == 2})
+         let list =  items.filter( prices =>{ return prices.priceType == 2;})
+         if (list.length>0){
+           menuItem.retail = list[0].retail;
+           menuItem.unitTypeID = list[0].unitTypeID;
+           menuItem.productPrice = list[0];
+           menuItem.priceCategories.productPrices = list;
+           return menuItem
+        }
+      }
+    }
+    return menuItem;
   }
 
   private handleError(error: any) {

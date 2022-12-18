@@ -68,7 +68,7 @@
                 Name
               </app-value-fields>
 
-            <app-category-select   [inputForm]="productForm"
+              <app-category-select   [inputForm]="productForm"
                                      [fieldName]="'subCategoryID'"
                                      [type]="'subcategory'">Sub Category</app-category-select>
               <app-category-select   [inputForm]="productForm" [type]="'category'">Category</app-category-select>
@@ -122,8 +122,9 @@
             </div>
 
             <div>
-                <h4><mat-icon>design</mat-icon>Design</h4>
+                <h4><mat-icon>design</mat-icon>Design / Layout</h4>
                 <div class="grid-item">
+                    <mat-label>Use material icons from fonts.google.com</mat-label>
                     <div>
                       <app-value-fields
                         [inputForm]="productForm"
@@ -131,8 +132,20 @@
                         Material Icon
                       </app-value-fields>
                   </div>
-                  <mat-label>Use material icons from fonts.google.com</mat-label>
                 </div>
+
+                <div class="grid-item">
+                    <mat-label>Enter a negative value to show up at front, a large value to show at the end.</mat-label>
+                    <div>
+                      <app-value-fields
+                        [inputForm]="productForm"
+                        [fieldName]="'menuSort'">
+                        Sort Value
+                      </app-value-fields>
+                  </div>
+                </div>
+
+
 
                 <div class="header">
                   <h4><mat-icon>image</mat-icon>Images</h4>

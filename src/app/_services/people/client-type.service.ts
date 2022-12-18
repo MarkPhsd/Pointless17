@@ -51,6 +51,7 @@ export interface IUserAuth_Properties {
   deleteProduct: boolean;
   deleteEmployee: boolean;
 
+  uploadPictures: boolean;
 
 }
 

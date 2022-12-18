@@ -40,7 +40,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
 
   isApp     = false;
   isProduct : boolean;
-  isCategory: boolean;
+
   getPlatForm() {  return Capacitor.getPlatform(); }
 
   constructor(
@@ -77,16 +77,28 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
         // this.orderMethodService.notifyEvent('This item has no type, please contact administrator.', 'Error')
         return false
       }
-      if (menuItem.itemType.useType  === 'adjustment') { return false}
-      if (menuItem.itemType.type     === 'adjustment') { return false}
-      if (menuItem.itemType.type     === 'discounts') { return false}
-      if (menuItem.itemType.type     === 'grouping') {
-        this.isCategory = true;
-        return false
+      if (menuItem.itemType.useType.toLowerCase()  === 'adjustment') { return false}
+      if (menuItem.itemType.type.toLowerCase()     === 'adjustment') { return false}
+      if (menuItem.itemType.type.toLowerCase()     === 'discounts') { return false}
+      if (menuItem.itemType.type.toLowerCase()     === 'grouping') {
+        return false;
       }
     }
     return true
   }
+
+  get isCategory(): boolean {
+    const menuItem = this.menuItem;
+    if (menuItem) {
+        if (menuItem.itemType)   {
+          if (menuItem.itemType.type.toLowerCase()  === 'grouping') {
+            return true;
+        }
+      }
+    }
+    return false;
+  }
+
 
   ngOnDestroy(): void {
     if (this._order)  this._order.unsubscribe();
@@ -134,7 +146,7 @@ export class MenuItemCardComponent implements OnInit, OnDestroy {
       this.outPutLoadMore.emit('true')
       return ;
     }
-    // console.log('add', add)
+
     this.action$ = this.orderMethodService.menuItemActionObs(this.order,this.menuItem, add)
   }
 
